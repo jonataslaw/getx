@@ -1,42 +1,55 @@
 # Get
 
-A consistent Flutter route navigation library that does not rebuild materialApp with each navigation.
+A consistent Flutter route navigation library that navigate with no context and not rebuild materialApp with each navigation.
 
 ## Getting Started
 
 Flutter's conventional navigation method has a route reconstruction bug that makes it inconsistent 
 for large applications with undefined routes.
 Get came to solve this problem.
-
-Plus, get makes navigation much clearer and more concise for beginners. The nomenclatures u
-sed by Flutter routes often confuse those who start with the framework.
-Get is friendly to those who came from Web programming, and those who never programmed, 
-with a clearer navigation system.
+In addition, Get needs no context, also solving Flutter's biggest problem with patterns like BLoC. 
+Get also makes navigation much clearer and more concise for beginners and friendly to those who came from Web programming.
 
 ## How to use?
 
+Add this to your package's pubspec.yaml file:
+
+dependencies:
+  get: 
+  
+And import it:
+```dart
+import 'package:get/get.dart';
+```
+Add GetKey to your MaterialApp and enjoy:
+```dart
+MaterialApp(
+    navigatorKey: Get.key,
+    home: MyHome(),
+  )
+```
 To navigate to a new screen:
 
 ```dart
-Get.to(context, NextScreen());
+Get.to(NextScreen());
 ```
 
 To return to previous screen
 
 ```dart
-Get.back(context);
+Get.back();
 ```
 
 To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
 
 ```dart
-Get.off(context, NextScreen());
+Get.off(NextScreen());
 ```
 
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(context, NextScreen());
+Get.offAll(NextScreen());
 ```
 
 Is possible used default namedRoutes from flutter?
@@ -48,6 +61,7 @@ void main() {
   runApp(MaterialApp(
     onGenerateRoute: Router.generateRoute,
     initialRoute: "/",
+    navigatorKey: Get.key,
     title: 'Navigation',
   ));
 }
@@ -80,7 +94,7 @@ class FirstRoute extends StatelessWidget {
         child: RaisedButton(
           child: Text('Open route'),
           onPressed: () {
-            Navigator.pushNamed(context, "/second");
+            Get.toNamed("/second");
           },
         ),
       ),
@@ -98,7 +112,7 @@ class SecondRoute extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           onPressed: () {
-            Get.back(context);
+            Get.back();
           },
           child: Text('Go back!'),
         ),

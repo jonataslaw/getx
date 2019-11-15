@@ -16,4 +16,12 @@
 
 ## [1.1.0] 
 
-- Add support to Push.named 
+- Add support to named routes 
+
+## [1.2.0] 
+
+- Add routes navigation with no context
+
+## [1.2.1] 
+
+- Fix bug currentState = null

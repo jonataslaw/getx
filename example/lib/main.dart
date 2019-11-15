@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
+    navigatorKey: Get.key,
     home: FirstRoute(),
   ));
 }
@@ -19,7 +20,7 @@ class FirstRoute extends StatelessWidget {
         child: RaisedButton(
           child: Text('Open route'),
           onPressed: () {
-            Get.to(context, SecondRoute());
+            Get.to(SecondRoute());
           },
         ),
       ),
@@ -37,7 +38,7 @@ class SecondRoute extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           onPressed: () {
-            Get.back(context);
+            Get.back();
           },
           child: Text('Go back!'),
         ),
