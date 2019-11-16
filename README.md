@@ -54,7 +54,8 @@ Get.offAll(NextScreen());
 
 Is possible used default namedRoutes from flutter?
 Yes, and with no navigation bug
-Example:
+
+### Add " navigatorKey: Get.key," to MaterialApp
 
 ```dart
 void main() {
@@ -65,16 +66,30 @@ void main() {
     title: 'Navigation',
   ));
 }
+```
 
+Copy this class and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
+### Important!!! We suggest that you copy this class for 3 reasons:
+1- You must define an escape route if you accidentally set a wrong route. This example already contains this.
+Flutter_Web does not provide friendly urls or url settings (no matter how you set the route, it will always return to the main page after the page is reloaded and the route is not displayed in the url with default navigation) But Get supports it! So, when a user enters yourflutterwebsite.com/support and exactly the support route is displayed, you need to pass the settings parameter to GetRoute, and this example already contemplates it!
+3- These routes are designed to work with GetRoute, not CupertinoPageRoute or MaterialPageRoute. Never put them here.
+
+```dart
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return GetRoute(builder: (_) => FirstRoute());
-      case '/second':
-        return GetRoute(builder: (_) => SecondRoute());
+        return GetRoute(
+          builder: (_) => SplashScreen(),
+          settings: settings,
+        );
+      case '/Home':
+        return GetRoute(settings: settings, builder: (_) => Home());
+      case '/Chat':
+        return GetRoute(settings: settings, builder: (_) => Chat());
       default:
         return GetRoute(
+            settings: settings,
             builder: (_) => Scaffold(
                   body: Center(
                       child: Text('No route defined for ${settings.name}')),
@@ -82,7 +97,10 @@ class Router {
     }
   }
 }
+```
+And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (BLoC will love it), and when your app is compiled to the web, your routes will appear in the url beautifully <3
 
+```dart
 class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,3 +139,5 @@ class SecondRoute extends StatelessWidget {
   }
 }
 ```
+
+That is all.
