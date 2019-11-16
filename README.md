@@ -69,9 +69,13 @@ void main() {
 ```
 
 Copy this class and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
+
 ### Important!!! We suggest that you copy this class for 3 reasons:
+
 1- You must define an escape route if you accidentally set a wrong route. This example already contains this.
-Flutter_Web does not provide friendly urls or url settings (no matter how you set the route, it will always return to the main page after the page is reloaded and the route is not displayed in the url with default navigation) But Get supports it! So, when a user enters yourflutterwebsite.com/support and exactly the support route is displayed, you need to pass the settings parameter to GetRoute, and this example already contemplates it!
+
+2- Flutter_Web does not provide friendly urls or url settings (no matter how you set the route, it will always return to the main page after the page is reloaded and the route is not displayed in the url with default navigation) But Get supports it! So, when a user enters yourflutterwebsite.com/support and exactly the support route is displayed, you need to pass the settings parameter to GetRoute, and this example already contemplates it!
+
 3- These routes are designed to work with GetRoute, not CupertinoPageRoute or MaterialPageRoute. Never put them here.
 
 ```dart
