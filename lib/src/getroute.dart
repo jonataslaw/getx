@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GetRoute<T> extends PageRoute<T> {
-  /// Construct a MaterialPageRoute whose contents are defined by [builder].
-  ///
   /// The values of [builder], [maintainState], and [fullScreenDialog] must not
   /// be null.
   GetRoute({
