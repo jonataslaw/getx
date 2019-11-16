@@ -52,8 +52,14 @@ To go to the next screen and cancel all previous routes (useful in shopping cart
 Get.offAll(NextScreen());
 ```
 
-Is possible used default namedRoutes from flutter?
-Yes, and with no navigation bug
+### That's it, you've learned how to navigate between routes the default way.
+
+However, for people who like more organized code who want to navigate with named routes, or for Flutter_web Developers who want the url to show exactly which route is being shown, and want the page refresh not to affect the state of the routes. On your site, we give you a much more elegant and functional solution. Yeah, the default navigation doesn't fully support Flutter_web, but Get does !!!!
+
+## So... Is possible used default namedRoutes from flutter?
+- Yes, and with no navigation bug
+
+## Using with Named Routes and And offering full flutter_web support:
 
 ### Add " navigatorKey: Get.key," to MaterialApp
 
