@@ -16,7 +16,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.3.0
+  get: ^1.3.2
 ```
   
 And import it:
@@ -51,7 +51,7 @@ Get.off(NextScreen());
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(NextScreen(), (Route<dynamic> route) => false));
+Get.offAll(NextScreen(), (route) => false));
 ```
 
 ### That's it, you've learned how to navigate between routes the default way.
@@ -72,7 +72,7 @@ Get.offNamed("/NextScreen");
 ```
 To navigate and remove all previous screens from the tree.
 ```dart
-Get.offAllNamed("/NextScreen", (Route<dynamic> route) => false));
+Get.offAllNamed("/NextScreen", (route) => false));
 ```
 
 ## Using with Named Routes and And offering full flutter_web support (REQUIRED FOR NAMED ROUTES):
