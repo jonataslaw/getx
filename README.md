@@ -54,6 +54,28 @@ To go to the next screen and cancel all previous routes (useful in shopping cart
 Get.offAll(NextScreen(), (route) => false));
 ```
 
+To navigate to the next route, and receive or update data as soon as you return from it:
+```dart
+var data = await Get.to(Payment());
+```
+on other screen, send a data for previous route:
+
+```dart
+Get.back(result: 'sucess');
+```
+And use it:
+
+ex:
+```dart
+if(data == 'sucess') madeAnything();
+```
+
+Others methods:
+Get.removeRoute // remove one route. 
+Get.until // back repeatedly until the predicate returns true.
+Get.offUntil // go to next route and remove all the previous routes until the predicate returns true.
+Get.offNamedUntil // go to next named route and remove all the previous routes until the predicate returns true.
+
 ### That's it, you've learned how to navigate between routes the default way.
 
 However, for people who like more organized code who want to navigate with named routes, or for Flutter_web Developers who want the url to show exactly which route is being shown, and want the page refresh not to affect the state of the routes. On your site, we give you a much more elegant and functional solution. Yeah, the default navigation doesn't fully support Flutter_web, but Get does !!!!
