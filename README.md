@@ -16,7 +16,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.3.2
+  get: ^1.4.0
 ```
   
 And import it:
