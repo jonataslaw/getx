@@ -1,14 +1,13 @@
 # Get
 
-A consistent Flutter route navigation library that navigate with no context and not rebuild materialApp with each navigation.
-
+A consistent navigation library that lets you navigate between screens, open dialogs, and display snackbars from anywhere in your code without context.
 ## Getting Started
 
-Flutter's conventional navigation method has a route reconstruction bug that makes it inconsistent 
-for large applications with undefined routes.
-Get came to solve this problem.
-In addition, Get needs no context, also solving Flutter's biggest problem with patterns like BLoC. 
-Get also makes navigation much clearer and more concise for beginners and friendly to those who came from Web programming.
+Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and snacking is really painful.
+In addition, with each route navigation, all of your screens below MaterialApp are rebuilt, often causing RAM and CPU bottlenecks. 
+I worked on a pull to fix it in the framework, and seeing how things work I realized that a lot of cliche code could be avoided to get clean and concise code. 
+With that in mind, I created this library that will change the way you work with the Framework and save your life from cliche code, 
+increasing your productivity, and eliminating all the bugs present in Flutter's default navigation altogether.
 
 ## How to use?
 
@@ -16,7 +15,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.4.0
+  get: ^1.6.3
 ```
   
 And import it:
@@ -69,6 +68,41 @@ ex:
 ```dart
 if(data == 'sucess') madeAnything();
 ```
+To open dialog:
+
+```dart
+Get.dialog(YourDialogWidget());
+```
+
+To open default dialog:
+
+```dart
+ Get.defaultDialog(
+                title: "My Title",
+                content: Text("Hi, it's my dialog"),
+                confirm: FlatButton(
+                  child: Text("Ok"),
+                  onPressed: () => print("OK pressed"),
+                ),
+                cancel: FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: () => Get.back(),
+                ));
+```
+
+To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
+but with Get, all you have to do is call your SnackBar from anywhere in your code! No context, no cliche code!
+
+```dart
+  GetBar(
+              title: "Hey i'm a Get SnackBar!",
+              message:
+                  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
+              duration: Duration(seconds: 3),
+            )..show();
+```
+Plus, the default SnackBar is completely inflexible, while GetBar lets you change the color, shape, opacity, and anything else you want!
+
 
 Others methods:
 Get.removeRoute // remove one route. 
@@ -154,6 +188,17 @@ class FirstRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    GetBar(
+                      title: "Hey i'm a Get SnackBar!",
+                      message:
+                          "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
+                      duration: Duration(seconds: 3),
+                    )..show();
+                  },
+                ),
         title: Text('First Route'),
       ),
       body: Center(

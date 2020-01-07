@@ -1,6 +1,6 @@
 name: get
-description: A consistent Flutter route navigation library that navigate with no context and not rebuild materialApp with each navigation.
-version: 1.2.1
+description: A consistent navigation library that lets you navigate between screens, open dialogs, and display snackbars with no context.
+version: 1.6.3
 author: Jonny Borges <jonataborges01@gmail.com>
 homepage: https://github.com/jonataslaw/get
 

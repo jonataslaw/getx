@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'dialog.dart';
 import 'getroute.dart';
 
 class Get {
@@ -85,6 +87,28 @@ class Get {
   static off(Widget page, {bool rebuildRoutes = false}) {
     return key.currentState
         .pushReplacement(GetRoute(opaque: rebuildRoutes, builder: (_) => page));
+  }
+
+  /// Show a dialog. You can choose color and opacity of background
+  static dialog(Widget page, {Color color, double opacity = 0.5}) {
+    Get.to(DialogGet(child: page, color: color, opacity: opacity));
+  }
+
+  static defaultDialog(
+      {Color color,
+      double opacity = 0.5,
+      String title = "Alert dialog",
+      Widget content,
+      Widget cancel,
+      Widget confirm}) {
+    Get.to(DefaultDialogGet(
+      color: color,
+      opacity: opacity,
+      title: title,
+      content: content,
+      cancel: cancel,
+      confirm: confirm,
+    ));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
