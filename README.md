@@ -192,9 +192,7 @@ class FirstRoute extends StatelessWidget {
                   icon: Icon(Icons.add),
                   onPressed: () {
                     GetBar(
-                      title: "Hey i'm a Get SnackBar!",
-                      message:
-                          "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
+                      title: "Hi!", message: "i'm a Get SnackBar!",
                       duration: Duration(seconds: 3),
                     )..show();
                   },
