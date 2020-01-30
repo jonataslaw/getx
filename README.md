@@ -1,6 +1,6 @@
 # Get
 
-A consistent navigation library that lets you navigate between screens, open dialogs, and display snackbars from anywhere in your code without context.
+A consistent navigation library that lets you navigate between screens, open dialogs/bottomSheets, and display snackbars from anywhere in your code without context.
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and snacking is really painful.
@@ -15,7 +15,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.7.1
+  get: ^1.7.3
 ```
   
 And import it:
@@ -29,6 +29,7 @@ MaterialApp(
     home: MyHome(),
   )
 ```
+### Navigating without named routes
 To navigate to a new screen:
 
 ```dart
@@ -50,7 +51,7 @@ Get.off(NextScreen());
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(NextScreen(), (route) => false));
+Get.offAll(NextScreen(), (route) => false);
 ```
 
 To navigate to the next route, and receive or update data as soon as you return from it:
@@ -68,16 +69,34 @@ ex:
 ```dart
 if(data == 'sucess') madeAnything();
 ```
-Others methods:
+### Others methods (docs will be added soon):
 Get.removeRoute // remove one route. 
 Get.until // back repeatedly until the predicate returns true.
 Get.offUntil // go to next route and remove all the previous routes until the predicate returns true.
 Get.offNamedUntil // go to next named route and remove all the previous routes until the predicate returns true.
 
-
+### SnackBars
 To show a modern snackbar:
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
+```
+To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
+but with Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want with GetBar!
+
+```dart
+  GetBar(
+              title: "Hey i'm a Get SnackBar!",
+              message:
+                  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
+              icon: Icon(Icons.alarm),
+              shouldIconPulse: true,
+              onTap:(){},
+              barBlur: 20,
+              isDismissible: true,
+              duration: Duration(seconds: 3),
+            )..show();
+```
+### Dialogs
 
 To open dialog:
 
@@ -101,21 +120,30 @@ To open default dialog:
                 ));
 ```
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
-but with Get, all you have to do is call your SnackBar from anywhere in your code and and customize it however you want!
+### BottomSheets
+Get.bottomSheet is like showModalBottomSheet, but don't need of context.
 
 ```dart
-  GetBar(
-              title: "Hey i'm a Get SnackBar!",
-              message:
-                  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
-              icon: Icon(Icons.alarm),
-              shouldIconPulse: true,
-              onTap:(){},
-              barBlur: 20,
-              isDismissible: true,
-              duration: Duration(seconds: 3),
-            )..show();
+Get.bottomSheet(
+      builder: (_){
+          return Container(
+            child: Wrap(
+            children: <Widget>[
+            ListTile(
+            leading: Icon(Icons.music_note),
+            title: Text('Music'),
+            onTap: () => {}          
+          ),
+            ListTile(
+            leading: Icon(Icons.videocam),
+            title: Text('Video'),
+            onTap: () => {},          
+          ),
+            ],
+          ),
+       );
+      }
+    );
 ```
 
 
@@ -137,7 +165,7 @@ Get.offNamed("/NextScreen");
 ```
 To navigate and remove all previous screens from the tree.
 ```dart
-Get.offAllNamed("/NextScreen", (route) => false));
+Get.offAllNamed("/NextScreen", (route) => false);
 ```
 
 ## Using with Named Routes and And offering full flutter_web support (REQUIRED FOR NAMED ROUTES):
@@ -175,12 +203,13 @@ class Router {
           settings: settings,
         );
       case '/Home':
-        return GetRoute(settings: settings, builder: (_) => Home());
+        return GetRoute(settings: settings, builder: (_) => Home(), transition: Transition.fade);
       case '/Chat':
-        return GetRoute(settings: settings, builder: (_) => Chat());
+        return GetRoute(settings: settings, builder: (_) => Chat(),transition: Transition.rightToLeft);
       default:
         return GetRoute(
             settings: settings,
+            transition: Transition.rotate
             builder: (_) => Scaffold(
                   body: Center(
                       child: Text('No route defined for ${settings.name}')),
