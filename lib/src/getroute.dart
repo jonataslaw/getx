@@ -1,25 +1,184 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GetRoute<T> extends PageRoute<T> {
-  /// Construct a MaterialPageRoute whose contents are defined by [builder].
-  ///
-  /// The values of [builder], [maintainState], and [fullScreenDialog] must not
+class GetRoute<T> extends PageRouteBuilder<T> {
+  /// Construct a Modified PageRoute whose contents are defined by child.
+  /// The values of [child], [maintainState], [opaque], and [fullScreenDialog] must not
   /// be null.
   GetRoute({
-    @required this.builder,
+    Key key,
     RouteSettings settings,
     this.opaque = false,
     this.maintainState = true,
+    @required this.child,
+    @required this.transition,
+    this.curve = Curves.linear,
+    this.alignment,
+    this.duration = const Duration(milliseconds: 300),
     bool fullscreenDialog = false,
-  })  : assert(builder != null),
+  })  : assert(child != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         assert(opaque != null),
-        super(settings: settings, fullscreenDialog: fullscreenDialog);
-
-  /// Builds the primary contents of the route.
-  final WidgetBuilder builder;
+        super(
+            fullscreenDialog: fullscreenDialog,
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return child;
+            },
+            transitionDuration: duration,
+            settings: settings,
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              switch (transition) {
+                case Transition.fade:
+                  return FadeTransition(opacity: animation, child: child);
+                  break;
+                case Transition.rightToLeft:
+                  return SlideTransition(
+                    transformHitTests: false,
+                    position: new Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(-1.0, 0.0),
+                      ).animate(secondaryAnimation),
+                      child: child,
+                    ),
+                  );
+                  break;
+                case Transition.leftToRight:
+                  return SlideTransition(
+                    transformHitTests: false,
+                    position: Tween<Offset>(
+                      begin: const Offset(-1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(1.0, 0.0),
+                      ).animate(secondaryAnimation),
+                      child: child,
+                    ),
+                  );
+                  break;
+                case Transition.upToDown:
+                  return SlideTransition(
+                    transformHitTests: false,
+                    position: Tween<Offset>(
+                      begin: const Offset(0.0, -1.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(0.0, 1.0),
+                      ).animate(secondaryAnimation),
+                      child: child,
+                    ),
+                  );
+                  break;
+                case Transition.downToUp:
+                  return SlideTransition(
+                    transformHitTests: false,
+                    position: Tween<Offset>(
+                      begin: const Offset(0.0, 1.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: new SlideTransition(
+                      position: new Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(0.0, -1.0),
+                      ).animate(secondaryAnimation),
+                      child: child,
+                    ),
+                  );
+                  break;
+                case Transition.scale:
+                  return ScaleTransition(
+                    alignment: alignment,
+                    scale: CurvedAnimation(
+                      parent: animation,
+                      curve: Interval(
+                        0.00,
+                        0.50,
+                        curve: curve,
+                      ),
+                    ),
+                    child: child,
+                  );
+                  break;
+                case Transition.rotate:
+                  return new RotationTransition(
+                    alignment: alignment,
+                    turns: animation,
+                    child: new ScaleTransition(
+                      alignment: alignment,
+                      scale: animation,
+                      child: FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      ),
+                    ),
+                  );
+                  break;
+                case Transition.size:
+                  return Align(
+                    alignment: alignment,
+                    child: SizeTransition(
+                      sizeFactor: CurvedAnimation(
+                        parent: animation,
+                        curve: curve,
+                      ),
+                      child: child,
+                    ),
+                  );
+                  break;
+                case Transition.rightToLeftWithFade:
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset.zero,
+                          end: const Offset(-1.0, 0.0),
+                        ).animate(secondaryAnimation),
+                        child: child,
+                      ),
+                    ),
+                  );
+                  break;
+                case Transition.leftToRightWithFade:
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(-1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset.zero,
+                          end: const Offset(1.0, 0.0),
+                        ).animate(secondaryAnimation),
+                        child: child,
+                      ),
+                    ),
+                  );
+                  break;
+                default:
+                  return FadeTransition(opacity: animation, child: child);
+              }
+            });
 
   @override
   final bool maintainState;
@@ -37,50 +196,41 @@ class GetRoute<T> extends PageRoute<T> {
   @override
   String get barrierLabel => null;
 
-  @override
-  bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) {
-    return previousRoute is GetRoute || previousRoute is CupertinoPageRoute;
-  }
+  // @override
+  // bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) {
+  //   return previousRoute is GetRoute || previousRoute is CupertinoPageRoute;
+  // }
 
-  @override
-  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
-    // Don't perform outgoing animation if the next route is a fullscreen dialog.
-    return (nextRoute is GetRoute && !nextRoute.fullscreenDialog) ||
-        (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog);
-  }
-
-  @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
-    final Widget result = builder(context);
-    assert(() {
-      if (result == null) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary(
-              'The builder for route "${settings.name}" returned null.'),
-          ErrorDescription('Route builders must never return null.')
-        ]);
-      }
-      return true;
-    }());
-    return Semantics(
-      scopesRoute: true,
-      explicitChildNodes: true,
-      child: result,
-    );
-  }
-
-  @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
-    return theme.buildTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
-  }
+  // @override
+  // bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
+  //   // Don't perform outgoing animation if the next route is a fullscreen dialog.
+  //   return (nextRoute is GetRoute && !nextRoute.fullscreenDialog) ||
+  //       (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog);
+  // }
 
   @override
   String get debugLabel => '${super.debugLabel}(${settings.name})';
+
+  final Widget child;
+
+  final Transition transition;
+
+  final Curve curve;
+
+  final Alignment alignment;
+
+  final Duration duration;
+}
+
+enum Transition {
+  fade,
+  rightToLeft,
+  leftToRight,
+  upToDown,
+  downToUp,
+  scale,
+  rotate,
+  size,
+  rightToLeftWithFade,
+  leftToRightWithFade,
 }

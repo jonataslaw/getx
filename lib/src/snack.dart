@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get.dart';
+import 'routes.dart';
 import 'snack_route.dart' as route;
 
 typedef void SnackStatusCallback(SnackStatus status);
@@ -216,7 +216,6 @@ class GetBar<T extends Object> extends StatefulWidget {
     _snackRoute = route.showSnack<T>(
       snack: this,
     );
-
     return await Get.key.currentState.push(_snackRoute);
   }
 

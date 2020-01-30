@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'bottomsheet.dart';
 import 'dialog.dart';
+import 'snack.dart';
 import 'getroute.dart';
 
 class Get {
@@ -29,9 +30,10 @@ class Get {
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static to(Widget page, {bool rebuildRoutes = false}) {
-    return key.currentState
-        .push(GetRoute(opaque: rebuildRoutes, builder: (_) => page));
+  static to(Widget page,
+      {bool rebuildRoutes = false, Transition transition = Transition.fade}) {
+    return key.currentState.push(
+        GetRoute(opaque: rebuildRoutes, child: page, transition: transition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -84,37 +86,135 @@ class Get {
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static off(Widget page, {bool rebuildRoutes = false}) {
-    return key.currentState
-        .pushReplacement(GetRoute(opaque: rebuildRoutes, builder: (_) => page));
+  static off(Widget page,
+      {bool rebuildRoutes = false,
+      Transition transition = Transition.rightToLeft}) {
+    return key.currentState.pushReplacement(
+        GetRoute(opaque: rebuildRoutes, child: page, transition: transition));
+  }
+
+  /// It replaces Navigator.pushAndRemoveUntil, but needs no context
+  static offAll(Widget page, RoutePredicate predicate,
+      {bool rebuildRoutes = false,
+      Transition transition = Transition.rightToLeft}) {
+    return key.currentState.pushAndRemoveUntil(
+        GetRoute(opaque: rebuildRoutes, child: page, transition: transition),
+        predicate);
   }
 
   /// Show a dialog. You can choose color and opacity of background
-  static dialog(Widget page, {Color color, double opacity = 0.5}) {
-    Get.to(DialogGet(child: page, color: color, opacity: opacity));
+  static Future<T> dialog<T>(
+    Widget child, {
+    bool barrierDismissible = true,
+    //  WidgetBuilder builder,
+    bool useRootNavigator = true,
+  }) {
+    assert(child == null
+        // || builder == null
+        );
+    assert(useRootNavigator != null);
+    // assert(debugCheckHasMaterialLocalizations(context));
+
+    final ThemeData theme =
+        Theme.of(Get.key.currentContext, shadowThemeOnly: true);
+    return getShowGeneralDialog(
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        final Widget pageChild = child; // ?? Builder(builder: builder);
+        return SafeArea(
+          child: Builder(builder: (BuildContext context) {
+            return theme != null
+                ? Theme(data: theme, child: pageChild)
+                : pageChild;
+          }),
+        );
+      },
+      barrierDismissible: barrierDismissible,
+      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
+          .modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 150),
+      // transitionBuilder: _buildMaterialDialogTransitions,
+      useRootNavigator: useRootNavigator,
+    );
   }
 
   static defaultDialog(
       {Color color,
-      double opacity = 0.5,
+      double opacity = 0.2,
       String title = "Alert dialog",
       Widget content,
       Widget cancel,
       Widget confirm}) {
-    Get.to(DefaultDialogGet(
+    final child = DefaultDialogGet(
       color: color,
       opacity: opacity,
       title: title,
       content: content,
       cancel: cancel,
       confirm: confirm,
+    );
+
+    dialog(child);
+  }
+
+  static Future<T> bottomSheet<T>({
+    @required WidgetBuilder builder,
+    Color backgroundColor,
+    double elevation,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    Color barrierColor,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+  }) {
+    assert(builder != null);
+    assert(isScrollControlled != null);
+    assert(useRootNavigator != null);
+    assert(isDismissible != null);
+    assert(enableDrag != null);
+
+    return Get.key.currentState.push<T>(GetModalBottomSheetRoute<T>(
+      builder: builder,
+      theme: Theme.of(Get.key.currentContext, shadowThemeOnly: true),
+      isScrollControlled: isScrollControlled,
+      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
+          .modalBarrierDismissLabel,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      isDismissible: isDismissible,
+      modalBarrierColor: barrierColor,
+      enableDrag: enableDrag,
     ));
   }
 
-  /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  static offAll(Widget page, RoutePredicate predicate,
-      {bool rebuildRoutes = false}) {
-    return key.currentState.pushAndRemoveUntil(
-        GetRoute(opaque: rebuildRoutes, builder: (_) => page), predicate);
+  static snackbar(title, message,
+      {Color colorText, Duration duration, SnackPosition snackPosition}) {
+    return GetBar(
+      titleText: Text(
+        title,
+        style: TextStyle(
+            color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
+            fontWeight: FontWeight.w800,
+            fontSize: 16),
+      ),
+      messageText: Text(
+        message,
+        style: TextStyle(
+            color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
+            fontWeight: FontWeight.w300,
+            fontSize: 14),
+      ),
+      snackPosition: snackPosition ?? SnackPosition.TOP,
+      borderRadius: 15,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      duration: duration ?? Duration(seconds: 3),
+      barBlur: 7.0,
+      backgroundColor: Colors.grey.withOpacity(0.2),
+    )..show();
   }
 }

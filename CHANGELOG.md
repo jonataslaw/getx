@@ -48,7 +48,7 @@
 
 ## [1.4.0] 
 
-- Added Get.removeRoute // remove one route. 
+- Added Get.removeRoute // ability to remove one route. 
         Get.until // back repeatedly until the predicate returns true.
         Get.offUntil // go to next route and remove all the previous routes until the predicate returns true.
         Get.offNamedUntil // go to next named route and remove all the previous routes until the predicate returns true.
@@ -85,3 +85,21 @@
 ## [1.6.3] 
    
  - Clean code. 
+
+## [1.6.4] 
+   
+ - Improve performance. 
+
+## [1.7.0] 
+   
+ - Improve geral performance. Get.to Wrap now consumes even less RAM and CPU. In an application with 20 screens, it obtained 82% less RAM usage compared to the traditional method Navigator.push and had a CPU normalization of 23% in a Moto z2, against 64% CPU usage in Navigator.push with MaterialPageRoute. Test it for yourself!
+ - Added BottomSheet with no context 
+ - Added modern Blur Snackbar
+ - Added customs transitions
+ - Improve dialogs performance
+
+ ## [1.7.1] 
+ -Fix docs
+
+
+
