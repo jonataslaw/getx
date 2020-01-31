@@ -109,12 +109,8 @@ class Get {
     //  WidgetBuilder builder,
     bool useRootNavigator = true,
   }) {
-    assert(child == null
-        // || builder == null
-        );
+    assert(child != null);
     assert(useRootNavigator != null);
-    // assert(debugCheckHasMaterialLocalizations(context));
-
     final ThemeData theme =
         Theme.of(Get.key.currentContext, shadowThemeOnly: true);
     return getShowGeneralDialog(
