@@ -189,7 +189,7 @@ class Get {
   }
 
   static snackbar(title, message,
-      {Color colorText, Duration duration, SnackPosition snackPosition}) {
+      {Color colorText, Duration duration, SnackPosition snackPosition, Color backgroundColor}) {
     return GetBar(
       titleText: Text(
         title,
@@ -210,7 +210,7 @@ class Get {
       margin: EdgeInsets.symmetric(horizontal: 10),
       duration: duration ?? Duration(seconds: 3),
       barBlur: 7.0,
-      backgroundColor: Colors.grey.withOpacity(0.2),
+      backgroundColor: ( backgroundColor ?? Colors.grey.withOpacity(0.2) ),
     )..show();
   }
 }
