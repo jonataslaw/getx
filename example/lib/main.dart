@@ -46,3 +46,31 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+
+class Router {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return GetRoute(
+          page: SplashScreen(),
+          settings: settings,
+        );
+      case '/Home':
+        return GetRoute(
+            settings: settings, page: Home(), transition: Transition.fade);
+      case '/Chat':
+        return GetRoute(
+            settings: settings,
+            page: Chat(),
+            transition: Transition.rightToLeft);
+      default:
+        return GetRoute(
+            settings: settings,
+            transition: Transition.rotate,
+            page: Scaffold(
+              body:
+                  Center(child: Text('No route defined for ${settings.name}')),
+            ));
+    }
+  }
+}

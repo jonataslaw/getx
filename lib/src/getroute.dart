@@ -9,13 +9,13 @@ class GetRoute<T> extends PageRouteBuilder<T> {
     RouteSettings settings,
     this.opaque = false,
     this.maintainState = true,
-    @required this.child,
-    @required this.transition,
+    @required this.page,
+    this.transition = Transition.fade,
     this.curve = Curves.linear,
     this.alignment,
-    this.duration = const Duration(milliseconds: 300),
+    this.duration = const Duration(milliseconds: 400),
     bool fullscreenDialog = false,
-  })  : assert(child != null),
+  })  : assert(page != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         assert(opaque != null),
@@ -23,7 +23,7 @@ class GetRoute<T> extends PageRouteBuilder<T> {
             fullscreenDialog: fullscreenDialog,
             pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) {
-              return child;
+              return page;
             },
             transitionDuration: duration,
             settings: settings,
@@ -114,10 +114,10 @@ class GetRoute<T> extends PageRouteBuilder<T> {
                   );
                   break;
                 case Transition.rotate:
-                  return new RotationTransition(
+                  return RotationTransition(
                     alignment: alignment,
                     turns: animation,
-                    child: new ScaleTransition(
+                    child: ScaleTransition(
                       alignment: alignment,
                       scale: animation,
                       child: FadeTransition(
@@ -211,7 +211,7 @@ class GetRoute<T> extends PageRouteBuilder<T> {
   @override
   String get debugLabel => '${super.debugLabel}(${settings.name})';
 
-  final Widget child;
+  final Widget page;
 
   final Transition transition;
 

@@ -32,34 +32,46 @@ class Get {
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static to(Widget page,
       {bool rebuildRoutes = false, Transition transition = Transition.fade}) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.push(
-        GetRoute(opaque: rebuildRoutes, child: page, transition: transition));
+        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static toNamed(String page, {arguments}) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
   static offNamed(String page, {arguments}) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.pushReplacementNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
   static until(String page, predicate) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
   static offUntil(page, predicate) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
   static offNamedUntil(page, predicate) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
     return key.currentState.pushNamedAndRemoveUntil(page, predicate);
   }
 
@@ -83,6 +95,18 @@ class Get {
     return key.currentState.pop(result);
   }
 
+  /// It will close as many screens as you define. Times must be> 0;
+  static close(int times) {
+    if ((times == null) || (times < 1)) {
+      times = 1;
+    }
+    int count = 0;
+    var back = key.currentState.popUntil((route) {
+      return count++ == times;
+    });
+    return back;
+  }
+
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
@@ -90,7 +114,7 @@ class Get {
       {bool rebuildRoutes = false,
       Transition transition = Transition.rightToLeft}) {
     return key.currentState.pushReplacement(
-        GetRoute(opaque: rebuildRoutes, child: page, transition: transition));
+        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -98,7 +122,7 @@ class Get {
       {bool rebuildRoutes = false,
       Transition transition = Transition.rightToLeft}) {
     return key.currentState.pushAndRemoveUntil(
-        GetRoute(opaque: rebuildRoutes, child: page, transition: transition),
+        GetRoute(opaque: rebuildRoutes, page: page, transition: transition),
         predicate);
   }
 
@@ -189,28 +213,89 @@ class Get {
   }
 
   static snackbar(title, message,
-      {Color colorText, Duration duration, SnackPosition snackPosition, Color backgroundColor}) {
+      {Color colorText,
+      Duration duration,
+      SnackPosition snackPosition,
+      Widget titleText,
+      Widget messageText,
+      Widget icon,
+      bool shouldIconPulse,
+      double maxWidth,
+      EdgeInsets margin,
+      EdgeInsets padding,
+      double borderRadius,
+      Color borderColor,
+      double borderWidth,
+      Color backgroundColor,
+      Color leftBarIndicatorColor,
+      List<BoxShadow> boxShadows,
+      Gradient backgroundGradient,
+      FlatButton mainButton,
+      OnTap onTap,
+      bool isDismissible,
+      bool showProgressIndicator,
+      SnackDismissDirection dismissDirection,
+      AnimationController progressIndicatorController,
+      Color progressIndicatorBackgroundColor,
+      Animation<Color> progressIndicatorValueColor,
+      SnackStyle snackStyle,
+      Curve forwardAnimationCurve,
+      Curve reverseAnimationCurve,
+      Duration animationDuration,
+      double barBlur,
+      double overlayBlur,
+      Color overlayColor,
+      Form userInputForm}) {
+    //   if (key.currentState.mounted)
     return GetBar(
-      titleText: Text(
-        title,
-        style: TextStyle(
-            color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
-            fontWeight: FontWeight.w800,
-            fontSize: 16),
-      ),
-      messageText: Text(
-        message,
-        style: TextStyle(
-            color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
-            fontWeight: FontWeight.w300,
-            fontSize: 14),
-      ),
-      snackPosition: snackPosition ?? SnackPosition.TOP,
-      borderRadius: 15,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      duration: duration ?? Duration(seconds: 3),
-      barBlur: 7.0,
-      backgroundColor: ( backgroundColor ?? Colors.grey.withOpacity(0.2) ),
-    )..show();
+        titleText: titleText ??
+            Text(
+              title,
+              style: TextStyle(
+                  color:
+                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16),
+            ),
+        messageText: messageText ??
+            Text(
+              message,
+              style: TextStyle(
+                  color:
+                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 14),
+            ),
+        snackPosition: snackPosition ?? SnackPosition.TOP,
+        borderRadius: borderRadius ?? 15,
+        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        duration: duration ?? Duration(seconds: 3),
+        barBlur: barBlur ?? 7.0,
+        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        icon: icon,
+        shouldIconPulse: shouldIconPulse ?? true,
+        maxWidth: maxWidth,
+        padding: padding ?? EdgeInsets.all(16),
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        leftBarIndicatorColor: leftBarIndicatorColor,
+        boxShadows: boxShadows,
+        backgroundGradient: backgroundGradient,
+        mainButton: mainButton,
+        onTap: onTap,
+        isDismissible: isDismissible ?? true,
+        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+        showProgressIndicator: showProgressIndicator ?? false,
+        progressIndicatorController: progressIndicatorController,
+        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+        progressIndicatorValueColor: progressIndicatorValueColor,
+        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+        animationDuration: animationDuration ?? Duration(seconds: 1),
+        overlayBlur: overlayBlur ?? 0.0,
+        overlayColor: overlayColor ?? Colors.transparent,
+        userInputForm: userInputForm)
+      ..show();
   }
 }

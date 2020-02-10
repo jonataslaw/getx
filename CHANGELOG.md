@@ -98,8 +98,24 @@
  - Added customs transitions
  - Improve dialogs performance
 
- ## [1.7.1] 
+## [1.7.1] 
  -Fix docs
+
+## [1.7.2] 
+ -Fix bottomsheet on macos
+
+## [1.7.3] 
+ -Added transitions docs
+
+## [1.7.4] 
+ -Fix dialog child error
+
+## [1.8.0] 
+ -Add Get.close method.
+ -Add many Snackbars features
+
+## [1.8.1] 
+ -Fix new snackbar features
 
 
 

@@ -108,15 +108,12 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
 
 class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
   String _getRouteLabel(MaterialLocalizations localizations) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return '';
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-        return localizations.dialogLabel;
+    if ((Theme.of(context).platform == TargetPlatform.android) ||
+        (Theme.of(context).platform == TargetPlatform.fuchsia)) {
+      return localizations.dialogLabel;
+    } else {
+      return '';
     }
-    return null;
   }
 
   @override

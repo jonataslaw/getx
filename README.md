@@ -3,7 +3,7 @@
 A consistent navigation library that lets you navigate between screens, open dialogs/bottomSheets, and display snackbars from anywhere in your code without context.
 ## Getting Started
 
-Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and snacking is really painful.
+Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really painful.
 In addition, with each route navigation, all of your screens below MaterialApp are rebuilt, often causing RAM and CPU bottlenecks. 
 I worked on a pull to fix it in the framework, and seeing how things work I realized that a lot of cliche code could be avoided to get clean and concise code. 
 With that in mind, I created this library that will change the way you work with the Framework and save your life from cliche code, 
@@ -15,7 +15,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.7.4
+  get: ^1.8.1
 ```
   
 And import it:
@@ -69,11 +69,7 @@ ex:
 ```dart
 if(data == 'sucess') madeAnything();
 ```
-### Others methods (docs will be added soon):
-Get.removeRoute // remove one route. 
-Get.until // back repeatedly until the predicate returns true.
-Get.offUntil // go to next route and remove all the previous routes until the predicate returns true.
-Get.offNamedUntil // go to next named route and remove all the previous routes until the predicate returns true.
+
 
 ### SnackBars
 To show a modern snackbar:
@@ -81,20 +77,54 @@ To show a modern snackbar:
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
-but with Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want with GetBar!
+but with Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
 
 ```dart
-  GetBar(
-              title: "Hey i'm a Get SnackBar!",
-              message:
-                  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
-              icon: Icon(Icons.alarm),
+  Get.snackbar(
+               "Hey i'm a Get SnackBar!", // title
+               "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
+              icon: Icon(Icons.alarm), 
               shouldIconPulse: true,
               onTap:(){},
               barBlur: 20,
               isDismissible: true,
               duration: Duration(seconds: 3),
-            )..show();
+            );
+
+  ////////// ALL FEATURES //////////
+  //     Color colorText,
+  //     Duration duration,
+  //     SnackPosition snackPosition,
+  //     Widget titleText,
+  //     Widget messageText,
+  //     Widget icon,
+  //     bool shouldIconPulse,
+  //     double maxWidth,
+  //     EdgeInsets margin,
+  //     EdgeInsets padding,
+  //     double borderRadius,
+  //     Color borderColor,
+  //     double borderWidth,
+  //     Color backgroundColor,
+  //     Color leftBarIndicatorColor,
+  //     List<BoxShadow> boxShadows,
+  //     Gradient backgroundGradient,
+  //     FlatButton mainButton,
+  //     OnTap onTap,
+  //     bool isDismissible,
+  //     bool showProgressIndicator,
+  //     AnimationController progressIndicatorController,
+  //     Color progressIndicatorBackgroundColor,
+  //     Animation<Color> progressIndicatorValueColor,
+  //     SnackStyle snackStyle,
+  //     Curve forwardAnimationCurve,
+  //     Curve reverseAnimationCurve,
+  //     Duration animationDuration,
+  //     double barBlur,
+  //     double overlayBlur,
+  //     Color overlayColor,
+  //     Form userInputForm
+  ///////////////////////////////////
 ```
 ### Dialogs
 
@@ -183,15 +213,10 @@ void main() {
 }
 ```
 
-### Important!!! COPY THE ROUTER CLASS BELOW:
+### COPY THE ROUTER CLASS BELOW:
 Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
-
-We suggest that you copy this class for 3 reasons:
-1- You must define an escape route if you accidentally set a wrong route. This example already contains this.
-
-2- Flutter_Web does not provide friendly urls(no matter how you set the route, it will always return to the main page after the page is reloaded and the route is not displayed in the url with default navigation), but Get supports it! So, when a user enters yourflutterwebsite.com/support and exactly the support route is displayed, you need to pass the settings parameter to GetRoute, and this example already contemplates it!
-
-3- These routes are designed to work with GetRoute, not CupertinoPageRoute or MaterialPageRoute. Never put them here.
+#### Important!!! 
+GetRoute has great performance optimizations that MaterialPageRoute and CupertinoPageRoute do not. It solves the main problems with memory leaks and unexpected reconstructions of the Flutter, so please do not insert MaterialPageRoute or CupertinoPageRoute here, or you will lose one of the main benefits of this lib, in addition to experiencing inconsistencies in the transitions. We recommend always using GetRoute, and if you need custom transitions, use PageRouteBuilder by adding the parameter 'opaque = false' to maintain compatibility with the library.
 
 ```dart
 class Router {
@@ -199,18 +224,18 @@ class Router {
     switch (settings.name) {
       case '/':
         return GetRoute(
-          builder: (_) => SplashScreen(),
+          page: SplashScreen(),
           settings: settings,
         );
       case '/Home':
-        return GetRoute(settings: settings, builder: (_) => Home(), transition: Transition.fade);
+        return GetRoute(settings: settings, page: Home(), transition: Transition.fade);
       case '/Chat':
-        return GetRoute(settings: settings, builder: (_) => Chat(),transition: Transition.rightToLeft);
+        return GetRoute(settings: settings, page: Chat(), transition: Transition.rightToLeft);
       default:
         return GetRoute(
             settings: settings,
-            transition: Transition.rotate
-            builder: (_) => Scaffold(
+            transition: Transition.fade,
+            page: Scaffold(
                   body: Center(
                       child: Text('No route defined for ${settings.name}')),
                 ));
@@ -229,12 +254,7 @@ class FirstRoute extends StatelessWidget {
         leading: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    GetBar(
-                      title: "Hey i'm a Get SnackBar!",
-                      message:
-                          "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!",
-                      duration: Duration(seconds: 3),
-                    )..show();
+                    Get.snackbar("hi", "i am a modern snackbar");
                   },
                 ),
         title: Text('First Route'),
@@ -269,6 +289,18 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+```
+
+### Others methods (docs will be added soon):
+
+```dart
+Get.removeRoute() // remove one route.
+
+Get.until() // back repeatedly until the predicate returns true.
+
+Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
+
+Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
 ```
 
 That is all.
