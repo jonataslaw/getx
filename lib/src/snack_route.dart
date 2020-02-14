@@ -392,6 +392,6 @@ SnackRoute showSnack<T>({@required GetBar snack}) {
 
   return SnackRoute<T>(
     snack: snack,
-    settings: RouteSettings(name: "getroute"),
+    settings: RouteSettings(name: "snackbar"),
   );
 }
