@@ -15,7 +15,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.8.1
+  get: ^1.9.2
 ```
   
 And import it:
@@ -212,6 +212,40 @@ void main() {
   ));
 }
 ```
+#### Middleware 
+If you want to hear Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
+
+##### add GetObserver();
+```dart
+void main() {
+  runApp(MaterialApp(
+    onGenerateRoute: Router.generateRoute,
+    initialRoute: "/",
+    navigatorKey: Get.key,
+    navigatorObservers: [
+        GetObserver(MiddleWare.observer), // HERE !!!
+    ],
+  ));
+}
+```
+Create a MiddleWare class
+
+```dart
+class MiddleWare {
+  static observer(Routing routing) {
+    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
+    ///If you need to enter any of these 3 events directly here, 
+    ///you must specify that the event is != Than you are trying to do.
+    if (routing.current == '/second' && !routing.isSnackbar) {
+      Get.snackbar("Hi", "You are on second route");
+    } else if (routing.current =='/third'){
+      print('last route called');
+    }
+  }
+}
+```
+
+
 
 ### COPY THE ROUTER CLASS BELOW:
 Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
@@ -224,21 +258,25 @@ class Router {
     switch (settings.name) {
       case '/':
         return GetRoute(
-          page: SplashScreen(),
+          page: First(),
           settings: settings,
         );
-      case '/Home':
-        return GetRoute(settings: settings, page: Home(), transition: Transition.fade);
-      case '/Chat':
-        return GetRoute(settings: settings, page: Chat(), transition: Transition.rightToLeft);
+      case '/second':
+        return GetRoute(
+            settings: settings, page: Second(), transition: Transition.fade);
+      case '/third':
+        return GetRoute(
+            settings: settings,
+            page: Third(),
+            transition: Transition.rightToLeft);
       default:
         return GetRoute(
             settings: settings,
             transition: Transition.fade,
             page: Scaffold(
-                  body: Center(
-                      child: Text('No route defined for ${settings.name}')),
-                ));
+              body:
+                  Center(child: Text('No route defined for ${settings.name}')),
+            ));
     }
   }
 }
@@ -246,17 +284,17 @@ class Router {
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (BLoC will love it), and when your app is compiled to the web, your routes will appear in the url beautifully <3
 
 ```dart
-class FirstRoute extends StatelessWidget {
+class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Get.snackbar("hi", "i am a modern snackbar");
-                  },
-                ),
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Get.snackbar("hi", "i am a modern snackbar");
+          },
+        ),
         title: Text('First Route'),
       ),
       body: Center(
@@ -271,12 +309,37 @@ class FirstRoute extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
+class Second extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Second Route"),
+        leading: IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Get.snackbar("hi", "i am a modern snackbar");
+          },
+        ),
+        title: Text('second Route'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Open route'),
+          onPressed: () {
+            Get.toNamed("/third");
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class Third extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Third Route"),
       ),
       body: Center(
         child: RaisedButton(
