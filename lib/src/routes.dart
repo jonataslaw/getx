@@ -6,13 +6,138 @@ import 'getroute.dart';
 import 'snack.dart';
 
 // ignore: non_constant_identifier_names
-final _Get Get = _Get._();
+final GetService Get = _Get();
 
+///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
+///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
+///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
+///To return to the previous screen, use Get.back().
+///No need to pass any context to Get, just put the name of the route inside
+///the parentheses and the magic will occur.
 abstract class GetService {
   GlobalKey<NavigatorState> get key;
+
+  factory GetService() => Get;
+
+  /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
+  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
+  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  Future<T> to<T>(Widget page, {bool rebuildRoutes = false, Transition transition = Transition.fade});
+
+  /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
+  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
+  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  Future<T> toNamed<T>(String page, {arguments});
+
+  /// It replaces Navigator.pushReplacementNamed, but needs no context.
+  Future<T> offNamed<T, TO>(String page, {arguments});
+
+  /// It replaces Navigator.popUntil, but needs no context.
+  void until(String page, predicate);
+
+  /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
+  Future<T> offUntil<T>(page, predicate);
+
+  /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
+  Future<T> offNamedUntil<T>(page, predicate);
+
+  /// It replaces Navigator.removeRoute, but needs no context.
+  void removeRoute(route);
+
+  /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
+  Future<T> offAllNamed<T>(
+    String newRouteName, {
+    RoutePredicate predicate,
+    arguments,
+  });
+
+  /// It replaces Navigator.pop, but needs no context.
+  bool back<T>({T result});
+
+  /// It will close as many screens as you define. Times must be> 0;
+  void close(int times);
+
+  /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
+  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
+  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
+  Future<T> off<T, TO>(Widget page, {bool rebuildRoutes = false, Transition transition = Transition.rightToLeft});
+
+  /// It replaces Navigator.pushAndRemoveUntil, but needs no context
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
+  Future<T> offAll<T>(Widget page,
+      {RoutePredicate predicate, bool rebuildRoutes = false, Transition transition = Transition.rightToLeft});
+
+  /// Show a dialog. You can choose color and opacity of background
+  Future<T> dialog<T>(
+    Widget child, {
+    bool barrierDismissible = true,
+    //  WidgetBuilder builder,
+    bool useRootNavigator = true,
+  });
+
+  Future defaultDialog(
+      {Color color,
+      double opacity = 0.2,
+      String title = "Alert dialog",
+      Widget content,
+      Widget cancel,
+      Widget confirm});
+
+  Future<T> bottomSheet<T>({
+    @required WidgetBuilder builder,
+    Color backgroundColor,
+    double elevation,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    Color barrierColor,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+  });
+
+  GetBar snackbar(title, message,
+      {Color colorText,
+      Duration duration,
+      SnackPosition snackPosition,
+      Widget titleText,
+      Widget messageText,
+      Widget icon,
+      bool shouldIconPulse,
+      double maxWidth,
+      EdgeInsets margin,
+      EdgeInsets padding,
+      double borderRadius,
+      Color borderColor,
+      double borderWidth,
+      Color backgroundColor,
+      Color leftBarIndicatorColor,
+      List<BoxShadow> boxShadows,
+      Gradient backgroundGradient,
+      FlatButton mainButton,
+      OnTap onTap,
+      bool isDismissible,
+      bool showProgressIndicator,
+      SnackDismissDirection dismissDirection,
+      AnimationController progressIndicatorController,
+      Color progressIndicatorBackgroundColor,
+      Animation<Color> progressIndicatorValueColor,
+      SnackStyle snackStyle,
+      Curve forwardAnimationCurve,
+      Curve reverseAnimationCurve,
+      Duration animationDuration,
+      double barBlur,
+      double overlayBlur,
+      Color overlayColor,
+      Form userInputForm});
 }
 
-class _Get {
+class _Get implements GetService {
   GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
 
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
@@ -21,17 +146,7 @@ class _Get {
   ///To return to the previous screen, use Get.back().
   ///No need to pass any context to Get, just put the name of the route inside
   ///the parentheses and the magic will occur.
-  factory _Get() {
-    return Get;
-  }
-
-  ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
-  ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-  ///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
-  ///To return to the previous screen, use Get.back().
-  ///No need to pass any context to Get, just put the name of the route inside
-  ///the parentheses and the magic will occur.
-  _Get._();
+  _Get();
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
@@ -85,11 +200,14 @@ class _Get {
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
   Future<T> offAllNamed<T>(
-    String newRouteName,
-    RoutePredicate predicate, {
+    String newRouteName, {
+    RoutePredicate predicate,
     arguments,
   }) {
+    predicate ??= (route) => false;
     return key.currentState.pushNamedAndRemoveUntil<T>(newRouteName, predicate, arguments: arguments);
   }
 
@@ -113,14 +231,19 @@ class _Get {
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
   Future<T> off<T, TO>(Widget page, {bool rebuildRoutes = false, Transition transition = Transition.rightToLeft}) {
     return key.currentState
         .pushReplacement<T, TO>(GetRoute<T>(opaque: rebuildRoutes, page: page, transition: transition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  Future<T> offAll<T>(Widget page, RoutePredicate predicate,
-      {bool rebuildRoutes = false, Transition transition = Transition.rightToLeft}) {
+  ///
+  /// If no [predicate] is provided, then all routes will be popped
+  Future<T> offAll<T>(Widget page,
+      {RoutePredicate predicate, bool rebuildRoutes = false, Transition transition = Transition.rightToLeft}) {
+    predicate ??= (route) => true;
     return key.currentState
         .pushAndRemoveUntil<T>(GetRoute<T>(opaque: rebuildRoutes, page: page, transition: transition), predicate);
   }

@@ -62,7 +62,7 @@ class Router {
       default:
         return GetRoute(
             settings: settings,
-            transition: Transition.rotate,
+            transition: Transition.fade,
             page: Scaffold(
               body: Center(child: Text('No route defined for ${settings.name}')),
             ));
