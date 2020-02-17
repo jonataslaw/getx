@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class GetRoute<T> extends PageRouteBuilder<T> {
   /// Construct a Modified PageRoute whose contents are defined by child.
@@ -21,16 +22,13 @@ class GetRoute<T> extends PageRouteBuilder<T> {
         assert(opaque != null),
         super(
             fullscreenDialog: fullscreenDialog,
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
+            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
               return page;
             },
             transitionDuration: duration,
             settings: settings,
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
+            transitionsBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation, Widget child) {
               switch (transition) {
                 case Transition.fade:
                   return FadeTransition(opacity: animation, child: child);
@@ -179,6 +177,11 @@ class GetRoute<T> extends PageRouteBuilder<T> {
                   return FadeTransition(opacity: animation, child: child);
               }
             });
+
+  @override
+  NavigatorState get navigator {
+    return Get.key.currentState;
+  }
 
   @override
   final bool maintainState;

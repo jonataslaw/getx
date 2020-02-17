@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'bottomsheet.dart';
 import 'dialog.dart';
-import 'snack.dart';
 import 'getroute.dart';
+import 'snack.dart';
 
-class Get {
-  static Get _get;
-  static GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
+// ignore: non_constant_identifier_names
+final _Get Get = _Get._();
+
+abstract class GetService {
+  GlobalKey<NavigatorState> get key;
+}
+
+class _Get {
+  GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
 
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
   ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
@@ -14,9 +21,8 @@ class Get {
   ///To return to the previous screen, use Get.back().
   ///No need to pass any context to Get, just put the name of the route inside
   ///the parentheses and the magic will occur.
-  factory Get() {
-    if (_get == null) _get = Get._();
-    return _get;
+  factory _Get() {
+    return Get;
   }
 
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
@@ -25,78 +31,75 @@ class Get {
   ///To return to the previous screen, use Get.back().
   ///No need to pass any context to Get, just put the name of the route inside
   ///the parentheses and the magic will occur.
-  Get._();
+  _Get._();
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static to(Widget page,
-      {bool rebuildRoutes = false, Transition transition = Transition.fade}) {
+  Future<T> to<T>(Widget page, {bool rebuildRoutes = false, Transition transition = Transition.fade}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.push(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
+    return key.currentState.push<T>(GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static toNamed(String page, {arguments}) {
+  Future<T> toNamed<T>(String page, {arguments}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushNamed(page, arguments: arguments);
+    return key.currentState.pushNamed<T>(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  static offNamed(String page, {arguments}) {
+  Future<T> offNamed<T, TO>(String page, {arguments}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushReplacementNamed(page, arguments: arguments);
+    return key.currentState.pushReplacementNamed<T, TO>(page, arguments: arguments);
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static until(String page, predicate) {
+  void until(String page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
-  static offUntil(page, predicate) {
+  Future<T> offUntil<T>(page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushAndRemoveUntil(page, predicate);
+    return key.currentState.pushAndRemoveUntil<T>(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static offNamedUntil(page, predicate) {
+  Future<T> offNamedUntil<T>(page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushNamedAndRemoveUntil(page, predicate);
+    return key.currentState.pushNamedAndRemoveUntil<T>(page, predicate);
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
-  static removeRoute(route) {
+  void removeRoute(route) {
     return key.currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static offAllNamed(
+  Future<T> offAllNamed<T>(
     String newRouteName,
     RoutePredicate predicate, {
     arguments,
   }) {
-    return key.currentState
-        .pushNamedAndRemoveUntil(newRouteName, predicate, arguments: arguments);
+    return key.currentState.pushNamedAndRemoveUntil<T>(newRouteName, predicate, arguments: arguments);
   }
 
   /// It replaces Navigator.pop, but needs no context.
-  static back({result}) {
-    return key.currentState.pop(result);
+  bool back<T>({T result}) {
+    return key.currentState.pop<T>(result);
   }
 
   /// It will close as many screens as you define. Times must be> 0;
-  static close(int times) {
+  void close(int times) {
     if ((times == null) || (times < 1)) {
       times = 1;
     }
@@ -110,24 +113,20 @@ class Get {
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static off(Widget page,
-      {bool rebuildRoutes = false,
-      Transition transition = Transition.rightToLeft}) {
-    return key.currentState.pushReplacement(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
+  Future<T> off<T, TO>(Widget page, {bool rebuildRoutes = false, Transition transition = Transition.rightToLeft}) {
+    return key.currentState
+        .pushReplacement<T, TO>(GetRoute<T>(opaque: rebuildRoutes, page: page, transition: transition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  static offAll(Widget page, RoutePredicate predicate,
-      {bool rebuildRoutes = false,
-      Transition transition = Transition.rightToLeft}) {
-    return key.currentState.pushAndRemoveUntil(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition),
-        predicate);
+  Future<T> offAll<T>(Widget page, RoutePredicate predicate,
+      {bool rebuildRoutes = false, Transition transition = Transition.rightToLeft}) {
+    return key.currentState
+        .pushAndRemoveUntil<T>(GetRoute<T>(opaque: rebuildRoutes, page: page, transition: transition), predicate);
   }
 
   /// Show a dialog. You can choose color and opacity of background
-  static Future<T> dialog<T>(
+  Future<T> dialog<T>(
     Widget child, {
     bool barrierDismissible = true,
     //  WidgetBuilder builder,
@@ -135,23 +134,18 @@ class Get {
   }) {
     assert(child != null);
     assert(useRootNavigator != null);
-    final ThemeData theme =
-        Theme.of(Get.key.currentContext, shadowThemeOnly: true);
+    final ThemeData theme = Theme.of(key.currentContext, shadowThemeOnly: true);
     return getShowGeneralDialog(
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
         final Widget pageChild = child; // ?? Builder(builder: builder);
         return SafeArea(
           child: Builder(builder: (BuildContext context) {
-            return theme != null
-                ? Theme(data: theme, child: pageChild)
-                : pageChild;
+            return theme != null ? Theme(data: theme, child: pageChild) : pageChild;
           }),
         );
       },
       barrierDismissible: barrierDismissible,
-      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
-          .modalBarrierDismissLabel,
+      barrierLabel: MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 150),
       // transitionBuilder: _buildMaterialDialogTransitions,
@@ -159,7 +153,7 @@ class Get {
     );
   }
 
-  static defaultDialog(
+  Future defaultDialog(
       {Color color,
       double opacity = 0.2,
       String title = "Alert dialog",
@@ -175,10 +169,10 @@ class Get {
       confirm: confirm,
     );
 
-    dialog(child);
+    return dialog<dynamic>(child);
   }
 
-  static Future<T> bottomSheet<T>({
+  Future<T> bottomSheet<T>({
     @required WidgetBuilder builder,
     Color backgroundColor,
     double elevation,
@@ -196,12 +190,11 @@ class Get {
     assert(isDismissible != null);
     assert(enableDrag != null);
 
-    return Get.key.currentState.push<T>(GetModalBottomSheetRoute<T>(
+    return key.currentState.push<T>(GetModalBottomSheetRoute<T>(
       builder: builder,
-      theme: Theme.of(Get.key.currentContext, shadowThemeOnly: true),
+      theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,
-      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
-          .modalBarrierDismissLabel,
+      barrierLabel: MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
       backgroundColor: backgroundColor,
       elevation: elevation,
       shape: shape,
@@ -212,7 +205,7 @@ class Get {
     ));
   }
 
-  static snackbar(title, message,
+  GetBar snackbar(title, message,
       {Color colorText,
       Duration duration,
       SnackPosition snackPosition,
@@ -252,8 +245,7 @@ class Get {
             Text(
               title,
               style: TextStyle(
-                  color:
-                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
+                  color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
                   fontWeight: FontWeight.w800,
                   fontSize: 16),
             ),
@@ -261,8 +253,7 @@ class Get {
             Text(
               message,
               style: TextStyle(
-                  color:
-                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
+                  color: colorText ?? Theme.of(Get.key.currentContext).accentColor,
                   fontWeight: FontWeight.w300,
                   fontSize: 14),
             ),

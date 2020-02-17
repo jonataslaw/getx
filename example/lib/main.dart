@@ -56,21 +56,37 @@ class Router {
           settings: settings,
         );
       case '/Home':
-        return GetRoute(
-            settings: settings, page: Home(), transition: Transition.fade);
+        return GetRoute(settings: settings, page: Home(), transition: Transition.fade);
       case '/Chat':
-        return GetRoute(
-            settings: settings,
-            page: Chat(),
-            transition: Transition.rightToLeft);
+        return GetRoute(settings: settings, page: Chat(), transition: Transition.rightToLeft);
       default:
         return GetRoute(
             settings: settings,
             transition: Transition.rotate,
             page: Scaffold(
-              body:
-                  Center(child: Text('No route defined for ${settings.name}')),
+              body: Center(child: Text('No route defined for ${settings.name}')),
             ));
     }
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("Splash Screen"));
+  }
+}
+
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("Home Page"));
+  }
+}
+
+class Chat extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("Chat"));
   }
 }
