@@ -1,0 +1,103 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code related
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+**/.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+**/*.g.dart
+/build/
+
+
+.gradle/
+gradle*
+*.cer
+
+# Swagger
+.swagger-codegen-ignore
+.swagger-codegen/
+swagger-cli.jar
+**/docs
+
+# Android related
+**/android/.gradle
+**/android/captures/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/**/key.jks
+**/android/**/google-services.json
+**/android/.gradletasknamecache
+**/android/release-manager-key.json
+
+# Fastlane
+fastlane/metadata/android/en-US/*.txt
+fastlane/report.xml
+fastlane/README.md
+
+# iOS/XCode related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/Flutter.podspec
+**/ios/**/xcuserdata
+**/ios/*.cer
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/fastlane/report.xml
+*.mobileprovision
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+coverage/
+lib/generated/
+res/
+
+
+.direnv
+.aliases.sh
+
+# Exceptions to above rules.
+!**/ios/**/default.mode1v3
+!**/ios/**/default.mode2v3
+!**/ios/**/default.pbxuser
+!**/ios/**/default.perspectivev3
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
