@@ -138,7 +138,7 @@ abstract class GetService {
 }
 
 class _Get implements GetService {
-  GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
 
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
   ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"

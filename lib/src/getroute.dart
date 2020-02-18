@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class GetRoute<T> extends PageRouteBuilder<T> {
   /// Construct a Modified PageRoute whose contents are defined by child.
@@ -177,11 +176,6 @@ class GetRoute<T> extends PageRouteBuilder<T> {
                   return FadeTransition(opacity: animation, child: child);
               }
             });
-
-  @override
-  NavigatorState get navigator {
-    return Get.key.currentState;
-  }
 
   @override
   final bool maintainState;
