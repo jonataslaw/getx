@@ -28,6 +28,7 @@ Add GetKey to your MaterialApp and enjoy:
 ```dart
 MaterialApp(
     navigatorKey: Get.key,
+ // navigatorKey: Get.addKey(Modular.navigatorKey), // to modular users
     home: MyHome(),
   )
 ```
