@@ -9,7 +9,19 @@ import 'transparent_route.dart';
 
 class Get {
   static Get _get;
-  static GlobalKey<NavigatorState> key = new GlobalKey<NavigatorState>();
+  static GlobalKey<NavigatorState> _key;
+
+  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
+    _key = newKey;
+    return _key;
+  }
+
+  static GlobalKey<NavigatorState> get key {
+    if (_key == null) {
+      _key = GlobalKey<NavigatorState>();
+    }
+    return _key;
+  }
 
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
   ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"

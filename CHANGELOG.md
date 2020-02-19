@@ -143,6 +143,11 @@
 ## [1.10.4] 
  -Improve Get.offAll() - predicate now is optional
 
+## [1.10.5] 
+ -Added setKey to improve modular compatibility
+ -Added ability to define transition duration directly when calling the new route.
+
+
 
 
 
