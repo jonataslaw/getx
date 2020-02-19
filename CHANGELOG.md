@@ -117,5 +117,32 @@
 ## [1.8.1] 
  -Fix new snackbar features
 
+## [1.9.0] 
+ -Added: Navigator observer 
+ -Added: Get.args to named routes 
+ -Improve snackbar performance 
+
+## [1.9.1] 
+ -Fix typo on snackbar route
+
+## [1.9.2] 
+ -Added docs to GetObserver
+
+## [1.10.0] 
+ -Added backdrop
+
+## [1.10.1] 
+ -Backdrop improvement
+
+## [1.10.2] 
+ -Improve snackbar text color
+
+## [1.10.3] 
+ -Improve default color from dialogs
+
+## [1.10.4] 
+ -Improve Get.offAll() - predicate now is optional
+
+
 
 

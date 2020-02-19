@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'backdrop_blur.dart';
 import 'bottomsheet.dart';
 import 'dialog.dart';
 import 'snack.dart';
 import 'getroute.dart';
+import 'transparent_route.dart';
 
 class Get {
   static Get _get;
@@ -31,11 +34,16 @@ class Get {
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static to(Widget page,
-      {bool rebuildRoutes = false, Transition transition = Transition.fade}) {
+      {bool rebuildRoutes = false,
+      Transition transition = Transition.fade,
+      Duration duration = const Duration(milliseconds: 400)}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.push(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
+    return key.currentState.push(GetRoute(
+        opaque: rebuildRoutes,
+        page: page,
+        transition: transition,
+        duration: duration));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -82,16 +90,18 @@ class Get {
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
   static offAllNamed(
-    String newRouteName,
-    RoutePredicate predicate, {
+    String newRouteName, {
+    RoutePredicate predicate,
     arguments,
   }) {
-    return key.currentState
-        .pushNamedAndRemoveUntil(newRouteName, predicate, arguments: arguments);
+    var route = (Route<dynamic> rota) => false;
+    return key.currentState.pushNamedAndRemoveUntil(
+        newRouteName, predicate ?? route,
+        arguments: arguments);
   }
 
   /// It replaces Navigator.pop, but needs no context.
-  static back({result}) {
+  static back({dynamic result}) {
     return key.currentState.pop(result);
   }
 
@@ -112,18 +122,24 @@ class Get {
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static off(Widget page,
       {bool rebuildRoutes = false,
-      Transition transition = Transition.rightToLeft}) {
-    return key.currentState.pushReplacement(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition));
+      Transition transition = Transition.rightToLeft,
+      Duration duration = const Duration(milliseconds: 400)}) {
+    return key.currentState.pushReplacement(GetRoute(
+        opaque: rebuildRoutes,
+        page: page,
+        transition: transition,
+        duration: duration));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  static offAll(Widget page, RoutePredicate predicate,
-      {bool rebuildRoutes = false,
+  static offAll(Widget page,
+      {RoutePredicate predicate,
+      bool rebuildRoutes = false,
       Transition transition = Transition.rightToLeft}) {
+    var route = (Route<dynamic> rota) => false;
     return key.currentState.pushAndRemoveUntil(
         GetRoute(opaque: rebuildRoutes, page: page, transition: transition),
-        predicate);
+        predicate ?? route);
   }
 
   /// Show a dialog. You can choose color and opacity of background
@@ -137,6 +153,7 @@ class Get {
     assert(useRootNavigator != null);
     final ThemeData theme =
         Theme.of(Get.key.currentContext, shadowThemeOnly: true);
+
     return getShowGeneralDialog(
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
@@ -208,8 +225,38 @@ class Get {
       clipBehavior: clipBehavior,
       isDismissible: isDismissible,
       modalBarrierColor: barrierColor,
+      settings: RouteSettings(name: "bottomsheet"),
       enableDrag: enableDrag,
     ));
+  }
+
+  /// get arguments from current screen. You need of context
+  static args(context) {
+    return ModalRoute.of(context).settings.arguments;
+  }
+
+  static backdrop(Widget child,
+      {double radius = 20.0,
+      double blurRadius: 20.0,
+      int duration = 300,
+      Transition transition = Transition.fade,
+      Widget bottomButton = const Icon(Icons.visibility),
+      double bottomHeight = 60.0,
+      bool bottomButtonRotate = false}) {
+    final page = RippleBackdropAnimatePage(
+      child: child,
+      childFade: true,
+      duration: duration,
+      blurRadius: blurRadius,
+      bottomButton: bottomButton,
+      bottomHeight: bottomHeight,
+      bottomButtonRotate: bottomButtonRotate,
+    );
+
+    return key.currentState
+        .push(TransparentRoute(builder: (BuildContext context) {
+      return page;
+    }));
   }
 
   static snackbar(title, message,
@@ -246,56 +293,56 @@ class Get {
       double overlayBlur,
       Color overlayColor,
       Form userInputForm}) {
-    //   if (key.currentState.mounted)
-    return GetBar(
-        titleText: titleText ??
-            Text(
-              title,
-              style: TextStyle(
-                  color:
-                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 16),
-            ),
-        messageText: messageText ??
-            Text(
-              message,
-              style: TextStyle(
-                  color:
-                      colorText ?? Theme.of(Get.key.currentContext).accentColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 14),
-            ),
-        snackPosition: snackPosition ?? SnackPosition.TOP,
-        borderRadius: borderRadius ?? 15,
-        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
-        duration: duration ?? Duration(seconds: 3),
-        barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
-        icon: icon,
-        shouldIconPulse: shouldIconPulse ?? true,
-        maxWidth: maxWidth,
-        padding: padding ?? EdgeInsets.all(16),
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.FLOATING,
-        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? Duration(seconds: 1),
-        overlayBlur: overlayBlur ?? 0.0,
-        overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm)
-      ..show();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      final Color defaultColor = IconTheme.of(Get.key.currentContext).color;
+      return GetBar(
+          titleText: titleText ??
+              Text(
+                title,
+                style: TextStyle(
+                    color: colorText ?? defaultColor,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16),
+              ),
+          messageText: messageText ??
+              Text(
+                message,
+                style: TextStyle(
+                    color: colorText ?? defaultColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 14),
+              ),
+          snackPosition: snackPosition ?? SnackPosition.TOP,
+          borderRadius: borderRadius ?? 15,
+          margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+          duration: duration ?? Duration(seconds: 3),
+          barBlur: barBlur ?? 7.0,
+          backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+          icon: icon,
+          shouldIconPulse: shouldIconPulse ?? true,
+          maxWidth: maxWidth,
+          padding: padding ?? EdgeInsets.all(16),
+          borderColor: borderColor,
+          borderWidth: borderWidth,
+          leftBarIndicatorColor: leftBarIndicatorColor,
+          boxShadows: boxShadows,
+          backgroundGradient: backgroundGradient,
+          mainButton: mainButton,
+          onTap: onTap,
+          isDismissible: isDismissible ?? true,
+          dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+          showProgressIndicator: showProgressIndicator ?? false,
+          progressIndicatorController: progressIndicatorController,
+          progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+          progressIndicatorValueColor: progressIndicatorValueColor,
+          snackStyle: snackStyle ?? SnackStyle.FLOATING,
+          forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+          reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+          animationDuration: animationDuration ?? Duration(seconds: 1),
+          overlayBlur: overlayBlur ?? 0.0,
+          overlayColor: overlayColor ?? Colors.transparent,
+          userInputForm: userInputForm)
+        ..show();
+    });
   }
 }

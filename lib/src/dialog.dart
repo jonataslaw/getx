@@ -43,6 +43,7 @@ Future<T> getShowGeneralDialog<T>({
   assert(!barrierDismissible || barrierLabel != null);
   return Get.key.currentState.push<T>(_DialogRoute<T>(
     pageBuilder: pageBuilder,
+    settings: RouteSettings(name: "dialog"), // REMOVE THIS IF ERROR
     barrierDismissible: barrierDismissible,
     barrierLabel: barrierLabel,
     barrierColor: barrierColor,

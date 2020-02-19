@@ -1,6 +1,6 @@
 name: get
 description: A consistent navigation library that lets you navigate between screens, open dialogs, and display snackbars easily with no context.
-version: 1.8.1
+version: 1.10.4
 homepage: https://github.com/jonataslaw/get
 
 environment:

@@ -9,13 +9,15 @@ I worked on a pull to fix it in the framework, and seeing how things work I real
 With that in mind, I created this library that will change the way you work with the Framework and save your life from cliche code, 
 increasing your productivity, and eliminating all the bugs present in Flutter's default navigation altogether.
 
+##### If you use MODULAR, you can to use [GET MODULAR](https://pub.dev/packages/get_modular) 
+
 ## How to use?
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.9.2
+  get: ^1.10.4
 ```
   
 And import it:
@@ -51,7 +53,7 @@ Get.off(NextScreen());
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(NextScreen(), (route) => false);
+Get.offAll(NextScreen());
 ```
 
 To navigate to the next route, and receive or update data as soon as you return from it:
@@ -195,7 +197,7 @@ Get.offNamed("/NextScreen");
 ```
 To navigate and remove all previous screens from the tree.
 ```dart
-Get.offAllNamed("/NextScreen", (route) => false);
+Get.offAllNamed("/NextScreen");
 ```
 
 ## Using with Named Routes and And offering full flutter_web support (REQUIRED FOR NAMED ROUTES):
@@ -213,7 +215,7 @@ void main() {
 }
 ```
 #### Middleware 
-If you want to hear Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
+If you want listen Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
 
 ##### add GetObserver();
 ```dart
