@@ -17,7 +17,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.10.5
+  get: ^1.11.1
 ```
   
 And import it:
@@ -28,7 +28,6 @@ Add GetKey to your MaterialApp and enjoy:
 ```dart
 MaterialApp(
     navigatorKey: Get.key,
- // navigatorKey: Get.addKey(Modular.navigatorKey), // to modular users
     home: MyHome(),
   )
 ```
@@ -252,8 +251,6 @@ class MiddleWare {
 
 ### COPY THE ROUTER CLASS BELOW:
 Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
-#### Important!!! 
-GetRoute has great performance optimizations that MaterialPageRoute and CupertinoPageRoute do not. It solves the main problems with memory leaks and unexpected reconstructions of the Flutter, so please do not insert MaterialPageRoute or CupertinoPageRoute here, or you will lose one of the main benefits of this lib, in addition to experiencing inconsistencies in the transitions. We recommend always using GetRoute, and if you need custom transitions, use PageRouteBuilder by adding the parameter 'opaque = false' to maintain compatibility with the library.
 
 ```dart
 class Router {
@@ -276,6 +273,35 @@ class Router {
         return GetRoute(
             settings: settings,
             transition: Transition.fade,
+            page: Scaffold(
+              body:
+                  Center(child: Text('No route defined for ${settings.name}')),
+            ));
+    }
+  }
+}
+```
+##### Experimental
+If you need specific Cupertino elements, such as dragging to close, you can use GetCupertino:
+```dart
+class Router {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return GetCupertino(
+          page: First(),
+          settings: settings,
+        );
+      case '/second':
+        return GetCupertino(
+            settings: settings, page: Second());
+      case '/third':
+        return GetCupertino(
+            settings: settings,
+            page: Third());
+      default:
+        return GetCupertino(
+            settings: settings,
             page: Scaffold(
               body:
                   Center(child: Text('No route defined for ${settings.name}')),

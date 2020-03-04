@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'backdrop_blur.dart';
 import 'bottomsheet.dart';
 import 'dialog.dart';
+import 'getroute_cupertino.dart';
 import 'snack.dart';
 import 'getroute.dart';
+import 'transitions_type.dart';
 import 'transparent_route.dart';
 
 class Get {
@@ -46,16 +50,23 @@ class Get {
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static to(Widget page,
-      {bool rebuildRoutes = false,
-      Transition transition = Transition.fade,
+      {bool rebuildRoutes,
+      Transition transition,
       Duration duration = const Duration(milliseconds: 400)}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.push(GetRoute(
-        opaque: rebuildRoutes,
-        page: page,
-        transition: transition,
-        duration: duration));
+
+    return Platform.isIOS
+        ? key.currentState.push(GetCupertino(
+            opaque: rebuildRoutes ?? true,
+            page: page,
+            transition: transition ?? Transition.cupertino,
+            duration: duration))
+        : key.currentState.push(GetRoute(
+            opaque: rebuildRoutes ?? false,
+            page: page,
+            transition: transition ?? Transition.fade,
+            duration: duration));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -356,5 +367,17 @@ class Get {
           userInputForm: userInputForm)
         ..show();
     });
+  }
+
+  static iconColor() {
+    return Theme.of(key.currentContext).iconTheme.color;
+  }
+
+  static height() {
+    return MediaQuery.of(key.currentContext).size.height;
+  }
+
+  static width() {
+    return MediaQuery.of(key.currentContext).size.width;
   }
 }

@@ -147,6 +147,13 @@
  -Added setKey to improve modular compatibility
  -Added ability to define transition duration directly when calling the new route.
 
+## [1.11.0] 
+ -Added experimental GetCupertino
+
+## [1.11.1] 
+ -Improve swipe to back on iOS devices
+
+
 
 
 

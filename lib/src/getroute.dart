@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'transitions_type.dart';
+
 class GetRoute<T> extends PageRouteBuilder<T> {
   /// Construct a Modified PageRoute whose contents are defined by child.
   /// The values of [child], [maintainState], [opaque], and [fullScreenDialog] must not
@@ -220,17 +222,4 @@ class GetRoute<T> extends PageRouteBuilder<T> {
   final Alignment alignment;
 
   final Duration duration;
-}
-
-enum Transition {
-  fade,
-  rightToLeft,
-  leftToRight,
-  upToDown,
-  downToUp,
-  scale,
-  rotate,
-  size,
-  rightToLeftWithFade,
-  leftToRightWithFade,
 }
