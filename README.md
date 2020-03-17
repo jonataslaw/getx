@@ -9,7 +9,7 @@ I worked on a pull to fix it in the framework, and seeing how things work I real
 With that in mind, I created this library that will change the way you work with the Framework and save your life from cliche code, 
 increasing your productivity, and eliminating all the bugs present in Flutter's default navigation altogether.
 
-##### If you use MODULAR, you can to use [GET MODULAR](https://pub.dev/packages/get_modular) or add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
+##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
 ## How to use?
 
