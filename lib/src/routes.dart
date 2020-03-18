@@ -49,7 +49,7 @@ class Get {
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static to(Widget page,
+  static Future<T> to<T>(Widget page,
       {bool rebuildRoutes,
       Transition transition,
       Duration duration = const Duration(milliseconds: 400)}) {
@@ -72,47 +72,47 @@ class Get {
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static toNamed(String page, {arguments}) {
+  static Future<T> toNamed<T>(String page, {arguments}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  static offNamed(String page, {arguments}) {
+  static Future<T> offNamed<T>(String page, {arguments}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.pushReplacementNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static until(String page, predicate) {
+  static void until(String page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
-  static offUntil(page, predicate) {
+  static Future<T> offUntil<T>(page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static offNamedUntil(page, predicate) {
+  static Future<T> offNamedUntil<T>(page, predicate) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.pushNamedAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
-  static removeRoute(route) {
+  static void removeRoute(route) {
     return key.currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static offAllNamed(
+  static Future<T> offAllNamed<T>(
     String newRouteName, {
     RoutePredicate predicate,
     arguments,
@@ -124,12 +124,12 @@ class Get {
   }
 
   /// It replaces Navigator.pop, but needs no context.
-  static back({dynamic result}) {
+  static void back({dynamic result}) {
     return key.currentState.pop(result);
   }
 
   /// It will close as many screens as you define. Times must be> 0;
-  static close(int times) {
+  static void close(int times) {
     if ((times == null) || (times < 1)) {
       times = 1;
     }
@@ -143,25 +143,33 @@ class Get {
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
-  static off(Widget page,
+  static Future<T> off<T>(Widget page,
       {bool rebuildRoutes = false,
-      Transition transition = Transition.rightToLeft,
+      Transition transition,
       Duration duration = const Duration(milliseconds: 400)}) {
     return key.currentState.pushReplacement(GetRoute(
         opaque: rebuildRoutes,
         page: page,
-        transition: transition,
+        transition: transition ?? Platform.isIOS
+            ? Transition.cupertino
+            : Transition.fade,
         duration: duration));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  static offAll(Widget page,
+  static Future<T> offAll<T>(Widget page,
       {RoutePredicate predicate,
       bool rebuildRoutes = false,
-      Transition transition = Transition.rightToLeft}) {
+      Transition transition}) {
     var route = (Route<dynamic> rota) => false;
     return key.currentState.pushAndRemoveUntil(
-        GetRoute(opaque: rebuildRoutes, page: page, transition: transition),
+        GetRoute(
+          opaque: rebuildRoutes,
+          page: page,
+          transition: transition ?? Platform.isIOS
+              ? Transition.cupertino
+              : Transition.fade,
+        ),
         predicate ?? route);
   }
 
@@ -258,7 +266,7 @@ class Get {
     return ModalRoute.of(context).settings.arguments;
   }
 
-  static backdrop(Widget child,
+  static Future backdrop(Widget child,
       {double radius = 20.0,
       double blurRadius: 20.0,
       int duration = 300,
@@ -282,7 +290,7 @@ class Get {
     }));
   }
 
-  static snackbar(title, message,
+  static void snackbar(title, message,
       {Color colorText,
       Duration duration,
       SnackPosition snackPosition,
@@ -369,15 +377,23 @@ class Get {
     });
   }
 
-  static iconColor() {
-    return Theme.of(key.currentContext).iconTheme.color;
+  static BuildContext context() {
+    return key.currentContext;
   }
 
-  static height() {
-    return MediaQuery.of(key.currentContext).size.height;
+  static ThemeData theme() {
+    return Theme.of(context());
   }
 
-  static width() {
-    return MediaQuery.of(key.currentContext).size.width;
+  static Color iconColor() {
+    return Theme.of(context()).iconTheme.color;
+  }
+
+  static double height() {
+    return MediaQuery.of(context()).size.height;
+  }
+
+  static double width() {
+    return MediaQuery.of(context()).size.width;
   }
 }

@@ -153,8 +153,6 @@
 ## [1.11.1] 
  -Improve swipe to back on iOS devices
 
-
-
-
-
+ ## [1.12.0-dev] 
+ -Compatibility with Dev branch
 
