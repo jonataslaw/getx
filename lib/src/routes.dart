@@ -1,15 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'backdrop_blur.dart';
-import 'bottomsheet.dart';
-import 'dialog.dart';
-import 'getroute_cupertino.dart';
-import 'snack.dart';
-import 'getroute.dart';
-import 'transitions_type.dart';
-import 'transparent_route.dart';
+import 'package:get/src/dialog/dialog.dart';
+import 'package:get/get.dart';
+import 'routes/blur/backdrop_blur.dart';
+import 'routes/blur/transparent_route.dart';
 
 class Get {
   static Get _get;
@@ -56,7 +50,7 @@ class Get {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
 
-    return Platform.isIOS
+    return GetPlatform.isIOS
         ? key.currentState.push(GetCupertino(
             opaque: rebuildRoutes ?? true,
             page: page,
@@ -377,23 +371,13 @@ class Get {
     });
   }
 
-  static BuildContext context() {
-    return key.currentContext;
-  }
+  static BuildContext get context => key.currentContext;
 
-  static ThemeData theme() {
-    return Theme.of(context());
-  }
+  static ThemeData get theme => Theme.of(context);
 
-  static Color iconColor() {
-    return Theme.of(context()).iconTheme.color;
-  }
+  static Color get iconColor => Theme.of(context).iconTheme.color;
 
-  static double height() {
-    return MediaQuery.of(context()).size.height;
-  }
+  static double get height => MediaQuery.of(context).size.height;
 
-  static double width() {
-    return MediaQuery.of(context()).size.width;
-  }
+  static double get width => MediaQuery.of(context).size.width;
 }
