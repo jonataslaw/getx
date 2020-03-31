@@ -4,6 +4,7 @@ import 'package:get/src/dialog/dialog.dart';
 import 'package:get/get.dart';
 import 'routes/blur/backdrop_blur.dart';
 import 'routes/blur/transparent_route.dart';
+import 'routes/default_route.dart';
 
 class Get {
   static Get _get;
@@ -44,23 +45,14 @@ class Get {
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
   static Future<T> to<T>(Widget page,
-      {bool rebuildRoutes,
-      Transition transition,
-      Duration duration = const Duration(milliseconds: 400)}) {
+      {bool rebuildRoutes, Transition transition, Duration duration}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-
-    return GetPlatform.isIOS
-        ? key.currentState.push(GetCupertino(
-            opaque: rebuildRoutes ?? true,
-            page: page,
-            transition: transition ?? Transition.cupertino,
-            duration: duration))
-        : key.currentState.push(GetRoute(
-            opaque: rebuildRoutes ?? false,
-            page: page,
-            transition: transition ?? Transition.fade,
-            duration: duration));
+    return key.currentState.push(GetRoute(
+        rebuildRoutes: rebuildRoutes,
+        page: page,
+        transition: transition ?? Transition.cupertino,
+        duration: duration ?? const Duration(milliseconds: 400)));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -118,7 +110,7 @@ class Get {
   }
 
   /// It replaces Navigator.pop, but needs no context.
-  static void back({dynamic result}) {
+  static back({dynamic result}) {
     return key.currentState.pop(result);
   }
 
@@ -128,7 +120,7 @@ class Get {
       times = 1;
     }
     int count = 0;
-    var back = key.currentState.popUntil((route) {
+    void back = key.currentState.popUntil((route) {
       return count++ == times;
     });
     return back;
@@ -142,11 +134,9 @@ class Get {
       Transition transition,
       Duration duration = const Duration(milliseconds: 400)}) {
     return key.currentState.pushReplacement(GetRoute(
-        opaque: rebuildRoutes,
+        rebuildRoutes: rebuildRoutes,
         page: page,
-        transition: transition ?? Platform.isIOS
-            ? Transition.cupertino
-            : Transition.fade,
+        transition: transition,
         duration: duration));
   }
 
@@ -158,12 +148,7 @@ class Get {
     var route = (Route<dynamic> rota) => false;
     return key.currentState.pushAndRemoveUntil(
         GetRoute(
-          opaque: rebuildRoutes,
-          page: page,
-          transition: transition ?? Platform.isIOS
-              ? Transition.cupertino
-              : Transition.fade,
-        ),
+            rebuildRoutes: rebuildRoutes, page: page, transition: transition),
         predicate ?? route);
   }
 

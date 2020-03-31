@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'routes.dart';
+import 'package:get/get.dart';
 
 class DefaultDialogGet extends StatelessWidget {
   final color;

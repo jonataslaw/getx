@@ -153,6 +153,26 @@
 ## [1.11.1] 
  -Improve swipe to back on iOS devices
 
- ## [1.12.0-dev] 
- -Compatibility with Dev branch
+## [1.11.2] 
+ -Fix flutter web platform and added GetPlatform
+
+## [1.11.3] 
+-Added docs
+
+## [1.11.4] 
+- Refactor code of library
+
+## [1.12.0-dev] 
+-Compatibility with Dev branch
+
+## [1.13.0-dev] 
+- Plugin refactor
+- Added GetPlatform
+
+## [1.13.1-dev] 
+- Fix back function
+
+
+
+
 

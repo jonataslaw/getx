@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'routes.dart';
+import 'package:get/get.dart';
 import 'snack_route.dart' as route;
 
 typedef void SnackStatusCallback(SnackStatus status);

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'transitions_type.dart';
 
-class GetRoute<T> extends PageRouteBuilder<T> {
+class GetMaterial<T> extends PageRouteBuilder<T> {
   /// Construct a Modified PageRoute whose contents are defined by child.
   /// The values of [child], [maintainState], [opaque], and [fullScreenDialog] must not
   /// be null.
-  GetRoute({
+  GetMaterial({
     Key key,
     RouteSettings settings,
     this.opaque = false,
@@ -200,13 +199,13 @@ class GetRoute<T> extends PageRouteBuilder<T> {
 
   // @override
   // bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) {
-  //   return previousRoute is GetRoute || previousRoute is CupertinoPageRoute;
+  //   return previousRoute is GetMaterial || previousRoute is CupertinoPageRoute;
   // }
 
   // @override
   // bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
   //   // Don't perform outgoing animation if the next route is a fullscreen dialog.
-  //   return (nextRoute is GetRoute && !nextRoute.fullscreenDialog) ||
+  //   return (nextRoute is GetMaterial && !nextRoute.fullscreenDialog) ||
   //       (nextRoute is CupertinoPageRoute && !nextRoute.fullscreenDialog);
   // }
 

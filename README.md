@@ -11,7 +11,7 @@ increasing your productivity, and eliminating all the bugs present in Flutter's 
 
 ##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
-##### If you use master/dev branch of Flutter, use the version 1.12.0-dev.
+##### If you use master/dev branch of Flutter, use the version 1.12.1-dev.
 
 ## How to use?
 
@@ -19,7 +19,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.11.1 // get: ^1.12.0-dev on dev/master
+  get: ^1.11.6 // get: ^1.13.1-dev on dev/master
 ```
   
 And import it:
@@ -249,8 +249,6 @@ class MiddleWare {
 }
 ```
 
-
-
 ### COPY THE ROUTER CLASS BELOW:
 Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
 
@@ -283,35 +281,7 @@ class Router {
   }
 }
 ```
-##### Experimental
-If you need specific Cupertino elements, such as dragging to close, you can use GetCupertino:
-```dart
-class Router {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return GetCupertino(
-          page: First(),
-          settings: settings,
-        );
-      case '/second':
-        return GetCupertino(
-            settings: settings, page: Second());
-      case '/third':
-        return GetCupertino(
-            settings: settings,
-            page: Third());
-      default:
-        return GetCupertino(
-            settings: settings,
-            page: Scaffold(
-              body:
-                  Center(child: Text('No route defined for ${settings.name}')),
-            ));
-    }
-  }
-}
-```
+
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (BLoC will love it), and when your app is compiled to the web, your routes will appear in the url beautifully <3
 
 ```dart
@@ -395,6 +365,14 @@ Get.until() // back repeatedly until the predicate returns true.
 Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
 
 Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
+
+GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
+
+Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height
+
+Get.context // Gives the context of the screen in the foreground anywhere in your code.
+
+var arguments = Get.args(context); // Gives current route arguments
 ```
 
-That is all.
+This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
