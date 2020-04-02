@@ -11,7 +11,7 @@ increasing your productivity, and eliminating all the bugs present in Flutter's 
 
 ##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
-##### If you use master/dev branch of Flutter, use the version 1.12.1-dev.
+##### If you use master/dev branch of Flutter, use the version 1.14.0-dev.
 
 ## How to use?
 
@@ -19,7 +19,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.11.6 // get: ^1.13.1-dev on dev/master
+  get: ^1.11.6 // ^1.14.0-dev on dev/master
 ```
   
 And import it:
@@ -268,7 +268,8 @@ class Router {
         return GetRoute(
             settings: settings,
             page: Third(),
-            transition: Transition.rightToLeft);
+            popGesture: true,
+            transition: Transition.cupertino);
       default:
         return GetRoute(
             settings: settings,

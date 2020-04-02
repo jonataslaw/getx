@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/src/dialog/dialog.dart';
 import 'package:get/get.dart';
+import 'platform/platform.dart';
 import 'routes/blur/backdrop_blur.dart';
 import 'routes/blur/transparent_route.dart';
 import 'routes/default_route.dart';
@@ -43,21 +44,27 @@ class Get {
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  /// of rebuilding every app after a route, use opaque = true as the parameter.
   static Future<T> to<T>(Widget page,
-      {bool rebuildRoutes, Transition transition, Duration duration}) {
+      {bool opaque,
+      Transition transition,
+      Duration duration,
+      bool popGesture}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState.push(GetRoute(
-        rebuildRoutes: rebuildRoutes,
+        opaque: opaque ?? true,
         page: page,
-        transition: transition ?? Transition.cupertino,
+        popGesture: popGesture,
+        transition: transition ?? GetPlatform.isIOS
+            ? Transition.cupertino
+            : Transition.fade,
         duration: duration ?? const Duration(milliseconds: 400)));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  /// of rebuilding every app after a route, use opaque = true as the parameter.
   static Future<T> toNamed<T>(String page, {arguments}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
@@ -128,27 +135,38 @@ class Get {
 
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use rebuildRoutes = true as the parameter.
+  /// of rebuilding every app after a route, use opaque = true as the parameter.
   static Future<T> off<T>(Widget page,
-      {bool rebuildRoutes = false,
+      {bool opaque = false,
       Transition transition,
+      bool popGesture,
       Duration duration = const Duration(milliseconds: 400)}) {
     return key.currentState.pushReplacement(GetRoute(
-        rebuildRoutes: rebuildRoutes,
+        opaque: opaque ?? true,
         page: page,
-        transition: transition,
+        popGesture: popGesture,
+        transition: transition ?? GetPlatform.isIOS
+            ? Transition.cupertino
+            : Transition.fade,
         duration: duration));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
   static Future<T> offAll<T>(Widget page,
       {RoutePredicate predicate,
-      bool rebuildRoutes = false,
+      bool opaque = false,
+      bool popGesture,
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
     return key.currentState.pushAndRemoveUntil(
         GetRoute(
-            rebuildRoutes: rebuildRoutes, page: page, transition: transition),
+          opaque: opaque ?? true,
+          popGesture: popGesture,
+          page: page,
+          transition: transition ?? GetPlatform.isIOS
+              ? Transition.cupertino
+              : Transition.fade,
+        ),
         predicate ?? route);
   }
 

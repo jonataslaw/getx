@@ -172,6 +172,12 @@
 ## [1.13.1-dev] 
 - Fix back function
 
+## [1.14.0-dev] 
+- Added compatibility with Flutter 1.17.1
+- Added back popGesture to iOS (default) and Android (optional)
+- Improve performance
+- Decrease lib size to 94.9kb (25.4k after compiled on release)
+
 
 
 
