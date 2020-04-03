@@ -12,6 +12,7 @@ increasing your productivity, and eliminating all the bugs present in Flutter's 
 ##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
 ##### If you use master/dev branch of Flutter, use the version 1.14.0-dev.
+##### If you use beta branch of Flutter, use the version 1.13.1-dev.
 
 ## How to use?
 
@@ -19,7 +20,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.11.6 // ^1.14.0-dev on dev/master
+  get: ^1.11.6 // or ^1.14.0-dev or ^1.13.1-dev 
 ```
   
 And import it:
