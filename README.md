@@ -180,6 +180,12 @@ Get.bottomSheet(
     );
 ```
 
+### Do you use another function that depends on the context? Get can give you the context of the current screen too!
+Use Get.context rather context
+
+- Note: this does not work with certain InheritedWidgets.
+99% of the cases, this will work well, but if Get.context doesn't work, it means that you are trying to use widgets that should be on your tree, outside of it. Get.context will work for ALL cases where it is appropriate.
+
 
 ### That's it, you've learned how to navigate between routes the default way.
 
