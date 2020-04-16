@@ -11,7 +11,7 @@ increasing your productivity, and eliminating all the bugs present in Flutter's 
 
 ##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
-##### If you use master/dev/beta branch of Flutter, use the version 1.14.0-dev.
+##### If you use master/dev branch of Flutter, use the version 1.16.0-dev.
 
 ## How to use?
 
@@ -19,7 +19,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.11.6 // or ^1.14.0-dev 
+  get: ^1.12.0 // ^1.16.0-dev on dev/master
 ```
   
 And import it:
@@ -95,6 +95,7 @@ but with Get, all you have to do is call your Get.snackbar from anywhere in your
               duration: Duration(seconds: 3),
             );
 
+
   ////////// ALL FEATURES //////////
   //     Color colorText,
   //     Duration duration,
@@ -130,6 +131,8 @@ but with Get, all you have to do is call your Get.snackbar from anywhere in your
   //     Form userInputForm
   ///////////////////////////////////
 ```
+If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use GetBar (). Show () which provides the RAW API on which Get.snackbar was built.
+
 ### Dialogs
 
 To open dialog:
@@ -179,19 +182,17 @@ Get.bottomSheet(
       }
     );
 ```
+### Global configurations
+You can create Global settings for Get. Just add Get.config to your code before pushing any route
 
-### Do you use another function that depends on the context? Get can give you the context of the current screen too!
-Use Get.context rather context
+```dart
+Get.config(
+      enableLog = true,
+      defaultPopGesture = true,
+      defaultTransition = Transitions.cupertino}
+```
 
-- Note: this does not work with certain InheritedWidgets.
-99% of the cases, this will work well, but if Get.context doesn't work, it means that you are trying to use widgets that should be on your tree, outside of it. Get.context will work for ALL cases where it is appropriate.
-
-
-### That's it, you've learned how to navigate between routes the default way.
-
-However, for people who like more organized code who want to navigate with named routes, or for Flutter_web Developers who want the url to show exactly which route is being shown, and want the page refresh not to affect the state of the routes. On your site, we give you a much more elegant and functional solution. Yeah, the default navigation doesn't fully support Flutter_web, but Get does !!!!
-
-## So... Is possible used default namedRoutes from flutter?
+## Navigate with named routes:
 - Yes, and with no navigation bug, add "named" to Get. HOWEVER, TO MAKE THIS TYPE OF NAVIGATION, USE THE ROUTE MODEL FROM REPOSITORY. 
 Example of navigation with named routes:
 

@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../get_main.dart';
+
 class Routing {
   final current;
   final previous;
@@ -29,13 +31,13 @@ class GetObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     if ('${route?.settings?.name}' == 'snackbar') {
-      print("[OPEN SNACKBAR] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[OPEN SNACKBAR] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      print("[OPEN BOTTOMSHEET] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[OPEN BOTTOMSHEET] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
-      print("[OPEN DIALOG] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[OPEN DIALOG] ${route?.settings?.name}");
     } else {
-      print("[GOING TO ROUTE] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[GOING TO ROUTE] ${route?.settings?.name}");
     }
 
     routing(Routing(
@@ -53,15 +55,16 @@ class GetObserver extends NavigatorObserver {
     super.didPop(route, previousRoute);
 
     if ('${route?.settings?.name}' == 'snackbar') {
-      print("[CLOSE SNACKBAR] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[CLOSE SNACKBAR] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      print("[CLOSE BOTTOMSHEET] ${route?.settings?.name}");
+      if (Get.isLogEnable)
+        print("[CLOSE BOTTOMSHEET] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
-      print("[CLOSE DIALOG] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[CLOSE DIALOG] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'snackbar') {
-      print("[CLOSE SNACKBAR] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[CLOSE SNACKBAR] ${route?.settings?.name}");
     } else {
-      print("[BACK ROUTE] ${route?.settings?.name}");
+      if (Get.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
     }
 
     routing(Routing(
@@ -77,7 +80,7 @@ class GetObserver extends NavigatorObserver {
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
+    if (Get.isLogEnable) print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
 
     routing(Routing(
         removed: null, // add '${oldRoute?.settings?.name}' or remain null ???
@@ -92,7 +95,7 @@ class GetObserver extends NavigatorObserver {
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    print("[REMOVING ROUTE] ${route?.settings?.name}");
+    if (Get.isLogEnable) print("[REMOVING ROUTE] ${route?.settings?.name}");
 
     routing(Routing(
         isBack: false,

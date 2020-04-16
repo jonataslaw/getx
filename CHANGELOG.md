@@ -178,7 +178,14 @@
 - Improve performance
 - Decrease lib size to 94.9kb (25.4k after compiled on release)
 
+## [1.14.1-dev] 
+- Fix ternary on new dart version
 
-
-
+## [1.16.0-dev] 
+- Added Get config
+- Added logEnable 
+- Added Default transition 
+- Added default popGesture behaviour 
+- Added overlayContext 
+- Fix Duration transition
 

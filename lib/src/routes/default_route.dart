@@ -30,9 +30,10 @@ class GetRoute<T> extends PageRoute<T> {
     this.curve = Curves.linear,
     this.alignment,
     this.opaque = true,
+    this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
     this.transition = Transition.cupertino,
-    this.duration = const Duration(milliseconds: 400),
+    // this.duration = const Duration(milliseconds: 400),
     bool fullscreenDialog = false,
   })  : assert(page != null),
         assert(maintainState != null),
@@ -45,7 +46,7 @@ class GetRoute<T> extends PageRoute<T> {
 
   final bool popGesture;
 
-  final Duration duration;
+  // final Duration duration;
 
   final String title;
 
@@ -99,8 +100,7 @@ class GetRoute<T> extends PageRoute<T> {
   final bool opaque;
 
   @override
-  // A relatively rigorous eyeball estimation.
-  Duration get transitionDuration => const Duration(milliseconds: 400);
+  final Duration transitionDuration;
 
   @override
   Color get barrierColor => null; //Color(0x00FFFFFF);
@@ -230,6 +230,7 @@ class GetRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
     Transition transition,
+    Duration duration,
     Curve curve,
     Alignment alignment,
   ) {
@@ -468,6 +469,7 @@ class GetRoute<T> extends PageRoute<T> {
         secondaryAnimation,
         child,
         transition,
+        transitionDuration,
         curve,
         alignment);
   }

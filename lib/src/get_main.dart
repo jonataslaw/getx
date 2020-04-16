@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/src/dialog/dialog.dart';
 import 'package:get/get.dart';
+import '../get.dart';
 import 'platform/platform.dart';
 import 'routes/blur/backdrop_blur.dart';
 import 'routes/blur/transparent_route.dart';
@@ -42,6 +43,12 @@ class Get {
   ///the parentheses and the magic will occur.
   Get._();
 
+  static bool _enableLog = true;
+  static bool _defaultPopGesture = GetPlatform.isIOS;
+  static bool _defaultOpaqueRoute = true;
+  static Transition _defaultTransition =
+      (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
+
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
@@ -55,11 +62,9 @@ class Get {
     return key.currentState.push(GetRoute(
         opaque: opaque ?? true,
         page: page,
-        popGesture: popGesture,
-        transition: transition ?? GetPlatform.isIOS
-            ? Transition.cupertino
-            : Transition.fade,
-        duration: duration ?? const Duration(milliseconds: 400)));
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
+        transitionDuration: duration ?? const Duration(milliseconds: 400)));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -144,11 +149,9 @@ class Get {
     return key.currentState.pushReplacement(GetRoute(
         opaque: opaque ?? true,
         page: page,
-        popGesture: popGesture,
-        transition: transition ?? GetPlatform.isIOS
-            ? Transition.cupertino
-            : Transition.fade,
-        duration: duration));
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
+        transitionDuration: duration));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -161,11 +164,9 @@ class Get {
     return key.currentState.pushAndRemoveUntil(
         GetRoute(
           opaque: opaque ?? true,
-          popGesture: popGesture,
+          popGesture: popGesture ?? _defaultPopGesture,
           page: page,
-          transition: transition ?? GetPlatform.isIOS
-              ? Transition.cupertino
-              : Transition.fade,
+          transition: transition ?? _defaultTransition,
         ),
         predicate ?? route);
   }
@@ -374,13 +375,48 @@ class Get {
     });
   }
 
+  /// change default config of Get
+  static void config(
+      {bool enableLog,
+      bool defaultPopGesture,
+      bool defaultOpaqueRoute,
+      Transition defaultTransition}) {
+    if (enableLog != null) {
+      _enableLog = enableLog;
+    }
+    if (defaultPopGesture != null) {
+      _defaultPopGesture = defaultPopGesture;
+    }
+    if (defaultOpaqueRoute != null) {
+      _defaultOpaqueRoute = defaultOpaqueRoute;
+    }
+    if (defaultTransition != null) {
+      _defaultTransition = defaultTransition;
+    }
+  }
+
+  static bool get isLogEnable => _enableLog;
+  static bool get isPopGestureEnable => _defaultPopGesture;
+  static bool get isOpaqueRouteDefault => _defaultOpaqueRoute;
+
+  /// give access to currentContext
   static BuildContext get context => key.currentContext;
 
+  static BuildContext get overlayContext => key.currentState.overlay.context;
+
+  /// give access to Theme.of(context)
   static ThemeData get theme => Theme.of(context);
 
+  /// give access to Theme.of(context).iconTheme.color
   static Color get iconColor => Theme.of(context).iconTheme.color;
 
+  /// give access to MediaQuery.of(context).size.height
   static double get height => MediaQuery.of(context).size.height;
 
+  /// give access to MediaQuery.of(context).size.width
   static double get width => MediaQuery.of(context).size.width;
 }
+
+/// It replaces the Flutter Navigator, but needs no context.
+/// You can to use navigator.push(YourRoute()) rather Navigator.push(context, YourRoute());
+NavigatorState get navigator => Get.key.currentState;
