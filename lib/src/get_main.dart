@@ -56,74 +56,121 @@ class Get {
       {bool opaque,
       Transition transition,
       Duration duration,
+      int id,
       bool popGesture}) {
-    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
-    // when widget don't mounted
-    return key.currentState.push(GetRoute(
-        opaque: opaque ?? true,
-        page: page,
-        popGesture: popGesture ?? _defaultPopGesture,
-        transition: transition ?? _defaultTransition,
-        transitionDuration: duration ?? const Duration(milliseconds: 400)));
+    if (id == null) {
+      return key.currentState.push(GetRoute(
+          opaque: opaque ?? true,
+          page: page,
+          popGesture: popGesture ?? _defaultPopGesture,
+          transition: transition ?? _defaultTransition,
+          transitionDuration: duration ?? const Duration(milliseconds: 400)));
+    } else {
+      return global(id).currentState.push(GetRoute(
+          opaque: opaque ?? true,
+          page: page,
+          popGesture: popGesture ?? _defaultPopGesture,
+          transition: transition ?? _defaultTransition,
+          transitionDuration: duration ?? const Duration(milliseconds: 400)));
+    }
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  static Future<T> toNamed<T>(String page, {arguments}) {
+  static Future<T> toNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushNamed(page, arguments: arguments);
+    if (id == null) {
+      return key.currentState.pushNamed(page, arguments: arguments);
+    } else {
+      return global(id).currentState.pushNamed(page, arguments: arguments);
+    }
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  static Future<T> offNamed<T>(String page, {arguments}) {
+  static Future<T> offNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushReplacementNamed(page, arguments: arguments);
+    if (id == null) {
+      return key.currentState.pushReplacementNamed(page, arguments: arguments);
+    } else {
+      return global(id)
+          .currentState
+          .pushReplacementNamed(page, arguments: arguments);
+    }
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static void until(String page, predicate) {
+  static void until(String page, predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.popUntil(predicate);
+    if (id == null) {
+      return key.currentState.popUntil(predicate);
+    } else {
+      return global(id).currentState.popUntil(predicate);
+    }
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
-  static Future<T> offUntil<T>(page, predicate) {
+  static Future<T> offUntil<T>(page, predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushAndRemoveUntil(page, predicate);
+    if (id == null) {
+      return key.currentState.pushAndRemoveUntil(page, predicate);
+    } else {
+      return global(id).currentState.pushAndRemoveUntil(page, predicate);
+    }
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static Future<T> offNamedUntil<T>(page, predicate) {
+  static Future<T> offNamedUntil<T>(page, predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return key.currentState.pushNamedAndRemoveUntil(page, predicate);
+    if (id == null) {
+      return key.currentState.pushNamedAndRemoveUntil(page, predicate);
+    } else {
+      return global(id).currentState.pushNamedAndRemoveUntil(page, predicate);
+    }
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
-  static void removeRoute(route) {
-    return key.currentState.removeRoute(route);
+  static void removeRoute(route, {int id}) {
+    if (id == null) {
+      return key.currentState.removeRoute(route);
+    } else {
+      return global(id).currentState.removeRoute(route);
+    }
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static Future<T> offAllNamed<T>(
-    String newRouteName, {
-    RoutePredicate predicate,
-    arguments,
-  }) {
+  static Future<T> offAllNamed<T>(String newRouteName,
+      {RoutePredicate predicate, arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
-    return key.currentState.pushNamedAndRemoveUntil(
-        newRouteName, predicate ?? route,
-        arguments: arguments);
+
+    if (id == null) {
+      return key.currentState.pushNamedAndRemoveUntil(
+          newRouteName, predicate ?? route,
+          arguments: arguments);
+    } else {
+      return global(id).currentState.pushNamedAndRemoveUntil(
+          newRouteName, predicate ?? route,
+          arguments: arguments);
+    }
   }
 
   /// It replaces Navigator.pop, but needs no context.
-  static back({dynamic result}) {
-    return key.currentState.pop(result);
+  static void back({dynamic result, int id}) {
+    if (id == null) {
+      key.currentState.pop(result);
+    } else {
+      global(id).currentState.pop(result);
+    }
+  }
+
+  /// Experimental API to back from overlay
+  static void backE({dynamic result}) {
+    Navigator.pop(overlayContext);
   }
 
   /// It will close as many screens as you define. Times must be> 0;
@@ -145,13 +192,23 @@ class Get {
       {bool opaque = false,
       Transition transition,
       bool popGesture,
+      int id,
       Duration duration = const Duration(milliseconds: 400)}) {
-    return key.currentState.pushReplacement(GetRoute(
-        opaque: opaque ?? true,
-        page: page,
-        popGesture: popGesture ?? _defaultPopGesture,
-        transition: transition ?? _defaultTransition,
-        transitionDuration: duration));
+    if (id == null) {
+      return key.currentState.pushReplacement(GetRoute(
+          opaque: opaque ?? true,
+          page: page,
+          popGesture: popGesture ?? _defaultPopGesture,
+          transition: transition ?? _defaultTransition,
+          transitionDuration: duration));
+    } else {
+      return global(id).currentState.pushReplacement(GetRoute(
+          opaque: opaque ?? true,
+          page: page,
+          popGesture: popGesture ?? _defaultPopGesture,
+          transition: transition ?? _defaultTransition,
+          transitionDuration: duration));
+    }
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -159,16 +216,29 @@ class Get {
       {RoutePredicate predicate,
       bool opaque = false,
       bool popGesture,
+      int id,
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
-    return key.currentState.pushAndRemoveUntil(
-        GetRoute(
-          opaque: opaque ?? true,
-          popGesture: popGesture ?? _defaultPopGesture,
-          page: page,
-          transition: transition ?? _defaultTransition,
-        ),
-        predicate ?? route);
+
+    if (id == null) {
+      return key.currentState.pushAndRemoveUntil(
+          GetRoute(
+            opaque: opaque ?? true,
+            popGesture: popGesture ?? _defaultPopGesture,
+            page: page,
+            transition: transition ?? _defaultTransition,
+          ),
+          predicate ?? route);
+    } else {
+      return global(id).currentState.pushAndRemoveUntil(
+          GetRoute(
+            opaque: opaque ?? true,
+            popGesture: popGesture ?? _defaultPopGesture,
+            page: page,
+            transition: transition ?? _defaultTransition,
+          ),
+          predicate ?? route);
+    }
   }
 
   /// Show a dialog. You can choose color and opacity of background
@@ -205,7 +275,7 @@ class Get {
     );
   }
 
-  static defaultDialog(
+  static Future<T> defaultDialog<T>(
       {Color color,
       double opacity = 0.2,
       String title = "Alert dialog",
@@ -221,7 +291,7 @@ class Get {
       confirm: confirm,
     );
 
-    dialog(child);
+    return dialog(child);
   }
 
   static Future<T> bottomSheet<T>({
@@ -231,6 +301,7 @@ class Get {
     ShapeBorder shape,
     Clip clipBehavior,
     Color barrierColor,
+    bool ignoreSafeArea,
     bool isScrollControlled = false,
     bool useRootNavigator = false,
     bool isDismissible = true,
@@ -248,9 +319,10 @@ class Get {
       isScrollControlled: isScrollControlled,
       barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
           .modalBarrierDismissLabel,
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
       shape: shape,
+      removeTop: ignoreSafeArea ?? true,
       clipBehavior: clipBehavior,
       isDismissible: isDismissible,
       modalBarrierColor: barrierColor,
@@ -259,10 +331,11 @@ class Get {
     ));
   }
 
-  /// get arguments from current screen. You need of context
-  static args(context) {
-    return ModalRoute.of(context).settings.arguments;
-  }
+  // /// get arguments from current screen. You need of context
+  // @deprecated
+  // static args(context) {
+  //   return ModalRoute.of(context).settings.arguments;
+  // }
 
   static Future backdrop(Widget child,
       {double radius = 20.0,
@@ -395,17 +468,74 @@ class Get {
     }
   }
 
+  static Map<int, GlobalKey<NavigatorState>> _keys = {};
+
+  static GlobalKey<NavigatorState> nestedKey(int key) {
+    _keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    return _keys[key];
+  }
+
+  static GlobalKey<NavigatorState> global(int key) {
+    if (!_keys.containsKey(key)) {
+      throw 'route id not found';
+    }
+    final recoverKey = _keys[key];
+    return recoverKey;
+  }
+
+  /// give access to Routing API from GetObserver
+  static Routing get routing => _routing;
+
+  static Routing _routing;
+
+  static setRouting(Routing rt) {
+    _routing = rt;
+  }
+
+  /// give current arguments
+  static get arguments => _routing.args;
+
+  /// give arguments from previous route
+  static get previousArguments => _routing.previousArgs;
+
+  /// give name from current route
+  static get currentRoute => _routing.current;
+
+  /// give name from previous route
+  static get previousRoute => _routing.previous;
+
+  /// check if snackbar is open
+  static bool get isSnackbarOpen => _routing.isSnackbar;
+
+  /// check if dialog is open
+  static bool get isDialogOpen => _routing.isDialog;
+
+  /// check if bottomsheet is open
+  static bool get isBottomSheetOpen => _routing.isBottomSheet;
+
+  /// check a raw current route
+  static Route<dynamic> get rawRoute => _routing.route;
+
+  /// check if log is enable
   static bool get isLogEnable => _enableLog;
+
+  /// check if popGesture is enable
   static bool get isPopGestureEnable => _defaultPopGesture;
+
+  /// check if default opaque route is enable
   static bool get isOpaqueRouteDefault => _defaultOpaqueRoute;
 
   /// give access to currentContext
   static BuildContext get context => key.currentContext;
 
+  /// give access to current Overlay Context
   static BuildContext get overlayContext => key.currentState.overlay.context;
 
   /// give access to Theme.of(context)
   static ThemeData get theme => Theme.of(context);
+
+  /// give access to Mediaquery.of(context)
+  static MediaQueryData get mediaquery => MediaQuery.of(context);
 
   /// give access to Theme.of(context).iconTheme.color
   static Color get iconColor => Theme.of(context).iconTheme.color;

@@ -4,14 +4,26 @@ A consistent navigation library that lets you navigate between screens, open dia
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really painful.
-In addition, with each route navigation, all of your screens below MaterialApp are rebuilt, often causing RAM and CPU bottlenecks. 
-I worked on a pull to fix it in the framework, and seeing how things work I realized that a lot of cliche code could be avoided to get clean and concise code. 
-With that in mind, I created this library that will change the way you work with the Framework and save your life from cliche code, 
-increasing your productivity, and eliminating all the bugs present in Flutter's default navigation altogether.
+In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
+This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
 
-##### If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
+```dart
+// Default Flutter navigator
+Navigator.push(
+        context,
+        MaterialPageRoute(
+           builder: (context) { 
+            return Home();
+          },
+        ),
+      );
 
-##### If you use master/dev branch of Flutter, use the version 1.16.0-dev.
+// Get sintax 
+Get.to(Home());
+```
+
+##### If you use master/dev/beta branch of Flutter, use the version 1.19.0-dev.
+* If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
 ## How to use?
 
@@ -19,7 +31,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.12.0 // ^1.16.0-dev on dev/master
+  get: ^1.15.2 // ^1.19.0-dev on dev/master
 ```
   
 And import it:
@@ -74,14 +86,56 @@ ex:
 if(data == 'sucess') madeAnything();
 ```
 
+Don't you want to learn our syntax?
+Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard browser, without having to use context
+Example:
+
+```dart
+// Default Flutter navigator
+Navigator.push(
+        context,
+        MaterialPageRoute(
+           builder: (context) { 
+            return HomePage();
+          },
+        ),
+      );
+
+// Get with no context but Flutter sintax
+navigator.push(
+        MaterialPageRoute(
+           builder: (context) { 
+            return HomePage();
+          },
+        ),
+      );
+
+// Get sintax (Much better, but we respect your opinion)
+Get.to(HomePage());
+```
 
 ### SnackBars
-To show a modern snackbar:
+
+To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
+```dart
+final snackBar = SnackBar(
+      content: Text('Hi!'),
+      action: SnackBarAction(
+              label: 'I am a old and ugly snackbar :(',
+              onPressed: (){}
+            ),
+          // Find the Scaffold in the widget tree and use
+          // it to show a SnackBar.
+          Scaffold.of(context).showSnackBar(snackBar);
+```
+
+With Get:
+
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
-but with Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+
+With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
 
 ```dart
   Get.snackbar(
@@ -131,7 +185,8 @@ but with Get, all you have to do is call your Get.snackbar from anywhere in your
   //     Form userInputForm
   ///////////////////////////////////
 ```
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use GetBar (). Show () which provides the RAW API on which Get.snackbar was built.
+If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use 
+`GetBar().show();` which provides the RAW API on which Get.snackbar was built.
 
 ### Dialogs
 
@@ -191,6 +246,7 @@ Get.config(
       defaultPopGesture = true,
       defaultTransition = Transitions.cupertino}
 ```
+
 
 ## Navigate with named routes:
 - Yes, and with no navigation bug, add "named" to Get. HOWEVER, TO MAKE THIS TYPE OF NAVIGATION, USE THE ROUTE MODEL FROM REPOSITORY. 
@@ -290,7 +346,7 @@ class Router {
 }
 ```
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (BLoC will love it), and when your app is compiled to the web, your routes will appear in the url beautifully <3
+And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url beautifully <3
 
 ```dart
 class First extends StatelessWidget {
@@ -363,6 +419,94 @@ class Third extends StatelessWidget {
 }
 ```
 
+
+### Advanced APIs
+Each day Get gets further away from the standard Framework, and provides a wider range of features that are unthinkable to be executed using the standard Flutter.
+With Get 1.17.0 a range of new APIs was launched, which allow access from arguments of a named route to whether there is a snackbar or dialog open at that moment, or which screen is being displayed.
+This is a big step towards completely detaching the Flutter navigation from InheritedWidgets. Using context to access an InheritedWidget to access a simple navigation feature is one of the only boring things to do in this incredible framework, and now Get has solved this problem, it has become omniscient, and you will have access to basically any tool Flutter which is only available within the widget tree using it.
+
+All APIs available here are in beta stage, so if you find any errors here, open an issue or offer a PR.
+
+```dart
+MaterialApp(
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver()], // ADD THIS !!!!
+    );
+```
+
+You will also be able to use your own Middleware within GetObserver, this will not influence anything.
+
+```dart
+MaterialApp(
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
+    );
+```
+
+```dart
+Get.arguments // give the current args from currentScreen
+
+Get.previousArguments // give arguments of previous route
+
+Get.previousRoute // give name of previous route
+
+Get.rawRoute // give the raw route to access for example, rawRoute.isFirst()
+
+Get.routing // give access to Rounting API from GetObserver
+
+Get.isSnackbarOpen // check if snackbar is open
+
+Get.isDialogOpen // check if dialog is open
+
+Get.isBottomSheetOpen // check if bottomsheet is open
+
+
+```
+### Nested Navigators
+
+Get made Flutter's nested navigation even easier.
+You don't need the context, and you will find your navigation stack by Id.
+
+See how simple it is:
+```dart
+             Navigator(
+                key: nestedKey(1), // create a key by index
+                initialRoute: '/',
+                onGenerateRoute: (settings) {
+                  if (settings.name == '/') {
+                    return GetRoute(
+                      page: Scaffold(
+                        appBar: AppBar(
+                          title: Text("Main"),
+                        ),
+                        body: Center(
+                          child: FlatButton(
+                              color: Colors.blue,
+                              onPressed: () {
+                                Get.toNamed('/second', 1); // navigate by your nested route by index
+                              },
+                              child: Text("Go to second")),
+                        ),
+                      ),
+                    );
+                  } else if (settings.name == '/second') {
+                    return GetRoute(
+                      page: Center(
+                        child: Scaffold(
+                          appBar: AppBar(
+                            title: Text("Main"),
+                          ),
+                          body: Center(
+                            child:  Text("second")
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }),
+```
+
+
 ### Others methods (docs will be added soon):
 
 ```dart
@@ -380,6 +524,7 @@ Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.
 
 Get.context // Gives the context of the screen in the foreground anywhere in your code.
 
+@deprecated on 1.17.0
 var arguments = Get.args(context); // Gives current route arguments
 ```
 

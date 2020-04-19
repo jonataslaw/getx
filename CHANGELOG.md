@@ -189,3 +189,15 @@
 - Added overlayContext 
 - Fix Duration transition
 
+## [1.16.1-dev] 
+- Improve: GetObserver
+
+## [1.17.0-dev] 
+- Added experimental APIs
+
+## [1.18.0-dev] 
+- Added SafeArea to bottomsheets
+- Added docs
+
+## [1.19.0-dev] 
+- Added nested navigators

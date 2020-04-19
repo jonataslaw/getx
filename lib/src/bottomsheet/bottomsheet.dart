@@ -8,6 +8,10 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.backgroundColor,
     this.elevation,
     this.shape,
+    this.removeBottom = false,
+    this.removeLeft = false,
+    this.removeRight = false,
+    this.removeTop = true,
     this.clipBehavior,
     this.modalBarrierColor,
     this.isDismissible = true,
@@ -29,6 +33,15 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
+
+  // remove safearea from top
+  final bool removeTop;
+  // remove safearea from bottom
+  final bool removeBottom;
+  // remove safearea from left
+  final bool removeLeft;
+  // remove safearea from right
+  final bool removeRight;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 700);
@@ -61,7 +74,10 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     // and isn't exposed to the top padding of the MediaQuery.
     Widget bottomSheet = MediaQuery.removePadding(
       context: context,
-      removeTop: true,
+      removeTop: removeTop,
+      removeBottom: removeBottom,
+      removeLeft: removeLeft,
+      removeRight: removeRight,
       child: _GetModalBottomSheet<T>(
         route: this,
         backgroundColor: backgroundColor ??
