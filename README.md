@@ -9,11 +9,11 @@ This library that will change the way you work with the Framework and save your 
 
 ```dart
 // Default Flutter navigator
-Navigator.push(
+Navigator.of(context).push(
         context,
         MaterialPageRoute(
-           builder: (context) { 
-            return Home();
+           builder: (BuildContext context) { 
+            return HomePage();
           },
         ),
       );
@@ -22,7 +22,7 @@ Navigator.push(
 Get.to(Home());
 ```
 
-##### If you use master/dev/beta branch of Flutter, use the version 1.19.0-dev.
+##### If you use master/dev/beta branch of Flutter, use the version 1.19.1-dev.
 * If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
 ## How to use?
@@ -31,7 +31,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.15.2 // ^1.19.0-dev on dev/master
+  get: ^1.16.0 // ^1.19.1-dev on beta/dev/master
 ```
   
 And import it:
@@ -87,31 +87,34 @@ if(data == 'sucess') madeAnything();
 ```
 
 Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard browser, without having to use context
+Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
 Example:
 
 ```dart
+
 // Default Flutter navigator
-Navigator.push(
+Navigator.of(context).push(
         context,
         MaterialPageRoute(
-           builder: (context) { 
+           builder: (BuildContext context) { 
             return HomePage();
           },
         ),
       );
 
-// Get with no context but Flutter sintax
+// Get using Flutter syntax without needing context
 navigator.push(
         MaterialPageRoute(
-           builder: (context) { 
+           builder: (_) { 
             return HomePage();
           },
         ),
       );
 
-// Get sintax (Much better, but we respect your opinion)
+// Get sintax (It is much better, but you have the right to disagree)
 Get.to(HomePage());
+
+
 ```
 
 ### SnackBars
@@ -524,8 +527,7 @@ Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.
 
 Get.context // Gives the context of the screen in the foreground anywhere in your code.
 
-@deprecated on 1.17.0
-var arguments = Get.args(context); // Gives current route arguments
+
 ```
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
