@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/src/get_main.dart';
 
 import '../platform/platform.dart';
 import 'transitions_type.dart';
@@ -32,7 +33,7 @@ class GetRoute<T> extends PageRoute<T> {
     this.opaque = true,
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
-    this.transition = Transition.cupertino,
+    this.transition,
     // this.duration = const Duration(milliseconds: 400),
     bool fullscreenDialog = false,
   })  : assert(page != null),
@@ -229,11 +230,13 @@ class GetRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-    Transition transition,
+    Transition tr,
     Duration duration,
     Curve curve,
     Alignment alignment,
   ) {
+    Transition transition = (tr ?? Get.defaultTransition);
+
     if (route.fullscreenDialog) {
       final bool linearTransition = isPopGestureInProgress(route);
       return CupertinoFullscreenDialogTransition(

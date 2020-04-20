@@ -201,3 +201,10 @@
 
 ## [1.19.0-dev] 
 - Added nested navigators
+
+## [1.19.1-dev] 
+- Fix default transitions for namedRoutes
+
+## [1.20.0-dev] 
+- Added Get Instance Manager
+  Get.put / Get.find / Get.delete

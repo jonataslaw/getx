@@ -1,6 +1,6 @@
 name: get
 description: Navigate between screens, display snackbars, dialogs and bottomSheets, from anywhere in your code without context with Get.
-version: 1.19.0-dev
+version: 1.20.0-dev
 homepage: https://github.com/jonataslaw/get
 
 environment:

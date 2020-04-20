@@ -22,7 +22,7 @@ Navigator.of(context).push(
 Get.to(Home());
 ```
 
-##### If you use master/dev/beta branch of Flutter, use the version 1.19.1-dev.
+##### If you use master/dev/beta branch of Flutter, use the version 1.20.0-dev.
 * If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
 
 ## How to use?
@@ -31,7 +31,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.16.0 // ^1.19.1-dev on beta/dev/master
+  get: ^1.17.0 // ^1.20.0-dev on beta/dev/master
 ```
   
 And import it:
@@ -250,6 +250,30 @@ Get.config(
       defaultTransition = Transitions.cupertino}
 ```
 
+## Simple Instance Manager
+Are you already using Get and want to make your project as lean as possible? Now Get has a simple manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code.
+
+
+```dart
+Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+```
+Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
+So you can use your controller (or class Bloc) normally
+
+```dart
+controller.fetchApi();// Rather Controller controller = Controller();
+```
+
+Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "search" for your controller, you don't need any additional dependencies:
+
+```dart
+Controller controller = Get.find(Controller());
+```
+And then you will be able to recover your controller data that was obtained back there:
+
+```dart
+Text(controller.textFromApi);
+```
 
 ## Navigate with named routes:
 - Yes, and with no navigation bug, add "named" to Get. HOWEVER, TO MAKE THIS TYPE OF NAVIGATION, USE THE ROUTE MODEL FROM REPOSITORY. 

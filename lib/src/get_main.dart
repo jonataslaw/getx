@@ -4,8 +4,6 @@ import 'package:get/src/dialog/dialog.dart';
 import 'package:get/get.dart';
 import '../get.dart';
 import 'platform/platform.dart';
-import 'routes/blur/backdrop_blur.dart';
-import 'routes/blur/transparent_route.dart';
 import 'routes/default_route.dart';
 
 class Get {
@@ -331,36 +329,6 @@ class Get {
     ));
   }
 
-  // /// get arguments from current screen. You need of context
-  // @deprecated
-  // static args(context) {
-  //   return ModalRoute.of(context).settings.arguments;
-  // }
-
-  static Future backdrop(Widget child,
-      {double radius = 20.0,
-      double blurRadius: 20.0,
-      int duration = 300,
-      Transition transition = Transition.fade,
-      Widget bottomButton = const Icon(Icons.visibility),
-      double bottomHeight = 60.0,
-      bool bottomButtonRotate = false}) {
-    final page = RippleBackdropAnimatePage(
-      child: child,
-      childFade: true,
-      duration: duration,
-      blurRadius: blurRadius,
-      bottomButton: bottomButton,
-      bottomHeight: bottomHeight,
-      bottomButtonRotate: bottomButtonRotate,
-    );
-
-    return key.currentState
-        .push(TransparentRoute(builder: (BuildContext context) {
-      return page;
-    }));
-  }
-
   static void snackbar(title, message,
       {Color colorText,
       Duration duration,
@@ -483,6 +451,32 @@ class Get {
     return recoverKey;
   }
 
+  static Map<dynamic, dynamic> _singl = {};
+
+  /// Register a singleton instance of your class
+  static T put<T>(T singleton) {
+    _singl.putIfAbsent(T, () => singleton);
+    return _singl[T];
+  }
+
+  /// Delete a singleton instance of your class
+  static bool delete<T>(T singleton) {
+    if (!_singl.containsKey(T)) {
+      throw 'key id not found';
+    }
+    _singl.removeWhere((oldkey, value) => (oldkey == T));
+    return true;
+  }
+
+  /// Recover a singleton instance of your class
+  static T find<T>(T key) {
+    if (!_singl.containsKey(T)) {
+      throw 'key id not found';
+    }
+    final recoverKey = _singl[T];
+    return recoverKey;
+  }
+
   /// give access to Routing API from GetObserver
   static Routing get routing => _routing;
 
@@ -524,6 +518,8 @@ class Get {
 
   /// check if default opaque route is enable
   static bool get isOpaqueRouteDefault => _defaultOpaqueRoute;
+
+  static Transition get defaultTransition => _defaultTransition;
 
   /// give access to currentContext
   static BuildContext get context => key.currentContext;
