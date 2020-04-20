@@ -3,6 +3,8 @@
 A consistent navigation library that lets you navigate between screens, open dialogs/bottomSheets, and display snackbars from anywhere in your code without context.
 ## Getting Started
 
+*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really painful.
 In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
 This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
@@ -21,17 +23,13 @@ Navigator.of(context).push(
 // Get sintax 
 Get.to(Home());
 ```
-
-##### If you use master/dev/beta branch of Flutter, use the version 1.20.0-dev.
-* If you use MODULAR, add on your MaterialApp this: navigatorKey: Get.addKey(Modular.navigatorKey)
-
 ## How to use?
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.17.0 // ^1.20.0-dev on beta/dev/master
+  get: ^1.17.2 // ^1.20.0-dev on beta/dev/master
 ```
   
 And import it:
@@ -275,9 +273,14 @@ And then you will be able to recover your controller data that was obtained back
 Text(controller.textFromApi);
 ```
 
+To remove a instance of Get:
+```dart
+Controller controller = Get.delete(Controller());
+```
+
+
 ## Navigate with named routes:
-- Yes, and with no navigation bug, add "named" to Get. HOWEVER, TO MAKE THIS TYPE OF NAVIGATION, USE THE ROUTE MODEL FROM REPOSITORY. 
-Example of navigation with named routes:
+- If you prefer to browse selected routes, or Get also supports this.
 
 To navigate to nextScreen
 ```dart
@@ -292,9 +295,9 @@ To navigate and remove all previous screens from the tree.
 Get.offAllNamed("/NextScreen");
 ```
 
-## Using with Named Routes and And offering full flutter_web support (REQUIRED FOR NAMED ROUTES):
+## Configure the Named Routes and And offering full flutter_web support to friendly urls:
 
-### Add " navigatorKey: Get.key," to MaterialApp
+### If you have not yet added "navigatorKey: Get.key," to your MaterialApp, do it now. Take the opportunity to add an "initialRoute" and your "onGenerateRoute".
 
 ```dart
 void main() {
@@ -306,40 +309,7 @@ void main() {
   ));
 }
 ```
-#### Middleware 
-If you want listen Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
 
-##### add GetObserver();
-```dart
-void main() {
-  runApp(MaterialApp(
-    onGenerateRoute: Router.generateRoute,
-    initialRoute: "/",
-    navigatorKey: Get.key,
-    navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
-    ],
-  ));
-}
-```
-Create a MiddleWare class
-
-```dart
-class MiddleWare {
-  static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
-    ///If you need to enter any of these 3 events directly here, 
-    ///you must specify that the event is != Than you are trying to do.
-    if (routing.current == '/second' && !routing.isSnackbar) {
-      Get.snackbar("Hi", "You are on second route");
-    } else if (routing.current =='/third'){
-      print('last route called');
-    }
-  }
-}
-```
-
-### COPY THE ROUTER CLASS BELOW:
 Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
 
 ```dart
@@ -373,7 +343,43 @@ class Router {
 }
 ```
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url beautifully <3
+And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+
+
+#### Middleware 
+If you want listen Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
+
+##### add GetObserver();
+```dart
+void main() {
+  runApp(MaterialApp(
+    onGenerateRoute: Router.generateRoute,
+    initialRoute: "/",
+    navigatorKey: Get.key,
+    navigatorObservers: [
+        GetObserver(MiddleWare.observer), // HERE !!!
+    ],
+  ));
+}
+```
+Create a MiddleWare class
+
+```dart
+class MiddleWare {
+  static observer(Routing routing) {
+    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
+    ///If you need to enter any of these 3 events directly here, 
+    ///you must specify that the event is != Than you are trying to do.
+    if (routing.current == '/second' && !routing.isSnackbar) {
+      Get.snackbar("Hi", "You are on second route");
+    } else if (routing.current =='/third'){
+      print('last route called');
+    }
+  }
+}
+```
+
+Now, use Get on your code:
 
 ```dart
 class First extends StatelessWidget {
@@ -551,6 +557,7 @@ Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.
 
 Get.context // Gives the context of the screen in the foreground anywhere in your code.
 
+Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 
 ```
 
