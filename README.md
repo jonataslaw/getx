@@ -29,7 +29,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.17.2 // ^1.20.0-dev on beta/dev/master
+  get: ^1.17.3 // ^1.20.0-dev on beta/dev/master
 ```
   
 And import it:
@@ -262,10 +262,11 @@ So you can use your controller (or class Bloc) normally
 controller.fetchApi();// Rather Controller controller = Controller();
 ```
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "search" for your controller, you don't need any additional dependencies:
+Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
 
 ```dart
-Controller controller = Get.find(Controller());
+Controller controller = Get.find();
+//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 And then you will be able to recover your controller data that was obtained back there:
 
@@ -275,7 +276,7 @@ Text(controller.textFromApi);
 
 To remove a instance of Get:
 ```dart
-Controller controller = Get.delete(Controller());
+Get.delete(Controller());
 ```
 
 
@@ -293,6 +294,19 @@ Get.offNamed("/NextScreen");
 To navigate and remove all previous screens from the tree.
 ```dart
 Get.offAllNamed("/NextScreen");
+```
+
+### Send data to named Routes:
+
+Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+```dart
+Get.toNamed("/NextScreen", arguments: 'Get is the best');
+```
+on your class or controller:
+
+```dart
+print(Get.arguments);
+//print out: Get is the best
 ```
 
 ## Configure the Named Routes and And offering full flutter_web support to friendly urls:

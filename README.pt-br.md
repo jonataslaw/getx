@@ -34,7 +34,7 @@ Adicione esse pacote ao seu arquivo pubspec.yaml:
 
 ```
 dependencies:
-  get: ^1.17.1s // ^1.20.0-dev on beta/dev/master
+  get: ^1.17.3 // ^1.20.0-dev on beta/dev/master
 ```
   
 Importe ele se seu IDE não fizer isso de forma automática:
@@ -269,7 +269,8 @@ controller.fetchApi();// Rather Controller controller = Controller();
 Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador; você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
 
 ```dart
-Controller controller = Get.find(Controller());
+Controller controller = Get.find();
+// Sim, parece Magia, o Get irá descobrir qual é seu controller, e irá te entregar. Você pode ter 1 milhão de controllers instanciados, o Get sempre te entregará o controller correto. Apenas se lembre de Tipar seu controller, final controller = Get.find(); por exemplo, não irá funcionar.
 ```
 E então você poderá recuperar os dados do seu controlador obtidos lá:
 
@@ -298,6 +299,19 @@ Get.offNamed("/NextScreen");
 Para navegar para uma nova tela e remover todas rotas anteriores da stack
 ```dart
 Get.offAllNamed("/NextScreen");
+```
+
+### Enviando dados por rotas nomeadas:
+
+Apenas envie o que você quiser por argumentos. Get aceita qualquer coisa aqui, não importa se é uma String, um Map, uma List, int ou até uma instancia de classe.
+```dart
+Get.toNamed("/NextScreen", arguments: 'Get is the best');
+```
+Agora você pode recuperar em sua classe ou em seu controller:
+
+```dart
+print(Get.arguments);
+//print out: Get is the best
 ```
 
 ## Configurando rotas nomeadas e adicionando suporte completo à urls amigáveis do Flutter Web
