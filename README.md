@@ -29,7 +29,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.17.3 // ^1.20.0-dev on beta/dev/master
+  get: ^1.17.3 // ^1.20.1-dev on beta/dev/master
 ```
   
 And import it:
