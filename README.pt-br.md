@@ -34,7 +34,7 @@ Adicione esse pacote ao seu arquivo pubspec.yaml:
 
 ```
 dependencies:
-  get: ^1.17.3 // ^1.20.0-dev on beta/dev/master
+  get: ^1.17.3 // ^1.20.1-dev on beta/dev/master
 ```
   
 Importe ele se seu IDE não fizer isso de forma automática:
