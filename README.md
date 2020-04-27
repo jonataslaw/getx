@@ -24,7 +24,7 @@ This library that will change the way you work with the Framework and save your 
 
 ## How to use?
 
-- Flutter Master/Dev/Beta: version 2.0.1-dev
+- Flutter Master/Dev/Beta: version 2.0.2-dev
 - Flutter Stable branch: version 2.0.1
 
 Add this to your package's pubspec.yaml file:
