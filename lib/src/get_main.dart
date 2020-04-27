@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/src/dialog/dialog.dart';
-import 'package:get/get.dart';
-import '../get.dart';
+import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
 import 'routes/default_route.dart';
+import 'routes/observers/route_observer.dart';
+import 'routes/transitions_type.dart';
+import 'snackbar/snack.dart';
 
 class Get {
   static Get _get;
@@ -46,6 +47,9 @@ class Get {
   static bool _defaultOpaqueRoute = true;
   static Transition _defaultTransition =
       (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
+  static Duration _defaultDurationTransition = Duration(milliseconds: 400);
+  static bool _defaultGlobalState = true;
+  static RouteSettings _settings;
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
@@ -56,21 +60,12 @@ class Get {
       Duration duration,
       int id,
       bool popGesture}) {
-    if (id == null) {
-      return key.currentState.push(GetRoute(
-          opaque: opaque ?? true,
-          page: page,
-          popGesture: popGesture ?? _defaultPopGesture,
-          transition: transition ?? _defaultTransition,
-          transitionDuration: duration ?? const Duration(milliseconds: 400)));
-    } else {
-      return global(id).currentState.push(GetRoute(
-          opaque: opaque ?? true,
-          page: page,
-          popGesture: popGesture ?? _defaultPopGesture,
-          transition: transition ?? _defaultTransition,
-          transitionDuration: duration ?? const Duration(milliseconds: 400)));
-    }
+    return global(id).currentState.push(GetRoute(
+        opaque: opaque ?? true,
+        page: page,
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
+        transitionDuration: duration ?? _defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -79,66 +74,40 @@ class Get {
   static Future<T> toNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    if (id == null) {
-      return key.currentState.pushNamed(page, arguments: arguments);
-    } else {
-      return global(id).currentState.pushNamed(page, arguments: arguments);
-    }
+    return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
   static Future<T> offNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    if (id == null) {
-      return key.currentState.pushReplacementNamed(page, arguments: arguments);
-    } else {
-      return global(id)
-          .currentState
-          .pushReplacementNamed(page, arguments: arguments);
-    }
+    return global(id)
+        .currentState
+        .pushReplacementNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static void until(String page, predicate, {int id}) {
+  static void until(predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    if (id == null) {
-      return key.currentState.popUntil(predicate);
-    } else {
-      return global(id).currentState.popUntil(predicate);
-    }
+    return global(id).currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
   static Future<T> offUntil<T>(page, predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    if (id == null) {
-      return key.currentState.pushAndRemoveUntil(page, predicate);
-    } else {
-      return global(id).currentState.pushAndRemoveUntil(page, predicate);
-    }
+    return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
   static Future<T> offNamedUntil<T>(page, predicate, {int id}) {
-    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
-    // when widget don't mounted
-    if (id == null) {
-      return key.currentState.pushNamedAndRemoveUntil(page, predicate);
-    } else {
-      return global(id).currentState.pushNamedAndRemoveUntil(page, predicate);
-    }
+    return global(id).currentState.pushNamedAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
   static void removeRoute(route, {int id}) {
-    if (id == null) {
-      return key.currentState.removeRoute(route);
-    } else {
-      return global(id).currentState.removeRoute(route);
-    }
+    return global(id).currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
@@ -146,24 +115,25 @@ class Get {
       {RoutePredicate predicate, arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
 
-    if (id == null) {
-      return key.currentState.pushNamedAndRemoveUntil(
-          newRouteName, predicate ?? route,
-          arguments: arguments);
-    } else {
-      return global(id).currentState.pushNamedAndRemoveUntil(
-          newRouteName, predicate ?? route,
-          arguments: arguments);
-    }
+    return global(id).currentState.pushNamedAndRemoveUntil(
+        newRouteName, predicate ?? route,
+        arguments: arguments);
   }
 
+  static bool get isOverlaysOpen =>
+      (isSnackbarOpen || isDialogOpen || isBottomSheetOpen);
+
+  static bool get isOverlaysClosed =>
+      (!Get.isSnackbarOpen && !Get.isDialogOpen && !Get.isBottomSheetOpen);
+
   /// It replaces Navigator.pop, but needs no context.
-  static void back({dynamic result, int id}) {
-    if (id == null) {
-      key.currentState.pop(result);
-    } else {
-      global(id).currentState.pop(result);
+  static void back({dynamic result, bool closeOverlays = false, int id}) {
+    if (closeOverlays && isOverlaysOpen) {
+      navigator.popUntil((route) {
+        return (isOverlaysClosed);
+      });
     }
+    global(id).currentState.pop(result);
   }
 
   /// Experimental API to back from overlay
@@ -172,12 +142,12 @@ class Get {
   }
 
   /// It will close as many screens as you define. Times must be> 0;
-  static void close(int times) {
+  static void close(int times, [int id]) {
     if ((times == null) || (times < 1)) {
       times = 1;
     }
     int count = 0;
-    void back = key.currentState.popUntil((route) {
+    void back = global(id).currentState.popUntil((route) {
       return count++ == times;
     });
     return back;
@@ -191,22 +161,13 @@ class Get {
       Transition transition,
       bool popGesture,
       int id,
-      Duration duration = const Duration(milliseconds: 400)}) {
-    if (id == null) {
-      return key.currentState.pushReplacement(GetRoute(
-          opaque: opaque ?? true,
-          page: page,
-          popGesture: popGesture ?? _defaultPopGesture,
-          transition: transition ?? _defaultTransition,
-          transitionDuration: duration));
-    } else {
-      return global(id).currentState.pushReplacement(GetRoute(
-          opaque: opaque ?? true,
-          page: page,
-          popGesture: popGesture ?? _defaultPopGesture,
-          transition: transition ?? _defaultTransition,
-          transitionDuration: duration));
-    }
+      Duration duration}) {
+    return global(id).currentState.pushReplacement(GetRoute(
+        opaque: opaque ?? true,
+        page: page,
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
+        transitionDuration: duration ?? _defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -218,78 +179,44 @@ class Get {
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
 
-    if (id == null) {
-      return key.currentState.pushAndRemoveUntil(
-          GetRoute(
-            opaque: opaque ?? true,
-            popGesture: popGesture ?? _defaultPopGesture,
-            page: page,
-            transition: transition ?? _defaultTransition,
-          ),
-          predicate ?? route);
-    } else {
-      return global(id).currentState.pushAndRemoveUntil(
-          GetRoute(
-            opaque: opaque ?? true,
-            popGesture: popGesture ?? _defaultPopGesture,
-            page: page,
-            transition: transition ?? _defaultTransition,
-          ),
-          predicate ?? route);
-    }
+    return global(id).currentState.pushAndRemoveUntil(
+        GetRoute(
+          opaque: opaque ?? true,
+          popGesture: popGesture ?? _defaultPopGesture,
+          page: page,
+          transition: transition ?? _defaultTransition,
+        ),
+        predicate ?? route);
   }
 
-  /// Show a dialog. You can choose color and opacity of background
+  /// Show a dialog
   static Future<T> dialog<T>(
     Widget child, {
     bool barrierDismissible = true,
-    //  WidgetBuilder builder,
     bool useRootNavigator = true,
+    RouteSettings routeSettings,
   }) {
-    assert(child != null);
-    assert(useRootNavigator != null);
-    final ThemeData theme =
-        Theme.of(Get.key.currentContext, shadowThemeOnly: true);
-
-    return getShowGeneralDialog(
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
-        final Widget pageChild = child; // ?? Builder(builder: builder);
-        return SafeArea(
-          child: Builder(builder: (BuildContext context) {
-            return theme != null
-                ? Theme(data: theme, child: pageChild)
-                : pageChild;
-          }),
-        );
-      },
+    return showDialog(
       barrierDismissible: barrierDismissible,
-      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
-          .modalBarrierDismissLabel,
-      barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 150),
-      // transitionBuilder: _buildMaterialDialogTransitions,
       useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      context: overlayContext,
+      builder: (_) {
+        return child;
+      },
     );
   }
 
   static Future<T> defaultDialog<T>(
-      {Color color,
-      double opacity = 0.2,
-      String title = "Alert dialog",
+      {String title = "Alert dialog",
       Widget content,
       Widget cancel,
       Widget confirm}) {
-    final child = DefaultDialogGet(
-      color: color,
-      opacity: opacity,
-      title: title,
+    return dialog(AlertDialog(
+      title: Text(title, textAlign: TextAlign.center),
       content: content,
-      cancel: cancel,
-      confirm: confirm,
-    );
-
-    return dialog(child);
+      actions: <Widget>[cancel, confirm],
+    ));
   }
 
   static Future<T> bottomSheet<T>({
@@ -311,7 +238,7 @@ class Get {
     assert(isDismissible != null);
     assert(enableDrag != null);
 
-    return Get.key.currentState.push<T>(GetModalBottomSheetRoute<T>(
+    return navigator.push<T>(GetModalBottomSheetRoute<T>(
       builder: builder,
       theme: Theme.of(Get.key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,
@@ -421,6 +348,8 @@ class Get {
       {bool enableLog,
       bool defaultPopGesture,
       bool defaultOpaqueRoute,
+      Duration defaultDurationTransition,
+      bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
       _enableLog = enableLog;
@@ -434,6 +363,14 @@ class Get {
     if (defaultTransition != null) {
       _defaultTransition = defaultTransition;
     }
+
+    if (defaultDurationTransition != null) {
+      _defaultDurationTransition = defaultDurationTransition;
+    }
+
+    if (defaultGlobalState != null) {
+      _defaultGlobalState = defaultGlobalState;
+    }
   }
 
   static Map<int, GlobalKey<NavigatorState>> _keys = {};
@@ -443,14 +380,17 @@ class Get {
     return _keys[key];
   }
 
-  static GlobalKey<NavigatorState> global(int key) {
-    if (!_keys.containsKey(key)) {
+  static GlobalKey<NavigatorState> global(int k) {
+    if (k == null) {
+      return key;
+    }
+    if (!_keys.containsKey(k)) {
       throw 'route id not found';
     }
-    final recoverKey = _keys[key];
-    return recoverKey;
+    return _keys[k];
   }
 
+  //////////// INSTANCE MANAGER
   static Map<dynamic, dynamic> _singl = {};
 
   /// Register a singleton instance of your class
@@ -468,10 +408,13 @@ class Get {
     return true;
   }
 
+  /// check if instance is registred
+  static bool isRegistred<T>() => _singl.containsKey(T);
+
   /// Recover a singleton instance of your class
-  static T find<T>(T key) {
+  static T find<T>() {
     if (!_singl.containsKey(T)) {
-      throw 'key id not found';
+      throw 'key id ${T.runtimeType} not found';
     }
     final recoverKey = _singl[T];
     return recoverKey;
@@ -480,14 +423,29 @@ class Get {
   /// give access to Routing API from GetObserver
   static Routing get routing => _routing;
 
+  static RouteSettings get routeSettings => _settings;
+
   static Routing _routing;
+
+  static Map<String, String> _parameters = {};
+
+  static setParameter(Map<String, String> param) {
+    _parameters = param;
+  }
 
   static setRouting(Routing rt) {
     _routing = rt;
   }
 
+  static setSettings(RouteSettings settings) {
+    _settings = settings;
+  }
+
   /// give current arguments
   static get arguments => _routing.args;
+
+  /// give current arguments
+  static Map<String, String> get parameters => _parameters;
 
   /// give arguments from previous route
   static get previousArguments => _routing.previousArgs;
@@ -512,6 +470,13 @@ class Get {
 
   /// check if log is enable
   static bool get isLogEnable => _enableLog;
+
+  /// default duration of transition animation
+  /// default duration work only API 2.0
+  static Duration get defaultDurationTransition => _defaultDurationTransition;
+
+  /// give global state of all GetState by default
+  static bool get defaultGlobalState => _defaultGlobalState;
 
   /// check if popGesture is enable
   static bool get isPopGestureEnable => _defaultPopGesture;

@@ -208,3 +208,23 @@
 ## [1.20.0-dev] 
 - Added Get Instance Manager
   Get.put / Get.find / Get.delete
+
+## [1.20.1-dev] 
+- Improve: Get.finds
+
+## [2.0.0-dev] 
+- Added easy state manager
+- Cleaner code
+- Improve Get 
+- Change dialog API 
+- Added GetMaterialApp 
+- Added new experimental APIs 
+- Improve Observer 
+- Added default duration on Transitions 
+- Added new routeNamed sistem
+- Added Global stateManager config 
+- Improve Get instance manager 
+- Added routingCallback 
+- Added closeOverlays to Get.back 
+- Added dynamic urls 
+- Many APIs added

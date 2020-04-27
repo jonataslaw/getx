@@ -19,8 +19,6 @@ const int _kMaxDroppedSwipePageForwardAnimationTime = 800; // Milliseconds.
 const int _kMaxPageBackAnimationTime = 300;
 
 class GetRoute<T> extends PageRoute<T> {
-  /// Creates a page route for use in an iOS designed app.
-  ///
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
   /// be null.
   GetRoute({
@@ -30,6 +28,7 @@ class GetRoute<T> extends PageRoute<T> {
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
+    this.parameter,
     this.opaque = true,
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
@@ -48,6 +47,8 @@ class GetRoute<T> extends PageRoute<T> {
   final bool popGesture;
 
   // final Duration duration;
+
+  final Map<String, String> parameter;
 
   final String title;
 
@@ -231,7 +232,6 @@ class GetRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
     Transition tr,
-    Duration duration,
     Curve curve,
     Alignment alignment,
   ) {
@@ -472,7 +472,6 @@ class GetRoute<T> extends PageRoute<T> {
         secondaryAnimation,
         child,
         transition,
-        transitionDuration,
         curve,
         alignment);
   }

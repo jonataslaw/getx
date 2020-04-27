@@ -100,6 +100,7 @@ class GetObserver extends NavigatorObserver {
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (Get.isLogEnable) print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
+    if (Get.isLogEnable) print("[NEW ROUTE] ${newRoute?.settings?.name}");
 
     final routeSend = Routing(
         removed: null, // add '${oldRoute?.settings?.name}' or remain null ???

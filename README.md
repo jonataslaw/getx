@@ -1,13 +1,7 @@
 # Get
 
-A consistent navigation library that lets you navigate between screens, open dialogs/bottomSheets, and display snackbars from anywhere in your code without context.
-## Getting Started
-
-*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
-
-Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really painful.
-In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
-This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
+Get is an extra-light and powerful microframework for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way.
+Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present in the standard framework.
 
 ```dart
 // Default Flutter navigator
@@ -23,23 +17,28 @@ Navigator.of(context).push(
 // Get sintax 
 Get.to(Home());
 ```
+*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+## Getting Started
+
+Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
+In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
+This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
+
 ## How to use?
+
+- Flutter Master/Dev/Beta: version 2.0.0-dev
+- Flutter Stable branch: version 1.17.3
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.17.3 // ^1.20.0-dev on beta/dev/master
-```
-  
-And import it:
+  get: ^1.17.3 // ^2.0.0-dev on beta/dev/master
+``` 
+Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
 import 'package:get/get.dart';
-```
-Add GetKey to your MaterialApp and enjoy:
-```dart
-MaterialApp(
-    navigatorKey: Get.key,
+GetMaterialApp( // Before: MaterialApp(
     home: MyHome(),
   )
 ```
@@ -218,8 +217,7 @@ Get.bottomSheet is like showModalBottomSheet, but don't need of context.
 
 ```dart
 Get.bottomSheet(
-      builder: (_){
-          return Container(
+     Container(
             child: Wrap(
             children: <Widget>[
             ListTile(
@@ -238,19 +236,108 @@ Get.bottomSheet(
       }
     );
 ```
-### Global configurations
-You can create Global settings for Get. Just add Get.config to your code before pushing any route
+
+## Simple State Manager
+There are currently several state managers for Flutter. However, most of them involve using an inheritedWidget to access your data through context and use ChangeNotifier to update widgets (like the Provider), or are too complex for beginners (like BLoC), others are easy and reactive (like MobX) however they need to use a code generator.
+So I created in just 95 lines of code this easy and light state manager, which does not use ChangeNotifier (ChangeNotifier is bad for performance, and which will supply the need especially for those who are new to Flutter. Get is omniscient, this means that it has access to any Flutter API, whether inside or outside the widget tree. The Get state manager updates only the necessary Widget, uses the widgets' own memory status to update, making it more efficient than ChangeNotifier, and does not use InheritedWidget, giving you full control of the state of your application. This does not mean that it is the best state manager, but it is an ideal solution for certain types of users.
+
+Get's state manager is perfect for the MVC standard, and you can use it like this:
+```dart
+// Create controller class and extends GetController
+class Controller extends GetController {
+  int counter = 0;
+  void increment() {
+    counter++;
+    update(this); // use update(this) to update counter variable um UI when increment be called
+  }
+}
+// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
+GetBuilder(
+    controller: controller,
+    builder: (_) => Text(
+              '${_.counter}',
+              )),
+```
+**Done!**
+- You have already learned how to manage states with Get.
+
+### Global State manager
+
+If you navigate many routes and need data that was in your previously used controller, you just need to send Get to find the controller in memory for you!
 
 ```dart
-Get.config(
-      enableLog = true,
-      defaultPopGesture = true,
-      defaultTransition = Transitions.cupertino}
+class OtherClasse extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Get.find();
+    return Scaffold(
+      body: Center(
+        child: GetBuilder(
+          controller: controller,
+          builder: (_) => Text(
+            '${_.counter}',
+            style: Theme.of(context).textTheme.headline4,
+          ),
+        ),
+      ),
+    );
+  }
+
+```
+If you don't want to instantiate your controller whenever you need to use it, you can create a get directly on your controller and access it statically.
+
+```dart
+class Controller extends GetController {
+  static Controller get to => Get.find(); // add this line
+  int counter = 0;
+  void increment() {
+    counter++;
+    update(this); 
+  }
+}
+```
+And then you can access your controller directly, that way:
+```dart
+FloatingActionButton(
+        onPressed: Controller.to.increment, // This is incredibly simple!
+        child: Icon(Icons.add),
+      ),
+```
+When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+
+##### Different forms of use:
+
+You can use controlador instance directly on GetBuilder:
+```dart
+GetBuilder(
+    controller: Controller(), //here
+    builder: (_) => Text(
+              '${_.counter}',
+              )),
+```
+You can type your GetBuilder to access the IDE's autocomplete
+```dart
+GetBuilder<Controller>(  //here
+    controller: Controller(),
+    builder: (value) => Text(
+              '${value.counter}', //here
+              )),
 ```
 
-## Simple Instance Manager
-Are you already using Get and want to make your project as lean as possible? Now Get has a simple manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code.
+You can to use controller instance:
+```dart
+Controller controller = Controller();
+[...]
+GetBuilder(
+    controller: controller, //here
+    builder: (_) => Text(
+              '${controller.counter}', // here
+              )),
+```
 
+
+## Simple Instance Manager
+Are you already using Get and want to make your project as lean as possible? Now Get has a simple instance manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code.
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
@@ -281,7 +368,7 @@ Get.delete(Controller());
 
 
 ## Navigate with named routes:
-- If you prefer to browse selected routes, or Get also supports this.
+- If you prefer to navigate by namedRoutes, Get also supports this.
 
 To navigate to nextScreen
 ```dart
@@ -294,6 +381,21 @@ Get.offNamed("/NextScreen");
 To navigate and remove all previous screens from the tree.
 ```dart
 Get.offAllNamed("/NextScreen");
+```
+
+To define routes, use GetMaterialApp:
+
+```dart
+void main() {
+  runApp(GetMaterialApp(
+    initialRoute: '/',
+    namedRoutes: {
+      '/': GetRoute(page: MyHomePage()),
+      '/second': GetRoute(page: Second()),
+      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+    },
+  ));
+}
 ```
 
 ### Send data to named Routes:
@@ -309,61 +411,63 @@ print(Get.arguments);
 //print out: Get is the best
 ```
 
-## Configure the Named Routes and And offering full flutter_web support to friendly urls:
+#### Dynamic urls links
+Get is the first and only package to offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
 
-### If you have not yet added "navigatorKey: Get.key," to your MaterialApp, do it now. Take the opportunity to add an "initialRoute" and your "onGenerateRoute".
+```dart
+Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
+```
+on your controller/bloc/stateful/stateless class:
+
+```dart
+print(Get.parameters['id']);
+// out: 354
+print(Get.parameters['name']);
+// out: Enzo
+```
+
+You can also receive NamedParameters with Get easily:
 
 ```dart
 void main() {
-  runApp(MaterialApp(
-    onGenerateRoute: Router.generateRoute,
-    initialRoute: "/",
-    navigatorKey: Get.key,
-    title: 'Navigation',
+  runApp(GetMaterialApp(
+    initialRoute: '/',
+    namedRoutes: {
+      '/': GetRoute(page: MyHomePage()),
+      '/second/:user': GetRoute(page: Second()), // receive ID
+      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+    },
   ));
 }
 ```
+Send data on route name
+```dart
+Get.toNamed("/second/34954");
+```
 
-Copy this Router class below and put it in your app, rename routes and classes for your own, add more classes to it if necessary.
+On second screen take the data by parameter
 
 ```dart
-class Router {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return GetRoute(
-          page: First(),
-          settings: settings,
-        );
-      case '/second':
-        return GetRoute(
-            settings: settings, page: Second(), transition: Transition.fade);
-      case '/third':
-        return GetRoute(
-            settings: settings,
-            page: Third(),
-            popGesture: true,
-            transition: Transition.cupertino);
-      default:
-        return GetRoute(
-            settings: settings,
-            transition: Transition.fade,
-            page: Scaffold(
-              body:
-                  Center(child: Text('No route defined for ${settings.name}')),
-            ));
-    }
-  }
-}
+print(Get.parameters['user']);
+// out: 34954
 ```
 
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
 
 
 #### Middleware 
-If you want listen Get events to trigger actions, you can add a GetObserver to your materialApp. This is extremely useful for triggering events whenever a specific Screen is displayed on the screen. Currently on Flutter you would have to put the event on initState and wait for a possible response in a navigator.pop (context); to get that. But with Get, this is extremely simple!
+If you want listen Get events to trigger actions, you can to use routingCallback to it
+```dart
+GetMaterialApp(
+  routingCallback: (route){
+    if(routing.current == '/second'){
+      openAds();
+    }
+  }
+  ```
+If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
 
-##### add GetObserver();
+
 ```dart
 void main() {
   runApp(MaterialApp(
@@ -466,18 +570,34 @@ class Third extends StatelessWidget {
 }
 ```
 
+### Optional Global Settings
+You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 
-### Advanced APIs
-Each day Get gets further away from the standard Framework, and provides a wider range of features that are unthinkable to be executed using the standard Flutter.
-With Get 1.17.0 a range of new APIs was launched, which allow access from arguments of a named route to whether there is a snackbar or dialog open at that moment, or which screen is being displayed.
-This is a big step towards completely detaching the Flutter navigation from InheritedWidgets. Using context to access an InheritedWidget to access a simple navigation feature is one of the only boring things to do in this incredible framework, and now Get has solved this problem, it has become omniscient, and you will have access to basically any tool Flutter which is only available within the widget tree using it.
+```dart
 
-All APIs available here are in beta stage, so if you find any errors here, open an issue or offer a PR.
+GetMaterialApp(
+      enableLog: true,
+      defaultTransition: Transitions.fade,
+      defaultOpaqueRoute: Get.isOpaqueRouteDefault,
+      defaultPopGesture: Get.isPopGestureEnable,
+      defaultDurationTransition: Get.defaultDurationTransition,
+      defaultGlobalState: Get.defaultGlobalState,
+    );
+
+Get.config(
+      enableLog = true,
+      defaultPopGesture = true,
+      defaultTransition = Transitions.cupertino}
+```
+
+
+### Other Advanced APIs and Manual configurations
+GetMaterialApp configures everything for you, but if you are using any package like Modular, you may want to configure Get Manually using advanced APIs.
 
 ```dart
 MaterialApp(
       navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()], // ADD THIS !!!!
+      navigatorObservers: [GetObserver()],
     );
 ```
 
@@ -507,8 +627,24 @@ Get.isDialogOpen // check if dialog is open
 
 Get.isBottomSheetOpen // check if bottomsheet is open
 
+Get.removeRoute() // remove one route.
+
+Get.until() // back repeatedly until the predicate returns true.
+
+Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
+
+Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
+
+GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
+
+Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height
+
+Get.context // Gives the context of the screen in the foreground anywhere in your code.
+
+Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 
 ```
+
 ### Nested Navigators
 
 Get made Flutter's nested navigation even easier.
@@ -553,26 +689,5 @@ See how simple it is:
                 }),
 ```
 
-
-### Others methods (docs will be added soon):
-
-```dart
-Get.removeRoute() // remove one route.
-
-Get.until() // back repeatedly until the predicate returns true.
-
-Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
-
-Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
-
-GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
-
-Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height
-
-Get.context // Gives the context of the screen in the foreground anywhere in your code.
-
-Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
-
-```
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
