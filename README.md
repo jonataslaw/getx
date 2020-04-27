@@ -1,9 +1,6 @@
 # Get
 
-Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. 
-Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way!
-Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
-
+Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 ```dart
 // Default Flutter navigator
 Navigator.of(context).push(
@@ -19,30 +16,29 @@ Navigator.of(context).push(
 Get.to(Home());
 ```
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
-
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
 In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
-This library that will change the way you work with the Framework and save your life from boilerplate, increasing your productivity, and eliminating the rebuild bugs of your application.
+This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
 
 ## How to use?
 
-- Flutter Master/Dev/Beta: version 2.0.0-dev
-- Flutter Stable branch: version 2.0.0
+- Flutter Master/Dev/Beta: version 2.0.1-dev
+- Flutter Stable branch: version 2.0.1
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^2.0.0 // ^2.0.0-dev on beta/dev/master
+  get: ^2.0.1 // ^2.0.1-dev on beta/dev/master
 ``` 
 Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
 import 'package:get/get.dart';
 GetMaterialApp( // Before: MaterialApp(
-    home: MyHome(),
-  )
+  home: MyHome(),
+)
 ```
 ### Navigating without named routes
 To navigate to a new screen:
@@ -254,43 +250,39 @@ class Controller extends GetController {
   }
 }
 // On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
-GetBuilder(
-    controller: controller,
+GetBuilder<Controller>(
+    init: Controller(), // INIT IT ONLY THE FIRST TIME
     builder: (_) => Text(
               '${_.counter}',
               )),
+//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 **Done!**
 - You have already learned how to manage states with Get.
 
 ### Global State manager
 
-If you navigate many routes and need data that was in your previously used controller, you just need to send Get to find the controller in memory for you!
+If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
 
 ```dart
 class OtherClasse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Controller controller = Get.find();
     return Scaffold(
       body: Center(
-        child: GetBuilder(
-          controller: controller,
-          builder: (_) => Text(
-            '${_.counter}',
-            style: Theme.of(context).textTheme.headline4,
-          ),
+        child: GetBuilder<Controller>(
+          builder: (s) => Text('${s.counter}'),
         ),
       ),
     );
   }
 
 ```
-If you don't want to instantiate your controller whenever you need to use it, you can create a get directly on your controller and access it statically.
+If you need to use your controller in many other places, and outside of ReBuilder, just create a get in your controller and have it easily. You can copy this code and just change the name of your controller.
 
 ```dart
 class Controller extends GetController {
-  static Controller get to => Get.find(); // add this line
+  static Controller get to => Get.find(); // add this line 
   int counter = 0;
   void increment() {
     counter++;
@@ -301,8 +293,10 @@ class Controller extends GetController {
 And then you can access your controller directly, that way:
 ```dart
 FloatingActionButton(
-        onPressed: Controller.to.increment, // This is incredibly simple!
-        child: Icon(Icons.add),
+        onPressed:(){
+         Controller.to.increment(), 
+        } // This is incredibly simple!
+        child: Text("${Controller.to.counter}"),
       ),
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
@@ -310,30 +304,37 @@ When you press FloatingActionButton, all widgets that are listening to the 'coun
 ##### Different forms of use:
 
 You can use controlador instance directly on GetBuilder:
-```dart
-GetBuilder(
-    controller: Controller(), //here
-    builder: (_) => Text(
-              '${_.counter}',
-              )),
-```
-You can type your GetBuilder to access the IDE's autocomplete
+
 ```dart
 GetBuilder<Controller>(  //here
-    controller: Controller(),
+    init: Controller(),
     builder: (value) => Text(
               '${value.counter}', //here
               )),
 ```
 
-You can to use controller instance:
+Or use controller instance:
 ```dart
 Controller controller = Controller();
 [...]
-GetBuilder(
-    controller: controller, //here
+GetBuilder( // you dont need to type on this way
+    init: controller, //here
     builder: (_) => Text(
               '${controller.counter}', // here
+              )),
+
+```
+Recommended:
+```dart
+class Controller extends GetController {
+  static Controller get to => Get.find(); 
+[...]
+}
+// on stateful/stateless class
+GetBuilder<Controller>(  
+    init: Controller(), // use it only first time on each controller
+    builder: (_) => Text(
+              '${Controller.to.counter}', //here
               )),
 ```
 
