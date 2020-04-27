@@ -1,7 +1,8 @@
 # Get
 
-Get is an extra-light and powerful microframework for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way.
-Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present in the standard framework.
+Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. 
+Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way!
+Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 
 ```dart
 // Default Flutter navigator
@@ -18,22 +19,23 @@ Navigator.of(context).push(
 Get.to(Home());
 ```
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
 In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
-This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
+This library that will change the way you work with the Framework and save your life from boilerplate, increasing your productivity, and eliminating the rebuild bugs of your application.
 
 ## How to use?
 
 - Flutter Master/Dev/Beta: version 2.0.0-dev
-- Flutter Stable branch: version 1.17.3
+- Flutter Stable branch: version 2.0.0
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^1.17.3 // ^2.0.0-dev on beta/dev/master
+  get: ^2.0.0 // ^2.0.0-dev on beta/dev/master
 ``` 
 Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
