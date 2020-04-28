@@ -24,14 +24,14 @@ This library that will change the way you work with the Framework and save your 
 
 ## How to use?
 
-- Flutter Master/Dev/Beta: version 2.0.2-dev
-- Flutter Stable branch: version 2.0.1
+- Flutter Master/Dev/Beta: version 2.0.7-dev
+- Flutter Stable branch: version 2.0.3
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  get: ^2.0.1 // ^2.0.1-dev on beta/dev/master
+  get: ^2.0.3 // ^2.0.1-dev on beta/dev/master
 ``` 
 Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
@@ -246,7 +246,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); // use update(this) to update counter variable um UI when increment be called
+    update(this); // use update(this) to update counter variable on UI when increment be called
   }
 }
 // On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
