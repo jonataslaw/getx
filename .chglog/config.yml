@@ -1,0 +1,29 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/jonataslaw/get
+options:
+  commits:
+    # filters:
+    #   Type:
+    #     - feat
+    #     - fix
+    #     - remove
+    #     - deprecate
+    #     - refactor
+  commit_groups:
+    # title_maps:
+    #   feat: Addeed
+    #   fix: Fixed
+    #   remove: Removed
+    #   deprecate: Deprecated
+    #   refactor: Changed
+  header:
+    pattern: "^(\\w*)\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
