@@ -15,10 +15,17 @@
 {{ range .Versions }}
 <a name="{{ .Tag.Name }}"></a>
 ## {{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }} - {{ datetime "2006-01-02" .Tag.Date }}
+
+{{ if .CommitGroups -}}
 {{ range .CommitGroups -}}
 ### {{ .Title }}
 {{ range .Commits -}}
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}
+{{ end -}}
+{{ else }}
+{{ range .Commits -}}
+- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{if .Subject}}{{ .Subject }}{{else if .Header}}{{ .Header }}{{ end }}
 {{ end }}
 {{ end -}}
 
