@@ -14,7 +14,7 @@ options:
         - refactor
   commit_groups:
     title_maps:
-      feat: Addeed
+      feat: Added
       fix: Fixed
       remove: Removed
       deprecate: Deprecated
