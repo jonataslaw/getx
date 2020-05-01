@@ -12,7 +12,7 @@ Navigator.of(context).push(
         ),
       );
 
-// Get sintax 
+// Get syntax 
 Get.to(Home());
 ```
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
