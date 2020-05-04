@@ -1,6 +1,6 @@
 # Get
 
-Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 ```dart
 // Default Flutter navigator
 Navigator.of(context).push(
@@ -24,15 +24,12 @@ This library that will change the way you work with the Framework and save your 
 
 ## How to use?
 
-- Flutter Master/Dev/Beta: version 2.0.7-dev
-- Flutter Stable branch: version 2.0.3
+- Flutter Master/Dev/Beta: version 2.0.x-dev 
+- Flutter Stable branch: version 2.0.x
+(look for latest version on pub.dev)
 
-Add this to your package's pubspec.yaml file:
-
-```
-dependencies:
-  get: ^2.0.3 // ^2.0.1-dev on beta/dev/master
-``` 
+Add Get to your pubspec.yaml file according to the version of Flutter you are using.
+ 
 Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
 import 'package:get/get.dart';
@@ -106,7 +103,7 @@ navigator.push(
         ),
       );
 
-// Get sintax (It is much better, but you have the right to disagree)
+// Get syntax (It is much better, but you have the right to disagree)
 Get.to(HomePage());
 
 
@@ -236,10 +233,34 @@ Get.bottomSheet(
 ```
 
 ## Simple State Manager
-There are currently several state managers for Flutter. However, most of them involve using an inheritedWidget to access your data through context and use ChangeNotifier to update widgets (like the Provider), or are too complex for beginners (like BLoC), others are easy and reactive (like MobX) however they need to use a code generator.
-So I created in just 95 lines of code this easy and light state manager, which does not use ChangeNotifier (ChangeNotifier is bad for performance, and which will supply the need especially for those who are new to Flutter. Get is omniscient, this means that it has access to any Flutter API, whether inside or outside the widget tree. The Get state manager updates only the necessary Widget, uses the widgets' own memory status to update, making it more efficient than ChangeNotifier, and does not use InheritedWidget, giving you full control of the state of your application. This does not mean that it is the best state manager, but it is an ideal solution for certain types of users.
+There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets (such as the Provider) and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that ChangeNotifier should be used with 1 or a maximum of 2 listeners (https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large. Other state managers are very good, but they have some weakness. BLoC is very safe and efficient, but it is very complex for beginners, which has kept people from developing with Flutter. MobX is easier than BLoC and reactive, almost perfect, I would say, but you need to use a code generator that for large applications, reduces productivity, you will need to drink a lot of coffees until your code is ready again after a Flutter clean.
+Get was created to solve all problems with current state managers in just 95 lines of code. This easy and lightweight state manager, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
 
-Get's state manager is perfect for the MVC standard, and you can use it like this:
+What performance improvements does Get bring?
+
+1- Update only the required widget.
+
+2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+
+3- Forget StatefulWidget! With Get you will never need it again (if you need to use it, you are using Get incorrectly). With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+
+4- Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+
+5- Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+6- Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+
+7- Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+
+8- Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is close to 0 even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+
+9- Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this. Example:
+
+- Class a => Class B (has controller X) => Class C (has controller X)
+
+In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+
+### State manager usage
+
 ```dart
 // Create controller class and extends GetController
 class Controller extends GetController {
@@ -282,7 +303,13 @@ If you need to use your controller in many other places, and outside of ReBuilde
 
 ```dart
 class Controller extends GetController {
+
+  /// You do not need that. I recommend using it just for ease of syntax.
+  /// with static method: Controller.to.counter();
+  /// with no static method: Get.find<Controller>().counter();
+  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other does.
   static Controller get to => Get.find(); // add this line 
+
   int counter = 0;
   void increment() {
     counter++;
@@ -301,30 +328,21 @@ FloatingActionButton(
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
 
-##### Different forms of use:
+##### Forms of use:
 
-You can use controlador instance directly on GetBuilder:
+- Recommended usage:
+
+You can use Controller instance directly on GetBuilder value:
 
 ```dart
-GetBuilder<Controller>(  //here
+GetBuilder<Controller>(  
     init: Controller(),
     builder: (value) => Text(
               '${value.counter}', //here
               )),
 ```
+You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
 
-Or use controller instance:
-```dart
-Controller controller = Controller();
-[...]
-GetBuilder( // you dont need to type on this way
-    init: controller, //here
-    builder: (_) => Text(
-              '${controller.counter}', // here
-              )),
-
-```
-Recommended:
 ```dart
 class Controller extends GetController {
   static Controller get to => Get.find(); 
@@ -336,8 +354,33 @@ GetBuilder<Controller>(
     builder: (_) => Text(
               '${Controller.to.counter}', //here
               )),
+or 
+
+class Controller extends GetController {
+ // static Controller get to => Get.find(); // with no static get
+[...]
+}
+// on stateful/stateless class
+GetBuilder<Controller>(  
+    init: Controller(), // use it only first time on each controller
+    builder: (_) => Text(
+              '${Get.find<Controller>().counter}', //here
+              )),
 ```
 
+- Not recommended (because you will need to use StatefulWidget to instantiate your controller), but functional:
+
+```dart
+
+Controller controller = Controller();
+[...]
+GetBuilder( // you dont need to type on this way
+    init: controller, //here
+    builder: (_) => Text(
+              '${controller.counter}', // here
+              )),
+
+```
 
 ## Simple Instance Manager
 Are you already using Get and want to make your project as lean as possible? Now Get has a simple instance manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code.
