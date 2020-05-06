@@ -104,7 +104,7 @@ navigator.push(
         ),
       );
 
-// Get sintax (It is much better, but you have the right to disagree)
+// Get syntax (It is much better, but you have the right to disagree)
 Get.to(HomePage());
 
 
