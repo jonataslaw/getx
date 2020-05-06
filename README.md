@@ -115,14 +115,16 @@ Get.to(HomePage());
 To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
 ```dart
 final snackBar = SnackBar(
-      content: Text('Hi!'),
-      action: SnackBarAction(
-              label: 'I am a old and ugly snackbar :(',
-              onPressed: (){}
-            ),
-          // Find the Scaffold in the widget tree and use
-          // it to show a SnackBar.
-          Scaffold.of(context).showSnackBar(snackBar);
+  content: Text('Hi!'),
+  action: SnackBarAction(
+      label: 'I am a old and ugly snackbar :(',
+      onPressed: (){}
+      ),
+);
+
+// Find the Scaffold in the widget tree and use
+// it to show a SnackBar.
+Scaffold.of(context).showSnackBar(snackBar);
 ```
 
 With Get:
