@@ -1,3 +1,16 @@
+## [2.0.10] 
+- Bump new Flutter version
+- Added Get.generalDialog
+
+## [2.0.6] 
+- Fix typo on readme
+
+## [2.0.5] 
+- Changing the bottomsheet API to comply with the documentation.
+
+## [2.0.4] 
+- Fix type not found in some versions of Flutter stable
+
 ## [2.0.3] 
 - Update Docs
 

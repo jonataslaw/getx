@@ -29,7 +29,15 @@ class Routing {
 
 class GetObserver extends NavigatorObserver {
   final Function(Routing) routing;
+
   GetObserver([this.routing]);
+
+  Route<dynamic> route;
+  bool isBack;
+  bool isSnackbar;
+  bool isBottomSheet;
+  bool isDialog;
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     if ('${route?.settings?.name}' == 'snackbar') {
@@ -42,6 +50,10 @@ class GetObserver extends NavigatorObserver {
       if (Get.isLogEnable) print("[GOING TO ROUTE] ${route?.settings?.name}");
     }
 
+    isSnackbar = '${route?.settings?.name}' == 'snackbar';
+    isDialog = '${route?.settings?.name}' == 'dialog';
+    isBottomSheet = '${route?.settings?.name}' == 'bottomsheet';
+
     final routeSend = Routing(
       removed: null,
       isBack: false,
@@ -50,9 +62,9 @@ class GetObserver extends NavigatorObserver {
       previous: '${previousRoute?.settings?.name}',
       args: route?.settings?.arguments,
       previousArgs: previousRoute?.settings?.arguments,
-      isSnackbar: '${route?.settings?.name}' == 'snackbar',
-      isDialog: '${route?.settings?.name}' == 'dialog',
-      isBottomSheet: '${route?.settings?.name}' == 'bottomsheet',
+      isSnackbar: isSnackbar,
+      isDialog: isDialog,
+      isBottomSheet: isBottomSheet,
     );
     if (routing != null) {
       routing(routeSend);
@@ -76,6 +88,10 @@ class GetObserver extends NavigatorObserver {
     } else {
       if (Get.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
     }
+
+    isSnackbar = false;
+    isDialog = false;
+    isBottomSheet = false;
 
     final routeSend = Routing(
       removed: null,
@@ -102,6 +118,10 @@ class GetObserver extends NavigatorObserver {
     if (Get.isLogEnable) print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
     if (Get.isLogEnable) print("[NEW ROUTE] ${newRoute?.settings?.name}");
 
+    isSnackbar = false;
+    isDialog = false;
+    isBottomSheet = false;
+
     final routeSend = Routing(
         removed: null, // add '${oldRoute?.settings?.name}' or remain null ???
         isBack: false,
@@ -109,9 +129,9 @@ class GetObserver extends NavigatorObserver {
         current: '${newRoute?.settings?.name}',
         previous: '${oldRoute?.settings?.name}',
         args: newRoute?.settings?.arguments,
-        isSnackbar: null,
-        isBottomSheet: null,
-        isDialog: null,
+        isSnackbar: false,
+        isBottomSheet: false,
+        isDialog: false,
         previousArgs: null);
 
     if (routing != null) {
@@ -130,10 +150,9 @@ class GetObserver extends NavigatorObserver {
         route: previousRoute,
         current: '${previousRoute?.settings?.name}',
         removed: '${route?.settings?.name}',
-        previous: null,
-        isSnackbar: null,
-        isBottomSheet: null,
-        isDialog: null,
+        isSnackbar: isSnackbar,
+        isBottomSheet: isBottomSheet,
+        isDialog: isDialog,
         args: previousRoute?.settings?.arguments,
         previousArgs: route?.settings?.arguments);
 

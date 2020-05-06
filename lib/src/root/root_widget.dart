@@ -34,7 +34,7 @@ class GetMaterialApp extends StatefulWidget {
     this.shortcuts,
     this.routingCallback,
     this.defaultTransition,
-    this.actions,
+    // this.actions,
     this.opaqueRoute,
     this.enableLog,
     this.popGesture,
@@ -79,7 +79,7 @@ class GetMaterialApp extends StatefulWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> shortcuts;
-  final Map<LocalKey, ActionFactory> actions;
+  // final Map<LocalKey, ActionFactory> actions;
   final bool debugShowMaterialGrid;
   final Function(Routing) routingCallback;
   final Transition defaultTransition;
@@ -118,7 +118,15 @@ class _GetMaterialAppState extends State<GetMaterialApp> {
 
   Route<dynamic> namedRoutesGenerate(RouteSettings settings) {
     Get.setSettings(settings);
-    final parsedString = parse.split(settings.name);
+    // final parsedString = parse.split(settings.name);
+
+    /// onGenerateRoute to FlutterWeb is Broken on Dev/Master. This is a temporary
+    /// workaround until they fix it, because the problem is with the 'Flutter engine',
+    /// which changes the initial route for an empty String, not the main Flutter,
+    /// so only Team can fix it.
+    final parsedString = parse.split(
+        settings.name == '' ? (widget.initialRoute ?? '/') : settings.name);
+
     String settingsname = parsedString.route;
     Map<String, GetRoute> newNamedRoutes = {};
 
@@ -196,7 +204,7 @@ class _GetMaterialAppState extends State<GetMaterialApp> {
       showSemanticsDebugger: widget.showSemanticsDebugger ?? false,
       debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner ?? true,
       shortcuts: widget.shortcuts,
-      actions: widget.actions,
+      //   actions: widget.actions,
     );
   }
 }

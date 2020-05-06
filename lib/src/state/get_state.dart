@@ -23,10 +23,10 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
   final bool autoRemove;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
-  final T controller;
+  final T init;
   GetBuilder({
     Key key,
-    this.controller,
+    this.init,
     this.global = true,
     this.builder,
     this.autoRemove = true,
@@ -34,7 +34,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
     this.dispose,
     this.didChangeDependencies,
     this.didUpdateWidget,
-  })  : assert(builder != null, controller != null),
+  })  : assert(builder != null),
         super(key: key);
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
@@ -49,12 +49,12 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       if (Get.isRegistred<T>()) {
         controller = Get.find<T>();
       } else {
-        controller = widget.controller;
+        controller = widget.init;
         controller._allStates[controller] = this;
         Get.put(controller);
       }
     } else {
-      controller = widget.controller;
+      controller = widget.init;
       controller._allStates[controller] = this;
     }
     if (widget.initState != null) widget.initState(this);
@@ -62,15 +62,15 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
 
   @override
   void dispose() {
-    if (controller != null) {
+    if (widget.init != null) {
       var b = controller;
       if (b._allStates[controller].hashCode == this.hashCode) {
         b._allStates.remove(controller);
       }
     }
     if (widget.dispose != null) widget.dispose(this);
-    if (widget.autoRemove && Get.isRegistred<T>()) {
-      Get.delete(controller);
+    if (widget.autoRemove && Get.isRegistred<T>() && (widget.init != null)) {
+      Get.delete(widget.init);
     }
     super.dispose();
   }

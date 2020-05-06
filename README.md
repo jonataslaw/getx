@@ -24,11 +24,12 @@ This library that will change the way you work with the Framework and save your 
 
 ## How to use?
 
-- Flutter Master/Dev/Beta: version 2.0.x-dev 
+<!-- - Flutter Master/Dev/Beta: version 2.0.x-dev 
 - Flutter Stable branch: version 2.0.x
-(look for latest version on pub.dev)
+(look for latest version on pub.dev) -->
 
-Add Get to your pubspec.yaml file according to the version of Flutter you are using.
+Add Get to your pubspec.yaml file 
+<!-- according to the version of Flutter you are using. -->
  
 Exchange your MaterialApp for GetMaterialApp and enjoy!
 ```dart
@@ -103,7 +104,7 @@ navigator.push(
         ),
       );
 
-// Get syntax (It is much better, but you have the right to disagree)
+// Get sintax (It is much better, but you have the right to disagree)
 Get.to(HomePage());
 
 
@@ -206,6 +207,11 @@ To open default dialog:
                   onPressed: () => Get.back(),
                 ));
 ```
+You can also use Get.generalDialog instead of showGeneralDialog.
+
+For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
+For widgets that don't use Overlay, you can use Get.context.
+These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
 
 ### BottomSheets
 Get.bottomSheet is like showModalBottomSheet, but don't need of context.
@@ -480,6 +486,10 @@ void main() {
     initialRoute: '/',
     namedRoutes: {
       '/': GetRoute(page: MyHomePage()),
+      /// Important!  :user is not a new route, it is just a parameter
+      /// specification. Do not use '/second/:user' and '/second'
+      /// if you need new route to user, use '/second/user/:user' 
+      /// if '/second' is a route.
       '/second/:user': GetRoute(page: Second()), // receive ID
       '/third': GetRoute(page: Third(),transition: Transition.cupertino);
     },
