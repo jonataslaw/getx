@@ -18,10 +18,10 @@ const int _kMaxDroppedSwipePageForwardAnimationTime = 800; // Milliseconds.
 // user releases a page mid swipe.
 const int _kMaxPageBackAnimationTime = 300;
 
-class GetRoute<T> extends PageRoute<T> {
+class GetRouteBase<T> extends PageRoute<T> {
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
   /// be null.
-  GetRoute({
+  GetRouteBase({
     @required this.page,
     this.title,
     RouteSettings settings,
@@ -85,7 +85,7 @@ class GetRoute<T> extends PageRoute<T> {
   @override
   void didChangePrevious(Route<dynamic> previousRoute) {
     final String previousTitleString =
-        previousRoute is GetRoute ? previousRoute.title : null;
+        previousRoute is GetRouteBase ? previousRoute.title : null;
     if (_previousTitle == null) {
       _previousTitle = ValueNotifier<String>(previousTitleString);
     } else {
@@ -113,7 +113,7 @@ class GetRoute<T> extends PageRoute<T> {
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
     // Don't perform outgoing animation if the next route is a fullscreen dialog.
-    return nextRoute is GetRoute && !nextRoute.fullscreenDialog;
+    return nextRoute is GetRouteBase && !nextRoute.fullscreenDialog;
   }
 
   /// True if an iOS-style back swipe pop gesture is currently underway for [route].

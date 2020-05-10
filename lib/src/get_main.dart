@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
+import 'root/root_controller.dart';
 import 'routes/default_route.dart';
 import 'routes/observers/route_observer.dart';
 import 'routes/transitions_type.dart';
@@ -60,7 +61,7 @@ class Get {
       Duration duration,
       int id,
       bool popGesture}) {
-    return global(id).currentState.push(GetRoute(
+    return global(id).currentState.push(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         popGesture: popGesture ?? _defaultPopGesture,
@@ -136,10 +137,10 @@ class Get {
     global(id).currentState.pop(result);
   }
 
-  /// Experimental API to back from overlay
-  static void backE({dynamic result}) {
-    Navigator.pop(overlayContext);
-  }
+  // /// Experimental API to back from overlay
+  // static void backE({dynamic result}) {
+  //   Navigator.pop(overlayContext);
+  // }
 
   /// It will close as many screens as you define. Times must be> 0;
   static void close(int times, [int id]) {
@@ -162,7 +163,7 @@ class Get {
       bool popGesture,
       int id,
       Duration duration}) {
-    return global(id).currentState.pushReplacement(GetRoute(
+    return global(id).currentState.pushReplacement(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         popGesture: popGesture ?? _defaultPopGesture,
@@ -180,7 +181,7 @@ class Get {
     var route = (Route<dynamic> rota) => false;
 
     return global(id).currentState.pushAndRemoveUntil(
-        GetRoute(
+        GetRouteBase(
           opaque: opaque ?? true,
           popGesture: popGesture ?? _defaultPopGesture,
           page: page,
@@ -232,15 +233,89 @@ class Get {
     );
   }
 
-  static Future<T> defaultDialog<T>(
-      {String title = "Alert dialog",
-      Widget content,
-      Widget cancel,
-      Widget confirm}) {
-    return dialog(AlertDialog(
+  static Future<T> defaultDialog<T>({
+    String title = "Alert",
+    Widget content,
+    VoidCallback onConfirm,
+    VoidCallback onCancel,
+    VoidCallback onCustom,
+    String textConfirm,
+    String textCancel,
+    String textCustom,
+    Widget confirm,
+    Widget cancel,
+    Widget custom,
+    Color backgroundColor,
+    Color buttonColor,
+    String middleText = "Dialog made in 3 lines of code",
+    double radius = 20.0,
+    List<Widget> actions,
+  }) {
+    Widget cancelButton = cancel ?? (onCancel != null || textCancel != null)
+        ? FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onPressed: () {
+              onCancel?.call();
+              Get.back();
+            },
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: Text(textConfirm ?? "Cancel"),
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                    color: buttonColor ?? Get.theme.accentColor,
+                    width: 2,
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(100)),
+          )
+        : null;
+
+    Widget confirmButton = confirm ?? (onConfirm != null || textConfirm != null)
+        ? FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            color: buttonColor ?? Get.theme.accentColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100)),
+            child: Text(textConfirm ?? "Ok"),
+            onPressed: () {
+              onConfirm?.call();
+            })
+        : null;
+    if (actions == null) {
+      actions = [];
+      if (cancelButton != null) {
+        actions.add(cancelButton);
+      }
+      if (confirmButton != null) {
+        actions.add(confirmButton);
+      }
+    }
+    return Get.dialog(AlertDialog(
+      titlePadding: EdgeInsets.all(8),
+      contentPadding: EdgeInsets.all(8),
+      backgroundColor: backgroundColor ?? Get.theme.dialogBackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius))),
       title: Text(title, textAlign: TextAlign.center),
-      content: content,
-      actions: <Widget>[cancel, confirm],
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          content ?? Text(middleText ?? "", textAlign: TextAlign.center),
+          SizedBox(height: 16),
+          ButtonTheme(
+            minWidth: 78.0,
+            height: 34.0,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: actions,
+            ),
+          )
+        ],
+      ),
+      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+      buttonPadding: EdgeInsets.zero,
     ));
   }
 
@@ -281,9 +356,94 @@ class Get {
     ));
   }
 
+  static void rawSnackbar(
+      {String title,
+      String message,
+      Widget titleText,
+      Widget messageText,
+      Widget icon,
+      bool instantInit = false,
+      bool shouldIconPulse = true,
+      double maxWidth,
+      EdgeInsets margin = const EdgeInsets.all(0.0),
+      EdgeInsets padding = const EdgeInsets.all(16),
+      double borderRadius = 0.0,
+      Color borderColor,
+      double borderWidth = 1.0,
+      Color backgroundColor = const Color(0xFF303030),
+      Color leftBarIndicatorColor,
+      List<BoxShadow> boxShadows,
+      Gradient backgroundGradient,
+      FlatButton mainButton,
+      OnTap onTap,
+      Duration duration = const Duration(seconds: 3),
+      bool isDismissible = true,
+      SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
+      bool showProgressIndicator = false,
+      AnimationController progressIndicatorController,
+      Color progressIndicatorBackgroundColor,
+      Animation<Color> progressIndicatorValueColor,
+      SnackPosition snackPosition = SnackPosition.BOTTOM,
+      SnackStyle snackStyle = SnackStyle.FLOATING,
+      Curve forwardAnimationCurve = Curves.easeOutCirc,
+      Curve reverseAnimationCurve = Curves.easeOutCirc,
+      Duration animationDuration = const Duration(seconds: 1),
+      SnackStatusCallback onStatusChanged,
+      double barBlur = 0.0,
+      double overlayBlur = 0.0,
+      Color overlayColor = Colors.transparent,
+      Form userInputForm}) {
+    GetBar getBar = GetBar(
+        title: title,
+        message: message,
+        titleText: titleText,
+        messageText: messageText,
+        snackPosition: snackPosition,
+        borderRadius: borderRadius,
+        margin: margin,
+        duration: duration,
+        barBlur: barBlur,
+        backgroundColor: backgroundColor,
+        icon: icon,
+        shouldIconPulse: shouldIconPulse,
+        maxWidth: maxWidth,
+        padding: padding,
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        leftBarIndicatorColor: leftBarIndicatorColor,
+        boxShadows: boxShadows,
+        backgroundGradient: backgroundGradient,
+        mainButton: mainButton,
+        onTap: onTap,
+        isDismissible: isDismissible,
+        dismissDirection: dismissDirection,
+        showProgressIndicator: showProgressIndicator ?? false,
+        progressIndicatorController: progressIndicatorController,
+        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+        progressIndicatorValueColor: progressIndicatorValueColor,
+        snackStyle: snackStyle,
+        forwardAnimationCurve: forwardAnimationCurve,
+        reverseAnimationCurve: reverseAnimationCurve,
+        animationDuration: animationDuration,
+        overlayBlur: overlayBlur,
+        overlayColor: overlayColor,
+        userInputForm: userInputForm);
+
+    if (instantInit) {
+      getBar.show();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        getBar.show();
+      });
+    }
+  }
+
   static void snackbar(title, message,
       {Color colorText,
       Duration duration,
+
+      /// with instantInit = false you can put Get.snackbar on initState
+      bool instantInit = false,
       SnackPosition snackPosition,
       Widget titleText,
       Widget messageText,
@@ -315,57 +475,63 @@ class Get {
       double overlayBlur,
       Color overlayColor,
       Form userInputForm}) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      final Color defaultColor = IconTheme.of(Get.key.currentContext).color;
-      return GetBar(
-          titleText: titleText ??
-              Text(
-                title,
-                style: TextStyle(
-                    color: colorText ?? defaultColor,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16),
-              ),
-          messageText: messageText ??
-              Text(
-                message,
-                style: TextStyle(
-                    color: colorText ?? defaultColor,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 14),
-              ),
-          snackPosition: snackPosition ?? SnackPosition.TOP,
-          borderRadius: borderRadius ?? 15,
-          margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
-          duration: duration ?? Duration(seconds: 3),
-          barBlur: barBlur ?? 7.0,
-          backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
-          icon: icon,
-          shouldIconPulse: shouldIconPulse ?? true,
-          maxWidth: maxWidth,
-          padding: padding ?? EdgeInsets.all(16),
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          leftBarIndicatorColor: leftBarIndicatorColor,
-          boxShadows: boxShadows,
-          backgroundGradient: backgroundGradient,
-          mainButton: mainButton,
-          onTap: onTap,
-          isDismissible: isDismissible ?? true,
-          dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
-          showProgressIndicator: showProgressIndicator ?? false,
-          progressIndicatorController: progressIndicatorController,
-          progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-          progressIndicatorValueColor: progressIndicatorValueColor,
-          snackStyle: snackStyle ?? SnackStyle.FLOATING,
-          forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-          reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-          animationDuration: animationDuration ?? Duration(seconds: 1),
-          overlayBlur: overlayBlur ?? 0.0,
-          overlayColor: overlayColor ?? Colors.transparent,
-          userInputForm: userInputForm)
-        ..show();
-    });
+    GetBar getBar = GetBar(
+        titleText: (title == null)
+            ? null
+            : titleText ??
+                Text(
+                  title,
+                  style: TextStyle(
+                      color: colorText ?? theme.iconTheme.color,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16),
+                ),
+        messageText: messageText ??
+            Text(
+              message,
+              style: TextStyle(
+                  color: colorText ?? theme.iconTheme.color,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 14),
+            ),
+        snackPosition: snackPosition ?? SnackPosition.TOP,
+        borderRadius: borderRadius ?? 15,
+        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        duration: duration ?? Duration(seconds: 3),
+        barBlur: barBlur ?? 7.0,
+        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        icon: icon,
+        shouldIconPulse: shouldIconPulse ?? true,
+        maxWidth: maxWidth,
+        padding: padding ?? EdgeInsets.all(16),
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        leftBarIndicatorColor: leftBarIndicatorColor,
+        boxShadows: boxShadows,
+        backgroundGradient: backgroundGradient,
+        mainButton: mainButton,
+        onTap: onTap,
+        isDismissible: isDismissible ?? true,
+        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+        showProgressIndicator: showProgressIndicator ?? false,
+        progressIndicatorController: progressIndicatorController,
+        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+        progressIndicatorValueColor: progressIndicatorValueColor,
+        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+        animationDuration: animationDuration ?? Duration(seconds: 1),
+        overlayBlur: overlayBlur ?? 0.0,
+        overlayColor: overlayColor ?? Colors.transparent,
+        userInputForm: userInputForm);
+
+    if (instantInit) {
+      getBar.show();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        getBar.show();
+      });
+    }
   }
 
   /// change default config of Get
@@ -398,6 +564,16 @@ class Get {
     }
   }
 
+  static GetMaterialController getController = GetMaterialController();
+
+  static changeTheme(ThemeData theme) {
+    getController.setTheme(theme);
+  }
+
+  static restartApp() {
+    getController.restartApp();
+  }
+
   static Map<int, GlobalKey<NavigatorState>> _keys = {};
 
   static GlobalKey<NavigatorState> nestedKey(int key) {
@@ -416,40 +592,128 @@ class Get {
   }
 
   //////////// INSTANCE MANAGER
-  static Map<dynamic, dynamic> _singl = {};
+  Map<dynamic, dynamic> _singl = {};
 
-  /// Register a singleton instance of your class
-  static T put<T>(T singleton) {
-    _singl.putIfAbsent(T, () => singleton);
-    return _singl[T];
+  Map<dynamic, _FcBuilderFunc> _factory = {};
+
+  static void lazyPut<S>(Object instance) {
+    final lazy = () => instance;
+    Get()._factory.putIfAbsent(S, () => lazy);
+  }
+
+  static void lazyPutBuilder<S>(_FcBuilderFunc function) {
+    Get()._factory.putIfAbsent(S, () => function);
+  }
+
+  /// Inject class on Get Instance Manager
+  static S put<S>(
+    S dependency, {
+    String name,
+    bool overrideAbstract = false,
+    _FcBuilderFunc<S> builder,
+  }) {
+    _insert(
+        isSingleton: true,
+        replace: overrideAbstract,
+        //?? (("$S" == "${dependency.runtimeType}") == false),
+        name: name,
+        builder: builder ?? (() => dependency));
+    return find<S>(name: name);
+  }
+
+  /// Create a new instance from builder class
+  /// Example
+  /// Get.create(() => Repl());
+  /// Repl a = Get.find();
+  /// Repl b = Get.find();
+  /// print(a==b); (false)
+  static void create<S>(
+    _FcBuilderFunc<S> builder, {
+    String name,
+  }) {
+    _insert(isSingleton: false, name: name, builder: builder);
+  }
+
+  static void _insert<S>({
+    bool isSingleton,
+    String name,
+    bool replace = true,
+    _FcBuilderFunc<S> builder,
+  }) {
+    assert(builder != null);
+    String key = _getKey(S, name);
+    if (replace) {
+      Get()._singl[key] = _FcBuilder<S>(isSingleton, builder);
+    } else {
+      Get()._singl.putIfAbsent(key, () => _FcBuilder<S>(isSingleton, builder));
+    }
+  }
+
+  /// Find a instance from required class
+  static S find<S>({String name}) {
+    if (Get.isRegistred<S>()) {
+      String key = _getKey(S, name);
+      _FcBuilder builder = Get()._singl[key];
+      if (builder == null) {
+        if (name == null) {
+          throw "class ${S.toString()} is not register";
+        } else {
+          throw "class ${S.toString()} with name '$name' is not register";
+        }
+      }
+      return Get()._singl[key].getSependency();
+    } else {
+      if (!Get()._factory.containsKey(S))
+        throw " $S not found. You need call Get.put<$S>($S()) before";
+
+      if (isLogEnable) print('[GET] $S instance was created at that time');
+      S _value = Get.put<S>(Get()._factory[S].call() as S);
+      Get()._factory.remove(S);
+      return _value;
+    }
+  }
+
+  /// Remove dependency of [S] on dependency abstraction. For concrete class use Get.delete
+  static void remove<S>({String name}) {
+    String key = _getKey(S, name);
+    _FcBuilder builder = Get()._singl[key];
+    if (builder != null) builder.dependency = null;
+    if (Get()._singl.containsKey(key)) {
+      print('error on remove $key');
+    } else {
+      if (isLogEnable) print('[GET] $key removed from memory');
+    }
+  }
+
+  static String _getKey(Type type, String name) {
+    return name == null ? type.toString() : type.toString() + name;
   }
 
   static bool reset() {
-    _singl.clear();
+    Get()._singl.clear();
     return true;
   }
 
-  /// Delete a singleton instance of your class
-  static bool delete<T>(T singleton) {
-    if (!_singl.containsKey(T)) {
-      print('key id not found');
+  /// Delete class instance on [S] and clean memory
+  static bool delete<S>({String name}) {
+    String key = _getKey(S, name);
+
+    if (!Get()._singl.containsKey(key)) {
+      print('Instance $key not found');
       return false;
     }
-    _singl.removeWhere((oldkey, value) => (oldkey == T));
+    Get()._singl.removeWhere((oldkey, value) => (oldkey == key));
+    if (Get()._singl.containsKey(key)) {
+      print('error on remove object $key');
+    } else {
+      if (isLogEnable) print('[GET] $key deleted from memory');
+    }
     return true;
   }
 
   /// check if instance is registred
-  static bool isRegistred<T>() => _singl.containsKey(T);
-
-  /// Recover a singleton instance of your class
-  static T find<T>() {
-    if (!_singl.containsKey(T)) {
-      throw 'key id ${T.runtimeType} not found';
-    }
-    final recoverKey = _singl[T];
-    return recoverKey;
-  }
+  static bool isRegistred<S>({String name}) =>
+      Get()._singl.containsKey(_getKey(S, name));
 
   /// give access to Routing API from GetObserver
   static Routing get routing => _routing;
@@ -526,8 +790,11 @@ class Get {
   /// give access to Theme.of(context)
   static ThemeData get theme => Theme.of(context);
 
+  /// give access to TextTheme.of(context)
+  static TextTheme get textTheme => Theme.of(context).textTheme;
+
   /// give access to Mediaquery.of(context)
-  static MediaQueryData get mediaquery => MediaQuery.of(context);
+  static MediaQueryData get mediaQuery => MediaQuery.of(context);
 
   /// give access to Theme.of(context).iconTheme.color
   static Color get iconColor => Theme.of(context).iconTheme.color;
@@ -542,3 +809,24 @@ class Get {
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather Navigator.push(context, YourRoute());
 NavigatorState get navigator => Get.key.currentState;
+
+class _FcBuilder<S> {
+  bool isSingleton;
+  _FcBuilderFunc builderFunc;
+  S dependency;
+
+  _FcBuilder(this.isSingleton, this.builderFunc);
+
+  S getSependency() {
+    if (isSingleton) {
+      if (dependency == null) {
+        dependency = builderFunc() as S;
+      }
+      return dependency;
+    } else {
+      return builderFunc() as S;
+    }
+  }
+}
+
+typedef _FcBuilderFunc<S> = S Function();

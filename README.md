@@ -1,13 +1,14 @@
 # Get
 
 Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+
 ```dart
 // Default Flutter navigator
 Navigator.of(context).push(
         context,
         MaterialPageRoute(
            builder: (BuildContext context) { 
-            return HomePage();
+            return Home();
           },
         ),
       );
@@ -196,16 +197,8 @@ To open default dialog:
 
 ```dart
  Get.defaultDialog(
-                title: "My Title",
-                content: Text("Hi, it's my dialog"),
-                confirm: FlatButton(
-                  child: Text("Ok"),
-                  onPressed: () => print("OK pressed"),
-                ),
-                cancel: FlatButton(
-                  child: Text("Cancel"),
-                  onPressed: () => Get.back(),
-                ));
+              onConfirm: () => print("Ok"),
+              middleText: "Dialog made in 3 lines of code");
 ```
 You can also use Get.generalDialog instead of showGeneralDialog.
 
@@ -231,8 +224,8 @@ Get.bottomSheet(
             title: Text('Video'),
             onTap: () => {},          
           ),
-            ],
-          ),
+         ],
+        ),
        );
       }
     );
@@ -305,7 +298,7 @@ class OtherClasse extends StatelessWidget {
   }
 
 ```
-If you need to use your controller in many other places, and outside of ReBuilder, just create a get in your controller and have it easily. You can copy this code and just change the name of your controller.
+If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
 
 ```dart
 class Controller extends GetController {
@@ -313,7 +306,7 @@ class Controller extends GetController {
   /// You do not need that. I recommend using it just for ease of syntax.
   /// with static method: Controller.to.counter();
   /// with no static method: Get.find<Controller>().counter();
-  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other does.
+  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other the IDE will autocomplete it.
   static Controller get to => Get.find(); // add this line 
 
   int counter = 0;
@@ -389,7 +382,7 @@ GetBuilder( // you dont need to type on this way
 ```
 
 ## Simple Instance Manager
-Are you already using Get and want to make your project as lean as possible? Now Get has a simple instance manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code.
+Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
@@ -415,7 +408,7 @@ Text(controller.textFromApi);
 
 To remove a instance of Get:
 ```dart
-Get.delete(Controller());
+Get.delete<Controller>();
 ```
 
 

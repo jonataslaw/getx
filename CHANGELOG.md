@@ -1,3 +1,33 @@
+## [2.2.2] 
+- Fix GetRoute not found
+
+## [2.2.1] 
+- Improve lazyPut
+
+## [2.2.0] 
+- Added: Ability to choose or delay a widget's state change according to its ID.
+- Added: Ability to fire triggers when loading materialApp.
+- Added: Ability to change theme dynamically.
+- Added: Ability to rebuild the entire app with one command.
+- Added: Ability to trigger events on the MaterialApp.
+- Added: Get.lazyPut (lazy loading of dependencies).
+- Added: Get.creator - a factory of dependencies .
+- Added: Capability of define abstract class on dependencies. 
+
+## [2.1.2] 
+- Get.defaultDialog refactor
+
+## [2.1.1] 
+- fix typo
+
+## [2.1.0] 
+- Added Get.rawSnackbar
+- Added instantInit config to snackbars
+- Refactor Get Instance Manager
+- Improved performance and bug fix to Get State Manager 
+- Improved performance of GetRoute on namedRoutes
+- Hotfix on namedRoutes
+
 ## [2.0.10] 
 - Bump new Flutter version
 - Added Get.generalDialog

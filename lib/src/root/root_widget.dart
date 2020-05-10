@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/src/routes/get_route.dart';
 import 'package:get/src/routes/utils/parse_arguments.dart';
+import 'root_controller.dart';
 
-class GetMaterialApp extends StatefulWidget {
+class GetMaterialApp extends StatelessWidget {
   const GetMaterialApp({
     Key key,
     this.navigatorKey,
@@ -17,6 +19,8 @@ class GetMaterialApp extends StatefulWidget {
     this.title = '',
     this.onGenerateTitle,
     this.color,
+    this.onInit,
+    this.onDispose,
     this.theme,
     this.darkTheme,
     this.themeMode = ThemeMode.system,
@@ -84,37 +88,14 @@ class GetMaterialApp extends StatefulWidget {
   final Function(Routing) routingCallback;
   final Transition defaultTransition;
   final bool opaqueRoute;
+  final VoidCallback onInit;
+  final VoidCallback onDispose;
   final bool enableLog;
   final bool popGesture;
   final Duration transitionDuration;
   final bool defaultGlobalState;
   final Map<String, GetRoute> namedRoutes;
   final GetRoute unknownRoute;
-
-  @override
-  _GetMaterialAppState createState() => _GetMaterialAppState();
-}
-
-class _GetMaterialAppState extends State<GetMaterialApp> {
-  ParseRoute parse = ParseRoute();
-  @override
-  void initState() {
-    if (widget.namedRoutes != null) {
-      widget.namedRoutes.forEach((key, value) {
-        parse.addRoute(key);
-      });
-    }
-    Get.config(
-      enableLog: widget.enableLog ?? Get.isLogEnable,
-      defaultTransition: widget.defaultTransition ?? Get.defaultTransition,
-      defaultOpaqueRoute: widget.opaqueRoute ?? Get.isOpaqueRouteDefault,
-      defaultPopGesture: widget.popGesture ?? Get.isPopGestureEnable,
-      defaultDurationTransition:
-          widget.transitionDuration ?? Get.defaultDurationTransition,
-      defaultGlobalState: widget.defaultGlobalState ?? Get.defaultGlobalState,
-    );
-    super.initState();
-  }
 
   Route<dynamic> namedRoutesGenerate(RouteSettings settings) {
     Get.setSettings(settings);
@@ -124,87 +105,132 @@ class _GetMaterialAppState extends State<GetMaterialApp> {
     /// workaround until they fix it, because the problem is with the 'Flutter engine',
     /// which changes the initial route for an empty String, not the main Flutter,
     /// so only Team can fix it.
-    final parsedString = parse.split(
-        settings.name == '' ? (widget.initialRoute ?? '/') : settings.name);
+    var parsedString = Get.getController.parse.split(
+        (settings.name == '' || settings.name == null)
+            ? (initialRoute ?? '/')
+            : settings.name);
 
-    String settingsname = parsedString.route;
+    if (parsedString == null) {
+      parsedString = AppRouteMatch();
+      parsedString.route = settings.name;
+    }
+
+    String settingsName = parsedString.route;
     Map<String, GetRoute> newNamedRoutes = {};
 
-    widget.namedRoutes.forEach((key, value) {
-      String newName = parse.split(key).route;
+    namedRoutes.forEach((key, value) {
+      String newName = Get.getController.parse.split(key).route;
       newNamedRoutes.addAll({newName: value});
     });
 
-    if (newNamedRoutes.containsKey(settingsname)) {
+    if (newNamedRoutes.containsKey(settingsName)) {
       Get.setParameter(parsedString.parameters);
-      return GetRoute(
-        page: newNamedRoutes[settingsname].page,
-        title: newNamedRoutes[settingsname].title,
+
+      return GetRouteBase(
+        page: newNamedRoutes[settingsName].page,
+        title: newNamedRoutes[settingsName].title,
         parameter: parsedString.parameters,
         settings:
             RouteSettings(name: settings.name, arguments: settings.arguments),
-        maintainState: newNamedRoutes[settingsname].maintainState,
-        curve: newNamedRoutes[settingsname].curve,
-        alignment: newNamedRoutes[settingsname].alignment,
-        opaque: newNamedRoutes[settingsname].opaque,
-        transitionDuration: (widget.transitionDuration == null
-            ? newNamedRoutes[settingsname].transitionDuration
-            : widget.transitionDuration),
-        transition: newNamedRoutes[settingsname].transition,
-        popGesture: newNamedRoutes[settingsname].popGesture,
-        fullscreenDialog: newNamedRoutes[settingsname].fullscreenDialog,
+        maintainState: newNamedRoutes[settingsName].maintainState,
+        curve: newNamedRoutes[settingsName].curve,
+        alignment: newNamedRoutes[settingsName].alignment,
+        opaque: newNamedRoutes[settingsName].opaque,
+        transitionDuration: (transitionDuration == null
+            ? newNamedRoutes[settingsName].transitionDuration
+            : transitionDuration),
+        transition: newNamedRoutes[settingsName].transition,
+        popGesture: newNamedRoutes[settingsName].popGesture,
+        fullscreenDialog: newNamedRoutes[settingsName].fullscreenDialog,
       );
     } else {
-      return (widget.unknownRoute ??
-          GetRoute(
+      return ((unknownRoute == null
+          ? GetRouteBase(
               page: Scaffold(
-            body: Center(
-              child: Text("Route not found :("),
-            ),
-          )));
+              body: Center(
+                child: Text("Route not found :("),
+              ),
+            ))
+          : GetRouteBase(
+              page: unknownRoute.page,
+              title: unknownRoute.title,
+              settings: unknownRoute.settings,
+              maintainState: unknownRoute.maintainState,
+              curve: unknownRoute.curve,
+              alignment: unknownRoute.alignment,
+              parameter: unknownRoute.parameter,
+              opaque: unknownRoute.opaque,
+              transitionDuration: unknownRoute.transitionDuration,
+              popGesture: unknownRoute.popGesture,
+              transition: unknownRoute.transition,
+              fullscreenDialog: unknownRoute.fullscreenDialog,
+            )));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: (widget.navigatorKey == null
-          ? Get.key
-          : Get.addKey(widget.navigatorKey)),
-      home: widget.home,
-      routes: widget.routes ?? const <String, WidgetBuilder>{},
-      initialRoute: widget.initialRoute,
-      onGenerateRoute: (widget.namedRoutes == null
-          ? widget.onGenerateRoute
-          : namedRoutesGenerate),
-      onGenerateInitialRoutes: widget.onGenerateInitialRoutes,
-      onUnknownRoute: widget.onUnknownRoute,
-      navigatorObservers: (widget.navigatorObservers == null
-          ? <NavigatorObserver>[GetObserver(widget.routingCallback)]
-          : <NavigatorObserver>[GetObserver(widget.routingCallback)]
-        ..addAll(widget.navigatorObservers)),
-      builder: widget.builder,
-      title: widget.title ?? '',
-      onGenerateTitle: widget.onGenerateTitle,
-      color: widget.color,
-      theme: widget.theme,
-      darkTheme: widget.darkTheme,
-      themeMode: widget.themeMode ?? ThemeMode.system,
-      locale: widget.locale,
-      localizationsDelegates: widget.localizationsDelegates,
-      localeListResolutionCallback: widget.localeListResolutionCallback,
-      localeResolutionCallback: widget.localeResolutionCallback,
-      supportedLocales:
-          widget.supportedLocales ?? const <Locale>[Locale('en', 'US')],
-      debugShowMaterialGrid: widget.debugShowMaterialGrid ?? false,
-      showPerformanceOverlay: widget.showPerformanceOverlay ?? false,
-      checkerboardRasterCacheImages:
-          widget.checkerboardRasterCacheImages ?? false,
-      checkerboardOffscreenLayers: widget.checkerboardOffscreenLayers ?? false,
-      showSemanticsDebugger: widget.showSemanticsDebugger ?? false,
-      debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner ?? true,
-      shortcuts: widget.shortcuts,
-      //   actions: widget.actions,
-    );
+    return GetBuilder<GetMaterialController>(
+        init: Get.getController,
+        dispose: (d) {
+          onDispose?.call();
+        },
+        initState: (i) {
+          onInit?.call();
+          if (namedRoutes != null) {
+            namedRoutes.forEach((key, value) {
+              Get.getController.parse.addRoute(key);
+            });
+          }
+          Get.config(
+            enableLog: enableLog ?? Get.isLogEnable,
+            defaultTransition: defaultTransition ?? Get.defaultTransition,
+            defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
+            defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
+            defaultDurationTransition:
+                transitionDuration ?? Get.defaultDurationTransition,
+            defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
+          );
+        },
+        builder: (_) {
+          return MaterialApp(
+            key: _.key,
+            navigatorKey:
+                (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
+            home: home,
+            routes: routes ?? const <String, WidgetBuilder>{},
+            initialRoute: initialRoute,
+            onGenerateRoute:
+                (namedRoutes == null ? onGenerateRoute : namedRoutesGenerate),
+            onGenerateInitialRoutes: onGenerateInitialRoutes,
+            onUnknownRoute: onUnknownRoute,
+            navigatorObservers: (navigatorObservers == null
+                ? <NavigatorObserver>[GetObserver(routingCallback)]
+                : <NavigatorObserver>[GetObserver(routingCallback)]
+              ..addAll(navigatorObservers)),
+            builder: builder,
+            title: title ?? '',
+            onGenerateTitle: onGenerateTitle,
+            color: color,
+            theme: theme ?? _.theme ?? ThemeData.fallback(),
+            darkTheme: darkTheme,
+            themeMode: themeMode ?? ThemeMode.system,
+            locale: locale,
+            localizationsDelegates: localizationsDelegates,
+            localeListResolutionCallback: localeListResolutionCallback,
+            localeResolutionCallback: localeResolutionCallback,
+            supportedLocales:
+                supportedLocales ?? const <Locale>[Locale('en', 'US')],
+            debugShowMaterialGrid: debugShowMaterialGrid ?? false,
+            showPerformanceOverlay: showPerformanceOverlay ?? false,
+            checkerboardRasterCacheImages:
+                checkerboardRasterCacheImages ?? false,
+            checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
+            showSemanticsDebugger: showSemanticsDebugger ?? false,
+            debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+            shortcuts: shortcuts,
+            //   actions: actions,
+          );
+        });
   }
 }

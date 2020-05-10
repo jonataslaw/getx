@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 import '../get_main.dart';
 
+class RealState {
+  final State state;
+  final String id;
+  RealState({this.state, this.id});
+}
+
 class GetController extends State {
-  Map<GetController, State> _allStates = {};
+  Map<GetController, List<RealState>> _allStates = {};
 
   /// Update GetBuilder with update(this)
-  void update(GetController id) {
-    if (id != null) {
-      final State state = _allStates[id];
-      if (state != null && state.mounted) state.setState(() {});
+  void update(GetController controller, [List<String> ids]) {
+    if (controller != null) {
+      if (ids == null) {
+        var all = _allStates[controller];
+        all.forEach((rs) {
+          if (rs.state != null && rs.state.mounted) rs.state.setState(() {});
+        });
+      } else {
+        ids.forEach(
+          (s) {
+            var all = _allStates[controller];
+            all.forEach((rs) {
+              if (rs.state != null && rs.state.mounted && rs.id == s)
+                rs.state.setState(() {});
+            });
+          },
+        );
+      }
     }
   }
 
@@ -20,6 +40,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
   @required
   final Widget Function(T) builder;
   final bool global;
+  final String id;
   final bool autoRemove;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
@@ -32,6 +53,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
     this.autoRemove = true,
     this.initState,
     this.dispose,
+    this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
   })  : assert(builder != null),
@@ -48,14 +70,24 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     if (widget.global) {
       if (Get.isRegistred<T>()) {
         controller = Get.find<T>();
+        if (controller._allStates[controller] == null) {
+          controller._allStates[controller] = [];
+        }
+        controller._allStates[controller]
+            .add(RealState(state: this, id: widget.id));
       } else {
         controller = widget.init;
-        controller._allStates[controller] = this;
-        Get.put(controller);
+        if (controller._allStates[controller] == null) {
+          controller._allStates[controller] = [];
+        }
+        controller._allStates[controller]
+            .add(RealState(state: this, id: widget.id));
+        Get.put<T>(controller);
       }
     } else {
       controller = widget.init;
-      controller._allStates[controller] = this;
+      controller._allStates[controller]
+          .add(RealState(state: this, id: widget.id));
     }
     if (widget.initState != null) widget.initState(this);
   }
@@ -67,11 +99,24 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       if (b._allStates[controller].hashCode == this.hashCode) {
         b._allStates.remove(controller);
       }
+    } else {
+      var b = controller;
+      if (b._allStates[controller].hashCode == this.hashCode) {
+        b._allStates.remove(controller);
+      }
     }
     if (widget.dispose != null) widget.dispose(this);
-    if (widget.autoRemove && Get.isRegistred<T>() && (widget.init != null)) {
-      Get.delete(widget.init);
+
+    if (widget.init != null) {
+      if (widget.autoRemove && Get.isRegistred<T>()) {
+        Get.delete<T>();
+      }
+    } else {
+      // controller._allStates[controller].remove(this);
+      controller._allStates[controller]
+          .remove(RealState(state: this, id: widget.id));
     }
+
     super.dispose();
   }
 
