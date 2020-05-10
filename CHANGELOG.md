@@ -1,3 +1,16 @@
+## [2.2.6] 
+- Fix cancel button on defaultDialog don't appear when widget implementation usage
+
+## [2.2.5] 
+- Refator defaultDialog
+
+## [2.2.4] 
+- Clean code
+- Fix Get.LazyPut
+
+## [2.2.3] 
+- Remove defaultDialog type
+
 ## [2.2.2] 
 - Fix GetRoute not found
 

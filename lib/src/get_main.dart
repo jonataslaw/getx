@@ -251,26 +251,36 @@ class Get {
     double radius = 20.0,
     List<Widget> actions,
   }) {
-    Widget cancelButton = cancel ?? (onCancel != null || textCancel != null)
-        ? FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onPressed: () {
-              onCancel?.call();
-              Get.back();
-            },
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            child: Text(textConfirm ?? "Cancel"),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: buttonColor ?? Get.theme.accentColor,
-                    width: 2,
-                    style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(100)),
-          )
-        : null;
+    bool leanCancel = onCancel != null || textCancel != null;
+    bool leanConfirm = onConfirm != null || textConfirm != null;
+    actions ??= [];
 
-    Widget confirmButton = confirm ?? (onConfirm != null || textConfirm != null)
-        ? FlatButton(
+    if (cancel != null) {
+      actions.add(cancel);
+    } else {
+      if (leanCancel) {
+        actions.add(FlatButton(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () {
+            onCancel?.call();
+            Get.back();
+          },
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Text(textCancel ?? "Cancel"),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                  color: buttonColor ?? Get.theme.accentColor,
+                  width: 2,
+                  style: BorderStyle.solid),
+              borderRadius: BorderRadius.circular(100)),
+        ));
+      }
+    }
+    if (confirm != null) {
+      actions.add(confirm);
+    } else {
+      if (leanConfirm) {
+        actions.add(FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             color: buttonColor ?? Get.theme.accentColor,
             shape: RoundedRectangleBorder(
@@ -278,15 +288,7 @@ class Get {
             child: Text(textConfirm ?? "Ok"),
             onPressed: () {
               onConfirm?.call();
-            })
-        : null;
-    if (actions == null) {
-      actions = [];
-      if (cancelButton != null) {
-        actions.add(cancelButton);
-      }
-      if (confirmButton != null) {
-        actions.add(confirmButton);
+            }));
       }
     }
     return Get.dialog(AlertDialog(
@@ -596,12 +598,7 @@ class Get {
 
   Map<dynamic, _FcBuilderFunc> _factory = {};
 
-  static void lazyPut<S>(Object instance) {
-    final lazy = () => instance;
-    Get()._factory.putIfAbsent(S, () => lazy);
-  }
-
-  static void lazyPutBuilder<S>(_FcBuilderFunc function) {
+  static void lazyPut<S>(_FcBuilderFunc function) {
     Get()._factory.putIfAbsent(S, () => function);
   }
 
