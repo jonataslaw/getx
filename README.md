@@ -706,7 +706,7 @@ See how simple it is:
                 initialRoute: '/',
                 onGenerateRoute: (settings) {
                   if (settings.name == '/') {
-                    return GetRoute(
+                    return GetRouteBase(
                       page: Scaffold(
                         appBar: AppBar(
                           title: Text("Main"),
@@ -722,7 +722,7 @@ See how simple it is:
                       ),
                     );
                   } else if (settings.name == '/second') {
-                    return GetRoute(
+                    return GetRouteBase(
                       page: Center(
                         child: Scaffold(
                           appBar: AppBar(
