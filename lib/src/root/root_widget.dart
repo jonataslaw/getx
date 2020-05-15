@@ -5,6 +5,7 @@ import 'package:get/src/routes/utils/parse_arguments.dart';
 import 'root_controller.dart';
 
 class GetMaterialApp extends StatelessWidget {
+
   const GetMaterialApp({
     Key key,
     this.navigatorKey,
@@ -99,13 +100,12 @@ class GetMaterialApp extends StatelessWidget {
 
   Route<dynamic> namedRoutesGenerate(RouteSettings settings) {
     Get.setSettings(settings);
-    // final parsedString = parse.split(settings.name);
 
     /// onGenerateRoute to FlutterWeb is Broken on Dev/Master. This is a temporary
     /// workaround until they fix it, because the problem is with the 'Flutter engine',
     /// which changes the initial route for an empty String, not the main Flutter,
     /// so only Team can fix it.
-    var parsedString = Get.getController.parse.split(
+    var parsedString = Get().getController.parse.split(
         (settings.name == '' || settings.name == null)
             ? (initialRoute ?? '/')
             : settings.name);
@@ -119,7 +119,7 @@ class GetMaterialApp extends StatelessWidget {
     Map<String, GetRoute> newNamedRoutes = {};
 
     namedRoutes.forEach((key, value) {
-      String newName = Get.getController.parse.split(key).route;
+      String newName = Get().getController.parse.split(key).route;
       newNamedRoutes.addAll({newName: value});
     });
 
@@ -171,7 +171,7 @@ class GetMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GetMaterialController>(
-        init: Get.getController,
+        init: Get().getController,
         dispose: (d) {
           onDispose?.call();
         },
@@ -179,7 +179,7 @@ class GetMaterialApp extends StatelessWidget {
           onInit?.call();
           if (namedRoutes != null) {
             namedRoutes.forEach((key, value) {
-              Get.getController.parse.addRoute(key);
+              Get().getController.parse.addRoute(key);
             });
           }
           Get.config(
@@ -212,7 +212,7 @@ class GetMaterialApp extends StatelessWidget {
             title: title ?? '',
             onGenerateTitle: onGenerateTitle,
             color: color,
-            theme: theme ?? _.theme ?? ThemeData.fallback(),
+            theme: _.theme ?? theme ?? ThemeData.fallback(),
             darkTheme: darkTheme,
             themeMode: themeMode ?? ThemeMode.system,
             locale: locale,

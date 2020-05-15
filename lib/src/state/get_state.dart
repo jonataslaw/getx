@@ -32,6 +32,8 @@ class GetController extends State {
     }
   }
 
+  void close() {}
+
   @override
   Widget build(_) => throw ("build method can't be called");
 }
@@ -86,14 +88,24 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       }
     } else {
       controller = widget.init;
+      if (controller._allStates[controller] == null) {
+        controller._allStates[controller] = [];
+      }
       controller._allStates[controller]
           .add(RealState(state: this, id: widget.id));
     }
     if (widget.initState != null) widget.initState(this);
+    try {
+      controller?.initState();
+    } catch (e) {
+      if (Get.isLogEnable) print("Controller is not attach");
+    }
   }
 
   @override
-  void dispose() {
+  void dispose() async {
+    super.dispose();
+
     if (widget.init != null) {
       var b = controller;
       if (b._allStates[controller].hashCode == this.hashCode) {
@@ -109,6 +121,7 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
 
     if (widget.init != null) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
+        controller.close();
         Get.delete<T>();
       }
     } else {
@@ -116,8 +129,6 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       controller._allStates[controller]
           .remove(RealState(state: this, id: widget.id));
     }
-
-    super.dispose();
   }
 
   @override

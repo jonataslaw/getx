@@ -1,3 +1,27 @@
+## [2.5.0]
+- Added List.obs
+- Now you can transform any class on obs
+
+## [2.4.0] 
+- Added GetX, state manager rxDart based. 
+- Fix error on add for non global controllers
+
+## [2.3.2] 
+- Fix close method called on not root GetBuilder
+
+## [2.3.1] 
+- Auto close stream inside close method
+- Added docs
+
+## [2.3.0] 
+- Added interface to GetX support
+
+## [2.2.8] 
+- Added api to platform brightness
+
+## [2.2.7] 
+- Fix typos
+
 ## [2.2.6] 
 - Fix cancel button on defaultDialog don't appear when widget implementation usage
 

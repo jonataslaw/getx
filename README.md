@@ -183,7 +183,7 @@ With Get, all you have to do is call your Get.snackbar from anywhere in your cod
   ///////////////////////////////////
 ```
 If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use 
-`GetBar().show();` which provides the RAW API on which Get.snackbar was built.
+`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
 
 ### Dialogs
 
@@ -244,7 +244,7 @@ What performance improvements does Get bring?
 
 2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
 
-3- Forget StatefulWidget! With Get you will never need it again. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3- Forget StatefulWidget! With Get you will never need it again (if you need to use it, you are using Get incorrectly). With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
 
 4- Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
 
@@ -261,7 +261,7 @@ What performance improvements does Get bring?
 
 In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
 
-### State manager usage
+### Simple state manager usage
 
 ```dart
 // Create controller class and extends GetController
@@ -282,8 +282,6 @@ GetBuilder<Controller>(
 ```
 **Done!**
 - You have already learned how to manage states with Get.
-
-### Global State manager
 
 If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
 
@@ -329,6 +327,39 @@ FloatingActionButton(
       ),
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+
+##### No StatefulWidget:
+Using StatefulWidgets means storing the state of entire screens unnecessarily. With Get the use of StatefulWidget is optional. Avoid them and save your users' RAM.
+
+If you need to call initState() or dispose() method, you can call them directly from GetBuilder();
+
+```dart
+GetBuilder<Controller>(
+          initState(_) => Controller.to.fetchApi(),
+          dispose(_) => Controller.to.closeStreams(),
+          builder: (s) => Text('${s.username}'),
+        ),
+```
+
+
+- NOTE: If you are working with reactive programming with Get, know that it automatically closes your streams, as long as you close them correctly inside the close() method;
+
+Do not call a dispose method inside GetController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+
+```dart
+class Controller extends GetController {
+StreamController<User> user = StreamController<User>();
+StreamController<String> name = StreamController<String>();
+
+/// close stream = close method, not dispose.
+@override
+void close() {
+  user.close();
+  name.close();
+  super.close();
+}
+
+```
 
 ##### Forms of use:
 
@@ -384,6 +415,130 @@ GetBuilder( // you dont need to type on this way
 
 ```
 
+If you want to refine a widget's update control, you can assign them unique IDs:
+```dart
+GetBuilder<Controller>( 
+    id: 'text' 
+    init: Controller(), // use it only first time on each controller
+    builder: (_) => Text(
+              '${Get.find<Controller>().counter}', //here
+              )),
+```
+And update it fis form:
+```dart
+update(this,['text']);
+
+You can also impose conditions for the update:
+
+```
+update(this,['text'], counter < 10);
+
+Why use the update method and why don't we use ChangeNotifier?
+
+
+## Reactive State Manager
+
+If you want power, Get gives you the most advanced state manager you could ever have.
+GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.
+Without decorations, you can turn anything into Observable with just a ".obs".
+
+Maximum performance: In addition to having a smart algorithm for minimal reconstruction, Get uses comparators to make sure the state has changed. If you experience any errors in your application, and send a duplicate change of state, Get will ensure that your application does not collapse.
+The state only changes if the values ​​change. That's the main difference between Get, and using Computed from MobX. When joining two observables, when one is changed, the hearing of that observable will change. With Get, if you join two variables (which is unnecessary computed for that), GetX (similar to Observer) will only change if it implies a real change of state. Example:
+
+```dart
+final count1 = 0.obs;
+final count2 = 0.obs;
+int get soma => count1.value + count2.value;
+```
+
+```dart
+ GetX<Controller>(
+              builder: (_) {
+                print("count 1 rebuild");
+                return Text('${_.count1.value}');
+              },
+            ),
+            GetX<Controller>(
+              builder: (_) {
+                print("count 2 rebuild");
+                return Text('${_.count2.value}');
+              },
+            ),
+            GetX<Controller>(
+              builder: (_) {
+                print("count 3 rebuild");
+                return Text('${_.soma}');
+              },
+            ),
+```
+
+If we increment the number of count 1, only count 1 and count 3 are reconstructed, because count 1 now has a value of 1, and 1 + 0 = 1, changing the sum value.
+
+If we change count 2, only count2 and 3 are reconstructed, because the value of 2 has changed, and the result of the sum is now 2.
+
+If we add the number 1 to count 1, which already contains 1, no widget is reconstructed. If we add a value of 1 for count 1 and a value of 2 for count 2, only 2 and 3 will be reconstructed, simply because GetX not only changes what is necessary, it avoids duplicating events.
+
+In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+
+```dart
+list.addIf(item<limit, item);
+```
+
+Without decorations, without a code generator, without complications, GetX will change the way you manage your states in Flutter, and that is not a promise, it is a certainty!
+
+Do you know Flutter's counter app? Your Controller class might look like this:
+
+```dart
+class CountCtl extends RxController {
+  int count = 0.obs;
+}
+```
+With a simple:
+```dart
+ctl.count.value++
+```
+
+You could update the counter variable in your UI, regardless of where it is stored.
+
+You can transform anything on obs:
+
+```dart
+class RxUser {
+  final name = "Camila".obs;
+  final age = 18.obs;
+}
+
+class User {
+  User({String name, int age});
+  final rx = RxUser();
+
+  String get name => rx.name.value;
+  set name(String value) => rx.name.value = value;
+
+  int get age => rx.age.value;
+  set age(int value) => rx.age.value = value;
+}
+```
+
+```dart
+
+void main() {
+  final user = User();
+  print(user.name);
+  user.age = 23;
+  user.rx.age.listen((int age) => print(age));
+  user.age = 24;
+  user.age = 25;
+}
+___________
+out:
+Camila
+23
+24
+25
+
+
+
 ## Simple Instance Manager
 Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
@@ -407,6 +562,12 @@ And then you will be able to recover your controller data that was obtained back
 
 ```dart
 Text(controller.textFromApi);
+```
+
+Looking for lazy loading? You can declare all your controllers, and it will be called only when someone needs it. You can do this with:
+```dart
+Get.lazyPut<Service>(()=> ApiMock());
+/// ApiMock will only be called when someone uses Get.find<Service> for the first time
 ```
 
 To remove a instance of Get:
@@ -718,7 +879,7 @@ See how simple it is:
                           child: FlatButton(
                               color: Colors.blue,
                               onPressed: () {
-                                Get.toNamed('/second', 1); // navigate by your nested route by index
+                                Get.toNamed('/second', id:1); // navigate by your nested route by index
                               },
                               child: Text("Go to second")),
                         ),

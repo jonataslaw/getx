@@ -10,6 +10,21 @@ import 'rx/rx_interface.dart';
 import 'snackbar/snack.dart';
 
 class Get {
+  static Get _get;
+  static GlobalKey<NavigatorState> _key;
+
+  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
+    _key = newKey;
+    return _key;
+  }
+
+  static GlobalKey<NavigatorState> get key {
+    if (_key == null) {
+      _key = GlobalKey<NavigatorState>();
+    }
+    return _key;
+  }
+
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
   ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
   ///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
@@ -21,15 +36,6 @@ class Get {
     return _get;
   }
 
-  bool _enableLog = true;
-  bool _defaultPopGesture = GetPlatform.isIOS;
-  bool _defaultOpaqueRoute = true;
-  Transition _defaultTransition =
-      (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
-  Duration _defaultDurationTransition = Duration(milliseconds: 400);
-  bool _defaultGlobalState = true;
-  RouteSettings _settings;
-
   ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
   ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
   ///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
@@ -38,21 +44,14 @@ class Get {
   ///the parentheses and the magic will occur.
   Get._();
 
-  static Get _get;
-
-  GlobalKey<NavigatorState> _key;
-
-  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
-    _get._key = newKey;
-    return _get._key;
-  }
-
-  static GlobalKey<NavigatorState> get key {
-    if (_get._key == null) {
-      _get._key = GlobalKey<NavigatorState>();
-    }
-    return _get._key;
-  }
+  static bool _enableLog = true;
+  static bool _defaultPopGesture = GetPlatform.isIOS;
+  static bool _defaultOpaqueRoute = true;
+  static Transition _defaultTransition =
+      (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
+  static Duration _defaultDurationTransition = Duration(milliseconds: 400);
+  static bool _defaultGlobalState = true;
+  static RouteSettings _settings;
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
@@ -65,15 +64,15 @@ class Get {
       bool fullscreenDialog = false,
       Object arguments,
       bool popGesture}) {
-    return _get.global(id).currentState.push(GetRouteBase(
+    return global(id).currentState.push(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
-        popGesture: popGesture ?? _get._defaultPopGesture,
-        transition: transition ?? _get._defaultTransition,
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
         fullscreenDialog: fullscreenDialog,
-        transitionDuration: duration ?? _get._defaultDurationTransition));
+        transitionDuration: duration ?? _defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -82,15 +81,14 @@ class Get {
   static Future<T> toNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.pushNamed(page, arguments: arguments);
+    return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
   static Future<T> offNamed<T>(String page, {arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get
-        .global(id)
+    return global(id)
         .currentState
         .pushReplacementNamed(page, arguments: arguments);
   }
@@ -99,35 +97,31 @@ class Get {
   static void until(predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.popUntil(predicate);
+    return global(id).currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
   static Future<T> offUntil<T>(page, predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.pushAndRemoveUntil(page, predicate);
+    return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
   static Future<T> offNamedUntil<T>(page, predicate, {int id}) {
-    return _get
-        .global(id)
-        .currentState
-        .pushNamedAndRemoveUntil(page, predicate);
+    return global(id).currentState.pushNamedAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.popAndPushNamed, but needs no context.
   static Future<T> offAndToNamed<T>(String page, {arguments, int id, result}) {
-    return _get
-        .global(id)
+    return global(id)
         .currentState
         .popAndPushNamed(page, arguments: arguments, result: result);
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
   static void removeRoute(route, {int id}) {
-    return _get.global(id).currentState.removeRoute(route);
+    return global(id).currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
@@ -135,7 +129,7 @@ class Get {
       {RoutePredicate predicate, arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
 
-    return _get.global(id).currentState.pushNamedAndRemoveUntil(
+    return global(id).currentState.pushNamedAndRemoveUntil(
         newRouteName, predicate ?? route,
         arguments: arguments);
   }
@@ -153,7 +147,7 @@ class Get {
         return (isOverlaysClosed);
       });
     }
-    _get.global(id).currentState.pop(result);
+    global(id).currentState.pop(result);
   }
 
   // /// Experimental API to back from overlay
@@ -167,7 +161,7 @@ class Get {
       times = 1;
     }
     int count = 0;
-    void back = _get.global(id).currentState.popUntil((route) {
+    void back = global(id).currentState.popUntil((route) {
       return count++ == times;
     });
     return back;
@@ -184,15 +178,15 @@ class Get {
       Object arguments,
       bool fullscreenDialog = false,
       Duration duration}) {
-    return _get.global(id).currentState.pushReplacement(GetRouteBase(
+    return global(id).currentState.pushReplacement(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
         fullscreenDialog: fullscreenDialog,
-        popGesture: popGesture ?? _get._defaultPopGesture,
-        transition: transition ?? _get._defaultTransition,
-        transitionDuration: duration ?? _get._defaultDurationTransition));
+        popGesture: popGesture ?? _defaultPopGesture,
+        transition: transition ?? _defaultTransition,
+        transitionDuration: duration ?? _defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -206,15 +200,15 @@ class Get {
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
 
-    return _get.global(id).currentState.pushAndRemoveUntil(
+    return global(id).currentState.pushAndRemoveUntil(
         GetRouteBase(
           opaque: opaque ?? true,
-          popGesture: popGesture ?? _get._defaultPopGesture,
+          popGesture: popGesture ?? _defaultPopGesture,
           page: page,
           settings: RouteSettings(
               name: '/' + page.toString().toLowerCase(), arguments: arguments),
           fullscreenDialog: fullscreenDialog,
-          transition: transition ?? _get._defaultTransition,
+          transition: transition ?? _defaultTransition,
         ),
         predicate ?? route);
   }
@@ -566,7 +560,7 @@ class Get {
   }
 
   /// change default config of Get
-  Get.config(
+  static void config(
       {bool enableLog,
       bool defaultPopGesture,
       bool defaultOpaqueRoute,
@@ -574,47 +568,45 @@ class Get {
       bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
-      _get._enableLog = enableLog;
+      _enableLog = enableLog;
     }
     if (defaultPopGesture != null) {
-      _get._defaultPopGesture = defaultPopGesture;
+      _defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      _get._defaultOpaqueRoute = defaultOpaqueRoute;
+      _defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      _get._defaultTransition = defaultTransition;
+      _defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      _get._defaultDurationTransition = defaultDurationTransition;
+      _defaultDurationTransition = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {
-      _get._defaultGlobalState = defaultGlobalState;
+      _defaultGlobalState = defaultGlobalState;
     }
   }
 
-  GetMaterialController _getController = GetMaterialController();
+  static GetMaterialController getController = GetMaterialController();
 
-  GetMaterialController get getController => _getController;
-
-  Get.changeTheme(ThemeData theme) {
-    _get._getController.setTheme(theme);
+  static changeTheme(ThemeData theme) {
+    getController.setTheme(theme);
   }
 
-  Get.restartApp() {
-    _get._getController.restartApp();
+  static restartApp() {
+    getController.restartApp();
   }
 
-  Map<int, GlobalKey<NavigatorState>> _keys = {};
+  static Map<int, GlobalKey<NavigatorState>> _keys = {};
 
   static GlobalKey<NavigatorState> nestedKey(int key) {
-    _get._keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
-    return _get._keys[key];
+    _keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    return _keys[key];
   }
 
-  GlobalKey<NavigatorState> global(int k) {
+  static GlobalKey<NavigatorState> global(int k) {
     if (k == null) {
       return key;
     }
@@ -744,31 +736,31 @@ class Get {
       Get()._singl.containsKey(_getKey(S, name));
 
   /// give access to Routing API from GetObserver
-  static Routing get routing => _get._routing;
+  static Routing get routing => _routing;
 
-  static RouteSettings get routeSettings => _get._settings;
+  static RouteSettings get routeSettings => _settings;
 
-  Routing _routing;
+  static Routing _routing;
 
-  Map<String, String> _parameters = {};
+  static Map<String, String> _parameters = {};
 
-  Get.setParameter(Map<String, String> param) {
-    _get._parameters = param;
+  static setParameter(Map<String, String> param) {
+    _parameters = param;
   }
 
-  Get.setRouting(Routing rt) {
-    _get._routing = rt;
+  static setRouting(Routing rt) {
+    _routing = rt;
   }
 
-  Get.setSettings(RouteSettings settings) {
-    _get._settings = settings;
+  static setSettings(RouteSettings settings) {
+    _settings = settings;
   }
 
   /// give current arguments
-  static Object get arguments => _get._routing.args;
+  static get arguments => _routing.args;
 
   /// give current arguments
-  static Map<String, String> get parameters => _get._parameters;
+  static Map<String, String> get parameters => _parameters;
 
   /// interface to GetX
   RxInterface _obs;
@@ -778,44 +770,43 @@ class Get {
   static set obs(RxInterface observer) => _get._obs = observer;
 
   /// give arguments from previous route
-  static get previousArguments => _get._routing.previousArgs;
+  static get previousArguments => _routing.previousArgs;
 
   /// give name from current route
-  static get currentRoute => _get._routing.current;
+  static get currentRoute => _routing.current;
 
   /// give name from previous route
-  static get previousRoute => _get._routing.previous;
+  static get previousRoute => _routing.previous;
 
   /// check if snackbar is open
-  static bool get isSnackbarOpen => _get._routing.isSnackbar;
+  static bool get isSnackbarOpen => _routing.isSnackbar;
 
   /// check if dialog is open
-  static bool get isDialogOpen => _get._routing.isDialog;
+  static bool get isDialogOpen => _routing.isDialog;
 
   /// check if bottomsheet is open
-  static bool get isBottomSheetOpen => _get._routing.isBottomSheet;
+  static bool get isBottomSheetOpen => _routing.isBottomSheet;
 
   /// check a raw current route
-  static Route<dynamic> get rawRoute => _get._routing.route;
+  static Route<dynamic> get rawRoute => _routing.route;
 
   /// check if log is enable
-  static bool get isLogEnable => _get._enableLog;
+  static bool get isLogEnable => _enableLog;
 
   /// default duration of transition animation
   /// default duration work only API 2.0
-  static Duration get defaultDurationTransition =>
-      _get._defaultDurationTransition;
+  static Duration get defaultDurationTransition => _defaultDurationTransition;
 
   /// give global state of all GetState by default
-  static bool get defaultGlobalState => _get._defaultGlobalState;
+  static bool get defaultGlobalState => _defaultGlobalState;
 
   /// check if popGesture is enable
-  static bool get isPopGestureEnable => _get._defaultPopGesture;
+  static bool get isPopGestureEnable => _defaultPopGesture;
 
   /// check if default opaque route is enable
-  static bool get isOpaqueRouteDefault => _get._defaultOpaqueRoute;
+  static bool get isOpaqueRouteDefault => _defaultOpaqueRoute;
 
-  static Transition get defaultTransition => _get._defaultTransition;
+  static Transition get defaultTransition => _defaultTransition;
 
   /// give access to currentContext
   static BuildContext get context => key.currentContext;
