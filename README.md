@@ -23,6 +23,23 @@ Flutter's conventional navigation has a lot of unnecessary boilerplate, requires
 In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
 This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
 
+
+- **[How to use?](#how-to-use)**
+- **[Navigating without named routes](#Navigating-without-named-routes)**
+- **[SnackBars](#SnackBars)**
+- **[Dialogs](#Dialogs)**
+- **[BottomSheets](#BottomSheets)**
+- **[Simple State Manager](#Simple-State-Manager)**
+- **[Reactive State Manager](#Reactive-State-Manager)**
+- **[Simple Instance Manager](#Simple-Instance-Manager)**
+- **[Navigate with named routes](#Navigate-with-named-routes)**
+- **[Send data to named Routes](#Send-data-to-named-Routes)**
+- **[Dynamic urls links](#Dynamic-urls-links)**
+- **[Middleware](#Middleware)**
+- **[Optional Global Settings](#Optional-Global-Settings)**
+- **[Other Advanced APIs and Manual configurations](#Other-Advanced-APIs-and-Manual-configurations)**
+- **[Nested Navigators](#Nested-Navigators)**
+
 ## How to use?
 
 <!-- - Flutter Master/Dev/Beta: version 2.0.x-dev 
@@ -39,7 +56,7 @@ GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-### Navigating without named routes
+## Navigating without named routes
 To navigate to a new screen:
 
 ```dart
@@ -153,6 +170,7 @@ With Get, all you have to do is call your Get.snackbar from anywhere in your cod
   //     SnackPosition snackPosition,
   //     Widget titleText,
   //     Widget messageText,
+  //     bool instantInit,
   //     Widget icon,
   //     bool shouldIconPulse,
   //     double maxWidth,
@@ -242,7 +260,7 @@ What performance improvements does Get bring?
 
 1- Update only the required widget.
 
-2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb for until).
 
 3- Forget StatefulWidget! With Get you will never need it again (if you need to use it, you are using Get incorrectly). With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
 
@@ -329,7 +347,7 @@ FloatingActionButton(
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
 
-##### No StatefulWidget:
+#### No StatefulWidget:
 Using StatefulWidgets means storing the state of entire screens unnecessarily. With Get the use of StatefulWidget is optional. Avoid them and save your users' RAM.
 
 If you need to call initState() or dispose() method, you can call them directly from GetBuilder();
@@ -434,8 +452,6 @@ You can also impose conditions for the update:
 ```
 update(this,['text'], counter < 10);
 
-Why use the update method and why don't we use ChangeNotifier?
-
 
 ## Reactive State Manager
 
@@ -537,6 +553,7 @@ Camila
 23
 24
 25
+
 ```
 
 ## Simple Instance Manager
@@ -805,7 +822,7 @@ Get.config(
 
 
 ### Other Advanced APIs and Manual configurations
-GetMaterialApp configures everything for you, but if you are using any package like Modular, you may want to configure Get Manually using advanced APIs.
+GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
 
 ```dart
 MaterialApp(
@@ -862,6 +879,8 @@ Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in th
 
 Get made Flutter's nested navigation even easier.
 You don't need the context, and you will find your navigation stack by Id.
+
+- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
 
 See how simple it is:
 ```dart

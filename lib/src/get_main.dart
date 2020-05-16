@@ -42,18 +42,6 @@ class Get {
 
   GlobalKey<NavigatorState> _key;
 
-  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
-    _get._key = newKey;
-    return _get._key;
-  }
-
-  static GlobalKey<NavigatorState> get key {
-    if (_get._key == null) {
-      _get._key = GlobalKey<NavigatorState>();
-    }
-    return _get._key;
-  }
-
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
@@ -268,6 +256,8 @@ class Get {
     VoidCallback onConfirm,
     VoidCallback onCancel,
     VoidCallback onCustom,
+    Color cancelTextColor,
+    Color confirmTextColor,
     String textConfirm,
     String textCancel,
     String textCustom,
@@ -295,7 +285,10 @@ class Get {
             Get.back();
           },
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Text(textCancel ?? "Cancel"),
+          child: Text(
+            textCancel ?? "Cancel",
+            style: TextStyle(color: cancelTextColor ?? theme.accentColor),
+          ),
           shape: RoundedRectangleBorder(
               side: BorderSide(
                   color: buttonColor ?? Get.theme.accentColor,
@@ -314,7 +307,10 @@ class Get {
             color: buttonColor ?? Get.theme.accentColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100)),
-            child: Text(textConfirm ?? "Ok"),
+            child: Text(
+              textConfirm ?? "Ok",
+              style: TextStyle(color: confirmTextColor ?? theme.primaryColor),
+            ),
             onPressed: () {
               onConfirm?.call();
             }));
@@ -607,6 +603,19 @@ class Get {
     _get._getController.restartApp();
   }
 
+  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
+    Get()._key = newKey;
+    return Get()._key;
+  }
+
+  static GlobalKey<NavigatorState> get key {
+    // _get start empty, is mandatory key be static to prevent errors like "key was called null"
+    if (Get()._key == null) {
+      Get()._key = GlobalKey<NavigatorState>();
+    }
+    return Get()._key;
+  }
+
   Map<int, GlobalKey<NavigatorState>> _keys = {};
 
   static GlobalKey<NavigatorState> nestedKey(int key) {
@@ -678,7 +687,7 @@ class Get {
   }
 
   /// Find a instance from required class
-  static S find<S>({String name}) {
+  static S find<S>({String name, _FcBuilderFunc<S> instance}) {
     if (Get.isRegistred<S>()) {
       String key = _getKey(S, name);
       _FcBuilder builder = Get()._singl[key];
@@ -697,6 +706,30 @@ class Get {
       if (isLogEnable) print('[GET] $S instance was created at that time');
       S _value = Get.put<S>(Get()._factory[S].call() as S);
       Get()._factory.remove(S);
+      return _value;
+    }
+  }
+
+  static S findInstance<S>(_FcBuilderFunc<S> instance, {String name}) {
+    if (Get()._singl.containsKey(_getKey(instance.call().runtimeType, name))) {
+      String key = _getKey(instance.call().runtimeType, name);
+      _FcBuilder builder = Get()._singl[key];
+      if (builder == null) {
+        if (name == null) {
+          throw "class ${S.toString()} is not register";
+        } else {
+          throw "class ${S.toString()} with name '$name' is not register";
+        }
+      }
+      return Get()._singl[key].getSependency();
+    } else {
+      if (!Get()._factory.containsKey(instance.call().runtimeType))
+        throw " $S not found. You need call Get.put<$S>($S()) before";
+
+      if (isLogEnable) print('[GET] $S instance was created at that time');
+      S _value =
+          Get.put<S>(Get()._factory[instance.call().runtimeType].call() as S);
+      Get()._factory.remove(instance.call().runtimeType);
       return _value;
     }
   }
@@ -753,15 +786,15 @@ class Get {
   Map<String, String> _parameters = {};
 
   Get.setParameter(Map<String, String> param) {
-    _get._parameters = param;
+    _parameters = param;
   }
 
   Get.setRouting(Routing rt) {
-    _get._routing = rt;
+    _routing = rt;
   }
 
   Get.setSettings(RouteSettings settings) {
-    _get._settings = settings;
+    _settings = settings;
   }
 
   /// give current arguments

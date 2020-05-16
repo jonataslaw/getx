@@ -5,7 +5,6 @@ import 'package:get/src/routes/utils/parse_arguments.dart';
 import 'root_controller.dart';
 
 class GetMaterialApp extends StatelessWidget {
-
   const GetMaterialApp({
     Key key,
     this.navigatorKey,

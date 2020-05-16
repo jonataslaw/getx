@@ -145,7 +145,13 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
 
   Map<Stream<Change<E>>, StreamSubscription> _subscriptions = Map();
 
-  final _changeCtl = StreamController<Change<E>>();
+  // StreamSubscription _changectl = StreamSubscription();
+
+  StreamController<Change<E>> _changeCtl =
+      StreamController<Change<E>>.broadcast();
+
+  @override
+  StreamController<Change<E>> subject = StreamController<Change<E>>.broadcast();
 
   /// Adds [item] only if [condition] resolves to true.
   void addIf(condition, E item) {
@@ -161,6 +167,9 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
 
   operator []=(int index, E value) {
     super[index] = value;
+    if (Get.obs != null) {
+      Get.obs.addListener(subject.stream);
+    }
     subject.add(Change<E>.set(item: value, pos: index));
   }
 
@@ -196,6 +205,7 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
   }
 
   close() {
+    clear();
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();
     });
@@ -219,14 +229,12 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
   /// A stream of record of changes to this list
   Stream<Change<E>> get onChange {
     final now = DateTime.now();
-    _changeCtl.addStream(_onChange.skipWhile((m) => m.time.isBefore(now)));
+
+    _onChange.skipWhile((m) => m.time.isBefore(now));
     return _changeCtl.stream.asBroadcastStream();
   }
 
   Stream<Change<E>> _onChange;
-
-  @override
-  StreamController<Change<E>> subject = StreamController<Change<E>>();
 
   addListener(Stream<Change<E>> rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
@@ -238,7 +246,18 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
   }
 
   @override
-  var value;
+  get value {
+    if (Get.obs != null) {
+      Get.obs.addListener(subject.stream);
+    }
+    return this;
+  }
+
+  // int get length => (value as List).length;
+
+  set value(E val) {
+    assign(val);
+  }
 
   @override
   Stream<E> get stream => onChange.map((c) => c.item);
@@ -252,7 +271,7 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
   void bindStream(Stream<E> stream) => stream.listen((v) => value = v);
 
   @override
-  void bindOrSet(/* T | Stream<T> | Rx<T> */ other) {
+  void bindOrSet(/* T | Stream<T> or Rx<T> */ other) {
     if (other is RxInterface<E>) {
       bind(other);
     } else if (other is Stream<E>) {
@@ -267,7 +286,7 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
       stream.listen(callback);
 
   @override
-  void setCast(dynamic /* T */ val) => value = val;
+  void setCast(dynamic val) => value = val;
 }
 
 typedef bool Condition();
@@ -275,12 +294,12 @@ typedef bool Condition();
 typedef E ChildrenListComposer<S, E>(S value);
 
 /// An observable list that is bound to another list [binding]
-class BoundList<S, E> extends ListX<E> {
+class BindingList<S, E> extends ListX<E> {
   final ListX<S> binding;
 
   final ChildrenListComposer<S, E> composer;
 
-  BoundList(this.binding, this.composer) {
+  BindingList(this.binding, this.composer) {
     for (S v in binding) _add(composer(v));
     binding.onChange.listen((Change<S> n) {
       if (n.op == ListChangeOp.add) {

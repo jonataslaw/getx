@@ -8,31 +8,33 @@ class RealState {
 }
 
 class GetController extends State {
-  Map<GetController, List<RealState>> _allStates = {};
+  Map<int, List<RealState>> _allStates = {};
 
   /// Update GetBuilder with update(this)
-  void update(GetController controller, [List<String> ids]) {
-    if (controller != null) {
-      if (ids == null) {
-        var all = _allStates[controller];
-        all.forEach((rs) {
-          if (rs.state != null && rs.state.mounted) rs.state.setState(() {});
-        });
-      } else {
-        ids.forEach(
-          (s) {
-            var all = _allStates[controller];
-            all.forEach((rs) {
-              if (rs.state != null && rs.state.mounted && rs.id == s)
-                rs.state.setState(() {});
-            });
-          },
-        );
-      }
+  void update(GetController controller,
+      [List<String> ids, bool condition = true]) {
+    if (controller == null || !condition) return;
+
+    if (ids == null) {
+      var all = _allStates[controller.hashCode];
+      all.forEach((rs) {
+        if (rs.state != null && rs.state.mounted) rs.state.setState(() {});
+      });
+    } else {
+      ids.forEach(
+        (s) {
+          var all = _allStates[controller.hashCode];
+          all.forEach((rs) {
+            if (rs.state != null && rs.state.mounted && rs.id == s)
+              rs.state.setState(() {});
+          });
+        },
+      );
     }
   }
 
-  void close() {}
+  void onClose() {}
+  void onInit() {}
 
   @override
   Widget build(_) => throw ("build method can't be called");
@@ -72,31 +74,31 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     if (widget.global) {
       if (Get.isRegistred<T>()) {
         controller = Get.find<T>();
-        if (controller._allStates[controller] == null) {
-          controller._allStates[controller] = [];
+        if (controller._allStates[controller.hashCode] == null) {
+          controller._allStates[controller.hashCode] = [];
         }
-        controller._allStates[controller]
+        controller._allStates[controller.hashCode]
             .add(RealState(state: this, id: widget.id));
       } else {
         controller = widget.init;
-        if (controller._allStates[controller] == null) {
-          controller._allStates[controller] = [];
+        if (controller._allStates[controller.hashCode] == null) {
+          controller._allStates[controller.hashCode] = [];
         }
-        controller._allStates[controller]
+        controller._allStates[controller.hashCode]
             .add(RealState(state: this, id: widget.id));
         Get.put<T>(controller);
       }
     } else {
       controller = widget.init;
-      if (controller._allStates[controller] == null) {
-        controller._allStates[controller] = [];
+      if (controller._allStates[controller.hashCode] == null) {
+        controller._allStates[controller.hashCode] = [];
       }
-      controller._allStates[controller]
+      controller._allStates[controller.hashCode]
           .add(RealState(state: this, id: widget.id));
     }
     if (widget.initState != null) widget.initState(this);
     try {
-      controller?.initState();
+      controller?.onInit();
     } catch (e) {
       if (Get.isLogEnable) print("Controller is not attach");
     }
@@ -108,25 +110,25 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
 
     if (widget.init != null) {
       var b = controller;
-      if (b._allStates[controller].hashCode == this.hashCode) {
-        b._allStates.remove(controller);
+      if (b._allStates[controller.hashCode].hashCode == this.hashCode) {
+        b._allStates.remove(controller.hashCode);
       }
     } else {
       var b = controller;
-      if (b._allStates[controller].hashCode == this.hashCode) {
-        b._allStates.remove(controller);
+      if (b._allStates[controller.hashCode].hashCode == this.hashCode) {
+        b._allStates.remove(controller.hashCode);
       }
     }
     if (widget.dispose != null) widget.dispose(this);
 
     if (widget.init != null) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
-        controller.close();
+        controller.onClose();
         Get.delete<T>();
       }
     } else {
       // controller._allStates[controller].remove(this);
-      controller._allStates[controller]
+      controller._allStates[controller.hashCode]
           .remove(RealState(state: this, id: widget.id));
     }
   }
@@ -149,3 +151,5 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     return widget.builder(controller);
   }
 }
+
+

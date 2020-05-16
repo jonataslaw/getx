@@ -1,3 +1,9 @@
+## [2.5.2]
+- Fix: key not found when Get.key is used with no MaterialApp
+
+## [2.5.1]
+- Improve - GetBuilder uses 18% less ram on more of 20 controllers.
+
 ## [2.5.0]
 - Added List.obs
 - Now you can transform any class on obs

@@ -31,7 +31,7 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
   T controller;
 
   _GetXState() {
-    _observer = Rx();
+    _observer = ListX();
   }
 
   @override
@@ -60,15 +60,23 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
 
   @override
   void dispose() {
-    controller?.close();
+    if (widget.dispose != null) widget.dispose(this);
+
+    if (widget.init != null) {
+      if (widget.autoRemove && Get.isRegistred<T>()) {
+        controller.onClose();
+        Get.delete<T>();
+      }
+    }
+    controller.onClose();
+    _observer.close();
     _listenSubscription?.cancel();
-    _observer?.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _observer.close();
+    // _observer.close();
     final observer = Get.obs;
     Get.obs = this._observer;
     final result = widget.builder(controller);

@@ -6,7 +6,7 @@ abstract class RxInterface<T> {
   RxInterface([T initial]);
 
   /// Get current value
-  T get value;
+  get value;
 
   /// Set value
   set value(T val);
@@ -15,7 +15,7 @@ abstract class RxInterface<T> {
   void setCast(dynamic /* T */ val);
 
   /// Stream of record of [Change]s of value
-  Stream<Change<T>> get onChange;
+  // Stream<Change<T>> get onChange;
 
   /// add listener to stream
   addListener(Stream<Change<T>> rxGetx);
@@ -52,10 +52,10 @@ abstract class RxInterface<T> {
 
 class RxController implements DisposableInterface {
   void onInit() async {}
-  void close() async {}
+  void onClose() async {}
 }
 
 abstract class DisposableInterface {
-  void close() async {}
+  void onClose() async {}
   void onInit() async {}
 }
