@@ -800,6 +800,24 @@ class Third extends StatelessWidget {
 }
 ```
 
+### Change Theme
+Please do not use any higher level widget than GetMaterialApp in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with Get.
+If you want to change the theme, just use:
+
+```dart
+Get.changeTheme (Theme.dark());
+```
+
+If you want to create something like a button that changes the theme with touch, you can combine two Get APIs for that, the api that checks if the dark theme is being used, and the theme change API, you can just put this within an onPressed:
+
+```dart
+Get.changeTheme (Get.isDarkMode? Theme.light(): Theme.dark());
+```
+
+When darkmode is activated, it will switch to the light theme, and when the light theme is activated, it will change to dark.
+
+You can create your custom theme and simply add it within Get.changeTheme without any cliche code for that.
+
 ### Optional Global Settings
 You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 

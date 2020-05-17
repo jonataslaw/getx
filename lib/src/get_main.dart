@@ -596,11 +596,11 @@ class Get {
   GetMaterialController get getController => _getController;
 
   Get.changeTheme(ThemeData theme) {
-    _get._getController.setTheme(theme);
+    Get()._getController.setTheme(theme);
   }
 
   Get.restartApp() {
-    _get._getController.restartApp();
+    Get()._getController.restartApp();
   }
 
   static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
@@ -619,8 +619,8 @@ class Get {
   Map<int, GlobalKey<NavigatorState>> _keys = {};
 
   static GlobalKey<NavigatorState> nestedKey(int key) {
-    _get._keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
-    return _get._keys[key];
+    Get()._keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    return Get()._keys[key];
   }
 
   GlobalKey<NavigatorState> global(int k) {
@@ -710,30 +710,6 @@ class Get {
     }
   }
 
-  static S findInstance<S>(_FcBuilderFunc<S> instance, {String name}) {
-    if (Get()._singl.containsKey(_getKey(instance.call().runtimeType, name))) {
-      String key = _getKey(instance.call().runtimeType, name);
-      _FcBuilder builder = Get()._singl[key];
-      if (builder == null) {
-        if (name == null) {
-          throw "class ${S.toString()} is not register";
-        } else {
-          throw "class ${S.toString()} with name '$name' is not register";
-        }
-      }
-      return Get()._singl[key].getSependency();
-    } else {
-      if (!Get()._factory.containsKey(instance.call().runtimeType))
-        throw " $S not found. You need call Get.put<$S>($S()) before";
-
-      if (isLogEnable) print('[GET] $S instance was created at that time');
-      S _value =
-          Get.put<S>(Get()._factory[instance.call().runtimeType].call() as S);
-      Get()._factory.remove(instance.call().runtimeType);
-      return _value;
-    }
-  }
-
   /// Remove dependency of [S] on dependency abstraction. For concrete class use Get.delete
   static void remove<S>({String name}) {
     String key = _getKey(S, name);
@@ -777,78 +753,78 @@ class Get {
       Get()._singl.containsKey(_getKey(S, name));
 
   /// give access to Routing API from GetObserver
-  static Routing get routing => _get._routing;
+  static Routing get routing => Get()._routing;
 
-  static RouteSettings get routeSettings => _get._settings;
+  static RouteSettings get routeSettings => Get()._settings;
 
   Routing _routing;
 
   Map<String, String> _parameters = {};
 
   Get.setParameter(Map<String, String> param) {
-    _parameters = param;
+    Get()._parameters = param;
   }
 
   Get.setRouting(Routing rt) {
-    _routing = rt;
+    Get()._routing = rt;
   }
 
   Get.setSettings(RouteSettings settings) {
-    _settings = settings;
+    Get()._settings = settings;
   }
 
   /// give current arguments
-  static Object get arguments => _get._routing.args;
+  static Object get arguments => Get()._routing.args;
 
   /// give current arguments
-  static Map<String, String> get parameters => _get._parameters;
+  static Map<String, String> get parameters => Get()._parameters;
 
   /// interface to GetX
   RxInterface _obs;
 
-  static RxInterface get obs => _get._obs;
+  static RxInterface get obs => Get()._obs;
 
-  static set obs(RxInterface observer) => _get._obs = observer;
+  static set obs(RxInterface observer) => Get()._obs = observer;
 
   /// give arguments from previous route
-  static get previousArguments => _get._routing.previousArgs;
+  static get previousArguments => Get()._routing.previousArgs;
 
   /// give name from current route
-  static get currentRoute => _get._routing.current;
+  static get currentRoute => Get()._routing.current;
 
   /// give name from previous route
-  static get previousRoute => _get._routing.previous;
+  static get previousRoute => Get()._routing.previous;
 
   /// check if snackbar is open
-  static bool get isSnackbarOpen => _get._routing.isSnackbar;
+  static bool get isSnackbarOpen => Get()._routing.isSnackbar;
 
   /// check if dialog is open
-  static bool get isDialogOpen => _get._routing.isDialog;
+  static bool get isDialogOpen => Get()._routing.isDialog;
 
   /// check if bottomsheet is open
-  static bool get isBottomSheetOpen => _get._routing.isBottomSheet;
+  static bool get isBottomSheetOpen => Get()._routing.isBottomSheet;
 
   /// check a raw current route
-  static Route<dynamic> get rawRoute => _get._routing.route;
+  static Route<dynamic> get rawRoute => Get()._routing.route;
 
   /// check if log is enable
-  static bool get isLogEnable => _get._enableLog;
+  static bool get isLogEnable => Get()._enableLog;
 
   /// default duration of transition animation
   /// default duration work only API 2.0
   static Duration get defaultDurationTransition =>
-      _get._defaultDurationTransition;
+      Get()._defaultDurationTransition;
 
   /// give global state of all GetState by default
-  static bool get defaultGlobalState => _get._defaultGlobalState;
+  static bool get defaultGlobalState => Get()._defaultGlobalState;
 
   /// check if popGesture is enable
-  static bool get isPopGestureEnable => _get._defaultPopGesture;
+  static bool get isPopGestureEnable => Get()._defaultPopGesture;
 
   /// check if default opaque route is enable
-  static bool get isOpaqueRouteDefault => _get._defaultOpaqueRoute;
+  static bool get isOpaqueRouteDefault => Get()._defaultOpaqueRoute;
 
-  static Transition get defaultTransition => _get._defaultTransition;
+  static Transition get defaultTransition => Get()._defaultTransition;
 
   /// give access to currentContext
   static BuildContext get context => key.currentContext;
