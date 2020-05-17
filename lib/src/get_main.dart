@@ -599,6 +599,10 @@ class Get {
     _get._getController.setTheme(theme);
   }
 
+  Get.changeThemeMode(ThemeMode themeMode) {
+    Get()._getController.setThemeMode(themeMode);
+  }
+
   Get.restartApp() {
     _get._getController.restartApp();
   }

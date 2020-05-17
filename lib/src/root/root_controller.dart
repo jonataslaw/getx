@@ -6,9 +6,15 @@ class GetMaterialController extends GetController {
   ParseRoute parse = ParseRoute();
   Key key = UniqueKey();
   ThemeData theme;
+  ThemeMode themeMode;
 
   void setTheme(ThemeData value) {
     theme = value;
+    update(this);
+  }
+
+  void setThemeMode(ThemeMode value) {
+    themeMode = value;
     update(this);
   }
 
