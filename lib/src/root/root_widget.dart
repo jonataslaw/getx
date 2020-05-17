@@ -213,7 +213,7 @@ class GetMaterialApp extends StatelessWidget {
             color: color,
             theme: _.theme ?? theme ?? ThemeData.fallback(),
             darkTheme: darkTheme,
-            themeMode: themeMode ?? ThemeMode.system,
+            themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
             locale: locale,
             localizationsDelegates: localizationsDelegates,
             localeListResolutionCallback: localeListResolutionCallback,
