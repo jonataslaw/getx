@@ -88,13 +88,13 @@ var data = await Get.to(Payment());
 on other screen, send a data for previous route:
 
 ```dart
-Get.back(result: 'sucess');
+Get.back(result: 'success');
 ```
 And use it:
 
 ex:
 ```dart
-if(data == 'sucess') madeAnything();
+if(data == 'success') madeAnything();
 ```
 
 Don't you want to learn our syntax?
@@ -465,7 +465,7 @@ The state only changes if the values ​​change. That's the main difference be
 ```dart
 final count1 = 0.obs;
 final count2 = 0.obs;
-int get soma => count1.value + count2.value;
+int get sum => count1.value + count2.value;
 ```
 
 ```dart
@@ -484,7 +484,7 @@ int get soma => count1.value + count2.value;
             GetX<Controller>(
               builder: (_) {
                 print("count 3 rebuild");
-                return Text('${_.soma}');
+                return Text('${_.sum}');
               },
             ),
 ```
