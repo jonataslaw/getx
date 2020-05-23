@@ -692,7 +692,7 @@ class Get {
 
   /// Find a instance from required class
   static S find<S>({String name, _FcBuilderFunc<S> instance}) {
-    if (Get.isRegistred<S>()) {
+    if (Get.isRegistred<S>(name: name)) {
       String key = _getKey(S, name);
       _FcBuilder builder = Get()._singl[key];
       if (builder == null) {
