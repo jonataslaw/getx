@@ -1,3 +1,24 @@
+## [2.5.8]
+- Added docs
+
+## [2.5.7]
+- Fix Get.generalDialog optionals
+- Added GetX onInit support
+
+## [2.5.6]
+- GetBuilder refactor to work with lazyPut.
+Now you can list your controllers in advance with Get.lazyPut, and only when it is called for the first time will it be relocated in memory.
+
+## [2.5.5]
+- Fix arguments broken by new methods
+
+## [2.5.4]
+- Refactor methods
+
+## [2.5.3]
+- Fix snackbar padding on iPhone SE 2.
+- Added themes docs
+
 ## [2.5.2]
 - Fix: key not found when Get.key is used with no MaterialApp
 
