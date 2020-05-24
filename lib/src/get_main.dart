@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/src/routes/bindings_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
 import 'root/root_controller.dart';
@@ -52,6 +53,7 @@ class Get {
       int id,
       bool fullscreenDialog = false,
       Object arguments,
+      Bindings binding,
       bool popGesture}) {
     return _get.global(id).currentState.push(GetRouteBase(
         opaque: opaque ?? true,
@@ -61,6 +63,7 @@ class Get {
         popGesture: popGesture ?? _get._defaultPopGesture,
         transition: transition ?? _get._defaultTransition,
         fullscreenDialog: fullscreenDialog,
+        binding: binding,
         transitionDuration: duration ?? _get._defaultDurationTransition));
   }
 
@@ -165,11 +168,13 @@ class Get {
       bool popGesture,
       int id,
       Object arguments,
+      Bindings binding,
       bool fullscreenDialog = false,
       Duration duration}) {
     return _get.global(id).currentState.pushReplacement(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
+        binding: binding,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
         fullscreenDialog: fullscreenDialog,
@@ -185,6 +190,7 @@ class Get {
       bool popGesture,
       int id,
       Object arguments,
+      Bindings binding,
       bool fullscreenDialog = false,
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
@@ -194,6 +200,7 @@ class Get {
           opaque: opaque ?? true,
           popGesture: popGesture ?? _get._defaultPopGesture,
           page: page,
+          binding: binding,
           settings: RouteSettings(
               name: '/' + page.toString().toLowerCase(), arguments: arguments),
           fullscreenDialog: fullscreenDialog,

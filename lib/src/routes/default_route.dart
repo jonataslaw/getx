@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/src/get_main.dart';
+import 'package:get/src/routes/bindings_interface.dart';
 
 import '../platform/platform.dart';
 import 'transitions_type.dart';
@@ -29,6 +30,7 @@ class GetRouteBase<T> extends PageRoute<T> {
     this.curve = Curves.linear,
     this.alignment,
     this.parameter,
+    this.binding,
     this.opaque = true,
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
@@ -45,6 +47,8 @@ class GetRouteBase<T> extends PageRoute<T> {
   final Widget page;
 
   final bool popGesture;
+
+  final Bindings binding;
 
   // final Duration duration;
 
@@ -464,6 +468,11 @@ class GetRouteBase<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    /// prebuild dependencies
+    if (binding != null) {
+      binding.dependencies();
+    }
+
     return buildPageTransitions<T>(
         this,
         context,

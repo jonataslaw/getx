@@ -38,7 +38,7 @@ class GetObserver extends NavigatorObserver {
   String current;
   String previous;
   Object args;
- // String previousArgs;
+  // String previousArgs;
   String removed;
 
   @override
@@ -59,7 +59,7 @@ class GetObserver extends NavigatorObserver {
     current = '${route?.settings?.name}';
     previous = '${previousRoute?.settings?.name}';
     args = route?.settings?.arguments;
-   // previousArgs = previousRoute?.settings?.arguments;
+    // previousArgs = previousRoute?.settings?.arguments;
 
     final routeSend = Routing(
       removed: null,
@@ -102,7 +102,7 @@ class GetObserver extends NavigatorObserver {
     current = '${previousRoute?.settings?.name}';
     previous = '${route?.settings?.name}';
     args = previousRoute?.settings?.arguments;
-   // previousArgs = route?.settings?.arguments;
+    // previousArgs = route?.settings?.arguments;
 
     final routeSend = Routing(
       removed: null,

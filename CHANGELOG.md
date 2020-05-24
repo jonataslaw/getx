@@ -1,3 +1,7 @@
+## [2.6.0]
+- Added bindings.
+You can now add bindings from your controllers to your routes, to prepare GetBuilder or GetX to create a dependency already declared in a Binding class. This feature is in an experimental phase, and will not be documented until the end of the tests.
+
 ## [2.5.10]
 - Removed remnants of previousArgs on routeObserver.
 This feature had been deprecated in previous updates, and was removed in version 2.5.8. Some remaining references on the routeObserver were causing exceptions in version 2.5.9, and were removed completely in version 2.5.10.
