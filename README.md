@@ -1,5 +1,7 @@
 ![](get.png)
 
+*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get) 
 [![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -19,7 +21,7 @@ Navigator.of(context).push(
 // Get syntax 
 Get.to(Home());
 ```
-*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
