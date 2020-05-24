@@ -253,8 +253,6 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
     return this;
   }
 
-  // int get length => (value as List).length;
-
   set value(E val) {
     assign(val);
   }

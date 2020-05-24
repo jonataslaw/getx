@@ -9,5 +9,6 @@ enum Transition {
   size,
   rightToLeftWithFade,
   leftToRightWithFade,
-  cupertino
+  cupertino,
+  custom
 }

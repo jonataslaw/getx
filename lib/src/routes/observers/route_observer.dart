@@ -3,21 +3,19 @@ import 'package:flutter/widgets.dart';
 import '../../get_main.dart';
 
 class Routing {
-  final current;
-  final previous;
-  final args;
-  final previousArgs;
-  final removed;
-  final Route<dynamic> route;
-  final bool isBack;
-  final bool isSnackbar;
-  final bool isBottomSheet;
-  final bool isDialog;
+  String current;
+  String previous;
+  Object args;
+  String removed;
+  Route<dynamic> route;
+  bool isBack;
+  bool isSnackbar;
+  bool isBottomSheet;
+  bool isDialog;
   Routing({
     this.current,
     this.previous,
     this.args,
-    this.previousArgs,
     this.removed,
     this.route,
     this.isBack,
@@ -37,6 +35,11 @@ class GetObserver extends NavigatorObserver {
   bool isSnackbar;
   bool isBottomSheet;
   bool isDialog;
+  String current;
+  String previous;
+  Object args;
+ // String previousArgs;
+  String removed;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
@@ -53,6 +56,10 @@ class GetObserver extends NavigatorObserver {
     isSnackbar = '${route?.settings?.name}' == 'snackbar';
     isDialog = '${route?.settings?.name}' == 'dialog';
     isBottomSheet = '${route?.settings?.name}' == 'bottomsheet';
+    current = '${route?.settings?.name}';
+    previous = '${previousRoute?.settings?.name}';
+    args = route?.settings?.arguments;
+   // previousArgs = previousRoute?.settings?.arguments;
 
     final routeSend = Routing(
       removed: null,
@@ -61,7 +68,7 @@ class GetObserver extends NavigatorObserver {
       current: '${route?.settings?.name}',
       previous: '${previousRoute?.settings?.name}',
       args: route?.settings?.arguments,
-      previousArgs: previousRoute?.settings?.arguments,
+      //  previousArgs: previousRoute?.settings?.arguments,
       isSnackbar: isSnackbar,
       isDialog: isDialog,
       isBottomSheet: isBottomSheet,
@@ -92,6 +99,10 @@ class GetObserver extends NavigatorObserver {
     isSnackbar = false;
     isDialog = false;
     isBottomSheet = false;
+    current = '${previousRoute?.settings?.name}';
+    previous = '${route?.settings?.name}';
+    args = previousRoute?.settings?.arguments;
+   // previousArgs = route?.settings?.arguments;
 
     final routeSend = Routing(
       removed: null,
@@ -100,7 +111,7 @@ class GetObserver extends NavigatorObserver {
       current: '${previousRoute?.settings?.name}',
       previous: '${route?.settings?.name}',
       args: previousRoute?.settings?.arguments,
-      previousArgs: route?.settings?.arguments,
+      //  previousArgs: route?.settings?.arguments,
       isSnackbar: false, //'${route?.settings?.name}' == 'snackbar',
       isDialog: false, //'${route?.settings?.name}' == 'dialog',
       isBottomSheet: false, //'${route?.settings?.name}' == 'bottomsheet',
@@ -123,16 +134,17 @@ class GetObserver extends NavigatorObserver {
     isBottomSheet = false;
 
     final routeSend = Routing(
-        removed: null, // add '${oldRoute?.settings?.name}' or remain null ???
-        isBack: false,
-        route: newRoute,
-        current: '${newRoute?.settings?.name}',
-        previous: '${oldRoute?.settings?.name}',
-        args: newRoute?.settings?.arguments,
-        isSnackbar: false,
-        isBottomSheet: false,
-        isDialog: false,
-        previousArgs: null);
+      removed: null, // add '${oldRoute?.settings?.name}' or remain null ???
+      isBack: false,
+      route: newRoute,
+      current: '${newRoute?.settings?.name}',
+      previous: '${oldRoute?.settings?.name}',
+      args: newRoute?.settings?.arguments,
+      //  previousArgs: newRoute?.settings?.arguments,
+      isSnackbar: false,
+      isBottomSheet: false,
+      isDialog: false,
+    );
 
     if (routing != null) {
       routing(routeSend);
@@ -144,17 +156,19 @@ class GetObserver extends NavigatorObserver {
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
     if (Get.isLogEnable) print("[REMOVING ROUTE] ${route?.settings?.name}");
-
     final routeSend = Routing(
-        isBack: false,
-        route: previousRoute,
-        current: '${previousRoute?.settings?.name}',
-        removed: '${route?.settings?.name}',
-        isSnackbar: isSnackbar,
-        isBottomSheet: isBottomSheet,
-        isDialog: isDialog,
-        args: previousRoute?.settings?.arguments,
-        previousArgs: route?.settings?.arguments);
+      isBack: false,
+      route: previousRoute,
+      // current: '${previousRoute?.settings?.name}',
+      current: current,
+      args: args,
+      removed: '${route?.settings?.name}',
+      // args: previousRoute?.settings?.arguments,
+      isSnackbar: isSnackbar,
+      isBottomSheet: isBottomSheet,
+      isDialog: isDialog,
+      //   previousArgs: route?.settings?.arguments,
+    );
 
     if (routing != null) {
       routing(routeSend);

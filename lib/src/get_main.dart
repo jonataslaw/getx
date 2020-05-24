@@ -144,11 +144,6 @@ class Get {
     _get.global(id).currentState.pop(result);
   }
 
-  // /// Experimental API to back from overlay
-  // static void backE({dynamic result}) {
-  //   Navigator.pop(overlayContext);
-  // }
-
   /// It will close as many screens as you define. Times must be> 0;
   static void close(int times, [int id]) {
     if ((times == null) || (times < 1)) {
@@ -228,14 +223,13 @@ class Get {
   /// Api from showGeneralDialog with no context
   static Future<T> generalDialog<T>({
     @required RoutePageBuilder pageBuilder,
-    bool barrierDismissible,
     String barrierLabel,
-    Color barrierColor,
-    Duration transitionDuration,
+    bool barrierDismissible = true,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder transitionBuilder,
     bool useRootNavigator = true,
     RouteSettings routeSettings,
-    //  RouteSettings routeSettings
   }) {
     return showGeneralDialog(
       pageBuilder: pageBuilder,
@@ -555,6 +549,7 @@ class Get {
     if (instantInit) {
       getBar.show();
     } else {
+      Get()._routing.isSnackbar = true;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         getBar.show();
       });
@@ -570,24 +565,24 @@ class Get {
       bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
-      _get._enableLog = enableLog;
+      Get()._enableLog = enableLog;
     }
     if (defaultPopGesture != null) {
-      _get._defaultPopGesture = defaultPopGesture;
+      Get()._defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      _get._defaultOpaqueRoute = defaultOpaqueRoute;
+      Get()._defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      _get._defaultTransition = defaultTransition;
+      Get()._defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      _get._defaultDurationTransition = defaultDurationTransition;
+      Get()._defaultDurationTransition = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {
-      _get._defaultGlobalState = defaultGlobalState;
+      Get()._defaultGlobalState = defaultGlobalState;
     }
   }
 
@@ -756,6 +751,8 @@ class Get {
   static bool isRegistred<S>({String name}) =>
       Get()._singl.containsKey(_getKey(S, name));
 
+  static bool isPrepared<S>() => Get()._factory.containsKey(S);
+
   /// give access to Routing API from GetObserver
   static Routing get routing => Get()._routing;
 
@@ -790,8 +787,8 @@ class Get {
 
   static set obs(RxInterface observer) => Get()._obs = observer;
 
-  /// give arguments from previous route
-  static get previousArguments => Get()._routing.previousArgs;
+  // /// give arguments from previous route
+  // static get previousArguments => Get()._routing.previousArgs;
 
   /// give name from current route
   static get currentRoute => Get()._routing.current;

@@ -12,11 +12,12 @@ class GetRoute {
   final Alignment alignment;
   final bool maintainState;
   final bool opaque;
+  final Widget customTransition;
   final Duration transitionDuration;
   final bool fullscreenDialog;
   final RouteSettings settings;
 
-  GetRoute({
+  const GetRoute({
     @required this.page,
     this.title,
     this.settings,
@@ -28,6 +29,7 @@ class GetRoute {
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
     this.transition,
+    this.customTransition,
     this.fullscreenDialog = false,
   })  : assert(page != null),
         assert(maintainState != null),

@@ -1,3 +1,10 @@
+## [2.5.10]
+- Removed remnants of previousArgs on routeObserver.
+This feature had been deprecated in previous updates, and was removed in version 2.5.8. Some remaining references on the routeObserver were causing exceptions in version 2.5.9, and were removed completely in version 2.5.10.
+
+## [2.5.9]
+- Fix Get.find with named instance
+
 ## [2.5.8]
 - Added docs
 

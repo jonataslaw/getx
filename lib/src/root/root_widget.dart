@@ -199,8 +199,9 @@ class GetMaterialApp extends StatelessWidget {
             home: home,
             routes: routes ?? const <String, WidgetBuilder>{},
             initialRoute: initialRoute,
-            onGenerateRoute:
-                (namedRoutes == null ? onGenerateRoute : namedRoutesGenerate),
+            onGenerateRoute: (namedRoutes == null || onUnknownRoute != null
+                ? onGenerateRoute
+                : namedRoutesGenerate),
             onGenerateInitialRoutes: onGenerateInitialRoutes,
             onUnknownRoute: onUnknownRoute,
             navigatorObservers: (navigatorObservers == null
