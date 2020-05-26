@@ -8,9 +8,6 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.backgroundColor,
     this.elevation,
     this.shape,
-    this.removeBottom = false,
-    this.removeLeft = false,
-    this.removeRight = false,
     this.removeTop = true,
     this.clipBehavior,
     this.modalBarrierColor,
@@ -36,12 +33,6 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   // remove safearea from top
   final bool removeTop;
-  // remove safearea from bottom
-  final bool removeBottom;
-  // remove safearea from left
-  final bool removeLeft;
-  // remove safearea from right
-  final bool removeRight;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 700);
@@ -75,20 +66,21 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     Widget bottomSheet = MediaQuery.removePadding(
       context: context,
       removeTop: removeTop,
-      removeBottom: removeBottom,
-      removeLeft: removeLeft,
-      removeRight: removeRight,
-      child: _GetModalBottomSheet<T>(
-        route: this,
-        backgroundColor: backgroundColor ??
-            sheetTheme?.modalBackgroundColor ??
-            sheetTheme?.backgroundColor,
-        elevation:
-            elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
-        shape: shape,
-        clipBehavior: clipBehavior,
-        isScrollControlled: isScrollControlled,
-        enableDrag: enableDrag,
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: _GetModalBottomSheet<T>(
+          route: this,
+          backgroundColor: backgroundColor ??
+              sheetTheme?.modalBackgroundColor ??
+              sheetTheme?.backgroundColor,
+          elevation:
+              elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
+          shape: shape,
+          clipBehavior: clipBehavior,
+          isScrollControlled: isScrollControlled,
+          enableDrag: enableDrag,
+        ),
       ),
     );
     if (theme != null) bottomSheet = Theme(data: theme, child: bottomSheet);

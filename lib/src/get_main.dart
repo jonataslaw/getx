@@ -366,7 +366,8 @@ class Get {
     assert(isDismissible != null);
     assert(enableDrag != null);
 
-    return navigator.push<T>(GetModalBottomSheetRoute<T>(
+    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
+        .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
       theme: Theme.of(Get.key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,

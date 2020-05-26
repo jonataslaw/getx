@@ -135,6 +135,7 @@ class GetMaterialApp extends StatelessWidget {
         curve: newNamedRoutes[settingsName].curve,
         alignment: newNamedRoutes[settingsName].alignment,
         opaque: newNamedRoutes[settingsName].opaque,
+        binding: newNamedRoutes[settingsName].binding,
         transitionDuration: (transitionDuration == null
             ? newNamedRoutes[settingsName].transitionDuration
             : transitionDuration),
@@ -159,6 +160,7 @@ class GetMaterialApp extends StatelessWidget {
               alignment: unknownRoute.alignment,
               parameter: unknownRoute.parameter,
               opaque: unknownRoute.opaque,
+              binding: unknownRoute.binding,
               transitionDuration: unknownRoute.transitionDuration,
               popGesture: unknownRoute.popGesture,
               transition: unknownRoute.transition,

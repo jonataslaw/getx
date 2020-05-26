@@ -330,6 +330,51 @@ void main() {
 
     expect(find.byType(FirstScreen), findsOneWidget);
   });
+
+  testWidgets("Get.snackbar test", (tester) async {
+    await tester.pumpWidget(
+      Wrapper(
+        child: RaisedButton(
+          child: Text('Open Snackbar'),
+          onPressed: () {
+            Get.snackbar('title', "message",
+                duration: Duration(seconds: 1), instantInit: true);
+          },
+        ),
+      ),
+    );
+
+    expect(Get.isSnackbarOpen, false);
+    await tester.tap(find.text('Open Snackbar'));
+
+    expect(Get.isSnackbarOpen, true);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets("Get.rawSnackbar test", (tester) async {
+    await tester.pumpWidget(
+      Wrapper(
+        child: RaisedButton(
+          child: Text('Open Snackbar'),
+          onPressed: () {
+            Get.rawSnackbar(
+                title: 'title',
+                message: "message",
+                duration: Duration(seconds: 1),
+                instantInit: true);
+          },
+        ),
+      ),
+    );
+
+    expect(Get.isSnackbarOpen, false);
+    await tester.tap(find.text('Open Snackbar'));
+
+    expect(Get.isSnackbarOpen, true);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  
 }
 
 class FirstScreen extends StatelessWidget {

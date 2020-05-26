@@ -1,3 +1,15 @@
+## [2.6.3]
+- Flutter currently has a problem on some devices where using showModalBottomSheet() can cause TextFields to be hidden behind the keyboard (https://github.com/flutter/flutter/issues/18564) this issue is closed, even users reporting that the problem still occurs.
+The problem happens casually, as well as the problem of the snackbar on the iPhone SE 2, and checking the code, I realized that a padding with MediaQuery.of(context).viewInsets.bottom is missing inside the bottomSheet to make it work correctly, since it does not have any constraint with the keyboard.
+For stability, I decided not to use the standard Flutter bottomSheet, which contains many bugs, mainly related to keyboard padding, and the lack of respect for topBar's safeArea, and to use a proprietary bottomSheet implementation that is more stable. The Flutter dialog has no problem, so it will be used as the basis for Get.dialog. The bottomSheet will be based on the Flutter bottomSheet Raw API (_ModalBottomSheetRoute), applying bug fixes.
+- Added Get.isSnackbarOpen tests
+
+## [2.6.2]
+- Refactor Bindings API
+
+## [2.6.1]
+- Expose Bindings API
+
 ## [2.6.0]
 - Added bindings.
 You can now add bindings from your controllers to your routes, to prepare GetBuilder or GetX to create a dependency already declared in a Binding class. This feature is in an experimental phase, and will not be documented until the end of the tests.

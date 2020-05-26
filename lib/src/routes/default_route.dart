@@ -41,7 +41,12 @@ class GetRouteBase<T> extends PageRoute<T> {
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         //  assert(opaque),
-        super(settings: settings, fullscreenDialog: fullscreenDialog);
+        super(settings: settings, fullscreenDialog: fullscreenDialog) {
+    /// prebuild dependencies
+    if (binding != null) {
+      binding.dependencies();
+    }
+  }
 
   /// Builds the primary contents of the route.
   final Widget page;
@@ -468,11 +473,6 @@ class GetRouteBase<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    /// prebuild dependencies
-    if (binding != null) {
-      binding.dependencies();
-    }
-
     return buildPageTransitions<T>(
         this,
         context,
