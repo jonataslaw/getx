@@ -11,14 +11,17 @@ class _StoredValue<T> implements RxInterface<T> {
   Map<Stream<Change<T>>, StreamSubscription> _subscriptions = Map();
 
   T _value;
-  T get value {
+  T get v {
     if (Get.obs != null) {
       Get.obs.addListener(subject.stream);
     }
     return _value;
   }
 
-  String get string => value.toString();
+  T get value => v;
+  set value(T va) => v = va;
+
+  String get string => v.toString();
 
   close() {
     _subscriptions.forEach((observable, subscription) {
@@ -38,7 +41,7 @@ class _StoredValue<T> implements RxInterface<T> {
     });
   }
 
-  set value(T val) {
+  set v(T val) {
     if (_value == val) return;
     T old = _value;
     _value = val;
@@ -51,14 +54,14 @@ class _StoredValue<T> implements RxInterface<T> {
     _onChange = subject.stream.asBroadcastStream();
   }
 
-  void setCast(dynamic /* T */ val) => value = val;
+  void setCast(dynamic /* T */ val) => v = val;
 
   Stream<Change<T>> _onChange;
 
   Stream<Change<T>> get onChange {
     _cb++;
 
-    _changeCtl.add(Change<T>($new: value, $old: null, batch: _cb));
+    _changeCtl.add(Change<T>($new: v, $old: null, batch: _cb));
     _changeCtl.addStream(_onChange.skipWhile((v) => v.batch < _cb));
     return _changeCtl.stream.asBroadcastStream();
   }
@@ -66,11 +69,11 @@ class _StoredValue<T> implements RxInterface<T> {
   Stream<T> get stream => onChange.map((c) => c.$new);
 
   void bind(RxInterface<T> reactive) {
-    value = reactive.value;
-    reactive.stream.listen((v) => value = v);
+    v = reactive.v;
+    reactive.stream.listen((va) => v = va);
   }
 
-  void bindStream(Stream<T> stream) => stream.listen((v) => value = v);
+  void bindStream(Stream<T> stream) => stream.listen((va) => v = va);
 
   void bindOrSet(/* T | Stream<T> | Reactive<T> */ other) {
     if (other is RxInterface<T>) {
@@ -78,7 +81,7 @@ class _StoredValue<T> implements RxInterface<T> {
     } else if (other is Stream<T>) {
       bindStream(other.cast<T>());
     } else {
-      value = other;
+      v = other;
     }
   }
 
@@ -245,22 +248,19 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
     });
   }
 
-  // @override
-  // int get length => list.length;
+  List<E> get value => v as List<E>;
 
-  // List<E> get list => value as List<E>;
-
-  // set list(List<E> v) => assignAll(v);
+  set value(List<E> va) => assignAll(va);
 
   @override
-  get value {
+  get v {
     if (Get.obs != null) {
       Get.obs.addListener(subject.stream);
     }
     return this;
   }
 
-  set value(E val) {
+  set v(E val) {
     assign(val);
   }
 
@@ -269,11 +269,11 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
 
   @override
   void bind(RxInterface<E> reactive) {
-    value = reactive.value;
-    reactive.stream.listen((v) => value = v);
+    v = reactive.v;
+    reactive.stream.listen((va) => v = va);
   }
 
-  void bindStream(Stream<E> stream) => stream.listen((v) => value = v);
+  void bindStream(Stream<E> stream) => stream.listen((va) => v = va);
 
   @override
   void bindOrSet(/* T | Stream<T> or Rx<T> */ other) {
@@ -282,7 +282,7 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
     } else if (other is Stream<E>) {
       bindStream(other.cast<E>());
     } else {
-      value = other;
+      v = other;
     }
   }
 
@@ -291,7 +291,7 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
       stream.listen(callback);
 
   @override
-  void setCast(dynamic val) => value = val;
+  void setCast(dynamic val) => v = val;
 }
 
 typedef bool Condition();

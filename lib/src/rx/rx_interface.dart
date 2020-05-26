@@ -6,10 +6,10 @@ abstract class RxInterface<T> {
   RxInterface([T initial]);
 
   /// Get current value
-  get value;
+  get v;
 
   /// Set value
-  set value(T val);
+  set v(T val);
 
   /// Cast [val] to [T] before setting
   void setCast(dynamic /* T */ val);

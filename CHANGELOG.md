@@ -1,3 +1,6 @@
+## [2.7.1]
+- Improve list to set and get methods
+
 ## [2.7.0]
 - Added obx, a simple state interceptor. 
 - Improve Bindings, ListX, and fix docs typos
