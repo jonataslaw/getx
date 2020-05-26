@@ -34,8 +34,8 @@ class GetController extends State {
     }
   }
 
-  void onClose() {}
-  void onInit() {}
+  void onClose() async {}
+  void onInit() async {}
 
   @override
   Widget build(_) => throw ("build method can't be called");
@@ -107,7 +107,7 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       try {
         controller?.onInit();
       } catch (e) {
-        if (Get.isLogEnable) print("Controller is not attach");
+        if (Get.isLogEnable) print("[GET] error: $e");
       }
     }
   }
@@ -120,7 +120,7 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
 
     if (isCreator) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
-        controller.onClose();
+        // controller.onClose();
         controller._allStates.remove(real);
         Get.delete<T>();
       }

@@ -75,11 +75,11 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
 
     if (isCreator) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
-        controller.onClose();
+        // controller.onClose();
         Get.delete<T>();
       }
-    } else {
-      controller.onClose();
+      // } else {
+      //   controller.onClose();
     }
     // controller.onClose();
     _observer.close();

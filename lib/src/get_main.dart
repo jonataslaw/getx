@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 import 'package:get/src/routes/bindings_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
@@ -721,6 +722,12 @@ class Get {
   static void remove<S>({String name}) {
     String key = _getKey(S, name);
     _FcBuilder builder = Get()._singl[key];
+    final i = builder.dependency;
+
+    if (i is DisposableInterface || i is GetController) {
+      i.onClose();
+      if (isLogEnable) print('[GET] onClose of $key called');
+    }
     if (builder != null) builder.dependency = null;
     if (Get()._singl.containsKey(key)) {
       print('error on remove $key');
@@ -739,13 +746,22 @@ class Get {
   }
 
   /// Delete class instance on [S] and clean memory
-  static bool delete<S>({String name}) {
+  static Future<bool> delete<S>({String name}) async {
     String key = _getKey(S, name);
 
     if (!Get()._singl.containsKey(key)) {
       print('Instance $key not found');
       return false;
     }
+
+    _FcBuilder builder = Get()._singl[key];
+    final i = builder.dependency;
+
+    if (i is DisposableInterface || i is GetController) {
+      await i.onClose();
+      if (isLogEnable) print('[GET] onClose of $key called');
+    }
+
     Get()._singl.removeWhere((oldkey, value) => (oldkey == key));
     if (Get()._singl.containsKey(key)) {
       print('error on remove object $key');
@@ -766,7 +782,7 @@ class Get {
 
   static RouteSettings get routeSettings => Get()._settings;
 
-  Routing _routing;
+  Routing _routing = Routing();
 
   Map<String, String> _parameters = {};
 
@@ -859,6 +875,9 @@ class Get {
 
   /// give access to Theme.of(context).iconTheme.color
   static Color get iconColor => Theme.of(context).iconTheme.color;
+
+  /// give access to Focus.of(context).iconTheme.color
+  static FocusScopeNode get focusScope => FocusScope.of(context);
 
   /// give access to MediaQuery.of(context).size.height
   static double get height => MediaQuery.of(context).size.height;

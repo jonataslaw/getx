@@ -905,13 +905,13 @@ You can create Global settings for Get. Just add Get.config to your code before 
 
 ```dart
 
-GetMaterialApp(
-      enableLog: true,
-      defaultTransition: Transitions.fade,
-      defaultOpaqueRoute: Get.isOpaqueRouteDefault,
-      defaultPopGesture: Get.isPopGestureEnable,
-      defaultDurationTransition: Get.defaultDurationTransition,
-      defaultGlobalState: Get.defaultGlobalState,
+GetMaterialApp(    
+    enableLog: true,
+    defaultTransition: Transition.fade,
+    opaqueRoute: Get.isOpaqueRouteDefault,
+    popGesture: Get.isPopGestureEnable,
+    transitionDuration: Get.defaultDurationTransition,
+    defaultGlobalState: Get.defaultGlobalState,
     );
 
 Get.config(

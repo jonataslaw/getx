@@ -1,3 +1,7 @@
+## [2.7.0]
+- Added obx, a simple state interceptor. 
+- Improve Bindings, ListX, and fix docs typos
+
 ## [2.6.3]
 - Flutter currently has a problem on some devices where using showModalBottomSheet() can cause TextFields to be hidden behind the keyboard (https://github.com/flutter/flutter/issues/18564) this issue is closed, even users reporting that the problem still occurs.
 The problem happens casually, as well as the problem of the snackbar on the iPhone SE 2, and checking the code, I realized that a padding with MediaQuery.of(context).viewInsets.bottom is missing inside the bottomSheet to make it work correctly, since it does not have any constraint with the keyboard.

@@ -245,6 +245,13 @@ class ListX<E> extends DelegatingList<E> implements List<E>, RxInterface<E> {
     });
   }
 
+  // @override
+  // int get length => list.length;
+
+  // List<E> get list => value as List<E>;
+
+  // set list(List<E> v) => assignAll(v);
+
   @override
   get value {
     if (Get.obs != null) {
@@ -375,12 +382,12 @@ extension MapExtension on Map {
   }
 }
 
-extension ListExtension on List {
-  ListX get obs {
+extension ListExtension<E> on List<E> {
+  ListX<E> get obs {
     if (this != null)
-      return ListX()..assignAll(this);
+      return ListX<E>()..assignAll(this);
     else
-      return ListX(null);
+      return ListX<E>(null);
   }
 }
 
