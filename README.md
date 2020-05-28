@@ -5,6 +5,9 @@
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get) 
 ![building](https://github.com/jonataslaw/get/workflows/Test,%20build%20and%20deploy/badge.svg)
 [![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+<a href="https://github.com/Solido/awesome-flutter">
+   <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
+</a>
 
 Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 
