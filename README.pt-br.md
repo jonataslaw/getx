@@ -33,8 +33,8 @@ Somando a isso, quando uma rota é enviada, o `MaterialApp` inteiro pode ser rec
 Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar seu código dos boilerplates, aumentando sua produtividade, e eliminando os bugs de reconstrução da sua aplicação.
 
 
-- **[How to use?](#how-to-use)**
-- **[Navigating without named routes](#Navigating-without-named-routes)**
+- **[Como usar?](#como-usar)**
+- **[Navegação sem rotas nomeadas](#navegação-sem-rotas-nomeadas)**
 - **[SnackBars](#SnackBars)**
 - **[Dialogs](#Dialogs)**
 - **[BottomSheets](#BottomSheets)**
@@ -59,131 +59,132 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
 
 Any contribution is welcome!
 
-## How to use?
+## Como usar?
 
 <!-- - Flutter Master/Dev/Beta: version 2.0.x-dev 
 - Flutter Stable branch: version 2.0.x
-(look for latest version on pub.dev) -->
+(procure pela versão mais recente em pub.dev) -->
 
-Add Get to your pubspec.yaml file 
+Adicione Get ao seu arquivo pubspec.yaml
 <!-- according to the version of Flutter you are using. -->
  
-Exchange your MaterialApp for GetMaterialApp and enjoy!
+Troque seu `MaterialApp` por `GetMaterialApp` e aproveite!
 ```dart
 import 'package:get/get.dart';
+
 GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-## Navigating without named routes
-To navigate to a new screen:
+
+## Navegação sem rotas nomeadas
+Para navegar para uma próxima tela:
 
 ```dart
-Get.to(NextScreen());
+Get.to(ProximaTela());
 ```
 
-To return to previous screen
+Para retornar para a tela anterior:
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Para ir para a próxima tela e NÃO deixar opção para voltar para a tela anterior (bom para SplashScreens, telas de login e etc.):
 
 ```dart
-Get.off(NextScreen());
+Get.off(ProximaTela());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Para ir para a próxima tela e cancelar todas as rotas anteriores (útil em telas de carrinho, votações e testes):
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(ProximaTela());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+Para navegar para a próxima rota, e recebar ou atualizar dados assim que retornar da rota:
 ```dart
-var data = await Get.to(Payment());
+var dados = await Get.to(Pagamento());
 ```
-on other screen, send a data for previous route:
+Na outra tela, envie os dados para a rota anterior:
 
 ```dart
-Get.back(result: 'sucess');
+Get.back(result: 'sucesso');
 ```
-And use it:
+E use-os:
 
-ex:
 ```dart
-if(data == 'sucess') madeAnything();
+if (dados == 'sucesso') fazerQualquerCoisa();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+Não quer aprender nossa sintaxe?
+Apenas mude o `Navigator` (letra maiúscula) para `navigator` (letra minúscula), e você terá todas as funcionalidades da navigation padrão, sem precisar usar `context`
+
+Exemplo:
 
 ```dart
-
-// Default Flutter navigator
+// Navigator padrão do Flutter
 Navigator.of(context).push(
-        context,
-        MaterialPageRoute(
-           builder: (BuildContext context) { 
-            return HomePage();
-          },
-        ),
-      );
+  context,
+  MaterialPageRoute(
+      builder: (BuildContext context) {
+      return HomePage();
+    },
+  ),
+);
 
-// Get using Flutter syntax without needing context
+// Get usando a sintaxe Flutter sem precisar do context
 navigator.push(
-        MaterialPageRoute(
-           builder: (_) { 
-            return HomePage();
-          },
-        ),
-      );
+  MaterialPageRoute(
+      builder: (_) {
+      return HomePage();
+    },
+  ),
+);
 
-// Get syntax (It is much better, but you have the right to disagree)
+// Sintaxe do Get (é bem melhor, mas você tem o direito de discordar)
 Get.to(HomePage());
-
-
 ```
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
+Para ter um `SnackBar` simples no Flutter, você precisa pegar o `context` do Scaffold, ou você precisa de uma `GlobalKey` atrelada ao seu Scaffold
 ```dart
 final snackBar = SnackBar(
-      content: Text('Hi!'),
-      action: SnackBarAction(
-              label: 'I am a old and ugly snackbar :(',
-              onPressed: (){}
-            ),
-          // Find the Scaffold in the widget tree and use
-          // it to show a SnackBar.
-          Scaffold.of(context).showSnackBar(snackBar);
+  content: Text('Olá!'),
+  action: SnackBarAction(
+    label: 'Eu sou uma SnackBar velha e feia :(',
+    onPressed: (){}
+  ),
+);
+// Encontra o Scaffold na árvore de Widgets e
+// o usa para mostrar o SnackBar
+Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Com o Get:
 
 ```dart
-Get.snackbar('Hi', 'i am a modern snackbar');
+Get.snackbar('Olá', 'eu sou uma SnackBar moderna e linda!');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+Com Get, tudo que você precisa fazer é chamar `Get.snackbar` de qualquer lugar no seu código, ou custumizá-lo da forma que quiser!
 
 ```dart
-  Get.snackbar(
-               "Hey i'm a Get SnackBar!", // title
-               "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
-              icon: Icon(Icons.alarm), 
-              shouldIconPulse: true,
-              onTap:(){},
-              barBlur: 20,
-              isDismissible: true,
-              duration: Duration(seconds: 3),
-            );
+Get.snackbar(
+  "Ei, eu sou uma SnackBar Get!", // título
+  "É inacreditável! Eu estou usando uma SnackBar sem context, sem " +
+  "boilerplate, sem Scaffold, é algo realmente maravilhoso!", // mensagem
+  icon: Icon(Icons.alarm),
+  shouldIconPulse: true,
+  onTap:(){},
+  barBlur: 20,
+  isDismissible: true,
+  duration: Duration(seconds: 3),
+);
 
 
-  ////////// ALL FEATURES //////////
+  ////////// TODOS OS RECURSOS //////////
   //     Color colorText,
   //     Duration duration,
   //     SnackPosition snackPosition,
@@ -219,27 +220,27 @@ With Get, all you have to do is call your Get.snackbar from anywhere in your cod
   //     Form userInputForm
   ///////////////////////////////////
 ```
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use 
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+Se você prefere a SnackBar tradicional, ou quer customizar por completo, incluindo até adicionar apenas uma linha (Get.snackbar usa um `title` e `message` obrigatórios), você pode usar `Get.rawSnackbar();` que fornece a RAW API na qual Get.snackbar foi contruído.
 
 ### Dialogs
 
-To open dialog:
+Para abrir um dialog:
 
 ```dart
-Get.dialog(YourDialogWidget());
+Get.dialog(SeuDialogWidget());
 ```
 
-To open default dialog:
+Para abrir um dialog padrão:
 
 ```dart
- Get.defaultDialog(
-              onConfirm: () => print("Ok"),
-              middleText: "Dialog made in 3 lines of code");
+Get.defaultDialog(
+  onConfirm: () => print("Ok"),
+  middleText: "Dialog made in 3 lines of code",
+);
 ```
-You can also use Get.generalDialog instead of showGeneralDialog.
+Você também pode usar `Get.generalDialog` em vez de `showGeneralDialog`.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
+Para todos os outros Widgets dialog do Flutter, incluindo os do Cupertino, você pode usar `Get.overlayContext` em vez do `context`, e abrir em qualquer lugar do seu código.
 For widgets that don't use Overlay, you can use Get.context.
 These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
 
