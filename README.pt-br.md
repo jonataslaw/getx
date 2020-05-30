@@ -2,35 +2,35 @@
 
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
-[![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get) 
+[![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/Test,%20build%20and%20deploy/badge.svg)
 [![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
 
-Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+Get é uma biblioteca poderosa e extra-leve para Flutter que vai te dar superpoderes e aumentar sua produtividade. Navegue sem `context`, abre dialogs, snackbars ou bottomsheets de qualquer lugar do código, gerencie estados e injete dependências de uma forma simples e prática! Get é seguro, estável, atualizado e oferece uma enorge gama de APIs que não estão presentes no framework padrão.
 
 ```dart
-// Default Flutter navigator
+// Flutter navigator padrão
 Navigator.of(context).push(
-        context,
-        MaterialPageRoute(
-           builder: (BuildContext context) { 
-            return Home();
-          },
-        ),
-      );
+  context,
+  MaterialPageRoute(
+      builder: (BuildContext context) {
+      return Home();
+    },
+  ),
+);
 
-// Get syntax 
+// Sintaxe do Get
 Get.to(Home());
 ```
 
-## Getting Started
+## Começando
 
-Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
-In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
-This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
+A navegação convencional do Flutter tem uma grande quantidade de boilerplate (muito código que se repete demais), requer o `context` para navegar entre telas, abrir dialogs e usar snackbars no framework é entediante.
+Somando a isso, quando uma rota é enviada, o `MaterialApp` inteiro pode ser reconstruído causando travamentos. Isso não acontece com o Get.
+Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar seu código dos boilerplates, aumentando sua produtividade, e eliminando os bugs de reconstrução da sua aplicação.
 
 
 - **[How to use?](#how-to-use)**
@@ -50,12 +50,12 @@ This library that will change the way you work with the Framework and save your 
 - **[Nested Navigators](#Nested-Navigators)**
 
 
-#### You can contribute to the project in multiple ways:
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (not even half of Get's functions have been documented yet).
-- Writing articles/videos about Get (they will be inserted in the Readme, and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
+#### Você pode contribuir no projeto de várias formas:
+- Ajudando a traduzir o README para outras linguagens.
+- Adicionando mais documentação ao REAME (nem metado das funcionalidade do Get foram documentadas ainda).
+- Fazendo artigos/videos sobre o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
+- Fazendo PRs (Pull-Requests) para código/testes.
+- Incluindo novas funcionalidades.
 
 Any contribution is welcome!
 
