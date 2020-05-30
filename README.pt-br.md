@@ -241,56 +241,55 @@ Get.defaultDialog(
 Você também pode usar `Get.generalDialog` em vez de `showGeneralDialog`.
 
 Para todos os outros Widgets dialog do Flutter, incluindo os do Cupertino, você pode usar `Get.overlayContext` em vez do `context`, e abrir em qualquer lugar do seu código.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+
+Para widgets que não usam `Overlay`, você pode usar `Get.context`. Esses dois contextos vão funcionar em 99% dos casos para substituir o context da sua UI, exceto em casos onde o `inheritedWidget` é usado sem a navigation context.
 
 ### BottomSheets
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+`Get.bottomSheet()` é tipo o `showModalBottomSheet()`, mas não precisa do context.
 
 ```dart
 Get.bottomSheet(
-     Container(
-            child: Wrap(
-            children: <Widget>[
-            ListTile(
-            leading: Icon(Icons.music_note),
-            title: Text('Music'),
-            onTap: () => {}          
-          ),
-            ListTile(
-            leading: Icon(Icons.videocam),
-            title: Text('Video'),
-            onTap: () => {},          
-          ),
-         ],
+  Container(
+    child: Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.music_note),
+          title: Text('Música'),
+          onTap: () => {}
         ),
-       );
-      }
-    );
+        ListTile(
+          leading: Icon(Icons.videocam),
+          title: Text('Vídeo'),
+          onTap: () => {},
+        ),
+      ],
+    ),
+  ),
+);
 ```
 
-## Simple State Manager
-There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that ChangeNotifier should be used with 1 or a maximum of 2 listeners (https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large. Other state managers are good, but have their nuances. BLoC is very safe and efficient, but it is very complex for beginners, which has kept people from developing with Flutter. MobX is easier than BLoC and reactive, almost perfect, I would say, but you need to use a code generator that for large applications, reduces productivity, you will need to drink a lot of coffees until your code is ready again after a Flutter clean (And this is not MobX's fault, but the codegen which is really slow!). Provider uses InheritedWidget to deliver the same listener, as a way of solving the problem reported above with ChangeNotifier, which implies that any access to its ChangeNotifier class must be within the widget tree because of the context to access o Inherited.
+## Gerenciador de estado simples
+Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance de aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande. Outros gerenciadores de estado são bons, mas tem suas nuances. BLoC é bem seguro e eficiente, mas é muito complexo (especialmente para iniciantes), o que impediu pessoas de desenvolverem com Flutter. MobX é mais fácil que o BLoc e é reativo, quase perfeito eu diria, mas você precisa usar um code generator que, para aplicações de grande porte, reduz a produtividade (você terá que beber vários cafés até que seu código esteja pronto denovo depois de um `flutter clean`, o que não é culpa do MobX, o code generatoe que é muito lento!). Provider usa o `InheritedWidget` para entregar o mesmo listener, como uma forma de solucionar o problema reportado acima com o ChangeNotifier, o que indica que qualquer acesso ao ChangeNotifier dele tem que ser dentro da árvore de widgets por causa do `context` necessário para acessar o Inherited.
 
-Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager. Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
+Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria analisar esses pontos tanto quanto os argumentos abaixo para escolher entre usar Get na sua forma pura (Vanilla), ou usando-o em conjunto com outro gerenciador de estado. Definitivamente, Get não é o inimigo nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
 
-Get has a state manager that is extremely light and easy (written in just 95 lines of code), which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+Get tem um gerenciador de estado que é extremamente leve e fácil (escrito em apensar 95 linha de código), que não usa ChangeNotifier, vai atender a necessidade especialmente daqueles novos no Flutter, e não vai causar problemas em aplicações de grande porte.
 
-What performance improvements does Get bring?
+Que melhoras na performance o Get traz?
 
-1- Update only the required widget.
+1. Atualiza somente o widget necessário.
 
-2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb for until).
+2. Não usa o `ChangeNotifier`, é o gerenciador de estado que utiliza menos memória (próximo de 0mb até agora).
 
-3- Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. Esqueça StatefulWidget's! Com Get voce nunca mais vai precisar. Com outros gerenciadores de estado, você provavelmente precisa usar um StatefulWidget para pegar a instância do seu Provider, BLoc, MobX controller, etc. Mas já parou para pensar que seu AppBar, seu Scaffold e a maioria dos widgets que estão na sua classe são stateless? Então porque salvar o estado de uma classe inteira, se você pode salvar somente o estado de um widget stateful? Get resolve isso também. Crie uma classe Stateless, faça tudo stateless. Se vocÊ precisar atualizar um único componente, envolvar ele com o GetBuilder, e seu estado será mantido.
 
-4- Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. Organize seu projeto de verdade! Controllers não devem ficar na sua UI, coloque seus `TextEditController`, ou qualquer controller que você usa dentro da classe Controller.
 
-5- Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5. Você precisa acionar um evento para atualizar um widget assim que ele é renderizado? GetBuilder tem a propriedade `initState` assim como um StatefulWidget, e você pode acionar eventos a partir do seu controller, diretamente de lá. Sem mais de eventos serem colocados no initState.
 
-6- Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. Você precisa acionar uma ação como fechar `Stream`s, timers, etc? GetBuilder também tem a propriedade `dispose`, onde você pode acionar eventos assim que o widget é destruído.
 
-7- Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. Use `Stream`s somente se necessário. Você pode usar seus StreamControllers dentro do seu controller normalmente, e usar `StreamBuilder` normalmente também, mas lembre-se, um Stream consume uma memória razoável, programação reativa é linda, mas você não abuse. 30 Streams abertos simultaneamente podem ser ainda piores que o `ChangeNotifier` (e olha que o ChangeNotifier é bem ruim)
 
 8- Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
 
@@ -313,10 +312,11 @@ class Controller extends GetController {
 }
 // On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
 GetBuilder<Controller>(
-    init: Controller(), // INIT IT ONLY THE FIRST TIME
-    builder: (_) => Text(
-              '${_.counter}',
-              )),
+  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  builder: (controller) => Text(
+    '${controller.counter}',
+  ),
+),
 //Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 **Done!**
