@@ -422,65 +422,72 @@ class Controller extends GetController {
   }
 }
 ```
-Controller life cycle:
-- onInit() where it is created.
-- onClose() where it is closed to make any changes in preparation for the delete method
-- deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+Ciclo de vida do controller:
+* `onInit()`: Onde ele é criado.
+* `onClose()`: Onde ele é fechado para fazer mudanças em preparação para o método delete()
+* deleted: Você não tem mais acesso a essa API porque ela está literalmente removendo o controller da memória. Está literalmente deletado, sem deixar rastros.
 
-##### Forms of use:
+##### Formas de uso:
 
-- Recommended usage:
+* Uso recomendado;
 
-You can use Controller instance directly on GetBuilder value:
+Você pode usar uma instância do Controller diretamente no `value` do GetBuilder
 
 ```dart
 GetBuilder<Controller>(  
-    init: Controller(),
-    builder: (value) => Text(
-              '${value.counter}', //here
-              )),
+  init: Controller(),
+  builder: (value) => Text(
+    '${value.counter}', //aqui
+  )
+),
 ```
-You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
+Você talvez também precise de uma instância do seu controller fora do GetBuilder, e você pode usar essas abordagens para conseguir isso:
 
+essa:
 ```dart
 class Controller extends GetController {
-  static Controller get to => Get.find(); 
-[...]
+  static Controller get to => Get.find(); // criando um getter estático
+  [...]
 }
-// on stateful/stateless class
-GetBuilder<Controller>(  
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Controller.to.counter}', //here
-              )),
-or 
-
-class Controller extends GetController {
- // static Controller get to => Get.find(); // with no static get
-[...]
-}
-// on stateful/stateless class
-GetBuilder<Controller>(  
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Get.find<Controller>().counter}', //here
-              )),
+// Numa classe stateful/stateless
+GetBuilder<Controller>(
+  init: Controller(), // use somente uma vez por controller, não se esqueça
+  builder: (_) => Text(
+    '${Controller.to.counter}', //aqui
+  )
+),
 ```
 
-- You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+ou essa:
+```dart
+class Controller extends GetController {
+ // sem nenhum método estático
+[...]
+}
+// Numa classe stateful/stateless
+GetBuilder<Controller>(
+  init: Controller(), // use somente uma vez por controller, não se esqueça
+  builder: (_) => Text(
+    '${Get.find<Controller>().counter}', //aqui
+  )
+),
+```
+
+* Você pode usar outras abordagens "menos regulares". Se você está utilizando outro gerenciador de dependências, como o get_it, modular, etc., e só quer entregar a instância do controller, pode fazer isso:
 
 ```dart
-
 Controller controller = Controller();
 [...]
-GetBuilder( // you dont need to type on this way
-    init: controller, //here
-    builder: (_) => Text(
-              '${controller.counter}', // here
-              )),
+GetBuilder( // não precisa digitar desse jeito
+  init: controller, //aqui
+  builder: (_) => Text(
+    '${controller.counter}', // aqui
+  )
+),
 
 ```
-This approach is not recommended, as you will have to manually dispose of your controllers, close your streams manually, and literally give up one of the great benefits of this library, which is intelligent memory control. But if you trust your potential, go ahead!
+
+Essa abordagem não é recomendade, uma vez que você vai precisar descartar os controllers manualmente, fechar seus stream manualmente, e literalmente abandonar um dos grandes benefícios desse package, que é controle de memória inteligente. Mas se você confia no seu potencial, vai em frente!
 
 If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
 ```dart
