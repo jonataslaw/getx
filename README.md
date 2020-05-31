@@ -634,7 +634,8 @@ List get list => _list.value;
 ```
 ```dart
 ListView.builder (
-itemCount: list.lenght
+  itemCount: list.lenght
+)
 ```
 You could add an existing list of another type to the observable list using a list.assign (oldList); or the assignAll method, which differs from add, and addAll, which must be of the same type. All existing methods in a list are also available on GetX.
 
@@ -700,14 +701,16 @@ To define routes, use GetMaterialApp:
 
 ```dart
 void main() {
-  runApp(GetMaterialApp(
-    initialRoute: '/',
-    namedRoutes: {
-      '/': GetRoute(page: MyHomePage()),
-      '/second': GetRoute(page: Second()),
-      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-    },
-  ));
+  runApp(
+    GetMaterialApp(
+      initialRoute: '/',
+      namedRoutes: {
+        '/': GetRoute(page: MyHomePage()),
+        '/second': GetRoute(page: Second()),
+        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      },
+    )
+  );
 }
 ```
 
@@ -743,18 +746,20 @@ You can also receive NamedParameters with Get easily:
 
 ```dart
 void main() {
-  runApp(GetMaterialApp(
-    initialRoute: '/',
-    namedRoutes: {
-      '/': GetRoute(page: MyHomePage()),
-      /// Important!  :user is not a new route, it is just a parameter
-      /// specification. Do not use '/second/:user' and '/second'
-      /// if you need new route to user, use '/second/user/:user' 
-      /// if '/second' is a route.
-      '/second/:user': GetRoute(page: Second()), // receive ID
-      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-    },
-  ));
+  runApp(
+    GetMaterialApp(
+      initialRoute: '/',
+      namedRoutes: {
+        '/': GetRoute(page: MyHomePage()),
+        /// Important!  :user is not a new route, it is just a parameter
+        /// specification. Do not use '/second/:user' and '/second'
+        /// if you need new route to user, use '/second/user/:user' 
+        /// if '/second' is a route.
+        '/second/:user': GetRoute(page: Second()), // receive ID
+        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      },
+    )
+  );
 }
 ```
 Send data on route name
@@ -776,25 +781,27 @@ And now, all you need to do is use Get.toNamed() to navigate your named routes, 
 If you want listen Get events to trigger actions, you can to use routingCallback to it
 ```dart
 GetMaterialApp(
-  routingCallback: (route){
+  routingCallback: (route) {
     if(routing.current == '/second'){
       openAds();
     }
   }
-  ```
+)
+```
 If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
-
 
 ```dart
 void main() {
-  runApp(MaterialApp(
-    onGenerateRoute: Router.generateRoute,
-    initialRoute: "/",
-    navigatorKey: Get.key,
-    navigatorObservers: [
+  runApp(
+    MaterialApp(
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: "/",
+      navigatorKey: Get.key,
+      navigatorObservers: [
         GetObserver(MiddleWare.observer), // HERE !!!
-    ],
-  ));
+      ],
+    ),
+  );
 }
 ```
 Create a MiddleWare class
@@ -915,20 +922,20 @@ If you want to know in depth how to change the theme, you can follow this tutori
 You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 
 ```dart
-
-GetMaterialApp(    
-    enableLog: true,
-    defaultTransition: Transition.fade,
-    opaqueRoute: Get.isOpaqueRouteDefault,
-    popGesture: Get.isPopGestureEnable,
-    transitionDuration: Get.defaultDurationTransition,
-    defaultGlobalState: Get.defaultGlobalState,
-    );
+GetMaterialApp(
+  enableLog: true,
+  defaultTransition: Transition.fade,
+  opaqueRoute: Get.isOpaqueRouteDefault,
+  popGesture: Get.isPopGestureEnable,
+  transitionDuration: Get.defaultDurationTransition,
+  defaultGlobalState: Get.defaultGlobalState,
+);
 
 Get.config(
-      enableLog = true,
-      defaultPopGesture = true,
-      defaultTransition = Transitions.cupertino}
+  enableLog = true,
+  defaultPopGesture = true,
+  defaultTransition = Transitions.cupertino
+)
 ```
 
 
@@ -937,18 +944,18 @@ GetMaterialApp configures everything for you, but if you want to configure Get M
 
 ```dart
 MaterialApp(
-      navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()],
-    );
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver()],
+);
 ```
 
 You will also be able to use your own Middleware within GetObserver, this will not influence anything.
 
 ```dart
 MaterialApp(
-      navigatorKey: Get.key,
-      navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
-    );
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
+);
 ```
 
 ```dart
@@ -995,41 +1002,43 @@ You don't need the context, and you will find your navigation stack by Id.
 
 See how simple it is:
 ```dart
-             Navigator(
-                key: nestedKey(1), // create a key by index
-                initialRoute: '/',
-                onGenerateRoute: (settings) {
-                  if (settings.name == '/') {
-                    return GetRouteBase(
-                      page: Scaffold(
-                        appBar: AppBar(
-                          title: Text("Main"),
-                        ),
-                        body: Center(
-                          child: FlatButton(
-                              color: Colors.blue,
-                              onPressed: () {
-                                Get.toNamed('/second', id:1); // navigate by your nested route by index
-                              },
-                              child: Text("Go to second")),
-                        ),
-                      ),
-                    );
-                  } else if (settings.name == '/second') {
-                    return GetRouteBase(
-                      page: Center(
-                        child: Scaffold(
-                          appBar: AppBar(
-                            title: Text("Main"),
-                          ),
-                          body: Center(
-                            child:  Text("second")
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                }),
+Navigator(
+  key: nestedKey(1), // create a key by index
+  initialRoute: '/',
+  onGenerateRoute: (settings) {
+    if (settings.name == '/') {
+      return GetRouteBase(
+        page: Scaffold(
+          appBar: AppBar(
+            title: Text("Main"),
+          ),
+          body: Center(
+            child: FlatButton(
+              color: Colors.blue,
+              onPressed: () {
+                Get.toNamed('/second', id:1); // navigate by your nested route by index
+              },
+              child: Text("Go to second"),
+            ),
+          ),
+        ),
+      );
+    } else if (settings.name == '/second') {
+      return GetRouteBase(
+        page: Center(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text("Main"),
+            ),
+            body: Center(
+              child:  Text("second")
+            ),
+          ),
+        ),
+      );
+    }
+  }
+),
 ```
 
 
