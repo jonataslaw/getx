@@ -270,35 +270,52 @@ Get.bottomSheet(
 ```
 
 ## Gerenciador de estado simples
-Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance de aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande. Outros gerenciadores de estado são bons, mas tem suas nuances. BLoC é bem seguro e eficiente, mas é muito complexo (especialmente para iniciantes), o que impediu pessoas de desenvolverem com Flutter. MobX é mais fácil que o BLoc e é reativo, quase perfeito eu diria, mas você precisa usar um code generator que, para aplicações de grande porte, reduz a produtividade (você terá que beber vários cafés até que seu código esteja pronto denovo depois de um `flutter clean`, o que não é culpa do MobX, o code generatoe que é muito lento!). Provider usa o `InheritedWidget` para entregar o mesmo listener, como uma forma de solucionar o problema reportado acima com o ChangeNotifier, o que indica que qualquer acesso ao ChangeNotifier dele tem que ser dentro da árvore de widgets por causa do `context` necessário para acessar o Inherited.
+Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance em aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande. Outros gerenciadores de estado são bons, mas tem suas nuances. BLoC é bem seguro e eficiente, mas é muito complexo (especialmente para iniciantes), o que impediu pessoas de desenvolverem com Flutter. MobX é mais fácil que o BLoc e é reativo, quase perfeito eu diria, mas você precisa usar um code generator que, para aplicações de grande porte, reduz a produtividade (você terá que beber vários cafés até que seu código esteja pronto denovo depois de um `flutter clean`, o que não é culpa do MobX, na verdade o code generator que é muito lento!). Provider usa o `InheritedWidget` para entregar o mesmo listener, como uma forma de solucionar o problema reportado acima com o ChangeNotifier, o que indica que qualquer acesso ao ChangeNotifier dele tem que ser dentro da árvore de widgets por causa do `context` necessário para acessar o Inherited.
 
-Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria analisar esses pontos tanto quanto os argumentos abaixo para escolher entre usar Get na sua forma pura (Vanilla), ou usando-o em conjunto com outro gerenciador de estado. Definitivamente, Get não é o inimigo nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
+Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria analisar esses pontos tanto quanto os argumentos abaixo para escolher entre usar Get na sua forma pura, ou usando-o em conjunto com outro gerenciador de estado. Definitivamente, Get não é o inimigo de nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
 
-Get tem um gerenciador de estado que é extremamente leve e fácil (escrito em apensar 95 linha de código), que não usa ChangeNotifier, vai atender a necessidade especialmente daqueles novos no Flutter, e não vai causar problemas em aplicações de grande porte.
+Get tem um gerenciador de estado que é extremamente leve e fácil (escrito em apenas 95 linha de código), que não usa ChangeNotifier, vai atender a necessidade especialmente daqueles novos no Flutter, e não vai causar problemas em aplicações de grande porte.
 
-Que melhoras na performance o Get traz?
+**Que melhoras na performance o Get traz?**
 
 1. Atualiza somente o widget necessário.
 
 2. Não usa o `ChangeNotifier`, é o gerenciador de estado que utiliza menos memória (próximo de 0mb até agora).
 
-3. Esqueça StatefulWidget's! Com Get voce nunca mais vai precisar. Com outros gerenciadores de estado, você provavelmente precisa usar um StatefulWidget para pegar a instância do seu Provider, BLoc, MobX controller, etc. Mas já parou para pensar que seu AppBar, seu Scaffold e a maioria dos widgets que estão na sua classe são stateless? Então porque salvar o estado de uma classe inteira, se você pode salvar somente o estado de um widget stateful? Get resolve isso também. Crie uma classe Stateless, faça tudo stateless. Se vocÊ precisar atualizar um único componente, envolvar ele com o GetBuilder, e seu estado será mantido.
+3. Esqueça StatefulWidget's! Com Get você nunca mais vai precisar deles. Com outros gerenciadores de estado, você provavelmente precisa usar um StatefulWidget para pegar a instância do seu Provider, BLoc, MobX controller, etc. Mas já parou para pensar que seu AppBar, seu Scaffold e a maioria dos widgets que estão na sua classe são stateless? Então porque salvar o estado de uma classe inteira, se você pode salvar somente o estado de um widget stateful? Get resolve isso também. Crie uma classe Stateless, faça tudo stateless. Se você precisar atualizar um único componente, envolva ele com o `GetBuilder`, e seu estado será mantido.
 
 4. Organize seu projeto de verdade! Controllers não devem ficar na sua UI, coloque seus `TextEditController`, ou qualquer controller que você usa dentro da classe Controller.
 
-5. Você precisa acionar um evento para atualizar um widget assim que ele é renderizado? GetBuilder tem a propriedade `initState` assim como um StatefulWidget, e você pode acionar eventos a partir do seu controller, diretamente de lá. Sem mais de eventos serem colocados no initState.
+5. Você precisa acionar um evento para atualizar um widget assim que ele é renderizado? GetBuilder tem a propriedade `initState()` assim como um StatefulWidget, e você pode acionar eventos a partir do seu controller, diretamente de lá. Sem mais de eventos serem colocados no initState.
 
-6. Você precisa acionar uma ação como fechar `Stream`s, timers, etc? GetBuilder também tem a propriedade `dispose`, onde você pode acionar eventos assim que o widget é destruído.
+6. Você precisa acionar uma ação como fechar Streams, timers, etc? GetBuilder também tem a propriedade `dispose()`, onde você pode acionar eventos assim que o widget é destruído.
 
 7. Use `Stream`s somente se necessário. Você pode usar seus StreamControllers dentro do seu controller normalmente, e usar `StreamBuilder` normalmente também, mas lembre-se, um Stream consume uma memória razoável, programação reativa é linda, mas você não abuse. 30 Streams abertos simultaneamente podem ser ainda piores que o `ChangeNotifier` (e olha que o ChangeNotifier é bem ruim)
-8. Atualizar widgets sem gastar memória com isso. Get guarda somente a ID do criador GetBuilder, e atualiza esse GetBuilder quando necessário. O consumo de memória do ID do Get é muito baixo mesmo para milhares de GetBuilders. Quando você cria um novo GetBuilder, na verdade você está compartilhando o estado do GetBuilder quem tem um ID do creator. Um novo estado não é criado para cada GetBuilder, o que reduz MUITO o consumo de memória RAM em aplicações grandes. Basicamente sua aplicação vai ser toda stateless, e os poucos widgets que serão Stateful (dentro do GetBuilder) vão ter um estado único, e assim atualizar um deles vai atualizar todos eles. O estado é só um.
 
-9. Get é onisciente e na maioria dos casos sabe o momento exato de tirar um controller da memória. Você não precisa se preocupar com quando descartar o controller, Get sabe o melhor momento para fazer isso. Exemplo: 
+8. Atualizar widgets sem gastar memória com isso. Get guarda somente a "ID do criador" do GetBuilder, e atualiza esse GetBuilder quando necessário. O consumo de memória do ID do GetBuilder é muito baixo mesmo para milhares de GetBuilders. Quando você cria um novo GetBuilder, na verdade você está compartilhando o estado do GetBuilder quem tem um ID do creator. Um novo estado não é criado para cada GetBuilder, o que reduz MUITO o consumo de memória RAM em aplicações grandes. Basicamente sua aplicação vai ser toda stateless, e os poucos widgets que serão Stateful (dentro do GetBuilder) vão ter um estado único, e assim atualizar um deles vai atualizar todos eles. O estado é um só.
 
-`Class A => Class B (tem o controller X) => Class C (tem o controller X)`
+9.  Get é onisciente e na maioria dos casos sabe o momento exato de tirar um controller da memória. Você não precisa se preocupar com quando descartar o controller, Get sabe o melhor momento para fazer isso. 
 
-Na classe A o controller não está ainda na memória, porque você ainda não o usou (Get carrega só quando precisa). Na classe B você usou o controller, e ele entrou na memória. Na classe C você usou o mesmo controller da classe B, Get vai compartilhar o estado do controller B com o controller C, e o mesmo controller ainda esta na memória. Se você fechar a classe C e classe B, Get vai tirar o controller X da memória automaticamente e liberar recursos, porque a classe A não está usando o controller. Se você navegar para a Classe B denovo, o controller X vai entrar na memória denovo. Se em vez de ir para a classe C você voltar para a classe A, Get vai tirar o controller da memória do mesmo jeito. Se a classe C não usar o controller, e você tirar a classe B da memória, nenhuma classe estaria usando o controller X, e novamente o controller seria descartado. A única exceção que pode atrapalhar o Get, é se
-Você remover classe N da rota de forma inesperada, e tentasse usar o controller na classe C. Nesse caso, o ID do creator do controller que estava em B seria deletado, e o Get foi programado para remover da memória todo controller que não tem nenhum ID de creator. Se é sua intenção fazer isso, adicione a config `autoRemove: false` no GetBuilder da classe B, e use `adoptID = true;` no GetBuilder da classe C. 
+Vamos analisar o seguite exemplo: 
+
+`Class A => Class B (ControllerX) => Class C (ControllerX)`
+
+* Na classe A o controller não está ainda na memória, porque você ainda não o usou (Get carrega só quando precisa). 
+
+* Na classe B você usou o controller, e ele entrou na memória. 
+
+* Na classe C você usou o mesmo controller da classe B, então o Get vai compartilhar o estado do controller B com o controller C, e o mesmo controller ainda estará na memória.
+
+* Se você fechar a classe C e classe B, Get vai tirar o controller X da memória automaticamente e liberar recursos, porque a classe A não está usando o controller.
+
+* Se você navegar para a Classe B denovo, o controller X vai entrar na memória denovo.
+
+* Se em vez de ir para a classe C você voltar para a classe A, Get vai tirar o controller da memória do mesmo jeito.
+
+* Se a classe C não usar o controller, e você tirar a classe B da memória, nenhuma classe estaria usando o controller X, e novamente o controller seria descartado.
+
+**Nota**: A única exceção que pode atrapalhar o Get, é se
+Você remover classe B da rota de forma inesperada, e tentasse usar o controller na classe C. Nesse caso, o ID do creator do controller que estava em B seria deletado, e o Get foi programado para remover da memória todo controller que não tem nenhum ID de creator. Se é sua intenção fazer isso, adicione a config `autoRemove: false` no GetBuilder da classe B, e use `adoptID = true;` no GetBuilder da classe C. 
 
 ### Uso do gerenciador de estado simples
 
@@ -322,11 +339,11 @@ GetBuilder<Controller>(
 ```
 **Feito!**
 
-* Você já aprendeu como gerenciar estados com o Get.
-* Nota: Você talvez queira uma maior organização, e não querer usar a propriedade `init`. Para isso, você pode criar uma classe e extendê-la da classe `Bindings`, e nela mencionar os controllers que serão criados dentro daquela rota. Controllers não serão criados naquele momento exato, muito pelo contrário, isso é apenas uma declaração, para que na primeira vez que vc use um Controller, Get vai saber onde procurar. Get vai continuar no formato "lazyLoad" (carrega somente quando necessário) e vai continuar descartando os Controllers quando eles não forem mais necessários. Veja pub.dev example para ver como funciona.
+Você já aprendeu como gerenciar estados com o Get.
 
+Nota: Você talvez queira uma maior organização, e não querer usar a propriedade `init`. Para isso, você pode criar uma classe e extendê-la da classe `Bindings`, e nela mencionar os controllers que serão criados dentro daquela rota. Controllers não serão criados naquele momento exato, muito pelo contrário, isso é apenas uma declaração, para que na primeira vez que vc use um Controller, Get vai saber onde procurar. Get vai continuar no formato "lazyLoad" (carrega somente quando necessário) e vai continuar descartando os Controllers quando eles não forem mais necessários. Veja pub.dev example para ver como funciona.
 
-Se você navegar por várias rotas e precisa de algum daat que estava em um outro controller previamente utilizado, você só precisa utilizar o GetBuilder novamente (sem o init):
+Se você navegar por várias rotas e precisa de algum dado que estava em um outro controller previamente utilizado, você só precisa utilizar o GetBuilder novamente (sem o init):
 
 ```dart
 class OutraClasse extends StatelessWidget {
@@ -340,9 +357,10 @@ class OutraClasse extends StatelessWidget {
       ),
     );
   }
+}
 ```
 
-Se você precisa utilizar seu controller em vários outros lugares, e fora do GetBuilder, apenas crie um getter no seu controller and consiga seu controller facilmente (ou use `Get.find<Controller>()`)
+Se você precisa utilizar seu controller em vários outros lugares, e fora do GetBuilder, apenas crie um getter no seu controller que você consegue ele facilmente (ou use `Get.find<Controller>()` )
 
 ```dart
 class Controller extends GetController {
@@ -350,7 +368,7 @@ class Controller extends GetController {
   /// Você não precisa disso. Eu recomendo usar isso apenas 
   /// porque a sintaxe é mais fácil.
   /// com o método estático: Controller.to.counter();
-  /// sem o método estático: Get.find<Contreoller>();
+  /// sem o método estático: Get.find<Controller>();
   /// Não há diferença em performance, nem efeito colateral por usar esse sintaxe. Só uma não precisa da tipage, e a outra forma a IDE vai autocompletar.
   static Controller get to => Get.find(); // adicione esta linha
 
@@ -373,13 +391,13 @@ FloatingActionButton(
 Quando você pressionar o FloatingActionButton, todos os widgets que estão escutando a variável `counter` serão atualizados automaticamente.
 
 #### Sem StatefulWidget;
-Usar StatefulWidgets significa guardar o estado de telas inteiras desnecessariamente, mesmo porque se você precisa recarregar minimamente algum widget, você vai incorporá-lo num Consumer/Observer/BlocProvider/GetBuilder, que vai ser outro StatefulWidget.
+Usar StatefulWidget's significa guardar o estado de telas inteiras desnecessariamente, mesmo porque se você precisa recarregar minimamente algum widget, você vai incorporá-lo num Consumer/Observer/BlocProvider/GetBuilder, que vai ser outro StatefulWidget.
 A classe StatefulWidget é maior que a classe StatelessWidget, o que vai alocar mais memória, e isso pode não fazer uma diferença significativa com uma ou duas classes, mas com certeza vai quando você tiver 100 delas!
+
 A não ser que você precise usar um mixin, como o `TickerProviderStateMixin`, será totalmente desnecessário usar um StatefulWidget com o Get.
 
 Você pode chamar todos os métodos de um StatefulWidget diretamente de um GetBuilder.
 Se você precisa chamar o método `initState()` ou `dispose()` por exemplo, é possível chamá-los diretamente:
-
 ```dart
 GetBuilder<Controller>(
   initState: (_) => Controller.to.fetchApi(),
@@ -398,7 +416,9 @@ void onInit() {
 ```
 * Nota: Se você quiser rodar um método no momento que o controller é chamado pela primeira vez, você NÃO PRECISA usar construtores para isso, na verdade, usando um package que é focado em performance como o Get, isso chega no limite de má prática, porque se desvia da lógica que os controllers são criados ou alocados (Se você criar uma instância desse controller, o construtor vai ser chamado imediatamente, e ele será populado antes de ser usado, ou seja, você está alocando memória e não está utilizando, o que fere os princípios desse package). Os métodos `onInit()` e `onClose()` foram criados para isso, eles serão chamados quando o controller é criado, ou usados pela primeira vez, dependendo de como você está utilizando o Get (lazyPut ou não). Se quiser, por exemplo, fazer uma chamada para sua API para popular dados, você pode esquecer do estilo antigo de usar `initState()/dispose()`, apenas comece sua chamada para a api no `onInit`, e apenas se você precisar executar algum comando como fechar stream, use o `onClose()`.
 
-O propósito desse package é precisamente te dar uma solução completa para navegação de rotas, gerenciamente de dependências e estados, usando o mínimo possível de dependências, com um alto grau de decoupling. Get envolve em todos as API de baixo e alto nível dentro de si mesmo, para ter certeza que você irá trabalhar com o mínimo possível de coupling. Nós centralizamos tudo em um único package. Dessa forma, você pode colocar somente widgets na sua view, e deixar a parte do seu time que trabalhar com a lógica de negócio livre, para que possam trabalhar sem depender de nenhum elemento da View. Isso fornece um ambiente de trabalho muito mais limpo, para que parte do seu time possa trabalhar apenas com os widgets, sem se preocupar sobre enviar dados para o controller, e outra parte do seu time trabalhe apensar com lógica de negócio, sem depender de nenhum elemento da view.
+O propósito desse package é precisamente te dar uma solução completa para navegação de rotas, gerenciamente de dependências e estados, usando o mínimo possível de dependências, com um alto grau de decoupling. Get envolve em todas as APIs de baixo e alto nível dentro de si mesmo, para ter certeza que você irá trabalhar com o mínimo possível de coupling. 
+
+Nós centralizamos tudo em um único package. Dessa forma, você pode colocar somente widgets na sua view, e o controller pode ter só lógica de negócio, sem depender de nenhum elemento da View. Isso fornece um ambiente de trabalho muito mais limpo, para que parte do seu time possa trabalhar apenas com os widgets, sem se preocupar sobre enviar dados para o controller, e outra parte se preocupe apenas com a lógica de negócio, sem depender de nenhum elemento da view.
 
 Então, para simplificar isso:
 
