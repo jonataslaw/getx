@@ -14,13 +14,13 @@ Get is an extra-light and powerful library for Flutter that will give you superp
 ```dart
 // Default Flutter navigator
 Navigator.of(context).push(
-        context,
-        MaterialPageRoute(
-           builder: (BuildContext context) { 
-            return Home();
-          },
-        ),
-      );
+  context,
+  MaterialPageRoute(
+    builder: (BuildContext context) { 
+      return Home();
+    },
+  ),
+);
 
 // Get syntax 
 Get.to(Home());
@@ -124,22 +124,22 @@ Example:
 
 // Default Flutter navigator
 Navigator.of(context).push(
-        context,
-        MaterialPageRoute(
-           builder: (BuildContext context) { 
-            return HomePage();
-          },
-        ),
-      );
+  context,
+  MaterialPageRoute(
+    builder: (BuildContext context) { 
+      return HomePage();
+    },
+  ),
+);
 
 // Get using Flutter syntax without needing context
 navigator.push(
-        MaterialPageRoute(
-           builder: (_) { 
-            return HomePage();
-          },
-        ),
-      );
+  MaterialPageRoute(
+    builder: (_) { 
+      return HomePage();
+    },
+  ),
+);
 
 // Get syntax (It is much better, but you have the right to disagree)
 Get.to(HomePage());
@@ -152,14 +152,15 @@ Get.to(HomePage());
 To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
 ```dart
 final snackBar = SnackBar(
-      content: Text('Hi!'),
-      action: SnackBarAction(
-              label: 'I am a old and ugly snackbar :(',
-              onPressed: (){}
-            ),
-          // Find the Scaffold in the widget tree and use
-          // it to show a SnackBar.
-          Scaffold.of(context).showSnackBar(snackBar);
+  content: Text('Hi!'),
+  action: SnackBarAction(
+    label: 'I am a old and ugly snackbar :(',
+    onPressed: (){}
+  ),
+);
+// Find the Scaffold in the widget tree and use
+// it to show a SnackBar.
+Scaffold.of(context).showSnackBar(snackBar);
 ```
 
 With Get:
@@ -171,16 +172,16 @@ Get.snackbar('Hi', 'i am a modern snackbar');
 With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
 
 ```dart
-  Get.snackbar(
-               "Hey i'm a Get SnackBar!", // title
-               "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
-              icon: Icon(Icons.alarm), 
-              shouldIconPulse: true,
-              onTap:(){},
-              barBlur: 20,
-              isDismissible: true,
-              duration: Duration(seconds: 3),
-            );
+Get.snackbar(
+  "Hey i'm a Get SnackBar!", // title
+  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
+  icon: Icon(Icons.alarm), 
+  shouldIconPulse: true,
+  onTap:(){},
+  barBlur: 20,
+  isDismissible: true,
+  duration: Duration(seconds: 3),
+);
 
 
   ////////// ALL FEATURES //////////
@@ -233,9 +234,10 @@ Get.dialog(YourDialogWidget());
 To open default dialog:
 
 ```dart
- Get.defaultDialog(
-              onConfirm: () => print("Ok"),
-              middleText: "Dialog made in 3 lines of code");
+Get.defaultDialog(
+  onConfirm: () => print("Ok"),
+  middleText: "Dialog made in 3 lines of code"
+);
 ```
 You can also use Get.generalDialog instead of showGeneralDialog.
 
@@ -248,24 +250,23 @@ Get.bottomSheet is like showModalBottomSheet, but don't need of context.
 
 ```dart
 Get.bottomSheet(
-     Container(
-            child: Wrap(
-            children: <Widget>[
-            ListTile(
-            leading: Icon(Icons.music_note),
-            title: Text('Music'),
-            onTap: () => {}          
-          ),
-            ListTile(
-            leading: Icon(Icons.videocam),
-            title: Text('Video'),
-            onTap: () => {},          
-          ),
-         ],
+  Container(
+    child: Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.music_note),
+          title: Text('Music'),
+          onTap: () => {}
         ),
-       );
-      }
-    );
+        ListTile(
+          leading: Icon(Icons.videocam),
+          title: Text('Video'),
+          onTap: () => {},
+        ),
+      ],
+    ),
+  );
+);
 ```
 
 ## Simple State Manager
@@ -312,10 +313,11 @@ class Controller extends GetController {
 }
 // On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
 GetBuilder<Controller>(
-    init: Controller(), // INIT IT ONLY THE FIRST TIME
-    builder: (_) => Text(
-              '${_.counter}',
-              )),
+  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  builder: (_) => Text(
+    '${_.counter}',
+  ),
+)
 //Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 **Done!**
@@ -327,7 +329,7 @@ GetBuilder<Controller>(
 If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
 
 ```dart
-class OtherClasse extends StatelessWidget {
+class OtherClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -361,11 +363,11 @@ class Controller extends GetController {
 And then you can access your controller directly, that way:
 ```dart
 FloatingActionButton(
-        onPressed:(){
-         Controller.to.increment(), 
-        } // This is incredibly simple!
-        child: Text("${Controller.to.counter}"),
-      ),
+  onPressed: () {
+    Controller.to.increment(), 
+  } // This is incredibly simple!
+  child: Text("${Controller.to.counter}"),
+),
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
 
@@ -379,10 +381,10 @@ If you need to call initState() or dispose() method for example, you can call th
 
 ```dart
 GetBuilder<Controller>(
-          initState(_) => Controller.to.fetchApi(),
-          dispose(_) => Controller.to.closeStreams(),
-          builder: (s) => Text('${s.username}'),
-        ),
+  initState: (_) => Controller.to.fetchApi(),
+  dispose: (_) => Controller.to.closeStreams(),
+  builder: (s) => Text('${s.username}'),
+),
 ```
 
 A much better approach than this is to use the onInit() and onClose() method directly from your controller.
@@ -406,17 +408,17 @@ Do not call a dispose method inside GetController, it will not do anything, reme
 
 ```dart
 class Controller extends GetController {
-StreamController<User> user = StreamController<User>();
-StreamController<String> name = StreamController<String>();
+  StreamController<User> user = StreamController<User>();
+  StreamController<String> name = StreamController<String>();
 
-/// close stream = onClose method, not dispose.
-@override
-void onClose() {
-  user.close();
-  name.close();
-  super.onClose();
+  /// close stream = onClose method, not dispose.
+  @override
+  void onClose() {
+    user.close();
+    name.close();
+    super.onClose();
+  }
 }
-
 ```
 Controller life cycle:
 - onInit() where it is created.
@@ -430,11 +432,12 @@ Controller life cycle:
 You can use Controller instance directly on GetBuilder value:
 
 ```dart
-GetBuilder<Controller>(  
-    init: Controller(),
-    builder: (value) => Text(
-              '${value.counter}', //here
-              )),
+GetBuilder<Controller>(
+  init: Controller(),
+  builder: (value) => Text(
+    '${value.counter}', //here
+  ),
+),
 ```
 You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
 
@@ -445,35 +448,38 @@ class Controller extends GetController {
 }
 // on stateful/stateless class
 GetBuilder<Controller>(  
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Controller.to.counter}', //here
-              )),
+  init: Controller(), // use it only first time on each controller
+  builder: (_) => Text(
+    '${Controller.to.counter}', //here
+  )
+),
+```
 or 
-
+```dart
 class Controller extends GetController {
  // static Controller get to => Get.find(); // with no static get
 [...]
 }
 // on stateful/stateless class
 GetBuilder<Controller>(  
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Get.find<Controller>().counter}', //here
-              )),
+  init: Controller(), // use it only first time on each controller
+  builder: (_) => Text(
+    '${Get.find<Controller>().counter}', //here
+  ),
+),
 ```
 
 - You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
 
 ```dart
-
 Controller controller = Controller();
 [...]
 GetBuilder( // you dont need to type on this way
-    init: controller, //here
-    builder: (_) => Text(
-              '${controller.counter}', // here
-              )),
+  init: controller, //here
+  builder: (_) => Text(
+    '${controller.counter}', // here
+  ),
+),
 
 ```
 This approach is not recommended, as you will have to manually dispose of your controllers, close your streams manually, and literally give up one of the great benefits of this library, which is intelligent memory control. But if you trust your potential, go ahead!
@@ -481,11 +487,12 @@ This approach is not recommended, as you will have to manually dispose of your c
 If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
 ```dart
 GetBuilder<Controller>( 
-    id: 'text' 
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Get.find<Controller>().counter}', //here
-              )),
+  id: 'text' 
+  init: Controller(), // use it only first time on each controller
+  builder: (_) => Text(
+    '${Get.find<Controller>().counter}', //here
+  ),
+),
 ```
 And update it this form:
 ```dart
@@ -522,24 +529,24 @@ int get sum => count1.value + count2.value;
 ```
 
 ```dart
- GetX<Controller>(
-              builder: (_) {
-                print("count 1 rebuild");
-                return Text('${_.count1.value}');
-              },
-            ),
-            GetX<Controller>(
-              builder: (_) {
-                print("count 2 rebuild");
-                return Text('${_.count2.value}');
-              },
-            ),
-            GetX<Controller>(
-              builder: (_) {
-                print("count 3 rebuild");
-                return Text('${_.sum}');
-              },
-            ),
+GetX<Controller>(
+  builder: (_) {
+    print("count 1 rebuild");
+    return Text('${_.count1.value}');
+  },
+),
+GetX<Controller>(
+  builder: (_) {
+    print("count 2 rebuild");
+    return Text('${_.count2.value}');
+  },
+),
+GetX<Controller>(
+  builder: (_) {
+    print("count 3 rebuild");
+    return Text('${_.sum}');
+  },
+),
 ```
 
 If we increment the number of count 1, only count 1 and count 3 are reconstructed, because count 1 now has a value of 1, and 1 + 0 = 1, changing the sum value.
@@ -615,8 +622,9 @@ You can access list.length, or list.value.length. Most of the time, both ways wi
 final list = List<User>().obs;
 ```
 ```dart
-ListView.builder (
-itemCount: list.value.lenght
+ListView.builder(
+  itemCount: list.value.lenght
+)
 ```
 or else create a "get" method for it and abandon "value" for life. example:
 
