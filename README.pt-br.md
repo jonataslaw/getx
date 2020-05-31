@@ -32,22 +32,29 @@ A navegação convencional do Flutter tem uma grande quantidade de boilerplate (
 Somando a isso, quando uma rota é enviada, o `MaterialApp` inteiro pode ser reconstruído causando travamentos. Isso não acontece com o Get.
 Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar seu código dos boilerplates, aumentando sua produtividade, e eliminando os bugs de reconstrução da sua aplicação.
 
+- [Começando](#começando)
+    - [Você pode contribuir no projeto de várias formas:](#você-pode-contribuir-no-projeto-de-várias-formas)
+- [Como usar?](#como-usar)
+- [Navegação sem rotas nomeadas](#navegação-sem-rotas-nomeadas)
+  - [SnackBars](#snackbars)
+  - [Dialogs](#dialogs)
+  - [BottomSheets](#bottomsheets)
+- [Gerenciador de estado simples](#gerenciador-de-estado-simples)
+  - [Uso do gerenciador de estado simples](#uso-do-gerenciador-de-estado-simples)
+    - [Sem StatefulWidget;](#sem-statefulwidget)
+      - [Formas de uso:](#formas-de-uso)
+- [Reactive State Manager - GetX](#reactive-state-manager---getx)
+- [Simple Instance Manager](#simple-instance-manager)
+- [Navigate with named routes:](#navigate-with-named-routes)
+  - [Send data to named Routes:](#send-data-to-named-routes)
+    - [Dynamic urls links](#dynamic-urls-links)
+    - [Middleware](#middleware)
+  - [Change Theme](#change-theme)
+  - [Optional Global Settings](#optional-global-settings)
+  - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
+  - [Nested Navigators](#nested-navigators)
 
-- **[Como usar?](#como-usar)**
-- **[Navegação sem rotas nomeadas](#navegação-sem-rotas-nomeadas)**
-- **[SnackBars](#SnackBars)**
-- **[Dialogs](#Dialogs)**
-- **[BottomSheets](#BottomSheets)**
-- **[Simple State Manager](#Simple-State-Manager)**
-- **[Reactive State Manager](#Reactive-State-Manager)**
-- **[Simple Instance Manager](#Simple-Instance-Manager)**
-- **[Navigate with named routes](#Navigate-with-named-routes)**
-- **[Send data to named Routes](#Send-data-to-named-Routes)**
-- **[Dynamic urls links](#Dynamic-urls-links)**
-- **[Middleware](#Middleware)**
-- **[Optional Global Settings](#Optional-Global-Settings)**
-- **[Other Advanced APIs and Manual configurations](#Other-Advanced-APIs-and-Manual-configurations)**
-- **[Nested Navigators](#Nested-Navigators)**
+
 
 
 #### Você pode contribuir no projeto de várias formas:
@@ -489,35 +496,37 @@ GetBuilder( // não precisa digitar desse jeito
 
 Essa abordagem não é recomendade, uma vez que você vai precisar descartar os controllers manualmente, fechar seus stream manualmente, e literalmente abandonar um dos grandes benefícios desse package, que é controle de memória inteligente. Mas se você confia no seu potencial, vai em frente!
 
-If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
+Se você quiser refinar o controle de atualização de widgets do GetBuilder, você pode assinalar a ele IDs únicas
 ```dart
-GetBuilder<Controller>( 
-    id: 'text' 
-    init: Controller(), // use it only first time on each controller
-    builder: (_) => Text(
-              '${Get.find<Controller>().counter}', //here
-              )),
+GetBuilder<Controller>(
+  id: 'text'
+  init: Controller(), // use somente uma vez por controller, não se esqueça
+  builder: (_) => Text(
+    '${Get.find<Controller>().counter}', //aqui
+  )
+),
 ```
-And update it this form:
+E atualizá-los dessa forma:
 ```dart
 update(this,['text']);
 ```
-You can also impose conditions for the update:
 
+Você também pode impor condições para o update acontecer:
 ```dart
 update(this,['text'], counter < 10);
 ```
 
-GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this. However, there are situations where you want only the widget where a certain variable has been changed to be rebuilt, and this is what GetX does with a mastery never seen before.
+GetX faz isso automaticamente e somente reconstrói o widget que usa a exata variável que foi alterada. Se você alterar o valor davariável para o mesmo valor que ela já era e isso não sugira uma mudança de estado, GetX não vai reconstruir esse widget, economizando memória e ciclos de CPU (Ex: 3 está sendo mostrado na tela, e você muda a variável para ter o valor 3 denovo. Na maioria dos gerenciadores de estado, isso vai causar uma reconstrução do widget, mas com o GetX o widget só vai reconstruir se de fato o estado mudou).
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+GetBuilder é focado precisamente em múltiplos controles de estados. Imagine que você adicionou 30 produtos ao carrinho, você clica pra deletar um deles, e ao mesmo tempos a lista é atualizada, o preço é atualizado e o pequeno círculo mostrando a quantidade de produtos é atualizado. Esse tipo de abordagem faz o GetBuilder excelente, porque ele agupa estados e muda todos eles de uma vez sem nenhuma "lógica computacional" pra isso. GetBuilder foi criado com esse tipo de situação em mente, já que pra mudanças de estados simples, você pode simplesmente usar o `setState()`, e você não vai precisar de um gerenciador de estado para isso. Porém, há situações onde você quer somente que o widget onde uma certa variável mudou seja reconstruído, e isso é o que o GetX faz com uma maestria nunca vista antes.
+
+Dessa forma, se você quiser controlar individualmente, você pode assinalar ID's para isso, ou usar GetX. Isso é com você, apenas lembre-se que quando mais "widgets individuais" você tiver, mais a performance do GetX vai se sobressair. Mas o GetBuilder vai ser superior quando há multiplas mudanças de estado.
 
 You can use both in any situation, but if you want to tune their application to the maximum possible performance, I would say that: if your variables are changed at different times, use GetX, because there is no competition for it when the subject is to rebuild only what is necessary, if you do not need unique IDs, because all your variables will be changed when you perform an action, use GetBuilder, because it is a simple state updater in blocks, made in a few lines of code, to make just what he promises to do: update state in blocks. There is no way to compare RAM, CPU, or anything else from a giant state manager to a simple StatefulWidget (like GetBuilder) that is updated when you call update(this). It was done in a simple way, to have the least computational logic involved, just to fulfill a single purpose and spend the minimum resources possible for that purpose.
 If you want a powerful state manager, you can go without fear to GetX. It does not work with variables, but flows, everything in it is streams under the hood. You can use rxDart in conjunction with it, because everything is stream, you can hear the event of each "variable", because everything in it is stream, it is literally BLoC, easier than MobX, and without code generator or decorations .
 
 
-## Reactive State Manager
+## Reactive State Manager - GetX
 
 If you want power, Get gives you the most advanced state manager you could ever have.
 GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.
