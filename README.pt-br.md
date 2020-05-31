@@ -299,7 +299,7 @@ Que melhoras na performance o Get traz?
 Na classe A o controller não está ainda na memória, porque você ainda não o usou (Get carrega só quando precisa). Na classe B você usou o controller, e ele entrou na memória. Na classe C você usou o mesmo controller da classe B, Get vai compartilhar o estado do controller B com o controller C, e o mesmo controller ainda esta na memória. Se você fechar a classe C e classe B, Get vai tirar o controller X da memória automaticamente e liberar recursos, porque a classe A não está usando o controller. Se você navegar para a Classe B denovo, o controller X vai entrar na memória denovo. Se em vez de ir para a classe C você voltar para a classe A, Get vai tirar o controller da memória do mesmo jeito. Se a classe C não usar o controller, e você tirar a classe B da memória, nenhuma classe estaria usando o controller X, e novamente o controller seria descartado. A única exceção que pode atrapalhar o Get, é se
 Você remover classe N da rota de forma inesperada, e tentasse usar o controller na classe C. Nesse caso, o ID do creator do controller que estava em B seria deletado, e o Get foi programado para remover da memória todo controller que não tem nenhum ID de creator. Se é sua intenção fazer isso, adicione a config `autoRemove: false` no GetBuilder da classe B, e use `adoptID = true;` no GetBuilder da classe C. 
 
-### Simple state manager usage
+### Uso do gerenciador de estado simples
 
 ```dart
 // Crie a classe Controller e entenda ela do GetController 
@@ -319,16 +319,16 @@ GetBuilder<Controller>(
 ),
 // Inicialize seu controller somente uma vez. Na segunda vez que você for usar  GetBuilder para o mesmo controller, não Inicialize denovo. Seu controller será automaticamente removido da memória. Você não precisa se preocupar com isso, Get vai fazer isso automaticamente, apenas tenha certeza que você não vai inicializar o mesmo controller duas vezes. 
 ```
-**Done!**
-- You have already learned how to manage states with Get.
+**Feito!**
 
-- Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+* Você já aprendeu como gerenciar estados com o Get.
+* Nota: Você talvez queira uma maior organização, e não querer usar a propriedade `init`. Para isso, você pode criar uma classe e extendê-la da classe `Bindings`, e nela mencionar os controllers que serão criados dentro daquela rota. Controllers não serão criados naquele momento exato, muito pelo contrário, isso é apenas uma declaração, para que na primeira vez que vc use um Controller, Get vai saber onde procurar. Get vai continuar no formato "lazyLoad" (carrega somente quando necessário) e vai continuar descartando os Controllers quando eles não forem mais necessários. Veja pub.dev example para ver como funciona.
 
 
-If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
+Se você navegar por várias rotas e precisa de algum daat que estava em um outro controller previamente utilizado, você só precisa utilizar o GetBuilder novamente (sem o init):
 
 ```dart
-class OtherClasse extends StatelessWidget {
+class OutraClasse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -339,18 +339,19 @@ class OtherClasse extends StatelessWidget {
       ),
     );
   }
-
 ```
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
+
+Se você precisa utilizar seu controller em vários outros lugares, e fora do GetBuilder, apenas crie um getter no seu controller and consiga seu controller facilmente (ou use `Get.find<Controller>()`)
 
 ```dart
 class Controller extends GetController {
 
-  /// You do not need that. I recommend using it just for ease of syntax.
-  /// with static method: Controller.to.counter();
-  /// with no static method: Get.find<Controller>().counter();
-  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other the IDE will autocomplete it.
-  static Controller get to => Get.find(); // add this line 
+  /// Você não precisa disso. Eu recomendo usar isso apenas 
+  /// porque a sintaxe é mais fácil.
+  /// com o método estático: Controller.to.counter();
+  /// sem o método estático: Get.find<Contreoller>();
+  /// Não há diferença em performance, nem efeito colateral por usar esse sintaxe. Só uma não precisa da tipage, e a outra forma a IDE vai autocompletar.
+  static Controller get to => Get.find(); // adicione esta linha
 
   int counter = 0;
   void increment() {
@@ -359,31 +360,31 @@ class Controller extends GetController {
   }
 }
 ```
-And then you can access your controller directly, that way:
+E então você pode acessar seu controller diretamente, desse jeito:
 ```dart
 FloatingActionButton(
-        onPressed:(){
-         Controller.to.increment(), 
-        } // This is incredibly simple!
-        child: Text("${Controller.to.counter}"),
-      ),
+  onPressed:(){
+    Controller.to.increment(), 
+  } // Isso é incrivelmente simples!
+  child: Text("${Controller.to.counter}"),
+),
 ```
-When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+Quando você pressionar o FloatingActionButton, todos os widgets que estão escutando a variável `counter` serão atualizados automaticamente.
 
-#### No StatefulWidget:
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder, which will be another StatefulWidget.
-The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
-Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get. 
+#### Sem StatefulWidget;
+Usar StatefulWidgets significa guardar o estado de telas inteiras desnecessariamente, mesmo porque se você precisa recarregar minimamente algum widget, você vai incorporá-lo num Consumer/Observer/BlocProvider/GetBuilder, que vai ser outro StatefulWidget.
+A classe StatefulWidget é maior que a classe StatelessWidget, o que vai alocar mais memória, e isso pode não fazer uma diferença significativa com uma ou duas classes, mas com certeza vai quando você tiver 100 delas!
+A não ser que você precise usar um mixin, como o `TickerProviderStateMixin`, será totalmente desnecessário usar um StatefulWidget com o Get.
 
-You can call all methods of a StatefulWidget directly from a GetBuilder.
-If you need to call initState() or dispose() method for example, you can call them directly;
+Você pode chamar todos os métodos de um StatefulWidget diretamente de um GetBuilder.
+Se você precisa chamar o método `initState()` ou `dispose()` por exemplo, é possível chamá-los diretamente:
 
 ```dart
 GetBuilder<Controller>(
-          initState(_) => Controller.to.fetchApi(),
-          dispose(_) => Controller.to.closeStreams(),
-          builder: (s) => Text('${s.username}'),
-        ),
+  initState: (_) => Controller.to.fetchApi(),
+  dispose: (_) => Controller.to.closeStreams(),
+  builder: (s) => Text('${s.username}'),
+),
 ```
 
 A much better approach than this is to use the onInit() and onClose() method directly from your controller.
