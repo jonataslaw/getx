@@ -513,7 +513,7 @@ You can use both in any situation, but if you want to tune their application to 
 If you want a powerful state manager, you can go without fear to GetX. It does not work with variables, but flows, everything in it is streams under the hood. You can use rxDart in conjunction with it, because everything is stream, you can hear the event of each "variable", because everything in it is stream, it is literally BLoC, easier than MobX, and without code generator or decorations .
 
 
-## Reactive State Manager
+## Reactive State Manager - GetX
 
 If you want power, Get gives you the most advanced state manager you could ever have.
 GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.

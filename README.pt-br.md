@@ -9,14 +9,14 @@
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
 
-Get é uma biblioteca poderosa e extra-leve para Flutter que vai te dar superpoderes e aumentar sua produtividade. Navegue sem `context`, abre dialogs, snackbars ou bottomsheets de qualquer lugar do código, gerencie estados e injete dependências de uma forma simples e prática! Get é seguro, estável, atualizado e oferece uma enorge gama de APIs que não estão presentes no framework padrão.
+Get é uma biblioteca poderosa e extra-leve para Flutter que vai te dar superpoderes e aumentar sua produtividade. Navegue sem precisar do `context`, abra `Dialog`s, `Snackbar`s ou `BottomSheet`s de qualquer lugar no código, gerencie estados e injete dependências de uma forma simples e prática! Get é seguro, estável, atualizado e oferece uma enorme gama de APIs que não estão presentes no framework padrão.
 
 ```dart
-// Flutter navigator padrão
+// Navigator padrão do Flutter
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
-      builder: (BuildContext context) {
+    builder: (BuildContext context) {
       return Home();
     },
   ),
@@ -28,8 +28,8 @@ Get.to(Home());
 
 ## Começando
 
-A navegação convencional do Flutter tem uma grande quantidade de boilerplate (muito código que se repete demais), requer o `context` para navegar entre telas, abrir dialogs e usar snackbars no framework é entediante.
-Somando a isso, quando uma rota é enviada, o `MaterialApp` inteiro pode ser reconstruído causando travamentos. Isso não acontece com o Get.
+A navegação convencional do Flutter tem uma grande quantidade de boilerplate (código que se repete demais), requer o `context` para navegar entre telas/rotas, abrir dialogs e usar snackbars no framework, e é entediante.
+Somando a isso, quando uma rota é enviada (uma tela carregada), o `MaterialApp` inteiro pode ser reconstruído podendo causando travamentos. Isso não acontece com o Get.
 Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar seu código dos boilerplates, aumentando sua produtividade, e eliminando os bugs de reconstrução da sua aplicação.
 
 - [Começando](#começando)
@@ -59,9 +59,9 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
 
 #### Você pode contribuir no projeto de várias formas:
 - Ajudando a traduzir o README para outras linguagens.
-- Adicionando mais documentação ao REAME (nem metado das funcionalidade do Get foram documentadas ainda).
-- Fazendo artigos/videos sobre o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
-- Fazendo PRs (Pull-Requests) para código/testes.
+- Adicionando mais documentação ao README (até o momento, nem metade das funcionalidades do Get foram documentadas).
+- Fazendo artigos/vídeos sobre o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
+- Fazendo PR's (Pull-Requests) para código/testes.
 - Incluindo novas funcionalidades.
 
 Qualquer contribuição é bem-vinda!
@@ -73,9 +73,9 @@ Qualquer contribuição é bem-vinda!
 (procure pela versão mais recente em pub.dev) -->
 
 Adicione Get ao seu arquivo pubspec.yaml
-<!-- according to the version of Flutter you are using. -->
- 
-Troque seu `MaterialApp` por `GetMaterialApp` e aproveite!
+<!-- de acordo com a versão do flutter que você estiver usando -->
+
+Troque seu `MaterialApp()` por `GetMaterialApp()` e aproveite!
 ```dart
 import 'package:get/get.dart';
 
@@ -85,31 +85,29 @@ GetMaterialApp( // Before: MaterialApp(
 ```
 
 ## Navegação sem rotas nomeadas
-Para navegar para uma próxima tela:
 
+Para navegar para uma próxima tela:
 ```dart
 Get.to(ProximaTela());
 ```
 
 Para retornar para a tela anterior:
-
 ```dart
 Get.back();
 ```
 
 Para ir para a próxima tela e NÃO deixar opção para voltar para a tela anterior (bom para SplashScreens, telas de login e etc.):
-
 ```dart
 Get.off(ProximaTela());
 ```
 
-Para ir para a próxima tela e cancelar todas as rotas anteriores (útil em telas de carrinho, votações e testes):
+Para ir para a próxima tela e cancelar todas as rotas anteriores (útil em telas de carrinho, votações ou testes):
 
 ```dart
 Get.offAll(ProximaTela());
 ```
 
-Para navegar para a próxima rota, e recebar ou atualizar dados assim que retornar da rota:
+Para navegar para a próxima rota, e receber ou atualizar dados assim que retornar da rota:
 ```dart
 var dados = await Get.to(Pagamento());
 ```
@@ -125,16 +123,15 @@ if (dados == 'sucesso') fazerQualquerCoisa();
 ```
 
 Não quer aprender nossa sintaxe?
-Apenas mude o `Navigator` (letra maiúscula) para `navigator` (letra minúscula), e você terá todas as funcionalidades da navigation padrão, sem precisar usar `context`
+Apenas mude o `Navigator` (letra maiúscula) para `navigator` (letra minúscula), e você terá todas as funcionalidades de navegação padrão, sem precisar usar `context`
 
 Exemplo:
-
 ```dart
 // Navigator padrão do Flutter
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
-      builder: (BuildContext context) {
+    builder: (BuildContext context) {
       return HomePage();
     },
   ),
@@ -155,7 +152,7 @@ Get.to(HomePage());
 
 ### SnackBars
 
-Para ter um `SnackBar` simples no Flutter, você precisa pegar o `context` do Scaffold, ou você precisa de uma `GlobalKey` atrelada ao seu Scaffold
+Para ter um `SnackBar` simples no Flutter, você precisa pegar o `context` do Scaffold, ou você precisa de uma `GlobalKey` atrelada ao seu Scaffold.
 ```dart
 final snackBar = SnackBar(
   content: Text('Olá!'),
@@ -170,12 +167,11 @@ Scaffold.of(context).showSnackBar(snackBar);
 ```
 
 Com o Get:
-
 ```dart
 Get.snackbar('Olá', 'eu sou uma SnackBar moderna e linda!');
 ```
 
-Com Get, tudo que você precisa fazer é chamar `Get.snackbar` de qualquer lugar no seu código, ou custumizá-lo da forma que quiser!
+Com Get, tudo que você precisa fazer é chamar `Get.snackbar()` de qualquer lugar no seu código, e/ou customizá-lo da forma que quiser!
 
 ```dart
 Get.snackbar(
@@ -227,18 +223,16 @@ Get.snackbar(
   //     Form userInputForm
   ///////////////////////////////////
 ```
-Se você prefere a SnackBar tradicional, ou quer customizar por completo, incluindo até adicionar apenas uma linha (Get.snackbar usa um `title` e `message` obrigatórios), você pode usar `Get.rawSnackbar();` que fornece a RAW API na qual Get.snackbar foi contruído.
+Se você prefere a SnackBar tradicional, ou quer customizar por completo, como por exemplo fazer ele ter só uma linha (`Get.snackbar` tem os parâmetros `title` e `message` obrigatórios), você pode usar `Get.rawSnackbar();` que fornece a RAW API na qual `Get.snackbar` foi contruído.
 
 ### Dialogs
 
 Para abrir um dialog:
-
 ```dart
-Get.dialog(SeuDialogWidget());
+Get.dialog(SeuWidgetDialog());
 ```
 
 Para abrir um dialog padrão:
-
 ```dart
 Get.defaultDialog(
   onConfirm: () => print("Ok"),
@@ -522,11 +516,8 @@ GetBuilder é focado precisamente em múltiplos controles de estados. Imagine qu
 
 Dessa forma, se você quiser controlar individualmente, você pode assinalar ID's para isso, ou usar GetX. Isso é com você, apenas lembre-se que quando mais "widgets individuais" você tiver, mais a performance do GetX vai se sobressair. Mas o GetBuilder vai ser superior quando há multiplas mudanças de estado.
 
-Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX
-
-You can use both in any situation, but if you want to tune their application to the maximum possible performance, I would say that: if your variables are changed at different times, use GetX, because there is no competition for it when the subject is to rebuild only what is necessary, if you do not need unique IDs, because all your variables will be changed when you perform an action, use GetBuilder, because it is a simple state updater in blocks, made in a few lines of code, to make just what he promises to do: update state in blocks. There is no way to compare RAM, CPU, or anything else from a giant state manager to a simple StatefulWidget (like GetBuilder) that is updated when you call update(this). It was done in a simple way, to have the least computational logic involved, just to fulfill a single purpose and spend the minimum resources possible for that purpose.
-If you want a powerful state manager, you can go without fear to GetX. It does not work with variables, but flows, everything in it is streams under the hood. You can use rxDart in conjunction with it, because everything is stream, you can hear the event of each "variable", because everything in it is stream, it is literally BLoC, easier than MobX, and without code generator or decorations .
-
+Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX, porque não tem competição para isso quando o widget é pra reconstruir somente o que é necessário. Se você não precisa de IDs únicas, porque todas as suas variáveis serão alteradas quando você fazer uma ação, use GetBuilder, porque é um atualizador de estado em blocos simples, feito com apenas algumas linhas de código, para fazer justamente o que ele promete fazer: atualizar estado em blocos. Não há forma de comparar RAM, CPU, etc de um gerenciador de estado gigante com um simples StatefulWidget (como GetBuilder) que é atualizado quando você chama `update(this)`. Foi feito de uma forma simples, para ter o mínimo de lógica computacional, somente para cumprir um único papel e gastar o mínimo de recursos possível.
+Se você quer um gerenciador de estados poderoso, você pode ir sem medo para o GetX. Ele não funciona com variáveis, mas sim fluxos. Tudo está em seus streams por baixo dos panos. Você pode usar `rxDart` em conjunto com ele, porque tudo é um stream, você pode ouvir o evento de cada "variável", porque tudo é um stream, é literalmente BLoc, só que mais fácil que MobX e sem code generators ou decorations.
 
 ## Reactive State Manager - GetX
 
