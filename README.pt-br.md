@@ -44,8 +44,8 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
     - [Sem StatefulWidget;](#sem-statefulwidget)
       - [Formas de uso:](#formas-de-uso)
 - [Reactive State Manager - GetX](#reactive-state-manager---getx)
-- [Simple Instance Manager](#simple-instance-manager)
-- [Navigate with named routes:](#navigate-with-named-routes)
+- [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
+- [Navegar com rotas nomeadas](#navegar-com-rotas-nomeadas)
   - [Send data to named Routes:](#send-data-to-named-routes)
     - [Dynamic urls links](#dynamic-urls-links)
     - [Middleware](#middleware)
@@ -676,71 +676,76 @@ Se você tem um projeto absurdamente grande, e code generator é um problema par
 
 Obviamente, se alguém quiser contribuir para o projeto e criar um code generator, or algo similar, eu vou linkar o README como uma alternativa, minha necessidade não é a necessidade de todos os devs, mas por agora eu digo: há boas solução que já fazem isso, como MobX.
 
-## Simple Instance Manager
-Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+## Gerenciamento de dependências simples
+
+Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciado de dependência simpels e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
 
 ```dart
-Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+Controller controller = Get.put(Controller()); // Em vez de Controller controller = Controller();
 ```
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
 
+Em vez de instanciar sua classe dentro da classe que você está usando, você está instanciando ele dentro da instância do Get, que vai fazer ele ficar disponível por todo o App
+
+Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
 ```dart
-controller.fetchApi();// Rather Controller controller = Controller();
+controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador; você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
 
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+// Sim, parece Magia, o Get irá descobrir qual é seu controller, e irá te entregar.
+// Você pode ter 1 milhão de controllers instanciados, o Get sempre te entregará o controller correto.
+// Apenas se lembre de Tipar seu controller, final controller = Get.find(); por exemplo, não irá funcionar.
 ```
-And then you will be able to recover your controller data that was obtained back there:
 
+E então você será capaz de recuperar os dados do seu controller que foram obtidos anteriormente:
 ```dart
 Text(controller.textFromApi);
 ```
-
-Looking for lazy loading? You can declare all your controllers, and it will be called only when someone needs it. You can do this with:
+Procurando por `lazyLoading`?(carregar somente quando for usar) Você pode declarar todos os seus controllers, e eles só vão ser inicializados e chamados quando alguém precisar. Você pode fazer isso
 ```dart
 Get.lazyPut<Service>(()=> ApiMock());
-/// ApiMock will only be called when someone uses Get.find<Service> for the first time
+/// ApiMock só sera chamado quando alguém usar o Get.find<Service> pela primeira vez
 ```
 
-To remove a instance of Get:
+Para remover a instância do Get:
 ```dart
 Get.delete<Controller>();
 ```
 
+## Navegar com rotas nomeadas
+- Se você prefere navegar por rotas nomeadas, Get também dá suporte a isso:
 
-## Navigate with named routes:
-- If you prefer to navigate by namedRoutes, Get also supports this.
-
-To navigate to nextScreen
+Para navegar para uma nova tela
 ```dart
 Get.toNamed("/NextScreen");
 ```
-To navigate and remove the previous screen from the tree.
+
+Para navegar para uma tela sem a opção de voltar para a rota atual.
 ```dart
 Get.offNamed("/NextScreen");
 ```
-To navigate and remove all previous screens from the tree.
+
+Para navegar para uma nova tela e remover todas rotas anteriores da stack
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
-
+Para definir rotas, use o `GetMaterialApp`:
 ```dart
 void main() {
-  runApp(GetMaterialApp(
-    initialRoute: '/',
-    namedRoutes: {
-      '/': GetRoute(page: MyHomePage()),
-      '/second': GetRoute(page: Second()),
-      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-    },
-  ));
+  runApp(
+    GetMaterialApp(
+      initialRoute: '/',
+      namedRoutes: {
+        '/': GetRoute(page: MyHomePage()),
+        '/second': GetRoute(page: Second()),
+        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      },
+    )
+  );
 }
 ```
 
