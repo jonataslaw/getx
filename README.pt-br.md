@@ -386,8 +386,7 @@ GetBuilder<Controller>(
   builder: (s) => Text('${s.username}'),
 ),
 ```
-
-A much better approach than this is to use the onInit() and onClose() method directly from your controller.
+Uma abordagem muito melhor que isso é usar os métodos `onInit()` e `onClose()` diretamente do seu controller.
 
 ```dart
 @override
@@ -396,29 +395,32 @@ void onInit() {
   super.onInit();
 }
 ```
+* Nota: Se você quiser rodar um método no momento que o controller é chamado pela primeira vez, você NÃO PRECISA usar construtores para isso, na verdade, usando um package que é focado em performance como o Get, isso chega no limite de má prática, porque se desvia da lógica que os controllers são criados ou alocados (Se você criar uma instância desse controller, o construtor vai ser chamado imediatamente, e ele será populado antes de ser usado, ou seja, você está alocando memória e não está utilizando, o que fere os princípios desse package). Os métodos `onInit()` e `onClose()` foram criados para isso, eles serão chamados quando o controller é criado, ou usados pela primeira vez, dependendo de como você está utilizando o Get (lazyPut ou não). Se quiser, por exemplo, fazer uma chamada para sua API para popular dados, você pode esquecer do estilo antigo de usar `initState()/dispose()`, apenas comece sua chamada para a api no `onInit`, e apenas se você precisar executar algum comando como fechar stream, use o `onClose()`.
 
-- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
-The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
+O propósito desse package é precisamente te dar uma solução completa para navegação de rotas, gerenciamente de dependências e estados, usando o mínimo possível de dependências, com um alto grau de decoupling. Get envolve em todos as API de baixo e alto nível dentro de si mesmo, para ter certeza que você irá trabalhar com o mínimo possível de coupling. Nós centralizamos tudo em um único package. Dessa forma, você pode colocar somente widgets na sua view, e deixar a parte do seu time que trabalhar com a lógica de negócio livre, para que possam trabalhar sem depender de nenhum elemento da View. Isso fornece um ambiente de trabalho muito mais limpo, para que parte do seu time possa trabalhar apenas com os widgets, sem se preocupar sobre enviar dados para o controller, e outra parte do seu time trabalhe apensar com lógica de negócio, sem depender de nenhum elemento da view.
 
-So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
-You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
+Então, para simplificar isso:
 
-Do not call a dispose method inside GetController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+Você não precisa chamar métodos no `initState()` e enviá-los para seu controller via parâmetros, nem precisa do construtor do controller pra isso, você possui o método `onInit()` que é chamado no momento certo para você inicializar seus services.
 
+Você não precisa chamar o método `dispose()`, você tem o método `onClose()` que vai ser chamado no momento exato quando seu controller não for mais necessário e será removido da memória. Dessa forma, você pode deixar views somente para os widgets, e o controller só para as regras de negócio.
+
+Não chame o método `dispose()` dentro do GetController, não vai fazer nada, lembre-se que o controller não é um widget, você não deveria usar o dispose lá, e esse método será automatacimente e inteligentemente removido da memória pelo Get. Se você usou algum stream no controller e quer fechá-lo, apensar insira o método para fechar os stream dentro do método `onClose()`.
+
+Exemplo:
 ```dart
 class Controller extends GetController {
-StreamController<User> user = StreamController<User>();
-StreamController<String> name = StreamController<String>();
+  var user = StreamController<User>();
+  var name = StreamController<String>();
 
-/// close stream = onClose method, not dispose.
-@override
-void onClose() {
-  user.close();
-  name.close();
-  super.onClose();
+  /// close stream = onClose method, not dispose.
+  @override
+  void onClose() {
+    user.close();
+    name.close();
+    super.onClose();
+  }
 }
-
 ```
 Controller life cycle:
 - onInit() where it is created.
