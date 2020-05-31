@@ -508,7 +508,7 @@ GetBuilder( // não precisa digitar desse jeito
 
 ```
 
-Essa abordagem não é recomendade, uma vez que você vai precisar descartar os controllers manualmente, fechar seus stream manualmente, e literalmente abandonar um dos grandes benefícios desse package, que é controle de memória inteligente. Mas se você confia no seu potencial, vai em frente!
+Essa abordagem não é recomendada, uma vez que você vai precisar descartar os controllers manualmente, fechar seus stream manualmente, e literalmente abandonar um dos grandes benefícios desse package, que é controle de memória inteligente. Mas se você confia no seu potencial, vai em frente!
 
 Se você quiser refinar o controle de atualização de widgets do GetBuilder, você pode assinalar a ele IDs únicas
 ```dart
@@ -541,12 +541,13 @@ Se você quer um gerenciador de estados poderoso, você pode ir sem medo para o 
 
 ## Reactive State Manager - GetX
 
-If you want power, Get gives you the most advanced state manager you could ever have.
-GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.
-Without decorations, you can turn anything into Observable with just a ".obs".
+Se você quer poder, Get té dá o mais avançado gerenciador de estado que você pode ter.
+GetX foi construído 100% baseado em Stream, e te dá todo o poder de fogo que o BLoc te dá, com uma sintaxe mais fácil que a do MobX.
+Sem decorations, você poder tornar qualquer coisa em um `Observable` com somete um `.obs`
 
-Maximum performance: In addition to having a smart algorithm for minimal reconstruction, Get uses comparators to make sure the state has changed. If you experience any errors in your application, and send a duplicate change of state, Get will ensure that your application does not collapse.
-The state only changes if the values ​​change. That's the main difference between Get, and using Computed from MobX. When joining two observables, when one is changed, the hearing of that observable will change. With Get, if you join two variables (which is unnecessary computed for that), GetX (similar to Observer) will only change if it implies a real change of state. Example:
+Performance máxima: Somando ao fato de ter um algoritmo inteligente para reconstrução mínima, Get usa comparadores para ter certeza que o estado mudou. Se você encontrar erros na sua aplicação, e enviar uma mudança de estado duplicada, Get vai ter certeza que sua aplicação não entre em colapso.
+
+O estado só muda se o valor mudar. Essa é a principal diferença entre Get, e usar o `Computed` do MobX. Quando juntar dois observables, se um deles é alterado, a escuta daquele observable vai mudar. Com Get, se você juntar duas variáveis (que na verdade é desnecessário), GetX(similar ao Observer) vai somente mudar se implicar numa mudança real de estado. Exemplo:
 
 ```dart
 final count1 = 0.obs;
@@ -555,118 +556,125 @@ int get sum => count1.value + count2.value;
 ```
 
 ```dart
- GetX<Controller>(
-              builder: (_) {
-                print("count 1 rebuild");
-                return Text('${_.count1.value}');
-              },
-            ),
-            GetX<Controller>(
-              builder: (_) {
-                print("count 2 rebuild");
-                return Text('${_.count2.value}');
-              },
-            ),
-            GetX<Controller>(
-              builder: (_) {
-                print("count 3 rebuild");
-                return Text('${_.sum}');
-              },
-            ),
+GetX<Controller>(
+  builder: (_) {
+    print("count 1 rebuild");
+    return Text('${_.count1.value}');
+  },
+),
+GetX<Controller>(
+  builder: (_) {
+    print("count 2 rebuild");
+    return Text('${_.count2.value}');
+  },
+),
+GetX<Controller>(
+  builder: (_) {
+    print("sum rebuild");
+    return Text('${_.sum}');
+  },
+),
 ```
+Se nós incrementarmos o número do `count1`, somente `count1` e `sum` serão reconstruídos, porque `count1` agora tem um valor de 1, e 1 + 0 = 1, alterando o valor do `sum`.
 
-If we increment the number of count 1, only count 1 and count 3 are reconstructed, because count 1 now has a value of 1, and 1 + 0 = 1, changing the sum value.
+Se nós mudarmos `count2`, somente `count2` e `sum` serão reconstruídos, porque o valor do 2 mudou, e o resultado da sum é agora 2.
 
-If we change count 2, only count2 and 3 are reconstructed, because the value of 2 has changed, and the result of the sum is now 2.
+Se definirmos o valor de `count1` para 1, nenhum widget será reconstruído, porque o valor já era 1.
 
-If we add the number 1 to count 1, which already contains 1, no widget is reconstructed. If we add a value of 1 for count 1 and a value of 2 for count 2, only 2 and 3 will be reconstructed, simply because GetX not only changes what is necessary, it avoids duplicating events.
+Se definirmos o valor de `count1` para 1 denovo, e definirmos o valor de `count2` para 2, então somente o `count2`e o `sum` vão ser reconstruídos, simplesmente porque o GetX não somente altera o que for necessário, ele também evita eventos duplicados.
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+Somando a isso, Get provê um controle de estado refinado. Você pode adicionar uma condição a um evento (como adicionar um objeto a uma lista).
 
 ```dart
-list.addIf(item<limit, item);
+list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications, GetX will change the way you manage your states in Flutter, and that is not a promise, it is a certainty!
+Sem decorations, sem code generator, sem complicações, GetX vai mudar a forma que você controla seus estados no Flutter, e isso não é uma promessa, isso é uma certeza!
 
-Do you know Flutter's counter app? Your Controller class might look like this:
-
+Sabe o app de contador do Flutter? Sua classe Controller pode ficar assim:
 ```dart
-class CountCtl extends RxController {
+class CountController extends RxController {
   final count = 0.obs;
 }
 ```
-With a simple:
+E com um simples:
 ```dart
-ctl.count.value++
+controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+Você pode atualizar a variável counter na sua UI, independente de onde esteja sendo armazenada.
 
-You can transform anything on obs:
-
+Você pode transformar qualquer coisa em obs:
 ```dart
-class RxUser {
-  final name = "Camila".obs;
-  final age = 18.obs;
+class RxUsuario {
+  final nome = "Camila".obs;
+  final idade = 18.obs;
 }
 
-class User {
-  User({String name, int age});
-  final rx = RxUser();
+class Usuario {
+  Usuario({String nome, int idade});
+  final rx = RxUsuario();
 
-  String get name => rx.name.value;
-  set name(String value) => rx.name.value = value;
+  String get nome => rx.nome.value;
+  set nome(String value) => rx.nome.value = value;
 
-  int get age => rx.age.value;
-  set age(int value) => rx.age.value = value;
+  int get idade => rx.idade.value;
+  set idade(int value) => rx.idade.value = value;
 }
 ```
 
 ```dart
 
 void main() {
-  final user = User();
-  print(user.name);
-  user.age = 23;
-  user.rx.age.listen((int age) => print(age));
-  user.age = 24;
-  user.age = 25;
+  final usuario = Usuario();
+  print(usuario.nome);
+  usuario.idade = 23;
+  usuario.rx.idade.listen((int idade) => print(idade));
+  usuario.idade = 24;
+  usuario.idade = 25;
 }
 ___________
-out:
+saída:
 Camila
 23
 24
 25
-
 ```
 
-Before you immerse yourself in this world, I will give you a tip, always access the "value" of your flow when reading it, especially if you are working with lists where this is apparently optional.
-You can access list.length, or list.value.length. Most of the time, both ways will work, since the GetX list inherits directly from the dart List. But there is a difference between you accessing the object, and accessing the flow. I strongly recommend you to access the value:
+Antes de você entrar de cabeça nesse mundo, eu vou te dar uma dica: sempre acesse o `.value` do seu flow quando estiver lendo ele, especialmente se estier trabalhando com Lists onde isso é aparentemente opcional.
+
+Você pode acessar `list.length` ou `list.value.length`. Na maioria do tempo, os dois vão funcionar, já que a list do GetX herda diretamente do Dart list. Mas tem uma diferença entre você acessando o objeto, e você acessando o flow. Eu recomendo fortemente que você acesse o `.value`:
 ```dart
-final list = List<User>().obs;
+final list = List<Usuario>().obs;
 ```
 ```dart
 ListView.builder (
-itemCount: list.value.lenght
+  itemCount: list.value.lenght
+)
 ```
-or else create a "get" method for it and abandon "value" for life. example:
 
+ou então criar um getter para ele e abandonar o "value" para sempre. Exemplo:
 ```dart
-final _list = List<User>().obs;
+final _list = List<Usuario>().obs;
 List get list => _list.value;
 ```
 ```dart
 ListView.builder (
 itemCount: list.lenght
 ```
-You could add an existing list of another type to the observable list using a list.assign (oldList); or the assignAll method, which differs from add, and addAll, which must be of the same type. All existing methods in a list are also available on GetX.
+Você pode adicionar uma lista existente de outro tipo para o observable list usando um `list.assign(oldList)` ou o método `assignAll()`, que difere de `add()` e `addAll()`, que precisa ser do mesmo tipo. Todos os métodos existente num list também estão disponíveis no GetX.
 
-We could remove the obligation to use value with a simple decoration and code generator, but the purpose of this lib is precisely not to need any external dependency. It is to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, light and performance way without needing any external package. You can literally add 3 letters to your pubspec (get) and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance. The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand. If you are bothered by value, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
+Nós poderíamos remover a obrigação de usar o value com uma simples decoration e code generator, mas o propósito desse package é precisamente não precisar de nenhuma dependência externa. É para oferecer um ambiente pronto para programar, envolvendo os essenciais (gerenciamento de rotas, dependencias e estados), numa forma simples, leve e performática sem precisar de packages externos. Você pode literalmente adicionar 3 letras e um ':' e começar a programar. Todas as soluções incluídas por padrão, miram em facilidade, produtividade e performance.
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+O peso total desse package é menor que o de um único gerenciador de estado, mesmo sendo uma solução completa, e isso é o que você precisa entender.
+
+Se você está incomodado com o `.value`, e gosta de code generator, MobX é uma excelente alternativa, e você pode usá-lo em conjunto com o Get. PAra aquele que querem adicionar uma única dependência no pubspec a começar a programar sem se preocupar sobre a versão do package sendo incompatível com outra, ou se o erro de uma atualização do estado está vind do gerenciador de estado ou da dependência, ou ainda, não quer se preocupar com a disponibilidade de controllers, prefere literalmente "só programar", Get é perfeito.
+
+Se você não tem problemas com o code generator do MobX, ou não vê problema no boilerplate do BLoc, você pode simplesmente usar o Get para rotas, e esquecer que nele existe um gerenciado de estado. Get nasceu da necessidade, minha empresa tinha um projeto com mais de 90 controllers e o code generator simplesmente levava mais de 30 minutos para completar suas tarefas depois de um `flutter clean` numa máquina razoavelmente boa, se o seu projeto tem 5, 10, 15 controllers, qualquer gerenciador de estado vai ter satisfazer.
+
+Se você tem um projeto absurdamente grande, e code generator é um problema para você, então você foi presenteado com essa solução que é o Get.
+
+Obviamente, se alguém quiser contribuir para o projeto e criar um code generator, or algo similar, eu vou linkar o README como uma alternativa, minha necessidade não é a necessidade de todos os devs, mas por agora eu digo: há boas solução que já fazem isso, como MobX.
 
 ## Simple Instance Manager
 Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
