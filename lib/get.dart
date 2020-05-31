@@ -6,6 +6,7 @@ export 'src/snackbar/snack.dart';
 export 'src/bottomsheet/bottomsheet.dart';
 export 'src/snackbar/snack_route.dart';
 export 'src/state/get_state.dart';
+export 'src/state/mixin_state.dart';
 export 'src/rx/rx_interface.dart';
 export 'src/rx/rx_impl.dart';
 export 'src/rx/rx_event.dart';

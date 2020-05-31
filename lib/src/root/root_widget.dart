@@ -36,6 +36,8 @@ class GetMaterialApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
     this.routingCallback,
     this.defaultTransition,
     // this.actions,
@@ -92,6 +94,8 @@ class GetMaterialApp extends StatelessWidget {
   final VoidCallback onDispose;
   final bool enableLog;
   final bool popGesture;
+  final SmartManagement smartManagement;
+  final Bindings initialBinding;
   final Duration transitionDuration;
   final bool defaultGlobalState;
   final Map<String, GetRoute> namedRoutes;
@@ -177,6 +181,8 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
+          initialBinding?.dependencies();
+          Get().smartManagement = smartManagement;
           onInit?.call();
           if (namedRoutes != null) {
             namedRoutes.forEach((key, value) {
@@ -195,7 +201,7 @@ class GetMaterialApp extends StatelessWidget {
         },
         builder: (_) {
           return MaterialApp(
-            key: _.key,
+            key: key,
             navigatorKey:
                 (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
             home: home,

@@ -6,17 +6,15 @@ import 'rx_impl.dart';
 
 Widget obx(Widget Function() builder) {
   final b = builder;
-  return Obx(
-    builder: b,
-  );
+  return Obx(b);
 }
 
 class Obx extends StatefulWidget {
   final Widget Function() builder;
 
-  const Obx({
+  const Obx(
     this.builder,
-  });
+  );
   _ObxState createState() => _ObxState();
 }
 

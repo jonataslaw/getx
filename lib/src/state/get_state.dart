@@ -47,6 +47,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
   final bool global;
   final String id;
   final bool autoRemove;
+  final bool assignId;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
@@ -56,6 +57,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
     this.global = true,
     this.builder,
     this.autoRemove = true,
+    this.assignId = false,
     this.initState,
     this.dispose,
     this.id,
@@ -118,7 +120,7 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
 
     if (widget.dispose != null) widget.dispose(this);
 
-    if (isCreator) {
+    if (isCreator || widget.assignId) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
         // controller.onClose();
         controller._allStates.remove(real);

@@ -4,7 +4,7 @@ import 'package:get/src/state/get_state.dart';
 
 class GetMaterialController extends GetController {
   ParseRoute parse = ParseRoute();
-  Key key = UniqueKey();
+  Key key;
   ThemeData theme;
   ThemeMode themeMode;
 
@@ -19,6 +19,7 @@ class GetMaterialController extends GetController {
   }
 
   void restartApp() {
+    print("restart chamado");
     key = UniqueKey();
     update(this);
   }
