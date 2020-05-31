@@ -302,22 +302,22 @@ Você remover classe N da rota de forma inesperada, e tentasse usar o controller
 ### Simple state manager usage
 
 ```dart
-// Create controller class and extends GetController
+// Crie a classe Controller e entenda ela do GetController 
 class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); // use update(this) to update counter variable on UI when increment be called
+    update(this); // use update(this) para atualizar a variável counter na UI quando increment for chamado
   }
 }
-// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
+// Na sua classe Stateless/Stateful, use o GetBuilder para atualizar o texto quando a função increment for chamada
 GetBuilder<Controller>(
-  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  init: Controller(), // INICIE O CONTROLLER SOMENTE NA PRIMEIRA VEZ
   builder: (controller) => Text(
     '${controller.counter}',
   ),
 ),
-//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
+// Inicialize seu controller somente uma vez. Na segunda vez que você for usar  GetBuilder para o mesmo controller, não Inicialize denovo. Seu controller será automaticamente removido da memória. Você não precisa se preocupar com isso, Get vai fazer isso automaticamente, apenas tenha certeza que você não vai inicializar o mesmo controller duas vezes. 
 ```
 **Done!**
 - You have already learned how to manage states with Get.
