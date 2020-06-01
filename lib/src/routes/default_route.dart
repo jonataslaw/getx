@@ -31,6 +31,7 @@ class GetRouteBase<T> extends PageRoute<T> {
     this.alignment,
     this.parameter,
     this.binding,
+    this.bindings,
     this.opaque = true,
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
@@ -46,6 +47,9 @@ class GetRouteBase<T> extends PageRoute<T> {
     if (binding != null) {
       binding.dependencies();
     }
+    if (bindings != null) {
+      bindings.forEach((element) => element.dependencies());
+    }
   }
 
   /// Builds the primary contents of the route.
@@ -54,6 +58,8 @@ class GetRouteBase<T> extends PageRoute<T> {
   final bool popGesture;
 
   final Bindings binding;
+
+  final List<Bindings> bindings;
 
   // final Duration duration;
 

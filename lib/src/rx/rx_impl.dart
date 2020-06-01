@@ -175,12 +175,17 @@ class ListX<E> extends Iterable<E> implements RxInterface<E> {
 
   void addAll(List<E> item) {
     _list.addAll(item);
-    subject.add(Change<E>.insert(item: _list.last, pos: _list.length - 1));
+    subject.add(Change<E>.insert(item: _list, pos: _list.length - 1));
   }
 
   /// Adds only if [item] is not null.
   void addNonNull(E item) {
     if (item != null) add(item);
+  }
+
+  /// Adds only if [item] is not null.
+  void addAllNonNull(Iterable<E> item) {
+    if (item != null) addAll(item);
   }
 
   void insert(int index, E item) {
@@ -591,7 +596,7 @@ extension MapExtension on Map {
 extension ListExtension<E> on List<E> {
   ListX<E> get obs {
     if (this != null)
-      return ListX<E>([])..assignAll(this);
+      return ListX<E>([])..addAllNonNull(this);
     else
       return ListX<E>(null);
   }

@@ -1,3 +1,4 @@
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" align="right" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 ![](get.png)
 
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
@@ -50,21 +51,22 @@ Flutter's conventional navigation has a lot of unnecessary boilerplate, requires
 This library that will change the way you work with the Framework and save your life from boilerplate, increasing your productivity, and provide you with everything that is most modern when it comes to managing states, routes and dependencies.
 
 - **[How to use?](#how-to-use)**
-- **[Navigating without named routes](#Navigating-without-named-routes)**
-- **[SnackBars](#SnackBars)**
-- **[Dialogs](#Dialogs)**
-- **[BottomSheets](#BottomSheets)**
-- **[Simple State Manager](#Simple-State-Manager)**
-- **[Reactive State Manager](#Reactive-State-Manager)**
-- **[Bindings](#Bindings)**
-- **[Workers](#Workers)**
-- **[Navigate with named routes](#Navigate-with-named-routes)**
-- **[Send data to named Routes](#Send-data-to-named-Routes)**
-- **[Dynamic urls links](#Dynamic-urls-links)**
-- **[Middleware](#Middleware)**
-- **[Optional Global Settings](#Optional-Global-Settings)**
-- **[Other Advanced APIs and Manual configurations](#Other-Advanced-APIs-and-Manual-configurations)**
-- **[Nested Navigators](#Nested-Navigators)**
+- **[Navigating without named routes](#navigating-without-named-routes)**
+- **[SnackBars](#snackBars)**
+- **[Dialogs](#dialogs)**
+- **[BottomSheets](#bottomsheets)**
+- **[Simple State Manager](#simple-state-manager)**
+- **[Reactive State Manager](#reactive-state-manager)**
+- **[Bindings](#bindings)**
+- **[Workers](#workers)**
+- **[Navigate with named routes](#navigate-with-named-routes)**
+- **[Send data to named Routes](#send-data-to-named-Routes)**
+- **[Dynamic urls links](#dynamic-urls-links)**
+- **[Middleware](#middleware)**
+- **[Optional Global Settings](#optional-global-settings)**
+- **[Nested Navigators](#nested-navigators)**
+- **[Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)**
+
 
 
 #### You can contribute to the project in multiple ways:
@@ -1012,6 +1014,54 @@ Get.config(
       defaultTransition = Transitions.cupertino}
 ```
 
+### Nested Navigators
+
+Get made Flutter's nested navigation even easier.
+You don't need the context, and you will find your navigation stack by Id.
+
+- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+
+See how simple it is:
+```dart
+             Navigator(
+                key: nestedKey(1), // create a key by index
+                initialRoute: '/',
+                onGenerateRoute: (settings) {
+                  if (settings.name == '/') {
+                    return GetRouteBase(
+                      page: Scaffold(
+                        appBar: AppBar(
+                          title: Text("Main"),
+                        ),
+                        body: Center(
+                          child: FlatButton(
+                              color: Colors.blue,
+                              onPressed: () {
+                                Get.toNamed('/second', id:1); // navigate by your nested route by index
+                              },
+                              child: Text("Go to second")),
+                        ),
+                      ),
+                    );
+                  } else if (settings.name == '/second') {
+                    return GetRouteBase(
+                      page: Center(
+                        child: Scaffold(
+                          appBar: AppBar(
+                            title: Text("Main"),
+                          ),
+                          body: Center(
+                            child:  Text("second")
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }),
+```
+
+This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
+
 
 ### Other Advanced APIs and Manual configurations
 GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
@@ -1067,53 +1117,3 @@ Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in th
 
 ```
 
-### Nested Navigators
-
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
-
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
-
-See how simple it is:
-```dart
-             Navigator(
-                key: nestedKey(1), // create a key by index
-                initialRoute: '/',
-                onGenerateRoute: (settings) {
-                  if (settings.name == '/') {
-                    return GetRouteBase(
-                      page: Scaffold(
-                        appBar: AppBar(
-                          title: Text("Main"),
-                        ),
-                        body: Center(
-                          child: FlatButton(
-                              color: Colors.blue,
-                              onPressed: () {
-                                Get.toNamed('/second', id:1); // navigate by your nested route by index
-                              },
-                              child: Text("Go to second")),
-                        ),
-                      ),
-                    );
-                  } else if (settings.name == '/second') {
-                    return GetRouteBase(
-                      page: Center(
-                        child: Scaffold(
-                          appBar: AppBar(
-                            title: Text("Main"),
-                          ),
-                          body: Center(
-                            child:  Text("second")
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                }),
-```
-
-
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
-
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
