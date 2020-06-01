@@ -1,6 +1,6 @@
 ![](get.png)
 
-*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+*Idiomas: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/Test,%20build%20and%20deploy/badge.svg)
@@ -61,7 +61,7 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
 - [Reactive State Manager - GetX](#reactive-state-manager---getx)
 - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
 - [Bindings](#bindings)
-    - [Para usar essa API você só precisa:](#para-usar-essa-api-você-só-precisa)
+  - [Como utilizar:](#como-utilizar)
 - [Workers](#workers)
 - [Navegar com rotas nomeadas](#navegar-com-rotas-nomeadas)
   - [Enviar dados para rotas nomeadas](#enviar-dados-para-rotas-nomeadas)
@@ -69,9 +69,8 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
     - [Middleware](#middleware)
   - [Change Theme](#change-theme)
   - [Configurações Globais Opcionais](#configurações-globais-opcionais)
-  - [Optional Global Settings](#optional-global-settings)
   - [Outras APIs avançadas e Configurações Manuais](#outras-apis-avançadas-e-configurações-manuais)
-  - [Navigators Aninhados](#navigators-aninhados)
+  - [Nested Navigators](#nested-navigators)
 
 
 
@@ -171,7 +170,7 @@ Get.to(HomePage());
 
 ### SnackBars
 
-Para ter um `SnackBar` simples no Flutter, você precisa pegar o `context` do Scaffold, ou você precisa de uma `GlobalKey` atrelada ao seu Scaffold.
+Para ter um `SnackBar` simples no Flutter, você precisa do `context` do Scaffold, ou uma `GlobalKey` atrelada ao seu Scaffold.
 ```dart
 final snackBar = SnackBar(
   content: Text('Olá!'),
@@ -195,8 +194,7 @@ Com Get, tudo que você precisa fazer é chamar `Get.snackbar()` de qualquer lug
 ```dart
 Get.snackbar(
   "Ei, eu sou uma SnackBar Get!", // título
-  "É inacreditável! Eu estou usando uma SnackBar sem context, sem " +
-  "boilerplate, sem Scaffold, é algo realmente maravilhoso!", // mensagem
+  "É inacreditável! Eu estou usando uma SnackBar sem context, sem boilerplate, sem Scaffold!", // mensagem
   icon: Icon(Icons.alarm),
   shouldIconPulse: true,
   onTap:(){},
@@ -242,7 +240,7 @@ Get.snackbar(
   //     Form userInputForm
   ///////////////////////////////////
 ```
-Se você prefere a SnackBar tradicional, ou quer customizar por completo, como por exemplo fazer ele ter só uma linha (`Get.snackbar` tem os parâmetros `title` e `message` obrigatórios), você pode usar `Get.rawSnackbar();` que fornece a RAW API na qual `Get.snackbar` foi contruído.
+Se você prefere a SnackBar tradicional, ou quer customizar por completo, como por exemplo fazer ele ter uma só linha (`Get.snackbar` tem os parâmetros `title` e `message` obrigatórios), você pode usar `Get.rawSnackbar();` que fornece a API bruta na qual `Get.snackbar` foi contruído.
 
 ### Dialogs
 
@@ -260,7 +258,7 @@ Get.defaultDialog(
 ```
 Você também pode usar `Get.generalDialog` em vez de `showGeneralDialog`.
 
-Para todos os outros Widgets dialog do Flutter, incluindo os do Cupertino, você pode usar `Get.overlayContext` em vez do `context`, e abrir em qualquer lugar do seu código.
+Para todos os outros Widgets do tipo dialog do Flutter, incluindo os do Cupertino, você pode usar `Get.overlayContext` em vez do `context`, e abrir em qualquer lugar do seu código.
 
 Para widgets que não usam `overlayContext`, você pode usar `Get.context`. Esses dois contextos vão funcionar em 99% dos casos para substituir o context da sua UI, exceto em casos onde o `inheritedWidget` é usado sem a navigation context.
 
@@ -411,7 +409,7 @@ Quando você pressionar o FloatingActionButton, todos os widgets que estão escu
 
 #### Sem StatefulWidget;
 Usar StatefulWidget's significa guardar o estado de telas inteiras desnecessariamente, mesmo porque se você precisa recarregar minimamente algum widget, você vai incorporá-lo num Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, que vai ser outro StatefulWidget.
-A classe StatefulWidget é maior que a classe StatelessWidget, o que vai alocar mais memória, e isso pode não fazer uma diferença significativa com uma ou duas classes, mas com certeza vai quando você tiver 100 delas!
+A classe StatefulWidget é maior que a classe StatelessWidget, o que vai alocar mais memória, e isso pode não fazer uma diferença significativa com uma ou duas classes, mas com certeza fará quando você tiver 100 delas!
 
 A não ser que você precise usar um mixin, como o `TickerProviderStateMixin`, será totalmente desnecessário usar um StatefulWidget com o Get.
 
@@ -433,9 +431,9 @@ void onInit() {
   super.onInit();
 }
 ```
-* Nota: Se você quiser rodar um método no momento que o controller é chamado pela primeira vez, você NÃO PRECISA usar construtores para isso, na verdade, usando um package que é focado em performance como o Get, isso chega no limite de má prática, porque se desvia da lógica que os controllers são criados ou alocados (Se você criar uma instância desse controller, o construtor vai ser chamado imediatamente, e ele será populado antes de ser usado, ou seja, você está alocando memória e não está utilizando, o que fere os princípios desse package). Os métodos `onInit()` e `onClose()` foram criados para isso, eles serão chamados quando o controller é criado, ou usados pela primeira vez, dependendo de como você está utilizando o Get (lazyPut ou não). Se quiser, por exemplo, fazer uma chamada para sua API para popular dados, você pode esquecer do estilo antigo de usar `initState()/dispose()`, apenas comece sua chamada para a api no `onInit`, e apenas se você precisar executar algum comando como fechar stream, use o `onClose()`.
+* Nota: Se você quiser executar um método no momento que o controller é chamado pela primeira vez, você NÃO precisa usar construtores para isso, na verdade, usando um package que é focado em performance como o Get, isso chega no limite de má prática, porque se desvia da lógica de que os controllers são criados ou alocados (Se você criar uma instância desse controller, o construtor vai ser chamado imediatamente, e ele será populado antes de ser usado, ou seja, você está alocando memória e não está utilizando, o que fere os princípios desse package). Os métodos `onInit()` e `onClose()` foram criados para isso, eles serão chamados quando o controller é criado, ou usados pela primeira vez, dependendo de como você está utilizando o Get (lazyPut ou não). Se quiser, por exemplo, fazer uma chamada para sua API para popular dados, você pode esquecer do estilo antigo de usar `initState()/dispose()`, apenas comece sua chamada para a api no `onInit`, e apenas se você precisar executar algum comando como fechar stream, use o `onClose()`.
 
-O propósito desse package é precisamente te dar uma solução completa para navegação de rotas, gerenciamente de dependências e estados, usando o mínimo possível de dependências, com um alto grau de decoupling. Get envolve em todas as APIs de baixo e alto nível dentro de si mesmo, para ter certeza que você irá trabalhar com o mínimo possível de coupling. 
+O propósito desse package é precisamente te dar uma solução completa para navegação de rotas, gerenciamente de dependências e estados, usando o mínimo possível de dependências, com um alto grau de desacoplamento. Get envolve em todas as APIs de baixo e alto nível dentro de si mesmo, para ter certeza que você irá trabalhar com o mínimo possível de acoplamento.
 
 Nós centralizamos tudo em um único package. Dessa forma, você pode colocar somente widgets na sua view, e o controller pode ter só lógica de negócio, sem depender de nenhum elemento da View. Isso fornece um ambiente de trabalho muito mais limpo, para que parte do seu time possa trabalhar apenas com os widgets, sem se preocupar sobre enviar dados para o controller, e outra parte se preocupe apenas com a lógica de negócio, sem depender de nenhum elemento da view.
 
@@ -443,9 +441,9 @@ Então, para simplificar isso:
 
 Você não precisa chamar métodos no `initState()` e enviá-los para seu controller via parâmetros, nem precisa do construtor do controller pra isso, você possui o método `onInit()` que é chamado no momento certo para você inicializar seus services.
 
-Você não precisa chamar o método `dispose()`, você tem o método `onClose()` que vai ser chamado no momento exato quando seu controller não for mais necessário e será removido da memória. Dessa forma, você pode deixar views somente para os widgets, e o controller só para as regras de negócio.
+Você não precisa chamar o método `dispose()`, você tem o método `onClose()` que vai ser chamado no momento exato quando seu controller não for mais necessário e será removido da memória. Dessa forma, você pode deixar a view somente para os widgets, e o controller só para as regras de negócio.
 
-Não chame o método `dispose()` dentro do GetController, não vai fazer nada, lembre-se que o controller não é um widget, você não deveria usar o dispose lá, e esse método será automatacimente e inteligentemente removido da memória pelo Get. Se você usou algum stream no controller e quer fechá-lo, apensar insira o método para fechar os stream dentro do método `onClose()`.
+Não chame o método `dispose()` dentro do GetController, não vai fazer nada. Lembre-se que o controller não é um widget, você não deveria usar o dispose lá, e esse método será automaticamente e inteligentemente removido da memória pelo Get. Se você usou algum stream no controller e quer fechá-lo, apenas insira o método para fechar os stream dentro do método `onClose()`.
 
 Exemplo:
 ```dart
@@ -453,7 +451,7 @@ class Controller extends GetController {
   var user = StreamController<User>();
   var name = StreamController<String>();
 
-  /// close stream = onClose method, not dispose.
+  /// fechar stream = método onClose(), não dispose().
   @override
   void onClose() {
     user.close();
@@ -465,7 +463,7 @@ class Controller extends GetController {
 Ciclo de vida do controller:
 * `onInit()`: Onde ele é criado.
 * `onClose()`: Onde ele é fechado para fazer mudanças em preparação para o método delete()
-* deleted: Você não tem mais acesso a essa API porque ela está literalmente removendo o controller da memória. Está literalmente deletado, sem deixar rastros.
+* deleted: Você não tem acesso a essa API porque ela está literalmente removendo o controller da memória. Está literalmente deletado, sem deixar rastros.
 
 ##### Formas de uso:
 
@@ -547,13 +545,13 @@ Você também pode impor condições para o update acontecer:
 update(this,['text'], counter < 10);
 ```
 
-GetX faz isso automaticamente e somente reconstrói o widget que usa a exata variável que foi alterada. Se você alterar o valor davariável para o mesmo valor que ela já era e isso não sugira uma mudança de estado, GetX não vai reconstruir esse widget, economizando memória e ciclos de CPU (Ex: 3 está sendo mostrado na tela, e você muda a variável para ter o valor 3 denovo. Na maioria dos gerenciadores de estado, isso vai causar uma reconstrução do widget, mas com o GetX o widget só vai reconstruir se de fato o estado mudou).
+GetX faz isso automaticamente e somente reconstrói o widget que usa a exata variável que foi alterada. Se você alterar o valor da variável para o mesmo valor que ela era anteriormente e isso não sugira uma mudança de estado, GetX não vai reconstruir esse widget, economizando memória e ciclos de CPU (Ex: 3 está sendo mostrado na tela, e você muda a variável para ter o valor 3 denovo. Na maioria dos gerenciadores de estado, isso vai causar uma reconstrução do widget, mas com o GetX o widget só vai reconstruir se de fato o estado mudou).
 
 GetBuilder é focado precisamente em múltiplos controles de estados. Imagine que você adicionou 30 produtos ao carrinho, você clica pra deletar um deles, e ao mesmo tempos a lista é atualizada, o preço é atualizado e o pequeno círculo mostrando a quantidade de produtos é atualizado. Esse tipo de abordagem faz o GetBuilder excelente, porque ele agupa estados e muda todos eles de uma vez sem nenhuma "lógica computacional" pra isso. GetBuilder foi criado com esse tipo de situação em mente, já que pra mudanças de estados simples, você pode simplesmente usar o `setState()`, e você não vai precisar de um gerenciador de estado para isso. Porém, há situações onde você quer somente que o widget onde uma certa variável mudou seja reconstruído, e isso é o que o GetX faz com uma maestria nunca vista antes.
 
 Dessa forma, se você quiser controlar individualmente, você pode assinalar ID's para isso, ou usar GetX. Isso é com você, apenas lembre-se que quando mais "widgets individuais" você tiver, mais a performance do GetX vai se sobressair. Mas o GetBuilder vai ser superior quando há multiplas mudanças de estado.
 
-Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX, porque não tem competição para isso quando o widget é pra reconstruir somente o que é necessário. Se você não precisa de IDs únicas, porque todas as suas variáveis serão alteradas quando você fazer uma ação, use GetBuilder, porque é um atualizador de estado em blocos simples, feito com apenas algumas linhas de código, para fazer justamente o que ele promete fazer: atualizar estado em blocos. Não há forma de comparar RAM, CPU, etc de um gerenciador de estado gigante com um simples StatefulWidget (como GetBuilder) que é atualizado quando você chama `update(this)`. Foi feito de uma forma simples, para ter o mínimo de lógica computacional, somente para cumprir um único papel e gastar o mínimo de recursos possível.
+Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX, porque não tem competição para isso quando o widget é para reconstruir somente o que é necessário. Se você não precisa de IDs únicas, porque todas as suas variáveis serão alteradas quando você fazer uma ação, use GetBuilder, porque é um atualizador de estado em blocos simples, feito com apenas algumas linhas de código, para fazer justamente o que ele promete fazer: atualizar estado em blocos. Não há forma de comparar RAM, CPU, etc de um gerenciador de estado gigante com um simples StatefulWidget (como GetBuilder) que é atualizado quando você chama `update(this)`. Foi feito de uma forma simples, para ter o mínimo de lógica computacional, somente para cumprir um único papel e gastar o mínimo de recursos possível.
 Se você quer um gerenciador de estados poderoso, você pode ir sem medo para o GetX. Ele não funciona com variáveis, mas sim fluxos. Tudo está em seus streams por baixo dos panos. Você pode usar `rxDart` em conjunto com ele, porque tudo é um stream, você pode ouvir o evento de cada "variável", porque tudo é um stream, é literalmente BLoc, só que mais fácil que MobX e sem code generators ou decorations.
 
 ## Reactive State Manager - GetX
@@ -575,26 +573,26 @@ int get sum => count1.value + count2.value;
 ```dart
 GetX<Controller>(
   builder: (_) {
-    print("count 1 rebuild");
+    print("count 1 foi reconstruído");
     return Text('${_.count1.value}');
   },
 ),
 GetX<Controller>(
   builder: (_) {
-    print("count 2 rebuild");
+    print("count 2 foi reconstruído");
     return Text('${_.count2.value}');
   },
 ),
 GetX<Controller>(
   builder: (_) {
-    print("sum rebuild");
+    print("sum foi reconstruído");
     return Text('${_.sum}');
   },
 ),
 ```
 Se nós incrementarmos o número do `count1`, somente `count1` e `sum` serão reconstruídos, porque `count1` agora tem um valor de 1, e 1 + 0 = 1, alterando o valor do `sum`.
 
-Se nós mudarmos `count2`, somente `count2` e `sum` serão reconstruídos, porque o valor do 2 mudou, e o resultado da sum é agora 2.
+Se nós mudarmos `count2`, somente `count2` e `sum` serão reconstruídos, porque o valor do 2 mudou, e o resultado da variável `sum` é agora 2.
 
 Se definirmos o valor de `count1` para 1, nenhum widget será reconstruído, porque o valor já era 1.
 
@@ -675,17 +673,17 @@ A api `assign` vai limpar sua lista e adicionar um único objeto que você quer.
 
 A api `assignAll`  vai limpar sua lista e vai adicionar objetos `Iterable` que você precisa.
 
-Nós poderíamos remover a obrigação de usar o value  em String e int com uma simples decoration e code generator, mas o propósito desse package é precisamente não precisar de nenhuma dependência externa. É para oferecer um ambiente pronto para programar, envolvendo os essenciais (gerenciamento de rotas, dependencias e estados), numa forma simples, leve e performática sem precisar de packages externos. Você pode literalmente adicionar 3 letras e um ':' no seu pubspec.yaml e começar a programar. Todas as soluções incluídas por padrão, miram em facilidade, produtividade e performance.
+Nós poderíamos remover a obrigação de usar o value em String e int com uma simples decoration e code generator, mas o propósito desse package é precisamente não precisar de nenhuma dependência externa. É para oferecer um ambiente pronto para programar, envolvendo os essenciais (gerenciamento de rotas, dependências e estados), numa forma simples, leve e performática sem precisar de packages externos. Você pode literalmente adicionar 3 letras e um ':' no seu pubspec.yaml e começar a programar. Todas as soluções incluídas por padrão, miram em facilidade, produtividade e performance.
 
 O peso total desse package é menor que o de um único gerenciador de estado, mesmo sendo uma solução completa, e isso é o que você precisa entender.
 
-Se você está incomodado com o `.value`, e gosta de code generator, MobX é uma excelente alternativa, e você pode usá-lo em conjunto com o Get. PAra aquele que querem adicionar uma única dependência no pubspec a começar a programar sem se preocupar sobre a versão do package sendo incompatível com outra, ou se o erro de uma atualização do estado está vind do gerenciador de estado ou da dependência, ou ainda, não quer se preocupar com a disponibilidade de controllers, prefere literalmente "só programar", Get é perfeito.
+Se você está incomodado com o `.value`, e gosta de code generator, MobX é uma excelente alternativa, e você pode usá-lo em conjunto com o Get. Para aqueles que querem adicionar uma única dependência no pubspec.yaml e começar a programar sem se preocupar sobre a versão de um package sendo incompatível com outra, ou se o erro de uma atualização do estado está vindo do gerenciador de estado ou da dependência, ou ainda, não quer se preocupar com a disponibilidade de controllers, prefere literalmente "só programar", Get é perfeito.
 
-Agora se você não tem problemas com o code generator do MobX, ou não vê problema no boilerplate do BLoc, você pode simplesmente usar o Get para rotas, e esquecer que nele existe um gerenciado de estado. Get nasceu da necessidade, minha empresa tinha um projeto com mais de 90 controllers e o code generator simplesmente levava mais de 30 minutos para completar suas tarefas depois de um `flutter clean` numa máquina razoavelmente boa, se o seu projeto tem 5, 10, 15 controllers, qualquer gerenciador de estado vai ter satisfazer.
+Agora se você não tem problemas com o code generator do MobX, ou não vê problema no boilerplate do BLoc, você pode simplesmente usar o Get para rotas, e esquecer que nele existe um gerenciador de estado. Get nasceu da necessidade, minha empresa tinha um projeto com mais de 90 controllers e o code generator simplesmente levava mais de 30 minutos para completar suas tarefas depois de um `flutter clean` numa máquina razoavelmente boa, se o seu projeto tem 5, 10, 15 controllers, qualquer gerenciador de estado vai ter satisfazer.
 
 Se você tem um projeto absurdamente grande, e code generator é um problema para você, então você foi presenteado com essa solução que é o Get.
 
-Obviamente, se alguém quiser contribuir para o projeto e criar um code generator, or algo similar, eu vou linkar o README como uma alternativa, minha necessidade não é a necessidade de todos os devs, mas por agora eu digo: há boas solução que já fazem isso, como MobX.
+Obviamente, se alguém quiser contribuir para o projeto e criar um code generator, or algo similar, eu vou linkar no README como uma alternativa, minha necessidade não é a necessidade de todos os devs, mas por agora eu digo: há boas soluções que já fazem isso, como MobX.
 
 Tipagem no Get usando Bindings é desnecessário. Você pode usar o widget `Obx()` em vez do GetX, e ele só recebe a função anônima que cria o widget.
 
@@ -693,7 +691,7 @@ Tipagem no Get usando Bindings é desnecessário. Você pode usar o widget `Obx(
 
 * Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
 
-Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciado de dependência simpels e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
+Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Em vez de Controller controller = Controller();
@@ -706,7 +704,7 @@ Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
 controller.fetchApi();
 ```
 
-Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador; você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
+Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador. Você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
 
 ```dart
 Controller controller = Get.find();
@@ -722,7 +720,7 @@ Text(controller.textFromApi);
 Procurando por `lazyLoading`?(carregar somente quando for usar) Você pode declarar todos os seus controllers, e eles só vão ser inicializados e chamados quando alguém precisar. Você pode fazer isso
 ```dart
 Get.lazyPut<Service>(()=> ApiMock());
-/// ApiMock só sera chamado quando alguém usar o Get.find<Service> pela primeira vez
+/// ApiMock só será chamado quando alguém usar o Get.find<Service> pela primeira vez
 ```
 
 Para remover a instância do Get:
@@ -733,7 +731,7 @@ Get.delete<Controller>();
 ## Bindings
 Um dos grandes diferenciais desse package, talvez, seja a possibilidade de integração total com rotas, gerenciador de estado e gerenciador de dependências.
 
-Quando uma rota é removida da stack, todos os controllers, variáveis e instâncias de objetos relacionados com ela serão removidos da memória. Se você está usando streams ou timer, eles serão fechados automaticamente, e você não precisa se preocupar com nada disso.
+Quando uma rota é removida da stack, todos os controllers, variáveis e instâncias de objetos relacionados com ela são removidos da memória. Se você está usando streams ou timer, eles serão fechados automaticamente, e você não precisa se preocupar com nada disso.
 
 Na versão 2.10 Get implementou completamente a API Bindings.
 
@@ -745,8 +743,8 @@ Isso permite Get saber qual tela está sendo mostrada quando um controller parti
 
 Somando a isso, a classe Binding vai permitir que você tenha um controle de configuração SmartManager. Você pode configurar as dependências que serão organizadas quando for remover a rota da stack, ou quando o widget que usa ele é definido, ou nada disso. Você vai ter gerenciador de dependências inteligente trabalhando para você, e você pode configurá-lo como quiser.
 
-#### Para usar essa API você só precisa:
-* Criar uma classe que implementa a Bindings
+### Como utilizar:
+* Para usar essa API você só precisa criar uma classe que implementa a Bindings:
 
 ```dart
 class HomeBinding implements Bindings {}
@@ -778,7 +776,7 @@ Usando rotas normais:
 Get.to(Home(), binding: HomeBinding());
 ```
 
-Então, você não vai precisar se preocupar com gereciamento da memória da sua aplicação mais, Get vai fazer para você.
+Então, você não vai precisar se preocupar com gerenciamento da memória da sua aplicação mais, Get vai fazer para você.
 
 
 ## Workers
@@ -787,29 +785,27 @@ Workers vai te dar suporte, ativando callbacks específicos quando um evento oco
 ```dart
 /// Chamada toda vez que a variável for alterada
 ever(count1, (value) => print("novo valor: $value"));
+
 /// Chamada apenas na primeira vez que a variável for alterada
 once(count1, (value) => print("novo valor: $value (não vai mudar mais)"));
+
 /// Anti DDos - Chamada toda vez que o usuário parar de digitar por 1 segundo, por exemplo.
 debounce(count1, (value) => print("debouce $value"), time: Duration(seconds: 1));
+
 /// Ignore todas as mudanças num período de 1 segundo.
 interval(count1, (value) => print("interval $value"), time: Duration(seconds: 1));
 ```
-- ever
+- **ever**
 é chamado toda vez que a variável mudar de valor. É só isso.
 
-- once
+- **once**
 é chamado somente na primeira vez que a variável mudar de valor.
 
-- debounce
-É muito útil em funções de pesquisa, onde você somente quer que a API seja chamada depois que o usuário terminar de digitar. Normalmente, se o usuário digitar "Jonny", será feita 5 requests na sua API, pela letra 'J', 'o', 'n', 'n' e'y'. Com o debounce isso não acontece, porque você tem a sua disposição uma função que só fazer a pesquisa na api quando o usuário parar de digitar. O debounce é bom para táticas anti-DDos, para funções de pesquisa em que cada letra digitada causaria um request na API. Debounce vai esperar o usário parar de digitar o nome, para então fazer o request para API.
+- **debounce**
+É muito útil em funções de pesquisa, onde você somente quer que a API seja chamada depois que o usuário terminar de digitar. Normalmente, se o usuário digitar "Jonny", será feita 5 requests na sua API, pelas letras 'J', 'o', 'n', 'n' e 'y'. Com o `debounce` isso não acontece, porque você tem a sua disposição uma função que só fazer a pesquisa na api quando o usuário parar de digitar. O `debounce` é bom para táticas anti-DDos, para funções de pesquisa em que cada letra digitada ativaria um request na API. Debounce vai esperar o usário parar de digitar o nome, para então fazer o request para API.
 
-- interval
-é diferente do debounce. quando se usa debounce , se o usuário fizer 1000 mudanças numa variável em 1 segundo, o debounce só computa o último depois de um tempo estipulado ( o padrão é 800 milisegundos). Interval por outro lado vai ignorar todas as ações do usuário pelo período estipulado. Se o interval for de 1 segundo, então ele só conseguirá enviar 60 eventos por segundo. Se for 3 segundos de prazo, então o interval vai enviar 20 eventos por minuto (diferente do debounce que só enviaria o evento depois do prazo estipulado acabar). Isso é recomendado para evitar abuso, em funções que o usuário pode clicar rapidamente em algo para ter uma vantagem. Para exemplificar, imagine que o usuário pode ganhar moedas clicando num botão. Se ele clicar 300 vezes no mesmo minuto, ele vai ganhar 300 moedas. Usando o interval, você pode definir um prazo de 1 segundo, e mesmo se ele clicasse 300 vezes em um minuto, ele ganharia apenas 60 moedas. Se fosse usado o debounce, o usuário ganharia apenas 1 moeda, porque só é executado quando o usuário para de clicar por um prazo estabelecido.
-
-
-
-Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. debounce will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
-
+- **interval**
+Quando se usa `debounce` , se o usuário fizer 1000 mudanças numa variável em 1 segundo, o `debounce` só computa a última mudança feita após a inatividade por um tempo estipulado (o padrão é 800 milisegundos). `interval` por outro lado vai ignorar todas as ações do usuário pelo período estipulado. Se o `interval` for de 1 segundo, então ele só conseguirá enviar 60 eventos por segundo. Se for 3 segundos de prazo, então o `interval` vai enviar 20 eventos por minuto (diferente do `debounce` que só enviaria o evento depois que o prazo estipulado acabar). Isso é recomendado para evitar abuso em funções que o usuário pode clicar rapidamente em algo para ter uma vantagem. Para exemplificar, imagine que o usuário pode ganhar moedas clicando num botão. Se ele clicar 300 vezes no botão em um minuto, ele vai ganhar 300 moedas. Usando o `interval`, você pode definir um prazo de 1 segundo por exemplo, e mesmo se ele clicasse 300 vezes em um minuto, ele ganharia apenas 60 moedas. Se fosse usado o `debounce`, o usuário ganharia apenas 1 moeda, porque só é executado quando o usuário para de clicar por um prazo estabelecido.
 
 ## Navegar com rotas nomeadas
 - Se você prefere navegar por rotas nomeadas, Get também dá suporte a isso:
@@ -854,12 +850,12 @@ Get.toNamed("/ProximaTela", arguments: 'Get é o melhor');
 
 Na sua classe ou controller:
 ```dart
-print(Get.arguments); //mostra: Get é o melhor
+print(Get.arguments); //valor: Get é o melhor
 ```
 #### Links de Url dinâmicos
 
 Get oferece links de url dinâmicos assim como na Web.
-Desenvolvedores Web provavelmente já queriam essa featura no Flutter, e muito provavelmente viram um package que promete essa feature e entrega uma sintaxe totalmente diferente do que uma url teria na web, mas o Get também resolve isso.
+Desenvolvedores Web provavelmente já queriam essa feature no Flutter, e muito provavelmente viram um package que promete essa feature mas entrega uma sintaxe totalmente diferente do que uma url teria na web, mas o Get também resolve isso.
 ```dart
 Get.offAllNamed("/ProximaTela?device=phone&id=354&name=Enzo");
 ```
@@ -876,7 +872,7 @@ void main() => runApp(
     initialRoute: '/',
     namedRoutes: {
       '/': GetRoute(page: MyHomePage()),
-      /// Importante! :user não é uma nova rota, é somente uma
+      /// Importante! ':user' não é uma nova rota, é somente uma
       /// especificação do parâmentro. Não use '/segunda/:user/' e '/segunda'
       /// se você precisa de uma nova rota para o user, então
       /// use '/segunda/user/:user' se '/segunda' for uma rota
@@ -1025,22 +1021,19 @@ Você pode criar seu tema customizado e simplesmente adicionar ele dentro de `Ge
 Get.changeTheme(ThemeData.light());
 ```
 
-Se você quer criar algo como um botão que muda o tema com um toque, você pode combinar duas APIs Get para isso, a API que checa se o tema dark está sendo usado, e a API de mudança de tema. E dentro de um `onPressed`:
+Se você quer criar algo como um botão que muda o tema com um toque, você pode combinar duas APIs do Get para isso, a API que checa se o tema dark está sendo usado, e a API de mudança de tema. E dentro de um `onPressed` você coloca isso:
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 Quando o modo escuro está ativado, ele vai alterar para o modo claro, e vice versa.
 
-Se você quer saber a fundo como mudar o tema, você pode seguir esse tutorial no Medium que até te ensina a persistir o tema usando Get:
+Se você quer saber a fundo como mudar o tema, você pode seguir esse tutorial no Medium que até te ensina a persistir o tema usando Get e shared_preferences:
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 
 ### Configurações Globais Opcionais
-Você pode criar configurações globais para o Get. Apenas adicione `Get.config` no seu código antes de ir para qualquer rota ou faça diretamente no seu GetMaterialApp
-### Optional Global Settings
-You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
-
+Você pode mudar configurações globais para o Get. Apenas adicione `Get.config` no seu código antes de ir para qualquer rota ou faça diretamente no seu GetMaterialApp
 ```dart
-//esse
+// essa forma
 GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
@@ -1050,7 +1043,7 @@ GetMaterialApp(
   defaultGlobalState: Get.defaultGlobalState,
 );
 
-// ou esse
+// ou essa
 Get.config(
   enableLog = true,
   defaultPopGesture = true,
@@ -1058,6 +1051,7 @@ Get.config(
 )
 ```
 ### Outras APIs avançadas e Configurações Manuais
+
 GetMaterialApp configura tudo para você, mas se quiser configurar Get manualmente, você pode usando APIs avançadas.
 ```dart
 MaterialApp(
@@ -1075,51 +1069,73 @@ MaterialApp(
 ```
 
 ```dart
-Get.arguments // fornece os arguments da tela atual
+// fornece os arguments da tela atual
+Get.arguments 
 
-Get.previousArguments // fornece os arguments da rota anterior
+// fornece os arguments da rota anterior
+Get.previousArguments
 
-Get.previousRoute // fornece o nome da rota anterior
+// fornece o nome da rota anterior
+Get.previousRoute
 
-Get.rawRoute // fornece a rota bruta para acessar por exemplo, rawRoute.isFirst()
+// fornece a rota bruta para acessar por exemplo, rawRoute.isFirst()
+Get.rawRoute
 
-Get.routing // fornece acesso a API de rotas de dentro do GetObserver
+// fornece acesso a API de rotas de dentro do GetObserver
+Get.routing
 
-Get.isSnackbarOpen // checa se o snackbar está aberto
+// checa se o snackbar está aberto
+Get.isSnackbarOpen
 
-Get.isDialogOpen // checa se o dialog está aberto
+// checa se o dialog está aberto
+Get.isDialogOpen
 
-Get.isBottomSheetOpen // checa se o bottomsheet está aberto
+// checa se o bottomsheet está aberto
+Get.isBottomSheetOpen
 
-Get.removeRoute() // remove uma rota.
+// remove uma rota.
+Get.removeRoute()
 
-Get.until() // volta repeditamente até o predicate retorne true.
+// volta repetidamente até o predicate retorne true.
+Get.until()
 
-Get.offUntil() // vá para a próxima rota e remove todas as rotas anteriores até que o predicate retorne true.
+// vá para a próxima rota e remove todas as rotas
+//anteriores até que o predicate retorne true.
+Get.offUntil()
 
-Get.offNamedUntil() // vá para a próxima rota nomeada e remove todas as rotas anteriores até que o predicate retorne true.
+// vá para a próxima rota nomeada e remove todas as
+//rotas anteriores até que o predicate retorne true.
+Get.offNamedUntil() 
 
-GetPlatform.isAndroid/isIOS/isWeb... // retorna qual é a plataforma (Esse método é completamente compatível com o FlutterWeb, diferente do método do framework "Platform.isAndroid")
+// retorna qual é a plataforma
+//(Esse método é completamente compatível com o FlutterWeb,
+//diferente do método do framework "Platform.isAndroid")
+GetPlatform.isAndroid/isIOS/isWeb... 
 
-Get.height // Equivalente ao método: MediaQuery.of(context).size.height
-Get.width // Equivalente ao método: MediaQuery.of(context).size.width
+// Equivalente ao método: MediaQuery.of(context).size.height
+Get.height
 
-Get.context // forncece o context da tela em qualquer lugar do seu código.
+// Equivalente ao método: MediaQuery.of(context).size.width
+Get.width
 
-Get.contextOverlay // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
+// forncece o context da tela em qualquer lugar do seu código.
+Get.context
+
+// fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
+Get.contextOverlay
 
 ```
 
-### Navigators Aninhados
+### Nested Navigators
 
 Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa do `context`, e você encontrará sua `navigation stack` pela ID.
 
-* Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, The ideal is not to use NestedNavigators, or usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
+* Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, ou usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
 
 Veja como é simples:
 ```dart
 Navigator(
-  key: nestedKey(1), // crie uma key para index
+  key: nestedKey(1), // crie uma key com um index
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -1157,7 +1173,7 @@ Navigator(
 ),
 ```
 
-Essa biblioteca vai sempre ficar atualizada e será sempre implementado nova features. Sinta-se livre para oferecer PRs e contribuir com o package.
+Essa biblioteca sempre será atualizada e terá sempre nova features sendo implementadas. Sinta-se livre para oferecer PRs e contribuir com o package.
 
 
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
