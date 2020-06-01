@@ -1,3 +1,7 @@
+## [2.10.1]
+- Fix broken links on pub
+- Fix List empty error
+
 ## [2.10.0]
 - Added SmartManagement, your application's memory is managed intelligently like never before!
 - Added Obx, a widget that knows when to rebuild a child, without needing any type.

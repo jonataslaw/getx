@@ -13,6 +13,7 @@ class GetRoute {
   final bool maintainState;
   final bool opaque;
   final Bindings binding;
+  final List<Bindings> bindings;
   final Widget customTransition;
   final Duration transitionDuration;
   final bool fullscreenDialog;
@@ -30,6 +31,7 @@ class GetRoute {
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
     this.binding,
+    this.bindings,
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,

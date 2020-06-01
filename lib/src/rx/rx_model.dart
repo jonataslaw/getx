@@ -5,7 +5,7 @@ class Change<T> {
   /// Value after change
   final T $new;
 
-  final T item;
+  final item;
 
   final ListChangeOp op;
 
