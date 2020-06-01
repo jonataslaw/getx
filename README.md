@@ -9,6 +9,7 @@
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
 
+
 Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 
 ```dart
@@ -25,13 +26,28 @@ Navigator.of(context).push(
 // Get syntax 
 Get.to(Home());
 ```
+**Complete example of the Flutter counter app in just 11 lines with Get**
+
+```dart
+void main() => runApp(GetMaterialApp(home: Home()));
+
+class Home extends StatelessWidget {
+  final count = 0.obs;
+  @override
+  Widget build(context) => Scaffold(
+        appBar: AppBar(title: Text("Get change you life")),
+        floatingActionButton:
+            FloatingActionButton(onPressed: () => count.value++),
+        body: Center(child: Obx(() => Text(count.string))),
+      );
+}
+
+```
 
 ## Getting Started
 
 Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
-In addition, when a route is pushed, the entire MaterialApp can be rebuilt causing freezes, this does not happen with Get.
-This library that will change the way you work with the Framework and save your life from cliche code, increasing your productivity, and eliminating the rebuild bugs of your application.
-
+This library that will change the way you work with the Framework and save your life from boilerplate, increasing your productivity, and provide you with everything that is most modern when it comes to managing states, routes and dependencies.
 
 - **[How to use?](#how-to-use)**
 - **[Navigating without named routes](#Navigating-without-named-routes)**
@@ -40,7 +56,8 @@ This library that will change the way you work with the Framework and save your 
 - **[BottomSheets](#BottomSheets)**
 - **[Simple State Manager](#Simple-State-Manager)**
 - **[Reactive State Manager](#Reactive-State-Manager)**
-- **[Simple Instance Manager](#Simple-Instance-Manager)**
+- **[Bindings](#Bindings)**
+- **[Workers](#Workers)**
 - **[Navigate with named routes](#Navigate-with-named-routes)**
 - **[Send data to named Routes](#Send-data-to-named-Routes)**
 - **[Dynamic urls links](#Dynamic-urls-links)**
@@ -53,7 +70,7 @@ This library that will change the way you work with the Framework and save your 
 #### You can contribute to the project in multiple ways:
 - Helping to translate the readme into other languages.
 - Adding documentation to the readme (not even half of Get's functions have been documented yet).
-- Writing articles/videos about Get (they will be inserted in the Readme, and in the future in our Wiki).
+- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
 - Offering PRs for code/tests.
 - Including new functions.
 
@@ -372,7 +389,7 @@ FloatingActionButton(
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
 
 #### No StatefulWidget:
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder, which will be another StatefulWidget.
+Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
 The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
 Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get. 
 
@@ -427,8 +444,6 @@ Controller life cycle:
 
 ##### Forms of use:
 
-- Recommended usage:
-
 You can use Controller instance directly on GetBuilder value:
 
 ```dart
@@ -446,7 +461,7 @@ class Controller extends GetController {
   static Controller get to => Get.find(); 
 [...]
 }
-// on stateful/stateless class
+// on you view:
 GetBuilder<Controller>(  
   init: Controller(), // use it only first time on each controller
   builder: (_) => Text(
@@ -474,7 +489,7 @@ GetBuilder<Controller>(
 ```dart
 Controller controller = Controller();
 [...]
-GetBuilder( // you dont need to type on this way
+GetBuilder<Controller>( 
   init: controller, //here
   builder: (_) => Text(
     '${controller.counter}', // here
@@ -482,7 +497,8 @@ GetBuilder( // you dont need to type on this way
 ),
 
 ```
-This approach is not recommended, as you will have to manually dispose of your controllers, close your streams manually, and literally give up one of the great benefits of this library, which is intelligent memory control. But if you trust your potential, go ahead!
+<!-- This approach is not recommended, as you will have to manually dispose of your controllers, close your streams manually, and literally give up one of the great benefits of this library, which is intelligent memory control. But if you trust your potential, go ahead! -->
+
 
 If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
 ```dart
@@ -616,35 +632,35 @@ Camila
 
 ```
 
-Before you immerse yourself in this world, I will give you a tip, always access the "value" of your flow when reading it, especially if you are working with lists where this is apparently optional.
-You can access list.length, or list.value.length. Most of the time, both ways will work, since the GetX list inherits directly from the dart List. But there is a difference between you accessing the object, and accessing the flow. I strongly recommend you to access the value:
+Working with Lists using Get is the best and most enjoyable thing in the world. They are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that, unfortunate primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+
 ```dart
 final list = List<User>().obs;
 ```
-```dart
-ListView.builder(
-  itemCount: list.value.lenght
-)
-```
-or else create a "get" method for it and abandon "value" for life. example:
 
-```dart
-final _list = List<User>().obs;
-List get list => _list.value;
-```
 ```dart
 ListView.builder (
   itemCount: list.lenght
 )
 ```
-You could add an existing list of another type to the observable list using a list.assign (oldList); or the assignAll method, which differs from add, and addAll, which must be of the same type. All existing methods in a list are also available on GetX.
 
-We could remove the obligation to use value with a simple decoration and code generator, but the purpose of this lib is precisely not to need any external dependency. It is to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, light and performance way without needing any external package. You can literally add 3 letters to your pubspec (get) and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance. The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand. If you are bothered by value, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
+The "assign" api will clear your list, and add a single object that you want to start there.
+The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+
+We could remove the obligation to use 'value' to String and int with a simple decoration and code generator, but the purpose of this lib is precisely not to need any external dependency. It is to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, light and performance way without needing any external package. You can literally add 3 letters to your pubspec (get) and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance. The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand. If you are bothered by value, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
 If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
 Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
 
+Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
+Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+
+
 ## Simple Instance Manager
+- Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
+
 Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
 ```dart
@@ -679,6 +695,78 @@ To remove a instance of Get:
 ```dart
 Get.delete<Controller>();
 ```
+
+## Bindings 
+One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
+When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
+In version 2.10 Get completely implemented the Bindings API.
+Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
+The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
+This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
+In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
+
+#### To use this API you only need:
+- Create a class and implements Binding
+
+```dart
+class HomeBinding implements Bindings{
+```
+
+Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
+
+```dart
+class HomeBinding implements Bindings{
+  @override
+  void dependencies() {
+    Get.lazyPut<ControllerX>(() => ControllerX());
+    Get.lazyPut<Service>(()=> Api());
+  }
+}
+```
+Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
+
+- Using named routes:
+```dart
+namedRoutes: {
+  '/': GetRoute(Home(), binding: HomeBinding())
+}
+```
+
+- Using normal routes:
+```dart
+Get.to(Home(), binding: HomeBinding());
+```
+
+There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+
+## Workers:
+Workers will assist you, triggering specific callbacks when an event occurs.
+
+
+```dart
+/// Called every time the variable $_ is changed
+ever(count1, (_) => print("$_ has been changed"));
+
+/// Called only first time the variable $_ is changed
+once(count1, (_) => print("$_ was changed once"));
+
+/// Anti DDos - Called every time the user stops typing for 1 second, for example. 
+debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
+
+/// Ignore all changes within 1 second.
+interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
+```
+- ever
+'ever' is called every time its variable is changed. That's it.
+
+- ever
+'once' is called only the first time the variable has been changed.
+
+- debounce
+'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+
+- interval
+'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. debounce will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
 
 
 ## Navigate with named routes:
@@ -1043,3 +1131,5 @@ Navigator(
 
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
+
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>

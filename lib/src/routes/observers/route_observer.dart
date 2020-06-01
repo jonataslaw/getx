@@ -96,6 +96,10 @@ class GetObserver extends NavigatorObserver {
       if (Get.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
     }
 
+    if (Get().smartManagement == SmartManagement.full) {
+      Get().removeDependencyByRoute("${route?.settings?.name}");
+    }
+
     isSnackbar = false;
     isDialog = false;
     isBottomSheet = false;
@@ -129,6 +133,10 @@ class GetObserver extends NavigatorObserver {
     if (Get.isLogEnable) print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
     if (Get.isLogEnable) print("[NEW ROUTE] ${newRoute?.settings?.name}");
 
+    if (Get().smartManagement == SmartManagement.full) {
+      Get().removeDependencyByRoute("${oldRoute?.settings?.name}");
+    }
+
     isSnackbar = false;
     isDialog = false;
     isBottomSheet = false;
@@ -156,6 +164,11 @@ class GetObserver extends NavigatorObserver {
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
     if (Get.isLogEnable) print("[REMOVING ROUTE] ${route?.settings?.name}");
+
+    if (Get().smartManagement == SmartManagement.full) {
+      Get().removeDependencyByRoute("${route?.settings?.name}");
+    }
+
     final routeSend = Routing(
       isBack: false,
       route: previousRoute,

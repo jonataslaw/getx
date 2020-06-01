@@ -1,42 +1,43 @@
-// import '../../get.dart';
+import 'package:get/get.dart';
+import 'rx_interface.dart';
+import 'utils/debouncer.dart';
 
-// class Reaction extends Rx {
-//   dynamic Function() listener;
-//   void Function(dynamic) callback;
+void ever(RxInterface listener, Function(dynamic) callback) {
+  listener.subject.stream.listen((event) {
+    callback(event.$new);
+  });
+}
 
-//   Reaction(this.listener, this.callback) : super() {
-//     subject.stream.listen((_) {
-//       callback(_);
-//     });
+void once(RxInterface listener, Function(dynamic) callback) {
+  int times = 0;
+  listener.subject.stream.listen((event) {
+    times++;
+    if (times < 2) {
+      callback(event.$new);
+    }
+  });
+}
 
-//     var previousObserver = Get.obs;
-//     Get.obs = this;
-//     listener();
-//     Get.obs = previousObserver;
-//   }
+void interval(RxInterface listener, Function(dynamic) callback,
+    {Duration time}) {
+  bool debounceActive = false;
+  Duration timer = time ?? Duration(seconds: 1);
 
-//   void dispose() {
-//     close();
-//   }
-// }
+  listener.subject.stream.listen((event) async {
+    if (debounceActive) return null;
+    debounceActive = true;
+    await Future.delayed(timer);
+    debounceActive = false;
+    callback(event.$new);
+  });
+}
 
-// class When extends Rx {
-//   dynamic Function() listener;
-//   void Function(dynamic) callback;
-
-//   When(this.listener, this.callback) : super() {
-//     subject.stream.listen((_) {
-//       callback(_);
-//       dispose();
-//     });
-
-//     var previousObserver = Get.obs;
-//     Get.obs = this;
-//     listener();
-//     Get.obs = previousObserver;
-//   }
-
-//   void dispose() {
-//     close();
-//   }
-// }
+void debounce(RxInterface listener, Function(dynamic) callback,
+    {Duration time}) {
+  final _debouncer = Debouncer(delay: time ?? Duration(milliseconds: 800));
+  listener.subject.stream.listen((event) {
+    _debouncer(() {
+      callback(event.$new);
+    });
+  });
+}

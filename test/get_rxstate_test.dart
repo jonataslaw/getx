@@ -44,7 +44,7 @@ void main() {
     expect(find.text("Double: 0.0"), findsOneWidget);
     expect(find.text("String: string"), findsOneWidget);
     expect(find.text("Bool: true"), findsOneWidget);
-    expect(find.text("List: 0"), findsOneWidget);
+    expect(find.text("List: 1"), findsOneWidget);
     expect(find.text("Map: 0"), findsOneWidget);
 
     Controller.to.increment();
@@ -67,7 +67,7 @@ class Controller extends RxController {
   var counter = 0.obs;
   var doubleNum = 0.0.obs;
   var string = "string".obs;
-  var list = [].obs;
+  var list = [0].obs;
   var map = {}.obs;
   var boolean = true.obs;
 

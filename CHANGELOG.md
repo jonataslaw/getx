@@ -1,4 +1,15 @@
-## [2.7.1]
+## [2.10.0]
+- Added SmartManagement, your application's memory is managed intelligently like never before!
+- Added Obx, a widget that knows when to rebuild a child, without needing any type.
+- Added MIxinBuilder - If you need to use GetBuilder in conjunction with GetX, use GetController with this widget, and the changes will occur either using update (this) or changing some reactive variable. Use only if necessary, for better RAM consumption, prefer widgets in that order:
+Obx => GetX => GetBuilder => MixinBuilder.
+Obx is the lightest of all, and MixinBuilder is a mix of the other 3, whenever possible, use the specific widget.
+- Refactor: refactor StateManager of Get.
+- Changed: full List API refactor, now value is no longer needed.
+- Added Workers: You can hear changes to a variable and trigger custom callbacks.
+- Added Bindings API docs.
+
+# [2.7.1]
 - Improve list to set and get methods
 
 ## [2.7.0]

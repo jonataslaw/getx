@@ -10,6 +10,7 @@ class GetX<T extends RxController> extends StatefulWidget {
   // final Stream Function(T) stream;
   // final StreamController Function(T) streamController;
   final bool autoRemove;
+  final bool assignId;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final T init;
   const GetX({
@@ -17,6 +18,7 @@ class GetX<T extends RxController> extends StatefulWidget {
     this.global = true,
     this.autoRemove = true,
     this.initState,
+    this.assignId = false,
     //  this.stream,
     this.dispose,
     this.didChangeDependencies,
@@ -33,16 +35,21 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
   bool isCreator = false;
 
   _GetXState() {
-    _observer = ListX();
+    _observer = Rx();
   }
 
   @override
   void initState() {
+    bool isPrepared = Get.isPrepared<T>();
+    bool isRegistred = Get.isRegistred<T>();
     if (widget.global) {
-      if (Get.isPrepared<T>()) {
+      // if (Get().smartManagement == SmartManagement.full) {
+      //   Get.isDependencyInit<T>();
+      // }
+      if (isPrepared) {
         isCreator = true;
         controller = Get.find<T>();
-      } else if (Get.isRegistred<T>() && !Get.isPrepared<T>()) {
+      } else if (isRegistred) {
         controller = Get.find<T>();
         isCreator = false;
       } else {
@@ -56,11 +63,7 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
     }
     if (widget.initState != null) widget.initState(this);
     if (isCreator) {
-      try {
-        controller?.onInit();
-      } catch (e) {
-        if (Get.isLogEnable) print("Failure on call onInit");
-      }
+      controller?.onInit();
     }
 
     _listenSubscription = _observer.subject.stream.listen((data) {
@@ -73,8 +76,9 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
   void dispose() {
     if (widget.dispose != null) widget.dispose(this);
 
-    if (isCreator) {
+    if (isCreator || widget.assignId) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
+        print("DISPOSEEER CHAMADOOO");
         // controller.onClose();
         Get.delete<T>();
       }
@@ -92,7 +96,6 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
 
   @override
   Widget build(BuildContext context) {
-    // _observer.close();
     final observer = Get.obs;
     Get.obs = this._observer;
     final result = widget.builder(controller);
