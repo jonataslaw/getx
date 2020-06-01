@@ -1,3 +1,4 @@
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 ![](get.png)
 
 *Idiomas: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
@@ -69,8 +70,6 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
     - [Middleware](#middleware)
   - [Change Theme](#change-theme)
   - [Configurações Globais Opcionais](#configurações-globais-opcionais)
-  - [Outras APIs avançadas e Configurações Manuais](#outras-apis-avançadas-e-configurações-manuais)
-  - [Nested Navigators](#nested-navigators)
 
 
 
@@ -1049,6 +1048,54 @@ Get.config(
   defaultPopGesture = true,
   defaultTransition = Transitions.cupertino
 )
+
+### Nested Navigators
+
+Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa do `context`, e você encontrará sua `navigation stack` pela ID.
+
+* Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, ou usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
+
+Veja como é simples:
+```dart
+Navigator(
+  key: nestedKey(1), // crie uma key com um index
+  initialRoute: '/',
+  onGenerateRoute: (settings) {
+    if (settings.name == '/') {
+      return GetRouteBase(
+        page: Scaffold(
+          appBar: AppBar(
+            title: Text("Principal"),
+          ),
+          body: Center(
+            child: FlatButton(
+              color: Colors.blue,
+              child: Text("Ir para a segunda"),
+              onPressed: () {
+                Get.toNamed('/segunda', id:1); // navega pela sua navegação aninhada usando o index
+              },
+            )
+          ),
+        ),
+      );
+    } else if (settings.name == '/segunda') {
+      return GetRouteBase(
+        page: Center(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text("Principal"),
+            ),
+            body: Center(
+              child:  Text("Segunda")
+            ),
+          ),
+        ),
+      );
+    }
+  }
+),
+```
+
 ```
 ### Outras APIs avançadas e Configurações Manuais
 
@@ -1126,54 +1173,6 @@ Get.contextOverlay
 
 ```
 
-### Nested Navigators
-
-Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa do `context`, e você encontrará sua `navigation stack` pela ID.
-
-* Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, ou usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
-
-Veja como é simples:
-```dart
-Navigator(
-  key: nestedKey(1), // crie uma key com um index
-  initialRoute: '/',
-  onGenerateRoute: (settings) {
-    if (settings.name == '/') {
-      return GetRouteBase(
-        page: Scaffold(
-          appBar: AppBar(
-            title: Text("Principal"),
-          ),
-          body: Center(
-            child: FlatButton(
-              color: Colors.blue,
-              child: Text("Ir para a segunda"),
-              onPressed: () {
-                Get.toNamed('/segunda', id:1); // navega pela sua navegação aninhada usando o index
-              },
-            )
-          ),
-        ),
-      );
-    } else if (settings.name == '/segunda') {
-      return GetRouteBase(
-        page: Center(
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text("Principal"),
-            ),
-            body: Center(
-              child:  Text("Segunda")
-            ),
-          ),
-        ),
-      );
-    }
-  }
-),
-```
-
 Essa biblioteca sempre será atualizada e terá sempre nova features sendo implementadas. Sinta-se livre para oferecer PRs e contribuir com o package.
 
 
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
