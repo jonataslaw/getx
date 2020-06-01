@@ -50,9 +50,10 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
     - [Links de Url dinâmicos](#links-de-url-dinâmicos)
     - [Middleware](#middleware)
   - [Change Theme](#change-theme)
+  - [Configurações Globais Opcionais](#configurações-globais-opcionais)
   - [Optional Global Settings](#optional-global-settings)
-  - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
-  - [Nested Navigators](#nested-navigators)
+  - [Outras APIs avançadas e Configurações Manuais](#outras-apis-avançadas-e-configurações-manuais)
+  - [Navigators Aninhados](#navigators-aninhados)
 
 
 
@@ -922,149 +923,143 @@ class Terceira extends StatelessWidget {
 ```
 
 ### Change Theme
-Please do not use any higher level widget than GetMaterialApp in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with Get.
+Por favor não use nenhum widget acima do `GetMaterialApp` para atualizá-lo. Isso pode ativar keys duplicadas. Muitas pessoas estão acostumadas com a forma pré-história de criar um widget `ThemeProvider` só pra mudar o tema do seu app, e isso definitamente NÃO é necessário com o Get.
 
-You can create your custom theme and simply add it within Get.changeTheme without any boilerplate for that:
-
-
+Você pode criar seu tema customizado e simplesmente adicionar ele dentro de `Get.changeTheme()` sem nenhum boilerplate para isso:
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the theme with onTap, you can combine two Get APIs for that, the api that checks if the dark theme is being used, and the theme change API, you can just put this within an onPressed:
-
+Se você quer criar algo como um botão que muda o tema com um toque, você pode combinar duas APIs Get para isso, a API que checa se o tema dark está sendo usado, e a API de mudança de tema. E dentro de um `onPressed`:
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
+Quando o modo escuro está ativado, ele vai alterar para o modo claro, e vice versa.
 
-When darkmode is activated, it will switch to the light theme, and when the light theme is activated, it will change to dark.
-
-
-If you want to know in depth how to change the theme, you can follow this tutorial on Medium that even teaches the persistence of the theme using Get:
-
+Se você quer saber a fundo como mudar o tema, você pode seguir esse tutorial no Medium que até te ensina a persistir o tema usando Get:
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 
-
+### Configurações Globais Opcionais
+Você pode criar configurações globais para o Get. Apenas adicione `Get.config` no seu código antes de ir para qualquer rota ou faça diretamente no seu GetMaterialApp
 ### Optional Global Settings
 You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 
 ```dart
+//esse
+GetMaterialApp(
+  enableLog: true,
+  defaultTransition: Transition.fade,
+  opaqueRoute: Get.isOpaqueRouteDefault,
+  popGesture: Get.isPopGestureEnable,
+  transitionDuration: Get.defaultDurationTransition,
+  defaultGlobalState: Get.defaultGlobalState,
+);
 
-GetMaterialApp(    
-    enableLog: true,
-    defaultTransition: Transition.fade,
-    opaqueRoute: Get.isOpaqueRouteDefault,
-    popGesture: Get.isPopGestureEnable,
-    transitionDuration: Get.defaultDurationTransition,
-    defaultGlobalState: Get.defaultGlobalState,
-    );
-
+// ou esse
 Get.config(
-      enableLog = true,
-      defaultPopGesture = true,
-      defaultTransition = Transitions.cupertino}
+  enableLog = true,
+  defaultPopGesture = true,
+  defaultTransition = Transitions.cupertino
+)
 ```
-
-
-### Other Advanced APIs and Manual configurations
-GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
-
+### Outras APIs avançadas e Configurações Manuais
+GetMaterialApp configura tudo para você, mas se quiser configurar Get manualmente, você pode usando APIs avançadas.
 ```dart
 MaterialApp(
-      navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()],
-    );
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver()],
+);
 ```
 
-You will also be able to use your own Middleware within GetObserver, this will not influence anything.
-
+Você também será capaz de usar seu próprio Middleware dentro do GetObserver, isso não irá influenciar em nada.
 ```dart
 MaterialApp(
-      navigatorKey: Get.key,
-      navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
-    );
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver(MiddleWare.observer)], // Aqui
+);
 ```
 
 ```dart
-Get.arguments // give the current args from currentScreen
+Get.arguments // fornece os arguments da tela atual
 
-Get.previousArguments // give arguments of previous route
+Get.previousArguments // fornece os arguments da rota anterior
 
-Get.previousRoute // give name of previous route
+Get.previousRoute // fornece o nome da rota anterior
 
-Get.rawRoute // give the raw route to access for example, rawRoute.isFirst()
+Get.rawRoute // fornece a rota bruta para acessar por exemplo, rawRoute.isFirst()
 
-Get.routing // give access to Rounting API from GetObserver
+Get.routing // fornece acesso a API de rotas de dentro do GetObserver
 
-Get.isSnackbarOpen // check if snackbar is open
+Get.isSnackbarOpen // checa se o snackbar está aberto
 
-Get.isDialogOpen // check if dialog is open
+Get.isDialogOpen // checa se o dialog está aberto
 
-Get.isBottomSheetOpen // check if bottomsheet is open
+Get.isBottomSheetOpen // checa se o bottomsheet está aberto
 
-Get.removeRoute() // remove one route.
+Get.removeRoute() // remove uma rota.
 
-Get.until() // back repeatedly until the predicate returns true.
+Get.until() // volta repeditamente até o predicate retorne true.
 
-Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
+Get.offUntil() // vá para a próxima rota e remove todas as rotas anteriores até que o predicate retorne true.
 
-Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
+Get.offNamedUntil() // vá para a próxima rota nomeada e remove todas as rotas anteriores até que o predicate retorne true.
 
-GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
+GetPlatform.isAndroid/isIOS/isWeb... // retorna qual é a plataforma (Esse método é completamente compatível com o FlutterWeb, diferente do método do framework "Platform.isAndroid")
 
-Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height
+Get.height // Equivalente ao método: MediaQuery.of(context).size.height
+Get.width // Equivalente ao método: MediaQuery.of(context).size.width
 
-Get.context // Gives the context of the screen in the foreground anywhere in your code.
+Get.context // forncece o context da tela em qualquer lugar do seu código.
 
-Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+Get.contextOverlay // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
 
 ```
 
-### Nested Navigators
+### Navigators Aninhados
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa do `context`, e você encontrará sua `navigation stack` pela ID.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+* Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, The ideal is not to use NestedNavigators, or usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
 
-See how simple it is:
+Veja como é simples:
 ```dart
-             Navigator(
-                key: nestedKey(1), // create a key by index
-                initialRoute: '/',
-                onGenerateRoute: (settings) {
-                  if (settings.name == '/') {
-                    return GetRouteBase(
-                      page: Scaffold(
-                        appBar: AppBar(
-                          title: Text("Main"),
-                        ),
-                        body: Center(
-                          child: FlatButton(
-                              color: Colors.blue,
-                              onPressed: () {
-                                Get.toNamed('/second', id:1); // navigate by your nested route by index
-                              },
-                              child: Text("Go to second")),
-                        ),
-                      ),
-                    );
-                  } else if (settings.name == '/second') {
-                    return GetRouteBase(
-                      page: Center(
-                        child: Scaffold(
-                          appBar: AppBar(
-                            title: Text("Main"),
-                          ),
-                          body: Center(
-                            child:  Text("second")
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                }),
+Navigator(
+  key: nestedKey(1), // crie uma key para index
+  initialRoute: '/',
+  onGenerateRoute: (settings) {
+    if (settings.name == '/') {
+      return GetRouteBase(
+        page: Scaffold(
+          appBar: AppBar(
+            title: Text("Principal"),
+          ),
+          body: Center(
+            child: FlatButton(
+              color: Colors.blue,
+              child: Text("Ir para a segunda"),
+              onPressed: () {
+                Get.toNamed('/segunda', id:1); // navega pela sua navegação aninhada usando o index
+              },
+            )
+          ),
+        ),
+      );
+    } else if (settings.name == '/segunda') {
+      return GetRouteBase(
+        page: Center(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text("Principal"),
+            ),
+            body: Center(
+              child:  Text("Segunda")
+            ),
+          ),
+        ),
+      );
+    }
+  }
+),
 ```
 
-
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
+Essa biblioteca vai sempre ficar atualizada e será sempre implementado nova features. Sinta-se livre para oferecer PRs e contribuir com o package.
