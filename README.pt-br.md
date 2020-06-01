@@ -46,8 +46,8 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
 - [Reactive State Manager - GetX](#reactive-state-manager---getx)
 - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
 - [Navegar com rotas nomeadas](#navegar-com-rotas-nomeadas)
-  - [Send data to named Routes:](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
+  - [Enviar dados para rotas nomeadas](#enviar-dados-para-rotas-nomeadas)
+    - [Links de Url dinâmicos](#links-de-url-dinâmicos)
     - [Middleware](#middleware)
   - [Change Theme](#change-theme)
   - [Optional Global Settings](#optional-global-settings)
@@ -741,71 +741,66 @@ void main() {
       initialRoute: '/',
       namedRoutes: {
         '/': GetRoute(page: MyHomePage()),
-        '/second': GetRoute(page: Second()),
-        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+        '/login': GetRoute(page: Login()),
+        '/cadastro': GetRoute(page: Cadastro(),transition: Transition.cupertino);
       },
     )
   );
 }
 ```
 
-### Send data to named Routes:
+### Enviar dados para rotas nomeadas
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+Apenas envie o que você quiser no parâmetro `arguments`. Get aceita qualquer coisa aqui, seja String, Map, List, ou até a instância de uma classe.
 ```dart
-Get.toNamed("/NextScreen", arguments: 'Get is the best');
-```
-on your class or controller:
-
-```dart
-print(Get.arguments);
-//print out: Get is the best
+Get.toNamed("/ProximaTela", arguments: 'Get é o melhor');
 ```
 
-#### Dynamic urls links
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
-
+Na sua classe ou controller:
 ```dart
-Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
+print(Get.arguments); //mostra: Get é o melhor
 ```
-on your controller/bloc/stateful/stateless class:
+#### Links de Url dinâmicos
 
+Get oferece links de url dinâmicos assim como na Web.
+Desenvolvedores Web provavelmente já queriam essa featura no Flutter, e muito provavelmente viram um package que promete essa feature e entrega uma sintaxe totalmente diferente do que uma url teria na web, mas o Get também resolve isso.
 ```dart
-print(Get.parameters['id']);
-// out: 354
-print(Get.parameters['name']);
-// out: Enzo
+Get.offAllNamed("/ProximaTela?device=phone&id=354&name=Enzo");
+```
+na sua classe controller/bloc/stateful/stateless:
+```dart
+print(Get.parameters['id']); // valor: 354
+print(Get.parameters['name']); // valor: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
-
+Você também pode receber parâmetros nomeados com o Get facilmente:
 ```dart
-void main() {
-  runApp(GetMaterialApp(
+void main() => runApp(
+  GetMaterialApp(
     initialRoute: '/',
     namedRoutes: {
       '/': GetRoute(page: MyHomePage()),
-      /// Important!  :user is not a new route, it is just a parameter
-      /// specification. Do not use '/second/:user' and '/second'
-      /// if you need new route to user, use '/second/user/:user' 
-      /// if '/second' is a route.
-      '/second/:user': GetRoute(page: Second()), // receive ID
+      /// Importante! :user não é uma nova rota, é somente uma
+      /// especificação do parâmentro. Não use '/second/:user/' e '/second'
+      /// se você precisa de uma nova rota para o user, então
+      /// use '/second/user/:user' se '/second' for uma rota
+      '/second/:user': GetRoute(page: Second()), // recebe a ID
       '/third': GetRoute(page: Third(),transition: Transition.cupertino);
     },
-  ));
-}
+  ),
+);
 ```
-Send data on route name
+Envie dados na rota nomeada
 ```dart
 Get.toNamed("/second/34954");
 ```
 
-On second screen take the data by parameter
-
+Na segunda tela receba os dados usando `Get.parameters[]`
 ```dart
-print(Get.parameters['user']);
-// out: 34954
+print(Get.parameters['user']); // valor: 34954
 ```
+
+E agora, tudo que você precisa fazer é usar `Get.toNamed)` para navegar por suas rotas nomeadas, sem nenhum `context` (você pode chamar suas rotas diretamente do seu BLoc ou do Controller), e quando seu aplicativo é compilado para a web, suas rotas vão aparecer na url :heart:
 
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
 
