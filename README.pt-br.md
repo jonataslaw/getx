@@ -720,17 +720,17 @@ Get.delete<Controller>();
 
 Para navegar para uma nova tela
 ```dart
-Get.toNamed("/NextScreen");
+Get.toNamed("/ProximaTela");
 ```
 
 Para navegar para uma tela sem a opção de voltar para a rota atual.
 ```dart
-Get.offNamed("/NextScreen");
+Get.offNamed("/ProximaTela");
 ```
 
 Para navegar para uma nova tela e remover todas rotas anteriores da stack
 ```dart
-Get.offAllNamed("/NextScreen");
+Get.offAllNamed("/ProximaTela");
 ```
 
 Para definir rotas, use o `GetMaterialApp`:
@@ -781,18 +781,18 @@ void main() => runApp(
     namedRoutes: {
       '/': GetRoute(page: MyHomePage()),
       /// Importante! :user não é uma nova rota, é somente uma
-      /// especificação do parâmentro. Não use '/second/:user/' e '/second'
+      /// especificação do parâmentro. Não use '/segunda/:user/' e '/segunda'
       /// se você precisa de uma nova rota para o user, então
-      /// use '/second/user/:user' se '/second' for uma rota
-      '/second/:user': GetRoute(page: Second()), // recebe a ID
-      '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      /// use '/segunda/user/:user' se '/segunda' for uma rota
+      '/segunda/:user': GetRoute(page: Segunda()), // recebe a ID
+      '/terceira': GetRoute(page: Terceira(),transition: Transition.cupertino);
     },
   ),
 );
 ```
 Envie dados na rota nomeada
 ```dart
-Get.toNamed("/second/34954");
+Get.toNamed("/segunda/34954");
 ```
 
 Na segunda tela receba os dados usando `Get.parameters[]`
@@ -800,57 +800,58 @@ Na segunda tela receba os dados usando `Get.parameters[]`
 print(Get.parameters['user']); // valor: 34954
 ```
 
-E agora, tudo que você precisa fazer é usar `Get.toNamed)` para navegar por suas rotas nomeadas, sem nenhum `context` (você pode chamar suas rotas diretamente do seu BLoc ou do Controller), e quando seu aplicativo é compilado para a web, suas rotas vão aparecer na url :heart:
-
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+E agora, tudo que você precisa fazer é usar `Get.toNamed)` para navegar por suas rotas nomeadas, sem nenhum `context` (você pode chamar suas rotas diretamente do seu BLoc ou do Controller), e quando seu aplicativo é compilado para a web, suas rotas vão aparecer na url ❤
 
 
-#### Middleware 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+#### Middleware
+
+Se você quer escutar eventos do Get para ativar ações, você pode usar `routingCallback` para isso
 ```dart
 GetMaterialApp(
   routingCallback: (route){
-    if(routing.current == '/second'){
+    if(routing.current == '/segunda'){
       openAds();
     }
   }
-  ```
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+)
+```
 
-
+Se você não estiver usando o `GetMaterialApp`, você pode usar a API manual para anexar um observer Middleware.
 ```dart
 void main() {
-  runApp(MaterialApp(
-    onGenerateRoute: Router.generateRoute,
-    initialRoute: "/",
-    navigatorKey: Get.key,
-    navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
-    ],
-  ));
+  runApp(
+    MaterialApp(
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: "/",
+      navigatorKey: Get.key,
+      navigatorObservers: [
+        GetObserver(MiddleWare.observer), // AQUI !!!
+      ],
+    )
+  );
 }
 ```
-Create a MiddleWare class
 
+Criar uma classe MiddleWare
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
-    ///If you need to enter any of these 3 events directly here, 
-    ///you must specify that the event is != Than you are trying to do.
-    if (routing.current == '/second' && !routing.isSnackbar) {
-      Get.snackbar("Hi", "You are on second route");
-    } else if (routing.current =='/third'){
-      print('last route called');
+    /// Você pode escutar junto com as rotas, snackbars, dialogs
+    /// e bottomsheets em cada tela.
+    /// Se você precisar entrar em algum um desses 3 eventos aqui diretamente,
+    /// você precisa especificar que o evento é != do que você está tentando fazer
+    if (routing.current == '/segunda' && !routing.isSnackbar) {
+      Get.snackbar("Olá", "Você está na segunda rota");
+    } else if (routing.current =='/terceira'){
+      print('última rota chamada');
     }
   }
 }
 ```
 
-Now, use Get on your code:
-
+Agora, use Get no seu código:
 ```dart
-class First extends StatelessWidget {
+class Primeira extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -858,16 +859,16 @@ class First extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
-            Get.snackbar("hi", "i am a modern snackbar");
+            Get.snackbar("Oi", "eu sou uma snackbar moderna");
           },
         ),
-        title: Text('First Route'),
+        title: Text('Primeira rota'),
       ),
       body: Center(
         child: RaisedButton(
-          child: Text('Open route'),
+          child: Text('Abrir rota'),
           onPressed: () {
-            Get.toNamed("/second");
+            Get.toNamed("/segunda");
           },
         ),
       ),
@@ -875,7 +876,7 @@ class First extends StatelessWidget {
   }
 }
 
-class Second extends StatelessWidget {
+class Segunda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -883,16 +884,16 @@ class Second extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
-            Get.snackbar("hi", "i am a modern snackbar");
+            Get.snackbar("Oi", "eu sou uma snackbar moderna");
           },
         ),
-        title: Text('second Route'),
+        title: Text('Segunda rota'),
       ),
       body: Center(
         child: RaisedButton(
-          child: Text('Open route'),
+          child: Text('Abrir rota'),
           onPressed: () {
-            Get.toNamed("/third");
+            Get.toNamed("/terceira");
           },
         ),
       ),
@@ -900,19 +901,19 @@ class Second extends StatelessWidget {
   }
 }
 
-class Third extends StatelessWidget {
+class Terceira extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Third Route"),
+        title: Text("Terceira Rota"),
       ),
       body: Center(
         child: RaisedButton(
           onPressed: () {
             Get.back();
           },
-          child: Text('Go back!'),
+          child: Text('Voltar!'),
         ),
       ),
     );
