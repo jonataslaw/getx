@@ -175,6 +175,7 @@ class GetMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+ 
     return GetBuilder<GetMaterialController>(
         init: Get().getController,
         dispose: (d) {

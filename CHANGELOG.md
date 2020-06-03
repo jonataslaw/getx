@@ -1,3 +1,6 @@
+## [2.10.2]
+- Fix Get.generalDialog default options
+
 ## [2.10.1]
 - Fix broken links on pub
 - Fix List empty error

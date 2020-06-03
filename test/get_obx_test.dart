@@ -3,15 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  Get.lazyPut<Controller2>(() => Controller2());
+  Controller controller = Get.put<Controller>(Controller());
   testWidgets("GetController smoke test", (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: GetX<Controller>(
-          init: Controller(),
-          builder: (controller) {
-            return Column(
-              children: [
+        home: Column(
+          children: [
+            Obx(
+              () => Column(children: [
                 Text(
                   'Count: ${controller.counter.value}',
                 ),
@@ -34,21 +33,12 @@ void main() {
                   child: Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
-                GetX<Controller2>(builder: (controller) {
-                  return Text('lazy ${controller.lazy}');
-                }),
-                GetX<Controller>(builder: (controller) {
-                  return Container();
-                }),
-                GetX<ControllerNonGlobal>(
-                    init: ControllerNonGlobal(),
-                    global: false,
-                    builder: (controller) {
-                      return Text('single ${controller.nonGlobal}');
-                    })
-              ],
-            );
-          },
+                obx(() => Text(
+                      'Obx: ${controller.map.value.length}',
+                    ))
+              ]),
+            ),
+          ],
         ),
       ),
     );
@@ -59,6 +49,7 @@ void main() {
     expect(find.text("Bool: true"), findsOneWidget);
     expect(find.text("List: 0"), findsOneWidget);
     expect(find.text("Map: 0"), findsOneWidget);
+    expect(find.text("Obx: 0"), findsOneWidget);
 
     Controller.to.increment();
 
@@ -71,17 +62,7 @@ void main() {
     await tester.pump();
 
     expect(find.text("Count: 2"), findsOneWidget);
-    expect(find.text("lazy 0"), findsOneWidget);
-    expect(find.text("single 0"), findsOneWidget);
   });
-}
-
-class Controller2 extends RxController {
-  int lazy = 0;
-}
-
-class ControllerNonGlobal extends RxController {
-  int nonGlobal = 0;
 }
 
 class Controller extends RxController {

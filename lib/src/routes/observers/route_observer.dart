@@ -90,8 +90,6 @@ class GetObserver extends NavigatorObserver {
         print("[CLOSE BOTTOMSHEET] ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
       if (Get.isLogEnable) print("[CLOSE DIALOG] ${route?.settings?.name}");
-    } else if ('${route?.settings?.name}' == 'snackbar') {
-      if (Get.isLogEnable) print("[CLOSE SNACKBAR] ${route?.settings?.name}");
     } else {
       if (Get.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
     }

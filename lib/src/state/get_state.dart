@@ -106,16 +106,12 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     }
     if (widget.initState != null) widget.initState(this);
     if (isCreator) {
-      try {
-        controller?.onInit();
-      } catch (e) {
-        if (Get.isLogEnable) print("[GET] error: $e");
-      }
+      controller?.onInit();
     }
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     super.dispose();
 
     if (widget.dispose != null) widget.dispose(this);

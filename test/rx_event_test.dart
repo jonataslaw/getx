@@ -1,0 +1,80 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+
+void main() {
+  test('once', () async {
+    final count = 0.obs;
+    int result = -1;
+    once(count, (_) {
+      result = _;
+    });
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(1, result);
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(1, result);
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(1, result);
+  });
+
+  test('ever', () async {
+    final count = 0.obs;
+    int result = -1;
+    ever(count, (_) {
+      result = _;
+    });
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(1, result);
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(2, result);
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(3, result);
+  });
+
+  test('debounce', () async {
+    final count = 0.obs;
+    int result = -1;
+    debounce(count, (_) {
+      print(_);
+      result = _;
+    }, time: Duration(milliseconds: 100));
+
+    count.value++;
+    count.value++;
+    count.value++;
+    count.value++;
+    await Future.delayed(Duration.zero);
+    expect(-1, result);
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(4, result);
+  });
+
+  test('interval', () async {
+    final count = 0.obs;
+    int result = -1;
+    interval(count, (_) {
+      print(_);
+      result = _;
+    }, time: Duration(milliseconds: 100));
+
+    count.value++;
+    await Future.delayed(Duration.zero);
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(1, result);
+    count.value++;
+    count.value++;
+    count.value++;
+    await Future.delayed(Duration.zero);
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(2, result);
+    count.value++;
+    await Future.delayed(Duration.zero);
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(5, result);
+  });
+}

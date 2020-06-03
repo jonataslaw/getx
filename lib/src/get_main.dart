@@ -232,7 +232,7 @@ class Get {
   /// Api from showGeneralDialog with no context
   static Future<T> generalDialog<T>({
     @required RoutePageBuilder pageBuilder,
-    String barrierLabel,
+    String barrierLabel = "Dismiss",
     bool barrierDismissible = true,
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
@@ -643,9 +643,14 @@ class Get {
 
   Map<dynamic, _FcBuilderFunc> _factory = {};
 
-  static void lazyPut<S>(_FcBuilderFunc<S> builder, {String tag}) {
+  static void lazyPut<S>(_FcBuilderFunc builder, {String tag}) {
     String key = _getKey(S, tag);
     Get()._factory.putIfAbsent(key, () => builder);
+  }
+
+  static Future<S> putAsync<S>(_FcBuilderFuncAsync<S> builder,
+      {String tag}) async {
+    return Get.put<S>(await builder(), tag: tag);
   }
 
   /// Inject class on Get Instance Manager
@@ -966,3 +971,5 @@ enum SmartManagement {
 }
 
 typedef _FcBuilderFunc<S> = S Function();
+
+typedef _FcBuilderFuncAsync<S> = Future<S> Function();

@@ -30,6 +30,18 @@ void main() {
 
     expect(find.byType(YourDialogWidget), findsOneWidget);
   });
+
+  testWidgets("Get.dialog close test", (tester) async {
+    await tester.pumpWidget(
+      Wrapper(child: Container()),
+    );
+
+    Get.dialog(YourDialogWidget());
+    expect(Get.isDialogOpen, true);
+    Get.back();
+    expect(Get.isDialogOpen, false);
+    await tester.pumpAndSettle();
+  });
 }
 
 class YourDialogWidget extends StatelessWidget {
