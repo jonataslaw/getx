@@ -10,17 +10,17 @@ class GetMaterialController extends GetController {
 
   void setTheme(ThemeData value) {
     theme = value;
-    update(this);
+    update();
   }
 
   void setThemeMode(ThemeMode value) {
     themeMode = value;
-    update(this);
+    update();
   }
 
   void restartApp() {
     print("restart chamado");
     key = UniqueKey();
-    update(this);
+    update();
   }
 }

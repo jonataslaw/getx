@@ -1,3 +1,8 @@
+## [2.10.3]
+- GetBuilder refactor. 11% reduction in RAM consumption and 2% in CPU consumption for the sample application. (using as base Flutter for linux desktop).
+
+- The "this" property of the "update" method has been deprecated and will be removed in the next update. Please don't use it anymore. Just use "update()" now.
+
 ## [2.10.2]
 - Fix Get.generalDialog default options
 

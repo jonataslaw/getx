@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:get/src/routes/bindings_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
 import 'root/root_controller.dart';
+import 'routes/bindings_interface.dart';
 import 'routes/default_route.dart';
 import 'routes/observers/route_observer.dart';
 import 'routes/transitions_type.dart';
 import 'rx/rx_interface.dart';
 import 'snackbar/snack.dart';
 
+///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
+///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
+///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
+///To return to the previous screen, use Get.back().
+///No need to pass any context to Get, just put the name of the route inside
+///the parentheses and the magic will occur.
 class Get {
-  ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
-  ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-  ///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
-  ///To return to the previous screen, use Get.back().
-  ///No need to pass any context to Get, just put the name of the route inside
-  ///the parentheses and the magic will occur.
   factory Get() {
     if (_get == null) _get = Get._();
     return _get;
@@ -727,6 +727,11 @@ class Get {
   registerRouteInstance<S>({String tag}) {
     //  print("Register route [$S] as ${Get.currentRoute}");
     Get().routesKey.putIfAbsent(_getKey(S, tag), () => Get.currentRoute);
+  }
+
+  static S findByType<S>(Type type, {String tag}) {
+    String key = _getKey(type, tag);
+    return Get()._singl[key].getSependency();
   }
 
   /// Find a instance from required class

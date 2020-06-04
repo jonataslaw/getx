@@ -93,6 +93,6 @@ class Controller extends GetController {
 
   void increment2() {
     count++;
-    update(this);
+    update();
   }
 }

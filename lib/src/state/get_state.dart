@@ -1,44 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../get_main.dart';
 
-class RealState {
-  final State state;
-  final String id;
-  final bool isCreator;
-  const RealState({this.state, this.id, this.isCreator = false});
-}
-
-class GetController extends State {
+class GetController {
+  void onClose() async {}
+  void onInit() async {}
   List<RealState> _allStates = [];
 
-  /// Update GetBuilder with update(this)
-  void update(GetController controller,
-      [List<String> ids, bool condition = true]) {
-    if (controller == null || !condition) return;
+  /// Update GetBuilder with update();
+  void update(
+      [@Deprecated('Instead of using the "update(this)" use only "update()". The "this" property will be removed in the next update')
+          GetController _this,
+      List<String> ids,
+      bool condition = true]) {
+    if (!condition) return;
 
     if (ids == null) {
-      // _allStates[controller.hashCode];
       _allStates.forEach((rs) {
-        if (rs.state != null && rs.state.mounted) rs.state.setState(() {});
+        rs.updater(() {});
       });
     } else {
       ids.forEach(
         (s) {
-          //  var all = _allStates[controller.hashCode];
           _allStates.forEach((rs) {
-            if (rs.state != null && rs.state.mounted && rs.id == s)
-              rs.state.setState(() {});
+            if (rs.id == s) rs.updater(() {});
           });
         },
       );
     }
   }
-
-  void onClose() async {}
-  void onInit() async {}
-
-  @override
-  Widget build(_) => throw ("build method can't be called");
 }
 
 class GetBuilder<T extends GetController> extends StatefulWidget {
@@ -78,30 +68,34 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     super.initState();
 
     if (widget.global) {
-      if (Get.isPrepared<T>()) {
+      bool isPrepared = Get.isPrepared<T>();
+      bool isRegistred = Get.isRegistred<T>();
+
+      if (isPrepared) {
         isCreator = true;
         controller = Get.find<T>();
-
-        real = RealState(state: this, id: widget.id, isCreator: isCreator);
+        real = RealState(
+          updater: setState,
+          id: widget.id,
+        );
         controller._allStates.add(real);
-      } else if (Get.isRegistred<T>() && !Get.isPrepared<T>()) {
+      } else if (isRegistred) {
         controller = Get.find<T>();
         isCreator = false;
-        real = RealState(state: this, id: widget.id, isCreator: isCreator);
+        real = RealState(updater: setState, id: widget.id);
         controller._allStates.add(real);
       } else {
         controller = widget.init;
         isCreator = true;
 
-        real = RealState(state: this, id: widget.id, isCreator: isCreator);
+        real = RealState(updater: setState, id: widget.id);
         controller._allStates.add(real);
         Get.put<T>(controller);
       }
     } else {
       controller = widget.init;
-
       isCreator = true;
-      real = RealState(state: this, id: widget.id, isCreator: isCreator);
+      real = RealState(updater: setState, id: widget.id);
       controller._allStates.add(real);
     }
     if (widget.initState != null) widget.initState(this);
@@ -113,24 +107,15 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
   @override
   void dispose() {
     super.dispose();
-
     if (widget.dispose != null) widget.dispose(this);
-
     if (isCreator || widget.assignId) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
-        // controller.onClose();
         controller._allStates.remove(real);
         Get.delete<T>();
       }
     } else {
-      // controller._allStates[controller].remove(this);
       controller._allStates.remove(real);
     }
-
-    /// force GC remove this
-    controller = null;
-    real = null;
-    isCreator = null;
   }
 
   @override
@@ -150,4 +135,10 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
   Widget build(BuildContext context) {
     return widget.builder(controller);
   }
+}
+
+class RealState {
+  final StateSetter updater;
+  final String id;
+  const RealState({this.updater, this.id});
 }

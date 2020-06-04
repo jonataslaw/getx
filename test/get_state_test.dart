@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetController smoke test", (testr) async {
-    await testr.pumpWidget(
+  testWidgets("GetController smoke test", (test) async {
+    await test.pumpWidget(
       MaterialApp(
         home: GetBuilder<Controller>(
           init: Controller(),
@@ -49,19 +49,19 @@ void main() {
 
     Controller.to.increment();
 
-    await testr.pump();
+    await test.pump();
 
     expect(find.text("1"), findsOneWidget);
 
-    await testr.tap(find.text('increment'));
+    await test.tap(find.text('increment'));
 
-    await testr.pump();
+    await test.pump();
 
     expect(find.text("2"), findsOneWidget);
 
-    await testr.tap(find.text('incrementWithId'));
+    await test.tap(find.text('incrementWithId'));
 
-    await testr.pump();
+    await test.pump();
 
     expect(find.text("id 3"), findsOneWidget);
     expect(find.text("lazy 0"), findsOneWidget);
@@ -70,21 +70,13 @@ void main() {
 
   testWidgets(
     "MixinBuilder with build null",
-    (WidgetTester testr) async {
+    (WidgetTester test) async {
       expect(
           () => GetBuilder<Controller>(
                 init: Controller(),
                 builder: null,
               ),
           throwsAssertionError);
-    },
-  );
-
-  testWidgets(
-    "GetBuilder controller error",
-    (WidgetTester testr) async {
-      expect(() => ControllerError().callBuild(),
-          throwsA("build method can\'t be called"));
     },
   );
 }
@@ -95,7 +87,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this);
+    update();
   }
 
   void incrementWithId() {
@@ -106,15 +98,6 @@ class Controller extends GetController {
 
 class Controller2 extends GetController {
   int test = 0;
-}
-
-class ControllerError extends GetController {
-  int test = 0;
-
-  callBuild() {
-    BuildContext context;
-    build(context);
-  }
 }
 
 class ControllerNonGlobal extends GetController {
