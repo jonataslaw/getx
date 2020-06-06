@@ -1,6 +1,6 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" align="right" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![](get.png)
 
@@ -1150,6 +1150,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/jonataslaw"><img src="https://avatars2.githubusercontent.com/u/35742643?v=4" width="100px;" alt=""/><br /><sub><b>Jonny Borges</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=jonataslaw" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Nipodemos"><img src="https://avatars1.githubusercontent.com/u/11494727?v=4" width="100px;" alt=""/><br /><sub><b>Nipodemos</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=Nipodemos" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/RodBr"><img src="https://avatars2.githubusercontent.com/u/13925313?v=4" width="100px;" alt=""/><br /><sub><b>robr</b></sub></a><br /><a href="#tutorial-RodBr" title="Tutorials">✅</a></td>
+    <td align="center"><a href="http://ryanedge.page"><img src="https://avatars1.githubusercontent.com/u/6907797?v=4" width="100px;" alt=""/><br /><sub><b>Ryan</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=chimon2000" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
