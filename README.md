@@ -1,5 +1,3 @@
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" align="right" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
-
 ![](get.png)
 
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
@@ -10,51 +8,53 @@
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
-Get is an extra-light and powerful library for Flutter that will give you superpowers and increase your productivity. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way! Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+- Get is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
+- Get is not for everyone, its focus is (performance) on the minimum consumption of resources, (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
+- Get will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 
-```dart
-// Default Flutter navigator
-Navigator.of(context).push(
-  context,
-  MaterialPageRoute(
-    builder: (BuildContext context) { 
-      return Home();
-    },
-  ),
-);
 
-// Get syntax 
-Get.to(Home());
-```
-**Complete example of the Flutter counter app in just 11 lines with Get**
+**The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.**
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
+// Create your business logic class and place all variables, methods and controllers inside it.
+class Controller {
+  // ".obs" turns any object into an observable one.
+  var count = 0.obs;
+  increment() => count.value++;
+}
 
 class Home extends StatelessWidget {
-  final count = 0.obs;
+  // Instantiate your class using Get.put() to make it available for all "child" routes there.
+  final Controller c = Get.put(Controller());
   @override
   Widget build(context) => Scaffold(
-        appBar: AppBar(title: Text("Get change you life")),
-        floatingActionButton:
-            FloatingActionButton(onPressed: () => count.value++),
-        body: Center(child: Obx(() => Text(count.string))),
-      );
+      appBar:
+          AppBar(title: Obx(() => Text("Total of clicks: " + c.count.string))),
+      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+      body: Center(child: RaisedButton(
+              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+      floatingActionButton:
+          FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+}
+
+class Other extends StatelessWidget {
+  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
+  final Controller c = Get.find();
+  @override
+  Widget build(context) => Scaffold(body: Center(child: Text(c.count.string)));
 }
 
 ```
 
-## Getting Started
+This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
-Flutter's conventional navigation has a lot of unnecessary boilerplate, requires context to navigate between screens, open dialogs, and use snackbars on framework is really boring.
-This library that will change the way you work with the Framework and save your life from boilerplate, increasing your productivity, and provide you with everything that is most modern when it comes to managing states, routes and dependencies.
-
-- **[How to use?](#how-to-use)**
 - **[Navigating without named routes](#navigating-without-named-routes)**
 - **[SnackBars](#snackBars)**
 - **[Dialogs](#dialogs)**
@@ -73,7 +73,8 @@ This library that will change the way you work with the Framework and save your 
 
 
 
-#### You can contribute to the project in multiple ways:
+#### Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.
+
 - Helping to translate the readme into other languages.
 - Adding documentation to the readme (not even half of Get's functions have been documented yet).
 - Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
@@ -88,12 +89,15 @@ Any contribution is welcome!
 - Flutter Stable branch: version 2.0.x
 (look for latest version on pub.dev) -->
 
-Add Get to your pubspec.yaml file 
-<!-- according to the version of Flutter you are using. -->
- 
-Exchange your MaterialApp for GetMaterialApp and enjoy!
+Add this to your pubspec.yaml file:
+
+```
+dependencies:
+  get: 
+```
+If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+
 ```dart
-import 'package:get/get.dart';
 GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
@@ -105,7 +109,7 @@ To navigate to a new screen:
 Get.to(NextScreen());
 ```
 
-To return to previous screen
+To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
 
 ```dart
 Get.back();
@@ -130,13 +134,13 @@ var data = await Get.to(Payment());
 on other screen, send a data for previous route:
 
 ```dart
-Get.back(result: 'sucess');
+Get.back(result: 'success');
 ```
 And use it:
 
 ex:
 ```dart
-if(data == 'sucess') madeAnything();
+if(data == 'success') madeAnything();
 ```
 
 Don't you want to learn our syntax?
@@ -331,7 +335,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); // use update(this) to update counter variable on UI when increment be called
+    update(); // use update() to update counter variable on UI when increment be called
   }
 }
 // On your Stateless/Stateful class, use GetBuilder to update Text when increment be called 
@@ -379,7 +383,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); 
+    update(); 
   }
 }
 ```
@@ -518,12 +522,12 @@ GetBuilder<Controller>(
 ```
 And update it this form:
 ```dart
-update(this,['text']);
+update(['text']);
 ```
 You can also impose conditions for the update:
 
 ```dart
-update(this,['text'], counter < 10);
+update(['text'], counter < 10);
 ```
 
 GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
@@ -535,7 +539,7 @@ You can use both in any situation, but if you want to tune their application to 
 If you want a powerful state manager, you can go without fear to GetX. It does not work with variables, but flows, everything in it is streams under the hood. You can use rxDart in conjunction with it, because everything is stream, you can hear the event of each "variable", because everything in it is stream, it is literally BLoC, easier than MobX, and without code generator or decorations .
 
 
-## Reactive State Manager - GetX
+## Reactive State Manager 
 
 If you want power, Get gives you the most advanced state manager you could ever have.
 GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.
@@ -663,6 +667,21 @@ Obviously, if someone wants to contribute to the project and create a code gener
 Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
 Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
 
+### GetX vs GetBuilder vs Obx MixinBuilder
+In a decade working with programming I was able to learn some valuable lessons.
+My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
+However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
+Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
+GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
+However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
+There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
+GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
+Finally, some people opened a resource request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+
+- Note: To use GetBuilder and MixinBuilder you must use GetController. To use GetX and Obx you must use RxController.
+Probably using a GetController using GetX and Obx will work, but it will not be possible to use an RxController on a GetBuilder.
+Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods.
 
 ## Simple Instance Manager
 - Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
@@ -1136,27 +1155,3 @@ Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in th
 ```
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
-
-
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/jonataslaw"><img src="https://avatars2.githubusercontent.com/u/35742643?v=4" width="100px;" alt=""/><br /><sub><b>Jonny Borges</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=jonataslaw" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/Nipodemos"><img src="https://avatars1.githubusercontent.com/u/11494727?v=4" width="100px;" alt=""/><br /><sub><b>Nipodemos</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=Nipodemos" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/RodBr"><img src="https://avatars2.githubusercontent.com/u/13925313?v=4" width="100px;" alt=""/><br /><sub><b>robr</b></sub></a><br /><a href="#tutorial-RodBr" title="Tutorials">✅</a></td>
-    <td align="center"><a href="http://ryanedge.page"><img src="https://avatars1.githubusercontent.com/u/6907797?v=4" width="100px;" alt=""/><br /><sub><b>Ryan</b></sub></a><br /><a href="https://github.com/jonataslaw/get/commits?author=chimon2000" title="Tests">⚠️</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

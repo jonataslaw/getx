@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
 import 'root/root_controller.dart';
+import 'root/smart_management.dart';
 import 'routes/bindings_interface.dart';
 import 'routes/default_route.dart';
 import 'routes/observers/route_observer.dart';
@@ -657,6 +658,7 @@ class Get {
   static S put<S>(
     S dependency, {
     String tag,
+    bool permanent = false,
     bool overrideAbstract = false,
     _FcBuilderFunc<S> builder,
   }) {
@@ -665,6 +667,7 @@ class Get {
         replace: overrideAbstract,
         //?? (("$S" == "${dependency.runtimeType}") == false),
         name: tag,
+        permanent: permanent,
         builder: builder ?? (() => dependency));
     return find<S>(tag: tag);
   }
@@ -686,14 +689,16 @@ class Get {
     bool isSingleton,
     String name,
     bool replace = true,
+    bool permanent = false,
     _FcBuilderFunc<S> builder,
   }) {
     assert(builder != null);
     String key = _getKey(S, name);
     if (replace) {
-      Get()._singl[key] = _FcBuilder<S>(isSingleton, builder);
+      Get()._singl[key] = _FcBuilder<S>(isSingleton, builder, permanent);
     } else {
-      Get()._singl.putIfAbsent(key, () => _FcBuilder<S>(isSingleton, builder));
+      Get()._singl.putIfAbsent(
+          key, () => _FcBuilder<S>(isSingleton, builder, permanent));
     }
   }
 
@@ -734,12 +739,24 @@ class Get {
     return Get()._singl[key].getSependency();
   }
 
+  void initController<S>({String tag}) {
+    String key = _getKey(S, tag);
+    final i = Get()._singl[key].getSependency();
+
+    if (i is DisposableInterface) {
+      i.onInit();
+      if (isLogEnable) print('[GET] $key has been initialized');
+    }
+  }
+
   /// Find a instance from required class
   static S find<S>({String tag, _FcBuilderFunc<S> instance}) {
     String key = _getKey(S, tag);
+    bool callInit = false;
     if (Get.isRegistred<S>(tag: tag)) {
       if (!isDependencyInit<S>()) {
         Get().registerRouteInstance<S>(tag: tag);
+        callInit = true;
       }
 
       _FcBuilder builder = Get()._singl[key];
@@ -750,6 +767,10 @@ class Get {
           throw "class ${S.toString()} with tag '$tag' is not register";
         }
       }
+      if (callInit) {
+        Get().initController<S>(tag: tag);
+      }
+
       return Get()._singl[key].getSependency();
     } else {
       if (!Get()._factory.containsKey(key))
@@ -760,10 +781,15 @@ class Get {
 
       if (!isDependencyInit<S>()) {
         Get().registerRouteInstance<S>(tag: tag);
+        callInit = true;
       }
 
       if (Get().smartManagement != SmartManagement.keepFactory) {
         Get()._factory.remove(key);
+      }
+
+      if (callInit) {
+        Get().initController<S>(tag: tag);
       }
 
       return _value;
@@ -815,6 +841,14 @@ class Get {
     }
 
     _FcBuilder builder = Get()._singl[newKey];
+    if (builder.permanent) {
+      (key == null)
+          ? print(
+              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.')
+          : print(
+              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
+      return false;
+    }
     final i = builder.dependency;
 
     if (i is DisposableInterface || i is GetController) {
@@ -953,8 +987,9 @@ class _FcBuilder<S> {
   bool isSingleton;
   _FcBuilderFunc builderFunc;
   S dependency;
+  bool permanent = false;
 
-  _FcBuilder(this.isSingleton, this.builderFunc);
+  _FcBuilder(this.isSingleton, this.builderFunc, this.permanent);
 
   S getSependency() {
     if (isSingleton) {
@@ -966,13 +1001,6 @@ class _FcBuilder<S> {
       return builderFunc() as S;
     }
   }
-}
-
-enum SmartManagement {
-  full,
-  onlyBuilder,
-  keepFactory,
-  // none,
 }
 
 typedef _FcBuilderFunc<S> = S Function();

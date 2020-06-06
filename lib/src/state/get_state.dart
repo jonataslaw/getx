@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/src/rx/rx_interface.dart';
 import '../get_main.dart';
 
-class GetController {
+class GetController extends DisposableInterface {
   void onClose() async {}
   void onInit() async {}
   List<RealState> _allStates = [];
 
   /// Update GetBuilder with update();
-  void update(
-      [@Deprecated('Instead of using the "update(this)" use only "update()". The "this" property will be removed in the next update')
-          GetController _this,
-      List<String> ids,
-      bool condition = true]) {
+  void update([List<String> ids, bool condition = true]) {
     if (!condition) return;
 
     if (ids == null) {
@@ -97,11 +94,12 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       isCreator = true;
       real = RealState(updater: setState, id: widget.id);
       controller._allStates.add(real);
-    }
-    if (widget.initState != null) widget.initState(this);
-    if (isCreator) {
       controller?.onInit();
     }
+    if (widget.initState != null) widget.initState(this);
+    // if (isCreator) {
+    //   controller?.onInit();
+    // }
   }
 
   @override

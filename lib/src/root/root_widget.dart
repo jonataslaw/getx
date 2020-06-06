@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/src/routes/get_route.dart';
 import 'package:get/src/routes/utils/parse_arguments.dart';
 import 'root_controller.dart';
+import 'smart_management.dart';
 
 class GetMaterialApp extends StatelessWidget {
   const GetMaterialApp({

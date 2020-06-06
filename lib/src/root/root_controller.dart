@@ -19,7 +19,6 @@ class GetMaterialController extends GetController {
   }
 
   void restartApp() {
-    print("restart chamado");
     key = UniqueKey();
     update();
   }

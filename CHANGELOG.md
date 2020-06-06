@@ -1,3 +1,11 @@
+## [2.11.0]
+- Added Permissions:
+You can now revoke permissions to SmartManagement so that it cannot delete a particular controller.
+Add to Get.put (Controller(), permanent: true); to make it indelible.
+Get.lazyPut () will not receive this resource. Initially he had it, but we saw in internal tests that it could cause problems with the bindings API. Bindings were created to initialize and delete an instance, if it were allowed to make a controller started with lazyPut permanent, copies of that Controller would be created every time Binding was called. For the safety of users, especially new users who could easily do this, it was decided that this feature will only be present in Get.put.
+- Improve: Now a controller's life cycle has no connection with the View life cycle. It is no longer called internally in an "initState", it is now called when the Controller enters memory. This means that now onInit will always be called, regardless of where you started your dependency.
+- removed: this property of the update() method has been permanently removed.
+
 ## [2.10.3]
 - GetBuilder refactor. 11% reduction in RAM consumption and 2% in CPU consumption for the sample application. (using as base Flutter for linux desktop).
 

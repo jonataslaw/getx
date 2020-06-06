@@ -18,18 +18,18 @@ void main() {
                 child: Text("increment"),
                 onPressed: () => controller.increment(),
               ),
-              // FlatButton(
-              //   child: Text("incrementWithId"),
-              //   onPressed: () => controller.incrementWithId(),
-              // ),
-              // GetBuilder<Controller>(
-              //     id: '1',
-              //     didChangeDependencies: (_) {
-              //       print("didChangeDependencies called");
-              //     },
-              //     builder: (controller) {
-              //       return Text('id ${controller.counter}');
-              //     }),
+              FlatButton(
+                child: Text("incrementWithId"),
+                onPressed: () => controller.incrementWithId(),
+              ),
+              GetBuilder<Controller>(
+                  id: '1',
+                  didChangeDependencies: (_) {
+                    print("didChangeDependencies called");
+                  },
+                  builder: (controller) {
+                    return Text('id ${controller.counter}');
+                  }),
               GetBuilder<Controller2>(builder: (controller) {
                 return Text('lazy ${controller.test}');
               }),
@@ -59,11 +59,11 @@ void main() {
 
     expect(find.text("2"), findsOneWidget);
 
-    // await test.tap(find.text('incrementWithId'));
+    await test.tap(find.text('incrementWithId'));
 
     await test.pump();
 
-    // expect(find.text("id 3"), findsOneWidget);
+    expect(find.text("id 3"), findsOneWidget);
     expect(find.text("lazy 0"), findsOneWidget);
     expect(find.text("single 0"), findsOneWidget);
   });
@@ -90,10 +90,10 @@ class Controller extends GetController {
     update();
   }
 
-  // void incrementWithId() {
-  //   counter++;
-  //   update(this, ['1']);
-  // }
+  void incrementWithId() {
+    counter++;
+    update(['1']);
+  }
 }
 
 class Controller2 extends GetController {

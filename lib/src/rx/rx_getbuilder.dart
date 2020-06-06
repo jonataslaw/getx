@@ -4,7 +4,7 @@ import 'package:get/src/get_main.dart';
 import 'rx_impl.dart';
 import 'rx_interface.dart';
 
-class GetX<T extends RxController> extends StatefulWidget {
+class GetX<T extends DisposableInterface> extends StatefulWidget {
   final Widget Function(T) builder;
   final bool global;
   // final Stream Function(T) stream;
@@ -28,7 +28,7 @@ class GetX<T extends RxController> extends StatefulWidget {
   _GetXState<T> createState() => _GetXState<T>();
 }
 
-class _GetXState<T extends RxController> extends State<GetX<T>> {
+class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   RxInterface _observer;
   StreamSubscription _listenSubscription;
   T controller;
@@ -60,11 +60,12 @@ class _GetXState<T extends RxController> extends State<GetX<T>> {
     } else {
       controller = widget.init;
       isCreator = true;
-    }
-    if (widget.initState != null) widget.initState(this);
-    if (isCreator) {
       controller?.onInit();
     }
+    if (widget.initState != null) widget.initState(this);
+    // if (isCreator) {
+    //   controller?.onInit();
+    // }
 
     _listenSubscription = _observer.subject.stream.listen((data) {
       setState(() {});

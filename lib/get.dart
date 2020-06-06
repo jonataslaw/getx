@@ -19,3 +19,4 @@ export 'src/routes/bindings_interface.dart';
 export 'src/routes/observers/route_observer.dart';
 export 'src/routes/transitions_type.dart';
 export 'src/platform/platform.dart';
+
