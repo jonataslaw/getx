@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/rx/rx_interface.dart';
 import '../get_main.dart';
@@ -6,30 +5,43 @@ import 'rx_impl.dart';
 
 Widget obx(Widget Function() builder) {
   final b = builder;
-  return Obx(b);
+  return Obxx(b);
+}
+
+/// it's very very very very experimental, or now, it's just tests.
+class Obxx extends StatelessWidget {
+  final Widget Function() builder;
+  Obxx(this.builder, {Key key}) : super(key: key);
+  final RxInterface _observer = Rx();
+
+  @override
+  Widget build(_) {
+    _observer.subject.stream.listen((data) => (_ as Element)..markNeedsBuild());
+    final observer = Get.obs;
+    Get.obs = _observer;
+    final result = builder();
+    Get.obs = observer;
+    return result;
+  }
 }
 
 class Obx extends StatefulWidget {
   final Widget Function() builder;
 
-  const Obx(
-    this.builder,
-  );
+  const Obx(this.builder);
   _ObxState createState() => _ObxState();
 }
 
 class _ObxState extends State<Obx> {
   RxInterface _observer;
-  StreamSubscription _listenSubscription;
-  bool isCreator = false;
 
   _ObxState() {
-    _observer = ListX();
+    _observer = Rx();
   }
 
   @override
   void initState() {
-    _listenSubscription = _observer.subject.stream.listen((data) {
+    _observer.subject.stream.listen((data) {
       setState(() {});
     });
     super.initState();
@@ -38,7 +50,6 @@ class _ObxState extends State<Obx> {
   @override
   void dispose() {
     _observer.close();
-    _listenSubscription?.cancel();
     super.dispose();
   }
 

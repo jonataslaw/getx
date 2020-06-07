@@ -4,10 +4,9 @@ import 'rx_callbacks.dart';
 import 'rx_interface.dart';
 import 'rx_model.dart';
 
-class _StoredValue<T> implements RxInterface<T> {
+class _RxImpl<T> implements RxInterface<T> {
   StreamController<Change<T>> subject = StreamController<Change<T>>.broadcast();
-  StreamController<Change<T>> _changeCtl =
-      StreamController<Change<T>>.broadcast();
+  StreamController<Change<T>> _changeCtl = StreamController<Change<T>>();
   Map<Stream<Change<T>>, StreamSubscription> _subscriptions = Map();
 
   T _value;
@@ -50,7 +49,7 @@ class _StoredValue<T> implements RxInterface<T> {
 
   int _cb = 0;
 
-  _StoredValue([T initial]) : _value = initial {
+  _RxImpl([T initial]) : _value = initial {
     _onChange = subject.stream.asBroadcastStream();
   }
 
@@ -91,28 +90,28 @@ class _StoredValue<T> implements RxInterface<T> {
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 
-class StringX<String> extends _StoredValue<String> {
+class StringX<String> extends _RxImpl<String> {
   StringX([String initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-class IntX<int> extends _StoredValue<int> {
+class IntX<int> extends _RxImpl<int> {
   IntX([int initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-class MapX<Map> extends _StoredValue<Map> {
+class MapX<Map> extends _RxImpl<Map> {
   MapX([Map initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-// class ListX<List> extends _StoredValue<List> {
+// class ListX<List> extends _RxImpl<List> {
 //   ListX([List initial]) {
 //     _value = initial;
 //     _onChange = subject.stream.asBroadcastStream();
@@ -529,28 +528,28 @@ typedef E ChildrenListComposer<S, E>(S value);
 //   }
 // }
 
-class BoolX<bool> extends _StoredValue<bool> {
+class BoolX<bool> extends _RxImpl<bool> {
   BoolX([bool initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-class DoubleX<double> extends _StoredValue<double> {
+class DoubleX<double> extends _RxImpl<double> {
   DoubleX([double initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-class NumX<num> extends _StoredValue<num> {
+class NumX<num> extends _RxImpl<num> {
   NumX([num initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();
   }
 }
 
-class Rx<T> extends _StoredValue<T> {
+class Rx<T> extends _RxImpl<T> {
   Rx([T initial]) {
     _value = initial;
     _onChange = subject.stream.asBroadcastStream();

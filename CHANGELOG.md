@@ -1,3 +1,6 @@
+## [2.11.1]
+- Fixed: oninit calling only once.
+
 ## [2.11.0]
 - Added Permissions:
 You can now revoke permissions to SmartManagement so that it cannot delete a particular controller.

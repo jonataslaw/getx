@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/get_main.dart';
+import 'package:get/src/root/smart_management.dart';
 import 'rx_impl.dart';
 import 'rx_interface.dart';
 
@@ -30,7 +30,6 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
 
 class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   RxInterface _observer;
-  StreamSubscription _listenSubscription;
   T controller;
   bool isCreator = false;
 
@@ -43,9 +42,6 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     bool isPrepared = Get.isPrepared<T>();
     bool isRegistred = Get.isRegistred<T>();
     if (widget.global) {
-      // if (Get().smartManagement == SmartManagement.full) {
-      //   Get.isDependencyInit<T>();
-      // }
       if (isPrepared) {
         isCreator = true;
         controller = Get.find<T>();
@@ -63,11 +59,11 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
       controller?.onInit();
     }
     if (widget.initState != null) widget.initState(this);
-    // if (isCreator) {
-    //   controller?.onInit();
-    // }
+    if (isCreator && Get().smartManagement == SmartManagement.onlyBuilder) {
+      controller?.onInit();
+    }
 
-    _listenSubscription = _observer.subject.stream.listen((data) {
+    _observer.subject.stream.listen((data) {
       setState(() {});
     });
     super.initState();
@@ -87,8 +83,6 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     }
     // controller.onClose();
     _observer.close();
-    _listenSubscription?.cancel();
-
     controller = null;
     isCreator = null;
     super.dispose();

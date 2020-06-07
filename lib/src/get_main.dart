@@ -729,7 +729,7 @@ class Get {
     return Get().routesKey.containsKey(key);
   }
 
-  registerRouteInstance<S>({String tag}) {
+  void registerRouteInstance<S>({String tag}) {
     //  print("Register route [$S] as ${Get.currentRoute}");
     Get().routesKey.putIfAbsent(_getKey(S, tag), () => Get.currentRoute);
   }
@@ -754,7 +754,8 @@ class Get {
     String key = _getKey(S, tag);
     bool callInit = false;
     if (Get.isRegistred<S>(tag: tag)) {
-      if (!isDependencyInit<S>()) {
+      if (!isDependencyInit<S>() &&
+          Get().smartManagement == SmartManagement.full) {
         Get().registerRouteInstance<S>(tag: tag);
         callInit = true;
       }
@@ -779,7 +780,8 @@ class Get {
       if (isLogEnable) print('[GET] $S instance was created at that time');
       S _value = Get.put<S>(Get()._factory[key].call() as S);
 
-      if (!isDependencyInit<S>()) {
+      if (!isDependencyInit<S>() &&
+          Get().smartManagement == SmartManagement.full) {
         Get().registerRouteInstance<S>(tag: tag);
         callInit = true;
       }
