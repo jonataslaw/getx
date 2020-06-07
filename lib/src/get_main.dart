@@ -755,7 +755,7 @@ class Get {
     bool callInit = false;
     if (Get.isRegistred<S>(tag: tag)) {
       if (!isDependencyInit<S>() &&
-          Get().smartManagement == SmartManagement.full) {
+          Get().smartManagement != SmartManagement.onlyBuilder) {
         Get().registerRouteInstance<S>(tag: tag);
         callInit = true;
       }
@@ -781,7 +781,7 @@ class Get {
       S _value = Get.put<S>(Get()._factory[key].call() as S);
 
       if (!isDependencyInit<S>() &&
-          Get().smartManagement == SmartManagement.full) {
+          Get().smartManagement != SmartManagement.onlyBuilder) {
         Get().registerRouteInstance<S>(tag: tag);
         callInit = true;
       }
@@ -902,13 +902,6 @@ class Get {
   /// give current arguments
   static Map<String, String> get parameters => Get()._parameters;
 
-  /// interface to GetX
-  RxInterface _obs;
-
-  static RxInterface get obs => Get()._obs;
-
-  static set obs(RxInterface observer) => Get()._obs = observer;
-
   /// give name from current route
   static get currentRoute => Get()._routing.current;
 
@@ -1004,6 +997,8 @@ class _FcBuilder<S> {
     }
   }
 }
+
+
 
 typedef _FcBuilderFunc<S> = S Function();
 

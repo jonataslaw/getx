@@ -43,7 +43,9 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     bool isRegistred = Get.isRegistred<T>();
     if (widget.global) {
       if (isPrepared) {
-        isCreator = true;
+        if (Get().smartManagement != SmartManagement.keepFactory) {
+          isCreator = true;
+        }
         controller = Get.find<T>();
       } else if (isRegistred) {
         controller = Get.find<T>();
@@ -62,26 +64,19 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (isCreator && Get().smartManagement == SmartManagement.onlyBuilder) {
       controller?.onInit();
     }
-
-    _observer.subject.stream.listen((data) {
-      setState(() {});
-    });
+    _observer.subject.stream.listen((data) => setState(() {}));
     super.initState();
   }
 
   @override
   void dispose() {
     if (widget.dispose != null) widget.dispose(this);
-
     if (isCreator || widget.assignId) {
       if (widget.autoRemove && Get.isRegistred<T>()) {
-        // controller.onClose();
         Get.delete<T>();
       }
-      // } else {
-      //   controller.onClose();
     }
-    // controller.onClose();
+
     _observer.close();
     controller = null;
     isCreator = null;
@@ -90,10 +85,10 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final observer = Get.obs;
-    Get.obs = this._observer;
+    final observer = getObs;
+    getObs = this._observer;
     final result = widget.builder(controller);
-    Get.obs = observer;
+    getObs = observer;
     return result;
   }
 }

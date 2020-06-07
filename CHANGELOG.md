@@ -1,3 +1,7 @@
+## [2.11.2]
+- Added docs
+- Improvement performance of Obx
+
 ## [2.11.1]
 - Fixed: oninit calling only once.
 

@@ -94,7 +94,7 @@ class GetObserver extends NavigatorObserver {
       if (Get.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
     }
 
-    if (Get().smartManagement == SmartManagement.full) {
+    if (Get().smartManagement != SmartManagement.onlyBuilder) {
       Get().removeDependencyByRoute("${route?.settings?.name}");
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/src/root/smart_management.dart';
 import 'package:get/src/rx/rx_interface.dart';
 import '../get_main.dart';
 
@@ -69,12 +70,11 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       bool isRegistred = Get.isRegistred<T>();
 
       if (isPrepared) {
-        isCreator = true;
+        if (Get().smartManagement != SmartManagement.keepFactory) {
+          isCreator = true;
+        }
         controller = Get.find<T>();
-        real = RealState(
-          updater: setState,
-          id: widget.id,
-        );
+        real = RealState(updater: setState, id: widget.id);
         controller._allStates.add(real);
       } else if (isRegistred) {
         controller = Get.find<T>();
@@ -84,7 +84,6 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       } else {
         controller = widget.init;
         isCreator = true;
-
         real = RealState(updater: setState, id: widget.id);
         controller._allStates.add(real);
         Get.put<T>(controller);
@@ -97,9 +96,9 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       controller?.onInit();
     }
     if (widget.initState != null) widget.initState(this);
-    // if (isCreator) {
-    //   controller?.onInit();
-    // }
+    if (isCreator && Get().smartManagement == SmartManagement.onlyBuilder) {
+      controller?.onInit();
+    }
   }
 
   @override

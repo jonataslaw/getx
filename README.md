@@ -667,7 +667,7 @@ Obviously, if someone wants to contribute to the project and create a code gener
 Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
 Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
 
-### GetX vs GetBuilder vs Obx MixinBuilder
+### GetX vs GetBuilder vs Obx vs MixinBuilder
 In a decade working with programming I was able to learn some valuable lessons.
 My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
 However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
@@ -763,6 +763,23 @@ Get.to(Home(), binding: HomeBinding());
 ```
 
 There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+
+The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+```dart
+GetMaterialApp(
+  initialBinding: SampleBind(),
+  home: Home();
+);
+```
+
+If you want to use your initializations in one place, you can use SmartManagement.keepfactory to allow this, and although using keepfactory should be the exception, as it is the softest SmartManagement out there.
+
+I always prefer the standard SmartManagement (full). It can be annoying at times, and eliminate something you don't want, as it has refined controls that remove memory dependency even if there is a flaw, and a widget is not arranged properly. It is safe enough with StatelessWidget, since even if there is no page available, it will still remove the controller from memory. But there are some use cases, which this restriction can be bothersome. For these situations you can use SmartManagement.onlyBuilders, which will depend on the effective removal of widgets that use the controller from the tree to remove the controller.
+
+- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetBaterialApp's initialBinding.
+
+- NOTE2: Using Bindings is completely optional, you can use Get.put() and Get.find() on classes that use a given controller without any problem.
+However, if you work with Services or any other abstraction, I recommend using Bindings for a larger organization.
 
 ## Workers:
 Workers will assist you, triggering specific callbacks when an event occurs.
@@ -1062,7 +1079,7 @@ You don't need the context, and you will find your navigation stack by Id.
 See how simple it is:
 ```dart
 Navigator(
-  key: nestedKey(1), // create a key by index
+  key: Get.nestedKey(1), // create a key by index
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -1146,7 +1163,7 @@ Get.offNamedUntil() // go to next named route and remove all the previous routes
 
 GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
 
-Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height
+Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable. If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.height and context.width
 
 Get.context // Gives the context of the screen in the foreground anywhere in your code.
 
