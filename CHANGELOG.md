@@ -1,3 +1,6 @@
+## [2.11.3]
+- Type parameters and added docs
+
 ## [2.11.2]
 - Added docs
 - Improvement performance of Obx

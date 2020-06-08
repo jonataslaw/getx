@@ -134,6 +134,8 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
   }
 }
 
+typedef ShouldRebuild<T> = bool Function(T previous, T next);
+
 class RealState {
   final StateSetter updater;
   final String id;

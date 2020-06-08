@@ -695,7 +695,7 @@ Instead of instantiating your class within the class you are using, you are inst
 So you can use your controller (or class Bloc) normally
 
 ```dart
-controller.fetchApi();// Rather Controller controller = Controller();
+controller.fetchApi();
 ```
 
 Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
@@ -714,6 +714,23 @@ Looking for lazy loading? You can declare all your controllers, and it will be c
 ```dart
 Get.lazyPut<Service>(()=> ApiMock());
 /// ApiMock will only be called when someone uses Get.find<Service> for the first time
+```
+
+If you want to register an asynchronous instance, you can use Get.putAsync.
+```dart
+Get.putAsync<SharedPreferences>(() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('counter', 12345);
+    return prefs;
+});
+```
+usage:
+
+```dart
+  int count = Get.find<SharedPreferences>().getInt('counter');
+  print(count);
+  // out: 12345
+}
 ```
 
 To remove a instance of Get:

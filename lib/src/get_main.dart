@@ -73,14 +73,14 @@ class Get {
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  static Future<T> toNamed<T>(String page, {arguments, int id}) {
+  static Future<T> toNamed<T>(String page, {Object arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return _get.global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  static Future<T> offNamed<T>(String page, {arguments, int id}) {
+  static Future<T> offNamed<T>(String page, {Object arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return _get
@@ -90,29 +90,32 @@ class Get {
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static void until(predicate, {int id}) {
+  static void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return _get.global(id).currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
-  static Future<T> offUntil<T>(page, predicate, {int id}) {
+  static Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate,
+      {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return _get.global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static Future<T> offNamedUntil<T>(page, predicate, {int id}) {
+  static Future<T> offNamedUntil<T>(String page, RoutePredicate predicate,
+      {int id, Object arguments}) {
     return _get
         .global(id)
         .currentState
-        .pushNamedAndRemoveUntil(page, predicate);
+        .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
   }
 
   /// It replaces Navigator.popAndPushNamed, but needs no context.
-  static Future<T> offAndToNamed<T>(String page, {arguments, int id, result}) {
+  static Future<T> offAndToNamed<T>(String page,
+      {Object arguments, int id, dynamic result}) {
     return _get
         .global(id)
         .currentState
@@ -120,13 +123,13 @@ class Get {
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
-  static void removeRoute(route, {int id}) {
+  static void removeRoute(Route<dynamic> route, {int id}) {
     return _get.global(id).currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
   static Future<T> offAllNamed<T>(String newRouteName,
-      {RoutePredicate predicate, arguments, int id}) {
+      {RoutePredicate predicate, Object arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
 
     return _get.global(id).currentState.pushNamedAndRemoveUntil(
@@ -651,6 +654,7 @@ class Get {
 
   static Future<S> putAsync<S>(_FcBuilderFuncAsync<S> builder,
       {String tag}) async {
+    WidgetsFlutterBinding.ensureInitialized();
     return Get.put<S>(await builder(), tag: tag);
   }
 
@@ -707,7 +711,8 @@ class Get {
   void removeDependencyByRoute(String routeName) async {
     List<String> keysToRemove = [];
     Get().routesKey.forEach((key, value) {
-      if (value == routeName && value != null) {
+      // if (value == routeName && value != null) {
+      if (value == routeName) {
         keysToRemove.add(key);
       }
     });
@@ -793,7 +798,6 @@ class Get {
       if (callInit) {
         Get().initController<S>(tag: tag);
       }
-
       return _value;
     }
   }
@@ -997,8 +1001,6 @@ class _FcBuilder<S> {
     }
   }
 }
-
-
 
 typedef _FcBuilderFunc<S> = S Function();
 

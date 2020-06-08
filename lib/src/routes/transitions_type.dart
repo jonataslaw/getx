@@ -10,5 +10,5 @@ enum Transition {
   rightToLeftWithFade,
   leftToRightWithFade,
   cupertino,
-  // custom
+  custom
 }

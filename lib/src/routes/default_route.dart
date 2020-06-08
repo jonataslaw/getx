@@ -32,6 +32,7 @@ class GetRouteBase<T> extends PageRoute<T> {
     this.parameter,
     this.binding,
     this.bindings,
+    this.customBuildPageTransitions,
     this.opaque = true,
     this.transitionDuration = const Duration(milliseconds: 400),
     this.popGesture,
@@ -54,6 +55,8 @@ class GetRouteBase<T> extends PageRoute<T> {
 
   /// Builds the primary contents of the route.
   final Widget page;
+
+  final Widget customBuildPageTransitions;
 
   final bool popGesture;
 
@@ -239,7 +242,7 @@ class GetRouteBase<T> extends PageRoute<T> {
   ///
   ///  * [CupertinoPageTransitionsBuilder], which uses this method to define a
   ///    [PageTransitionsBuilder] for the [PageTransitionsTheme].
-  static Widget buildPageTransitions<T>(
+  Widget buildPageTransitions<T>(
     PageRoute<T> route,
     BuildContext context,
     bool popGesture,
@@ -479,16 +482,20 @@ class GetRouteBase<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    return buildPageTransitions<T>(
-        this,
-        context,
-        popGesture ?? GetPlatform.isIOS,
-        animation,
-        secondaryAnimation,
-        child,
-        transition,
-        curve,
-        alignment);
+    if (customBuildPageTransitions != null) {
+      return customBuildPageTransitions;
+    } else {
+      return buildPageTransitions<T>(
+          this,
+          context,
+          popGesture ?? GetPlatform.isIOS,
+          animation,
+          secondaryAnimation,
+          child,
+          transition,
+          curve,
+          alignment);
+    }
   }
 
   @override
