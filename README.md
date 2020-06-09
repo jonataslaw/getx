@@ -24,7 +24,7 @@
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 // Create your business logic class and place all variables, methods and controllers inside it.
-class Controller {
+class Controller extends RxController{
   // ".obs" turns any object into an observable one.
   var count = 0.obs;
   increment() => count.value++;
