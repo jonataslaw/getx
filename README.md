@@ -55,23 +55,29 @@ class Other extends StatelessWidget {
 
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
-- **[Navigating without named routes](#navigating-without-named-routes)**
-- **[SnackBars](#snackBars)**
-- **[Dialogs](#dialogs)**
-- **[BottomSheets](#bottomsheets)**
-- **[Simple State Manager](#simple-state-manager)**
-- **[Reactive State Manager](#reactive-state-manager)**
-- **[Bindings](#bindings)**
-- **[Workers](#workers)**
-- **[Navigate with named routes](#navigate-with-named-routes)**
-- **[Send data to named Routes](#send-data-to-named-Routes)**
-- **[Dynamic urls links](#dynamic-urls-links)**
-- **[Middleware](#middleware)**
-- **[Optional Global Settings](#optional-global-settings)**
-- **[Nested Navigators](#nested-navigators)**
-- **[Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)**
-
-
+- [How to use?](#how-to-use)
+- [Navigating without named routes](#navigating-without-named-routes)
+  - [SnackBars](#snackbars)
+  - [Dialogs](#dialogs)
+  - [BottomSheets](#bottomsheets)
+- [Simple State Manager](#simple-state-manager)
+  - [Simple state manager usage](#simple-state-manager-usage)
+    - [No StatefulWidget:](#no-statefulwidget)
+      - [Forms of use:](#forms-of-use)
+- [Reactive State Manager](#reactive-state-manager)
+  - [GetX vs GetBuilder vs Obx vs MixinBuilder](#getx-vs-getbuilder-vs-obx-vs-mixinbuilder)
+- [Simple Instance Manager](#simple-instance-manager)
+- [Bindings](#bindings)
+    - [To use this API you only need:](#to-use-this-api-you-only-need)
+- [Workers:](#workers)
+- [Navigate with named routes:](#navigate-with-named-routes)
+  - [Send data to named Routes:](#send-data-to-named-routes)
+    - [Dynamic urls links](#dynamic-urls-links)
+    - [Middleware](#middleware)
+  - [Change Theme](#change-theme)
+  - [Optional Global Settings](#optional-global-settings)
+  - [Nested Navigators](#nested-navigators)
+  - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
 
 #### Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.
 
