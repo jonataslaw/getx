@@ -1,7 +1,6 @@
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 ![](get.png)
 
-*Idiomas: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+*Idiomas: [Inglês](README.md), Português Brasileiro (este aquivo)*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/Test,%20build%20and%20deploy/badge.svg)
@@ -10,46 +9,57 @@
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
 
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
-Get é uma biblioteca poderosa e extra-leve para Flutter que vai te dar superpoderes e aumentar sua produtividade. Navegue sem precisar do `context`, abra `Dialog`s, `Snackbar`s ou `BottomSheet`s de qualquer lugar no código, gerencie estados e injete dependências de uma forma simples e prática! Get é seguro, estável, atualizado e oferece uma enorme gama de APIs que não estão presentes no framework padrão.
+- Get é uma biblioteca poderosa e extra-leve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
+- Get não é para todos, seu foco é
+  - **Performance**: Já que gasta o mínimo de recursos
+  - **Produtividade**: Usando uma sintaxe fácil e agradável
+  - **Organização**: Que permite o total desacoplamento da View e da lógica de negócio.
+- Get vai economizar horas de desenvolvimento, e vai extrair a performance máxima que sua aplicação pode entregar, enquanto é fácil para iniciantes e preciso para experts. 
+- Navegue por rotas sem `context`, abra `Dialog`s, `Snackbar`s ou `BottomSheet`s de qualquer lugar no código, gerencie estados e injete dependências de uma forma simples e prática. 
+- Get é seguro, estável, atualizado e oferece uma enorme gama de APIs que não estão presentes no framework padrão.
 
-```dart
-// Navigator padrão do Flutter
-Navigator.of(context).push(
-  context,
-  MaterialPageRoute(
-    builder: (BuildContext context) {
-      return Home();
-    },
-  ),
-);
+**O app 'Counter' criado por padrão no com o comando `flutter create` tem mais de 100 linhas(incluindo os comentários). Para demonstrar o poder do Get, irei demonstrar como fazer o mesmo 'Counter' mudando o estado em cada toque trocando entre páginas e compartilhando o estado entre telas. Tudo de forma organizada, separando a lógica de negócio da View, COM SOMENTE 26 LINHAS INCLUINDO COMENTÁRIOS**
 
-// Sintaxe do Get
-Get.to(Home());
-```
-
-**Exemplo completo do app Flutter counter em somente 11 linhas de código**
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
+// Crie sua classe de lógica de negócio e coloque todas as variáveis, métodos e controllers dentro dela
+class Controller extends RxController {
+  // ".obs" transforma um objeto num Observable
+  var count = 0.obs;
+  increment() => count.value++;
+}
+
 class Home extends StatelessWidget {
-  final count = 0.obs;
+  // Instancie sua classe usando Get.put() para torná-la disponível para todas as rotas subsequentes
+  final Controller c = Get.put(Controller());
   @override
   Widget build(context) => Scaffold(
-    appBar: AppBar(title: Text("Get muda sua vida")),
-    floatingActionButton: FloatingActionButton(onPressed: () => count.value++),
-    body: Center(child: Obx(() => Text(count.string))),
-  );
+    appBar: AppBar(title: Obx(
+      () => Text("Total of clicks: " + c.count.string))),
+      // Troque o Navigator.push de 8 linhas por um simples Get.to(). Você não precisa do 'context'
+    body: Center(child: RaisedButton(
+      child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
+    floatingActionButton: FloatingActionButton(child:
+     Icon(Icons.add), onPressed: c.increment));
 }
+
+class Outra extends StatelessWidget {
+  // Você pode pedir o Get para encontrar o controller que foi usado em outra página e redirecionar você pra ele.
+  final Controller c = Get.find();
+  @override
+  Widget build(context) => Scaffold(body: Center(child: Text(c.count.string)));
+}
+
 ```
 
-## Começando
+Esse é um projeto simples mas já deixa claro o quão poderoso o Get é. Enquanto seu projeto cresce, essa diferença se torna bem mais significante.
 
-A navegação convencional do Flutter tem uma grande quantidade de boilerplate (código que se repete demais), requer o `context` para navegar entre telas/rotas, abrir dialogs e usar snackbars no framework, e é entediante.
+Get foi feito para funcionar com times, mas torna o trabalho de um desenvolvedor individual simples.
 
-Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar seu código dos boilerplates, aumentando sua produtividade, e eliminando os bugs de reconstrução da sua aplicação.
+Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é para todos, mas se você identificar com o que foi dito acima, Get é para você!
 
-- [Começando](#começando)
-    - [Você pode contribuir no projeto de várias formas:](#você-pode-contribuir-no-projeto-de-várias-formas)
 - [Como usar?](#como-usar)
 - [Navegação sem rotas nomeadas](#navegação-sem-rotas-nomeadas)
   - [SnackBars](#snackbars)
@@ -59,7 +69,8 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
   - [Uso do gerenciador de estado simples](#uso-do-gerenciador-de-estado-simples)
     - [Sem StatefulWidget;](#sem-statefulwidget)
       - [Formas de uso:](#formas-de-uso)
-- [Reactive State Manager - GetX](#reactive-state-manager---getx)
+- [Reactive State Manager](#reactive-state-manager)
+  - [GetX vs GetBuilder vs Obx vs MixinBuilder](#getx-vs-getbuilder-vs-obx-vs-mixinbuilder)
 - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
 - [Bindings](#bindings)
   - [Como utilizar:](#como-utilizar)
@@ -74,7 +85,7 @@ Essa biblioteca vai mudar a forma que você trabalha com o Framework e salvar se
 
 
 
-#### Você pode contribuir no projeto de várias formas:
+#### Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores:
 - Ajudando a traduzir o README para outras linguagens.
 - Adicionando mais documentação ao README (até o momento, nem metade das funcionalidades do Get foram documentadas).
 - Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
@@ -90,14 +101,17 @@ Qualquer contribuição é bem-vinda!
 (procure pela versão mais recente em pub.dev) -->
 
 Adicione Get ao seu arquivo pubspec.yaml
-<!-- de acordo com a versão do flutter que você estiver usando -->
+```yaml
+dependencies:
+  get:
+```
 
 Troque seu `MaterialApp()` por `GetMaterialApp()` e aproveite!
 ```dart
 import 'package:get/get.dart';
 
-GetMaterialApp( // Before: MaterialApp(
-  home: MyHome(),
+GetMaterialApp( // Antes: MaterialApp(
+  home: HomePage(),
 )
 ```
 
@@ -108,7 +122,7 @@ Para navegar para uma próxima tela:
 Get.to(ProximaTela());
 ```
 
-Para retornar para a tela anterior:
+Para fechar snackbars, dialogs, bottomsheets, ou qualquer coisa que você normalmente fecharia com o `Navigator.pop(context)` (como por exemplo fechar a View atual e voltar para a anterior):
 ```dart
 Get.back();
 ```
@@ -341,7 +355,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); // use update(this) para atualizar a variável counter na UI quando increment for chamado
+    update(); // use update() para atualizar a variável counter na UI quando increment for chamado
   }
 }
 // Na sua classe Stateless/Stateful, use o GetBuilder para atualizar o texto quando a função increment for chamada
@@ -391,7 +405,7 @@ class Controller extends GetController {
   int counter = 0;
   void increment() {
     counter++;
-    update(this); 
+    update(); 
   }
 }
 ```
@@ -536,12 +550,12 @@ GetBuilder<Controller>(
 ```
 E atualizá-los dessa forma:
 ```dart
-update(this,['text']);
+update(['text']);
 ```
 
 Você também pode impor condições para o update acontecer:
 ```dart
-update(this,['text'], counter < 10);
+update(['text'], counter < 10);
 ```
 
 GetX faz isso automaticamente e somente reconstrói o widget que usa a exata variável que foi alterada. Se você alterar o valor da variável para o mesmo valor que ela era anteriormente e isso não sugira uma mudança de estado, GetX não vai reconstruir esse widget, economizando memória e ciclos de CPU (Ex: 3 está sendo mostrado na tela, e você muda a variável para ter o valor 3 denovo. Na maioria dos gerenciadores de estado, isso vai causar uma reconstrução do widget, mas com o GetX o widget só vai reconstruir se de fato o estado mudou).
@@ -550,10 +564,10 @@ GetBuilder é focado precisamente em múltiplos controles de estados. Imagine qu
 
 Dessa forma, se você quiser controlar individualmente, você pode assinalar ID's para isso, ou usar GetX. Isso é com você, apenas lembre-se que quando mais "widgets individuais" você tiver, mais a performance do GetX vai se sobressair. Mas o GetBuilder vai ser superior quando há multiplas mudanças de estado.
 
-Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX, porque não tem competição para isso quando o widget é para reconstruir somente o que é necessário. Se você não precisa de IDs únicas, porque todas as suas variáveis serão alteradas quando você fazer uma ação, use GetBuilder, porque é um atualizador de estado em blocos simples, feito com apenas algumas linhas de código, para fazer justamente o que ele promete fazer: atualizar estado em blocos. Não há forma de comparar RAM, CPU, etc de um gerenciador de estado gigante com um simples StatefulWidget (como GetBuilder) que é atualizado quando você chama `update(this)`. Foi feito de uma forma simples, para ter o mínimo de lógica computacional, somente para cumprir um único papel e gastar o mínimo de recursos possível.
+Você pode usar os dois em qualquer situação, mas se quiser refinar a aplicação para a melhor performance possível, eu diria isso: se as suas variáveis são alteradas em momentos diferentes, use GetX, porque não tem competição para isso quando o widget é para reconstruir somente o que é necessário. Se você não precisa de IDs únicas, porque todas as suas variáveis serão alteradas quando você fazer uma ação, use GetBuilder, porque é um atualizador de estado em blocos simples, feito com apenas algumas linhas de código, para fazer justamente o que ele promete fazer: atualizar estado em blocos. Não há forma de comparar RAM, CPU, etc de um gerenciador de estado gigante com um simples StatefulWidget (como GetBuilder) que é atualizado quando você chama `update()`. Foi feito de uma forma simples, para ter o mínimo de lógica computacional, somente para cumprir um único papel e gastar o mínimo de recursos possível.
 Se você quer um gerenciador de estados poderoso, você pode ir sem medo para o GetX. Ele não funciona com variáveis, mas sim fluxos. Tudo está em seus streams por baixo dos panos. Você pode usar `rxDart` em conjunto com ele, porque tudo é um stream, você pode ouvir o evento de cada "variável", porque tudo é um stream, é literalmente BLoc, só que mais fácil que MobX e sem code generators ou decorations.
 
-## Reactive State Manager - GetX
+## Reactive State Manager
 
 Se você quer poder, Get té dá o mais avançado gerenciador de estado que você pode ter.
 GetX foi construído 100% baseado em Stream, e te dá todo o poder de fogo que o BLoc te dá, com uma sintaxe mais fácil que a do MobX.
@@ -686,8 +700,35 @@ Obviamente, se alguém quiser contribuir para o projeto e criar um code generato
 
 Tipagem no Get usando Bindings é desnecessário. Você pode usar o widget `Obx()` em vez do GetX, e ele só recebe a função anônima que cria o widget.
 
-## Gerenciamento de dependências simples
+### GetX vs GetBuilder vs Obx vs MixinBuilder
 
+Em uma década de trabalho com programação eu fui capaz de aprender umas lições valiosas.
+
+Meu primeiro contato com programação reactiva foi tão "Nossa, isso é incrível" e de fato é incrível.
+
+Porém, não é ideal para todas as situações. De vez em quando tudo que você precisa é mudar o estado de duas ou três variáveis ao mesmo tempo, ou uma mudança de estado diferente, que nesses casos a programação reativa não é ruim, mas não é apropriado.
+
+Programação reativa tem um consumo de RAM maior que pode ser compensado pelo fluxo individual, que vai se encarregar que apenas o Widget necessário é reconstruído, mas criar uma lista com 80 objetos, cada um com vários streams não é uma boa ideia. Abra o `dart inspect` e cheque quando um StreamBuilder consome, e você vai entender o que eu estou tentando dizer a você.
+
+Com isso em mente, eu criar o gerenciador de estados simples. É simples, e é exatamente o que você deve exigir dele: alterar vários estados em blocos de uma forma simples, e mais econômico possível.
+
+GetBuilder economiza muito quando se trata de RAM, e dificilmente vai existir uma forma mais econômica de lidar com isso do que ele (pelo menos eu não consigo imaginar nenhum. Se existir, me avise).
+
+Entretando, GetBuilder ainda é um gerenciador de estados "mecânico", você precisa chamar o `update()` assim como você faria com o `notifyListeners()` do `Provider`.
+
+Há outras situações onde a programação reativa é muito interessante, e não trabalhar com ela é a mesma coisa que reinventar a roda. Com isso em mente, GetX foi criado para prover tudo que há de mais moder e avançado num gerenciado de estado. Ele atualiza somente o que é necessário quando for necessário. Se por exemplo você tiver um erro que mande 300 alterações de estado simultaneamente, GetX vai filtrar e alterar a tela somente se o estado mudar de verdade.
+
+GetX ainda é mais econômico que qualquer outro gerenciador de estados reativo, mas consome um pouco mais de RAM do que o GetBuilder. Pensando nisso e mirando em minimizar o consumo de recursos que o Obx foi criado.
+
+Ao contrário de GetX e GetBuilder, você não será capaz de inicializar o controller dentro do Obx, é só um Widget com um `StreamSubscription` que recebe eventos de mundança das childrens ou child, só isso. É mais econômico que o GetX, mas perde para o GetBuilder, que é nada mais que o esperado, já que é reativo. GetBuilder tem uma das formas mais simplística que existe, de guardar o hashcode de um Widget e seu StateSetter. Com Obs você não precisa escrever seu tipo de controller, e você pode ouvir mudanças de múltiplos controllers diferentes, mas eles precisam ser inicializados antes, tanto usando o forma demonstrada no exemplo no início desse README, ou usando a classe `Bindings`
+
+Concluindo, uma pessoa abriu um pedido para uma feature nova, como ele queria usar somente um tipo de variável reativa, e precisava inserir um Obx junto do GetBuilder para isso. Pensando nisso, `MixinBuilder` foi criado. Ele permite as duas formas de alterar estados: usando variáveis com `.obs`, ou a forma mecânica via `update()`
+
+Porém, desses 4 widgets, esse é o que consome mais recursos, já que usa os dois gerenciadores de estado combinados.
+
+- Nota: Para usar GetBuilder e MixinBuilder você precisa usar GetController. Para usar GetX ou Obx você precisa usar RxController.
+
+## Gerenciamento de dependências simples
 * Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
 
 Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
@@ -720,6 +761,22 @@ Procurando por `lazyLoading`?(carregar somente quando for usar) Você pode decla
 ```dart
 Get.lazyPut<Service>(()=> ApiMock());
 /// ApiMock só será chamado quando alguém usar o Get.find<Service> pela primeira vez
+```
+
+Se você quiser registar uma instância assíncrona, você pode usar `Get.putAsync()`:
+
+```dart
+Get.putAsync<SharedPreferences>(() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('contador', 12345);
+  return prefs;
+});
+```
+
+Como usar:
+```dart
+int valor = Get.find<SharedPreferences>().getInt('contador');
+print(valor); // Imprime: 123456
 ```
 
 Para remover a instância do Get:
@@ -777,6 +834,30 @@ Get.to(Home(), binding: HomeBinding());
 
 Então, você não vai precisar se preocupar com gerenciamento da memória da sua aplicação mais, Get vai fazer para você.
 
+A classe Bindings é chamada quando uma rota é chamada. Você pode criar uma Binding inicial no seu GetMaterialApp para inserir todas as dependências que serão criadas.
+
+```dart
+GetMaterialApp(
+  initialBinding: SampleBind(),
+  home: Home(),
+)
+```
+
+Se você quiser usar suas inicializações em um lugar, você pode usar `SmartManagement.keepfactory` para permitir isso.
+
+Sempre prefira usar SmartManagement padrão (full), você não precisa configurar nada pra isso, o Get já te entrega ele assim por padrão. Ele com certeza irá eliminar todos seus controladores em desuso da memória, pois seu controle refinado remove a dependência, ainda que haja uma falha e um widget que utiliza ele não seja disposado adequadamente. Ele também é seguro o bastante para ser usado só com StatelessWidget, pois possui inúmeros callbacks de segurança que impedirão de um controlador permanecer na memória se não estiver sendo usado por nenhum widget. No entanto, se você se incomodar com o comportamento padrão, ou simplesmente não quiser que isso ocorra, Get disponibiliza outras opções mais brandas de gerenciamento inteligente de memória, como o SmartManagement.onlyBuilders, que dependerá da remoção efetiva dos widgets que usam o controlador da árvore para removê-lo, e você poderá impedir que um controlador seja disposado usando "autoRemove:false" no seu GetBuilder/GetX.
+
+Com essa opção, apenas os controladores iniciados no "init:" ou carregados em um Binding com "Get.lazyPut" serão disposados, se você usar Get.put ou qualquer outra abordagem, o SmartManagement não terá permissões para excluir essa dependência.
+
+Com o comportamento padrão, até os widgets instanciados com "Get.put" serão removidos, sendo a diferença crucial entre eles.
+
+`SmartManagement.keepFactory` é como o SmartManagement.full, com uma única diferença. o full expurga até as fabricas das dependências, de forma que o Get.lazyPut() só conseguirá ser chamado uma única vez e sua fábrica e referências serão auto-destruídas. `SmartManagement.keepFactory` irá remover suas dependências quando necessário, no entanto, vai manter guardado a "forma" destas, para fabricar uma igual se você precisar novamente de uma instância daquela.
+
+Em vez de usar `SmartManagement.keepFactory` você pode usar Bindings. Bindings cria fábricas transitórias, que são criadas no momento que você clica para ir para outra tela, e será destruído assim que a animação de mudança de tela acontecer. É tão pouco tempo, que o analyzer sequer conseguirá registrá-lo. Quando você navegar para essa tela novamente, uma nova fábrica temporária será chamada, então isso é preferível à usar `SmartManagement.keepFactory`, mas se você não quer ter o trabalho de criar Bindings, ou deseja manter todas suas dependências no mesmo Binding, isso certamente irá te ajudar. Fábricas ocupam pouca memória, elas não guardam instâncias, mas uma função com a "forma" daquela classe que você quer. Isso é muito pouco, mas como o objetivo dessa lib é obter o máximo de desempenho possível usando o mínimo de recursos, Get remove até as fabricas por padrão. Use o que achar mais conveniente para você.
+
+- Nota: NÃO USE SmartManagement.keepfactory se você está usando vários Bindings. Ele foi criado para ser usado sem Bindings, ou com um único Binding ligado ao GetMaterialApp lá no `initialBinding`
+
+- Nota²: Usar Bindings é completamente opcional, você pode usar Get.put() e Get.find() em classes que usam o controller sem problemas. Porém, se você trabalhar com Services ou qualquer outra abstração, eu recomendo usar Bindings. Especialmente em grandes empresas.
 
 ## Workers
 Workers vai te dar suporte, ativando callbacks específicos quando um evento ocorrer.
@@ -1159,10 +1240,14 @@ Get.offNamedUntil()
 //diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid/isIOS/isWeb... 
 
-// Equivalente ao método: MediaQuery.of(context).size.height
+// Equivalente ao método: MediaQuery.of(context).size.height, mas é imutável.
+// Se você precisa de um height adaptável (como em navegadores em que a janela pode ser redimensionada)
+// você precisa usar 'context.height'
 Get.height
 
-// Equivalente ao método: MediaQuery.of(context).size.width
+// Equivalente ao método: MediaQuery.of(context).size.width, mas é imutável.
+// Se você precisa de um width adaptável (como em navegadores em que a janela pode ser redimensionada)
+// você precisa usar 'context.width'
 Get.width
 
 // forncece o context da tela em qualquer lugar do seu código.
