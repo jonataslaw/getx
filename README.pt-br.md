@@ -763,6 +763,22 @@ Get.lazyPut<Service>(()=> ApiMock());
 /// ApiMock só será chamado quando alguém usar o Get.find<Service> pela primeira vez
 ```
 
+Se você quiser registar uma instância assíncrona, você pode usar `Get.putAsync()`:
+
+```dart
+Get.putAsync<SharedPreferences>(() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('contador', 12345);
+  return prefs;
+});
+```
+
+Como usar:
+```dart
+int valor = Get.find<SharedPreferences>().getInt('contador');
+print(valor); // Imprime: 123456
+```
+
 Para remover a instância do Get:
 ```dart
 Get.delete<Controller>();
