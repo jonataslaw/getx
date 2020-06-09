@@ -791,7 +791,7 @@ The Binding class is called when a route is called, you can create an "initialBi
 ```dart
 GetMaterialApp(
   initialBinding: SampleBind(),
-  home: Home();
+  home: Home(),
 );
 ```
 
@@ -799,7 +799,7 @@ If you want to use your initializations in one place, you can use SmartManagemen
 
 I always prefer the standard SmartManagement (full). It can be annoying at times, and eliminate something you don't want, as it has refined controls that remove memory dependency even if there is a flaw, and a widget is not arranged properly. It is safe enough with StatelessWidget, since even if there is no page available, it will still remove the controller from memory. But there are some use cases, which this restriction can be bothersome. For these situations you can use SmartManagement.onlyBuilders, which will depend on the effective removal of widgets that use the controller from the tree to remove the controller.
 
-- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetBaterialApp's initialBinding.
+- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
 
 - NOTE2: Using Bindings is completely optional, you can use Get.put() and Get.find() on classes that use a given controller without any problem.
 However, if you work with Services or any other abstraction, I recommend using Bindings for a larger organization.

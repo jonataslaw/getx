@@ -818,6 +818,22 @@ Get.to(Home(), binding: HomeBinding());
 
 Então, você não vai precisar se preocupar com gerenciamento da memória da sua aplicação mais, Get vai fazer para você.
 
+A classe Bindings é chamada quando uma rota é chamada. Você pode criar uma Binding inicial no seu GetMaterialApp para inserir todas as dependências que serão criadas.
+
+```dart
+GetMaterialApp(
+  initialBinding: SampleBind(),
+  home: Home(),
+)
+```
+
+Se você quiser usar suas inicializações em um lugar, você pode usar `SmartManagement.keepfactory` para permitir isso. E apesar de que usar o keepfactory deve ser uma exceção ao caso, mesmo assim é um dos mais suaves por aí.
+
+Eu sempre prefiro o SmartManagemente padrão (full). Pode ser frustrante as vezes, e eliminar algo que você não queira, já que tem controlers refinados que removem a dependência da memória mesmo que tenha uma falha, e algum widget não esteja organizado propriamente. É seguro o suficiente com o StatelessWidget, já que mesmo que não tenha nenhuma página disponível, ainda sim vai remover o controller da memória. Mas tem uns momentos certos para usar, (which this restriction can be bothersome)???. Para essas situações você pode usar o SmartManagemente.onlyBuilders, que vai depende da remoção efetiva dos widgets que usam o controller da árvore para remover o controller.
+
+- Nota: NÃO USE SmartManagement.keepfactory se você está usando vários Bindings. Ele foi criado para ser usado sem Bindings, ou com um único Binding ligado ao GetMaterialApp lá no `initialBinding`
+
+- Nota²: Usar Bindings é completamente opcional, você pode usar Get.put() e Get.find() em classes que usam o controller sem problemas. Porém, se você trabalhar com Services ou qualquer outra abstração, eu recomendo usar Bindings. Especialmente em grandes empresas.
 
 ## Workers
 Workers vai te dar suporte, ativando callbacks específicos quando um evento ocorrer.
@@ -1200,10 +1216,14 @@ Get.offNamedUntil()
 //diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid/isIOS/isWeb... 
 
-// Equivalente ao método: MediaQuery.of(context).size.height
+// Equivalente ao método: MediaQuery.of(context).size.height, mas é imutável.
+// Se você precisa de um height adaptável (como em navegadores em que a janela pode ser redimensionada)
+// você precisa usar 'context.height'
 Get.height
 
-// Equivalente ao método: MediaQuery.of(context).size.width
+// Equivalente ao método: MediaQuery.of(context).size.width, mas é imutável.
+// Se você precisa de um width adaptável (como em navegadores em que a janela pode ser redimensionada)
+// você precisa usar 'context.width'
 Get.width
 
 // forncece o context da tela em qualquer lugar do seu código.
