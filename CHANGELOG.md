@@ -1,3 +1,6 @@
+## [2.12.2]
+- Fix Workers
+
 ## [2.12.1]
 - Added: onReady on Controllers LifeCycle
 - Added: Observable maps
