@@ -24,7 +24,7 @@
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 // Create your business logic class and place all variables, methods and controllers inside it.
-class Controller {
+class Controller extends RxController{
   // ".obs" turns any object into an observable one.
   var count = 0.obs;
   increment() => count.value++;
@@ -55,23 +55,29 @@ class Other extends StatelessWidget {
 
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
-- **[Navigating without named routes](#navigating-without-named-routes)**
-- **[SnackBars](#snackBars)**
-- **[Dialogs](#dialogs)**
-- **[BottomSheets](#bottomsheets)**
-- **[Simple State Manager](#simple-state-manager)**
-- **[Reactive State Manager](#reactive-state-manager)**
-- **[Bindings](#bindings)**
-- **[Workers](#workers)**
-- **[Navigate with named routes](#navigate-with-named-routes)**
-- **[Send data to named Routes](#send-data-to-named-Routes)**
-- **[Dynamic urls links](#dynamic-urls-links)**
-- **[Middleware](#middleware)**
-- **[Optional Global Settings](#optional-global-settings)**
-- **[Nested Navigators](#nested-navigators)**
-- **[Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)**
-
-
+- [How to use?](#how-to-use)
+- [Navigating without named routes](#navigating-without-named-routes)
+  - [SnackBars](#snackbars)
+  - [Dialogs](#dialogs)
+  - [BottomSheets](#bottomsheets)
+- [Simple State Manager](#simple-state-manager)
+  - [Simple state manager usage](#simple-state-manager-usage)
+    - [No StatefulWidget:](#no-statefulwidget)
+      - [Forms of use:](#forms-of-use)
+- [Reactive State Manager](#reactive-state-manager)
+  - [GetX vs GetBuilder vs Obx vs MixinBuilder](#getx-vs-getbuilder-vs-obx-vs-mixinbuilder)
+- [Simple Instance Manager](#simple-instance-manager)
+- [Bindings](#bindings)
+    - [To use this API you only need:](#to-use-this-api-you-only-need)
+- [Workers:](#workers)
+- [Navigate with named routes:](#navigate-with-named-routes)
+  - [Send data to named Routes:](#send-data-to-named-routes)
+    - [Dynamic urls links](#dynamic-urls-links)
+    - [Middleware](#middleware)
+  - [Change Theme](#change-theme)
+  - [Optional Global Settings](#optional-global-settings)
+  - [Nested Navigators](#nested-navigators)
+  - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
 
 #### Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.
 
@@ -414,21 +420,21 @@ GetBuilder<Controller>(
 ),
 ```
 
-A much better approach than this is to use the onStart() and onClose() method directly from your controller.
+A much better approach than this is to use the onInit() and onClose() method directly from your controller.
 
 ```dart
 @override
-void onStart() {
+void onInit() {
   fetchApi();
-  super.onStart();
+  super.onInit();
 }
 ```
 
-- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onStart() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
 The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
 
 So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onStart() method that is called at the right time for you to start your services.
+You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
 You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
 
 Do not call a dispose method inside GetController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
@@ -448,7 +454,7 @@ class Controller extends GetController {
 }
 ```
 Controller life cycle:
-- onStart() where it is created.
+- onInit() where it is created.
 - onClose() where it is closed to make any changes in preparation for the delete method
 - deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
 
@@ -681,7 +687,7 @@ Finally, some people opened a resource request, as they wanted to use only one t
 
 - Note: To use GetBuilder and MixinBuilder you must use GetController. To use GetX and Obx you must use RxController.
 Probably using a GetController using GetX and Obx will work, but it will not be possible to use an RxController on a GetBuilder.
-Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onStart() and onClose() methods.
+Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods.
 
 ## Simple Instance Manager
 - Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
@@ -785,15 +791,19 @@ The Binding class is called when a route is called, you can create an "initialBi
 ```dart
 GetMaterialApp(
   initialBinding: SampleBind(),
-  home: Home();
+  home: Home(),
 );
 ```
 
-If you want to use your initializations in one place, you can use SmartManagement.keepfactory to allow this, and although using keepfactory should be the exception, as it is the softest SmartManagement out there.
+Always prefer to use standard SmartManagement (full), you do not need to configure anything for that, Get already gives it to you by default. It will surely eliminate all your disused controllers from memory, as its refined control removes the dependency, even if a failure occurs and a widget that uses it is not properly disposed.
+The "full" mode is also safe enough to be used with StatelessWidget, as it has numerous security callbacks that will prevent a controller from remaining in memory if it is not being used by any widget, and disposition is not important here. However, if you are bothered by the default behavior, or just don't want it to happen, Get offers other, more lenient options for intelligent memory management, such as SmartManagement.onlyBuilders, which will depend on the effective removal of widgets using the controller. tree to remove it, and you can prevent a controller from being deployed using "autoRemove: false" in your GetBuilder/GetX.
+With this option, only controllers started in "init:" or loaded into a Binding with "Get.lazyPut" will be disposed, if you use Get.put or any other approach, SmartManagement will not have permissions to exclude this dependency.
+With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
+SmartManagement.keepFactory is like SmartManagement.full, with one difference. SmartManagement.full purges the factories from the premises, so that Get.lazyPut() will only be able to be called once and your factory and references will be self-destructing. SmartManagement.keepFactory will remove its dependencies when necessary, however, it will keep the "shape" of these, to make an equal one if you need an instance of that again.
+Instead of using SmartManagement.keepFactory you can use Bindings.
+Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens. It is so little time that the analyzer will not even be able to register it. When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you . Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want. This is very little, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default. Use whichever is most convenient for you.
 
-I always prefer the standard SmartManagement (full). It can be annoying at times, and eliminate something you don't want, as it has refined controls that remove memory dependency even if there is a flaw, and a widget is not arranged properly. It is safe enough with StatelessWidget, since even if there is no page available, it will still remove the controller from memory. But there are some use cases, which this restriction can be bothersome. For these situations you can use SmartManagement.onlyBuilders, which will depend on the effective removal of widgets that use the controller from the tree to remove the controller.
-
-- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetBaterialApp's initialBinding.
+- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
 
 - NOTE2: Using Bindings is completely optional, you can use Get.put() and Get.find() on classes that use a given controller without any problem.
 However, if you work with Services or any other abstraction, I recommend using Bindings for a larger organization.
