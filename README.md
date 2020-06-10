@@ -3,7 +3,7 @@
 *Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get) 
-![building](https://github.com/jonataslaw/get/workflows/Test,%20build%20and%20deploy/badge.svg)
+![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
