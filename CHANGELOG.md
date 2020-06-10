@@ -1,3 +1,6 @@
+## [2.12.5]
+- Update readme
+
 ## [2.12.4]
 - Prevent exceptions on onReady with nullables
 
