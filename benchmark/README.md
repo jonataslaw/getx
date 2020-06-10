@@ -36,6 +36,8 @@ Redux = 4.16
 
 Provider = 4.15 
 
+Get = 4.14
+
 GetX = 4.13 
 
-Get = 4.14
+
