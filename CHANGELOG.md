@@ -1,3 +1,9 @@
+## [2.12.4]
+- Prevent exceptions on onReady with nullables
+
+## [2.12.3]
+- Fix List lenght == null 
+
 ## [2.12.2]
 - Fix Workers
 

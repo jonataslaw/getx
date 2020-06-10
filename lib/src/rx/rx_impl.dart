@@ -361,12 +361,11 @@ class ListX<E> extends Iterable<E> implements RxInterface<E> {
     addAll(items);
   }
 
-  List<E> _value;
   List<E> get value {
     if (getObs != null) {
       getObs.addListener(subject.stream);
     }
-    return _value;
+    return _list;
   }
 
   String get string => value.toString();
@@ -381,8 +380,8 @@ class ListX<E> extends Iterable<E> implements RxInterface<E> {
   }
 
   set value(Iterable<E> val) {
-    if (_value == val) return;
-    _value = val;
+    if (_list == val) return;
+    _list = val;
     subject.add(null);
   }
 

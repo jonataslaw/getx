@@ -41,7 +41,7 @@ abstract class DisposableInterface {
   /// Do not overwrite this method.
   void onStart() {
     onInit();
-    SchedulerBinding.instance.addPostFrameCallback((_) => onReady());
+    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
   }
 
   /// Called Called immediately after the widget is allocated in memory.
