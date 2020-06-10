@@ -749,7 +749,7 @@ class Get {
     final i = Get()._singl[key].getSependency();
 
     if (i is DisposableInterface) {
-      i.onInit();
+      i.onStart();
       if (isLogEnable) print('[GET] $key has been initialized');
     }
   }

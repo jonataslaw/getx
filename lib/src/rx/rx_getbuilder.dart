@@ -58,11 +58,11 @@ class _GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     } else {
       controller = widget.init;
       isCreator = true;
-      controller?.onInit();
+      controller?.onStart();
     }
     if (widget.initState != null) widget.initState(this);
     if (isCreator && Get().smartManagement == SmartManagement.onlyBuilder) {
-      controller?.onInit();
+      controller?.onStart();
     }
     _observer.subject.stream.listen((data) => setState(() {}));
     super.initState();

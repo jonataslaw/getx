@@ -1,3 +1,8 @@
+## [2.12.1]
+- Added: onReady on Controllers LifeCycle
+- Added: Observable maps
+- Refactor: observable variables that now consume even less RAM.
+
 ## [2.11.3]
 - Type parameters and added docs
 
