@@ -1,6 +1,6 @@
 ![](get.png)
- 
-*Languages: [English](README.md), [Brazilian Portuguese](README.pt-br.md).*
+
+*Languages: English (this file), [Brazilian Portuguese](README.pt-br.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get) 
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -55,31 +55,48 @@ class Other extends StatelessWidget {
 
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
-- [How to use?](#how-to-use)
-- [Navigating without named routes](#navigating-without-named-routes)
-  - [SnackBars](#snackbars)
-  - [Dialogs](#dialogs)
-  - [BottomSheets](#bottomsheets)
-- [Simple State Manager](#simple-state-manager)
-  - [Simple state manager usage](#simple-state-manager-usage)
-    - [No StatefulWidget:](#no-statefulwidget)
-      - [Forms of use:](#forms-of-use)
-- [Reactive State Manager](#reactive-state-manager)
-  - [GetX vs GetBuilder vs Obx vs MixinBuilder](#getx-vs-getbuilder-vs-obx-vs-mixinbuilder)
-- [Simple Instance Manager](#simple-instance-manager)
-- [Bindings](#bindings)
-    - [To use this API you only need:](#to-use-this-api-you-only-need)
-- [Workers:](#workers)
-- [Navigate with named routes:](#navigate-with-named-routes)
-  - [Send data to named Routes:](#send-data-to-named-routes)
+- [Route Management](#route-management)
+  - [How to use?](#how-to-use)
+  - [Navigation without named routes](#navigation-without-named-routes)
+  - [Navigation with named routes](#navigation-with-named-routes)
+    - [Send data to named Routes:](#send-data-to-named-routes)
     - [Dynamic urls links](#dynamic-urls-links)
     - [Middleware](#middleware)
+  - [Navigation without context](#navigation-without-context)
+    - [SnackBars](#snackbars)
+    - [Dialogs](#dialogs)
+    - [BottomSheets](#bottomsheets)
+  - [Nested Navigation](#nested-navigation)
+- [State Management](#state-management)
+  - [Simple State Manager](#simple-state-manager)
+    - [Advantages](#advantages)
+    - [Usage](#usage)
+    - [How it handles controllers](#how-it-handles-controllers)
+    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
+    - [Why it exists](#why-it-exists)
+    - [Other ways of using it](#other-ways-of-using-it)
+    - [Unique IDs](#unique-ids)
+  - [Reactive State Manager](#reactive-state-manager)
+    - [Advantages](#advantages-1)
+    - [Usage](#usage-1)
+    - [Where .obs can be used](#where-obs-can-be-used)
+    - [Note about Lists](#note-about-lists)
+    - [Why i have to use .value?](#why-i-have-to-use-value)
+    - [Obx()](#obx)
+    - [Workers:](#workers)
+  - [Mixing the two state managers](#mixing-the-two-state-managers)
+  - [GetBuilder vs GetX && Obx vs MixinBuilder](#getbuilder-vs-getx--obx-vs-mixinbuilder)
+- [Dependency Management](#dependency-management)
+  - [Simple Instance Manager](#simple-instance-manager)
+  - [Bindings](#bindings)
+    - [How to use](#how-to-use-1)
+  - [SmartManagement](#smartmanagement)
+- [Utils](#utils)
   - [Change Theme](#change-theme)
-  - [Optional Global Settings](#optional-global-settings)
-  - [Nested Navigators](#nested-navigators)
   - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
+    - [Optional Global Settings](#optional-global-settings)
 
-#### Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.
+*Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.*
 
 - Helping to translate the readme into other languages.
 - Adding documentation to the readme (not even half of Get's functions have been documented yet).
@@ -87,13 +104,11 @@ This is a simple project but it already makes clear how powerful Get is. As your
 - Offering PRs for code/tests.
 - Including new functions.
 
+# Route Management
+
 Any contribution is welcome!
 
 ## How to use?
-
-<!-- - Flutter Master/Dev/Beta: version 2.0.x-dev 
-- Flutter Stable branch: version 2.0.x
-(look for latest version on pub.dev) -->
 
 Add this to your pubspec.yaml file:
 
@@ -108,7 +123,8 @@ GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-## Navigating without named routes
+
+## Navigation without named routes
 To navigate to a new screen:
 
 ```dart
@@ -179,6 +195,220 @@ Get.to(HomePage());
 
 
 ```
+
+## Navigation with named routes
+- If you prefer to navigate by namedRoutes, Get also supports this.
+
+To navigate to nextScreen
+```dart
+Get.toNamed("/NextScreen");
+```
+To navigate and remove the previous screen from the tree.
+```dart
+Get.offNamed("/NextScreen");
+```
+To navigate and remove all previous screens from the tree.
+```dart
+Get.offAllNamed("/NextScreen");
+```
+
+To define routes, use GetMaterialApp:
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      initialRoute: '/',
+      namedRoutes: {
+        '/': GetRoute(page: MyHomePage()),
+        '/second': GetRoute(page: Second()),
+        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      },
+    )
+  );
+}
+```
+
+### Send data to named Routes:
+
+Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+```dart
+Get.toNamed("/NextScreen", arguments: 'Get is the best');
+```
+on your class or controller:
+
+```dart
+print(Get.arguments);
+//print out: Get is the best
+```
+
+### Dynamic urls links
+Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+
+```dart
+Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
+```
+on your controller/bloc/stateful/stateless class:
+
+```dart
+print(Get.parameters['id']);
+// out: 354
+print(Get.parameters['name']);
+// out: Enzo
+```
+
+You can also receive NamedParameters with Get easily:
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      initialRoute: '/',
+      namedRoutes: {
+        '/': GetRoute(page: MyHomePage()),
+        /// Important!  :user is not a new route, it is just a parameter
+        /// specification. Do not use '/second/:user' and '/second'
+        /// if you need new route to user, use '/second/user/:user' 
+        /// if '/second' is a route.
+        '/second/:user': GetRoute(page: Second()), // receive ID
+        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
+      },
+    )
+  );
+}
+```
+Send data on route name
+```dart
+Get.toNamed("/second/34954");
+```
+
+On second screen take the data by parameter
+
+```dart
+print(Get.parameters['user']);
+// out: 34954
+```
+
+And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+
+
+### Middleware 
+If you want listen Get events to trigger actions, you can to use routingCallback to it
+```dart
+GetMaterialApp(
+  routingCallback: (route) {
+    if(routing.current == '/second'){
+      openAds();
+    }
+  }
+)
+```
+If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+
+```dart
+void main() {
+  runApp(
+    MaterialApp(
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: "/",
+      navigatorKey: Get.key,
+      navigatorObservers: [
+        GetObserver(MiddleWare.observer), // HERE !!!
+      ],
+    ),
+  );
+}
+```
+Create a MiddleWare class
+
+```dart
+class MiddleWare {
+  static observer(Routing routing) {
+    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
+    ///If you need to enter any of these 3 events directly here, 
+    ///you must specify that the event is != Than you are trying to do.
+    if (routing.current == '/second' && !routing.isSnackbar) {
+      Get.snackbar("Hi", "You are on second route");
+    } else if (routing.current =='/third'){
+      print('last route called');
+    }
+  }
+}
+```
+
+Now, use Get on your code:
+
+```dart
+class First extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Get.snackbar("hi", "i am a modern snackbar");
+          },
+        ),
+        title: Text('First Route'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Open route'),
+          onPressed: () {
+            Get.toNamed("/second");
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class Second extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Get.snackbar("hi", "i am a modern snackbar");
+          },
+        ),
+        title: Text('second Route'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Open route'),
+          onPressed: () {
+            Get.toNamed("/third");
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class Third extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Third Route"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+```
+## Navigation without context
 
 ### SnackBars
 
@@ -302,38 +532,93 @@ Get.bottomSheet(
 );
 ```
 
-## Simple State Manager
-There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that ChangeNotifier should be used with 1 or a maximum of 2 listeners (https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large. Other state managers are good, but have their nuances. BLoC is very safe and efficient, but it is very complex for beginners, which has kept people from developing with Flutter. MobX is easier than BLoC and reactive, almost perfect, I would say, but you need to use a code generator that for large applications, reduces productivity, you will need to drink a lot of coffees until your code is ready again after a Flutter clean (And this is not MobX's fault, but the codegen which is really slow!). Provider uses InheritedWidget to deliver the same listener, as a way of solving the problem reported above with ChangeNotifier, which implies that any access to its ChangeNotifier class must be within the widget tree because of the context to access o Inherited.
+
+## Nested Navigation
+
+Get made Flutter's nested navigation even easier.
+You don't need the context, and you will find your navigation stack by Id.
+
+- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+
+See how simple it is:
+```dart
+Navigator(
+  key: Get.nestedKey(1), // create a key by index
+  initialRoute: '/',
+  onGenerateRoute: (settings) {
+    if (settings.name == '/') {
+      return GetRouteBase(
+        page: Scaffold(
+          appBar: AppBar(
+            title: Text("Main"),
+          ),
+          body: Center(
+            child: FlatButton(
+              color: Colors.blue,
+              onPressed: () {
+                Get.toNamed('/second', id:1); // navigate by your nested route by index
+              },
+              child: Text("Go to second"),
+            ),
+          ),
+        ),
+      );
+    } else if (settings.name == '/second') {
+      return GetRouteBase(
+        page: Center(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text("Main"),
+            ),
+            body: Center(
+              child:  Text("second")
+            ),
+          ),
+        ),
+      );
+    }
+  }
+),
+```
+
+
+# State Management
+
+There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
+
+Other state managers are good, but have their nuances:
+- BLoC is very safe and efficient, but it is very complex for beginners, which has kept people from developing with Flutter.
+- MobX is easier than BLoC and reactive, almost perfect, I would say, but you need to use a code generator, that for large applications, reduces productivity, since you will need to drink a lot of coffees until your code is ready again after a `flutter clean` (And this is not MobX's fault, but the codegen which is really slow!).
+- Provider uses InheritedWidget to deliver the same listener, as a way of solving the problem reported above with ChangeNotifier, which implies that any access to its ChangeNotifier class must be within the widget tree because of the context to access o Inherited.
+
 
 Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager. Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
 
-Get has a state manager that is extremely light and easy (written in just 95 lines of code), which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+## Simple State Manager
 
-What performance improvements does Get bring?
+Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
 
-1- Update only the required widget.
+### Advantages
 
-2- Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb for until).
+1. Update only the required widgets.
 
-3- Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
 
-4- Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
 
-5- Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
 
-6- Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
 
-7- Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
 
-8- Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
 
-9- Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this. Example:
+8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
 
-- Class a => Class B (has controller X) => Class C (has controller X)
+9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
 
-In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
-
-### Simple state manager usage
+### Usage
 
 ```dart
 // Create controller class and extends GetController
@@ -404,7 +689,14 @@ FloatingActionButton(
 ```
 When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
 
-#### No StatefulWidget:
+### How it handles controllers
+Let's say we have this:
+
+`Class a => Class B (has controller X) => Class C (has controller X)`
+
+In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+
+### You won't need StatefulWidgets anymore
 Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
 The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
 Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get. 
@@ -431,6 +723,8 @@ void onInit() {
 ```
 
 - NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+
+### Why it exists
 The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
 
 So to simplify this:
@@ -458,7 +752,7 @@ Controller life cycle:
 - onClose() where it is closed to make any changes in preparation for the delete method
 - deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
 
-##### Forms of use:
+### Other ways of using it
 
 You can use Controller instance directly on GetBuilder value:
 
@@ -513,9 +807,8 @@ GetBuilder<Controller>(
 ),
 
 ```
-<!-- This approach is not recommended, as you will have to manually dispose of your controllers, close your streams manually, and literally give up one of the great benefits of this library, which is intelligent memory control. But if you trust your potential, go ahead! -->
 
-
+### Unique IDs
 If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
 ```dart
 GetBuilder<Controller>( 
@@ -537,22 +830,25 @@ update(['text'], counter < 10);
 ```
 
 GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+
+## Reactive State Manager
+
+### Advantages
 GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this. However, there are situations where you want only the widget where a certain variable has been changed to be rebuilt, and this is what GetX does with a mastery never seen before.
 
 That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
 
-You can use both in any situation, but if you want to tune their application to the maximum possible performance, I would say that: if your variables are changed at different times, use GetX, because there is no competition for it when the subject is to rebuild only what is necessary, if you do not need unique IDs, because all your variables will be changed when you perform an action, use GetBuilder, because it is a simple state updater in blocks, made in a few lines of code, to make just what he promises to do: update state in blocks. There is no way to compare RAM, CPU, or anything else from a giant state manager to a simple StatefulWidget (like GetBuilder) that is updated when you call update(this). It was done in a simple way, to have the least computational logic involved, just to fulfill a single purpose and spend the minimum resources possible for that purpose.
+You can use both in any situation, but if you want to tune their application to the maximum possible performance, I would say that: if your variables are changed at different times, use GetX, because there is no competition for it when the subject is to rebuild only what is necessary, if you do not need unique IDs, because all your variables will be changed when you perform an action, use GetBuilder, because it is a simple state updater in blocks, made in a few lines of code, to make just what he promises to do: update state in blocks. There is no way to compare RAM, CPU, or anything else from a giant state manager to a simple StatefulWidget (like GetBuilder) that is updated when you call update(). It was done in a simple way, to have the least computational logic involved, just to fulfill a single purpose and spend the minimum resources possible for that purpose.
 If you want a powerful state manager, you can go without fear to GetX. It does not work with variables, but flows, everything in it is streams under the hood. You can use rxDart in conjunction with it, because everything is stream, you can hear the event of each "variable", because everything in it is stream, it is literally BLoC, easier than MobX, and without code generator or decorations .
-
-
-## Reactive State Manager 
 
 If you want power, Get gives you the most advanced state manager you could ever have.
 GetX was built 100% based on Streams, and give you all the firepower that BLoC gave you, with an easier facility than using MobX.
 Without decorations, you can turn anything into Observable with just a ".obs".
 
 Maximum performance: In addition to having a smart algorithm for minimal reconstruction, Get uses comparators to make sure the state has changed. If you experience any errors in your application, and send a duplicate change of state, Get will ensure that your application does not collapse.
-The state only changes if the values ​​change. That's the main difference between Get, and using Computed from MobX. When joining two observables, when one is changed, the hearing of that observable will change. With Get, if you join two variables (which is unnecessary computed for that), GetX (similar to Observer) will only change if it implies a real change of state. Example:
+The state only changes if the values ​​change. That's the main difference between Get, and using Computed from MobX. When joining two observables, when one is changed, the hearing of that observable will change. With Get, if you join two variables (which is unnecessary computed for that), GetX (similar to Observer) will only change if it implies a real change of state. 
+
+### Usage
 
 ```dart
 final count1 = 0.obs;
@@ -609,6 +905,7 @@ ctl.count.value++
 
 You could update the counter variable in your UI, regardless of where it is stored.
 
+### Where .obs can be used
 You can transform anything on obs:
 
 ```dart
@@ -648,6 +945,7 @@ Camila
 
 ```
 
+### Note about Lists
 Working with Lists using Get is the best and most enjoyable thing in the world. They are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
 You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that, unfortunate primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
 
@@ -665,29 +963,78 @@ You don't have to work with sets if you don't want to. you can use the "assign '
 The "assign" api will clear your list, and add a single object that you want to start there.
 The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
 
+### Why i have to use .value?
 We could remove the obligation to use 'value' to String and int with a simple decoration and code generator, but the purpose of this lib is precisely not to need any external dependency. It is to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, light and performance way without needing any external package. You can literally add 3 letters to your pubspec (get) and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance. The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand. If you are bothered by value, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+
 If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
 Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
 
+### Obx()
+
 Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
 Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
 
-### GetX vs GetBuilder vs Obx vs MixinBuilder
-In a decade working with programming I was able to learn some valuable lessons.
-My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
-However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
-Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
-With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
-GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
-However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
-There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
-GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
-Finally, some people opened a resource request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+### Workers:
+Workers will assist you, triggering specific callbacks when an event occurs.
+
+
+```dart
+/// Called every time the variable $_ is changed
+ever(count1, (_) => print("$_ has been changed"));
+
+/// Called only first time the variable $_ is changed
+once(count1, (_) => print("$_ was changed once"));
+
+/// Anti DDos - Called every time the user stops typing for 1 second, for example. 
+debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
+
+/// Ignore all changes within 1 second.
+interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
+```
+- ever
+'ever' is called every time its variable is changed. That's it.
+
+- ever
+'once' is called only the first time the variable has been changed.
+
+- debounce
+'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+
+- interval
+'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+
+
+## Mixing the two state managers
+Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
 
 - Note: To use GetBuilder and MixinBuilder you must use GetController. To use GetX and Obx you must use RxController.
 Probably using a GetController using GetX and Obx will work, but it will not be possible to use an RxController on a GetBuilder.
 Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods.
+
+## GetBuilder vs GetX && Obx vs MixinBuilder
+In a decade working with programming I was able to learn some valuable lessons.
+
+My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
+However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
+
+Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+
+With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
+
+GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
+
+However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
+
+There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
+
+GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
+
+
+
+
+# Dependency Management
+
 
 ## Simple Instance Manager
 - Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
@@ -744,6 +1091,7 @@ To remove a instance of Get:
 Get.delete<Controller>();
 ```
 
+
 ## Bindings 
 One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
 When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
@@ -753,7 +1101,7 @@ The Binding class is a class that will decouple dependency injection, while "bin
 This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
 In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
 
-#### To use this API you only need:
+### How to use
 - Create a class and implements Binding
 
 ```dart
@@ -794,7 +1142,7 @@ GetMaterialApp(
   home: Home(),
 );
 ```
-
+## SmartManagement
 Always prefer to use standard SmartManagement (full), you do not need to configure anything for that, Get already gives it to you by default. It will surely eliminate all your disused controllers from memory, as its refined control removes the dependency, even if a failure occurs and a widget that uses it is not properly disposed.
 The "full" mode is also safe enough to be used with StatelessWidget, as it has numerous security callbacks that will prevent a controller from remaining in memory if it is not being used by any widget, and disposition is not important here. However, if you are bothered by the default behavior, or just don't want it to happen, Get offers other, more lenient options for intelligent memory management, such as SmartManagement.onlyBuilders, which will depend on the effective removal of widgets using the controller. tree to remove it, and you can prevent a controller from being deployed using "autoRemove: false" in your GetBuilder/GetX.
 With this option, only controllers started in "init:" or loaded into a Binding with "Get.lazyPut" will be disposed, if you use Get.put or any other approach, SmartManagement will not have permissions to exclude this dependency.
@@ -808,250 +1156,10 @@ Bindings creates transitory factories, which are created the moment you click to
 - NOTE2: Using Bindings is completely optional, you can use Get.put() and Get.find() on classes that use a given controller without any problem.
 However, if you work with Services or any other abstraction, I recommend using Bindings for a larger organization.
 
-## Workers:
-Workers will assist you, triggering specific callbacks when an event occurs.
 
+# Utils
 
-```dart
-/// Called every time the variable $_ is changed
-ever(count1, (_) => print("$_ has been changed"));
-
-/// Called only first time the variable $_ is changed
-once(count1, (_) => print("$_ was changed once"));
-
-/// Anti DDos - Called every time the user stops typing for 1 second, for example. 
-debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
-
-/// Ignore all changes within 1 second.
-interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
-```
-- ever
-'ever' is called every time its variable is changed. That's it.
-
-- ever
-'once' is called only the first time the variable has been changed.
-
-- debounce
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
-
-- interval
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
-
-
-## Navigate with named routes:
-- If you prefer to navigate by namedRoutes, Get also supports this.
-
-To navigate to nextScreen
-```dart
-Get.toNamed("/NextScreen");
-```
-To navigate and remove the previous screen from the tree.
-```dart
-Get.offNamed("/NextScreen");
-```
-To navigate and remove all previous screens from the tree.
-```dart
-Get.offAllNamed("/NextScreen");
-```
-
-To define routes, use GetMaterialApp:
-
-```dart
-void main() {
-  runApp(
-    GetMaterialApp(
-      initialRoute: '/',
-      namedRoutes: {
-        '/': GetRoute(page: MyHomePage()),
-        '/second': GetRoute(page: Second()),
-        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-      },
-    )
-  );
-}
-```
-
-### Send data to named Routes:
-
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
-```dart
-Get.toNamed("/NextScreen", arguments: 'Get is the best');
-```
-on your class or controller:
-
-```dart
-print(Get.arguments);
-//print out: Get is the best
-```
-
-#### Dynamic urls links
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
-
-```dart
-Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
-```
-on your controller/bloc/stateful/stateless class:
-
-```dart
-print(Get.parameters['id']);
-// out: 354
-print(Get.parameters['name']);
-// out: Enzo
-```
-
-You can also receive NamedParameters with Get easily:
-
-```dart
-void main() {
-  runApp(
-    GetMaterialApp(
-      initialRoute: '/',
-      namedRoutes: {
-        '/': GetRoute(page: MyHomePage()),
-        /// Important!  :user is not a new route, it is just a parameter
-        /// specification. Do not use '/second/:user' and '/second'
-        /// if you need new route to user, use '/second/user/:user' 
-        /// if '/second' is a route.
-        '/second/:user': GetRoute(page: Second()), // receive ID
-        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-      },
-    )
-  );
-}
-```
-Send data on route name
-```dart
-Get.toNamed("/second/34954");
-```
-
-On second screen take the data by parameter
-
-```dart
-print(Get.parameters['user']);
-// out: 34954
-```
-
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
-
-
-#### Middleware 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
-```dart
-GetMaterialApp(
-  routingCallback: (route) {
-    if(routing.current == '/second'){
-      openAds();
-    }
-  }
-)
-```
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
-
-```dart
-void main() {
-  runApp(
-    MaterialApp(
-      onGenerateRoute: Router.generateRoute,
-      initialRoute: "/",
-      navigatorKey: Get.key,
-      navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
-      ],
-    ),
-  );
-}
-```
-Create a MiddleWare class
-
-```dart
-class MiddleWare {
-  static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen. 
-    ///If you need to enter any of these 3 events directly here, 
-    ///you must specify that the event is != Than you are trying to do.
-    if (routing.current == '/second' && !routing.isSnackbar) {
-      Get.snackbar("Hi", "You are on second route");
-    } else if (routing.current =='/third'){
-      print('last route called');
-    }
-  }
-}
-```
-
-Now, use Get on your code:
-
-```dart
-class First extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            Get.snackbar("hi", "i am a modern snackbar");
-          },
-        ),
-        title: Text('First Route'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Open route'),
-          onPressed: () {
-            Get.toNamed("/second");
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class Second extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            Get.snackbar("hi", "i am a modern snackbar");
-          },
-        ),
-        title: Text('second Route'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Open route'),
-          onPressed: () {
-            Get.toNamed("/third");
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class Third extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Third Route"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: Text('Go back!'),
-        ),
-      ),
-    );
-  }
-}
-```
-
-### Change Theme
+## Change Theme
 Please do not use any higher level widget than GetMaterialApp in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with Get.
 
 You can create your custom theme and simply add it within Get.changeTheme without any boilerplate for that:
@@ -1075,76 +1183,8 @@ If you want to know in depth how to change the theme, you can follow this tutori
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 
 
-### Optional Global Settings
-You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 
-```dart
-GetMaterialApp(
-  enableLog: true,
-  defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
-);
-
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
-```
-
-
-### Nested Navigators
-
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
-
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
-
-See how simple it is:
-```dart
-Navigator(
-  key: Get.nestedKey(1), // create a key by index
-  initialRoute: '/',
-  onGenerateRoute: (settings) {
-    if (settings.name == '/') {
-      return GetRouteBase(
-        page: Scaffold(
-          appBar: AppBar(
-            title: Text("Main"),
-          ),
-          body: Center(
-            child: FlatButton(
-              color: Colors.blue,
-              onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
-              },
-              child: Text("Go to second"),
-            ),
-          ),
-        ),
-      );
-    } else if (settings.name == '/second') {
-      return GetRouteBase(
-        page: Center(
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text("Main"),
-            ),
-            body: Center(
-              child:  Text("second")
-            ),
-          ),
-        ),
-      );
-    }
-  }
-),
-```
-
-### Other Advanced APIs and Manual configurations
+## Other Advanced APIs and Manual configurations
 GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
 
 ```dart
@@ -1197,5 +1237,28 @@ Get.context // Gives the context of the screen in the foreground anywhere in you
 Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 
 ```
+
+
+### Optional Global Settings
+You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  defaultTransition: Transition.fade,
+  opaqueRoute: Get.isOpaqueRouteDefault,
+  popGesture: Get.isPopGestureEnable,
+  transitionDuration: Get.defaultDurationTransition,
+  defaultGlobalState: Get.defaultGlobalState,
+);
+
+Get.config(
+  enableLog = true,
+  defaultPopGesture = true,
+  defaultTransition = Transitions.cupertino
+)
+```
+
+
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
