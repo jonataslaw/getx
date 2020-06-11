@@ -15,28 +15,42 @@
 
 
 - Get is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
-- Get is not for everyone, its focus is (performance) on the minimum consumption of resources, (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
+- Get is not for everyone, its focus is (performance) on the minimum consumption of resources ([look the benchmarks](https://github.com/jonataslaw/benchmarks)), (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
 - Get will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 
+**Get makes your development productive, but want to make it even more productive? Add the extension [Get extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
 
-**The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.**
 
+The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+
+- Step 1: 
+Add "Get" before your materialApp, turning it into GetMaterialApp
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
-// Create your business logic class and place all variables, methods and controllers inside it.
+```
+- Step 2:
+Create your business logic class and place all variables, methods and controllers inside it.
+You can make any variable observable using a simple ".obs".
+
+```dart
 class Controller extends RxController{
-  // ".obs" turns any object into an observable one.
-  var count = 0.obs;
+  var count = 0.obs; 
   increment() => count.value++;
 }
-
+```
+- Step 3:
+Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+```dart
 class Home extends StatelessWidget {
+
   // Instantiate your class using Get.put() to make it available for all "child" routes there.
   final Controller c = Get.put(Controller());
+
   @override
   Widget build(context) => Scaffold(
-      appBar:
-          AppBar(title: Obx(() => Text("Total of clicks: " + c.count.string))),
+      // Use Obx(()=> to update Text() whenever count is changed.
+      appBar: AppBar(title: Obx(() => Text("Clicks: " + c.count.string))),
+
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: RaisedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
@@ -47,8 +61,11 @@ class Home extends StatelessWidget {
 class Other extends StatelessWidget {
   // You can ask Get to find a Controller that is being used by another page and redirect you to it.
   final Controller c = Get.find();
+
   @override
-  Widget build(context) => Scaffold(body: Center(child: Text(c.count.string)));
+  Widget build(context){
+     // Access the updated count variable
+     return Scaffold(body: Center(child: Text(c.count.string)));
 }
 
 ```
