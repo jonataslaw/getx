@@ -6,7 +6,7 @@ void ever(RxInterface listener, Function(dynamic) callback,
     {bool condition = true}) {
   listener.subject.stream.listen((event) {
     if (condition) {
-      callback(event.$new);
+      callback(event);
     }
   });
 }
@@ -18,7 +18,7 @@ void once(RxInterface listener, Function(dynamic) callback,
     if (!condition) return null;
     times++;
     if (times < 2) {
-      callback(event.$new);
+      callback(event);
     }
   });
 }
@@ -31,7 +31,7 @@ void interval(RxInterface listener, Function(dynamic) callback,
     debounceActive = true;
     await Future.delayed(time ?? Duration(seconds: 1));
     debounceActive = false;
-    callback(event.$new);
+    callback(event);
   });
 }
 
@@ -40,7 +40,7 @@ void debounce(RxInterface listener, Function(dynamic) callback,
   final _debouncer = Debouncer(delay: time ?? Duration(milliseconds: 800));
   listener.subject.stream.listen((event) {
     _debouncer(() {
-      callback(event.$new);
+      callback(event);
     });
   });
 }

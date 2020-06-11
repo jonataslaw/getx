@@ -5,9 +5,16 @@ import 'package:get/src/rx/rx_interface.dart';
 import '../get_main.dart';
 
 class GetController extends DisposableInterface {
-  void onClose() async {}
-  void onInit() async {}
   List<RealState> _allStates = [];
+
+  @override
+  void onInit() async {}
+
+  @override
+  void onReady() async {}
+
+  @override
+  void onClose() async {}
 
   /// Update GetBuilder with update();
   void update([List<String> ids, bool condition = true]) {
@@ -93,11 +100,11 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
       isCreator = true;
       real = RealState(updater: setState, id: widget.id);
       controller._allStates.add(real);
-      controller?.onInit();
+      controller?.onStart();
     }
     if (widget.initState != null) widget.initState(this);
     if (isCreator && Get().smartManagement == SmartManagement.onlyBuilder) {
-      controller?.onInit();
+      controller?.onStart();
     }
   }
 

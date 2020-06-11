@@ -1,5 +1,5 @@
 #The name of your workflow.
-name:  Test, build and deploy
+name:  build
 # Trigger the workflow on push or pull request
 on: [push,pull_request]
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
@@ -21,7 +21,7 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
       # run static analys code
-      - run: flutter  analyze
+      #- run: flutter  analyze
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       # Upload coverage reports to Codecov

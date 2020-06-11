@@ -1,3 +1,20 @@
+## [2.12.5]
+- Update readme
+
+## [2.12.4]
+- Prevent exceptions on onReady with nullables
+
+## [2.12.3]
+- Fix List lenght == null 
+
+## [2.12.2]
+- Fix Workers
+
+## [2.12.1]
+- Added: onReady on Controllers LifeCycle
+- Added: Observable maps
+- Refactor: observable variables that now consume even less RAM.
+
 ## [2.11.3]
 - Type parameters and added docs
 
