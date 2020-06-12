@@ -1,3 +1,7 @@
+## [2.12.6]
+- Update docs
+- Fix Bindings list on GetRouteBase
+
 ## [2.12.5]
 - Update readme
 

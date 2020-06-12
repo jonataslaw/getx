@@ -375,14 +375,18 @@ class _GetBarState<K extends Object> extends State<GetBar>
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.BOTTOM
               ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
-              :
-              // EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top),
-              EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          bottom: widget.snackPosition == SnackPosition.BOTTOM,
-          top: widget.snackPosition == SnackPosition.TOP,
-          left: false,
-          right: false,
-          child: _getSnack(),
+              : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: SafeArea(
+            minimum: widget.snackPosition == SnackPosition.BOTTOM
+                ? EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom)
+                : EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top),
+            bottom: widget.snackPosition == SnackPosition.BOTTOM,
+            top: widget.snackPosition == SnackPosition.TOP,
+            left: false,
+            right: false,
+            child: _getSnack(),
+          ),
         ),
       ),
     );
