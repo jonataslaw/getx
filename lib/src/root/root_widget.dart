@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/src/routes/get_route.dart';
 import 'package:get/src/routes/utils/parse_arguments.dart';
+import '../get_instance.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -109,7 +110,7 @@ class GetMaterialApp extends StatelessWidget {
     /// workaround until they fix it, because the problem is with the 'Flutter engine',
     /// which changes the initial route for an empty String, not the main Flutter,
     /// so only Team can fix it.
-    var parsedString = Get().getController.parse.split(
+    var parsedString = Get.getController.parse.split(
         (settings.name == '' || settings.name == null)
             ? (initialRoute ?? '/')
             : settings.name);
@@ -123,7 +124,7 @@ class GetMaterialApp extends StatelessWidget {
     Map<String, GetRoute> newNamedRoutes = {};
 
     namedRoutes.forEach((key, value) {
-      String newName = Get().getController.parse.split(key).route;
+      String newName = Get.getController.parse.split(key).route;
       newNamedRoutes.addAll({newName: value});
     });
 
@@ -179,21 +180,21 @@ class GetMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GetMaterialController>(
-        init: Get().getController,
+        init: Get.getController,
         dispose: (d) {
           onDispose?.call();
         },
         initState: (i) {
           initialBinding?.dependencies();
-          Get().smartManagement = smartManagement;
+          GetConfig.smartManagement = smartManagement;
           onInit?.call();
           if (namedRoutes != null) {
             namedRoutes.forEach((key, value) {
-              Get().getController.parse.addRoute(key);
+              Get.getController.parse.addRoute(key);
             });
           }
           Get.config(
-            enableLog: enableLog ?? Get.isLogEnable,
+            enableLog: enableLog ?? GetConfig.isLogEnable,
             defaultTransition: defaultTransition ?? Get.defaultTransition,
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,

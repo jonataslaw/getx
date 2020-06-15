@@ -53,5 +53,5 @@ abstract class DisposableInterface {
 
   /// Called before the onDelete method. onClose is used to close events
   /// before the controller is destroyed, such as closing streams, for example.
-  void onClose() async {}
+   onClose() async {}
 }

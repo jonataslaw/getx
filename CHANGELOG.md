@@ -1,4 +1,11 @@
-## [2.12.6]
+## [2.13.1]
+- Added sort to ListX
+- Prepared the framework for version 3
+
+## [2.13.0]
+- Added Get.focusScope
+
+## [2.13.0]
 - Update docs
 - Fix Bindings list on GetRouteBase
 

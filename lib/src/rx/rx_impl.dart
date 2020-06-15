@@ -341,6 +341,11 @@ class ListX<E> extends Iterable<E> implements RxInterface<E> {
     subject.add(null);
   }
 
+  void sort([int compare(E a, E b)]) {
+    _list.sort();
+    subject.add(null);
+  }
+
   close() {
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();

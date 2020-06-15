@@ -1,55 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:get/src/get_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
 import 'root/root_controller.dart';
-import 'root/smart_management.dart';
 import 'routes/bindings_interface.dart';
 import 'routes/default_route.dart';
 import 'routes/observers/route_observer.dart';
 import 'routes/transitions_type.dart';
-import 'rx/rx_interface.dart';
 import 'snackbar/snack.dart';
 
-///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
-///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
-///To return to the previous screen, use Get.back().
+///Use to instead of Navigator.push, off instead of Navigator.pushReplacement,
+///offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
+///after them. Example: toNamed, offNamed, and AllNamed.
+///To return to the previous screen, use back().
 ///No need to pass any context to Get, just put the name of the route inside
 ///the parentheses and the magic will occur.
-class Get {
-  factory Get() {
-    if (_get == null) _get = Get._();
-    return _get;
-  }
-
-  bool _enableLog = true;
-  bool _defaultPopGesture = GetPlatform.isIOS;
-  bool _defaultOpaqueRoute = true;
-  Transition _defaultTransition =
+class GetImpl implements GetService {
+  bool defaultPopGesture = GetPlatform.isIOS;
+  bool defaultOpaqueRoute = true;
+  Transition defaultTransition =
       (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
-  Duration _defaultDurationTransition = Duration(milliseconds: 400);
-  bool _defaultGlobalState = true;
-  RouteSettings _settings;
-  SmartManagement smartManagement = SmartManagement.full;
+  Duration defaultDurationTransition = Duration(milliseconds: 400);
+  bool defaultGlobalState = true;
+  RouteSettings settings;
 
-  ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
-  ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-  ///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
-  ///To return to the previous screen, use Get.back().
+  ///Use to instead of Navigator.push, off instead of Navigator.pushReplacement,
+  ///offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
+  ///after them. Example: toNamed, offNamed, and AllNamed.
+  ///To return to the previous screen, use back().
   ///No need to pass any context to Get, just put the name of the route inside
   ///the parentheses and the magic will occur.
-  Get._();
-
-  static Get _get;
-
-  GlobalKey<NavigatorState> _key;
 
   /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  static Future<T> to<T>(Widget page,
+  Future<T> to<T>(Widget page,
       {bool opaque,
       Transition transition,
       Duration duration,
@@ -58,108 +45,104 @@ class Get {
       Object arguments,
       Bindings binding,
       bool popGesture}) {
-    return _get.global(id).currentState.push(GetRouteBase(
+    return global(id).currentState.push(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
-        popGesture: popGesture ?? _get._defaultPopGesture,
-        transition: transition ?? _get._defaultTransition,
+        popGesture: popGesture ?? defaultPopGesture,
+        transition: transition ?? defaultTransition,
         fullscreenDialog: fullscreenDialog,
         binding: binding,
-        transitionDuration: duration ?? _get._defaultDurationTransition));
+        transitionDuration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  static Future<T> toNamed<T>(String page, {Object arguments, int id}) {
+  Future<T> toNamed<T>(String page, {Object arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.pushNamed(page, arguments: arguments);
+    return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  static Future<T> offNamed<T>(String page, {Object arguments, int id}) {
+  Future<T> offNamed<T>(String page, {Object arguments, int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get
-        .global(id)
+    return global(id)
         .currentState
         .pushReplacementNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.popUntil, but needs no context.
-  static void until(RoutePredicate predicate, {int id}) {
+  void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.popUntil(predicate);
+    return global(id).currentState.popUntil(predicate);
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
-  static Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate,
-      {int id}) {
+  Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return _get.global(id).currentState.pushAndRemoveUntil(page, predicate);
+    return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static Future<T> offNamedUntil<T>(String page, RoutePredicate predicate,
+  Future<T> offNamedUntil<T>(String page, RoutePredicate predicate,
       {int id, Object arguments}) {
-    return _get
-        .global(id)
+    return global(id)
         .currentState
         .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
   }
 
   /// It replaces Navigator.popAndPushNamed, but needs no context.
-  static Future<T> offAndToNamed<T>(String page,
+  Future<T> offAndToNamed<T>(String page,
       {Object arguments, int id, dynamic result}) {
-    return _get
-        .global(id)
+    return global(id)
         .currentState
         .popAndPushNamed(page, arguments: arguments, result: result);
   }
 
   /// It replaces Navigator.removeRoute, but needs no context.
-  static void removeRoute(Route<dynamic> route, {int id}) {
-    return _get.global(id).currentState.removeRoute(route);
+  void removeRoute(Route<dynamic> route, {int id}) {
+    return global(id).currentState.removeRoute(route);
   }
 
   /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
-  static Future<T> offAllNamed<T>(String newRouteName,
+  Future<T> offAllNamed<T>(String newRouteName,
       {RoutePredicate predicate, Object arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
 
-    return _get.global(id).currentState.pushNamedAndRemoveUntil(
+    return global(id).currentState.pushNamedAndRemoveUntil(
         newRouteName, predicate ?? route,
         arguments: arguments);
   }
 
-  static bool get isOverlaysOpen =>
+  bool get isOverlaysOpen =>
       (isSnackbarOpen || isDialogOpen || isBottomSheetOpen);
 
-  static bool get isOverlaysClosed =>
-      (!Get.isSnackbarOpen && !Get.isDialogOpen && !Get.isBottomSheetOpen);
+  bool get isOverlaysClosed =>
+      (!isSnackbarOpen && !isDialogOpen && !isBottomSheetOpen);
 
   /// It replaces Navigator.pop, but needs no context.
-  static void back({dynamic result, bool closeOverlays = false, int id}) {
+  void back({dynamic result, bool closeOverlays = false, int id}) {
     if (closeOverlays && isOverlaysOpen) {
       navigator.popUntil((route) {
         return (isOverlaysClosed);
       });
     }
-    _get.global(id).currentState.pop(result);
+    global(id).currentState.pop(result);
   }
 
   /// It will close as many screens as you define. Times must be> 0;
-  static void close(int times, [int id]) {
+  void close(int times, [int id]) {
     if ((times == null) || (times < 1)) {
       times = 1;
     }
     int count = 0;
-    void back = _get.global(id).currentState.popUntil((route) {
+    void back = global(id).currentState.popUntil((route) {
       return count++ == times;
     });
     return back;
@@ -168,7 +151,7 @@ class Get {
   /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  static Future<T> off<T>(Widget page,
+  Future<T> off<T>(Widget page,
       {bool opaque = false,
       Transition transition,
       bool popGesture,
@@ -177,20 +160,20 @@ class Get {
       Bindings binding,
       bool fullscreenDialog = false,
       Duration duration}) {
-    return _get.global(id).currentState.pushReplacement(GetRouteBase(
+    return global(id).currentState.pushReplacement(GetRouteBase(
         opaque: opaque ?? true,
         page: page,
         binding: binding,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
         fullscreenDialog: fullscreenDialog,
-        popGesture: popGesture ?? _get._defaultPopGesture,
-        transition: transition ?? _get._defaultTransition,
-        transitionDuration: duration ?? _get._defaultDurationTransition));
+        popGesture: popGesture ?? defaultPopGesture,
+        transition: transition ?? defaultTransition,
+        transitionDuration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
-  static Future<T> offAll<T>(Widget page,
+  Future<T> offAll<T>(Widget page,
       {RoutePredicate predicate,
       bool opaque = false,
       bool popGesture,
@@ -201,22 +184,22 @@ class Get {
       Transition transition}) {
     var route = (Route<dynamic> rota) => false;
 
-    return _get.global(id).currentState.pushAndRemoveUntil(
+    return global(id).currentState.pushAndRemoveUntil(
         GetRouteBase(
           opaque: opaque ?? true,
-          popGesture: popGesture ?? _get._defaultPopGesture,
+          popGesture: popGesture ?? defaultPopGesture,
           page: page,
           binding: binding,
           settings: RouteSettings(
               name: '/' + page.toString().toLowerCase(), arguments: arguments),
           fullscreenDialog: fullscreenDialog,
-          transition: transition ?? _get._defaultTransition,
+          transition: transition ?? defaultTransition,
         ),
         predicate ?? route);
   }
 
   /// Show a dialog
-  static Future<T> dialog<T>(
+  Future<T> dialog<T>(
     Widget child, {
     bool barrierDismissible = true,
     bool useRootNavigator = true,
@@ -234,7 +217,7 @@ class Get {
   }
 
   /// Api from showGeneralDialog with no context
-  static Future<T> generalDialog<T>({
+  Future<T> generalDialog<T>({
     @required RoutePageBuilder pageBuilder,
     String barrierLabel = "Dismiss",
     bool barrierDismissible = true,
@@ -257,7 +240,7 @@ class Get {
     );
   }
 
-  static Future<T> defaultDialog<T>({
+  Future<T> defaultDialog<T>({
     String title = "Alert",
     Widget content,
     VoidCallback onConfirm,
@@ -289,7 +272,7 @@ class Get {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           onPressed: () {
             onCancel?.call();
-            Get.back();
+            back();
           },
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Text(
@@ -298,7 +281,7 @@ class Get {
           ),
           shape: RoundedRectangleBorder(
               side: BorderSide(
-                  color: buttonColor ?? Get.theme.accentColor,
+                  color: buttonColor ?? theme.accentColor,
                   width: 2,
                   style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(100)),
@@ -311,7 +294,7 @@ class Get {
       if (leanConfirm) {
         actions.add(FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            color: buttonColor ?? Get.theme.accentColor,
+            color: buttonColor ?? theme.accentColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100)),
             child: Text(
@@ -323,10 +306,10 @@ class Get {
             }));
       }
     }
-    return Get.dialog(AlertDialog(
+    return dialog(AlertDialog(
       titlePadding: EdgeInsets.all(8),
       contentPadding: EdgeInsets.all(8),
-      backgroundColor: backgroundColor ?? Get.theme.dialogBackgroundColor,
+      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius))),
       title: Text(title, textAlign: TextAlign.center),
@@ -353,7 +336,7 @@ class Get {
     ));
   }
 
-  static Future<T> bottomSheet<T>(
+  Future<T> bottomSheet<T>(
     Widget bottomsheet, {
     Color backgroundColor,
     double elevation,
@@ -375,10 +358,10 @@ class Get {
     return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
-      theme: Theme.of(Get.key.currentContext, shadowThemeOnly: true),
+      theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,
-      barrierLabel: MaterialLocalizations.of(Get.key.currentContext)
-          .modalBarrierDismissLabel,
+      barrierLabel:
+          MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
       shape: shape,
@@ -391,7 +374,7 @@ class Get {
     ));
   }
 
-  static void rawSnackbar(
+  void rawSnackbar(
       {String title,
       String message,
       Widget titleText,
@@ -473,12 +456,12 @@ class Get {
     }
   }
 
-  static void snackbar(title, message,
+  void snackbar(title, message,
       {Color colorText,
       Duration duration,
 
-      /// with instantInit = false you can put Get.snackbar on initState
-      bool instantInit = false,
+      /// with instantInit = false you can put snackbar on initState
+      bool instantInit = true,
       SnackPosition snackPosition,
       Widget titleText,
       Widget messageText,
@@ -563,7 +546,7 @@ class Get {
     if (instantInit) {
       getBar.show();
     } else {
-      Get()._routing.isSnackbar = true;
+      _routing.isSnackbar = true;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         getBar.show();
       });
@@ -571,7 +554,7 @@ class Get {
   }
 
   /// change default config of Get
-  Get.config(
+  config(
       {bool enableLog,
       bool defaultPopGesture,
       bool defaultOpaqueRoute,
@@ -579,57 +562,49 @@ class Get {
       bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
-      Get()._enableLog = enableLog;
+      enableLog = enableLog;
     }
     if (defaultPopGesture != null) {
-      Get()._defaultPopGesture = defaultPopGesture;
+      defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      Get()._defaultOpaqueRoute = defaultOpaqueRoute;
+      defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      Get()._defaultTransition = defaultTransition;
+      defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      Get()._defaultDurationTransition = defaultDurationTransition;
+      defaultDurationTransition = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {
-      Get()._defaultGlobalState = defaultGlobalState;
+      defaultGlobalState = defaultGlobalState;
     }
   }
 
-  GetMaterialController _getController = GetMaterialController();
+  GetMaterialController getController = GetMaterialController();
 
-  GetMaterialController get getController => _getController;
-
-  Get.changeTheme(ThemeData theme) {
-    Get()._getController.setTheme(theme);
+  changeTheme(ThemeData theme) {
+    getController.setTheme(theme);
   }
 
-  Get.changeThemeMode(ThemeMode themeMode) {
-    Get()._getController.setThemeMode(themeMode);
+  changeThemeMode(ThemeMode themeMode) {
+    getController.setThemeMode(themeMode);
   }
 
-  static GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
-    Get()._key = newKey;
-    return Get()._key;
+  GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
+    key = newKey;
+    return key;
   }
 
-  static GlobalKey<NavigatorState> get key {
-    // _get start empty, is mandatory key be static to prevent errors like "key was called null"
-    if (Get()._key == null) {
-      Get()._key = GlobalKey<NavigatorState>();
-    }
-    return Get()._key;
-  }
+  GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
 
   Map<int, GlobalKey<NavigatorState>> _keys = {};
-  UniqueKey mKey = UniqueKey();
-  static GlobalKey<NavigatorState> nestedKey(int key) {
-    Get()._keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
-    return Get()._keys[key];
+
+  GlobalKey<NavigatorState> nestedKey(int key) {
+    _keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    return _keys[key];
   }
 
   GlobalKey<NavigatorState> global(int k) {
@@ -642,366 +617,94 @@ class Get {
     return _keys[k];
   }
 
-  //////////// INSTANCE MANAGER
-  Map<dynamic, dynamic> _singl = {};
-
-  Map<dynamic, _FcBuilderFunc> _factory = {};
-
-  static void lazyPut<S>(_FcBuilderFunc builder, {String tag}) {
-    String key = _getKey(S, tag);
-    Get()._factory.putIfAbsent(key, () => builder);
-  }
-
-  static Future<S> putAsync<S>(_FcBuilderFuncAsync<S> builder,
-      {String tag}) async {
-    WidgetsFlutterBinding.ensureInitialized();
-    return Get.put<S>(await builder(), tag: tag);
-  }
-
-  /// Inject class on Get Instance Manager
-  static S put<S>(
-    S dependency, {
-    String tag,
-    bool permanent = false,
-    bool overrideAbstract = false,
-    _FcBuilderFunc<S> builder,
-  }) {
-    _insert(
-        isSingleton: true,
-        replace: overrideAbstract,
-        //?? (("$S" == "${dependency.runtimeType}") == false),
-        name: tag,
-        permanent: permanent,
-        builder: builder ?? (() => dependency));
-    return find<S>(tag: tag);
-  }
-
-  /// Create a new instance from builder class
-  /// Example
-  /// Get.create(() => Repl());
-  /// Repl a = Get.find();
-  /// Repl b = Get.find();
-  /// print(a==b); (false)
-  static void create<S>(
-    _FcBuilderFunc<S> builder, {
-    String name,
-  }) {
-    _insert(isSingleton: false, name: name, builder: builder);
-  }
-
-  static void _insert<S>({
-    bool isSingleton,
-    String name,
-    bool replace = true,
-    bool permanent = false,
-    _FcBuilderFunc<S> builder,
-  }) {
-    assert(builder != null);
-    String key = _getKey(S, name);
-    if (replace) {
-      Get()._singl[key] = _FcBuilder<S>(isSingleton, builder, permanent);
-    } else {
-      Get()._singl.putIfAbsent(
-          key, () => _FcBuilder<S>(isSingleton, builder, permanent));
-    }
-  }
-
-  Map<String, String> routesKey = {};
-
-  void removeDependencyByRoute(String routeName) async {
-    List<String> keysToRemove = [];
-    Get().routesKey.forEach((key, value) {
-      // if (value == routeName && value != null) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
-    keysToRemove.forEach((element) async {
-      await Get.delete(key: element);
-    });
-    keysToRemove.forEach((element) {
-      Get().routesKey?.remove(element);
-    });
-    keysToRemove.clear();
-  }
-
-  static bool isRouteDependecyNull<S>({String name}) {
-    return (Get().routesKey[_getKey(S, name)] == null);
-  }
-
-  static bool isDependencyInit<S>({String name}) {
-    String key = _getKey(S, name);
-    return Get().routesKey.containsKey(key);
-  }
-
-  void registerRouteInstance<S>({String tag}) {
-    //  print("Register route [$S] as ${Get.currentRoute}");
-    Get().routesKey.putIfAbsent(_getKey(S, tag), () => Get.currentRoute);
-  }
-
-  static S findByType<S>(Type type, {String tag}) {
-    String key = _getKey(type, tag);
-    return Get()._singl[key].getSependency();
-  }
-
-  void initController<S>({String tag}) {
-    String key = _getKey(S, tag);
-    final i = Get()._singl[key].getSependency();
-
-    if (i is DisposableInterface) {
-      i.onStart();
-      if (isLogEnable) print('[GET] $key has been initialized');
-    }
-  }
-
-  /// Find a instance from required class
-  static S find<S>({String tag, _FcBuilderFunc<S> instance}) {
-    String key = _getKey(S, tag);
-    bool callInit = false;
-    if (Get.isRegistred<S>(tag: tag)) {
-      if (!isDependencyInit<S>() &&
-          Get().smartManagement != SmartManagement.onlyBuilder) {
-        Get().registerRouteInstance<S>(tag: tag);
-        callInit = true;
-      }
-
-      _FcBuilder builder = Get()._singl[key];
-      if (builder == null) {
-        if (tag == null) {
-          throw "class ${S.toString()} is not register";
-        } else {
-          throw "class ${S.toString()} with tag '$tag' is not register";
-        }
-      }
-      if (callInit) {
-        Get().initController<S>(tag: tag);
-      }
-
-      return Get()._singl[key].getSependency();
-    } else {
-      if (!Get()._factory.containsKey(key))
-        throw " $S not found. You need call Get.put<$S>($S()) before";
-
-      if (isLogEnable) print('[GET] $S instance was created at that time');
-      S _value = Get.put<S>(Get()._factory[key].call() as S);
-
-      if (!isDependencyInit<S>() &&
-          Get().smartManagement != SmartManagement.onlyBuilder) {
-        Get().registerRouteInstance<S>(tag: tag);
-        callInit = true;
-      }
-
-      if (Get().smartManagement != SmartManagement.keepFactory) {
-        Get()._factory.remove(key);
-      }
-
-      if (callInit) {
-        Get().initController<S>(tag: tag);
-      }
-      return _value;
-    }
-  }
-
-  /// Remove dependency of [S] on dependency abstraction. For concrete class use Get.delete
-  static void remove<S>({String tag}) {
-    String key = _getKey(S, tag);
-    _FcBuilder builder = Get()._singl[key];
-    final i = builder.dependency;
-
-    if (i is DisposableInterface || i is GetController) {
-      i.onClose();
-      if (isLogEnable) print('[GET] onClose of $key called');
-    }
-    if (builder != null) builder.dependency = null;
-    if (Get()._singl.containsKey(key)) {
-      print('error on remove $key');
-    } else {
-      if (isLogEnable) print('[GET] $key removed from memory');
-    }
-  }
-
-  static String _getKey(Type type, String name) {
-    return name == null ? type.toString() : type.toString() + name;
-  }
-
-  static bool reset(
-      {bool clearFactory = true, bool clearRouteBindings = true}) {
-    if (clearFactory) Get()._factory.clear();
-    if (clearRouteBindings) Get().routesKey.clear();
-    Get()._singl.clear();
-    return true;
-  }
-
-  /// Delete class instance on [S] and clean memory
-  static Future<bool> delete<S>({String tag, String key}) async {
-    String newKey;
-    if (key == null) {
-      newKey = _getKey(S, tag);
-    } else {
-      newKey = key;
-    }
-
-    if (!Get()._singl.containsKey(newKey)) {
-      print('Instance $newKey not found');
-      return false;
-    }
-
-    _FcBuilder builder = Get()._singl[newKey];
-    if (builder.permanent) {
-      (key == null)
-          ? print(
-              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.')
-          : print(
-              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
-      return false;
-    }
-    final i = builder.dependency;
-
-    if (i is DisposableInterface || i is GetController) {
-      await i.onClose();
-      if (isLogEnable) print('[GET] onClose of $newKey called');
-    }
-
-    Get()._singl.removeWhere((oldkey, value) => (oldkey == newKey));
-    if (Get()._singl.containsKey(newKey)) {
-      print('[GET] error on remove object $newKey');
-    } else {
-      if (isLogEnable) print('[GET] $newKey deleted from memory');
-    }
-    // Get().routesKey?.remove(key);
-    return true;
-  }
-
-  /// check if instance is registred
-  static bool isRegistred<S>({String tag}) =>
-      Get()._singl.containsKey(_getKey(S, tag));
-
-  static bool isPrepared<S>({String tag}) =>
-      Get()._factory.containsKey(_getKey(S, tag));
-
   /// give access to Routing API from GetObserver
-  static Routing get routing => Get()._routing;
+  Routing get routing => _routing;
 
-  static RouteSettings get routeSettings => Get()._settings;
+  RouteSettings get routeSettings => settings;
 
   Routing _routing = Routing();
 
   Map<String, String> _parameters = {};
 
-  Get.setParameter(Map<String, String> param) {
-    Get()._parameters = param;
+  setParameter(Map<String, String> param) {
+    _parameters = param;
   }
 
-  Get.setRouting(Routing rt) {
-    Get()._routing = rt;
+  setRouting(Routing rt) {
+    _routing = rt;
   }
 
-  Get.setSettings(RouteSettings settings) {
-    Get()._settings = settings;
+  setSettings(RouteSettings settings) {
+    settings = settings;
   }
 
   /// give current arguments
-  static Object get arguments => Get()._routing.args;
+  Object get arguments => _routing.args;
 
   /// give current arguments
-  static Map<String, String> get parameters => Get()._parameters;
+  Map<String, String> get parameters => _parameters;
 
   /// give name from current route
-  static get currentRoute => Get()._routing.current;
+  get currentRoute => _routing.current;
 
   /// give name from previous route
-  static get previousRoute => Get()._routing.previous;
+  get previousRoute => _routing.previous;
 
   /// check if snackbar is open
-  static bool get isSnackbarOpen => Get()._routing.isSnackbar;
+  bool get isSnackbarOpen => _routing.isSnackbar;
 
   /// check if dialog is open
-  static bool get isDialogOpen => Get()._routing.isDialog;
+  bool get isDialogOpen => _routing.isDialog;
 
   /// check if bottomsheet is open
-  static bool get isBottomSheetOpen => Get()._routing.isBottomSheet;
+  bool get isBottomSheetOpen => _routing.isBottomSheet;
 
   /// check a raw current route
-  static Route<dynamic> get rawRoute => Get()._routing.route;
-
-  /// check if log is enable
-  static bool get isLogEnable => Get()._enableLog;
-
-  /// default duration of transition animation
-  /// default duration work only API 2.0
-  static Duration get defaultDurationTransition =>
-      Get()._defaultDurationTransition;
-
-  /// give global state of all GetState by default
-  static bool get defaultGlobalState => Get()._defaultGlobalState;
+  Route<dynamic> get rawRoute => _routing.route;
 
   /// check if popGesture is enable
-  static bool get isPopGestureEnable => Get()._defaultPopGesture;
+  bool get isPopGestureEnable => defaultPopGesture;
 
   /// check if default opaque route is enable
-  static bool get isOpaqueRouteDefault => Get()._defaultOpaqueRoute;
-
-  static Transition get defaultTransition => Get()._defaultTransition;
+  bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
   /// give access to currentContext
-  static BuildContext get context => key.currentContext;
+  BuildContext get context => key.currentContext;
 
   /// give access to current Overlay Context
-  static BuildContext get overlayContext => key.currentState.overlay.context;
+  BuildContext get overlayContext => key.currentState.overlay.context;
 
   /// give access to Theme.of(context)
-  static ThemeData get theme => Theme.of(context);
+  ThemeData get theme => Theme.of(context);
 
   /// give access to TextTheme.of(context)
-  static TextTheme get textTheme => Theme.of(context).textTheme;
+  TextTheme get textTheme => Theme.of(context).textTheme;
 
   /// give access to Mediaquery.of(context)
-  static MediaQueryData get mediaQuery => MediaQuery.of(context);
+  MediaQueryData get mediaQuery => MediaQuery.of(context);
 
   /// Check if dark mode theme is enable
-  static get isDarkMode => (theme.brightness == Brightness.dark);
+  get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
-  static get isPlatformDarkMode =>
-      (mediaQuery.platformBrightness == Brightness.dark);
+  get isPlatformDarkMode => (mediaQuery.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
-  static Color get iconColor => Theme.of(context).iconTheme.color;
+  Color get iconColor => Theme.of(context).iconTheme.color;
 
-  /// give access to Focus.of(context).iconTheme.color
-  static FocusScopeNode get focusScope => FocusScope.of(context);
+  /// give access to FocusScope.of(context)
+  FocusNode get focusScope => FocusManager.instance.primaryFocus;
 
-  /// give access to MediaQuery.of(context).size.height
-  static double get height => MediaQuery.of(context).size.height;
+  /// give access to Immutable MediaQuery.of(context).size.height
+  double get height => MediaQuery.of(context).size.height;
 
-  /// give access to MediaQuery.of(context).size.width
-  static double get width => MediaQuery.of(context).size.width;
+  /// give access to Immutable MediaQuery.of(context).size.width
+  double get width => MediaQuery.of(context).size.width;
 }
+
+// ignore: non_constant_identifier_names
+final Get = GetImpl();
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather Navigator.push(context, YourRoute());
 NavigatorState get navigator => Get.key.currentState;
-
-class _FcBuilder<S> {
-  bool isSingleton;
-  _FcBuilderFunc builderFunc;
-  S dependency;
-  bool permanent = false;
-
-  _FcBuilder(this.isSingleton, this.builderFunc, this.permanent);
-
-  S getSependency() {
-    if (isSingleton) {
-      if (dependency == null) {
-        dependency = builderFunc() as S;
-      }
-      return dependency;
-    } else {
-      return builderFunc() as S;
-    }
-  }
-}
-
-typedef _FcBuilderFunc<S> = S Function();
-
-typedef _FcBuilderFuncAsync<S> = Future<S> Function();
