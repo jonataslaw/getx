@@ -152,7 +152,7 @@ abstract class GetService {
       Widget titleText,
       Widget messageText,
       Widget icon,
-      bool instantInit = false,
+      bool instantInit = true,
       bool shouldIconPulse = true,
       double maxWidth,
       EdgeInsets margin = const EdgeInsets.all(0.0),
@@ -239,7 +239,7 @@ abstract class GetService {
   GlobalKey<NavigatorState> global(int k);
   //////////// INSTANCE MANAGER
 
-  setParameter(Map<String, String> param);
+  // setParameter(Map<String, String> param);
 
   /// give current arguments
   Object get arguments;

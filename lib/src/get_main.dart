@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:get/src/get_instance.dart';
 import 'package:get/src/get_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
@@ -133,7 +134,9 @@ class GetImpl implements GetService {
         return (isOverlaysClosed);
       });
     }
-    global(id).currentState.pop(result);
+    if (global(id).currentState.canPop()) {
+      global(id).currentState.pop(result);
+    }
   }
 
   /// It will close as many screens as you define. Times must be> 0;
@@ -380,7 +383,7 @@ class GetImpl implements GetService {
       Widget titleText,
       Widget messageText,
       Widget icon,
-      bool instantInit = false,
+      bool instantInit = true,
       bool shouldIconPulse = true,
       double maxWidth,
       EdgeInsets margin = const EdgeInsets.all(0.0),
@@ -562,24 +565,24 @@ class GetImpl implements GetService {
       bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
-      enableLog = enableLog;
+      GetConfig.isLogEnable = enableLog;
     }
     if (defaultPopGesture != null) {
-      defaultPopGesture = defaultPopGesture;
+      this.defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      defaultOpaqueRoute = defaultOpaqueRoute;
+      this.defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      defaultTransition = defaultTransition;
+      this.defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      defaultDurationTransition = defaultDurationTransition;
+      this.defaultDurationTransition = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {
-      defaultGlobalState = defaultGlobalState;
+      this.defaultGlobalState = defaultGlobalState;
     }
   }
 
@@ -624,11 +627,7 @@ class GetImpl implements GetService {
 
   Routing _routing = Routing();
 
-  Map<String, String> _parameters = {};
-
-  setParameter(Map<String, String> param) {
-    _parameters = param;
-  }
+  Map<String, String> parameters = {};
 
   setRouting(Routing rt) {
     _routing = rt;
@@ -640,9 +639,6 @@ class GetImpl implements GetService {
 
   /// give current arguments
   Object get arguments => _routing.args;
-
-  /// give current arguments
-  Map<String, String> get parameters => _parameters;
 
   /// give name from current route
   get currentRoute => _routing.current;

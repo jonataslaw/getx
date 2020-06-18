@@ -4,6 +4,49 @@ import 'transitions_type.dart';
 
 class GetRoute {
   final Widget page;
+  final String name;
+  final bool popGesture;
+  final Map<String, String> parameter;
+  final String title;
+  final Transition transition;
+  final Curve curve;
+  final Alignment alignment;
+  final bool maintainState;
+  final GetPageBuilder route;
+  final bool opaque;
+  final Bindings binding;
+  final List<Bindings> bindings;
+  final Widget customTransition;
+  final Duration transitionDuration;
+  final bool fullscreenDialog;
+  final RouteSettings settings;
+
+  const GetRoute({
+    @required this.page,
+    this.title,
+    this.name,
+    this.settings,
+    this.maintainState = true,
+    this.curve = Curves.linear,
+    this.alignment,
+    this.route,
+    this.parameter,
+    this.opaque = true,
+    this.transitionDuration = const Duration(milliseconds: 400),
+    this.popGesture,
+    this.binding,
+    this.bindings,
+    this.transition,
+    this.customTransition,
+    this.fullscreenDialog = false,
+  })  : assert(page != null),
+        assert(maintainState != null),
+        assert(fullscreenDialog != null);
+}
+
+class GetPage {
+  final String name;
+  final GetPageBuilder page;
   final bool popGesture;
   final Map<String, String> parameter;
   final String title;
@@ -19,7 +62,8 @@ class GetRoute {
   final bool fullscreenDialog;
   final RouteSettings settings;
 
-  const GetRoute({
+  const GetPage({
+    @required this.name,
     @required this.page,
     this.title,
     this.settings,
@@ -36,6 +80,8 @@ class GetRoute {
     this.customTransition,
     this.fullscreenDialog = false,
   })  : assert(page != null),
+        assert(name != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null);
 }
+

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/src/routes/get_route.dart';
 import 'package:get/src/routes/utils/parse_arguments.dart';
 import '../get_instance.dart';
+import 'parse_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -43,12 +44,32 @@ class GetMaterialApp extends StatelessWidget {
     this.routingCallback,
     this.defaultTransition,
     // this.actions,
+    this.getPages,
     this.opaqueRoute,
     this.enableLog,
     this.popGesture,
     this.transitionDuration,
     this.defaultGlobalState,
-    this.namedRoutes,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated(
+        """Please, use new api getPages. You can now simply create a list of GetPages, 
+  and enter your route name in the 'name' property. 
+  Page now receives a function ()=> Page(), which allows more flexibility. 
+  You can now decide which page you want to display, according to the parameters received on the page. 
+  Example: 
+  GetPage(
+    name: '/second', 
+    page:(){
+      if (Get.parameters['id'] == null) {
+        return Login();
+      } else {
+        return Home();
+      }
+    }); 
+  
+  """)
+        // ignore: deprecated_member_use_from_same_package
+        this.namedRoutes,
     this.unknownRoute,
   })  : assert(routes != null),
         assert(navigatorObservers != null),
@@ -100,11 +121,41 @@ class GetMaterialApp extends StatelessWidget {
   final Bindings initialBinding;
   final Duration transitionDuration;
   final bool defaultGlobalState;
+
   final Map<String, GetRoute> namedRoutes;
+  final List<GetPage> getPages;
   final GetRoute unknownRoute;
 
+  Route<dynamic> generator(RouteSettings settings) {
+    final match = _routeTree.matchRoute(settings.name);
+    print(settings.name);
+
+    Get.parameters = match?.parameters;
+
+    return GetRouteBase(
+      page: null,
+      title: match.route.title,
+      route: match.route.page,
+      parameter: match.route.parameter,
+      settings:
+          RouteSettings(name: settings.name, arguments: settings.arguments),
+      maintainState: match.route.maintainState,
+      curve: match.route.curve,
+      alignment: match.route.alignment,
+      opaque: match.route.opaque,
+      binding: match.route.binding,
+      bindings: match.route.bindings,
+      transitionDuration: (transitionDuration == null
+          ? match.route.transitionDuration
+          : transitionDuration),
+      transition: match.route.transition,
+      popGesture: match.route.popGesture,
+      fullscreenDialog: match.route.fullscreenDialog,
+    );
+  }
+
   Route<dynamic> namedRoutesGenerate(RouteSettings settings) {
-    Get.setSettings(settings);
+    //  Get.setSettings(settings);
 
     /// onGenerateRoute to FlutterWeb is Broken on Dev/Master. This is a temporary
     /// workaround until they fix it, because the problem is with the 'Flutter engine',
@@ -129,7 +180,7 @@ class GetMaterialApp extends StatelessWidget {
     });
 
     if (newNamedRoutes.containsKey(settingsName)) {
-      Get.setParameter(parsedString.parameters);
+      Get.parameters = parsedString.parameters;
 
       return GetRouteBase(
         page: newNamedRoutes[settingsName].page,
@@ -185,6 +236,12 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
+          if (getPages != null) {
+            _routeTree = ParseRouteTree();
+            getPages.forEach((element) {
+              _routeTree.addRoute(element);
+            });
+          }
           initialBinding?.dependencies();
           GetConfig.smartManagement = smartManagement;
           onInit?.call();
@@ -211,10 +268,40 @@ class GetMaterialApp extends StatelessWidget {
             home: home,
             routes: routes ?? const <String, WidgetBuilder>{},
             initialRoute: initialRoute,
-            onGenerateRoute: (namedRoutes == null || onUnknownRoute != null
-                ? onGenerateRoute
-                : namedRoutesGenerate),
-            onGenerateInitialRoutes: onGenerateInitialRoutes,
+            onGenerateRoute: (getPages != null
+                ? generator
+                : namedRoutes != null ? namedRoutesGenerate : onGenerateRoute),
+            onGenerateInitialRoutes: onGenerateInitialRoutes ??
+                    (getPages == null || home != null)
+                ? null
+                : (st) {
+                    final match = _routeTree.matchRoute(initialRoute);
+                    print(initialRoute);
+                    print(match.parameters);
+                    Get.parameters = match.parameters;
+                    return [
+                      GetRouteBase(
+                        page: null,
+                        route: match.route.page,
+                        title: match.route.title,
+                        parameter: match.parameters,
+                        settings:
+                            RouteSettings(name: initialRoute, arguments: null),
+                        maintainState: match.route.maintainState,
+                        curve: match.route.curve,
+                        alignment: match.route.alignment,
+                        opaque: match.route.opaque,
+                        binding: match.route.binding,
+                        bindings: match.route.bindings,
+                        transitionDuration: (transitionDuration == null
+                            ? match.route.transitionDuration
+                            : transitionDuration),
+                        transition: match.route.transition,
+                        popGesture: match.route.popGesture,
+                        fullscreenDialog: match.route.fullscreenDialog,
+                      )
+                    ];
+                  },
             onUnknownRoute: onUnknownRoute,
             navigatorObservers: (navigatorObservers == null
                 ? <NavigatorObserver>[GetObserver(routingCallback)]
@@ -246,3 +333,5 @@ class GetMaterialApp extends StatelessWidget {
         });
   }
 }
+
+ParseRouteTree _routeTree;

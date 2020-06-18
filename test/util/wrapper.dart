@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class Wrapper extends StatelessWidget {
   final Widget child;
-  final Map<String, GetRoute> namedRoutes;
+  final List<GetPage> namedRoutes;
   final String initialRoute;
   final Transition defaultTransition;
 
@@ -20,7 +20,7 @@ class Wrapper extends StatelessWidget {
     return GetMaterialApp(
       defaultTransition: defaultTransition,
       initialRoute: initialRoute,
-      namedRoutes: namedRoutes,
+      getPages: namedRoutes,
       home: Scaffold(
         body: child,
       ),

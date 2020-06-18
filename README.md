@@ -102,7 +102,7 @@ This is a simple project but it already makes clear how powerful Get is. As your
     - [Obx()](#obx)
     - [Workers:](#workers)
   - [Mixing the two state managers](#mixing-the-two-state-managers)
-  - [GetBuilder vs GetX && Obx vs MixinBuilder](#getbuilder-vs-getx--obx-vs-mixinbuilder)
+  - [GetBuilder vs GetX && Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 - [Dependency Management](#dependency-management)
   - [Simple Instance Manager](#simple-instance-manager)
   - [Bindings](#bindings)
@@ -236,11 +236,21 @@ void main() {
   runApp(
     GetMaterialApp(
       initialRoute: '/',
-      namedRoutes: {
-        '/': GetRoute(page: MyHomePage()),
-        '/second': GetRoute(page: Second()),
-        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-      },
+      getPages: [
+      GetPage(
+        name: '/',
+        page: () => MyHomePage(),
+      ),
+      GetPage(
+        name: '/second',
+        page: () => Second(),
+      ),
+      GetPage(
+        name: '/third',
+        page: () => Third(),
+        transition: Transition.cupertino  
+      ),
+     ],
     )
   );
 }
@@ -281,15 +291,25 @@ void main() {
   runApp(
     GetMaterialApp(
       initialRoute: '/',
-      namedRoutes: {
-        '/': GetRoute(page: MyHomePage()),
+      getPages: [
+      GetPage(
+        name: '/',
+        page: () => MyHomePage(),
+      ),
+      GetPage(
         /// Important!  :user is not a new route, it is just a parameter
         /// specification. Do not use '/second/:user' and '/second'
         /// if you need new route to user, use '/second/user/:user' 
         /// if '/second' is a route.
-        '/second/:user': GetRoute(page: Second()), // receive ID
-        '/third': GetRoute(page: Third(),transition: Transition.cupertino);
-      },
+        name: '/second/:user',
+        page: () => Second(),
+      ),
+      GetPage(
+        name: '/third',
+        page: () => Third(),
+        transition: Transition.cupertino  
+      ),
+     ],
     )
   );
 }
@@ -900,6 +920,34 @@ If we change count 2, only count2 and 3 are reconstructed, because the value of 
 
 If we add the number 1 to count 1, which already contains 1, no widget is reconstructed. If we add a value of 1 for count 1 and a value of 2 for count 2, only 2 and 3 will be reconstructed, simply because GetX not only changes what is necessary, it avoids duplicating events.
 
+- NOTE: By default, the first event will allow rebuild even if it is the same. We created this behavior due to dualistic variables, such as Boolean.
+Imagine you did this:
+
+```dart
+var isLogged = false.obs;
+```
+
+and then you check if a user is logged in to trigger an event in "ever".
+
+```dart
+onInit(){
+  ever(isLogged, fireRoute);
+  isLogged.value = await Preferences.hasToken();
+}
+
+fireRoute(logged) {
+  if (logged) {
+   Get.off(Home());
+  } else {
+   Get.off(Login());
+  }
+}
+```
+
+if hasToken was false, there would be no change to isLogged, so ever would never be called. To avoid this type of behavior, the first change to an observable will always trigger an event, even if it is the same.
+You can remove this behavior if you want, using:
+`isLogged.firstRebuild = false;`
+
 In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
 
 ```dart
@@ -961,6 +1009,7 @@ Camila
 25
 
 ```
+
 
 ### Note about Lists
 Working with Lists using Get is the best and most enjoyable thing in the world. They are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
@@ -1029,7 +1078,7 @@ Some people opened a feature request, as they wanted to use only one type of rea
 Probably using a GetController using GetX and Obx will work, but it will not be possible to use an RxController on a GetBuilder.
 Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods.
 
-## GetBuilder vs GetX && Obx vs MixinBuilder
+## GetBuilder vs GetX vs Obx vs MixinBuilder
 In a decade working with programming I was able to learn some valuable lessons.
 
 My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.

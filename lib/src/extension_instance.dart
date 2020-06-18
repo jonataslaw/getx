@@ -27,4 +27,10 @@ extension Storage on GetImpl {
   bool reset({bool clearFactory = true, bool clearRouteBindings = true}) =>
       GetInstance().reset(
           clearFactory: clearFactory, clearRouteBindings: clearRouteBindings);
+
+  /// Delete class instance on [S] and clean memory
+  Future<bool> delete<S>({String tag, String key}) async =>
+      GetInstance().delete<S>(tag: tag, key: key);
+
+  bool isRegistred<S>({String tag}) => GetInstance().isRegistred<S>(tag: tag);
 }

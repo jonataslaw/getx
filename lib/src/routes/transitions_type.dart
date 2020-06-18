@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 enum Transition {
   fade,
   rightToLeft,
@@ -12,3 +14,5 @@ enum Transition {
   cupertino,
   custom
 }
+
+typedef GetPageBuilder = Widget Function();

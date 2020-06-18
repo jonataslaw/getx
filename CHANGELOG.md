@@ -1,3 +1,8 @@
+## [2.14.0]
+- Added getPages API. 
+- Deprecated namedPages
+- Fix default transition
+
 ## [2.13.1]
 - Added sort to ListX
 - Prepared the framework for version 3

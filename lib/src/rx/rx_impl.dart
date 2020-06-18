@@ -32,8 +32,11 @@ class _RxImpl<T> implements RxInterface<T> {
     });
   }
 
+  bool firstRebuild = true;
+
   set value(T val) {
-    if (_value == val) return;
+    if (_value == val && !firstRebuild) return;
+    firstRebuild = false;
     _value = val;
     subject.add(_value);
   }
@@ -240,10 +243,10 @@ class ListX<E> extends Iterable<E> implements RxInterface<E> {
   Iterator<E> get iterator => _list.iterator;
 
   @override
-  bool get isEmpty => _list.isEmpty;
+  bool get isEmpty => value.isEmpty;
 
   @override
-  bool get isNotEmpty => _list.isNotEmpty;
+  bool get isNotEmpty => value.isNotEmpty;
 
   StreamController<E> subject = StreamController<E>.broadcast();
   Map<Stream<E>, StreamSubscription> _subscriptions = Map();

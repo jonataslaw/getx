@@ -31,6 +31,7 @@ class GetRouteBase<T> extends PageRoute<T> {
     this.alignment,
     this.parameter,
     this.binding,
+    this.route,
     this.bindings,
     this.customBuildPageTransitions,
     this.opaque = true,
@@ -39,7 +40,7 @@ class GetRouteBase<T> extends PageRoute<T> {
     this.transition,
     // this.duration = const Duration(milliseconds: 400),
     bool fullscreenDialog = false,
-  })  : assert(page != null),
+  })  : // assert(page != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         //  assert(opaque),
@@ -55,6 +56,8 @@ class GetRouteBase<T> extends PageRoute<T> {
 
   /// Builds the primary contents of the route.
   final Widget page;
+
+  final GetPageBuilder route;
 
   final Widget customBuildPageTransitions;
 
@@ -196,14 +199,13 @@ class GetRouteBase<T> extends PageRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    final Widget child = page;
     final Widget result = Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: child,
+      child: (route == null ? page : route()),
     );
     assert(() {
-      if (child == null) {
+      if (route == null && page == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary(
               'The builder for route "${settings.name}" returned null.'),

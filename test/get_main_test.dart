@@ -20,11 +20,11 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         initialRoute: '/',
-        namedRoutes: {
-          '/': GetRoute(page: FirstScreen()),
-          '/second': GetRoute(page: SecondScreen()),
-          '/third': GetRoute(page: ThirdScreen())
-        },
+        namedRoutes: [
+          GetPage(page: () => FirstScreen(), name: '/'),
+          GetPage(page: () => SecondScreen(), name: '/second'),
+          GetPage(page: () => ThirdScreen(), name: '/third'),
+        ],
         child: Container(),
       ),
     );
@@ -58,12 +58,12 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         initialRoute: '/',
-        namedRoutes: {
-          '/': GetRoute(page: Container()),
-          '/first': GetRoute(page: FirstScreen()),
-          '/second': GetRoute(page: SecondScreen()),
-          '/third': GetRoute(page: ThirdScreen())
-        },
+        namedRoutes: [
+          GetPage(name: '/', page: () => Container()),
+          GetPage(name: '/first', page: () => FirstScreen()),
+          GetPage(name: '/second', page: () => SecondScreen()),
+          GetPage(name: '/third', page: () => ThirdScreen()),
+        ],
         child: Container(),
       ),
     );
@@ -109,12 +109,12 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         initialRoute: '/',
-        namedRoutes: {
-          '/': GetRoute(page: Container()),
-          '/first': GetRoute(page: FirstScreen()),
-          '/second': GetRoute(page: SecondScreen()),
-          '/third': GetRoute(page: ThirdScreen())
-        },
+        namedRoutes: [
+          GetPage(page: () => Container(), name: '/'),
+          GetPage(page: () => FirstScreen(), name: '/first'),
+          GetPage(page: () => SecondScreen(), name: '/second'),
+          GetPage(page: () => ThirdScreen(), name: '/third'),
+        ],
         child: Container(),
       ),
     );
@@ -142,12 +142,12 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         initialRoute: '/',
-        namedRoutes: {
-          '/': GetRoute(page: Container()),
-          '/first': GetRoute(page: FirstScreen()),
-          '/second': GetRoute(page: SecondScreen()),
-          '/third': GetRoute(page: ThirdScreen())
-        },
+        namedRoutes: [
+          GetPage(page: () => Container(), name: '/'),
+          GetPage(page: () => FirstScreen(), name: '/first'),
+          GetPage(page: () => SecondScreen(), name: '/second'),
+          GetPage(page: () => ThirdScreen(), name: '/third'),
+        ],
         child: Container(),
       ),
     );
@@ -191,12 +191,12 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         initialRoute: '/',
-        namedRoutes: {
-          '/': GetRoute(page: Container()),
-          '/first': GetRoute(page: FirstScreen()),
-          '/second': GetRoute(page: SecondScreen()),
-          '/third': GetRoute(page: ThirdScreen())
-        },
+        namedRoutes: [
+          GetPage(page: () => Container(), name: '/'),
+          GetPage(page: () => FirstScreen(), name: '/first'),
+          GetPage(page: () => SecondScreen(), name: '/second'),
+          GetPage(page: () => ThirdScreen(), name: '/third'),
+        ],
         child: Container(),
       ),
     );
@@ -373,8 +373,6 @@ void main() {
     expect(Get.isSnackbarOpen, true);
     await tester.pump(const Duration(seconds: 1));
   });
-
-  
 }
 
 class FirstScreen extends StatelessWidget {
