@@ -40,6 +40,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "kluverua",
+      "name": "kluverua",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13339896?v=4",
+      "profile": "https://github.com/kluverua",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
