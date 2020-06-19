@@ -184,7 +184,8 @@ class GetImpl implements GetService {
       Object arguments,
       Bindings binding,
       bool fullscreenDialog = false,
-      Transition transition}) {
+      Transition transition,
+      Duration duration}) {
     var route = (Route<dynamic> rota) => false;
 
     return global(id).currentState.pushAndRemoveUntil(
@@ -197,6 +198,7 @@ class GetImpl implements GetService {
               name: '/' + page.toString().toLowerCase(), arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           transition: transition ?? defaultTransition,
+          transitionDuration: duration ?? defaultDurationTransition,
         ),
         predicate ?? route);
   }
