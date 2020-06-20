@@ -26,3 +26,5 @@ jobs:
       - run: flutter test --coverage
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
+      - uses: codecov/codecov-action@v1.0.7
+
