@@ -276,8 +276,6 @@ class GetMaterialApp extends StatelessWidget {
                 ? null
                 : (st) {
                     final match = _routeTree.matchRoute(initialRoute);
-                    print(initialRoute);
-                    print(match.parameters);
                     Get.parameters = match.parameters;
                     return [
                       GetRouteBase(
