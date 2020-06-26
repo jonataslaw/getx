@@ -12,6 +12,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   final bool autoRemove;
   final bool assignId;
   final void Function(State state) initState, dispose, didChangeDependencies;
+  final void Function(GetX oldWidget, State state) didUpdateWidget;
   final T init;
   const GetX({
     this.builder,
@@ -22,6 +23,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
     //  this.stream,
     this.dispose,
     this.didChangeDependencies,
+    this.didUpdateWidget,
     this.init,
     // this.streamController
   });
@@ -63,6 +65,20 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
     }
     _observer.subject.stream.listen((data) => setState(() {}));
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.didChangeDependencies != null) {
+      widget.didChangeDependencies(this);
+    }
+  }
+
+  @override
+  void didUpdateWidget(GetX oldWidget) {
+    super.didUpdateWidget(oldWidget as GetX<T>);
+    if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:get/src/get_instance.dart';
 import 'package:get/src/root/smart_management.dart';
 import 'package:get/src/rx/rx_interface.dart';
 
-class GetController extends DisposableInterface {
-  List<Updater> _updaters = [];
+class GetxController extends DisposableInterface {
+  final List<Updater> _updaters = [];
 
   /// Update GetBuilder with update();
   void update([List<String> ids, bool condition = true]) {
@@ -18,15 +18,17 @@ class GetController extends DisposableInterface {
             .forEach((rs) => rs.updater(() {}));
   }
 
+  @override
   void onInit() async {}
 
+  @override
   void onReady() async {}
 
+  @override
   void onClose() async {}
 }
 
-class GetBuilder<T extends GetController> extends StatefulWidget {
-  @required
+class GetBuilder<T extends GetxController> extends StatefulWidget {
   final Widget Function(T) builder;
   final bool global;
   final String id;
@@ -40,7 +42,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
     Key key,
     this.init,
     this.global = true,
-    this.builder,
+    @required this.builder,
     this.autoRemove = true,
     this.assignId = false,
     this.initState,
@@ -55,7 +57,7 @@ class GetBuilder<T extends GetController> extends StatefulWidget {
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
+class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   T controller;
   Updater real;
   bool isCreator = false;
@@ -64,8 +66,8 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
     super.initState();
 
     if (widget.global) {
-      bool isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-      bool isRegistred = GetInstance().isRegistred<T>(tag: widget.tag);
+      final isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
+      final isRegistred = GetInstance().isRegistred<T>(tag: widget.tag);
 
       if (isPrepared) {
         if (GetConfig.smartManagement != SmartManagement.keepFactory) {
@@ -116,13 +118,14 @@ class _GetBuilderState<T extends GetController> extends State<GetBuilder<T>> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.didChangeDependencies != null)
+    if (widget.didChangeDependencies != null) {
       widget.didChangeDependencies(this);
+    }
   }
 
   @override
   void didUpdateWidget(GetBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(oldWidget as GetBuilder<T>);
     if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
   }
 

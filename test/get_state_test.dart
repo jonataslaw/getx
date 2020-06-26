@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetController smoke test", (test) async {
+  testWidgets("GetxController smoke test", (test) async {
     await test.pumpWidget(
       MaterialApp(
         home: GetBuilder<Controller>(
@@ -81,7 +81,7 @@ void main() {
   );
 }
 
-class Controller extends GetController {
+class Controller extends GetxController {
   static Controller get to => Get.find();
 
   int counter = 0;
@@ -96,10 +96,10 @@ class Controller extends GetController {
   }
 }
 
-class Controller2 extends GetController {
+class Controller2 extends GetxController {
   int test = 0;
 }
 
-class ControllerNonGlobal extends GetController {
+class ControllerNonGlobal extends GetxController {
   int nonGlobal = 0;
 }

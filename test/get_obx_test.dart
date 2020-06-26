@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 void main() {
   Controller controller = Get.put<Controller>(Controller());
-  testWidgets("GetController smoke test", (tester) async {
+  testWidgets("GetxController smoke test", (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Column(
@@ -65,7 +65,7 @@ void main() {
   });
 }
 
-class Controller extends RxController {
+class Controller extends GetxController {
   static Controller get to => Get.find();
 
   var counter = 0.obs;

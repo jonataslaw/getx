@@ -77,7 +77,7 @@ void main() {
   );
 }
 
-class Controller extends GetController {
+class Controller extends GetxController {
   static Controller get to => Get.find();
   int count = 0;
   var counter = 0.obs;

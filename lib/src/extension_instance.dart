@@ -7,8 +7,9 @@ extension Storage on GetImpl {
     return GetInstance().lazyPut<S>(builder, tag: tag);
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder, {String tag}) async =>
-      GetInstance().putAsync<S>(builder, tag: tag);
+  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+          {String tag, bool permanent = false}) async =>
+      GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
   S find<S>({String tag, FcBuilderFunc<S> instance}) =>
       GetInstance().find<S>(tag: tag, instance: instance);

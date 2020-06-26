@@ -1,5 +1,5 @@
 abstract class Bindings {
-  void dependencies();
+  dependencies();
 }
 
 // abstract class INavigation {}

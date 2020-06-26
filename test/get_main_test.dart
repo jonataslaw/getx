@@ -242,7 +242,7 @@ void main() {
     await tester.pumpWidget(
       Wrapper(
         child: Container(),
-        defaultTransition: Transition.cupertino,
+        defaultTransition: Transition.fadeIn,
       ),
     );
 

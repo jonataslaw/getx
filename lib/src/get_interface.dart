@@ -184,7 +184,7 @@ abstract class GetService {
       Color overlayColor = Colors.transparent,
       Form userInputForm});
 
-  void snackbar(title, message,
+  void snackbar(String title, String message,
       {Color colorText,
       Duration duration,
 
@@ -224,11 +224,11 @@ abstract class GetService {
 
   /// INSTANCE MANAGER
 
-  GetMaterialController getController;
+  GetMaterialController getxController;
 
-  changeTheme(ThemeData theme);
+  void changeTheme(ThemeData theme);
 
-  changeThemeMode(ThemeMode themeMode);
+  void changeThemeMode(ThemeMode themeMode);
 
   GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey);
 

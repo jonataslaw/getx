@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/src/routes/utils/parse_arguments.dart';
 import 'package:get/src/state/get_state.dart';
 
-class GetMaterialController extends GetController {
-  ParseRoute parse = ParseRoute();
+class GetMaterialController extends GetxController {
   Key key;
   ThemeData theme;
   ThemeMode themeMode;

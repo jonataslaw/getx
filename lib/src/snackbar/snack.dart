@@ -215,7 +215,7 @@ class GetBar<T extends Object> extends StatefulWidget {
   Future<T> show() async {
     _snackRoute = route.showSnack<T>(
       snack: this,
-    );
+    ) as SnackRoute<T>;
     return await Get.key.currentState.push(_snackRoute);
   }
 

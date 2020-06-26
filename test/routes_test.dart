@@ -4,16 +4,18 @@ import 'package:get/src/routes/get_route.dart';
 
 void main() {
   testWidgets(
-    "GetRoute page null",
+    'GetPage page null',
     (WidgetTester testr) async {
-      expect(() => GetRoute(page: null), throwsAssertionError);
+      expect(() => GetPage(page: null, name: null), throwsAssertionError);
     },
   );
 
   testWidgets(
     "GetRoute maintainState null",
     (WidgetTester testr) async {
-      expect(() => GetRoute(page: Scaffold(), maintainState: null),
+      expect(
+          () =>
+              GetPage(page: () => Scaffold(), maintainState: null, name: null),
           throwsAssertionError);
     },
   );
@@ -21,7 +23,9 @@ void main() {
   testWidgets(
     "GetRoute fullscreenDialog null",
     (WidgetTester testr) async {
-      expect(() => GetRoute(page: Scaffold(), fullscreenDialog: null),
+      expect(
+          () => GetPage(
+              page: () => Scaffold(), fullscreenDialog: null, name: null),
           throwsAssertionError);
     },
   );

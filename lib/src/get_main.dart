@@ -5,6 +5,7 @@ import 'package:get/src/get_instance.dart';
 import 'package:get/src/get_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
 import 'platform/platform.dart';
+import 'root/parse_route.dart';
 import 'root/root_controller.dart';
 import 'routes/bindings_interface.dart';
 import 'routes/default_route.dart';
@@ -22,7 +23,7 @@ class GetImpl implements GetService {
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
   Transition defaultTransition =
-      (GetPlatform.isIOS ? Transition.cupertino : Transition.fade);
+      (GetPlatform.isIOS ? Transition.leftToRight : Transition.fadeIn);
   Duration defaultDurationTransition = Duration(milliseconds: 400);
   bool defaultGlobalState = true;
   RouteSettings settings;
@@ -45,32 +46,42 @@ class GetImpl implements GetService {
       bool fullscreenDialog = false,
       Object arguments,
       Bindings binding,
+      preventDuplicates = true,
       bool popGesture}) {
-    return global(id).currentState.push(GetRouteBase(
+    if (preventDuplicates &&
+        '/' + page.toString().toLowerCase() == currentRoute) {
+      return null;
+    }
+
+    return global(id).currentState.push(GetPageRoute(
         opaque: opaque ?? true,
-        page: page,
+        page: () => page,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
         fullscreenDialog: fullscreenDialog,
         binding: binding,
-        transitionDuration: duration ?? defaultDurationTransition));
+        duration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  Future<T> toNamed<T>(String page, {Object arguments, int id}) {
-    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
-    // when widget don't mounted
+  Future<T> toNamed<T>(String page,
+      {Object arguments, int id, preventDuplicates = true}) {
+    if (preventDuplicates && page == currentRoute) {
+      return null;
+    }
     return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
   /// It replaces Navigator.pushReplacementNamed, but needs no context.
-  Future<T> offNamed<T>(String page, {Object arguments, int id}) {
-    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
-    // when widget don't mounted
+  Future<T> offNamed<T>(String page,
+      {Object arguments, int id, preventDuplicates = true}) {
+    if (preventDuplicates && page == currentRoute) {
+      return null;
+    }
     return global(id)
         .currentState
         .pushReplacementNamed(page, arguments: arguments);
@@ -128,13 +139,21 @@ class GetImpl implements GetService {
       (!isSnackbarOpen && !isDialogOpen && !isBottomSheetOpen);
 
   /// It replaces Navigator.pop, but needs no context.
-  void back({dynamic result, bool closeOverlays = false, int id}) {
+  void back(
+      {dynamic result,
+      bool closeOverlays = false,
+      bool canPop = true,
+      int id}) {
     if (closeOverlays && isOverlaysOpen) {
       navigator.popUntil((route) {
         return (isOverlaysClosed);
       });
     }
-    if (global(id).currentState.canPop()) {
+    if (canPop) {
+      if (global(id).currentState.canPop()) {
+        global(id).currentState.pop(result);
+      }
+    } else {
       global(id).currentState.pop(result);
     }
   }
@@ -162,17 +181,22 @@ class GetImpl implements GetService {
       Object arguments,
       Bindings binding,
       bool fullscreenDialog = false,
+      preventDuplicates = true,
       Duration duration}) {
-    return global(id).currentState.pushReplacement(GetRouteBase(
+    if (preventDuplicates &&
+        '/' + page.toString().toLowerCase() == currentRoute) {
+      return null;
+    }
+    return global(id).currentState.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
-        page: page,
+        page: () => page,
         binding: binding,
         settings: RouteSettings(
             name: '/' + page.toString().toLowerCase(), arguments: arguments),
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
-        transitionDuration: duration ?? defaultDurationTransition));
+        duration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -184,21 +208,22 @@ class GetImpl implements GetService {
       Object arguments,
       Bindings binding,
       bool fullscreenDialog = false,
-      Transition transition,
-      Duration duration}) {
+      Duration duration,
+      Transition transition}) {
     var route = (Route<dynamic> rota) => false;
 
     return global(id).currentState.pushAndRemoveUntil(
-        GetRouteBase(
+        GetPageRoute(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
-          page: page,
+          page: () => page,
           binding: binding,
           settings: RouteSettings(
-              name: '/' + page.toString().toLowerCase(), arguments: arguments),
+              name: '/' + page.runtimeType.toString().toLowerCase(),
+              arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           transition: transition ?? defaultTransition,
-          transitionDuration: duration ?? defaultDurationTransition,
+          duration: duration ?? defaultDurationTransition,
         ),
         predicate ?? route);
   }
@@ -461,7 +486,7 @@ class GetImpl implements GetService {
     }
   }
 
-  void snackbar(title, message,
+  void snackbar(String title, String message,
       {Color colorText,
       Duration duration,
 
@@ -558,6 +583,24 @@ class GetImpl implements GetService {
     }
   }
 
+  ParseRouteTree routeTree;
+
+  addPages(List<GetPage> getPages) {
+    if (getPages != null) {
+      if (routeTree == null) routeTree = ParseRouteTree();
+      getPages.forEach((element) {
+        routeTree.addRoute(element);
+      });
+    }
+  }
+
+  addPage(GetPage getPage) {
+    if (getPage != null) {
+      if (routeTree == null) routeTree = ParseRouteTree();
+      routeTree.addRoute(getPage);
+    }
+  }
+
   /// change default config of Get
   config(
       {bool enableLog,
@@ -588,14 +631,27 @@ class GetImpl implements GetService {
     }
   }
 
-  GetMaterialController getController = GetMaterialController();
+  GetMaterialController getxController = GetMaterialController();
 
-  changeTheme(ThemeData theme) {
-    getController.setTheme(theme);
+  Locale locale;
+
+  void updateLocale(Locale l) {
+    locale = l;
+    getxController.update();
   }
 
-  changeThemeMode(ThemeMode themeMode) {
-    getController.setThemeMode(themeMode);
+  Map<String, Map<String, String>> translations;
+
+  void addTranslations(Map<String, Map<String, String>> tr) {
+    translations.addAll(tr);
+  }
+
+  void changeTheme(ThemeData theme) {
+    getxController.setTheme(theme);
+  }
+
+  void changeThemeMode(ThemeMode themeMode) {
+    getxController.setThemeMode(themeMode);
   }
 
   GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {

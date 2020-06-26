@@ -1,3 +1,15 @@
+## [3.0.1]
+- Breaking changes on Rx api and GetController and RxController were merged, and now you only have the 'GetxController'
+- Refactor routing system. Now you can add custom transitions and more
+- Improved the use of dynamic routes, you can now define two different pages according to your arguments.
+- Added GetView widget
+- Added internacionalization
+- Added validations
+- Added Get queqe
+- Added GetStorage (with separated package)
+- Minor bug fixes.
+
+
 ## [2.14.0]
 - Added getPages API. 
 - Deprecated namedPages
@@ -12,7 +24,7 @@
 
 ## [2.13.0]
 - Update docs
-- Fix Bindings list on GetRouteBase
+- Fix Bindings list on GetPageRoute
 
 ## [2.12.5]
 - Update readme
@@ -64,7 +76,7 @@ Get.lazyPut () will not receive this resource. Initially he had it, but we saw i
 ## [2.10.0]
 - Added SmartManagement, your application's memory is managed intelligently like never before!
 - Added Obx, a widget that knows when to rebuild a child, without needing any type.
-- Added MIxinBuilder - If you need to use GetBuilder in conjunction with GetX, use GetController with this widget, and the changes will occur either using update (this) or changing some reactive variable. Use only if necessary, for better RAM consumption, prefer widgets in that order:
+- Added MIxinBuilder - If you need to use GetBuilder in conjunction with GetX, use GetxController with this widget, and the changes will occur either using update (this) or changing some reactive variable. Use only if necessary, for better RAM consumption, prefer widgets in that order:
 Obx => GetX => GetBuilder => MixinBuilder.
 Obx is the lightest of all, and MixinBuilder is a mix of the other 3, whenever possible, use the specific widget.
 - Refactor: refactor StateManager of Get.

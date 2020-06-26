@@ -51,25 +51,26 @@ class _RxImpl<T> implements RxInterface<T> {
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 
-class StringX<String> extends _RxImpl<String> {
-  StringX([String initial]) {
+class RxString<String> extends _RxImpl<String> {
+  RxString([String initial]) {
     _value = initial;
   }
 }
 
-class IntX<int> extends _RxImpl<int> {
-  IntX([int initial]) {
+class RxInt<int> extends _RxImpl<int> {
+  RxInt([int initial]) {
     _value = initial;
   }
 }
 
-class MapX<K, V> extends RxInterface implements Map<K, V> {
-  MapX([Map<K, V> initial]) {
+class RxMap<K, V> extends RxInterface implements Map<K, V> {
+  RxMap([Map<K, V> initial]) {
     _value = initial;
   }
 
+  @override
   StreamController subject = StreamController<Map<K, V>>.broadcast();
-  Map<Stream<Map<K, V>>, StreamSubscription> _subscriptions = Map();
+  final Map<Stream<Map<K, V>>, StreamSubscription> _subscriptions = {};
 
   Map<K, V> _value;
   Map<K, V> get value {
@@ -81,7 +82,8 @@ class MapX<K, V> extends RxInterface implements Map<K, V> {
 
   String get string => value.toString();
 
-  close() {
+  @override
+  void close() {
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();
     });
@@ -89,7 +91,8 @@ class MapX<K, V> extends RxInterface implements Map<K, V> {
     subject.close();
   }
 
-  addListener(Stream rxGetx) {
+  @override
+  void addListener(Stream rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
       return;
     }
@@ -118,7 +121,7 @@ class MapX<K, V> extends RxInterface implements Map<K, V> {
     subject.add(_value);
   }
 
-  void addIf(/* bool | Condition */ condition, K key, V value) {
+  void addIf(condition, K key, V value) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) {
       _value[key] = value;
@@ -126,7 +129,7 @@ class MapX<K, V> extends RxInterface implements Map<K, V> {
     }
   }
 
-  void addAllIf(/* bool | Condition */ condition, Map<K, V> values) {
+  void addAllIf(condition, Map<K, V> values) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) addAll(values);
   }
@@ -234,8 +237,8 @@ class MapX<K, V> extends RxInterface implements Map<K, V> {
 }
 
 /// Create a list similar to `List<T>`
-class ListX<E> extends Iterable<E> implements RxInterface<E> {
-  ListX([List<E> initial]) {
+class RxList<E> extends Iterable<E> implements RxInterface<E> {
+  RxList([List<E> initial]) {
     _list = initial;
   }
 
@@ -411,20 +414,20 @@ typedef bool Condition();
 
 typedef E ChildrenListComposer<S, E>(S value);
 
-class BoolX<bool> extends _RxImpl<bool> {
-  BoolX([bool initial]) {
+class RxBool<bool> extends _RxImpl<bool> {
+  RxBool([bool initial]) {
     _value = initial;
   }
 }
 
-class DoubleX<double> extends _RxImpl<double> {
-  DoubleX([double initial]) {
+class RxDouble<double> extends _RxImpl<double> {
+  RxDouble([double initial]) {
     _value = initial;
   }
 }
 
-class NumX<num> extends _RxImpl<num> {
-  NumX([num initial]) {
+class RxNum<num> extends _RxImpl<num> {
+  RxNum([num initial]) {
     _value = initial;
   }
 }
@@ -436,36 +439,36 @@ class Rx<T> extends _RxImpl<T> {
 }
 
 extension StringExtension on String {
-  StringX<String> get obs => StringX(this);
+  RxString<String> get obs => RxString(this);
 }
 
 extension IntExtension on int {
-  IntX<int> get obs => IntX(this);
+  RxInt<int> get obs => RxInt(this);
 }
 
 extension DoubleExtension on double {
-  DoubleX<double> get obs => DoubleX(this);
+  RxDouble<double> get obs => RxDouble(this);
 }
 
 extension BoolExtension on bool {
-  BoolX<bool> get obs => BoolX(this);
+  RxBool<bool> get obs => RxBool(this);
 }
 
 extension MapExtension<K, V> on Map<K, V> {
-  MapX<K, V> get obs {
+  RxMap<K, V> get obs {
     if (this != null)
-      return MapX<K, V>({})..addAll(this);
+      return RxMap<K, V>({})..addAll(this);
     else
-      return MapX<K, V>(null);
+      return RxMap<K, V>(null);
   }
 }
 
 extension ListExtension<E> on List<E> {
-  ListX<E> get obs {
+  RxList<E> get obs {
     if (this != null)
-      return ListX<E>([])..addAllNonNull(this);
+      return RxList<E>([])..addAllNonNull(this);
     else
-      return ListX<E>(null);
+      return RxList<E>(null);
   }
 }
 

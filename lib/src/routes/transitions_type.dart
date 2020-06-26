@@ -2,17 +2,16 @@ import 'package:flutter/widgets.dart';
 
 enum Transition {
   fade,
+  fadeIn,
   rightToLeft,
   leftToRight,
   upToDown,
   downToUp,
-  scale,
-  rotate,
-  size,
   rightToLeftWithFade,
   leftToRightWithFade,
-  cupertino,
-  custom
+  zoom,
+  noTransition,
+  native
 }
 
 typedef GetPageBuilder = Widget Function();

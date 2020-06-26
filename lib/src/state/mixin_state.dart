@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/src/rx/rx_obx.dart';
 import 'get_state.dart';
 
-class MixinBuilder<T extends GetController> extends StatelessWidget {
+class MixinBuilder<T extends GetxController> extends StatelessWidget {
   @required
   final Widget Function(T) builder;
   final bool global;

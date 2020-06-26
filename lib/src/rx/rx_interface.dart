@@ -25,17 +25,6 @@ abstract class RxInterface<T> {
   // Stream<S> map<S>(S mapper(T data));
 }
 
-class RxController extends DisposableInterface {
-  @override
-  void onInit() async {}
-
-  @override
-  void onReady() async {}
-
-  @override
-  void onClose() async {}
-}
-
 abstract class DisposableInterface {
   /// Called at the exact moment that the widget is allocated in memory.
   /// Do not overwrite this method.
@@ -53,5 +42,5 @@ abstract class DisposableInterface {
 
   /// Called before the onDelete method. onClose is used to close events
   /// before the controller is destroyed, such as closing streams, for example.
-   onClose() async {}
+  onClose() async {}
 }

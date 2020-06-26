@@ -2,7 +2,6 @@ import 'root/smart_management.dart';
 import 'rx/rx_interface.dart';
 import 'typedefs/typedefs.dart';
 
-
 class GetConfig {
   //////////// INSTANCE MANAGER
   static Map<dynamic, dynamic> _singl = {};
@@ -26,8 +25,9 @@ class GetInstance {
     GetConfig._factory.putIfAbsent(key, () => builder);
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder, {String tag}) async {
-    return put<S>(await builder(), tag: tag);
+  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+      {String tag, bool permanent = false}) async {
+    return put<S>(await builder(), tag: tag, permanent: permanent);
   }
 
   /// Inject class on Get Instance Manager
@@ -105,14 +105,13 @@ class GetInstance {
   }
 
   void registerRouteInstance<S>({String tag}) {
-    //  print("Register route [$S] as ${currentRoute}");
     GetConfig.routesKey
         .putIfAbsent(_getKey(S, tag), () => GetConfig.currentRoute);
   }
 
   S findByType<S>(Type type, {String tag}) {
     String key = _getKey(type, tag);
-    return GetConfig._singl[key].getSependency();
+    return GetConfig._singl[key].getSependency() as S;
   }
 
   void initController<S>({String tag}) {
@@ -136,7 +135,7 @@ class GetInstance {
         callInit = true;
       }
 
-      FcBuilder builder = GetConfig._singl[key];
+      FcBuilder builder = GetConfig._singl[key] as FcBuilder;
       if (builder == null) {
         if (tag == null) {
           throw "class ${S.toString()} is not register";
@@ -148,7 +147,7 @@ class GetInstance {
         initController<S>(tag: tag);
       }
 
-      return GetConfig._singl[key].getSependency();
+      return GetConfig._singl[key].getSependency() as S;
     } else {
       if (!GetConfig._factory.containsKey(key))
         throw " $S not found. You need call put<$S>($S()) before";
@@ -177,7 +176,7 @@ class GetInstance {
   /// Remove dependency of [S] on dependency abstraction. For concrete class use delete
   void remove<S>({String tag}) {
     String key = _getKey(S, tag);
-    FcBuilder builder = GetConfig._singl[key];
+    FcBuilder builder = GetConfig._singl[key] as FcBuilder;
     final i = builder.dependency;
 
     if (i is DisposableInterface) {
@@ -217,7 +216,7 @@ class GetInstance {
       return false;
     }
 
-    FcBuilder builder = GetConfig._singl[newKey];
+    FcBuilder builder = GetConfig._singl[newKey] as FcBuilder;
     if (builder.permanent) {
       (key == null)
           ? print(

@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 void main() {
   test('once', () async {
     final count = 0.obs;
-    int result = -1;
+    var result = -1;
     once(count, (_) {
-      result = _;
+      result = _ as int;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -21,9 +21,9 @@ void main() {
 
   test('ever', () async {
     final count = 0.obs;
-    int result = -1;
+    var result = -1;
     ever(count, (_) {
-      result = _;
+      result = _ as int;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -38,10 +38,10 @@ void main() {
 
   test('debounce', () async {
     final count = 0.obs;
-    int result = -1;
+    var result = -1;
     debounce(count, (_) {
       print(_);
-      result = _;
+      result = _ as int;
     }, time: Duration(milliseconds: 100));
 
     count.value++;
@@ -56,10 +56,10 @@ void main() {
 
   test('interval', () async {
     final count = 0.obs;
-    int result = -1;
+    var result = -1;
     interval(count, (_) {
       print(_);
-      result = _;
+      result = _ as int;
     }, time: Duration(milliseconds: 100));
 
     count.value++;

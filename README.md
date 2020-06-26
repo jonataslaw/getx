@@ -10,7 +10,7 @@
 </a>
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -33,7 +33,7 @@ Create your business logic class and place all variables, methods and controller
 You can make any variable observable using a simple ".obs".
 
 ```dart
-class Controller extends RxController{
+class Controller extends GetxController{
   var count = 0.obs; 
   increment() => count.value++;
 }
@@ -112,6 +112,7 @@ This is a simple project but it already makes clear how powerful Get is. As your
   - [Change Theme](#change-theme)
   - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
     - [Optional Global Settings](#optional-global-settings)
+- [Breaking changes from 2.0](#breaking-changes-from-2.0)
 
 *Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.*
 
@@ -237,20 +238,14 @@ void main() {
     GetMaterialApp(
       initialRoute: '/',
       getPages: [
-      GetPage(
-        name: '/',
-        page: () => MyHomePage(),
-      ),
-      GetPage(
-        name: '/second',
-        page: () => Second(),
-      ),
-      GetPage(
-        name: '/third',
-        page: () => Third(),
-        transition: Transition.cupertino  
-      ),
-     ],
+        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/second', page: () => Second()),
+        GetPage(
+          name: '/third',
+          page: () => Third(),
+          transition: Transition.zoom  
+        ),
+      ],
     )
   );
 }
@@ -297,12 +292,13 @@ void main() {
         page: () => MyHomePage(),
       ),
       GetPage(
-        /// Important!  :user is not a new route, it is just a parameter
-        /// specification. Do not use '/second/:user' and '/second'
-        /// if you need new route to user, use '/second/user/:user' 
-        /// if '/second' is a route.
-        name: '/second/:user',
-        page: () => Second(),
+        name: '/profile/',
+        page: () => MyProfile(),
+      ),
+       //You can define a different page for routes with arguments, and another without arguments, but for that you must use the slash '/' on the route that will not receive arguments as above.
+       GetPage(
+        name: '/profile/:user',
+        page: () => UserProfile(),
       ),
       GetPage(
         name: '/third',
@@ -333,7 +329,7 @@ And now, all you need to do is use Get.toNamed() to navigate your named routes, 
 If you want listen Get events to trigger actions, you can to use routingCallback to it
 ```dart
 GetMaterialApp(
-  routingCallback: (route) {
+  routingCallback: (routing) {
     if(routing.current == '/second'){
       openAds();
     }
@@ -449,7 +445,8 @@ class Third extends StatelessWidget {
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold, 
+To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+
 ```dart
 final snackBar = SnackBar(
   content: Text('Hi!'),
@@ -584,7 +581,7 @@ Navigator(
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
-      return GetRouteBase(
+      return GetPageRoute(
         page: Scaffold(
           appBar: AppBar(
             title: Text("Main"),
@@ -601,7 +598,7 @@ Navigator(
         ),
       );
     } else if (settings.name == '/second') {
-      return GetRouteBase(
+      return GetPageRoute(
         page: Center(
           child: Scaffold(
             appBar: AppBar(
@@ -658,8 +655,8 @@ Get has a state manager that is extremely light and easy, which does not use Cha
 ### Usage
 
 ```dart
-// Create controller class and extends GetController
-class Controller extends GetController {
+// Create controller class and extends GetxController
+class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
@@ -700,7 +697,7 @@ class OtherClass extends StatelessWidget {
 If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
 
   /// You do not need that. I recommend using it just for ease of syntax.
   /// with static method: Controller.to.counter();
@@ -768,10 +765,10 @@ So to simplify this:
 You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
 You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
 
-Do not call a dispose method inside GetController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
 
@@ -804,7 +801,7 @@ GetBuilder<Controller>(
 You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
   static Controller get to => Get.find(); 
 [...]
 }
@@ -818,7 +815,7 @@ GetBuilder<Controller>(
 ```
 or 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
  // static Controller get to => Get.find(); // with no static get
 [...]
 }
@@ -870,6 +867,34 @@ GetX does this automatically and only reconstructs the widget that uses the exac
 
 ## Reactive State Manager
 
+Reactive programming can alienate many people because it is said to be complicated. Getx turns reactive programming into something so simple, that it can be used and learned by those who started at that very moment in Flutter. No, you will not need to create StreamControllers. You also won't need to create a StreamBuilder for each variable. You will not need to create a class for each state. You will not need to create a get for an initial value. Reactive programming with Get is as easy as using setState (or even easier!).
+
+Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+
+This is your count variable:
+```dart
+var name = 'Jonatas Borges';
+```
+To make it observable, you just need to add ".obs" to the end of it:
+```dart
+var name = 'Jonatas Borges'.obs;
+```
+
+This borders on absurdity when it comes to practicality. What did we do under the hood? We created a stream of Strings, assigned the initial value "Jonatas Borges", we warn all widgets that use "Jonatas Borges" that they now belong to this variable, and when it is changed, they will be changed too. This is the magic of Get, that only dart allows us to do this.
+
+Okay, but as we know, a widget can only be changed if it is inside a function, because static classes do not have the power to "auto-change". You will need to create a StreamBuilder, subscribe to listen to this variable, and create a "cascade" of StreamBuilder if you want to change several variables in the same scope, right?
+No, you don't need a StreamBuilder, but you are right about static classes.
+
+Well, in the view we usually have a lot of boilerplate when we want to change a specific widget. With Get you can also forget about this Boilerplate. StreamBuilder? initialValue? builder?
+No, you just need to play this variable inside an Obx widget.
+```dart
+Obx (() => Text (controller.name));
+```
+
+What do you need to memorize? "Obx(() =>" You are just passing that widget through an arrow-function into an Obx. Obx is smart, and will only be changed if the value of name is changed. If name is "John" and you change it to "John", it will not have any changes on the screen, and Obx will simply ignore this change, and will not rebuild the widget, to save resources. Isn't that amazing?
+
+What if I have 5 observable variables within an Obx? It will update when any of them are changed. And if I have 30 variables in a class, when I update one, will it update all variables that are in that class? No, just the specific widget that uses that variable. And if I machine-gun my observable variable 1 billion times with the same value, will I have freeze on the screen for unnecessary reconstructions? No, GetX only updates the screen when the variable changes on the screen, if the screen remains the same, it will not reconstruct anything.
+
 ### Advantages
 GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this. However, there are situations where you want only the widget where a certain variable has been changed to be rebuilt, and this is what GetX does with a mastery never seen before.
 
@@ -887,6 +912,29 @@ The state only changes if the values ​​change. That's the main difference be
 
 ### Usage
 
+You have 3 ways to turn a variable into an observable.
+The first is using Rx{Type}. 
+
+```dart
+var count = RxString();
+```
+The second is to use Rx and type it with `Rx<Type>`
+```dart
+var count = Rx<String>();
+```
+
+The third, more practical, easy, and incredible approach, is just to add an .obs to your variable.
+
+```dart
+var count = 0.obs;
+
+// or Rxint count = 0.obs;
+// or Rx<int> count = 0.obs;
+```
+
+ As we know, Dart is now heading towards null safety. With that it is a good idea, from now on, you start to use your variables always with an initial value. Transforming a variable into an observable with an initial value with Get is the simplest and most practical approach that currently exists in Flutter. You will literally add a ".obs" to the end of your variable, and that’s it, you’ve made it observable, and its value will be the initial value, this is fantastic!
+
+You can add variables, and if you want to type your widget to get your controller inside, you just need to use GetX widget instead of Obx
 ```dart
 final count1 = 0.obs;
 final count2 = 0.obs;
@@ -895,9 +943,9 @@ int get sum => count1.value + count2.value;
 
 ```dart
 GetX<Controller>(
-  builder: (_) {
+  builder: (value) {
     print("count 1 rebuild");
-    return Text('${_.count1.value}');
+    return Text('${value.count1.value}');
   },
 ),
 GetX<Controller>(
@@ -959,7 +1007,7 @@ Without decorations, without a code generator, without complications, GetX will 
 Do you know Flutter's counter app? Your Controller class might look like this:
 
 ```dart
-class CountCtl extends RxController {
+class CountCtl extends GetxController {
   final count = 0.obs;
 }
 ```
@@ -1074,9 +1122,7 @@ interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ## Mixing the two state managers
 Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
 
-- Note: To use GetBuilder and MixinBuilder you must use GetController. To use GetX and Obx you must use RxController.
-Probably using a GetController using GetX and Obx will work, but it will not be possible to use an RxController on a GetBuilder.
-Extending these controllers is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods.
+Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 In a decade working with programming I was able to learn some valuable lessons.
@@ -1095,8 +1141,6 @@ However, GetBuilder is still a mechanical state manager, you need to call update
 There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
 
 GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
-
-
 
 
 # Dependency Management
@@ -1325,6 +1369,57 @@ Get.config(
 )
 ```
 
+# Breaking changes from 2.0
+1- Rx types:
+Before: StringX now: RxString 
+
+Before: IntX now: RxInt 
+
+Before: MapX now: RxMax 
+
+Before: ListX now: RxList 
+
+Before: NumX now: RxNum
+
+Before: RxDouble now: RxDouble
+
+RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+
+
+2- NamedRoutes 
+Before:
+```dart
+GetMaterialApp(
+  namedRoutes: {
+    '/': GetRoute(page: Home()),
+  }
+)
+```
+Now:
+```dart
+GetMaterialApp(
+  getPages: [
+    GetPage(name: '/', page:()=> Home()),
+  ]
+)
+```
+
+Why this change?
+Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
+Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
+
+```dart
+
+GetStorage box = GetStorage();
+
+GetMaterialApp(
+  getPages: [
+    GetPage(name: '/', page:(){  
+      return box.hasData('token') ? Home() : Login();
+    })
+  ]
+)
+```
 
 
 This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
