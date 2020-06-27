@@ -78,7 +78,7 @@ class GetUtils {
   static bool isURL(String s) => RegexValidation.hasMatch(s, regex.url);
 
   /// Checks if string is email.
-  static bool isEmail(String s) => RegexValidation.hasMatch(s, regex.txt);
+  static bool isEmail(String s) => RegexValidation.hasMatch(s, regex.email);
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) =>
