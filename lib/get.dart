@@ -8,6 +8,7 @@ export 'src/snackbar/snack_route.dart';
 export 'src/state/get_state.dart';
 export 'src/state/get_view.dart';
 export 'src/regex/get_utils.dart';
+export 'src/regex/get_utils_extensions.dart';
 export 'src/queue/get_queue.dart';
 export 'src/state/mixin_state.dart';
 export 'src/rx/rx_interface.dart';
