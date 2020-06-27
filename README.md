@@ -15,13 +15,16 @@
 - [About Get](#about-get)
 - [The Three pillars](#the-three-pillars)
   - [State management](#state-management)
+    - [In-depth explanation](#in-depth-explanation)
   - [Route management](#route-management)
+    - [In-Depth Explanation](#in-depth-explanation-1)
   - [Dependency management](#dependency-management)
+    - [In-depth explanation](#in-depth-explanation-2)
 - [How to contribute](#how-to-contribute)
 - [Utils](#utils)
   - [Change Theme](#change-theme)
-  - [Other Advanced APIs and Manual configurations](#other-advanced-apis-and-manual-configurations)
-    - [Optional Global Settings](#optional-global-settings)
+  - [Other Advanced APIs](#other-advanced-apis)
+    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
 - [Breaking changes from 2.0](#breaking-changes-from-20)
 - [Why I made this package](#why-i-made-this-package)
 
@@ -94,6 +97,10 @@ class Other extends StatelessWidget {
 
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
+### In-depth explanation
+
+**See an more in-depth explanation of state management [here](./docs/state_management.md). There you will see more examples and also the differente between the simple stage manager and the reactive state manager**
+
 ## Route management
 
 **See a more in-depth explanation of route management [here](./docs/route_management.md)**
@@ -140,9 +147,52 @@ var data = await Get.to(Payment());
 
 Noticed that you didn't had to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
 
+### In-Depth Explanation
+
 **Note: Get work with named routes too! As said in the beggining, there is a in-depth documentation [here](./docs/route_management.md)**
 
 ## Dependency management
+
+**See a more in-depth explanation of dependency management [here](./docs/dependency_management.md)**
+
+- Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
+
+Are you already using Get and want to make your project as lean as possible? Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+
+```dart
+Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+```
+
+Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
+So you can use your controller (or class Bloc) normally
+
+```dart
+controller.fetchApi();
+```
+
+Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+
+```dart
+Controller controller = Get.find();
+//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+```
+
+And then you will be able to recover your controller data that was obtained back there:
+
+```dart
+Text(controller.textFromApi);
+```
+
+Looking for lazy loading? You can declare all your controllers, and it will be called only when someone needs it. You can do this with:
+
+```dart
+Get.lazyPut<Service>(()=> ApiMock());
+/// ApiMock will only be called when someone uses Get.find<Service> for the first time
+```
+
+### In-depth explanation
+
+**See a more in-depth explanation of dependency management [here](./docs/dependency_management.md)**
 
 # How to contribute
 
@@ -180,25 +230,7 @@ If you want to know in depth how to change the theme, you can follow this tutori
 
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 
-## Other Advanced APIs and Manual configurations
-
-GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
-
-```dart
-MaterialApp(
-  navigatorKey: Get.key,
-  navigatorObservers: [GetObserver()],
-);
-```
-
-You will also be able to use your own Middleware within GetObserver, this will not influence anything.
-
-```dart
-MaterialApp(
-  navigatorKey: Get.key,
-  navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
-);
-```
+## Other Advanced APIs
 
 ```dart
 Get.arguments // give the current args from currentScreen
@@ -235,7 +267,25 @@ Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in th
 
 ```
 
-### Optional Global Settings
+### Optional Global Settings and Manual configurations
+
+GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
+
+```dart
+MaterialApp(
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver()],
+);
+```
+
+You will also be able to use your own Middleware within GetObserver, this will not influence anything.
+
+```dart
+MaterialApp(
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
+);
+```
 
 You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
 
@@ -327,4 +377,4 @@ I know this looks a lot like the package being based on my personal experiences,
 
 Every time I go through a frustrating experience, I write it down in my schedule, and try to resolve it after completing the project.
 
-And then I decided to make a package that have the three things that you will always use: State management, route management and Dependency injection/management
+And then I decided to make a package that have the three things that you will always use: State management, route management, Dependency injection/management, internationalization, and storage (the last two are still being made)
