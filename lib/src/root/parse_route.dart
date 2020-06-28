@@ -10,19 +10,19 @@ class GetPageMatch {
 
 class ParseRouteTree {
   final List<ParseRouteTreeNode> _nodes = <ParseRouteTreeNode>[];
- // bool _hasDefaultRoute = false;
+  // bool _hasDefaultRoute = false;
 
   void addRoute(GetPage route) {
     String path = route.name;
 
     if (path == Navigator.defaultRouteName) {
-      //if (_hasDefaultRoute) {
-      //  throw ("Default route was already defined");
-      //}
+      // if (_hasDefaultRoute) {
+      //   throw ("Default route was already defined");
+      // }
       var node = ParseRouteTreeNode(path, ParseRouteTreeNodeType.component);
       node.routes = [route];
       _nodes.add(node);
-     // _hasDefaultRoute = true;
+      // _hasDefaultRoute = true;
       return;
     }
     if (path.startsWith("/")) {

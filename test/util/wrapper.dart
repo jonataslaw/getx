@@ -27,3 +27,27 @@ class Wrapper extends StatelessWidget {
     );
   }
 }
+
+class WrapperNamed extends StatelessWidget {
+  final Widget child;
+  final List<GetPage> namedRoutes;
+  final String initialRoute;
+  final Transition defaultTransition;
+
+  const WrapperNamed({
+    Key key,
+    this.child,
+    this.namedRoutes,
+    this.initialRoute,
+    this.defaultTransition,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      defaultTransition: defaultTransition,
+      initialRoute: initialRoute,
+      getPages: namedRoutes,
+    );
+  }
+}

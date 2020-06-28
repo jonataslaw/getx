@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/root/smart_management.dart';
-import '../../get_instance.dart';
 import '../../get_main.dart';
 
 class Routing {

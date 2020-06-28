@@ -18,14 +18,13 @@ void main() {
   });
   testWidgets("Get.toNamed smoke test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
+      GetMaterialApp(
         initialRoute: '/',
-        namedRoutes: [
+        getPages: [
           GetPage(page: () => FirstScreen(), name: '/'),
           GetPage(page: () => SecondScreen(), name: '/second'),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
-        child: Container(),
       ),
     );
 
@@ -56,15 +55,14 @@ void main() {
 
   testWidgets("Get.offNamed smoke test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
+      GetMaterialApp(
         initialRoute: '/',
-        namedRoutes: [
+        getPages: [
           GetPage(name: '/', page: () => Container()),
           GetPage(name: '/first', page: () => FirstScreen()),
           GetPage(name: '/second', page: () => SecondScreen()),
           GetPage(name: '/third', page: () => ThirdScreen()),
         ],
-        child: Container(),
       ),
     );
 
@@ -107,7 +105,7 @@ void main() {
 
   testWidgets("Get.offAllNamed smoke test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
+      WrapperNamed(
         initialRoute: '/',
         namedRoutes: [
           GetPage(page: () => Container(), name: '/'),
@@ -115,7 +113,6 @@ void main() {
           GetPage(page: () => SecondScreen(), name: '/second'),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
-        child: Container(),
       ),
     );
 
@@ -140,7 +137,7 @@ void main() {
 
   testWidgets("Get.offAndToNamed smoke test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
+      WrapperNamed(
         initialRoute: '/',
         namedRoutes: [
           GetPage(page: () => Container(), name: '/'),
@@ -148,7 +145,6 @@ void main() {
           GetPage(page: () => SecondScreen(), name: '/second'),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
-        child: Container(),
       ),
     );
 
@@ -189,7 +185,7 @@ void main() {
 
   testWidgets("Get.offNamedUntil smoke test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
+      WrapperNamed(
         initialRoute: '/',
         namedRoutes: [
           GetPage(page: () => Container(), name: '/'),
@@ -197,7 +193,6 @@ void main() {
           GetPage(page: () => SecondScreen(), name: '/second'),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
-        child: Container(),
       ),
     );
 

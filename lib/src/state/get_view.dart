@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/get_instance.dart';
+import 'package:get/src/instance/get_instance.dart';
 
 abstract class GetView<T> extends StatelessWidget {
   const GetView({Key key}) : super(key: key);
