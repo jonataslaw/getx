@@ -103,11 +103,11 @@ This is a simple project but it already makes clear how powerful Get is. As your
 
 ### In-depth explanation
 
-**See an more in-depth explanation of state management [here](./docs/state_management.md). There you will see more examples and also the differente between the simple stage manager and the reactive state manager**
+**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the differente between the simple stage manager and the reactive state manager**
 
 ## Route management
 
-**See a more in-depth explanation of route management [here](./docs/route_management.md)**
+**See a more in-depth explanation of route management [here](./docs/en_US/route_management.md)**
 
 If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
 
@@ -153,11 +153,11 @@ Noticed that you didn't had to use context to do any of these things? That's one
 
 ### In-Depth Explanation
 
-**Note: Get work with named routes too! As said in the beggining, there is a in-depth documentation [here](./docs/route_management.md)**
+**Note: Get work with named routes too! As said in the beggining, there is a in-depth documentation [here](./docs/en_US/route_management.md)**
 
 ## Dependency management
 
-**See a more in-depth explanation of dependency management [here](./docs/dependency_management.md)**
+**See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)**
 
 - Note: If you are using Get's State Manager, you don't have to worry about that, just read for information, but pay more attention to the bindings api, which will do all of this automatically for you.
 
@@ -196,7 +196,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 ### In-depth explanation
 
-**See a more in-depth explanation of dependency management [here](./docs/dependency_management.md)**
+**See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)**
 
 # How to contribute
 
