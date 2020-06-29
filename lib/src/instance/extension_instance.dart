@@ -1,8 +1,8 @@
+import 'package:get/src/typedefs/typedefs.dart';
+import '../get_main.dart';
 import 'get_instance.dart';
-import 'get_main.dart';
-import 'typedefs/typedefs.dart';
 
-extension Storage on GetImpl {
+extension Inst on GetImpl {
   void lazyPut<S>(FcBuilderFunc builder, {String tag}) {
     return GetInstance().lazyPut<S>(builder, tag: tag);
   }

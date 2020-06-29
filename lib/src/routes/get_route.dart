@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/src/routes/bindings_interface.dart';
 import 'transitions_type.dart';
 
-
 class GetPage {
   final String name;
   final GetPageBuilder page;
@@ -43,4 +42,3 @@ class GetPage {
         assert(maintainState != null),
         assert(fullscreenDialog != null);
 }
-

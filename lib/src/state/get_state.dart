@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/get_instance.dart';
+import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/root/smart_management.dart';
 import 'package:get/src/rx/rx_interface.dart';
 

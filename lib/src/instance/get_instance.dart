@@ -1,6 +1,6 @@
-import 'root/smart_management.dart';
-import 'rx/rx_interface.dart';
-import 'typedefs/typedefs.dart';
+import 'package:get/src/root/smart_management.dart';
+import 'package:get/src/rx/rx_interface.dart';
+import 'package:get/src/typedefs/typedefs.dart';
 
 class GetConfig {
   //////////// INSTANCE MANAGER

@@ -1,3 +1,7 @@
+## [3.1.0]
+- Added extensions to GetUtils and fix typo on GetUtils.isEmail (@stefandevo)
+- Added .gitignore file (@hdeyana)
+
 ## [3.0.1]
 - Breaking changes on Rx api and GetController and RxController were merged, and now you only have the 'GetxController'
 - Refactor routing system. Now you can add custom transitions and more
@@ -13,7 +17,8 @@
 ## [2.14.0]
 - Added getPages API. 
 - Deprecated namedPages
-- Fix default transition
+- Fix default transition 
+- Added Duration on Get.offAll(@kluverua)
 
 ## [2.13.1]
 - Added sort to ListX
@@ -57,7 +62,7 @@
 - Added Permissions:
 You can now revoke permissions to SmartManagement so that it cannot delete a particular controller.
 Add to Get.put (Controller(), permanent: true); to make it indelible.
-Get.lazyPut () will not receive this resource. Initially he had it, but we saw in internal tests that it could cause problems with the bindings API. Bindings were created to initialize and delete an instance, if it were allowed to make a controller started with lazyPut permanent, copies of that Controller would be created every time Binding was called. For the safety of users, especially new users who could easily do this, it was decided that this feature will only be present in Get.put.
+Get.lazyPut() will not receive this resource. Initially he had it, but we saw in internal tests that it could cause problems with the bindings API. Bindings were created to initialize and delete an instance, if it were allowed to make a controller started with lazyPut permanent, copies of that Controller would be created every time Binding was called. For the safety of users, especially new users who could easily do this, it was decided that this feature will only be present in Get.put.
 - Improve: Now a controller's life cycle has no connection with the View life cycle. It is no longer called internally in an "initState", it is now called when the Controller enters memory. This means that now onInit will always be called, regardless of where you started your dependency.
 - removed: this property of the update() method has been permanently removed.
 
@@ -76,20 +81,23 @@ Get.lazyPut () will not receive this resource. Initially he had it, but we saw i
 ## [2.10.0]
 - Added SmartManagement, your application's memory is managed intelligently like never before!
 - Added Obx, a widget that knows when to rebuild a child, without needing any type.
-- Added MIxinBuilder - If you need to use GetBuilder in conjunction with GetX, use GetxController with this widget, and the changes will occur either using update (this) or changing some reactive variable. Use only if necessary, for better RAM consumption, prefer widgets in that order:
+- Added MixinBuilder - If you need to use GetBuilder in conjunction with GetX, use GetxController with this widget, and the changes will occur either using update (this) or changing some reactive variable. Use only if necessary, for better RAM consumption, prefer widgets in that order:
 Obx => GetX => GetBuilder => MixinBuilder.
 Obx is the lightest of all, and MixinBuilder is a mix of the other 3, whenever possible, use the specific widget.
-- Refactor: refactor StateManager of Get.
+- Refactor: StateManager of Get.
 - Changed: full List API refactor, now value is no longer needed.
 - Added Workers: You can hear changes to a variable and trigger custom callbacks.
 - Added Bindings API docs.
+- Added Portuguese language to readme(@Nipodemos)
 
 # [2.7.1]
 - Improve list to set and get methods
 
 ## [2.7.0]
 - Added obx, a simple state interceptor. 
-- Improve Bindings, ListX, and fix docs typos
+- Improve Bindings, ListX, and 
+- fix docs typos e broken code (@ghprod)
+
 
 ## [2.6.3]
 - Flutter currently has a problem on some devices where using showModalBottomSheet() can cause TextFields to be hidden behind the keyboard (https://github.com/flutter/flutter/issues/18564) this issue is closed, even users reporting that the problem still occurs.
@@ -116,6 +124,7 @@ This feature had been deprecated in previous updates, and was removed in version
 
 ## [2.5.8]
 - Added docs
+- Added tests(@chimon2000)
 
 ## [2.5.7]
 - Fix Get.generalDialog optionals
@@ -124,6 +133,7 @@ This feature had been deprecated in previous updates, and was removed in version
 ## [2.5.6]
 - GetBuilder refactor to work with lazyPut.
 Now you can list your controllers in advance with Get.lazyPut, and only when it is called for the first time will it be relocated in memory.
+- Fix english typos(@gumbarros)
 
 ## [2.5.5]
 - Fix arguments broken by new methods
@@ -134,6 +144,7 @@ Now you can list your controllers in advance with Get.lazyPut, and only when it 
 ## [2.5.3]
 - Fix snackbar padding on iPhone SE 2.
 - Added themes docs
+- Added ThemeMode (@RodBr)
 
 ## [2.5.2]
 - Fix: key not found when Get.key is used with no MaterialApp
@@ -182,7 +193,7 @@ Now you can list your controllers in advance with Get.lazyPut, and only when it 
 - Fix GetRoute not found
 
 ## [2.2.1] 
-- Improve lazyPut
+- Improve lazyPut and fix tag to lazyput(@rochadaniel)
 
 ## [2.2.0] 
 - Added: Ability to choose or delay a widget's state change according to its ID.
@@ -326,6 +337,7 @@ Now you can list your controllers in advance with Get.lazyPut, and only when it 
 
  ## [1.10.2] 
  -Improve snackbar text color
+ -Added background color to snackbar (@claudneysessa)
 
  ## [1.10.1] 
  -Backdrop improvement

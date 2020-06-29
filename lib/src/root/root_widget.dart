@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/routes/get_route.dart';
-import '../get_instance.dart';
-import 'parse_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -24,6 +23,7 @@ class GetMaterialApp extends StatelessWidget {
     this.title = '',
     this.onGenerateTitle,
     this.color,
+    this.customTransition,
     this.onInit,
     this.onDispose,
     this.theme,
@@ -77,6 +77,7 @@ class GetMaterialApp extends StatelessWidget {
   final ThemeData theme;
   final ThemeData darkTheme;
   final ThemeMode themeMode;
+  final CustomTransition customTransition;
   final Color color;
   final Map<String, Map<String, String>> translationsKeys;
   final Translations translations;
@@ -126,6 +127,27 @@ class GetMaterialApp extends StatelessWidget {
     );
   }
 
+  List<Route<dynamic>> initialRoutesGenerate(String name) {
+    final match = Get.routeTree.matchRoute(name);
+    Get.parameters = match?.parameters;
+
+    return [
+      GetPageRoute(
+        page: match.route.page,
+        parameter: match.route.parameter,
+        settings: RouteSettings(name: name, arguments: null),
+        curve: match.route.curve,
+        opaque: match.route.opaque,
+        binding: match.route.binding,
+        bindings: match.route.bindings,
+        duration: (transitionDuration ?? match.route.transitionDuration),
+        transition: match.route.transition,
+        popGesture: match.route.popGesture,
+        fullscreenDialog: match.route.fullscreenDialog,
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GetMaterialController>(
@@ -139,11 +161,12 @@ class GetMaterialApp extends StatelessWidget {
           }
 
           if (translations != null) {
-            if (Get.locale == null) Get.translations = translations.keys;
-          }
-          if (translationsKeys != null) {
+            Get.translations = translations.keys;
+          } else if (translationsKeys != null) {
             Get.translations = translationsKeys;
           }
+
+          Get.customTransition = customTransition;
 
           initialBinding?.dependencies();
           Get.addPages(getPages);
@@ -171,32 +194,7 @@ class GetMaterialApp extends StatelessWidget {
             onGenerateRoute: (getPages != null ? generator : onGenerateRoute),
             onGenerateInitialRoutes: (getPages == null || home != null)
                 ? onGenerateInitialRoutes
-                : (st) {
-                    GetPageMatch match;
-                    if (initialRoute == null && getPages != null) {
-                      match = Get.routeTree?.matchRoute(getPages.first.name);
-                    } else {
-                      match = Get.routeTree?.matchRoute(initialRoute);
-                    }
-                    Get.parameters = match?.parameters;
-                    return [
-                      GetPageRoute(
-                        page: match.route.page,
-                        parameter: match.parameters,
-                        settings:
-                            RouteSettings(name: initialRoute, arguments: null),
-                        curve: match.route.curve,
-                        opaque: match.route.opaque,
-                        binding: match.route.binding,
-                        bindings: match.route.bindings,
-                        duration: (transitionDuration ??
-                            match.route.transitionDuration),
-                        transition: match.route.transition,
-                        popGesture: match.route.popGesture,
-                        fullscreenDialog: match.route.fullscreenDialog,
-                      )
-                    ];
-                  },
+                : initialRoutesGenerate,
             onUnknownRoute: onUnknownRoute,
             navigatorObservers: (navigatorObservers == null
                 ? <NavigatorObserver>[GetObserver(routingCallback)]
@@ -235,14 +233,18 @@ abstract class Translations {
 
 extension Trans on String {
   String get tr {
+    if (Get.locale?.languageCode == null) return this;
     if (Get.translations
         .containsKey("${Get.locale.languageCode}_${Get.locale.countryCode}")) {
       return Get.translations[
           "${Get.locale.languageCode}_${Get.locale.countryCode}"][this];
     } else if (Get.translations.containsKey(Get.locale.languageCode)) {
       return Get.translations[Get.locale.languageCode][this];
+    } else if (Get.translations.isNotEmpty) {
+      return Get.translations.values.first[this];
+    } else {
+      return this;
     }
-    return Get.translations.values.first[this];
   }
 
   String trArgs([List<String> args]) {

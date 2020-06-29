@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:ui' show lerpDouble;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/src/get_instance.dart';
 import 'package:get/src/get_main.dart';
+import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/platform/platform.dart';
 import 'bindings_interface.dart';
 import 'custom_transition.dart';
@@ -73,8 +73,39 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
                   child: child)
               : child);
     }
+    final curvedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: this.curve ?? Curves.linear,
+    );
 
-    if (transition == Transition.native) {
+    if (transition == null) {
+      if (Get.customTransition != null) {
+        return Get.customTransition.buildTransition(
+            context,
+            animation,
+            secondaryAnimation,
+            popGesture ?? Get.defaultPopGesture
+                ? _CupertinoBackGestureDetector<T>(
+                    enabledCallback: () => _isPopGestureEnabled<T>(this),
+                    onStartPopGesture: () => _startPopGesture<T>(this),
+                    child: child)
+                : child);
+      }
+
+      if (Get.defaultTransition != null) {
+        return TransitionFilter.newTransitionComponent(Get.defaultTransition)
+            .buildChildWithTransition(
+                context,
+                curvedAnimation,
+                secondaryAnimation,
+                popGesture ?? Get.defaultPopGesture
+                    ? _CupertinoBackGestureDetector<T>(
+                        enabledCallback: () => _isPopGestureEnabled<T>(this),
+                        onStartPopGesture: () => _startPopGesture<T>(this),
+                        child: child)
+                    : child);
+      }
+
       return Theme.of(context).pageTransitionsTheme.buildTransitions(
           this,
           context,
@@ -87,11 +118,6 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
                   child: child)
               : child);
     }
-
-    final curvedAnimation = CurvedAnimation(
-      parent: animation,
-      curve: this.curve ?? Curves.linear,
-    );
 
     return TransitionFilter.newTransitionComponent(transition)
         .buildChildWithTransition(

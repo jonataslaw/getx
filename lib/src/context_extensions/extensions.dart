@@ -68,4 +68,3 @@ extension MDQ on BuildContext {
   /// True if the current device is Tablet
   bool get isTablet => isSmallTablet || isLargeTablet;
 }
-

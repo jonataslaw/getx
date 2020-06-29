@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:get/src/get_instance.dart';
+import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/get_interface.dart';
 import 'bottomsheet/bottomsheet.dart';
+import 'instance/get_instance.dart';
 import 'platform/platform.dart';
 import 'root/parse_route.dart';
 import 'root/root_controller.dart';
@@ -22,8 +23,7 @@ import 'snackbar/snack.dart';
 class GetImpl implements GetService {
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
-  Transition defaultTransition =
-      (GetPlatform.isIOS ? Transition.leftToRight : Transition.fadeIn);
+  Transition defaultTransition;
   Duration defaultDurationTransition = Duration(milliseconds: 400);
   bool defaultGlobalState = true;
   RouteSettings settings;
@@ -631,16 +631,27 @@ class GetImpl implements GetService {
     }
   }
 
+  CustomTransition customTransition;
+
   GetMaterialController getxController = GetMaterialController();
 
   Locale locale;
 
   void updateLocale(Locale l) {
     locale = l;
-    getxController.update();
+    forceAppUpdate();
   }
 
-  Map<String, Map<String, String>> translations;
+  void forceAppUpdate() {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
+  Map<String, Map<String, String>> translations = {};
 
   void addTranslations(Map<String, Map<String, String>> tr) {
     translations.addAll(tr);
