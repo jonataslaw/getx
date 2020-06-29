@@ -136,11 +136,11 @@ Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é p
 
 ### Explicação completa
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/route_management.md)**
+**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md)**
 
 ## Gerenciamento de rotas
 
-Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md)
+Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/route_management.md)
 
 Para navegar para uma próxima tela:
 
@@ -178,9 +178,9 @@ var dados = await Get.to(Pagamento());
 
 ## Gerenciamento de Dependência
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/dependency_management.md)**
+**Veja uma explicação mais completa do gerenciamento de dependência [aqui](./docs/pt_BR/dependency_management.md)**
 
-- Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
+- Nota: Se você está usando o gerenciador de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
 
 Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
 
@@ -220,7 +220,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 ### Explicação completa
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/dependency_management.md)**
+**Veja uma explicação mais completa do gerenciamento de dependência [aqui](./docs/pt_BR/dependency_management.md)**
 
 # Utilidades
 
