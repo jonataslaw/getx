@@ -51,18 +51,6 @@ class _RxImpl<T> implements RxInterface<T> {
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 
-class RxString<String> extends _RxImpl<String> {
-  RxString([String initial]) {
-    _value = initial;
-  }
-}
-
-class RxInt<int> extends _RxImpl<int> {
-  RxInt([int initial]) {
-    _value = initial;
-  }
-}
-
 class RxMap<K, V> extends RxInterface implements Map<K, V> {
   RxMap([Map<K, V> initial]) {
     _value = initial;
@@ -414,20 +402,32 @@ typedef bool Condition();
 
 typedef E ChildrenListComposer<S, E>(S value);
 
-class RxBool<bool> extends _RxImpl<bool> {
+class RxBool extends _RxImpl<bool> {
   RxBool([bool initial]) {
     _value = initial;
   }
 }
 
-class RxDouble<double> extends _RxImpl<double> {
+class RxDouble extends _RxImpl<double> {
   RxDouble([double initial]) {
     _value = initial;
   }
 }
 
-class RxNum<num> extends _RxImpl<num> {
+class RxNum extends _RxImpl<num> {
   RxNum([num initial]) {
+    _value = initial;
+  }
+}
+
+class RxString extends _RxImpl<String> {
+  RxString([String initial]) {
+    _value = initial;
+  }
+}
+
+class RxInt extends _RxImpl<int> {
+  RxInt([int initial]) {
     _value = initial;
   }
 }
@@ -439,25 +439,25 @@ class Rx<T> extends _RxImpl<T> {
 }
 
 extension StringExtension on String {
-  RxString<String> get obs => RxString(this);
+  RxString get obs => RxString(this);
 }
 
 extension IntExtension on int {
-  RxInt<int> get obs => RxInt(this);
+  RxInt get obs => RxInt(this);
 }
 
 extension DoubleExtension on double {
-  RxDouble<double> get obs => RxDouble(this);
+  RxDouble get obs => RxDouble(this);
 }
 
 extension BoolExtension on bool {
-  RxBool<bool> get obs => RxBool(this);
+  RxBool get obs => RxBool(this);
 }
 
 extension MapExtension<K, V> on Map<K, V> {
   RxMap<K, V> get obs {
     if (this != null)
-      return RxMap<K, V>({})..addAll(this);
+      return RxMap<K, V>(<K, V>{})..addAll(this);
     else
       return RxMap<K, V>(null);
   }
@@ -466,12 +466,12 @@ extension MapExtension<K, V> on Map<K, V> {
 extension ListExtension<E> on List<E> {
   RxList<E> get obs {
     if (this != null)
-      return RxList<E>([])..addAllNonNull(this);
+      return RxList<E>(<E>[])..addAllNonNull(this);
     else
       return RxList<E>(null);
   }
 }
 
-extension ObjectExtension on Object {
-  Rx<Object> get obs => Rx(this);
+extension RxT<T> on T {
+  Rx<T> get obs => Rx(this);
 }

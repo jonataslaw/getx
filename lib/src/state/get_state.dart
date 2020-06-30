@@ -1,10 +1,11 @@
+import 'dart:collection';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/root/smart_management.dart';
 import 'package:get/src/rx/rx_interface.dart';
 
 class GetxController extends DisposableInterface {
-  final List<Updater> _updaters = [];
+  final HashSet<Updater> _updaters = HashSet<Updater>();
 
   /// Update GetBuilder with update();
   void update([List<String> ids, bool condition = true]) {

@@ -1,3 +1,9 @@
+## [3.1.2]
+- Expose GetInstance
+
+## [3.1.1]
+- Improvement .obs methods
+
 ## [3.1.0]
 - Added extensions to GetUtils and fix typo on GetUtils.isEmail (@stefandevo)
 - Added .gitignore file (@hdeyana)

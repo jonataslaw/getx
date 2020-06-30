@@ -24,5 +24,7 @@ export 'src/routes/observers/route_observer.dart';
 export 'src/routes/transitions_type.dart';
 export 'src/platform/platform.dart';
 export 'src/instance/extension_instance.dart';
+export 'src/instance/get_instance.dart';
+export 'src/typedefs/typedefs.dart';
 export 'src/routes/custom_transition.dart';
 export 'src/context_extensions/extensions.dart';

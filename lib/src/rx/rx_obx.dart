@@ -50,12 +50,14 @@ class _ObxState extends State<Obx> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget get notifyChilds {
     final observer = getObs;
     getObs = _observer;
     final result = widget.builder();
     getObs = observer;
     return result;
   }
+
+  @override
+  Widget build(BuildContext context) => notifyChilds;
 }
