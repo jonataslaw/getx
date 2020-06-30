@@ -14,6 +14,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 - [About Get](#about-get)
+- [Installing](#installing)
 - [The Three pillars](#the-three-pillars)
   - [State management](#state-management)
     - [In-depth explanation](#in-depth-explanation)
@@ -33,10 +34,27 @@
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
 - GetX is not for everyone, its focus is (performance) on the minimum consumption of resources ([look the benchmarks](https://github.com/jonataslaw/benchmarks)), (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
-- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts.
+- Navigate without `context`, open `dialogs`, `snackbars` or `bottomsheets` from anywhere in your code, Manage states and inject dependencies in an easy and practical way.
+- Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
 - GetX is not a bloc. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's AOT which is incredible, and manages to eliminate unused resources like no other framework does.
 
-**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
+**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**. Not available in other IDEs for now.
+
+# Installing
+
+Add Get to your pubspec.yaml file:
+
+```yaml
+dependencies:
+  get:
+```
+
+Import get in files that it will be used:
+
+```dart
+import 'package:get/get.dart';
+```
 
 # The Three pillars
 
@@ -103,7 +121,7 @@ This is a simple project but it already makes clear how powerful Get is. As your
 
 ### In-depth explanation
 
-**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the differente between the simple stage manager and the reactive state manager**
+**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
 
 ## Route management
 
@@ -237,43 +255,63 @@ If you want to know in depth how to change the theme, you can follow this tutori
 ## Other Advanced APIs
 
 ```dart
-Get.arguments // give the current args from currentScreen
+// give the current args from currentScreen
+Get.arguments
 
-Get.previousArguments // give arguments of previous route
+// give arguments of previous route
+Get.previousArguments
 
-Get.previousRoute // give name of previous route
+// give name of previous route
+Get.previousRoute
 
-Get.rawRoute // give the raw route to access for example, rawRoute.isFirst()
+// give the raw route to access for example, rawRoute.isFirst()
+Get.rawRoute
 
-Get.routing // give access to Rounting API from GetObserver
+// give access to Rounting API from GetObserver
+Get.routing
 
-Get.isSnackbarOpen // check if snackbar is open
+// check if snackbar is open
+Get.isSnackbarOpen
 
-Get.isDialogOpen // check if dialog is open
+// check if dialog is open
+Get.isDialogOpen
 
-Get.isBottomSheetOpen // check if bottomsheet is open
+// check if bottomsheet is open
+Get.isBottomSheetOpen
 
-Get.removeRoute() // remove one route.
+// remove one route.
+Get.removeRoute()
 
-Get.until() // back repeatedly until the predicate returns true.
+// back repeatedly until the predicate returns true.
+Get.until()
 
-Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
+// go to next route and remove all the previous routes until the predicate returns true.
+Get.offUntil()
 
-Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
+// go to next named route and remove all the previous routes until the predicate returns true.
+Get.offNamedUntil()
 
-GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
+//Check in what platform the app is running
+GetPlatform.isAndroid
+GetPlatform.isIOS
+GetPlatform.isWeb
 
-Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable. If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.height and context.width
+// Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable.
+// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+Get.height
+Get.width
 
-Get.context // Gives the context of the screen in the foreground anywhere in your code.
+// Gives the context of the screen in the foreground anywhere in your code.
+Get.context
 
-Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+// Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+Get.contextOverlay
 
 ```
 
 ### Optional Global Settings and Manual configurations
 
-GetMaterialApp configures everything for you, but if you want to configure Get Manually using advanced APIs.
+GetMaterialApp configures everything for you, but if you want to configure Get manually.
 
 ```dart
 MaterialApp(
@@ -287,7 +325,9 @@ You will also be able to use your own Middleware within GetObserver, this will n
 ```dart
 MaterialApp(
   navigatorKey: Get.key,
-  navigatorObservers: [GetObserver(MiddleWare.observer)], // Here
+  navigatorObservers: [
+    GetObserver(MiddleWare.observer) // Here
+  ],
 );
 ```
 
@@ -313,17 +353,15 @@ Get.config(
 # Breaking changes from 2.0
 
 1- Rx types:
-Before: StringX now: RxString
 
-Before: IntX now: RxInt
-
-Before: MapX now: RxMax
-
-Before: ListX now: RxList
-
-Before: NumX now: RxNum
-
-Before: RxDouble now: RxDouble
+| Before   | After      |
+| -------- | ---------- |
+| StringX  | `RxString` |
+| IntX     | `RxInt`    |
+| MapX     | `RxMax`    |
+| ListX    | `RxList`   |
+| NumX     | `RxNum`    |
+| RxDouble | `RxDouble` |
 
 RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
 
@@ -365,8 +403,6 @@ GetMaterialApp(
 )
 ```
 
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
-
 # Why I made this package
 
 The problem that this package tries to solve is to have most of what you need in only one package. One day, when i update some of my apps to work with Flutter 1.9, something bad happened: Everything broke.
@@ -381,4 +417,6 @@ I know this looks a lot like the package being based on my personal experiences,
 
 Every time I go through a frustrating experience, I write it down in my schedule, and try to resolve it after completing the project.
 
-And then I decided to make a package that have the three things that you will always use: State management, route management, Dependency injection/management, internationalization, and storage (the last two are still being made)
+And then I decided to make a package that have the three things that you will always use: State management, route management, Dependency injection/management. Eventually i made internationalization, and storage (the last two are still being made)
+
+This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.

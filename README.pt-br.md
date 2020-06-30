@@ -1,6 +1,6 @@
 ![](get.png)
 
-*Idiomas: [Inglês](README.md), Português Brasileiro (este arquivo), [Spanish](README-es.md).*
+*Idiomas: [Inglês](README.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -12,7 +12,7 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Me compre um café" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 - [Sobre Get](#sobre-get)
-  - [Instalando e iniciando](#instalando-e-iniciando)
+- [Instalando e iniciando](#instalando-e-iniciando)
 - [Os três pilares](#os-três-pilares)
   - [Gerenciamento de estado](#gerenciamento-de-estado)
     - [Explicação completa](#explicação-completa)
@@ -21,12 +21,20 @@
   - [Gerenciamento de Dependência](#gerenciamento-de-dependência)
     - [Explicação completa](#explicação-completa-2)
 - [Utilidades](#utilidades)
-  - [Outras APIs avançadas e Configurações Manuais](#outras-apis-avançadas-e-configurações-manuais)
+  - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
+  - [Outras APIs avançadas](#outras-apis-avançadas)
+    - [Configurações Globais opcionais e configurações manuais](#configurações-globais-opcionais-e-configurações-manuais)
+- [Breaking Changes da versão 2 para 3](#breaking-changes-da-versão-2-para-3)
+  - [Tipagem Rx](#tipagem-rx)
+  - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
+  - [Rotas nomeadas](#rotas-nomeadas)
+    - [Porque essa mudança](#porque-essa-mudança)
+- [Porque eu fiz esse package](#porque-eu-fiz-esse-package)
 
 # Sobre Get
 
 - Get é uma biblioteca poderosa e extra-leve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
-- Get não é para todos, seu foco é
+- Get não é para todos, seu foco é:
   - **Performance**: Já que gasta o mínimo de recursos
   - **Produtividade**: Usando uma sintaxe fácil e agradável
   - **Organização**: Que permite o total desacoplamento da View e da lógica de negócio.
@@ -35,7 +43,7 @@
 - Get é seguro, estável, atualizado e oferece uma enorme gama de APIs que não estão presentes no framework padrão.
 - GetX não é um `bloc` da vida. Ele tem uma variedade de recursos que te permite começar a programar sem se preocupar com nada, mas cada um desses recursos estão em um container separado, ou seja, nenhuma depende da outra para funcionar. Elas só são inicializadas após o uso. Se você usa apenas o gerenciador de estado, apenas ele será compilado. Teste você mesmo, vá no repositório de benchmark do getX e perceberá: usando somente o gerenciador de estado do Get, a aplicação ficou mais leve do que outros projetos que também estão usando só o gerenciador de estado, porque nada que não seja usado será compilado no seu código, e cada recuro do GetX foi feito para ser muito leve. O mérito vem também do AOT do próprio Flutter que é incrível, e consegue eliminar recursos não utilizados de uma forma que nenhum outro framework consegue.
 
-**GetX faz seu desenvolvimento mais produtivo, mas quer deixá-lo mais produtivo ainda? Adicione a extensão [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) no seu VSCode**. Não disponível para outras IDEs por enquanto.
+**GetX faz seu desenvolvimento mais produtivo, mas quer deixá-lo mais produtivo ainda? Adicione a extensão [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) no seu VSCode**. Não disponível para outras IDEs por enquanto.
 
 Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
 
@@ -47,11 +55,7 @@ Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um
 
 Qualquer contribuição é bem-vinda!
 
-## Instalando e iniciando
-
-<!-- - Flutter Master/Dev/Beta: version 2.0.x-dev 
-- Flutter Stable branch: version 2.0.x
-(procure pela versão mais recente em pub.dev) -->
+# Instalando e iniciando
 
 Adicione Get ao seu arquivo pubspec.yaml
 
@@ -60,14 +64,10 @@ dependencies:
   get:
 ```
 
-Troque seu `MaterialApp()` por `GetMaterialApp()` e aproveite!
+Importe o get nos arquivos que ele for usado:
 
 ```dart
 import 'package:get/get.dart';
-
-GetMaterialApp( // Antes: MaterialApp(
-  home: HomePage(),
-)
 ```
 
 # Os três pilares
@@ -85,10 +85,11 @@ Troque `MaterialApp` para `GetMaterialApp`
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- **Obs:** Isso não modifica o `MaterialApp` do Flutter, GetMaterialApp não é uma versão modificada do MaterialApp, é só um Widget pré-configurado, que tem como child o MaterialApp padrão. Você pode configurar isso manualmente, mas definitivamente não é necessário. GetMaterialApp vai criar rotas, injetá-las, injetar traduções, injetar tudo que você precisa para navegação por rotas (gerenciamento de rotas). Se você quer somente usar o gerenciado de estado ou somente o gerenciador de dependências, não é necessário usar o GetMaterialApp. Ele somente é necessário para:
+- **Obs:** Isso não modifica o `MaterialApp` do Flutter, GetMaterialApp não é uma versão modificada do MaterialApp, é só um Widget pré-configurado, que tem como child o MaterialApp padrão. Você pode configurar isso manualmente, mas definitivamente não é necessário. GetMaterialApp vai criar rotas, injetá-las, injetar traduções, injetar tudo que você precisa para navegação por rotas (gerenciamento de rotas). Se você quer somente usar o gerenciadro de estado ou somente o gerenciador de dependências, não é necessário usar o GetMaterialApp. Ele somente é necessário para:
   - Rotas
   - Snackbars/bottomsheets/dialogs
   - apis relacionadas a rotas e a ausência de `context`
+  - Internacionalização
 
 - Passo 2:
 Cria a sua classe de regra de negócio e coloque todas as variáveis, métodos e controllers dentro dela.
@@ -140,7 +141,7 @@ Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é p
 
 ## Gerenciamento de rotas
 
-Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/route_management.md)
+Veja uma explicação mais completa do gerenciamento de rotas [aqui](./docs/pt_BR/route_management.md)
 
 Para navegar para uma próxima tela:
 
@@ -171,6 +172,8 @@ Para navegar para a próxima rota, e receber ou atualizar dados assim que retorn
 ```dart
 var dados = await Get.to(Pagamento());
 ```
+
+Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? Essa é uma das maiores vantagens de usar o gerenciamento de rotas do GetX. Com isso, você pode executar todos esse métodos de dentro da classe Controller, sem preocupações.
 
 ### Explicação completa
 
@@ -224,25 +227,33 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 # Utilidades
 
-## Outras APIs avançadas e Configurações Manuais
+## Mudar tema (changeTheme)
 
-GetMaterialApp configura tudo para você, mas se quiser configurar Get manualmente, você pode usando APIs avançadas.
+Por favor não use widget acima do GetMaterialApp para atualizar o tome. Isso pode causar keys duplicadas. Várias pessoas estão acostumadas com o jeito normal de criar um Widget `ThemeProvider` só pra alterar o thema do app, mas isso definitivamente NÃO é necessário no Get.
 
-```dart
-MaterialApp(
-  navigatorKey: Get.key,
-  navigatorObservers: [GetObserver()],
-);
-```
-
-Você também será capaz de usar seu próprio Middleware dentro do GetObserver, isso não irá influenciar em nada.
+Você pode criar seu tema customizado e simplesmente adicionar dentro do `Get.changeTheme` sem nenhum boilerplate para isso:
 
 ```dart
-MaterialApp(
-  navigatorKey: Get.key,
-  navigatorObservers: [GetObserver(MiddleWare.observer)], // Aqui
-);
+Get.changeTheme(ThemeData.light())
 ```
+
+Se você quer criar algo como um botão que muda o tema com o toque, você pode combinar duas APIs Get pra isso: a API que checa se o tema dark está sendo aplicado, e a API de mudar o tema, e colocar isso no `onPressed:`
+
+```dart
+Get.changeTheme(
+  Get.isDarkMode
+  ? ThemeData.light()
+  : ThemeData.dark()
+)
+```
+
+Quando o modo Dark está ativado, ele vai trocar pro modo light, e vice versa.
+
+Se você quiser saber mais como trocar o tema, você pode seguir esse tutorial no Medium que até ensina persistência do tema usando Get (e SharedPreferences):
+
+- [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
+
+## Outras APIs avançadas
 
 ```dart
 // fornece os arguments da tela atual
@@ -305,5 +316,142 @@ Get.context
 Get.contextOverlay
 
 ```
+
+### Configurações Globais opcionais e configurações manuais
+
+GetMaterialApp configura tudo para você, mas se quiser configurar Get manualmente, você pode.
+
+```dart
+MaterialApp(
+  navigatorKey: Get.key,
+  navigatorObservers: [GetObserver()],
+);
+```
+
+Você também será capaz de usar seu próprio Middleware dentro do GetObserver, isso não irá influenciar em nada.
+
+```dart
+MaterialApp(
+  navigatorKey: Get.key,
+  navigatorObservers: [
+    GetObserver(MiddleWare.observer) // Aqui
+  ],
+);
+```
+
+Você pode criar Configurações Globais para o Get. Apenas adicione `Get.config` ao seu código antes de usar qualquer rota ou faça diretamente no seu GetMaterialApp
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  defaultTransition: Transition.fade,
+  opaqueRoute: Get.isOpaqueRouteDefault,
+  popGesture: Get.isPopGestureEnable,
+  transitionDuration: Get.defaultDurationTransition,
+  defaultGlobalState: Get.defaultGlobalState,
+);
+Get.config(
+  enableLog = true,
+  defaultPopGesture = true,
+  defaultTransition = Transitions.cupertino
+)
+```
+
+# Breaking Changes da versão 2 para 3
+
+## Tipagem Rx
+
+| Antes    | Depois     |
+| -------- | ---------- |
+| StringX  | `RxString` |
+| IntX     | `RxInt`    |
+| MapX     | `RxMax`    |
+| ListX    | `RxList`   |
+| NumX     | `RxNum`    |
+| RxDouble | `RxDouble` |
+
+## RxController e GetBuilder se uniram
+
+RxController e GetBuilder agora viraram um só, você não precisa mais memorizar qual controller quer usar, apenas coloque `GetxController`, vai funcionar para os dois gerenciamento de estados
+
+```dart
+//Gerenciador de estado simples
+class Controller extends GetXController {
+  String nome = '';
+
+  void atualizarNome(String novoNome) {
+    nome = novoNome;
+    update()
+  }
+}
+```
+
+```dart
+class Controller extends GetXController {
+  final nome = ''.obs;
+
+  // não precisa de um método direto pra atualizar o nome
+  // só usar o nome.value
+}
+```
+
+## Rotas nomeadas
+
+Antes:
+
+```dart
+GetMaterialApp(
+  namedRoutes: {
+    '/': GetRoute(page: Home()),
+  }
+)
+```
+
+Agora:
+
+```dart
+GetMaterialApp(
+  getPages: [
+    GetPage(name: '/', page:()=> Home()),
+  ]
+)
+```
+
+### Porque essa mudança
+
+Frequentemente, pode ser necessário decidir qual pagina vai ser mostrada ao usuário a partir de um parâmetro, como um token de login. A forma abordada anteriormente não era flexível, já que não permitia isso.
+
+Inserir a página numa função reduziu significativamente o consumo de RAM, já que as rotas não são alocadas na memória desde o app inicia, e também permite fazer esse tipo de abordagem:
+
+```dart
+
+GetStorage box = GetStorage();
+
+GetMaterialApp(
+  getPages: [
+    GetPage(name: '/', page:(){  
+      return box.hasData('token') ? Home() : Login();
+    })
+  ]
+)
+```
+
+# Porque eu fiz esse package
+
+O problema que esse package tenta resolver é possuir a maioria das funções que preciso num package só.
+
+Um dia, quando eu atualizei um dos meus apps no trabalho para o Flutter 1.9, algo ruim aconteceu: Tudo quebrou.
+
+Todas as bibliotecas pararam de funcionar, na atualização foi bloqueado o uso do hifen "-". Alguns atualizaram seus packages, outros não. Outros eu tive que olhar o porque do projeto não compilar. Outros simplesmente se tornaram incompatíveis com a versão atual, como o `image_extended` que eu até ofereci um PR lá pra conseguir corrigir, e tudo isso por causa de um simples update.
+
+Eu perdi 2 dias de trabalho só procurando por erros pra saber de onde eles vieram.
+
+Eu confesso que foi uma das situações mais estressantes que eu já passei na vida. Foi exatamente nesse dia que eu decidi colocar tudo num package.
+
+Eu sei que parece que esse package é feito só pra sanar minha experiência pessoal, mas eu sou um programador, e eu tento resolver problemas sempre da perspectiva do programador. Eu não me importo em nada mais que fazer a minha vida e de outros programadores mais fácil com esse package.
+
+Sempre que eu passo por uma experiência frustrante, eu escrevo no meu caleundário, e tento resolver depois de completar o projeto.
+
+E então eu decidi fazer um package que tenha três coisas que eu sempre uso: Gerenciamento de Estado, de rotas e de dependências. Depois eu fiz também internacionalização, e persistênsia de dados (estilo Hive)
 
 Essa biblioteca sempre será atualizada e terá sempre nova features sendo implementadas. Sinta-se livre para oferecer PRs e contribuir com o package.
