@@ -307,6 +307,47 @@ Get.context
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 Get.contextOverlay
 
+/// similar to MediaQuery.of(this).padding
+Get.mediaQueryPadding()
+
+/// similar to MediaQuery.of(this).viewPadding
+Get.mediaQueryViewPadding()
+
+/// similar to MediaQuery.of(this).viewInsets;
+Get.mediaQueryViewInsets()
+
+/// similar to MediaQuery.of(this).orientation;
+Get.orientation()
+
+/// check if device is on landscape mode
+Get.isLandscape()
+
+/// check if device is on portrait mode
+Get.isPortrait()
+
+/// similar to MediaQuery.of(this).devicePixelRatio;
+Get.devicePixelRatio()
+
+/// similar to MediaQuery.of(this).textScaleFactor;
+Get.textScaleFactor()
+
+/// get the shortestSide from screen
+Get.mediaQueryShortestSide()
+
+/// True if width be larger than 800
+Get.showNavbar()
+
+/// True if the shortestSide is smaller than 600p
+Get.isPhone()
+
+/// True if the shortestSide is largest than 600p
+Get.isSmallTablet()
+
+/// True if the shortestSide is largest than 720p
+Get.isLargeTablet()
+
+/// True if the current device is Tablet
+Get.isTablet()
 ```
 
 ### Optional Global Settings and Manual configurations
