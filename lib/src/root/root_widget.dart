@@ -43,6 +43,7 @@ class GetMaterialApp extends StatelessWidget {
     this.shortcuts,
     this.smartManagement = SmartManagement.full,
     this.initialBinding,
+    this.unknownRoute,
     this.routingCallback,
     this.defaultTransition,
     // this.actions,
@@ -106,10 +107,29 @@ class GetMaterialApp extends StatelessWidget {
   final Duration transitionDuration;
   final bool defaultGlobalState;
   final List<GetPage> getPages;
+  final GetPage unknownRoute;
 
   Route<dynamic> generator(RouteSettings settings) {
     final match = Get.routeTree.matchRoute(settings.name);
     Get.parameters = match?.parameters;
+
+    if (match?.route == null) {
+      return GetPageRoute(
+        page: unknownRoute.page,
+        parameter: unknownRoute.parameter,
+        settings:
+            RouteSettings(name: settings.name, arguments: settings.arguments),
+        curve: unknownRoute.curve,
+        opaque: unknownRoute.opaque,
+        customTransition: match.route.customTransition,
+        binding: unknownRoute.binding,
+        bindings: unknownRoute.bindings,
+        duration: (transitionDuration ?? unknownRoute.transitionDuration),
+        transition: unknownRoute.transition,
+        popGesture: unknownRoute.popGesture,
+        fullscreenDialog: unknownRoute.fullscreenDialog,
+      );
+    }
 
     return GetPageRoute(
       page: match.route.page,
@@ -118,6 +138,7 @@ class GetMaterialApp extends StatelessWidget {
           RouteSettings(name: settings.name, arguments: settings.arguments),
       curve: match.route.curve,
       opaque: match.route.opaque,
+      customTransition: match.route.customTransition,
       binding: match.route.binding,
       bindings: match.route.bindings,
       duration: (transitionDuration ?? match.route.transitionDuration),

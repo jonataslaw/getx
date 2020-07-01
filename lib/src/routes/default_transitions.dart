@@ -10,6 +10,8 @@ class LeftToRightFadeTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -39,6 +41,8 @@ class RightToLeftFadeTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -68,11 +72,13 @@ class NoTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
     return transitionComponent.buildChildWithTransition(
-        context, animation, secondaryAnimation, child);
+        context, curve, alignment, animation, secondaryAnimation, child);
   }
 }
 
@@ -84,13 +90,15 @@ class FadeInTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
     return FadeTransition(
       opacity: animation,
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
     );
   }
 }
@@ -103,6 +111,8 @@ class SlideDownTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -112,7 +122,7 @@ class SlideDownTransition extends TransitionInterface {
         end: Offset.zero,
       ).animate(animation),
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
     );
   }
 }
@@ -125,6 +135,8 @@ class SlideLeftTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -134,7 +146,7 @@ class SlideLeftTransition extends TransitionInterface {
         end: Offset.zero,
       ).animate(animation),
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
     );
   }
 }
@@ -147,6 +159,8 @@ class SlideRightTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -156,7 +170,7 @@ class SlideRightTransition extends TransitionInterface {
         end: Offset.zero,
       ).animate(animation),
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
     );
   }
 }
@@ -169,6 +183,8 @@ class SlideTopTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -178,7 +194,7 @@ class SlideTopTransition extends TransitionInterface {
         end: Offset.zero,
       ).animate(animation),
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
     );
   }
 }
@@ -191,13 +207,63 @@ class ZoomInTransition extends TransitionInterface {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
+      Curve curve,
+      Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
     return ScaleTransition(
       scale: animation,
       child: transitionComponent.buildChildWithTransition(
-          context, animation, secondaryAnimation, child),
+          context, curve, alignment, animation, secondaryAnimation, child),
+    );
+  }
+}
+
+class SizeTransitions extends TransitionInterface {
+  SizeTransitions({
+    TransitionComponent transitionComponent,
+  }) : super(transitionComponent: transitionComponent);
+
+  @override
+  Widget buildChildWithTransition(
+      BuildContext context,
+      Curve curve,
+      Alignment alignment,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    return Align(
+      alignment: Alignment.center,
+      child: SizeTransition(
+        sizeFactor: CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class CupertinoTransitions extends TransitionInterface {
+  CupertinoTransitions({
+    TransitionComponent transitionComponent,
+  }) : super(transitionComponent: transitionComponent);
+
+  @override
+  Widget buildChildWithTransition(
+      BuildContext context,
+      Curve curve,
+      Alignment alignment,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    return CupertinoPageTransition(
+      primaryRouteAnimation: animation,
+      secondaryRouteAnimation: secondaryAnimation,
+      linearTransition: true,
+      child: child,
     );
   }
 }

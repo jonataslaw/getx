@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'snack_route.dart' as route;
+import 'snack_route.dart' as snackroute;
 
 typedef void SnackStatusCallback(SnackStatus status);
 typedef void OnTap(GetBar snack);
@@ -209,11 +209,11 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// A [TextFormField] in case you want a simple user input. Every other widget is ignored if this is not null.
   final Form userInputForm;
 
-  route.SnackRoute<T> _snackRoute;
+  snackroute.SnackRoute<T> _snackRoute;
 
   /// Show the snack. Kicks in [SnackStatus.IS_APPEARING] state followed by [SnackStatus.SHOWING]
   Future<T> show() async {
-    _snackRoute = route.showSnack<T>(
+    _snackRoute = snackroute.showSnack<T>(
       snack: this,
     ) as SnackRoute<T>;
     return await Get.key.currentState.push(_snackRoute);

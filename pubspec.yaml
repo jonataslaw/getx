@@ -1,6 +1,6 @@
 name: get
 description: Open screens/snackbars/dialogs/bottomSheets without context, manage states and inject dependencies easily with Get.
-version: 3.1.2
+version: 3.1.3
 homepage: https://github.com/jonataslaw/get
 
 environment:

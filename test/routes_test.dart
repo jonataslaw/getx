@@ -14,6 +14,15 @@ void main() {
     "GetRoute maintainState null",
     (WidgetTester testr) async {
       expect(
+          () => GetPage(page: () => Scaffold(), maintainState: null, name: '/'),
+          throwsAssertionError);
+    },
+  );
+
+  testWidgets(
+    "GetRoute name null",
+    (WidgetTester testr) async {
+      expect(
           () =>
               GetPage(page: () => Scaffold(), maintainState: null, name: null),
           throwsAssertionError);
@@ -25,7 +34,7 @@ void main() {
     (WidgetTester testr) async {
       expect(
           () => GetPage(
-              page: () => Scaffold(), fullscreenDialog: null, name: null),
+              page: () => Scaffold(), fullscreenDialog: null, name: '/'),
           throwsAssertionError);
     },
   );

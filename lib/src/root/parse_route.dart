@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/src/routes/get_route.dart';
 
@@ -20,7 +22,7 @@ class ParseRouteTree {
       //   throw ("Default route was already defined");
       // }
       var node = ParseRouteTreeNode(path, ParseRouteTreeNodeType.component);
-      node.routes = [route];
+      node.routes = HashSet<GetPage>()..add(route);
       _nodes.add(node);
       // _hasDefaultRoute = true;
       return;
@@ -45,7 +47,7 @@ class ParseRouteTree {
       }
       if (i == pathComponents.length - 1) {
         if (node.routes == null) {
-          node.routes = [route];
+          node.routes = HashSet<GetPage>()..add(route);
         } else {
           node.routes.add(route);
         }
@@ -131,8 +133,8 @@ class ParseRouteTree {
       if (nodeToUse != null &&
           nodeToUse.routes != null &&
           nodeToUse.routes.length > 0) {
-        List<GetPage> routes = nodeToUse.routes;
-        GetPageMatch routeMatch = GetPageMatch(routes[0]);
+        HashSet<GetPage> routes = nodeToUse.routes;
+        GetPageMatch routeMatch = GetPageMatch(routes.first);
 
         routeMatch.parameters = match.parameters;
 
@@ -201,7 +203,7 @@ class ParseRouteTreeNode {
 
   String part;
   ParseRouteTreeNodeType type;
-  List<GetPage> routes = <GetPage>[];
+  HashSet<GetPage> routes = HashSet<GetPage>();
   List<ParseRouteTreeNode> nodes = <ParseRouteTreeNode>[];
   ParseRouteTreeNode parent;
 

@@ -4,6 +4,28 @@ import 'package:get/get.dart';
 
 import 'util/wrapper.dart';
 
+class SizeTransitions extends CustomTransition {
+  @override
+  Widget buildTransition(
+      BuildContext context,
+      Curve curve,
+      Alignment alignment,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    return Align(
+      alignment: Alignment.center,
+      child: SizeTransition(
+        sizeFactor: CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
 void main() {
   testWidgets("Get.to smoke test", (tester) async {
     await tester.pumpWidget(
@@ -21,7 +43,10 @@ void main() {
       GetMaterialApp(
         initialRoute: '/',
         getPages: [
-          GetPage(page: () => FirstScreen(), name: '/'),
+          GetPage(
+              page: () => FirstScreen(),
+              name: '/',
+              customTransition: SizeTransitions()),
           GetPage(page: () => SecondScreen(), name: '/second'),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
@@ -188,9 +213,17 @@ void main() {
       WrapperNamed(
         initialRoute: '/',
         namedRoutes: [
-          GetPage(page: () => Container(), name: '/'),
-          GetPage(page: () => FirstScreen(), name: '/first'),
-          GetPage(page: () => SecondScreen(), name: '/second'),
+          GetPage(
+              page: () => Container(),
+              name: '/',
+              popGesture: true,
+              transition: Transition.cupertino),
+          GetPage(
+              page: () => FirstScreen(),
+              name: '/first',
+              transition: Transition.size),
+          GetPage(
+              page: () => SecondScreen(), name: '/second', transition: null),
           GetPage(page: () => ThirdScreen(), name: '/third'),
         ],
       ),
@@ -324,16 +357,42 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+
+    await tester.pumpWidget(
+      Wrapper(
+        child: Container(),
+        defaultTransition: Transition.cupertino,
+      ),
+    );
+
+    Get.to(FirstScreen());
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FirstScreen), findsOneWidget);
+
+    await tester.pumpWidget(
+      Wrapper(
+        child: Container(),
+        defaultTransition: Transition.size,
+      ),
+    );
+
+    Get.to(FirstScreen());
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FirstScreen), findsOneWidget);
   });
 
   testWidgets("Get.snackbar test", (tester) async {
     await tester.pumpWidget(
-      Wrapper(
-        child: RaisedButton(
+      GetMaterialApp(
+        popGesture: true,
+        home: RaisedButton(
           child: Text('Open Snackbar'),
           onPressed: () {
-            Get.snackbar('title', "message",
-                duration: Duration(seconds: 1), instantInit: true);
+            Get.snackbar('title', "message", duration: Duration(seconds: 1));
           },
         ),
       ),
@@ -353,10 +412,20 @@ void main() {
           child: Text('Open Snackbar'),
           onPressed: () {
             Get.rawSnackbar(
-                title: 'title',
-                message: "message",
-                duration: Duration(seconds: 1),
-                instantInit: true);
+              title: 'title',
+              message: "message",
+              onTap: (_) {
+                print('snackbar tapped');
+              },
+              duration: Duration(seconds: 1),
+              shouldIconPulse: true,
+              icon: Icon(Icons.alarm),
+              showProgressIndicator: true,
+              barBlur: null,
+              isDismissible: true,
+              leftBarIndicatorColor: Colors.amber,
+              overlayBlur: 1.0,
+            );
           },
         ),
       ),

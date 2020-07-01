@@ -11,6 +11,8 @@ enum Transition {
   leftToRightWithFade,
   zoom,
   noTransition,
+  cupertino,
+  size,
   native
 }
 

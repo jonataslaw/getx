@@ -1,33 +1,35 @@
 import 'dart:async';
 import 'dart:ui';
-import 'snack.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:get/src/snackbar/snack.dart';
 
 class SnackRoute<T> extends OverlayRoute<T> {
-  Animation<double> _filterBlurAnimation;
-  Animation<Color> _filterColorAnimation;
+  final GetBar snack;
+  final Builder _builder;
+  final Completer<T> _transitionCompleter = Completer<T>();
+  final SnackStatusCallback _onStatusChanged;
+  Alignment _initialAlignment;
+  Alignment _endAlignment;
+  bool _wasDismissedBySwipe = false;
+  Timer _timer;
+  T _result;
+  SnackStatus currentStatus;
 
   SnackRoute({
     @required this.snack,
     RouteSettings settings,
-  }) : super(settings: settings) {
-    this._builder = Builder(builder: (BuildContext innerContext) {
-      return GestureDetector(
-        child: snack,
-        onTap: snack.onTap != null
-            ? () {
-                snack.onTap(snack);
-              }
-            : null,
-      );
-    });
-
+  })  : _builder = Builder(builder: (BuildContext innerContext) {
+          return GestureDetector(
+            child: snack,
+            onTap: snack.onTap != null ? () => snack.onTap(snack) : null,
+          );
+        }),
+        _onStatusChanged = snack.onStatusChanged,
+        super(settings: settings) {
     _configureAlignment(this.snack.snackPosition);
-    _onStatusChanged = snack.onStatusChanged;
   }
 
-  _configureAlignment(SnackPosition snackPosition) {
+  void _configureAlignment(SnackPosition snackPosition) {
     switch (snack.snackPosition) {
       case SnackPosition.TOP:
         {
@@ -44,51 +46,12 @@ class SnackRoute<T> extends OverlayRoute<T> {
     }
   }
 
-  GetBar snack;
-  Builder _builder;
-
   Future<T> get completed => _transitionCompleter.future;
-  final Completer<T> _transitionCompleter = Completer<T>();
-
-  SnackStatusCallback _onStatusChanged;
-  Alignment _initialAlignment;
-  Alignment _endAlignment;
-  bool _wasDismissedBySwipe = false;
-
-  Timer _timer;
-
   bool get opaque => false;
 
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
-    List<OverlayEntry> overlays = [];
-
-    if (snack.overlayBlur > 0.0) {
-      overlays.add(
-        OverlayEntry(
-            builder: (BuildContext context) {
-              return GestureDetector(
-                onTap: snack.isDismissible ? () => snack.dismiss() : null,
-                child: AnimatedBuilder(
-                  animation: _filterBlurAnimation,
-                  builder: (context, child) {
-                    return BackdropFilter(
-                      filter: ImageFilter.blur(
-                          sigmaX: _filterBlurAnimation.value,
-                          sigmaY: _filterBlurAnimation.value),
-                      child: Container(
-                        constraints: BoxConstraints.expand(),
-                        color: _filterColorAnimation.value,
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-            maintainState: false,
-            opaque: opaque),
-      );
-    }
+    final List<OverlayEntry> overlays = [];
 
     overlays.add(
       OverlayEntry(
@@ -96,9 +59,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
             final Widget annotatedChild = Semantics(
               child: AlignTransition(
                 alignment: _animation,
-                child: snack.isDismissible
-                    ? _getDismissibleSnack(_builder)
-                    : _getSnack(),
+                child: _getSnack(),
               ),
               focused: false,
               container: true,
@@ -116,50 +77,11 @@ class SnackRoute<T> extends OverlayRoute<T> {
   /// This string is a workaround until Dismissible supports a returning item
   String dismissibleKeyGen = "";
 
-  Widget _getDismissibleSnack(Widget child) {
-    return Dismissible(
-      direction: _getDismissDirection(),
-      resizeDuration: null,
-      confirmDismiss: (_) {
-        if (currentStatus == SnackStatus.IS_APPEARING ||
-            currentStatus == SnackStatus.IS_HIDING) {
-          return Future.value(false);
-        }
-        return Future.value(true);
-      },
-      key: Key(dismissibleKeyGen),
-      onDismissed: (_) {
-        dismissibleKeyGen += "1";
-        _cancelTimer();
-        _wasDismissedBySwipe = true;
-
-        if (isCurrent) {
-          navigator.pop();
-        } else {
-          navigator.removeRoute(this);
-        }
-      },
-      child: _getSnack(),
-    );
-  }
-
   Widget _getSnack() {
     return Container(
       margin: snack.margin,
       child: _builder,
     );
-  }
-
-  DismissDirection _getDismissDirection() {
-    if (snack.dismissDirection == SnackDismissDirection.HORIZONTAL) {
-      return DismissDirection.horizontal;
-    } else {
-      if (snack.snackPosition == SnackPosition.TOP) {
-        return DismissDirection.up;
-      } else {
-        return DismissDirection.down;
-      }
-    }
   }
 
   @override
@@ -210,6 +132,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<double> createBlurFilterAnimation() {
+    if (snack.overlayBlur == null) return null;
+
     return Tween(begin: 0.0, end: snack.overlayBlur).animate(
       CurvedAnimation(
         parent: _controller,
@@ -223,6 +147,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<Color> createColorFilterAnimation() {
+    if (snack.overlayColor == null) return null;
+
     return ColorTween(begin: Colors.transparent, end: snack.overlayColor)
         .animate(
       CurvedAnimation(
@@ -235,9 +161,6 @@ class SnackRoute<T> extends OverlayRoute<T> {
       ),
     );
   }
-
-  T _result;
-  SnackStatus currentStatus;
 
   //copy of `routes.dart`
   void _handleStatusChanged(AnimationStatus status) {
@@ -282,8 +205,6 @@ class SnackRoute<T> extends OverlayRoute<T> {
     _controller = createAnimationController();
     assert(_controller != null,
         '$runtimeType.createAnimationController() returned null.');
-    _filterBlurAnimation = createBlurFilterAnimation();
-    _filterColorAnimation = createColorFilterAnimation();
     _animation = createAnimation();
     assert(_animation != null, '$runtimeType.createAnimation() returned null.');
     super.install();
@@ -291,25 +212,14 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   @override
   TickerFuture didPush() {
-    super.didPush();
     assert(_controller != null,
         '$runtimeType.didPush called before calling install() or after calling dispose().');
     assert(!_transitionCompleter.isCompleted,
         'Cannot reuse a $runtimeType after disposing it.');
     _animation.addStatusListener(_handleStatusChanged);
     _configureTimer();
+    super.didPush();
     return _controller.forward();
-  }
-
-  @override
-  void didReplace(Route<dynamic> oldRoute) {
-    assert(_controller != null,
-        '$runtimeType.didReplace called before calling install() or after calling dispose().');
-    assert(!_transitionCompleter.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
-    if (oldRoute is SnackRoute) _controller.value = oldRoute._controller.value;
-    _animation.addStatusListener(_handleStatusChanged);
-    super.didReplace(oldRoute);
   }
 
   @override
@@ -360,17 +270,6 @@ class SnackRoute<T> extends OverlayRoute<T> {
     }
   }
 
-  /// Whether this route can perform a transition to the given route.
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
-  bool canTransitionTo(SnackRoute<dynamic> nextRoute) => true;
-
-  /// Whether this route can perform a transition from the given route.
-  ///
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
-  bool canTransitionFrom(SnackRoute<dynamic> previousRoute) => true;
-
   @override
   void dispose() {
     assert(!_transitionCompleter.isCompleted,
@@ -388,10 +287,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
 }
 
 SnackRoute showSnack<T>({@required GetBar snack}) {
-  assert(snack != null);
-
   return SnackRoute<T>(
     snack: snack,
-    settings: RouteSettings(name: "snackbar"),
+    settings: RouteSettings(name: 'snackbar'),
   );
 }

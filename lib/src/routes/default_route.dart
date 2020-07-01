@@ -16,6 +16,7 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
   final bool popGesture;
   final Transition transition;
   final Curve curve;
+  final Alignment alignment;
   final GetPageBuilder page;
   final CustomTransition customTransition;
   final Bindings binding;
@@ -32,8 +33,9 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
     this.bindings,
     this.opaque = true,
     this.parameter,
+    this.alignment,
     this.fullscreenDialog = false,
-    this.curve,
+    this.curve = Curves.linear,
     this.popGesture,
     this.customTransition,
   }) : super(
@@ -64,6 +66,8 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
     if (this.customTransition != null) {
       return this.customTransition.buildTransition(
           context,
+          curve,
+          alignment,
           animation,
           secondaryAnimation,
           popGesture ?? Get.defaultPopGesture
@@ -82,6 +86,8 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
       if (Get.customTransition != null) {
         return Get.customTransition.buildTransition(
             context,
+            curve,
+            alignment,
             animation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
@@ -96,6 +102,8 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
         return TransitionFilter.newTransitionComponent(Get.defaultTransition)
             .buildChildWithTransition(
                 context,
+                curve,
+                alignment,
                 curvedAnimation,
                 secondaryAnimation,
                 popGesture ?? Get.defaultPopGesture
@@ -122,6 +130,8 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
     return TransitionFilter.newTransitionComponent(transition)
         .buildChildWithTransition(
             context,
+            curve,
+            alignment,
             curvedAnimation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
@@ -134,7 +144,7 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
 
   @override
   Duration get transitionDuration =>
-      this.duration ?? Duration(milliseconds: 300);
+      this.duration ?? Duration(milliseconds: 400);
 
   static bool _isPopGestureEnabled<T>(PageRoute<T> route) {
     if (route.isFirst) return false;

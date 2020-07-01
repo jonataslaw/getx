@@ -1,3 +1,7 @@
+## [3.1.3]
+- Activate unknownRoute on version 3
+- Go back transitions.size and transitions.cupertino
+
 ## [3.1.2]
 - Expose GetInstance
 

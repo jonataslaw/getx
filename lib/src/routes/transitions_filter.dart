@@ -33,6 +33,13 @@ class TransitionFilter {
       case Transition.leftToRightWithFade:
         return LeftToRightFadeTransition(
             transitionComponent: transitionComponent);
+
+      case Transition.cupertino:
+        return CupertinoTransitions(transitionComponent: transitionComponent);
+
+      case Transition.size:
+        return SizeTransitions(transitionComponent: transitionComponent);
+
       default:
         return FadeInTransition(transitionComponent: transitionComponent);
     }

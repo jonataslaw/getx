@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/src/routes/bindings_interface.dart';
+import 'custom_transition.dart';
 import 'transitions_type.dart';
 
 class GetPage {
@@ -15,7 +16,7 @@ class GetPage {
   final bool opaque;
   final Bindings binding;
   final List<Bindings> bindings;
-  final Widget customTransition;
+  final CustomTransition customTransition;
   final Duration transitionDuration;
   final bool fullscreenDialog;
   final RouteSettings settings;
