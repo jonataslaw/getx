@@ -5,18 +5,18 @@ import 'package:get/src/root/smart_management.dart';
 import 'package:get/src/rx/rx_interface.dart';
 
 class GetxController extends DisposableInterface {
-  final HashSet<Updater> _updaters = HashSet<Updater>();
+  final HashSet<UpdaterBuilder> _updaters = HashSet<UpdaterBuilder>();
 
   /// Update GetBuilder with update();
   void update([List<String> ids, bool condition = true]) {
     if (!condition) return;
     (ids == null)
         ? _updaters.forEach((rs) {
-            rs.updater(() {});
+            rs().updater(() {});
           })
         : _updaters
-            .where((element) => ids.contains(element.id))
-            .forEach((rs) => rs.updater(() {}));
+            .where((element) => ids.contains(element().id))
+            .forEach((rs) => rs().updater(() {}));
   }
 
   @override
@@ -60,7 +60,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
 
 class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   T controller;
-  Updater real;
+  UpdaterBuilder real;
   bool isCreator = false;
   @override
   void initState() {
@@ -75,24 +75,24 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
           isCreator = true;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
-        real = Updater(updater: setState, id: widget.id);
+        real = () => Updater(updater: setState, id: widget.id);
         controller._updaters.add(real);
       } else if (isRegistred) {
         controller = GetInstance().find<T>(tag: widget.tag);
         isCreator = false;
-        real = Updater(updater: setState, id: widget.id);
+        real = () => Updater(updater: setState, id: widget.id);
         controller._updaters.add(real);
       } else {
         controller = widget.init;
         isCreator = true;
-        real = Updater(updater: setState, id: widget.id);
+        real = () => Updater(updater: setState, id: widget.id);
         controller._updaters.add(real);
         GetInstance().put<T>(controller, tag: widget.tag);
       }
     } else {
       controller = widget.init;
       isCreator = true;
-      real = Updater(updater: setState, id: widget.id);
+      real = () => Updater(updater: setState, id: widget.id);
       controller._updaters.add(real);
       controller?.onStart();
     }
@@ -141,3 +141,5 @@ class Updater {
   final String id;
   const Updater({this.updater, this.id});
 }
+
+typedef UpdaterBuilder = Updater Function();

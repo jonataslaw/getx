@@ -1,3 +1,37 @@
+## [3.2.0]
+- Improve GetBuilder ram usage
+- Added method update to Rx 
+Now you no longer need to make an entire class reactive to get an element update from it, you can simply call the update method of its instance, like this:
+```dart
+class User{
+  User(this.name = '', this.age = 0);
+  String name; 
+  int age;
+}
+
+final user = User().obs;
+
+Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
+
+// To update:
+user.update((user){
+user.name = 'Jonny';
+user.age = 18;
+});
+```
+
+Now is also possible to access a value without using the ".value". Just open and close parentheses.
+In the previous example, you could do:
+```dart
+user().name; // before: user.value.name
+```
+And it is also possible to set a value without using the value, inserting the value directly into the variable.
+```dart
+user(User('João', 35)); // before: user.value = User('João', 35)
+```
+Added fenix mode to Get.lazyPut.
+
+
 ## [3.1.4]
 - Update readme banner
 

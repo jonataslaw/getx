@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:collection';
 import 'rx_interface.dart';
 
 class _RxImpl<T> implements RxInterface<T> {
   StreamController<T> subject = StreamController<T>.broadcast();
-  Map<Stream<T>, StreamSubscription> _subscriptions = Map();
+  HashMap<Stream<T>, StreamSubscription> _subscriptions =
+      HashMap<Stream<T>, StreamSubscription>();
 
   T _value;
   T get value {
@@ -11,6 +13,18 @@ class _RxImpl<T> implements RxInterface<T> {
       getObs.addListener(subject.stream);
     }
     return _value;
+  }
+
+  T call([T v]) {
+    if (v != null) {
+      this.value = v;
+    }
+    return this.value;
+  }
+
+  void update(void fn(T value)) {
+    fn(value);
+    subject.add(value);
   }
 
   String get string => value.toString();
@@ -354,6 +368,11 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
     add(item);
   }
 
+  void update(void fn(Iterable<E> value)) {
+    fn(value);
+    subject.add(null);
+  }
+
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
     clear();
@@ -473,5 +492,5 @@ extension ListExtension<E> on List<E> {
 }
 
 extension RxT<T> on T {
-  Rx<T> get obs => Rx(this);
+  Rx<T> get obs => Rx<T>(this);
 }

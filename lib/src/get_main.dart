@@ -48,16 +48,15 @@ class GetImpl implements GetService {
       Bindings binding,
       preventDuplicates = true,
       bool popGesture}) {
-    if (preventDuplicates &&
-        '/' + page.toString().toLowerCase() == currentRoute) {
+    if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
       return null;
     }
 
     return global(id).currentState.push(GetPageRoute(
         opaque: opaque ?? true,
         page: () => page,
-        settings: RouteSettings(
-            name: '/' + page.toString().toLowerCase(), arguments: arguments),
+        settings:
+            RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
         fullscreenDialog: fullscreenDialog,
@@ -183,16 +182,15 @@ class GetImpl implements GetService {
       bool fullscreenDialog = false,
       preventDuplicates = true,
       Duration duration}) {
-    if (preventDuplicates &&
-        '/' + page.toString().toLowerCase() == currentRoute) {
+    if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
       return null;
     }
     return global(id).currentState.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
         page: () => page,
         binding: binding,
-        settings: RouteSettings(
-            name: '/' + page.toString().toLowerCase(), arguments: arguments),
+        settings:
+            RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
@@ -218,9 +216,8 @@ class GetImpl implements GetService {
           popGesture: popGesture ?? defaultPopGesture,
           page: () => page,
           binding: binding,
-          settings: RouteSettings(
-              name: '/' + page.runtimeType.toString().toLowerCase(),
-              arguments: arguments),
+          settings:
+              RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           transition: transition ?? defaultTransition,
           duration: duration ?? defaultDurationTransition,

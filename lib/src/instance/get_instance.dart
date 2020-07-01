@@ -5,11 +5,17 @@ import 'package:get/src/typedefs/typedefs.dart';
 class GetConfig {
   //////////// INSTANCE MANAGER
   static Map<dynamic, dynamic> _singl = {};
-  static Map<dynamic, FcBuilderFunc> _factory = {};
+  static Map<dynamic, Lazy> _factory = {};
   static Map<String, String> routesKey = {};
   static SmartManagement smartManagement = SmartManagement.full;
   static bool isLogEnable = true;
   static String currentRoute;
+}
+
+class Lazy {
+  Lazy(this.builder, this.fenix);
+  bool fenix;
+  FcBuilderFunc builder;
 }
 
 class GetInstance {
@@ -20,9 +26,10 @@ class GetInstance {
   GetInstance._();
   static GetInstance _getInstance;
 
-  void lazyPut<S>(FcBuilderFunc builder, {String tag}) {
+  void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
     String key = _getKey(S, tag);
-    GetConfig._factory.putIfAbsent(key, () => builder);
+
+    GetConfig._factory.putIfAbsent(key, () => Lazy(builder, fenix));
   }
 
   Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
@@ -154,7 +161,7 @@ class GetInstance {
 
       if (GetConfig.isLogEnable)
         print('[GET] $S instance was created at that time');
-      S _value = put<S>(GetConfig._factory[key].call() as S);
+      S _value = put<S>(GetConfig._factory[key].builder() as S);
 
       if (!isDependencyInit<S>() &&
           GetConfig.smartManagement != SmartManagement.onlyBuilder) {
@@ -163,7 +170,9 @@ class GetInstance {
       }
 
       if (GetConfig.smartManagement != SmartManagement.keepFactory) {
-        GetConfig._factory.remove(key);
+        if (!GetConfig._factory[key].fenix) {
+          GetConfig._factory.remove(key);
+        }
       }
 
       if (callInit) {
