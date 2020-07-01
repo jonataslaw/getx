@@ -242,38 +242,112 @@ MaterialApp(
 ```
 
 ```dart
-Get.arguments // give the current args from currentScreen
+// give the current args from currentScreen
+Get.arguments
 
-Get.previousArguments // give arguments of previous route
+// give arguments of previous route
+Get.previousArguments
 
-Get.previousRoute // give name of previous route
+// give name of previous route
+Get.previousRoute
 
-Get.rawRoute // give the raw route to access for example, rawRoute.isFirst()
+// give the raw route to access for example, rawRoute.isFirst()
+Get.rawRoute
 
-Get.routing // give access to Rounting API from GetObserver
+// give access to Rounting API from GetObserver
+Get.routing
 
-Get.isSnackbarOpen // check if snackbar is open
+// check if snackbar is open
+Get.isSnackbarOpen
 
-Get.isDialogOpen // check if dialog is open
+// check if dialog is open
+Get.isDialogOpen
 
-Get.isBottomSheetOpen // check if bottomsheet is open
+// check if bottomsheet is open
+Get.isBottomSheetOpen
 
-Get.removeRoute() // remove one route.
+// remove one route.
+Get.removeRoute()
 
-Get.until() // back repeatedly until the predicate returns true.
+// back repeatedly until the predicate returns true.
+Get.until()
 
-Get.offUntil() // go to next route and remove all the previous routes until the predicate returns true.
+// go to next route and remove all the previous routes until the predicate returns true.
+Get.offUntil()
 
-Get.offNamedUntil() // go to next named route and remove all the previous routes until the predicate returns true.
+// go to next named route and remove all the previous routes until the predicate returns true.
+Get.offNamedUntil()
 
-GetPlatform.isAndroid/isIOS/isWeb... //(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
+//Check in what platform the app is running
+GetPlatform.isAndroid
+GetPlatform.isIOS
+GetPlatform.isWeb
 
-Get.height / Get.width // Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable. If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.height and context.width
+// Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable.
+Get.height
+Get.width
 
-Get.context // Gives the context of the screen in the foreground anywhere in your code.
+// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+Get.context.width
+Get.context.height
 
-Get.contextOverlay // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+// Gives the context of the screen in the foreground anywhere in your code.
+Get.context
 
+// Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+Get.contextOverlay
+
+// gives you the power to define half the screen now, a third of it and so on.
+//Useful for responsive applications.
+// param dividedBy (double) optional - default: 1
+// param reducedBy (double) optional - default: 0
+Get.context.heightTransformer()
+Get.context.widthTransformer()
+
+/// similar to MediaQuery.of(context).size
+Get.context.mediaQuerySize()
+
+/// similar to MediaQuery.of(context).padding
+Get.context.mediaQueryPadding()
+
+/// similar to MediaQuery.of(context).viewPadding
+Get.context.mediaQueryViewPadding()
+
+/// similar to MediaQuery.of(context).viewInsets;
+Get.context.mediaQueryViewInsets()
+
+/// similar to MediaQuery.of(context).orientation;
+Get.context.orientation()
+
+/// check if device is on landscape mode
+Get.context.isLandscape()
+
+/// check if device is on portrait mode
+Get.context.isPortrait()
+
+/// similar to MediaQuery.of(context).devicePixelRatio;
+Get.context.devicePixelRatio()
+
+/// similar to MediaQuery.of(context).textScaleFactor;
+Get.context.textScaleFactor()
+
+/// get the shortestSide from screen
+Get.context.mediaQueryShortestSide()
+
+/// True if width be larger than 800
+Get.context.showNavbar()
+
+/// True if the shortestSide is smaller than 600p
+Get.context.isPhone()
+
+/// True if the shortestSide is largest than 600p
+Get.context.isSmallTablet()
+
+/// True if the shortestSide is largest than 720p
+Get.context.isLargeTablet()
+
+/// True if the current device is Tablet
+Get.context.isTablet()
 ```
 
 ### Configuraciones globales opcionales

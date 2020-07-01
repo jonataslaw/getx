@@ -299,15 +299,13 @@ Get.offNamedUntil()
 //diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid/isIOS/isWeb...
 
-// Equivalente ao método: MediaQuery.of(context).size.height, mas é imutável.
-// Se você precisa de um height adaptável (como em navegadores em que a janela pode ser redimensionada)
-// você precisa usar 'context.height'
+// Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
 Get.height
-
-// Equivalente ao método: MediaQuery.of(context).size.width, mas é imutável.
-// Se você precisa de um width adaptável (como em navegadores em que a janela pode ser redimensionada)
-// você precisa usar 'context.width'
 Get.width
+
+// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
+Get.context.width
+Get.context.height
 
 // forncece o context da tela em qualquer lugar do seu código.
 Get.context
@@ -315,6 +313,47 @@ Get.context
 // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
 Get.contextOverlay
 
+/// similar to MediaQuery.of(this).padding
+Get.mediaQueryPadding()
+
+/// similar to MediaQuery.of(this).viewPadding
+Get.mediaQueryViewPadding()
+
+/// similar to MediaQuery.of(this).viewInsets;
+Get.mediaQueryViewInsets()
+
+/// similar to MediaQuery.of(this).orientation;
+Get.orientation()
+
+/// check if device is on landscape mode
+Get.isLandscape()
+
+/// check if device is on portrait mode
+Get.isPortrait()
+
+/// similar to MediaQuery.of(this).devicePixelRatio;
+Get.devicePixelRatio()
+
+/// similar to MediaQuery.of(this).textScaleFactor;
+Get.textScaleFactor()
+
+/// get the shortestSide from screen
+Get.mediaQueryShortestSide()
+
+/// True if width be larger than 800
+Get.showNavbar()
+
+/// True if the shortestSide is smaller than 600p
+Get.isPhone()
+
+/// True if the shortestSide is largest than 600p
+Get.isSmallTablet()
+
+/// True if the shortestSide is largest than 720p
+Get.isLargeTablet()
+
+/// True if the current device is Tablet
+Get.isTablet()
 ```
 
 ### Configurações Globais opcionais e configurações manuais
