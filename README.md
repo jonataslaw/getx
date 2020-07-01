@@ -297,22 +297,26 @@ GetPlatform.isIOS
 GetPlatform.isWeb
 
 // Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable.
-// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
 Get.height
 Get.width
 
-// gives you the power to define half the screen now, a third of it and so on. A dynamic width/heigth
-//Useful for responsive applications.
-// param dividedBy (double) optional - default: 1
-// param reducedBy (double) optional - default: 0
-Get.context.heightTransformer()
-Get.context.widthTransformer()
+// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+Get.context.width
+Get.context.height
+
 
 // Gives the context of the screen in the foreground anywhere in your code.
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 Get.contextOverlay
+
+// gives you the power to define half the screen now, a third of it and so on.
+//Useful for responsive applications.
+// param dividedBy (double) optional - default: 1
+// param reducedBy (double) optional - default: 0
+Get.context.heightTransformer()
+Get.context.widthTransformer()
 
 /// similar to MediaQuery.of(context).size
 Get.context.mediaQuerySize()

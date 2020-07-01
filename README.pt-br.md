@@ -299,15 +299,13 @@ Get.offNamedUntil()
 //diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid/isIOS/isWeb...
 
-// Equivalente ao método: MediaQuery.of(context).size.height, mas é imutável.
-// Se você precisa de um height adaptável (como em navegadores em que a janela pode ser redimensionada)
-// você precisa usar 'context.height'
+// Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
 Get.height
-
-// Equivalente ao método: MediaQuery.of(context).size.width, mas é imutável.
-// Se você precisa de um width adaptável (como em navegadores em que a janela pode ser redimensionada)
-// você precisa usar 'context.width'
 Get.width
+
+// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
+Get.context.width
+Get.context.height
 
 // forncece o context da tela em qualquer lugar do seu código.
 Get.context

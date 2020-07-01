@@ -278,11 +278,18 @@ Get.offUntil()
 // go to next named route and remove all the previous routes until the predicate returns true.
 Get.offNamedUntil()
 
-//(This method is completely compatible with FlutterWeb, unlike the framework. "Platform.isAndroid")
-// Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable. If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.height and context.width
-GetPlatform.isAndroid/isIOS/isWeb...
+//Check in what platform the app is running
+GetPlatform.isAndroid
+GetPlatform.isIOS
+GetPlatform.isWeb
 
-Get.height / Get.width
+// Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable.
+Get.height
+Get.width
+
+// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+Get.context.width
+Get.context.height
 
 // Gives the context of the screen in the foreground anywhere in your code.
 Get.context
@@ -290,47 +297,57 @@ Get.context
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 Get.contextOverlay
 
-/// similar to MediaQuery.of(this).padding
-Get.mediaQueryPadding()
+// gives you the power to define half the screen now, a third of it and so on.
+//Useful for responsive applications.
+// param dividedBy (double) optional - default: 1
+// param reducedBy (double) optional - default: 0
+Get.context.heightTransformer()
+Get.context.widthTransformer()
 
-/// similar to MediaQuery.of(this).viewPadding
-Get.mediaQueryViewPadding()
+/// similar to MediaQuery.of(context).size
+Get.context.mediaQuerySize()
 
-/// similar to MediaQuery.of(this).viewInsets;
-Get.mediaQueryViewInsets()
+/// similar to MediaQuery.of(context).padding
+Get.context.mediaQueryPadding()
 
-/// similar to MediaQuery.of(this).orientation;
-Get.orientation()
+/// similar to MediaQuery.of(context).viewPadding
+Get.context.mediaQueryViewPadding()
+
+/// similar to MediaQuery.of(context).viewInsets;
+Get.context.mediaQueryViewInsets()
+
+/// similar to MediaQuery.of(context).orientation;
+Get.context.orientation()
 
 /// check if device is on landscape mode
-Get.isLandscape()
+Get.context.isLandscape()
 
 /// check if device is on portrait mode
-Get.isPortrait()
+Get.context.isPortrait()
 
-/// similar to MediaQuery.of(this).devicePixelRatio;
-Get.devicePixelRatio()
+/// similar to MediaQuery.of(context).devicePixelRatio;
+Get.context.devicePixelRatio()
 
-/// similar to MediaQuery.of(this).textScaleFactor;
-Get.textScaleFactor()
+/// similar to MediaQuery.of(context).textScaleFactor;
+Get.context.textScaleFactor()
 
 /// get the shortestSide from screen
-Get.mediaQueryShortestSide()
+Get.context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
-Get.showNavbar()
+Get.context.showNavbar()
 
 /// True if the shortestSide is smaller than 600p
-Get.isPhone()
+Get.context.isPhone()
 
 /// True if the shortestSide is largest than 600p
-Get.isSmallTablet()
+Get.context.isSmallTablet()
 
 /// True if the shortestSide is largest than 720p
-Get.isLargeTablet()
+Get.context.isLargeTablet()
 
 /// True if the current device is Tablet
-Get.isTablet()
+Get.context.isTablet()
 ```
 
 ### Configuraciones globales opcionales
