@@ -1,3 +1,6 @@
+## [3.1.4]
+- Update readme banner
+
 ## [3.1.3]
 - Activate unknownRoute on version 3
 - Go back transitions.size and transitions.cupertino
