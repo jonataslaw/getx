@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui' show lerpDouble;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/src/get_main.dart';
@@ -27,7 +28,7 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
     // this.transitionComponent,
     RouteSettings settings,
     this.duration,
-    this.transition = Transition.native,
+    this.transition,
     this.binding,
     @required this.page,
     this.bindings,
@@ -60,9 +61,33 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
   @override
   final bool fullscreenDialog;
 
+  static bool isPopGestureInProgress(PageRoute<dynamic> route) {
+    return route.navigator.userGestureInProgress;
+  }
+
+  bool get popGestureInProgress => isPopGestureInProgress(this);
+
+  @override
+  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
+    // Don't perform outgoing animation if the next route is a fullscreen dialog.
+    return nextRoute is GetPageRoute && !nextRoute.fullscreenDialog;
+  }
+
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    if (fullscreenDialog != null &&
+        transition == null &&
+        customTransition == null) {
+      final bool linearTransition = isPopGestureInProgress(this);
+      return CupertinoFullscreenDialogTransition(
+        primaryRouteAnimation: animation,
+        secondaryRouteAnimation: secondaryAnimation,
+        child: child,
+        linearTransition: linearTransition,
+      );
+    }
+
     if (this.customTransition != null) {
       return this.customTransition.buildTransition(
           context,
@@ -174,12 +199,6 @@ class GetPageRoute<T> extends PageRouteBuilder<T> {
       controller: route.controller,
     );
   }
-
-  static bool isPopGestureInProgress(PageRoute<dynamic> route) {
-    return route.navigator.userGestureInProgress;
-  }
-
-  bool get popGestureInProgress => isPopGestureInProgress(this);
 }
 
 const double _kBackGestureWidth = 20.0;

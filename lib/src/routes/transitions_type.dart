@@ -12,6 +12,7 @@ enum Transition {
   zoom,
   noTransition,
   cupertino,
+  cupertinoDialog,
   size,
   native
 }

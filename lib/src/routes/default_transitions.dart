@@ -2,11 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'transitions_component.dart';
 
-class LeftToRightFadeTransition extends TransitionInterface {
-  LeftToRightFadeTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class LeftToRightFadeTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -33,11 +29,7 @@ class LeftToRightFadeTransition extends TransitionInterface {
   }
 }
 
-class RightToLeftFadeTransition extends TransitionInterface {
-  RightToLeftFadeTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class RightToLeftFadeTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -64,11 +56,7 @@ class RightToLeftFadeTransition extends TransitionInterface {
   }
 }
 
-class NoTransition extends TransitionInterface {
-  NoTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class NoTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -77,16 +65,11 @@ class NoTransition extends TransitionInterface {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
-    return transitionComponent.buildChildWithTransition(
-        context, curve, alignment, animation, secondaryAnimation, child);
+    return child;
   }
 }
 
-class FadeInTransition extends TransitionInterface {
-  FadeInTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class FadeInTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -95,19 +78,11 @@ class FadeInTransition extends TransitionInterface {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
-    return FadeTransition(
-      opacity: animation,
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
-    );
+    return FadeTransition(opacity: animation, child: child);
   }
 }
 
-class SlideDownTransition extends TransitionInterface {
-  SlideDownTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class SlideDownTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -121,17 +96,12 @@ class SlideDownTransition extends TransitionInterface {
         begin: Offset(0.0, 1.0),
         end: Offset.zero,
       ).animate(animation),
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
+      child: child,
     );
   }
 }
 
-class SlideLeftTransition extends TransitionInterface {
-  SlideLeftTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class SlideLeftTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -145,17 +115,12 @@ class SlideLeftTransition extends TransitionInterface {
         begin: Offset(-1.0, 0.0),
         end: Offset.zero,
       ).animate(animation),
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
+      child: child,
     );
   }
 }
 
-class SlideRightTransition extends TransitionInterface {
-  SlideRightTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class SlideRightTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -169,17 +134,12 @@ class SlideRightTransition extends TransitionInterface {
         begin: Offset(1.0, 0.0),
         end: Offset.zero,
       ).animate(animation),
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
+      child: child,
     );
   }
 }
 
-class SlideTopTransition extends TransitionInterface {
-  SlideTopTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class SlideTopTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -193,17 +153,12 @@ class SlideTopTransition extends TransitionInterface {
         begin: Offset(0.0, -1.0),
         end: Offset.zero,
       ).animate(animation),
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
+      child: child,
     );
   }
 }
 
-class ZoomInTransition extends TransitionInterface {
-  ZoomInTransition({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class ZoomInTransition extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -214,17 +169,12 @@ class ZoomInTransition extends TransitionInterface {
       Widget child) {
     return ScaleTransition(
       scale: animation,
-      child: transitionComponent.buildChildWithTransition(
-          context, curve, alignment, animation, secondaryAnimation, child),
+      child: child,
     );
   }
 }
 
-class SizeTransitions extends TransitionInterface {
-  SizeTransitions({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class SizeTransitions extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -246,11 +196,7 @@ class SizeTransitions extends TransitionInterface {
   }
 }
 
-class CupertinoTransitions extends TransitionInterface {
-  CupertinoTransitions({
-    TransitionComponent transitionComponent,
-  }) : super(transitionComponent: transitionComponent);
-
+class CupertinoTransitions extends TransitionComponent {
   @override
   Widget buildChildWithTransition(
       BuildContext context,
@@ -266,9 +212,4 @@ class CupertinoTransitions extends TransitionInterface {
       child: child,
     );
   }
-}
-
-abstract class TransitionInterface implements TransitionComponent {
-  TransitionComponent transitionComponent;
-  TransitionInterface({this.transitionComponent});
 }

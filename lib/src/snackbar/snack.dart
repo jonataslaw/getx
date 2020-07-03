@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'snack_route.dart' as snackroute;
+import 'snack_route.dart' as route;
 
 typedef void SnackStatusCallback(SnackStatus status);
 typedef void OnTap(GetBar snack);
@@ -209,11 +209,11 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// A [TextFormField] in case you want a simple user input. Every other widget is ignored if this is not null.
   final Form userInputForm;
 
-  snackroute.SnackRoute<T> _snackRoute;
+  route.SnackRoute<T> _snackRoute;
 
   /// Show the snack. Kicks in [SnackStatus.IS_APPEARING] state followed by [SnackStatus.SHOWING]
   Future<T> show() async {
-    _snackRoute = snackroute.showSnack<T>(
+    _snackRoute = route.showSnack<T>(
       snack: this,
     ) as SnackRoute<T>;
     return await Get.key.currentState.push(_snackRoute);
@@ -374,19 +374,18 @@ class _GetBarState<K extends Object> extends State<GetBar>
             : widget.backgroundColor,
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.BOTTOM
-              ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
+              ? EdgeInsets.only(
+                  bottom: (GetUtils.isGreaterThan(
+                          MediaQuery.of(context).viewInsets.bottom,
+                          MediaQuery.of(context).padding.bottom)
+                      ? MediaQuery.of(context).viewInsets.bottom
+                      : MediaQuery.of(context).padding.bottom))
               : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          child: SafeArea(
-            minimum: widget.snackPosition == SnackPosition.BOTTOM
-                ? EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom)
-                : EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top),
-            bottom: widget.snackPosition == SnackPosition.BOTTOM,
-            top: widget.snackPosition == SnackPosition.TOP,
-            left: false,
-            right: false,
-            child: _getSnack(),
-          ),
+          bottom: widget.snackPosition == SnackPosition.BOTTOM,
+          top: widget.snackPosition == SnackPosition.TOP,
+          left: false,
+          right: false,
+          child: _getSnack(),
         ),
       ),
     );

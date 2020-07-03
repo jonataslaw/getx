@@ -6,42 +6,39 @@ class TransitionFilter {
   static TransitionComponent newTransitionComponent(
     Transition transition,
   ) {
-    TransitionComponent transitionComponent = TransitionComponent();
     switch (transition) {
       case Transition.leftToRight:
-        return SlideLeftTransition(transitionComponent: transitionComponent);
+        return SlideLeftTransition();
 
       case Transition.downToUp:
-        return SlideDownTransition(transitionComponent: transitionComponent);
+        return SlideDownTransition();
 
       case Transition.upToDown:
-        return SlideTopTransition(transitionComponent: transitionComponent);
+        return SlideTopTransition();
 
       case Transition.rightToLeft:
-        return SlideRightTransition(transitionComponent: transitionComponent);
+        return SlideRightTransition();
 
       case Transition.zoom:
-        return ZoomInTransition(transitionComponent: transitionComponent);
+        return ZoomInTransition();
 
       case Transition.fadeIn:
-        return FadeInTransition(transitionComponent: transitionComponent);
+        return FadeInTransition();
 
       case Transition.rightToLeftWithFade:
-        return RightToLeftFadeTransition(
-            transitionComponent: transitionComponent);
+        return RightToLeftFadeTransition();
 
       case Transition.leftToRightWithFade:
-        return LeftToRightFadeTransition(
-            transitionComponent: transitionComponent);
+        return LeftToRightFadeTransition();
 
       case Transition.cupertino:
-        return CupertinoTransitions(transitionComponent: transitionComponent);
+        return CupertinoTransitions();
 
       case Transition.size:
-        return SizeTransitions(transitionComponent: transitionComponent);
+        return SizeTransitions();
 
       default:
-        return FadeInTransition(transitionComponent: transitionComponent);
+        return FadeInTransition();
     }
   }
 }

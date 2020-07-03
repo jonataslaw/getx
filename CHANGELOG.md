@@ -1,3 +1,6 @@
+## [3.2.1]
+- Prevent black blackground on cupertino fullscreenDialog
+
 ## [3.2.0]
 - Improve GetBuilder ram usage
 - Added method update to Rx 

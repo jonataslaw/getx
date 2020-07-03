@@ -27,6 +27,7 @@ class GetImpl implements GetService {
   Duration defaultDurationTransition = Duration(milliseconds: 400);
   bool defaultGlobalState = true;
   RouteSettings settings;
+  String defaultSeparator = "_";
 
   ///Use to instead of Navigator.push, off instead of Navigator.pushReplacement,
   ///offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
