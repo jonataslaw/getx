@@ -6,6 +6,7 @@ labels: ''
 assignees: jonataslaw
 
 ---
+**Fill in the template. Issues that do not respect the model will be closed.**
 
 **Describe the bug**
 A clear and concise description of what the bug is.
