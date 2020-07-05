@@ -8,6 +8,8 @@ abstract class RxInterface<T> {
   /// add listener to stream
   addListener(Stream<T> rxGetx);
 
+  bool get canUpdate;
+
   /// close stream
   close() {
     subject?.close();
@@ -15,14 +17,8 @@ abstract class RxInterface<T> {
 
   StreamController<T> subject;
 
-  /// Convert value on string
-  // String get string;
-
   /// Calls [callback] with current value, when the value changes.
   StreamSubscription<T> listen(ValueCallback<T> callback);
-
-  /// Maps the changes into a [Stream] of [S]
-  // Stream<S> map<S>(S mapper(T data));
 }
 
 abstract class DisposableInterface {

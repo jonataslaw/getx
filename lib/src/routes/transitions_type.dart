@@ -10,6 +10,7 @@ enum Transition {
   rightToLeftWithFade,
   leftToRightWithFade,
   zoom,
+  topLevel,
   noTransition,
   cupertino,
   cupertinoDialog,

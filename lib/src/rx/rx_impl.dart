@@ -15,6 +15,10 @@ class _RxImpl<T> implements RxInterface<T> {
     return _value;
   }
 
+  bool get canUpdate {
+    return _subscriptions.length > 0;
+  }
+
   T call([T v]) {
     if (v != null) {
       this.value = v;
@@ -83,6 +87,10 @@ class RxMap<K, V> extends RxInterface implements Map<K, V> {
   }
 
   String get string => value.toString();
+
+  bool get canUpdate {
+    return _subscriptions.length > 0;
+  }
 
   @override
   void close() {
@@ -249,6 +257,10 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   @override
   bool get isEmpty => value.isEmpty;
+
+  bool get canUpdate {
+    return _subscriptions.length > 0;
+  }
 
   @override
   bool get isNotEmpty => value.isNotEmpty;
@@ -418,8 +430,6 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 RxInterface getObs;
 
 typedef bool Condition();
-
-typedef E ChildrenListComposer<S, E>(S value);
 
 class RxBool extends _RxImpl<bool> {
   RxBool([bool initial]) {

@@ -1,3 +1,6 @@
+## [3.2.2]
+- Improve transitions and refactor route system
+
 ## [3.2.1]
 - Prevent black blackground on cupertino fullscreenDialog
 

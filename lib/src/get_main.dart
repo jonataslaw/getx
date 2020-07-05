@@ -62,7 +62,7 @@ class GetImpl implements GetService {
         transition: transition ?? defaultTransition,
         fullscreenDialog: fullscreenDialog,
         binding: binding,
-        duration: duration ?? defaultDurationTransition));
+        transitionDuration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
@@ -195,7 +195,7 @@ class GetImpl implements GetService {
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
-        duration: duration ?? defaultDurationTransition));
+        transitionDuration: duration ?? defaultDurationTransition));
   }
 
   /// It replaces Navigator.pushAndRemoveUntil, but needs no context
@@ -221,7 +221,7 @@ class GetImpl implements GetService {
               RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           transition: transition ?? defaultTransition,
-          duration: duration ?? defaultDurationTransition,
+          transitionDuration: duration ?? defaultDurationTransition,
         ),
         predicate ?? route);
   }
@@ -583,7 +583,7 @@ class GetImpl implements GetService {
 
   ParseRouteTree routeTree;
 
-  addPages(List<GetPage> getPages) {
+  void addPages(List<GetPage> getPages) {
     if (getPages != null) {
       if (routeTree == null) routeTree = ParseRouteTree();
       getPages.forEach((element) {
@@ -592,7 +592,7 @@ class GetImpl implements GetService {
     }
   }
 
-  addPage(GetPage getPage) {
+  void addPage(GetPage getPage) {
     if (getPage != null) {
       if (routeTree == null) routeTree = ParseRouteTree();
       routeTree.addRoute(getPage);
@@ -600,7 +600,7 @@ class GetImpl implements GetService {
   }
 
   /// change default config of Get
-  config(
+  void config(
       {bool enableLog,
       bool defaultPopGesture,
       bool defaultOpaqueRoute,
@@ -696,11 +696,11 @@ class GetImpl implements GetService {
 
   Map<String, String> parameters = {};
 
-  setRouting(Routing rt) {
+  void setRouting(Routing rt) {
     _routing = rt;
   }
 
-  setSettings(RouteSettings settings) {
+  void setSettings(RouteSettings settings) {
     settings = settings;
   }
 
@@ -708,10 +708,10 @@ class GetImpl implements GetService {
   Object get arguments => _routing.args;
 
   /// give name from current route
-  get currentRoute => _routing.current;
+  String get currentRoute => _routing.current;
 
   /// give name from previous route
-  get previousRoute => _routing.previous;
+  String get previousRoute => _routing.previous;
 
   /// check if snackbar is open
   bool get isSnackbarOpen => _routing.isSnackbar;
@@ -747,10 +747,11 @@ class GetImpl implements GetService {
   MediaQueryData get mediaQuery => MediaQuery.of(context);
 
   /// Check if dark mode theme is enable
-  get isDarkMode => (theme.brightness == Brightness.dark);
+  bool get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
-  get isPlatformDarkMode => (mediaQuery.platformBrightness == Brightness.dark);
+  bool get isPlatformDarkMode =>
+      (mediaQuery.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color get iconColor => Theme.of(context).iconTheme.color;

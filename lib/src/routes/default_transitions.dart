@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'transitions_component.dart';
 
-class LeftToRightFadeTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class LeftToRightFadeTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -29,9 +27,8 @@ class LeftToRightFadeTransition extends TransitionComponent {
   }
 }
 
-class RightToLeftFadeTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class RightToLeftFadeTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -56,9 +53,8 @@ class RightToLeftFadeTransition extends TransitionComponent {
   }
 }
 
-class NoTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class NoTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -69,9 +65,8 @@ class NoTransition extends TransitionComponent {
   }
 }
 
-class FadeInTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class FadeInTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -82,9 +77,8 @@ class FadeInTransition extends TransitionComponent {
   }
 }
 
-class SlideDownTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class SlideDownTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -101,9 +95,8 @@ class SlideDownTransition extends TransitionComponent {
   }
 }
 
-class SlideLeftTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class SlideLeftTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -120,9 +113,8 @@ class SlideLeftTransition extends TransitionComponent {
   }
 }
 
-class SlideRightTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class SlideRightTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -139,9 +131,8 @@ class SlideRightTransition extends TransitionComponent {
   }
 }
 
-class SlideTopTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class SlideTopTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -158,9 +149,8 @@ class SlideTopTransition extends TransitionComponent {
   }
 }
 
-class ZoomInTransition extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class ZoomInTransition {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -174,9 +164,8 @@ class ZoomInTransition extends TransitionComponent {
   }
 }
 
-class SizeTransitions extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class SizeTransitions {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,
@@ -196,9 +185,8 @@ class SizeTransitions extends TransitionComponent {
   }
 }
 
-class CupertinoTransitions extends TransitionComponent {
-  @override
-  Widget buildChildWithTransition(
+class CupertinoTransitions {
+  Widget buildTransitions(
       BuildContext context,
       Curve curve,
       Alignment alignment,

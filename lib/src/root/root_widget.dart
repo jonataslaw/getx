@@ -124,7 +124,8 @@ class GetMaterialApp extends StatelessWidget {
         customTransition: match.route.customTransition,
         binding: unknownRoute.binding,
         bindings: unknownRoute.bindings,
-        duration: (transitionDuration ?? unknownRoute.transitionDuration),
+        transitionDuration:
+            (transitionDuration ?? unknownRoute.transitionDuration),
         transition: unknownRoute.transition,
         popGesture: unknownRoute.popGesture,
         fullscreenDialog: unknownRoute.fullscreenDialog,
@@ -141,7 +142,8 @@ class GetMaterialApp extends StatelessWidget {
       customTransition: match.route.customTransition,
       binding: match.route.binding,
       bindings: match.route.bindings,
-      duration: (transitionDuration ?? match.route.transitionDuration),
+      transitionDuration:
+          (transitionDuration ?? match.route.transitionDuration),
       transition: match.route.transition,
       popGesture: match.route.popGesture,
       fullscreenDialog: match.route.fullscreenDialog,
@@ -161,7 +163,8 @@ class GetMaterialApp extends StatelessWidget {
         opaque: match.route.opaque,
         binding: match.route.binding,
         bindings: match.route.bindings,
-        duration: (transitionDuration ?? match.route.transitionDuration),
+        transitionDuration:
+            (transitionDuration ?? match.route.transitionDuration),
         transition: match.route.transition,
         popGesture: match.route.popGesture,
         fullscreenDialog: match.route.fullscreenDialog,
