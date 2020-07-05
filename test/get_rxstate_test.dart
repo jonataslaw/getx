@@ -35,16 +35,13 @@ void main() {
                   onPressed: () => controller.increment(),
                 ),
                 GetX<Controller2>(builder: (controller) {
-                  return Text('lazy ${controller.lazy}');
-                }),
-                GetX<Controller>(builder: (controller) {
-                  return Container();
+                  return Text('lazy ${controller.lazy.value}');
                 }),
                 GetX<ControllerNonGlobal>(
                     init: ControllerNonGlobal(),
                     global: false,
                     builder: (controller) {
-                      return Text('single ${controller.nonGlobal}');
+                      return Text('single ${controller.nonGlobal.value}');
                     })
               ],
             );
@@ -77,11 +74,11 @@ void main() {
 }
 
 class Controller2 extends GetxController {
-  int lazy = 0;
+  var lazy = 0.obs;
 }
 
 class ControllerNonGlobal extends GetxController {
-  int nonGlobal = 0;
+  var nonGlobal = 0.obs;
 }
 
 class Controller extends GetxController {
