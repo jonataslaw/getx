@@ -294,44 +294,44 @@ class GetUtils {
   static bool isEqual(num a, num b) => a == b;
 
   /// Checks if the cpf is valid.
-  static bool isCpf(String cpf){
+  static bool isCpf(String cpf) {
     if (cpf == null) return false;
 
     // get only the numbers
-    var numeros = cpf.replaceAll(RegExp(r'[^0-9]'), '');
+    var numbers = cpf.replaceAll(RegExp(r'[^0-9]'), '');
     // Test if the CPF has 11 digits
-    if (numeros.length != 11) return false;
+    if (numbers.length != 11) return false;
     // Test if all CPF digits are the same
-    if (RegExp(r'^(\d)\1*$').hasMatch(numeros)) return false;
+    if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) return false;
 
-     // Dividir dígitos
-    List<int> digitos =
-        numeros.split('').map((String d) => int.parse(d)).toList();
+    // split the digits
+    List<int> digits =
+        numbers.split('').map((String d) => int.parse(d)).toList();
 
-    // Calcular o primeiro dígito verificador
-    var calc_dv1 = 0;
+    // Calculate the first verifier digit
+    var calcDv1 = 0;
     for (var i in Iterable<int>.generate(9, (i) => 10 - i)) {
-      calc_dv1 += digitos[10 - i] * i;
+      calcDv1 += digits[10 - i] * i;
     }
-    calc_dv1 %= 11;
-    var dv1 = calc_dv1 < 2 ? 0 : 11 - calc_dv1;
+    calcDv1 %= 11;
+    var dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
 
-    // Testar o primeiro dígito verificado
-    if (digitos[9] != dv1) return false;
+    // Tests the first verifier digit
+    if (digits[9] != dv1) return false;
 
-    // Calcular o segundo dígito verificador
-    var calc_dv2 = 0;
+    // Calculate the second verifier digit
+    var calcDv2 = 0;
     for (var i in Iterable<int>.generate(10, (i) => 11 - i)) {
-      calc_dv2 += digitos[11 - i] * i;
+      calcDv2 += digits[11 - i] * i;
     }
-    calc_dv2 %= 11;
+    calcDv2 %= 11;
 
-    var dv2 = calc_dv2 < 2 ? 0 : 11 - calc_dv2;
-    
-    // Testar o segundo dígito verificador
-    if (digitos[10] != dv2) return false;
+    var dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
 
-  return true;
+    // Test the second verifier digit
+    if (digits[10] != dv2) return false;
+
+    return true;
   }
 
   /// Capitalize each word inside string
