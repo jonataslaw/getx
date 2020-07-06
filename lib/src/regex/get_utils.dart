@@ -293,6 +293,20 @@ class GetUtils {
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
 
+  /// Checks if the cpf is valid.
+  static bool isCpf(String cpf){
+    if (cpf == null) return false;
+
+    // get only the numbers
+    var numeros = cpf.replaceAll(RegExp(r'[^0-9]'), '');
+    // Test if the CPF has 11 digits
+    if (numeros.length != 11) return false;
+    // Test if all CPF digits are the same
+    if (RegExp(r'^(\d)\1*$').hasMatch(numeros)) return false;
+  
+  return true;
+  }
+
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   ///
