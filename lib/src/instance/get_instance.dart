@@ -227,11 +227,7 @@ class GetInstance {
 
     FcBuilder builder = GetConfig._singl[newKey] as FcBuilder;
     if (builder.permanent) {
-      (key == null)
-          ? print(
-              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.')
-          : print(
-              '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
+      print('[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
       return false;
     }
     final i = builder.dependency;
