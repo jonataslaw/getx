@@ -293,6 +293,47 @@ class GetUtils {
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
 
+  /// Checks if the cpf is valid.
+  static bool isCpf(String cpf) {
+    if (cpf == null) return false;
+
+    // get only the numbers
+    var numbers = cpf.replaceAll(RegExp(r'[^0-9]'), '');
+    // Test if the CPF has 11 digits
+    if (numbers.length != 11) return false;
+    // Test if all CPF digits are the same
+    if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) return false;
+
+    // split the digits
+    List<int> digits =
+        numbers.split('').map((String d) => int.parse(d)).toList();
+
+    // Calculate the first verifier digit
+    var calcDv1 = 0;
+    for (var i in Iterable<int>.generate(9, (i) => 10 - i)) {
+      calcDv1 += digits[10 - i] * i;
+    }
+    calcDv1 %= 11;
+    var dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
+
+    // Tests the first verifier digit
+    if (digits[9] != dv1) return false;
+
+    // Calculate the second verifier digit
+    var calcDv2 = 0;
+    for (var i in Iterable<int>.generate(10, (i) => 11 - i)) {
+      calcDv2 += digits[11 - i] * i;
+    }
+    calcDv2 %= 11;
+
+    var dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
+
+    // Test the second verifier digit
+    if (digits[10] != dv2) return false;
+
+    return true;
+  }
+
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   ///
