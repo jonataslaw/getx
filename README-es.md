@@ -24,7 +24,7 @@
   - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
     - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
 - [Rompiendo cambios desde 2.0](#rompiendo-cambios-desde-20)
-- [¿Por qué Getx](#por-qué-getx)
+- [¿Por qué Getx?](#por-qué-getx)
 
 # Sobre GetX
 

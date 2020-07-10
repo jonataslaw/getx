@@ -12,7 +12,7 @@
 
 ![](getx.png)
 
-# Communication and support channels
+# Communication and support channels:
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
@@ -22,7 +22,6 @@
 
 # Topics
 
-- [**Topics**](#topics)
 - [**About Get**](#about-get)
 - [**Installing**](#installing)
 - [**The Three pillars**](#the-three-pillars)
@@ -38,7 +37,7 @@
   - [Other Advanced APIs](#other-advanced-apis)
     - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
 - [**Breaking changes from 2.0**](#breaking-changes-from-20)
-- [**Why Getx?](#why-getx)
+- [**Why GetX?**](#why-getx)
 
 # About Get
 
