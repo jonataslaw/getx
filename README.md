@@ -12,6 +12,11 @@
 
 ![](getx.png)
 
+**Communication and support channels:**
+[Slack - English](https://communityinviter.com/apps/getxworkspace/getx)
+[Discord - English and Portuguese](https://discord.com/invite/9Y3wK9)
+[Telegram - Portuguese](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
+
 
 - [About Get](#about-get)
 - [Installing](#installing)
