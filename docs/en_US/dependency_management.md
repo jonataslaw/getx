@@ -1,4 +1,3 @@
-
 # Dependency Management
 
 ## Simple Instance Manager

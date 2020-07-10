@@ -24,6 +24,7 @@
   - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
     - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
 - [Rompiendo cambios desde 2.0](#rompiendo-cambios-desde-20)
+- [¿Por qué Getx](#por-qué-getx)
 
 # Sobre GetX
 
@@ -64,7 +65,9 @@ El proyecto "contador" creado por defecto en un nuevo proyecto en Flutter tiene 
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-Nota: esto no modifica el MaterialApp del Flutter, GetMaterialApp no es una MaterialApp modificado, es solo un Widget preconfigurado, que tiene como child un MaterialApp por defecto. Puede configurar esto manualmente, pero definitivamente no es necesario. GetMaterialApp creará rutas, las inyectará, inyectará traducciones, inyectará todo lo que necesita para la navegación de rutas. Si usa Get solo para la gestión de estado o dependencias, no es necesario usar GetMaterialApp. GetMaterialApp es necesario para rutas, snackbars, internacionalización, bottomSheets, diálogos y APIs de alto nivel relacionadas con rutas y ausencia de contexto.
+**Nota**: esto no modifica el MaterialApp del Flutter, GetMaterialApp no es una MaterialApp modificado, es solo un Widget preconfigurado, que tiene como child un MaterialApp por defecto. Puede configurar esto manualmente, pero definitivamente no es necesario. GetMaterialApp creará rutas, las inyectará, inyectará traducciones, inyectará todo lo que necesita para la navegación de rutas. Si usa Get solo para la gestión de estado o dependencias, no es necesario usar GetMaterialApp. GetMaterialApp es necesario para rutas, snackbars, internacionalización, bottomSheets, diálogos y APIs de alto nivel relacionadas con rutas y ausencia de contexto.
+
+**Note²:** This step in only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
 
 - Paso 2:  
 Cree su clase con la lógica de negocio colocando todas las variables, métodos y controladores dentro de ella. Puede hacer que cualquier variable sea observable usando un simple ".obs".
@@ -426,7 +429,8 @@ GetMaterialApp(
   ]
 )
 ```
-# ¿Por qué Getx?
+
+# ¿Por qué Getx
 
 1- Después de una actualización de Flutter, muchos paquetes suelen romperse. A veces se producen errores de compilación, errores de los que aún no hay respuestas y el desarrollador necesita saber el origen del error, poder rastrearlo, y solo entonces intentar abrir un issue en el repositorio correspondiente, para finalmente ver su problema resuelto. Getx centraliza los principales recursos para el desarrollo (gestión de estado, dependencia y rutas), lo que le permite agregar un único paquete a su pubspec y comenzar a trabajar. Después de una actualización de Flutter, lo único que debe hacer es actualizar la dependencia Get y ponerse a trabajar. Get también resuelve problemas de compatibilidad. ¿Cuántas veces una versión de un paquete no es compatible con la versión de otro, porque una usa una dependencia en una versión y la otra en otra? Tampoco es una preocupación usando Get, ya que todo estará en el mismo paquete y será totalmente compatible.
 
