@@ -14,29 +14,29 @@
 
 # Communication and support channels:
 
-[Slack - English](https://communityinviter.com/apps/getxworkspace/getx)
+[**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[Discord - English and Portuguese](https://discord.com/invite/9Y3wK9)
+[**Discord (English and Portuguese)**](https://discord.com/invite/9Y3wK9)
 
-[Telegram - Portuguese](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
+[**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Topics:
-- [About Get](#about-get)
-- [Installing](#installing)
-- [The Three pillars](#the-three-pillars)
+- [**About Get**](#about-get)
+- [**Installing**](#installing)
+- [**The Three pillars**](#the-three-pillars)
   - [State management](#state-management)
     - [In-depth explanation](#in-depth-explanation)
   - [Route management](#route-management)
     - [In-Depth Explanation](#in-depth-explanation-1)
   - [Dependency management](#dependency-management)
     - [In-depth explanation](#in-depth-explanation-2)
-- [How to contribute](#how-to-contribute)
-- [Utils](#utils)
+- [**How to contribute**](#how-to-contribute)
+- [**Utils**](#utils)
   - [Change Theme](#change-theme)
   - [Other Advanced APIs](#other-advanced-apis)
     - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
-- [Why I made this package](#why-i-made-this-package)
+- [**Breaking changes from 2.0**](#breaking-changes-from-20)
+- [**Why GetX?**](#why-getx?)
 
 # About Get
 
