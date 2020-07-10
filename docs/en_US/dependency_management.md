@@ -88,11 +88,11 @@ Get.put<S>(
   // defaults to false
   bool permanent = false,
 
-  // optional: TODO: make docs about this
+  // optional: allows you after using an abstract class in a test, replace it with another one and follow the test.
   // defaults to false
   bool overrideAbstract = false,
 
-  // optional: TODO: make docs about this
+  // optional: allows you to create the dependency using function instead of the dependency itself.
   FcBuilderFunc<S> builder,
 )
 ```
@@ -109,7 +109,9 @@ Get.lazyPut<S>(
   // must be unique
   String tag,
 
-  // optional: TODO: make docs about this
+  // optional: It is similar to "permanent", the difference is that the instance is discarded when
+  // is not being used, but when it's use is needed again, Get will recreate the instance
+  // just the same as "SmartManagement.keepFactory" in the bindings api
   // defaults to false
   bool fenix = false
   
