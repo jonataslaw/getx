@@ -12,22 +12,33 @@
 
 ![](getx.png)
 
-- [About Get](#about-get)
-- [Installing](#installing)
-- [The Three pillars](#the-three-pillars)
+# Communication and support channels
+
+[**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
+
+[**Discord (English and Portuguese)**](https://discord.com/invite/9Y3wK9)
+
+[**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
+
+# Topics
+
+- [**Topics**](#topics)
+- [**About Get**](#about-get)
+- [**Installing**](#installing)
+- [**The Three pillars**](#the-three-pillars)
   - [State management](#state-management)
     - [In-depth explanation](#in-depth-explanation)
   - [Route management](#route-management)
     - [In-Depth Explanation](#in-depth-explanation-1)
   - [Dependency management](#dependency-management)
     - [In-depth explanation](#in-depth-explanation-2)
-- [How to contribute](#how-to-contribute)
-- [Utils](#utils)
+- [**How to contribute**](#how-to-contribute)
+- [**Utils**](#utils)
   - [Change Theme](#change-theme)
   - [Other Advanced APIs](#other-advanced-apis)
     - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
-- [Why Getx](#why-getx)
+- [**Breaking changes from 2.0**](#breaking-changes-from-20)
+- [**Why Getx?](#why-getx)
 
 # About Get
 
@@ -460,7 +471,7 @@ GetMaterialApp(
 )
 ```
 
-# Why Getx
+# Why Getx?
 
 1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
 

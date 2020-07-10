@@ -477,7 +477,7 @@ GetMaterialApp(
 )
 ```
 
-# Por que GetX
+# Por que GetX?
 
 1- Muitas vezes após uma atualização do Flutter, muitos dos seus packages irão quebrar. As vezes acontecem erros de compilação, muitas vezes aparecem erros que ainda não existem respostas sobre, e o desenvolvedor necessita saber de onde o erro veio, rastrear o erro, para só então tentar abrir uma issue no repositório correspondente, e ver seu problema resolvido. Get centraliza os principais recursos para o desenvolvimento (Gerencia de estado, de dependencias e de rotas), permitindo você adicionar um único package em seu pubspec, e começar a trabalhar. Após uma atualização do Flutter, a única coisa que você precisa fazer é atualizar a dependencia do Get, e começar a trabalhar. Get também resolve problemas de compatibilidade. Quantas vezes uma versão de um package não é compatível com a versão de outro, porque um utiliza uma dependencia em uma versão, e o outro em outra versão? Essa também não é uma preocupação usando Get, já que tudo está no mesmo package e é totalmente compatível.
 
