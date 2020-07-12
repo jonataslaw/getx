@@ -62,6 +62,79 @@ Para eliminar una instancia de GetX:
 Get.delete<Controller>();
 ```
 
+## Options
+
+When you use Get.put, lazyPut and putAsync you will have some options that you can change if you want
+
+- On Get.put():
+
+```dart
+Get.put<S>(
+  // mandatory: the class that you want to get to save, like a controller or anything
+  // note: that "S" means that it can be anything
+  S dependency
+
+  // optional: this is for when you want multiple classess that are of the same type
+  // since you normally get a class by using Get.find<Controller>(),
+  // you need to use tag to tell which instance you need
+  // must be unique string
+  String tag,
+
+  // optional: by default, get will dispose instances after they are not used anymore (example,
+  // the controller of a view that is closed), but you might need that the instance
+  // to be kept there throughout the entire app, like an instance of sharedPreferences or something
+  // so you use this
+  // defaults to false
+  bool permanent = false,
+
+  // optional: allows you after using an abstract class in a test, replace it with another one and follow the test.
+  // defaults to false
+  bool overrideAbstract = false,
+
+  // optional: allows you to create the dependency using function instead of the dependency itself.
+  FcBuilderFunc<S> builder,
+)
+```
+
+- On Get.lazyPut:
+
+```dart
+Get.lazyPut<S>(
+  // mandatory: a method that will be executed when your class is called for the first time
+  // Example: Get.lazyPut<Controller>( () => Controller() )
+  FcBuilderFunc builder,
+  
+  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
+  // must be unique
+  String tag,
+
+  // optional: It is similar to "permanent", the difference is that the instance is discarded when
+  // is not being used, but when it's use is needed again, Get will recreate the instance
+  // just the same as "SmartManagement.keepFactory" in the bindings api
+  // defaults to false
+  bool fenix = false
+  
+)
+```
+
+- On Get.putAsync:
+
+```dart
+Get.putAsync<S>(
+
+  // mandatory: an async method that will be executed to instantiate your class
+  // Example: Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
+  FcBuilderFuncAsync<S> builder,
+
+  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
+  // must be unique
+  String tag,
+
+  // optional: same as in Get.put(), used when you need to maintain that instance alive in the entire app
+  // defaults to false
+  bool permanent = false
+```
+
 ## Bindings
 
 Una de las grandes diferencias de este paquete, tal vez, es la posibilidad de una integración completa de las rutas, gestor de estado y dependencias.

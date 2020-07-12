@@ -1,7 +1,6 @@
+# Gerenciamento de dependência
 
 ## Gerenciamento de dependências simples
-
-* Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
 
 Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
 
@@ -9,9 +8,13 @@ Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um g
 Controller controller = Get.put(Controller()); // Em vez de Controller controller = Controller();
 ```
 
+* Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
+
 Em vez de instanciar sua classe dentro da classe que você está usando, você está instanciando ele dentro da instância do Get, que vai fazer ele ficar disponível por todo o App
 
 Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
+
+**Tip:** O gerenciamento de dependência do get é desaclpado de outras partes do package, então se por exemplo seu aplicativo já está usando um outro gerenciador de estado (qualquer um, não importa), você não precisa de reescrever tudo, pode simplesmente usar só a injeção de dependência sem problemas
 
 ```dart
 controller.fetchApi();
@@ -60,6 +63,78 @@ Para remover a instância do Get:
 
 ```dart
 Get.delete<Controller>();
+```
+
+## Opções
+
+Quando você usa Get.put, lazyPut e putAsync, existe algumas opções que você pode alterar se quiser
+
+- No Get.put():
+
+```dart
+Get.put<S>(
+  // obrigatório: a classe que você quer salvar, como um controller ou qualquer outra coisa
+  // obs: Esse "S" significa que pode ser qualquer coisa
+  S dependency
+
+  // opcional: isso é pra quando você quer múltiplas classess que são do mesmo tipo
+  // já que você normalmente pega usando "Get.find<Controller>()",
+  // você precisa usar uma tag para dizer qual das instâncias vc precisa
+  // precisa ser uma string única
+  String tag,
+
+  // opcional: por padrão, get vai descartar as instâncias quando elas não são mais usadas (exemplo,
+  // o controller de uma view que foi fechada) // Mas talvez você precisa quea instância seja mantida por todo o app, como a instância do SharedPreferences por exemplo
+  // então vc usa isso
+  // padrão: false
+  bool permanent = false,
+
+  // opcional: permite que depois de usar uma classe abstrata num teste,
+  // trocar por outra e continuar com o teste
+  // padrão: false
+  bool overrideAbstract = false,
+
+  // opcional: permite criar a dependência usando uma função em vez da dependênia em si
+  FcBuilderFunc<S> builder,
+)
+```
+
+- No Get.lazyPut:
+
+```dart
+Get.lazyPut<S>(
+  // obrigatório: um método que vai ser executado quando sua classe é chamada pela primeira vez
+  // Exemplo: "Get.lazyPut<Controller>( () => Controller()
+  FcBuilderFunc builder,
+  
+  // opcional: igual ao Get.put(), é usado quando você precisa de múltiplas instâncias de uma mesma classe
+  // precisa ser uma string única
+  String tag,
+
+  // opcional: é similar a "permanent", mas a instância é descartada quando
+  // não é mais usada e é refeita quando precisa ser usada novamente
+  // Assim como a opção SmartManagement.keepFactory na api Bindings
+  // padrão: false
+  bool fenix = false
+  
+)
+```
+
+- No Get.putAsync:
+
+```dart
+Get.putAsync<S>(
+  // Obrigatório: um método assíncrono que vai ser executado para instanciar sua classe
+  // Exemplo: Get.putAsyn<YourAsyncClass>( () async => await YourAsyncClass() )
+  FcBuilderFuncAsync<S> builder,
+
+  // opcional: igual ao Get.put(), é usado quando você precisa de múltiplas instâncias de uma mesma classe
+  // precisa ser uma string única
+  String tag,
+
+  // opcional: igual ao Get.put(), usado quando você precisa manter a instância ativa no app inteiro.
+  // padrão: false
+  bool permanent = false
 ```
 
 ## Bindings
