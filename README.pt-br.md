@@ -299,63 +299,68 @@ Get.offNamedUntil()
 // retorna qual é a plataforma
 //(Esse método é completamente compatível com o FlutterWeb,
 //diferente do método do framework "Platform.isAndroid")
-GetPlatform.isAndroid/isIOS/isWeb...
+GetPlatform.isAndroid
+GetPlatform.isIOS
+GetPlatform.isWeb
 
 // Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
 Get.height
 Get.width
 
-// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
-Get.context.width
-Get.context.height
-
-// forncece o context da tela em qualquer lugar do seu código.
+// fornece o context da tela em qualquer lugar do seu código.
 Get.context
 
 // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
 Get.contextOverlay
 
+// Obs: os métodos a seguir são extensions do context. Já que se
+// tem acesso ao context em qualquer lugar do código da UI, você pode usar lá
+
+// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
+context.width
+context.height
+
 /// similar to MediaQuery.of(this).padding
-Get.mediaQueryPadding()
+context.mediaQueryPadding()
 
 /// similar to MediaQuery.of(this).viewPadding
-Get.mediaQueryViewPadding()
+context.mediaQueryViewPadding()
 
 /// similar to MediaQuery.of(this).viewInsets;
-Get.mediaQueryViewInsets()
+context.mediaQueryViewInsets()
 
 /// similar to MediaQuery.of(this).orientation;
-Get.orientation()
+context.orientation()
 
 /// check if device is on landscape mode
-Get.isLandscape()
+context.isLandscape()
 
 /// check if device is on portrait mode
-Get.isPortrait()
+context.isPortrait()
 
 /// similar to MediaQuery.of(this).devicePixelRatio;
-Get.devicePixelRatio()
+context.devicePixelRatio()
 
 /// similar to MediaQuery.of(this).textScaleFactor;
-Get.textScaleFactor()
+context.textScaleFactor()
 
 /// get the shortestSide from screen
-Get.mediaQueryShortestSide()
+context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
-Get.showNavbar()
+context.showNavbar()
 
 /// True if the shortestSide is smaller than 600p
-Get.isPhone()
+context.isPhone()
 
 /// True if the shortestSide is largest than 600p
-Get.isSmallTablet()
+context.isSmallTablet()
 
 /// True if the shortestSide is largest than 720p
-Get.isLargeTablet()
+context.isLargeTablet()
 
 /// True if the current device is Tablet
-Get.isTablet()
+context.isTablet()
 ```
 
 ### Configurações Globais opcionais e configurações manuais

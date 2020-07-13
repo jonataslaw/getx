@@ -318,10 +318,13 @@ Get.context
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 Get.contextOverlay
 
+// Note: the following methods are extensions on context. Since you
+// have access to context in any place of your UI, you can use it anywhere in the UI code
+
 // If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
 context.width
 context.height
-
+ 
 // gives you the power to define half the screen now, a third of it and so on.
 //Useful for responsive applications.
 // param dividedBy (double) optional - default: 1
