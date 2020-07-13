@@ -75,7 +75,7 @@ import 'package:get/get.dart';
 
 ## Gerenciamento de estado
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/route_management.md)**
+**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md)**
 
 O app 'Counter' criado por padrão no flutter com o comando `flutter create` tem mais de 100 linhas(incluindo os comentários). Para demonstrar o poder do Get, irei demonstrar como fazer o mesmo 'Counter' mudando o estado em cada toque trocando entre páginas e compartilhando o estado entre telas. Tudo de forma organizada, separando a lógica de negócio da View, COM SOMENTE 26 LINHAS INCLUINDO COMENTÁRIOS
 
