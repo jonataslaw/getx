@@ -29,54 +29,76 @@ class GetImpl implements GetService {
   RouteSettings settings;
   String defaultSeparator = "_";
 
-  ///Use to instead of Navigator.push, off instead of Navigator.pushReplacement,
-  ///offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-  ///after them. Example: toNamed, offNamed, and AllNamed.
-  ///To return to the previous screen, use back().
-  ///No need to pass any context to Get, just put the name of the route inside
-  ///the parentheses and the magic will occur.
-
-  /// It replaces Navigator.push, but needs no context, and it doesn't have the Navigator.push
+  /// Pushes a new [page] to the stack
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic
+  ///
+  /// You can set a custom [transition], a transition [duration].
+  /// You can send any type of value to the other route in the [arguments].
+  /// If you're using the [Bindings] api, it's here that you use it
+  ///
+  /// It replaces Navigator.push and it doesn't have the Navigator.push
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
-  Future<T> to<T>(Widget page,
-      {bool opaque,
-      Transition transition,
-      Duration duration,
-      int id,
-      bool fullscreenDialog = false,
-      Object arguments,
-      Bindings binding,
-      preventDuplicates = true,
-      bool popGesture}) {
+  Future<T> to<T>(
+    Widget page, {
+    bool opaque,
+    Transition transition,
+    Duration duration,
+    int id,
+    bool fullscreenDialog = false,
+    Object arguments,
+    Bindings binding,
+    preventDuplicates = true,
+    bool popGesture,
+  }) {
     if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
       return null;
     }
 
-    return global(id).currentState.push(GetPageRoute(
-        opaque: opaque ?? true,
-        page: () => page,
-        settings:
-            RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
-        popGesture: popGesture ?? defaultPopGesture,
-        transition: transition ?? defaultTransition,
-        fullscreenDialog: fullscreenDialog,
-        binding: binding,
-        transitionDuration: duration ?? defaultDurationTransition));
+    return global(id).currentState.push(
+          GetPageRoute(
+            opaque: opaque ?? true,
+            page: () => page,
+            settings: RouteSettings(
+              name: '/${page.runtimeType}',
+              arguments: arguments,
+            ),
+            popGesture: popGesture ?? defaultPopGesture,
+            transition: transition ?? defaultTransition,
+            fullscreenDialog: fullscreenDialog,
+            binding: binding,
+            transitionDuration: duration ?? defaultDurationTransition,
+          ),
+        );
   }
 
-  /// It replaces Navigator.pushNamed, but needs no context, and it doesn't have the Navigator.pushNamed
-  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use opaque = true as the parameter.
-  Future<T> toNamed<T>(String page,
-      {Object arguments, int id, preventDuplicates = true}) {
+  /// Pushes a new named [page] to the stack
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Note: Always put a slash on the route ('/page1'), since this package expects that
+  Future<T> toNamed<T>(
+    String page, {
+    Object arguments,
+    int id,
+    preventDuplicates = true,
+  }) {
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
     return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
-  /// It replaces Navigator.pushReplacementNamed, but needs no context.
+  /// Pop the current named [page] in the stack and push a new one in its place
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Note: Always put a slash on the route ('/page1'), since this package expects that
   Future<T> offNamed<T>(String page,
       {Object arguments, int id, preventDuplicates = true}) {
     if (preventDuplicates && page == currentRoute) {
@@ -87,21 +109,30 @@ class GetImpl implements GetService {
         .pushReplacementNamed(page, arguments: arguments);
   }
 
-  /// It replaces Navigator.popUntil, but needs no context.
+  /// Calls pop several times in the stack until [predicate] returns true
+  ///
+  /// TODO: complement this doc
   void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return global(id).currentState.popUntil(predicate);
   }
 
-  /// It replaces Navigator.pushAndRemoveUntil, but needs no context.
+  /// Push the given [page], and then pop several [pages] in the stack until
+  /// [predicate] returns true
+  ///
+  /// TODO: complement this doc
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
-  /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
+  /// Push the given named [page], and then pop several [pages] in the stack
+  /// until [predicate] returns true
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  /// TODO: complement this doc
   Future<T> offNamedUntil<T>(String page, RoutePredicate predicate,
       {int id, Object arguments}) {
     return global(id)
@@ -109,7 +140,11 @@ class GetImpl implements GetService {
         .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
   }
 
-  /// It replaces Navigator.popAndPushNamed, but needs no context.
+  /// Pop the current named page and pushes a new [page] to the stack in its place
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  /// TODO: complement this doc
+  /// TODO: ask jonatas what is that result argument
   Future<T> offAndToNamed<T>(String page,
       {Object arguments, int id, dynamic result}) {
     return global(id)
@@ -117,12 +152,18 @@ class GetImpl implements GetService {
         .popAndPushNamed(page, arguments: arguments, result: result);
   }
 
-  /// It replaces Navigator.removeRoute, but needs no context.
+  /// Remove a specific [route] from the stack
   void removeRoute(Route<dynamic> route, {int id}) {
     return global(id).currentState.removeRoute(route);
   }
 
-  /// It replaces Navigator.pushNamedAndRemoveUntil, but needs no context.
+  /// Push a named page and remove all other pages from stack
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Note: Always put a slash on the route ('/page1'), since this package expects that
   Future<T> offAllNamed<T>(String newRouteName,
       {RoutePredicate predicate, Object arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
@@ -132,13 +173,22 @@ class GetImpl implements GetService {
         arguments: arguments);
   }
 
+  /// Returns true if a snackbar, dialog or bottomsheet is currently showing in the screen
   bool get isOverlaysOpen =>
       (isSnackbarOpen || isDialogOpen || isBottomSheetOpen);
 
+  /// returns true if there is no snackbar, dialog or bottomsheet open
   bool get isOverlaysClosed =>
       (!isSnackbarOpen && !isDialogOpen && !isBottomSheetOpen);
 
-  /// It replaces Navigator.pop, but needs no context.
+  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
+  ///
+  /// if your set [closeOverlays] to true, Get.back() will close the currently open
+  /// snackbar/dialog/bottomsheet AND the current page
+  ///
+  /// TODO: ask jonatas about "canPop"
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
   void back(
       {dynamic result,
       bool closeOverlays = false,
@@ -158,7 +208,7 @@ class GetImpl implements GetService {
     }
   }
 
-  /// It will close as many screens as you define. Times must be> 0;
+  /// Close as many routes as defined by [times]
   void close(int times, [int id]) {
     if ((times == null) || (times < 1)) {
       times = 1;
@@ -170,7 +220,17 @@ class GetImpl implements GetService {
     return back;
   }
 
-  /// It replaces Navigator.pushReplacement, but needs no context, and it doesn't have the Navigator.pushReplacement
+  /// Pop the current [page] in the stack and push a new one in its place
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// You can set a custom [transition], a transition [duration].
+  /// You can send any type of value to the other route in the [arguments].
+  /// If you're using the [Bindings] api, it's here that you use it
+  ///
+  /// It replaces Navigator.pushReplacement and it doesn't have the Navigator.pushReplacement
   /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
   /// of rebuilding every app after a route, use opaque = true as the parameter.
   Future<T> off<T>(Widget page,
@@ -198,7 +258,19 @@ class GetImpl implements GetService {
         transitionDuration: duration ?? defaultDurationTransition));
   }
 
-  /// It replaces Navigator.pushAndRemoveUntil, but needs no context
+  /// Pop all pages of the stack and push a new one
+  ///
+  /// It has the advantage of not needing context, so you can call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// You can set a custom [transition] and a transition [duration].
+  /// You can send any type of value to the other route in the [arguments].
+  /// If you're using the [Bindings] api, it's here that you use it
+  ///
+  /// It replaces Navigator.pushReplacement and it doesn't have the Navigator.pushReplacement
+  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
+  /// of rebuilding every app after a route, use opaque = true as the parameter.
   Future<T> offAll<T>(Widget page,
       {RoutePredicate predicate,
       bool opaque = false,
