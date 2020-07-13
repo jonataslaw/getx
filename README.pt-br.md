@@ -305,57 +305,57 @@ GetPlatform.isAndroid/isIOS/isWeb...
 Get.height
 Get.width
 
+// fornece o context da tela em qualquer lugar do seu código.
+Get.context
+
 // Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
 Get.context.width
 Get.context.height
-
-// forncece o context da tela em qualquer lugar do seu código.
-Get.context
 
 // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
 Get.contextOverlay
 
 /// similar to MediaQuery.of(this).padding
-Get.mediaQueryPadding()
+Get.context.mediaQueryPadding()
 
 /// similar to MediaQuery.of(this).viewPadding
-Get.mediaQueryViewPadding()
+Get.context.mediaQueryViewPadding()
 
 /// similar to MediaQuery.of(this).viewInsets;
-Get.mediaQueryViewInsets()
+Get.context.mediaQueryViewInsets()
 
 /// similar to MediaQuery.of(this).orientation;
-Get.orientation()
+Get.context.orientation()
 
 /// check if device is on landscape mode
-Get.isLandscape()
+Get.context.isLandscape()
 
 /// check if device is on portrait mode
-Get.isPortrait()
+Get.context.isPortrait()
 
 /// similar to MediaQuery.of(this).devicePixelRatio;
-Get.devicePixelRatio()
+Get.context.devicePixelRatio()
 
 /// similar to MediaQuery.of(this).textScaleFactor;
-Get.textScaleFactor()
+Get.context.textScaleFactor()
 
 /// get the shortestSide from screen
-Get.mediaQueryShortestSide()
+Get.context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
-Get.showNavbar()
+Get.context.showNavbar()
 
 /// True if the shortestSide is smaller than 600p
-Get.isPhone()
+Get.context.isPhone()
 
 /// True if the shortestSide is largest than 600p
-Get.isSmallTablet()
+Get.context.isSmallTablet()
 
 /// True if the shortestSide is largest than 720p
-Get.isLargeTablet()
+Get.context.isLargeTablet()
 
 /// True if the current device is Tablet
-Get.isTablet()
+Get.context.isTablet()
 ```
 
 ### Configurações Globais opcionais e configurações manuais

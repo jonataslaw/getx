@@ -319,60 +319,60 @@ Get.context
 Get.contextOverlay
 
 // If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
-context.width
-context.height
+Get.context.width
+Get.context.height
 
 // gives you the power to define half the screen now, a third of it and so on.
 //Useful for responsive applications.
 // param dividedBy (double) optional - default: 1
 // param reducedBy (double) optional - default: 0
-context.heightTransformer()
-context.widthTransformer()
+Get.context.heightTransformer()
+Get.context.widthTransformer()
 
 /// similar to MediaQuery.of(context).size
-context.mediaQuerySize()
+Get.context.mediaQuerySize()
 
 /// similar to MediaQuery.of(context).padding
-context.mediaQueryPadding()
+Get.context.mediaQueryPadding()
 
 /// similar to MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+Get.context.mediaQueryViewPadding()
 
 /// similar to MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+Get.context.mediaQueryViewInsets()
 
 /// similar to MediaQuery.of(context).orientation;
-context.orientation()
+Get.context.orientation()
 
 /// check if device is on landscape mode
-context.isLandscape()
+Get.context.isLandscape()
 
 /// check if device is on portrait mode
-context.isPortrait()
+Get.context.isPortrait()
 
 /// similar to MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+Get.context.devicePixelRatio()
 
 /// similar to MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+Get.context.textScaleFactor()
 
 /// get the shortestSide from screen
-context.mediaQueryShortestSide()
+Get.context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
-context.showNavbar()
+Get.context.showNavbar()
 
 /// True if the shortestSide is smaller than 600p
-context.isPhone()
+Get.context.isPhone()
 
 /// True if the shortestSide is largest than 600p
-context.isSmallTablet()
+Get.context.isSmallTablet()
 
 /// True if the shortestSide is largest than 720p
-context.isLargeTablet()
+Get.context.isLargeTablet()
 
 /// True if the current device is Tablet
-context.isTablet()
+Get.context.isTablet()
 ```
 
 ### Optional Global Settings and Manual configurations
