@@ -1,3 +1,10 @@
+## [3.3.0]
+- Fix extensions (@stefandevo)
+- Added CPF to utils options (@kauemurakami)
+- Added fenix mode to Get.lazyPut. 
+Use `Get.lazyPut<Controller>(()=> Controller(), fenix:true)` to have a controller that after being destroyed, has the ability to be recreated in case someone needs it. This is a function that already exists in smartManagement.keepFactory which is now also possible in full mode.
+- Fix native transition on android
+
 ## [3.2.2]
 - Improve transitions and refactor route system
 

@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get_state/home/controllers/home_controller.dart';
-import 'package:get_state/home/models/home_model.dart';
+import 'package:get_state/home/data/home_model.dart';
 import 'package:get/get.dart';
 
-class CountryPage extends StatelessWidget {
+class CountryPage extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,9 +28,9 @@ class CountryPage extends StatelessWidget {
             ),
             body: Center(
               child: ListView.builder(
-                  itemCount: null,
+                  itemCount: controller.data.value.countries.length,
                   itemBuilder: (context, index) {
-                    Country country = Controller.to.data.countries[index];
+                    Country country = controller.data.value.countries[index];
                     return ListTile(
                       onTap: () {
                         Get.toNamed('/details', arguments: country);
