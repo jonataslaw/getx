@@ -12,6 +12,28 @@
 
 ![](getx.png)
 
+- [**Communication and support channels:**](#communication-and-support-channels-)
+- [**About Get**](#about-get)
+- [**Installing**](#installing)
+- [**Counter App in Get**](#counter-app-in-get)
+- [**The Three pillars**](#the-three-pillars)
+  * [State management](#state-management)
+    + [Reactive State Manager](#reactive-state-manager)
+    + [More details about state management](#more-details-about-state-management)
+  * [Route management](#route-management)
+    + [More details about route management](#more-details-about-route-management)
+    + [Video Explanation](#video-explanation)
+  * [Dependency management](#dependency-management)
+    + [More details about dependency management](#more-details-about-dependency-management)
+- [**How to contribute**](#how-to-contribute)
+- [**Utils**](#utils)
+  * [Change Theme](#change-theme)
+  * [Other Advanced APIs](#other-advanced-apis)
+    + [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
+- [**Breaking changes from 2.0**](#breaking-changes-from-20)
+- [**Why Getx?**](#why-getx-)
+
+
 # Communication and support channels:
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
@@ -19,25 +41,6 @@
 [**Discord (English and Portuguese)**](https://discord.com/invite/9Y3wK9)
 
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
-
-# Topics
-
-- [**About Get**](#about-get)
-- [**Installing**](#installing)
-- [**The Three pillars**](#the-three-pillars)
-  - [State management](#state-management)
-    - [In-depth explanation](#in-depth-explanation)
-  - [Route management](#route-management)
-    - [In-Depth Explanation](#in-depth-explanation-1)
-  - [Dependency management](#dependency-management)
-    - [In-depth explanation](#in-depth-explanation-2)
-- [**How to contribute**](#how-to-contribute)
-- [**Utils**](#utils)
-  - [Change Theme](#change-theme)
-  - [Other Advanced APIs](#other-advanced-apis)
-    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-- [**Breaking changes from 2.0**](#breaking-changes-from-20)
-- [**Why GetX?**](#why-getx)
 
 # About Get
 
@@ -64,12 +67,7 @@ Import get in files that it will be used:
 ```dart
 import 'package:get/get.dart';
 ```
-
-# The Three pillars
-
-## State management
-
-**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the differente between the simple stage manager and the reactive state manager**
+# Counter App with GetX
 
 The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
 
@@ -123,19 +121,74 @@ class Other extends StatelessWidget {
   Widget build(context){
      // Access the updated count variable
      return Scaffold(body: Center(child: Text(c.count.string)));
+  }
 }
-
 ```
 
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant. Get was designed to work with teams, but it makes the job of an individual developer simple. Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
 
-### In-depth explanation
+Get was designed to work with teams, but it makes the job of an individual developer simple.
+
+Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+
+# The Three pillars
+
+## State management
+
+There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
+
+Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager.
+
+Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
+
+Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (who has the package name, GetX)
+
+### Reactive State Manager
+
+Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+
+- You won't need to create StreamControllers.
+- You won't need to create a StreamBuilder for each variable
+- You will not need to create a class for each state.
+- You will not need to create a get for an initial value.
+
+Reactive programming with Get is as easy as using setState.
+
+Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+
+This is your count variable:
+
+```dart
+var name = 'Jonatas Borges';
+```
+
+To make it observable, you just need to add ".obs" to the end of it:
+
+```dart
+var name = 'Jonatas Borges'.obs;
+```
+
+And in the UI, when you want to show that value and update the screen whenever tha values changes, simply do this:
+
+```dart
+Obx (() => Text (controller.name));
+```
+
+That's all. It's *that* simple.
+
+### More details about state management
 
 **See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
 
-## Route management
+### Video explanation about state management
 
-See a more in-depth explanation of route management [here](./docs/en_US/route_management.md)
+
+Amateur coder did an awesome video about state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
+
+You will get a good idea of GetX power.
+
+
+## Route management
 
 If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
 
@@ -171,21 +224,17 @@ To go to the next screen and cancel all previous routes (useful in shopping cart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
-
-```dart
-var data = await Get.to(Payment());
-```
-
 Noticed that you didn't had to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
 
-### In-Depth Explanation
+### More details about route management
 
-**Note: Get work with named routes too! As said in the beggining, there is a in-depth documentation [here](./docs/en_US/route_management.md)**
+**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./docs/en_US/route_management.md)**
+
+### Video Explanation
+
+Amateur Coder did an excellent video that cover route management with Get! here is the link: [Complete Getx Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI)
 
 ## Dependency management
-
-See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
@@ -217,14 +266,7 @@ And then you will be able to recover your controller data that was obtained back
 Text(controller.textFromApi);
 ```
 
-Looking for lazy loading? You can declare all your controllers, and it will be called only when someone needs it. You can do this with:
-
-```dart
-Get.lazyPut<Service>(()=> ApiMock());
-/// ApiMock will only be called when someone uses Get.find<Service> for the first time
-```
-
-### In-depth explanation
+### More details about dependency management
 
 **See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)**
 
@@ -233,7 +275,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 *Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better.*
 
 - Helping to translate the readme into other languages.
-- Adding documentation to the readme (not even half of Get's functions have been documented yet).
+- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
 - Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
 - Offering PRs for code/tests.
 - Including new functions.

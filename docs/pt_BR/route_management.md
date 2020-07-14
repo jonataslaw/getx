@@ -464,7 +464,7 @@ Get.config(
   defaultPopGesture = true,
   defaultTransition = Transitions.cupertino
 )
-
+```
 ### Nested Navigators
 
 Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa do `context`, e você encontrará sua `navigation stack` pela ID.

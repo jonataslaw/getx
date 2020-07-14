@@ -1,5 +1,6 @@
-
 # Route Management
+
+This is the complete explanation of all there is to Getx when the matter is route management.
 
 ## How to use
 
