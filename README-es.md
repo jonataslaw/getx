@@ -143,6 +143,10 @@ class Other extends StatelessWidget {
 
 ```
 
+Resultado:
+
+![](counter-app-gif.gif)
+
 Este es un proyecto simple pero ya deja en claro cuán poderoso es GetX. A medida que su proyecto crezca, esta diferencia se volverá más significativa. GetX fue diseñado para trabajar con equipos, pero también simplifica el trabajo de un desarrollador individual. Mejore sus plazos, entregue todo a tiempo, sin perder rendimiento. GetX no es para todos, pero si te identificaste con esa frase, ¡GET es para ti!
 
 # Los tres pilares

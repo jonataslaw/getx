@@ -133,6 +133,10 @@ class Outra extends StatelessWidget {
 
 ```
 
+Resultado:
+
+![](counter-app-gif.gif)
+
 Esse é um projeto simples mas já deixa claro o quão poderoso o Get é. Enquanto seu projeto cresce, essa diferença se torna bem mais significante.
 
 Get foi feito para funcionar com times, mas torna o trabalho de um desenvolvedor individual simples.

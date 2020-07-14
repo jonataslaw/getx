@@ -125,6 +125,10 @@ class Other extends StatelessWidget {
 }
 ```
 
+Result:
+
+![](counter-app-gif.gif)
+
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
 
 Get was designed to work with teams, but it makes the job of an individual developer simple.
