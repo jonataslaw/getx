@@ -1,3 +1,22 @@
+- [Gestión del Estado](#gestión-del-estado)
+  - [Gestor de Estado Simple](#gestor-de-estado-simple)
+    - [Ventajas](#ventajas)
+    - [Uso](#uso)
+    - [Cómo maneja los Controllers](#cómo-maneja-los-controllers)
+    - [Ya no necesitará StatefulWidgets](#ya-no-necesitará-statefulwidgets)
+    - [Por qué existe](#por-qué-existe)
+    - [Otras formas de usarlo](#otras-formas-de-usarlo)
+    - [ID únicos](#id-únicos)
+  - [Reactivo STATE_MANAGER](#reactivo-state_manager)
+    - [Ventajas](#ventajas-1)
+    - [Uso](#uso-1)
+    - [Donde se pueden usar .obs](#donde-se-pueden-usar-obs)
+    - [Nota sobre listas](#nota-sobre-listas)
+    - [¿Por qué tengo que usar .value](#por-qué-tengo-que-usar-value)
+    - [Obx()](#obx)
+    - [Workers](#workers)
+  - [Mezclando los dos State Managers](#mezclando-los-dos-state-managers)
+  - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # Gestión del Estado
 

@@ -1,5 +1,12 @@
+- [Simple State Manager](#simple-state-manager)
+  - [Uso do gerenciador de estado simples](#uso-do-gerenciador-de-estado-simples)
+    - [Sem StatefulWidget](#sem-statefulwidget)
+      - [Formas de uso](#formas-de-uso)
+- [Reactive State Manager](#reactive-state-manager)
+  - [GetX vs GetBuilder vs Obx vs MixinBuilder](#getx-vs-getbuilder-vs-obx-vs-mixinbuilder)
+- [Workers](#workers)
 
-## Gerenciador de estado simples
+## Simple State Manager
 
 Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance em aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande. 
 

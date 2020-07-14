@@ -1,3 +1,15 @@
+- [Gestión de Rutas](#gestión-de-rutas)
+  - [¿Cómo utilizarlo](#cómo-utilizarlo)
+  - [Navegación sin rutas nombradas](#navegación-sin-rutas-nombradas)
+  - [Navegación con rutas nombradas](#navegación-con-rutas-nombradas)
+    - [Enviar datos a rutas nombradas](#enviar-datos-a-rutas-nombradas)
+    - [Enlaces de URL dinámicos](#enlaces-de-url-dinámicos)
+    - [Middleware](#middleware)
+  - [Navegación sin contexto](#navegación-sin-contexto)
+    - [SnackBars](#snackbars)
+    - [Diálogos](#diálogos)
+    - [BottomSheets](#bottomsheets)
+  - [Navegación anidada](#navegación-anidada)
 
 # Gestión de Rutas
 

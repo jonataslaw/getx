@@ -1,3 +1,25 @@
+- [State Management](#state-management)
+  - [Reactive State Manager](#reactive-state-manager)
+    - [Advantages](#advantages)
+    - [Usage](#usage)
+    - [Example](#example)
+    - [Conditions to rebuild](#conditions-to-rebuild)
+    - [Where .obs can be used](#where-obs-can-be-used)
+    - [Note about Lists](#note-about-lists)
+    - [Why i have to use .value](#why-i-have-to-use-value)
+    - [Obx()](#obx)
+    - [Workers](#workers)
+  - [Mixing the two state managers](#mixing-the-two-state-managers)
+  - [Simple State Manager](#simple-state-manager)
+    - [Advantages](#advantages-1)
+    - [Usage](#usage-1)
+    - [How it handles controllers](#how-it-handles-controllers)
+    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
+    - [Why it exists](#why-it-exists)
+    - [Other ways of using it](#other-ways-of-using-it)
+    - [Unique IDs](#unique-ids)
+  - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
+
 # State Management
 
 There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
