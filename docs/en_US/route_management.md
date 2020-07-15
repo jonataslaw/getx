@@ -1,5 +1,19 @@
+- [Route Management](#route-management)
+  - [How to use](#how-to-use)
+  - [Navigation without named routes](#navigation-without-named-routes)
+  - [Navigation with named routes](#navigation-with-named-routes)
+    - [Send data to named Routes](#send-data-to-named-routes)
+    - [Dynamic urls links](#dynamic-urls-links)
+    - [Middleware](#middleware)
+  - [Navigation without context](#navigation-without-context)
+    - [SnackBars](#snackbars)
+    - [Dialogs](#dialogs)
+    - [BottomSheets](#bottomsheets)
+  - [Nested Navigation](#nested-navigation)
 
 # Route Management
+
+This is the complete explanation of all there is to Getx when the matter is route management.
 
 ## How to use
 

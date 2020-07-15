@@ -1,4 +1,8 @@
-# Dependency Management
+- [Simple Instance Manager](#simple-instance-manager)
+- [Options](#options)
+- [Bindings](#bindings)
+  - [How to use](#how-to-use)
+- [SmartManagement](#smartmanagement)
 
 ## Simple Instance Manager
 

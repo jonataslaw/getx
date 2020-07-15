@@ -12,15 +12,23 @@
 
 ![](getx.png)
 
+<h2> Pedimos desculpas por qualquer parte não traduzida aqui. O GetX é atualizado com muita frequência e as traduções podem não vir ao mesmo tempo. Então, para manter essa documentação pelo menos com tudo que a versão em inglês tem, eu vou deixar todos os textos não-traduzidos aqui (eu considero que é melhor ele estar lá em inglês do que não estar), então se alguém quiser traduzir, seria muito útil 😁</h2>
+
+- [Canais para comunicação e suporte:](#canais-para-comunicação-e-suporte)
 - [Sobre Get](#sobre-get)
-- [Instalando e iniciando](#instalando-e-iniciando)
+- [Instalando](#instalando)
+- [App Counter usando GetX](#app-counter-usando-getx)
 - [Os três pilares](#os-três-pilares)
   - [Gerenciamento de estado](#gerenciamento-de-estado)
-    - [Explicação completa](#explicação-completa)
+    - [Reactive state manager](#reactive-state-manager)
+    - [Mais detalhes sobre gerenciamento de estado](#mais-detalhes-sobre-gerenciamento-de-estado)
+    - [Explicação em video do gerenciamento de estado](#explicação-em-video-do-gerenciamento-de-estado)
   - [Gerenciamento de rotas](#gerenciamento-de-rotas)
-    - [Explicação completa](#explicação-completa-1)
+    - [Mais detalhes sobre gerenciamento de rotas](#mais-detalhes-sobre-gerenciamento-de-rotas)
+    - [Explicação em video do gerenciamento de rotas](#explicação-em-video-do-gerenciamento-de-rotas)
   - [Gerenciamento de Dependência](#gerenciamento-de-dependência)
-    - [Explicação completa](#explicação-completa-2)
+    - [Mais detalhes sobre gerenciamento de dependências](#mais-detalhes-sobre-gerenciamento-de-dependências)
+- [Como contribuir](#como-contribuir)
 - [Utilidades](#utilidades)
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
   - [Outras APIs avançadas](#outras-apis-avançadas)
@@ -30,7 +38,15 @@
   - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
   - [Rotas nomeadas](#rotas-nomeadas)
     - [Porque essa mudança](#porque-essa-mudança)
-- [Por que GetX](#por-que-getx)
+- [Por que GetX?](#por-que-getx)
+
+# Canais para comunicação e suporte:
+
+[**Slack (Inglês)**](https://communityinviter.com/apps/getxworkspace/getx)
+
+[**Discord (Inglês e Português)**](https://discord.com/invite/9Y3wK9)
+
+[**Telegram (Português)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Sobre Get
 
@@ -46,17 +62,7 @@
 
 **GetX faz seu desenvolvimento mais produtivo, mas quer deixá-lo mais produtivo ainda? Adicione a extensão [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) no seu VSCode**. Não disponível para outras IDEs por enquanto.
 
-Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
-
-- Ajudando a traduzir o README para outras linguagens.
-- Adicionando mais documentação ao README (até o momento, nem metade das funcionalidades do Get foram documentadas).
-- Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
-- Fazendo PR's (Pull-Requests) para código/testes.
-- Incluindo novas funcionalidades.
-
-Qualquer contribuição é bem-vinda!
-
-# Instalando e iniciando
+# Instalando
 
 Adicione Get ao seu arquivo pubspec.yaml
 
@@ -71,11 +77,7 @@ Importe o get nos arquivos que ele for usado:
 import 'package:get/get.dart';
 ```
 
-# Os três pilares
-
-## Gerenciamento de estado
-
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md)**
+# App Counter usando GetX
 
 O app 'Counter' criado por padrão no flutter com o comando `flutter create` tem mais de 100 linhas(incluindo os comentários). Para demonstrar o poder do Get, irei demonstrar como fazer o mesmo 'Counter' mudando o estado em cada toque trocando entre páginas e compartilhando o estado entre telas. Tudo de forma organizada, separando a lógica de negócio da View, COM SOMENTE 26 LINHAS INCLUINDO COMENTÁRIOS
 
@@ -131,19 +133,72 @@ class Outra extends StatelessWidget {
 
 ```
 
+Resultado:
+
+![](counter-app-gif.gif)
+
 Esse é um projeto simples mas já deixa claro o quão poderoso o Get é. Enquanto seu projeto cresce, essa diferença se torna bem mais significante.
 
 Get foi feito para funcionar com times, mas torna o trabalho de um desenvolvedor individual simples.
 
 Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é para todos, mas se você identificar com o que foi dito acima, Get é para você!
 
-### Explicação completa
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md)**
+# Os três pilares
+
+## Gerenciamento de estado
+
+Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance em aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande.
+
+Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria analisar esses pontos tanto quanto os argumentos abaixo para escolher entre usar Get na sua forma pura, ou usando-o em conjunto com outro gerenciador de estado.
+
+Definitivamente, Get não é o inimigo de nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
+
+### Reactive state manager
+
+Programação reativa pode alienar muitas pessoas porque é dito que é complicado. GetX transforma a programação reativa em algo bem simples:
+
+* Você não precisa de criar StreamControllers
+* Você não precisa criar um StreamBuilder para cada variável
+* Você não precisa criar uma classe para cada estado
+* Você não precisa criar um get para o valor inicial
+
+Programação reativa com o Get é tão fácil quanto usar setState.
+
+Vamos imaginar que você tenha uma variável e quer que toda vez que ela alterar, todos os widgets que a usam são automaticamente alterados.
+
+Essa é sua variável:
+
+```dart
+var name = 'Jonatas Borges';
+```
+
+Para fazer dela uma variável observável, você só precisa adicionar `.obs` no final:
+
+```dart
+var name = 'Jonatas Borges'.obs;
+```
+
+E Na UI, quando quiser mostrar a variável e escutar as mudanças dela, simplesmente faça isso:
+
+
+```dart
+Obx (() => Text (controller.name));
+```
+
+Só isso. É *simples assim*;
+
+### Mais detalhes sobre gerenciamento de estado
+
+**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md). Lá terá mais exemplos e também a diferença do simple state manager do reactive state manager**
+
+### Explicação em video do gerenciamento de estado
+
+Amateur Coder fez um vídeo ótimo sobre o gerenciamento de estado! (em inglês). Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
+
+Você vai ter uma boa idea do poder do GetX
 
 ## Gerenciamento de rotas
-
-Veja uma explicação mais completa do gerenciamento de rotas [aqui](./docs/pt_BR/route_management.md)
 
 Para navegar para uma próxima tela:
 
@@ -177,13 +232,15 @@ var dados = await Get.to(Pagamento());
 
 Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? Essa é uma das maiores vantagens de usar o gerenciamento de rotas do GetX. Com isso, você pode executar todos esse métodos de dentro da classe Controller, sem preocupações.
 
-### Explicação completa
+### Mais detalhes sobre gerenciamento de rotas
 
 **GetX funciona com rotas nomeadas também! Veja uma explicação mais completa do gerenciamento de rotas [aqui](./docs/pt_BR/route_management.md)**
 
-## Gerenciamento de Dependência
+### Explicação em video do gerenciamento de rotas
 
-**Veja uma explicação mais completa do gerenciamento de dependência [aqui](./docs/pt_BR/dependency_management.md)**
+Amateur Coder fez um outro vídeo excelente sobre gerenciamento de rotas! Link: [Complete Getx Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI)
+
+## Gerenciamento de Dependência
 
 - Nota: Se você está usando o gerenciador de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
 
@@ -223,9 +280,21 @@ Get.lazyPut<Service>(()=> ApiMock());
 /// ApiMock só será chamado quando alguém usar o Get.find<Service> pela primeira vez
 ```
 
-### Explicação completa
+### Mais detalhes sobre gerenciamento de dependências
 
 **Veja uma explicação mais completa do gerenciamento de dependência [aqui](./docs/pt_BR/dependency_management.md)**
+
+# Como contribuir 
+
+Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
+
+- Ajudando a traduzir o README para outras linguagens.
+- Adicionando mais documentação ao README (até o momento, várias das funcionalidades do Get não foram documentadas).
+- Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README, e no futuro na nossa Wiki).
+- Fazendo PR's (Pull-Requests) para código/testes.
+- Incluindo novas funcionalidades.
+
+Qualquer contribuição é bem-vinda!
 
 # Utilidades
 

@@ -1,3 +1,10 @@
+- [Gestión de dependencias](#gestión-de-dependencias)
+  - [Simple Instance Manager](#simple-instance-manager)
+  - [Options](#options)
+  - [Bindings](#bindings)
+    - [Cómo utilizar](#cómo-utilizar)
+  - [SmartManagement](#smartmanagement)
+
 
 # Gestión de dependencias
 

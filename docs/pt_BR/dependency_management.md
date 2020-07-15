@@ -1,3 +1,9 @@
+- [Gerenciamento de dependência](#gerenciamento-de-dependência)
+  - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
+  - [Opções](#opções)
+  - [Bindings](#bindings)
+    - [Como utilizar](#como-utilizar)
+
 # Gerenciamento de dependência
 
 ## Gerenciamento de dependências simples
