@@ -32,6 +32,7 @@ extension GetStringUtils on String {
   bool get isPassport => GetUtils.isPassport(this);
   bool get isCurrency => GetUtils.isCurrency(this);
   bool isCpf(String s) => GetUtils.isCpf(this);
+  bool isCnpj(String s) => GetUtils.isCpf(this);
   bool isCaseInsensitiveContains(String b) =>
       GetUtils.isCaseInsensitiveContains(this, b);
   bool isCaseInsensitiveContainsAny(String b) =>
