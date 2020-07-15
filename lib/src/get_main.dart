@@ -31,15 +31,26 @@ class GetImpl implements GetService {
 
   /// Pushes a new [page] to the stack
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
   ///
-  /// You can set a custom [transition], a transition [duration].
+  /// You can set a custom [transition], and a transition [duration].
+  ///
   /// You can send any type of value to the other route in the [arguments].
-  /// If you're using the [Bindings] api, it's here that you use it
   ///
-  /// It replaces Navigator.push and it doesn't have the Navigator.push
-  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use opaque = true as the parameter.
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
   Future<T> to<T>(
     Widget page, {
     bool opaque,
@@ -75,11 +86,18 @@ class GetImpl implements GetService {
 
   /// Pushes a new named [page] to the stack
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
-  /// Note: Always put a slash on the route ('/page1'), since this package expects that
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> toNamed<T>(
     String page, {
     Object arguments,
@@ -94,13 +112,24 @@ class GetImpl implements GetService {
 
   /// Pop the current named [page] in the stack and push a new one in its place
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
-  /// Note: Always put a slash on the route ('/page1'), since this package expects that
-  Future<T> offNamed<T>(String page,
-      {Object arguments, int id, preventDuplicates = true}) {
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  Future<T> offNamed<T>(
+    String page, {
+    Object arguments,
+    int id,
+    preventDuplicates = true,
+  }) {
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
@@ -111,7 +140,14 @@ class GetImpl implements GetService {
 
   /// Calls pop several times in the stack until [predicate] returns true
   ///
-  /// TODO: complement this doc
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  ///
+  /// or also like this:
+  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
   void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
@@ -121,20 +157,40 @@ class GetImpl implements GetService {
   /// Push the given [page], and then pop several [pages] in the stack until
   /// [predicate] returns true
   ///
-  /// TODO: complement this doc
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  ///
+  /// or also like this:
+  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
-  /// Push the given named [page], and then pop several [pages] in the stack
+  /// Push the given named [page], and then pop several pages in the stack
   /// until [predicate] returns true
   ///
   /// You can send any type of value to the other route in the [arguments].
-  /// TODO: complement this doc
-  Future<T> offNamedUntil<T>(String page, RoutePredicate predicate,
-      {int id, Object arguments}) {
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  /// or also like
+  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  Future<T> offNamedUntil<T>(
+    String page,
+    RoutePredicate predicate, {
+    int id,
+    Object arguments,
+  }) {
     return global(id)
         .currentState
         .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
@@ -143,8 +199,11 @@ class GetImpl implements GetService {
   /// Pop the current named page and pushes a new [page] to the stack in its place
   ///
   /// You can send any type of value to the other route in the [arguments].
-  /// TODO: complement this doc
-  /// TODO: ask jonatas what is that result argument
+  /// It is very similar to `offNamed()` but use a different approach
+  ///
+  /// The `offNamed()` pop a page, and goes to the next. The `offAndToNamed()` goes
+  /// to the next page, and removes the previous one. The route transition
+  /// animation is different.
   Future<T> offAndToNamed<T>(String page,
       {Object arguments, int id, dynamic result}) {
     return global(id)
@@ -153,17 +212,24 @@ class GetImpl implements GetService {
   }
 
   /// Remove a specific [route] from the stack
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
   void removeRoute(Route<dynamic> route, {int id}) {
     return global(id).currentState.removeRoute(route);
   }
 
-  /// Push a named page and remove all other pages from stack
+  /// Push a named [page] and remove all other pages from stack
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
+  /// It has the advantage of not needing context, so you can
+  /// call from your business logic.
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
-  /// Note: Always put a slash on the route ('/page1'), since this package expects that
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T> offAllNamed<T>(String newRouteName,
       {RoutePredicate predicate, Object arguments, int id}) {
     var route = (Route<dynamic> rota) => false;
@@ -186,14 +252,17 @@ class GetImpl implements GetService {
   /// if your set [closeOverlays] to true, Get.back() will close the currently open
   /// snackbar/dialog/bottomsheet AND the current page
   ///
-  /// TODO: ask jonatas about "canPop"
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
-  void back(
-      {dynamic result,
-      bool closeOverlays = false,
-      bool canPop = true,
-      int id}) {
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
+  void back({
+    dynamic result,
+    bool closeOverlays = false,
+    bool canPop = true,
+    int id,
+  }) {
     if (closeOverlays && isOverlaysOpen) {
       navigator.popUntil((route) {
         return (isOverlaysClosed);
@@ -220,29 +289,40 @@ class GetImpl implements GetService {
     return back;
   }
 
-  /// Pop the current [page] in the stack and push a new one in its place
+  /// Pop the current page and pushes a new [page] to the stack
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
+  ///
+  /// You can set a custom [transition], and a transition [duration].
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
-  /// You can set a custom [transition], a transition [duration].
-  /// You can send any type of value to the other route in the [arguments].
-  /// If you're using the [Bindings] api, it's here that you use it
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
   ///
-  /// It replaces Navigator.pushReplacement and it doesn't have the Navigator.pushReplacement
-  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use opaque = true as the parameter.
-  Future<T> off<T>(Widget page,
-      {bool opaque = false,
-      Transition transition,
-      bool popGesture,
-      int id,
-      Object arguments,
-      Bindings binding,
-      bool fullscreenDialog = false,
-      preventDuplicates = true,
-      Duration duration}) {
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  Future<T> off<T>(
+    Widget page, {
+    bool opaque = false,
+    Transition transition,
+    bool popGesture,
+    int id,
+    Object arguments,
+    Bindings binding,
+    bool fullscreenDialog = false,
+    preventDuplicates = true,
+    Duration duration,
+  }) {
     if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
       return null;
     }
@@ -258,29 +338,45 @@ class GetImpl implements GetService {
         transitionDuration: duration ?? defaultDurationTransition));
   }
 
-  /// Pop all pages of the stack and push a new one
+  /// Pop all pages in the stack and pushes a new [page] to it
   ///
-  /// It has the advantage of not needing context, so you can call from your business logic.
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
+  ///
+  /// You can set a custom [transition], and a transition [duration].
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
-  /// You can set a custom [transition] and a transition [duration].
-  /// You can send any type of value to the other route in the [arguments].
-  /// If you're using the [Bindings] api, it's here that you use it
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
   ///
-  /// It replaces Navigator.pushReplacement and it doesn't have the Navigator.pushReplacement
-  /// routes rebuild bug present in Flutter. If for some strange reason you want the default behavior
-  /// of rebuilding every app after a route, use opaque = true as the parameter.
-  Future<T> offAll<T>(Widget page,
-      {RoutePredicate predicate,
-      bool opaque = false,
-      bool popGesture,
-      int id,
-      Object arguments,
-      Bindings binding,
-      bool fullscreenDialog = false,
-      Duration duration,
-      Transition transition}) {
+  /// [predicate] can be used like this:
+  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  /// or also like
+  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  Future<T> offAll<T>(
+    Widget page, {
+    RoutePredicate predicate,
+    bool opaque = false,
+    bool popGesture,
+    int id,
+    Object arguments,
+    Bindings binding,
+    bool fullscreenDialog = false,
+    Duration duration,
+    Transition transition,
+  }) {
     var route = (Route<dynamic> rota) => false;
 
     return global(id).currentState.pushAndRemoveUntil(
