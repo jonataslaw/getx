@@ -240,10 +240,6 @@ Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? E
 
 Amateur Coder fez um outro vídeo excelente sobre gerenciamento de rotas! Link: [Complete Getx Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI)
 
-O Próprio criador desse package, jonatas, fez um vídeo sobre o get. Esse é o vídeo de como ele fez o app do example, um app que usa a api do coronavírus pra mostrar dados
-
-É muito interessante porque tem várias coisas do get lá pra se aprender. Link: [Gestão de estados DESCOMPLICADA com GetX aplicado a comunicação API Rest](https://www.youtube.com/watch?v=3qjebK6kwSM)
-
 ## Gerenciamento de Dependência
 
 - Nota: Se você está usando o gerenciador de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
