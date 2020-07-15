@@ -336,10 +336,9 @@ class GetPageRoute<T> extends PageRoute<T> {
                       child: child)
                   : child);
 
-        return FadeInTransition().buildTransitions(
+        return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+            this,
             context,
-            curve,
-            alignment,
             animation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
@@ -364,10 +363,9 @@ class GetPageRoute<T> extends PageRoute<T> {
                       child: child)
                   : child);
 
-        return FadeInTransition().buildTransitions(
+        return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+            this,
             context,
-            curve,
-            alignment,
             animation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture

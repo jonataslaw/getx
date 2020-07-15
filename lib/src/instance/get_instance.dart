@@ -64,8 +64,10 @@ class GetInstance {
   void create<S>(
     FcBuilderFunc<S> builder, {
     String name,
+    bool permanent = true,
   }) {
-    _insert(isSingleton: false, name: name, builder: builder);
+    _insert(
+        isSingleton: false, name: name, builder: builder, permanent: permanent);
   }
 
   void _insert<S>({
@@ -227,7 +229,8 @@ class GetInstance {
 
     FcBuilder builder = GetConfig._singl[newKey] as FcBuilder;
     if (builder.permanent) {
-      print('[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
+      print(
+          '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
       return false;
     }
     final i = builder.dependency;

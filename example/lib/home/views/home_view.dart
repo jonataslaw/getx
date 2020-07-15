@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_state/home/controllers/home_controller.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
-    print("rebuild");
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -24,66 +23,58 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
         ),
         body: Center(
-          child: GetBuilder<Controller>(
-              init: Controller(),
-              initState: (_) {
-                Controller.to.fetchDataFromApi();
-              },
-              builder: (_) {
-                if (_.data == null) {
-                  return CircularProgressIndicator();
-                } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 100,
+          child: Obx(() => (controller.data() == null)
+              ? CircularProgressIndicator()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Text(
+                      "Total Confirmed",
+                      style: TextStyle(
+                        fontSize: 30,
                       ),
-                      Text(
-                        "Total Confirmed",
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
+                    ),
+                    Text(
+                      '${controller.data.value.global.totalConfirmed}',
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Total Deaths",
+                      style: TextStyle(
+                        fontSize: 30,
                       ),
-                      Text(
-                        '${_.data.global.totalConfirmed}',
-                        style: TextStyle(
-                            fontSize: 45, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${controller.data.value.global.totalDeaths}',
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    OutlineButton(
+                      borderSide: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
                       ),
-                      SizedBox(
-                        height: 10,
+                      shape: StadiumBorder(),
+                      onPressed: () {
+                        Get.toNamed('/country');
+                      },
+                      child: Text(
+                        "Fetch by country",
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "Total Deaths",
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
-                      ),
-                      Text(
-                        '${_.data.global.totalDeaths}',
-                        style: TextStyle(
-                            fontSize: 45, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      OutlineButton(
-                          borderSide: BorderSide(
-                            color: Colors.deepPurple,
-                            width: 3,
-                          ),
-                          shape: StadiumBorder(),
-                          onPressed: () {
-                            Get.toNamed('/country');
-                          },
-                          child: Text(
-                            "Fetch by country",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ))
-                    ],
-                  );
-                }
-              }),
+                    )
+                  ],
+                )),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_state/home/models/home_model.dart';
+import 'package:get_state/home/data/home_model.dart';
 
 class DetailsPage extends StatelessWidget {
   @override

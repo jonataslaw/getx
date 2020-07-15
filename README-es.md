@@ -288,67 +288,72 @@ GetPlatform.isWeb
 Get.height
 Get.width
 
-// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
-Get.context.width
-Get.context.height
-
 // Gives the context of the screen in the foreground anywhere in your code.
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
 Get.contextOverlay
 
+// Note: the following methods are extensions on context. Since you
+// have access to context in any place of your UI, you can use it anywhere in the UI code
+
+// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+context.width
+context.height
+
+
+
 // gives you the power to define half the screen now, a third of it and so on.
 //Useful for responsive applications.
 // param dividedBy (double) optional - default: 1
 // param reducedBy (double) optional - default: 0
-Get.context.heightTransformer()
-Get.context.widthTransformer()
+context.heightTransformer()
+context.widthTransformer()
 
 /// similar to MediaQuery.of(context).size
-Get.context.mediaQuerySize()
+context.mediaQuerySize()
 
 /// similar to MediaQuery.of(context).padding
-Get.context.mediaQueryPadding()
+context.mediaQueryPadding()
 
 /// similar to MediaQuery.of(context).viewPadding
-Get.context.mediaQueryViewPadding()
+context.mediaQueryViewPadding()
 
 /// similar to MediaQuery.of(context).viewInsets;
-Get.context.mediaQueryViewInsets()
+context.mediaQueryViewInsets()
 
 /// similar to MediaQuery.of(context).orientation;
-Get.context.orientation()
+context.orientation()
 
 /// check if device is on landscape mode
-Get.context.isLandscape()
+context.isLandscape()
 
 /// check if device is on portrait mode
-Get.context.isPortrait()
+context.isPortrait()
 
 /// similar to MediaQuery.of(context).devicePixelRatio;
-Get.context.devicePixelRatio()
+context.devicePixelRatio()
 
 /// similar to MediaQuery.of(context).textScaleFactor;
-Get.context.textScaleFactor()
+context.textScaleFactor()
 
 /// get the shortestSide from screen
-Get.context.mediaQueryShortestSide()
+context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
-Get.context.showNavbar()
+context.showNavbar()
 
 /// True if the shortestSide is smaller than 600p
-Get.context.isPhone()
+context.isPhone()
 
 /// True if the shortestSide is largest than 600p
-Get.context.isSmallTablet()
+context.isSmallTablet()
 
 /// True if the shortestSide is largest than 720p
-Get.context.isLargeTablet()
+context.isLargeTablet()
 
 /// True if the current device is Tablet
-Get.context.isTablet()
+context.isTablet()
 ```
 
 ### Configuraciones globales opcionales
