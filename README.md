@@ -16,7 +16,7 @@
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[**Discord (English and Portuguese)**](https://discord.com/invite/9Y3wK9)
+[**Discord (English and Portuguese)**](https://discord.com/invite/9Hpt99N)
 
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
