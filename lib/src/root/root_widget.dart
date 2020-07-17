@@ -258,14 +258,15 @@ abstract class Translations {
 extension Trans on String {
   String get tr {
     if (Get.locale?.languageCode == null) return this;
-    if (Get.translations
-        .containsKey("${Get.locale.languageCode}_${Get.locale.countryCode}")) {
+    if (Get.translations.containsKey(
+            "${Get.locale.languageCode}_${Get.locale.countryCode}") &&
+        Get.translations["${Get.locale.languageCode}_${Get.locale.countryCode}"]
+            .containsKey(this)) {
       return Get.translations[
           "${Get.locale.languageCode}_${Get.locale.countryCode}"][this];
-    } else if (Get.translations.containsKey(Get.locale.languageCode)) {
+    } else if (Get.translations.containsKey(Get.locale.languageCode) &&
+        Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
-    } else if (Get.translations.isNotEmpty) {
-      return Get.translations.values.first[this];
     } else {
       return this;
     }
