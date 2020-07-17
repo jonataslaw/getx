@@ -187,7 +187,7 @@ That's all. It's *that* simple.
 ### Video explanation about state management
 
 
-Amateur coder did an awesome video about state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
+Amateur Coder did an awesome video about state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
 
 You will get a good idea of GetX power.
 
@@ -464,6 +464,12 @@ Get.config(
   defaultTransition = Transitions.cupertino
 )
 ```
+
+## Video explanation of Other GetX Features
+
+
+Amateur Coder did an awesome video about utils, storage, bindings and other features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
+
 
 # Breaking changes from 2.0
 
