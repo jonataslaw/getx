@@ -27,7 +27,7 @@ class GetUtils {
   }
 
   /// Checks if string consist only numeric.
-  /// Numeric only doesnt accepting "." which double data type have
+  /// Numeric only doesn't accepting "." which double data type have
   static bool isNumericOnly(String s) =>
       RegexValidation.hasMatch(s, regex.numericOnly);
 
@@ -299,7 +299,7 @@ class GetUtils {
 
     // Obter somente os números do CNPJ
     var numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
-    
+
     // Testar se o CNPJ possui 14 dígitos
     if (numbers.length != 14) return false;
 

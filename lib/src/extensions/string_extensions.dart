@@ -1,4 +1,4 @@
-import 'get_utils.dart';
+import '../../utils.dart';
 
 extension GetStringUtils on String {
   bool get isNum => GetUtils.isNum(this);
@@ -44,28 +44,4 @@ extension GetStringUtils on String {
   String camelCase(String s) => GetUtils.camelCase(this);
   String numericOnly(String s, {bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
-}
-
-extension GetNumUtils on num {
-  bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
-  bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
-  bool isEqual(num b) => GetUtils.isEqual(this, b);
-}
-
-extension GetDynamicUtils on dynamic {
-  bool get isNull => GetUtils.isNull(this);
-  bool get isNullOrBlank => GetUtils.isNullOrBlank(this);
-  bool get isOneAKind => GetUtils.isOneAKind(this);
-  bool isLengthLowerThan(int maxLength) =>
-      GetUtils.isLengthLowerThan(this, maxLength);
-  bool isLengthGreaterThan(int maxLength) =>
-      GetUtils.isLengthGreaterThan(this, maxLength);
-  bool isLengthGreaterOrEqual(int maxLength) =>
-      GetUtils.isLengthGreaterOrEqual(this, maxLength);
-  bool isLengthLowerOrEqual(int maxLength) =>
-      GetUtils.isLengthLowerOrEqual(this, maxLength);
-  bool isLengthEqualTo(int maxLength) =>
-      GetUtils.isLengthEqualTo(this, maxLength);
-  bool isLengthBetween(int minLength, int maxLength) =>
-      GetUtils.isLengthBetween(this, minLength, maxLength);
 }
