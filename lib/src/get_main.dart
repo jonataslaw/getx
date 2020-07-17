@@ -655,6 +655,16 @@ class GetImpl implements GetService {
     translations.addAll(tr);
   }
 
+  void appendTranslations(Map<String, Map<String, String>> tr) {
+    tr.forEach((key, map) {
+      if (Get.translations.containsKey(key)) {
+        Get.translations[key].addAll(map);
+      } else {
+        Get.translations[key] = map;
+      }
+    });
+  }
+
   void changeTheme(ThemeData theme) {
     getxController.setTheme(theme);
   }
