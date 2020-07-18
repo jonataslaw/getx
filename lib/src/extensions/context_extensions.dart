@@ -51,45 +51,45 @@ extension MDQ on BuildContext {
         widthTransformer(dividedBy: dividedBy, reducedBy: reducedByW);
   }
 
-  /// similar to [MediaQuery.of(context).padding]
+  /// similar to `MediaQuery.of(this).padding`.
   EdgeInsets get mediaQueryPadding => MediaQuery.of(this).padding;
 
-  /// similar to [MediaQuery.of(context).viewPadding]
+  /// similar to `MediaQuery.of(this).viewPadding`.
   EdgeInsets get mediaQueryViewPadding => MediaQuery.of(this).viewPadding;
 
-  /// similar to [MediaQuery.of(context).viewInsets]
+  /// similar to `MediaQuery.of(this).viewInsets`.
   EdgeInsets get mediaQueryViewInsets => MediaQuery.of(this).viewInsets;
 
-  /// similar to [MediaQuery.of(context).orientation]
+  /// similar to `MediaQuery.of(this).orientation`.
   Orientation get orientation => MediaQuery.of(this).orientation;
 
-  /// check if device is on landscape mode
+  /// check if device is on LANDSCAPE mode.
   bool get isLandscape => orientation == Orientation.landscape;
 
-  /// check if device is on portrait mode
+  /// check if device is on PORTRAIT mode.
   bool get isPortrait => orientation == Orientation.portrait;
 
-  /// similar to [MediaQuery.of(this).devicePixelRatio]
+  /// similar to `MediaQuery.of(this).devicePixelRatio`.
   double get devicePixelRatio => MediaQuery.of(this).devicePixelRatio;
 
-  /// similar to [MediaQuery.of(this).textScaleFactor]
+  /// similar to `MediaQuery.of(this).textScaleFactor`.
   double get textScaleFactor => MediaQuery.of(this).textScaleFactor;
 
-  /// get the shortestSide from screen
+  /// get the `shortestSide` from screen.
   double get mediaQueryShortestSide => mediaQuerySize.shortestSide;
 
-  /// True if width be larger than 800
+  /// True if `width` is larger than 800p.
   bool get showNavbar => (width > 800);
 
-  /// True if the shortestSide is smaller than 600p
+  /// True if the `shortestSide` is smaller than 600p.
   bool get isPhone => (mediaQueryShortestSide < 600);
 
-  /// True if the shortestSide is largest than 600p
+  /// True if the `shortestSide` is largest than 600p.
   bool get isSmallTablet => (mediaQueryShortestSide >= 600);
 
-  /// True if the shortestSide is largest than 720p
+  /// True if the `shortestSide` is largest than 720p.
   bool get isLargeTablet => (mediaQueryShortestSide >= 720);
 
-  /// True if the current device is Tablet
+  /// True if the current device is TABLET.
   bool get isTablet => isSmallTablet || isLargeTablet;
 }
