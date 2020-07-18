@@ -33,6 +33,7 @@
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
   - [Outras APIs avançadas](#outras-apis-avançadas)
     - [Configurações Globais opcionais e configurações manuais](#configurações-globais-opcionais-e-configurações-manuais)
+  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
 - [Breaking Changes da versão 2 para 3](#breaking-changes-da-versão-2-para-3)
   - [Tipagem Rx](#tipagem-rx)
   - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
@@ -471,6 +472,11 @@ Get.config(
   defaultTransition = Transitions.cupertino
 )
 ```
+
+## Video explanation of Other GetX Features
+
+
+Amateur Coder did an awesome video about utils, storage, bindings and other features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
 # Breaking Changes da versão 2 para 3
 
