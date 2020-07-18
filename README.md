@@ -12,26 +12,28 @@
 
 ![](getx.png)
 
-- [**Communication and support channels:**](#communication-and-support-channels-)
-- [**About Get**](#about-get)
-- [**Installing**](#installing)
-- [**Counter App in Get**](#counter-app-in-get)
-- [**The Three pillars**](#the-three-pillars)
-  * [State management](#state-management)
-    + [Reactive State Manager](#reactive-state-manager)
-    + [More details about state management](#more-details-about-state-management)
-  * [Route management](#route-management)
-    + [More details about route management](#more-details-about-route-management)
-    + [Video Explanation](#video-explanation)
-  * [Dependency management](#dependency-management)
-    + [More details about dependency management](#more-details-about-dependency-management)
-- [**How to contribute**](#how-to-contribute)
-- [**Utils**](#utils)
-  * [Change Theme](#change-theme)
-  * [Other Advanced APIs](#other-advanced-apis)
-    + [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-- [**Breaking changes from 2.0**](#breaking-changes-from-20)
-- [**Why Getx?**](#why-getx-)
+- [Communication and support channels:](#communication-and-support-channels)
+- [About Get](#about-get)
+- [Installing](#installing)
+- [Counter App with GetX](#counter-app-with-getx)
+- [The Three pillars](#the-three-pillars)
+  - [State management](#state-management)
+    - [Reactive State Manager](#reactive-state-manager)
+    - [More details about state management](#more-details-about-state-management)
+    - [Video explanation about state management](#video-explanation-about-state-management)
+  - [Route management](#route-management)
+    - [More details about route management](#more-details-about-route-management)
+    - [Video Explanation](#video-explanation)
+  - [Dependency management](#dependency-management)
+    - [More details about dependency management](#more-details-about-dependency-management)
+- [How to contribute](#how-to-contribute)
+- [Utils](#utils)
+  - [Change Theme](#change-theme)
+  - [Other Advanced APIs](#other-advanced-apis)
+    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
+  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
+- [Breaking changes from 2.0](#breaking-changes-from-20)
+- [Why Getx?](#why-getx)
 
 
 # Communication and support channels:
@@ -475,14 +477,14 @@ Amateur Coder did an awesome video about utils, storage, bindings and other feat
 
 1- Rx types:
 
-| Before   | After      |
-| -------- | ---------- |
-| StringX  | `RxString` |
-| IntX     | `RxInt`    |
-| MapX     | `RxMax`    |
-| ListX    | `RxList`   |
-| NumX     | `RxNum`    |
-| DoubleX  | `RxDouble` |
+| Before  | After      |
+| ------- | ---------- |
+| StringX | `RxString` |
+| IntX    | `RxInt`    |
+| MapX    | `RxMax`    |
+| ListX   | `RxList`   |
+| NumX    | `RxNum`    |
+| DoubleX | `RxDouble` |
 
 RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
 
