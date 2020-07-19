@@ -11,7 +11,7 @@ extension Inst on GetImpl {
           {String tag, bool permanent = false}) async =>
       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
-  void create<S>(FcBuilderFunc<S> builder,
+  S create<S>(FcBuilderFunc<S> builder,
           {String name, bool permanent = true}) =>
       GetInstance().create<S>(builder, name: name, permanent: permanent);
 

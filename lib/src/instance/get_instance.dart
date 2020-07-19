@@ -14,6 +14,7 @@ class GetConfig {
 
 class Lazy {
   Lazy(this.builder, this.fenix);
+
   bool fenix;
   FcBuilderFunc builder;
 }
@@ -23,7 +24,9 @@ class GetInstance {
     if (_getInstance == null) _getInstance = GetInstance._();
     return _getInstance;
   }
+
   GetInstance._();
+
   static GetInstance _getInstance;
 
   void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
@@ -38,8 +41,7 @@ class GetInstance {
   }
 
   /// Inject class on Get Instance Manager
-  S put<S>(
-    S dependency, {
+  S put<S>(S dependency, {
     String tag,
     bool permanent = false,
     bool overrideAbstract = false,
@@ -61,13 +63,13 @@ class GetInstance {
   /// Repl a = find();
   /// Repl b = find();
   /// print(a==b); (false)
-  void create<S>(
-    FcBuilderFunc<S> builder, {
+  S create<S>(FcBuilderFunc<S> builder, {
     String name,
     bool permanent = true,
   }) {
     _insert(
         isSingleton: false, name: name, builder: builder, permanent: permanent);
+    return find<S>(tag: name);
   }
 
   void _insert<S>({
