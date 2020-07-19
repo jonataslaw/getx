@@ -22,6 +22,7 @@
   - [Gestión del Estado](#gestión-del-estado)
     - [Reactivo STATE_MANAGER](#reactivo-state_manager)
     - [Más detalles sobre la gestión del estado.](#más-detalles-sobre-la-gestión-del-estado)
+    - [Video explanation about state management](#video-explanation-about-state-management)
   - [Gestión de Rutas](#gestión-de-rutas)
     - [Más detalles sobre la gestión de rutas.](#más-detalles-sobre-la-gestión-de-rutas)
     - [Video Explanation](#video-explanation)
@@ -31,6 +32,7 @@
   - [Cambiar de tema](#cambiar-de-tema)
   - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
     - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
+  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
 - [Rompiendo cambios desde 2.0](#rompiendo-cambios-desde-20)
 - [¿Por qué Getx?](#por-qué-getx)
 
@@ -186,6 +188,13 @@ Obx(() => Text (controller.name));
 ### Más detalles sobre la gestión del estado.
 
 **Vea una explicación más detallada de la administración del estado [aquí](./docs/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo**
+
+### Video explanation about state management
+
+
+Amateur Coder did an awesome video about state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
+
+You will get a good idea of GetX power.
 
 ## Gestión de Rutas
 
@@ -445,6 +454,11 @@ Get.config(
   defaultTransition = Transitions.cupertino
 )
 ```
+
+## Video explanation of Other GetX Features
+
+
+Amateur Coder did an awesome video about utils, storage, bindings and other features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
 # Rompiendo cambios desde 2.0
 
