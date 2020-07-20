@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:benckmark/item.dart';
 
-import '../../../item.dart';
-
 part 'items_event.dart';
 
 class ItemsBloc extends Bloc<ItemsEvent, List<Item>> {
