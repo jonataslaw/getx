@@ -8,7 +8,7 @@ class HomeProvider {
       return ApiModel.fromJson(response.data);
     } catch (e) {
       print(e.toString());
-      return ApiModel();
+      return null;
     }
   }
 }
