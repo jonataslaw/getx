@@ -1,6 +1,6 @@
 ![](get.png)
 
-*Idiomas: [Inglês](README.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md).*
+*Idiomas: [Inglês](README.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Polaco](README.pl.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)

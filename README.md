@@ -1,6 +1,6 @@
 ![](get.png)
 
-*Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md).*
+*Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md),[Polish](README.pl.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -205,10 +205,9 @@ GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-
-To navigate to a new screen:
-
+Navigate to new screen:
 ```dart
+
 Get.to(NextScreen());
 ```
 
@@ -252,6 +251,7 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 
 Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
 So you can use your controller (or class Bloc) normally
+
 
 **Tip:** Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
 
