@@ -206,6 +206,7 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 Navigate to new screen:
+```dart
 
 Get.to(NextScreen());
 ```
