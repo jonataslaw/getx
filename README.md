@@ -205,7 +205,8 @@ GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-Def
+Navigate to new screen:
+
 Get.to(NextScreen());
 ```
 
@@ -246,7 +247,11 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 ```
 
 - Note: If you are using Get's State Manager, pay more attention to the bindings api, which will make easier to connect your view to your controller.
-https://github.com/jonataslaw/ge
+
+Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
+So you can use your controller (or class Bloc) normally
+
+
 **Tip:** Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
 
 ```dart
@@ -451,7 +456,7 @@ GetMaterialApp(
   opaqueRoute: Get.isOpaqueRouteDefault,
   popGesture: Get.isPopGestureEnable,
   transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,https://github.com/jonataslaw/ge
+  defaultGlobalState: Get.defaultGlobalState,
 );
 
 Get.config(
