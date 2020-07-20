@@ -34,6 +34,13 @@ void main() {
     Get.reset();
   });
 
+  test('Get.create test', () async {
+    final instance = Get.create<Controller>(() => Controller());
+    final instanceLikened = Get.create(() => Controller());
+    expect(false, instance.hashCode == instanceLikened.hashCode);
+    Get.reset();
+  });
+
   test('Get.lazyPut test', () async {
     final controller = Controller();
     Get.lazyPut<Controller>(() => controller);

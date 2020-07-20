@@ -61,13 +61,13 @@ class GetInstance {
   /// Repl a = find();
   /// Repl b = find();
   /// print(a==b); (false)
-  void create<S>(
-    FcBuilderFunc<S> builder, {
+  S create<S>(FcBuilderFunc<S> builder, {
     String name,
     bool permanent = true,
   }) {
     _insert(
         isSingleton: false, name: name, builder: builder, permanent: permanent);
+    return find<S>(tag: name);
   }
 
   void _insert<S>({
