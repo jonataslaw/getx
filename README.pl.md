@@ -176,7 +176,7 @@ Obx (() => Text (controller.name));
 To wszystko. *Proste*, co nie?
 
 ### Bardziej szczegółowo o menadżerze stanu
-**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./docs/en_US/state_menagment.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
+**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./docs/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
 
 ### Video tłumaczące użycie menadżera stanu
 
