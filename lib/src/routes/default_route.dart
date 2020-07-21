@@ -3,6 +3,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:get/src/get_main.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/utils.dart';
@@ -129,6 +130,14 @@ class GetPageRoute<T> extends PageRoute<T> {
   bool get popGestureInProgress => isPopGestureInProgress(this);
 
   @override
+  void dispose() {
+    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+      GetInstance().removeDependencyByRoute("${settings.name}");
+    }
+    super.dispose();
+  }
+
+  @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     if (fullscreenDialog && transition == null) {
@@ -196,6 +205,14 @@ class GetPageRoute<T> extends PageRoute<T> {
                     onStartPopGesture: () => _startPopGesture<T>(this),
                     child: child)
                 : child);
+
+      case Transition.noTransition:
+        return popGesture ?? Get.defaultPopGesture
+            ? _CupertinoBackGestureDetector<T>(
+                enabledCallback: () => _isPopGestureEnabled<T>(this),
+                onStartPopGesture: () => _startPopGesture<T>(this),
+                child: child)
+            : child;
 
       case Transition.rightToLeft:
         return SlideRightTransition().buildTransitions(

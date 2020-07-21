@@ -41,7 +41,7 @@ extension MDQ on BuildContext {
         dividedBy;
   }
 
-  /// TODO: make docs about that
+  /// Divide the height proportionally by the given value
   double ratio({
     double dividedBy = 1,
     double reducedByW = 0.0,

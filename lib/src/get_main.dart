@@ -870,13 +870,13 @@ class GetImpl implements GetService {
 
   RouteSettings get routeSettings => settings;
 
-  Routing _routing = Routing();
+  final _routing = Routing();
 
   Map<String, String> parameters = {};
 
-  void setRouting(Routing rt) {
-    _routing = rt;
-  }
+  // void setRouting(Routing rt) {
+  //   _routing = rt;
+  // }
 
   void setSettings(RouteSettings settings) {
     settings = settings;

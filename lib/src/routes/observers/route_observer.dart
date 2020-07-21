@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/root/smart_management.dart';
-import '../../get_main.dart';
 
 class Routing {
   String current;
@@ -14,22 +12,28 @@ class Routing {
   bool isBottomSheet;
   bool isDialog;
   Routing({
-    this.current,
-    this.previous,
+    this.current = '',
+    this.previous = '',
     this.args,
-    this.removed,
+    this.removed = '',
     this.route,
     this.isBack,
     this.isSnackbar,
     this.isBottomSheet,
     this.isDialog,
   });
+
+  void update(void fn(Routing value)) {
+    fn(this);
+    GetConfig.currentRoute = this.current;
+  }
 }
 
 class GetObserver extends NavigatorObserver {
   final Function(Routing) routing;
 
-  GetObserver([this.routing]);
+  GetObserver([this.routing, this._routeSend]);
+  final Routing _routeSend;
 
   Route<dynamic> route;
   bool isBack;
@@ -46,43 +50,30 @@ class GetObserver extends NavigatorObserver {
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     if ('${route?.settings?.name}' == 'snackbar') {
       if (GetConfig.isLogEnable)
-        print("[OPEN SNACKBAR] ${route?.settings?.name}");
+        print("[GETX] OPEN SNACKBAR ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
       if (GetConfig.isLogEnable)
-        print("[OPEN BOTTOMSHEET] ${route?.settings?.name}");
+        print("[GETX] OPEN BOTTOMSHEET ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
       if (GetConfig.isLogEnable)
-        print("[OPEN DIALOG] ${route?.settings?.name}");
+        print("[GETX] OPEN DIALOG ${route?.settings?.name}");
     } else {
       if (GetConfig.isLogEnable)
-        print("[GOING TO ROUTE] ${route?.settings?.name}");
+        print("[GETX] GOING TO ROUTE ${route?.settings?.name}");
     }
 
-    isSnackbar = '${route?.settings?.name}' == 'snackbar';
-    isDialog = '${route?.settings?.name}' == 'dialog';
-    isBottomSheet = '${route?.settings?.name}' == 'bottomsheet';
-    current = '${route?.settings?.name}';
-    previous = '${previousRoute?.settings?.name}';
-    args = route?.settings?.arguments;
-    // previousArgs = previousRoute?.settings?.arguments;
-
-    final routeSend = Routing(
-      removed: null,
-      isBack: false,
-      route: route,
-      current: '${route?.settings?.name}',
-      previous: '${previousRoute?.settings?.name}',
-      args: route?.settings?.arguments,
-      //  previousArgs: previousRoute?.settings?.arguments,
-      isSnackbar: isSnackbar,
-      isDialog: isDialog,
-      isBottomSheet: isBottomSheet,
-    );
-    if (routing != null) {
-      routing(routeSend);
-    }
-    GetConfig.currentRoute = current;
-    Get.setRouting(routeSend);
+    _routeSend.update((value) {
+      if (route is PageRoute) value.current = '${route?.settings?.name}';
+      value.args = route?.settings?.arguments;
+      value.route = route;
+      value.isBack = false;
+      value.removed = '';
+      value.previous = '${previousRoute?.settings?.name}';
+      value.isSnackbar = '${route?.settings?.name}' == 'snackbar';
+      value.isBottomSheet = '${route?.settings?.name}' == 'bottomsheet';
+      value.isDialog = '${route?.settings?.name}' == 'dialog';
+    });
+    if (routing != null) routing(_routeSend);
   }
 
   @override
@@ -91,112 +82,67 @@ class GetObserver extends NavigatorObserver {
 
     if ('${route?.settings?.name}' == 'snackbar') {
       if (GetConfig.isLogEnable)
-        print("[CLOSE SNACKBAR] ${route?.settings?.name}");
+        print("[GETX] CLOSE SNACKBAR ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
       if (GetConfig.isLogEnable)
-        print("[CLOSE BOTTOMSHEET] ${route?.settings?.name}");
+        print("[GETX] CLOSE BOTTOMSHEET ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
       if (GetConfig.isLogEnable)
-        print("[CLOSE DIALOG] ${route?.settings?.name}");
+        print("[GETX] CLOSE DIALOG ${route?.settings?.name}");
     } else {
-      if (GetConfig.isLogEnable) print("[BACK ROUTE] ${route?.settings?.name}");
+      if (GetConfig.isLogEnable)
+        print("[GETX] BACK ROUTE ${route?.settings?.name}");
     }
 
-    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-      GetInstance().removeDependencyByRoute("${route?.settings?.name}");
-    }
-
-    isSnackbar = false;
-    isDialog = false;
-    isBottomSheet = false;
-    current = '${previousRoute?.settings?.name}';
-    previous = '${route?.settings?.name}';
-    args = previousRoute?.settings?.arguments;
-    // previousArgs = route?.settings?.arguments;
-
-    final routeSend = Routing(
-      removed: null,
-      isBack: true,
-      route: previousRoute,
-      current: '${previousRoute?.settings?.name}',
-      previous: '${route?.settings?.name}',
-      args: previousRoute?.settings?.arguments,
-      //  previousArgs: route?.settings?.arguments,
-      isSnackbar: false, //'${route?.settings?.name}' == 'snackbar',
-      isDialog: false, //'${route?.settings?.name}' == 'dialog',
-      isBottomSheet: false, //'${route?.settings?.name}' == 'bottomsheet',
-    );
-
-    if (routing != null) {
-      routing(routeSend);
-    }
-    GetConfig.currentRoute = current;
-    Get.setRouting(routeSend);
+    _routeSend.update((value) {
+      if (previousRoute is PageRoute)
+        value.current = '${previousRoute?.settings?.name}';
+      value.args = route?.settings?.arguments;
+      value.route = previousRoute;
+      value.isBack = true;
+      value.removed = '';
+      value.previous = '${route?.settings?.name}';
+      value.isSnackbar = false;
+      value.isBottomSheet = false;
+      value.isDialog = false;
+    });
+    if (routing != null) routing(_routeSend);
   }
 
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (GetConfig.isLogEnable)
-      print("[REPLACE ROUTE] ${oldRoute?.settings?.name}");
-    if (GetConfig.isLogEnable) print("[NEW ROUTE] ${newRoute?.settings?.name}");
+      print("[GETX] REPLACE ROUTE ${oldRoute?.settings?.name}");
+    if (GetConfig.isLogEnable)
+      print("[GETX] NEW ROUTE ${newRoute?.settings?.name}");
 
-    if (GetConfig.smartManagement == SmartManagement.full) {
-      GetInstance().removeDependencyByRoute("${oldRoute?.settings?.name}");
-    }
-
-    isSnackbar = false;
-    isDialog = false;
-    isBottomSheet = false;
-
-    final routeSend = Routing(
-      removed: null, // add '${oldRoute?.settings?.name}' or remain null ???
-      isBack: false,
-      route: newRoute,
-      current: '${newRoute?.settings?.name}',
-      previous: '${oldRoute?.settings?.name}',
-      args: newRoute?.settings?.arguments,
-      //  previousArgs: newRoute?.settings?.arguments,
-      isSnackbar: false,
-      isBottomSheet: false,
-      isDialog: false,
-    );
-
-    if (routing != null) {
-      routing(routeSend);
-    }
-    GetConfig.currentRoute = current;
-    Get.setRouting(routeSend);
+    _routeSend.update((value) {
+      if (newRoute is PageRoute) value.current = '${newRoute?.settings?.name}';
+      value.args = newRoute?.settings?.arguments;
+      value.route = newRoute;
+      value.isBack = false;
+      value.removed = '';
+      value.previous = '${oldRoute?.settings?.name}';
+      value.isSnackbar = false;
+      value.isBottomSheet = false;
+      value.isDialog = false;
+    });
+    if (routing != null) routing(_routeSend);
   }
 
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
     if (GetConfig.isLogEnable)
-      print("[REMOVING ROUTE] ${route?.settings?.name}");
+      print("[GETX] REMOVING ROUTE ${route?.settings?.name}");
 
-    if (GetConfig.smartManagement == SmartManagement.full) {
-      GetInstance().removeDependencyByRoute("${route?.settings?.name}");
-    }
-
-    final routeSend = Routing(
-      isBack: false,
-      route: previousRoute,
-      // current: '${previousRoute?.settings?.name}',
-      current: current,
-      args: args,
-      removed: '${route?.settings?.name}',
-      // args: previousRoute?.settings?.arguments,
-      isSnackbar: isSnackbar,
-      isBottomSheet: isBottomSheet,
-      isDialog: isDialog,
-      //   previousArgs: route?.settings?.arguments,
-    );
-
-    if (routing != null) {
-      routing(routeSend);
-    }
-    GetConfig.currentRoute = current;
-    Get.setRouting(routeSend);
+    _routeSend.update((value) {
+      value.route = previousRoute;
+      value.isBack = false;
+      value.removed = '${route?.settings?.name}';
+      value.previous = '${route?.settings?.name}';
+    });
+    if (routing != null) routing(_routeSend);
   }
 }

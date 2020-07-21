@@ -1,3 +1,9 @@
+## [3.4.0]
+- Added '[everAll]' Worker: Listen a List of '.obx'
+- Added Workers dispose
+- Fix transition.noTransition
+- Fix TextField and VideoPlayController dispose before transition animation
+
 ## [3.3.0]
 - Fix extensions (@stefandevo)
 - Added CPF to utils options (@kauemurakami)

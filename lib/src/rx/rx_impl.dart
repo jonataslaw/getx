@@ -66,6 +66,7 @@ class _RxImpl<T> implements RxInterface<T> {
       stream.listen(onData, onError: onError, onDone: onDone);
 
   void bindStream(Stream<T> stream) => stream.listen((va) => value = va);
+
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 

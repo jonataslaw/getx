@@ -65,7 +65,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   @override
   void initState() {
     super.initState();
-
+    if (widget.initState != null) widget.initState(this);
     if (widget.global) {
       final isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
       final isRegistred = GetInstance().isRegistred<T>(tag: widget.tag);
@@ -96,7 +96,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
       controller._updaters.add(real);
       controller?.onStart();
     }
-    if (widget.initState != null) widget.initState(this);
+
     if (isCreator && GetConfig.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }

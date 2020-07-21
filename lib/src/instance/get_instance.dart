@@ -129,7 +129,7 @@ class GetInstance {
 
     if (i is DisposableInterface) {
       i.onStart();
-      if (GetConfig.isLogEnable) print('[GET] $key has been initialized');
+      if (GetConfig.isLogEnable) print('[GETX] $key has been initialized');
     }
   }
 
@@ -162,7 +162,7 @@ class GetInstance {
         throw " $S not found. You need call put<$S>($S()) before";
 
       if (GetConfig.isLogEnable)
-        print('[GET] $S instance was created at that time');
+        print('[GETX] $S instance was created at that time');
       S _value = put<S>(GetConfig._factory[key].builder() as S);
 
       if (!isDependencyInit<S>() &&
@@ -192,13 +192,13 @@ class GetInstance {
 
     if (i is DisposableInterface) {
       i.onClose();
-      if (GetConfig.isLogEnable) print('[GET] onClose of $key called');
+      if (GetConfig.isLogEnable) print('[GETX] onClose of $key called');
     }
     if (builder != null) builder.dependency = null;
     if (GetConfig._singl.containsKey(key)) {
       print('error on remove $key');
     } else {
-      if (GetConfig.isLogEnable) print('[GET] $key removed from memory');
+      if (GetConfig.isLogEnable) print('[GETX] $key removed from memory');
     }
   }
 
@@ -230,21 +230,21 @@ class GetInstance {
     FcBuilder builder = GetConfig._singl[newKey] as FcBuilder;
     if (builder.permanent) {
       print(
-          '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
+          '[GETX] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
       return false;
     }
     final i = builder.dependency;
 
     if (i is DisposableInterface) {
       await i.onClose();
-      if (GetConfig.isLogEnable) print('[GET] onClose of $newKey called');
+      if (GetConfig.isLogEnable) print('[GETX] onClose of $newKey called');
     }
 
     GetConfig._singl.removeWhere((oldkey, value) => (oldkey == newKey));
     if (GetConfig._singl.containsKey(newKey)) {
-      print('[GET] error on remove object $newKey');
+      print('[GETX] error on remove object $newKey');
     } else {
-      if (GetConfig.isLogEnable) print('[GET] $newKey deleted from memory');
+      if (GetConfig.isLogEnable) print('[GETX] $newKey deleted from memory');
     }
     // GetConfig.routesKey?.remove(key);
     return true;

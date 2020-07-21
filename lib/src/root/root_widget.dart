@@ -180,6 +180,8 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
+          print(
+              '[GETX] INITIALIZED: If you need help, join our community support channels: https://tinyurl.com/y3cp88l3');
           if (locale != null) {
             Get.locale = locale;
           }
@@ -221,8 +223,8 @@ class GetMaterialApp extends StatelessWidget {
                 : initialRoutesGenerate,
             onUnknownRoute: onUnknownRoute,
             navigatorObservers: (navigatorObservers == null
-                ? <NavigatorObserver>[GetObserver(routingCallback)]
-                : <NavigatorObserver>[GetObserver(routingCallback)]
+                ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
+                : <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
               ..addAll(navigatorObservers)),
             builder: builder,
             title: title ?? '',

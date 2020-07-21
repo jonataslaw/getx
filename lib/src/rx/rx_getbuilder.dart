@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/root/smart_management.dart';
@@ -34,6 +36,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   RxInterface _observer;
   T controller;
   bool isCreator = false;
+  StreamSubscription subs;
 
   @override
   void initState() {
@@ -60,10 +63,10 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
       controller?.onStart();
     }
     if (widget.initState != null) widget.initState(this);
-    if (isCreator && GetConfig.smartManagement == SmartManagement.onlyBuilder) {
-      controller?.onStart();
-    }
-    _observer.subject.stream.listen((data) => setState(() {}));
+    // if (isCreator && GetConfig.smartManagement == SmartManagement.onlyBuilder) {
+    //   controller?.onStart();
+    // }
+    subs = _observer.subject.stream.listen((data) => setState(() {}));
     super.initState();
   }
 
@@ -89,7 +92,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
         GetInstance().delete<T>();
       }
     }
-
+    subs.cancel();
     _observer.close();
     controller = null;
     isCreator = null;
