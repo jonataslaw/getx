@@ -299,7 +299,7 @@ class GetUtils {
 
     // Obter somente os números do CNPJ
     var numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
-    
+
     // Testar se o CNPJ possui 14 dígitos
     if (numbers.length != 14) return false;
 
