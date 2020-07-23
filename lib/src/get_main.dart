@@ -144,7 +144,7 @@ class GetImpl implements GetService {
   /// as explained in documentation
   ///
   /// [predicate] can be used like this:
-  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   ///
   /// or also like this:
   /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
@@ -154,17 +154,19 @@ class GetImpl implements GetService {
     return global(id).currentState.popUntil(predicate);
   }
 
-  /// Push the given [page], and then pop several [pages] in the stack until
+  /// Push the given [page], and then pop several pages in the stack until
   /// [predicate] returns true
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   ///
+  /// TODO: Learn how to get a Route class to use with this method
+  ///
   /// [predicate] can be used like this:
-  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  /// `Get.until((route) => Get.currentRoute == '/home')` so when you get to home page,
   ///
   /// or also like this:
-  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.Until((route) => !Get.isDialogOpen())` to make sure the dialog is closed
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
@@ -180,9 +182,9 @@ class GetImpl implements GetService {
   /// as explained in documentation
   ///
   /// [predicate] can be used like this:
-  /// `Get.until(Get.currentRoute == '/home')`so when you get to home page,
+  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   /// or also like
-  /// `Get.until(!Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> offNamedUntil<T>(
@@ -204,8 +206,12 @@ class GetImpl implements GetService {
   /// The `offNamed()` pop a page, and goes to the next. The `offAndToNamed()` goes
   /// to the next page, and removes the previous one. The route transition
   /// animation is different.
-  Future<T> offAndToNamed<T>(String page,
-      {Object arguments, int id, dynamic result}) {
+  Future<T> offAndToNamed<T>(
+    String page, {
+    Object arguments,
+    int id,
+    dynamic result,
+  }) {
     return global(id)
         .currentState
         .popAndPushNamed(page, arguments: arguments, result: result);
@@ -219,24 +225,36 @@ class GetImpl implements GetService {
     return global(id).currentState.removeRoute(route);
   }
 
-  /// Push a named [page] and remove all other pages from stack
+  /// Push a named [page] and remove several pages from stack until
+  /// [predicate] return true
   ///
   /// It has the advantage of not needing context, so you can
   /// call from your business logic.
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
+  /// [predicate] can be used like this:
+  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
+  /// or also like
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
-  Future<T> offAllNamed<T>(String newRouteName,
-      {RoutePredicate predicate, Object arguments, int id}) {
+  Future<T> offAllNamed<T>(
+    String newRouteName, {
+    RoutePredicate predicate,
+    Object arguments,
+    int id,
+  }) {
     var route = (Route<dynamic> rota) => false;
 
     return global(id).currentState.pushNamedAndRemoveUntil(
-        newRouteName, predicate ?? route,
-        arguments: arguments);
+          newRouteName,
+          predicate ?? route,
+          arguments: arguments,
+        );
   }
 
   /// Returns true if a snackbar, dialog or bottomsheet is currently showing in the screen
