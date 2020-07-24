@@ -481,7 +481,7 @@ Amateur Coder did an awesome video about utils, storage, bindings and other feat
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
-| MapX    | `RxMax`    |
+| MapX    | `RxMap`    |
 | ListX   | `RxList`   |
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
