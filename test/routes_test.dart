@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/src/routes/get_route.dart';
+import 'package:get/src/navigation/routes/get_route.dart';
 
 void main() {
   testWidgets(

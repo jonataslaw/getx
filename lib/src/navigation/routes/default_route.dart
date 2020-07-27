@@ -388,11 +388,10 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   void dispose() {
-    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-      Future.delayed(Duration.zero,
-          () => GetInstance().removeDependencyByRoute("${settings.name}"));
-    }
     super.dispose();
+    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+      GetInstance().removeDependencyByRoute("${settings.name}");
+    }
   }
 }
 

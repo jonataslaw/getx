@@ -79,7 +79,7 @@ class GetInstance {
         .putIfAbsent(key, () => FcBuilder<S>(isSingleton, builder, permanent));
   }
 
-  void removeDependencyByRoute(String routeName) async {
+  Future<void> removeDependencyByRoute(String routeName) async {
     List<String> keysToRemove = [];
     GetConfig.routesKey.forEach((key, value) {
       // if (value == routeName && value != null) {
@@ -87,6 +87,7 @@ class GetInstance {
         keysToRemove.add(key);
       }
     });
+
     keysToRemove.forEach((element) async {
       await delete(key: element);
     });

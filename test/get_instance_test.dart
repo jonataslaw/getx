@@ -49,4 +49,14 @@ void main() {
     expect(ct1, api);
     Get.reset();
   });
+
+  test('Get.create with abstract class test', () async {
+    Get.create<Service>(() => Api());
+    final ct1 = Get.find<Service>();
+    final ct2 = Get.find<Service>();
+    expect(ct1 is Service, true);
+    expect(ct2 is Service, true);
+    expect(ct1 == ct2, false);
+    Get.reset();
+  });
 }
