@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-extension MDQ on BuildContext {
+extension ContextExtensionss on BuildContext {
   /// The same of [MediaQuery.of(context).size]
   Size get mediaQuerySize => MediaQuery.of(this).size;
 
@@ -52,7 +53,16 @@ extension MDQ on BuildContext {
   }
 
   /// similar to [MediaQuery.of(context).padding]
+  ThemeData get theme => Theme.of(this);
+
+  /// similar to [MediaQuery.of(context).padding]
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  /// similar to [MediaQuery.of(context).padding]
   EdgeInsets get mediaQueryPadding => MediaQuery.of(this).padding;
+
+  /// similar to [MediaQuery.of(context).padding]
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
 
   /// similar to [MediaQuery.of(context).viewPadding]
   EdgeInsets get mediaQueryViewPadding => MediaQuery.of(this).viewPadding;

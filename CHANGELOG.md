@@ -1,3 +1,6 @@
+## [3.4.1]
+- Structure organization, and improvements.
+
 ## [3.4.0]
 - Added '[everAll]' Worker: Listen a List of '.obx'
 - Added Workers dispose

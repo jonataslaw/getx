@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/scheduler.dart';
-import 'package:get/src/rx/rx_callbacks.dart';
+import 'package:get/src/state_manager/rx/rx_callbacks.dart';
 
 abstract class RxInterface<T> {
   RxInterface([T initial]);
@@ -20,6 +20,8 @@ abstract class RxInterface<T> {
   /// Calls [callback] with current value, when the value changes.
   StreamSubscription<T> listen(ValueCallback<T> callback);
 }
+
+abstract class GetxService extends DisposableInterface {}
 
 abstract class DisposableInterface {
   /// Called at the exact moment that the widget is allocated in memory.

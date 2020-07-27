@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/rx/rx_interface.dart';
+import 'package:get/src/state_manager/rx/rx_interface.dart';
 import 'rx_impl.dart';
 
 Widget obx(Widget Function() builder) {

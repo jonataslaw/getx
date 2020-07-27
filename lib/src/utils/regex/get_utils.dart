@@ -1,4 +1,4 @@
-import 'package:get/src/regex/regex.dart';
+import 'package:get/src/utils/regex/regex.dart';
 
 class GetUtils {
   /// Checks if data is null.

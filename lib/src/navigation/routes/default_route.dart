@@ -3,10 +3,10 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/src/navigation/route_manager.dart';
 import 'package:get/src/get_main.dart';
 import 'package:get/src/instance/get_instance.dart';
-import 'package:get/utils.dart';
+import 'package:get/src/utils/utils.dart';
 import 'bindings_interface.dart';
 import 'custom_transition.dart';
 import 'default_transitions.dart';
@@ -128,14 +128,6 @@ class GetPageRoute<T> extends PageRoute<T> {
   }
 
   bool get popGestureInProgress => isPopGestureInProgress(this);
-
-  @override
-  void dispose() {
-    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-      GetInstance().removeDependencyByRoute("${settings.name}");
-    }
-    super.dispose();
-  }
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
@@ -392,6 +384,15 @@ class GetPageRoute<T> extends PageRoute<T> {
                     child: child)
                 : child);
     }
+  }
+
+  @override
+  void dispose() {
+    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+      Future.delayed(Duration.zero,
+          () => GetInstance().removeDependencyByRoute("${settings.name}"));
+    }
+    super.dispose();
   }
 }
 

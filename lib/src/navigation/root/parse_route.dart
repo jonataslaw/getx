@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/routes/get_route.dart';
+import 'package:get/src/navigation/routes/get_route.dart';
 
 class GetPageMatch {
   GetPageMatch(this.route);

@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/root/smart_management.dart';
-import 'package:get/src/rx/rx_interface.dart';
+import 'package:get/src/navigation/root/smart_management.dart';
+import 'package:get/src/state_manager/rx/rx_interface.dart';
 
 class GetxController extends DisposableInterface {
   final HashSet<UpdaterBuilder> _updaters = HashSet<UpdaterBuilder>();
@@ -97,7 +97,8 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
       controller?.onStart();
     }
 
-    if (isCreator && GetConfig.smartManagement == SmartManagement.onlyBuilder) {
+    if (widget.global &&
+        GetConfig.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
   }

@@ -1,17 +1,23 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 
-abstract class GetWidget<T> extends StatelessWidget {
-  const GetWidget({Key key}) : super(key: key);
-  T get controller => GetInstance().find();
+abstract class GetView<T> extends StatelessWidget {
+  const GetView({Key key}) : super(key: key);
+  T get controller => GetInstance().find<T>();
 
   @override
   Widget build(BuildContext context);
 }
 
-abstract class GetView<T> extends StatelessWidget {
-  const GetView({Key key}) : super(key: key);
-  T get controller => GetInstance().find();
+abstract class GetWidget<T> extends StatelessWidget {
+  GetWidget({Key key}) : super(key: key);
+
+  final Set<T> _value = Set<T>();
+
+  T get controller {
+    if (_value.isEmpty) _value.add(GetInstance().find<T>());
+    return _value.first;
+  }
 
   @override
   Widget build(BuildContext context);

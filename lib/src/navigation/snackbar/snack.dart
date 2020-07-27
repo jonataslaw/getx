@@ -375,11 +375,12 @@ class _GetBarState<K extends Object> extends State<GetBar>
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.BOTTOM
               ? EdgeInsets.only(
-                  bottom: (GetUtils.isGreaterThan(
-                          MediaQuery.of(context).viewInsets.bottom,
-                          MediaQuery.of(context).padding.bottom)
-                      ? MediaQuery.of(context).viewInsets.bottom
-                      : MediaQuery.of(context).padding.bottom))
+                  // bottom: (GetUtils.isGreaterThan(
+                  //         MediaQuery.of(context).viewInsets.bottom,
+                  //         MediaQuery.of(context).padding.bottom)
+                  //     ? MediaQuery.of(context).viewInsets.bottom
+                  //     : MediaQuery.of(context).padding.bottom))
+                  bottom: MediaQuery.of(context).viewInsets.bottom)
               : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           bottom: widget.snackPosition == SnackPosition.BOTTOM,
           top: widget.snackPosition == SnackPosition.TOP,

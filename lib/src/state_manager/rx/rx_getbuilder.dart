@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/root/smart_management.dart';
+import 'package:get/src/navigation/root/smart_management.dart';
 import 'rx_impl.dart';
 import 'rx_interface.dart';
 
@@ -63,9 +63,10 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
       controller?.onStart();
     }
     if (widget.initState != null) widget.initState(this);
-    // if (isCreator && GetConfig.smartManagement == SmartManagement.onlyBuilder) {
-    //   controller?.onStart();
-    // }
+    if (widget.global &&
+        GetConfig.smartManagement == SmartManagement.onlyBuilder) {
+      controller?.onStart();
+    }
     subs = _observer.subject.stream.listen((data) => setState(() {}));
     super.initState();
   }
