@@ -281,7 +281,7 @@ extension Trans on String {
         Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
       // If there is no corresponding language or corresponding key, return the key.
-    } else if (Get.translations.containsKey(
+    } else if (Get.fallbackLocale != null && Get.translations.containsKey(
             "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
         Get.translations[
                 "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
