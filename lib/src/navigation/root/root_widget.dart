@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+iimport 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/src/instance/get_instance.dart';
@@ -30,6 +30,7 @@ class GetMaterialApp extends StatelessWidget {
     this.darkTheme,
     this.themeMode = ThemeMode.system,
     this.locale,
+    this.fallbackLocale,
     this.localizationsDelegates,
     this.localeListResolutionCallback,
     this.localeResolutionCallback,
@@ -83,6 +84,7 @@ class GetMaterialApp extends StatelessWidget {
   final Map<String, Map<String, String>> translationsKeys;
   final Translations translations;
   final Locale locale;
+  final Locale fallbackLocale;
   final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
   final LocaleListResolutionCallback localeListResolutionCallback;
   final LocaleResolutionCallback localeResolutionCallback;
@@ -186,6 +188,10 @@ class GetMaterialApp extends StatelessWidget {
             Get.locale = locale;
           }
 
+          if (fallbackLocale != null) {
+            Get.fallbackLocale = fallbackLocale;
+          }
+
           if (translations != null) {
             Get.translations = translations.keys;
           } else if (translationsKeys != null) {
@@ -234,6 +240,7 @@ class GetMaterialApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
             locale: Get.locale ?? locale,
+            fallbackLocale: Get.fallbackLocale ?? fallbackLocale,
             localizationsDelegates: localizationsDelegates,
             localeListResolutionCallback: localeListResolutionCallback,
             localeResolutionCallback: localeResolutionCallback,
@@ -275,6 +282,16 @@ extension Trans on String {
         Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
       // If there is no corresponding language or corresponding key, return the key.
+    } else if (Get.translations.containsKey(
+            "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
+        Get.translations[
+                "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
+            .containsKey(this)) {
+      return Get.translations[
+              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
+          [this];
+
+      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
     } else {
       return this;
     }
