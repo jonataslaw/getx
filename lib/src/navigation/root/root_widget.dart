@@ -1,4 +1,4 @@
-iimport 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/src/instance/get_instance.dart';
@@ -240,7 +240,6 @@ class GetMaterialApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
             locale: Get.locale ?? locale,
-            fallbackLocale: Get.fallbackLocale ?? fallbackLocale,
             localizationsDelegates: localizationsDelegates,
             localeListResolutionCallback: localeListResolutionCallback,
             localeResolutionCallback: localeResolutionCallback,
