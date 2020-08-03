@@ -33,6 +33,8 @@ abstract class GetInterface {
   GetMaterialController getxController = GetMaterialController();
 
   Locale locale;
+  
+  Locale fallbackLocale;
 
   GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
 
