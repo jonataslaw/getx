@@ -265,7 +265,7 @@ final list = List<User>().obs;
 ```dart
 Text(title.value), // String need to have .value in front of it
 ListView.builder (
-  itemCount: list.lenght // lists don't need it
+  itemCount: list.length // lists don't need it
 )
 ```
 

@@ -516,7 +516,7 @@ final list = List<User>().obs;
 
 ```dart
 ListView.builder (
-  itemCount: list.lenght
+  itemCount: list.length
 )
 ```
 
