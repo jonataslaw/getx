@@ -416,7 +416,7 @@ Você também não precisa usar `.value` com listas, a api dart nos permitiu rem
 final list = List<Usuario>().obs;
 
 ListView.builder (
-itemCount: list.lenght
+itemCount: list.length
 )
 ```
 
