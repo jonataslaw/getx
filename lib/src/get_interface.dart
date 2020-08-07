@@ -4,7 +4,7 @@ import 'navigation/root/root_controller.dart';
 import 'navigation/routes/custom_transition.dart';
 import 'navigation/routes/observers/route_observer.dart';
 import 'navigation/routes/transitions_type.dart';
-import 'utils/utils.dart';
+import '../utils.dart';
 
 ///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
 ///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
@@ -33,7 +33,7 @@ abstract class GetInterface {
   GetMaterialController getxController = GetMaterialController();
 
   Locale locale;
-  
+
   Locale fallbackLocale;
 
   GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();

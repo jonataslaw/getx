@@ -75,8 +75,8 @@ class GetInstance {
     assert(builder != null);
     String key = _getKey(S, name);
 
-    GetConfig._singl
-        .putIfAbsent(key, () => FcBuilder<S>(isSingleton, builder, permanent));
+    GetConfig._singl.putIfAbsent(
+        key, () => FcBuilder<S>(isSingleton, builder, permanent, false));
   }
 
   Future<void> removeDependencyByRoute(String routeName) async {
@@ -97,9 +97,17 @@ class GetInstance {
     keysToRemove.clear();
   }
 
-  bool isDependencyInit<S>({String name}) {
+  bool initDependencies<S>({String name}) {
     String key = _getKey(S, name);
-    return GetConfig.routesKey.containsKey(key);
+    bool isInit = GetConfig._singl[key].isInit;
+    if (!isInit) {
+      startController<S>(tag: name);
+      GetConfig._singl[key].isInit = true;
+      if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+        registerRouteInstance<S>(tag: name);
+      }
+    }
+    return true;
   }
 
   void registerRouteInstance<S>({String tag}) {
@@ -112,7 +120,7 @@ class GetInstance {
     return GetConfig._singl[key].getSependency() as S;
   }
 
-  void initController<S>({String tag}) {
+  void startController<S>({String tag}) {
     String key = _getKey(S, tag);
     final i = GetConfig._singl[key].getSependency();
 
@@ -146,14 +154,8 @@ class GetInstance {
   /// Find a instance from required class
   S find<S>({String tag, FcBuilderFunc<S> instance}) {
     String key = _getKey(S, tag);
-    bool callInit = false;
-    if (isRegistred<S>(tag: tag)) {
-      if (!isDependencyInit<S>() &&
-          GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        registerRouteInstance<S>(tag: tag);
-        callInit = true;
-      }
 
+    if (isRegistred<S>(tag: tag)) {
       FcBuilder builder = GetConfig._singl[key] as FcBuilder;
       if (builder == null) {
         if (tag == null) {
@@ -162,9 +164,7 @@ class GetInstance {
           throw "class ${S.toString()} with tag '$tag' is not register";
         }
       }
-      if (callInit) {
-        initController<S>(tag: tag);
-      }
+      initDependencies<S>();
 
       return GetConfig._singl[key].getSependency() as S;
     } else {
@@ -175,21 +175,13 @@ class GetInstance {
         print('[GETX] $S instance was created at that time');
       S _value = put<S>(GetConfig._factory[key].builder() as S);
 
-      if (!isDependencyInit<S>() &&
-          GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        registerRouteInstance<S>(tag: tag);
-        callInit = true;
+      initDependencies<S>();
+
+      if (GetConfig.smartManagement != SmartManagement.keepFactory &&
+          !GetConfig._factory[key].fenix) {
+        GetConfig._factory.remove(key);
       }
 
-      if (GetConfig.smartManagement != SmartManagement.keepFactory) {
-        if (!GetConfig._factory[key].fenix) {
-          GetConfig._factory.remove(key);
-        }
-      }
-
-      if (callInit) {
-        initController<S>(tag: tag);
-      }
       return _value;
     }
   }
@@ -263,8 +255,9 @@ class FcBuilder<S> {
   FcBuilderFunc builderFunc;
   S dependency;
   bool permanent = false;
+  bool isInit = false;
 
-  FcBuilder(this.isSingleton, this.builderFunc, this.permanent);
+  FcBuilder(this.isSingleton, this.builderFunc, this.permanent, this.isInit);
 
   S getSependency() {
     if (isSingleton) {

@@ -1,3 +1,11 @@
+## [3.4.3]
+- Fix onInit fired only first time 
+- Fix language callback(@lundin)
+- Fix docs (@nipodemos)
+
+## [3.4.2]
+- Fix individual imports
+
 ## [3.4.1]
 - Structure organization, and improvements.
 
