@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:matcher/matcher.dart';
 import 'package:get/get.dart';
 
 class Mock {
@@ -9,6 +10,14 @@ class Mock {
 }
 
 class Controller {}
+
+class DisposableController extends DisposableInterface {
+  bool initialized = false;
+
+  void onInit() async {
+    initialized = true;
+  }
+}
 
 abstract class Service {
   String post();
@@ -58,5 +67,30 @@ void main() {
     expect(ct2 is Service, true);
     expect(ct1 == ct2, false);
     Get.reset();
+  });
+
+  group('test put, delete and check onInit execution', () {
+    tearDownAll(() {
+      Get.reset();
+    });
+
+    test('Get.put test with init check', () async {
+      final instance = Get.put<DisposableController>(DisposableController());
+      expect(instance, Get.find<DisposableController>());
+      expect(instance.initialized, true);
+    });
+
+    test('Get.delete test with disposable controller', () async {
+      expect(await Get.delete<DisposableController>(), true);
+      expect(() => Get.find<DisposableController>(),
+          throwsA(TypeMatcher<String>()));
+    });
+
+    test('Get.put test after delete with disposable controller and init check',
+        () async {
+      final instance = Get.put<DisposableController>(DisposableController());
+      expect(instance, Get.find<DisposableController>());
+      expect(instance.initialized, true);
+    });
   });
 }
