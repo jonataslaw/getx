@@ -117,12 +117,12 @@ class GetInstance {
 
   S findByType<S>(Type type, {String tag}) {
     String key = _getKey(type, tag);
-    return GetConfig._singl[key].getSependency() as S;
+    return GetConfig._singl[key].getDependency() as S;
   }
 
   void startController<S>({String tag}) {
     String key = _getKey(S, tag);
-    final i = GetConfig._singl[key].getSependency();
+    final i = GetConfig._singl[key].getDependency();
 
     if (i is DisposableInterface) {
       i.onStart();
@@ -134,7 +134,7 @@ class GetInstance {
   //   final key = _getKey(S, tag);
 
   //   if (GetConfig._singl.containsKey(key)) {
-  //     return GetConfig._singl[key].getSependency() as S;
+  //     return GetConfig._singl[key].getDependency() as S;
   //   } else {
   //     if (GetConfig._factory.containsKey(key)) {
   //       S _value = put<S>((GetConfig._factory[key].builder() as S), tag: tag);
@@ -166,7 +166,7 @@ class GetInstance {
       }
       initDependencies<S>();
 
-      return GetConfig._singl[key].getSependency() as S;
+      return GetConfig._singl[key].getDependency() as S;
     } else {
       if (!GetConfig._factory.containsKey(key))
         throw " $S not found. You need call put<$S>($S()) before";
