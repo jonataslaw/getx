@@ -155,7 +155,7 @@ class GetInstance {
   S find<S>({String tag, FcBuilderFunc<S> instance}) {
     String key = _getKey(S, tag);
 
-    if (isRegistred<S>(tag: tag)) {
+    if (isRegistered<S>(tag: tag)) {
       FcBuilder builder = GetConfig._singl[key] as FcBuilder;
       if (builder == null) {
         if (tag == null) {
@@ -227,7 +227,7 @@ class GetInstance {
       if (GetConfig.isLogEnable) print('[GETX] onClose of $newKey called');
     }
 
-    GetConfig._singl.removeWhere((oldkey, value) => (oldkey == newKey));
+    GetConfig._singl.removeWhere((oldKey, value) => (oldKey == newKey));
     if (GetConfig._singl.containsKey(newKey)) {
       print('[GETX] error on remove object $newKey');
     } else {
@@ -237,8 +237,8 @@ class GetInstance {
     return true;
   }
 
-  /// check if instance is registred
-  bool isRegistred<S>({String tag}) =>
+  /// check if instance is registered
+  bool isRegistered<S>({String tag}) =>
       GetConfig._singl.containsKey(_getKey(S, tag));
 
   /// check if instance is prepared
@@ -259,7 +259,7 @@ class FcBuilder<S> {
 
   FcBuilder(this.isSingleton, this.builderFunc, this.permanent, this.isInit);
 
-  S getSependency() {
+  S getDependency() {
     if (isSingleton) {
       if (dependency == null) {
         dependency = builderFunc() as S;

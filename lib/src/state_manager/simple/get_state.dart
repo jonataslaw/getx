@@ -205,14 +205,14 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
     if (widget.initState != null) widget.initState(this);
     if (widget.global) {
       final isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-      final isRegistred = GetInstance().isRegistred<T>(tag: widget.tag);
+      final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
       if (isPrepared) {
         if (GetConfig.smartManagement != SmartManagement.keepFactory) {
           isCreator = true;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
-      } else if (isRegistred) {
+      } else if (isRegistered) {
         controller = GetInstance().find<T>(tag: widget.tag);
         isCreator = false;
       } else {
@@ -240,7 +240,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
     super.dispose();
     if (widget.dispose != null) widget.dispose(this);
     if (isCreator || widget.assignId) {
-      if (widget.autoRemove && GetInstance().isRegistred<T>(tag: widget.tag)) {
+      if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         if (remove != null) remove();
 
         GetInstance().delete<T>(tag: widget.tag);
@@ -268,7 +268,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
     if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
   }
 
-  Widget get notifyChilds {
+  Widget get notifyChildren {
     final old = Value._remove;
     Value._remove = disposers;
     final observer = Value._setter;
@@ -280,7 +280,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => notifyChilds;
+  Widget build(BuildContext context) => notifyChildren;
 }
 
 class Value<T> extends GetxController {

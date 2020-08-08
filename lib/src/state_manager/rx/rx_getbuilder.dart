@@ -42,14 +42,14 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   void initState() {
     _observer = Rx();
     bool isPrepared = GetInstance().isPrepared<T>();
-    bool isRegistred = GetInstance().isRegistred<T>();
+    bool isRegistered = GetInstance().isRegistered<T>();
     if (widget.global) {
       if (isPrepared) {
         if (GetConfig.smartManagement != SmartManagement.keepFactory) {
           isCreator = true;
         }
         controller = GetInstance().find<T>();
-      } else if (isRegistred) {
+      } else if (isRegistered) {
         controller = GetInstance().find<T>();
         isCreator = false;
       } else {
@@ -89,7 +89,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   void dispose() {
     if (widget.dispose != null) widget.dispose(this);
     if (isCreator || widget.assignId) {
-      if (widget.autoRemove && GetInstance().isRegistred<T>()) {
+      if (widget.autoRemove && GetInstance().isRegistered<T>()) {
         GetInstance().delete<T>();
       }
     }
@@ -100,7 +100,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
     super.dispose();
   }
 
-  Widget get notifyChilds {
+  Widget get notifyChildren {
     final observer = getObs;
     getObs = _observer;
     final result = widget.builder(controller);
@@ -119,5 +119,5 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => notifyChilds;
+  Widget build(BuildContext context) => notifyChildren;
 }
