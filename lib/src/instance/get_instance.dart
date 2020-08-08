@@ -164,7 +164,7 @@ class GetInstance {
           throw "class ${S.toString()} with tag '$tag' is not register";
         }
       }
-      initDependencies<S>();
+      initDependencies<S>(name: tag);
 
       return GetConfig._singl[key].getSependency() as S;
     } else {
@@ -175,7 +175,7 @@ class GetInstance {
         print('[GETX] $S instance was created at that time');
       S _value = put<S>(GetConfig._factory[key].builder() as S);
 
-      initDependencies<S>();
+      initDependencies<S>(name: tag);
 
       if (GetConfig.smartManagement != SmartManagement.keepFactory &&
           !GetConfig._factory[key].fenix) {
