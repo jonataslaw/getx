@@ -30,5 +30,5 @@ extension Inst on GetInterface {
   Future<bool> delete<S>({String tag, String key}) async =>
       GetInstance().delete<S>(tag: tag, key: key);
 
-  bool isRegistred<S>({String tag}) => GetInstance().isRegistred<S>(tag: tag);
+  bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
 }

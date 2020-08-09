@@ -117,12 +117,12 @@ class GetInstance {
 
   S findByType<S>(Type type, {String tag}) {
     String key = _getKey(type, tag);
-    return GetConfig._singl[key].getSependency() as S;
+    return GetConfig._singl[key].getDependency() as S;
   }
 
   void startController<S>({String tag}) {
     String key = _getKey(S, tag);
-    final i = GetConfig._singl[key].getSependency();
+    final i = GetConfig._singl[key].getDependency();
 
     if (i is DisposableInterface) {
       i.onStart();
@@ -134,7 +134,7 @@ class GetInstance {
   //   final key = _getKey(S, tag);
 
   //   if (GetConfig._singl.containsKey(key)) {
-  //     return GetConfig._singl[key].getSependency() as S;
+  //     return GetConfig._singl[key].getDependency() as S;
   //   } else {
   //     if (GetConfig._factory.containsKey(key)) {
   //       S _value = put<S>((GetConfig._factory[key].builder() as S), tag: tag);
@@ -155,7 +155,7 @@ class GetInstance {
   S find<S>({String tag, FcBuilderFunc<S> instance}) {
     String key = _getKey(S, tag);
 
-    if (isRegistred<S>(tag: tag)) {
+    if (isRegistered<S>(tag: tag)) {
       FcBuilder builder = GetConfig._singl[key] as FcBuilder;
       if (builder == null) {
         if (tag == null) {
@@ -166,7 +166,7 @@ class GetInstance {
       }
       initDependencies<S>(name: tag);
 
-      return GetConfig._singl[key].getSependency() as S;
+      return GetConfig._singl[key].getDependency() as S;
     } else {
       if (!GetConfig._factory.containsKey(key))
         throw " $S not found. You need call put<$S>($S()) before";
@@ -227,7 +227,7 @@ class GetInstance {
       if (GetConfig.isLogEnable) print('[GETX] onClose of $newKey called');
     }
 
-    GetConfig._singl.removeWhere((oldkey, value) => (oldkey == newKey));
+    GetConfig._singl.removeWhere((oldKey, value) => (oldKey == newKey));
     if (GetConfig._singl.containsKey(newKey)) {
       print('[GETX] error on remove object $newKey');
     } else {
@@ -237,8 +237,8 @@ class GetInstance {
     return true;
   }
 
-  /// check if instance is registred
-  bool isRegistred<S>({String tag}) =>
+  /// check if instance is registered
+  bool isRegistered<S>({String tag}) =>
       GetConfig._singl.containsKey(_getKey(S, tag));
 
   /// check if instance is prepared
@@ -259,7 +259,7 @@ class FcBuilder<S> {
 
   FcBuilder(this.isSingleton, this.builderFunc, this.permanent, this.isInit);
 
-  S getSependency() {
+  S getDependency() {
     if (isSingleton) {
       if (dependency == null) {
         dependency = builderFunc() as S;
