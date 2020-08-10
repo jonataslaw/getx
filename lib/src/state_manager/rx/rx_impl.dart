@@ -70,13 +70,13 @@ class _RxImpl<T> implements RxInterface<T> {
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 
-class RxMap<K, V> extends RxInterface implements Map<K, V> {
+class RxMap<K, V> extends RxInterface<Map<K, V>> implements Map<K, V> {
   RxMap([Map<K, V> initial]) {
     _value = initial;
   }
 
   @override
-  StreamController subject = StreamController<Map<K, V>>.broadcast();
+  StreamController<Map<K, V>> subject = StreamController<Map<K, V>>.broadcast();
   final Map<Stream<Map<K, V>>, StreamSubscription> _subscriptions = {};
 
   Map<K, V> _value;
@@ -248,7 +248,7 @@ class RxMap<K, V> extends RxInterface implements Map<K, V> {
 }
 
 /// Create a list similar to `List<T>`
-class RxList<E> extends Iterable<E> implements RxInterface<E> {
+class RxList<E> extends Iterable<E> implements RxInterface<List<E>> {
   RxList([List<E> initial]) {
     _list = initial;
   }
@@ -266,8 +266,8 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
   @override
   bool get isNotEmpty => value.isNotEmpty;
 
-  StreamController<E> subject = StreamController<E>.broadcast();
-  Map<Stream<E>, StreamSubscription> _subscriptions = Map();
+  StreamController<List<E>> subject = StreamController<List<E>>.broadcast();
+  Map<Stream<List<E>>, StreamSubscription> _subscriptions = Map();
 
   /// Adds [item] only if [condition] resolves to true.
   void addIf(condition, E item) {
@@ -283,7 +283,7 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   operator []=(int index, E val) {
     _list[index] = val;
-    subject.add(val);
+    subject.add(_list);
   }
 
   E operator [](int index) {
@@ -292,12 +292,12 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   void add(E item) {
     _list.add(item);
-    subject.add(item);
+    subject.add(_list);
   }
 
   void addAll(Iterable<E> item) {
     _list.addAll(item);
-    subject.add(null);
+    subject.add(_list);
   }
 
   /// Adds only if [item] is not null.
@@ -312,12 +312,12 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   void insert(int index, E item) {
     _list.insert(index, item);
-    subject.add(item);
+    subject.add(_list);
   }
 
   void insertAll(int index, Iterable<E> iterable) {
     _list.insertAll(index, iterable);
-    subject.add(iterable.last);
+    subject.add(_list);
   }
 
   int get length => value.length;
@@ -337,34 +337,34 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   E removeAt(int index) {
     E item = _list.removeAt(index);
-    subject.add(item);
+    subject.add(_list);
     return item;
   }
 
   E removeLast() {
     E item = _list.removeLast();
-    subject.add(item);
+    subject.add(_list);
     return item;
   }
 
   void removeRange(int start, int end) {
     _list.removeRange(start, end);
-    subject.add(null);
+    subject.add(_list);
   }
 
   void removeWhere(bool Function(E) test) {
     _list.removeWhere(test);
-    subject.add(null);
+    subject.add(_list);
   }
 
   void clear() {
     _list.clear();
-    subject.add(null);
+    subject.add(_list);
   }
 
   void sort([int compare(E a, E b)]) {
     _list.sort();
-    subject.add(null);
+    subject.add(_list);
   }
 
   close() {
@@ -401,7 +401,7 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
 
   String get string => value.toString();
 
-  addListener(Stream<E> rxGetx) {
+  addListener(Stream<List<E>> rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
       return;
     }
@@ -413,12 +413,12 @@ class RxList<E> extends Iterable<E> implements RxInterface<E> {
   set value(Iterable<E> val) {
     if (_list == val) return;
     _list = val;
-    subject.add(null);
+    subject.add(_list);
   }
 
-  Stream<E> get stream => subject.stream;
+  Stream<List<E>> get stream => subject.stream;
 
-  StreamSubscription<E> listen(void Function(E) onData,
+  StreamSubscription<List<E>> listen(void Function(List<E>) onData,
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 

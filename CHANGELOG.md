@@ -1,3 +1,6 @@
+## [3.4.4]
+- Fix exception 'isInit called null' when tags are used in conjunction with dependencies. (@djade007)
+
 ## [3.4.3]
 - Fix onInit fired only first time 
 - Fix language callback(@lundin)

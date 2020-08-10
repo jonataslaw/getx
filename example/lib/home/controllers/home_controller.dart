@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:get_state/home/data/home_model.dart';
-import 'package:get_state/home/data/home_repository.dart';
+import '../data/home_model.dart';
+import '../data/home_repository.dart';
 
 class HomeController extends GetxController {
-  HomeController(this.homeRepository);
+  HomeController({this.homeRepository});
   final HomeRepository homeRepository;
 
   Rx<ApiModel> data = Rx<ApiModel>();

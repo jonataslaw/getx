@@ -7,7 +7,7 @@ export 'root/root_widget.dart';
 export 'snackbar/snack_route.dart';
 export 'bottomsheet/bottomsheet.dart';
 export 'snackbar/snack.dart';
-export '../get_main.dart';
+export '../core/get_main.dart';
 export 'routes/default_route.dart';
 export 'root/smart_management.dart';
 export 'extension_navigation.dart';

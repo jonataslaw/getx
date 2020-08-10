@@ -47,13 +47,20 @@
 # About Get
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
-- GetX is not for everyone, its focus is (performance) on the minimum consumption of resources ([look the benchmarks](https://github.com/jonataslaw/benchmarks)), (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
-- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts.
-- Navigate without `context`, open `dialogs`, `snackbars` or `bottomsheets` from anywhere in your code, Manage states and inject dependencies in an easy and practical way.
-- Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
-- GetX is not `bloated`. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's AOT which is incredible, and manages to eliminate unused resources like no other framework does.
 
-**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**. Not available in other IDEs for now.
+
+- GetX has 3 basic principles, this means that this is the priority for all resources in the library
+**PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
+**PRODUCTIVITY:** GetX uses an easy and pleasant syntax.
+**ORGANIZATION:** GetX allows total decoupling of the View from the business logic.
+
+
+- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+
+
+- GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
+
+**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
 
 # Installing
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/src/get_interface.dart';
+import 'package:get/src/core/get_interface.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'root/parse_route.dart';

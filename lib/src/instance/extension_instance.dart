@@ -1,4 +1,4 @@
-import 'package:get/src/get_interface.dart';
+import 'package:get/src/core/get_interface.dart';
 import 'get_instance.dart';
 
 extension Inst on GetInterface {

@@ -6,12 +6,12 @@ abstract class RxInterface<T> {
   RxInterface([T initial]);
 
   /// add listener to stream
-  addListener(Stream<T> rxGetx);
+  void addListener(Stream<T> rxGetx);
 
   bool get canUpdate;
 
   /// close stream
-  close() {
+  void close() {
     subject?.close();
   }
 
@@ -21,6 +21,9 @@ abstract class RxInterface<T> {
   StreamSubscription<T> listen(ValueCallback<T> callback);
 }
 
+/// Unlike GetxController, which serves to control events on each of its pages,
+/// GetxService is not automatically disposed. It is ideal for situations where,
+/// once started, that service will remain in memory, such as Auth control for example.
 abstract class GetxService extends DisposableInterface {}
 
 abstract class DisposableInterface {
