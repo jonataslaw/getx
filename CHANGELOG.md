@@ -1,3 +1,7 @@
+## [3.4.5]
+- Fix typo on RxList.remove that could cause type errors.
+- Remove initialization console print
+
 ## [3.4.4]
 - Fix exception 'isInit called null' when tags are used in conjunction with dependencies. (@djade007)
 

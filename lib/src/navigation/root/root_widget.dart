@@ -182,8 +182,6 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
-          print(
-              '[GETX] INITIALIZED: If you need help, join our community support channels: https://tinyurl.com/y3cp88l3');
           if (locale != null) Get.locale = locale;
 
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;

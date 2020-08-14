@@ -330,7 +330,7 @@ class RxList<E> extends Iterable<E> implements RxInterface<List<E>> {
   bool remove(Object item) {
     bool hasRemoved = _list.remove(item);
     if (hasRemoved) {
-      subject.add(item);
+      subject.add(_list);
     }
     return hasRemoved;
   }
@@ -383,7 +383,7 @@ class RxList<E> extends Iterable<E> implements RxInterface<List<E>> {
 
   void update(void fn(Iterable<E> value)) {
     fn(value);
-    subject.add(null);
+    subject.add(_list);
   }
 
   /// Replaces all existing items of this list with [items]
