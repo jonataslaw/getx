@@ -1,3 +1,6 @@
+## [3.4.6]
+- Fix TextField dispose throw on last Flutter hotfix
+
 ## [3.4.5]
 - Fix typo on RxList.remove that could cause type errors.
 - Remove initialization console print
