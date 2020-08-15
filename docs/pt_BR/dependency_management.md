@@ -146,7 +146,8 @@ Get.create<S>(
   // Exemplo: Get.create<YourAsyncClass>( () async => await YourAsyncClass() )
   FcBuilderFunc<S> builder,
 
-  // opcional: igual ao Get.put(), é usado quando você precisa de múltiplas instâncias de uma mesma classe
+  // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
+  // Útil caso você tenha uma lista em que cada item precise de um controller próprio
   // precisa ser uma string única. Apenas mudou o nome de tag para name.
   String name,
 
