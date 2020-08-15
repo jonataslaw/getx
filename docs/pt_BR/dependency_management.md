@@ -73,7 +73,7 @@ Get.delete<Controller>();
 
 ## Métodos de instanciamento.
 
-Apesar do Get já entregar configurações muito boas para uso, é possível refiná-las ainda mais para que sejam de utilididade ainda maior para você programador. Os métodos e seus parâmetros configuráveis são:
+Apesar do Get já entregar configurações muito boas para uso, é possível refiná-las ainda mais para que sejam de utilidade ainda maior para você programador. Os métodos e seus parâmetros configuráveis são:
 
 - Get.put():
 
