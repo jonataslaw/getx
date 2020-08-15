@@ -143,7 +143,7 @@ Get.putAsync<S>(
 ```dart
 Get.create<S>(
   // Obrigatório: um método assíncrono que vai ser executado para instanciar sua classe
-  // Exemplo: Get.create<YourClass>( () async => await YourClass() )
+  // Exemplo: Get.create<YourClass>(() => YourClass() )
   FcBuilderFunc<S> builder,
 
   // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
@@ -166,7 +166,7 @@ Primeiro, vamos falar do `fenix` do Get.lazyPut e o `permanent` dos outros méto
 
 - O `permanent` diz respeito ao uso. Se a instância permanece ativa, ou se é apagada, quando não está em uso na tela.
 
-A diferença fundamental entre `permanent` e `fenix` está em como você quer armazenas as suas instâncias. Reforçando: por padrão, o Get apaga as instâncias quando elas não estão em uso (Digamos que a tela 1 tenha o controlador A e tela 2, controlador B. Ao mover-se de 1 para 2, o controlador A perde o uso e portanto é apagado), mas se você optar por algo `permanent: true`, então ela não se perde nessa transição - o que é muito útil para serviços que você quer manter rodando na aplicação inteira. Já o `fenix`, é para serviços que você não se preocupa em perder por uma tela ou outra, mas quando você precisar chamar o serviço, você espera que ele "retorne das cinzas" (`fenix: true`), criando uma nova instância. 
+A diferença fundamental entre `permanent` e `fenix` está em como você quer armazenar as suas instâncias. Reforçando: por padrão, o Get apaga as instâncias quando elas não estão em uso (Digamos que a tela 1 tenha o controlador A e tela 2, controlador B. Ao mover-se de 1 para 2, o controlador A perde o uso e portanto é apagado), mas se você optar por algo `permanent: true`, então ela não se perde nessa transição - o que é muito útil para serviços que você quer manter rodando na aplicação inteira. Já o `fenix`, é para serviços que você não se preocupa em perder por uma tela ou outra, mas quando você precisar chamar o serviço, você espera que ele "retorne das cinzas" (`fenix: true`), criando uma nova instância. 
 
 Prosseguindo com as diferenças entre os métodos: 
 
