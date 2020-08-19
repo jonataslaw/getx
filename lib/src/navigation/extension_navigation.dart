@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/src/core/get_interface.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:get/src/core/log.dart';
 import 'root/parse_route.dart';
 import 'routes/bindings_interface.dart';
 
@@ -763,6 +764,7 @@ extension GetNavigation on GetInterface {
   /// change default config of Get
   void config(
       {bool enableLog,
+      LogWriterCallback logWriterCallback,
       bool defaultPopGesture,
       bool defaultOpaqueRoute,
       Duration defaultDurationTransition,
@@ -771,6 +773,7 @@ extension GetNavigation on GetInterface {
     if (enableLog != null) {
       GetConfig.isLogEnable = enableLog;
     }
+    GetConfig.log = logWriterCallback;
     if (defaultPopGesture != null) {
       this.defaultPopGesture = defaultPopGesture;
     }

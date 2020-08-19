@@ -49,17 +49,13 @@ class GetObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     if ('${route?.settings?.name}' == 'snackbar') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] OPEN SNACKBAR ${route?.settings?.name}");
+      GetConfig.log("[GETX] OPEN SNACKBAR ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] OPEN BOTTOMSHEET ${route?.settings?.name}");
+      GetConfig.log("[GETX] OPEN BOTTOMSHEET ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] OPEN DIALOG ${route?.settings?.name}");
+      GetConfig.log("[GETX] OPEN DIALOG ${route?.settings?.name}");
     } else {
-      if (GetConfig.isLogEnable)
-        print("[GETX] GOING TO ROUTE ${route?.settings?.name}");
+      GetConfig.log("[GETX] GOING TO ROUTE ${route?.settings?.name}");
     }
 
     _routeSend.update((value) {
@@ -81,17 +77,13 @@ class GetObserver extends NavigatorObserver {
     super.didPop(route, previousRoute);
 
     if ('${route?.settings?.name}' == 'snackbar') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] CLOSE SNACKBAR ${route?.settings?.name}");
+      GetConfig.log("[GETX] CLOSE SNACKBAR ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] CLOSE BOTTOMSHEET ${route?.settings?.name}");
+      GetConfig.log("[GETX] CLOSE BOTTOMSHEET ${route?.settings?.name}");
     } else if ('${route?.settings?.name}' == 'dialog') {
-      if (GetConfig.isLogEnable)
-        print("[GETX] CLOSE DIALOG ${route?.settings?.name}");
+      GetConfig.log("[GETX] CLOSE DIALOG ${route?.settings?.name}");
     } else {
-      if (GetConfig.isLogEnable)
-        print("[GETX] BACK ROUTE ${route?.settings?.name}");
+      GetConfig.log("[GETX] BACK ROUTE ${route?.settings?.name}");
     }
 
     _routeSend.update((value) {
@@ -112,10 +104,8 @@ class GetObserver extends NavigatorObserver {
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    if (GetConfig.isLogEnable)
-      print("[GETX] REPLACE ROUTE ${oldRoute?.settings?.name}");
-    if (GetConfig.isLogEnable)
-      print("[GETX] NEW ROUTE ${newRoute?.settings?.name}");
+    GetConfig.log("[GETX] REPLACE ROUTE ${oldRoute?.settings?.name}");
+    GetConfig.log("[GETX] NEW ROUTE ${newRoute?.settings?.name}");
 
     _routeSend.update((value) {
       if (newRoute is PageRoute) value.current = '${newRoute?.settings?.name}';
@@ -134,8 +124,7 @@ class GetObserver extends NavigatorObserver {
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    if (GetConfig.isLogEnable)
-      print("[GETX] REMOVING ROUTE ${route?.settings?.name}");
+    GetConfig.log("[GETX] REMOVING ROUTE ${route?.settings?.name}");
 
     _routeSend.update((value) {
       value.route = previousRoute;

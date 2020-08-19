@@ -10,6 +10,8 @@ void main() {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
+      enableLog: true,
+      // logWriterCallback: localLogWriter,
       getPages: [
         GetPage(name: '/', page: () => HomePage(), binding: HomeBinding()),
         GetPage(name: '/country', page: () => CountryPage()),
@@ -17,4 +19,9 @@ void main() {
       ],
     ),
   );
+}
+
+// Sample of abstract logging function
+void localLogWriter(String text, {bool isError = false}) {
+  print('** ' + text + ' [' + isError.toString() + ']');
 }
