@@ -773,7 +773,9 @@ extension GetNavigation on GetInterface {
     if (enableLog != null) {
       GetConfig.isLogEnable = enableLog;
     }
-    GetConfig.log = logWriterCallback;
+    if (logWriterCallback != null) {
+      GetConfig.log = logWriterCallback;
+    }
     if (defaultPopGesture != null) {
       this.defaultPopGesture = defaultPopGesture;
     }

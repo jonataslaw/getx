@@ -5,7 +5,7 @@ import 'package:get/src/state_manager/rx/rx_interface.dart';
 class GetConfig {
   static SmartManagement smartManagement = SmartManagement.full;
   static bool isLogEnable = true;
-  static LogWriterCallback log;
+  static LogWriterCallback log = defaultLogWriterCallback;
   static String currentRoute;
 }
 
