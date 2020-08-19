@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/src/core/log.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/navigation/routes/get_route.dart';
 import 'root_controller.dart';
@@ -51,6 +52,7 @@ class GetMaterialApp extends StatelessWidget {
     this.getPages,
     this.opaqueRoute,
     this.enableLog,
+    this.logWriterCallback,
     this.popGesture,
     this.transitionDuration,
     this.defaultGlobalState,
@@ -103,6 +105,7 @@ class GetMaterialApp extends StatelessWidget {
   final VoidCallback onInit;
   final VoidCallback onDispose;
   final bool enableLog;
+  final LogWriterCallback logWriterCallback;
   final bool popGesture;
   final SmartManagement smartManagement;
   final Bindings initialBinding;
@@ -201,6 +204,7 @@ class GetMaterialApp extends StatelessWidget {
 
           Get.config(
             enableLog: enableLog ?? GetConfig.isLogEnable,
+            logWriterCallback: logWriterCallback,
             defaultTransition: defaultTransition ?? Get.defaultTransition,
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
