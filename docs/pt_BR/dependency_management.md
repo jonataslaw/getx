@@ -20,7 +20,7 @@ Em vez de instanciar sua classe dentro da classe que você está usando, você e
 
 Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
 
-**Tip:** O gerenciamento de dependência do get é desaclpado de outras partes do package, então se por exemplo seu aplicativo já está usando um outro gerenciador de estado (qualquer um, não importa), você não precisa de reescrever tudo, pode simplesmente usar só a injeção de dependência sem problemas
+**Tip:** O gerenciamento de dependência do get é desacoplado de outras partes do package, então se por exemplo seu aplicativo já está usando um outro gerenciador de estado (qualquer um, não importa), você não precisa de reescrever tudo, pode simplesmente usar só a injeção de dependência sem problemas
 
 ```dart
 controller.fetchApi();
@@ -71,11 +71,11 @@ Para remover a instância do Get:
 Get.delete<Controller>();
 ```
 
-## Opções
+## Métodos de instanciamento.
 
-Quando você usa Get.put, lazyPut e putAsync, existe algumas opções que você pode alterar se quiser
+Apesar do Get já entregar configurações muito boas para uso, é possível refiná-las ainda mais para que sejam de utilidade ainda maior para você programador. Os métodos e seus parâmetros configuráveis são:
 
-- No Get.put():
+- Get.put():
 
 ```dart
 Get.put<S>(
@@ -95,17 +95,12 @@ Get.put<S>(
   // padrão: false
   bool permanent = false,
 
-  // opcional: permite que depois de usar uma classe abstrata num teste,
-  // trocar por outra e continuar com o teste
-  // padrão: false
-  bool overrideAbstract = false,
-
   // opcional: permite criar a dependência usando uma função em vez da dependênia em si
   FcBuilderFunc<S> builder,
 )
 ```
 
-- No Get.lazyPut:
+- Get.lazyPut:
 
 ```dart
 Get.lazyPut<S>(
@@ -126,7 +121,7 @@ Get.lazyPut<S>(
 )
 ```
 
-- No Get.putAsync:
+- Get.putAsync:
 
 ```dart
 Get.putAsync<S>(
@@ -142,6 +137,44 @@ Get.putAsync<S>(
   // padrão: false
   bool permanent = false
 ```
+
+- Get.create:
+
+```dart
+Get.create<S>(
+  // Obrigatório: Uma função que retorna uma classe que será "fabricada" toda vez que Get.find() for chamado
+  // Exemplo: Get.create<YourClass>(() => YourClass())
+  FcBuilderFunc<S> builder,
+
+  // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
+  // Útil caso você tenha uma lista em que cada item precise de um controller próprio
+  // precisa ser uma string única. Apenas mudou o nome de tag para name.
+  String name,
+
+  // opcional: igual ao Get.put(), usado quando você precisa manter a instância ativa no app inteiro. A diferença
+  // é que com Get.create o permanent está habilitado por padrão
+  bool permanent = true
+```
+
+### Diferenças entre os métodos:
+
+Primeiramente, vamos falar das variáveis `_factory` e `_singl`. Ambas são essenciais no processo de criação e uso de suas dependências, pois é através delas que podemos armazenar, apagar, recriar nossas instâncias. 
+
+Primeiro, vamos falar do `fenix` do Get.lazyPut e o `permanent` dos outros métodos.
+
+- O `fenix` diz respeito ao armazenamento da instância. Quando você manipula os parâmetros `fenix` ou `smartManagement` para não perder as instâncias da sua dependência, elas serão salvas na para serem chamadas posteriormente.
+
+- O `permanent` diz respeito ao uso. Se a instância permanece ativa, ou se é apagada, quando não está em uso na tela.
+
+A diferença fundamental entre `permanent` e `fenix` está em como você quer armazenar as suas instâncias. Reforçando: por padrão, o Get apaga as instâncias quando elas não estão em uso (Digamos que a tela 1 tenha o controlador A e tela 2, controlador B. Ao mover-se de 1 para 2, o controlador A perde o uso e portanto é apagado), mas se você optar por algo `permanent: true`, então ela não se perde nessa transição - o que é muito útil para serviços que você quer manter rodando na aplicação inteira. Já o `fenix`, é para serviços que você não se preocupa em perder por uma tela ou outra, mas quando você precisar chamar o serviço, você espera que ele "retorne das cinzas" (`fenix: true`), criando uma nova instância. 
+
+Prosseguindo com as diferenças entre os métodos: 
+
+- Get.put e Get.putAsync seguem a mesma ordem de criação, com a diferença que o Async opta por aplicar um método assíncrono: Esses dois métodos criam e já inicializam a instância. Esta é inserida diretamente na memória, através do método interno `insert` com os parâmetros `permanent: false` e `isSingleton: true` (esse parâmetro `isSingleton` serve apenas para dizer se é para utilizar a dependência colocada em `dependency`, ou se é para usar a dependência colocada no `FcBuilderFunc`). Depois disso, é chamado o `Get.find` que imediatamente inicializa as instâncias que estão na memória. 
+
+- Get.create: Como o nome indica, você vai "criar" a sua dependência! Similar ao `Get.put`, ela também chama o método interno `insert` para instanciamento. Contudo, `permanent` e `isSingleton` passam a ser `true` e `false` (Como estamos "criando" a nossa dependência, não tem como ela ser um Singleton de algo, logo, `false`). E por ser `permanent: true`, temos por padrão o benefício de não se perder entre telas! Além disso, não é chamado o `Get.find`, logo ela fica esperando ser chamada para ser usada. Ele é criado dessa forma para aproveitar o uso do parâmetro `permanent`, já que, vale ressaltar, o Get.create foi criado com o objetivo de criar instâncias não compartilhadas, mas que não se perdem, como por exemplo um botão em um listView, que você quer uma instância única para aquela lista - por conta disso, o Get.create deve ser usado em conjunto com o GetWidget. 
+
+- Get.lazyPut: Como o nome dá a entender, é um processo preguiçoso (lazy). A instância é criada, mas ela não é chamada para uso logo em seguida, ela fica aguardando ser chamada. Diferente dos outros métodos, o `insert` não é chamado. Ao invés disso, a instância é inserida em outra parte na memória, uma parte responsável por dizer se a instância pode ser recriada ou não, vamos chamá-la de "fábrica". Se queremos criar algo para ser chamado só depois, não vamos misturá-lo com as coisas que estão sendo usadas agora. E é aqui que entra a mágica do `fenix`. Se você optou por deixar `fenix: false`, e seu `smartManagement` não for `keepFactory`, então ao usar o `Get.find` a instância passa da "fábrica" para a área comum das instância. Em seguinda, por padrão é removida da "fábrica". Agora, se você optou por  `fenix: true`, a instância continua a existir nessa parte dedicada, mesmo indo para a área comum, para ser chamada futuramente caso precise. 
 
 ## Bindings
 
