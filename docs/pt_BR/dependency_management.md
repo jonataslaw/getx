@@ -142,8 +142,8 @@ Get.putAsync<S>(
 
 ```dart
 Get.create<S>(
-  // Obrigatório: um método assíncrono que vai ser executado para instanciar sua classe
-  // Exemplo: Get.create<YourClass>(() => YourClass() )
+  // Obrigatório: Uma função que retorna uma classe que será "fabricada" toda vez que Get.find() for chamado
+  // Exemplo: Get.create<YourClass>(() => YourClass())
   FcBuilderFunc<S> builder,
 
   // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
