@@ -17,7 +17,7 @@ _Idiomas: Español (este archivo), [Inglés](README.md), [Portugués de Brasil](
 - [Sobre GetX](#sobre-getx)
 - [Como contribuir](#como-contribuir)
 - [Instalando](#installing)
-- [Proyecto Counter en GetX](#proyecto-counter-no-getx)
+- [Proyecto Counter en GetX](#proyeto-counter-no-getx)
 - [Los tres pilares](#los-tres-pilares)
   - [Gestión del Estado](#gestión-del-estado)
     - [STATE_MANAGER Reactivo](#reactivo-state_manager)
@@ -121,15 +121,15 @@ class Controller extends GetxController {
 ```dart
 class Home extends StatelessWidget {
 
-  // Cree una instancia de su clase usando Get.put () para que esté disponible para todas las rutas "secundarias" allí.
+  // Cree una instancia de su clase usando Get.put() para que esté disponible para todas las rutas "secundarias" allí.
   final Controller c = Get.put(Controller());
 
   @override
   Widget build(context) => Scaffold(
-      // Utilice Obx (() => para actualizar Text () siempre que se cambie el recuento.
+      // Utilice Obx(()=> para actualizar Text() siempre que se cambie el recuento.
       appBar: AppBar(title: Obx(() => Text("Clicks: " + c.count.string))),
 
-      // Reemplace el Navigator.push de 8 líneas por un simple Get.to (). No necesitas contexto
+      // Reemplace el Navigator.push de 8 líneas por un simple Get.to(). No necesitas contexto
       body: Center(child: RaisedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
