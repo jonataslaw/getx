@@ -261,6 +261,7 @@ abstract class Translations {
   Map<String, Map<String, String>> get keys;
 }
 
+
 extension Trans on String {
   String get tr {
     // Returns the key if locale is null.
@@ -279,17 +280,20 @@ extension Trans on String {
         Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
       // If there is no corresponding language or corresponding key, return the key.
-    } else if (Get.fallbackLocale != null &&
-        Get.translations.containsKey(
-            "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
-        Get.translations[
+    } else if (Get.fallbackLocale != null) {
+      if (Get.translations.containsKey(
+              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
+          Get.translations[
+                  "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
+              .containsKey(this)) {
+        return Get.translations[
                 "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-            .containsKey(this)) {
-      return Get.translations[
-              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-          [this];
-
-      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
+            [this];
+      }
+      if (Get.translations.containsKey(Get.fallbackLocale.languageCode) &&
+          Get.translations[Get.fallbackLocale.languageCode].containsKey(this)) {
+        return Get.translations[Get.fallbackLocale.languageCode][this];
+      }
     } else {
       return this;
     }
