@@ -43,10 +43,12 @@ extension GetNavigation on GetInterface {
     bool fullscreenDialog = false,
     Object arguments,
     Bindings binding,
-    preventDuplicates = true,
+    bool preventDuplicates = true,
     bool popGesture,
   }) {
-    if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
+    if (preventDuplicates &&
+        '/${page.runtimeType}' == currentRoute &&
+        forceRouteName) {
       return null;
     }
     return global(id).currentState.push(
@@ -54,7 +56,7 @@ extension GetNavigation on GetInterface {
             opaque: opaque ?? true,
             page: () => page,
             settings: RouteSettings(
-              name: '/${page.runtimeType}',
+              name: forceRouteName ? '/${page.runtimeType}' : '',
               arguments: arguments,
             ),
             popGesture: popGesture ?? defaultPopGesture,
@@ -318,15 +320,18 @@ extension GetNavigation on GetInterface {
     preventDuplicates = true,
     Duration duration,
   }) {
-    if (preventDuplicates && '/${page.runtimeType}' == currentRoute) {
+    if (preventDuplicates &&
+        '/${page.runtimeType}' == currentRoute &&
+        forceRouteName) {
       return null;
     }
     return global(id).currentState.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
         page: () => page,
         binding: binding,
-        settings:
-            RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
+        settings: RouteSettings(
+            name: forceRouteName ? '/${page.runtimeType}' : '',
+            arguments: arguments),
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
@@ -381,8 +386,9 @@ extension GetNavigation on GetInterface {
           popGesture: popGesture ?? defaultPopGesture,
           page: () => page,
           binding: binding,
-          settings:
-              RouteSettings(name: '/${page.runtimeType}', arguments: arguments),
+          settings: RouteSettings(
+              name: forceRouteName ? '/${page.runtimeType}' : '',
+              arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           transition: transition ?? defaultTransition,
           transitionDuration: duration ?? defaultDurationTransition,

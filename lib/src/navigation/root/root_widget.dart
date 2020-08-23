@@ -50,6 +50,7 @@ class GetMaterialApp extends StatelessWidget {
     this.defaultTransition,
     // this.actions,
     this.getPages,
+    this.forceRouteName = true,
     this.opaqueRoute,
     this.enableLog,
     this.logWriterCallback,
@@ -102,6 +103,7 @@ class GetMaterialApp extends StatelessWidget {
   final Function(Routing) routingCallback;
   final Transition defaultTransition;
   final bool opaqueRoute;
+  final bool forceRouteName;
   final VoidCallback onInit;
   final VoidCallback onDispose;
   final bool enableLog;
@@ -189,6 +191,8 @@ class GetMaterialApp extends StatelessWidget {
 
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 
+          Get.forceRouteName = forceRouteName;
+
           if (translations != null) {
             Get.translations = translations.keys;
           } else if (translationsKeys != null) {
@@ -260,7 +264,6 @@ class GetMaterialApp extends StatelessWidget {
 abstract class Translations {
   Map<String, Map<String, String>> get keys;
 }
-
 
 extension Trans on String {
   String get tr {

@@ -16,6 +16,7 @@ import '../../utils.dart';
 abstract class GetInterface {
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
+  bool forceRouteName = true;
   Transition defaultTransition;
   Duration defaultDurationTransition = Duration(milliseconds: 400);
   bool defaultGlobalState = true;
