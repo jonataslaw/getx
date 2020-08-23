@@ -279,8 +279,9 @@ extension Trans on String {
         Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
       // If there is no corresponding language or corresponding key, return the key.
-    } else if (Get.fallbackLocale != null &&
-        Get.translations.containsKey(
+    } else if (Get.fallbackLocale == null) {
+      return this;
+    } else if (Get.translations.containsKey(
             "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
         Get.translations[
                 "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
@@ -290,6 +291,9 @@ extension Trans on String {
           [this];
 
       // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
+    } else if (Get.translations.containsKey(Get.fallbackLocale.languageCode) &&
+        Get.translations[Get.fallbackLocale.languageCode].containsKey(this)) {
+      return Get.translations[Get.fallbackLocale.languageCode][this];
     } else {
       return this;
     }
