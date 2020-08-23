@@ -431,6 +431,14 @@ context.isLargeTablet()
 
 /// True if the current device is Tablet
 context.isTablet()
+
+/// Returns a value according to the screen size
+/// can give value for
+/// swatch: if the shortestSide is smaller than 300
+/// mobile: if the shortestSide is smaller than 600
+/// tablet: if the shortestSide is smaller than 1200
+/// desktop: if width is largest than 1200  
+context.responsiveValue<T>()
 ```
 
 ### Optional Global Settings and Manual configurations
