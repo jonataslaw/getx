@@ -437,7 +437,7 @@ context.isTablet()
 /// swatch: if the shortestSide is smaller than 300
 /// mobile: if the shortestSide is smaller than 600
 /// tablet: if the shortestSide is smaller than 1200
-/// desktop: if the shortestSide is largest than 1200  
+/// desktop: if width is largest than 1200  
 context.responsiveValue<T>()
 ```
 
