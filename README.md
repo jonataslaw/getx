@@ -482,6 +482,22 @@ Get.config(
 )
 ```
 
+You can optionally redirect all the logging messages from Get. If you want to use your own favourite logging package and want to capture the logs there.
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  logWriterCallback: localLogWriter,
+);
+
+void localLogWriter(String text, {bool isError = false}) {
+  // pass the message to your favourite logging package here
+  // please note that even if enableLog: false log messages will be pushed in this callback
+  // you get check the flag if you want through GetConfig.isLogEnable
+}
+
+```
+
 ## Video explanation of Other GetX Features
 
 

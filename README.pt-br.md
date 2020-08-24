@@ -473,6 +473,22 @@ Get.config(
 )
 ```
 
+É possível redirecionar todas as mensagens de log do GetX. Útil quando se tem um package de logging e vc quer que ele lide com todos os logs
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  logWriterCallback: localLogWriter,
+);
+
+void localLogWriter(String text, {bool isError = false}) {
+  // passage a mensagem para seu package de logging favorito aqui
+  // Obs: mesmo que as mensagens de log estejam desativadas
+  // com o comando "enableLog: false", as mensagens ainda vão passar por aqui
+  // Você precisa checar essa config manualmente aqui se quiser respeitá-la
+}
+```
+
 ## Video explanation of Other GetX Features
 
 
