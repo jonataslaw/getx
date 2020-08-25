@@ -9,8 +9,6 @@ import 'simple_builder.dart';
 
 typedef Disposer = void Function();
 
-
-
 class GetxController extends DisposableInterface {
   final HashSet<StateSetter> _updaters = HashSet<StateSetter>();
 

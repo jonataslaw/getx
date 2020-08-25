@@ -1,3 +1,6 @@
+## [3.5.1]
+- Remove unnecessary whitespaces
+
 ## [3.5.0]
 - Added logwritter (@stefandevo)
 - Added responsiveValue (@juanjoseleca)
