@@ -1,4 +1,4 @@
-import '../../utils.dart';
+import '../regex/get_utils.dart';
 
 extension GetNumUtils on num {
   bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
