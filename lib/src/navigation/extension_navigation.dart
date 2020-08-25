@@ -4,6 +4,7 @@ import 'package:get/src/core/get_interface.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/src/core/log.dart';
+import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
 import 'routes/bindings_interface.dart';
 
@@ -46,17 +47,17 @@ extension GetNavigation on GetInterface {
     bool preventDuplicates = true,
     bool popGesture,
   }) {
-    if (preventDuplicates &&
-        '/${page.runtimeType}' == currentRoute &&
-        forceRouteName) {
+    String routename = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routename == currentRoute) {
       return null;
     }
     return global(id).currentState.push(
           GetPageRoute(
             opaque: opaque ?? true,
             page: () => page,
+            routeName: routename,
             settings: RouteSettings(
-              name: forceRouteName ? '/${page.runtimeType}' : '',
+              //  name: forceRouteName ? '${a.runtimeType}' : '',
               arguments: arguments,
             ),
             popGesture: popGesture ?? defaultPopGesture,
@@ -320,18 +321,16 @@ extension GetNavigation on GetInterface {
     preventDuplicates = true,
     Duration duration,
   }) {
-    if (preventDuplicates &&
-        '/${page.runtimeType}' == currentRoute &&
-        forceRouteName) {
+    String routename = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routename == currentRoute) {
       return null;
     }
     return global(id).currentState.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
         page: () => page,
         binding: binding,
-        settings: RouteSettings(
-            name: forceRouteName ? '/${page.runtimeType}' : '',
-            arguments: arguments),
+        settings: RouteSettings(arguments: arguments),
+        routeName: routename,
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
@@ -380,16 +379,17 @@ extension GetNavigation on GetInterface {
   }) {
     var route = (Route<dynamic> rota) => false;
 
+    String routename = "/${page.runtimeType.toString()}";
+
     return global(id).currentState.pushAndRemoveUntil(
         GetPageRoute(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
           page: () => page,
           binding: binding,
-          settings: RouteSettings(
-              name: forceRouteName ? '/${page.runtimeType}' : '',
-              arguments: arguments),
+          settings: RouteSettings(arguments: arguments),
           fullscreenDialog: fullscreenDialog,
+          routeName: routename,
           transition: transition ?? defaultTransition,
           transitionDuration: duration ?? defaultDurationTransition,
         ),
@@ -398,44 +398,76 @@ extension GetNavigation on GetInterface {
 
   /// Show a dialog
   Future<T> dialog<T>(
-    Widget child, {
+    Widget widget, {
     bool barrierDismissible = true,
+    Color barrierColor,
+    bool useSafeArea = true,
     bool useRootNavigator = true,
-    //  RouteSettings routeSettings
+    RouteSettings routeSettings,
   }) {
-    return showDialog(
-      barrierDismissible: barrierDismissible,
-      useRootNavigator: useRootNavigator,
-      routeSettings: RouteSettings(name: 'dialog'),
-      context: overlayContext,
-      builder: (_) {
-        return child;
+    assert(widget != null);
+    assert(barrierDismissible != null);
+    assert(useSafeArea != null);
+    assert(useRootNavigator != null);
+    assert(debugCheckHasMaterialLocalizations(context));
+
+    final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
+    return generalDialog(
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        final Widget pageChild = widget;
+        Widget dialog = Builder(builder: (BuildContext context) {
+          return theme != null
+              ? Theme(data: theme, child: pageChild)
+              : pageChild;
+        });
+        if (useSafeArea) {
+          dialog = SafeArea(child: dialog);
+        }
+        return dialog;
       },
+      barrierDismissible: barrierDismissible,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: barrierColor ?? Colors.black54,
+      transitionDuration: const Duration(milliseconds: 150),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOut,
+          ),
+          child: child,
+        );
+      },
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
     );
   }
 
   /// Api from showGeneralDialog with no context
   Future<T> generalDialog<T>({
     @required RoutePageBuilder pageBuilder,
-    String barrierLabel = "Dismiss",
-    bool barrierDismissible = true,
+    bool barrierDismissible = false,
+    String barrierLabel,
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder transitionBuilder,
     bool useRootNavigator = true,
     RouteSettings routeSettings,
   }) {
-    return showGeneralDialog(
+    assert(pageBuilder != null);
+    assert(useRootNavigator != null);
+    assert(!barrierDismissible || barrierLabel != null);
+    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
+        .push<T>(GetDialogRoute<T>(
       pageBuilder: pageBuilder,
       barrierDismissible: barrierDismissible,
       barrierLabel: barrierLabel,
       barrierColor: barrierColor,
       transitionDuration: transitionDuration,
       transitionBuilder: transitionBuilder,
-      useRootNavigator: useRootNavigator,
-      routeSettings: RouteSettings(name: 'dialog'),
-      context: overlayContext,
-    );
+      settings: routeSettings,
+    ));
   }
 
   Future<T> defaultDialog<T>({
@@ -567,7 +599,7 @@ extension GetNavigation on GetInterface {
       clipBehavior: clipBehavior,
       isDismissible: isDismissible,
       modalBarrierColor: barrierColor,
-      settings: RouteSettings(name: "bottomsheet"),
+      settings: settings,
       enableDrag: enableDrag,
     ));
   }

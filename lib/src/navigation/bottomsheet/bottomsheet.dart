@@ -16,6 +16,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     @required this.isScrollControlled,
     RouteSettings settings,
   })  : assert(isScrollControlled != null),
+        name = "BOTTOMSHEET: ${builder.hashCode}",
         assert(isDismissible != null),
         assert(enableDrag != null),
         super(settings: settings);
@@ -30,6 +31,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
+  final String name;
 
   // remove safearea from top
   final bool removeTop;

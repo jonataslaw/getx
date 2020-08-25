@@ -1,6 +1,7 @@
 import 'package:get/src/core/log.dart';
 import 'package:get/src/navigation/root/smart_management.dart';
 import 'package:get/src/state_manager/rx/rx_interface.dart';
+import 'package:get/src/utils/queue/get_queue.dart';
 
 class GetConfig {
   static SmartManagement smartManagement = SmartManagement.full;
@@ -196,6 +197,14 @@ class GetInstance {
     return true;
   }
 
+  static GetQueue queue = GetQueue();
+
+  // Future<bool> delete<S>({String tag, String key, bool force = false}) async {
+  //   final s = await queue
+  //       .add<bool>(() async => dele<S>(tag: tag, key: key, force: force));
+  //   return s;
+  // }
+
   /// Delete class instance on [S] and clean memory
   Future<bool> delete<S>({String tag, String key, bool force = false}) async {
     String newKey;
@@ -205,36 +214,39 @@ class GetInstance {
       newKey = key;
     }
 
-    if (!_singl.containsKey(newKey)) {
-      GetConfig.log('Instance $newKey not found', isError: true);
-      return false;
-    }
+    return queue.add<bool>(() async {
+      if (!_singl.containsKey(newKey)) {
+        GetConfig.log('[GETX] Instance $newKey already been removed.',
+            isError: true);
+        return false;
+      }
 
-    FcBuilder builder = _singl[newKey] as FcBuilder;
-    if (builder.permanent && !force) {
-      GetConfig.log(
-          '[GETX] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.',
-          isError: true);
-      return false;
-    }
-    final i = builder.dependency;
+      FcBuilder builder = _singl[newKey] as FcBuilder;
+      if (builder.permanent && !force) {
+        GetConfig.log(
+            '[GETX] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.',
+            isError: true);
+        return false;
+      }
+      final i = builder.dependency;
 
-    if (i is GetxService && !force) {
-      return false;
-    }
-    if (i is DisposableInterface) {
-      await i.onClose();
-      GetConfig.log('[GETX] onClose of $newKey called');
-    }
+      if (i is GetxService && !force) {
+        return false;
+      }
+      if (i is DisposableInterface) {
+        await i.onClose();
+        GetConfig.log('[GETX] onClose of $newKey called');
+      }
 
-    _singl.removeWhere((oldKey, value) => (oldKey == newKey));
-    if (_singl.containsKey(newKey)) {
-      GetConfig.log('[GETX] error on remove object $newKey', isError: true);
-    } else {
-      GetConfig.log('[GETX] $newKey deleted from memory');
-    }
-    // _routesKey?.remove(key);
-    return true;
+      _singl.removeWhere((oldKey, value) => (oldKey == newKey));
+      if (_singl.containsKey(newKey)) {
+        GetConfig.log('[GETX] error on remove object $newKey', isError: true);
+      } else {
+        GetConfig.log('[GETX] $newKey deleted from memory');
+      }
+      // _routesKey?.remove(key);
+      return true;
+    });
   }
 
   /// check if instance is registered
