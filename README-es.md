@@ -1,6 +1,6 @@
 ![](get.png)
 
-*Idiomas: Español (este archivo), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md).*
+*Idiomas: Español (este archivo), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Polaco](README.pl.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -106,7 +106,7 @@ void main() => runApp(GetMaterialApp(home: Home()));
 Cree su clase con la lógica de negocio colocando todas las variables, métodos y controladores dentro de ella. Puede hacer que cualquier variable sea observable usando un simple ".obs".
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
   var count = 0.obs;
   increment() => count.value++;
 }
@@ -141,6 +141,7 @@ class Other extends StatelessWidget {
   Widget build(context){
      // Access the updated count variable
      return Scaffold(body: Center(child: Text(c.count.string)));
+  }
 }
 
 ```

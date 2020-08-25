@@ -1,3 +1,39 @@
+## [3.5.1]
+- Remove unnecessary whitespaces
+
+## [3.5.0]
+- Added logwritter (@stefandevo)
+- Added responsiveValue (@juanjoseleca)
+- Fixed ghost url for snackbar, bottomsheets, and dialogs and unnamed navigation.
+
+## [3.4.6]
+- Fix TextField dispose throw on last Flutter hotfix
+
+## [3.4.5]
+- Fix typo on RxList.remove that could cause type errors.
+- Remove initialization console print
+
+## [3.4.4]
+- Fix exception 'isInit called null' when tags are used in conjunction with dependencies. (@djade007) 
+- Fix typos (@tiagocpeixoto)
+
+## [3.4.3]
+- Fix onInit fired only first time 
+- Fix language callback(@lundin)
+- Fix docs (@nipodemos)
+
+## [3.4.2]
+- Fix individual imports
+
+## [3.4.1]
+- Structure organization, and improvements.
+
+## [3.4.0]
+- Added '[everAll]' Worker: Listen a List of '.obx'
+- Added Workers dispose
+- Fix transition.noTransition
+- Fix TextField and VideoPlayController dispose before transition animation
+
 ## [3.3.0]
 - Fix extensions (@stefandevo)
 - Added CPF to utils options (@kauemurakami)

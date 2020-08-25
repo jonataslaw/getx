@@ -34,6 +34,8 @@ void main() {
 
     Get.to(SecondScreen());
 
+    await tester.pump(Duration.zero);
+
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);

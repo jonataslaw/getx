@@ -1,10 +1,10 @@
 ![](get.png)
 
-*Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md).*
+*Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md),[Polish](README.pl.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
-[![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Discord Shield](https://discordapp.com/api/guilds/722900883784073290/widget.png?style=shield)](https://discord.com/invite/9Hpt99N)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
@@ -40,20 +40,27 @@
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[**Discord (English and Portuguese)**](https://discord.com/invite/9Hpt99N)
+[**Discord (English, Spanish and Portuguese)**](https://discord.com/invite/9Hpt99N)
 
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # About Get
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
-- GetX is not for everyone, its focus is (performance) on the minimum consumption of resources ([look the benchmarks](https://github.com/jonataslaw/benchmarks)), (productivity) using an easy and pleasant syntax and (organization) allowing the total decoupling of the View from the business logic.
-- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts.
-- Navigate without `context`, open `dialogs`, `snackbars` or `bottomsheets` from anywhere in your code, Manage states and inject dependencies in an easy and practical way.
-- Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
-- GetX is not `bloated`. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's AOT which is incredible, and manages to eliminate unused resources like no other framework does.
 
-**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**. Not available in other IDEs for now.
+
+- GetX has 3 basic principles, this means that this is the priority for all resources in the library
+**PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
+**PRODUCTIVITY:** GetX uses an easy and pleasant syntax.
+**ORGANIZATION:** GetX allows total decoupling of the View from the business logic.
+
+
+- GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
+
+
+- GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
+
+**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
 
 # Installing
 
@@ -205,10 +212,9 @@ GetMaterialApp( // Before: MaterialApp(
   home: MyHome(),
 )
 ```
-
-To navigate to a new screen:
-
+Navigate to new screen:
 ```dart
+
 Get.to(NextScreen());
 ```
 
@@ -252,6 +258,7 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 
 Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
 So you can use your controller (or class Bloc) normally
+
 
 **Tip:** Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
 
@@ -424,6 +431,14 @@ context.isLargeTablet()
 
 /// True if the current device is Tablet
 context.isTablet()
+
+/// Returns a value according to the screen size
+/// can give value for
+/// swatch: if the shortestSide is smaller than 300
+/// mobile: if the shortestSide is smaller than 600
+/// tablet: if the shortestSide is smaller than 1200
+/// desktop: if width is largest than 1200  
+context.responsiveValue<T>()
 ```
 
 ### Optional Global Settings and Manual configurations
@@ -467,6 +482,22 @@ Get.config(
 )
 ```
 
+You can optionally redirect all the logging messages from Get. If you want to use your own favourite logging package and want to capture the logs there.
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  logWriterCallback: localLogWriter,
+);
+
+void localLogWriter(String text, {bool isError = false}) {
+  // pass the message to your favourite logging package here
+  // please note that even if enableLog: false log messages will be pushed in this callback
+  // you get check the flag if you want through GetConfig.isLogEnable
+}
+
+```
+
 ## Video explanation of Other GetX Features
 
 
@@ -481,7 +512,7 @@ Amateur Coder did an awesome video about utils, storage, bindings and other feat
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
-| MapX    | `RxMax`    |
+| MapX    | `RxMap`    |
 | ListX   | `RxList`   |
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |

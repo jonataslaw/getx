@@ -1,8 +1,7 @@
-import 'package:get/src/typedefs/typedefs.dart';
-import '../get_main.dart';
+import 'package:get/src/core/get_interface.dart';
 import 'get_instance.dart';
 
-extension Inst on GetImpl {
+extension Inst on GetInterface {
   void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
     return GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
@@ -19,15 +18,9 @@ extension Inst on GetImpl {
       GetInstance().find<S>(tag: tag, instance: instance);
 
   S put<S>(S dependency,
-          {String tag,
-          bool permanent = false,
-          bool overrideAbstract = false,
-          FcBuilderFunc<S> builder}) =>
-      GetInstance().put<S>(dependency,
-          tag: tag,
-          permanent: permanent,
-          overrideAbstract: overrideAbstract,
-          builder: builder);
+          {String tag, bool permanent = false, FcBuilderFunc<S> builder}) =>
+      GetInstance()
+          .put<S>(dependency, tag: tag, permanent: permanent, builder: builder);
 
   bool reset({bool clearFactory = true, bool clearRouteBindings = true}) =>
       GetInstance().reset(
@@ -37,5 +30,5 @@ extension Inst on GetImpl {
   Future<bool> delete<S>({String tag, String key}) async =>
       GetInstance().delete<S>(tag: tag, key: key);
 
-  bool isRegistred<S>({String tag}) => GetInstance().isRegistred<S>(tag: tag);
+  bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
 }

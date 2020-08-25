@@ -1,11 +1,11 @@
-import 'package:get_state/home/data/home_provider.dart';
-import 'package:get_state/home/data/home_model.dart';
+import 'home_model.dart';
+import 'home_provider.dart';
 
 class HomeRepository {
-  HomeRepository(this.homeProvider);
+  HomeRepository({this.homeProvider});
   final HomeProvider homeProvider;
 
   Future<ApiModel> getData() async {
-    return homeProvider.fetchData();
+    return homeProvider.get();
   }
 }

@@ -1,14 +1,12 @@
-import 'package:get/src/root/smart_management.dart';
-import 'package:get/src/rx/rx_interface.dart';
-import 'package:get/src/typedefs/typedefs.dart';
+import 'package:get/src/core/log.dart';
+import 'package:get/src/navigation/root/smart_management.dart';
+import 'package:get/src/state_manager/rx/rx_interface.dart';
+import 'package:get/src/utils/queue/get_queue.dart';
 
 class GetConfig {
-  //////////// INSTANCE MANAGER
-  static Map<dynamic, dynamic> _singl = {};
-  static Map<dynamic, Lazy> _factory = {};
-  static Map<String, String> routesKey = {};
   static SmartManagement smartManagement = SmartManagement.full;
   static bool isLogEnable = true;
+  static LogWriterCallback log = defaultLogWriterCallback;
   static String currentRoute;
 }
 
@@ -23,13 +21,17 @@ class GetInstance {
     if (_getInstance == null) _getInstance = GetInstance._();
     return _getInstance;
   }
-  GetInstance._();
+  const GetInstance._();
   static GetInstance _getInstance;
+
+  static Map<dynamic, dynamic> _singl = {};
+  static Map<dynamic, Lazy> _factory = {};
+  static Map<String, String> _routesKey = {};
 
   void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
     String key = _getKey(S, tag);
 
-    GetConfig._factory.putIfAbsent(key, () => Lazy(builder, fenix));
+    _factory.putIfAbsent(key, () => Lazy(builder, fenix));
   }
 
   Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
@@ -42,13 +44,10 @@ class GetInstance {
     S dependency, {
     String tag,
     bool permanent = false,
-    bool overrideAbstract = false,
     FcBuilderFunc<S> builder,
   }) {
     _insert(
         isSingleton: true,
-        replace: overrideAbstract,
-        //?? (("$S" == "${dependency.runtimeType}") == false),
         name: tag,
         permanent: permanent,
         builder: builder ?? (() => dependency));
@@ -73,78 +72,92 @@ class GetInstance {
   void _insert<S>({
     bool isSingleton,
     String name,
-    bool replace = true,
     bool permanent = false,
     FcBuilderFunc<S> builder,
   }) {
     assert(builder != null);
     String key = _getKey(S, name);
-    if (replace) {
-      GetConfig._singl[key] = FcBuilder<S>(isSingleton, builder, permanent);
-    } else {
-      GetConfig._singl.putIfAbsent(
-          key, () => FcBuilder<S>(isSingleton, builder, permanent));
-    }
+
+    _singl.putIfAbsent(
+        key, () => FcBuilder<S>(isSingleton, builder, permanent, false));
   }
 
-  void removeDependencyByRoute(String routeName) async {
+  Future<void> removeDependencyByRoute(String routeName) async {
     List<String> keysToRemove = [];
-    GetConfig.routesKey.forEach((key, value) {
-      // if (value == routeName && value != null) {
+    _routesKey.forEach((key, value) {
       if (value == routeName) {
         keysToRemove.add(key);
       }
     });
+
     keysToRemove.forEach((element) async {
       await delete(key: element);
     });
     keysToRemove.forEach((element) {
-      GetConfig.routesKey?.remove(element);
+      _routesKey?.remove(element);
     });
     keysToRemove.clear();
   }
 
-  bool isRouteDependecyNull<S>({String name}) {
-    return (GetConfig.routesKey[_getKey(S, name)] == null);
-  }
-
-  bool isDependencyInit<S>({String name}) {
+  bool initDependencies<S>({String name}) {
     String key = _getKey(S, name);
-    return GetConfig.routesKey.containsKey(key);
+    bool isInit = _singl[key].isInit;
+    if (!isInit) {
+      startController<S>(tag: name);
+      _singl[key].isInit = true;
+      if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+        registerRouteInstance<S>(tag: name);
+      }
+    }
+    return true;
   }
 
   void registerRouteInstance<S>({String tag}) {
-    GetConfig.routesKey
-        .putIfAbsent(_getKey(S, tag), () => GetConfig.currentRoute);
+    _routesKey.putIfAbsent(_getKey(S, tag), () => GetConfig.currentRoute);
   }
 
   S findByType<S>(Type type, {String tag}) {
     String key = _getKey(type, tag);
-    return GetConfig._singl[key].getSependency() as S;
+    return _singl[key].getDependency() as S;
   }
 
-  void initController<S>({String tag}) {
+  void startController<S>({String tag}) {
     String key = _getKey(S, tag);
-    final i = GetConfig._singl[key].getSependency();
+    final i = _singl[key].getDependency();
 
     if (i is DisposableInterface) {
       i.onStart();
-      if (GetConfig.isLogEnable) print('[GET] $key has been initialized');
+      GetConfig.log('[GETX] $key has been initialized');
     }
   }
+
+  // S putOrFind<S>(S Function() dep, {String tag}) {
+  //   final key = _getKey(S, tag);
+
+  //   if (_singl.containsKey(key)) {
+  //     return _singl[key].getDependency() as S;
+  //   } else {
+  //     if (_factory.containsKey(key)) {
+  //       S _value = put<S>((_factory[key].builder() as S), tag: tag);
+
+  //       if (GetConfig.smartManagement != SmartManagement.keepFactory) {
+  //         if (!_factory[key].fenix) {
+  //           _factory.remove(key);
+  //         }
+  //       }
+  //       return _value;
+  //     }
+
+  //     return GetInstance().put(dep(), tag: tag);
+  //   }
+  // }
 
   /// Find a instance from required class
   S find<S>({String tag, FcBuilderFunc<S> instance}) {
     String key = _getKey(S, tag);
-    bool callInit = false;
-    if (isRegistred<S>(tag: tag)) {
-      if (!isDependencyInit<S>() &&
-          GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        registerRouteInstance<S>(tag: tag);
-        callInit = true;
-      }
 
-      FcBuilder builder = GetConfig._singl[key] as FcBuilder;
+    if (isRegistered<S>(tag: tag)) {
+      FcBuilder builder = _singl[key] as FcBuilder;
       if (builder == null) {
         if (tag == null) {
           throw "class ${S.toString()} is not register";
@@ -152,53 +165,24 @@ class GetInstance {
           throw "class ${S.toString()} with tag '$tag' is not register";
         }
       }
-      if (callInit) {
-        initController<S>(tag: tag);
-      }
+      initDependencies<S>(name: tag);
 
-      return GetConfig._singl[key].getSependency() as S;
+      return _singl[key].getDependency() as S;
     } else {
-      if (!GetConfig._factory.containsKey(key))
+      if (!_factory.containsKey(key))
         throw " $S not found. You need call put<$S>($S()) before";
 
-      if (GetConfig.isLogEnable)
-        print('[GET] $S instance was created at that time');
-      S _value = put<S>(GetConfig._factory[key].builder() as S);
+      GetConfig.log('[GETX] $S instance was created at that time');
+      S _value = put<S>(_factory[key].builder() as S);
 
-      if (!isDependencyInit<S>() &&
-          GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        registerRouteInstance<S>(tag: tag);
-        callInit = true;
+      initDependencies<S>(name: tag);
+
+      if (GetConfig.smartManagement != SmartManagement.keepFactory &&
+          !_factory[key].fenix) {
+        _factory.remove(key);
       }
 
-      if (GetConfig.smartManagement != SmartManagement.keepFactory) {
-        if (!GetConfig._factory[key].fenix) {
-          GetConfig._factory.remove(key);
-        }
-      }
-
-      if (callInit) {
-        initController<S>(tag: tag);
-      }
       return _value;
-    }
-  }
-
-  /// Remove dependency of [S] on dependency abstraction. For concrete class use delete
-  void remove<S>({String tag}) {
-    String key = _getKey(S, tag);
-    FcBuilder builder = GetConfig._singl[key] as FcBuilder;
-    final i = builder.dependency;
-
-    if (i is DisposableInterface) {
-      i.onClose();
-      if (GetConfig.isLogEnable) print('[GET] onClose of $key called');
-    }
-    if (builder != null) builder.dependency = null;
-    if (GetConfig._singl.containsKey(key)) {
-      print('error on remove $key');
-    } else {
-      if (GetConfig.isLogEnable) print('[GET] $key removed from memory');
     }
   }
 
@@ -207,14 +191,22 @@ class GetInstance {
   }
 
   bool reset({bool clearFactory = true, bool clearRouteBindings = true}) {
-    if (clearFactory) GetConfig._factory.clear();
-    if (clearRouteBindings) GetConfig.routesKey.clear();
-    GetConfig._singl.clear();
+    if (clearFactory) _factory.clear();
+    if (clearRouteBindings) _routesKey.clear();
+    _singl.clear();
     return true;
   }
 
+  static GetQueue queue = GetQueue();
+
+  // Future<bool> delete<S>({String tag, String key, bool force = false}) async {
+  //   final s = await queue
+  //       .add<bool>(() async => dele<S>(tag: tag, key: key, force: force));
+  //   return s;
+  // }
+
   /// Delete class instance on [S] and clean memory
-  Future<bool> delete<S>({String tag, String key}) async {
+  Future<bool> delete<S>({String tag, String key, bool force = false}) async {
     String newKey;
     if (key == null) {
       newKey = _getKey(S, tag);
@@ -222,39 +214,69 @@ class GetInstance {
       newKey = key;
     }
 
-    if (!GetConfig._singl.containsKey(newKey)) {
-      print('Instance $newKey not found');
-      return false;
-    }
+    return queue.add<bool>(() async {
+      if (!_singl.containsKey(newKey)) {
+        GetConfig.log('[GETX] Instance $newKey already been removed.',
+            isError: true);
+        return false;
+      }
 
-    FcBuilder builder = GetConfig._singl[newKey] as FcBuilder;
-    if (builder.permanent) {
-      print(
-          '[GET] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.');
-      return false;
-    }
-    final i = builder.dependency;
+      FcBuilder builder = _singl[newKey] as FcBuilder;
+      if (builder.permanent && !force) {
+        GetConfig.log(
+            '[GETX] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.',
+            isError: true);
+        return false;
+      }
+      final i = builder.dependency;
 
-    if (i is DisposableInterface) {
-      await i.onClose();
-      if (GetConfig.isLogEnable) print('[GET] onClose of $newKey called');
-    }
+      if (i is GetxService && !force) {
+        return false;
+      }
+      if (i is DisposableInterface) {
+        await i.onClose();
+        GetConfig.log('[GETX] onClose of $newKey called');
+      }
 
-    GetConfig._singl.removeWhere((oldkey, value) => (oldkey == newKey));
-    if (GetConfig._singl.containsKey(newKey)) {
-      print('[GET] error on remove object $newKey');
-    } else {
-      if (GetConfig.isLogEnable) print('[GET] $newKey deleted from memory');
-    }
-    // GetConfig.routesKey?.remove(key);
-    return true;
+      _singl.removeWhere((oldKey, value) => (oldKey == newKey));
+      if (_singl.containsKey(newKey)) {
+        GetConfig.log('[GETX] error on remove object $newKey', isError: true);
+      } else {
+        GetConfig.log('[GETX] $newKey deleted from memory');
+      }
+      // _routesKey?.remove(key);
+      return true;
+    });
   }
 
-  /// check if instance is registred
-  bool isRegistred<S>({String tag}) =>
-      GetConfig._singl.containsKey(_getKey(S, tag));
+  /// check if instance is registered
+  bool isRegistered<S>({String tag}) => _singl.containsKey(_getKey(S, tag));
 
   /// check if instance is prepared
-  bool isPrepared<S>({String tag}) =>
-      GetConfig._factory.containsKey(_getKey(S, tag));
+  bool isPrepared<S>({String tag}) => _factory.containsKey(_getKey(S, tag));
+}
+
+typedef FcBuilderFunc<S> = S Function();
+
+typedef FcBuilderFuncAsync<S> = Future<S> Function();
+
+class FcBuilder<S> {
+  bool isSingleton;
+  FcBuilderFunc builderFunc;
+  S dependency;
+  bool permanent = false;
+  bool isInit = false;
+
+  FcBuilder(this.isSingleton, this.builderFunc, this.permanent, this.isInit);
+
+  S getDependency() {
+    if (isSingleton) {
+      if (dependency == null) {
+        dependency = builderFunc() as S;
+      }
+      return dependency;
+    } else {
+      return builderFunc() as S;
+    }
+  }
 }

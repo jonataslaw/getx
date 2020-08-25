@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:get/src/platform/platform_web.dart';
+import 'package:get/src/utils/platform/platform_web.dart';
 
 void main() {
   test('Platform test', () {
