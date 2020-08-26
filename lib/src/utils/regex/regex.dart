@@ -1,4 +1,5 @@
-/// Following:
+/// Copyright (c) 2020, Agung Nursatria
+/// All rights reserved.
 /// https://pub.dev/packages/regexpattern
 /// https://github.com/agungnursatria/regexpattern
 class Regex {
