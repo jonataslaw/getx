@@ -10,7 +10,7 @@ extension GetStringUtils on String {
   bool get isAudioFileName => GetUtils.isAudio(this);
   bool get isVideoFileName => GetUtils.isVideo(this);
   bool get isTxtFileName => GetUtils.isTxt(this);
-  bool get isDocumentFileName => GetUtils.isDocument(this);
+  bool get isDocumentFileName => GetUtils.isWord(this);
   bool get isExcelFileName => GetUtils.isExcel(this);
   bool get isPPTFileName => GetUtils.isPPT(this);
   bool get isAPKFileName => GetUtils.isAPK(this);
@@ -23,7 +23,6 @@ extension GetStringUtils on String {
   bool get isMD5 => GetUtils.isMD5(this);
   bool get isSHA1 => GetUtils.isSHA1(this);
   bool get isSHA256 => GetUtils.isSHA256(this);
-  bool get isISBN => GetUtils.isISBN(this);
   bool get isBinary => GetUtils.isBinary(this);
   bool get isIPv4 => GetUtils.isIPv4(this);
   bool get isIPv6 => GetUtils.isIPv6(this);

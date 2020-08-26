@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/src/state_manager/rx/rx_interface.dart';
-
 import 'rx_impl.dart';
 
 Widget obx(Widget Function() builder) {
@@ -96,7 +94,7 @@ class _ObxState extends State<Obx> {
 ///    false.obs,
 ///   ),
 
-// TODO: change T to a proper Rx interfase, that includes the accessor for ::value
+// TODO: change T to a proper Rx interface, that includes the accessor for ::value
 class ObxValue<T extends RxInterface> extends StatefulWidget {
   final Widget Function(T) builder;
   final T data;
