@@ -36,6 +36,6 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
         id: id,
         didChangeDependencies: didChangeDependencies,
         didUpdateWidget: didUpdateWidget,
-        builder: (controller) => obx(() => builder.call(controller)));
+        builder: (controller) => Obx(() => builder.call(controller)));
   }
 }

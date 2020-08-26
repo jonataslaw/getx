@@ -33,7 +33,7 @@ void main() {
                   child: Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
-                obx(() => Text(
+                Obx(() => Text(
                       'Obx: ${controller.map.value.length}',
                     ))
               ]),
