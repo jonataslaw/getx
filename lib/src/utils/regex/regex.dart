@@ -1,3 +1,6 @@
+/// Following:
+/// https://pub.dev/packages/regexpattern
+/// https://github.com/agungnursatria/regexpattern
 class Regex {
   /// Username regex
   Pattern username = r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$';
