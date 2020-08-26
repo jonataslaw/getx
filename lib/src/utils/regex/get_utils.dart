@@ -27,7 +27,7 @@ class GetUtils {
   }
 
   /// Checks if string consist only numeric.
-  /// Numeric only doesnt accepting "." which double data type have
+  /// Numeric only doesn't accepting "." which double data type have
   static bool isNumericOnly(String s) =>
       RegexValidation.hasMatch(s, regex.numericOnly);
 

@@ -1,3 +1,11 @@
+## [3.5.1]
+- Remove unnecessary whitespaces
+
+## [3.5.0]
+- Added logwritter (@stefandevo)
+- Added responsiveValue (@juanjoseleca)
+- Fixed ghost url for snackbar, bottomsheets, and dialogs and unnamed navigation.
+
 ## [3.4.6]
 - Fix TextField dispose throw on last Flutter hotfix
 
@@ -6,7 +14,8 @@
 - Remove initialization console print
 
 ## [3.4.4]
-- Fix exception 'isInit called null' when tags are used in conjunction with dependencies. (@djade007)
+- Fix exception 'isInit called null' when tags are used in conjunction with dependencies. (@djade007) 
+- Fix typos (@tiagocpeixoto)
 
 ## [3.4.3]
 - Fix onInit fired only first time 

@@ -4,7 +4,7 @@
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
-[![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Discord Shield](https://discordapp.com/api/guilds/722900883784073290/widget.png?style=shield)](https://discord.com/invite/9Hpt99N)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
@@ -40,7 +40,7 @@
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[**Discord (English and Portuguese)**](https://discord.com/invite/9Hpt99N)
+[**Discord (English, Spanish and Portuguese)**](https://discord.com/invite/9Hpt99N)
 
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
@@ -431,6 +431,14 @@ context.isLargeTablet()
 
 /// True if the current device is Tablet
 context.isTablet()
+
+/// Returns a value according to the screen size
+/// can give value for
+/// swatch: if the shortestSide is smaller than 300
+/// mobile: if the shortestSide is smaller than 600
+/// tablet: if the shortestSide is smaller than 1200
+/// desktop: if width is largest than 1200  
+context.responsiveValue<T>()
 ```
 
 ### Optional Global Settings and Manual configurations
@@ -472,6 +480,22 @@ Get.config(
   defaultPopGesture = true,
   defaultTransition = Transitions.cupertino
 )
+```
+
+You can optionally redirect all the logging messages from Get. If you want to use your own favourite logging package and want to capture the logs there.
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+  logWriterCallback: localLogWriter,
+);
+
+void localLogWriter(String text, {bool isError = false}) {
+  // pass the message to your favourite logging package here
+  // please note that even if enableLog: false log messages will be pushed in this callback
+  // you get check the flag if you want through GetConfig.isLogEnable
+}
+
 ```
 
 ## Video explanation of Other GetX Features

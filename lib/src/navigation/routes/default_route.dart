@@ -27,6 +27,7 @@ class GetPageRoute<T> extends PageRoute<T> {
     this.barrierColor,
     this.binding,
     this.bindings,
+    this.routeName,
     this.page,
     this.barrierLabel,
     this.maintainState = true,
@@ -41,6 +42,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   final Duration transitionDuration;
 
   final GetPageBuilder page;
+
+  final String routeName;
 
   final CustomTransition customTransition;
 
@@ -119,8 +122,9 @@ class GetPageRoute<T> extends PageRoute<T> {
         element.dependencies();
       }
     }
-    GetConfig.currentRoute = settings.name;
-    return page();
+    final pageWidget = page();
+    GetConfig.currentRoute = settings.name ?? routeName;
+    return pageWidget;
   }
 
   static bool isPopGestureInProgress(PageRoute<dynamic> route) {
@@ -389,8 +393,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   @override
   void dispose() {
     if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => GetInstance().removeDependencyByRoute("${settings.name}"));
+      WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
+          .removeDependencyByRoute("${settings?.name ?? routeName}"));
     }
     super.dispose();
   }
