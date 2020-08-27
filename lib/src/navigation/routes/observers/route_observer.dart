@@ -107,13 +107,13 @@ class GetObserver extends NavigatorObserver {
     String routeName = name(route);
 
     if (isSnackbar) {
-      GetConfig.log("[GETX] CLOSE SNACKBAR $routeName");
+      GetConfig.log("CLOSE SNACKBAR $routeName", name: '[GETX]');
     } else if (isBottomSheet) {
-      GetConfig.log("[GETX] CLOSE $routeName");
+      GetConfig.log("CLOSE $routeName", name: '[GETX]');
     } else if (isDialog) {
-      GetConfig.log("[GETX] CLOSE $routeName");
+      GetConfig.log("CLOSE $routeName", name: '[GETX]');
     } else if (isGetPageRoute) {
-      GetConfig.log("[GETX] CLOSE TO ROUTE $routeName");
+      GetConfig.log("CLOSE TO ROUTE $routeName", name: '[GETX]');
     }
     GetConfig.currentRoute = routeName;
 
@@ -136,8 +136,8 @@ class GetObserver extends NavigatorObserver {
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
 
-    GetConfig.log("[GETX] REPLACE ROUTE ${oldRoute?.settings?.name}");
-    GetConfig.log("[GETX] NEW ROUTE ${newRoute?.settings?.name}");
+    GetConfig.log("REPLACE ROUTE ${oldRoute?.settings?.name}", name: '[GETX]');
+    GetConfig.log("NEW ROUTE ${newRoute?.settings?.name}", name: '[GETX]');
 
     GetConfig.currentRoute = name(newRoute);
 
@@ -158,7 +158,7 @@ class GetObserver extends NavigatorObserver {
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    GetConfig.log("[GETX] REMOVING ROUTE ${route?.settings?.name}");
+    GetConfig.log("REMOVING ROUTE ${route?.settings?.name}", name: '[GETX]');
 
     _routeSend.update((value) {
       value.route = previousRoute;
