@@ -72,13 +72,13 @@ class GetObserver extends NavigatorObserver {
     String routeName = name(route);
 
     if (isSnackbar) {
-      GetConfig.log("[GETX] OPEN SNACKBAR $routeName");
+      GetConfig.log("OPEN SNACKBAR $routeName", name: '[GETX]');
     } else if (isBottomSheet) {
-      GetConfig.log("[GETX] OPEN $routeName");
+      GetConfig.log("OPEN $routeName", name: '[GETX]');
     } else if (isDialog) {
-      GetConfig.log("[GETX] OPEN $routeName");
+      GetConfig.log("OPEN $routeName", name: '[GETX]');
     } else if (isGetPageRoute) {
-      GetConfig.log("[GETX] GOING TO ROUTE $routeName");
+      GetConfig.log("GOING TO ROUTE $routeName", name: '[GETX]');
     }
     GetConfig.currentRoute = routeName;
 
