@@ -72,13 +72,13 @@ class GetObserver extends NavigatorObserver {
     String routeName = name(route);
 
     if (isSnackbar) {
-      GetConfig.log("OPEN SNACKBAR $routeName", name: '[GETX]');
+      GetConfig.log("OPEN SNACKBAR $routeName");
     } else if (isBottomSheet) {
-      GetConfig.log("OPEN $routeName", name: '[GETX]');
+      GetConfig.log("OPEN $routeName");
     } else if (isDialog) {
-      GetConfig.log("OPEN $routeName", name: '[GETX]');
+      GetConfig.log("OPEN $routeName");
     } else if (isGetPageRoute) {
-      GetConfig.log("GOING TO ROUTE $routeName", name: '[GETX]');
+      GetConfig.log("GOING TO ROUTE $routeName");
     }
     GetConfig.currentRoute = routeName;
 
@@ -107,13 +107,13 @@ class GetObserver extends NavigatorObserver {
     String routeName = name(route);
 
     if (isSnackbar) {
-      GetConfig.log("CLOSE SNACKBAR $routeName", name: '[GETX]');
+      GetConfig.log("CLOSE SNACKBAR $routeName");
     } else if (isBottomSheet) {
-      GetConfig.log("CLOSE $routeName", name: '[GETX]');
+      GetConfig.log("CLOSE $routeName");
     } else if (isDialog) {
-      GetConfig.log("CLOSE $routeName", name: '[GETX]');
+      GetConfig.log("CLOSE $routeName");
     } else if (isGetPageRoute) {
-      GetConfig.log("CLOSE TO ROUTE $routeName", name: '[GETX]');
+      GetConfig.log("CLOSE TO ROUTE $routeName");
     }
     GetConfig.currentRoute = routeName;
 
@@ -136,8 +136,8 @@ class GetObserver extends NavigatorObserver {
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
 
-    GetConfig.log("REPLACE ROUTE ${oldRoute?.settings?.name}", name: '[GETX]');
-    GetConfig.log("NEW ROUTE ${newRoute?.settings?.name}", name: '[GETX]');
+    GetConfig.log("REPLACE ROUTE ${oldRoute?.settings?.name}");
+    GetConfig.log("NEW ROUTE ${newRoute?.settings?.name}");
 
     GetConfig.currentRoute = name(newRoute);
 
@@ -158,7 +158,7 @@ class GetObserver extends NavigatorObserver {
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    GetConfig.log("REMOVING ROUTE ${route?.settings?.name}", name: '[GETX]');
+    GetConfig.log("REMOVING ROUTE ${route?.settings?.name}");
 
     _routeSend.update((value) {
       value.route = previousRoute;

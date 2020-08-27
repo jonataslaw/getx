@@ -128,7 +128,7 @@ class GetInstance {
 
     if (i is DisposableInterface) {
       i.onStart();
-      GetConfig.log('$key has been initialized', name: '[GETX]');
+      GetConfig.log('$key has been initialized');
     }
   }
 
@@ -173,7 +173,7 @@ class GetInstance {
       if (!_factory.containsKey(key))
         throw " $S not found. You need call put<$S>($S()) before";
 
-      GetConfig.log('$S instance was created at that time', name: '[GETX]');
+      GetConfig.log('$S instance was created at that time');
       S _value = put<S>(_factory[key].builder() as S);
 
       initDependencies<S>(name: tag);
@@ -217,8 +217,7 @@ class GetInstance {
 
     return queue.add<bool>(() async {
       if (!_singl.containsKey(newKey)) {
-        GetConfig.log('Instance $newKey already been removed.', name: '[GETX]',
-            isError: true);
+        GetConfig.log('Instance $newKey already been removed.', isError: true);
         return false;
       }
 
@@ -226,7 +225,6 @@ class GetInstance {
       if (builder.permanent && !force) {
         GetConfig.log(
             '[$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.',
-            name: '[GETX]',
             isError: true);
         return false;
       }
@@ -237,14 +235,14 @@ class GetInstance {
       }
       if (i is DisposableInterface) {
         await i.onClose();
-        GetConfig.log('onClose of $newKey called', name: '[GETX]');
+        GetConfig.log('onClose of $newKey called');
       }
 
       _singl.removeWhere((oldKey, value) => (oldKey == newKey));
       if (_singl.containsKey(newKey)) {
-        GetConfig.log('error on remove object $newKey', name: '[GETX]', isError: true);
+        GetConfig.log('error on remove object $newKey', isError: true);
       } else {
-        GetConfig.log('$newKey deleted from memory', name: '[GETX]');
+        GetConfig.log('$newKey deleted from memory');
       }
       // _routesKey?.remove(key);
       return true;

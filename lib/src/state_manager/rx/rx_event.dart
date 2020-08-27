@@ -100,7 +100,7 @@ class Worker {
   final String type;
 
   void _message() {
-    GetConfig.log('Worker $type disposed', name: '[Getx]');
+    GetConfig.log('Worker $type disposed');
   }
 
   void dispose() {
