@@ -153,7 +153,7 @@ class GetInstance {
   // }
 
   /// Find a instance from required class
-  S find<S>({String tag, FcBuilderFunc<S> instance}) {
+  S find<S>({String tag}) {
     String key = _getKey(S, tag);
 
     if (isRegistered<S>(tag: tag)) {
@@ -207,16 +207,11 @@ class GetInstance {
 
   /// Delete class instance on [S] and clean memory
   Future<bool> delete<S>({String tag, String key, bool force = false}) async {
-    String newKey;
-    if (key == null) {
-      newKey = _getKey(S, tag);
-    } else {
-      newKey = key;
-    }
+    final newKey = key ?? _getKey(S, tag);
 
     return queue.add<bool>(() async {
       if (!_singl.containsKey(newKey)) {
-        GetConfig.log('[GETX] Instance $newKey already been removed.',
+        GetConfig.log('[GETX] Instance "$newKey" already removed.',
             isError: true);
         return false;
       }
@@ -224,7 +219,7 @@ class GetInstance {
       FcBuilder builder = _singl[newKey] as FcBuilder;
       if (builder.permanent && !force) {
         GetConfig.log(
-            '[GETX] [$newKey] has been marked as permanent, SmartManagement is not authorized to delete it.',
+            '[GETX] "$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
             isError: true);
         return false;
       }
@@ -235,14 +230,14 @@ class GetInstance {
       }
       if (i is DisposableInterface) {
         await i.onClose();
-        GetConfig.log('[GETX] onClose of $newKey called');
+        GetConfig.log('[GETX] "$newKey" onClose() called');
       }
 
       _singl.removeWhere((oldKey, value) => (oldKey == newKey));
       if (_singl.containsKey(newKey)) {
-        GetConfig.log('[GETX] error on remove object $newKey', isError: true);
+        GetConfig.log('[GETX] error removing object "$newKey"', isError: true);
       } else {
-        GetConfig.log('[GETX] $newKey deleted from memory');
+        GetConfig.log('[GETX] "$newKey" deleted from memory');
       }
       // _routesKey?.remove(key);
       return true;

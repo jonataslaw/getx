@@ -1,4 +1,5 @@
 import 'package:get/src/core/get_interface.dart';
+
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
@@ -14,8 +15,7 @@ extension Inst on GetInterface {
           {String name, bool permanent = true}) =>
       GetInstance().create<S>(builder, name: name, permanent: permanent);
 
-  S find<S>({String tag, FcBuilderFunc<S> instance}) =>
-      GetInstance().find<S>(tag: tag, instance: instance);
+  S find<S>({String tag}) => GetInstance().find<S>(tag: tag);
 
   S put<S>(S dependency,
           {String tag, bool permanent = false, FcBuilderFunc<S> builder}) =>
