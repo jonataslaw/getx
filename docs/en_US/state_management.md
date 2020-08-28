@@ -9,7 +9,6 @@
     - [Why i have to use .value](#why-i-have-to-use-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  - [Mixing the two state managers](#mixing-the-two-state-managers)
   - [Simple State Manager](#simple-state-manager)
     - [Advantages](#advantages-1)
     - [Usage](#usage-1)
@@ -18,6 +17,7 @@
     - [Why it exists](#why-it-exists)
     - [Other ways of using it](#other-ways-of-using-it)
     - [Unique IDs](#unique-ids)
+  - [Mixing the two state managers](#mixing-the-two-state-managers)
   - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # State Management
@@ -129,21 +129,21 @@ int get sum => count1.value + count2.value;
 
 ```dart
 GetX<Controller>(
-  builder: (value) {
+  builder: (controller) {
     print("count 1 rebuild");
-    return Text('${value.count1.value}');
+    return Text('${controller.count1.value}');
   },
 ),
 GetX<Controller>(
-  builder: (_) {
+  builder: (controller) {
     print("count 2 rebuild");
-    return Text('${_.count2.value}');
+    return Text('${controller.count2.value}');
   },
 ),
 GetX<Controller>(
-  builder: (_) {
+  builder: (controller) {
     print("count 3 rebuild");
-    return Text('${_.sum}');
+    return Text('${controller.sum}');
   },
 ),
 ```
@@ -321,12 +321,6 @@ interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 
 - interval
 'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
-
-## Mixing the two state managers
-
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
-
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
 
 ## Simple State Manager
 
@@ -586,6 +580,13 @@ update(['text'], counter < 10);
 ```
 
 GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+
+## Mixing the two state managers
+
+Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+
+Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
+
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 
