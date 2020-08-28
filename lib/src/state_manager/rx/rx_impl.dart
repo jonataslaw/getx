@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
+
 import 'rx_interface.dart';
+
+RxInterface getObs;
+
+typedef bool Condition();
 
 class _RxImpl<T> implements RxInterface<T> {
   StreamController<T> subject = StreamController<T>.broadcast();
@@ -15,14 +20,26 @@ class _RxImpl<T> implements RxInterface<T> {
     return _value;
   }
 
-  bool get canUpdate {
-    return _subscriptions.length > 0;
+  /// Common to all Types [T], this operator overloading is using for
+  /// assignment, same as rx.value
+  ///
+  /// Example:
+  /// ```
+  /// var counter = 0.obs ;
+  /// counter >>= 3; // same as counter.value=3;
+  /// print(counter); // calls .toString() now
+  /// ```
+  ///
+  /// WARNING: still WIP, needs testing!
+  _RxImpl<T> operator >>(T val) {
+    subject.add(value = val);
+    return this;
   }
 
+  bool get canUpdate => _subscriptions.isNotEmpty;
+
   T call([T v]) {
-    if (v != null) {
-      this.value = v;
-    }
+    if (v != null) this.value = v;
     return this.value;
   }
 
@@ -33,15 +50,24 @@ class _RxImpl<T> implements RxInterface<T> {
 
   String get string => value.toString();
 
-  close() {
-    _subscriptions.forEach((observable, subscription) {
-      subscription.cancel();
-    });
+  @override
+  String toString() => value.toString();
+
+  /// This equality override works for _RxImpl instances and the internal values.
+  bool operator ==(o) {
+    // Todo, find a common implementation for the hashCode of different Types.
+    if (o is T) return _value == o;
+    if (o is _RxImpl<T>) return _value == o.value;
+    return false;
+  }
+
+  void close() {
+    _subscriptions.forEach((observable, subscription) => subscription.cancel());
     _subscriptions.clear();
     subject.close();
   }
 
-  addListener(Stream<T> rxGetx) {
+  void addListener(Stream<T> rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
       return;
     }
@@ -286,6 +312,16 @@ class RxList<E> extends Iterable<E> implements RxInterface<List<E>> {
     subject.add(_list);
   }
 
+  /// Special override to push() element(s) in a reactive way
+  /// inside the List,
+  RxList<E> operator +(val) {
+    if (val is Iterable)
+      subject.add(_list..addAll(val));
+    else
+      subject.add(_list..add(val));
+    return this;
+  }
+
   E operator [](int index) {
     return value[index];
   }
@@ -428,10 +464,6 @@ class RxList<E> extends Iterable<E> implements RxInterface<List<E>> {
   List<E> _list = <E>[];
 }
 
-RxInterface getObs;
-
-typedef bool Condition();
-
 class RxBool extends _RxImpl<bool> {
   RxBool([bool initial]) {
     _value = initial;
@@ -442,11 +474,56 @@ class RxDouble extends _RxImpl<double> {
   RxDouble([double initial]) {
     _value = initial;
   }
+
+  RxDouble operator +(double val) {
+    subject.add(value += val);
+    return this;
+  }
+
+  RxDouble operator -(double val) {
+    subject.add(value -= val);
+    return this;
+  }
+
+  RxDouble operator /(double val) {
+    subject.add(value /= val);
+    return this;
+  }
+
+  RxDouble operator *(double val) {
+    subject.add(value *= val);
+    return this;
+  }
 }
 
 class RxNum extends _RxImpl<num> {
   RxNum([num initial]) {
     _value = initial;
+  }
+
+  RxNum operator >>(num val) {
+    subject.add(value = val);
+    return this;
+  }
+
+  RxNum operator +(num val) {
+    subject.add(value += val);
+    return this;
+  }
+
+  RxNum operator -(num val) {
+    subject.add(value -= val);
+    return this;
+  }
+
+  RxNum operator /(num val) {
+    subject.add(value /= val);
+    return this;
+  }
+
+  RxNum operator *(num val) {
+    subject.add(value *= val);
+    return this;
   }
 }
 
@@ -454,11 +531,51 @@ class RxString extends _RxImpl<String> {
   RxString([String initial]) {
     _value = initial;
   }
+
+  RxString operator >>(String val) {
+    subject.add(value = val);
+    return this;
+  }
+
+  RxString operator +(String val) {
+    subject.add(value += val);
+    return this;
+  }
+
+  RxString operator *(int val) {
+    subject.add(value *= val);
+    return this;
+  }
 }
 
 class RxInt extends _RxImpl<int> {
   RxInt([int initial]) {
     _value = initial;
+  }
+
+  RxInt operator >>(int val) {
+    subject.add(value = val);
+    return this;
+  }
+
+  RxInt operator +(int val) {
+    subject.add(value += val);
+    return this;
+  }
+
+  RxInt operator -(int val) {
+    subject.add(value -= val);
+    return this;
+  }
+
+  RxInt operator /(int val) {
+    subject.add(value ~/= val);
+    return this;
+  }
+
+  RxInt operator *(int val) {
+    subject.add(value *= val);
+    return this;
   }
 }
 
