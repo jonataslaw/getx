@@ -4,7 +4,7 @@
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
-[![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Discord Shield](https://discordapp.com/api/guilds/722900883784073290/widget.png?style=shield)](https://discord.com/invite/9Hpt99N)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
@@ -40,7 +40,7 @@
 
 [**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[**Discord (English and Portuguese)**](https://discord.com/invite/9Hpt99N)
+[**Discord (English, Spanish and Portuguese)**](https://discord.com/invite/9Hpt99N)
 
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 

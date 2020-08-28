@@ -1,4 +1,4 @@
-import 'get_utils.dart';
+import '../regex/get_utils.dart';
 
 extension GetStringUtils on String {
   bool get isNum => GetUtils.isNum(this);
@@ -43,15 +43,4 @@ extension GetStringUtils on String {
   String camelCase(String s) => GetUtils.camelCase(this);
   String numericOnly(String s, {bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
-}
-
-extension GetNumUtils on num {
-  bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
-  bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
-  bool isEqual(num b) => GetUtils.isEqual(this, b);
-}
-
-extension GetDynamicUtils on dynamic {
-  bool get isNull => GetUtils.isNull(this);
-  bool get isNullOrBlank => GetUtils.isNullOrBlank(this);
 }
