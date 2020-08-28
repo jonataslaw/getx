@@ -39,7 +39,15 @@ class GetInstance {
     return put<S>(await builder(), tag: tag, permanent: permanent);
   }
 
-  /// Inject class on Get Instance Manager
+  /// Injects a Instance [S] in [GetInstance].
+  ///
+  /// No need to define the generic type <[S]> as it's inferred from the [dependency]
+  ///
+  /// - [dependency] The Instance to be injected.
+  /// - [tag] optionally, use a [tag] as an "id" to create multiple records of the same Type<[S]>
+  /// - [permanent] keeps the Instance in memory, not following [GetConfig.smartManagement]
+  ///   rules.
+  ///
   S put<S>(
     S dependency, {
     String tag,
@@ -54,12 +62,17 @@ class GetInstance {
     return find<S>(tag: tag);
   }
 
-  /// Create a new instance from builder class
-  /// Example
-  /// create(() => Repl());
+  /// Creates a new Class Instance [S] from the builder callback[S].
+  /// Every time [find]<[S]>() is used, it calls the builder method to generate
+  /// a new Instance [S].
+  ///
+  /// Example:
+  ///
+  /// ```create(() => Repl());
   /// Repl a = find();
   /// Repl b = find();
-  /// print(a==b); (false)
+  /// print(a==b); (false)```
+  ///
   void create<S>(
     FcBuilderFunc<S> builder, {
     String name,
@@ -69,6 +82,8 @@ class GetInstance {
         isSingleton: false, name: name, builder: builder, permanent: permanent);
   }
 
+  /// Injects the Instance [S] builder into the [_singleton] HashMap.
+  ///
   void _insert<S>({
     bool isSingleton,
     String name,
@@ -76,14 +91,17 @@ class GetInstance {
     FcBuilderFunc<S> builder,
   }) {
     assert(builder != null);
-    String key = _getKey(S, name);
-
+    final key = _getKey(S, name);
     _singl.putIfAbsent(
         key, () => FcBuilder<S>(isSingleton, builder, permanent, false));
   }
 
+  /// Clears from memory registered Instances associated with [routeName] when
+  /// using [GetConfig.smartManagement] as [SmartManagement.full] or [SmartManagement.keepFactory]
+  /// Meant for internal usage of [GetPageRoute] and [GetDialogRoute]
+  ///
   Future<void> removeDependencyByRoute(String routeName) async {
-    List<String> keysToRemove = [];
+    final keysToRemove = <String>[];
     _routesKey.forEach((key, value) {
       if (value == routeName) {
         keysToRemove.add(key);
@@ -99,32 +117,41 @@ class GetInstance {
     keysToRemove.clear();
   }
 
-  bool initDependencies<S>({String name}) {
-    String key = _getKey(S, name);
+  /// Initializes the dependencies for a Class Instance [S] (or tag),
+  /// If its a Controller, it starts the lifecycle process.
+  /// Optionally associating the current Route to the lifetime of the instance,
+  /// if [GetConfig.smartManagement] is marked as [SmartManagement.full] or
+  /// [GetConfig.keepFactory]
+  ///
+  bool _initDependencies<S>({String name}) {
+    final key = _getKey(S, name);
     bool isInit = _singl[key].isInit;
     if (!isInit) {
-      startController<S>(tag: name);
+      _startController<S>(tag: name);
       _singl[key].isInit = true;
       if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        registerRouteInstance<S>(tag: name);
+        _registerRouteInstance<S>(tag: name);
       }
     }
     return true;
   }
 
-  void registerRouteInstance<S>({String tag}) {
+  /// Links a Class instance [S] (or [tag]) to the current route.
+  /// Requires usage of [GetMaterialApp].
+  ///
+  void _registerRouteInstance<S>({String tag}) {
     _routesKey.putIfAbsent(_getKey(S, tag), () => GetConfig.currentRoute);
   }
 
+  /// Finds and returns a Class instance [S] (or tag) without further processing.
   S findByType<S>(Type type, {String tag}) {
     String key = _getKey(type, tag);
     return _singl[key].getDependency() as S;
   }
 
-  void startController<S>({String tag}) {
-    String key = _getKey(S, tag);
+  void _startController<S>({String tag}) {
+    final key = _getKey(S, tag);
     final i = _singl[key].getDependency();
-
     if (i is DisposableInterface) {
       i.onStart();
       GetConfig.log('[GETX] $key has been initialized');
@@ -152,7 +179,10 @@ class GetInstance {
   //   }
   // }
 
-  /// Find a instance from required class
+  /// Finds a instance of the required Class<[S]> (or [tag])
+  /// In the case of using Get.[create], it will create an instance
+  /// each time you call [find]
+  ///
   S find<S>({String tag}) {
     String key = _getKey(S, tag);
 
@@ -165,17 +195,17 @@ class GetInstance {
           throw "class ${S.toString()} with tag '$tag' is not register";
         }
       }
-      initDependencies<S>(name: tag);
+      _initDependencies<S>(name: tag);
 
       return _singl[key].getDependency() as S;
     } else {
       if (!_factory.containsKey(key))
-        throw " $S not found. You need call put<$S>($S()) before";
+        throw "$S not found. You need call put<$S>($S()) before";
 
       GetConfig.log('[GETX] $S instance was created at that time');
       S _value = put<S>(_factory[key].builder() as S);
 
-      initDependencies<S>(name: tag);
+      _initDependencies<S>(name: tag);
 
       if (GetConfig.smartManagement != SmartManagement.keepFactory &&
           !_factory[key].fenix) {
@@ -190,6 +220,12 @@ class GetInstance {
     return name == null ? type.toString() : type.toString() + name;
   }
 
+  /// Clears all registered instances (and/or tags).
+  /// Even the persistent ones.
+  ///
+  /// [clearFactory] clears the callbacks registered by [lazyPut]
+  /// [clearRouteBindings] clears Instances associated with routes.
+  ///
   bool reset({bool clearFactory = true, bool clearRouteBindings = true}) {
     if (clearFactory) _factory.clear();
     if (clearRouteBindings) _routesKey.clear();
@@ -205,7 +241,8 @@ class GetInstance {
   //   return s;
   // }
 
-  /// Delete class instance on [S] and clean memory
+  /// Delete registered Class Instance [S] (or [tag]) and, closes any open
+  /// controllers [DisposableInterface], cleans up the memory
   Future<bool> delete<S>({String tag, String key, bool force = false}) async {
     final newKey = key ?? _getKey(S, tag);
 
@@ -244,10 +281,10 @@ class GetInstance {
     });
   }
 
-  /// check if instance is registered
+  /// Check if a Class instance [S] (or [tag]) is registered.
   bool isRegistered<S>({String tag}) => _singl.containsKey(_getKey(S, tag));
 
-  /// check if instance is prepared
+  /// Check if Class instance [S] (or [tag]) is prepared to be used.
   bool isPrepared<S>({String tag}) => _factory.containsKey(_getKey(S, tag));
 }
 
