@@ -10,6 +10,7 @@ class GetPageMatch {
 
 class ParseRouteTree {
   final List<ParseRouteTreeNode> _nodes = <ParseRouteTreeNode>[];
+
   // bool _hasDefaultRoute = false;
 
   void addRoute(GetPage route) {
@@ -59,11 +60,14 @@ class ParseRouteTree {
     if (usePath.startsWith("/")) {
       usePath = path.substring(1);
     }
-    List<String> components = usePath.split("/");
+
+    // should take off url parameters first..
+    final uri = Uri.tryParse(usePath);
+//    List<String> components = usePath.split("/");
+    List<String> components = uri.pathSegments;
     if (path == Navigator.defaultRouteName) {
       components = ["/"];
     }
-
     Map<ParseRouteTreeNode, ParseRouteTreeNodeMatch> nodeMatches =
         <ParseRouteTreeNode, ParseRouteTreeNodeMatch>{};
     List<ParseRouteTreeNode> nodesToCheck = _nodes;
@@ -103,6 +107,10 @@ class ParseRouteTree {
           ParseRouteTreeNodeMatch parentMatch = nodeMatches[node.parent];
           ParseRouteTreeNodeMatch match =
               ParseRouteTreeNodeMatch.fromMatch(parentMatch, node);
+
+          // TODO: find a way to clean this implementation.
+          match.parameters.addAll(uri.queryParameters);
+
           if (node.isParameter()) {
             String paramKey = node.part.substring(1);
             match.parameters[paramKey] = pathPart;
