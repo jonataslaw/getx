@@ -87,7 +87,7 @@ extension GetNavigation on GetInterface {
     String page, {
     Object arguments,
     int id,
-    preventDuplicates = true,
+    bool preventDuplicates = true,
   }) {
     if (preventDuplicates && page == currentRoute) {
       return null;
@@ -113,7 +113,7 @@ extension GetNavigation on GetInterface {
     String page, {
     Object arguments,
     int id,
-    preventDuplicates = true,
+    bool preventDuplicates = true,
   }) {
     if (preventDuplicates && page == currentRoute) {
       return null;
@@ -318,7 +318,7 @@ extension GetNavigation on GetInterface {
     Object arguments,
     Bindings binding,
     bool fullscreenDialog = false,
-    preventDuplicates = true,
+    bool preventDuplicates = true,
     Duration duration,
   }) {
     String routename = "/${page.runtimeType.toString()}";
