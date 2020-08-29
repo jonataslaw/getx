@@ -12,7 +12,6 @@
 
 ![](getx.png)
 
-- [Communication and support channels:](#communication-and-support-channels)
 - [About Get](#about-get)
 - [Installing](#installing)
 - [Counter App with GetX](#counter-app-with-getx)
@@ -36,14 +35,6 @@
 - [Why Getx?](#why-getx)
 
 
-# Communication and support channels:
-
-[**Slack (English)**](https://communityinviter.com/apps/getxworkspace/getx)
-
-[**Discord (English, Spanish and Portuguese)**](https://discord.com/invite/9Hpt99N)
-
-[**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
-
 # About Get
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
@@ -61,6 +52,15 @@
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
 
 **GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
+
+**GetX Community channels**
+GetX has a huge, highly active, and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
+
+[**Slack**](https://communityinviter.com/apps/getxworkspace/getx)
+
+[**Discord**](https://discord.com/invite/9Hpt99N)
+
+[**Telegram**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Installing
 
