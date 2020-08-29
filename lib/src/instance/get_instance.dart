@@ -12,12 +12,14 @@ class GetConfig {
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
+
   const GetInstance._();
+
   static GetInstance _getInstance;
 
   /// Holds references to every registered Instance when using
   /// Get.[put]
-  static Map<String, _FcBuilder> _singl = {};
+  static Map<String, _InstanceBuilderFactory> _singl = {};
 
   /// Holds a reference to every registered callback when using
   /// Get.[lazyPut]
@@ -27,12 +29,13 @@ class GetInstance {
 
   static GetQueue _queue = GetQueue();
 
-  void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
+  void lazyPut<S>(InstanceBuilderCallback builder,
+      {String tag, bool fenix = false}) {
     String key = _getKey(S, tag);
     _factory.putIfAbsent(key, () => _Lazy(builder, fenix));
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
       {String tag, bool permanent = false}) async {
     return put<S>(await builder(), tag: tag, permanent: permanent);
   }
@@ -49,7 +52,7 @@ class GetInstance {
     S dependency, {
     String tag,
     bool permanent = false,
-    FcBuilderFunc<S> builder,
+    InstanceBuilderCallback<S> builder,
   }) {
     _insert(
         isSingleton: true,
@@ -70,7 +73,7 @@ class GetInstance {
   /// Repl b = find();
   /// print(a==b); (false)```
   void create<S>(
-    FcBuilderFunc<S> builder, {
+    InstanceBuilderCallback<S> builder, {
     String name,
     bool permanent = true,
   }) {
@@ -83,12 +86,14 @@ class GetInstance {
     bool isSingleton,
     String name,
     bool permanent = false,
-    FcBuilderFunc<S> builder,
+    InstanceBuilderCallback<S> builder,
   }) {
     assert(builder != null);
     final key = _getKey(S, name);
     _singl.putIfAbsent(
-        key, () => _FcBuilder<S>(isSingleton, builder, permanent, false));
+        key,
+        () =>
+            _InstanceBuilderFactory<S>(isSingleton, builder, permanent, false));
   }
 
   /// Clears from memory registered Instances associated with [routeName] when
@@ -180,8 +185,7 @@ class GetInstance {
   S find<S>({String tag}) {
     String key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      _FcBuilder builder = _singl[key] as _FcBuilder;
-      if (builder == null) {
+      if (_singl[key] == null) {
         if (tag == null) {
           throw 'Class "$S" is not register';
         } else {
@@ -189,7 +193,6 @@ class GetInstance {
         }
       }
       _initDependencies<S>(name: tag);
-
       return _singl[key].getDependency() as S;
     } else {
       if (!_factory.containsKey(key))
@@ -245,11 +248,12 @@ class GetInstance {
         return false;
       }
 
-      _FcBuilder builder = _singl[newKey] as _FcBuilder;
+      final builder = _singl[newKey];
       if (builder.permanent && !force) {
         GetConfig.log(
-            '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
-            isError: true);
+          '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
+          isError: true,
+        );
         return false;
       }
       final i = builder.dependency;
@@ -280,12 +284,12 @@ class GetInstance {
   bool isPrepared<S>({String tag}) => _factory.containsKey(_getKey(S, tag));
 }
 
-typedef FcBuilderFunc<S> = S Function();
+typedef InstanceBuilderCallback<S> = S Function();
 
-typedef FcBuilderFuncAsync<S> = Future<S> Function();
+typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class to register instances with Get.[put]<[S]>().
-class _FcBuilder<S> {
+class _InstanceBuilderFactory<S> {
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool isSingleton;
@@ -295,7 +299,7 @@ class _FcBuilder<S> {
 
   /// Generates (and regenerates) the instance when [isSingleton]=false.
   /// Usually used by factory methods
-  FcBuilderFunc<S> builderFunc;
+  InstanceBuilderCallback<S> builderFunc;
 
   /// Flag to persist the instance in memory,
   /// without considering [GetConfig.smartManagement]
@@ -303,7 +307,8 @@ class _FcBuilder<S> {
 
   bool isInit = false;
 
-  _FcBuilder(this.isSingleton, this.builderFunc, this.permanent, this.isInit);
+  _InstanceBuilderFactory(
+      this.isSingleton, this.builderFunc, this.permanent, this.isInit);
 
   /// Gets the actual instance by it's [builderFunc] or the persisted instance.
   S getDependency() {
@@ -315,6 +320,6 @@ class _FcBuilder<S> {
 /// keeps a reference to the callback to be called.
 class _Lazy {
   bool fenix;
-  FcBuilderFunc builder;
+  InstanceBuilderCallback builder;
   _Lazy(this.builder, this.fenix);
 }

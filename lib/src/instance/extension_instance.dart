@@ -3,11 +3,12 @@ import 'package:get/src/core/get_interface.dart';
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
-  void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
+  void lazyPut<S>(InstanceBuilderCallback builder,
+      {String tag, bool fenix = false}) {
     return GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
           {String tag, bool permanent = false}) async =>
       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
@@ -21,15 +22,13 @@ extension Inst on GetInterface {
   /// Repl a = find();
   /// Repl b = find();
   /// print(a==b); (false)```
-  ///
-  void create<S>(FcBuilderFunc<S> builder,
+  void create<S>(InstanceBuilderCallback<S> builder,
           {String name, bool permanent = true}) =>
       GetInstance().create<S>(builder, name: name, permanent: permanent);
 
   /// Finds a instance of the required Class<[S]> (or [tag])
   /// In the case of using Get.[create], it will create an instance
   /// each time you call [find]
-  ///
   S find<S>({String tag}) => GetInstance().find<S>(tag: tag);
 
   /// Injects a Instance [S] in [GetInstance].
@@ -40,17 +39,24 @@ extension Inst on GetInterface {
   /// - [tag] optionally, use a [tag] as an "id" to create multiple records of the same Type<[S]>
   /// - [permanent] keeps the Instance in memory, not following [GetConfig.smartManagement]
   ///   rules
-  ///
+  /// - [builder] If defined, the [dependency] must be returned from here
   S put<S>(S dependency,
-          {String tag, bool permanent = false, FcBuilderFunc<S> builder}) =>
+          {String tag,
+          bool permanent = false,
+          InstanceBuilderCallback<S> builder}) =>
       GetInstance()
           .put<S>(dependency, tag: tag, permanent: permanent, builder: builder);
 
+  /// Clears all registered instances (and/or tags).
+  /// Even the persistent ones.
+  ///
+  /// [clearFactory] clears the callbacks registered by [lazyPut]
+  /// [clearRouteBindings] clears Instances associated with routes.
   bool reset({bool clearFactory = true, bool clearRouteBindings = true}) =>
       GetInstance().reset(
           clearFactory: clearFactory, clearRouteBindings: clearRouteBindings);
 
-  /// Delete class instance on [S] and clean memory
+  /// Delete class instance on [S], cleaning the memory
   Future<bool> delete<S>({String tag, String key}) async =>
       GetInstance().delete<S>(tag: tag, key: key);
 

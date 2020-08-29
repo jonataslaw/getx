@@ -38,11 +38,69 @@ class _RxImpl<T> implements RxInterface<T> {
 
   bool get canUpdate => _subscriptions.isNotEmpty;
 
+  /// Makes this Rx looks like a function so you can update a new
+  /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
+  /// to some Widget that has a signature ::onChange( value )
+  ///
+  /// Example:
+  /// ```
+  /// final myText = 'GetX rocks!'.obs;
+  ///
+  /// // in your Constructor, just to check it works :P
+  /// ever( myText, print ) ;
+  ///
+  /// // in your build(BuildContext) {
+  /// TextField(
+  //    onChanged: myText,
+  //  ),
+  ///```
   T call([T v]) {
     if (v != null) this.value = v;
     return this.value;
   }
 
+  /// Makes a direct update of [value] adding it to the Stream
+  /// useful when you make use of Rx for custom Types to referesh your UI.
+  ///
+  /// Sample:
+  /// ```
+  ///  class Person {
+  ///     String name, last;
+  ///     int age;
+  ///     Person({this.name, this.last, this.age});
+  ///     @override
+  ///     String toString() => '$name $last, $age years old';
+  ///  }
+  ///
+  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
+  /// person.value.name = 'Roi';
+  /// person.refresh();
+  /// print( person );
+  /// ```
+  void refresh() {
+    subject.add(value);
+  }
+
+  /// Uses a callback to update [value] internally, similar to [refresh], but provides
+  /// the current value as the argument.
+  /// Makes sense for custom Rx types (like Models).
+  ///
+  /// Sample:
+  /// ```
+  ///  class Person {
+  ///     String name, last;
+  ///     int age;
+  ///     Person({this.name, this.last, this.age});
+  ///     @override
+  ///     String toString() => '$name $last, $age years old';
+  ///  }
+  ///
+  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
+  /// person.update((person) {
+  ///   person.name = 'Roi';
+  /// });
+  /// print( person );
+  /// ```
   void update(void fn(T value)) {
     fn(value);
     subject.add(value);

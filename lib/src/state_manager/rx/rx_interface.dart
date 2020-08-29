@@ -3,20 +3,22 @@ import 'dart:async';
 import 'package:flutter/scheduler.dart';
 import 'package:get/src/state_manager/rx/rx_callbacks.dart';
 
+/// This class is the foundation for all reactive (Rx) classes that makes Get
+/// so powerful.
+/// This interface is the contract that [_RxImpl]<[T]> uses in all it's
+/// subclass.
 abstract class RxInterface<T> {
   RxInterface([T initial]);
 
-  /// add listener to stream
+  StreamController<T> subject;
+
+  /// Adds a listener to stream
   void addListener(Stream<T> rxGetx);
 
   bool get canUpdate;
 
-  /// close stream
-  void close() {
-    subject?.close();
-  }
-
-  StreamController<T> subject;
+  /// Closes the stream
+  void close() => subject?.close();
 
   /// Calls [callback] with current value, when the value changes.
   StreamSubscription<T> listen(ValueCallback<T> callback);
@@ -55,14 +57,18 @@ abstract class DisposableInterface {
     SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
   }
 
-  /// Called Called immediately after the widget is allocated in memory.
+  /// Called immediately after the widget is allocated in memory.
+  /// You might use this initialize something for the controller.
   void onInit() async {}
 
-  /// Called after rendering the screen. It is the perfect place to enter navigation events,
-  /// be it snackbar, dialogs, or a new route.
+  /// Called 1 frame after onInit(). It is the perfect place to enter navigation events,
+  /// like snackbar, dialogs, or a new route, or async request.
   void onReady() async {}
 
-  /// Called before the onDelete method. onClose is used to close events
-  /// before the controller is destroyed, such as closing streams, for example.
-  onClose() async {}
+  /// Called before [onDelete] method. [onClose] might be used to dispose resources
+  /// used by the controller. Like closing events, or streams before the controller is destroyed.
+  /// Or dispose objects that can potentially create some memory leaks,
+  /// like TextEditingControllers, AnimationControllers.
+  /// Might be useful as well to persist some data on disk.
+  void onClose() async {}
 }
