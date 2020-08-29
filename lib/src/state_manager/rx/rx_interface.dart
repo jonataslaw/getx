@@ -42,8 +42,12 @@ abstract class DisposableInterface {
   /// It uses an internal "callable" type, to avoid any @overrides in subclases.
   /// This method should be internal and is required to define the lifetime cycle
   /// of the subclass.
-  ///
   final onStart = _InternalFinalCallback<void>();
+
+  bool _initialized = false;
+
+  /// Checks whether the controller has already been initialized.
+  bool get initialized => _initialized;
 
   DisposableInterface() {
     onStart.callback = _onStart;
@@ -52,6 +56,7 @@ abstract class DisposableInterface {
   // Internal callback that starts the cycle of this controller.
   void _onStart() {
     onInit();
+    _initialized = true;
     SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
   }
 

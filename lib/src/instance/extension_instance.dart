@@ -3,11 +3,12 @@ import 'package:get/src/core/get_interface.dart';
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
-  void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
+  void lazyPut<S>(InstanceBuilderCallback<S> builder,
+      {String tag, bool fenix = false}) {
     return GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
           {String tag, bool permanent = false}) async =>
       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
@@ -22,7 +23,7 @@ extension Inst on GetInterface {
   /// Repl b = find();
   /// print(a==b); (false)```
   ///
-  void create<S>(FcBuilderFunc<S> builder,
+  void create<S>(InstanceBuilderCallback<S> builder,
           {String name, bool permanent = true}) =>
       GetInstance().create<S>(builder, name: name, permanent: permanent);
 
@@ -42,7 +43,9 @@ extension Inst on GetInterface {
   ///   rules
   ///
   S put<S>(S dependency,
-          {String tag, bool permanent = false, FcBuilderFunc<S> builder}) =>
+          {String tag,
+          bool permanent = false,
+          InstanceBuilderCallback<S> builder}) =>
       GetInstance()
           .put<S>(dependency, tag: tag, permanent: permanent, builder: builder);
 
@@ -55,4 +58,6 @@ extension Inst on GetInterface {
       GetInstance().delete<S>(tag: tag, key: key);
 
   bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
+
+  bool isPrepared<S>({String tag}) => GetInstance().isPrepared<S>(tag: tag);
 }

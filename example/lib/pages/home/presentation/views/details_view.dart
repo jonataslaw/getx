@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_state/home/data/home_model.dart';
+import 'package:get_state/pages/home/domain/entity/cases_model.dart';
 
-class DetailsPage extends StatelessWidget {
+class DetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Country country = Get.arguments;

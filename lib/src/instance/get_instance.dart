@@ -27,12 +27,13 @@ class GetInstance {
 
   static GetQueue _queue = GetQueue();
 
-  void lazyPut<S>(FcBuilderFunc builder, {String tag, bool fenix = false}) {
+  void lazyPut<S>(InstanceBuilderCallback<S> builder,
+      {String tag, bool fenix = false}) {
     String key = _getKey(S, tag);
     _factory.putIfAbsent(key, () => _Lazy(builder, fenix));
   }
 
-  Future<S> putAsync<S>(FcBuilderFuncAsync<S> builder,
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
       {String tag, bool permanent = false}) async {
     return put<S>(await builder(), tag: tag, permanent: permanent);
   }
@@ -49,7 +50,7 @@ class GetInstance {
     S dependency, {
     String tag,
     bool permanent = false,
-    FcBuilderFunc<S> builder,
+    InstanceBuilderCallback<S> builder,
   }) {
     _insert(
         isSingleton: true,
@@ -70,7 +71,7 @@ class GetInstance {
   /// Repl b = find();
   /// print(a==b); (false)```
   void create<S>(
-    FcBuilderFunc<S> builder, {
+    InstanceBuilderCallback<S> builder, {
     String name,
     bool permanent = true,
   }) {
@@ -83,7 +84,7 @@ class GetInstance {
     bool isSingleton,
     String name,
     bool permanent = false,
-    FcBuilderFunc<S> builder,
+    InstanceBuilderCallback<S> builder,
   }) {
     assert(builder != null);
     final key = _getKey(S, name);
@@ -180,7 +181,7 @@ class GetInstance {
   S find<S>({String tag}) {
     String key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      _FcBuilder builder = _singl[key] as _FcBuilder;
+      _FcBuilder builder = _singl[key];
       if (builder == null) {
         if (tag == null) {
           throw 'Class "$S" is not register';
@@ -245,7 +246,7 @@ class GetInstance {
         return false;
       }
 
-      _FcBuilder builder = _singl[newKey] as _FcBuilder;
+      _FcBuilder builder = _singl[newKey];
       if (builder.permanent && !force) {
         GetConfig.log(
             '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
@@ -280,9 +281,9 @@ class GetInstance {
   bool isPrepared<S>({String tag}) => _factory.containsKey(_getKey(S, tag));
 }
 
-typedef FcBuilderFunc<S> = S Function();
+typedef InstanceBuilderCallback<S> = S Function();
 
-typedef FcBuilderFuncAsync<S> = Future<S> Function();
+typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class to register instances with Get.[put]<[S]>().
 class _FcBuilder<S> {
@@ -295,7 +296,7 @@ class _FcBuilder<S> {
 
   /// Generates (and regenerates) the instance when [isSingleton]=false.
   /// Usually used by factory methods
-  FcBuilderFunc<S> builderFunc;
+  InstanceBuilderCallback<S> builderFunc;
 
   /// Flag to persist the instance in memory,
   /// without considering [GetConfig.smartManagement]
@@ -315,6 +316,6 @@ class _FcBuilder<S> {
 /// keeps a reference to the callback to be called.
 class _Lazy {
   bool fenix;
-  FcBuilderFunc builder;
+  InstanceBuilderCallback builder;
   _Lazy(this.builder, this.fenix);
 }

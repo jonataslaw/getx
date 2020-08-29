@@ -29,6 +29,7 @@ dependencies:
   get:
     path: ../
   dio: ^3.0.9
+  mockito: 4.1.2
 
 dev_dependencies:
   flutter_test:
