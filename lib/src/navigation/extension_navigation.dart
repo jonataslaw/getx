@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/src/core/get_interface.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:get/src/core/get_interface.dart';
 import 'package:get/src/core/log.dart';
+
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
 import 'routes/bindings_interface.dart';
@@ -13,6 +14,8 @@ import 'routes/bindings_interface.dart';
 NavigatorState get navigator => Get.key.currentState;
 
 extension GetNavigation on GetInterface {
+  /// **Navigation.push()** shortcut.<br><br>
+  ///
   /// Pushes a new [page] to the stack
   ///
   /// It has the advantage of not needing context,
@@ -69,7 +72,9 @@ extension GetNavigation on GetInterface {
         );
   }
 
-  /// Pushes a new named [page] to the stack
+  /// **Navigation.pushNamed()** shortcut.<br><br>
+  ///
+  /// Pushes a new named [page] to the stack.
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
@@ -95,6 +100,8 @@ extension GetNavigation on GetInterface {
     return global(id).currentState.pushNamed(page, arguments: arguments);
   }
 
+  /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
+  ///
   /// Pop the current named [page] in the stack and push a new one in its place
   ///
   /// It has the advantage of not needing context, so you can call
@@ -123,6 +130,8 @@ extension GetNavigation on GetInterface {
         .pushReplacementNamed(page, arguments: arguments);
   }
 
+  /// **Navigation.popUntil()** shortcut.<br><br>
+  ///
   /// Calls pop several times in the stack until [predicate] returns true
   ///
   /// [id] is for when you are using nested navigation,
@@ -139,6 +148,8 @@ extension GetNavigation on GetInterface {
     return global(id).currentState.popUntil(predicate);
   }
 
+  /// **Navigation.pushAndRemoveUntil()** shortcut.<br><br>
+  ///
   /// Push the given [page], and then pop several pages in the stack until
   /// [predicate] returns true
   ///
@@ -160,6 +171,8 @@ extension GetNavigation on GetInterface {
     return global(id).currentState.pushAndRemoveUntil(page, predicate);
   }
 
+  /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
+  ///
   /// Push the given named [page], and then pop several pages in the stack
   /// until [predicate] returns true
   ///
@@ -185,6 +198,8 @@ extension GetNavigation on GetInterface {
         .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
   }
 
+  /// **Navigation.popAndPushNamed()** shortcut.<br><br>
+  ///
   /// Pop the current named page and pushes a new [page] to the stack in its place
   ///
   /// You can send any type of value to the other route in the [arguments].
@@ -200,6 +215,8 @@ extension GetNavigation on GetInterface {
         .popAndPushNamed(page, arguments: arguments, result: result);
   }
 
+  /// **Navigation.removeRoute()** shortcut.<br><br>
+  ///
   /// Remove a specific [route] from the stack
   ///
   /// [id] is for when you are using nested navigation,
@@ -208,6 +225,8 @@ extension GetNavigation on GetInterface {
     return global(id).currentState.removeRoute(route);
   }
 
+  /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
+  ///
   /// Push a named [page] and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
@@ -234,14 +253,16 @@ extension GetNavigation on GetInterface {
         arguments: arguments);
   }
 
-  /// Returns true if a snackbar, dialog or bottomsheet is currently showing in the screen
+  /// Returns true if a Snackbar, Dialog or BottomSheet is currently showing
   bool get isOverlaysOpen =>
       (isSnackbarOpen || isDialogOpen || isBottomSheetOpen);
 
-  /// returns true if there is no snackbar, dialog or bottomsheet open
+  /// Returns true if there is no Snackbar, Dialog or BottomSheet open
   bool get isOverlaysClosed =>
       (!isSnackbarOpen && !isDialogOpen && !isBottomSheetOpen);
 
+  /// **Navigation.popUntil()** shortcut.<br><br>
+  ///
   /// Pop the current page, snackbar, dialog or bottomsheet in the stack
   ///
   /// if your set [closeOverlays] to true, Get.back() will close the currently open
@@ -272,6 +293,8 @@ extension GetNavigation on GetInterface {
     }
   }
 
+  /// **Navigation.popUntil()** (with predicate) shortcut .<br><br>
+  ///
   /// Close as many routes as defined by [times]
   ///
   /// [id] is for when you are using nested navigation,
@@ -287,6 +310,8 @@ extension GetNavigation on GetInterface {
     return back;
   }
 
+  /// **Navigation.pushReplacement()** shortcut .<br><br>
+  ///
   /// Pop the current page and pushes a new [page] to the stack
   ///
   /// It has the advantage of not needing context,
@@ -337,6 +362,8 @@ extension GetNavigation on GetInterface {
         transitionDuration: duration ?? defaultDurationTransition));
   }
 
+  /// **Navigation.pushAndRemoveUntil()** shortcut .<br><br>
+  ///
   /// Push a [page] and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
@@ -470,6 +497,7 @@ extension GetNavigation on GetInterface {
     ));
   }
 
+  /// Custom UI Dialog.
   Future<T> defaultDialog<T>({
     String title = "Alert",
     Widget content,
@@ -884,7 +912,7 @@ extension GetNavigation on GetInterface {
       return key;
     }
     if (!keys.containsKey(k)) {
-      throw 'route id not found';
+      throw 'Route id ($k) not found';
     }
     return keys[k];
   }
@@ -892,7 +920,7 @@ extension GetNavigation on GetInterface {
   RouteSettings get routeSettings => settings;
 
   void setSettings(RouteSettings settings) {
-    settings = settings;
+    this.settings = settings;
   }
 
   /// give current arguments
