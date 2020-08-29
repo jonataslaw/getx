@@ -1,8 +1,8 @@
 - [State Management](#state-management)
   - [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
-    - [Usage](#usage)
-    - [Example](#example)
+    - [Declaring a reactive variable](#declaring-a-reactive-variable)
+    - [Using the values in the view](#using-the-values-in-the-view)
     - [Conditions to rebuild](#conditions-to-rebuild)
     - [Where .obs can be used](#where-obs-can-be-used)
     - [Note about Lists](#note-about-lists)
@@ -11,7 +11,7 @@
     - [Workers](#workers)
   - [Simple State Manager](#simple-state-manager)
     - [Advantages](#advantages-1)
-    - [Usage](#usage-1)
+    - [Usage](#usage)
     - [How it handles controllers](#how-it-handles-controllers)
     - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
     - [Why it exists](#why-it-exists)
@@ -102,7 +102,7 @@ final name = RxString('');
 final isLogged = RxBool(false);
 final count = RxInt(0);
 final balance = RxDouble(0.0);
-final number = RxNum(0) // in case you don't remember num is a dart type that accepts doubles and integers
+final number = RxNum(0)
 final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
