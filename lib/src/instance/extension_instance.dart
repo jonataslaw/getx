@@ -91,4 +91,6 @@ extension Inst on GetInterface {
   /// Check if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
+
+  bool isPrepared<S>({String tag}) => GetInstance().isPrepared<S>(tag: tag);
 }

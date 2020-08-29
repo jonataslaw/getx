@@ -758,7 +758,7 @@ extension GetNavigation on GetInterface {
                 Text(
                   title,
                   style: TextStyle(
-                      color: colorText ?? theme.iconTheme.color,
+                      color: colorText ?? Colors.black,
                       fontWeight: FontWeight.w800,
                       fontSize: 16),
                 ),
@@ -766,7 +766,7 @@ extension GetNavigation on GetInterface {
             Text(
               message,
               style: TextStyle(
-                  color: colorText ?? theme.iconTheme.color,
+                  color: colorText ?? Colors.black,
                   fontWeight: FontWeight.w300,
                   fontSize: 14),
             ),

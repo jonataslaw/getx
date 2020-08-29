@@ -96,7 +96,7 @@ Get.put<S>(
   bool overrideAbstract = false,
 
   // optional: allows you to create the dependency using function instead of the dependency itself.
-  FcBuilderFunc<S> builder,
+  InstanceBuilderCallback<S> builder,
 )
 ```
 
@@ -106,7 +106,7 @@ Get.put<S>(
 Get.lazyPut<S>(
   // mandatory: a method that will be executed when your class is called for the first time
   // Example: Get.lazyPut<Controller>( () => Controller() )
-  FcBuilderFunc builder,
+  InstanceBuilderCallback builder,
   
   // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
   // must be unique
@@ -128,7 +128,7 @@ Get.putAsync<S>(
 
   // mandatory: an async method that will be executed to instantiate your class
   // Example: Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
-  FcBuilderFuncAsync<S> builder,
+  AsyncInstanceBuilderCallback<S> builder,
 
   // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
   // must be unique

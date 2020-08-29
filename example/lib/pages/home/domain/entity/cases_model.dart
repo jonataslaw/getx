@@ -1,26 +1,26 @@
 // To parse this JSON data, do
 //
-//     final apiModel = apiModelFromJson(jsonString);
+//     final CasesModel = CasesModelFromJson(jsonString);
 
 import 'dart:convert';
 
-class ApiModel {
+class CasesModel {
   final Global global;
   final List<Country> countries;
   final String date;
 
-  ApiModel({
+  CasesModel({
     this.global,
     this.countries,
     this.date,
   });
 
-  factory ApiModel.fromRawJson(String str) =>
-      ApiModel.fromJson(json.decode(str));
+  factory CasesModel.fromRawJson(String str) =>
+      CasesModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory ApiModel.fromJson(Map<String, dynamic> json) => ApiModel(
+  factory CasesModel.fromJson(Map<String, dynamic> json) => CasesModel(
         global: json["Global"] == null ? null : Global.fromJson(json["Global"]),
         countries: json["Countries"] == null
             ? null

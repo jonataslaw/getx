@@ -19,7 +19,7 @@ abstract class Bindings {
 /// ````
 class BindingsBuilder extends Bindings {
   /// Register your dependencies in the [builder] callback.
-  final Function() builder;
+  final void Function() builder;
 
   BindingsBuilder(this.builder);
 
