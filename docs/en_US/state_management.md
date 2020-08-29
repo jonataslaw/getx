@@ -1,23 +1,23 @@
 - [State Management](#state-management)
   - [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
-    - [Usage](#usage)
-    - [Example](#example)
+    - [Declaring a reactive variable](#declaring-a-reactive-variable)
+    - [Using the values in the view](#using-the-values-in-the-view)
     - [Conditions to rebuild](#conditions-to-rebuild)
     - [Where .obs can be used](#where-obs-can-be-used)
     - [Note about Lists](#note-about-lists)
     - [Why i have to use .value](#why-i-have-to-use-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  - [Mixing the two state managers](#mixing-the-two-state-managers)
   - [Simple State Manager](#simple-state-manager)
     - [Advantages](#advantages-1)
-    - [Usage](#usage-1)
+    - [Usage](#usage)
     - [How it handles controllers](#how-it-handles-controllers)
     - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
     - [Why it exists](#why-it-exists)
     - [Other ways of using it](#other-ways-of-using-it)
     - [Unique IDs](#unique-ids)
+  - [Mixing the two state managers](#mixing-the-two-state-managers)
   - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # State Management
@@ -71,7 +71,7 @@ No, you just need to play this variable inside an Obx widget.
 Obx (() => Text (controller.name));
 ```
 
-What do you need to memorize? "Obx(() =>" You are just passing that widget through an arrow-function into an Obx. Obx is smart, and will only be changed if the value of name is changed. If name is "John" and you change it to "John", it will not have any changes on the screen, and Obx will simply ignore this change, and will not rebuild the widget, to save resources. Isn't that amazing?
+What do you need to memorize? Only `Obx(() =>`. You are just passing that widget through an arrow-function into an Obx. Obx is smart, and will only be changed if the value of name is changed. If name is "John" and you change it to "John", it will not have any changes on the screen, and Obx will simply ignore this change, and will not rebuild the widget, to save resources. Isn't that amazing?
 
 What if I have 5 observable variables within an Obx? It will update when any of them are changed. And if I have 30 variables in a class, when I update one, will it update all variables that are in that class? No, just the specific widget that uses that variable.
 
@@ -91,59 +91,83 @@ Maximum performance: In addition to having a smart algorithm for minimal reconst
 
 The state only changes if the values ​​change. That's the main difference between Get, and using Computed from MobX for example. When joining two observables, when one is changed, the hearing of that observable will change. With Get, if you join two variables (which is unnecessary computed for that), GetX (similar to Observer) will only change if it implies a real change of state.
 
-### Usage
+### Declaring a reactive variable
 
 You have 3 ways to turn a variable into an observable.
 The first is using Rx{Type}.
 
 ```dart
-var count = RxString();
+// initial value is recommended but not mandatory
+final name = RxString('');
+final isLogged = RxBool(false);
+final count = RxInt(0);
+final balance = RxDouble(0.0);
+final number = RxNum(0)
+final items = RxList<String>([]);
+final myMap = RxMap<String, int>({});
 ```
 
 The second is to use Rx and type it with `Rx<Type>`
 
 ```dart
-var count = Rx<String>();
+final name = Rx<String>('');
+final isLogged = Rx<Bool>(false);
+final count = Rx<Int>(0);
+final balance = Rx<Double>(0.0);
+final number = Rx<Num>(0)
+final items = Rx<List<String>>([]);
+final myMap = Rx<Map<String, int>>({});
+
+// Custom classes - it can be any class, literally
+final user = Rx<User>();
 ```
 
 The third, more practical and easier approach, is just to add an .obs to your variable.
 
 ```dart
-var count = 0.obs;
+final name = ''.obs;
+final isLogged = false.obs;
+final count = 0.obs;
+final balance = 0.0.obs;
+final number = 0.obs;
+final items = <String>[];
+final myMap = <String, int>{};
 
-// or Rxint count = 0.obs;
-// or Rx<int> count = 0.obs;
+// Custom classes - it can be any class, literally
+final user = User().obs;
 ```
 
 As we know, Dart is now heading towards null safety. Since that it is a good idea, from now on, you should start to use your variables always with an initial value. Transforming a variable into an observable with an initial value with Get is the simplest and most practical approach. You will literally add a ".obs" to the end of your variable, and that’s it, you’ve made it observable, and its value will be the initial value.
 
 You can add variables, and if you want to type your widget to get your controller inside, you just need to use GetX widget instead of Obx
 
-### Example
+### Using the values in the view
 
 ```dart
+// controller file
 final count1 = 0.obs;
 final count2 = 0.obs;
 int get sum => count1.value + count2.value;
 ```
 
 ```dart
+// view file
 GetX<Controller>(
-  builder: (value) {
+  builder: (controller) {
     print("count 1 rebuild");
-    return Text('${value.count1.value}');
+    return Text('${controller.count1.value}');
   },
 ),
 GetX<Controller>(
-  builder: (_) {
+  builder: (controller) {
     print("count 2 rebuild");
-    return Text('${_.count2.value}');
+    return Text('${controller.count2.value}');
   },
 ),
 GetX<Controller>(
-  builder: (_) {
+  builder: (controller) {
     print("count 3 rebuild");
-    return Text('${_.sum}');
+    return Text('${controller.sum}');
   },
 ),
 ```
@@ -197,7 +221,7 @@ Without decorations, without a code generator, without complications :smile:
 Do you know Flutter's counter app? Your Controller class might look like this:
 
 ```dart
-class CountCtl extends GetxController {
+class CountController extends GetxController {
   final count = 0.obs;
 }
 ```
@@ -205,68 +229,80 @@ class CountCtl extends GetxController {
 With a simple:
 
 ```dart
-ctl.count.value++
+controller.count.value++
 ```
 
 You could update the counter variable in your UI, regardless of where it is stored.
 
 ### Where .obs can be used
 
-You can transform anything on obs:
+You can transform anything on obs. Here are two ways of doing it:
 
+* You can convert your class values to obs
 ```dart
 class RxUser {
   final name = "Camila".obs;
   final age = 18.obs;
 }
-
-class User {
-  User({String name, int age});
-  final rx = RxUser();
-
-  String get name => rx.name.value;
-  set name(String value) => rx.name.value = value;
-
-  int get age => rx.age.value;
-  set age(int value) => rx.age.value = value;
-}
 ```
 
+* or you can convert the entire class to be an observable
 ```dart
-
-void main() {
-  final user = User();
-  print(user.name);
-  user.age = 23;
-  user.rx.age.listen((int age) => print(age));
-  user.age = 24;
-  user.age = 25;
+class User {
+  User({String name, int age});
+  var name;
+  var age;
 }
-___________
-out:
-Camila
-23
-24
-25
 
+// when instantianting:
+final user = User(name: "Camila", age: 18).obs;
 ```
 
 ### Note about Lists
 
 Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that, unfortunate primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
+Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
 
 ```dart
+// On the controller
 final String title = 'User Info:'.obs
 final list = List<User>().obs;
+
+// on the view
+Text(controller.title.value), // String need to have .value in front of it
+ListView.builder (
+  itemCount: controller.list.length // lists don't need it
+)
 ```
 
+When you are making your own classes observable, there is a different way to update them:
+
 ```dart
-Text(title.value), // String need to have .value in front of it
-ListView.builder (
-  itemCount: list.length // lists don't need it
-)
+// on the model file
+// we are going to make the entire class observable instead of each attribute
+class User() {
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
+}
+
+
+// on the controller file
+final user = User().obs;
+// when you need to update the user variable:
+user.update( (user) { // this parameter is the class itself taht you want to update
+user.name = 'Jonny';
+user.age = 18;
+});
+// an alternative way of update the user variable:
+user(User(name: 'João', age: 35));
+
+// on view:
+Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
+// you can also access the model values without the .value:
+user().name; // notice that is the user variable, not the class (variable has lowercase u)
 ```
 
 You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
@@ -321,12 +357,6 @@ interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 
 - interval
 'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
-
-## Mixing the two state managers
-
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
-
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
 
 ## Simple State Manager
 
@@ -586,6 +616,13 @@ update(['text'], counter < 10);
 ```
 
 GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+
+## Mixing the two state managers
+
+Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+
+Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
+
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 

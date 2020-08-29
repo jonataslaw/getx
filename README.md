@@ -50,9 +50,9 @@
 
 
 - GetX has 3 basic principles, this means that this is the priority for all resources in the library
-**PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
-**PRODUCTIVITY:** GetX uses an easy and pleasant syntax.
-**ORGANIZATION:** GetX allows total decoupling of the View from the business logic.
+  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
+  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax.
+  - **ORGANIZATION:** GetX allows total decoupling of the View from the business logic.
 
 
 - GetX will save hours of development, and will extract the maximum performance that your application can deliver, being easy for beginners, and accurate for experts. Navigate without context, open dialogs, snackbars or bottomsheets from anywhere in your code, Manage states and inject dependencies in an easy and practical way. Get is secure, stable, up-to-date, and offers a huge range of APIs that are not present on default framework.
