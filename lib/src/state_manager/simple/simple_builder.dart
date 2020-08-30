@@ -11,7 +11,8 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 
 /// Manages a local state like ObxValue, but uses a callback instead of a Rx value.
 ///
-/// Sample:
+/// Example:
+/// ```
 ///  ValueBuilder<bool>(
 ///    initialValue: false,
 ///    builder: (value, update) => Switch(
@@ -21,6 +22,7 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///    },),
 ///    onUpdate: (value) => print("Value updated: $value"),
 ///  ),
+///  ```
 class ValueBuilder<T> extends StatefulWidget {
   final T initialValue;
   final ValueBuilderBuilder builder;
