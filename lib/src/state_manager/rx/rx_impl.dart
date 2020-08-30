@@ -106,12 +106,16 @@ class _RxImpl<T> implements RxInterface<T> {
   String toString() => value.toString();
 
   /// This equality override works for _RxImpl instances and the internal values.
-  bool operator ==(o) {
+  @override
+  bool operator ==(dynamic o) {
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return _value == o;
     if (o is _RxImpl<T>) return _value == o.value;
     return false;
   }
+
+  @override
+  int get hashCode => _value.hashCode;
 
   void close() {
     _subscriptions.forEach((observable, subscription) => subscription.cancel());
