@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
 import '../rx_core/rx_impl.dart';
 
-
-
 /// The simplest reactive widget in GetX.
 ///
 /// Just pass your Rx variable in the root scope of the callback to have it

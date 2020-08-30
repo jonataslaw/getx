@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../get.dart';
 import '../rx_core/rx_interface.dart';
 import '../rx_typedefs/rx_typedefs.dart';

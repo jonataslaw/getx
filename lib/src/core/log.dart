@@ -1,4 +1,3 @@
-
 import 'package:get/instance_manager.dart';
 import 'dart:developer' as developer;
 

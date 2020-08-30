@@ -209,7 +209,6 @@ class GetInstance {
   S find<S>({String tag}) {
     String key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-
       if (_singl[key] == null) {
         if (tag == null) {
           throw 'Class "$S" is not register';
