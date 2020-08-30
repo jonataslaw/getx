@@ -81,7 +81,7 @@ import 'package:get/get.dart';
 The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
 
 - Step 1:
-Add "Get" before your materialApp, turning it into GetMaterialApp
+Add "Get" before your MaterialApp, turning it into GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
@@ -496,6 +496,43 @@ void localLogWriter(String text, {bool isError = false}) {
   // you get check the flag if you want through GetConfig.isLogEnable
 }
 
+```
+
+### Local State Widgets
+
+These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
+We have flavours for Reactive and Simple.
+For instance, you might use them to toggle obscureText in a TextField, maybe create a custom
+Expandable Panel, or maybe modify the current index in BottomNavigationBar while changing the content
+of the body in a Scaffold.
+
+#### ValueBuilder
+A simplification of StatefulWidget that works with a "setState" callback that takes the updated value.
+
+```dart
+ValueBuilder<bool>(
+  initialValue: false,
+  builder: (value, updateFn) => Switch(
+    value: value,
+    onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
+  ),
+  // if you need to call something outside the builder method.
+  onUpdate: (value) => print("Value updated: $value"),
+  onDispose: () => print("Widget unmounted"),   
+),
+```
+
+#### ObxValue
+Similar to ValueBuilder, but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and 
+updates automatically... isn't it awesome?
+
+```dart
+ObxValue((data) => Switch(
+        value: data.value,
+        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+    ),
+    false.obs,
+),
 ```
 
 ## Video explanation of Other GetX Features
