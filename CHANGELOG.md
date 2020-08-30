@@ -1,7 +1,9 @@
 ## [3.6.0]
-- Remove unnecessary whitespaces
-
-
+- Added RxSet
+- Change default logger to developer.log (@jorgegaticav)
+- Added BindingsBuilder, ValueBuilder, and ObxValue (@roipeker) 
+- Fix fallback locale not working if missing country code (@thaihuynhxyz)
+- Fix validation of email ".com.br"
 
 ## [3.5.1]
 - Remove unnecessary whitespaces
