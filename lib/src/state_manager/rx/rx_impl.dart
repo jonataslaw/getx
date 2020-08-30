@@ -13,12 +13,6 @@ class _RxImpl<T> implements RxInterface<T> {
       HashMap<Stream<T>, StreamSubscription>();
 
   T _value;
-  T get value {
-    if (getObs != null) {
-      getObs.addListener(subject.stream);
-    }
-    return _value;
-  }
 
   /// Common to all Types [T], this operator overloading is using for
   /// assignment, same as rx.value
@@ -141,6 +135,13 @@ class _RxImpl<T> implements RxInterface<T> {
     firstRebuild = false;
     _value = val;
     subject.add(_value);
+  }
+
+  T get value {
+    if (getObs != null) {
+      getObs.addListener(subject.stream);
+    }
+    return _value;
   }
 
   Stream<T> get stream => subject.stream;

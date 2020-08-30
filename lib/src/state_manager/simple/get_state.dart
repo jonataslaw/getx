@@ -48,7 +48,7 @@ class GetxController extends DisposableInterface {
   void onReady() async {}
 
   @override
-  void onClose() async {}
+  Future<void> onClose() async {}
 }
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {

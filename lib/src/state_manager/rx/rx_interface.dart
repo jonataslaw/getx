@@ -17,6 +17,10 @@ abstract class RxInterface<T> {
 
   bool get canUpdate;
 
+  set value(T val);
+
+  T get value;
+
   /// Closes the stream
   void close() => subject?.close();
 
@@ -75,7 +79,7 @@ abstract class DisposableInterface {
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
-  void onClose() async {}
+  Future<void> onClose() async {}
 }
 
 /// Used like [SingleTickerProviderMixin] but only with Get Controllers.
