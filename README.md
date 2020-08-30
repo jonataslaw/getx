@@ -52,7 +52,7 @@
 
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
 
-**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) to your VSCode**
+**GetX makes your development productive, but want to make it even more productive? Add the extension [GetX extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)**
 
 **GetX Community channels:**
 
@@ -97,7 +97,7 @@ You can make any variable observable using a simple ".obs".
 ```dart
 class Controller extends GetxController{
   var count = 0.obs;
-  increment() => count.value++;
+  increment() => count+1;
 }
 ```
 
@@ -113,7 +113,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) => Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
-      appBar: AppBar(title: Obx(() => Text("Clicks: " + c.count.string))),
+      appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: RaisedButton(
@@ -129,7 +129,7 @@ class Other extends StatelessWidget {
   @override
   Widget build(context){
      // Access the updated count variable
-     return Scaffold(body: Center(child: Text(c.count.string)));
+     return Scaffold(body: Center(child: Text("${c.count}")));
   }
 }
 ```
@@ -184,7 +184,7 @@ var name = 'Jonatas Borges'.obs;
 And in the UI, when you want to show that value and update the screen whenever tha values changes, simply do this:
 
 ```dart
-Obx (() => Text (controller.name));
+Obx(() => Text("${controller.name}"));
 ```
 
 That's all. It's *that* simple.

@@ -99,7 +99,7 @@ class _RxImpl<T> implements RxInterface<T> {
     fn(value);
     subject.add(value);
   }
-
+  
   String get string => value.toString();
 
   @override
@@ -110,7 +110,7 @@ class _RxImpl<T> implements RxInterface<T> {
   bool operator ==(dynamic o) {
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return _value == o;
-    if (o is _RxImpl<T>) return _value == o.value;
+    if (o is RxInterface<T>) return _value == o.value;
     return false;
   }
 
