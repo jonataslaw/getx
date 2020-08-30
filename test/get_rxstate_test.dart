@@ -28,7 +28,7 @@ void main() {
                   'Bool: ${controller.boolean.value}',
                 ),
                 Text(
-                  'Map: ${controller.map.value.length}',
+                  'Map: ${controller.map.length}',
                 ),
                 FlatButton(
                   child: Text("increment"),

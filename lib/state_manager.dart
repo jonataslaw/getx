@@ -5,6 +5,8 @@ export 'src/state_manager/simple/simple_builder.dart';
 export 'src/state_manager/simple/mixin_state.dart';
 export 'src/state_manager/rx/rx_interface.dart';
 export 'src/state_manager/rx/rx_impl.dart';
+export 'src/state_manager/rx/rx_list.dart';
+export 'src/state_manager/rx/rx_map.dart';
 export 'src/state_manager/rx/rx_event.dart';
 export 'src/state_manager/rx/rx_obx.dart';
 export 'src/state_manager/rx/rx_getbuilder.dart';

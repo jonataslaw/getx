@@ -1,3 +1,8 @@
+## [3.6.0]
+- Remove unnecessary whitespaces
+
+
+
 ## [3.5.1]
 - Remove unnecessary whitespaces
 
