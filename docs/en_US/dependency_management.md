@@ -162,13 +162,13 @@ Get.create<S>(
 
 ### Diferences between methods:
 
-We will talk about the variables `_factory` and `_singl`. Both are essential in the process of creating
- and using our dependencies, because is by it that we can store, dele and recreate the instances.
-
 First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
 
 The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
-Reinforcing: by default, GetX deletes instances when they are not is use (let's say screen 1 has controller 1 and screen 2 has controller 2. When you move from screen 1 to screen 2, the controller 1 lost its use so it is erased), but if you want to opt to `permanent:true`, then the controller will not be lost in this transition - which is very usefult for services that you want to keep alive thoughout the entire application. `fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need that, it will "recreate from the ashes" a new instance.
+Reinforcing: by default, GetX deletes instances when they are not is use.
+It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offName()`) the controller 1 lost it's use so it will be erased.
+But if you want to opt to `permanent:true`, then the controller will not be lost in this transition - which is very usefult for services that you want to keep alive thoughout the entire application.
+`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need that, it will "recreate from the ashes" a new instance.
 
 Proceeding with the differences between methods: 
 
