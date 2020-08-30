@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'util/matcher.dart';
 
 class Mock {
   static Future<String> test() async {
@@ -16,14 +17,6 @@ class DisposableController extends DisposableInterface {
   void onInit() async {
     initialized = true;
   }
-}
-
-class TypeMatcher<T> {
-  /// Creates a type matcher for the given type parameter.
-  const TypeMatcher();
-
-  /// Returns true if the given object is of type `T`.
-  bool check(dynamic object) => object is T;
 }
 
 abstract class Service {
