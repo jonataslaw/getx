@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/state_manager/rx/rx_obx.dart';
+import 'package:get/src/state_manager/rx/rx_obx_widget.dart';
 import 'get_state.dart';
 
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
