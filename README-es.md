@@ -195,7 +195,7 @@ Obx(() => Text (controller.name));
 
 ### Explicación en video sobre state management
 
-Amateur Coder hizo un video increíble sobre state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
+Darwin Morocho hizo una increíble serie de videos sobre state management! Link: [Complete GetX State Management](https://www.youtube.com/watch?v=PTjj0DFK8BA&list=PLV0nOzdUS5XtParoZLgKoVwNSK9zROwuO)
 
 Obtendrá una buena idea de la potencia de GetX.
 
