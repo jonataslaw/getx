@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'rx_interface.dart';
+import '../rx_core/rx_interface.dart';
 import 'utils/debouncer.dart';
 
 Worker ever(RxInterface listener, Function(dynamic) callback,

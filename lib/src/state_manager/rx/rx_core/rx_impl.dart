@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
-import 'rx_interface.dart';
+import '../rx_core/rx_interface.dart';
 
 RxInterface getObs;
 

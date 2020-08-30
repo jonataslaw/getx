@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:get/src/state_manager/rx/rx_interface.dart';
-import 'rx_impl.dart';
+import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
+import '../rx_core/rx_impl.dart';
 
 
 

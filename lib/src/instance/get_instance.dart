@@ -1,6 +1,6 @@
 import 'package:get/src/core/log.dart';
 import 'package:get/src/navigation/root/smart_management.dart';
-import 'package:get/src/state_manager/rx/rx_interface.dart';
+import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
 import 'package:get/src/utils/queue/get_queue.dart';
 
 class GetConfig {

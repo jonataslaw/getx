@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import '../../../get.dart';
-import 'rx_interface.dart';
-import 'rx_typedefs.dart';
+import '../../../../get.dart';
+import '../rx_core/rx_interface.dart';
+import '../rx_typedefs/rx_typedefs.dart';
 
 class RxMap<K, V> extends RxInterface<Map<K, V>> implements Map<K, V> {
   RxMap([Map<K, V> initial]) {

@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/navigation/root/smart_management.dart';
-import 'package:get/src/state_manager/rx/rx_interface.dart';
+import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
 import 'package:get/state_manager.dart';
 
 import 'simple_builder.dart';

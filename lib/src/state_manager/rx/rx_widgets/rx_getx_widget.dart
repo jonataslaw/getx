@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/navigation/root/smart_management.dart';
-import 'rx_impl.dart';
-import 'rx_interface.dart';
+import '../rx_core/rx_impl.dart';
+import '../rx_core/rx_interface.dart';
 
 class GetX<T extends DisposableInterface> extends StatefulWidget {
   final Widget Function(T) builder;

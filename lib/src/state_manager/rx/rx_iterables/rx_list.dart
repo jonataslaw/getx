@@ -1,17 +1,19 @@
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 
-import 'rx_impl.dart';
-import 'rx_interface.dart';
-import 'rx_typedefs.dart';
+import '../rx_core/rx_impl.dart';
+import '../rx_core/rx_interface.dart';
+import '../rx_typedefs/rx_typedefs.dart';
 
-class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
-  RxSet([Set<E> initial]) {
+
+/// Create a list similar to `List<T>`
+class RxList<E> implements List<E>, RxInterface<List<E>> {
+  RxList([List<E> initial]) {
     _list = initial;
   }
 
-  RxSet<E> _list = Set<E>();
+  List<E> _list = <E>[];
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -26,8 +28,8 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   @override
   bool get isNotEmpty => value.isNotEmpty;
 
-  StreamController<Set<E>> subject = StreamController<Set<E>>.broadcast();
-  Map<Stream<Set<E>>, StreamSubscription> _subscriptions = Map();
+  StreamController<List<E>> subject = StreamController<List<E>>.broadcast();
+  Map<Stream<List<E>>, StreamSubscription> _subscriptions = Map();
 
   /// Adds [item] only if [condition] resolves to true.
   void addIf(condition, E item) {
@@ -48,17 +50,19 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
-  RxSet<E> operator +(Iterable<E> val) {
+  RxList<E> operator +(Iterable<E> val) {
     addAll(val);
     subject.add(_list);
     return this;
   }
 
-  @override
-  bool add(E value) {
-    final val = _list.add(value);
+  E operator [](int index) {
+    return value[index];
+  }
+
+  void add(E item) {
+    _list.add(item);
     subject.add(_list);
-    return val;
   }
 
   void addAll(Iterable<E> item) {
@@ -159,7 +163,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   @protected
-  Set<E> get value {
+  List<E> get value {
     if (getObs != null) {
       getObs.addListener(subject.stream);
     }
@@ -168,7 +172,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   String get string => value.toString();
 
-  addListener(Stream<Set<E>> rxGetx) {
+  addListener(Stream<List<E>> rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
       return;
     }
@@ -183,9 +187,9 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     subject.add(_list);
   }
 
-  Stream<Set<E>> get stream => subject.stream;
+  Stream<List<E>> get stream => subject.stream;
 
-  StreamSubscription<Set<E>> listen(void Function(Set<E>) onData,
+  StreamSubscription<List<E>> listen(void Function(List<E>) onData,
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
@@ -204,7 +208,12 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   @override
-  Set<R> cast<R>() {
+  Map<int, E> asMap() {
+    return _list.asMap();
+  }
+
+  @override
+  List<R> cast<R>() {
     return _list.cast<R>();
   }
 
@@ -229,6 +238,11 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   @override
+  void fillRange(int start, int end, [E fillValue]) {
+    _list.fillRange(start, end, fillValue);
+  }
+
+  @override
   E firstWhere(bool Function(E) test, {E Function() orElse}) {
     return _list.firstWhere(test, orElse: orElse);
   }
@@ -249,13 +263,43 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   @override
+  Iterable<E> getRange(int start, int end) {
+    return _list.getRange(start, end);
+  }
+
+  @override
+  int indexOf(E element, [int start = 0]) {
+    return _list.indexOf(element, start);
+  }
+
+  @override
+  int indexWhere(bool Function(E) test, [int start = 0]) {
+    return _list.indexWhere(test, start);
+  }
+
+  @override
   String join([String separator = ""]) {
     return _list.join(separator);
   }
 
   @override
+  int lastIndexOf(E element, [int start]) {
+    return _list.lastIndexOf(element, start);
+  }
+
+  @override
+  int lastIndexWhere(bool Function(E) test, [int start]) {
+    return _list.lastIndexWhere(test, start);
+  }
+
+  @override
   E lastWhere(bool Function(E) test, {E Function() orElse}) {
     return _list.lastWhere(test, orElse: orElse);
+  }
+
+  @override
+  set length(int newLength) {
+    _list.length = newLength;
   }
 
   @override
@@ -266,6 +310,34 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   @override
   E reduce(E Function(E, E) combine) {
     return _list.reduce(combine);
+  }
+
+  @override
+  void replaceRange(int start, int end, Iterable<E> replacement) {
+    _list.replaceRange(start, end, replacement);
+  }
+
+  @override
+  void retainWhere(bool Function(E) test) {
+    _list.retainWhere(test);
+  }
+
+  @override
+  Iterable<E> get reversed => _list.reversed;
+
+  @override
+  void setAll(int index, Iterable<E> iterable) {
+    _list.setAll(index, iterable);
+  }
+
+  @override
+  void setRange(int start, int end, Iterable<E> iterable, [int skipCount = 0]) {
+    _list.setRange(start, end, iterable, skipCount);
+  }
+
+  @override
+  void shuffle([Random random]) {
+    _list.shuffle(random);
   }
 
   @override
@@ -284,6 +356,11 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   @override
   Iterable<E> skipWhile(bool Function(E) test) {
     return _list.skipWhile(test);
+  }
+
+  @override
+  List<E> sublist(int start, [int end]) {
+    return _list.sublist(start, end);
   }
 
   @override
@@ -317,51 +394,21 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   @override
-  bool containsAll(Iterable<Object> other) {
-    return _list.containsAll(other);
+  set first(E value) {
+    _list.first = value;
   }
 
   @override
-  Set<E> difference(Set<Object> other) {
-    return _list.difference(other);
-  }
-
-  @override
-  Set<E> intersection(Set<Object> other) {
-    return _list.intersection(other);
-  }
-
-  @override
-  E lookup(Object object) {
-    return _list.lookup(object);
-  }
-
-  @override
-  void removeAll(Iterable<Object> elements) {
-    _list.removeAll(elements);
-  }
-
-  @override
-  void retainAll(Iterable<Object> elements) {
-    _list.retainAll(elements);
-  }
-
-  @override
-  void retainWhere(bool Function(E) E) {
-    _list.retainWhere(E);
-  }
-
-  @override
-  Set<E> union(Set<E> other) {
-    return _list.union(other);
+  set last(E value) {
+    _list.last = value;
   }
 }
 
-extension SetExtension<E> on Set<E> {
-  RxSet<E> get obs {
+extension ListExtension<E> on List<E> {
+  RxList<E> get obs {
     if (this != null)
-      return RxSet<E>(<E>{})..addAllNonNull(this);
+      return RxList<E>(<E>[])..addAllNonNull(this);
     else
-      return RxSet<E>(null);
+      return RxList<E>(null);
   }
 }

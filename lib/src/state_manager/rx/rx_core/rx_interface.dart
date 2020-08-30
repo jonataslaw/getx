@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/scheduler.dart';
-import 'rx_typedefs.dart';
+import '../rx_typedefs/rx_typedefs.dart';
 
 /// This class is the foundation for all reactive (Rx) classes that makes Get
 /// so powerful.
