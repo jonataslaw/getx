@@ -175,8 +175,10 @@ class GetInstance {
     final key = _getKey(S, tag);
     final i = _singl[key].getDependency();
     if (i is DisposableInterface) {
-      i.onStart();
-      GetConfig.log('"$key" has been initialized');
+      if (i.onStart != null) {
+        i.onStart();
+        GetConfig.log('"$key" has been initialized');
+      }
     }
   }
 
