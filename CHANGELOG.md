@@ -1,9 +1,6 @@
 ## [3.6.2]
 - Fix more formatting issues
 
-## [3.6.2]
-- Fix more formatting issues
-
 ## [3.6.1]
 - Fix formatting issues
 
