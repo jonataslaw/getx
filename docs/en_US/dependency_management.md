@@ -215,9 +215,9 @@ Now you just need to inform your route, that you will use that binding to make t
 - Using named routes:
 
 ```dart
-namedRoutes: {
-  '/': GetRoute(Home(), binding: HomeBinding())
-}
+getPages: [
+  GetPage(name: '/', page: () => Home(), binding: HomeBinding()),
+]
 ```
 
 - Using normal routes:

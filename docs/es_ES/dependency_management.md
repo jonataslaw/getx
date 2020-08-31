@@ -221,9 +221,9 @@ Ahora solo necesita informar su ruta, que utilizará ese binding para establecer
 - Uso de rutas nombradas:
 
 ```dart
-namedRoutes: {
-  '/': GetRoute(Home(), binding: HomeBinding())
-}
+getPages: [
+  GetPage(name: '/', page: () => Home(), binding: HomeBinding()),
+]
 ```
 
 - Usando rutas normales:

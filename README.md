@@ -572,7 +572,7 @@ Now:
 ```dart
 GetMaterialApp(
   getPages: [
-    GetPage(name: '/', page:()=> Home()),
+    GetPage(name: '/', page: () => Home()),
   ]
 )
 ```

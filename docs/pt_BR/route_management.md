@@ -237,11 +237,11 @@ void main() {
   runApp(
     GetMaterialApp(
       initialRoute: '/',
-      namedRoutes: {
-        '/': GetRoute(page: MyHomePage()),
-        '/login': GetRoute(page: Login()),
-        '/cadastro': GetRoute(page: Cadastro(),transition: Transition.cupertino);
-      },
+      getPages: [
+        GetPage(name: '/', page: () => Home()),
+        GetPage(name: '/login', page: () => Login()),
+        GetPage(name: '/cadastro', page: () => Cadastro(), transition: Transition.cupertino),
+      ]
     )
   );
 }
@@ -283,15 +283,15 @@ Você também pode receber parâmetros nomeados com o Get facilmente:
 void main() => runApp(
   GetMaterialApp(
     initialRoute: '/',
-    namedRoutes: {
-      '/': GetRoute(page: MyHomePage()),
+    getPages: [
+      GetPage(name: '/', page: () => Home()),
       /// Importante! ':user' não é uma nova rota, é somente uma
       /// especificação do parâmentro. Não use '/segunda/:user/' e '/segunda'
       /// se você precisa de uma nova rota para o user, então
       /// use '/segunda/user/:user' se '/segunda' for uma rota
-      '/segunda/:user': GetRoute(page: Segunda()), // recebe a ID
-      '/terceira': GetRoute(page: Terceira(),transition: Transition.cupertino);
-    },
+      GetPage(name: '/segunda/:user', page: () => Segunda()), // recebe a ID
+      GetPage(name: '/terceira', page: () => Terceira(), transition: Transition.cupertino),
+    ]
   ),
 );
 ```
