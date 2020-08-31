@@ -1,3 +1,6 @@
+## [3.6.3]
+- Fix onStart called null on tests
+
 ## [3.6.2]
 - Fix more formatting issues
 
