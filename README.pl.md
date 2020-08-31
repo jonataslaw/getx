@@ -478,7 +478,7 @@ GetMaterialApp(
 	    // pamiętaj że nawet jeśli "enableLog: false" logi i tak będą wysłane w tym callbacku
 		  // Musisz sprawdzić konfiguracje flag  jeśli chcesz przez GetConfig.isLogEnable
 		  }
-
+```
 ## Video tłumaczące inne funkcjonalności GetX
 
 
