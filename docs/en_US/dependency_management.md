@@ -1,9 +1,20 @@
-# Dependency management
-- [Simple Instance Manager](#simple-instance-manager)
-- [Options](#options)
-- [Bindings](#bindings)
-  - [How to use](#how-to-use)
-- [SmartManagement](#smartmanagement)
+# Dependency Management
+- [Dependency Management](#dependency-management)
+  - [Usage](#usage)
+  - [Instancing methods](#instancing-methods)
+    - [Get.put()](#getput)
+    - [Get.lazyPut](#getlazyput)
+    - [Get.putAsync](#getputasync)
+    - [Get.create](#getcreate)
+  - [Diferences between methods:](#diferences-between-methods)
+  - [Bindings](#bindings)
+    - [How to use](#how-to-use)
+    - [BindingsBuilder](#bindingsbuilder)
+    - [SmartManagement](#smartmanagement)
+      - [SmartManagement.full](#smartmanagementfull)
+      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
+      - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
+  - [Notes](#notes)
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
@@ -12,8 +23,8 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 ```
 
 If you don't know why dependency injection is, you can check some links to learn:
-[Dependency Injection in Flutter](https://medium.com/flutter-community/dependency-injection-in-flutter-f19fb66a0740)
-[Dependency Injection in Dart/Flutter Apps](https://berthacks.com/dependency-injection-in-dartflutter-apps-ck71x93uu06fqd9s1zuosczgn)
+- [Dependency Injection in Flutter](https://medium.com/flutter-community/dependency-injection-in-flutter-f19fb66a0740)
+- [Dependency Injection in Dart/Flutter Apps](https://berthacks.com/dependency-injection-in-dartflutter-apps-ck71x93uu06fqd9s1zuosczgn)
 
 Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
 So you can use your controller (or Bloc class) normally
@@ -34,7 +45,7 @@ Text(controller.textFromApi);
 It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or when you know you will not gonna use that class at that time.
 
 ```dart
-Get.lazyPut<ApiMock>(()=> ApiMock());
+Get.lazyPut<ApiMock>(() => ApiMock());
 /// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
 ```
 
@@ -127,7 +138,7 @@ Get.lazyPut<S>(
 Get.lazyPut<FirebaseAuth>(
   () => {
   // ... some logic if needed
-    FirebaseAuth()
+    return FirebaseAuth()
   },
   tag: Math.random().toString(),
   fenix: true
@@ -298,17 +309,35 @@ That way you can avoid to create one Binding class for each route making this ev
 
 Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
 
-## SmartManagement
+### SmartManagement
 
-Always prefer to use standard SmartManagement (full), you do not need to configure anything for that, Get already gives it to you by default. It will surely eliminate all your disused controllers from memory, as its refined control removes the dependency, even if a failure occurs and a widget that uses it is not properly disposed.
-The "full" mode is also safe enough to be used with StatelessWidget, as it has numerous security callbacks that will prevent a controller from remaining in memory if it is not being used by any widget, and disposition is not important here. However, if you are bothered by the default behavior, or just don't want it to happen, Get offers other, more lenient options for intelligent memory management, such as SmartManagement.onlyBuilders, which will depend on the effective removal of widgets using the controller. tree to remove it, and you can prevent a controller from being deployed using "autoRemove: false" in your GetBuilder/GetX.
-With this option, only controllers started in "init:" or loaded into a Binding with "Get.lazyPut" will be disposed, if you use Get.put or any other approach, SmartManagement will not have permissions to exclude this dependency.
+GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
+This is what is called the `full` mode of dependency management.
+But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+
+#### SmartManagement.full
+
+It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
+
+#### SmartManagement.onlyBuilders
+With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut` will be disposed.
+
+If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
+
 With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
-SmartManagement.keepFactory is like SmartManagement.full, with one difference. SmartManagement.full purges the factories from the premises, so that Get.lazyPut() will only be able to be called once and your factory and references will be self-destructing. SmartManagement.keepFactory will remove its dependencies when necessary, however, it will keep the "shape" of these, to make an equal one if you need an instance of that again.
+
+#### SmartManagement.keepFactory
+
+// TODO ASK JONATAS WHAT THE HECK HE MEANT WITH THIS TEXT
+This one is like SmartManagement.full, with one difference: SmartManagement.full purges the factories from the premises, so that Get.lazyPut() will only be able to be called once and your factory and references will be self-destructing. SmartManagement.keepFactory will remove its dependencies when necessary, however, it will keep the "shape" of these, to make an equal one if you need an instance of that again.
+
 Instead of using SmartManagement.keepFactory you can use Bindings.
+// TODO ASK JONATAS THIS TOO
 Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens. It is so little time that the analyzer will not even be able to register it. When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you . Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want. This is very little, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default. Use whichever is most convenient for you.
 
-- NOTE: DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+## Notes
 
-- NOTE2: Using Bindings is completely optional, you can use Get.put() and Get.find() on classes that use a given controller without any problem.
-However, if you work with Services or any other abstraction, I recommend using Bindings for a larger organization.
+- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+
+- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
+However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.
