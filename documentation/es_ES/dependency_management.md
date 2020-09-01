@@ -243,6 +243,17 @@ GetMaterialApp(
 );
 ```
 
+Para declaraciones de una sola linea puede usar **BindingBuilder** en el  ``GetPages`` para omitir la declaración
+de un custom binding.
+
+```dart
+GetPage(
+  name: '/',
+  page: () => Home(),
+  binding: BindingsBuilder(() => Get.put(HomeController())),
+),
+```
+
 ## SmartManagement
 
 Siempre prefiera usar SmartManagement estándar (full), no necesita configurar nada para eso, GetX ya se lo proporciona de forma predeterminada. Seguramente eliminará todos los controladores en desuso de la memoria, ya que su control refinado elimina la dependencia, incluso si se produce un error y un widget que lo utiliza no se elimina correctamente.

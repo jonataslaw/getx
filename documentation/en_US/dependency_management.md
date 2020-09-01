@@ -237,6 +237,16 @@ GetMaterialApp(
 );
 ```
 
+For single callbacks you can use **BindingBuilder** in ``GetPages`` to simplify the creation of a custom Binding instance
+
+```dart
+GetPage(
+  name: '/',
+  page: () => Home(),
+  binding: BindingsBuilder(() => Get.put(HomeController())),
+),
+```
+
 ## SmartManagement
 
 Always prefer to use standard SmartManagement (full), you do not need to configure anything for that, Get already gives it to you by default. It will surely eliminate all your disused controllers from memory, as its refined control removes the dependency, even if a failure occurs and a widget that uses it is not properly disposed.
