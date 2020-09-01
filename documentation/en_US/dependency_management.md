@@ -37,6 +37,13 @@ The methods and it's configurable parameters are:
 The most common way of insert a dependency. Good for the controllers of your views for example.
 
 ```dart
+Get.put<SomeClass>(SomeClass());
+Get.put<LoginController>(LoginController(), permanent: true);
+Get.put<ListItemController>(ListItemController, tag: "some unique string");
+```
+
+This is all options you can set when using put:
+```dart
 Get.put<S>(
   // mandatory: the class that you want to get to save, like a controller or anything
   // note: "S" means that it can be a class of any type
@@ -63,10 +70,6 @@ Get.put<S>(
   // this one is not commonly used
   InstanceBuilderCallback<S> builder,
 )
-
-// Example:
-
-Get.put<LoginController>(LoginController(), permanent: true)
 ```
 
 ### Get.lazyPut
@@ -108,8 +111,6 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
-
-Since `Get.put()` does not support async methods/classes, you need to use Get.putAsync. The way of declare is equal to Get.lazyPut
 If you want to register an asynchronous instance, you can use `Get.putAsync`:
 
 ```dart
@@ -143,6 +144,13 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ### Get.create
 
 This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
+
+```dart
+Get.Create<SomeClass>(() => SomeClass());
+Get.Create<LoginController>(() => LoginController());
+```
+
+This is all options you can set when using create:
 
 ```dart
 Get.create<S>(
