@@ -90,7 +90,7 @@ import 'package:get/get.dart';
 
 # Proyecto Counter no GetX
 
-Vea una explicación más detallada de la administración del estado [aquí](./docs/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo
+Vea una explicación más detallada de la administración del estado [aquí](./documentation/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo
 
 El proyecto "contador" creado por defecto en un nuevo proyecto en Flutter tiene más de 100 líneas (con comentarios). Para mostrar el poder de GetX, demostraré cómo hacer un "contador" cambiando el estado con cada clic, cambiando de página y compartiendo el estado entre pantallas, todo de manera organizada, separando la vista de la lógica de negocio, SOLO 26 LÍNEAS DE CÓDIGO INCLUIDOS COMENTARIOS.
 
@@ -191,7 +191,7 @@ Obx(() => Text (controller.name));
 
 ### Más detalles sobre la gestión del estado.
 
-**Vea una explicación más detallada de la administración del estado [aquí](./docs/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo**
+**Vea una explicación más detallada de la administración del estado [aquí](./documentation/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo**
 
 ### Explicación en video sobre state management
 
@@ -233,7 +233,7 @@ var data = await Get.to(Payment());
 
 ### Más detalles sobre la gestión de rutas.
 
-**Vea una explicación más detallada de la Gestión de Rutas [aquí](./docs/es_ES/route_management.md).**
+**Vea una explicación más detallada de la Gestión de Rutas [aquí](./documentation/es_ES/route_management.md).**
 
 ### Explicación del video
 
@@ -277,7 +277,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 ### Más detalles sobre la gestión de dependencias.
 
-**Vea una explicación más detallada de la Gestión de dependencias [aquí](./docs/es_ES/dependency_management.md).**
+**Vea una explicación más detallada de la Gestión de dependencias [aquí](./documentation/es_ES/dependency_management.md).**
 
 # Utilidades
 

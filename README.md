@@ -191,7 +191,7 @@ That's all. It's *that* simple.
 
 ### More details about state management
 
-**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
+**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
 
 ### Video explanation about state management
 
@@ -240,7 +240,7 @@ Noticed that you didn't had to use context to do any of these things? That's one
 
 ### More details about route management
 
-**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./docs/en_US/route_management.md)**
+**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./documentation/en_US/route_management.md)**
 
 ### Video Explanation
 
@@ -281,7 +281,7 @@ Text(controller.textFromApi);
 
 ### More details about dependency management
 
-**See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)**
+**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
 
 # How to contribute
 

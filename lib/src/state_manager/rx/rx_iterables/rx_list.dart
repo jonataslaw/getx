@@ -180,8 +180,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
     }
     return _list;
   }
-  
-  
+
   String get string => value.toString();
 
   addListener(Stream<List<E>> rxGetx) {

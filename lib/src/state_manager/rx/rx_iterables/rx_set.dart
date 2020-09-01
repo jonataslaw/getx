@@ -8,10 +8,10 @@ import '../rx_typedefs/rx_typedefs.dart';
 
 class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   RxSet([Set<E> initial]) {
-    _list = initial;
+    _set = initial;
   }
 
-  RxSet<E> _list = Set<E>();
+  RxSet<E> _set = Set<E>();
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -42,28 +42,28 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   operator []=(int index, E val) {
-    _list[index] = val;
-    subject.add(_list);
+    _set[index] = val;
+    subject.add(_set);
   }
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
   RxSet<E> operator +(Iterable<E> val) {
     addAll(val);
-    subject.add(_list);
+    subject.add(_set);
     return this;
   }
 
   @override
   bool add(E value) {
-    final val = _list.add(value);
-    subject.add(_list);
+    final val = _set.add(value);
+    subject.add(_set);
     return val;
   }
 
   void addAll(Iterable<E> item) {
-    _list.addAll(item);
-    subject.add(_list);
+    _set.addAll(item);
+    subject.add(_set);
   }
 
   /// Adds only if [item] is not null.
@@ -77,13 +77,13 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   void insert(int index, E item) {
-    _list.insert(index, item);
-    subject.add(_list);
+    _set.insert(index, item);
+    subject.add(_set);
   }
 
   void insertAll(int index, Iterable<E> iterable) {
-    _list.insertAll(index, iterable);
-    subject.add(_list);
+    _set.insertAll(index, iterable);
+    subject.add(_set);
   }
 
   int get length => value.length;
@@ -94,43 +94,43 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   ///
   /// Returns whether the item was present in the list.
   bool remove(Object item) {
-    bool hasRemoved = _list.remove(item);
+    bool hasRemoved = _set.remove(item);
     if (hasRemoved) {
-      subject.add(_list);
+      subject.add(_set);
     }
     return hasRemoved;
   }
 
   E removeAt(int index) {
-    E item = _list.removeAt(index);
-    subject.add(_list);
+    E item = _set.removeAt(index);
+    subject.add(_set);
     return item;
   }
 
   E removeLast() {
-    E item = _list.removeLast();
-    subject.add(_list);
+    E item = _set.removeLast();
+    subject.add(_set);
     return item;
   }
 
   void removeRange(int start, int end) {
-    _list.removeRange(start, end);
-    subject.add(_list);
+    _set.removeRange(start, end);
+    subject.add(_set);
   }
 
   void removeWhere(bool Function(E) test) {
-    _list.removeWhere(test);
-    subject.add(_list);
+    _set.removeWhere(test);
+    subject.add(_set);
   }
 
   void clear() {
-    _list.clear();
-    subject.add(_list);
+    _set.clear();
+    subject.add(_set);
   }
 
   void sort([int compare(E a, E b)]) {
-    _list.sort();
-    subject.add(_list);
+    _set.sort();
+    subject.add(_set);
   }
 
   close() {
@@ -149,7 +149,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   void update(void fn(Iterable<E> value)) {
     fn(value);
-    subject.add(_list);
+    subject.add(_set);
   }
 
   /// Replaces all existing items of this list with [items]
@@ -163,7 +163,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     if (getObs != null) {
       getObs.addListener(subject.stream);
     }
-    return _list;
+    return _set;
   }
 
   String get string => value.toString();
@@ -178,9 +178,9 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   set value(Iterable<E> val) {
-    if (_list == val) return;
-    _list = val;
-    subject.add(_list);
+    if (_set == val) return;
+    _set = val;
+    subject.add(_set);
   }
 
   Stream<Set<E>> get stream => subject.stream;
@@ -338,20 +338,20 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   @override
   void removeAll(Iterable<Object> elements) {
-    _list.removeAll(elements);
-    subject.add(_list);
+    _set.removeAll(elements);
+    subject.add(_set);
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
-    _list.retainAll(elements);
-    subject.add(_list);
+    _set.retainAll(elements);
+    subject.add(_set);
   }
 
   @override
   void retainWhere(bool Function(E) E) {
-    _list.retainWhere(E);
-    subject.add(_list);
+    _set.retainWhere(E);
+    subject.add(_set);
   }
 
   @override
