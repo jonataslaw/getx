@@ -23,10 +23,6 @@ Get has a simple and powerful dependency manager that allows you to retrieve the
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-If you don't know why dependency injection is, you can check some links to learn:
-- [Dependency Injection in Flutter](https://medium.com/flutter-community/dependency-injection-in-flutter-f19fb66a0740)
-- [Dependency Injection in Dart/Flutter Apps](https://berthacks.com/dependency-injection-in-dartflutter-apps-ck71x93uu06fqd9s1zuosczgn)
-
 Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
 So you can use your controller (or Bloc class) normally
 
