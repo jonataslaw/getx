@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:get/route_manager.dart';
 import 'package:get/src/core/get_main.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/utils.dart';
-
 import 'bindings_interface.dart';
 import 'custom_transition.dart';
 import 'default_transitions.dart';
@@ -43,7 +41,7 @@ class GetPageRoute<T> extends PageRoute<T> {
   @override
   final Duration transitionDuration;
 
-  final WidgetCallback page;
+  final GetPageBuilder page;
 
   final String routeName;
 
