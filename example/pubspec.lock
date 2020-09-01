@@ -73,7 +73,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.7.0"
+    version: "3.8.0"
   http_parser:
     dependency: transitive
     description:

@@ -1,3 +1,14 @@
+## [3.8.0]
+- Added: Snackbar Status: Open, Opening, Closing and Closed
+example:
+```dart
+ Get.snackbar('title', 'message', snackbarStatus: (status) {
+                  if (status == SnackbarStatus.CLOSED) {
+                    // made anything
+                  }
+                });
+```
+
 ## [3.7.0]
 - Added: RxSet. Sets can now also be reactive.
 - Added isDesktop/isMobile (@roipeker) 

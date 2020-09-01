@@ -19,7 +19,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
     });
 
     _configureAlignment(this.snack.snackPosition);
-    _onStatusChanged = snack.onStatusChanged;
+    _snackbarStatus = snack.snackbarStatus;
   }
 
   _configureAlignment(SnackPosition snackPosition) {
@@ -45,7 +45,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
   Future<T> get completed => _transitionCompleter.future;
   final Completer<T> _transitionCompleter = Completer<T>();
 
-  SnackStatusCallback _onStatusChanged;
+  SnackbarStatusCallback _snackbarStatus;
   Alignment _initialAlignment;
   Alignment _endAlignment;
   bool _wasDismissedBySwipe = false;
@@ -115,8 +115,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
       direction: _getDismissDirection(),
       resizeDuration: null,
       confirmDismiss: (_) {
-        if (currentStatus == SnackStatus.IS_APPEARING ||
-            currentStatus == SnackStatus.IS_HIDING) {
+        if (currentStatus == SnackbarStatus.OPENING ||
+            currentStatus == SnackbarStatus.CLOSING) {
           return Future.value(false);
         }
         return Future.value(true);
@@ -231,24 +231,24 @@ class SnackRoute<T> extends OverlayRoute<T> {
   }
 
   T _result;
-  SnackStatus currentStatus;
+  SnackbarStatus currentStatus;
 
   //copy of `routes.dart`
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
-        currentStatus = SnackStatus.SHOWING;
-        _onStatusChanged(currentStatus);
+        currentStatus = SnackbarStatus.OPEN;
+        _snackbarStatus(currentStatus);
         if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = opaque;
 
         break;
       case AnimationStatus.forward:
-        currentStatus = SnackStatus.IS_APPEARING;
-        _onStatusChanged(currentStatus);
+        currentStatus = SnackbarStatus.OPENING;
+        _snackbarStatus(currentStatus);
         break;
       case AnimationStatus.reverse:
-        currentStatus = SnackStatus.IS_HIDING;
-        _onStatusChanged(currentStatus);
+        currentStatus = SnackbarStatus.CLOSING;
+        _snackbarStatus(currentStatus);
         if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = false;
         break;
       case AnimationStatus.dismissed:
@@ -257,8 +257,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
         // the transition and hits the dismissed status. For example, the iOS
         // back gesture drives this animation to the dismissed status before
         // popping the navigator.
-        currentStatus = SnackStatus.DISMISSED;
-        _onStatusChanged(currentStatus);
+        currentStatus = SnackbarStatus.CLOSED;
+        _snackbarStatus(currentStatus);
 
         if (!isCurrent) {
           navigator.finalizeRoute(this);

@@ -253,7 +253,7 @@ extension GetNavigation on GetInterface {
         arguments: arguments);
   }
 
-  /// Returns true if a Snackbar, Dialog or BottomSheet is currently showing
+  /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
   bool get isOverlaysOpen =>
       (isSnackbarOpen || isDialogOpen || isBottomSheetOpen);
 
@@ -664,12 +664,13 @@ extension GetNavigation on GetInterface {
       Curve forwardAnimationCurve = Curves.easeOutCirc,
       Curve reverseAnimationCurve = Curves.easeOutCirc,
       Duration animationDuration = const Duration(seconds: 1),
-      SnackStatusCallback onStatusChanged,
+      SnackbarStatusCallback snackbarStatus,
       double barBlur = 0.0,
       double overlayBlur = 0.0,
-      Color overlayColor = Colors.transparent,
-      Form userInputForm}) {
+      Color overlayColor,
+      Form userInputForm}) async {
     GetBar getBar = GetBar(
+        snackbarStatus: snackbarStatus,
         title: title,
         message: message,
         titleText: titleText,
@@ -749,9 +750,11 @@ extension GetNavigation on GetInterface {
       Duration animationDuration,
       double barBlur,
       double overlayBlur,
+      SnackbarStatusCallback snackbarStatus,
       Color overlayColor,
-      Form userInputForm}) {
+      Form userInputForm}) async {
     GetBar getBar = GetBar(
+        snackbarStatus: snackbarStatus,
         titleText: (title == null)
             ? null
             : titleText ??

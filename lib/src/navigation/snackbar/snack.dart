@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'snack_route.dart' as route;
+import 'snack_route.dart';
 
-typedef void SnackStatusCallback(SnackStatus status);
+typedef void SnackbarStatusCallback(SnackbarStatus status);
 typedef void OnTap(GetBar snack);
 
 // ignore: must_be_immutable
@@ -42,7 +42,7 @@ class GetBar<T extends Object> extends StatefulWidget {
       Curve forwardAnimationCurve = Curves.easeOutCirc,
       Curve reverseAnimationCurve = Curves.easeOutCirc,
       Duration animationDuration = const Duration(seconds: 1),
-      SnackStatusCallback onStatusChanged,
+      SnackbarStatusCallback snackbarStatus,
       double barBlur = 0.0,
       double overlayBlur = 0.0,
       Color overlayColor = Colors.transparent,
@@ -83,11 +83,11 @@ class GetBar<T extends Object> extends StatefulWidget {
         this.overlayColor = overlayColor,
         this.userInputForm = userInputForm,
         super(key: key) {
-    this.onStatusChanged = onStatusChanged ?? (status) {};
+    this.snackbarStatus = snackbarStatus ?? (status) {};
   }
 
   /// A callback for you to listen to the different Snack status
-  SnackStatusCallback onStatusChanged;
+  SnackbarStatusCallback snackbarStatus;
 
   /// The title displayed to the user
   final String title;
@@ -209,11 +209,11 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// A [TextFormField] in case you want a simple user input. Every other widget is ignored if this is not null.
   final Form userInputForm;
 
-  route.SnackRoute<T> _snackRoute;
+  SnackRoute<T> _snackRoute;
 
-  /// Show the snack. Kicks in [SnackStatus.IS_APPEARING] state followed by [SnackStatus.SHOWING]
+  /// Show the snack. Kicks in [SnackbarStatus.OPENING] state followed by [SnackbarStatus.OPEN]
   Future<T> show() async {
-    _snackRoute = route.showSnack<T>(
+    _snackRoute = showSnack<T>(
       snack: this,
     ) as SnackRoute<T>;
     return await Get.key.currentState.push(_snackRoute);
@@ -232,7 +232,7 @@ class GetBar<T extends Object> extends StatefulWidget {
       return _snackRoute.completed;
     } else if (_snackRoute.isActive) {
       // removeRoute is called every time you dismiss a Snack that is not the top route.
-      // It will not animate back and listeners will not detect SnackStatus.IS_HIDING or SnackStatus.DISMISSED
+      // It will not animate back and listeners will not detect SnackbarStatus.CLOSING or SnackbarStatus.CLOSED
       // To avoid this, always make sure that Snack is the top route when it is being dismissed
       _snackRoute.navigator.removeRoute(_snackRoute);
     }
@@ -242,12 +242,12 @@ class GetBar<T extends Object> extends StatefulWidget {
 
   /// Checks if the snack is visible
   bool isShowing() {
-    return _snackRoute?.currentStatus == SnackStatus.SHOWING;
+    return _snackRoute?.currentStatus == SnackbarStatus.OPEN;
   }
 
   /// Checks if the snack is dismissed
   bool isDismissed() {
-    return _snackRoute?.currentStatus == SnackStatus.DISMISSED;
+    return _snackRoute?.currentStatus == SnackbarStatus.CLOSED;
   }
 
   @override
@@ -258,7 +258,7 @@ class GetBar<T extends Object> extends StatefulWidget {
 
 class _GetBarState<K extends Object> extends State<GetBar>
     with TickerProviderStateMixin {
-  SnackStatus currentStatus;
+  SnackbarStatus currentStatus;
 
   AnimationController _fadeController;
   Animation<double> _fadeAnimation;
@@ -732,9 +732,9 @@ enum SnackStyle { FLOATING, GROUNDED }
 /// If vertical, dismiss down will be allowed if [SnackPosition.BOTTOM]
 enum SnackDismissDirection { HORIZONTAL, VERTICAL }
 
-/// Indicates the animation status
-/// [SnackStatus.SHOWING] Snack has stopped and the user can see it
-/// [SnackStatus.DISMISSED] Snack has finished its mission and returned any pending values
-/// [SnackStatus.IS_APPEARING] Snack is moving towards [SnackStatus.SHOWING]
-/// [SnackStatus.IS_HIDING] Snack is moving towards [] [SnackStatus.DISMISSED]
-enum SnackStatus { SHOWING, DISMISSED, IS_APPEARING, IS_HIDING }
+/// Indicates Status of snackbar
+/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar has closed,
+/// [SnackbarStatus.OPENING] Starts with the opening animation and ends with the full
+/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation and ends
+/// with the full snackbar dispose
+enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
