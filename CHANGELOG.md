@@ -1,7 +1,8 @@
 ## [3.7.0]
 - Added: RxSet. Sets can now also be reactive.
+- Added isDesktop/isMobile (@roipeker) 
 - Improve GetPlatform: It is now possible to know which device the user is using if GetPlatform.isWeb is true.
-context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation.
+context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation. (@roipeker) 
 - Change: The documentation previously stated that Iterables should not access the ".value" property.
 However, many users did not pay attention to this fact, and ended up generating unnecessary issues and bugs in their application.
 In this version, we focus on code security. Now ".value" is protected, so it cannot be accessed externally by Lists, Maps or Sets.

@@ -329,29 +329,29 @@ Pass parameters to `GetMaterialApp` to define the locale and translations.
 ```dart
 return GetMaterialApp(
     translations: Messages(), // your translations
-    locale: Locale('en_US'), // translations will be displayed in that locale
-    fallbackLocale: Locale('en_US'), // specify the fallback locale in case an invalid locale is selected.  
-    supportedLocales: <Locale>[Locale('en_US'), Locale('de_DE')] // specify the supported locales
+    locale: Locale('en', 'US'), // translations will be displayed in that locale
+    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.  
+    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // specify the supported locales
 );
 ```
 
 #### Change locale
 Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
 ```dart
-var locale = Locale('en_US');
+var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
 #### System locale
-To read the system locale, you could use `Platform.localeName`.
+To read the system locale, you could use `window.locale`.
 ```dart
+import 'dart:ui' as ui;
+
 return GetMaterialApp(
-    locale: Locale(Platform.localeName),
+    locale: ui.window.locale,
 );
 ```
 
-### More details about internationalization
-**See a more in-depth explanation of internationalization [here](./docs/en_US/internationalization.md)**
 ## Change Theme
 
 Please do not use any higher level widget than GetMaterialApp in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with Get.
