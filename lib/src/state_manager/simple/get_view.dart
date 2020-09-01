@@ -2,7 +2,24 @@ import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 
 /// GetView is a great way of quickly access your Controller
-/// without having call Get.find<Controller>() yourself.
+/// without having to call Get.find<AwesomeController>() yourself.
+///
+/// Sample:
+/// ```
+/// class AwesomeController extends GetxController {
+///   final String title = 'My Awesome View';
+/// }
+///
+/// class AwesomeView extends GetView<AwesomeController> {
+///   @override
+///   Widget build(BuildContext context) {
+///     return Container(
+///       padding: EdgeInsets.all(20),
+///       child: Text( controller.title ),
+///     );
+///   }
+/// }
+///``
 abstract class GetView<T> extends StatelessWidget {
   const GetView({Key key}) : super(key: key);
   T get controller => GetInstance().find<T>();
