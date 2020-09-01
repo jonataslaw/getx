@@ -489,7 +489,7 @@ Navigator(
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
-      return GetRouteBase(
+      return GetPageRoute(
         page: Scaffold(
           appBar: AppBar(
             title: Text("Principal"),
@@ -506,7 +506,7 @@ Navigator(
         ),
       );
     } else if (settings.name == '/segunda') {
-      return GetRouteBase(
+      return GetPageRoute(
         page: Center(
           child: Scaffold(
             appBar: AppBar(
