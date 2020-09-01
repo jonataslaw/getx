@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/src/navigation/routes/bindings_interface.dart';
+
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 
 class GetPage {
   final String name;
-  final GetPageBuilder page;
+  final WidgetCallback page;
   final bool popGesture;
   final Map<String, String> parameter;
   final String title;

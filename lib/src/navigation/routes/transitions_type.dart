@@ -18,4 +18,4 @@ enum Transition {
   native
 }
 
-typedef GetPageBuilder = Widget Function();
+typedef WidgetCallback = Widget Function();

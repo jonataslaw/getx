@@ -1,9 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/widgets.dart';
+import 'package:get/src/navigation/routes/transitions_type.dart';
 import 'package:get/src/state_manager/rx/rx_interface.dart';
+
 import 'rx_impl.dart';
-
-
 
 /// The simplest reactive widget in GetX.
 ///
@@ -13,7 +14,7 @@ import 'rx_impl.dart';
 /// final _name = "GetX".obs;
 /// Obx(() => Text( _name.value )),... ;
 class Obx extends StatefulWidget {
-  final Widget Function() builder;
+  final WidgetCallback builder;
 
   const Obx(this.builder);
   _ObxState createState() => _ObxState();

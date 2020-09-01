@@ -8,4 +8,6 @@ class GeneralPlatform {
   static bool get isAndroid => Platform.isAndroid;
   static bool get isIOS => Platform.isIOS;
   static bool get isFuchsia => Platform.isFuchsia;
+  static bool get isDesktop =>
+      Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 }
