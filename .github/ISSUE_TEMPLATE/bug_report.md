@@ -6,6 +6,7 @@ labels: ''
 assignees: jonataslaw
 
 ---
+**ATTENTION: DO NOT USE THIS FIELD TO ASK SUPPORT QUESTIONS. USE THE PLATFORM CHANNELS FOR THIS. THIS SPACE IS DEDICATED ONLY FOR OPENING BUGS.**
 **Fill in the template. Issues that do not respect the model will be closed.**
 
 **Describe the bug**
@@ -27,8 +28,8 @@ If applicable, add screenshots to help explain your problem.
 **Flutter Version:**
 Enter the version of the Flutter you are using
 
-**Get Version:**
-Enter the version of the Get you are using
+**Getx Version:**
+Enter the version of the Getx you are using
 
 **Describe on which device you found the bug:**
 ex: Moto z2 - Android.
