@@ -1,4 +1,4 @@
-@TestOn('vm')
+@TestOn('browser')
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/src/utils/platform/platform.dart';
@@ -11,6 +11,6 @@ void main() {
     expect(GetPlatform.isLinux, Platform.isLinux);
     expect(GetPlatform.isMacOS, Platform.isMacOS);
     expect(GetPlatform.isWindows, Platform.isWindows);
-    expect(GetPlatform.isWeb, false);
+    expect(GetPlatform.isWeb, true);
   });
 }

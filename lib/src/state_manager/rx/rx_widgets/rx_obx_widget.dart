@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
 import '../rx_core/rx_impl.dart';
 
+typedef WidgetCallback = Widget Function();
+
 /// The simplest reactive widget in GetX.
 ///
 /// Just pass your Rx variable in the root scope of the callback to have it
@@ -11,7 +13,7 @@ import '../rx_core/rx_impl.dart';
 /// final _name = "GetX".obs;
 /// Obx(() => Text( _name.value )),... ;
 class Obx extends StatefulWidget {
-  final Widget Function() builder;
+  final WidgetCallback builder;
 
   const Obx(this.builder);
   _ObxState createState() => _ObxState();

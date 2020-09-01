@@ -191,7 +191,7 @@ Só isso. É *simples assim*;
 
 ### Mais detalhes sobre gerenciamento de estado
 
-**Veja uma explicação mais completa do gerenciamento de estado [aqui](./docs/pt_BR/state_management.md). Lá terá mais exemplos e também a diferença do simple state manager do reactive state manager**
+**Veja uma explicação mais completa do gerenciamento de estado [aqui](./documentation/pt_BR/state_management.md). Lá terá mais exemplos e também a diferença do simple state manager do reactive state manager**
 
 ### Explicação em video do gerenciamento de estado
 
@@ -235,7 +235,7 @@ Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? E
 
 ### Mais detalhes sobre gerenciamento de rotas
 
-**GetX funciona com rotas nomeadas também! Veja uma explicação mais completa do gerenciamento de rotas [aqui](./docs/pt_BR/route_management.md)**
+**GetX funciona com rotas nomeadas também! Veja uma explicação mais completa do gerenciamento de rotas [aqui](./documentation/pt_BR/route_management.md)**
 
 ### Explicação em video do gerenciamento de rotas
 
@@ -283,7 +283,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 ### Mais detalhes sobre gerenciamento de dependências
 
-**Veja uma explicação mais completa do gerenciamento de dependência [aqui](./docs/pt_BR/dependency_management.md)**
+**Veja uma explicação mais completa do gerenciamento de dependência [aqui](./documentation/pt_BR/dependency_management.md)**
 
 # Como contribuir 
 

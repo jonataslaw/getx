@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 extension ContextExtensionss on BuildContext {
   /// The same of [MediaQuery.of(context).size]
@@ -117,8 +117,7 @@ extension ContextExtensionss on BuildContext {
     T watch,
   }) {
     double deviceWidth = mediaQuerySize.shortestSide;
-
-    if (kIsWeb) {
+    if (GetPlatform.isDesktop) {
       deviceWidth = mediaQuerySize.width;
     }
     if (deviceWidth >= 1200 && desktop != null) return desktop;
