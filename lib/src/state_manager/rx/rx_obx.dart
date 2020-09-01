@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/widgets.dart';
-import 'package:get/src/navigation/routes/transitions_type.dart';
-import 'package:get/src/state_manager/rx/rx_interface.dart';
+import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
+import '../rx_core/rx_impl.dart';
 
-import 'rx_impl.dart';
+typedef WidgetCallback = Widget Function();
 
 /// The simplest reactive widget in GetX.
 ///
