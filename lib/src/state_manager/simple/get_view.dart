@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 
+/// GetView is a great way of quickly access your Controller
+/// without having call Get.find<Controller>() yourself.
 abstract class GetView<T> extends StatelessWidget {
   const GetView({Key key}) : super(key: key);
   T get controller => GetInstance().find<T>();
