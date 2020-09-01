@@ -8,10 +8,10 @@ import '../rx_typedefs/rx_typedefs.dart';
 
 class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   RxSet([Set<E> initial]) {
-    _list = initial;
+    _set = initial;
   }
 
-  RxSet<E> _list = Set<E>();
+  RxSet<E> _set = Set<E>();
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -42,28 +42,28 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   operator []=(int index, E val) {
-    _list[index] = val;
-    subject.add(_list);
+    _set[index] = val;
+    subject.add(_set);
   }
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
   RxSet<E> operator +(Iterable<E> val) {
     addAll(val);
-    subject.add(_list);
+    subject.add(_set);
     return this;
   }
 
   @override
   bool add(E value) {
-    final val = _list.add(value);
-    subject.add(_list);
+    final val = _set.add(value);
+    subject.add(_set);
     return val;
   }
 
   void addAll(Iterable<E> item) {
-    _list.addAll(item);
-    subject.add(_list);
+    _set.addAll(item);
+    subject.add(_set);
   }
 
   /// Adds only if [item] is not null.
@@ -77,13 +77,13 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   void insert(int index, E item) {
-    _list.insert(index, item);
-    subject.add(_list);
+    _set.insert(index, item);
+    subject.add(_set);
   }
 
   void insertAll(int index, Iterable<E> iterable) {
-    _list.insertAll(index, iterable);
-    subject.add(_list);
+    _set.insertAll(index, iterable);
+    subject.add(_set);
   }
 
   int get length => value.length;
@@ -94,43 +94,43 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   ///
   /// Returns whether the item was present in the list.
   bool remove(Object item) {
-    bool hasRemoved = _list.remove(item);
+    bool hasRemoved = _set.remove(item);
     if (hasRemoved) {
-      subject.add(_list);
+      subject.add(_set);
     }
     return hasRemoved;
   }
 
   E removeAt(int index) {
-    E item = _list.removeAt(index);
-    subject.add(_list);
+    E item = _set.removeAt(index);
+    subject.add(_set);
     return item;
   }
 
   E removeLast() {
-    E item = _list.removeLast();
-    subject.add(_list);
+    E item = _set.removeLast();
+    subject.add(_set);
     return item;
   }
 
   void removeRange(int start, int end) {
-    _list.removeRange(start, end);
-    subject.add(_list);
+    _set.removeRange(start, end);
+    subject.add(_set);
   }
 
   void removeWhere(bool Function(E) test) {
-    _list.removeWhere(test);
-    subject.add(_list);
+    _set.removeWhere(test);
+    subject.add(_set);
   }
 
   void clear() {
-    _list.clear();
-    subject.add(_list);
+    _set.clear();
+    subject.add(_set);
   }
 
   void sort([int compare(E a, E b)]) {
-    _list.sort();
-    subject.add(_list);
+    _set.sort();
+    subject.add(_set);
   }
 
   close() {
@@ -149,7 +149,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   void update(void fn(Iterable<E> value)) {
     fn(value);
-    subject.add(_list);
+    subject.add(_set);
   }
 
   /// Replaces all existing items of this list with [items]
@@ -163,7 +163,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     if (getObs != null) {
       getObs.addListener(subject.stream);
     }
-    return _list;
+    return _set;
   }
 
   String get string => value.toString();
@@ -178,9 +178,9 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   }
 
   set value(Iterable<E> val) {
-    if (_list == val) return;
-    _list = val;
-    subject.add(_list);
+    if (_set == val) return;
+    _set = val;
+    subject.add(_set);
   }
 
   Stream<Set<E>> get stream => subject.stream;
@@ -193,167 +193,170 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
       stream.listen((va) => value = va);
 
   @override
-  E get first => _list.first;
+  E get first => value.first;
 
   @override
-  E get last => _list.last;
+  E get last => value.last;
 
   @override
   bool any(bool Function(E) test) {
-    return _list.any(test);
+    return value.any(test);
   }
 
   @override
   Set<R> cast<R>() {
-    return _list.cast<R>();
+    return value.cast<R>();
   }
 
   @override
   bool contains(Object element) {
-    return _list.contains(element);
+    return value.contains(element);
   }
 
   @override
   E elementAt(int index) {
-    return _list.elementAt(index);
+    return value.elementAt(index);
   }
 
   @override
   bool every(bool Function(E) test) {
-    return _list.every(test);
+    return value.every(test);
   }
 
   @override
   Iterable<T> expand<T>(Iterable<T> Function(E) f) {
-    return _list.expand(f);
+    return value.expand(f);
   }
 
   @override
   E firstWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.firstWhere(test, orElse: orElse);
+    return value.firstWhere(test, orElse: orElse);
   }
 
   @override
   T fold<T>(T initialValue, T Function(T, E) combine) {
-    return _list.fold(initialValue, combine);
+    return value.fold(initialValue, combine);
   }
 
   @override
   Iterable<E> followedBy(Iterable<E> other) {
-    return _list.followedBy(other);
+    return value.followedBy(other);
   }
 
   @override
   void forEach(void Function(E) f) {
-    _list.forEach(f);
+    value.forEach(f);
   }
 
   @override
   String join([String separator = ""]) {
-    return _list.join(separator);
+    return value.join(separator);
   }
 
   @override
   E lastWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.lastWhere(test, orElse: orElse);
+    return value.lastWhere(test, orElse: orElse);
   }
 
   @override
   Iterable<T> map<T>(T Function(E) f) {
-    return _list.map(f);
+    return value.map(f);
   }
 
   @override
   E reduce(E Function(E, E) combine) {
-    return _list.reduce(combine);
+    return value.reduce(combine);
   }
 
   @override
-  E get single => _list.single;
+  E get single => value.single;
 
   @override
   E singleWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.singleWhere(test, orElse: orElse);
+    return value.singleWhere(test, orElse: orElse);
   }
 
   @override
   Iterable<E> skip(int count) {
-    return _list.skip(count);
+    return value.skip(count);
   }
 
   @override
   Iterable<E> skipWhile(bool Function(E) test) {
-    return _list.skipWhile(test);
+    return value.skipWhile(test);
   }
 
   @override
   Iterable<E> take(int count) {
-    return _list.take(count);
+    return value.take(count);
   }
 
   @override
   Iterable<E> takeWhile(bool Function(E) test) {
-    return _list.takeWhile(test);
+    return value.takeWhile(test);
   }
 
   @override
   List<E> toList({bool growable = true}) {
-    return _list.toList(growable: growable);
+    return value.toList(growable: growable);
   }
 
   @override
   Set<E> toSet() {
-    return _list.toSet();
+    return value.toSet();
   }
 
   @override
   Iterable<E> where(bool Function(E) test) {
-    return _list.where(test);
+    return value.where(test);
   }
 
   @override
   Iterable<T> whereType<T>() {
-    return _list.whereType<T>();
+    return value.whereType<T>();
   }
 
   @override
   bool containsAll(Iterable<Object> other) {
-    return _list.containsAll(other);
+    return value.containsAll(other);
   }
 
   @override
   Set<E> difference(Set<Object> other) {
-    return _list.difference(other);
+    return value.difference(other);
   }
 
   @override
   Set<E> intersection(Set<Object> other) {
-    return _list.intersection(other);
+    return value.intersection(other);
   }
 
   @override
   E lookup(Object object) {
-    return _list.lookup(object);
+    return value.lookup(object);
   }
 
   @override
   void removeAll(Iterable<Object> elements) {
-    _list.removeAll(elements);
+    _set.removeAll(elements);
+    subject.add(_set);
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
-    _list.retainAll(elements);
+    _set.retainAll(elements);
+    subject.add(_set);
   }
 
   @override
   void retainWhere(bool Function(E) E) {
-    _list.retainWhere(E);
+    _set.retainWhere(E);
+    subject.add(_set);
   }
 
   @override
   Set<E> union(Set<E> other) {
-    return _list.union(other);
+    return value.union(other);
   }
 }
 

@@ -1,5 +1,38 @@
-## [3.6.3]
-- Fix onStart called null on tests
+## [3.7.0]
+- Added: RxSet. Sets can now also be reactive.
+- Added isDesktop/isMobile (@roipeker) 
+- Improve GetPlatform: It is now possible to know which device the user is using if GetPlatform.isWeb is true.
+context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation. (@roipeker) 
+- Change: The documentation previously stated that Iterables should not access the ".value" property.
+However, many users did not pay attention to this fact, and ended up generating unnecessary issues and bugs in their application.
+In this version, we focus on code security. Now ".value" is protected, so it cannot be accessed externally by Lists, Maps or Sets.
+- Change: Observable lists are now Dart Lists.
+There is no difference in your use:
+`RxList list = [].obs;`
+And you use
+`List list = [].obs;`
+- Change: You do not need to access the ".value" property of primitives.
+For Strings you need interpolation.
+For num, int, double, you will have the normal operators, and use it as dart types.
+This way, `.value` can be used exclusively in ModelClasses.
+Example:
+
+```dart
+var name = "Jonny" .obs;
+// usage:
+Text ("$name");
+
+var count = 0.obs;
+// usage:
+increment() => count ++;
+Text("$count");
+```
+
+Thus: List, Map, Set, num, int, double and String, as of this release, will no longer use the .value property.
+
+NOTE:
+The changes were not break changes, however, you may have missed the details of the documentation, so if you faced the message: "The member 'value' can only be used within instance members of subclasses of 'rx_list.dart' "you just need to remove the" .value "property from your list, and everything will work as planned.
+The same goes for Maps and Sets.
 
 ## [3.6.2]
 - Fix more formatting issues

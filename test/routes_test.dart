@@ -11,7 +11,7 @@ void main() {
   );
 
   testWidgets(
-    "GetRoute maintainState null",
+    "GetPage maintainState null",
     (WidgetTester testr) async {
       expect(
           () => GetPage(page: () => Scaffold(), maintainState: null, name: '/'),
@@ -20,7 +20,7 @@ void main() {
   );
 
   testWidgets(
-    "GetRoute name null",
+    "GetPage name null",
     (WidgetTester testr) async {
       expect(
           () =>
@@ -30,7 +30,7 @@ void main() {
   );
 
   testWidgets(
-    "GetRoute fullscreenDialog null",
+    "GetPage fullscreenDialog null",
     (WidgetTester testr) async {
       expect(
           () => GetPage(
