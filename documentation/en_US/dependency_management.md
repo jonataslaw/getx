@@ -119,6 +119,8 @@ Get.putAsync<SharedPreferences>(() async {
   await prefs.setInt('counter', 12345);
   return prefs;
 });
+
+Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 This is all options you can set when using putAsync:
@@ -136,9 +138,6 @@ Get.putAsync<S>(
   // defaults to false
   bool permanent = false
 )
-
-// Example
-Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 ### Get.create
@@ -180,7 +179,8 @@ final controller = Get.find<Controller>();
 // OR
 Controller controller = Get.find();
 
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+// Yes, it looks like Magic, Get will find your controller, and will deliver it to you.
+// You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
 And then you will be able to recover your controller data that was obtained back there:
