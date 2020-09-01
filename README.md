@@ -350,7 +350,7 @@ return GetMaterialApp(
 );
 ```
 
-### More details about state management
+### More details about internationalization
 **See a more in-depth explanation of internationalization [here](./docs/en_US/internationalization.md)**
 ## Change Theme
 
