@@ -30,18 +30,6 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   StreamController<List<E>> subject = StreamController<List<E>>.broadcast();
   Map<Stream<List<E>>, StreamSubscription> _subscriptions = Map();
 
-  /// Adds [item] only if [condition] resolves to true.
-  void addIf(condition, E item) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) add(item);
-  }
-
-  /// Adds all [items] only if [condition] resolves to true.
-  void addAllIf(condition, Iterable<E> items) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) addAll(items);
-  }
-
   operator []=(int index, E val) {
     _list[index] = val;
     subject.add(_list);
@@ -64,31 +52,47 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
     subject.add(_list);
   }
 
+  @override
   void addAll(Iterable<E> item) {
     _list.addAll(item);
     subject.add(_list);
   }
 
-  /// Adds only if [item] is not null.
+  /// Add [item] to [List<E>] only if [item] is not null.
   void addNonNull(E item) {
     if (item != null) add(item);
   }
 
-  /// Adds only if [item] is not null.
+  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
   void addAllNonNull(Iterable<E> item) {
     if (item != null) addAll(item);
   }
 
+  /// Add [item] to [List<E>] only if [condition] is true.
+  void addIf(dynamic condition, E item) {
+    if (condition is Condition) condition = condition();
+    if (condition is bool && condition) add(item);
+  }
+
+  /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
+  void addAllIf(dynamic condition, Iterable<E> items) {
+    if (condition is Condition) condition = condition();
+    if (condition is bool && condition) addAll(items);
+  }
+
+  @override
   void insert(int index, E item) {
     _list.insert(index, item);
     subject.add(_list);
   }
 
+  @override
   void insertAll(int index, Iterable<E> iterable) {
     _list.insertAll(index, iterable);
     subject.add(_list);
   }
 
+  @override
   int get length => value.length;
 
   /// Removes an item from the list.
@@ -96,6 +100,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   /// This is O(N) in the number of items in the list.
   ///
   /// Returns whether the item was present in the list.
+  @override
   bool remove(Object item) {
     bool hasRemoved = _list.remove(item);
     if (hasRemoved) {
@@ -104,38 +109,45 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
     return hasRemoved;
   }
 
+  @override
   E removeAt(int index) {
     E item = _list.removeAt(index);
     subject.add(_list);
     return item;
   }
 
+  @override
   E removeLast() {
     E item = _list.removeLast();
     subject.add(_list);
     return item;
   }
 
+  @override
   void removeRange(int start, int end) {
     _list.removeRange(start, end);
     subject.add(_list);
   }
 
+  @override
   void removeWhere(bool Function(E) test) {
     _list.removeWhere(test);
     subject.add(_list);
   }
 
+  @override
   void clear() {
     _list.clear();
     subject.add(_list);
   }
 
+  @override
   void sort([int compare(E a, E b)]) {
     _list.sort();
     subject.add(_list);
   }
 
+  @override
   close() {
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();
@@ -168,7 +180,8 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
     }
     return _list;
   }
-
+  
+  
   String get string => value.toString();
 
   addListener(Stream<List<E>> rxGetx) {
@@ -196,210 +209,219 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
       stream.listen((va) => value = va);
 
   @override
-  E get first => _list.first;
+  E get first => value.first;
 
   @override
-  E get last => _list.last;
+  E get last => value.last;
 
   @override
   bool any(bool Function(E) test) {
-    return _list.any(test);
+    return value.any(test);
   }
 
   @override
   Map<int, E> asMap() {
-    return _list.asMap();
+    return value.asMap();
   }
 
   @override
   List<R> cast<R>() {
-    return _list.cast<R>();
+    return value.cast<R>();
   }
 
   @override
   bool contains(Object element) {
-    return _list.contains(element);
+    return value.contains(element);
   }
 
   @override
   E elementAt(int index) {
-    return _list.elementAt(index);
+    return value.elementAt(index);
   }
 
   @override
   bool every(bool Function(E) test) {
-    return _list.every(test);
+    return value.every(test);
   }
 
   @override
   Iterable<T> expand<T>(Iterable<T> Function(E) f) {
-    return _list.expand(f);
+    return value.expand(f);
   }
 
   @override
   void fillRange(int start, int end, [E fillValue]) {
     _list.fillRange(start, end, fillValue);
+    subject.add(_list);
   }
 
   @override
   E firstWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.firstWhere(test, orElse: orElse);
+    return value.firstWhere(test, orElse: orElse);
   }
 
   @override
   T fold<T>(T initialValue, T Function(T, E) combine) {
-    return _list.fold(initialValue, combine);
+    return value.fold(initialValue, combine);
   }
 
   @override
   Iterable<E> followedBy(Iterable<E> other) {
-    return _list.followedBy(other);
+    return value.followedBy(other);
   }
 
   @override
   void forEach(void Function(E) f) {
-    _list.forEach(f);
+    value.forEach(f);
   }
 
   @override
   Iterable<E> getRange(int start, int end) {
-    return _list.getRange(start, end);
+    return value.getRange(start, end);
   }
 
   @override
   int indexOf(E element, [int start = 0]) {
-    return _list.indexOf(element, start);
+    return value.indexOf(element, start);
   }
 
   @override
   int indexWhere(bool Function(E) test, [int start = 0]) {
-    return _list.indexWhere(test, start);
+    return value.indexWhere(test, start);
   }
 
   @override
   String join([String separator = ""]) {
-    return _list.join(separator);
+    return value.join(separator);
   }
 
   @override
   int lastIndexOf(E element, [int start]) {
-    return _list.lastIndexOf(element, start);
+    return value.lastIndexOf(element, start);
   }
 
   @override
   int lastIndexWhere(bool Function(E) test, [int start]) {
-    return _list.lastIndexWhere(test, start);
+    return value.lastIndexWhere(test, start);
   }
 
   @override
   E lastWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.lastWhere(test, orElse: orElse);
+    return value.lastWhere(test, orElse: orElse);
   }
 
   @override
   set length(int newLength) {
     _list.length = newLength;
+    subject.add(_list);
   }
 
   @override
   Iterable<T> map<T>(T Function(E) f) {
-    return _list.map(f);
+    return value.map(f);
   }
 
   @override
   E reduce(E Function(E, E) combine) {
-    return _list.reduce(combine);
+    return value.reduce(combine);
   }
 
   @override
   void replaceRange(int start, int end, Iterable<E> replacement) {
     _list.replaceRange(start, end, replacement);
+    subject.add(_list);
   }
 
   @override
   void retainWhere(bool Function(E) test) {
     _list.retainWhere(test);
+    subject.add(_list);
   }
 
   @override
-  Iterable<E> get reversed => _list.reversed;
+  Iterable<E> get reversed => value.reversed;
 
   @override
   void setAll(int index, Iterable<E> iterable) {
     _list.setAll(index, iterable);
+    subject.add(_list);
   }
 
   @override
   void setRange(int start, int end, Iterable<E> iterable, [int skipCount = 0]) {
     _list.setRange(start, end, iterable, skipCount);
+    subject.add(_list);
   }
 
   @override
   void shuffle([Random random]) {
     _list.shuffle(random);
+    subject.add(_list);
   }
 
   @override
-  E get single => _list.single;
+  E get single => value.single;
 
   @override
   E singleWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.singleWhere(test, orElse: orElse);
+    return value.singleWhere(test, orElse: orElse);
   }
 
   @override
   Iterable<E> skip(int count) {
-    return _list.skip(count);
+    return value.skip(count);
   }
 
   @override
   Iterable<E> skipWhile(bool Function(E) test) {
-    return _list.skipWhile(test);
+    return value.skipWhile(test);
   }
 
   @override
   List<E> sublist(int start, [int end]) {
-    return _list.sublist(start, end);
+    return value.sublist(start, end);
   }
 
   @override
   Iterable<E> take(int count) {
-    return _list.take(count);
+    return value.take(count);
   }
 
   @override
   Iterable<E> takeWhile(bool Function(E) test) {
-    return _list.takeWhile(test);
+    return value.takeWhile(test);
   }
 
   @override
   List<E> toList({bool growable = true}) {
-    return _list.toList(growable: growable);
+    return value.toList(growable: growable);
   }
 
   @override
   Set<E> toSet() {
-    return _list.toSet();
+    return value.toSet();
   }
 
   @override
   Iterable<E> where(bool Function(E) test) {
-    return _list.where(test);
+    return value.where(test);
   }
 
   @override
   Iterable<T> whereType<T>() {
-    return _list.whereType<T>();
+    return value.whereType<T>();
   }
 
   @override
   set first(E value) {
     _list.first = value;
+    subject.add(_list);
   }
 
   @override
   set last(E value) {
     _list.last = value;
+    subject.add(_list);
   }
 }
 

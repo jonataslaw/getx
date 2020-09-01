@@ -193,167 +193,170 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
       stream.listen((va) => value = va);
 
   @override
-  E get first => _list.first;
+  E get first => value.first;
 
   @override
-  E get last => _list.last;
+  E get last => value.last;
 
   @override
   bool any(bool Function(E) test) {
-    return _list.any(test);
+    return value.any(test);
   }
 
   @override
   Set<R> cast<R>() {
-    return _list.cast<R>();
+    return value.cast<R>();
   }
 
   @override
   bool contains(Object element) {
-    return _list.contains(element);
+    return value.contains(element);
   }
 
   @override
   E elementAt(int index) {
-    return _list.elementAt(index);
+    return value.elementAt(index);
   }
 
   @override
   bool every(bool Function(E) test) {
-    return _list.every(test);
+    return value.every(test);
   }
 
   @override
   Iterable<T> expand<T>(Iterable<T> Function(E) f) {
-    return _list.expand(f);
+    return value.expand(f);
   }
 
   @override
   E firstWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.firstWhere(test, orElse: orElse);
+    return value.firstWhere(test, orElse: orElse);
   }
 
   @override
   T fold<T>(T initialValue, T Function(T, E) combine) {
-    return _list.fold(initialValue, combine);
+    return value.fold(initialValue, combine);
   }
 
   @override
   Iterable<E> followedBy(Iterable<E> other) {
-    return _list.followedBy(other);
+    return value.followedBy(other);
   }
 
   @override
   void forEach(void Function(E) f) {
-    _list.forEach(f);
+    value.forEach(f);
   }
 
   @override
   String join([String separator = ""]) {
-    return _list.join(separator);
+    return value.join(separator);
   }
 
   @override
   E lastWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.lastWhere(test, orElse: orElse);
+    return value.lastWhere(test, orElse: orElse);
   }
 
   @override
   Iterable<T> map<T>(T Function(E) f) {
-    return _list.map(f);
+    return value.map(f);
   }
 
   @override
   E reduce(E Function(E, E) combine) {
-    return _list.reduce(combine);
+    return value.reduce(combine);
   }
 
   @override
-  E get single => _list.single;
+  E get single => value.single;
 
   @override
   E singleWhere(bool Function(E) test, {E Function() orElse}) {
-    return _list.singleWhere(test, orElse: orElse);
+    return value.singleWhere(test, orElse: orElse);
   }
 
   @override
   Iterable<E> skip(int count) {
-    return _list.skip(count);
+    return value.skip(count);
   }
 
   @override
   Iterable<E> skipWhile(bool Function(E) test) {
-    return _list.skipWhile(test);
+    return value.skipWhile(test);
   }
 
   @override
   Iterable<E> take(int count) {
-    return _list.take(count);
+    return value.take(count);
   }
 
   @override
   Iterable<E> takeWhile(bool Function(E) test) {
-    return _list.takeWhile(test);
+    return value.takeWhile(test);
   }
 
   @override
   List<E> toList({bool growable = true}) {
-    return _list.toList(growable: growable);
+    return value.toList(growable: growable);
   }
 
   @override
   Set<E> toSet() {
-    return _list.toSet();
+    return value.toSet();
   }
 
   @override
   Iterable<E> where(bool Function(E) test) {
-    return _list.where(test);
+    return value.where(test);
   }
 
   @override
   Iterable<T> whereType<T>() {
-    return _list.whereType<T>();
+    return value.whereType<T>();
   }
 
   @override
   bool containsAll(Iterable<Object> other) {
-    return _list.containsAll(other);
+    return value.containsAll(other);
   }
 
   @override
   Set<E> difference(Set<Object> other) {
-    return _list.difference(other);
+    return value.difference(other);
   }
 
   @override
   Set<E> intersection(Set<Object> other) {
-    return _list.intersection(other);
+    return value.intersection(other);
   }
 
   @override
   E lookup(Object object) {
-    return _list.lookup(object);
+    return value.lookup(object);
   }
 
   @override
   void removeAll(Iterable<Object> elements) {
     _list.removeAll(elements);
+    subject.add(_list);
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
     _list.retainAll(elements);
+    subject.add(_list);
   }
 
   @override
   void retainWhere(bool Function(E) E) {
     _list.retainWhere(E);
+    subject.add(_list);
   }
 
   @override
   Set<E> union(Set<E> other) {
-    return _list.union(other);
+    return value.union(other);
   }
 }
 

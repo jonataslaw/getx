@@ -4,7 +4,7 @@ import '../../../../get.dart';
 import '../rx_core/rx_interface.dart';
 import '../rx_typedefs/rx_typedefs.dart';
 
-class RxMap<K, V> extends RxInterface<Map<K, V>> implements Map<K, V> {
+class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   RxMap([Map<K, V> initial]) {
     _value = initial;
   }
@@ -111,20 +111,20 @@ class RxMap<K, V> extends RxInterface<Map<K, V>> implements Map<K, V> {
   }
 
   @override
-  Map<K2, V2> cast<K2, V2>() => _value.cast<K2, V2>();
+  Map<K2, V2> cast<K2, V2>() => value.cast<K2, V2>();
 
   @override
-  bool containsKey(Object key) => _value.containsKey(key);
+  bool containsKey(Object key) => value.containsKey(key);
 
   @override
   bool containsValue(Object value) => _value.containsValue(value);
 
   @override
-  Iterable<MapEntry<K, V>> get entries => _value.entries;
+  Iterable<MapEntry<K, V>> get entries => value.entries;
 
   @override
   void forEach(void Function(K, V) f) {
-    _value.forEach(f);
+    value.forEach(f);
   }
 
   @override
@@ -134,7 +134,7 @@ class RxMap<K, V> extends RxInterface<Map<K, V>> implements Map<K, V> {
   bool get isNotEmpty => value.isNotEmpty;
 
   @override
-  Iterable<K> get keys => _value.keys;
+  Iterable<K> get keys => value.keys;
 
   @override
   int get length => value.length;
