@@ -215,9 +215,9 @@ Agora você só precisa informar sua rota que você vai usar esse binding para f
 Usando rotas nomeadas
 
 ```dart
-namedRoutes: {
-  '/': GetRoute(Home(), binding: HomeBinding())
-}
+getPages: [
+  GetPage(name: '/', page: () => Home(), binding: HomeBinding()),
+]
 ```
 
 Usando rotas normais:
