@@ -6,7 +6,7 @@
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Diferences between methods:](#diferences-between-methods)
+  - [Differences between methods:](#differences-between-methods)
   - [Bindings](#bindings)
     - [How to use](#how-to-use)
     - [BindingsBuilder](#bindingsbuilder)
@@ -14,6 +14,7 @@
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
+    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
   - [Notes](#notes)
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
@@ -32,7 +33,7 @@ So you can use your controller (or Bloc class) normally
 Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
 
 ```dart
-Controller controller = Get.find();
+Controller controller = Get.find(); // or final controller = Get.find<Controlelr>();
 //Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
@@ -81,6 +82,8 @@ Although Getx already delivers very good settings for use, it is possible to ref
 
 ### Get.put()
 
+The most common way of inserting a dependency. Good for the controllers of your views for example.
+
 ```dart
 Get.put<S>(
   // mandatory: the class that you want to get to save, like a controller or anything
@@ -116,10 +119,11 @@ Get.put<LoginController>(LoginController(), permanent: true)
 
 ### Get.lazyPut
 
+With lazyPut, the dependency will be only instantiated when it's called. This is particularly useful if you want to instantiate several classes in just one place, but don't need that instances immediatly
+
 ```dart
 Get.lazyPut<S>(
   // mandatory: a method that will be executed when your class is called for the first time
-  // Example: Get.lazyPut<Controller>( () => Controller() )
   InstanceBuilderCallback builder,
   
   // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
@@ -143,15 +147,19 @@ Get.lazyPut<FirebaseAuth>(
   tag: Math.random().toString(),
   fenix: true
 )
+
+// example 2:
+Get.lazyPut<Controller>( () => Controller() )
 ```
 
 ### Get.putAsync
+
+Since `Get.put()` does not support async methods/classes, you need to use Get.putAsync. The way of declare is equal to Get.lazyPut
 
 ```dart
 Get.putAsync<S>(
 
   // mandatory: an async method that will be executed to instantiate your class
-  // Example: Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
   AsyncInstanceBuilderCallback<S> builder,
 
   // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
@@ -161,9 +169,15 @@ Get.putAsync<S>(
   // optional: same as in Get.put(), used when you need to maintain that instance alive in the entire app
   // defaults to false
   bool permanent = false
+)
+
+// Example
+Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 ### Get.create
+
+This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
 
 ```dart
 Get.create<S>(
@@ -184,7 +198,7 @@ Get.create<S>(
   bool permanent = true
 ```
 
-## Diferences between methods:
+## Differences between methods
 
 First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
 
@@ -217,9 +231,7 @@ In addition, the Binding class will allow you to have SmartManager configuration
 - Create a class and implements Binding
 
 ```dart
-class HomeBinding implements Bindings {
-
-}
+class HomeBinding implements Bindings {}
 ```
 
 Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
@@ -228,7 +240,7 @@ Your IDE will automatically ask you to override the "dependencies" method, and y
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ControllerX>(() => ControllerX());
+    Get.lazyPut<HomeController>(() => HomeController());
     Get.put<Service>(()=> Api());
   }
 }
@@ -328,12 +340,15 @@ With the default behavior, even widgets instantiated with "Get.put" will be remo
 
 #### SmartManagement.keepFactory
 
-// TODO ASK JONATAS WHAT THE HECK HE MEANT WITH THIS TEXT
-This one is like SmartManagement.full, with one difference: SmartManagement.full purges the factories from the premises, so that Get.lazyPut() will only be able to be called once and your factory and references will be self-destructing. SmartManagement.keepFactory will remove its dependencies when necessary, however, it will keep the "shape" of these, to make an equal one if you need an instance of that again.
+Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep the their factory, which means it will recreate the dependency if you need that instance again.
 
-Instead of using SmartManagement.keepFactory you can use Bindings.
-// TODO ASK JONATAS THIS TOO
-Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens. It is so little time that the analyzer will not even be able to register it. When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you . Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want. This is very little, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default. Use whichever is most convenient for you.
+### How bindings work under the hood
+Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
+This happens so fast that the analyzer will not even be able to register it.
+When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
+Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
+This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
+Use whichever is most convenient for you.
 
 ## Notes
 
