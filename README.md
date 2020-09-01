@@ -29,10 +29,11 @@
     - [More details about dependency management](#more-details-about-dependency-management)
 - [How to contribute](#how-to-contribute)
 - [Utils](#utils)
+  - [Internationalization](#internationalization)
   - [Change Theme](#change-theme)
   - [Other Advanced APIs](#other-advanced-apis)
     - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
+  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)  
 - [Breaking changes from 2.0](#breaking-changes-from-20)
 - [Why Getx?](#why-getx)
 
@@ -191,7 +192,7 @@ That's all. It's *that* simple.
 
 ### More details about state management
 
-**See an more in-depth explanation of state management [here](./docs/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
+**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
 
 ### Video explanation about state management
 
@@ -240,7 +241,7 @@ Noticed that you didn't had to use context to do any of these things? That's one
 
 ### More details about route management
 
-**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./docs/en_US/route_management.md)**
+**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./documentation/en_US/route_management.md)**
 
 ### Video Explanation
 
@@ -281,7 +282,7 @@ Text(controller.textFromApi);
 
 ### More details about dependency management
 
-**See a more in-depth explanation of dependency management [here](./docs/en_US/dependency_management.md)**
+**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
 
 # How to contribute
 
@@ -296,6 +297,60 @@ Text(controller.textFromApi);
 Any contribution is welcome!
 
 # Utils
+## Internationalization
+### Translations
+Translations are kept as a simple key-value dictionary map.
+To add custom translations, create a class and extend `Translations`.
+```dart
+import 'package:get/get.dart';
+
+class Messages extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en_US': {
+          'hello': 'Hello World',
+        },
+        'de_DE': {
+          'hello': 'Hallo Welt',
+        }
+      };
+}
+```
+
+#### Using translations
+Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+```dart
+Text('title'.tr);
+```
+
+### Locales
+Pass parameters to `GetMaterialApp` to define the locale and translations.
+
+```dart
+return GetMaterialApp(
+    translations: Messages(), // your translations
+    locale: Locale('en', 'US'), // translations will be displayed in that locale
+    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.  
+    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // specify the supported locales
+);
+```
+
+#### Change locale
+Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+```dart
+var locale = Locale('en', 'US');
+Get.updateLocale(locale);
+```
+
+#### System locale
+To read the system locale, you could use `window.locale`.
+```dart
+import 'dart:ui' as ui;
+
+return GetMaterialApp(
+    locale: ui.window.locale,
+);
+```
 
 ## Change Theme
 
@@ -572,7 +627,7 @@ Now:
 ```dart
 GetMaterialApp(
   getPages: [
-    GetPage(name: '/', page:()=> Home()),
+    GetPage(name: '/', page: () => Home()),
   ]
 )
 ```

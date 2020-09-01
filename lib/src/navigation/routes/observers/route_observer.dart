@@ -88,7 +88,7 @@ class GetObserver extends NavigatorObserver {
       value.route = route;
       value.isBack = false;
       value.removed = '';
-      value.previous = '${previousRoute?.settings?.name}';
+      value.previous = previousRoute?.settings?.name ?? '';
       value.isSnackbar = isSnackbar;
       value.isBottomSheet = isBottomSheet;
       value.isDialog = isDialog;
@@ -119,12 +119,12 @@ class GetObserver extends NavigatorObserver {
 
     _routeSend.update((value) {
       if (previousRoute is PageRoute)
-        value.current = '${previousRoute?.settings?.name}';
+        value.current = previousRoute?.settings?.name ?? '';
       value.args = route?.settings?.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
-      value.previous = '${route?.settings?.name}';
+      value.previous = route?.settings?.name ?? '';
       value.isSnackbar = false;
       value.isBottomSheet = false;
       value.isDialog = false;
@@ -142,7 +142,7 @@ class GetObserver extends NavigatorObserver {
     GetConfig.currentRoute = name(newRoute);
 
     _routeSend.update((value) {
-      if (newRoute is PageRoute) value.current = '${newRoute?.settings?.name}';
+      if (newRoute is PageRoute) value.current = newRoute?.settings?.name ?? '';
       value.args = newRoute?.settings?.arguments;
       value.route = newRoute;
       value.isBack = false;
@@ -163,8 +163,8 @@ class GetObserver extends NavigatorObserver {
     _routeSend.update((value) {
       value.route = previousRoute;
       value.isBack = false;
-      value.removed = '${route?.settings?.name}';
-      value.previous = '${route?.settings?.name}';
+      value.removed = route?.settings?.name ?? '';
+      value.previous = route?.settings?.name ?? '';
     });
     if (routing != null) routing(_routeSend);
   }

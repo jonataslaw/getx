@@ -130,8 +130,8 @@ final isLogged = false.obs;
 final count = 0.obs;
 final balance = 0.0.obs;
 final number = 0.obs;
-final items = <String>[];
-final myMap = <String, int>{};
+final items = <String>[].obs;
+final myMap = <String, int>{}.obs;
 
 // Custom classes - it can be any class, literally
 final user = User().obs;

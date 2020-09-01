@@ -176,7 +176,7 @@ Obx (() => Text (controller.name));
 To wszystko. *Proste*, co nie?
 
 ### Bardziej szczegółowo o menadżerze stanu
-**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./docs/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
+**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./documentation/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
 
 ### Video tłumaczące użycie menadżera stanu
 
@@ -237,7 +237,7 @@ Zobacz, ze do żadnej z tych operacji nie potrzebowałeś contextu. Jest to jedn
 
 ### Więcej o routach
 
-**Get używa named routes i także oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./docs/en_US/route_management.md)**
+**Get używa named routes i także oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./documentation/en_US/route_management.md)**
 
 ### Video tłumaczące użycie
 
@@ -274,7 +274,7 @@ Text(controller.textFromApi);
 ```
 ### Bardziej szczegółowo o menadżerze dependencies
 
-**Zobzcz więcej w dokumentacji [tutaj](./docs/en_US/dependency_management.md)**
+**Zobzcz więcej w dokumentacji [tutaj](./documentation/en_US/dependency_management.md)**
 
 # Jak włożyć coś od siebie
 
@@ -478,7 +478,7 @@ GetMaterialApp(
 	    // pamiętaj że nawet jeśli "enableLog: false" logi i tak będą wysłane w tym callbacku
 		  // Musisz sprawdzić konfiguracje flag  jeśli chcesz przez GetConfig.isLogEnable
 		  }
-
+```
 ## Video tłumaczące inne funkcjonalności GetX
 
 
@@ -518,7 +518,7 @@ Teraz:
 ```dart
 GetMaterialApp(
   getPages: [
-    GetPage(name: '/', page:()=> Home()),
+    GetPage(name: '/', page: () => Home()),
   ]
 )
 ```
