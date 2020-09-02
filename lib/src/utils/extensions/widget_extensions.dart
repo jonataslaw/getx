@@ -35,14 +35,14 @@ extension WidgetMarginX on Widget {
           margin:
               EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
           child: this);
-  
+
   Widget marginOnly({
     double left = 0.0,
     double top = 0.0,
     double right = 0.0,
     double bottom = 0.0,
   }) =>
-      Padding(
+      Container(
           margin: EdgeInsets.only(
               top: top, left: left, right: right, bottom: bottom),
           child: this);
