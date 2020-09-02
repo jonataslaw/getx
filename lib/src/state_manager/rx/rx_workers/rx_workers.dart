@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../rx_core/rx_interface.dart';
 import 'utils/debouncer.dart';
 
-Worker ever(RxInterface listener, Function(dynamic) callback,
+Worker ever<T>(RxInterface<T> listener, Function(T) callback,
     {bool condition = true}) {
   StreamSubscription sub = listener.subject.stream.listen((event) {
     if (condition) callback(event);
