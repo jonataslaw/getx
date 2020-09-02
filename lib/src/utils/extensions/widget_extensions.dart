@@ -49,5 +49,5 @@ extension WidgetMarginX on Widget {
 }
 
 extension WidgetSliverBoxX on Widget {
-  Widget sliverBox => SliverToBoxAdapter(child: this);
+  Widget get sliverBox => SliverToBoxAdapter(child: this);
 }
