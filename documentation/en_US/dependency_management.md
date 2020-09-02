@@ -232,7 +232,7 @@ The Binding class is a class that will decouple dependency injection, while "bin
 This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
 In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
 
-### How to use
+### Bindings class
 
 - Create a class and implements Binding
 
@@ -332,6 +332,23 @@ Both ways of doing work perfectly fine and we want you to use what most suit you
 GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
 This is what is called the `full` mode of dependency management.
 But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+
+#### How to change
+
+If you want to change this config (which you usually don't need) this is the way:
+
+```dart
+void main () {
+  runApp(
+    GetMaterialApp(
+      smartManagement: SmartManagement.onlyBuilders //here
+      home: Home(),
+    )
+  )
+}
+
+
+```
 
 #### SmartManagement.full
 
