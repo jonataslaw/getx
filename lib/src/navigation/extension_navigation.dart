@@ -500,6 +500,7 @@ extension GetNavigation on GetInterface {
   /// Custom UI Dialog.
   Future<T> defaultDialog<T>({
     String title = "Alert",
+    TextStyle titleStyle,
     Widget content,
     VoidCallback onConfirm,
     VoidCallback onCancel,
@@ -515,7 +516,9 @@ extension GetNavigation on GetInterface {
     Color backgroundColor,
     Color buttonColor,
     String middleText = "Dialog made in 3 lines of code",
+    TextStyle middleTextStyle,
     double radius = 20.0,
+    ThemeData themeData,
     List<Widget> actions,
   }) {
     bool leanCancel = onCancel != null || textCancel != null;
@@ -564,34 +567,39 @@ extension GetNavigation on GetInterface {
             }));
       }
     }
-    return dialog(AlertDialog(
-      titlePadding: EdgeInsets.all(8),
-      contentPadding: EdgeInsets.all(8),
-      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          content ?? Text(middleText ?? "", textAlign: TextAlign.center),
-          SizedBox(height: 16),
-          ButtonTheme(
-            minWidth: 78.0,
-            height: 34.0,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
-          )
-        ],
+
+    return dialog(
+      AlertDialog(
+        titlePadding: EdgeInsets.all(8),
+        contentPadding: EdgeInsets.all(8),
+        backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            content ??
+                Text(middleText ?? "",
+                    textAlign: TextAlign.center, style: middleTextStyle),
+            SizedBox(height: 16),
+            ButtonTheme(
+              minWidth: 78.0,
+              height: 34.0,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: actions,
+              ),
+            )
+          ],
+        ),
+        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+        buttonPadding: EdgeInsets.zero,
       ),
-      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-      buttonPadding: EdgeInsets.zero,
-    ));
+    );
   }
 
   Future<T> bottomSheet<T>(
