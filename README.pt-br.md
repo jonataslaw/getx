@@ -51,7 +51,7 @@
 
 # Sobre Get
 
-- Get é uma biblioteca poderosa e extra-leve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
+- Get é uma biblioteca poderosa e extraleve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
 - Get não é para todos, seu foco é:
   - **Performance**: Já que gasta o mínimo de recursos
   - **Produtividade**: Usando uma sintaxe fácil e agradável
