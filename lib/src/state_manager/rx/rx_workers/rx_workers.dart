@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../rx_core/rx_interface.dart';
 import 'utils/debouncer.dart';
 
-Worker ever(RxInterface listener, Function(dynamic) callback,
+Worker ever<T>(RxInterface<T> listener, Function(T) callback,
     {bool condition = true}) {
   StreamSubscription sub = listener.subject.stream.listen((event) {
     if (condition) callback(event);
@@ -37,7 +37,7 @@ Worker everAll(List<RxInterface> listener, Function(dynamic) callback,
   return Worker(cancel, '[everAll]');
 }
 
-Worker once(RxInterface listener, Function(dynamic) callback,
+Worker once<T>(RxInterface<T> listener, Function(T) callback,
     {bool condition = true}) {
   StreamSubscription sub;
   int times = 0;
@@ -59,7 +59,7 @@ Worker once(RxInterface listener, Function(dynamic) callback,
   return Worker(cancel, '[once]');
 }
 
-Worker interval(RxInterface listener, Function(dynamic) callback,
+Worker interval<T>(RxInterface<T> listener, Function(T) callback,
     {Duration time, bool condition = true}) {
   bool debounceActive = false;
   StreamSubscription sub = listener.subject.stream.listen((event) async {
@@ -77,7 +77,7 @@ Worker interval(RxInterface listener, Function(dynamic) callback,
   return Worker(cancel, '[interval]');
 }
 
-Worker debounce(RxInterface listener, Function(dynamic) callback,
+Worker debounce<T>(RxInterface<T> listener, Function(T) callback,
     {Duration time}) {
   final _debouncer = Debouncer(delay: time ?? Duration(milliseconds: 800));
   StreamSubscription sub = listener.subject.stream.listen((event) {

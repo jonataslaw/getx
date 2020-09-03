@@ -160,6 +160,16 @@ class RxBool extends _RxImpl<bool> {
   RxBool([bool initial]) {
     _value = initial;
   }
+
+  bool operator &(bool other) => other && value;
+
+  bool operator |(bool other) => other || value;
+
+  bool operator ^(bool other) => !other == value;
+
+  String toString() {
+    return value ? "true" : "false";
+  }
 }
 
 class RxDouble extends _RxImpl<double> {
