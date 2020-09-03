@@ -30,10 +30,11 @@
     - [Mais detalhes sobre gerenciamento de dependências](#mais-detalhes-sobre-gerenciamento-de-dependências)
 - [Como contribuir](#como-contribuir)
 - [Utilidades](#utilidades)
+  - [Internacionalização](#internacionalização)
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
   - [Outras APIs avançadas](#outras-apis-avançadas)
     - [Configurações Globais opcionais e configurações manuais](#configurações-globais-opcionais-e-configurações-manuais)
-  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
+  - [Video explanation of Other GetX Features](#explicação-em-vídeo-sobre-outras-features-do-getx)
 - [Breaking Changes da versão 2 para 3](#breaking-changes-da-versão-2-para-3)
   - [Tipagem Rx](#tipagem-rx)
   - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
@@ -298,6 +299,61 @@ Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um
 Qualquer contribuição é bem-vinda!
 
 # Utilidades
+
+## Internacionalização
+### Traduções
+As traduções são mantidas num simples dictionary map de chave-valor.
+Para adicionar traduções personalizadas, crie uma classe e estenda `Translations`.
+```dart
+import 'package:get/get.dart';
+
+class Messages extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en_US': {
+          'hello': 'Hello World',
+        },
+        'de_DE': {
+          'hello': 'Hallo Welt',
+        }
+      };
+}
+```
+
+#### Usando traduções
+Basta anexar `.tr` a chave especificada e ela será traduzida, usando o valor atual de `Get.locale` e `Get.fallbackLocale`.
+```dart
+Text('hello'.tr);
+```
+
+### Localidade
+Passe parâmetros para `GetMaterialApp` definir a localidade e as traduções.
+
+```dart
+return GetMaterialApp(
+    translations: Messages(), // suas traduções
+    locale: Locale('en', 'US'), // as traduções serão exibidas para esta localidade
+    fallbackLocale: Locale('en', 'UK'), // especifica uma localidade em caso de falha na localidade definida
+    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // especifica as localidades suportados
+);
+```
+
+#### Alterar local
+Use `Get.updateLocale(locale)` para atualizar a localidade. As traduções usarão automaticamente a nova localidade.
+```dart
+var locale = Locale('en', 'US');
+Get.updateLocale(locale);
+```
+
+#### Localidade do sistema operacional
+Para ler a localidade do sistema operacional, você pode usar `window.locale`.
+```dart
+import 'dart:ui' as ui;
+
+return GetMaterialApp(
+    locale: ui.window.locale,
+);
+```
 
 ## Mudar tema (changeTheme)
 
