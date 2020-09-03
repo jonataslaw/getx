@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 /// [Bindings] should be extended or implemented.
 /// When using [GetMaterialApp], all [GetPage]s and navigation methods (like Get.to())
 /// have a [binding] property that takes an instance of Bindings to manage the
@@ -16,10 +18,26 @@ abstract class Bindings {
 ///   page: () => Home(),
 ///   binding: BindingsBuilder(() => Get.put(HomeController())),
 /// ),
-/// ````
-class BindingsBuilder extends Bindings {
+/// ```
+class BindingsBuilder<T> extends Bindings {
   /// Register your dependencies in the [builder] callback.
   final void Function() builder;
+
+  /// Shortcut to register 1 Controller with Get.put().
+  ///
+  /// Sample:
+  /// ```
+  /// GetPage(
+  ///   name: '/',
+  ///   page: () => Home(),
+  ///   binding: BindingsBuilder.put(() => HomeController()),
+  /// ),
+  /// ```
+  factory BindingsBuilder.put(InstanceBuilderCallback<T> builder,
+      {String tag, bool permanent = false}) {
+    return BindingsBuilder(() => GetInstance()
+        .put<T>(null, tag: tag, permanent: permanent, builder: builder));
+  }
 
   BindingsBuilder(this.builder);
 

@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/navigation/root/smart_management.dart';
@@ -40,15 +41,6 @@ class GetxController extends DisposableInterface {
   }
 
   void disposeKey(String key) => _updatersIds.remove(key);
-
-  @override
-  void onInit() async {}
-
-  @override
-  void onReady() async {}
-
-  @override
-  Future<void> onClose() async {}
 }
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
@@ -160,7 +152,9 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   Widget build(BuildContext context) => widget.builder(controller);
 }
 
-/// This is a experimental feature
+/// This is a experimental feature.
+/// Meant to be used with SimpleBuilder, it auto-registers the variable
+/// like Rx() does with Obx().
 class Value<T> extends GetxController {
   Value([this._value]);
   T _value;
