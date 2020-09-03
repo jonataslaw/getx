@@ -446,6 +446,16 @@ Get.contextOverlay
 context.width
 context.height
 
+// Dá a você agora o poder de definir metade da tela, um terço da dela e assim por diante.
+// Útil para aplicativos responsivos.
+// param dividedBy (double) opcional - default: 1
+// param reducedBy (double) opcional - default: 0
+context.heightTransformer()
+context.widthTransformer()
+
+/// similar a MediaQuery.of(context).size
+context.mediaQuerySize()
+
 /// similar a MediaQuery.of(this).padding
 context.mediaQueryPadding()
 
@@ -487,6 +497,14 @@ context.isLargeTablet()
 
 /// retorna True se o dispositivo é um Tablet
 context.isTablet()
+
+/// Retorna um valor de acordo com o tamanho da tela
+/// Os valores possíveis são:
+/// swatch: se a menor dimensão (largura ou altura) da tela for menor que 300px
+/// mobile: se a menor dimensão (largura ou altura) da tela for menor que 600px
+/// tablet: se a menor dimensão (largura ou altura) da tela for menor que 1200px
+/// desktop: se a largura da tela é maior ou iguial a 1200px  
+context.responsiveValue<T>()
 ```
 
 ### Configurações Globais opcionais e configurações manuais
@@ -543,6 +561,41 @@ void localLogWriter(String text, {bool isError = false}) {
   // com o comando "enableLog: false", as mensagens ainda vão passar por aqui
   // Você precisa checar essa config manualmente aqui se quiser respeitá-la
 }
+```
+
+### Widgets de Estado Local
+
+Esses Widgets permitem que você gerencie um único valor e mantenha o estado efêmero e localmente. Temos versões para Reativo e Simples. Por exemplo, você pode usá-los para alternar obscureText em um TextField, talvez criar um painel expansível personalizado ou talvez modificar o índice atual em um BottomNavigationBar enquanto altera o conteúdo do corpo em um Scaffold.
+
+#### ValueBuilder
+Uma simplificação de StatefulWidget que funciona com um callback de "setState" que passa o valor atualizado.
+
+
+```dart
+ValueBuilder<bool>(
+  initialValue: false,
+  builder: (value, updateFn) => Switch(
+    value: value,
+    onChanged: updateFn, // mesma assinatura! Você poderia usar ( newValue ) => updateFn( newValue )
+  ),
+  // se você precisa chamar algo fora do método builder.
+  onUpdate: (value) => print("Value updated: $value"),
+  onDispose: () => print("Widget unmounted"),   
+),
+```
+
+#### ObxValue
+Similar a ValueBuilder, mas esta é a versão Reativa, você passa uma instância Rx (lembra do .obs mágico?) e 
+atualiza automaticamente... não é incrível?
+
+```dart
+ObxValue(
+  (data) => Switch(
+    value: data.value,
+    onChanged: data, // Rx tem uma função _callable_! Você poderia usar (flag) => data.value = flag,
+  ),
+  false.obs,
+),
 ```
 
 ## Explicação em vídeo sobre Outras Features do GetX
