@@ -390,46 +390,46 @@ Get.contextOverlay
 context.width
 context.height
 
-/// similar to MediaQuery.of(this).padding
+/// similar a MediaQuery.of(this).padding
 context.mediaQueryPadding()
 
-/// similar to MediaQuery.of(this).viewPadding
+/// similar a MediaQuery.of(this).viewPadding
 context.mediaQueryViewPadding()
 
-/// similar to MediaQuery.of(this).viewInsets;
+/// similar a MediaQuery.of(this).viewInsets;
 context.mediaQueryViewInsets()
 
-/// similar to MediaQuery.of(this).orientation;
+/// similar a MediaQuery.of(this).orientation;
 context.orientation()
 
-/// check if device is on landscape mode
+/// verifica se o dispositivo está no modo paisagem
 context.isLandscape()
 
-/// check if device is on portrait mode
+/// verifica se o dispositivo está no modo retrato
 context.isPortrait()
 
-/// similar to MediaQuery.of(this).devicePixelRatio;
+/// similar a MediaQuery.of(this).devicePixelRatio;
 context.devicePixelRatio()
 
-/// similar to MediaQuery.of(this).textScaleFactor;
+/// similar a MediaQuery.of(this).textScaleFactor;
 context.textScaleFactor()
 
-/// get the shortestSide from screen
+/// obtém a menor dimensão (largura ou altura) da tela
 context.mediaQueryShortestSide()
 
-/// True if width be larger than 800
+/// retorna True se a largura da tela for maior que 800px
 context.showNavbar()
 
-/// True if the shortestSide is smaller than 600p
+/// retorna True se a menor dimensão (largura ou altura) da tela for menor que 600px
 context.isPhone()
 
-/// True if the shortestSide is largest than 600p
+/// retorna True se a menor dimensão (largura ou altura) da tela for maior ou igual a 600px
 context.isSmallTablet()
 
-/// True if the shortestSide is largest than 720p
+/// retorna True se a menor dimensão (largura ou altura) da tela for maior ou igual a 720px
 context.isLargeTablet()
 
-/// True if the current device is Tablet
+/// retorna True se o dispositivo é um Tablet
 context.isTablet()
 ```
 
@@ -489,10 +489,10 @@ void localLogWriter(String text, {bool isError = false}) {
 }
 ```
 
-## Video explanation of Other GetX Features
+## Explicação em vídeo sobre Outras Features do GetX
 
 
-Amateur Coder did an awesome video about utils, storage, bindings and other features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
+Amateur Coder fez um vídeo incrível sobre utils, storage, bindings e outras features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
 # Breaking Changes da versão 2 para 3
 
