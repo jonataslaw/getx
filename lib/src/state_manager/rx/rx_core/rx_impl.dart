@@ -23,7 +23,7 @@ class _RxImpl<T> implements RxInterface<T> {
   /// ```
   ///
   /// WARNING: still WIP, needs testing!
-  _RxImpl<T> operator >>(T val) {
+  _RxImpl<T> operator <<(T val) {
     subject.add(value = val);
     return this;
   }
@@ -289,6 +289,8 @@ class Rx<T> extends _RxImpl<T> {
     _value = initial;
   }
 
+  // TODO: Look for a way to throw the Exception with proper details when the
+  // value [T] doesn't implement toJson().
   @override
   dynamic toJson() => (value as dynamic)?.toJson();
 }
