@@ -497,7 +497,7 @@ Navigator(
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
       return GetPageRoute(
-        page: Scaffold(
+        page: () => Scaffold(
           appBar: AppBar(
             title: Text("Main"),
           ),
@@ -514,7 +514,7 @@ Navigator(
       );
     } else if (settings.name == '/second') {
       return GetPageRoute(
-        page: Center(
+        page: () => Center(
           child: Scaffold(
             appBar: AppBar(
               title: Text("Main"),
