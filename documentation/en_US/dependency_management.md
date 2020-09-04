@@ -1,12 +1,12 @@
 # Dependency Management
 - [Dependency Management](#dependency-management)
-  - [Usage](#usage)
   - [Instancing methods](#instancing-methods)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Differences between methods:](#differences-between-methods)
+  - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
+  - [Differences between methods](#differences-between-methods)
   - [Bindings](#bindings)
     - [How to use](#how-to-use)
     - [BindingsBuilder](#bindingsbuilder)
@@ -26,60 +26,23 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
 So you can use your controller (or Bloc class) normally
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
-
-```dart
-Controller controller = Get.find(); // or final controller = Get.find<Controlelr>();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
-```
-
-And then you will be able to recover your controller data that was obtained back there:
-
-```dart
-Text(controller.textFromApi);
-```
-
-It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or when you know you will not gonna use that class at that time.
-
-```dart
-Get.lazyPut<ApiMock>(() => ApiMock());
-/// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
-```
-
-If you want to register an asynchronous instance, you can use `Get.putAsync`:
-
-```dart
-Get.putAsync<SharedPreferences>(() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('counter', 12345);
-  return prefs;
-});
-```
-
 - Note: If you are using Get's State Manager, pay more attention to the [Bindings](#bindings) api, which will make easier to connect your view to your controller.
 - Note²: Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to change that, you can use this dependency injection manager with no problems at all
 
-## Usage
-
-```dart
-int count = Get.find<SharedPreferences>().getInt('counter');
-print(count); // out: 12345
-```
-
-To remove a instance of Get:
-
-```dart
-Get.delete<Controller>();
-```
-
 ## Instancing methods
-
-Although Getx already delivers very good settings for use, it is possible to refine them even more so that it become more useful to the programmer. The methods and it's configurable parameters are:
+The methods and it's configurable parameters are:
 
 ### Get.put()
 
-The most common way of inserting a dependency. Good for the controllers of your views for example.
+The most common way of insert a dependency. Good for the controllers of your views for example.
 
+```dart
+Get.put<SomeClass>(SomeClass());
+Get.put<LoginController>(LoginController(), permanent: true);
+Get.put<ListItemController>(ListItemController, tag: "some unique string");
+```
+
+This is all options you can set when using put:
 ```dart
 Get.put<S>(
   // mandatory: the class that you want to get to save, like a controller or anything
@@ -107,16 +70,28 @@ Get.put<S>(
   // this one is not commonly used
   InstanceBuilderCallback<S> builder,
 )
-
-// Example:
-
-Get.put<LoginController>(LoginController(), permanent: true)
 ```
 
 ### Get.lazyPut
+It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or if you want to instantiate several classes in just one place (like in a Bindings class) and you know you will not gonna use that class at that time.
 
-With lazyPut, the dependency will be only instantiated when it's called. This is particularly useful if you want to instantiate several classes in just one place, but don't need that instances immediatly
+```dart
+/// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
+Get.lazyPut<ApiMock>(() => ApiMock());
 
+Get.lazyPut<FirebaseAuth>(
+  () => {
+  // ... some logic if needed
+    return FirebaseAuth()
+  },
+  tag: Math.random().toString(),
+  fenix: true
+)
+
+Get.lazyPut<Controller>( () => Controller() )
+```
+
+This is all options you can set when using lazyPut:
 ```dart
 Get.lazyPut<S>(
   // mandatory: a method that will be executed when your class is called for the first time
@@ -133,25 +108,22 @@ Get.lazyPut<S>(
   bool fenix = false
   
 )
-
-// example
-Get.lazyPut<FirebaseAuth>(
-  () => {
-  // ... some logic if needed
-    return FirebaseAuth()
-  },
-  tag: Math.random().toString(),
-  fenix: true
-)
-
-// example 2:
-Get.lazyPut<Controller>( () => Controller() )
 ```
 
 ### Get.putAsync
+If you want to register an asynchronous instance, you can use `Get.putAsync`:
 
-Since `Get.put()` does not support async methods/classes, you need to use Get.putAsync. The way of declare is equal to Get.lazyPut
+```dart
+Get.putAsync<SharedPreferences>(() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('counter', 12345);
+  return prefs;
+});
 
+Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
+```
+
+This is all options you can set when using putAsync:
 ```dart
 Get.putAsync<S>(
 
@@ -166,14 +138,18 @@ Get.putAsync<S>(
   // defaults to false
   bool permanent = false
 )
-
-// Example
-Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 ### Get.create
 
 This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
+
+```dart
+Get.Create<SomeClass>(() => SomeClass());
+Get.Create<LoginController>(() => LoginController());
+```
+
+This is all options you can set when using create:
 
 ```dart
 Get.create<S>(
@@ -194,14 +170,48 @@ Get.create<S>(
   bool permanent = true
 ```
 
+## Using instantiated methods/classes
+
+Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+
+```dart
+final controller = Get.find<Controller>();
+// OR
+Controller controller = Get.find();
+
+// Yes, it looks like Magic, Get will find your controller, and will deliver it to you.
+// You can have 1 million controllers instantiated, Get will always give you the right controller.
+```
+
+And then you will be able to recover your controller data that was obtained back there:
+
+```dart
+Text(controller.textFromApi);
+```
+
+Since the returnd value is a normal class, you can do anything you want:
+```dart
+int count = Get.find<SharedPreferences>().getInt('counter');
+print(count); // out: 12345
+```
+
+To remove a instance of Get:
+
+```dart
+Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
+```
+
 ## Differences between methods
 
 First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
 
 The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
+
 Reinforcing: by default, GetX deletes instances when they are not is use.
 It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offName()`) the controller 1 lost it's use so it will be erased.
+
 But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
+
 `fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
 
 Proceeding with the differences between methods:
@@ -222,7 +232,7 @@ The Binding class is a class that will decouple dependency injection, while "bin
 This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
 In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
 
-### How to use
+### Bindings class
 
 - Create a class and implements Binding
 
@@ -322,6 +332,23 @@ Both ways of doing work perfectly fine and we want you to use what most suit you
 GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
 This is what is called the `full` mode of dependency management.
 But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+
+#### How to change
+
+If you want to change this config (which you usually don't need) this is the way:
+
+```dart
+void main () {
+  runApp(
+    GetMaterialApp(
+      smartManagement: SmartManagement.onlyBuilders //here
+      home: Home(),
+    )
+  )
+}
+
+
+```
 
 #### SmartManagement.full
 
