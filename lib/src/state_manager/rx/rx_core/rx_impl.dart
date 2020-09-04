@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+
 import '../rx_core/rx_interface.dart';
 
 RxInterface getObs;
@@ -101,6 +102,8 @@ class _RxImpl<T> implements RxInterface<T> {
 
   @override
   String toString() => value.toString();
+
+  dynamic toJson() => value;
 
   /// This equality override works for _RxImpl instances and the internal values.
   @override
@@ -285,6 +288,9 @@ class Rx<T> extends _RxImpl<T> {
   Rx([T initial]) {
     _value = initial;
   }
+
+  @override
+  dynamic toJson() => (value as dynamic)?.toJson();
 }
 
 extension StringExtension on String {
