@@ -346,8 +346,6 @@ void main () {
     )
   )
 }
-
-
 ```
 
 #### SmartManagement.full
