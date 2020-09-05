@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 import '../rx_core/rx_impl.dart';
@@ -28,9 +29,9 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   bool get isNotEmpty => value.isNotEmpty;
 
   StreamController<List<E>> subject = StreamController<List<E>>.broadcast();
-  Map<Stream<List<E>>, StreamSubscription> _subscriptions = Map();
+  final Map<Stream<List<E>>, StreamSubscription> _subscriptions = {};
 
-  operator []=(int index, E val) {
+  void operator []=(int index, E val) {
     _list[index] = val;
     subject.add(_list);
   }
@@ -102,7 +103,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   /// Returns whether the item was present in the list.
   @override
   bool remove(Object item) {
-    bool hasRemoved = _list.remove(item);
+    final hasRemoved = _list.remove(item);
     if (hasRemoved) {
       subject.add(_list);
     }
@@ -111,14 +112,14 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   @override
   E removeAt(int index) {
-    E item = _list.removeAt(index);
+    final item = _list.removeAt(index);
     subject.add(_list);
     return item;
   }
 
   @override
   E removeLast() {
-    E item = _list.removeLast();
+    final item = _list.removeLast();
     subject.add(_list);
     return item;
   }
@@ -148,7 +149,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   }
 
   @override
-  close() {
+  void close() {
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();
     });
@@ -183,16 +184,16 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   String get string => value.toString();
 
-  addListener(Stream<List<E>> rxGetx) {
-    if (_subscriptions.containsKey(rxGetx)) {
+  void addListener(Stream<List<E>> rxGetX) {
+    if (_subscriptions.containsKey(rxGetX)) {
       return;
     }
-    _subscriptions[rxGetx] = rxGetx.listen((data) {
+    _subscriptions[rxGetX] = rxGetX.listen((data) {
       subject.add(data);
     });
   }
 
-  set value(Iterable<E> val) {
+  set value(List<E> val) {
     if (_list == val) return;
     _list = val;
     subject.add(_list);
@@ -200,12 +201,15 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   Stream<List<E>> get stream => subject.stream;
 
-  StreamSubscription<List<E>> listen(void Function(List<E>) onData,
-          {Function onError, void Function() onDone, bool cancelOnError}) =>
+  StreamSubscription<List<E>> listen(
+    void Function(List<E>) onData, {
+    Function onError,
+    void Function() onDone,
+    bool cancelOnError,
+  }) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  void bindStream(Stream<Iterable<E>> stream) =>
-      stream.listen((va) => value = va);
+  void bindStream(Stream<List<E>> stream) => stream.listen((va) => value = va);
 
   @override
   E get first => value.first;
@@ -426,9 +430,10 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
 extension ListExtension<E> on List<E> {
   RxList<E> get obs {
-    if (this != null)
+    if (this != null) {
       return RxList<E>(<E>[])..addAllNonNull(this);
-    else
+    } else {
       return RxList<E>(null);
+    }
   }
 }

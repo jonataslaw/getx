@@ -1,2 +1,2 @@
-typedef bool Condition();
+typedef Condition = bool Function();
 typedef ValueCallback<T> = Function(T v);

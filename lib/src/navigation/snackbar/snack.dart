@@ -1,88 +1,55 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get.dart';
+
+import '../../../get.dart';
 import 'snack_route.dart';
 
-typedef void SnackbarStatusCallback(SnackbarStatus status);
-typedef void OnTap(GetBar snack);
+typedef SnackbarStatusCallback = void Function(SnackbarStatus status);
+typedef OnTap = void Function(GetBar snack);
 
 // ignore: must_be_immutable
 class GetBar<T extends Object> extends StatefulWidget {
-  GetBar(
-      {Key key,
-      String title,
-      String message,
-      Widget titleText,
-      Widget messageText,
-      Widget icon,
-      bool shouldIconPulse = true,
-      double maxWidth,
-      EdgeInsets margin = const EdgeInsets.all(0.0),
-      EdgeInsets padding = const EdgeInsets.all(16),
-      double borderRadius = 0.0,
-      Color borderColor,
-      double borderWidth = 1.0,
-      Color backgroundColor = const Color(0xFF303030),
-      Color leftBarIndicatorColor,
-      List<BoxShadow> boxShadows,
-      Gradient backgroundGradient,
-      FlatButton mainButton,
-      OnTap onTap,
-      Duration duration,
-      bool isDismissible = true,
-      SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
-      bool showProgressIndicator = false,
-      AnimationController progressIndicatorController,
-      Color progressIndicatorBackgroundColor,
-      Animation<Color> progressIndicatorValueColor,
-      SnackPosition snackPosition = SnackPosition.BOTTOM,
-      SnackStyle snackStyle = SnackStyle.FLOATING,
-      Curve forwardAnimationCurve = Curves.easeOutCirc,
-      Curve reverseAnimationCurve = Curves.easeOutCirc,
-      Duration animationDuration = const Duration(seconds: 1),
-      SnackbarStatusCallback snackbarStatus,
-      double barBlur = 0.0,
-      double overlayBlur = 0.0,
-      Color overlayColor = Colors.transparent,
-      Form userInputForm})
-      : this.title = title,
-        this.message = message,
-        this.titleText = titleText,
-        this.messageText = messageText,
-        this.icon = icon,
-        this.shouldIconPulse = shouldIconPulse,
-        this.maxWidth = maxWidth,
-        this.margin = margin,
-        this.padding = padding,
-        this.borderRadius = borderRadius,
-        this.borderColor = borderColor,
-        this.borderWidth = borderWidth,
-        this.backgroundColor = backgroundColor,
-        this.leftBarIndicatorColor = leftBarIndicatorColor,
-        this.boxShadows = boxShadows,
-        this.backgroundGradient = backgroundGradient,
-        this.mainButton = mainButton,
-        this.onTap = onTap,
-        this.duration = duration,
-        this.isDismissible = isDismissible,
-        this.dismissDirection = dismissDirection,
-        this.showProgressIndicator = showProgressIndicator,
-        this.progressIndicatorController = progressIndicatorController,
-        this.progressIndicatorBackgroundColor =
-            progressIndicatorBackgroundColor,
-        this.progressIndicatorValueColor = progressIndicatorValueColor,
-        this.snackPosition = snackPosition,
-        this.snackStyle = snackStyle,
-        this.forwardAnimationCurve = forwardAnimationCurve,
-        this.reverseAnimationCurve = reverseAnimationCurve,
-        this.animationDuration = animationDuration,
-        this.barBlur = barBlur,
-        this.overlayBlur = overlayBlur,
-        this.overlayColor = overlayColor,
-        this.userInputForm = userInputForm,
-        super(key: key) {
+  GetBar({
+    Key key,
+    this.title,
+    this.message,
+    this.titleText,
+    this.messageText,
+    this.icon,
+    this.shouldIconPulse = true,
+    this.maxWidth,
+    this.margin = const EdgeInsets.all(0.0),
+    this.padding = const EdgeInsets.all(16),
+    this.borderRadius = 0.0,
+    this.borderColor,
+    this.borderWidth = 1.0,
+    this.backgroundColor = const Color(0xFF303030),
+    this.leftBarIndicatorColor,
+    this.boxShadows,
+    this.backgroundGradient,
+    this.mainButton,
+    this.onTap,
+    this.duration,
+    this.isDismissible = true,
+    this.dismissDirection = SnackDismissDirection.VERTICAL,
+    this.showProgressIndicator = false,
+    this.progressIndicatorController,
+    this.progressIndicatorBackgroundColor,
+    this.progressIndicatorValueColor,
+    this.snackPosition = SnackPosition.BOTTOM,
+    this.snackStyle = SnackStyle.FLOATING,
+    this.forwardAnimationCurve = Curves.easeOutCirc,
+    this.reverseAnimationCurve = Curves.easeOutCirc,
+    this.animationDuration = const Duration(seconds: 1),
+    this.barBlur = 0.0,
+    this.overlayBlur = 0.0,
+    this.overlayColor = Colors.transparent,
+    this.userInputForm,
+    SnackbarStatusCallback snackbarStatus,
+  }) : super(key: key) {
     this.snackbarStatus = snackbarStatus ?? (status) {};
   }
 
@@ -95,20 +62,24 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// The message displayed to the user.
   final String message;
 
-  /// Replaces [title]. Although this accepts a [Widget], it is meant to receive [Text] or [RichText]
+  /// Replaces [title]. Although this accepts a [Widget], it is meant
+  /// to receive [Text] or [RichText]
   final Widget titleText;
 
-  /// Replaces [message]. Although this accepts a [Widget], it is meant to receive [Text] or  [RichText]
+  /// Replaces [message]. Although this accepts a [Widget], it is meant
+  /// to receive [Text] or  [RichText]
   final Widget messageText;
 
   /// Will be ignored if [backgroundGradient] is not null
   final Color backgroundColor;
 
   /// If not null, shows a left vertical colored bar on notification.
-  /// It is not possible to use it with a [Form] and I do not recommend using it with [LinearProgressIndicator]
+  /// It is not possible to use it with a [Form] and I do not recommend
+  /// using it with [LinearProgressIndicator]
   final Color leftBarIndicatorColor;
 
-  /// [boxShadows] The shadows generated by Snack. Leave it null if you don't want a shadow.
+  /// [boxShadows] The shadows generated by Snack. Leave it null
+  /// if you don't want a shadow.
   /// You can use more than one if you feel the need.
   /// Check (this example)[https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/shadows.dart]
   final List<BoxShadow> boxShadows;
@@ -116,7 +87,8 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// Makes [backgroundColor] be ignored.
   final Gradient backgroundGradient;
 
-  /// You can use any widget here, but I recommend [Icon] or [Image] as indication of what kind
+  /// You can use any widget here, but I recommend [Icon] or [Image] as
+  /// indication of what kind
   /// of message you are displaying. Other widgets may break the layout
   final Widget icon;
 
@@ -126,16 +98,19 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// A [FlatButton] widget if you need an action from the user.
   final FlatButton mainButton;
 
-  /// A callback that registers the user's click anywhere. An alternative to [mainButton]
+  /// A callback that registers the user's click anywhere.
+  /// An alternative to [mainButton]
   final OnTap onTap;
 
-  /// How long until Snack will hide itself (be dismissed). To make it indefinite, leave it null.
+  /// How long until Snack will hide itself (be dismissed).
+  /// To make it indefinite, leave it null.
   final Duration duration;
 
   /// True if you want to show a [LinearProgressIndicator].
   final bool showProgressIndicator;
 
-  /// An optional [AnimationController] when you want to control the progress of your [LinearProgressIndicator].
+  /// An optional [AnimationController] when you want to control the
+  /// progress of your [LinearProgressIndicator].
   final AnimationController progressIndicatorController;
 
   /// A [LinearProgressIndicator] configuration parameter.
@@ -144,9 +119,11 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// A [LinearProgressIndicator] configuration parameter.
   final Animation<Color> progressIndicatorValueColor;
 
-  /// Determines if the user can swipe or click the overlay (if [overlayBlur] > 0) to dismiss.
+  /// Determines if the user can swipe or click the overlay
+  /// (if [overlayBlur] > 0) to dismiss.
   /// It is recommended that you set [duration] != null if this is false.
-  /// If the user swipes to dismiss or clicks the overlay, no value will be returned.
+  /// If the user swipes to dismiss or clicks the overlay, no value
+  /// will be returned.
   final bool isDismissible;
 
   /// Used to limit Snack width (usually on large screens)
@@ -160,33 +137,41 @@ class GetBar<T extends Object> extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Adds a radius to all corners of Snack. Best combined with [margin].
-  /// I do not recommend using it with [showProgressIndicator] or [leftBarIndicatorColor].
+  /// I do not recommend using it with [showProgressIndicator]
+  /// or [leftBarIndicatorColor].
   final double borderRadius;
 
   /// Adds a border to every side of Snack
-  /// I do not recommend using it with [showProgressIndicator] or [leftBarIndicatorColor].
+  /// I do not recommend using it with [showProgressIndicator]
+  /// or [leftBarIndicatorColor].
   final Color borderColor;
 
   /// Changes the width of the border if [borderColor] is specified
   final double borderWidth;
 
-  /// Snack can be based on [SnackPosition.TOP] or on [SnackPosition.BOTTOM] of your screen.
+  /// Snack can be based on [SnackPosition.TOP] or on [SnackPosition.BOTTOM]
+  /// of your screen.
   /// [SnackPosition.BOTTOM] is the default.
   final SnackPosition snackPosition;
 
   /// [SnackDismissDirection.VERTICAL] by default.
-  /// Can also be [SnackDismissDirection.HORIZONTAL] in which case both left and right dismiss are allowed.
+  /// Can also be [SnackDismissDirection.HORIZONTAL] in which case both left
+  /// and right dismiss are allowed.
   final SnackDismissDirection dismissDirection;
 
   /// Snack can be floating or be grounded to the edge of the screen.
-  /// If grounded, I do not recommend using [margin] or [borderRadius]. [SnackStyle.FLOATING] is the default
-  /// If grounded, I do not recommend using a [backgroundColor] with transparency or [barBlur]
+  /// If grounded, I do not recommend using [margin] or [borderRadius].
+  /// [SnackStyle.FLOATING] is the default
+  /// If grounded, I do not recommend using a [backgroundColor] with
+  /// transparency or [barBlur]
   final SnackStyle snackStyle;
 
-  /// The [Curve] animation used when show() is called. [Curves.easeOut] is default
+  /// The [Curve] animation used when show() is called.
+  /// [Curves.easeOut] is default
   final Curve forwardAnimationCurve;
 
-  /// The [Curve] animation used when dismiss() is called. [Curves.fastOutSlowIn] is default
+  /// The [Curve] animation used when dismiss() is called.
+  /// [Curves.fastOutSlowIn] is default
   final Curve reverseAnimationCurve;
 
   /// Use it to speed up or slow down the animation duration
@@ -203,15 +188,18 @@ class GetBar<T extends Object> extends StatefulWidget {
   final double overlayBlur;
 
   /// Default is [Colors.transparent]. Only takes effect if [overlayBlur] > 0.0.
-  /// Make sure you use a color with transparency here e.g. Colors.grey[600].withOpacity(0.2).
+  /// Make sure you use a color with transparency here e.g.
+  /// Colors.grey[600].withOpacity(0.2).
   final Color overlayColor;
 
-  /// A [TextFormField] in case you want a simple user input. Every other widget is ignored if this is not null.
+  /// A [TextFormField] in case you want a simple user input.
+  /// Every other widget is ignored if this is not null.
   final Form userInputForm;
 
   SnackRoute<T> _snackRoute;
 
-  /// Show the snack. Kicks in [SnackbarStatus.OPENING] state followed by [SnackbarStatus.OPEN]
+  /// Show the snack. Kicks in [SnackbarStatus.OPENING] state
+  /// followed by [SnackbarStatus.OPEN]
   Future<T> show() async {
     _snackRoute = showSnack<T>(
       snack: this,
@@ -231,9 +219,12 @@ class GetBar<T extends Object> extends StatefulWidget {
       _snackRoute.navigator.pop(result);
       return _snackRoute.completed;
     } else if (_snackRoute.isActive) {
-      // removeRoute is called every time you dismiss a Snack that is not the top route.
-      // It will not animate back and listeners will not detect SnackbarStatus.CLOSING or SnackbarStatus.CLOSED
-      // To avoid this, always make sure that Snack is the top route when it is being dismissed
+      // removeRoute is called every time you dismiss a Snack that is not
+      // the top route.
+      // It will not animate back and listeners will not detect
+      // SnackbarStatus.CLOSING or SnackbarStatus.CLOSED
+      // To avoid this, always make sure that Snack is the top
+      // route when it is being dismissed
       _snackRoute.navigator.removeRoute(_snackRoute);
     }
 
@@ -283,6 +274,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
         ((widget.userInputForm != null ||
             ((widget.message != null && widget.message.isNotEmpty) ||
                 widget.messageText != null))),
+        // ignore: lines_longer_than_80_chars
         "A message is mandatory if you are not using userInputForm. Set either a message or messageText");
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
@@ -320,7 +312,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
         final keyContext = backgroundBoxKey.currentContext;
 
         if (keyContext != null) {
-          final RenderBox box = keyContext.findRenderObject();
+          final box = keyContext.findRenderObject() as RenderBox;
           _boxHeightCompleter.complete(box.size);
         }
       },
@@ -349,7 +341,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
     _fadeController.forward();
   }
 
-  Function _progressListener;
+  VoidCallback _progressListener;
 
   void _configureProgressIndicatorAnimation() {
     if (widget.showProgressIndicator &&
@@ -403,9 +395,9 @@ class _GetBarState<K extends Object> extends State<GetBar>
 
     return Stack(
       children: [
-        FutureBuilder(
+        FutureBuilder<Size>(
           future: _boxHeightCompleter.future,
-          builder: (context, AsyncSnapshot<Size> snapshot) {
+          builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -500,7 +492,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
 
   List<Widget> _getAppropriateRowLayout() {
     double buttonRightPadding;
-    double iconPadding = 0;
+    var iconPadding = 0.0;
     if (widget.padding.right - 12 < 0) {
       buttonRightPadding = 4;
     } else {
@@ -661,9 +653,9 @@ class _GetBarState<K extends Object> extends State<GetBar>
 
   Widget _buildLeftBarIndicator() {
     if (widget.leftBarIndicatorColor != null) {
-      return FutureBuilder(
+      return FutureBuilder<Size>(
         future: _boxHeightCompleter.future,
-        builder: (BuildContext buildContext, AsyncSnapshot<Size> snapshot) {
+        builder: (buildContext, snapshot) {
           if (snapshot.hasData) {
             return Container(
               color: widget.leftBarIndicatorColor,
@@ -733,8 +725,11 @@ enum SnackStyle { FLOATING, GROUNDED }
 enum SnackDismissDirection { HORIZONTAL, VERTICAL }
 
 /// Indicates Status of snackbar
-/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar has closed,
-/// [SnackbarStatus.OPENING] Starts with the opening animation and ends with the full
-/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation and ends
+/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
+/// has closed,
+/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
+/// with the full
+/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
+/// and ends
 /// with the full snackbar dispose
 enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }

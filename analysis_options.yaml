@@ -1,0 +1,12 @@
+include: package:effective_dart/analysis_options.1.2.0.yaml
+analyzer:
+  strong-mode:
+    implicit-casts: false
+linter:
+  rules:
+    await_only_futures: true
+    # This one is desirable, but that's a lot of work for now
+    public_member_api_docs: false
+    # Desirable, but would be breaking changes:
+    avoid_positional_boolean_parameters: false
+    constant_identifier_names: false

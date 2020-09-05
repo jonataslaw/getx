@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:get_state/pages/home/domain/adapters/repository_adapter.dart';
@@ -6,21 +7,24 @@ import 'package:get_state/pages/home/domain/entity/cases_model.dart';
 import 'package:get_state/pages/home/presentation/controllers/home_controller.dart';
 import 'package:matcher/matcher.dart';
 
-class MockReposity implements IHomeRepository {
+class MockRepository implements IHomeRepository {
   @override
   Future<CasesModel> getCases() async {
     await Future.delayed(Duration(milliseconds: 100));
-    return Random().nextBool()
-        ? CasesModel(
-            global: Global(totalDeaths: 100, totalConfirmed: 200),
-          )
-        : Future.error('error');
+
+    if (Random().nextBool()) {
+      CasesModel(
+        global: Global(totalDeaths: 100, totalConfirmed: 200),
+      );
+    }
+
+    return Future<CasesModel>.error('error');
   }
 }
 
 void main() {
   final binding = BindingsBuilder(() {
-    Get.lazyPut<IHomeRepository>(() => MockReposity());
+    Get.lazyPut<IHomeRepository>(() => MockRepository());
     Get.lazyPut<HomeController>(
         () => HomeController(homeRepository: Get.find()));
   });

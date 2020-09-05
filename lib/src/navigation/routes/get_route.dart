@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/navigation/routes/bindings_interface.dart';
+
+import 'bindings_interface.dart';
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 

@@ -7,8 +7,7 @@ RxInterface getObs;
 
 class _RxImpl<T> implements RxInterface<T> {
   StreamController<T> subject = StreamController<T>.broadcast();
-  HashMap<Stream<T>, StreamSubscription> _subscriptions =
-      HashMap<Stream<T>, StreamSubscription>();
+  final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
 
   T _value;
 
@@ -47,8 +46,10 @@ class _RxImpl<T> implements RxInterface<T> {
   //  ),
   ///```
   T call([T v]) {
-    if (v != null) this.value = v;
-    return this.value;
+    if (v != null) {
+      value = v;
+    }
+    return value;
   }
 
   /// Makes a direct update of [value] adding it to the Stream
@@ -73,8 +74,8 @@ class _RxImpl<T> implements RxInterface<T> {
     subject.add(value);
   }
 
-  /// Uses a callback to update [value] internally, similar to [refresh], but provides
-  /// the current value as the argument.
+  /// Uses a callback to update [value] internally, similar to [refresh],
+  /// but provides the current value as the argument.
   /// Makes sense for custom Rx types (like Models).
   ///
   /// Sample:
@@ -105,8 +106,10 @@ class _RxImpl<T> implements RxInterface<T> {
 
   dynamic toJson() => value;
 
-  /// This equality override works for _RxImpl instances and the internal values.
+  /// This equality override works for _RxImpl instances and the internal
+  /// values.
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(dynamic o) {
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return _value == o;
@@ -115,6 +118,7 @@ class _RxImpl<T> implements RxInterface<T> {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _value.hashCode;
 
   void close() {

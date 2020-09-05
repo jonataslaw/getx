@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/src/core/log.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/routes/get_route.dart';
+
+import '../../../get.dart';
+import '../../core/log.dart';
+import '../../instance/get_instance.dart';
+import '../routes/get_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -97,6 +98,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> shortcuts;
+
   // final Map<LocalKey, ActionFactory> actions;
   final bool debugShowMaterialGrid;
   final Function(Routing) routingCallback;
@@ -266,7 +268,8 @@ extension Trans on String {
     // Returns the key if locale is null.
     if (Get.locale?.languageCode == null) return this;
 
-    // Checks whether the language code and country code are present, and whether the key is also present.
+    // Checks whether the language code and country code are present, and
+    // whether the key is also present.
     if (Get.translations.containsKey(
             "${Get.locale.languageCode}_${Get.locale.countryCode}") &&
         Get.translations["${Get.locale.languageCode}_${Get.locale.countryCode}"]
@@ -274,24 +277,24 @@ extension Trans on String {
       return Get.translations[
           "${Get.locale.languageCode}_${Get.locale.countryCode}"][this];
 
-      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
+      // Checks if there is a callback language in the absence of the specific
+      // country, and if it contains that key.
     } else if (Get.translations.containsKey(Get.locale.languageCode) &&
         Get.translations[Get.locale.languageCode].containsKey(this)) {
       return Get.translations[Get.locale.languageCode][this];
-      // If there is no corresponding language or corresponding key, return the key.
+      // If there is no corresponding language or corresponding key, return
+      // the key.
     } else if (Get.fallbackLocale != null) {
-      if (Get.translations.containsKey(
-              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
-          Get.translations[
-                  "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-              .containsKey(this)) {
-        return Get.translations[
-                "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-            [this];
+      final fallback = Get.fallbackLocale;
+      final key = "${fallback.languageCode}_${fallback.countryCode}";
+
+      if (Get.translations.containsKey(key) &&
+          Get.translations[key].containsKey(this)) {
+        return Get.translations[key][this];
       }
-      if (Get.translations.containsKey(Get.fallbackLocale.languageCode) &&
-          Get.translations[Get.fallbackLocale.languageCode].containsKey(this)) {
-        return Get.translations[Get.fallbackLocale.languageCode][this];
+      if (Get.translations.containsKey(fallback.languageCode) &&
+          Get.translations[fallback.languageCode].containsKey(this)) {
+        return Get.translations[fallback.languageCode][this];
       }
       return this;
     } else {
@@ -300,11 +303,11 @@ extension Trans on String {
   }
 
   String trArgs([List<String> args]) {
-    String key = tr;
+    var key = tr;
     if (args != null) {
-      args.forEach((arg) {
+      for (final arg in args) {
         key = key.replaceFirst(RegExp(r'%s'), arg.toString());
-      });
+      }
     }
     return key;
   }

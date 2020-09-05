@@ -70,13 +70,14 @@ void main() {
 
   testWidgets(
     "MixinBuilder with build null",
-    (WidgetTester test) async {
+    (test) async {
       expect(
-          () => GetBuilder<Controller>(
-                init: Controller(),
-                builder: null,
-              ),
-          throwsAssertionError);
+        () => GetBuilder<Controller>(
+          init: Controller(),
+          builder: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
 }
@@ -85,6 +86,7 @@ class Controller extends GetxController {
   static Controller get to => Get.find();
 
   int counter = 0;
+
   void increment() {
     counter++;
     update();

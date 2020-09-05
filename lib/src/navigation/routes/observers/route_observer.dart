@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/dialog/dialog_route.dart';
-import 'package:get/src/navigation/routes/default_route.dart';
-import 'package:get/src/navigation/snackbar/snack_route.dart';
+
+import '../../../../route_manager.dart';
+import '../../../instance/get_instance.dart';
+import '../../dialog/dialog_route.dart';
+import '../../snackbar/snack_route.dart';
+import '../default_route.dart';
 
 class Routing {
   String current;
@@ -15,6 +16,7 @@ class Routing {
   bool isSnackbar;
   bool isBottomSheet;
   bool isDialog;
+
   Routing({
     this.current = '',
     this.previous = '',
@@ -36,6 +38,7 @@ class GetObserver extends NavigatorObserver {
   final Function(Routing) routing;
 
   GetObserver([this.routing, this._routeSend]);
+
   final Routing _routeSend;
 
   Route<dynamic> route;
@@ -46,6 +49,7 @@ class GetObserver extends NavigatorObserver {
   String current;
   String previous;
   Object args;
+
   // String previousArgs;
   String removed;
 
@@ -65,11 +69,11 @@ class GetObserver extends NavigatorObserver {
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
-    bool isGetPageRoute = route is GetPageRoute;
-    bool isSnackbar = route is SnackRoute;
-    bool isDialog = route is GetDialogRoute;
-    bool isBottomSheet = route is GetModalBottomSheetRoute;
-    String routeName = name(route);
+    var isGetPageRoute = route is GetPageRoute;
+    var isSnackbar = route is SnackRoute;
+    var isDialog = route is GetDialogRoute;
+    var isBottomSheet = route is GetModalBottomSheetRoute;
+    var routeName = name(route);
 
     if (isSnackbar) {
       GetConfig.log("OPEN SNACKBAR $routeName");
@@ -100,11 +104,11 @@ class GetObserver extends NavigatorObserver {
   void didPop(Route route, Route previousRoute) {
     super.didPop(route, previousRoute);
 
-    bool isGetPageRoute = route is GetPageRoute;
-    bool isSnackbar = route is SnackRoute;
-    bool isDialog = route is GetDialogRoute;
-    bool isBottomSheet = route is GetModalBottomSheetRoute;
-    String routeName = name(route);
+    var isGetPageRoute = route is GetPageRoute;
+    var isSnackbar = route is SnackRoute;
+    var isDialog = route is GetDialogRoute;
+    var isBottomSheet = route is GetModalBottomSheetRoute;
+    var routeName = name(route);
 
     if (isSnackbar) {
       GetConfig.log("CLOSE SNACKBAR $routeName");
@@ -118,8 +122,9 @@ class GetObserver extends NavigatorObserver {
     GetConfig.currentRoute = routeName;
 
     _routeSend.update((value) {
-      if (previousRoute is PageRoute)
+      if (previousRoute is PageRoute) {
         value.current = previousRoute?.settings?.name ?? '';
+      }
       value.args = route?.settings?.arguments;
       value.route = previousRoute;
       value.isBack = true;

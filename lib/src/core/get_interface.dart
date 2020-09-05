@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+
+import '../../utils.dart';
 import '../navigation/root/parse_route.dart';
 import '../navigation/root/root_controller.dart';
 import '../navigation/routes/custom_transition.dart';
 import '../navigation/routes/observers/route_observer.dart';
 import '../navigation/routes/transitions_type.dart';
-import '../../utils.dart';
 
-///Use Get.to instead of Navigator.push, Get.off instead of Navigator.pushReplacement,
-///Get.offAll instead of Navigator.pushAndRemoveUntil. For named routes just add "named"
-///after them. Example: Get.toNamed, Get.offNamed, and Get.AllNamed.
-///To return to the previous screen, use Get.back().
-///No need to pass any context to Get, just put the name of the route inside
-///the parentheses and the magic will occur.
+/// Use Get.to instead of Navigator.push, Get.off instead
+/// of Navigator.pushReplacement,
+/// Get.offAll instead of Navigator.pushAndRemoveUntil.
+/// For named routes just add "named" after them. Example: Get.toNamed,
+/// Get.offNamed, and Get.AllNamed.
+/// To return to the previous screen, use Get.back().
+/// No need to pass any context to Get, just put the name of the route inside
+/// the parentheses and the magic will occur.
 
 abstract class GetInterface {
   bool defaultPopGesture = GetPlatform.isIOS;

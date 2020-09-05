@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+
 import '../../../../get.dart';
 import '../rx_core/rx_interface.dart';
 import '../rx_typedefs/rx_typedefs.dart';
@@ -39,11 +41,11 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   }
 
   @override
-  void addListener(Stream rxGetx) {
-    if (_subscriptions.containsKey(rxGetx)) {
+  void addListener(Stream<Map<K, V>> rxGetX) {
+    if (_subscriptions.containsKey(rxGetX)) {
       return;
     }
-    _subscriptions[rxGetx] = rxGetx.listen((data) {
+    _subscriptions[rxGetX] = rxGetX.listen((data) {
       subject.add(data);
     });
   }
@@ -68,7 +70,7 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
     subject.add(_value);
   }
 
-  void addIf(condition, K key, V value) {
+  void addIf(dynamic condition, K key, V value) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) {
       _value[key] = value;
@@ -76,7 +78,7 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
     }
   }
 
-  void addAllIf(condition, Map<K, V> values) {
+  void addAllIf(dynamic condition, Map<K, V> values) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) addAll(values);
   }
@@ -185,9 +187,10 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
 
 extension MapExtension<K, V> on Map<K, V> {
   RxMap<K, V> get obs {
-    if (this != null)
+    if (this != null) {
       return RxMap<K, V>(<K, V>{})..addAll(this);
-    else
+    } else {
       return RxMap<K, V>(null);
+    }
   }
 }
