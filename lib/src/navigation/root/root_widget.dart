@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/src/core/log.dart';
 import 'package:get/src/instance/get_instance.dart';
 import 'package:get/src/navigation/routes/get_route.dart';
+
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -209,7 +210,7 @@ class GetMaterialApp extends StatelessWidget {
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
-                transitionDuration ?? Get.defaultDurationTransition,
+                transitionDuration ?? Get.defaultTransitionDuration,
             defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
           );
         },
