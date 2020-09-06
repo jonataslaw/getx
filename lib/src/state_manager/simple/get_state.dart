@@ -12,7 +12,9 @@ import 'simple_builder.dart';
 //typedef Disposer = void Function();
 
 // replacing StateSetter, return if the Widget is mounted for extra validation.
+// if it brings overhead the extra call,
 typedef GetStateUpdate = bool Function();
+//typedef GetStateUpdate = void Function(VoidCallback fn);
 
 /// Complies with [GetStateUpdater]
 ///
@@ -24,9 +26,14 @@ typedef GetStateUpdate = bool Function();
 /// TODO: check performance HIT for the extra method call.
 ///
 mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
+  // To avoid the creation of an anonym function to be GC later.
+  static VoidCallback _stateCallback = () {};
+
+  /// Experimental method to replace setState((){});
+  /// Used with GetStateUpdate.
   bool getUpdate() {
     final _mounted = mounted;
-    if (_mounted) setState(() {});
+    if (_mounted) setState(_stateCallback);
     return _mounted;
   }
 }
@@ -37,10 +44,7 @@ class GetxController extends DisposableInterface {
 //  final _updatersIds = HashMap<String, StateSetter>(); //<old>
   final _updatersIds = HashMap<String, GetStateUpdate>();
 
-//  final _updatersGroupIds = HashMap<String, List>(); //<old>
-  final _updatersGroupIds = HashMap<String, HashMap<int, GetStateUpdate>>();
-
-  static int _groupIdCount = 0;
+  final _updatersGroupIds = HashMap<String, HashSet<GetStateUpdate>>();
 
   /// Rebuilds [GetBuilder] each time you call [update()];
   /// Can take a List of [ids], that will only update the matching
@@ -50,14 +54,21 @@ class GetxController extends DisposableInterface {
   void update([List<String> ids, bool condition = true]) {
     if (!condition) return;
     if (ids == null) {
-//      _updaters.forEach((rs) => rs(() {}));//<old>
+//      _updaters?.forEach((rs) => rs(() {})); //<old>
       _updaters.forEach((rs) => rs());
     } else {
-      ids.forEach((element) {
-//        _updatersGroupIds[element]?.forEach((k, rs) => rs(() {}));//<old>
-//        _updatersIds[element]?.call(() {});//<old>
-        _updatersIds[element]?.call();
-        _updatersGroupIds[element]?.forEach((k, rs) => rs());
+      // @jonny, remove this commented code if it's not more optimized.
+//      for (final id in ids) {
+//        if (_updatersIds[id] != null) _updatersIds[id]();
+//        if (_updatersGroupIds[id] != null)
+//          for (final rs in _updatersGroupIds[id]) rs();
+//      }
+
+      ids.forEach((id) {
+//        _updatersIds[id]?.call(() {}); //<old>
+//        _updatersGroupIds[id]?.forEach((rs) => rs(() {})); //<old>
+        _updatersIds[id]?.call();
+        _updatersGroupIds[id]?.forEach((rs) => rs());
       });
     }
   }
@@ -72,13 +83,10 @@ class GetxController extends DisposableInterface {
   VoidCallback addListenerId(String key, GetStateUpdate listener) {
 //    _printCurrentIds();
     if (_updatersIds.containsKey(key)) {
-      final _innerKey = _groupIdCount++;
-//      final _ref = _updatersGroupIds[key] ??= HashMap<int, StateSetter>();//<old>
-      final _ref = _updatersGroupIds[key] ??= HashMap<int, GetStateUpdate>();
-      _ref[_innerKey] = listener;
+      _updatersGroupIds[key] ??= HashSet<GetStateUpdate>.identity();
+      _updatersGroupIds[key].add(listener);
       return () {
-        _ref?.remove(_innerKey);
-//        _printCurrentIds();
+        _updatersGroupIds[key].remove(listener);
       };
     } else {
       _updatersIds[key] = listener;
@@ -148,10 +156,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
   GetxController controller;
   bool isCreator = false;
-
-  /// TODO: @jonny, you intend to use disposers?
-//  final HashSet<Disposer> disposers = HashSet<Disposer>();
-
   VoidCallback remove;
 
   @override
@@ -195,8 +199,8 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void _subscribeToController() {
     remove?.call();
     remove = (widget.id == null)
-//        ? controller?.addListener(setState)//<old>
-//        : controller?.addListenerId(widget.id, setState);//<old>
+//        ? controller?.addListener(setState) //<old>
+//        : controller?.addListenerId(widget.id, setState); //<old>
         ? controller?.addListener(getUpdate)
         : controller?.addListenerId(widget.id, getUpdate);
   }
@@ -218,10 +222,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       }
     }
     remove?.call();
-
-//    disposers.forEach((element) {
-//      element();
-//    });
   }
 
   @override
@@ -251,6 +251,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 /// like Rx() does with Obx().
 class Value<T> extends GetxController {
   Value([this._value]);
+
   T _value;
 
   T get value {
