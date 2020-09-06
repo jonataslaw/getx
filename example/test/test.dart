@@ -13,7 +13,7 @@ class MockRepository implements IHomeRepository {
     await Future.delayed(Duration(milliseconds: 100));
 
     if (Random().nextBool()) {
-      CasesModel(
+      return CasesModel(
         global: Global(totalDeaths: 100, totalConfirmed: 200),
       );
     }
