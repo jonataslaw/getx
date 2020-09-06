@@ -144,11 +144,9 @@ class GetInstance {
       }
     });
 
-    // FIXME: this will not await sequentially as probably is expected
-    // ignore: avoid_function_literals_in_foreach_calls
-    keysToRemove.forEach((element) async {
+    for (final element in keysToRemove) {
       await delete(key: element);
-    });
+    }
 
     for (final element in keysToRemove) {
       _routesKey?.remove(element);
