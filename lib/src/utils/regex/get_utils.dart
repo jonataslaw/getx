@@ -49,12 +49,12 @@ class GetUtils {
   static bool isVideo(String filePath) {
     var ext = filePath.toLowerCase();
 
-    // FIXME: why all those ()?
-    return (((((ext.endsWith(".mp4") || ext.endsWith(".avi")) ||
-                        ext.endsWith(".wmv")) ||
-                    ext.endsWith(".rmvb")) ||
-                ext.endsWith(".mpg")) ||
-            ext.endsWith(".mpeg")) ||
+    return ext.endsWith(".mp4") ||
+        ext.endsWith(".avi") ||
+        ext.endsWith(".wmv") ||
+        ext.endsWith(".rmvb") ||
+        ext.endsWith(".mpg") ||
+        ext.endsWith(".mpeg") ||
         ext.endsWith(".3gp");
   }
 
@@ -62,10 +62,10 @@ class GetUtils {
   static bool isImage(String filePath) {
     final ext = filePath.toLowerCase();
 
-    // FIXME: why all those ()?
-    return (((ext.endsWith(".jpg") || ext.endsWith(".jpeg")) ||
-                ext.endsWith(".png")) ||
-            ext.endsWith(".gif")) ||
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
         ext.endsWith(".bmp");
   }
 
@@ -73,10 +73,10 @@ class GetUtils {
   static bool isAudio(String filePath) {
     final ext = filePath.toLowerCase();
 
-    // FIXME: why all those ()?
-    return (((ext.endsWith(".mp3") || ext.endsWith(".wav")) ||
-                ext.endsWith(".wma")) ||
-            ext.endsWith(".amr")) ||
+    return ext.endsWith(".mp3") ||
+        ext.endsWith(".wav") ||
+        ext.endsWith(".wma") ||
+        ext.endsWith(".amr") ||
         ext.endsWith(".ogg");
   }
 
