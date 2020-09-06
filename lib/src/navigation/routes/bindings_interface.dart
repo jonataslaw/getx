@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:get/get.dart';
 
 /// [Bindings] should be extended or implemented.
@@ -16,14 +18,20 @@ abstract class Bindings {
 /// GetPage(
 ///   name: '/',
 ///   page: () => Home(),
-///   binding: BindingsBuilder(() => Get.put(HomeController())),
+///   // This might cause you an error.
+///   // binding: BindingsBuilder(() => Get.put(HomeController())),
+///   binding: BindingsBuilder(() { Get.put(HomeController(); })),
+///   // Using .lazyPut() works fine.
+///   // binding: BindingsBuilder(() => Get.lazyPut(() => HomeController())),
 /// ),
 /// ```
 class BindingsBuilder<T> extends Bindings {
   /// Register your dependencies in the [builder] callback.
-  final void Function() builder;
+  final VoidCallback builder;
 
-  /// Shortcut to register 1 Controller with Get.put().
+  /// Shortcut to register 1 Controller with Get.put(),
+  /// Prevents the issue of the fat arrow function with the constructor.
+  /// BindingsBuilder(() => Get.put(HomeController())),
   ///
   /// Sample:
   /// ```
@@ -39,6 +47,9 @@ class BindingsBuilder<T> extends Bindings {
         .put<T>(null, tag: tag, permanent: permanent, builder: builder));
   }
 
+  /// WARNING: don't use `()=> Get.put(Controller())`,
+  /// if only passing 1 callback use `BindingsBuilder.put(Controller())`
+  /// or `BindingsBuilder(()=> Get.lazyPut(Controller()))`
   BindingsBuilder(this.builder);
 
   @override

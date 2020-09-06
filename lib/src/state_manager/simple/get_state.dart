@@ -8,39 +8,109 @@ import 'package:get/state_manager.dart';
 
 import 'simple_builder.dart';
 
-typedef Disposer = void Function();
+// Changed to VoidCallback.
+//typedef Disposer = void Function();
+
+// replacing StateSetter, return if the Widget is mounted for extra validation.
+typedef GetStateUpdate = bool Function();
+
+/// Complies with [GetStateUpdater]
+///
+/// This mixin's function represents a [GetStateUpdater], and might be used
+/// by [GetBuilder()], [SimpleBuilder()] (or similar) to comply
+/// with [GetStateUpdate] signature. REPLACING the [StateSetter].
+/// Avoids the potential (but extremely unlikely) issue of having
+/// the Widget in a dispose() state, and abstracts the API from the ugly fn((){}).
+/// TODO: check performance HIT for the extra method call.
+///
+mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
+  bool getUpdate() {
+    final _mounted = mounted;
+    if (_mounted) setState(() {});
+    return _mounted;
+  }
+}
 
 class GetxController extends DisposableInterface {
-  final HashSet<StateSetter> _updaters = HashSet<StateSetter>();
+  final _updaters = HashSet<GetStateUpdate>();
 
-  final HashMap<String, StateSetter> _updatersIds =
-      HashMap<String, StateSetter>();
+//  final _updatersIds = HashMap<String, StateSetter>(); //<old>
+  final _updatersIds = HashMap<String, GetStateUpdate>();
 
-  /// Update GetBuilder with update();
+//  final _updatersGroupIds = HashMap<String, List>(); //<old>
+  final _updatersGroupIds = HashMap<String, HashMap<int, GetStateUpdate>>();
+
+  static int _groupIdCount = 0;
+
+  /// Rebuilds [GetBuilder] each time you call [update()];
+  /// Can take a List of [ids], that will only update the matching
+  /// `GetBuilder( id: )`,
+  /// [ids] can be reused among `GetBuilders` like group tags.
+  /// The update will only notify the Widgets, if [condition] is true.
   void update([List<String> ids, bool condition = true]) {
     if (!condition) return;
-    (ids == null)
-        ? _updaters.forEach((rs) => rs(() {}))
-        : ids.forEach((element) {
-            _updatersIds[element]?.call(() {});
-          });
+    if (ids == null) {
+//      _updaters.forEach((rs) => rs(() {}));//<old>
+      _updaters.forEach((rs) => rs());
+    } else {
+      ids.forEach((element) {
+//        _updatersGroupIds[element]?.forEach((k, rs) => rs(() {}));//<old>
+//        _updatersIds[element]?.call(() {});//<old>
+        _updatersIds[element]?.call();
+        _updatersGroupIds[element]?.forEach((k, rs) => rs());
+      });
+    }
   }
 
-  Disposer addListener(StateSetter listener) {
+//  VoidCallback addListener(StateSetter listener) {//<old>
+  VoidCallback addListener(GetStateUpdate listener) {
     _updaters.add(listener);
     return () => _updaters.remove(listener);
   }
 
-  // void removeListener(StateSetter listener) {
-  //   _updaters.remove(listener);
-  // }
-
-  Disposer addListenerId(String key, StateSetter listener) {
-    _updatersIds[key] = listener;
-    return () => _updatersIds.remove(key);
+//  VoidCallback addListenerId(String key, StateSetter listener) {//<old>
+  VoidCallback addListenerId(String key, GetStateUpdate listener) {
+//    _printCurrentIds();
+    if (_updatersIds.containsKey(key)) {
+      final _innerKey = _groupIdCount++;
+//      final _ref = _updatersGroupIds[key] ??= HashMap<int, StateSetter>();//<old>
+      final _ref = _updatersGroupIds[key] ??= HashMap<int, GetStateUpdate>();
+      _ref[_innerKey] = listener;
+      return () {
+        _ref?.remove(_innerKey);
+//        _printCurrentIds();
+      };
+    } else {
+      _updatersIds[key] = listener;
+      return () => _updatersIds.remove(key);
+    }
   }
 
-  void disposeKey(String key) => _updatersIds.remove(key);
+  /// To dispose an [id] from future updates(), this ids are registered
+  /// by [GetBuilder()] or similar, so is a way to unlink the state change with
+  /// the Widget from the Controller.
+  void disposeId(String id) {
+    _updatersIds.remove(id);
+    _updatersGroupIds.remove(id);
+  }
+
+  /// Remove this after checking the new implementation makes sense.
+  /// Uncomment this if you wanna control the removal of ids..
+//  bool _debugging = false;
+//  Future<void> _printCurrentIds() async {
+//    if (_debugging) return;
+//    _debugging = true;
+//    print('about to debug...');
+//    await Future.delayed(Duration(milliseconds: 10));
+//    int totalGroups = 0;
+//    _updatersGroupIds.forEach((key, value) {
+//      totalGroups += value.length;
+//    });
+//    int totalIds = _updatersIds.length;
+//    print(
+//        'Total: ${totalIds + totalGroups}, in groups:$totalGroups, solo ids:$totalIds');
+//    _debugging = false;
+//  }
 }
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
@@ -53,6 +123,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
+
   const GetBuilder({
     Key key,
     this.init,
@@ -68,15 +139,20 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.didUpdateWidget,
   })  : assert(builder != null),
         super(key: key);
+
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
+class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
+    with GetStateUpdaterMixin {
   GetxController controller;
   bool isCreator = false;
-  final HashSet<Disposer> disposers = HashSet<Disposer>();
-  Disposer remove;
+
+  /// TODO: @jonny, you intend to use disposers?
+//  final HashSet<Disposer> disposers = HashSet<Disposer>();
+
+  VoidCallback remove;
 
   @override
   void initState() {
@@ -110,10 +186,27 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
         GetConfig.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    remove = (widget.id == null)
-        ? controller?.addListener(setState)
-        : controller?.addListenerId(widget.id, setState);
+    _subscribeToController();
   }
+
+  /// Register to listen Controller's events.
+  /// It gets a reference to the remove() callback, to delete the
+  /// setState "link" from the Controller.
+  void _subscribeToController() {
+    remove?.call();
+    remove = (widget.id == null)
+//        ? controller?.addListener(setState)//<old>
+//        : controller?.addListenerId(widget.id, setState);//<old>
+        ? controller?.addListener(getUpdate)
+        : controller?.addListenerId(widget.id, getUpdate);
+  }
+
+  /// Sample for [GetStateUpdate] when you don't wanna use [GetStateHelper mixin].
+//  bool _getUpdater() {
+//    final _mounted = mounted;
+//    if (_mounted) setState(() {});
+//    return _mounted;
+//  }
 
   @override
   void dispose() {
@@ -121,17 +214,14 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
     if (widget.dispose != null) widget.dispose(this);
     if (isCreator || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
-        if (remove != null) remove();
-
         GetInstance().delete<T>(tag: widget.tag);
       }
-    } else {
-      if (remove != null) remove();
     }
+    remove?.call();
 
-    disposers.forEach((element) {
-      element();
-    });
+//    disposers.forEach((element) {
+//      element();
+//    });
   }
 
   @override
@@ -145,6 +235,10 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   @override
   void didUpdateWidget(GetBuilder oldWidget) {
     super.didUpdateWidget(oldWidget as GetBuilder<T>);
+    // to avoid conflicts when modifying a "grouped" id list.
+    if (oldWidget.id != widget.id) {
+      _subscribeToController();
+    }
     if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
   }
 
