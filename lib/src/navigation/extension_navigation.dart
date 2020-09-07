@@ -518,7 +518,7 @@ extension GetNavigation on GetInterface {
     String middleText = "Dialog made in 3 lines of code",
     TextStyle middleTextStyle,
     double radius = 20.0,
-    ThemeData themeData,
+ //   ThemeData themeData,
     List<Widget> actions,
   }) {
     bool leanCancel = onCancel != null || textCancel != null;
