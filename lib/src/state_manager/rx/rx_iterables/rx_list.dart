@@ -146,7 +146,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   @override
   void sort([int compare(E a, E b)]) {
-    _list.sort();
+    _list.sort(compare);
     subject.add(_list);
   }
 
