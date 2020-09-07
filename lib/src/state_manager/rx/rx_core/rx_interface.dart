@@ -89,7 +89,7 @@ abstract class DisposableInterface {
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
-  Future onClose() async {}
+  FutureOr onClose() async {}
 }
 
 /// Used like [SingleTickerProviderMixin] but only with Get Controllers.
