@@ -157,19 +157,18 @@ class GetPageRoute<T> extends PageRoute<T> {
     }
     if (customTransition != null) {
       return customTransition.buildTransition(
-          context,
-          finalCurve,
-          alignment,
-          animation,
-          secondaryAnimation,
-          popGesture ?? Get.defaultPopGesture
-              ? _CupertinoBackGestureDetector<T>(
-                  enabledCallback: () => _isPopGestureEnabled<T>(this),
-                  onStartPopGesture: () => _startPopGesture<T>(this),
-                  child: child)
-              : child,
-          );
-
+        context,
+        finalCurve,
+        alignment,
+        animation,
+        secondaryAnimation,
+        popGesture ?? Get.defaultPopGesture
+            ? _CupertinoBackGestureDetector<T>(
+                enabledCallback: () => _isPopGestureEnabled<T>(this),
+                onStartPopGesture: () => _startPopGesture<T>(this),
+                child: child)
+            : child,
+      );
     }
 
     /// Apply the curve by default...
