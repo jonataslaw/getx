@@ -430,13 +430,12 @@ extension GetNavigation on GetInterface {
           binding: binding,
           settings: RouteSettings(arguments: arguments),
           fullscreenDialog: fullscreenDialog,
-          routeName: routename,
+          routeName: routeName,
           transition: transition ?? defaultTransition,
           curve: curve ?? defaultTransitionCurve,
           transitionDuration: duration ?? defaultTransitionDuration,
         ),
-        predicate ?? route);
-
+        predicate ?? (route) => false);
   }
 
   /// Show a dialog.

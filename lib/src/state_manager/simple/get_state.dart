@@ -52,7 +52,6 @@ class GetxController extends DisposableInterface {
   /// [ids] can be reused among `GetBuilders` like group tags.
   /// The update will only notify the Widgets, if [condition] is true.
   void update([List<String> ids, bool condition = true]) {
-
     if (!condition) {
       return;
     }
@@ -109,21 +108,22 @@ class GetxController extends DisposableInterface {
 
   /// Remove this after checking the new implementation makes sense.
   /// Uncomment this if you wanna control the removal of ids..
-//  bool _debugging = false;
-//  Future<void> _printCurrentIds() async {
-//    if (_debugging) return;
-//    _debugging = true;
-//    print('about to debug...');
-//    await Future.delayed(Duration(milliseconds: 10));
-//    int totalGroups = 0;
-//    _updatersGroupIds.forEach((key, value) {
-//      totalGroups += value.length;
-//    });
-//    int totalIds = _updatersIds.length;
-//    print(
-//        'Total: ${totalIds + totalGroups}, in groups:$totalGroups, solo ids:$totalIds');
-//    _debugging = false;
-//  }
+  ///  bool _debugging = false;
+  /// Future<void> _printCurrentIds() async {
+  /// if (_debugging) return;
+  /// _debugging = true;
+  /// print('about to debug...');
+  /// await Future.delayed(Duration(milliseconds: 10));
+  /// int totalGroups = 0;
+  /// _updatersGroupIds.forEach((key, value) {
+  /// totalGroups += value.length;
+  /// });
+  /// int totalIds = _updatersIds.length;
+  /// print(
+  ///     'Total: ${totalIds + totalGroups},'+
+  ///     'in groups:$totalGroups, solo ids:$totalIds',);
+  /// _debugging = false;
+  /// }
 }
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
@@ -157,10 +157,9 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-
 class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
-  GetxController controller;
+  T controller;
 
   bool isCreator = false;
   VoidCallback remove;
@@ -230,7 +229,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     }
 
     remove?.call();
-
   }
 
   @override
