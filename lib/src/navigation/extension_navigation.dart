@@ -885,7 +885,7 @@ extension GetNavigation on GetInterface {
     }
 
     if (defaultDurationTransition != null) {
-      this.defaultTransitionDuration = defaultDurationTransition;
+      defaultTransitionDuration = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {

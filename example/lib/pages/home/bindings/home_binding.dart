@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:get_state/pages/home/domain/adapters/repository_adapter.dart';
-import 'package:get_state/pages/home/presentation/controllers/home_controller.dart';
+import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
+import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
 import '../data/home_repository.dart';
 
 class HomeBinding extends Bindings {

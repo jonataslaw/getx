@@ -155,8 +155,8 @@ class GetPageRoute<T> extends PageRoute<T> {
           child: child,
           linearTransition: hasCurve);
     }
-    if (this.customTransition != null) {
-      return this.customTransition.buildTransition(
+    if (customTransition != null) {
+      return customTransition.buildTransition(
           context,
           finalCurve,
           alignment,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_state/routes/app_pages.dart';
+import 'package:get_demo/routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 
 void main() {

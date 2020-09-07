@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../state_manager/simple/get_state.dart';
 
 class GetMaterialController extends GetxController {

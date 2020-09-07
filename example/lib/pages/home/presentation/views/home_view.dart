@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_state/pages/home/presentation/controllers/home_controller.dart';
+import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   @override

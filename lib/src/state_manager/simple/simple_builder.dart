@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
-
 import 'get_state.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -102,12 +100,11 @@ class _SimpleBuilderState extends State<SimpleBuilder>
 
   @override
   Widget build(BuildContext context) {
-
     return TaskManager.instance.exchange(
-     disposers, 
-     getUpdate, 
-     widget.builder, 
-     context,
+      disposers,
+      getUpdate,
+      widget.builder,
+      context,
     );
   }
 }
@@ -122,12 +119,10 @@ class TaskManager {
 //  StateSetter _setter;//<old>
   GetStateUpdate _setter;
 
-
   HashSet<VoidCallback> _remove;
 
 //  void notify(HashSet<StateSetter> _updaters) { //<old>
   void notify(HashSet<GetStateUpdate> _updaters) {
-
     if (_setter != null) {
       if (!_updaters.contains(_setter)) {
         _updaters.add(_setter);

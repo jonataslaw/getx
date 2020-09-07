@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:get_state/pages/home/domain/adapters/repository_adapter.dart';
-import 'package:get_state/pages/home/domain/entity/cases_model.dart';
-import 'package:get_state/pages/home/presentation/controllers/home_controller.dart';
+import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
+import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
 import 'package:matcher/matcher.dart';
 
 class MockRepository implements IHomeRepository {

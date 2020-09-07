@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:get_state/pages/home/domain/adapters/repository_adapter.dart';
-import 'package:get_state/pages/home/domain/entity/cases_model.dart';
+import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
+import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
 
 class HomeRepository implements IHomeRepository {
   HomeRepository({this.dio});
