@@ -211,12 +211,13 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
         : controller?.addListenerId(widget.id, getUpdate);
   }
 
-  /// Sample for [GetStateUpdate] when you don't wanna use [GetStateHelper mixin].
-//  bool _getUpdater() {
-//    final _mounted = mounted;
-//    if (_mounted) setState(() {});
-//    return _mounted;
-//  }
+  /// Sample for [GetStateUpdate] when you don't wanna
+  /// use [GetStateHelper mixin].
+  ///  bool _getUpdater() {
+  ///    final _mounted = mounted;
+  ///    if (_mounted) setState(() {});
+  ///    return _mounted;
+  ///  }
 
   @override
   void dispose() {

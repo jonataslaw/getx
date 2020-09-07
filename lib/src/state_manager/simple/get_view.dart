@@ -24,7 +24,9 @@ import '../../instance/get_instance.dart';
 abstract class GetView<T> extends StatelessWidget {
   const GetView({Key key}) : super(key: key);
 
-  T get controller => GetInstance().find<T>();
+  final String tag = null;
+
+  T get controller => GetInstance().find<T>(tag: tag);
 
   @override
   Widget build(BuildContext context);
@@ -34,6 +36,8 @@ abstract class GetWidget<T> extends StatelessWidget {
   GetWidget({Key key}) : super(key: key);
 
   final Set<T> _value = <T>{};
+
+  final String tag = null;
 
   T get controller {
     if (_value.isEmpty) _value.add(GetInstance().find<T>());
