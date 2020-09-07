@@ -4,7 +4,9 @@ import '../regex/get_utils.dart';
 
 extension GetNumUtils on num {
   bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
+
   bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
+
   bool isEqual(num b) => GetUtils.isEqual(this, b);
 
   /// Utility to delay some callback (or code execution).
@@ -34,11 +36,15 @@ extension GetNumUtils on num {
   /// print(1.5.hours);
   ///```
   Duration get milliseconds => Duration(microseconds: (this * 1000).round());
+
   Duration get seconds => Duration(milliseconds: (this * 1000).round());
+
   Duration get minutes =>
       Duration(seconds: (this * Duration.secondsPerMinute).round());
+
   Duration get hours =>
       Duration(minutes: (this * Duration.minutesPerHour).round());
+
   Duration get days => Duration(hours: (this * Duration.hoursPerDay).round());
 
 //final _delayMaps = <Function, Future>{};

@@ -1,27 +1,31 @@
-import 'package:get/src/core/get_interface.dart';
-
+import '../core/get_interface.dart';
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
   /// Creates a new Instance<S> lazily from the [<S>builder()] callback.
   ///
   /// The first time you call [Get.find()], the [builder()] callback will create
-  /// the Instance and persisted as a Singleton (like you would use [Get.put()]).
+  /// the Instance and persisted as a Singleton (like you would use
+  /// [Get.put()]).
   ///
-  /// Using [GetConfig.smartManagement] as [SmartManagement.keepFactory] has the same outcome
+  /// Using [GetConfig.smartManagement] as [SmartManagement.keepFactory] has
+  /// the same outcome
   /// as using [fenix:true] :
-  /// The internal register of [builder()] will remain in memory to recreate the Instance
-  /// if the Instance has been removed with [Get.delete()].
+  /// The internal register of [builder()] will remain in memory to recreate
+  /// the Instance if the Instance has been removed with [Get.delete()].
   /// Therefore, future calls to [Get.find()] will return the same Instance.
   ///
-  /// If you need to make use of GetxController's life-cycle ([onInit(), onStart(), onClose()])
-  /// [fenix] is a great choice to mix with [GetBuilder()] and [GetX()] widgets, and/or [GetMaterialApp] Navigation.
+  /// If you need to make use of GetxController's life-cycle
+  /// ([onInit(), onStart(), onClose()])
+  /// [fenix] is a great choice to mix with [GetBuilder()] and [GetX()] widgets,
+  /// and/or [GetMaterialApp] Navigation.
   ///
-  /// You could use [Get.lazyPut(fenix:true)] in your app's [main()] instead of [Bindings()] for each [GetPage].
+  /// You could use [Get.lazyPut(fenix:true)] in your app's [main()] instead of
+  /// [Bindings()] for each [GetPage].
   /// And the memory management will be similar.
   ///
-  /// Subsequent calls to [Get.lazyPut()] with the same parameters (<[S]> and optionally [tag]
-  /// will **not** override the original).
+  /// Subsequent calls to [Get.lazyPut()] with the same parameters
+  /// (<[S]> and optionally [tag] will **not** override the original).
   void lazyPut<S>(InstanceBuilderCallback<S> builder,
       {String tag, bool fenix = false}) {
     GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
@@ -55,14 +59,17 @@ extension Inst on GetInterface {
 
   /// Injects an [Instance<S>] in memory.
   ///
-  /// No need to define the generic type <[S]> as it's inferred from the [dependency]
-  /// parameter.
+  /// No need to define the generic type <[S]> as it's inferred
+  /// from the [dependency] parameter.
   ///
   /// - [dependency] The Instance to be injected.
-  /// - [tag] optionally, use a [tag] as an "id" to create multiple records of the same Type<[S]>
-  ///   the [tag] does **not** conflict with the same tags used by other [dependencies] Types.
-  /// - [permanent] keeps the Instance in memory and persist it, not following [GetConfig.smartManagement]
-  ///   rules. Although, can be removed by [GetInstance.reset()] and [Get.delete()]
+  /// - [tag] optionally, use a [tag] as an "id" to create multiple records
+  /// of the same Type<[S]> the [tag] does **not** conflict with the same tags
+  /// used by other [dependencies] Types.
+  /// - [permanent] keeps the Instance in memory and persist it,
+  /// not following [GetConfig.smartManagement]
+  /// rules. Although, can be removed by [GetInstance.reset()]
+  /// and [Get.delete()]
   /// - [builder] If defined, the [dependency] must be returned from here
   S put<S>(S dependency,
           {String tag,

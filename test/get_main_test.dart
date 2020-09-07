@@ -202,8 +202,9 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
 
     Get.offUntil(
-        MaterialPageRoute(builder: (BuildContext context) => SecondScreen()),
-        ModalRoute.withName('/'));
+      MaterialPageRoute(builder: (context) => SecondScreen()),
+      ModalRoute.withName('/'),
+    );
 
     await tester.pumpAndSettle();
 

@@ -56,7 +56,7 @@ class HavingMatcher<T> implements TypeMatcher<T> {
       HavingMatcher(_parent, description, feature, matcher, _functionMatchers);
 
   @override
-  bool matches(item, Map matchState) {
+  bool matches(dynamic item, Map matchState) {
     for (var matcher in <Matcher>[_parent].followedBy(_functionMatchers)) {
       if (!matcher.matches(item, matchState)) {
         addStateInfo(matchState, {'matcher': matcher});
@@ -68,7 +68,11 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
     var matcher = matchState['matcher'] as Matcher;
     matcher.describeMismatch(
         item, mismatchDescription, matchState['state'] as Map, verbose);
@@ -101,7 +105,11 @@ class TypeMatcher<T> extends Matcher {
 
   @override
   Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
     var name = _stripDynamic(T);
     return mismatchDescription.add("is not an instance of '$name'");
   }

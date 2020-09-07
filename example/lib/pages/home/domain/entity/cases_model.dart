@@ -16,17 +16,21 @@ class CasesModel {
   });
 
   factory CasesModel.fromRawJson(String str) =>
-      CasesModel.fromJson(json.decode(str));
+      CasesModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory CasesModel.fromJson(Map<String, dynamic> json) => CasesModel(
-        global: json["Global"] == null ? null : Global.fromJson(json["Global"]),
+        global: json["Global"] == null
+            ? null
+            : Global.fromJson(json["Global"] as Map<String, dynamic>),
         countries: json["Countries"] == null
             ? null
             : List<Country>.from(
-                json["Countries"].map((x) => Country.fromJson(x))),
-        date: json["Date"] == null ? null : json["Date"],
+                (json["Countries"] as List<dynamic>)
+                    .map((x) => Country.fromJson(x as Map<String, dynamic>)),
+              ),
+        date: json["Date"] == null ? null : json["Date"] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,25 +67,30 @@ class Country {
     this.date,
   });
 
-  factory Country.fromRawJson(String str) => Country.fromJson(json.decode(str));
+  factory Country.fromRawJson(String str) =>
+      Country.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
-        country: json["Country"] == null ? null : json["Country"],
-        countryCode: json["CountryCode"] == null ? null : json["CountryCode"],
-        slug: json["Slug"] == null ? null : json["Slug"],
+        country: json["Country"] == null ? null : json["Country"] as String,
+        countryCode:
+            json["CountryCode"] == null ? null : json["CountryCode"] as String,
+        slug: json["Slug"] == null ? null : json["Slug"] as String,
         newConfirmed:
-            json["NewConfirmed"] == null ? null : json["NewConfirmed"],
-        totalConfirmed:
-            json["TotalConfirmed"] == null ? null : json["TotalConfirmed"],
-        newDeaths: json["NewDeaths"] == null ? null : json["NewDeaths"],
-        totalDeaths: json["TotalDeaths"] == null ? null : json["TotalDeaths"],
+            json["NewConfirmed"] == null ? null : json["NewConfirmed"] as int,
+        totalConfirmed: json["TotalConfirmed"] == null
+            ? null
+            : json["TotalConfirmed"] as int,
+        newDeaths: json["NewDeaths"] == null ? null : json["NewDeaths"] as int,
+        totalDeaths:
+            json["TotalDeaths"] == null ? null : json["TotalDeaths"] as int,
         newRecovered:
-            json["NewRecovered"] == null ? null : json["NewRecovered"],
-        totalRecovered:
-            json["TotalRecovered"] == null ? null : json["TotalRecovered"],
-        date: json["Date"] == null ? null : json["Date"],
+            json["NewRecovered"] == null ? null : json["NewRecovered"] as int,
+        totalRecovered: json["TotalRecovered"] == null
+            ? null
+            : json["TotalRecovered"] as int,
+        date: json["Date"] == null ? null : json["Date"] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -115,21 +124,25 @@ class Global {
     this.totalRecovered,
   });
 
-  factory Global.fromRawJson(String str) => Global.fromJson(json.decode(str));
+  factory Global.fromRawJson(String str) =>
+      Global.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory Global.fromJson(Map<String, dynamic> json) => Global(
         newConfirmed:
-            json["NewConfirmed"] == null ? null : json["NewConfirmed"],
-        totalConfirmed:
-            json["TotalConfirmed"] == null ? null : json["TotalConfirmed"],
-        newDeaths: json["NewDeaths"] == null ? null : json["NewDeaths"],
-        totalDeaths: json["TotalDeaths"] == null ? null : json["TotalDeaths"],
+            json["NewConfirmed"] == null ? null : json["NewConfirmed"] as int,
+        totalConfirmed: json["TotalConfirmed"] == null
+            ? null
+            : json["TotalConfirmed"] as int,
+        newDeaths: json["NewDeaths"] == null ? null : json["NewDeaths"] as int,
+        totalDeaths:
+            json["TotalDeaths"] == null ? null : json["TotalDeaths"] as int,
         newRecovered:
-            json["NewRecovered"] == null ? null : json["NewRecovered"],
-        totalRecovered:
-            json["TotalRecovered"] == null ? null : json["TotalRecovered"],
+            json["NewRecovered"] == null ? null : json["NewRecovered"] as int,
+        totalRecovered: json["TotalRecovered"] == null
+            ? null
+            : json["TotalRecovered"] as int,
       );
 
   Map<String, dynamic> toJson() => {

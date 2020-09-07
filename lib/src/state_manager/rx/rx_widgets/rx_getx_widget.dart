@@ -1,14 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/root/smart_management.dart';
+
+import '../../../instance/get_instance.dart';
+import '../../../navigation/root/smart_management.dart';
 import '../rx_core/rx_impl.dart';
 import '../rx_core/rx_interface.dart';
 
 class GetX<T extends DisposableInterface> extends StatefulWidget {
   final Widget Function(T) builder;
   final bool global;
+
   // final Stream Function(T) stream;
   // final StreamController Function(T) streamController;
   final bool autoRemove;
@@ -16,6 +18,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetX oldWidget, State state) didUpdateWidget;
   final T init;
+
   const GetX({
     this.builder,
     this.global = true,
@@ -29,6 +32,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
     this.init,
     // this.streamController
   });
+
   GetImplXState<T> createState() => GetImplXState<T>();
 }
 
@@ -41,8 +45,9 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void initState() {
     _observer = Rx();
-    bool isPrepared = GetInstance().isPrepared<T>();
-    bool isRegistered = GetInstance().isRegistered<T>();
+    var isPrepared = GetInstance().isPrepared<T>();
+    var isRegistered = GetInstance().isRegistered<T>();
+
     if (widget.global) {
       if (isPrepared) {
         if (GetConfig.smartManagement != SmartManagement.keepFactory) {

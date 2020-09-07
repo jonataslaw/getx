@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/src/core/get_interface.dart';
-import 'package:get/src/core/log.dart';
 
+import '../../instance_manager.dart';
+import '../../route_manager.dart';
+import '../core/get_interface.dart';
+import '../core/log.dart';
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
 import 'routes/bindings_interface.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
-/// You can to use navigator.push(YourRoute()) rather Navigator.push(context, YourRoute());
+/// You can to use navigator.push(YourRoute()) rather
+/// Navigator.push(context, YourRoute());
 NavigatorState get navigator => Get.key.currentState;
 
 extension GetNavigation on GetInterface {
@@ -50,15 +51,15 @@ extension GetNavigation on GetInterface {
     bool preventDuplicates = true,
     bool popGesture,
   }) {
-    String routename = "/${page.runtimeType.toString()}";
-    if (preventDuplicates && routename == currentRoute) {
+    var routeName = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
     return global(id).currentState.push(
           GetPageRoute(
             opaque: opaque ?? true,
             page: () => page,
-            routeName: routename,
+            routeName: routeName,
             settings: RouteSettings(
               //  name: forceRouteName ? '${a.runtimeType}' : '',
               arguments: arguments,
@@ -141,7 +142,8 @@ extension GetNavigation on GetInterface {
   /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   ///
   /// or also like this:
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the
+  /// dialog is closed
   void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
@@ -164,7 +166,8 @@ extension GetNavigation on GetInterface {
   /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   ///
   /// or also like this:
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
@@ -184,7 +187,8 @@ extension GetNavigation on GetInterface {
   /// [predicate] can be used like this:
   /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   /// or also like
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> offNamedUntil<T>(
@@ -200,14 +204,15 @@ extension GetNavigation on GetInterface {
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
   ///
-  /// Pop the current named page and pushes a new [page] to the stack in its place
+  /// Pop the current named page and pushes a new [page] to the stack
+  /// in its place
   ///
   /// You can send any type of value to the other route in the [arguments].
   /// It is very similar to `offNamed()` but use a different approach
   ///
-  /// The `offNamed()` pop a page, and goes to the next. The `offAndToNamed()` goes
-  /// to the next page, and removes the previous one. The route transition
-  /// animation is different.
+  /// The `offNamed()` pop a page, and goes to the next. The
+  /// `offAndToNamed()` goes to the next page, and removes the previous one.
+  /// The route transition animation is different.
   Future<T> offAndToNamed<T>(String page,
       {Object arguments, int id, dynamic result}) {
     return global(id)
@@ -238,19 +243,24 @@ extension GetNavigation on GetInterface {
   /// [predicate] can be used like this:
   /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   /// or also like
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
-  Future<T> offAllNamed<T>(String newRouteName,
-      {RoutePredicate predicate, Object arguments, int id}) {
-    var route = (Route<dynamic> rota) => false;
-
+  Future<T> offAllNamed<T>(
+    String newRouteName, {
+    RoutePredicate predicate,
+    Object arguments,
+    int id,
+  }) {
     return global(id).currentState.pushNamedAndRemoveUntil(
-        newRouteName, predicate ?? route,
-        arguments: arguments);
+          newRouteName,
+          predicate ?? (_) => false,
+          arguments: arguments,
+        );
   }
 
   /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
@@ -265,8 +275,8 @@ extension GetNavigation on GetInterface {
   ///
   /// Pop the current page, snackbar, dialog or bottomsheet in the stack
   ///
-  /// if your set [closeOverlays] to true, Get.back() will close the currently open
-  /// snackbar/dialog/bottomsheet AND the current page
+  /// if your set [closeOverlays] to true, Get.back() will close the
+  /// currently open snackbar/dialog/bottomsheet AND the current page
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
@@ -303,10 +313,9 @@ extension GetNavigation on GetInterface {
     if ((times == null) || (times < 1)) {
       times = 1;
     }
-    int count = 0;
-    void back = global(id).currentState.popUntil((route) {
-      return count++ == times;
-    });
+    var count = 0;
+    var back = global(id).currentState.popUntil((route) => count++ == times);
+
     return back;
   }
 
@@ -346,8 +355,8 @@ extension GetNavigation on GetInterface {
     bool preventDuplicates = true,
     Duration duration,
   }) {
-    String routename = "/${page.runtimeType.toString()}";
-    if (preventDuplicates && routename == currentRoute) {
+    var routeName = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
     return global(id).currentState.pushReplacement(GetPageRoute(
@@ -355,7 +364,7 @@ extension GetNavigation on GetInterface {
         page: () => page,
         binding: binding,
         settings: RouteSettings(arguments: arguments),
-        routeName: routename,
+        routeName: routeName,
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
@@ -380,7 +389,8 @@ extension GetNavigation on GetInterface {
   /// [predicate] can be used like this:
   /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
   /// or also like
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog is closed
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
@@ -404,23 +414,22 @@ extension GetNavigation on GetInterface {
     Duration duration,
     Transition transition,
   }) {
-    var route = (Route<dynamic> rota) => false;
-
-    String routename = "/${page.runtimeType.toString()}";
+    var routeName = "/${page.runtimeType.toString()}";
 
     return global(id).currentState.pushAndRemoveUntil(
-        GetPageRoute(
-          opaque: opaque ?? true,
-          popGesture: popGesture ?? defaultPopGesture,
-          page: () => page,
-          binding: binding,
-          settings: RouteSettings(arguments: arguments),
-          fullscreenDialog: fullscreenDialog,
-          routeName: routename,
-          transition: transition ?? defaultTransition,
-          transitionDuration: duration ?? defaultDurationTransition,
-        ),
-        predicate ?? route);
+          GetPageRoute(
+            opaque: opaque ?? true,
+            popGesture: popGesture ?? defaultPopGesture,
+            page: () => page,
+            binding: binding,
+            settings: RouteSettings(arguments: arguments),
+            fullscreenDialog: fullscreenDialog,
+            routeName: routeName,
+            transition: transition ?? defaultTransition,
+            transitionDuration: duration ?? defaultDurationTransition,
+          ),
+          predicate ?? (_) => false,
+        );
   }
 
   /// Show a dialog
@@ -438,12 +447,11 @@ extension GetNavigation on GetInterface {
     assert(useRootNavigator != null);
     assert(debugCheckHasMaterialLocalizations(context));
 
-    final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
+    final theme = Theme.of(context, shadowThemeOnly: true);
     return generalDialog(
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
-        final Widget pageChild = widget;
-        Widget dialog = Builder(builder: (BuildContext context) {
+      pageBuilder: (buildContext, animation, secondaryAnimation) {
+        final pageChild = widget;
+        Widget dialog = Builder(builder: (context) {
           return theme != null
               ? Theme(data: theme, child: pageChild)
               : pageChild;
@@ -518,8 +526,8 @@ extension GetNavigation on GetInterface {
     double radius = 20.0,
     List<Widget> actions,
   }) {
-    bool leanCancel = onCancel != null || textCancel != null;
-    bool leanConfirm = onConfirm != null || textConfirm != null;
+    var leanCancel = onCancel != null || textCancel != null;
+    var leanConfirm = onConfirm != null || textConfirm != null;
     actions ??= [];
 
     if (cancel != null) {
@@ -632,79 +640,81 @@ extension GetNavigation on GetInterface {
     ));
   }
 
-  void rawSnackbar(
-      {String title,
-      String message,
-      Widget titleText,
-      Widget messageText,
-      Widget icon,
-      bool instantInit = true,
-      bool shouldIconPulse = true,
-      double maxWidth,
-      EdgeInsets margin = const EdgeInsets.all(0.0),
-      EdgeInsets padding = const EdgeInsets.all(16),
-      double borderRadius = 0.0,
-      Color borderColor,
-      double borderWidth = 1.0,
-      Color backgroundColor = const Color(0xFF303030),
-      Color leftBarIndicatorColor,
-      List<BoxShadow> boxShadows,
-      Gradient backgroundGradient,
-      FlatButton mainButton,
-      OnTap onTap,
-      Duration duration = const Duration(seconds: 3),
-      bool isDismissible = true,
-      SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
-      bool showProgressIndicator = false,
-      AnimationController progressIndicatorController,
-      Color progressIndicatorBackgroundColor,
-      Animation<Color> progressIndicatorValueColor,
-      SnackPosition snackPosition = SnackPosition.BOTTOM,
-      SnackStyle snackStyle = SnackStyle.FLOATING,
-      Curve forwardAnimationCurve = Curves.easeOutCirc,
-      Curve reverseAnimationCurve = Curves.easeOutCirc,
-      Duration animationDuration = const Duration(seconds: 1),
-      SnackbarStatusCallback snackbarStatus,
-      double barBlur = 0.0,
-      double overlayBlur = 0.0,
-      Color overlayColor,
-      Form userInputForm}) async {
-    GetBar getBar = GetBar(
-        snackbarStatus: snackbarStatus,
-        title: title,
-        message: message,
-        titleText: titleText,
-        messageText: messageText,
-        snackPosition: snackPosition,
-        borderRadius: borderRadius,
-        margin: margin,
-        duration: duration,
-        barBlur: barBlur,
-        backgroundColor: backgroundColor,
-        icon: icon,
-        shouldIconPulse: shouldIconPulse,
-        maxWidth: maxWidth,
-        padding: padding,
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        isDismissible: isDismissible,
-        dismissDirection: dismissDirection,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle,
-        forwardAnimationCurve: forwardAnimationCurve,
-        reverseAnimationCurve: reverseAnimationCurve,
-        animationDuration: animationDuration,
-        overlayBlur: overlayBlur,
-        overlayColor: overlayColor,
-        userInputForm: userInputForm);
+  void rawSnackbar({
+    String title,
+    String message,
+    Widget titleText,
+    Widget messageText,
+    Widget icon,
+    bool instantInit = true,
+    bool shouldIconPulse = true,
+    double maxWidth,
+    EdgeInsets margin = const EdgeInsets.all(0.0),
+    EdgeInsets padding = const EdgeInsets.all(16),
+    double borderRadius = 0.0,
+    Color borderColor,
+    double borderWidth = 1.0,
+    Color backgroundColor = const Color(0xFF303030),
+    Color leftBarIndicatorColor,
+    List<BoxShadow> boxShadows,
+    Gradient backgroundGradient,
+    FlatButton mainButton,
+    OnTap onTap,
+    Duration duration = const Duration(seconds: 3),
+    bool isDismissible = true,
+    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
+    bool showProgressIndicator = false,
+    AnimationController progressIndicatorController,
+    Color progressIndicatorBackgroundColor,
+    Animation<Color> progressIndicatorValueColor,
+    SnackPosition snackPosition = SnackPosition.BOTTOM,
+    SnackStyle snackStyle = SnackStyle.FLOATING,
+    Curve forwardAnimationCurve = Curves.easeOutCirc,
+    Curve reverseAnimationCurve = Curves.easeOutCirc,
+    Duration animationDuration = const Duration(seconds: 1),
+    SnackbarStatusCallback snackbarStatus,
+    double barBlur = 0.0,
+    double overlayBlur = 0.0,
+    Color overlayColor,
+    Form userInputForm,
+  }) async {
+    final getBar = GetBar(
+      snackbarStatus: snackbarStatus,
+      title: title,
+      message: message,
+      titleText: titleText,
+      messageText: messageText,
+      snackPosition: snackPosition,
+      borderRadius: borderRadius,
+      margin: margin,
+      duration: duration,
+      barBlur: barBlur,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      shouldIconPulse: shouldIconPulse,
+      maxWidth: maxWidth,
+      padding: padding,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      leftBarIndicatorColor: leftBarIndicatorColor,
+      boxShadows: boxShadows,
+      backgroundGradient: backgroundGradient,
+      mainButton: mainButton,
+      onTap: onTap,
+      isDismissible: isDismissible,
+      dismissDirection: dismissDirection,
+      showProgressIndicator: showProgressIndicator ?? false,
+      progressIndicatorController: progressIndicatorController,
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+      progressIndicatorValueColor: progressIndicatorValueColor,
+      snackStyle: snackStyle,
+      forwardAnimationCurve: forwardAnimationCurve,
+      reverseAnimationCurve: reverseAnimationCurve,
+      animationDuration: animationDuration,
+      overlayBlur: overlayBlur,
+      overlayColor: overlayColor,
+      userInputForm: userInputForm,
+    );
 
     if (instantInit) {
       getBar.show();
@@ -715,45 +725,48 @@ extension GetNavigation on GetInterface {
     }
   }
 
-  void snackbar(String title, String message,
-      {Color colorText,
-      Duration duration,
+  void snackbar(
+    String title,
+    String message, {
+    Color colorText,
+    Duration duration,
 
-      /// with instantInit = false you can put snackbar on initState
-      bool instantInit = true,
-      SnackPosition snackPosition,
-      Widget titleText,
-      Widget messageText,
-      Widget icon,
-      bool shouldIconPulse,
-      double maxWidth,
-      EdgeInsets margin,
-      EdgeInsets padding,
-      double borderRadius,
-      Color borderColor,
-      double borderWidth,
-      Color backgroundColor,
-      Color leftBarIndicatorColor,
-      List<BoxShadow> boxShadows,
-      Gradient backgroundGradient,
-      FlatButton mainButton,
-      OnTap onTap,
-      bool isDismissible,
-      bool showProgressIndicator,
-      SnackDismissDirection dismissDirection,
-      AnimationController progressIndicatorController,
-      Color progressIndicatorBackgroundColor,
-      Animation<Color> progressIndicatorValueColor,
-      SnackStyle snackStyle,
-      Curve forwardAnimationCurve,
-      Curve reverseAnimationCurve,
-      Duration animationDuration,
-      double barBlur,
-      double overlayBlur,
-      SnackbarStatusCallback snackbarStatus,
-      Color overlayColor,
-      Form userInputForm}) async {
-    GetBar getBar = GetBar(
+    /// with instantInit = false you can put snackbar on initState
+    bool instantInit = true,
+    SnackPosition snackPosition,
+    Widget titleText,
+    Widget messageText,
+    Widget icon,
+    bool shouldIconPulse,
+    double maxWidth,
+    EdgeInsets margin,
+    EdgeInsets padding,
+    double borderRadius,
+    Color borderColor,
+    double borderWidth,
+    Color backgroundColor,
+    Color leftBarIndicatorColor,
+    List<BoxShadow> boxShadows,
+    Gradient backgroundGradient,
+    FlatButton mainButton,
+    OnTap onTap,
+    bool isDismissible,
+    bool showProgressIndicator,
+    SnackDismissDirection dismissDirection,
+    AnimationController progressIndicatorController,
+    Color progressIndicatorBackgroundColor,
+    Animation<Color> progressIndicatorValueColor,
+    SnackStyle snackStyle,
+    Curve forwardAnimationCurve,
+    Curve reverseAnimationCurve,
+    Duration animationDuration,
+    double barBlur,
+    double overlayBlur,
+    SnackbarStatusCallback snackbarStatus,
+    Color overlayColor,
+    Form userInputForm,
+  }) async {
+    final getBar = GetBar(
         snackbarStatus: snackbarStatus,
         titleText: (title == null)
             ? null
@@ -761,17 +774,19 @@ extension GetNavigation on GetInterface {
                 Text(
                   title,
                   style: TextStyle(
-                      color: colorText ?? Colors.black,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16),
+                    color: colorText ?? Colors.black,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                  ),
                 ),
         messageText: messageText ??
             Text(
               message,
               style: TextStyle(
-                  color: colorText ?? Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 14),
+                color: colorText ?? Colors.black,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
+              ),
             ),
         snackPosition: snackPosition ?? SnackPosition.TOP,
         borderRadius: borderRadius ?? 15,
@@ -816,10 +831,13 @@ extension GetNavigation on GetInterface {
 
   void addPages(List<GetPage> getPages) {
     if (getPages != null) {
-      if (routeTree == null) routeTree = ParseRouteTree();
-      getPages.forEach((element) {
+      if (routeTree == null) {
+        routeTree = ParseRouteTree();
+      }
+
+      for (final element in getPages) {
         routeTree.addRoute(element);
-      });
+      }
     }
   }
 
@@ -922,6 +940,8 @@ extension GetNavigation on GetInterface {
 
   RouteSettings get routeSettings => settings;
 
+  // FIXME: wouldn't a direct set suffice here?
+  // ignore: use_setters_to_change_properties
   void setSettings(RouteSettings settings) {
     this.settings = settings;
   }

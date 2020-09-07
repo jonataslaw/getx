@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 import 'util/matcher.dart';
 
 class Mock {
@@ -19,6 +20,7 @@ class DisposableController extends DisposableInterface {
   }
 }
 
+// ignore: one_member_abstracts
 abstract class Service {
   String post();
 }
@@ -32,7 +34,7 @@ class Api implements Service {
 
 void main() {
   test('Get.putAsync test', () async {
-    await Get.putAsync<String>(() => Mock.test());
+    await Get.putAsync<String>(Mock.test);
     expect('test', Get.find<String>());
     Get.reset();
   });
@@ -70,9 +72,7 @@ void main() {
   });
 
   group('test put, delete and check onInit execution', () {
-    tearDownAll(() {
-      Get.reset();
-    });
+    tearDownAll(Get.reset);
 
     test('Get.put test with init check', () async {
       final instance = Get.put<DisposableController>(DisposableController());

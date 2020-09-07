@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:get/get.dart';
+
+import '../../../../get.dart';
 import '../rx_core/rx_interface.dart';
 import 'utils/debouncer.dart';
 
@@ -16,13 +17,15 @@ Worker ever<T>(RxInterface<T> listener, Function(T) callback,
   return Worker(cancel, '[ever]');
 }
 
-Worker everAll(List<RxInterface> listener, Function(dynamic) callback,
+Worker everAll(List<RxInterface> listeners, Function(dynamic) callback,
     {bool condition = true}) {
-  List<StreamSubscription> evers = <StreamSubscription>[];
+  var evers = <StreamSubscription>[];
 
-  for (var i in listener) {
-    StreamSubscription sub = i.subject.stream.listen((event) {
-      if (condition) callback(event);
+  for (final listener in listeners) {
+    final sub = listener.subject.stream.listen((event) {
+      if (condition) {
+        callback(event);
+      }
     });
     evers.add(sub);
   }
@@ -37,23 +40,26 @@ Worker everAll(List<RxInterface> listener, Function(dynamic) callback,
   return Worker(cancel, '[everAll]');
 }
 
-Worker once<T>(RxInterface<T> listener, Function(T) callback,
-    {bool condition = true}) {
-  StreamSubscription sub;
-  int times = 0;
+Worker once<T>(
+  RxInterface<T> listener,
+  Function(T) callback, {
+  bool condition = true,
+}) {
+  StreamSubscription subscription;
+  var times = 0;
 
-  sub = listener.subject.stream.listen((event) {
+  subscription = listener.subject.stream.listen((event) {
     if (!condition) return null;
     times++;
     if (times < 2) {
       callback(event);
     } else {
-      sub.cancel();
+      subscription.cancel();
     }
   });
 
   Future<void> cancel() {
-    return sub.cancel();
+    return subscription.cancel();
   }
 
   return Worker(cancel, '[once]');
@@ -61,7 +67,7 @@ Worker once<T>(RxInterface<T> listener, Function(T) callback,
 
 Worker interval<T>(RxInterface<T> listener, Function(T) callback,
     {Duration time, bool condition = true}) {
-  bool debounceActive = false;
+  var debounceActive = false;
   StreamSubscription sub = listener.subject.stream.listen((event) async {
     if (debounceActive || !condition) return null;
     debounceActive = true;

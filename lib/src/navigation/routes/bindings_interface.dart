@@ -1,9 +1,11 @@
-import 'package:get/get.dart';
+import '../../../get.dart';
 
 /// [Bindings] should be extended or implemented.
-/// When using [GetMaterialApp], all [GetPage]s and navigation methods (like Get.to())
-/// have a [binding] property that takes an instance of Bindings to manage the
+/// When using [GetMaterialApp], all [GetPage]s and navigation
+/// methods (like Get.to()) have a [binding] property that takes an
+/// instance of Bindings to manage the
 /// dependencies() (via [Get.put()]) for the Route you are opening.
+// ignore: one_member_abstracts
 abstract class Bindings {
   void dependencies();
 }

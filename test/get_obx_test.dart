@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  Controller controller = Get.put<Controller>(Controller());
+  final controller = Get.put(Controller());
   testWidgets("GetxController smoke test", (tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -11,31 +11,17 @@ void main() {
           children: [
             Obx(
               () => Column(children: [
-                Text(
-                  'Count: ${controller.counter.value}',
-                ),
-                Text(
-                  'Double: ${controller.doubleNum.value}',
-                ),
-                Text(
-                  'String: ${controller.string.value}',
-                ),
-                Text(
-                  'List: ${controller.list.length}',
-                ),
-                Text(
-                  'Bool: ${controller.boolean.value}',
-                ),
-                Text(
-                  'Map: ${controller.map.length}',
-                ),
+                Text('Count: ${controller.counter.value}'),
+                Text('Double: ${controller.doubleNum.value}'),
+                Text('String: ${controller.string.value}'),
+                Text('List: ${controller.list.length}'),
+                Text('Bool: ${controller.boolean.value}'),
+                Text('Map: ${controller.map.length}'),
                 FlatButton(
                   child: Text("increment"),
-                  onPressed: () => controller.increment(),
+                  onPressed: controller.increment,
                 ),
-                Obx(() => Text(
-                      'Obx: ${controller.map.length}',
-                    ))
+                Obx(() => Text('Obx: ${controller.map.length}'))
               ]),
             ),
           ],
@@ -68,12 +54,12 @@ void main() {
 class Controller extends GetxController {
   static Controller get to => Get.find();
 
-  var counter = 0.obs;
-  var doubleNum = 0.0.obs;
-  var string = "string".obs;
-  var list = [].obs;
-  var map = {}.obs;
-  var boolean = true.obs;
+  RxInt counter = 0.obs;
+  RxDouble doubleNum = 0.0.obs;
+  RxString string = "string".obs;
+  RxList list = [].obs;
+  RxMap map = {}.obs;
+  RxBool boolean = true.obs;
 
   void increment() {
     counter.value++;

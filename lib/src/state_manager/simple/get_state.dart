@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/root/smart_management.dart';
-import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
-import 'package:get/state_manager.dart';
 
+import '../../../state_manager.dart';
+import '../../instance/get_instance.dart';
+import '../../navigation/root/smart_management.dart';
+import '../rx/rx_core/rx_interface.dart';
 import 'simple_builder.dart';
 
 typedef Disposer = void Function();
@@ -18,12 +18,19 @@ class GetxController extends DisposableInterface {
 
   /// Update GetBuilder with update();
   void update([List<String> ids, bool condition = true]) {
-    if (!condition) return;
-    (ids == null)
-        ? _updaters.forEach((rs) => rs(() {}))
-        : ids.forEach((element) {
-            _updatersIds[element]?.call(() {});
-          });
+    if (!condition) {
+      return;
+    }
+
+    if (ids == null) {
+      for (final updater in _updaters) {
+        updater(() {});
+      }
+    } else {
+      for (final id in ids) {
+        _updatersIds[id]?.call(() {});
+      }
+    }
   }
 
   Disposer addListener(StateSetter listener) {
@@ -53,6 +60,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
+
   const GetBuilder({
     Key key,
     this.init,
@@ -68,12 +76,13 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.didUpdateWidget,
   })  : assert(builder != null),
         super(key: key);
+
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
 class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
-  GetxController controller;
+  T controller;
   bool isCreator = false;
   final HashSet<Disposer> disposers = HashSet<Disposer>();
   Disposer remove;
@@ -129,9 +138,9 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
       if (remove != null) remove();
     }
 
-    disposers.forEach((element) {
-      element();
-    });
+    for (final disposer in disposers) {
+      disposer();
+    }
   }
 
   @override
@@ -157,6 +166,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
 /// like Rx() does with Obx().
 class Value<T> extends GetxController {
   Value([this._value]);
+
   T _value;
 
   T get value {

@@ -4,22 +4,23 @@ class GetUtils {
 
   /// In dart2js (in flutter v1.17) a var by default is undefined.
   /// *Use this only if you are in version <- 1.17*.
-  /// So we assure the null type in json convertions to avoid the "value":value==null?null:value;
-  /// someVar.nil will force the null type if the var is null or undefined.
+  /// So we assure the null type in json convertions to avoid the
+  /// "value":value==null?null:value; someVar.nil will force the null type
+  /// if the var is null or undefined.
   /// `nil` taken from ObjC just to have a shorter sintax.
   static dynamic nil(dynamic s) => s == null ? null : s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
   static bool isNullOrBlank(dynamic s) {
     if (isNull(s)) return true;
-    switch (s.runtimeType) {
+
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
       case Set:
       case Iterable:
-        return s.isEmpty;
-        break;
+        return s.isEmpty as bool;
       default:
         return s.toString() == 'null' || s.toString().trim().isEmpty;
     }
@@ -46,48 +47,54 @@ class GetUtils {
 
   /// Checks if string is an video file.
   static bool isVideo(String filePath) {
-    String ext = filePath.toLowerCase();
-    return (((((ext.endsWith(".mp4") || ext.endsWith(".avi")) ||
-                        ext.endsWith(".wmv")) ||
-                    ext.endsWith(".rmvb")) ||
-                ext.endsWith(".mpg")) ||
-            ext.endsWith(".mpeg")) ||
+    var ext = filePath.toLowerCase();
+
+    return ext.endsWith(".mp4") ||
+        ext.endsWith(".avi") ||
+        ext.endsWith(".wmv") ||
+        ext.endsWith(".rmvb") ||
+        ext.endsWith(".mpg") ||
+        ext.endsWith(".mpeg") ||
         ext.endsWith(".3gp");
   }
 
   /// Checks if string is an image file.
   static bool isImage(String filePath) {
-    String ext = filePath.toLowerCase();
-    return (((ext.endsWith(".jpg") || ext.endsWith(".jpeg")) ||
-                ext.endsWith(".png")) ||
-            ext.endsWith(".gif")) ||
+    final ext = filePath.toLowerCase();
+
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
         ext.endsWith(".bmp");
   }
 
   /// Checks if string is an audio file.
   static bool isAudio(String filePath) {
-    String ext = filePath.toLowerCase();
-    return (((ext.endsWith(".mp3") || ext.endsWith(".wav")) ||
-                ext.endsWith(".wma")) ||
-            ext.endsWith(".amr")) ||
+    final ext = filePath.toLowerCase();
+
+    return ext.endsWith(".mp3") ||
+        ext.endsWith(".wav") ||
+        ext.endsWith(".wma") ||
+        ext.endsWith(".amr") ||
         ext.endsWith(".ogg");
   }
 
   /// Checks if string is an powerpoint file.
   static bool isPPT(String filePath) {
-    String ext = filePath.toLowerCase();
+    final ext = filePath.toLowerCase();
     return ext.endsWith(".ppt") || ext.endsWith(".pptx");
   }
 
   /// Checks if string is an word file.
   static bool isWord(String filePath) {
-    String ext = filePath.toLowerCase();
+    final ext = filePath.toLowerCase();
     return ext.endsWith(".doc") || ext.endsWith(".docx");
   }
 
   /// Checks if string is an excel file.
   static bool isExcel(String filePath) {
-    String ext = filePath.toLowerCase();
+    final ext = filePath.toLowerCase();
     return ext.endsWith(".xls") || ext.endsWith(".xlsx");
   }
 
@@ -174,9 +181,11 @@ class GetUtils {
 
   /// Checks if string is Palindrom.
   static bool isPalindrom(String s) {
-    bool isPalindrom = true;
+    var isPalindrom = true;
     for (var i = 0; i < s.length; i++) {
-      if (s[i] != s[s.length - i - 1]) isPalindrom = false;
+      if (s[i] != s[s.length - i - 1]) {
+        isPalindrom = false;
+      }
     }
     return isPalindrom;
   }
@@ -187,13 +196,15 @@ class GetUtils {
     if ((s is String || s is List) && !isNullOrBlank(s)) {
       var first = s[0];
       var isOneAKind = true;
-      for (var i = 0; i < s.length; i++) {
+      var len = s.length as num;
+      for (var i = 0; i < len; i++) {
         if (s[i] != first) isOneAKind = false;
       }
       return isOneAKind;
     }
+
     if (s is int) {
-      String value = s.toString();
+      var value = s.toString();
       var first = value[0];
       var isOneAKind = true;
       for (var i = 0; i < value.length; i++) {
@@ -215,20 +226,17 @@ class GetUtils {
   /// Checks if length of data is LOWER than maxLength.
   static bool isLengthLowerThan(dynamic s, int maxLength) {
     if (isNull(s)) return (maxLength <= 0) ? true : false;
-    switch (s.runtimeType) {
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
       case Set:
       case Iterable:
-        return s.length < maxLength;
-        break;
+        return (s.length as num) < maxLength;
       case int:
         return s.toString().length < maxLength;
-        break;
       case double:
         return s.toString().replaceAll('.', '').length < maxLength;
-        break;
       default:
         return false;
     }
@@ -237,20 +245,17 @@ class GetUtils {
   /// Checks if length of data is GREATER than maxLength.
   static bool isLengthGreaterThan(dynamic s, int maxLength) {
     if (isNull(s)) return false;
-    switch (s.runtimeType) {
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
       case Set:
       case Iterable:
-        return s.length > maxLength;
-        break;
+        return (s.length as num) > maxLength;
       case int:
         return s.toString().length > maxLength;
-        break;
       case double:
         return s.toString().replaceAll('.', '').length > maxLength;
-        break;
       default:
         return false;
     }
@@ -259,13 +264,13 @@ class GetUtils {
   /// Checks if length of data is GREATER OR EQUAL to maxLength.
   static bool isLengthGreaterOrEqual(dynamic s, int maxLength) {
     if (isNull(s)) return false;
-    switch (s.runtimeType) {
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
       case Set:
       case Iterable:
-        return s.length >= maxLength;
+        return (s.length as num) >= maxLength;
         break;
       case int:
         return s.toString().length >= maxLength;
@@ -281,17 +286,15 @@ class GetUtils {
   /// Checks if length of data is LOWER OR EQUAL to maxLength.
   static bool isLengthLowerOrEqual(dynamic s, int maxLength) {
     if (isNull(s)) return false;
-    switch (s.runtimeType) {
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
       case Set:
       case Iterable:
-        return s.length <= maxLength;
-        break;
+        return (s.length as num) <= maxLength;
       case int:
         return s.toString().length <= maxLength;
-        break;
       case double:
         return s.toString().replaceAll('.', '').length <= maxLength;
       default:
@@ -302,7 +305,7 @@ class GetUtils {
   /// Checks if length of data is EQUAL to maxLength.
   static bool isLengthEqualTo(dynamic s, int maxLength) {
     if (isNull(s)) return false;
-    switch (s.runtimeType) {
+    switch (s.runtimeType as Type) {
       case String:
       case List:
       case Map:
@@ -328,14 +331,16 @@ class GetUtils {
         isLengthLowerOrEqual(s, maxLength);
   }
 
-  /// Checks if a contains b (Treating or interpreting upper- and lowercase letters as being the same).
+  /// Checks if a contains b (Treating or interpreting upper- and lowercase
+  /// letters as being the same).
   static bool isCaseInsensitiveContains(String a, String b) =>
       a.toLowerCase().contains(b.toLowerCase());
 
-  /// Checks if a contains b or b contains a (Treating or interpreting upper- and lowercase letters as being the same).
+  /// Checks if a contains b or b contains a (Treating or
+  /// interpreting upper- and lowercase letters as being the same).
   static bool isCaseInsensitiveContainsAny(String a, String b) {
-    String lowA = a.toLowerCase();
-    String lowB = b.toLowerCase();
+    final lowA = a.toLowerCase();
+    final lowB = b.toLowerCase();
     return lowA.contains(lowB) || lowB.contains(lowA);
   }
 
@@ -362,8 +367,7 @@ class GetUtils {
     if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) return false;
 
     // Dividir dígitos
-    List<int> digits =
-        numbers.split('').map((String d) => int.parse(d)).toList();
+    var digits = numbers.split('').map(int.parse).toList();
 
     // Calcular o primeiro dígito verificador
     var calcDv1 = 0;
@@ -404,8 +408,7 @@ class GetUtils {
     if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) return false;
 
     // split the digits
-    List<int> digits =
-        numbers.split('').map((String d) => int.parse(d)).toList();
+    var digits = numbers.split('').map(int.parse).toList();
 
     // Calculate the first verifier digit
     var calcDv1 = 0;
@@ -441,9 +444,11 @@ class GetUtils {
     if (isNullOrBlank(s)) return null;
     if (firstOnly) return capitalizeFirst(s);
 
-    List lst = s.split(' ');
-    String newStr = '';
-    for (var s in lst) newStr += capitalizeFirst(s);
+    var lst = s.split(' ');
+    var newStr = '';
+    for (var s in lst) {
+      newStr += capitalizeFirst(s);
+    }
     return newStr;
   }
 
@@ -470,9 +475,10 @@ class GetUtils {
 
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
-  /// If firstword only is true, then the example return is "12312" (first found numeric word)
+  /// If firstword only is true, then the example return is "12312"
+  /// (first found numeric word)
   static String numericOnly(String s, {bool firstWordOnly = false}) {
-    String numericOnlyStr = '';
+    var numericOnlyStr = '';
     for (var i = 0; i < s.length; i++) {
       if (isNumericOnly(s[i])) numericOnlyStr += s[i];
       if (firstWordOnly && numericOnlyStr.isNotEmpty && s[i] == " ") break;
@@ -480,6 +486,7 @@ class GetUtils {
     return numericOnlyStr;
   }
 
-  static bool hasMatch(String s, Pattern p) =>
-      (s == null) ? false : RegExp(p).hasMatch(s);
+  static bool hasMatch(String value, String pattern) {
+    return (value == null) ? false : RegExp(pattern).hasMatch(value);
+  }
 }

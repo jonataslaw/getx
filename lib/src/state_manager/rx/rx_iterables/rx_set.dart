@@ -11,7 +11,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     _set = initial;
   }
 
-  RxSet<E> _set = Set<E>();
+  Set<E> _set = <E>{};
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -27,28 +27,23 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   bool get isNotEmpty => value.isNotEmpty;
 
   StreamController<Set<E>> subject = StreamController<Set<E>>.broadcast();
-  Map<Stream<Set<E>>, StreamSubscription> _subscriptions = Map();
+  final Map<Stream<Set<E>>, StreamSubscription> _subscriptions = {};
 
   /// Adds [item] only if [condition] resolves to true.
-  void addIf(condition, E item) {
+  void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) add(item);
   }
 
   /// Adds all [items] only if [condition] resolves to true.
-  void addAllIf(condition, Iterable<E> items) {
+  void addAllIf(dynamic condition, Iterable<E> items) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) addAll(items);
   }
 
-  operator []=(int index, E val) {
-    _set[index] = val;
-    subject.add(_set);
-  }
-
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
-  RxSet<E> operator +(Iterable<E> val) {
+  RxSet<E> operator +(Set<E> val) {
     addAll(val);
     subject.add(_set);
     return this;
@@ -61,6 +56,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     return val;
   }
 
+  @override
   void addAll(Iterable<E> item) {
     _set.addAll(item);
     subject.add(_set);
@@ -76,16 +72,6 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     if (item != null) addAll(item);
   }
 
-  void insert(int index, E item) {
-    _set.insert(index, item);
-    subject.add(_set);
-  }
-
-  void insertAll(int index, Iterable<E> iterable) {
-    _set.insertAll(index, iterable);
-    subject.add(_set);
-  }
-
   int get length => value.length;
 
   /// Removes an item from the list.
@@ -94,28 +80,11 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   ///
   /// Returns whether the item was present in the list.
   bool remove(Object item) {
-    bool hasRemoved = _set.remove(item);
+    var hasRemoved = _set.remove(item);
     if (hasRemoved) {
       subject.add(_set);
     }
     return hasRemoved;
-  }
-
-  E removeAt(int index) {
-    E item = _set.removeAt(index);
-    subject.add(_set);
-    return item;
-  }
-
-  E removeLast() {
-    E item = _set.removeLast();
-    subject.add(_set);
-    return item;
-  }
-
-  void removeRange(int start, int end) {
-    _set.removeRange(start, end);
-    subject.add(_set);
   }
 
   void removeWhere(bool Function(E) test) {
@@ -128,12 +97,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     subject.add(_set);
   }
 
-  void sort([int compare(E a, E b)]) {
-    _set.sort();
-    subject.add(_set);
-  }
-
-  close() {
+  void close() {
     _subscriptions.forEach((observable, subscription) {
       subscription.cancel();
     });
@@ -168,16 +132,16 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   String get string => value.toString();
 
-  addListener(Stream<Set<E>> rxGetx) {
-    if (_subscriptions.containsKey(rxGetx)) {
+  void addListener(Stream<Set<E>> rxGetX) {
+    if (_subscriptions.containsKey(rxGetX)) {
       return;
     }
-    _subscriptions[rxGetx] = rxGetx.listen((data) {
+    _subscriptions[rxGetX] = rxGetX.listen((data) {
       subject.add(data);
     });
   }
 
-  set value(Iterable<E> val) {
+  set value(Set<E> val) {
     if (_set == val) return;
     _set = val;
     subject.add(_set);
@@ -189,8 +153,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  void bindStream(Stream<Iterable<E>> stream) =>
-      stream.listen((va) => value = va);
+  void bindStream(Stream<Set<E>> stream) => stream.listen((va) => value = va);
 
   @override
   E get first => value.first;
@@ -362,9 +325,10 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
 extension SetExtension<E> on Set<E> {
   RxSet<E> get obs {
-    if (this != null)
+    if (this != null) {
       return RxSet<E>(<E>{})..addAllNonNull(this);
-    else
+    } else {
       return RxSet<E>(null);
+    }
   }
 }

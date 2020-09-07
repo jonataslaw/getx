@@ -1,5 +1,6 @@
-import 'package:get/instance_manager.dart';
 import 'dart:developer' as developer;
+
+import '../../instance_manager.dart';
 
 typedef LogWriterCallback = void Function(String text, {bool isError});
 

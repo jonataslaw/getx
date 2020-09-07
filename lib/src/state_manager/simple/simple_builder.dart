@@ -9,7 +9,8 @@ typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
 typedef ValueBuilderBuilder<T> = Widget Function(
     T snapshot, ValueBuilderUpdateCallback<T> updater);
 
-/// Manages a local state like ObxValue, but uses a callback instead of a Rx value.
+/// Manages a local state like ObxValue, but uses a callback instead of
+/// a Rx value.
 ///
 /// Example:
 /// ```
@@ -25,7 +26,7 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
   final T initialValue;
-  final ValueBuilderBuilder builder;
+  final ValueBuilderBuilder<T> builder;
   final void Function() onDispose;
   final void Function(T) onUpdate;
 
@@ -78,9 +79,11 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
 // It's a experimental feature
 class SimpleBuilder extends StatefulWidget {
   final Widget Function(BuildContext) builder;
+
   const SimpleBuilder({Key key, @required this.builder})
       : assert(builder != null),
         super(key: key);
+
   @override
   _SimpleBuilderState createState() => _SimpleBuilderState();
 }
@@ -91,25 +94,33 @@ class _SimpleBuilderState extends State<SimpleBuilder> {
   @override
   void dispose() {
     super.dispose();
-    disposers.forEach((element) => element());
+    for (final disposer in disposers) {
+      disposer();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return TaskManager.instance
-        .exchange(disposers, setState, widget.builder, context);
+    return TaskManager.instance.exchange(
+      disposers,
+      setState,
+      widget.builder,
+      context,
+    );
   }
 }
 
 class TaskManager {
   TaskManager._();
+
   static TaskManager _instance;
+
   static TaskManager get instance => _instance ??= TaskManager._();
 
   StateSetter _setter;
   HashSet<Disposer> _remove;
 
-  notify(HashSet<StateSetter> _updaters) {
+  void notify(HashSet<StateSetter> _updaters) {
     if (_setter != null) {
       if (!_updaters.contains(_setter)) {
         _updaters.add(_setter);
