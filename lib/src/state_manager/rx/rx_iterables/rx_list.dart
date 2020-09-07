@@ -28,7 +28,9 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   bool get isNotEmpty => value.isNotEmpty;
 
-  StreamController<List<E>> subject = StreamController<List<E>>.broadcast();
+  @override
+  StreamController<List<E>> subject = StreamController.broadcast();
+
   final Map<Stream<List<E>>, StreamSubscription> _subscriptions = {};
 
   void operator []=(int index, E val) {
@@ -188,9 +190,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
     if (_subscriptions.containsKey(rxGetX)) {
       return;
     }
-    _subscriptions[rxGetX] = rxGetX.listen((data) {
-      subject.add(data);
-    });
+    _subscriptions[rxGetX] = rxGetX.listen(subject.add);
   }
 
   set value(List<E> val) {

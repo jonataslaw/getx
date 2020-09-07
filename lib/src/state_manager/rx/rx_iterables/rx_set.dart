@@ -56,6 +56,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     return val;
   }
 
+  @override
   void addAll(Iterable<E> item) {
     _set.addAll(item);
     subject.add(_set);

@@ -504,6 +504,7 @@ class _CupertinoBackGestureDetectorState<T>
     }
     // FIXME: shouldn't we return a default here?
     //  or perhaps throw error
+    // ignore: avoid_returning_null
     return null;
   }
 
