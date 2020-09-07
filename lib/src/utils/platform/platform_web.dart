@@ -2,10 +2,11 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'package:get/utils.dart';
+import '../../../utils.dart';
 
 html.Navigator _navigator = html.window.navigator;
 
+// ignore: avoid_classes_with_only_static_members
 class GeneralPlatform {
   static bool get isWeb => true;
 
@@ -29,5 +30,6 @@ class GeneralPlatform {
   }
 
   static bool get isFuchsia => false;
+
   static bool get isDesktop => isMacOS || isWindows || isLinux;
 }

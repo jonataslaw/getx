@@ -4,11 +4,10 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/src/core/get_main.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/utils.dart';
-
+import '../../../route_manager.dart';
+import '../../../utils.dart';
+import '../../core/get_main.dart';
+import '../../instance/get_instance.dart';
 import 'bindings_interface.dart';
 import 'custom_transition.dart';
 import 'default_transitions.dart';
@@ -80,7 +79,8 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
-    // Don't perform outgoing animation if the next route is a fullscreen dialog.
+    // Don't perform outgoing animation if the next route is a
+    // fullscreen dialog.
     return nextRoute is PageRoute && !nextRoute.fullscreenDialog;
   }
 
@@ -95,8 +95,9 @@ class GetPageRoute<T> extends PageRoute<T> {
 
     if (route.animation.status != AnimationStatus.completed) return false;
 
-    if (route.secondaryAnimation.status != AnimationStatus.dismissed)
+    if (route.secondaryAnimation.status != AnimationStatus.dismissed) {
       return false;
+    }
 
     if (isPopGestureInProgress(route)) return false;
 
@@ -114,14 +115,17 @@ class GetPageRoute<T> extends PageRoute<T> {
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     if (binding != null) {
       binding.dependencies();
     }
     if (bindings != null) {
-      for (Bindings element in bindings) {
-        element.dependencies();
+      for (final binding in bindings) {
+        binding.dependencies();
       }
     }
     final pageWidget = page();
@@ -151,7 +155,6 @@ class GetPageRoute<T> extends PageRoute<T> {
           child: child,
           linearTransition: hasCurve);
     }
-
     if (this.customTransition != null) {
       return this.customTransition.buildTransition(
           context,
@@ -164,7 +167,9 @@ class GetPageRoute<T> extends PageRoute<T> {
                   enabledCallback: () => _isPopGestureEnabled<T>(this),
                   onStartPopGesture: () => _startPopGesture<T>(this),
                   child: child)
-              : child);
+              : child,
+          );
+
     }
 
     /// Apply the curve by default...
@@ -348,7 +353,7 @@ class GetPageRoute<T> extends PageRoute<T> {
 
       case Transition.native:
       default:
-        if (GetPlatform.isIOS)
+        if (GetPlatform.isIOS) {
           return CupertinoTransitions().buildTransitions(
               context,
               hasCurve,
@@ -361,6 +366,7 @@ class GetPageRoute<T> extends PageRoute<T> {
                       onStartPopGesture: () => _startPopGesture<T>(this),
                       child: child)
                   : child);
+        }
 
         return FadeUpwardsPageTransitionsBuilder().buildTransitions(
             this,
@@ -461,8 +467,8 @@ class _CupertinoBackGestureDetectorState<T>
 
   void _handleDragCancel() {
     assert(mounted);
-    // This can be called even if start is not called, paired with the "down" event
-    // that we don't consider here.
+    // This can be called even if start is not called, paired with
+    // the "down" event that we don't consider here.
     _backGestureController?.dragEnd(0.0);
     _backGestureController = null;
   }
@@ -478,6 +484,9 @@ class _CupertinoBackGestureDetectorState<T>
       case TextDirection.ltr:
         return value;
     }
+    // FIXME: shouldn't we return a default here?
+    //  or perhaps throw error
+    // ignore: avoid_returning_null
     return null;
   }
 
@@ -486,7 +495,7 @@ class _CupertinoBackGestureDetectorState<T>
     assert(debugCheckHasDirectionality(context));
     // For devices with notches, the drag area needs to be larger on the side
     // that has the notch.
-    double dragAreaWidth = Directionality.of(context) == TextDirection.ltr
+    var dragAreaWidth = Directionality.of(context) == TextDirection.ltr
         ? MediaQuery.of(context).padding.left
         : MediaQuery.of(context).padding.right;
     dragAreaWidth = max(dragAreaWidth, _kBackGestureWidth);
@@ -555,10 +564,12 @@ class _CupertinoBackGestureController<T> {
       // The closer the panel is to dismissing, the shorter the animation is.
       // We want to cap the animation time, but we want to use a linear curve
       // to determine it.
-      final int droppedPageForwardAnimationTime = min(
+      final droppedPageForwardAnimationTime = min(
         lerpDouble(
-                _kMaxDroppedSwipePageForwardAnimationTime, 0, controller.value)
-            .floor(),
+          _kMaxDroppedSwipePageForwardAnimationTime,
+          0,
+          controller.value,
+        ).floor(),
         _kMaxPageBackAnimationTime,
       );
       controller.animateTo(1.0,
@@ -568,15 +579,20 @@ class _CupertinoBackGestureController<T> {
       // This route is destined to pop at this point. Reuse navigator's pop.
       navigator.pop();
 
-      // The popping may have finished inline if already at the target destination.
+      // The popping may have finished inline if already at the target
+      // destination.
       if (controller.isAnimating) {
         // Otherwise, use a custom popping animation duration and curve.
-        final int droppedPageBackAnimationTime = lerpDouble(
-                0, _kMaxDroppedSwipePageForwardAnimationTime, controller.value)
-            .floor();
-        controller.animateBack(0.0,
-            duration: Duration(milliseconds: droppedPageBackAnimationTime),
-            curve: animationCurve);
+        final droppedPageBackAnimationTime = lerpDouble(
+          0,
+          _kMaxDroppedSwipePageForwardAnimationTime,
+          controller.value,
+        ).floor();
+        controller.animateBack(
+          0.0,
+          duration: Duration(milliseconds: droppedPageBackAnimationTime),
+          curve: animationCurve,
+        );
       }
     }
 
@@ -585,7 +601,7 @@ class _CupertinoBackGestureController<T> {
       // curve of the page transition mid-flight since CupertinoPageTransition
       // depends on userGestureInProgress.
       AnimationStatusListener animationStatusCallback;
-      animationStatusCallback = (AnimationStatus status) {
+      animationStatusCallback = (status) {
         navigator.didStopUserGesture();
         controller.removeStatusListener(animationStatusCallback);
       };

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/state_manager/rx/rx_widgets/rx_obx_widget.dart';
+
+import '../rx/rx_widgets/rx_obx_widget.dart';
 import 'get_state.dart';
 
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
@@ -11,6 +12,7 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
+
   const MixinBuilder({
     Key key,
     this.init,

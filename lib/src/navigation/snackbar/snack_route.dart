@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
+
 import 'snack.dart';
 
 class SnackRoute<T> extends OverlayRoute<T> {
@@ -11,14 +13,14 @@ class SnackRoute<T> extends OverlayRoute<T> {
     @required this.snack,
     RouteSettings settings,
   }) : super(settings: settings) {
-    this._builder = Builder(builder: (BuildContext innerContext) {
+    _builder = Builder(builder: (innerContext) {
       return GestureDetector(
         child: snack,
         onTap: snack.onTap != null ? () => snack.onTap(snack) : null,
       );
     });
 
-    _configureAlignment(this.snack.snackPosition);
+    _configureAlignment(snack.snackPosition);
     _snackbarStatus = snack.snackbarStatus;
   }
 
@@ -56,53 +58,55 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
-    List<OverlayEntry> overlays = [];
+    var overlays = <OverlayEntry>[];
 
     if (snack.overlayBlur > 0.0) {
       overlays.add(
         OverlayEntry(
-            builder: (BuildContext context) {
-              return GestureDetector(
-                onTap: snack.isDismissible ? () => snack.dismiss() : null,
-                child: AnimatedBuilder(
-                  animation: _filterBlurAnimation,
-                  builder: (context, child) {
-                    return BackdropFilter(
-                      filter: ImageFilter.blur(
-                          sigmaX: _filterBlurAnimation.value,
-                          sigmaY: _filterBlurAnimation.value),
-                      child: Container(
-                        constraints: BoxConstraints.expand(),
-                        color: _filterColorAnimation.value,
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-            maintainState: false,
-            opaque: opaque),
+          builder: (context) {
+            return GestureDetector(
+              onTap: snack.isDismissible ? () => snack.dismiss() : null,
+              child: AnimatedBuilder(
+                animation: _filterBlurAnimation,
+                builder: (context, child) {
+                  return BackdropFilter(
+                    filter: ImageFilter.blur(
+                        sigmaX: _filterBlurAnimation.value,
+                        sigmaY: _filterBlurAnimation.value),
+                    child: Container(
+                      constraints: BoxConstraints.expand(),
+                      color: _filterColorAnimation.value,
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          maintainState: false,
+          opaque: opaque,
+        ),
       );
     }
 
     overlays.add(
       OverlayEntry(
-          builder: (BuildContext context) {
-            final Widget annotatedChild = Semantics(
-              child: AlignTransition(
-                alignment: _animation,
-                child: snack.isDismissible
-                    ? _getDismissibleSnack(_builder)
-                    : _getSnack(),
-              ),
-              focused: false,
-              container: true,
-              explicitChildNodes: true,
-            );
-            return annotatedChild;
-          },
-          maintainState: false,
-          opaque: opaque),
+        builder: (context) {
+          final Widget annotatedChild = Semantics(
+            child: AlignTransition(
+              alignment: _animation,
+              child: snack.isDismissible
+                  ? _getDismissibleSnack(_builder)
+                  : _getSnack(),
+            ),
+            focused: false,
+            container: true,
+            explicitChildNodes: true,
+          );
+          return annotatedChild;
+        },
+        maintainState: false,
+        opaque: opaque,
+      ),
     );
 
     return overlays;
@@ -172,9 +176,9 @@ class SnackRoute<T> extends OverlayRoute<T> {
   AnimationController get controller => _controller;
   AnimationController _controller;
 
-  /// Called to create the animation controller that will drive the transitions to
-  /// this route from the previous one, and back to the previous route from this
-  /// one.
+  /// Called to create the animation controller that will drive the transitions
+  /// to this route from the previous one, and back to the previous route
+  /// from this one.
   AnimationController createAnimationController() {
     assert(!_transitionCompleter.isCompleted,
         'Cannot reuse a $runtimeType after disposing it.');
@@ -286,10 +290,15 @@ class SnackRoute<T> extends OverlayRoute<T> {
   @override
   TickerFuture didPush() {
     super.didPush();
-    assert(_controller != null,
-        '$runtimeType.didPush called before calling install() or after calling dispose().');
-    assert(!_transitionCompleter.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
+    assert(
+      _controller != null,
+      // ignore: lines_longer_than_80_chars
+      '$runtimeType.didPush called before calling install() or after calling dispose().',
+    );
+    assert(
+      !_transitionCompleter.isCompleted,
+      'Cannot reuse a $runtimeType after disposing it.',
+    );
     _animation.addStatusListener(_handleStatusChanged);
     _configureTimer();
     return _controller.forward();
@@ -297,21 +306,34 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   @override
   void didReplace(Route<dynamic> oldRoute) {
-    assert(_controller != null,
-        '$runtimeType.didReplace called before calling install() or after calling dispose().');
-    assert(!_transitionCompleter.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
-    if (oldRoute is SnackRoute) _controller.value = oldRoute._controller.value;
+    assert(
+      _controller != null,
+      // ignore: lines_longer_than_80_chars
+      '$runtimeType.didReplace called before calling install() or after calling dispose().',
+    );
+    assert(
+      !_transitionCompleter.isCompleted,
+      'Cannot reuse a $runtimeType after disposing it.',
+    );
+
+    if (oldRoute is SnackRoute) {
+      _controller.value = oldRoute._controller.value;
+    }
     _animation.addStatusListener(_handleStatusChanged);
     super.didReplace(oldRoute);
   }
 
   @override
   bool didPop(T result) {
-    assert(_controller != null,
-        '$runtimeType.didPop called before calling install() or after calling dispose().');
-    assert(!_transitionCompleter.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
+    assert(
+      _controller != null,
+      // ignore: lines_longer_than_80_chars
+      '$runtimeType.didPop called before calling install() or after calling dispose().',
+    );
+    assert(
+      !_transitionCompleter.isCompleted,
+      'Cannot reuse a $runtimeType after disposing it.',
+    );
 
     _result = result;
     _cancelTimer();
@@ -335,9 +357,9 @@ class SnackRoute<T> extends OverlayRoute<T> {
         _timer.cancel();
       }
       _timer = Timer(snack.duration, () {
-        if (this.isCurrent) {
+        if (isCurrent) {
           navigator.pop();
-        } else if (this.isActive) {
+        } else if (isActive) {
           navigator.removeRoute(this);
         }
       });

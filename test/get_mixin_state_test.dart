@@ -66,13 +66,14 @@ void main() {
 
   testWidgets(
     "MixinBuilder with build null",
-    (WidgetTester tester) async {
+    (tester) async {
       expect(
-          () => MixinBuilder<Controller>(
-                init: Controller(),
-                builder: null,
-              ),
-          throwsAssertionError);
+        () => MixinBuilder<Controller>(
+          init: Controller(),
+          builder: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
 }
@@ -80,12 +81,12 @@ void main() {
 class Controller extends GetxController {
   static Controller get to => Get.find();
   int count = 0;
-  var counter = 0.obs;
-  var doubleNum = 0.0.obs;
-  var string = "string".obs;
-  var list = [].obs;
-  var map = {}.obs;
-  var boolean = true.obs;
+  RxInt counter = 0.obs;
+  RxDouble doubleNum = 0.0.obs;
+  RxString string = "string".obs;
+  RxList list = [].obs;
+  RxMap map = {}.obs;
+  RxBool boolean = true.obs;
 
   void increment() {
     counter.value++;

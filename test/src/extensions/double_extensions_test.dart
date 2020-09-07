@@ -3,7 +3,7 @@ import 'package:get/utils.dart';
 
 void main() {
   test('Test for toPrecision on Double', () {
-    double testVar = 5.4545454;
+    var testVar = 5.4545454;
     expect(testVar.toPrecision(2), equals(5.45));
   });
 }

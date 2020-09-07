@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/root/smart_management.dart';
-import 'package:get/src/state_manager/rx/rx_core/rx_interface.dart';
-import 'package:get/state_manager.dart';
 
+import '../../../state_manager.dart';
+import '../../instance/get_instance.dart';
+import '../../navigation/root/smart_management.dart';
+import '../rx/rx_core/rx_interface.dart';
 import 'simple_builder.dart';
 
 // Changed to VoidCallback.
@@ -52,10 +52,15 @@ class GetxController extends DisposableInterface {
   /// [ids] can be reused among `GetBuilders` like group tags.
   /// The update will only notify the Widgets, if [condition] is true.
   void update([List<String> ids, bool condition = true]) {
-    if (!condition) return;
+
+    if (!condition) {
+      return;
+    }
     if (ids == null) {
 //      _updaters?.forEach((rs) => rs(() {})); //<old>
-      _updaters.forEach((rs) => rs());
+      for (final updater in _updaters) {
+        updater();
+      }
     } else {
       // @jonny, remove this commented code if it's not more optimized.
 //      for (final id in ids) {
@@ -152,9 +157,11 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
+
 class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
   GetxController controller;
+
   bool isCreator = false;
   VoidCallback remove;
 
@@ -221,7 +228,9 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
+
     remove?.call();
+
   }
 
   @override

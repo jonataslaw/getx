@@ -23,6 +23,7 @@ abstract class RxInterface<T> {
   T get value;
 
   /// Closes the stream
+  // FIXME: shouldn't we expose the returned future?
   void close() => subject?.close();
 
   /// Calls [callback] with current value, when the value changes.
@@ -30,26 +31,31 @@ abstract class RxInterface<T> {
 }
 
 /// Unlike GetxController, which serves to control events on each of its pages,
-/// GetxService is not automatically disposed (nor can be removed with Get.delete()).
-/// It is ideal for situations where, once started, that service will remain in memory,
-/// such as Auth control for example. Only way to remove it is Get.reset().
+/// GetxService is not automatically disposed (nor can be removed with
+/// Get.delete()).
+/// It is ideal for situations where, once started, that service will
+/// remain in memory, such as Auth control for example. Only way to remove
+/// it is Get.reset().
 abstract class GetxService extends DisposableInterface {}
 
 /// Special callable class to keep the contract of a regular method, and avoid
-/// overrides if you extend the class that uses it, as Dart has no final methods.
+/// overrides if you extend the class that uses it, as Dart has no final
+/// methods.
 /// Used in [DisposableInterface] to avoid the danger of overriding onStart.
 ///
 class _InternalFinalCallback<T> {
   T Function() callback;
+
   _InternalFinalCallback();
+
   T call() => callback.call();
 }
 
 abstract class DisposableInterface {
   /// Called at the exact moment the widget is allocated in memory.
   /// It uses an internal "callable" type, to avoid any @overrides in subclases.
-  /// This method should be internal and is required to define the lifetime cycle
-  /// of the subclass.
+  /// This method should be internal and is required to define the
+  /// lifetime cycle of the subclass.
   final onStart = _InternalFinalCallback<void>();
 
   bool _initialized = false;
@@ -72,16 +78,18 @@ abstract class DisposableInterface {
   /// You might use this to initialize something for the controller.
   void onInit() {}
 
-  /// Called 1 frame after onInit(). It is the perfect place to enter navigation events,
-  /// like snackbar, dialogs, or a new route, or async request.
+  /// Called 1 frame after onInit(). It is the perfect place to enter
+  /// navigation events, like snackbar, dialogs, or a new route, or
+  /// async request.
   void onReady() async {}
 
-  /// Called before [onDelete] method. [onClose] might be used to dispose resources
-  /// used by the controller. Like closing events, or streams before the controller is destroyed.
+  /// Called before [onDelete] method. [onClose] might be used to
+  /// dispose resources used by the controller. Like closing events,
+  /// or streams before the controller is destroyed.
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
-  void onClose() async {}
+  FutureOr onClose() async {}
 }
 
 /// Used like [SingleTickerProviderMixin] but only with Get Controllers.
@@ -89,7 +97,8 @@ abstract class DisposableInterface {
 ///
 /// Example:
 ///```
-///class SplashController extends GetxController with SingleGetTickerProviderMixin {
+///class SplashController extends GetxController with
+///    SingleGetTickerProviderMixin {
 ///  AnimationController _ac;
 ///
 ///  @override

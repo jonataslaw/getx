@@ -1,7 +1,5 @@
 import 'dart:async';
-
-import 'package:get/get.dart';
-
+import '../../../../get.dart';
 import '../rx_core/rx_interface.dart';
 import 'utils/debouncer.dart';
 
@@ -68,6 +66,7 @@ Worker everAll(List<RxInterface> listeners, Function(dynamic) callback,
 
   return Worker(cancel, '[everAll]');
 }
+
 
 /// [once()] will execute only 1 time when [condition] is met and cancel
 /// the subscription to the [listener] stream right after that.

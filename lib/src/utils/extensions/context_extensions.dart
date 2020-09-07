@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+
+import '../../../get.dart';
 
 extension ContextExtensionss on BuildContext {
   /// The same of [MediaQuery.of(context).size]
   Size get mediaQuerySize => MediaQuery.of(this).size;
 
   /// The same of [MediaQuery.of(context).size.height]
-  /// Note: updates when you rezise your screen (like on a browser or desktop window)
+  /// Note: updates when you rezise your screen (like on a browser or
+  /// desktop window)
   double get height => mediaQuerySize.height;
 
   /// The same of [MediaQuery.of(context).size.width]
-  /// Note: updates when you rezise your screen (like on a browser or desktop window)
+  /// Note: updates when you rezise your screen (like on a browser or
+  /// desktop window)
   double get width => mediaQuerySize.width;
 
   /// Gives you the power to get a portion of the height.
   /// Useful for responsive applications.
   ///
-  /// [dividedBy] is for when you want to have a portion of the value you would get
-  /// like for example: if you want a value that represents a third of the screen
-  /// you can set it to 3, and you will get a third of the height
+  /// [dividedBy] is for when you want to have a portion of the value you
+  /// would get like for example: if you want a value that represents a third
+  /// of the screen you can set it to 3, and you will get a third of the height
   ///
   /// [reducedBy] is a percentage value of how much of the height you want
   /// if you for example want 46% of the height, then you reduce it by 56%.
@@ -32,9 +35,9 @@ extension ContextExtensionss on BuildContext {
   /// Gives you the power to get a portion of the width.
   /// Useful for responsive applications.
   ///
-  /// [dividedBy] is for when you want to have a portion of the value you would get
-  /// like for example: if you want a value that represents a third of the screen
-  /// you can set it to 3, and you will get a third of the width
+  /// [dividedBy] is for when you want to have a portion of the value you
+  /// would get like for example: if you want a value that represents a third
+  /// of the screen you can set it to 3, and you will get a third of the width
   ///
   /// [reducedBy] is a percentage value of how much of the width you want
   /// if you for example want 46% of the width, then you reduce it by 56%.
@@ -105,9 +108,9 @@ extension ContextExtensionss on BuildContext {
   bool get isTablet => isSmallTablet || isLargeTablet;
 
   /// Returns a specific value according to the screen size
-  /// if the device width is higher than or equal to 1200 return [desktop] value.
-  /// if the device width is higher than  or equal to 600 and less than 1200
-  /// return [tablet] value.
+  /// if the device width is higher than or equal to 1200 return
+  /// [desktop] value. if the device width is higher than  or equal to 600
+  /// and less than 1200 return [tablet] value.
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
   T responsiveValue<T>({
@@ -116,7 +119,7 @@ extension ContextExtensionss on BuildContext {
     T desktop,
     T watch,
   }) {
-    double deviceWidth = mediaQuerySize.shortestSide;
+    var deviceWidth = mediaQuerySize.shortestSide;
     if (GetPlatform.isDesktop) {
       deviceWidth = mediaQuerySize.width;
     }
