@@ -4,7 +4,6 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import '../../../route_manager.dart';
 import '../../../utils.dart';
 import '../../core/get_main.dart';
@@ -143,29 +142,39 @@ class GetPageRoute<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    final finalCurve = curve ?? Get.defaultTransitionCurve;
+    final hasCurve = curve != null;
     if (fullscreenDialog && transition == null) {
+      /// by default, if no curve is defined, use Cupertino transition in the
+      /// default way (no linearTransition)... otherwise take the curve passed.
       return CupertinoFullscreenDialogTransition(
-          primaryRouteAnimation: animation,
+          primaryRouteAnimation: hasCurve
+              ? CurvedAnimation(parent: animation, curve: finalCurve)
+              : animation,
           secondaryRouteAnimation: secondaryAnimation,
           child: child,
-          linearTransition: true);
+          linearTransition: hasCurve);
+    }
+    if (this.customTransition != null) {
+      return this.customTransition.buildTransition(
+          context,
+          finalCurve,
+          alignment,
+          animation,
+          secondaryAnimation,
+          popGesture ?? Get.defaultPopGesture
+              ? _CupertinoBackGestureDetector<T>(
+                  enabledCallback: () => _isPopGestureEnabled<T>(this),
+                  onStartPopGesture: () => _startPopGesture<T>(this),
+                  child: child)
+              : child,
+          );
+
     }
 
-    if (customTransition != null) {
-      return customTransition.buildTransition(
-        context,
-        curve,
-        alignment,
-        animation,
-        secondaryAnimation,
-        popGesture ?? Get.defaultPopGesture
-            ? _CupertinoBackGestureDetector<T>(
-                enabledCallback: () => _isPopGestureEnabled<T>(this),
-                onStartPopGesture: () => _startPopGesture<T>(this),
-                child: child)
-            : child,
-      );
-    }
+    /// Apply the curve by default...
+    final iosAnimation = animation;
+    animation = CurvedAnimation(parent: animation, curve: finalCurve);
 
     switch (transition ?? Get.defaultTransition) {
       case Transition.leftToRight:
@@ -291,9 +300,9 @@ class GetPageRoute<T> extends PageRoute<T> {
       case Transition.cupertino:
         return CupertinoTransitions().buildTransitions(
             context,
-            curve,
+            hasCurve,
             alignment,
-            animation,
+            hasCurve ? animation : iosAnimation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
                 ? _CupertinoBackGestureDetector<T>(
@@ -343,40 +352,13 @@ class GetPageRoute<T> extends PageRoute<T> {
                 : child);
 
       case Transition.native:
-        if (GetPlatform.isIOS) {
-          return CupertinoTransitions().buildTransitions(
-              context,
-              curve,
-              alignment,
-              animation,
-              secondaryAnimation,
-              popGesture ?? Get.defaultPopGesture
-                  ? _CupertinoBackGestureDetector<T>(
-                      enabledCallback: () => _isPopGestureEnabled<T>(this),
-                      onStartPopGesture: () => _startPopGesture<T>(this),
-                      child: child)
-                  : child);
-        }
-
-        return FadeUpwardsPageTransitionsBuilder().buildTransitions(
-            this,
-            context,
-            animation,
-            secondaryAnimation,
-            popGesture ?? Get.defaultPopGesture
-                ? _CupertinoBackGestureDetector<T>(
-                    enabledCallback: () => _isPopGestureEnabled<T>(this),
-                    onStartPopGesture: () => _startPopGesture<T>(this),
-                    child: child)
-                : child);
-
       default:
         if (GetPlatform.isIOS) {
           return CupertinoTransitions().buildTransitions(
               context,
-              curve,
+              hasCurve,
               alignment,
-              animation,
+              hasCurve ? animation : iosAnimation,
               secondaryAnimation,
               popGesture ?? Get.defaultPopGesture
                   ? _CupertinoBackGestureDetector<T>(

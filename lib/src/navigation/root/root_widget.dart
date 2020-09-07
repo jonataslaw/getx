@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import '../../../get.dart';
 import '../../core/log.dart';
 import '../../instance/get_instance.dart';
@@ -211,7 +210,7 @@ class GetMaterialApp extends StatelessWidget {
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
-                transitionDuration ?? Get.defaultDurationTransition,
+                transitionDuration ?? Get.defaultTransitionDuration,
             defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
           );
         },

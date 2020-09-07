@@ -88,8 +88,9 @@ class SimpleBuilder extends StatefulWidget {
   _SimpleBuilderState createState() => _SimpleBuilderState();
 }
 
-class _SimpleBuilderState extends State<SimpleBuilder> {
-  final HashSet<Disposer> disposers = HashSet<Disposer>();
+class _SimpleBuilderState extends State<SimpleBuilder>
+    with GetStateUpdaterMixin {
+  final HashSet<VoidCallback> disposers = HashSet<VoidCallback>();
 
   @override
   void dispose() {
@@ -101,11 +102,12 @@ class _SimpleBuilderState extends State<SimpleBuilder> {
 
   @override
   Widget build(BuildContext context) {
+
     return TaskManager.instance.exchange(
-      disposers,
-      setState,
-      widget.builder,
-      context,
+     disposers, 
+     getUpdate, 
+     widget.builder, 
+     context,
     );
   }
 }
@@ -117,10 +119,15 @@ class TaskManager {
 
   static TaskManager get instance => _instance ??= TaskManager._();
 
-  StateSetter _setter;
-  HashSet<Disposer> _remove;
+//  StateSetter _setter;//<old>
+  GetStateUpdate _setter;
 
-  void notify(HashSet<StateSetter> _updaters) {
+
+  HashSet<VoidCallback> _remove;
+
+//  void notify(HashSet<StateSetter> _updaters) { //<old>
+  void notify(HashSet<GetStateUpdate> _updaters) {
+
     if (_setter != null) {
       if (!_updaters.contains(_setter)) {
         _updaters.add(_setter);
@@ -130,8 +137,9 @@ class TaskManager {
   }
 
   Widget exchange(
-    HashSet<Disposer> disposers,
-    StateSetter setState,
+    HashSet<VoidCallback> disposers,
+//    StateSetter setState, //<old>
+    GetStateUpdate setState,
     Widget Function(BuildContext) builder,
     BuildContext context,
   ) {

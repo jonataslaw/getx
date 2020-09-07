@@ -23,7 +23,7 @@ class _RxImpl<T> implements RxInterface<T> {
   ///
   /// WARNING: still WIP, needs testing!
   _RxImpl<T> operator <<(T val) {
-    subject.add(value = val);
+    subject.add(_value = val);
     return this;
   }
 
@@ -94,9 +94,9 @@ class _RxImpl<T> implements RxInterface<T> {
   /// });
   /// print( person );
   /// ```
-  void update(void fn(T value)) {
-    fn(value);
-    subject.add(value);
+  void update(void fn(T val)) {
+    fn(_value);
+    subject.add(_value);
   }
 
   String get string => value.toString();
@@ -179,60 +179,52 @@ class RxBool extends _RxImpl<bool> {
   }
 }
 
-class RxDouble extends _RxImpl<double> {
+abstract class _BaseRxNum<T> extends _RxImpl<num> {
+  _BaseRxNum operator +(num val) {
+    subject.add(_value += val);
+    return this;
+  }
+
+  _BaseRxNum operator -(num val) {
+    subject.add(_value -= val);
+    return this;
+  }
+
+  _BaseRxNum operator /(num val) {
+    subject.add(_value /= val);
+    return this;
+  }
+
+  _BaseRxNum operator *(num val) {
+    subject.add(_value *= val);
+    return this;
+  }
+
+  _BaseRxNum operator ~/(num val) {
+    subject.add(_value ~/ val);
+    return this;
+  }
+
+  _BaseRxNum operator %(num val) {
+    subject.add(_value % val);
+    return this;
+  }
+
+  bool operator <=(num other) => _value <= other;
+  bool operator >=(num other) => _value >= other;
+  bool operator <(num other) => _value < other;
+  bool operator >(num other) => _value > other;
+}
+
+class RxDouble extends _BaseRxNum<double> {
   RxDouble([double initial]) {
     _value = initial;
   }
-
-  RxDouble operator +(double val) {
-    subject.add(value += val);
-    return this;
-  }
-
-  RxDouble operator -(double val) {
-    subject.add(value -= val);
-    return this;
-  }
-
-  RxDouble operator /(double val) {
-    subject.add(value /= val);
-    return this;
-  }
-
-  RxDouble operator *(double val) {
-    subject.add(value *= val);
-    return this;
-  }
 }
 
-class RxNum extends _RxImpl<num> {
+class RxNum extends _BaseRxNum<num> {
   RxNum([num initial]) {
     _value = initial;
-  }
-
-  RxNum operator >>(num val) {
-    subject.add(value = val);
-    return this;
-  }
-
-  RxNum operator +(num val) {
-    subject.add(value += val);
-    return this;
-  }
-
-  RxNum operator -(num val) {
-    subject.add(value -= val);
-    return this;
-  }
-
-  RxNum operator /(num val) {
-    subject.add(value /= val);
-    return this;
-  }
-
-  RxNum operator *(num val) {
-    subject.add(value *= val);
-    return this;
   }
 }
 
@@ -241,50 +233,20 @@ class RxString extends _RxImpl<String> {
     _value = initial;
   }
 
-  RxString operator >>(String val) {
-    subject.add(value = val);
-    return this;
-  }
-
   RxString operator +(String val) {
-    subject.add(value += val);
+    subject.add(_value += val);
     return this;
   }
 
   RxString operator *(int val) {
-    subject.add(value *= val);
+    subject.add(_value *= val);
     return this;
   }
 }
 
-class RxInt extends _RxImpl<int> {
+class RxInt extends _BaseRxNum<int> {
   RxInt([int initial]) {
     _value = initial;
-  }
-
-  RxInt operator >>(int val) {
-    subject.add(value = val);
-    return this;
-  }
-
-  RxInt operator +(int val) {
-    subject.add(value += val);
-    return this;
-  }
-
-  RxInt operator -(int val) {
-    subject.add(value -= val);
-    return this;
-  }
-
-  RxInt operator /(int val) {
-    subject.add(value ~/= val);
-    return this;
-  }
-
-  RxInt operator *(int val) {
-    subject.add(value *= val);
-    return this;
   }
 }
 

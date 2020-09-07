@@ -19,8 +19,14 @@ import '../navigation/routes/transitions_type.dart';
 abstract class GetInterface {
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
+
   Transition defaultTransition;
-  Duration defaultDurationTransition = Duration(milliseconds: 400);
+  Duration defaultTransitionDuration = Duration(milliseconds: 400);
+  Curve defaultTransitionCurve = Curves.easeOutQuad;
+
+  Curve defaultDialogTransitionCurve = Curves.easeOutQuad;
+  Duration defaultDialogTransitionDuration = Duration(milliseconds: 400);
+
   bool defaultGlobalState = true;
   RouteSettings settings;
   String defaultSeparator = "_";

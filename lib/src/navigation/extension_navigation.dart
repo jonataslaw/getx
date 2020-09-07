@@ -43,6 +43,7 @@ extension GetNavigation on GetInterface {
     Widget page, {
     bool opaque,
     Transition transition,
+    Curve curve,
     Duration duration,
     int id,
     bool fullscreenDialog = false,
@@ -66,9 +67,10 @@ extension GetNavigation on GetInterface {
             ),
             popGesture: popGesture ?? defaultPopGesture,
             transition: transition ?? defaultTransition,
+            curve: curve ?? defaultTransitionCurve,
             fullscreenDialog: fullscreenDialog,
             binding: binding,
-            transitionDuration: duration ?? defaultDurationTransition,
+            transitionDuration: duration ?? defaultTransitionDuration,
           ),
         );
   }
@@ -326,7 +328,8 @@ extension GetNavigation on GetInterface {
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
   ///
-  /// You can set a custom [transition], and a transition [duration].
+  /// You can set a custom [transition], define a Tween [curve],
+  /// and a transition [duration].
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
@@ -347,6 +350,7 @@ extension GetNavigation on GetInterface {
     Widget page, {
     bool opaque = false,
     Transition transition,
+    Curve curve,
     bool popGesture,
     int id,
     Object arguments,
@@ -368,7 +372,8 @@ extension GetNavigation on GetInterface {
         fullscreenDialog: fullscreenDialog,
         popGesture: popGesture ?? defaultPopGesture,
         transition: transition ?? defaultTransition,
-        transitionDuration: duration ?? defaultDurationTransition));
+        curve: curve ?? defaultTransitionCurve,
+        transitionDuration: duration ?? defaultTransitionDuration));
   }
 
   /// **Navigation.pushAndRemoveUntil()** shortcut .<br><br>
@@ -379,7 +384,7 @@ extension GetNavigation on GetInterface {
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
   ///
-  /// You can set a custom [transition], and a transition [duration].
+  /// You can set a custom [transition], a [curve] and a transition [duration].
   ///
   /// You can send any type of value to the other route in the [arguments].
   ///
@@ -411,28 +416,33 @@ extension GetNavigation on GetInterface {
     Object arguments,
     Bindings binding,
     bool fullscreenDialog = false,
-    Duration duration,
     Transition transition,
+    Curve curve,
+    Duration duration,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
     return global(id).currentState.pushAndRemoveUntil(
-          GetPageRoute(
-            opaque: opaque ?? true,
-            popGesture: popGesture ?? defaultPopGesture,
-            page: () => page,
-            binding: binding,
-            settings: RouteSettings(arguments: arguments),
-            fullscreenDialog: fullscreenDialog,
-            routeName: routeName,
-            transition: transition ?? defaultTransition,
-            transitionDuration: duration ?? defaultDurationTransition,
-          ),
-          predicate ?? (_) => false,
-        );
+        GetPageRoute(
+          opaque: opaque ?? true,
+          popGesture: popGesture ?? defaultPopGesture,
+          page: () => page,
+          binding: binding,
+          settings: RouteSettings(arguments: arguments),
+          fullscreenDialog: fullscreenDialog,
+          routeName: routename,
+          transition: transition ?? defaultTransition,
+          curve: curve ?? defaultTransitionCurve,
+          transitionDuration: duration ?? defaultTransitionDuration,
+        ),
+        predicate ?? route);
+
   }
 
-  /// Show a dialog
+  /// Show a dialog.
+  /// You can pass a [transitionDuration] and/or [transitionCurve],
+  /// overriding the defaults when the dialog shows up and closes.
+  /// When the dialog closes, uses those animations in reverse.
   Future<T> dialog<T>(
     Widget widget, {
     bool barrierDismissible = true,
@@ -440,6 +450,8 @@ extension GetNavigation on GetInterface {
     bool useSafeArea = true,
     bool useRootNavigator = true,
     RouteSettings routeSettings,
+    Duration transitionDuration,
+    Curve transitionCurve,
   }) {
     assert(widget != null);
     assert(barrierDismissible != null);
@@ -464,12 +476,12 @@ extension GetNavigation on GetInterface {
       barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: barrierColor ?? Colors.black54,
-      transitionDuration: const Duration(milliseconds: 150),
+      transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
-            curve: Curves.easeOut,
+            curve: transitionCurve ?? defaultDialogTransitionCurve,
           ),
           child: child,
         );
@@ -874,7 +886,7 @@ extension GetNavigation on GetInterface {
     }
 
     if (defaultDurationTransition != null) {
-      this.defaultDurationTransition = defaultDurationTransition;
+      this.defaultTransitionDuration = defaultDurationTransition;
     }
 
     if (defaultGlobalState != null) {

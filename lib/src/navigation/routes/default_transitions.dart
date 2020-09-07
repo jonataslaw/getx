@@ -188,7 +188,7 @@ class SizeTransitions {
 class CupertinoTransitions {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
+      bool useLinearTransition,
       Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
@@ -196,7 +196,7 @@ class CupertinoTransitions {
     return CupertinoPageTransition(
       primaryRouteAnimation: animation,
       secondaryRouteAnimation: secondaryAnimation,
-      linearTransition: true,
+      linearTransition: useLinearTransition,
       child: child,
     );
   }
