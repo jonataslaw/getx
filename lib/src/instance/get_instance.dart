@@ -340,12 +340,12 @@ class GetInstance {
   }
 
   /// Check if a Class Instance<[S]> (or [tag]) is registered in memory.
-  /// - [tag] optional, if you use a [tag] to register the Instance.
+  /// - [tag] is optional, if you used a [tag] to register the Instance.
   bool isRegistered<S>({String tag}) => _singl.containsKey(_getKey(S, tag));
 
-  /// Checks if a lazy factory callback that returns an Instance<[S]>
-  /// is registered.
-  /// - [tag] optional, if you use a [tag] to register the Instance.
+  /// Checks if a lazy factory callback ([Get.lazyPut()] that returns an
+  /// Instance<[S]> is registered in memory.
+  /// - [tag] is optional, if you used a [tag] to register the lazy Instance.
   bool isPrepared<S>({String tag}) => _factory.containsKey(_getKey(S, tag));
 }
 
