@@ -689,7 +689,7 @@ print( number == 12 ); // prints > true
 
 /// Custom Rx Models:
 
-// toJson(), toString() are deffered to the child, so you can implement override them, and print() the observable directly. 
+// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly. 
 
 class User {
     String name, last;
