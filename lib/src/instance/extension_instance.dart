@@ -92,12 +92,16 @@ extension Inst on GetInterface {
   /// controllers ([DisposableInterface]).
   ///
   /// - [tag] Optional "tag" used to register the Instance
-  Future<bool> delete<S>({String tag}) async =>
-      GetInstance().delete<S>(tag: tag);
+  /// - [force] Will delete an Instance even if marked as [permanent].
+  Future<bool> delete<S>({String tag, bool force = false}) async =>
+      GetInstance().delete<S>(tag: tag, force: force);
 
-  /// Check if a Class Instance<[S]> (or [tag]) is registered in memory.
+  /// Checks if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
 
+  /// Checks if an Instance<[S]> (or [tag]) returned from a factory builder
+  /// [Get.lazyPut()], is registered in memory.
+  /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isPrepared<S>({String tag}) => GetInstance().isPrepared<S>(tag: tag);
 }
