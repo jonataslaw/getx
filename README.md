@@ -596,7 +596,7 @@ ValueBuilder<bool>(
 ),
 ```
 
-####ObxValue
+#### ObxValue
 Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and 
 updates automatically... isn't it awesome?
 
