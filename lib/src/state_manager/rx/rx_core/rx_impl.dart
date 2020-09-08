@@ -163,7 +163,7 @@ class _RxImpl<T> implements RxInterface<T> {
 
 
   /// Updates the [value] and adds it to the stream, updating the observer
-  /// Widget, only it's different from the previous value.
+  /// Widget, only if it's different from the previous value.
   set value(T val) {
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
