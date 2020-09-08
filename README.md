@@ -801,7 +801,7 @@ class DbService extends GetxService {
 
 class SettingsService extends GetxService {
   void init() async {
-    print('$runtimeType delays 2 sec');
+    print('$runtimeType delays 1 sec');
     await 1.delay();
     print('$runtimeType ready!');
   }
