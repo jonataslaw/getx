@@ -355,23 +355,25 @@ return GetMaterialApp(
 
 ## Change Theme
 
-Please do not use any higher level widget than GetMaterialApp in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with Get.
+Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
 
-You can create your custom theme and simply add it within Get.changeTheme without any boilerplate for that:
+You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the theme with onTap, you can combine two Get APIs for that, the api that checks if the dark theme is being used, and the theme change API, you can just put this within an onPressed:
+If you want to create something like a button that changes the Theme in `onTap`, you can combine two **GetX™** APIs for that:
+- The api that checks if the dark `Theme` is being used. 
+- And the `Theme` Change API, you can just put this within an `onPressed`:
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-When darkmode is activated, it will switch to the light theme, and when the light theme is activated, it will change to dark.
+When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
 
-If you want to know in depth how to change the theme, you can follow this tutorial on Medium that even teaches the persistence of the theme using Get:
+If you want to know in depth how to change the Theme, you can follow this tutorial on Medium which even teaches the persistence of the theme using **GetX™**:
 
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 
@@ -417,60 +419,73 @@ Get.offNamedUntil()
 //Check in what platform the app is running
 GetPlatform.isAndroid
 GetPlatform.isIOS
+GetPlatform.isMacOS
+GetPlatform.isWindows
+GetPlatform.isLinux
+GetPlatform.isFuchsia
+
+//Check the device type
+GetPlatform.isMobile
+GetPlatform.isDesktop
+//All platforms are supported independently in web!
+//You can tell if you are running inside a browser
+//on Windows, iOS, OSX, Android, etc.
 GetPlatform.isWeb
 
-// Equivalent to the method: MediaQuery.of(context).size.height, but they are immutable.
+
+// Equivalent to : MediaQuery.of(context).size.height, 
+// but immutable.
 Get.height
 Get.width
 
-// Gives the current context of navigator.
+// Gives the current context of the Navigator.
 Get.context
 
-// Gives the context of the snackbar/dialog/bottomsheet in the foreground anywhere in your code.
+// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
 Get.contextOverlay
 
 // Note: the following methods are extensions on context. Since you
 // have access to context in any place of your UI, you can use it anywhere in the UI code
 
-// If you need a changeable height/width (like browser windows that can be scaled) you will need to use context.
+// If you need a changeable height/width (like Desktop or browser windows that can be scaled) you will need to use context.
 context.width
 context.height
  
-// gives you the power to define half the screen now, a third of it and so on.
-//Useful for responsive applications.
+// Gives you the power to define half the screen, a third of it and so on.
+// Useful for responsive applications.
 // param dividedBy (double) optional - default: 1
 // param reducedBy (double) optional - default: 0
 context.heightTransformer()
 context.widthTransformer()
 
-/// similar to MediaQuery.of(context).size
+/// Similar to MediaQuery.of(context).size
 context.mediaQuerySize()
 
-/// similar to MediaQuery.of(context).padding
+/// Similar to MediaQuery.of(context).padding
 context.mediaQueryPadding()
 
-/// similar to MediaQuery.of(context).viewPadding
+/// Similar to MediaQuery.of(context).viewPadding
 context.mediaQueryViewPadding()
 
-/// similar to MediaQuery.of(context).viewInsets;
+/// Similar to MediaQuery.of(context).viewInsets;
 context.mediaQueryViewInsets()
 
-/// similar to MediaQuery.of(context).orientation;
+/// Similar to MediaQuery.of(context).orientation;
 context.orientation()
 
-/// check if device is on landscape mode
+/// Check if device is on landscape mode
 context.isLandscape()
 
-/// check if device is on portrait mode
+/// Check if device is on portrait mode
 context.isPortrait()
 
-/// similar to MediaQuery.of(context).devicePixelRatio;
+/// Similar to MediaQuery.of(context).devicePixelRatio;
 context.devicePixelRatio()
 
-/// similar to MediaQuery.of(context).textScaleFactor;
+/// Similar to MediaQuery.of(context).textScaleFactor;
 context.textScaleFactor()
 
-/// get the shortestSide from screen
+/// Get the shortestSide from screen
 context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
@@ -488,9 +503,9 @@ context.isLargeTablet()
 /// True if the current device is Tablet
 context.isTablet()
 
-/// Returns a value according to the screen size
-/// can give value for
-/// swatch: if the shortestSide is smaller than 300
+/// Returns a value<T> according to the screen size
+/// can give value for:
+/// watch: if the shortestSide is smaller than 300
 /// mobile: if the shortestSide is smaller than 600
 /// tablet: if the shortestSide is smaller than 1200
 /// desktop: if width is largest than 1200  
@@ -508,7 +523,7 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within GetObserver, this will not influence anything.
+You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
 
 ```dart
 MaterialApp(
@@ -519,7 +534,8 @@ MaterialApp(
 );
 ```
 
-You can create Global settings for Get. Just add Get.config to your code before pushing any route or do it directly in your GetMaterialApp
+You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
+Or do it directly in your `GetMaterialApp`
 
 ```dart
 GetMaterialApp(
@@ -538,7 +554,9 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from Get. If you want to use your own favourite logging package and want to capture the logs there.
+You can optionally redirect all the logging messages from `Get`.
+If you want to use your own, favourite logging package, 
+and want to capture the logs there:
 
 ```dart
 GetMaterialApp(
@@ -558,12 +576,12 @@ void localLogWriter(String text, {bool isError = false}) {
 
 These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
 We have flavours for Reactive and Simple.
-For instance, you might use them to toggle obscureText in a TextField, maybe create a custom
-Expandable Panel, or maybe modify the current index in BottomNavigationBar while changing the content
-of the body in a Scaffold.
+For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
+Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
+of the body in a `Scaffold`.
 
 #### ValueBuilder
-A simplification of StatefulWidget that works with a "setState" callback that takes the updated value.
+A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
 
 ```dart
 ValueBuilder<bool>(
@@ -578,8 +596,8 @@ ValueBuilder<bool>(
 ),
 ```
 
-#### ObxValue
-Similar to ValueBuilder, but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and 
+####ObxValue
+Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and 
 updates automatically... isn't it awesome?
 
 ```dart
@@ -590,6 +608,214 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+## Useful tips
+
+
+`.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
+
+> Is very common to _believe_ that a property with `.obs` **IS** the actual value... but make no mistake!
+We avoid the Type declaration of the variable, because Dart's compiler is smart enough, and the code
+looks cleaner, but:
+```dart
+var message = 'Hello world'.obs;
+print( 'Message "$message" has Type ${message.runtimeType}');
+```
+Even if `message` _prints_ the actual String value, the Type is **RxString**!
+
+So, you can't do `message.substring( 0, 4 )`.
+You have to access the real `value` inside the _observable_: 
+The most "used way" is `.value`, but, did you know that you can also use...
+
+```dart
+final name = 'GetX'.obs;
+// only "updates" the stream, if the value is different from the current one. 
+name.value = 'Hey';
+
+// this weird (and kinda cool) assignment, updates the stream no matter what
+// it takes nulls, or same value... but rebuilds the observers.
+name << 'Hey'; // !
+
+// All Rx properties are "callable" and returns the new value.
+// but this approach does not accepts `null`, the UI will not rebuild.
+name('Hello');
+
+// is like a getter, prints 'Hello'.
+name() ;
+
+/// numbers:
+
+final count = 0.obs; 
+
+// you can just most basic operators acts on the property!
+count + 1;
+ 
+// Watch out! this is only valid if `count` is not final, but var
+count += 1;
+
+// You can also compare against values:
+count > 2;
+
+/// booleans:
+
+final flag = false.obs;
+
+// switches the value between true/false
+flag.toggle();
+
+
+/// all types:
+
+// Sets the `value` to null.
+flag.nil();
+
+// All toString(), toJson() operations are passed down to the `value`
+print( count ); // calls `toString()` inside  for RxInt
+
+final abc = [0,1,2].obs;
+// Converts the value to a json Array, prints RxList
+// Json is supported by all Rx types!
+print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}'); 
+
+// RxMap, RxList and RxSet are special Rx types, that extends their native types.
+// but you can work with a List as a regular list, although is reactive!
+abc.add(12); // pushes 12 to the list, and UPDATES the stream.
+abc[3]; // like Lists, reads the index 3.
+
+
+// equality works with the Rx and the value, but hashCode is always taken from the value
+final number = 12.obs;
+print( number == 12 ); // prints > true
+
+/// Custom Rx Models:
+
+// toJson(), toString() are deffered to the child, so you can implement override them, and print() the observable directly. 
+
+class User {
+    String name, last;
+    int age;
+    User({this.name, this.last, this.age});
+    
+    @override
+    String toString() => '$name $last, $age years old';
+}
+
+final user = User(name: 'John', last: 'Doe', age: 33).obs;
+
+// `user` is "reactive", but the properties inside ARE NOT!
+// So, if we change some variable inside of it...
+user.value.name = 'Roi';
+// The widget will not rebuild!,
+// `Rx` don't have any clue when you change something inside user.
+// So, for custom classes, we need to manually "notify" the change.
+user.refresh();
+
+// or we can use the `update()` method!
+user.update((value){
+  value.name='Roi';
+});
+
+print( user );
+
+// this also works.
+user << user.value;
+
+```
+
+#### GetView
+
+I love this Widget, is so simple, yet, so useful!
+
+Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
+
+```dart
+ class AwesomeController extends GetxController {
+   final String title = 'My Awesome View';
+ }
+  
+  // ALWAYS remember to pass the `Type` you used to register your controller!
+ class AwesomeView extends GetView<AwesomeController> {
+   @override
+   Widget build(BuildContext context) {
+     return Container(
+       padding: EdgeInsets.all(20),
+       child: Text( controller.title ), // just call `controller.something`
+     );
+   }
+ }
+```
+
+#### GetWidget
+
+Most people have no idea about this Widget, or totally confuse the usage of it.
+The use case is very rare, but very specific: It `caches` a Controller.
+Because of the _cache_, can't be a `const Stateless`.
+
+> So, when do you need to "cache" a Controller?
+
+If you use, another "not so common" feature of **GetX**: `Get.create()`.
+
+`Get.create(()=>Controller())` will generate a new `Controller` each time you call
+`Get.find<Controller>()`, 
+
+That's where `GetWidget` shines... as you can use it, for example,
+to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+
+
+#### GetxService
+
+This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
+But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
+**can not** be removed from memory. 
+
+So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
+`ApiService`, `StorageService`, `CacheService`. 
+
+```dart
+Future<void> main() async {
+  await initServices(); /// AWAIT SERVICES INITIALIZATION.
+  runApp(SomeApp());
+}
+
+/// Is a smart move to make your Services intiialize before you run the Flutter app.
+/// as you can control the execution flow (maybe you need to load some Theme configuration, 
+/// apiKey, language defined by the User... so load SettingService before running ApiService.
+/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.    
+void initServices() async {
+  print('starting services ...');
+  /// Here is where you put get_storage, hive, shared_pref initialization.
+  /// or moor connection, or whatever that's async.
+  await Get.putAsync(() => DbService().init());
+  await Get.put(SettingsService()).init();
+  print('All services started...');
+}
+
+class DbService extends GetxService {
+  Future<DbService> init() async {
+    print('$runtimeType delays 2 sec');
+    await 2.delay();
+    print('$runtimeType ready!');
+    return this;
+  }
+}
+
+class SettingsService extends GetxService {
+  void init() async {
+    print('$runtimeType delays 2 sec');
+    await 1.delay();
+    print('$runtimeType ready!');
+  }
+}
+
+```
+
+The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
+"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
+lifetime of your app, use `GetxService`. 
+  
+
+ 
+
 
 ## Video explanation of Other GetX Features
 
