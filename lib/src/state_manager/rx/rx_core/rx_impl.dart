@@ -4,7 +4,8 @@ import 'dart:collection';
 import '../rx_core/rx_interface.dart';
 
 
-/// global object that registers against `GetX` and `Obx`, and allows the reactivity
+/// global object that registers against `GetX` and `Obx`, and allows the
+/// reactivity
 /// of those `Widgets` and Rx values.
 RxInterface getObs;
 
@@ -207,6 +208,9 @@ class RxBool extends _RxImpl<bool> {
 
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
+  /// FIXME: why return this? fluent interface is not
+  ///  not really a dart thing since we have '..' operator
+  // ignore: avoid_returning_this
   RxBool toggle() {
     subject.add(_value = !_value);
     return this;
@@ -295,7 +299,8 @@ class RxInt extends _BaseRxNum<int> {
 }
 
 
-/// Foundation class used for custom `Types` outside the common native Dart types.
+/// Foundation class used for custom `Types` outside the common native Dart
+/// types.
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {

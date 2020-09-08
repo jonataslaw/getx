@@ -27,6 +27,7 @@ typedef GetStateUpdate = bool Function();
 // TODO: check performance HIT for the extra method call.
 mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
   // To avoid the creation of an anonym function to be GC later.
+  // ignore: prefer_function_declarations_over_variables
   static final VoidCallback _stateCallback = () {};
 
   /// Experimental method to replace setState((){});
@@ -68,12 +69,11 @@ class GetxController extends DisposableInterface {
 //          for (final rs in _updatersGroupIds[id]) rs();
 //      }
 
-      ids.forEach((id) {
-//        _updatersIds[id]?.call(() {}); //<old>
-//        _updatersGroupIds[id]?.forEach((rs) => rs(() {})); //<old>
+      for (final id in ids) {
         _updatersIds[id]?.call();
+        // ignore: avoid_function_literals_in_foreach_calls
         _updatersGroupIds[id]?.forEach((rs) => rs());
-      });
+      }
     }
   }
 

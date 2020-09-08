@@ -1,5 +1,6 @@
-import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+import '../entity/cases_model.dart';
 
+// ignore: one_member_abstracts
 abstract class IHomeRepository {
   Future<CasesModel> getCases();
 }

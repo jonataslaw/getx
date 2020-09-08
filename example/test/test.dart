@@ -49,7 +49,7 @@ void main() {
     binding.builder();
 
     /// recover your controller
-    HomeController controller = Get.find();
+    final controller = Get.find<HomeController>();
 
     /// check if onInit was called
     expect(controller.initialized, true);
