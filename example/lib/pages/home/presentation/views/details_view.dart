@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+
+import '../../domain/entity/cases_model.dart';
 
 class DetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Country country = Get.arguments as Country;
+    final country = Get.arguments as Country;
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(

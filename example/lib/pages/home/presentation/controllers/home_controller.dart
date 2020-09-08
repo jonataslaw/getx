@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
-import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+
+import '../../domain/adapters/repository_adapter.dart';
+import '../../domain/entity/cases_model.dart';
 
 enum Status { loading, success, error }
 
@@ -22,14 +23,16 @@ class HomeController extends GetxController {
 
   /// fetch cases from Api
   Future<void> fetchDataFromApi() async {
-    /// When the repository returns the value, change the status to success, and fill in "cases"
+    /// When the repository returns the value, change the status to success,
+    /// and fill in "cases"
     return homeRepository.getCases().then(
       (data) {
         cases(data);
         status(Status.success);
       },
 
-      /// In case of error, print the error and change the status to Status.error
+      /// In case of error, print the error and change the status
+      /// to Status.error
       onError: (err) {
         print("$err");
         return status(Status.error);

@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
+
+import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -28,7 +29,7 @@ class HomeView extends GetView<HomeController> {
         body: Center(
           child: Obx(
             () {
-              Status status = controller.status.value;
+              final status = controller.status.value;
               if (status == Status.loading) return CircularProgressIndicator();
               if (status == Status.error) return Text('Error on connection :(');
               return Column(
