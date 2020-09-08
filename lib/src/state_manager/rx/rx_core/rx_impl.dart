@@ -3,8 +3,12 @@ import 'dart:collection';
 
 import '../rx_core/rx_interface.dart';
 
+
+/// global object that registers against `GetX` and `Obx`, and allows the reactivity
+/// of those `Widgets` and Rx values.
 RxInterface getObs;
 
+/// Base Rx class that manages all the stream logic for any Type.
 class _RxImpl<T> implements RxInterface<T> {
   StreamController<T> subject = StreamController<T>.broadcast();
   final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
@@ -17,7 +21,7 @@ class _RxImpl<T> implements RxInterface<T> {
   /// Example:
   /// ```
   /// var counter = 0.obs ;
-  /// counter >>= 3; // same as counter.value=3;
+  /// counter <<= 3; // same as counter.value=3;
   /// print(counter); // calls .toString() now
   /// ```
   ///
@@ -99,11 +103,27 @@ class _RxImpl<T> implements RxInterface<T> {
     subject.add(_value);
   }
 
+  /// updates the value to [null] and adds it to the Stream.
+  /// Even with null-safety coming, is still an important feature to support, as
+  /// [call()] doesn't accept [null] values. For instance,
+  /// [InputDecoration.errorText] has to be null to not show the "error state".
+  ///
+  /// Sample:
+  /// ```
+  /// final inputError = ''.obs..nil();
+  /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
+  /// ```
+  void nil() {
+    subject.add(_value=null);
+  }
+
+  /// Same as `toString()` but using a getter.
   String get string => value.toString();
 
   @override
   String toString() => value.toString();
 
+  /// Returns the json representation of `value`.
   dynamic toJson() => value;
 
   /// This equality override works for _RxImpl instances and the internal
@@ -121,12 +141,15 @@ class _RxImpl<T> implements RxInterface<T> {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _value.hashCode;
 
+  /// Closes the subscriptions for this Rx, releasing the resources.
   void close() {
     _subscriptions.forEach((observable, subscription) => subscription.cancel());
     _subscriptions.clear();
     subject.close();
   }
 
+  /// This is an internal method.
+  /// Subscribe to changes on the inner stream.
   void addListener(Stream<T> rxGetx) {
     if (_subscriptions.containsKey(rxGetx)) {
       return;
@@ -138,6 +161,9 @@ class _RxImpl<T> implements RxInterface<T> {
 
   bool firstRebuild = true;
 
+
+  /// Updates the [value] and adds it to the stream, updating the observer
+  /// Widget, only it's different from the previous value.
   set value(T val) {
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
@@ -145,6 +171,7 @@ class _RxImpl<T> implements RxInterface<T> {
     subject.add(_value);
   }
 
+  /// Returns the current [value]
   T get value {
     if (getObs != null) {
       getObs.addListener(subject.stream);
@@ -158,11 +185,15 @@ class _RxImpl<T> implements RxInterface<T> {
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
+
+  /// Binds an existing stream to this Rx to keep the values in sync.
   void bindStream(Stream<T> stream) => stream.listen((va) => value = va);
 
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
 
+
+/// Rx class for `bool` Type.
 class RxBool extends _RxImpl<bool> {
   RxBool([bool initial]) {
     _value = initial;
@@ -174,11 +205,20 @@ class RxBool extends _RxImpl<bool> {
 
   bool operator ^(bool other) => !other == value;
 
+  /// Toggles the bool [value] between false and true.
+  /// A shortcut for `flag.value = !flag.value;`
+  RxBool toggle() {
+    subject.add(_value = !_value);
+    return this;
+  }
+
   String toString() {
     return value ? "true" : "false";
   }
 }
 
+/// Base Rx class for `num` Types (`double` and `int`) as mostly share the same
+/// operator overload, we centralize the common code here.
 abstract class _BaseRxNum<T> extends _RxImpl<num> {
   _BaseRxNum operator +(num val) {
     subject.add(_value += val);
@@ -216,18 +256,21 @@ abstract class _BaseRxNum<T> extends _RxImpl<num> {
   bool operator >(num other) => _value > other;
 }
 
+/// Rx class for `double` Type.
 class RxDouble extends _BaseRxNum<double> {
   RxDouble([double initial]) {
     _value = initial;
   }
 }
 
+/// Rx class for `num` Type.
 class RxNum extends _BaseRxNum<num> {
   RxNum([num initial]) {
     _value = initial;
   }
 }
 
+/// Rx class for `String` Type.
 class RxString extends _RxImpl<String> {
   RxString([String initial]) {
     _value = initial;
@@ -244,12 +287,17 @@ class RxString extends _RxImpl<String> {
   }
 }
 
+/// Rx class for `int` Type.
 class RxInt extends _BaseRxNum<int> {
   RxInt([int initial]) {
     _value = initial;
   }
 }
 
+
+/// Foundation class used for custom `Types` outside the common native Dart types.
+/// For example, any custom "Model" class, like User().obs will use `Rx` as
+/// wrapper.
 class Rx<T> extends _RxImpl<T> {
   Rx([T initial]) {
     _value = initial;
@@ -262,21 +310,26 @@ class Rx<T> extends _RxImpl<T> {
 }
 
 extension StringExtension on String {
+  /// Returns a `RxString` with [this] `String` as initial value.
   RxString get obs => RxString(this);
 }
 
 extension IntExtension on int {
+  /// Returns a `RxInt` with [this] `int` as initial value.
   RxInt get obs => RxInt(this);
 }
 
 extension DoubleExtension on double {
+  /// Returns a `RxDouble` with [this] `double` as initial value.
   RxDouble get obs => RxDouble(this);
 }
 
 extension BoolExtension on bool {
+  /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get obs => RxBool(this);
 }
 
 extension RxT<T> on T {
+  /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
 }
