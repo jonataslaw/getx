@@ -55,7 +55,7 @@ class GetObserver extends NavigatorObserver {
 
   String name(Route<dynamic> route) {
     if (route?.settings?.name != null) {
-      return route?.settings?.name;
+      return route.settings.name;
     } else if (route is GetPageRoute) {
       return route.routeName;
     } else if (route is GetDialogRoute) {
@@ -77,9 +77,7 @@ class GetObserver extends NavigatorObserver {
 
     if (isSnackbar) {
       GetConfig.log("OPEN SNACKBAR $routeName");
-    } else if (isBottomSheet) {
-      GetConfig.log("OPEN $routeName");
-    } else if (isDialog) {
+    } else if (isBottomSheet || isDialog) {
       GetConfig.log("OPEN $routeName");
     } else if (isGetPageRoute) {
       GetConfig.log("GOING TO ROUTE $routeName");
@@ -112,9 +110,7 @@ class GetObserver extends NavigatorObserver {
 
     if (isSnackbar) {
       GetConfig.log("CLOSE SNACKBAR $routeName");
-    } else if (isBottomSheet) {
-      GetConfig.log("CLOSE $routeName");
-    } else if (isDialog) {
+    } else if (isBottomSheet || isDialog) {
       GetConfig.log("CLOSE $routeName");
     } else if (isGetPageRoute) {
       GetConfig.log("CLOSE TO ROUTE $routeName");
