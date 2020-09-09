@@ -136,7 +136,7 @@ Worker interval<T>(RxInterface<T> listener, Function(T) callback,
     debounceActive = false;
     callback(event);
   });
-  return Worker(sub?.cancel, '[interval]');
+  return Worker(sub.cancel, '[interval]');
 }
 
 /// [debounce] is similar to [interval], but sends the last value.
