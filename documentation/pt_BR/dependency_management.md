@@ -1,82 +1,55 @@
+# Gerenciamento de dependência
 - [Gerenciamento de dependência](#gerenciamento-de-dependência)
   - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
-  - [Opções](#opções)
+  - [Métodos de criar instâncias](#métodos-de-criar-instâncias)
+    - [Get.put()](#getput)
+    - [Get.lazyPut](#getlazyput)
+    - [Get.putAsync](#getputasync)
+    - [Get.create](#getcreate)
+  - [Usando as classes/dependências instanciadas](#usando-as-classesdependências-instanciadas)
+  - [Diferenças entre os métodos](#diferenças-entre-os-métodos)
   - [Bindings](#bindings)
-    - [Como utilizar](#como-utilizar)
+    - [Classe Bindings](#classe-bindings)
+    - [BindingsBuilder](#bindingsbuilder)
+    - [SmartManagement](#smartmanagement)
+      - [Como alterar](#como-alterar)
+      - [SmartManagement.full](#smartmanagementfull)
+      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
+      - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
+      - [Como os Bindings funcionam](#como-os-bindings-funcionam)
+  - [Notas](#notas)
 
-# Gerenciamento de dependência
-
-## Gerenciamento de dependências simples
-
-Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
+Get tem um gerenciador de dependência simples e poderoso que permite você pegar a mesma classe que seu Bloc ou Controller com apenas uma linha de código, sem Provider context, sem inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Em vez de Controller controller = Controller();
 ```
 
-* Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api `Bindings`, que vai fazer tudo isso automaticamente para você.
-
 Em vez de instanciar sua classe dentro da classe que você está usando, você está instanciando ele dentro da instância do Get, que vai fazer ele ficar disponível por todo o App
 
 Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
 
-**Tip:** O gerenciamento de dependência do get é desacoplado de outras partes do package, então se por exemplo seu aplicativo já está usando um outro gerenciador de estado (qualquer um, não importa), você não precisa de reescrever tudo, pode simplesmente usar só a injeção de dependência sem problemas
+- Nota: Se você está usando o gerenciado de estado do Get, você não precisa se preocupar com isso, só leia a documentação, mas dê uma atenção a api [Bindings](#bindings), que vai fazer tudo isso automaticamente para você.
+- Nota²: O gerenciamento de dependência do get é desacoplado de outras partes do package, então se por exemplo seu aplicativo já está usando um outro gerenciador de estado (qualquer um, não importa), você não precisa de reescrever tudo, pode simplesmente usar só a injeção de dependência sem problemas
+
+## Métodos de criar instâncias
+Todos os métodos e seus parâmetros configuráveis são:
+
+### Get.put()
+A forma mais comum de instanciar uma dependência. Bom para os controllers das views por exemplo.
 
 ```dart
-controller.fetchApi();
+Get.put<Classe>(Classe());
+
+Get.put<LoginController>(LoginController(), permanent: true);
+
+Get.put<ListItemController>(
+  ListItemController,
+  tag: "uma string única",
+);
 ```
 
-Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador. Você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
-
-```dart
-Controller controller = Get.find();
-// Sim, parece Magia, o Get irá descobrir qual é seu controller, e irá te entregar.
-// Você pode ter 1 milhão de controllers instanciados, o Get sempre te entregará o controller correto.
-// Apenas se lembre de Tipar seu controller, final controller = Get.find(); por exemplo, não irá funcionar.
-```
-
-E então você será capaz de recuperar os dados do seu controller que foram obtidos anteriormente:
-
-```dart
-Text(controller.textFromApi);
-```
-
-Procurando por `lazyLoading`?(carregar somente quando for usar) Você pode declarar todos os seus controllers, e eles só vão ser inicializados e chamados quando alguém precisar. Você pode fazer isso
-
-```dart
-Get.lazyPut<Service>(()=> ApiMock());
-/// ApiMock só será chamado quando alguém usar o Get.find<Service> pela primeira vez
-```
-
-Se você quiser registar uma instância assíncrona, você pode usar `Get.putAsync()`:
-
-```dart
-Get.putAsync<SharedPreferences>(() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('contador', 12345);
-  return prefs;
-});
-```
-
-Como usar:
-
-```dart
-int valor = Get.find<SharedPreferences>().getInt('contador');
-print(valor); // Imprime: 123456
-```
-
-Para remover a instância do Get:
-
-```dart
-Get.delete<Controller>();
-```
-
-## Métodos de instanciamento.
-
-Apesar do Get já entregar configurações muito boas para uso, é possível refiná-las ainda mais para que sejam de utilidade ainda maior para você programador. Os métodos e seus parâmetros configuráveis são:
-
-- Get.put():
-
+E essas são todas as opções que você pode definir:
 ```dart
 Get.put<S>(
   // obrigatório: a classe que você quer salvar, como um controller ou qualquer outra coisa
@@ -100,12 +73,31 @@ Get.put<S>(
 )
 ```
 
-- Get.lazyPut:
+### Get.lazyPut
+É possível que você vá inserir essa instância, mas sabe que não vai usá-la imediatamente no app.
+Nesses casos pode ser usado o lazyPut que só cria a instância no momento que ela for necessária pela primeira vez.
+É útil também caso seja uma classe que é muito pesada e você não quer carregar ela junto com tudo quando o app abre.
 
+```dart
+/// ApiMock só será instanciado quando Get.find<ApiMock> for usado pela primeira vez
+Get.lazyPut<ApiMock>(() => ApiMock());
+
+Get.lazyPut<FirebaseAuth>(
+  () => {
+  // ... alguma lógica se necessário
+    return FirebaseAuth()
+  },
+  tag: Math.random().toString(),
+  fenix: true
+)
+
+Get.lazyPut<Controller>( () => Controller() )
+```
+
+E essas são todas as opções que você pode definir:
 ```dart
 Get.lazyPut<S>(
   // obrigatório: um método que vai ser executado quando sua classe é chamada pela primeira vez
-  // Exemplo: "Get.lazyPut<Controller>( () => Controller()
   InstanceBuilderCallback builder,
   
   // opcional: igual ao Get.put(), é usado quando você precisa de múltiplas instâncias de uma mesma classe
@@ -121,12 +113,24 @@ Get.lazyPut<S>(
 )
 ```
 
-- Get.putAsync:
+### Get.putAsync
+Se você quiser criar uma instância assíncrona, você pode usar `Get.putAsync`:
 
 ```dart
+Get.putAsync<SharedPreferences>(() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('counter', 12345);
+  return prefs;
+});
+
+Get.putAsync<SuaClasseAssincrona>( () async => await SuaClasseAssincrona() )
+```
+
+E essas são todas as opções que você pode definir:
+```dart
 Get.putAsync<S>(
+
   // Obrigatório: um método assíncrono que vai ser executado para instanciar sua classe
-  // Exemplo: Get.putAsyn<YourAsyncClass>( () async => await YourAsyncClass() )
   AsyncInstanceBuilderCallback<S> builder,
 
   // opcional: igual ao Get.put(), é usado quando você precisa de múltiplas instâncias de uma mesma classe
@@ -138,12 +142,19 @@ Get.putAsync<S>(
   bool permanent = false
 ```
 
-- Get.create:
+### Get.create
+Esse é mais específico. Uma explicação detalhada do que esse método é e as diferenças dele para os outros podem ser encontradas em [Diferenças entre os métodos](#diferenças-entre-os-métodos)
 
+
+```dart
+Get.Create<SomeClass>(() => SomeClass());
+Get.Create<LoginController>(() => LoginController());
+```
+
+E essas são todas as opções que você pode definir:
 ```dart
 Get.create<S>(
   // Obrigatório: Uma função que retorna uma classe que será "fabricada" toda vez que Get.find() for chamado
-  // Exemplo: Get.create<YourClass>(() => YourClass())
   InstanceBuilderCallback<S> builder,
 
   // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
@@ -156,14 +167,49 @@ Get.create<S>(
   bool permanent = true
 ```
 
-### Diferenças entre os métodos:
+## Usando as classes/dependências instanciadas
+
+Agora, imagine que você navegou por inúmeras rotas e precisa de dados que foram deixados para trás em seu controlador. Você precisaria de um gerenciador de estado combinado com o Provider ou Get_it, correto? Não com Get. Você só precisa pedir ao Get para "procurar" pelo seu controlador, você não precisa de nenhuma dependência adicional para isso:
+
+```dart
+final controller = Get.find<Controller>();
+// OU
+Controller controller = Get.find();
+// Sim, parece Magia, o Get irá descobrir qual é seu controller, e irá te entregar.
+// Você pode ter 1 milhão de controllers instanciados, o Get sempre te entregará o controller correto.
+// Apenas se lembre de Tipar seu controller, final controller = Get.find(); por exemplo, não irá funcionar.
+```
+
+E então você será capaz de recuperar os dados do seu controller que foram obtidos anteriormente:
+
+```dart
+Text(controller.textFromApi);
+```
+
+Já que o valor retornado é uma classe normal, você pode fazer o que quiser com ela:
+
+```dart
+int valor = Get.find<SharedPreferences>().getInt('contador');
+print(valor); // Imprime: 123456
+```
+
+Para remover a instância do Get:
+
+```dart
+Get.delete<Controller>();
+```
+
+## Diferenças entre os métodos
 
 Primeiro, vamos falar do `fenix` do Get.lazyPut e o `permanent` dos outros métodos.
 
 A diferença fundamental entre `permanent` e `fenix` está em como você quer armazenar as suas instâncias.
+
 Reforçando: por padrão, o Get apaga as instâncias quando elas não estão em uso.
 Isso significa que: Se a tela 1 tem o controller 1 e a tela 2 tem o controller 2 e você remove a primeira rota da stack (usando `Get.off()` ou `Get.offNamed`), o controller 1 perdeu seu uso portanto será apagado.
+
 Mas se você optar por usar `permanent: true`, então ela não se perde nessa transição - o que é muito útil para serviços que você quer manter rodando na aplicação inteira.
+
 Já o `fenix`, é para serviços que você não se preocupa em perder por uma tela ou outra, mas quando você precisar chamar o serviço, você espera que ele "retorne das cinzas" (`fenix: true`), criando uma nova instância.
 
 Prosseguindo com as diferenças entre os métodos:
@@ -190,9 +236,9 @@ Isso permite Get saber qual tela está sendo mostrada quando um controller parti
 
 Somando a isso, a classe Binding vai permitir que você tenha um controle de configuração SmartManager. Você pode configurar as dependências que serão organizadas quando for remover a rota da stack, ou quando o widget que usa ele é definido, ou nada disso. Você vai ter gerenciador de dependências inteligente trabalhando para você, e você pode configurá-lo como quiser.
 
-### Como utilizar
+### Classe Bindings
 
-* Para usar essa API você só precisa criar uma classe que implementa a Bindings:
+Crie uma classe qualquer que implemente a Bindings.
 
 ```dart
 class HomeBinding implements Bindings {}
@@ -204,8 +250,15 @@ Sua IDE vai automaticamente te perguntar para dar override no método `dependenc
 class HomeBinding implements Bindings{
   @override
   void dependencies() {
-    Get.lazyPut<ControllerX>(() => ControllerX());
+    Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<Service>(()=> Api());
+  }
+}
+
+class DetalhesBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<DetalhesController>(() => DetalhesController());
   }
 }
 ```
@@ -216,14 +269,24 @@ Usando rotas nomeadas
 
 ```dart
 getPages: [
-  GetPage(name: '/', page: () => Home(), binding: HomeBinding()),
-]
+  GetPage(
+    name: '/',
+    page: () => HomeView(),
+    binding: HomeBinding(),
+  ),
+  GetPage(
+    name: '/detalhes',
+    page: () => DetalhesView(),
+    binding: DetalhesBinding(),
+  ),
+];
 ```
 
 Usando rotas normais:
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
+Get.to(DetalhesView(), binding: DetalhesBinding())
 ```
 
 Então, você não vai precisar se preocupar com gerenciamento da memória da sua aplicação mais, Get vai fazer para você.
@@ -237,17 +300,82 @@ GetMaterialApp(
 )
 ```
 
-Se você quiser usar suas inicializações em um lugar, você pode usar `SmartManagement.keepfactory` para permitir isso.
+### BindingsBuilder
 
-Sempre prefira usar SmartManagement padrão (full), você não precisa configurar nada pra isso, o Get já te entrega ele assim por padrão. Ele com certeza irá eliminar todos seus controladores em desuso da memória, pois seu controle refinado remove a dependência, ainda que haja uma falha e um widget que utiliza ele não seja disposado adequadamente. Ele também é seguro o bastante para ser usado só com StatelessWidget, pois possui inúmeros callbacks de segurança que impedirão de um controlador permanecer na memória se não estiver sendo usado por nenhum widget. No entanto, se você se incomodar com o comportamento padrão, ou simplesmente não quiser que isso ocorra, Get disponibiliza outras opções mais brandas de gerenciamento inteligente de memória, como o SmartManagement.onlyBuilders, que dependerá da remoção efetiva dos widgets que usam o controlador da árvore para removê-lo, e você poderá impedir que um controlador seja disposado usando "autoRemove:false" no seu GetBuilder/GetX.
+A forma padrão de criar um binding é criando uma classe que implementa o Bindings.
 
-Com essa opção, apenas os controladores iniciados no "init:" ou carregados em um Binding com "Get.lazyPut" serão disposados, se você usar Get.put ou qualquer outra abordagem, o SmartManagement não terá permissões para excluir essa dependência.
+Mas alternativamente, você também pode usar a função `BindingsBuilder` par que você possa simplesmente usar uma função pra criar essas instâncias
 
-Com o comportamento padrão, até os widgets instanciados com "Get.put" serão removidos, sendo a diferença crucial entre eles.
+Exemplo:
 
-`SmartManagement.keepFactory` é como o SmartManagement.full, com uma única diferença. o full expurga até as fabricas das dependências, de forma que o Get.lazyPut() só conseguirá ser chamado uma única vez e sua fábrica e referências serão auto-destruídas. `SmartManagement.keepFactory` irá remover suas dependências quando necessário, no entanto, vai manter guardado a "forma" destas, para fabricar uma igual se você precisar novamente de uma instância daquela.
+```dart
+getPages: [
+  GetPage(
+    name: '/',
+    page: () => HomeView(),
+    binding: BindingsBuilder(() => {
+      Get.lazyPut<ControllerX>(() => ControllerX());
+      Get.put<Service>(()=> Api());
+    }),
+  ),
+  GetPage(
+    name: '/detalhes',
+    page: () => DetalhesView(),
+    binding: BindingsBuilder(() => {
+      Get.lazyPut<DetalhesController>(() => DetalhesController());
+    }),
+  ),
+];
+```
 
-Em vez de usar `SmartManagement.keepFactory` você pode usar Bindings. Bindings cria fábricas transitórias, que são criadas no momento que você clica para ir para outra tela, e será destruído assim que a animação de mudança de tela acontecer. É tão pouco tempo, que o analyzer sequer conseguirá registrá-lo. Quando você navegar para essa tela novamente, uma nova fábrica temporária será chamada, então isso é preferível à usar `SmartManagement.keepFactory`, mas se você não quer ter o trabalho de criar Bindings, ou deseja manter todas suas dependências no mesmo Binding, isso certamente irá te ajudar. Fábricas ocupam pouca memória, elas não guardam instâncias, mas uma função com a "forma" daquela classe que você quer. Isso é muito pouco, mas como o objetivo dessa lib é obter o máximo de desempenho possível usando o mínimo de recursos, Get remove até as fabricas por padrão. Use o que achar mais conveniente para você.
+Dessa forma você pode evitar criar uma classe Binding para cada rota, deixando tudo mais simples.
+
+As duas formas funcionam perfeitamente e você é livre para usar o que mais se encaixa no seu estilo de uso
+
+### SmartManagement
+
+GetX por padrão descarta controllers não utilizados da memória, mesmo que uma falha ocorra e um widget que usa ele não for propriamente descartado.
+Essa é o chamado modo `full` do gerenciamento de dependências.
+Mas se você quiser mudar a forma que o GetX controla o descarte das classes, você tem a sua disposição a classe `SmartManagement` que pode definir diferentes comportamentos.
+
+#### Como alterar
+
+Se você quiser alterar essa configuração (que normalmente você não precisa mudar) essa é a forma:
+
+```dart
+void main () {
+  runApp(
+    GetMaterialApp(
+      smartManagement: SmartManagement.onlyBuilders //Aqui
+      home: Home(),
+    )
+  )
+}
+```
+
+#### SmartManagement.full
+
+É o padrão. Descarta as classes que não estão mais sendo utilizadas e que não foram definidas para serem permanents. Na grande maioria dos casos você não vai querer nem precisar alterar essa configuração. Se você for novo com GetX, não altere isto.
+
+#### SmartManagement.onlyBuilders
+Com essa opção, somente controllers iniciados pelo `init:` or iniciados dentro de um Binding com `Get.lazyPut()` serão descartados.
+
+Se você usar `Get.put()` ou `Get.putAsync()` or qualquer outra forma, SmartManagement não vai ter permissão para excluir essa dependência.
+
+Com o comportamento padrão, até widgets instanciados com `Get.put()` serão removidos, ao contrário do `SmartManagement.onlyBuilders`.
+
+#### SmartManagement.keepFactory
+
+Assim como o modo `full`, ele vai descartar as dependências quando não estiverem sendo mais utilizadas. Porém, ele irá manter a "factory" de cada dependência. Isso significa que caso você precise de da dependência novamente, ele vai recriar aquele instância novamente.
+
+#### Como os Bindings funcionam
+Bindings cria fábricas transitórias, que são criadas no momento que você clica para ir para outra tela, e será destruído assim que a animação de mudança de tela acontecer.
+É tão pouco tempo, tão rápido, que o analyzer sequer conseguirá registrá-lo.
+Quando você navegar para essa tela novamente, uma nova fábrica temporária será chamada, então isso é preferível à usar `SmartManagement.keepFactory`, mas se você não quer ter o trabalho de criar Bindings, ou deseja manter todas suas dependências no mesmo Binding, isso certamente irá te ajudar.
+Fábricas ocupam pouca memória, elas não guardam instâncias, mas uma função com a "forma" daquela classe que você quer.
+Isso é muito pouco, mas como o objetivo dessa lib é obter o máximo de desempenho possível usando o mínimo de recursos, Get remove até as fábricas por padrão. Use o que achar mais conveniente para você.
+
+## Notas
 
 * Nota: NÃO USE SmartManagement.keepfactory se você está usando vários Bindings. Ele foi criado para ser usado sem Bindings, ou com um único Binding ligado ao GetMaterialApp lá no `initialBinding`
 
