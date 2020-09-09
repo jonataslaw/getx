@@ -29,7 +29,7 @@ abstract class GetInterface {
 
   bool defaultGlobalState = true;
   RouteSettings settings;
-  String defaultSeparator = "_";
+  String defaultSeparator = '_';
 
   final routing = Routing();
 

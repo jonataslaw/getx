@@ -1,3 +1,6 @@
+## [3.10.1]
+- Fix analyzer
+
 ## [3.10.0]
 Getx 3.10 released with CLI and Get Server.
 - Added: analyser + effective dart (@Grohden)
@@ -13,7 +16,8 @@ Getx 3.10 released with CLI and Get Server.
 - Added _RxImp.nil() to easily set the value to null (@roipeker)
 - Added missing docs to Rx classes. (@roipeker)
 - Added Get.delete(force:false) to Get extensions (@roipeker)
-- Improvement Docs (@nipodemos)
+- Added Docs and comments (@nipodemos)
+- Added docs to PT-br and fix typos (@eduardoflorence)
 - Cleanup route code (@justkawal)
 - Extension to facilitate insert widgets inside a CustomScrollView (@alexkharech)
 - Fix docs .obs examples (@kai-oswald)
