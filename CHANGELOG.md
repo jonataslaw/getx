@@ -1,3 +1,25 @@
+## [3.10.0]
+Getx 3.10 released with CLI and Get Server.
+- Added: analyser + effective dart (@Grohden)
+- Added TextStyle to generalDialog title and message (@roipeker)
+- renamed and added defaults transition duration and types in "GetInterface" (@roipeker)
+- added missing parameters in Get.to/Get.offAll (@roipeker)
+- added optional transitionDuration and transitionCurve to Get.dialog() (@roipeker)
+- Changed HashMap<int,GetStateUpdate> to HashSet<GetStateUpdate> and allow update IDs groups on GetBuilder (@roipeker)
+- Added a internal VoidCallback in GetStateUpdaterMixin::getUpdate (@roipeker)
+- Added Curve property to routes (@roipeker)
+- Improve docs, code cleanup, new GetStateUpdaterMixin and GetStateUpdate in favour of StateSetter on GetxController, GetBuilder, SimpleBuilder. (@roipeker)
+- Added RxBool.toggle() as an easy shortcut for switching true/false values. (@roipeker)
+- Added _RxImp.nil() to easily set the value to null (@roipeker)
+- Added missing docs to Rx classes. (@roipeker)
+- Added Get.delete(force:false) to Get extensions (@roipeker)
+- Improvement Docs (@nipodemos)
+- Cleanup route code (@justkawal)
+- Extension to facilitate insert widgets inside a CustomScrollView (@alexkharech)
+- Fix docs .obs examples (@kai-oswald)
+- Added tag capability to GetView 
+- Improve code separation of RouteManagement and Internacionalization
+
 ## [3.8.0]
 - Added: Snackbar Status: Open, Opening, Closing and Closed
 example:

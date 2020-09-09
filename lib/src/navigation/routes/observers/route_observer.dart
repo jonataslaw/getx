@@ -84,7 +84,7 @@ class GetObserver extends NavigatorObserver {
     }
     GetConfig.currentRoute = routeName;
 
-    _routeSend.update((value) {
+    _routeSend?.update((value) {
       if (route is PageRoute) value.current = routeName;
       value.args = route?.settings?.arguments;
       value.route = route;
@@ -117,7 +117,7 @@ class GetObserver extends NavigatorObserver {
     }
     GetConfig.currentRoute = routeName;
 
-    _routeSend.update((value) {
+    _routeSend?.update((value) {
       if (previousRoute is PageRoute) {
         value.current = previousRoute?.settings?.name ?? '';
       }
@@ -142,7 +142,7 @@ class GetObserver extends NavigatorObserver {
 
     GetConfig.currentRoute = name(newRoute);
 
-    _routeSend.update((value) {
+    _routeSend?.update((value) {
       if (newRoute is PageRoute) value.current = newRoute?.settings?.name ?? '';
       value.args = newRoute?.settings?.arguments;
       value.route = newRoute;
@@ -161,7 +161,7 @@ class GetObserver extends NavigatorObserver {
     super.didRemove(route, previousRoute);
     GetConfig.log("REMOVING ROUTE ${route?.settings?.name}");
 
-    _routeSend.update((value) {
+    _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
       value.removed = route?.settings?.name ?? '';

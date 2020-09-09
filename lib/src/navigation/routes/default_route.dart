@@ -113,15 +113,15 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
+    GetConfig.currentRoute = settings.name ?? routeName;
     binding?.dependencies();
     if (bindings != null) {
       for (final binding in bindings) {
         binding.dependencies();
       }
     }
-    final pageWidget = page();
-    GetConfig.currentRoute = settings.name ?? routeName;
-    return pageWidget;
+    // final pageWidget = page();
+    return page();
   }
 
   static bool isPopGestureInProgress(PageRoute<dynamic> route) {

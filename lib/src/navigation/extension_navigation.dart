@@ -533,6 +533,7 @@ extension GetNavigation on GetInterface {
     Widget cancel,
     Widget custom,
     Color backgroundColor,
+    bool barrierDismissible = true,
     Color buttonColor,
     String middleText = "Dialog made in 3 lines of code",
     TextStyle middleTextStyle,
@@ -618,6 +619,7 @@ extension GetNavigation on GetInterface {
         // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
         buttonPadding: EdgeInsets.zero,
       ),
+      barrierDismissible: barrierDismissible,
     );
   }
 
