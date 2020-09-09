@@ -154,9 +154,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
     } else {
       if (snack.snackPosition == SnackPosition.TOP) {
         return DismissDirection.up;
-      } else {
-        return DismissDirection.down;
       }
+      return DismissDirection.down;
     }
   }
 

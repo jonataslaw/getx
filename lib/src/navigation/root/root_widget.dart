@@ -261,4 +261,3 @@ class GetMaterialApp extends StatelessWidget {
 abstract class Translations {
   Map<String, Map<String, String>> get keys;
 }
-

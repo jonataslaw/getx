@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import '../rx_core/rx_interface.dart';
 
-
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
@@ -115,7 +114,7 @@ class _RxImpl<T> implements RxInterface<T> {
   /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
   /// ```
   void nil() {
-    subject.add(_value=null);
+    subject.add(_value = null);
   }
 
   /// Same as `toString()` but using a getter.
@@ -162,7 +161,6 @@ class _RxImpl<T> implements RxInterface<T> {
 
   bool firstRebuild = true;
 
-
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   set value(T val) {
@@ -186,13 +184,11 @@ class _RxImpl<T> implements RxInterface<T> {
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-
   /// Binds an existing stream to this Rx to keep the values in sync.
   void bindStream(Stream<T> stream) => stream.listen((va) => value = va);
 
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }
-
 
 /// Rx class for `bool` Type.
 class RxBool extends _RxImpl<bool> {
@@ -297,7 +293,6 @@ class RxInt extends _BaseRxNum<int> {
     _value = initial;
   }
 }
-
 
 /// Foundation class used for custom `Types` outside the common native Dart
 /// types.
