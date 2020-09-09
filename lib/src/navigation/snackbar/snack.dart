@@ -686,15 +686,12 @@ class _GetBarState<K extends Object> extends State<GetBar>
   }
 
   Widget _getTitleText() {
-    return widget.titleText != null
-        ? widget.titleText
-        : Text(
-            widget.title ?? "",
-            style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
-          );
+    return widget.titleText ??
+        Text(
+          widget.title ?? "",
+          style: TextStyle(
+              fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
+        );
   }
 
   Text _getDefaultNotificationText() {
@@ -705,11 +702,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
   }
 
   FlatButton _getMainActionButton() {
-    if (widget.mainButton != null) {
-      return widget.mainButton;
-    } else {
-      return null;
-    }
+    return widget.mainButton;
   }
 }
 
