@@ -786,7 +786,7 @@ void initServices() async {
   /// Here is where you put get_storage, hive, shared_pref initialization.
   /// or moor connection, or whatever that's async.
   await Get.putAsync(() => DbService().init());
-  await Get.put(SettingsService()).init();
+  await Get.putAsync(SettingsService()).init();
   print('All services started...');
 }
 
