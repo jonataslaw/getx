@@ -189,7 +189,7 @@ And then you will be able to recover your controller data that was obtained back
 Text(controller.textFromApi);
 ```
 
-Since the returnd value is a normal class, you can do anything you want:
+Since the returned value is a normal class, you can do anything you want:
 ```dart
 int count = Get.find<SharedPreferences>().getInt('counter');
 print(count); // out: 12345
@@ -208,7 +208,7 @@ First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other meth
 The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
 
 Reinforcing: by default, GetX deletes instances when they are not is use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offName()`) the controller 1 lost it's use so it will be erased.
+It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost it's use so it will be erased.
 
 But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
 
@@ -298,7 +298,7 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-The default way of creating a binding creating a class that implements Bindings.
+The default way of creating a binding is by creating a class that implements Bindings.
 But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
 
 Example:
@@ -353,7 +353,7 @@ void main () {
 It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
 
 #### SmartManagement.onlyBuilders
-With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut` will be disposed.
+With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
 
 If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
 
@@ -361,7 +361,7 @@ With the default behavior, even widgets instantiated with "Get.put" will be remo
 
 #### SmartManagement.keepFactory
 
-Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep the their factory, which means it will recreate the dependency if you need that instance again.
+Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
 
 ### How bindings work under the hood
 Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
