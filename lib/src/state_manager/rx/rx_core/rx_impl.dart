@@ -3,6 +3,8 @@ import 'dart:collection';
 
 import '../rx_core/rx_interface.dart';
 
+part 'rx_num.dart';
+
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
@@ -14,22 +16,6 @@ class _RxImpl<T> implements RxInterface<T> {
   final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
 
   T _value;
-
-  /// Common to all Types [T], this operator overloading is using for
-  /// assignment, same as rx.value
-  ///
-  /// Example:
-  /// ```
-  /// var counter = 0.obs ;
-  /// counter <<= 3; // same as counter.value=3;
-  /// print(counter); // calls .toString() now
-  /// ```
-  ///
-  /// WARNING: still WIP, needs testing!
-  _RxImpl<T> operator <<(T val) {
-    subject.add(_value = val);
-    return this;
-  }
 
   bool get canUpdate => _subscriptions.isNotEmpty;
 
@@ -215,68 +201,6 @@ class RxBool extends _RxImpl<bool> {
   String toString() {
     return value ? "true" : "false";
   }
-}
-
-/// Rx class for `num` Types (`double` and `int`) shared comparison operations
-abstract class _RxNumComparators<T extends num> extends _RxImpl<T> {
-  bool operator <=(T other) => _value <= other;
-
-  bool operator >=(T other) => _value >= other;
-
-  bool operator <(T other) => _value < other;
-
-  bool operator >(T other) => _value > other;
-}
-
-/// Rx class for `double` Type.
-class RxDouble extends _RxNumComparators<double> {
-  RxDouble([double initial]) {
-    _value = initial;
-  }
-
-  double operator *(double val) => _value * val;
-
-  double operator -(double val) => _value - val;
-
-  double operator +(double val) => _value + val;
-
-  double operator /(double val) => _value / val;
-
-  double operator %(double val) => _value % val;
-}
-
-/// Rx class for `num` Type.
-class RxNum extends _RxNumComparators<num> {
-  RxNum([num initial]) {
-    _value = initial;
-  }
-
-  num operator *(num val) => _value * val;
-
-  num operator -(num val) => _value - val;
-
-  num operator +(num val) => _value + val;
-
-  num operator /(num val) => _value / val;
-
-  num operator %(num val) => _value % val;
-}
-
-/// Rx class for `int` Type.
-class RxInt extends _RxNumComparators<int> {
-  RxInt([int initial]) {
-    _value = initial;
-  }
-
-  int operator %(int val) => _value % val;
-
-  int operator *(int val) => _value * val;
-
-  int operator -(int val) => _value - val;
-
-  int operator +(int val) => _value + val;
-
-  double operator /(int val) => _value / val;
 }
 
 /// Rx class for `String` Type.
