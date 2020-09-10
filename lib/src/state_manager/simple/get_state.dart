@@ -13,7 +13,7 @@ import 'simple_builder.dart';
 
 // replacing StateSetter, return if the Widget is mounted for extra validation.
 // if it brings overhead the extra call,
-typedef GetStateUpdate = bool Function();
+typedef GetStateUpdate = void Function();
 //typedef GetStateUpdate = void Function(VoidCallback fn);
 
 /// Complies with [GetStateUpdater]
@@ -32,10 +32,8 @@ mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
 
   /// Experimental method to replace setState((){});
   /// Used with GetStateUpdate.
-  bool getUpdate() {
-    final _mounted = mounted;
-    if (_mounted) setState(_stateCallback);
-    return _mounted;
+  void getUpdate() {
+    if (mounted) setState(_stateCallback);
   }
 }
 

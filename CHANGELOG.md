@@ -1,3 +1,6 @@
+## [3.10.2]
+- Fixed the use of tags with lazyPut and added Ability to overwrite "tag" in GetView and GetWidget.
+
 ## [3.10.1]
 - Fix analyzer
 
