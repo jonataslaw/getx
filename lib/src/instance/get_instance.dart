@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:collection';
+
 import '../core/log.dart';
 import '../navigation/root/smart_management.dart';
 import '../state_manager/rx/rx_core/rx_interface.dart';
@@ -29,6 +32,12 @@ class GetInstance {
   /// Holds a reference to [GetConfig.currentRoute] when the Instance was
   /// created to manage the memory.
   static final Map<String, String> _routesKey = {};
+
+  /// Stores the onClose() references of instances created with [Get.create()]
+  /// using the [GetConfig.currentRoute].
+  /// Experimental feature to keep the lifecycle and memory management with
+  /// non-singleton instances.
+  static final Map<String, HashSet<Function>> _routesByCreate = {};
 
   static final _queue = GetQueue();
 
@@ -101,6 +110,12 @@ class GetInstance {
   /// Creates a new Class Instance [S] from the builder callback[S].
   /// Every time [find]<[S]>() is used, it calls the builder method to generate
   /// a new Instance [S].
+  /// It also registers each [instance.onClose()] with the current
+  /// Route [GetConfig.currentRoute] to keep the lifecycle active.
+  /// Is important to know that the instances created are only stored per Route.
+  /// So, if you call `Get.delete<T>()` the "instance factory" used in this
+  /// method ([Get.create<T>()]) will be removed, but NOT the instances
+  /// already created by it.
   ///
   /// Example:
   ///
@@ -144,6 +159,19 @@ class GetInstance {
       }
     });
 
+    /// Removes [Get.create()] instances registered in [routeName].
+    if (_routesByCreate.containsKey(routeName)) {
+      for (final onClose in _routesByCreate[routeName]) {
+        // assure the [DisposableInterface] instance holding a reference
+        // to [onClose()] wasn't disposed.
+        if (onClose != null) {
+          await onClose();
+        }
+      }
+      _routesByCreate[routeName].clear();
+      _routesByCreate.remove(routeName);
+    }
+
     for (final element in keysToRemove) {
       await delete(key: element);
     }
@@ -168,9 +196,9 @@ class GetInstance {
       _startController<S>(tag: name);
       if (_singl[key].isSingleton) {
         _singl[key].isInit = true;
-      }
-      if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-        _registerRouteInstance<S>(tag: name);
+        if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+          _registerRouteInstance<S>(tag: name);
+        }
       }
     }
     return true;
@@ -196,6 +224,10 @@ class GetInstance {
       if (i.onStart != null) {
         i.onStart();
         GetConfig.log('"$key" has been initialized');
+      }
+      if (!_singl[key].isSingleton && i.onClose != null) {
+        _routesByCreate[GetConfig.currentRoute] ??= HashSet<Function>();
+        _routesByCreate[GetConfig.currentRoute].add(i.onClose);
       }
     }
   }
