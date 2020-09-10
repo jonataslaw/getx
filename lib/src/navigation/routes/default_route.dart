@@ -1,12 +1,13 @@
 import 'dart:math';
 import 'dart:ui' show lerpDouble;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/src/core/get_main.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/utils.dart';
+import '../../../route_manager.dart';
+import '../../../utils.dart';
+import '../../core/get_main.dart';
+import '../../instance/get_instance.dart';
 import 'bindings_interface.dart';
 import 'custom_transition.dart';
 import 'default_transitions.dart';
@@ -27,6 +28,7 @@ class GetPageRoute<T> extends PageRoute<T> {
     this.barrierColor,
     this.binding,
     this.bindings,
+    this.routeName,
     this.page,
     this.barrierLabel,
     this.maintainState = true,
@@ -41,6 +43,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   final Duration transitionDuration;
 
   final GetPageBuilder page;
+
+  final String routeName;
 
   final CustomTransition customTransition;
 
@@ -75,25 +79,20 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
-    // Don't perform outgoing animation if the next route is a fullscreen dialog.
+    // Don't perform outgoing animation if the next route is a
+    // fullscreen dialog.
     return nextRoute is PageRoute && !nextRoute.fullscreenDialog;
   }
 
   static bool _isPopGestureEnabled<T>(PageRoute<T> route) {
-    if (route.isFirst) return false;
-
-    if (route.willHandlePopInternally) return false;
-
-    if (route.hasScopedWillPopCallback) return false;
-
-    if (route.fullscreenDialog) return false;
-
-    if (route.animation.status != AnimationStatus.completed) return false;
-
-    if (route.secondaryAnimation.status != AnimationStatus.dismissed)
-      return false;
-
-    if (isPopGestureInProgress(route)) return false;
+    // ignore: lines_longer_than_80_chars
+    if (route.isFirst ||
+        route.willHandlePopInternally ||
+        route.hasScopedWillPopCallback ||
+        route.fullscreenDialog ||
+        route.animation.status != AnimationStatus.completed ||
+        route.secondaryAnimation.status != AnimationStatus.dismissed ||
+        isPopGestureInProgress(route)) return false;
 
     return true;
   }
@@ -109,17 +108,19 @@ class GetPageRoute<T> extends PageRoute<T> {
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
-    if (binding != null) {
-      binding.dependencies();
-    }
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
+    GetConfig.currentRoute = settings.name ?? routeName;
+    binding?.dependencies();
     if (bindings != null) {
-      for (Bindings element in bindings) {
-        element.dependencies();
+      for (final binding in bindings) {
+        binding.dependencies();
       }
     }
-    GetConfig.currentRoute = settings.name;
+    // final pageWidget = page();
     return page();
   }
 
@@ -132,28 +133,38 @@ class GetPageRoute<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    final finalCurve = curve ?? Get.defaultTransitionCurve;
+    final hasCurve = curve != null;
     if (fullscreenDialog && transition == null) {
+      /// by default, if no curve is defined, use Cupertino transition in the
+      /// default way (no linearTransition)... otherwise take the curve passed.
       return CupertinoFullscreenDialogTransition(
-          primaryRouteAnimation: animation,
+          primaryRouteAnimation: hasCurve
+              ? CurvedAnimation(parent: animation, curve: finalCurve)
+              : animation,
           secondaryRouteAnimation: secondaryAnimation,
           child: child,
-          linearTransition: true);
+          linearTransition: hasCurve);
+    }
+    if (customTransition != null) {
+      return customTransition.buildTransition(
+        context,
+        finalCurve,
+        alignment,
+        animation,
+        secondaryAnimation,
+        popGesture ?? Get.defaultPopGesture
+            ? _CupertinoBackGestureDetector<T>(
+                enabledCallback: () => _isPopGestureEnabled<T>(this),
+                onStartPopGesture: () => _startPopGesture<T>(this),
+                child: child)
+            : child,
+      );
     }
 
-    if (this.customTransition != null) {
-      return this.customTransition.buildTransition(
-          context,
-          curve,
-          alignment,
-          animation,
-          secondaryAnimation,
-          popGesture ?? Get.defaultPopGesture
-              ? _CupertinoBackGestureDetector<T>(
-                  enabledCallback: () => _isPopGestureEnabled<T>(this),
-                  onStartPopGesture: () => _startPopGesture<T>(this),
-                  child: child)
-              : child);
-    }
+    /// Apply the curve by default...
+    final iosAnimation = animation;
+    animation = CurvedAnimation(parent: animation, curve: finalCurve);
 
     switch (transition ?? Get.defaultTransition) {
       case Transition.leftToRight:
@@ -279,9 +290,9 @@ class GetPageRoute<T> extends PageRoute<T> {
       case Transition.cupertino:
         return CupertinoTransitions().buildTransitions(
             context,
-            curve,
+            hasCurve,
             alignment,
-            animation,
+            hasCurve ? animation : iosAnimation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
                 ? _CupertinoBackGestureDetector<T>(
@@ -331,39 +342,13 @@ class GetPageRoute<T> extends PageRoute<T> {
                 : child);
 
       case Transition.native:
-        if (GetPlatform.isIOS)
-          return CupertinoTransitions().buildTransitions(
-              context,
-              curve,
-              alignment,
-              animation,
-              secondaryAnimation,
-              popGesture ?? Get.defaultPopGesture
-                  ? _CupertinoBackGestureDetector<T>(
-                      enabledCallback: () => _isPopGestureEnabled<T>(this),
-                      onStartPopGesture: () => _startPopGesture<T>(this),
-                      child: child)
-                  : child);
-
-        return FadeUpwardsPageTransitionsBuilder().buildTransitions(
-            this,
-            context,
-            animation,
-            secondaryAnimation,
-            popGesture ?? Get.defaultPopGesture
-                ? _CupertinoBackGestureDetector<T>(
-                    enabledCallback: () => _isPopGestureEnabled<T>(this),
-                    onStartPopGesture: () => _startPopGesture<T>(this),
-                    child: child)
-                : child);
-
       default:
-        if (GetPlatform.isIOS)
+        if (GetPlatform.isIOS) {
           return CupertinoTransitions().buildTransitions(
               context,
-              curve,
+              hasCurve,
               alignment,
-              animation,
+              hasCurve ? animation : iosAnimation,
               secondaryAnimation,
               popGesture ?? Get.defaultPopGesture
                   ? _CupertinoBackGestureDetector<T>(
@@ -371,6 +356,7 @@ class GetPageRoute<T> extends PageRoute<T> {
                       onStartPopGesture: () => _startPopGesture<T>(this),
                       child: child)
                   : child);
+        }
 
         return FadeUpwardsPageTransitionsBuilder().buildTransitions(
             this,
@@ -389,8 +375,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   @override
   void dispose() {
     if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => GetInstance().removeDependencyByRoute("${settings.name}"));
+      WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
+          .removeDependencyByRoute("${settings?.name ?? routeName}"));
     }
     super.dispose();
   }
@@ -471,8 +457,8 @@ class _CupertinoBackGestureDetectorState<T>
 
   void _handleDragCancel() {
     assert(mounted);
-    // This can be called even if start is not called, paired with the "down" event
-    // that we don't consider here.
+    // This can be called even if start is not called, paired with
+    // the "down" event that we don't consider here.
     _backGestureController?.dragEnd(0.0);
     _backGestureController = null;
   }
@@ -488,6 +474,9 @@ class _CupertinoBackGestureDetectorState<T>
       case TextDirection.ltr:
         return value;
     }
+    // FIXME: shouldn't we return a default here?
+    //  or perhaps throw error
+    // ignore: avoid_returning_null
     return null;
   }
 
@@ -496,7 +485,7 @@ class _CupertinoBackGestureDetectorState<T>
     assert(debugCheckHasDirectionality(context));
     // For devices with notches, the drag area needs to be larger on the side
     // that has the notch.
-    double dragAreaWidth = Directionality.of(context) == TextDirection.ltr
+    var dragAreaWidth = Directionality.of(context) == TextDirection.ltr
         ? MediaQuery.of(context).padding.left
         : MediaQuery.of(context).padding.right;
     dragAreaWidth = max(dragAreaWidth, _kBackGestureWidth);
@@ -565,10 +554,12 @@ class _CupertinoBackGestureController<T> {
       // The closer the panel is to dismissing, the shorter the animation is.
       // We want to cap the animation time, but we want to use a linear curve
       // to determine it.
-      final int droppedPageForwardAnimationTime = min(
+      final droppedPageForwardAnimationTime = min(
         lerpDouble(
-                _kMaxDroppedSwipePageForwardAnimationTime, 0, controller.value)
-            .floor(),
+          _kMaxDroppedSwipePageForwardAnimationTime,
+          0,
+          controller.value,
+        ).floor(),
         _kMaxPageBackAnimationTime,
       );
       controller.animateTo(1.0,
@@ -578,15 +569,20 @@ class _CupertinoBackGestureController<T> {
       // This route is destined to pop at this point. Reuse navigator's pop.
       navigator.pop();
 
-      // The popping may have finished inline if already at the target destination.
+      // The popping may have finished inline if already at the target
+      // destination.
       if (controller.isAnimating) {
         // Otherwise, use a custom popping animation duration and curve.
-        final int droppedPageBackAnimationTime = lerpDouble(
-                0, _kMaxDroppedSwipePageForwardAnimationTime, controller.value)
-            .floor();
-        controller.animateBack(0.0,
-            duration: Duration(milliseconds: droppedPageBackAnimationTime),
-            curve: animationCurve);
+        final droppedPageBackAnimationTime = lerpDouble(
+          0,
+          _kMaxDroppedSwipePageForwardAnimationTime,
+          controller.value,
+        ).floor();
+        controller.animateBack(
+          0.0,
+          duration: Duration(milliseconds: droppedPageBackAnimationTime),
+          curve: animationCurve,
+        );
       }
     }
 
@@ -595,7 +591,7 @@ class _CupertinoBackGestureController<T> {
       // curve of the page transition mid-flight since CupertinoPageTransition
       // depends on userGestureInProgress.
       AnimationStatusListener animationStatusCallback;
-      animationStatusCallback = (AnimationStatus status) {
+      animationStatusCallback = (status) {
         navigator.didStopUserGesture();
         controller.removeStatusListener(animationStatusCallback);
       };

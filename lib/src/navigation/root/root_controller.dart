@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/src/state_manager/simple/get_state.dart';
+import '../../state_manager/simple/get_state.dart';
 
 class GetMaterialController extends GetxController {
   Key key;

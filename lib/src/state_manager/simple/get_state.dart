@@ -1,167 +1,130 @@
 import 'dart:collection';
-import 'package:flutter/widgets.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/root/smart_management.dart';
-import 'package:get/src/state_manager/rx/rx_interface.dart';
 
-typedef Disposer = void Function();
+import 'package:flutter/widgets.dart';
+
+import '../../../state_manager.dart';
+import '../../instance/get_instance.dart';
+import '../../navigation/root/smart_management.dart';
+import '../rx/rx_core/rx_interface.dart';
+import 'simple_builder.dart';
+
+// Changed to VoidCallback.
+//typedef Disposer = void Function();
+
+// replacing StateSetter, return if the Widget is mounted for extra validation.
+// if it brings overhead the extra call,
+typedef GetStateUpdate = bool Function();
+//typedef GetStateUpdate = void Function(VoidCallback fn);
+
+/// Complies with [GetStateUpdater]
+///
+/// This mixin's function represents a [GetStateUpdater], and might be used
+/// by [GetBuilder()], [SimpleBuilder()] (or similar) to comply
+/// with [GetStateUpdate] signature. REPLACING the [StateSetter].
+/// Avoids the potential (but extremely unlikely) issue of having
+/// the Widget in a dispose() state, and abstracts the
+/// API from the ugly fn((){}).
+// TODO: check performance HIT for the extra method call.
+mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
+  // To avoid the creation of an anonym function to be GC later.
+  // ignore: prefer_function_declarations_over_variables
+  static final VoidCallback _stateCallback = () {};
+
+  /// Experimental method to replace setState((){});
+  /// Used with GetStateUpdate.
+  bool getUpdate() {
+    final _mounted = mounted;
+    if (_mounted) setState(_stateCallback);
+    return _mounted;
+  }
+}
 
 class GetxController extends DisposableInterface {
-  final HashSet<StateSetter> _updaters = HashSet<StateSetter>();
+  final _updaters = HashSet<GetStateUpdate>();
 
-  final HashMap<String, StateSetter> _updatersIds =
-      HashMap<String, StateSetter>();
+//  final _updatersIds = HashMap<String, StateSetter>(); //<old>
+  final _updatersIds = HashMap<String, GetStateUpdate>();
 
-  /// Update GetBuilder with update();
+  final _updatersGroupIds = HashMap<String, HashSet<GetStateUpdate>>();
+
+  /// Rebuilds [GetBuilder] each time you call [update()];
+  /// Can take a List of [ids], that will only update the matching
+  /// `GetBuilder( id: )`,
+  /// [ids] can be reused among `GetBuilders` like group tags.
+  /// The update will only notify the Widgets, if [condition] is true.
   void update([List<String> ids, bool condition = true]) {
-    if (!condition) return;
-    (ids == null)
-        ? _updaters.forEach((rs) => rs(() {}))
-        : ids.forEach((element) {
-            _updatersIds[element]?.call(() {});
-          });
+    if (!condition) {
+      return;
+    }
+    if (ids == null) {
+//      _updaters?.forEach((rs) => rs(() {})); //<old>
+      for (final updater in _updaters) {
+        updater();
+      }
+    } else {
+      // @jonny, remove this commented code if it's not more optimized.
+//      for (final id in ids) {
+//        if (_updatersIds[id] != null) _updatersIds[id]();
+//        if (_updatersGroupIds[id] != null)
+//          for (final rs in _updatersGroupIds[id]) rs();
+//      }
+
+      for (final id in ids) {
+        _updatersIds[id]?.call();
+        // ignore: avoid_function_literals_in_foreach_calls
+        _updatersGroupIds[id]?.forEach((rs) => rs());
+      }
+    }
   }
 
-  Disposer addListener(StateSetter listener) {
+//  VoidCallback addListener(StateSetter listener) {//<old>
+  VoidCallback addListener(GetStateUpdate listener) {
     _updaters.add(listener);
     return () => _updaters.remove(listener);
   }
 
-  // void removeListener(StateSetter listener) {
-  //   _updaters.remove(listener);
-  // }
-
-  Disposer addListenerId(String key, StateSetter listener) {
-    _updatersIds[key] = listener;
-    return () => _updatersIds.remove(key);
+//  VoidCallback addListenerId(String key, StateSetter listener) {//<old>
+  VoidCallback addListenerId(String key, GetStateUpdate listener) {
+//    _printCurrentIds();
+    if (_updatersIds.containsKey(key)) {
+      _updatersGroupIds[key] ??= HashSet<GetStateUpdate>.identity();
+      _updatersGroupIds[key].add(listener);
+      return () {
+        _updatersGroupIds[key].remove(listener);
+      };
+    } else {
+      _updatersIds[key] = listener;
+      return () => _updatersIds.remove(key);
+    }
   }
 
-  void disposeKey(String key) => _updatersIds.remove(key);
+  /// To dispose an [id] from future updates(), this ids are registered
+  /// by [GetBuilder()] or similar, so is a way to unlink the state change with
+  /// the Widget from the Controller.
+  void disposeId(String id) {
+    _updatersIds.remove(id);
+    _updatersGroupIds.remove(id);
+  }
 
-  @override
-  void onInit() async {}
-
-  @override
-  void onReady() async {}
-
-  @override
-  void onClose() async {}
+  /// Remove this after checking the new implementation makes sense.
+  /// Uncomment this if you wanna control the removal of ids..
+  ///  bool _debugging = false;
+  /// Future<void> _printCurrentIds() async {
+  /// if (_debugging) return;
+  /// _debugging = true;
+  /// print('about to debug...');
+  /// await Future.delayed(Duration(milliseconds: 10));
+  /// int totalGroups = 0;
+  /// _updatersGroupIds.forEach((key, value) {
+  /// totalGroups += value.length;
+  /// });
+  /// int totalIds = _updatersIds.length;
+  /// print(
+  ///     'Total: ${totalIds + totalGroups},'+
+  ///     'in groups:$totalGroups, solo ids:$totalIds',);
+  /// _debugging = false;
+  /// }
 }
-
-// class GetBuilder<T extends GetxController> extends StatefulWidget {
-//   final Widget Function(T) builder;
-//   final bool global;
-//   final String id;
-//   final String tag;
-//   final bool autoRemove;
-//   final bool assignId;
-//   final void Function(State state) initState, dispose, didChangeDependencies;
-//   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
-//   final T init;
-//   const GetBuilder({
-//     Key key,
-//     this.init,
-//     this.global = true,
-//     @required this.builder,
-//     this.autoRemove = true,
-//     this.assignId = false,
-//     this.initState,
-//     this.tag,
-//     this.dispose,
-//     this.id,
-//     this.didChangeDependencies,
-//     this.didUpdateWidget,
-//   })  : assert(builder != null),
-//         super(key: key);
-//   @override
-//   _GetBuilderState<T> createState() => _GetBuilderState<T>();
-// }
-
-// class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
-//   GetxController controller;
-//   bool isCreator = false;
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     if (widget.initState != null) widget.initState(this);
-//     if (widget.global) {
-//       final isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-//       final isRegistred = GetInstance().isRegistred<T>(tag: widget.tag);
-
-//       if (isPrepared) {
-//         if (GetConfig.smartManagement != SmartManagement.keepFactory) {
-//           isCreator = true;
-//         }
-//         controller = GetInstance().find<T>(tag: widget.tag);
-//       } else if (isRegistred) {
-//         controller = GetInstance().find<T>(tag: widget.tag);
-//         isCreator = false;
-//       } else {
-//         controller = widget.init;
-//         isCreator = true;
-//         GetInstance().put<T>(controller, tag: widget.tag);
-//       }
-//     } else {
-//       controller = widget.init;
-//       isCreator = true;
-//       controller?.onStart();
-//     }
-
-//     if (widget.global &&
-//         GetConfig.smartManagement == SmartManagement.onlyBuilder) {
-//       controller?.onStart();
-//     }
-//     (widget.id == null)
-//         ? controller.addListener(setState)
-//         : controller.addListenerId(widget.id, setState);
-//   }
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     if (widget.dispose != null) widget.dispose(this);
-//     if (isCreator || widget.assignId) {
-//       if (widget.autoRemove && GetInstance().isRegistred<T>(tag: widget.tag)) {
-//         (widget.id == null)
-//             ? controller.removeListener(setState)
-//             : controller.removeListenerId(widget.id);
-//         GetInstance().delete<T>(tag: widget.tag);
-//       }
-//     } else {
-//       (widget.id == null)
-//           ? controller.removeListener(setState)
-//           : controller.removeListenerId(widget.id);
-//     }
-//   }
-
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     if (widget.didChangeDependencies != null) {
-//       widget.didChangeDependencies(this);
-//     }
-//   }
-
-//   @override
-//   void didUpdateWidget(GetBuilder oldWidget) {
-//     super.didUpdateWidget(oldWidget as GetBuilder<T>);
-//     if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return widget.builder(controller);
-//   }
-// }
-
-// class Updater {
-//   final StateSetter updater;
-//   final String id;
-//   const Updater({this.updater, this.id});
-// }
-
-// typedef UpdaterBuilder = Updater Function();
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
   final Widget Function(T) builder;
@@ -173,6 +136,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
+
   const GetBuilder({
     Key key,
     this.init,
@@ -188,15 +152,17 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.didUpdateWidget,
   })  : assert(builder != null),
         super(key: key);
+
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
-  GetxController controller;
+class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
+    with GetStateUpdaterMixin {
+  T controller;
+
   bool isCreator = false;
-  final HashSet<Disposer> disposers = HashSet<Disposer>();
-  Disposer remove;
+  VoidCallback remove;
 
   @override
   void initState() {
@@ -230,10 +196,28 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
         GetConfig.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    remove = (widget.id == null)
-        ? controller?.addListener(setState)
-        : controller?.addListenerId(widget.id, setState);
+    _subscribeToController();
   }
+
+  /// Register to listen Controller's events.
+  /// It gets a reference to the remove() callback, to delete the
+  /// setState "link" from the Controller.
+  void _subscribeToController() {
+    remove?.call();
+    remove = (widget.id == null)
+//        ? controller?.addListener(setState) //<old>
+//        : controller?.addListenerId(widget.id, setState); //<old>
+        ? controller?.addListener(getUpdate)
+        : controller?.addListenerId(widget.id, getUpdate);
+  }
+
+  /// Sample for [GetStateUpdate] when you don't wanna
+  /// use [GetStateHelper mixin].
+  ///  bool _getUpdater() {
+  ///    final _mounted = mounted;
+  ///    if (_mounted) setState(() {});
+  ///    return _mounted;
+  ///  }
 
   @override
   void dispose() {
@@ -241,17 +225,11 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
     if (widget.dispose != null) widget.dispose(this);
     if (isCreator || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
-        if (remove != null) remove();
-
         GetInstance().delete<T>(tag: widget.tag);
       }
-    } else {
-      if (remove != null) remove();
     }
 
-    disposers.forEach((element) {
-      element();
-    });
+    remove?.call();
   }
 
   @override
@@ -265,76 +243,33 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>> {
   @override
   void didUpdateWidget(GetBuilder oldWidget) {
     super.didUpdateWidget(oldWidget as GetBuilder<T>);
+    // to avoid conflicts when modifying a "grouped" id list.
+    if (oldWidget.id != widget.id) {
+      _subscribeToController();
+    }
     if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
   }
 
-  Widget get notifyChildren {
-    final old = Value._remove;
-    Value._remove = disposers;
-    final observer = Value._setter;
-    Value._setter = setState;
-    final result = widget.builder(controller);
-    Value._setter = observer;
-    Value._remove = old;
-    return result;
-  }
-
   @override
-  Widget build(BuildContext context) => notifyChildren;
+  Widget build(BuildContext context) => widget.builder(controller);
 }
 
+/// This is a experimental feature.
+/// Meant to be used with SimpleBuilder, it auto-registers the variable
+/// like Rx() does with Obx().
 class Value<T> extends GetxController {
   Value([this._value]);
+
   T _value;
 
   T get value {
-    if (_setter != null) {
-      if (!_updaters.contains(_setter)) {
-        final add = addListener(_setter);
-        _remove.add(add);
-      }
-    }
+    TaskManager.instance.notify(_updaters);
     return _value;
   }
-
-  static StateSetter _setter;
-
-  static HashSet<Disposer> _remove;
 
   set value(T newValue) {
     if (_value == newValue) return;
     _value = newValue;
     update();
-  }
-}
-
-class SimpleBuilder extends StatefulWidget {
-  final Widget Function(BuildContext) builder;
-  const SimpleBuilder({Key key, @required this.builder})
-      : assert(builder != null),
-        super(key: key);
-  @override
-  _SimpleBuilderState createState() => _SimpleBuilderState();
-}
-
-class _SimpleBuilderState extends State<SimpleBuilder> {
-  final HashSet<Disposer> disposers = HashSet<Disposer>();
-
-  @override
-  void dispose() {
-    super.dispose();
-    disposers.forEach((element) => element());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    HashSet<Disposer> old = Value._remove;
-    Value._remove = disposers;
-    StateSetter observer = Value._setter;
-    Value._setter = setState;
-    Widget result = widget.builder(context);
-    Value._remove = old;
-    Value._setter = observer;
-    return result;
   }
 }

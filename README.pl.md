@@ -4,11 +4,15 @@
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
-[![Gitter](https://badges.gitter.im/flutter_get/community.svg)](https://gitter.im/flutter_get/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
+[![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
+[![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx)
+[![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 <a href="https://github.com/Solido/awesome-flutter">
    <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
+
 
 ![](getx.png)
 
@@ -176,7 +180,7 @@ Obx (() => Text (controller.name));
 To wszystko. *Proste*, co nie?
 
 ### Bardziej szczegółowo o menadżerze stanu
-**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./docs/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
+**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./documentation/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
 
 ### Video tłumaczące użycie menadżera stanu
 
@@ -237,7 +241,7 @@ Zobacz, ze do żadnej z tych operacji nie potrzebowałeś contextu. Jest to jedn
 
 ### Więcej o routach
 
-**Get używa named routes i także oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./docs/en_US/route_management.md)**
+**Get używa named routes i także oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./documentation/en_US/route_management.md)**
 
 ### Video tłumaczące użycie
 
@@ -274,7 +278,7 @@ Text(controller.textFromApi);
 ```
 ### Bardziej szczegółowo o menadżerze dependencies
 
-**Zobzcz więcej w dokumentacji [tutaj](./docs/en_US/dependency_management.md)**
+**Zobzcz więcej w dokumentacji [tutaj](./documentation/en_US/dependency_management.md)**
 
 # Jak włożyć coś od siebie
 
@@ -466,6 +470,19 @@ Get.config(
 )
 ```
 
+Opcjonalnie możesz przekierować wszystkie logi z Get by używać swojej ulubionej paczki i zbierać w niej logi.
+
+```dart
+GetMaterialApp(
+  enableLog: true,
+    logWriterCallback: localLogWriter,
+	);
+	void localLogWriter(String text, {bool isError = false}) {
+	  // tutaj przekaż wiadomosci do ulubionej paczki
+	    // pamiętaj że nawet jeśli "enableLog: false" logi i tak będą wysłane w tym callbacku
+		  // Musisz sprawdzić konfiguracje flag  jeśli chcesz przez GetConfig.isLogEnable
+		  }
+```
 ## Video tłumaczące inne funkcjonalności GetX
 
 
@@ -505,7 +522,7 @@ Teraz:
 ```dart
 GetMaterialApp(
   getPages: [
-    GetPage(name: '/', page:()=> Home()),
+    GetPage(name: '/', page: () => Home()),
   ]
 )
 ```

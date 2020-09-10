@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_state/home/bindings/home_binding.dart';
-import 'package:get_state/home/views/country_view.dart';
-import 'home/views/details_view.dart';
-import 'home/views/home_view.dart';
+
+import 'routes/app_pages.dart';
+import 'shared/logger/logger_utils.dart';
 
 void main() {
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      enableLog: true,
-      // logWriterCallback: localLogWriter,
-      getPages: [
-        GetPage(name: '/', page: () => HomePage(), binding: HomeBinding()),
-        GetPage(name: '/country', page: () => CountryPage()),
-        GetPage(name: '/details', page: () => DetailsPage()),
-      ],
-    ),
-  );
+  runApp(MyApp());
 }
 
-// Sample of abstract logging function
-void localLogWriter(String text, {bool isError = false}) {
-  print('** ' + text + ' [' + isError.toString() + ']');
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      enableLog: true,
+      logWriterCallback: Logger.write,
+      initialRoute: AppPages.INITIAL,
+      getPages: AppPages.routes,
+    );
+  }
 }

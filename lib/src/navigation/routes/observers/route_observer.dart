@@ -1,5 +1,10 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/instance/get_instance.dart';
+
+import '../../../../route_manager.dart';
+import '../../../instance/get_instance.dart';
+import '../../dialog/dialog_route.dart';
+import '../../snackbar/snack_route.dart';
+import '../default_route.dart';
 
 class Routing {
   String current;
@@ -11,6 +16,7 @@ class Routing {
   bool isSnackbar;
   bool isBottomSheet;
   bool isDialog;
+
   Routing({
     this.current = '',
     this.previous = '',
@@ -25,7 +31,6 @@ class Routing {
 
   void update(void fn(Routing value)) {
     fn(this);
-    GetConfig.currentRoute = this.current;
   }
 }
 
@@ -33,6 +38,7 @@ class GetObserver extends NavigatorObserver {
   final Function(Routing) routing;
 
   GetObserver([this.routing, this._routeSend]);
+
   final Routing _routeSend;
 
   Route<dynamic> route;
@@ -43,31 +49,51 @@ class GetObserver extends NavigatorObserver {
   String current;
   String previous;
   Object args;
+
   // String previousArgs;
   String removed;
 
+  String name(Route<dynamic> route) {
+    if (route?.settings?.name != null) {
+      return route.settings.name;
+    } else if (route is GetPageRoute) {
+      return route.routeName;
+    } else if (route is GetDialogRoute) {
+      return route.name;
+    } else if (route is GetModalBottomSheetRoute) {
+      return route.name;
+    } else {
+      return route?.settings?.name;
+    }
+  }
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
-    if ('${route?.settings?.name}' == 'snackbar') {
-      GetConfig.log("[GETX] OPEN SNACKBAR ${route?.settings?.name}");
-    } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      GetConfig.log("[GETX] OPEN BOTTOMSHEET ${route?.settings?.name}");
-    } else if ('${route?.settings?.name}' == 'dialog') {
-      GetConfig.log("[GETX] OPEN DIALOG ${route?.settings?.name}");
-    } else {
-      GetConfig.log("[GETX] GOING TO ROUTE ${route?.settings?.name}");
-    }
+    var isGetPageRoute = route is GetPageRoute;
+    var isSnackbar = route is SnackRoute;
+    var isDialog = route is GetDialogRoute;
+    var isBottomSheet = route is GetModalBottomSheetRoute;
+    var routeName = name(route);
 
-    _routeSend.update((value) {
-      if (route is PageRoute) value.current = '${route?.settings?.name}';
+    if (isSnackbar) {
+      GetConfig.log("OPEN SNACKBAR $routeName");
+    } else if (isBottomSheet || isDialog) {
+      GetConfig.log("OPEN $routeName");
+    } else if (isGetPageRoute) {
+      GetConfig.log("GOING TO ROUTE $routeName");
+    }
+    GetConfig.currentRoute = routeName;
+
+    _routeSend?.update((value) {
+      if (route is PageRoute) value.current = routeName;
       value.args = route?.settings?.arguments;
       value.route = route;
       value.isBack = false;
       value.removed = '';
-      value.previous = '${previousRoute?.settings?.name}';
-      value.isSnackbar = '${route?.settings?.name}' == 'snackbar';
-      value.isBottomSheet = '${route?.settings?.name}' == 'bottomsheet';
-      value.isDialog = '${route?.settings?.name}' == 'dialog';
+      value.previous = previousRoute?.settings?.name ?? '';
+      value.isSnackbar = isSnackbar;
+      value.isBottomSheet = isBottomSheet;
+      value.isDialog = isDialog;
     });
     if (routing != null) routing(_routeSend);
   }
@@ -76,24 +102,30 @@ class GetObserver extends NavigatorObserver {
   void didPop(Route route, Route previousRoute) {
     super.didPop(route, previousRoute);
 
-    if ('${route?.settings?.name}' == 'snackbar') {
-      GetConfig.log("[GETX] CLOSE SNACKBAR ${route?.settings?.name}");
-    } else if ('${route?.settings?.name}' == 'bottomsheet') {
-      GetConfig.log("[GETX] CLOSE BOTTOMSHEET ${route?.settings?.name}");
-    } else if ('${route?.settings?.name}' == 'dialog') {
-      GetConfig.log("[GETX] CLOSE DIALOG ${route?.settings?.name}");
-    } else {
-      GetConfig.log("[GETX] BACK ROUTE ${route?.settings?.name}");
-    }
+    var isGetPageRoute = route is GetPageRoute;
+    var isSnackbar = route is SnackRoute;
+    var isDialog = route is GetDialogRoute;
+    var isBottomSheet = route is GetModalBottomSheetRoute;
+    var routeName = name(route);
 
-    _routeSend.update((value) {
-      if (previousRoute is PageRoute)
-        value.current = '${previousRoute?.settings?.name}';
+    if (isSnackbar) {
+      GetConfig.log("CLOSE SNACKBAR $routeName");
+    } else if (isBottomSheet || isDialog) {
+      GetConfig.log("CLOSE $routeName");
+    } else if (isGetPageRoute) {
+      GetConfig.log("CLOSE TO ROUTE $routeName");
+    }
+    GetConfig.currentRoute = routeName;
+
+    _routeSend?.update((value) {
+      if (previousRoute is PageRoute) {
+        value.current = previousRoute?.settings?.name ?? '';
+      }
       value.args = route?.settings?.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
-      value.previous = '${route?.settings?.name}';
+      value.previous = route?.settings?.name ?? '';
       value.isSnackbar = false;
       value.isBottomSheet = false;
       value.isDialog = false;
@@ -104,11 +136,14 @@ class GetObserver extends NavigatorObserver {
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    GetConfig.log("[GETX] REPLACE ROUTE ${oldRoute?.settings?.name}");
-    GetConfig.log("[GETX] NEW ROUTE ${newRoute?.settings?.name}");
 
-    _routeSend.update((value) {
-      if (newRoute is PageRoute) value.current = '${newRoute?.settings?.name}';
+    GetConfig.log("REPLACE ROUTE ${oldRoute?.settings?.name}");
+    GetConfig.log("NEW ROUTE ${newRoute?.settings?.name}");
+
+    GetConfig.currentRoute = name(newRoute);
+
+    _routeSend?.update((value) {
+      if (newRoute is PageRoute) value.current = newRoute?.settings?.name ?? '';
       value.args = newRoute?.settings?.arguments;
       value.route = newRoute;
       value.isBack = false;
@@ -124,13 +159,13 @@ class GetObserver extends NavigatorObserver {
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    GetConfig.log("[GETX] REMOVING ROUTE ${route?.settings?.name}");
+    GetConfig.log("REMOVING ROUTE ${route?.settings?.name}");
 
-    _routeSend.update((value) {
+    _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
-      value.removed = '${route?.settings?.name}';
-      value.previous = '${route?.settings?.name}';
+      value.removed = route?.settings?.name ?? '';
+      value.previous = route?.settings?.name ?? '';
     });
     if (routing != null) routing(_routeSend);
   }

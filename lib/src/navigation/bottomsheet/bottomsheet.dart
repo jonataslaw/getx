@@ -16,6 +16,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     @required this.isScrollControlled,
     RouteSettings settings,
   })  : assert(isScrollControlled != null),
+        name = "BOTTOMSHEET: ${builder.hashCode}",
         assert(isDismissible != null),
         assert(enableDrag != null),
         super(settings: settings);
@@ -30,6 +31,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
+  final String name;
 
   // remove safearea from top
   final bool removeTop;
@@ -59,7 +61,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    final BottomSheetThemeData sheetTheme =
+    final sheetTheme =
         theme?.bottomSheetTheme ?? Theme.of(context).bottomSheetTheme;
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
@@ -128,17 +130,16 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
-    final String routeLabel = _getRouteLabel(localizations);
+    final mediaQuery = MediaQuery.of(context);
+    final localizations = MaterialLocalizations.of(context);
+    final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
       animation: widget.route.animation,
-      builder: (BuildContext context, Widget child) {
+      builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
-        final double animationValue = mediaQuery.accessibleNavigation
+        final animationValue = mediaQuery.accessibleNavigation
             ? 1.0
             : widget.route.animation.value;
         return Semantics(

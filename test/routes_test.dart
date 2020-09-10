@@ -5,37 +5,39 @@ import 'package:get/src/navigation/routes/get_route.dart';
 void main() {
   testWidgets(
     'GetPage page null',
-    (WidgetTester testr) async {
+    (tester) async {
       expect(() => GetPage(page: null, name: null), throwsAssertionError);
     },
   );
 
   testWidgets(
-    "GetRoute maintainState null",
-    (WidgetTester testr) async {
+    "GetPage maintainState null",
+    (tester) async {
       expect(
-          () => GetPage(page: () => Scaffold(), maintainState: null, name: '/'),
-          throwsAssertionError);
+        () => GetPage(page: () => Scaffold(), maintainState: null, name: '/'),
+        throwsAssertionError,
+      );
     },
   );
 
   testWidgets(
-    "GetRoute name null",
-    (WidgetTester testr) async {
+    "GetPage name null",
+    (tester) async {
       expect(
-          () =>
-              GetPage(page: () => Scaffold(), maintainState: null, name: null),
-          throwsAssertionError);
+        () => GetPage(page: () => Scaffold(), maintainState: null, name: null),
+        throwsAssertionError,
+      );
     },
   );
 
   testWidgets(
-    "GetRoute fullscreenDialog null",
-    (WidgetTester testr) async {
+    "GetPage fullscreenDialog null",
+    (tester) async {
       expect(
-          () => GetPage(
-              page: () => Scaffold(), fullscreenDialog: null, name: '/'),
-          throwsAssertionError);
+        () =>
+            GetPage(page: () => Scaffold(), fullscreenDialog: null, name: '/'),
+        throwsAssertionError,
+      );
     },
   );
 }

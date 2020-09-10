@@ -61,12 +61,13 @@ void main() {
 
   testWidgets(
     "GetMaterialApp with debugShowMaterialGrid null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
-          () => GetMaterialApp(
-                debugShowMaterialGrid: null,
-              ),
-          throwsAssertionError);
+        () => GetMaterialApp(
+          debugShowMaterialGrid: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/src/core/log.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/routes/get_route.dart';
+import '../../../get.dart';
+import '../../core/log.dart';
+import '../../instance/get_instance.dart';
+import '../routes/get_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -97,6 +97,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> shortcuts;
+
   // final Map<LocalKey, ActionFactory> actions;
   final bool debugShowMaterialGrid;
   final Function(Routing) routingCallback;
@@ -209,7 +210,7 @@ class GetMaterialApp extends StatelessWidget {
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
-                transitionDuration ?? Get.defaultDurationTransition,
+                transitionDuration ?? Get.defaultTransitionDuration,
             defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
           );
         },
@@ -259,49 +260,4 @@ class GetMaterialApp extends StatelessWidget {
 
 abstract class Translations {
   Map<String, Map<String, String>> get keys;
-}
-
-extension Trans on String {
-  String get tr {
-    // Returns the key if locale is null.
-    if (Get.locale?.languageCode == null) return this;
-
-    // Checks whether the language code and country code are present, and whether the key is also present.
-    if (Get.translations.containsKey(
-            "${Get.locale.languageCode}_${Get.locale.countryCode}") &&
-        Get.translations["${Get.locale.languageCode}_${Get.locale.countryCode}"]
-            .containsKey(this)) {
-      return Get.translations[
-          "${Get.locale.languageCode}_${Get.locale.countryCode}"][this];
-
-      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
-    } else if (Get.translations.containsKey(Get.locale.languageCode) &&
-        Get.translations[Get.locale.languageCode].containsKey(this)) {
-      return Get.translations[Get.locale.languageCode][this];
-      // If there is no corresponding language or corresponding key, return the key.
-    } else if (Get.fallbackLocale != null &&
-        Get.translations.containsKey(
-            "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
-        Get.translations[
-                "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-            .containsKey(this)) {
-      return Get.translations[
-              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-          [this];
-
-      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
-    } else {
-      return this;
-    }
-  }
-
-  String trArgs([List<String> args]) {
-    String key = tr;
-    if (args != null) {
-      args.forEach((arg) {
-        key = key.replaceFirst(RegExp(r'%s'), arg.toString());
-      });
-    }
-    return key;
-  }
 }

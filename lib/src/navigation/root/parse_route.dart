@@ -1,25 +1,20 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/src/navigation/routes/get_route.dart';
 
-class GetPageMatch {
-  GetPageMatch(this.route);
-
-  GetPage route;
-  Map<String, String> parameters = <String, String>{};
-}
+import '../routes/get_route.dart';
 
 class ParseRouteTree {
-  final List<ParseRouteTreeNode> _nodes = <ParseRouteTreeNode>[];
+  final List<_ParseRouteTreeNode> _nodes = <_ParseRouteTreeNode>[];
+
   // bool _hasDefaultRoute = false;
 
   void addRoute(GetPage route) {
-    String path = route.name;
+    var path = route.name;
 
     if (path == Navigator.defaultRouteName) {
       // if (_hasDefaultRoute) {
       //   throw ("Default route was already defined");
       // }
-      var node = ParseRouteTreeNode(path, ParseRouteTreeNodeType.component);
+      var node = _ParseRouteTreeNode(path, _ParseRouteTreeNodeType.component);
       node.routes = [route];
       _nodes.add(node);
       // _hasDefaultRoute = true;
@@ -28,14 +23,14 @@ class ParseRouteTree {
     if (path.startsWith("/")) {
       path = path.substring(1);
     }
-    List<String> pathComponents = path.split('/');
-    ParseRouteTreeNode parent;
-    for (int i = 0; i < pathComponents.length; i++) {
-      String component = pathComponents[i];
-      ParseRouteTreeNode node = _nodeForComponent(component, parent);
+    var pathComponents = path.split('/');
+    _ParseRouteTreeNode parent;
+    for (var i = 0; i < pathComponents.length; i++) {
+      var component = pathComponents[i];
+      var node = _nodeForComponent(component, parent);
       if (node == null) {
-        ParseRouteTreeNodeType type = _typeForComponent(component);
-        node = ParseRouteTreeNode(component, type);
+        var type = _typeForComponent(component);
+        node = _ParseRouteTreeNode(component, type);
         node.parent = parent;
         if (parent == null) {
           _nodes.add(node);
@@ -54,26 +49,27 @@ class ParseRouteTree {
     }
   }
 
-  GetPageMatch matchRoute(String path) {
-    String usePath = path;
+  _GetPageMatch matchRoute(String path) {
+    var usePath = path;
     if (usePath.startsWith("/")) {
       usePath = path.substring(1);
     }
-    List<String> components = usePath.split("/");
+
+    // should take off url parameters first..
+    final uri = Uri.tryParse(usePath);
+//    List<String> components = usePath.split("/");
+    var components = uri.pathSegments;
     if (path == Navigator.defaultRouteName) {
       components = ["/"];
     }
-
-    Map<ParseRouteTreeNode, ParseRouteTreeNodeMatch> nodeMatches =
-        <ParseRouteTreeNode, ParseRouteTreeNodeMatch>{};
-    List<ParseRouteTreeNode> nodesToCheck = _nodes;
-    for (String checkComponent in components) {
-      Map<ParseRouteTreeNode, ParseRouteTreeNodeMatch> currentMatches =
-          <ParseRouteTreeNode, ParseRouteTreeNodeMatch>{};
-      List<ParseRouteTreeNode> nextNodes = <ParseRouteTreeNode>[];
-      for (ParseRouteTreeNode node in nodesToCheck) {
-        String pathPart = checkComponent;
-        Map<String, String> queryMap = {};
+    var nodeMatches = <_ParseRouteTreeNode, _ParseRouteTreeNodeMatch>{};
+    var nodesToCheck = _nodes;
+    for (final checkComponent in components) {
+      final currentMatches = <_ParseRouteTreeNode, _ParseRouteTreeNodeMatch>{};
+      final nextNodes = <_ParseRouteTreeNode>[];
+      for (final node in nodesToCheck) {
+        var pathPart = checkComponent;
+        var queryMap = <String, String>{};
 
         if (checkComponent.contains("?") && !checkComponent.contains("=")) {
           var splitParam = checkComponent.split("?");
@@ -87,24 +83,27 @@ class ParseRouteTree {
             queryMap = {splitParam2[0]: splitParam2[1]};
           } else {
             pathPart = splitParam[0];
-            final segunda = splitParam[1];
-            var other = segunda.split(RegExp(r"[&,=]"));
+            final second = splitParam[1];
+            var other = second.split(RegExp(r"[&,=]"));
             for (var i = 0; i < (other.length - 1); i++) {
-              bool impar = (i % 2 == 0);
-              if (impar) {
+              var isOdd = (i % 2 == 0);
+              if (isOdd) {
                 queryMap.addAll({other[0 + i]: other[1 + i]});
               }
             }
           }
         }
 
-        bool isMatch = (node.part == pathPart || node.isParameter());
+        final isMatch = (node.part == pathPart || node.isParameter());
         if (isMatch) {
-          ParseRouteTreeNodeMatch parentMatch = nodeMatches[node.parent];
-          ParseRouteTreeNodeMatch match =
-              ParseRouteTreeNodeMatch.fromMatch(parentMatch, node);
+          final parentMatch = nodeMatches[node.parent];
+          final match = _ParseRouteTreeNodeMatch.fromMatch(parentMatch, node);
+
+          // TODO: find a way to clean this implementation.
+          match.parameters.addAll(uri.queryParameters);
+
           if (node.isParameter()) {
-            String paramKey = node.part.substring(1);
+            final paramKey = node.part.substring(1);
             match.parameters[paramKey] = pathPart;
           }
           if (queryMap != null) {
@@ -123,16 +122,16 @@ class ParseRouteTree {
         return null;
       }
     }
-    List<ParseRouteTreeNodeMatch> matches = nodeMatches.values.toList();
+    var matches = nodeMatches.values.toList();
     if (matches.length > 0) {
-      ParseRouteTreeNodeMatch match = matches.first;
-      ParseRouteTreeNode nodeToUse = match.node;
+      var match = matches.first;
+      var nodeToUse = match.node;
 
       if (nodeToUse != null &&
           nodeToUse.routes != null &&
           nodeToUse.routes.length > 0) {
-        List<GetPage> routes = nodeToUse.routes;
-        GetPageMatch routeMatch = GetPageMatch(routes[0]);
+        var routes = nodeToUse.routes;
+        var routeMatch = _GetPageMatch(routes[0]);
 
         routeMatch.parameters = match.parameters;
 
@@ -142,13 +141,15 @@ class ParseRouteTree {
     return null;
   }
 
-  ParseRouteTreeNode _nodeForComponent(
-      String component, ParseRouteTreeNode parent) {
-    List<ParseRouteTreeNode> nodes = _nodes;
+  _ParseRouteTreeNode _nodeForComponent(
+    String component,
+    _ParseRouteTreeNode parent,
+  ) {
+    var nodes = _nodes;
     if (parent != null) {
       nodes = parent.nodes;
     }
-    for (ParseRouteTreeNode node in nodes) {
+    for (var node in nodes) {
       if (node.part == component) {
         return node;
       }
@@ -156,10 +157,10 @@ class ParseRouteTree {
     return null;
   }
 
-  ParseRouteTreeNodeType _typeForComponent(String component) {
-    ParseRouteTreeNodeType type = ParseRouteTreeNodeType.component;
+  _ParseRouteTreeNodeType _typeForComponent(String component) {
+    var type = _ParseRouteTreeNodeType.component;
     if (_isParameterComponent(component)) {
-      type = ParseRouteTreeNodeType.parameter;
+      type = _ParseRouteTreeNodeType.parameter;
     }
     return type;
   }
@@ -170,47 +171,56 @@ class ParseRouteTree {
 
   Map<String, String> parseQueryString(String query) {
     var search = RegExp('([^&=]+)=?([^&]*)');
-    var params = Map<String, String>();
+    var params = <String, String>{};
     if (query.startsWith('?')) query = query.substring(1);
     decode(String s) => Uri.decodeComponent(s.replaceAll('+', ' '));
+
     for (Match match in search.allMatches(query)) {
-      String key = decode(match.group(1));
-      String value = decode(match.group(2));
+      var key = decode(match.group(1));
+      final value = decode(match.group(2));
       params[key] = value;
     }
     return params;
   }
 }
 
-class ParseRouteTreeNodeMatch {
-  ParseRouteTreeNodeMatch(this.node);
+class _ParseRouteTreeNodeMatch {
+  _ParseRouteTreeNodeMatch(this.node);
 
-  ParseRouteTreeNodeMatch.fromMatch(ParseRouteTreeNodeMatch match, this.node) {
+  _ParseRouteTreeNodeMatch.fromMatch(
+      _ParseRouteTreeNodeMatch match, this.node) {
     parameters = <String, String>{};
     if (match != null) {
       parameters.addAll(match.parameters);
     }
   }
 
-  ParseRouteTreeNode node;
+  _ParseRouteTreeNode node;
   Map<String, String> parameters = <String, String>{};
 }
 
-class ParseRouteTreeNode {
-  ParseRouteTreeNode(this.part, this.type);
+class _ParseRouteTreeNode {
+  _ParseRouteTreeNode(this.part, this.type);
 
   String part;
-  ParseRouteTreeNodeType type;
+  _ParseRouteTreeNodeType type;
   List<GetPage> routes = <GetPage>[];
-  List<ParseRouteTreeNode> nodes = <ParseRouteTreeNode>[];
-  ParseRouteTreeNode parent;
+  List<_ParseRouteTreeNode> nodes = <_ParseRouteTreeNode>[];
+  _ParseRouteTreeNode parent;
 
   bool isParameter() {
-    return type == ParseRouteTreeNodeType.parameter;
+    return type == _ParseRouteTreeNodeType.parameter;
   }
 }
 
-enum ParseRouteTreeNodeType {
+class _GetPageMatch {
+  _GetPageMatch(this.route);
+
+  GetPage route;
+  Map<String, String> parameters = <String, String>{};
+}
+
+enum _ParseRouteTreeNodeType {
   component,
   parameter,
 }

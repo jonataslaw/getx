@@ -28,7 +28,7 @@ void main() {
                   'Bool: ${controller.boolean.value}',
                 ),
                 Text(
-                  'Map: ${controller.map.value.length}',
+                  'Map: ${controller.map.length}',
                 ),
                 FlatButton(
                   child: Text("increment"),
@@ -74,22 +74,22 @@ void main() {
 }
 
 class Controller2 extends GetxController {
-  var lazy = 0.obs;
+  RxInt lazy = 0.obs;
 }
 
 class ControllerNonGlobal extends GetxController {
-  var nonGlobal = 0.obs;
+  RxInt nonGlobal = 0.obs;
 }
 
 class Controller extends GetxController {
   static Controller get to => Get.find();
 
-  var counter = 0.obs;
-  var doubleNum = 0.0.obs;
-  var string = "string".obs;
-  var list = [].obs;
-  var map = {}.obs;
-  var boolean = true.obs;
+  RxInt counter = 0.obs;
+  RxDouble doubleNum = 0.0.obs;
+  RxString string = "string".obs;
+  RxList list = [].obs;
+  RxMap map = {}.obs;
+  RxBool boolean = true.obs;
 
   void increment() {
     counter.value++;

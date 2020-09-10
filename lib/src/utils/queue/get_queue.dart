@@ -10,7 +10,7 @@ class GetQueue {
       var item = _queue.removeAt(0);
       try {
         item.completer.complete(await item.job());
-      } catch (e) {
+      } on Exception catch (e) {
         item.completer.completeError(e);
       }
       _active = false;
@@ -27,7 +27,8 @@ class GetQueue {
 }
 
 class _Item {
-  final completer;
-  final job;
+  final dynamic completer;
+  final dynamic job;
+
   _Item(this.completer, this.job);
 }
