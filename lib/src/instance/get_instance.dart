@@ -159,12 +159,16 @@ class GetInstance {
   /// Optionally associating the current Route to the lifetime of the instance,
   /// if [GetConfig.smartManagement] is marked as [SmartManagement.full] or
   /// [GetConfig.keepFactory]
+  /// Only flags `isInit` if it's using `Get.create()`
+  /// (not for Singletons access).
   bool _initDependencies<S>({String name}) {
     final key = _getKey(S, name);
     final isInit = _singl[key].isInit;
     if (!isInit) {
       _startController<S>(tag: name);
-      _singl[key].isInit = true;
+      if (_singl[key].isSingleton) {
+        _singl[key].isInit = true;
+      }
       if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
         _registerRouteInstance<S>(tag: name);
       }

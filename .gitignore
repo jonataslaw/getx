@@ -74,3 +74,9 @@ captures/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+example/macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+
+example/macos/Flutter/ephemeral/
+
+example/macos/Flutter/GeneratedPluginRegistrant.swift
