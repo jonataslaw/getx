@@ -179,13 +179,17 @@ class _RxImpl<T> implements RxInterface<T> {
   }
 
   Stream<T> get stream => subject.stream;
-
   StreamSubscription<T> listen(void Function(T) onData,
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  /// Binds an existing stream to this Rx to keep the values in sync.
-  void bindStream(Stream<T> stream) => stream.listen((va) => value = va);
+  /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
+  /// You can bind multiple sources to update the value.
+  /// Closing the subscription will happen automatically when the observer
+  /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
+  void bindStream(Stream<T> stream) {
+    _subscriptions[stream] = stream.listen((va) => value = va);
+  }
 
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
 }

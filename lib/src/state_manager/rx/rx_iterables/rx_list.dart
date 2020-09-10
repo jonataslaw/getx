@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -31,7 +32,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   StreamController<List<E>> subject = StreamController.broadcast();
 
-  final Map<Stream<List<E>>, StreamSubscription> _subscriptions = {};
+  final _subscriptions = HashMap<Stream<List<E>>, StreamSubscription>();
 
   void operator []=(int index, E val) {
     _list[index] = val;
@@ -209,7 +210,13 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   }) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  void bindStream(Stream<List<E>> stream) => stream.listen((va) => value = va);
+  /// Binds an existing [Stream<List>] to this [RxList].
+  /// You can bind multiple sources to update the value.
+  /// Closing the subscription will happen automatically when the observer
+  /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
+  void bindStream(Stream<List<E>> stream) {
+    _subscriptions[stream] = stream.listen((va) => value = va);
+  }
 
   @override
   E get first => value.first;
