@@ -241,9 +241,7 @@ class GetInstance {
       }
 
       GetConfig.log('Lazy instance "$S" created');
-
-      var _value = put<S>(_factory[key].builder() as S);
-
+      final _value = put<S>(_factory[key].builder() as S, tag: tag);
       _initDependencies<S>(name: tag);
 
       if (GetConfig.smartManagement != SmartManagement.keepFactory &&
