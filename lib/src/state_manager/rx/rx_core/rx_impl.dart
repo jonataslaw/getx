@@ -217,57 +217,66 @@ class RxBool extends _RxImpl<bool> {
   }
 }
 
-/// Base Rx class for `num` Types (`double` and `int`) as mostly share the same
-/// operator overload, we centralize the common code here.
-abstract class _BaseRxNum<T> extends _RxImpl<num> {
-  _BaseRxNum operator +(num val) {
-    subject.add(_value += val);
-    return this;
-  }
+/// Rx class for `num` Types (`double` and `int`) shared comparison operations
+abstract class _RxNumComparators<T extends num> extends _RxImpl<T> {
+  bool operator <=(T other) => _value <= other;
 
-  _BaseRxNum operator -(num val) {
-    subject.add(_value -= val);
-    return this;
-  }
+  bool operator >=(T other) => _value >= other;
 
-  _BaseRxNum operator /(num val) {
-    subject.add(_value /= val);
-    return this;
-  }
+  bool operator <(T other) => _value < other;
 
-  _BaseRxNum operator *(num val) {
-    subject.add(_value *= val);
-    return this;
-  }
-
-  _BaseRxNum operator ~/(num val) {
-    subject.add(_value ~/ val);
-    return this;
-  }
-
-  _BaseRxNum operator %(num val) {
-    subject.add(_value % val);
-    return this;
-  }
-
-  bool operator <=(num other) => _value <= other;
-  bool operator >=(num other) => _value >= other;
-  bool operator <(num other) => _value < other;
-  bool operator >(num other) => _value > other;
+  bool operator >(T other) => _value > other;
 }
 
 /// Rx class for `double` Type.
-class RxDouble extends _BaseRxNum<double> {
+class RxDouble extends _RxNumComparators<double> {
   RxDouble([double initial]) {
     _value = initial;
   }
+
+  double operator *(double val) => _value * val;
+
+  double operator -(double val) => _value - val;
+
+  double operator +(double val) => _value + val;
+
+  double operator /(double val) => _value / val;
+
+  double operator %(double val) => _value % val;
 }
 
 /// Rx class for `num` Type.
-class RxNum extends _BaseRxNum<num> {
+class RxNum extends _RxNumComparators<num> {
   RxNum([num initial]) {
     _value = initial;
   }
+
+  num operator *(num val) => _value * val;
+
+  num operator -(num val) => _value - val;
+
+  num operator +(num val) => _value + val;
+
+  num operator /(num val) => _value / val;
+
+  num operator %(num val) => _value % val;
+}
+
+/// Rx class for `int` Type.
+class RxInt extends _RxNumComparators<int> {
+  RxInt([int initial]) {
+    _value = initial;
+  }
+
+  int operator %(int val) => _value % val;
+
+  int operator *(int val) => _value * val;
+
+  int operator -(int val) => _value - val;
+
+  int operator +(int val) => _value + val;
+
+  double operator /(int val) => _value / val;
 }
 
 /// Rx class for `String` Type.
@@ -276,22 +285,7 @@ class RxString extends _RxImpl<String> {
     _value = initial;
   }
 
-  RxString operator +(String val) {
-    subject.add(_value += val);
-    return this;
-  }
-
-  RxString operator *(int val) {
-    subject.add(_value *= val);
-    return this;
-  }
-}
-
-/// Rx class for `int` Type.
-class RxInt extends _BaseRxNum<int> {
-  RxInt([int initial]) {
-    _value = initial;
-  }
+  String operator +(String val) => _value + val;
 }
 
 /// Foundation class used for custom `Types` outside the common native Dart
