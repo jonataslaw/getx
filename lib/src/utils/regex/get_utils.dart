@@ -14,15 +14,10 @@ class GetUtils {
   static bool isNullOrBlank(dynamic s) {
     if (isNull(s)) return true;
 
-    switch (s.runtimeType as Type) {
-      case String:
-      case List:
-      case Map:
-      case Set:
-      case Iterable:
-        return s.isEmpty as bool;
-      default:
-        return s.toString() == 'null' || s.toString().trim().isEmpty;
+    if (s is String || s is List || s is Map || s is Set || s is Iterable) {
+      return s.isEmpty as bool;
+    } else {
+      return s.toString() == 'null' || s.toString().trim().isEmpty;
     }
   }
 
