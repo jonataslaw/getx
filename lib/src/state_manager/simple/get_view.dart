@@ -40,7 +40,7 @@ abstract class GetWidget<T> extends StatelessWidget {
   final String tag = null;
 
   T get controller {
-    if (_value.isEmpty) _value.add(GetInstance().find<T>());
+    if (_value.isEmpty) _value.add(GetInstance().find<T>(tag: tag));
     return _value.first;
   }
 

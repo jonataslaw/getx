@@ -18,8 +18,10 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetX oldWidget, State state) didUpdateWidget;
   final T init;
+  final String tag;
 
   const GetX({
+    this.tag,
     this.builder,
     this.global = true,
     this.autoRemove = true,
@@ -45,22 +47,22 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void initState() {
     _observer = Rx();
-    var isPrepared = GetInstance().isPrepared<T>();
-    var isRegistered = GetInstance().isRegistered<T>();
+    var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
+    var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isPrepared) {
         if (GetConfig.smartManagement != SmartManagement.keepFactory) {
           isCreator = true;
         }
-        controller = GetInstance().find<T>();
+        controller = GetInstance().find<T>(tag: widget.tag);
       } else if (isRegistered) {
-        controller = GetInstance().find<T>();
+        controller = GetInstance().find<T>(tag: widget.tag);
         isCreator = false;
       } else {
         controller = widget.init;
         isCreator = true;
-        GetInstance().put<T>(controller);
+        GetInstance().put<T>(controller, tag: widget.tag);
       }
     } else {
       controller = widget.init;
@@ -94,8 +96,8 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
   void dispose() {
     if (widget.dispose != null) widget.dispose(this);
     if (isCreator || widget.assignId) {
-      if (widget.autoRemove && GetInstance().isRegistered<T>()) {
-        GetInstance().delete<T>();
+      if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
+        GetInstance().delete<T>(tag: widget.tag);
       }
     }
     subs.cancel();
