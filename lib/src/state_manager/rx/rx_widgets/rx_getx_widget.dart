@@ -21,7 +21,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   final String tag;
 
   const GetX({
-    this.tag = null,
+    this.tag,
     this.builder,
     this.global = true,
     this.autoRemove = true,
