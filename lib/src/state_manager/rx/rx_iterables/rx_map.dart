@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
@@ -13,7 +14,7 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
 
   @override
   StreamController<Map<K, V>> subject = StreamController<Map<K, V>>.broadcast();
-  final Map<Stream<Map<K, V>>, StreamSubscription> _subscriptions = {};
+  final _subscriptions = HashMap<Stream<Map<K, V>>, StreamSubscription>();
 
   Map<K, V> _value;
 
@@ -62,8 +63,13 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  void bindStream(Stream<Map<K, V>> stream) =>
-      stream.listen((va) => value = va);
+  /// Binds an existing [Stream<Map>] to this [RxMap].
+  /// You can bind multiple sources to update the value.
+  /// Closing the subscription will happen automatically when the observer
+  /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
+  void bindStream(Stream<Map<K, V>> stream) {
+    _subscriptions[stream] = stream.listen((va) => value = va);
+  }
 
   void add(K key, V value) {
     _value[key] = value;

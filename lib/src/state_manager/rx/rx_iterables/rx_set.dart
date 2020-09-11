@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
@@ -27,7 +28,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   bool get isNotEmpty => value.isNotEmpty;
 
   StreamController<Set<E>> subject = StreamController<Set<E>>.broadcast();
-  final Map<Stream<Set<E>>, StreamSubscription> _subscriptions = {};
+  final _subscriptions = HashMap<Stream<Set<E>>, StreamSubscription>();
 
   /// Adds [item] only if [condition] resolves to true.
   void addIf(dynamic condition, E item) {
@@ -153,7 +154,13 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);
 
-  void bindStream(Stream<Set<E>> stream) => stream.listen((va) => value = va);
+  /// Binds an existing [Stream<Set>] to this [RxSet].
+  /// You can bind multiple sources to update the value.
+  /// Closing the subscription will happen automatically when the observer
+  /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
+  void bindStream(Stream<Set<E>> stream) {
+    _subscriptions[stream] = stream.listen((va) => value = va);
+  }
 
   @override
   E get first => value.first;
