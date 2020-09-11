@@ -3,6 +3,8 @@ import 'dart:collection';
 
 import '../rx_core/rx_interface.dart';
 
+part 'rx_num.dart';
+
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
@@ -14,22 +16,6 @@ class _RxImpl<T> implements RxInterface<T> {
   final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
 
   T _value;
-
-  /// Common to all Types [T], this operator overloading is using for
-  /// assignment, same as rx.value
-  ///
-  /// Example:
-  /// ```
-  /// var counter = 0.obs ;
-  /// counter <<= 3; // same as counter.value=3;
-  /// print(counter); // calls .toString() now
-  /// ```
-  ///
-  /// WARNING: still WIP, needs testing!
-  _RxImpl<T> operator <<(T val) {
-    subject.add(_value = val);
-    return this;
-  }
 
   bool get canUpdate => _subscriptions.isNotEmpty;
 
@@ -221,81 +207,13 @@ class RxBool extends _RxImpl<bool> {
   }
 }
 
-/// Base Rx class for `num` Types (`double` and `int`) as mostly share the same
-/// operator overload, we centralize the common code here.
-abstract class _BaseRxNum<T> extends _RxImpl<num> {
-  _BaseRxNum operator +(num val) {
-    subject.add(_value += val);
-    return this;
-  }
-
-  _BaseRxNum operator -(num val) {
-    subject.add(_value -= val);
-    return this;
-  }
-
-  _BaseRxNum operator /(num val) {
-    subject.add(_value /= val);
-    return this;
-  }
-
-  _BaseRxNum operator *(num val) {
-    subject.add(_value *= val);
-    return this;
-  }
-
-  _BaseRxNum operator ~/(num val) {
-    subject.add(_value ~/ val);
-    return this;
-  }
-
-  _BaseRxNum operator %(num val) {
-    subject.add(_value % val);
-    return this;
-  }
-
-  bool operator <=(num other) => _value <= other;
-  bool operator >=(num other) => _value >= other;
-  bool operator <(num other) => _value < other;
-  bool operator >(num other) => _value > other;
-}
-
-/// Rx class for `double` Type.
-class RxDouble extends _BaseRxNum<double> {
-  RxDouble([double initial]) {
-    _value = initial;
-  }
-}
-
-/// Rx class for `num` Type.
-class RxNum extends _BaseRxNum<num> {
-  RxNum([num initial]) {
-    _value = initial;
-  }
-}
-
 /// Rx class for `String` Type.
 class RxString extends _RxImpl<String> {
   RxString([String initial]) {
     _value = initial;
   }
 
-  RxString operator +(String val) {
-    subject.add(_value += val);
-    return this;
-  }
-
-  RxString operator *(int val) {
-    subject.add(_value *= val);
-    return this;
-  }
-}
-
-/// Rx class for `int` Type.
-class RxInt extends _BaseRxNum<int> {
-  RxInt([int initial]) {
-    _value = initial;
-  }
+  String operator +(String val) => _value + val;
 }
 
 /// Foundation class used for custom `Types` outside the common native Dart

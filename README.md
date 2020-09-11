@@ -632,10 +632,6 @@ final name = 'GetX'.obs;
 // only "updates" the stream, if the value is different from the current one.
 name.value = 'Hey';
 
-// this weird (and kinda cool) assignment, updates the stream no matter what
-// it takes nulls, or same value... but rebuilds the observers.
-name << 'Hey'; // !
-
 // All Rx properties are "callable" and returns the new value.
 // but this approach does not accepts `null`, the UI will not rebuild.
 name('Hello');
@@ -647,7 +643,7 @@ name() ;
 
 final count = 0.obs;
 
-// you can just most basic operators acts on the property!
+// You can use all non mutable operations from num primitives!
 count + 1;
 
 // Watch out! this is only valid if `count` is not final, but var
@@ -716,10 +712,6 @@ user.update((value){
 });
 
 print( user );
-
-// this also works.
-user << user.value;
-
 ```
 
 #### GetView
