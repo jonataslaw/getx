@@ -292,7 +292,7 @@ Text(controller.textFromApi);
 
 ### Translations
 
-Translations are kept as a simple key-value dictionary map.
+We keep the Translations as a simple key-value dictionary map.
 To add custom translations, create a class and extend `Translations`.
 
 ```dart
@@ -313,7 +313,7 @@ class Messages extends Translations {
 
 #### Using translations
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+Just append `.tr` to the specified key, and it will be translated, using the current value of `Get.locale` or `Get.fallbackLocale`.
 
 ```dart
 Text('title'.tr);
@@ -321,10 +321,30 @@ Text('title'.tr);
 
 ### Locales
 
+Flutter, by default, only supports English language `Locale` (*en_XX*).
+If you use any other `Locale` language, it will throw an Exception. 
+
+In order to support internalization in your app, make sure to [add flutter_localizations](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+Flutter requires this to support Widget's Semantics, tooltips and other annotations, and to update your UI properly for RTL languages, like arabic or hebrew.
+ 
+_pubspec.yaml:_
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+```
+
 Pass parameters to `GetMaterialApp` to define the locale and translations.
 
 ```dart
 return GetMaterialApp(
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate, // uses `flutter_localizations`
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
     translations: Messages(), // your translations
     locale: Locale('en', 'US'), // translations will be displayed in that locale
     fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
@@ -334,7 +354,7 @@ return GetMaterialApp(
 
 #### Change locale
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+Call `Get.updateLocale(locale)` to update the locale. `Translations` will automatically use the new locale and refresh the UI.
 
 ```dart
 var locale = Locale('en', 'US');
@@ -343,15 +363,15 @@ Get.updateLocale(locale);
 
 #### System locale
 
-To read the system locale, you could use `window.locale`.
+To read the system locale, you can use `Get.systemLocale`.
 
 ```dart
-import 'dart:ui' as ui;
-
 return GetMaterialApp(
-    locale: ui.window.locale,
+    locale: Get.systemLocale,
 );
 ```
+
+You can get the list of supported system locales with `Get.systemLocales` (is ordered by priority, so the first one is the primary locale). 
 
 ## Change Theme
 
@@ -412,6 +432,15 @@ Get.offUntil()
 
 // go to next named route and remove all the previous routes until the predicate returns true.
 Get.offNamedUntil()
+
+/// The system-reported default locale of the device.
+Get.systemLocale
+
+/// Check if dark mode theme is enable
+Get.isDarkMode
+
+/// Check if dark mode theme is enable on the platform
+Get.isPlatformDarkMode
 
 //Check in what platform the app is running
 GetPlatform.isAndroid

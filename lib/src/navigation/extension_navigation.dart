@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -903,8 +905,13 @@ extension GetNavigation on GetInterface {
     }
   }
 
+  /// Changes the current Locale of your app.
+  /// Make sure you import [flutter_localizations] in your pubspec.yaml,
+  /// and add the [localizationDelegates] as described:
+  /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
+  /// Otherwise, you will get an Exception.
   void updateLocale(Locale l) {
-    locale = l;
+    getxController.setLocale(l);
     forceAppUpdate();
   }
 
@@ -967,6 +974,12 @@ extension GetNavigation on GetInterface {
     this.settings = settings;
   }
 
+  /// The system-reported default locale of the device.
+  Locale get systemLocale => ui.window.locale;
+
+  /// The full system-reported supported locales of the device.
+  List<Locale> get systemLocales => ui.window.locales;
+
   /// give current arguments
   Object get arguments => routing.args;
 
@@ -1012,7 +1025,7 @@ extension GetNavigation on GetInterface {
   /// Check if dark mode theme is enable
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 
-  /// Check if dark mode theme is enable on platform on android Q+
+  /// Check if dark mode theme is enable on the platform
   bool get isPlatformDarkMode =>
       (mediaQuery.platformBrightness == Brightness.dark);
 

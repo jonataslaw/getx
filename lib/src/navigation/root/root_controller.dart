@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+
 import '../../state_manager/simple/get_state.dart';
 
 class GetMaterialController extends GetxController {
   Key key;
   ThemeData theme;
   ThemeMode themeMode;
+  Locale locale;
+
+  /// Changes the current app's Locale.
+  void setLocale(Locale value) {
+    locale = value;
+    update();
+  }
 
   void setTheme(ThemeData value) {
     theme = value;

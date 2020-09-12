@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../get.dart';
 import '../../core/log.dart';
 import '../../instance/get_instance.dart';
@@ -186,7 +187,7 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
-          if (locale != null) Get.locale = locale;
+          if (locale != null) Get.getxController.locale = locale;
 
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 

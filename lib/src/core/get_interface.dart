@@ -41,7 +41,14 @@ abstract class GetInterface {
 
   GetMaterialController getxController = GetMaterialController();
 
-  Locale locale;
+  /// Reports the current app Locale.
+  /// Make sure you import [flutter_localizations] in your pubspec.yaml,
+  /// if you use a locale that's not English. And add the
+  /// [localizationDelegates] as described:
+  /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
+  /// Otherwise, you will get an Exception.
+  // TODO: move locale and translations to his own domain.
+  Locale get locale => getxController.locale;
 
   Locale fallbackLocale;
 
