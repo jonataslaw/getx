@@ -47,7 +47,7 @@ extension GetNavigation on GetInterface {
     Duration duration,
     int id,
     bool fullscreenDialog = false,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool preventDuplicates = true,
     bool popGesture,
@@ -93,7 +93,7 @@ extension GetNavigation on GetInterface {
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> toNamed<T>(
     String page, {
-    Object arguments,
+    dynamic arguments,
     int id,
     bool preventDuplicates = true,
   }) {
@@ -121,7 +121,7 @@ extension GetNavigation on GetInterface {
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> offNamed<T>(
     String page, {
-    Object arguments,
+    dynamic arguments,
     int id,
     bool preventDuplicates = true,
   }) {
@@ -197,7 +197,7 @@ extension GetNavigation on GetInterface {
     String page,
     RoutePredicate predicate, {
     int id,
-    Object arguments,
+    dynamic arguments,
   }) {
     return global(id)
         .currentState
@@ -215,8 +215,12 @@ extension GetNavigation on GetInterface {
   /// The `offNamed()` pop a page, and goes to the next. The
   /// `offAndToNamed()` goes to the next page, and removes the previous one.
   /// The route transition animation is different.
-  Future<T> offAndToNamed<T>(String page,
-      {Object arguments, int id, dynamic result}) {
+  Future<T> offAndToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int id,
+    dynamic result,
+  }) {
     return global(id)
         .currentState
         .popAndPushNamed(page, arguments: arguments, result: result);
@@ -255,7 +259,7 @@ extension GetNavigation on GetInterface {
   Future<T> offAllNamed<T>(
     String newRouteName, {
     RoutePredicate predicate,
-    Object arguments,
+    dynamic arguments,
     int id,
   }) {
     return global(id).currentState.pushNamedAndRemoveUntil(
@@ -353,7 +357,7 @@ extension GetNavigation on GetInterface {
     Curve curve,
     bool popGesture,
     int id,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
@@ -413,7 +417,7 @@ extension GetNavigation on GetInterface {
     bool opaque = false,
     bool popGesture,
     int id,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool fullscreenDialog = false,
     Transition transition,
@@ -968,7 +972,7 @@ extension GetNavigation on GetInterface {
   }
 
   /// give current arguments
-  Object get arguments => routing.args;
+  dynamic get arguments => routing.args;
 
   /// give name from current route
   String get currentRoute => routing.current;
