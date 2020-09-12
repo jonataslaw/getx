@@ -173,6 +173,91 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
   }
 }
 
+class _GetPerModalBottomSheet<T> extends StatefulWidget {
+  const _GetPerModalBottomSheet({
+    Key key,
+    this.route,
+    this.backgroundColor,
+    this.elevation,
+    this.shape,
+    this.clipBehavior,
+    this.isScrollControlled = false,
+    this.enableDrag = true,
+  })  : assert(isScrollControlled != null),
+        assert(enableDrag != null),
+        super(key: key);
+
+  final GetModalBottomSheetRoute<T> route;
+  final bool isScrollControlled;
+  final Color backgroundColor;
+  final double elevation;
+  final ShapeBorder shape;
+  final Clip clipBehavior;
+  final bool enableDrag;
+
+  @override
+  // ignore: lines_longer_than_80_chars
+  _GetPerModalBottomSheetState<T> createState() =>
+      _GetPerModalBottomSheetState<T>();
+}
+
+// ignore: lines_longer_than_80_chars
+class _GetPerModalBottomSheetState<T>
+    extends State<_GetPerModalBottomSheet<T>> {
+  String _getRouteLabel(MaterialLocalizations localizations) {
+    if ((Theme.of(context).platform == TargetPlatform.android) ||
+        (Theme.of(context).platform == TargetPlatform.fuchsia)) {
+      return localizations.dialogLabel;
+    } else {
+      return '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    assert(debugCheckHasMediaQuery(context));
+    assert(debugCheckHasMaterialLocalizations(context));
+    final mediaQuery = MediaQuery.of(context);
+    final localizations = MaterialLocalizations.of(context);
+    final routeLabel = _getRouteLabel(localizations);
+
+    return AnimatedBuilder(
+      animation: widget.route.animation,
+      builder: (context, child) {
+        // Disable the initial animation when accessible navigation is on so
+        // that the semantics are added to the tree at the correct time.
+        final animationValue = mediaQuery.accessibleNavigation
+            ? 1.0
+            : widget.route.animation.value;
+        return Semantics(
+          scopesRoute: true,
+          namesRoute: true,
+          label: routeLabel,
+          explicitChildNodes: true,
+          child: ClipRect(
+            child: CustomSingleChildLayout(
+              delegate: _GetModalBottomSheetLayout(
+                  animationValue, widget.isScrollControlled),
+              child: BottomSheet(
+                animationController: widget.route._animationController,
+                onClosing: () {
+                  if (widget.route.isCurrent) {}
+                },
+                builder: widget.route.builder,
+                backgroundColor: widget.backgroundColor,
+                elevation: widget.elevation,
+                shape: widget.shape,
+                clipBehavior: widget.clipBehavior,
+                enableDrag: widget.enableDrag,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _GetModalBottomSheetLayout extends SingleChildLayoutDelegate {
   _GetModalBottomSheetLayout(this.progress, this.isScrollControlled);
 
