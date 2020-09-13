@@ -627,6 +627,7 @@ extension GetNavigation on GetInterface {
     Widget bottomsheet, {
     Color backgroundColor,
     double elevation,
+    bool persistent = true,
     ShapeBorder shape,
     Clip clipBehavior,
     Color barrierColor,
@@ -637,6 +638,7 @@ extension GetNavigation on GetInterface {
     bool enableDrag = true,
   }) {
     assert(bottomsheet != null);
+    assert(persistent != null);
     assert(isScrollControlled != null);
     assert(useRootNavigator != null);
     assert(isDismissible != null);
@@ -645,6 +647,7 @@ extension GetNavigation on GetInterface {
     return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
+      isPersistent: persistent,
       theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,
       barrierLabel:
