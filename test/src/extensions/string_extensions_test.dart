@@ -257,7 +257,7 @@ void main() {
       ];
 
       for (final phone in phoneNumbers) {
-        print('testing $phone');
+        // print('testing $phone');
         expect(phone.isPhoneNumber, true);
       }
 
@@ -571,7 +571,7 @@ void main() {
         // 'omissíssimo',
       ];
       for (final palindrom in palindroms) {
-        print("testing $palindrom");
+        // print("testing $palindrom");
         expect(palindrom.isPalindrom, true);
       }
       expect(alphaNumeric.isPalindrom, false);
@@ -620,7 +620,7 @@ void main() {
       ];
 
       for (final currency in currencies) {
-        print('currency $currency');
+        // print('currency $currency');
         expect(currency.isCurrency, true);
       }
 
@@ -703,13 +703,13 @@ void main() {
       expect(''.camelCase, null);
     });
 
-    test('var.numericOnly', () {
-      expect('foo bar'.numericOnly, 'fooBar');
+    test('var.numericOnly()', () {
+      expect('date: 2020/09/13, time: 00:00'.numericOnly(), '202009130000');
       expect(
-        'the fox jumped in the water'.numericOnly,
-        'theFoxJumpedInTheWater',
+        'and 1, and 2, and 1 2 3'.numericOnly(),
+        '12123',
       );
-      expect(''.numericOnly, null);
+      expect(''.numericOnly(), '');
     });
   });
 }

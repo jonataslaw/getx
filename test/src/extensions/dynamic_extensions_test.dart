@@ -1,18 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Test group for extension: isNullOrBlank', () {
-    dynamic testString;
-    test('String extension: isNullOrBlank', () {
-      expect(testString.isNullOrBlank, equals(true));
-    });
-    test('String extension: isNullOrBlank', () {
-      testString = 'Not null anymore';
-      expect(testString.isNullOrBlank, equals(false));
-    });
-    test('String extension: isNullOrBlank', () {
-      testString = '';
-      expect(testString.isNullOrBlank, equals(true));
-    });
-  });
+  // group('dynamic extensions', () {
+  //   var testString = '';
+  //   test('var.isNullOrBlank returns true on a not initilized variable', () {
+  //     expect(testString.isNullOrBlank, equals(true));
+  //   });
+  //   test('var.isNullOrBlank returns false on a initilized variable', () {
+  //     testString = 'Not null anymore';
+  //     expect(testString.isNullOrBlank, equals(false));
+  //   });
+  //   test('String extension: isNullOrBlank', () {
+  //     testString = '';
+  //     expect(testString.isNullOrBlank, equals(true));
+  //   });
+  // });
 }
