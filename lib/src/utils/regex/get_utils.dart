@@ -440,13 +440,6 @@ class GetUtils {
     return true;
   }
 
-  /// Uppercase first letter inside string and let the others lowercase
-  /// Example: your name => Your name
-  static String capitalizeFirst(String s) {
-    if (isNullOrBlank(s)) return null;
-    return s[0].toUpperCase() + s.substring(1).toLowerCase();
-  }
-
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   static String capitalize(String s) {
@@ -459,6 +452,13 @@ class GetUtils {
       result += ' ';
     }
     return result.trim();
+  }
+
+  /// Uppercase first letter inside string and let the others lowercase
+  /// Example: your name => Your name
+  static String capitalizeFirst(String s) {
+    if (isNullOrBlank(s)) return null;
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 
   /// Remove all whitespace inside string
