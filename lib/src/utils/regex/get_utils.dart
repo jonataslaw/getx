@@ -164,7 +164,7 @@ class GetUtils {
       r'^(?!0{3}|6{3}|9[0-9]{2})[0-9]{3}-?(?!0{2})[0-9]{2}-?(?!0{4})[0-9]{4}$');
 
   /// Checks if string is binary.
-  static bool isBinary(String s) => hasMatch(s, r'^[0-1]*$');
+  static bool isBinary(String s) => hasMatch(s, r'^[0-1]+$');
 
   /// Checks if string is IPv4.
   static bool isIPv4(String s) =>
@@ -181,9 +181,13 @@ class GetUtils {
 
   /// Checks if string is Palindrom.
   static bool isPalindrom(String s) {
+    final cleanString = s
+        .toLowerCase()
+        .replaceAll(RegExp(r"\s+"), '')
+        .replaceAll(RegExp(r"[^0-9a-zA-Z]+"), "");
     var isPalindrom = true;
-    for (var i = 0; i < s.length; i++) {
-      if (s[i] != s[s.length - i - 1]) {
+    for (var i = 0; i < cleanString.length; i++) {
+      if (cleanString[i] != cleanString[cleanString.length - i - 1]) {
         isPalindrom = false;
       }
     }
@@ -221,7 +225,7 @@ class GetUtils {
 
   /// Checks if string is Currency.
   static bool isCurrency(String s) => hasMatch(s,
-      r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
+      r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
 
   /// Checks if length of data is LOWER than maxLength.
   static bool isLengthLowerThan(dynamic s, int maxLength) {
@@ -436,27 +440,25 @@ class GetUtils {
     return true;
   }
 
-  /// Capitalize each word inside string
-  /// Example: your name => Your Name, your name => Your name
-  ///
-  /// If First Only is `true`, the only letter get uppercase is the first letter
-  static String capitalize(String s, {bool firstOnly = false}) {
-    if (isNullOrBlank(s)) return null;
-    if (firstOnly) return capitalizeFirst(s);
-
-    var lst = s.split(' ');
-    var newStr = '';
-    for (var s in lst) {
-      newStr += capitalizeFirst(s);
-    }
-    return newStr;
-  }
-
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
   static String capitalizeFirst(String s) {
     if (isNullOrBlank(s)) return null;
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
+  }
+
+  /// Capitalize each word inside string
+  /// Example: your name => Your Name, your name => Your name
+  static String capitalize(String s) {
+    if (isNullOrBlank(s)) return null;
+
+    var separatedWords = s.split(' ');
+    var result = '';
+    for (var word in separatedWords) {
+      result += capitalizeFirst(word);
+      result += ' ';
+    }
+    return result.trim();
   }
 
   /// Remove all whitespace inside string
@@ -470,7 +472,13 @@ class GetUtils {
   /// Example: your name => yourName
   static String camelCase(String s) {
     if (isNullOrBlank(s)) return null;
-    return s[0].toLowerCase() + removeAllWhitespace(capitalize(s)).substring(1);
+    var separatedWords = s.split(' ');
+    var newString = '';
+    for (final word in separatedWords) {
+      newString += word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }
+
+    return newString[0].toLowerCase() + newString.substring(1);
   }
 
   /// Extract numeric value of string

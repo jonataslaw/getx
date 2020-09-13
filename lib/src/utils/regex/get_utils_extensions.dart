@@ -69,8 +69,7 @@ extension GetStringUtils on String {
   bool isCaseInsensitiveContainsAny(String b) =>
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
-  String capitalize(String s, {bool firstOnly = false}) =>
-      GetUtils.capitalize(this, firstOnly: firstOnly);
+  String capitalize(String s) => GetUtils.capitalize(this);
 
   String capitalizeFirst(String s) => GetUtils.capitalizeFirst(this);
 
