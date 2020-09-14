@@ -59,9 +59,9 @@ extension GetStringUtils on String {
 
   bool get isCurrency => GetUtils.isCurrency(this);
 
-  bool isCpf(String s) => GetUtils.isCpf(this);
+  bool get isCpf => GetUtils.isCpf(this);
 
-  bool isCnpj(String s) => GetUtils.isCnpj(this);
+  bool get isCnpj => GetUtils.isCnpj(this);
 
   bool isCaseInsensitiveContains(String b) =>
       GetUtils.isCaseInsensitiveContains(this, b);
@@ -69,15 +69,14 @@ extension GetStringUtils on String {
   bool isCaseInsensitiveContainsAny(String b) =>
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
-  String capitalize(String s, {bool firstOnly = false}) =>
-      GetUtils.capitalize(this, firstOnly: firstOnly);
+  String get capitalize => GetUtils.capitalize(this);
 
-  String capitalizeFirst(String s) => GetUtils.capitalizeFirst(this);
+  String get capitalizeFirst => GetUtils.capitalizeFirst(this);
 
-  String removeAllWhitespace(String s) => GetUtils.removeAllWhitespace(this);
+  String get removeAllWhitespace => GetUtils.removeAllWhitespace(this);
 
-  String camelCase(String s) => GetUtils.camelCase(this);
+  String get camelCase => GetUtils.camelCase(this);
 
-  String numericOnly(String s, {bool firstWordOnly = false}) =>
+  String numericOnly({bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
 }

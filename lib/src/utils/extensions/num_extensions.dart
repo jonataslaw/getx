@@ -24,8 +24,10 @@ extension GetNumUtils on num {
   ///   print('currently running callback 1.2sec');
   /// }
   ///```
-  Future delay([VoidCallback callback]) async =>
-      Future.delayed(Duration(milliseconds: (this * 1000).round()), callback);
+  Future delay([VoidCallback callback]) async => Future.delayed(
+        Duration(milliseconds: (this * 1000).round()),
+        callback,
+      );
 
   /// Easy way to make Durations from numbers.
   ///
