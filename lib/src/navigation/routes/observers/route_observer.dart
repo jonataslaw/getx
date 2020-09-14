@@ -9,7 +9,7 @@ import '../default_route.dart';
 class Routing {
   String current;
   String previous;
-  Object args;
+  dynamic args;
   String removed;
   Route<dynamic> route;
   bool isBack;
@@ -48,7 +48,7 @@ class GetObserver extends NavigatorObserver {
   bool isDialog;
   String current;
   String previous;
-  Object args;
+  dynamic args;
 
   // String previousArgs;
   String removed;
