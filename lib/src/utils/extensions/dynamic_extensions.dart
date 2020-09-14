@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import '../../../utils.dart';
 import '../regex/get_utils.dart';
 
 extension GetDynamicUtils on dynamic {
@@ -7,4 +10,10 @@ extension GetDynamicUtils on dynamic {
   bool get isNull => GetUtils.isNull(this);
 
   bool get isNullOrBlank => GetUtils.isNullOrBlank(this);
+  
+  void logError({String info = ''}) =>
+      GetUtils.log('Error: ${this.runtimeType}', this, info);
+
+  void logInfo({String info = ''}) =>
+      GetUtils.log('Info: ${this.runtimeType}', this, info);
 }
