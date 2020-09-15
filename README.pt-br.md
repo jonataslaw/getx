@@ -716,7 +716,7 @@ class User {
 final user = User(name: 'John', last: 'Doe', age: 33).obs;
 
 // `user` é "reativo", mas as propriedades dentro NÃO SÃO!
-// ntão, se mudarmos alguma variável dentro dele:
+// Então, se mudarmos alguma variável dentro dele:
 user.value.name = 'Roi';
 // O widget não vai reconstruir!,
 // `Rx` não tem nenhuma notificação quando você muda algo dentro do usuário.
