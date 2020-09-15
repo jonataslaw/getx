@@ -18,7 +18,6 @@
 
 <h2> Pedimos desculpas por qualquer parte não traduzida aqui. O GetX™ é atualizado com muita frequência e as traduções podem não vir ao mesmo tempo. Então, para manter essa documentação pelo menos com tudo que a versão em inglês tem, eu vou deixar todos os textos não-traduzidos aqui (eu considero que é melhor ele estar lá em inglês do que não estar), então se alguém quiser traduzir, seria muito útil 😁</h2>
 
-- [Canais para comunicação e suporte:](#canais-para-comunicação-e-suporte)
 - [Sobre Get](#sobre-get)
 - [Instalando](#instalando)
 - [App Counter usando GetX](#app-counter-usando-getx)
@@ -45,14 +44,6 @@
   - [Rotas nomeadas](#rotas-nomeadas)
     - [Porque essa mudança](#porque-essa-mudança)
 - [Por que GetX?](#por-que-getx)
-
-# Canais para comunicação e suporte:
-
-[**Slack (Inglês)**](https://communityinviter.com/apps/getxworkspace/getx)
-
-[**Discord (Inglês e Português)**](https://discord.com/invite/9Hpt99N)
-
-[**Telegram (Português)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Sobre Get
 
@@ -914,7 +905,7 @@ Se você precisa de context para localizar um InheritedWidget, você precisa dis
 
 GetX™ tem uma comunidade altamente ativa e útil. Se você tiver dúvidas, ou quiser alguma ajuda com relação ao uso deste framework, por favor entre em nossos canais da comunidade, sua dúvida será respondida mais rapidamente, e será o lugar mais adequado. Este repositório é exclusivo para abertura de issues e solicitação de recursos, mas fique à vontade para fazer parte da Comunidade GetX™.
 
-| **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
+| **Slack (Inglês)**                                                                                                          | **Discord (Inglês e Português)**                                                                                            | **Telegram (Português)**                                                                                              |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
