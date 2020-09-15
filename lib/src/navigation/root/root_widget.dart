@@ -233,10 +233,10 @@ class GetMaterialApp extends StatelessWidget {
               ..addAll(navigatorObservers)),
             builder: (context, child) {
               return Directionality(
-                textDirection: rtlLanguages.contains(Get.locale.languageCode)
+                textDirection: rtlLanguages.contains(Get.locale?.languageCode)
                     ? TextDirection.rtl
                     : TextDirection.ltr,
-                child: builder(context, child),
+                child: builder == null ? child : builder(context, child),
               );
             },
             title: title ?? '',
