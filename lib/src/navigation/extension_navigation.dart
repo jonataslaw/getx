@@ -3,12 +3,14 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../get.dart';
 import '../../instance_manager.dart';
 import '../../route_manager.dart';
 import '../core/get_interface.dart';
 import '../core/log.dart';
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
+import 'root/root_controller.dart';
 import 'routes/bindings_interface.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
@@ -49,7 +51,7 @@ extension GetNavigation on GetInterface {
     Duration duration,
     int id,
     bool fullscreenDialog = false,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool preventDuplicates = true,
     bool popGesture,
@@ -95,7 +97,7 @@ extension GetNavigation on GetInterface {
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> toNamed<T>(
     String page, {
-    Object arguments,
+    dynamic arguments,
     int id,
     bool preventDuplicates = true,
   }) {
@@ -123,7 +125,7 @@ extension GetNavigation on GetInterface {
   /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
   Future<T> offNamed<T>(
     String page, {
-    Object arguments,
+    dynamic arguments,
     int id,
     bool preventDuplicates = true,
   }) {
@@ -199,7 +201,7 @@ extension GetNavigation on GetInterface {
     String page,
     RoutePredicate predicate, {
     int id,
-    Object arguments,
+    dynamic arguments,
   }) {
     return global(id)
         .currentState
@@ -217,8 +219,12 @@ extension GetNavigation on GetInterface {
   /// The `offNamed()` pop a page, and goes to the next. The
   /// `offAndToNamed()` goes to the next page, and removes the previous one.
   /// The route transition animation is different.
-  Future<T> offAndToNamed<T>(String page,
-      {Object arguments, int id, dynamic result}) {
+  Future<T> offAndToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int id,
+    dynamic result,
+  }) {
     return global(id)
         .currentState
         .popAndPushNamed(page, arguments: arguments, result: result);
@@ -257,7 +263,7 @@ extension GetNavigation on GetInterface {
   Future<T> offAllNamed<T>(
     String newRouteName, {
     RoutePredicate predicate,
-    Object arguments,
+    dynamic arguments,
     int id,
   }) {
     return global(id).currentState.pushNamedAndRemoveUntil(
@@ -355,7 +361,7 @@ extension GetNavigation on GetInterface {
     Curve curve,
     bool popGesture,
     int id,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
@@ -415,7 +421,7 @@ extension GetNavigation on GetInterface {
     bool opaque = false,
     bool popGesture,
     int id,
-    Object arguments,
+    dynamic arguments,
     Bindings binding,
     bool fullscreenDialog = false,
     Transition transition,
@@ -629,6 +635,7 @@ extension GetNavigation on GetInterface {
     Widget bottomsheet, {
     Color backgroundColor,
     double elevation,
+    bool persistent = true,
     ShapeBorder shape,
     Clip clipBehavior,
     Color barrierColor,
@@ -637,8 +644,10 @@ extension GetNavigation on GetInterface {
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
+    RouteSettings settings,
   }) {
     assert(bottomsheet != null);
+    assert(persistent != null);
     assert(isScrollControlled != null);
     assert(useRootNavigator != null);
     assert(isDismissible != null);
@@ -647,6 +656,7 @@ extension GetNavigation on GetInterface {
     return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
+      isPersistent: persistent,
       theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       isScrollControlled: isScrollControlled,
       barrierLabel:
@@ -887,21 +897,17 @@ extension GetNavigation on GetInterface {
       GetConfig.log = logWriterCallback;
     }
     if (defaultPopGesture != null) {
-      this.defaultPopGesture = defaultPopGesture;
+      getxController.defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      this.defaultOpaqueRoute = defaultOpaqueRoute;
+      getxController.defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      this.defaultTransition = defaultTransition;
+      getxController.defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      defaultTransitionDuration = defaultDurationTransition;
-    }
-
-    if (defaultGlobalState != null) {
-      this.defaultGlobalState = defaultGlobalState;
+      getxController.defaultTransitionDuration = defaultDurationTransition;
     }
   }
 
@@ -911,7 +917,7 @@ extension GetNavigation on GetInterface {
   /// https://flutter.dev/docs/development/accessibility-and-localization/internationalization
   /// Otherwise, you will get an Exception.
   void updateLocale(Locale l) {
-    getxController.setLocale(l);
+    Get.locale = l;
     forceAppUpdate();
   }
 
@@ -924,20 +930,6 @@ extension GetNavigation on GetInterface {
     (context as Element).visitChildren(rebuild);
   }
 
-  void addTranslations(Map<String, Map<String, String>> tr) {
-    translations.addAll(tr);
-  }
-
-  void appendTranslations(Map<String, Map<String, String>> tr) {
-    tr.forEach((key, map) {
-      if (Get.translations.containsKey(key)) {
-        Get.translations[key].addAll(map);
-      } else {
-        Get.translations[key] = map;
-      }
-    });
-  }
-
   void changeTheme(ThemeData theme) {
     getxController.setTheme(theme);
   }
@@ -947,7 +939,7 @@ extension GetNavigation on GetInterface {
   }
 
   GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
-    key = newKey;
+    getxController.key = newKey;
     return key;
   }
 
@@ -966,13 +958,11 @@ extension GetNavigation on GetInterface {
     return keys[k];
   }
 
-  RouteSettings get routeSettings => settings;
-
-  // FIXME: wouldn't a direct set suffice here?
-  // ignore: use_setters_to_change_properties
-  void setSettings(RouteSettings settings) {
-    this.settings = settings;
-  }
+  @Deprecated('''
+Since version 2.8 it is possible to access the properties 
+[Get.arguments] and [Get.currentRoute] directly. 
+[routeSettings] is useless and should not be used.''')
+  RouteSettings get routeSettings => null;
 
   /// The system-reported default locale of the device.
   Locale get systemLocale => ui.window.locale;
@@ -981,7 +971,7 @@ extension GetNavigation on GetInterface {
   List<Locale> get systemLocales => ui.window.locales;
 
   /// give current arguments
-  Object get arguments => routing.args;
+  dynamic get arguments => routing.args;
 
   /// give name from current route
   String get currentRoute => routing.current;
@@ -1040,4 +1030,43 @@ extension GetNavigation on GetInterface {
 
   /// give access to Immutable MediaQuery.of(context).size.width
   double get width => MediaQuery.of(context).size.width;
+
+  GlobalKey<NavigatorState> get key => getxController.key;
+
+  Map<int, GlobalKey<NavigatorState>> get keys => getxController.keys;
+
+  GetMaterialController get rootController => getxController;
+
+  bool get defaultPopGesture => getxController.defaultPopGesture;
+  bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
+
+  Transition get defaultTransition => getxController.defaultTransition;
+  Duration get defaultTransitionDuration {
+    return getxController.defaultDialogTransitionDuration;
+  }
+
+  Curve get defaultTransitionCurve => getxController.defaultTransitionCurve;
+
+  Curve get defaultDialogTransitionCurve {
+    return getxController.defaultDialogTransitionCurve;
+  }
+
+  Duration get defaultDialogTransitionDuration {
+    return getxController.defaultDialogTransitionDuration;
+  }
+
+  Routing get routing => getxController.routing;
+
+  Map<String, String> get parameters => getxController.parameters;
+  set parameters(Map<String, String> newParameters) =>
+      getxController.parameters = newParameters;
+
+  ParseRouteTree get routeTree => getxController.routeTree;
+  set routeTree(ParseRouteTree tree) => getxController.routeTree = tree;
+
+  CustomTransition get customTransition => getxController.customTransition;
+  set customTransition(CustomTransition newTransition) =>
+      getxController.customTransition = newTransition;
+
+  static GetMaterialController getxController = GetMaterialController();
 }

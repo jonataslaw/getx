@@ -40,7 +40,7 @@ void main() {
     final count = 0.obs;
     var result = -1;
     debounce(count, (_) {
-      print(_);
+      // print(_);
       result = _ as int;
     }, time: Duration(milliseconds: 100));
 
@@ -58,7 +58,7 @@ void main() {
     final count = 0.obs;
     var result = -1;
     interval(count, (_) {
-      print(_);
+      // print(_);
       result = _ as int;
     }, time: Duration(milliseconds: 100));
 

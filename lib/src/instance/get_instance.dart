@@ -21,6 +21,8 @@ class GetInstance {
 
   static GetInstance _getInstance;
 
+  static final config = GetConfig();
+
   /// Holds references to every registered Instance when using
   /// [Get.put()]
   static final Map<String, _InstanceBuilderFactory> _singl = {};

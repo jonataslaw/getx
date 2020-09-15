@@ -25,7 +25,7 @@ void main() {
               GetBuilder<Controller>(
                   id: '1',
                   didChangeDependencies: (_) {
-                    print("didChangeDependencies called");
+                    // print("didChangeDependencies called");
                   },
                   builder: (controller) {
                     return Text('id ${controller.counter}');
