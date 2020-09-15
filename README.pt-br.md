@@ -817,7 +817,7 @@ class SettingsService extends GetxService {
 ```
 
 A única maneira de realmente excluir um `GetxService`, é com o `Get.reset()`, que é como uma 
-"reinicialização a quente" do seu aplicativo. Portanto, lembre-se, se você precisar de persistência absoluta de uma instância de classe durante
+"hot restart" do seu aplicativo. Portanto, lembre-se, se você precisar de persistência absoluta de uma instância de classe durante
 o ciclo de vida de seu aplicativo, use GetxService.
 
 
