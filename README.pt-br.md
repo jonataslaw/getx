@@ -695,7 +695,6 @@ print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 abc.add(12); // Coloca 12 na lista, e ATUALIZA o stream.
 abc[3]; // como uma lista lê o índice 3.
 
-// equality works with the Rx and the value, but hashCode is always taken from the value
 // a igualdade funciona com o Rx e o valor, mas hashCode é sempre obtido do valor 
 final number = 12.obs;
 print( number == 12 ); // prints > true
