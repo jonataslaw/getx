@@ -160,6 +160,8 @@ Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria a
 
 Definitivamente, Get não é o inimigo de nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
 
+Get tem dois gerenciadores de estado diferentes: o simple state manager (vamos chamá-lo de GetBuilder) e o reactive state manager (que tem o nome do pacote, GetX)
+
 ### Reactive state manager
 
 Programação reativa pode alienar muitas pessoas porque é dito que é complicado. GetX transforma a programação reativa em algo bem simples:
@@ -187,7 +189,6 @@ var name = 'Jonatas Borges'.obs;
 
 E Na UI, quando quiser mostrar a variável e escutar as mudanças dela, simplesmente faça isso:
 
-
 ```dart
 Obx (() => Text (controller.name));
 ```
@@ -205,6 +206,16 @@ Amateur Coder fez um vídeo ótimo sobre o gerenciamento de estado! (em inglês)
 Você vai ter uma boa idea do poder do GetX
 
 ## Gerenciamento de rotas
+
+Se você for usar routes / snackbars / dialogs / bottomsheets sem contexto, GetX é excelente para você também, veja:
+
+Adicione "Get" antes do seu MaterialApp, transformando-o em GetMaterialApp
+
+```dart
+GetMaterialApp( // Antes: MaterialApp(
+  home: MyHome(),
+)
+```
 
 Para navegar para uma próxima tela:
 
@@ -256,9 +267,10 @@ Já está usando o Get e quer fazer seu projeto o melhor possível? Get tem um g
 Controller controller = Get.put(Controller()); // Em vez de Controller controller = Controller();
 ```
 
-Em vez de instanciar sua classe dentro da classe que você está usando, você está instanciando ele dentro da instância do Get, que vai fazer ele ficar disponível por todo o App
+Em vez de instanciar sua classe dentro da classe que você está usando, você está instanciando ele dentro da instância do Get, que vai fazer ele ficar disponível por todo o App para que então você possa usar seu controller (ou uma classe Bloc) normalmente
 
-Para que então você possa usar seu controller (ou uma classe Bloc) normalmente
+
+**Dica:** O gerenciamento de dependência Get é desacoplado de outras partes do pacote, então se, por exemplo, seu aplicativo já estiver usando um gerenciador de estado (qualquer um, não importa), você não precisa reescrever tudo, você pode usar esta injeção de dependência sem problemas
 
 ```dart
 controller.fetchApi();
@@ -290,37 +302,26 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 **Veja uma explicação mais completa do gerenciamento de dependência [aqui](./documentation/pt_BR/dependency_management.md)**
 
-# Como contribuir 
-
-Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
-
-- Ajudando a traduzir o README para outras linguagens.
-- Adicionando mais documentação ao README (até o momento, várias das funcionalidades do Get não foram documentadas).
-- Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README e no futuro na nossa Wiki).
-- Fazendo PR's (Pull-Requests) para código/testes.
-- Incluindo novas funcionalidades.
-
-Qualquer contribuição é bem-vinda!
-
 # Utilidades
 
 ## Internacionalização
 ### Traduções
 As traduções são mantidas num simples dictionary map de chave-valor.
 Para adicionar traduções personalizadas, crie uma classe e estenda `Translations`.
+
 ```dart
 import 'package:get/get.dart';
 
 class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
-        'en_US': {
-          'hello': 'Hello World',
-        },
-        'de_DE': {
-          'hello': 'Hallo Welt',
-        }
-      };
+    'en_US': {
+      'hello': 'Hello World',
+    },
+    'de_DE': {
+      'hello': 'Hallo Welt',
+    }
+  };
 }
 ```
 
@@ -361,7 +362,7 @@ return GetMaterialApp(
 
 ## Mudar tema (changeTheme)
 
-Por favor não use widget acima do GetMaterialApp para atualizar o tema. Isso pode causar keys duplicadas. Várias pessoas estão acostumadas com o jeito normal de criar um Widget `ThemeProvider` só pra alterar o tema do app, mas isso definitivamente NÃO é necessário no Get.
+Por favor não use widget acima do GetMaterialApp para atualizar o tema. Isso pode causar keys duplicadas. Várias pessoas estão acostumadas com o jeito normal de criar um Widget `ThemeProvider` só pra alterar o tema do app, mas isso definitivamente NÃO é necessário com GetX.
 
 Você pode criar seu tema customizado e simplesmente adicionar dentro do `Get.changeTheme` sem nenhum boilerplate para isso:
 
@@ -369,14 +370,12 @@ Você pode criar seu tema customizado e simplesmente adicionar dentro do `Get.ch
 Get.changeTheme(ThemeData.light())
 ```
 
-Se você quer criar algo como um botão que muda o tema com o toque, você pode combinar duas APIs Get pra isso: a API que checa se o tema dark está sendo aplicado, e a API de mudar o tema, e colocar isso no `onPressed:`
+Se você quer criar algo como um botão que muda o tema com o toque, você pode combinar duas APIs GetX pra isso:
+- A API que checa se o tema dark está sendo aplicado;
+- A API de mudar o tema e colocar isso no `onPressed:`
 
 ```dart
-Get.changeTheme(
-  Get.isDarkMode
-  ? ThemeData.light()
-  : ThemeData.dark()
-)
+Get.changeTheme(Get.isDarkMode ? ThemeData.light() : ThemeData.dark())
 ```
 
 Quando o modo Dark está ativado, ele vai trocar pro modo light e vice versa.
@@ -426,11 +425,22 @@ Get.offUntil()
 //rotas anteriores até que o predicate retorne true.
 Get.offNamedUntil()
 
-// retorna qual é a plataforma
+// Verifica em que plataforma o app está sendo executado
 //(Esse método é completamente compatível com o FlutterWeb,
 //diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid
 GetPlatform.isIOS
+GetPlatform.isMacOS
+GetPlatform.isWindows
+GetPlatform.isLinux
+GetPlatform.isFuchsia
+
+//Verifica o tipo de dispositivo
+GetPlatform.isMobile
+GetPlatform.isDesktop
+//Todas as plataformas são suportadas de forma independente na web!
+//Você pode saber se está executando dentro de um navegador
+//no Windows, iOS, OSX, Android, etc.
 GetPlatform.isWeb
 
 // Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
@@ -569,10 +579,10 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ### Widgets de Estado Local
 
-Esses Widgets permitem que você gerencie um único valor e mantenha o estado efêmero e localmente. Temos versões para Reativo e Simples. Por exemplo, você pode usá-los para alternar obscureText em um TextField, talvez criar um painel expansível personalizado ou talvez modificar o índice atual em um BottomNavigationBar enquanto altera o conteúdo do corpo em um Scaffold.
+Esses Widgets permitem que você gerencie um único valor e mantenha o estado efêmero e localmente. Temos versões para Reativo e Simples. Por exemplo, você pode usá-los para alternar obscureText em um `TextField`, talvez criar um painel expansível personalizado ou talvez modificar o índice atual em um `BottomNavigationBar` enquanto altera o conteúdo do corpo em um `Scaffold`.
 
 #### ValueBuilder
-Uma simplificação de StatefulWidget que funciona com um callback de "setState" que passa o valor atualizado.
+Uma simplificação de `StatefulWidget` que funciona com um callback de `setState` que passa o valor atualizado.
 
 
 ```dart
@@ -583,8 +593,8 @@ ValueBuilder<bool>(
     onChanged: updateFn, // mesma assinatura! Você poderia usar ( newValue ) => updateFn( newValue )
   ),
   // se você precisa chamar algo fora do método builder.
-  onUpdate: (value) => print("Value updated: $value"),
-  onDispose: () => print("Widget unmounted"),   
+  onUpdate: (value) => print("Valor atualizado: $value"),
+  onDispose: () => print("Widget desmontado"),   
 ),
 ```
 
@@ -604,8 +614,9 @@ ObxValue(
 
 ## Explicação em vídeo sobre Outras Features do GetX
 
-
 Amateur Coder fez um vídeo incrível sobre utils, storage, bindings e outras features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
+
+
 
 # Breaking Changes da versão 2 para 3
 
@@ -696,3 +707,15 @@ GetMaterialApp(
 
 4- Desacoplamento real. Você já deve ter ouvido o conceito "separar a view da lógica de negócios". Isso não é uma peculiaridade do BLoC, MVC ou MVVM, qualquer outro padrão existente no mercado tem esse conceito. No entanto, muitas vezes esse conceito pode ser mitigado no Flutter por conta do uso do context.
 Se você precisa de context para localizar um InheritedWidget, você precisa disso na view ou passar o context por parâmetro. Eu particularmente acho essa solução muito feia e para trabalhar em equipes teremos sempre uma dependência da lógica de negócios da View. Getx é pouco ortodoxo com a abordagem padrão e apesar de não proibir totalmente o uso de StatefulWidgets, InitState e etc, ele tem sempre uma abordagem similar que pode ser mais limpa. Os controllers tem ciclos de vida e quando você precisa fazer uma solicitação APIREST por exemplo, você não depende de nada da view. Você pode usar onInit para iniciar a chamada http e quando os dados chegarem, as variáveis serão preenchidas. Como GetX é totalmente reativo (de verdade e trabalha sob streams), assim que os itens forem preenchidos, automaticamente será atualizado na view todos os widgets que usam aquela variável. Isso permite que as pessoas especialistas em UI trabalhem apenas com widgets e não precisem enviar nada para a lógica de negócio além de eventos do usuário (como clicar em um botão), enquanto as pessoas que trabalham com a lógica de negócio ficarão livres para criá-la e testá-la separadamente.  
+
+# Como contribuir 
+
+Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
+
+- Ajudando a traduzir o README para outras linguagens.
+- Adicionando mais documentação ao README (até o momento, várias das funcionalidades do Get não foram documentadas).
+- Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README e no futuro na nossa Wiki).
+- Fazendo PR's (Pull-Requests) para código/testes.
+- Incluindo novas funcionalidades.
+
+Qualquer contribuição é bem-vinda!
