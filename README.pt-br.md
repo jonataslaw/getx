@@ -612,10 +612,214 @@ ObxValue(
 ),
 ```
 
-## Explicação em vídeo sobre Outras Features do GetX
+### Explicação em vídeo sobre Outras Features do GetX
 
 Amateur Coder fez um vídeo incrível sobre utils, storage, bindings e outras features! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
+
+## Dicas Úteis
+
+`.obs`ervables (também conhecidos como _Rx_ Types) possuem uma grande variedade de métodos e operadores internos.
+
+> É muito comum acreditar que uma propriedade com `.obs` **É** o valor real... mas não se engane!
+> Evitamos a declaração de tipo da variável, porque o compilador do Dart é inteligente o suficiente e o código
+> parece mais limpo, mas:
+
+```dart
+var message = 'Hello world'.obs;
+print( 'Message "$message" é do tipo ${message.runtimeType}');
+```
+
+Mesmo que `message` _imprima_ o valor da string, seu tipo é **RxString**!
+
+Então, você não pode fazer `message.substring( 0, 4 )`.
+Você tem que acessar o `valor` real dentro do _observable_:
+A "maneira" mais usada é utilizando `.value`, mas, você sabia que também pode usar:
+
+```dart
+final name = 'GetX'.obs;
+// apenas "atualiza" o stream, se o valor for diferente do atual.
+name.value = 'Hey';
+
+// Todas as propriedades Rx são "chamáveis" e retorna o novo valor.
+// but this approach does not accepts `null`, the UI will not rebuild.
+// mas esta abordagem não aceita `null`, a UI não será reconstruída
+name('Hello');
+
+// é como um getter, imprime 'Hello'
+name() ;
+
+/// números:
+
+final count = 0.obs;
+
+// Você pode usar todas as operações não mutáveis ​​das primitivas de num! 
+count + 1;
+
+// Cuidado! isso só é válido se `count` não for final, mas var
+count += 1;
+
+// Você também pode comparar com os valores:
+count > 2;
+
+/// booleans:
+
+final flag = false.obs;
+
+// mude o valor entre true/false
+flag.toggle();
+
+
+/// todos os yipos:
+
+// Defina `value` como null.
+flag.nil();
+
+// Todas as operações toString() e toJson() são passada para `value`
+print( count ); // chama `toString()` de RxInt
+
+final abc = [0,1,2].obs;
+// Converte o valor em um Array json, imprime RxList
+// Json é suportado por todos os Rx types!
+print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
+
+// RxMap, RxList e RxSet são Rx types especiais, que estendem seus tipos nativos.
+// mas você pode trabalhar com uma lista como uma lista normal, embora seja reativa!
+abc.add(12); // Coloca 12 na lista, e ATUALIZA o stream.
+abc[3]; // como uma lista lê o índice 3.
+
+// equality works with the Rx and the value, but hashCode is always taken from the value
+// a igualdade funciona com o Rx e o valor, mas hashCode é sempre obtido do valor 
+final number = 12.obs;
+print( number == 12 ); // prints > true
+
+/// Rx Models personalizados:
+
+// toJson(), toString() são transferidos para o filho, para que você possa implementar override neles e imprimir o observável diretamente.
+
+class User {
+    String name, last;
+    int age;
+    User({this.name, this.last, this.age});
+
+    @override
+    String toString() => '$name $last, $age years old';
+}
+
+final user = User(name: 'John', last: 'Doe', age: 33).obs;
+
+// `user` é "reativo", mas as propriedades dentro NÃO SÃO!
+// ntão, se mudarmos alguma variável dentro dele:
+user.value.name = 'Roi';
+// O widget não vai reconstruir!,
+// `Rx` não tem nenhuma notificação quando você muda algo dentro do usuário.
+// Portanto, para classes personalizadas, precisamos "notificar" manualmente a mudança.
+user.refresh();
+
+// ou podemos usar o método `update()`!
+user.update((value){
+  value.name='Roi';
+});
+
+print( user );
+```
+
+#### GetView
+
+Eu amo este Widget, é tão simples, mas tão útil!
+
+É um Widget `const Stateless` que tem um getter `controller` registrado para Controller, só isso.
+
+```dart
+class AwesomeController extends GetxController {
+  final String title = 'My Awesome View';
+}
+
+// SEMPRE lembre de passar o `Type` que você usou para registrar seu controlador!
+class AwesomeView extends GetView<AwesomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Text( controller.title ), // apenas chame `controller.something`
+    );
+  }
+}
+```
+
+#### GetWidget
+
+A maioria das pessoas não tem ideia sobre este widget, ou confunde totalmente o uso dele. 
+O caso de uso é muito raro, mas muito específico: Ele armazena em `cache` um Controller. 
+Por causa do _cache_, não pode ser um `const Stateless`.
+
+> Então, quando você precisa armazenar em "cache" um Controller?
+
+If you use, another "not so common" feature of **GetX**: `Get.create()`.
+Se você usar, uma outra característica "não tão comum" de **GetX**: `Get.create()`.
+
+`Get.create(()=>Controller())` irá gerar um novo `Controller` cada vez que você chamar
+`Get.find<Controller>()`,
+
+That's where `GetWidget` shines... as you can use it, for example,
+to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+
+É aí que `GetWidget` brilha... já que você pode usá-lo, por exemplo, 
+para manter uma lista de itens Todo. Portanto, se o widget for "reconstruído", ele manterá a mesma instância do controlador.
+
+#### GetxService
+
+Esta classe é como um `GetxController`, ele compartilha o mesmo ciclo de vida ( `onInit()`, `onReady()`, `onClose()`). 
+Mas não tem "lógica" dentro dele. Ele apenas notifica o sistema de injeção de dependência do GetX de que esta subclasse
+**não pode** ser removida da memória.
+
+Portanto, é muito útil manter seus "Services" sempre acessíveis e ativos com `Get.find()`. Como: 
+`ApiService`, `StorageService`, `CacheService`.
+
+```dart
+Future<void> main() async {
+  await initServices(); /// Aguarda a inicialização dos Services.
+  runApp(SomeApp());
+}
+
+/// É uma jogada inteligente para inicializar seus services antes de executar o aplicativo Flutter, 
+/// já que você pode controlar o fluxo de execução (talvez você precise carregar alguma configuração de tema, 
+/// apiKey, linguagem definida pelo usuário ... então carregue SettingService antes de executar ApiService. 
+/// então GetMaterialApp() não precisa reconstruir e obtém os valores diretamente.
+void initServices() async {
+  print('iniciando serviços...');
+  /// Aqui é onde você coloca a inicialização de get_storage, hive, shared_pref. 
+  /// ou checa a conexão, ou o que quer que seja assíncrono.
+  await Get.putAsync(() => DbService().init());
+  await Get.putAsync(SettingsService()).init();
+  print('Todos os serviços iniciados.');
+}
+
+class DbService extends GetxService {
+  Future<DbService> init() async {
+    print('$runtimeType delays 2 sec');
+    await 2.delay();
+    print('$runtimeType ready!');
+    return this;
+  }
+}
+
+class SettingsService extends GetxService {
+  void init() async {
+    print('$runtimeType delays 1 sec');
+    await 1.delay();
+    print('$runtimeType ready!');
+  }
+}
+```
+
+The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
+"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
+lifetime of your app, use `GetxService`.
+
+A única maneira de realmente excluir um `GetxService`, é com o `Get.reset()`, que é como uma 
+"reinicialização a quente" do seu aplicativo. Portanto, lembre-se, se você precisar de persistência absoluta de uma instância de classe durante
+o ciclo de vida de seu aplicativo, use GetxService.
 
 
 # Breaking Changes da versão 2 para 3
