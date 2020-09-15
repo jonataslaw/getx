@@ -20,7 +20,7 @@ jobs:
           flutter-version: '1.20.2'
           channel: 'stable'
       - run: flutter pub get
-      - run: flutter analyze
+      #- run: flutter analyze
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       # Upload coverage reports to Codecov
