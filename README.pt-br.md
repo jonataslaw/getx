@@ -833,7 +833,7 @@ o ciclo de vida de seu aplicativo, use GetxService.
 | MapX     | `RxMap`    |
 | ListX    | `RxList`   |
 | NumX     | `RxNum`    |
-| RxDouble | `RxDouble` |
+| DoubleX  | `RxDouble` |
 
 ## RxController e GetBuilder se uniram
 
@@ -882,7 +882,7 @@ GetMaterialApp(
 )
 ```
 
-### Porque essa mudança
+### Porque essa mudança?
 
 Frequentemente, pode ser necessário decidir qual pagina vai ser mostrada ao usuário a partir de um parâmetro, como um token de login. A forma abordada anteriormente não era flexível, já que não permitia isso.
 
@@ -912,14 +912,38 @@ GetMaterialApp(
 4- Desacoplamento real. Você já deve ter ouvido o conceito "separar a view da lógica de negócios". Isso não é uma peculiaridade do BLoC, MVC ou MVVM, qualquer outro padrão existente no mercado tem esse conceito. No entanto, muitas vezes esse conceito pode ser mitigado no Flutter por conta do uso do context.
 Se você precisa de context para localizar um InheritedWidget, você precisa disso na view ou passar o context por parâmetro. Eu particularmente acho essa solução muito feia e para trabalhar em equipes teremos sempre uma dependência da lógica de negócios da View. Getx é pouco ortodoxo com a abordagem padrão e apesar de não proibir totalmente o uso de StatefulWidgets, InitState e etc, ele tem sempre uma abordagem similar que pode ser mais limpa. Os controllers tem ciclos de vida e quando você precisa fazer uma solicitação APIREST por exemplo, você não depende de nada da view. Você pode usar onInit para iniciar a chamada http e quando os dados chegarem, as variáveis serão preenchidas. Como GetX é totalmente reativo (de verdade e trabalha sob streams), assim que os itens forem preenchidos, automaticamente será atualizado na view todos os widgets que usam aquela variável. Isso permite que as pessoas especialistas em UI trabalhem apenas com widgets e não precisem enviar nada para a lógica de negócio além de eventos do usuário (como clicar em um botão), enquanto as pessoas que trabalham com a lógica de negócio ficarão livres para criá-la e testá-la separadamente.  
 
-# Como contribuir 
+# Comunidade
 
-Quer contribuir no projeto? Nós ficaremos orgulhosos de ressaltar você como um dos colaboradores. Aqui vai algumas formas em que você pode contribuir e fazer Get (e Flutter) ainda melhores
+## Canais da comunidade
 
-- Ajudando a traduzir o README para outras linguagens.
-- Adicionando mais documentação ao README (até o momento, várias das funcionalidades do Get não foram documentadas).
-- Fazendo artigos/vídeos ensinando a usar o Get (eles serão inseridos no README e no futuro na nossa Wiki).
-- Fazendo PR's (Pull-Requests) para código/testes.
-- Incluindo novas funcionalidades.
+GetX tem uma comunidade altamente ativa e útil. Se você tiver dúvidas, ou quiser alguma ajuda com relação ao uso deste framework, por favor entre em nossos canais da comunidade, sua dúvida será respondida mais rapidamente, e será o lugar mais adequado. Este repositório é exclusivo para abertura de issues e solicitação de recursos, mas fique à vontade para fazer parte da Comunidade GetX.
+
+| **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
+| :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+## Como contribuir
+
+_Quer contribuir com o projeto? Teremos o orgulho de destacá-lo como um de nossos colaboradores. Aqui estão alguns pontos onde você pode contribuir e tornar o Get (e Flutter) ainda melhor._
+
+- Ajudando a traduzir o readme para outros idiomas.
+- Adicionando documentação ao readme (muitas funções do Get ainda não foram documentadas).
+- Escreva artigos ou faça vídeos ensinando como usar o Get (eles serão inseridos no Readme e futuramente em nosso Wiki).
+- Fazendo PRs para código/testes.
+- Incluindo novas funções.
 
 Qualquer contribuição é bem-vinda!
+
+
+## Artigos e vídeos
+
+- [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr). (inglês)
+- [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder. (inglês)
+- [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder. (inglês)
+- [GetX™ Other Features](https://youtu.be/ttQtlX_Q0eU) - Utils, storage, bindings and other features video by Amateur Coder. (inglês)
+- [Firestore User with GetX | Todo App](https://www.youtube.com/watch?v=BiV0DcXgk58) - Video by Amateur Coder. (inglês)
+- [Firebase Auth with GetX | Todo App](https://www.youtube.com/watch?v=-H-T_BSgfOE) - Video by Amateur Coder. (inglês)
+- [The Flutter GetX™ Ecosystem ~ State Management](https://medium.com/flutter-community/the-flutter-getx-ecosystem-state-management-881c7235511d) - State management by [Aachman Garg](https://github.com/imaachman). (inglês)
+- [GetX, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli. (inglês)
+- [Build a To-do List App from scratch using Flutter and GetX](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli. (inglês)
+- [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris. (inglês)
