@@ -31,19 +31,34 @@
     - [Explicação em video do gerenciamento de rotas](#explicação-em-video-do-gerenciamento-de-rotas)
   - [Gerenciamento de Dependência](#gerenciamento-de-dependência)
     - [Mais detalhes sobre gerenciamento de dependências](#mais-detalhes-sobre-gerenciamento-de-dependências)
-- [Como contribuir](#como-contribuir)
 - [Utilidades](#utilidades)
   - [Internacionalização](#internacionalização)
+    - [Traduções](#traduções)
+      - [Usando traduções](#usando-traduções)
+    - [Localidade](#localidade)
+      - [Alterar Local](#alterar-local)
+      - [Localidade do sistema operacional](#localidade-do-sistema-operacional)
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
   - [Outras APIs avançadas](#outras-apis-avançadas)
     - [Configurações Globais opcionais e configurações manuais](#configurações-globais-opcionais-e-configurações-manuais)
-  - [Video explanation of Other GetX Features](#explicação-em-vídeo-sobre-outras-features-do-getx)
+    - [Widgets de Estado Local](#widgets-de-estado-local)
+      - [ValueBuilder](#valuebuilder)
+      - [ObxValue](#obxvalue)
+  - [Dicas Úteis](#dicas-úteis)
+      - [GetView](#getview)
+      - [GetWidget](#getwidget)
+      - [GetxService](#getxservice)
+  - [Explicação em vídeo sobre Outras Features do GetX](#explicação-em-vídeo-sobre-outras-features-do-getx)
 - [Breaking Changes da versão 2 para 3](#breaking-changes-da-versão-2-para-3)
   - [Tipagem Rx](#tipagem-rx)
   - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
   - [Rotas nomeadas](#rotas-nomeadas)
     - [Porque essa mudança](#porque-essa-mudança)
 - [Por que GetX?](#por-que-getx)
+- [Comunidade](#comunidade)
+  - [Canais da comunidade](#canais-da-comunidade)
+  - [Como contribuir](#como-contribuir)
+  - [Artigos e vídeos](#artigos-e-vídeos)
 
 # Sobre Get
 
@@ -297,7 +312,7 @@ Get.lazyPut<Service>(()=> ApiMock());
 
 ## Internacionalização
 ### Traduções
-As traduções são mantidas num simples dictionary map de chave-valor.
+Nós mantemos as traduções num simples dictionary map de chave-valor.
 Para adicionar traduções personalizadas, crie uma classe e estenda `Translations`.
 
 ```dart
@@ -317,7 +332,7 @@ class Messages extends Translations {
 ```
 
 #### Usando traduções
-Basta anexar `.tr` a chave especificada e ela será traduzida, usando o valor atual de `Get.locale` e `Get.fallbackLocale`.
+Basta anexar `.tr` a chave especificada e ela será traduzida, usando o valor atual de `Get.locale` ou `Get.fallbackLocale`.
 ```dart
 Text('hello'.tr);
 ```
@@ -335,7 +350,7 @@ return GetMaterialApp(
 ```
 
 #### Alterar local
-Use `Get.updateLocale(locale)` para atualizar a localidade. As traduções usarão automaticamente a nova localidade.
+Use `Get.updateLocale(locale)` para atualizar a localidade. As traduções usarão automaticamente a nova localidade e a UI será atualizada.
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
