@@ -1,3 +1,5 @@
+import '../../../get.dart';
+
 class GetUtils {
   /// Checks if data is null.
   static bool isNull(dynamic s) => s == null;
@@ -492,4 +494,8 @@ class GetUtils {
   static bool hasMatch(String value, String pattern) {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
+
+  static void printFunction(String prefix, dynamic value, String info,
+          {bool isError = false}) =>
+      GetConfig.log('$prefix $value $info'.trim(), isError: isError);
 }
