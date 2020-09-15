@@ -449,7 +449,8 @@ GetPlatform.isDesktop
 //no Windows, iOS, OSX, Android, etc.
 GetPlatform.isWeb
 
-// Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
+// Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. 
+// Significa que não irá atualizar mesmo que o tamanho da tela mude (como em navegadores ou app desktop)
 Get.height
 Get.width
 
@@ -462,7 +463,8 @@ Get.contextOverlay
 // Obs: os métodos a seguir são extensions do context. Já que se
 // tem acesso ao context em qualquer lugar do código da UI, você pode usar lá
 
-// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) você precisa usar 'context'
+// Se você precisa de um width/height adaptável (como em navegadores em que a janela pode ser redimensionada) 
+// você precisa usar 'context'
 context.width
 context.height
 
@@ -648,7 +650,6 @@ final name = 'GetX'.obs;
 name.value = 'Hey';
 
 // Todas as propriedades Rx são "chamáveis" e retorna o novo valor.
-// but this approach does not accepts `null`, the UI will not rebuild.
 // mas esta abordagem não aceita `null`, a UI não será reconstruída
 name('Hello');
 
@@ -676,7 +677,7 @@ final flag = false.obs;
 flag.toggle();
 
 
-/// todos os yipos:
+/// todos os tipos:
 
 // Defina `value` como null.
 flag.nil();
@@ -701,7 +702,8 @@ print( number == 12 ); // prints > true
 
 /// Rx Models personalizados:
 
-// toJson(), toString() são transferidos para o filho, para que você possa implementar override neles e imprimir o observável diretamente.
+// toJson(), toString() são transferidos para o filho, para que você possa implementar 
+// override neles e imprimir o observável diretamente.
 
 class User {
     String name, last;
@@ -814,10 +816,6 @@ class SettingsService extends GetxService {
   }
 }
 ```
-
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
-lifetime of your app, use `GetxService`.
 
 A única maneira de realmente excluir um `GetxService`, é com o `Get.reset()`, que é como uma 
 "reinicialização a quente" do seu aplicativo. Portanto, lembre-se, se você precisar de persistência absoluta de uma instância de classe durante
