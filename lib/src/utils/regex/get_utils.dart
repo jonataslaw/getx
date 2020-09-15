@@ -485,6 +485,6 @@ class GetUtils {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
 
-  static void log(String prefix, dynamic value, String info) =>
-      print('$prefix $value $info');
+  static void printFunction(String prefix, dynamic value, String info) =>
+      print('$prefix $value $info'.trim());
 }

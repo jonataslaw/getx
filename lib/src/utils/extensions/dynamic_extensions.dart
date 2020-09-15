@@ -9,9 +9,12 @@ extension GetDynamicUtils on dynamic {
 
   bool get isNullOrBlank => GetUtils.isNullOrBlank(this);
 
-  void logError({String info = ''}) =>
-      GetUtils.log('Error: ${this.runtimeType}', this, info);
+  void printError(
+          {String info = '', Function logFunction = GetUtils.printFunction}) =>
+      logFunction('Error: ${this.runtimeType}', this, info);
 
-  void logInfo({String info = ''}) =>
-      GetUtils.log('Info: ${this.runtimeType}', this, info);
+  void printInfo(
+          {String info = '',
+          Function printFunction = GetUtils.printFunction}) =>
+      printFunction('Info: ${this.runtimeType}', this, info);
 }
