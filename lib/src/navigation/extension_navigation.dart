@@ -11,11 +11,6 @@ import 'root/parse_route.dart';
 import 'root/root_controller.dart';
 import 'routes/bindings_interface.dart';
 
-/// It replaces the Flutter Navigator, but needs no context.
-/// You can to use navigator.push(YourRoute()) rather
-/// Navigator.push(context, YourRoute());
-NavigatorState get navigator => Get.key.currentState;
-
 extension GetNavigation on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
@@ -1057,3 +1052,8 @@ Since version 2.8 it is possible to access the properties
 
   static GetMaterialController getxController = GetMaterialController();
 }
+
+/// It replaces the Flutter Navigator, but needs no context.
+/// You can to use navigator.push(YourRoute()) rather
+/// Navigator.push(context, YourRoute());
+NavigatorState get navigator => Get.key.currentState;
