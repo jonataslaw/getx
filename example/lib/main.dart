@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,
-      //  locale: Locale('PT'),
       logWriterCallback: Logger.write,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,

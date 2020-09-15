@@ -1,3 +1,5 @@
+import 'dart:ui';
+import '../../core/get_interface.dart';
 import '../../core/get_main.dart';
 
 extension Trans on String {
@@ -47,5 +49,45 @@ extension Trans on String {
       }
     }
     return key;
+  }
+}
+
+class _IntlHost {
+  Locale locale;
+
+  Locale fallbackLocale;
+
+  Map<String, Map<String, String>> translations = {};
+}
+
+extension LocalesIntl on GetInterface {
+  static final _intlHost = _IntlHost();
+
+  Locale get locale => _intlHost.locale;
+
+  Locale get fallbackLocale => _intlHost.fallbackLocale;
+
+  set locale(Locale newLocale) {
+    _intlHost.locale = newLocale;
+  }
+
+  set fallbackLocale(Locale newLocale) {
+    _intlHost.fallbackLocale = newLocale;
+  }
+
+  Map<String, Map<String, String>> get translations => _intlHost.translations;
+
+  void addTranslations(Map<String, Map<String, String>> tr) {
+    translations.addAll(tr);
+  }
+
+  void appendTranslations(Map<String, Map<String, String>> tr) {
+    tr.forEach((key, map) {
+      if (translations.containsKey(key)) {
+        translations[key].addAll(map);
+      } else {
+        translations[key] = map;
+      }
+    });
   }
 }

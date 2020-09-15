@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../get.dart';
 import '../../core/log.dart';
 import '../../instance/get_instance.dart';
+import '../extension_navigation.dart';
 import '../routes/get_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
@@ -181,7 +182,7 @@ class GetMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GetMaterialController>(
-        init: Get.getxController,
+        init: Get.rootController,
         dispose: (d) {
           onDispose?.call();
         },
@@ -191,9 +192,9 @@ class GetMaterialApp extends StatelessWidget {
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 
           if (translations != null) {
-            Get.translations = translations.keys;
+            Get.addTranslations(translations.keys);
           } else if (translationsKeys != null) {
-            Get.translations = translationsKeys;
+            Get.addTranslations(translationsKeys);
           }
 
           Get.customTransition = customTransition;
@@ -211,12 +212,12 @@ class GetMaterialApp extends StatelessWidget {
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
                 transitionDuration ?? Get.defaultTransitionDuration,
-            defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
+           
           );
         },
         builder: (_) {
           return MaterialApp(
-            key: key,
+            key: _.unikey,
             navigatorKey:
                 (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
             home: home,

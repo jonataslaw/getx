@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../get.dart';
 import '../../instance_manager.dart';
 import '../../route_manager.dart';
 import '../core/get_interface.dart';
 import '../core/log.dart';
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
+import 'root/root_controller.dart';
 import 'routes/bindings_interface.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
@@ -640,6 +642,7 @@ extension GetNavigation on GetInterface {
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
+    RouteSettings settings,
   }) {
     assert(bottomsheet != null);
     assert(persistent != null);
@@ -892,26 +895,22 @@ extension GetNavigation on GetInterface {
       GetConfig.log = logWriterCallback;
     }
     if (defaultPopGesture != null) {
-      this.defaultPopGesture = defaultPopGesture;
+      getxController.defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      this.defaultOpaqueRoute = defaultOpaqueRoute;
+      getxController.defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      this.defaultTransition = defaultTransition;
+      getxController.defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      defaultTransitionDuration = defaultDurationTransition;
-    }
-
-    if (defaultGlobalState != null) {
-      this.defaultGlobalState = defaultGlobalState;
+      getxController.defaultTransitionDuration = defaultDurationTransition;
     }
   }
 
   void updateLocale(Locale l) {
-    locale = l;
+    Get.locale = l;
     forceAppUpdate();
   }
 
@@ -924,20 +923,6 @@ extension GetNavigation on GetInterface {
     (context as Element).visitChildren(rebuild);
   }
 
-  void addTranslations(Map<String, Map<String, String>> tr) {
-    translations.addAll(tr);
-  }
-
-  void appendTranslations(Map<String, Map<String, String>> tr) {
-    tr.forEach((key, map) {
-      if (Get.translations.containsKey(key)) {
-        Get.translations[key].addAll(map);
-      } else {
-        Get.translations[key] = map;
-      }
-    });
-  }
-
   void changeTheme(ThemeData theme) {
     getxController.setTheme(theme);
   }
@@ -947,7 +932,7 @@ extension GetNavigation on GetInterface {
   }
 
   GlobalKey<NavigatorState> addKey(GlobalKey<NavigatorState> newKey) {
-    key = newKey;
+    getxController.key = newKey;
     return key;
   }
 
@@ -966,13 +951,11 @@ extension GetNavigation on GetInterface {
     return keys[k];
   }
 
-  RouteSettings get routeSettings => settings;
-
-  // FIXME: wouldn't a direct set suffice here?
-  // ignore: use_setters_to_change_properties
-  void setSettings(RouteSettings settings) {
-    this.settings = settings;
-  }
+  @Deprecated('''
+Since version 2.8 it is possible to access the properties 
+[Get.arguments] and [Get.currentRoute] directly. 
+[routeSettings] is useless and should not be used.''')
+  RouteSettings get routeSettings => null;
 
   /// give current arguments
   dynamic get arguments => routing.args;
@@ -1034,4 +1017,43 @@ extension GetNavigation on GetInterface {
 
   /// give access to Immutable MediaQuery.of(context).size.width
   double get width => MediaQuery.of(context).size.width;
+
+  GlobalKey<NavigatorState> get key => getxController.key;
+
+  Map<int, GlobalKey<NavigatorState>> get keys => getxController.keys;
+
+  GetMaterialController get rootController => getxController;
+
+  bool get defaultPopGesture => getxController.defaultPopGesture;
+  bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
+
+  Transition get defaultTransition => getxController.defaultTransition;
+  Duration get defaultTransitionDuration {
+    return getxController.defaultDialogTransitionDuration;
+  }
+
+  Curve get defaultTransitionCurve => getxController.defaultTransitionCurve;
+
+  Curve get defaultDialogTransitionCurve {
+    return getxController.defaultDialogTransitionCurve;
+  }
+
+  Duration get defaultDialogTransitionDuration {
+    return getxController.defaultDialogTransitionDuration;
+  }
+
+  Routing get routing => getxController.routing;
+
+  Map<String, String> get parameters => getxController.parameters;
+  set parameters(Map<String, String> newParameters) =>
+      getxController.parameters = newParameters;
+
+  ParseRouteTree get routeTree => getxController.routeTree;
+  set routeTree(ParseRouteTree tree) => getxController.routeTree = tree;
+
+  CustomTransition get customTransition => getxController.customTransition;
+  set customTransition(CustomTransition newTransition) =>
+      getxController.customTransition = newTransition;
+
+  static GetMaterialController getxController = GetMaterialController();
 }
