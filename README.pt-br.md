@@ -122,8 +122,7 @@ class Home extends StatelessWidget {
   final Controller c = Get.put(Controller());
   @override
   Widget build(context) => Scaffold(
-    appBar: AppBar(title: Obx(
-      () => Text("Total of clicks: " + c.count.string))),
+    appBar: AppBar(title: Obx(() => Text("Total de cliques: ${c.count}"))),
       // Troque o Navigator.push de 8 linhas por um simples Get.to(). Você não precisa do 'context'
     body: Center(child: RaisedButton(
       child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
@@ -135,7 +134,7 @@ class Outra extends StatelessWidget {
   // Você pode pedir o Get para encontrar o controller que foi usado em outra página e redirecionar você pra ele.
   final Controller c = Get.find();
   @override
-  Widget build(context) => Scaffold(body: Center(child: Text(c.count.string)));
+  Widget build(context) => Scaffold(body: Center(child: Text("${c.count}")));
 }
 
 ```
