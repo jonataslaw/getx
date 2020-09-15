@@ -42,25 +42,29 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
     if (condition is bool && condition) addAll(items);
   }
 
+  void refresh() {
+    subject.add(_set);
+  }
+
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
   RxSet<E> operator +(Set<E> val) {
     addAll(val);
-    subject.add(_set);
+    refresh();
     return this;
   }
 
   @override
   bool add(E value) {
     final val = _set.add(value);
-    subject.add(_set);
+    refresh();
     return val;
   }
 
   @override
   void addAll(Iterable<E> item) {
     _set.addAll(item);
-    subject.add(_set);
+    refresh();
   }
 
   /// Adds only if [item] is not null.
@@ -83,19 +87,19 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   bool remove(Object item) {
     var hasRemoved = _set.remove(item);
     if (hasRemoved) {
-      subject.add(_set);
+      refresh();
     }
     return hasRemoved;
   }
 
   void removeWhere(bool Function(E) test) {
     _set.removeWhere(test);
-    subject.add(_set);
+    refresh();
   }
 
   void clear() {
     _set.clear();
-    subject.add(_set);
+    refresh();
   }
 
   void close() {
@@ -114,7 +118,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
 
   void update(void fn(Iterable<E> value)) {
     fn(value);
-    subject.add(_set);
+    refresh();
   }
 
   /// Replaces all existing items of this list with [items]
@@ -145,7 +149,7 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   set value(Set<E> val) {
     if (_set == val) return;
     _set = val;
-    subject.add(_set);
+    refresh();
   }
 
   Stream<Set<E>> get stream => subject.stream;
@@ -309,19 +313,19 @@ class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   @override
   void removeAll(Iterable<Object> elements) {
     _set.removeAll(elements);
-    subject.add(_set);
+    refresh();
   }
 
   @override
   void retainAll(Iterable<Object> elements) {
     _set.retainAll(elements);
-    subject.add(_set);
+    refresh();
   }
 
   @override
   void retainWhere(bool Function(E) E) {
     _set.retainWhere(E);
-    subject.add(_set);
+    refresh();
   }
 
   @override

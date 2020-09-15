@@ -118,8 +118,8 @@ class _RxImpl<T> implements RxInterface<T> {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(dynamic o) {
     // Todo, find a common implementation for the hashCode of different Types.
-    if (o is T) return _value == o;
-    if (o is RxInterface<T>) return _value == o.value;
+    if (o is T) return value == o;
+    if (o is RxInterface<T>) return value == o.value;
     return false;
   }
 
@@ -165,6 +165,7 @@ class _RxImpl<T> implements RxInterface<T> {
   }
 
   Stream<T> get stream => subject.stream;
+
   StreamSubscription<T> listen(void Function(T) onData,
           {Function onError, void Function() onDone, bool cancelOnError}) =>
       stream.listen(onData, onError: onError, onDone: onDone);

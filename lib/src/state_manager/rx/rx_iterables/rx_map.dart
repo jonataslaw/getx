@@ -26,6 +26,10 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
     return _value;
   }
 
+  void refresh() {
+    subject.add(_value);
+  }
+
   String get string => value.toString();
 
   bool get canUpdate {
@@ -54,7 +58,7 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   set value(Map<K, V> val) {
     if (_value == val) return;
     _value = val;
-    subject.add(_value);
+    refresh();
   }
 
   Stream<Map<K, V>> get stream => subject.stream;
@@ -73,14 +77,14 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
 
   void add(K key, V value) {
     _value[key] = value;
-    subject.add(_value);
+    refresh();
   }
 
   void addIf(dynamic condition, K key, V value) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) {
       _value[key] = value;
-      subject.add(_value);
+      refresh();
     }
   }
 
@@ -97,25 +101,25 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   @override
   void operator []=(K key, V value) {
     _value[key] = value;
-    subject.add(_value);
+    refresh();
   }
 
   @override
   void addAll(Map<K, V> other) {
     _value.addAll(other);
-    subject.add(_value);
+    refresh();
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> entries) {
     _value.addEntries(entries);
-    subject.add(_value);
+    refresh();
   }
 
   @override
   void clear() {
     _value.clear();
-    subject.add(_value);
+    refresh();
   }
 
   @override
@@ -154,21 +158,21 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     final val = _value.putIfAbsent(key, ifAbsent);
-    subject.add(_value);
+    refresh();
     return val;
   }
 
   @override
   V remove(Object key) {
     final val = _value.remove(key);
-    subject.add(_value);
+    refresh();
     return val;
   }
 
   @override
   void removeWhere(bool Function(K, V) test) {
     _value.removeWhere(test);
-    subject.add(_value);
+    refresh();
   }
 
   @override
@@ -180,14 +184,14 @@ class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   @override
   V update(K key, V Function(V) update, {V Function() ifAbsent}) {
     final val = _value.update(key, update, ifAbsent: ifAbsent);
-    subject.add(_value);
+    refresh();
     return val;
   }
 
   @override
   void updateAll(V Function(K, V) update) {
     _value.updateAll(update);
-    subject.add(_value);
+    refresh();
   }
 }
 

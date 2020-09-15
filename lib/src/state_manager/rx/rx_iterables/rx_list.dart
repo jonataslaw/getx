@@ -36,6 +36,10 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   void operator []=(int index, E val) {
     _list[index] = val;
+    refresh();
+  }
+
+  void refresh() {
     subject.add(_list);
   }
 
@@ -43,7 +47,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   /// inside the List,
   RxList<E> operator +(Iterable<E> val) {
     addAll(val);
-    subject.add(_list);
+    refresh();
     return this;
   }
 
@@ -53,13 +57,13 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   void add(E item) {
     _list.add(item);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void addAll(Iterable<E> item) {
     _list.addAll(item);
-    subject.add(_list);
+    refresh();
   }
 
   /// Add [item] to [List<E>] only if [item] is not null.
@@ -87,13 +91,13 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   void insert(int index, E item) {
     _list.insert(index, item);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void insertAll(int index, Iterable<E> iterable) {
     _list.insertAll(index, iterable);
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -108,7 +112,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   bool remove(Object item) {
     final hasRemoved = _list.remove(item);
     if (hasRemoved) {
-      subject.add(_list);
+      refresh();
     }
     return hasRemoved;
   }
@@ -116,39 +120,39 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   E removeAt(int index) {
     final item = _list.removeAt(index);
-    subject.add(_list);
+    refresh();
     return item;
   }
 
   @override
   E removeLast() {
     final item = _list.removeLast();
-    subject.add(_list);
+    refresh();
     return item;
   }
 
   @override
   void removeRange(int start, int end) {
     _list.removeRange(start, end);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void removeWhere(bool Function(E) test) {
     _list.removeWhere(test);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void clear() {
     _list.clear();
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void sort([int compare(E a, E b)]) {
     _list.sort(compare);
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -168,7 +172,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
 
   void update(void fn(Iterable<E> value)) {
     fn(value);
-    subject.add(_list);
+    refresh();
   }
 
   /// Replaces all existing items of this list with [items]
@@ -197,7 +201,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   set value(List<E> val) {
     if (_list == val) return;
     _list = val;
-    subject.add(_list);
+    refresh();
   }
 
   Stream<List<E>> get stream => subject.stream;
@@ -262,7 +266,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   void fillRange(int start, int end, [E fillValue]) {
     _list.fillRange(start, end, fillValue);
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -323,7 +327,7 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   set length(int newLength) {
     _list.length = newLength;
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -339,13 +343,13 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   void replaceRange(int start, int end, Iterable<E> replacement) {
     _list.replaceRange(start, end, replacement);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void retainWhere(bool Function(E) test) {
     _list.retainWhere(test);
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -354,19 +358,19 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   void setAll(int index, Iterable<E> iterable) {
     _list.setAll(index, iterable);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void setRange(int start, int end, Iterable<E> iterable, [int skipCount = 0]) {
     _list.setRange(start, end, iterable, skipCount);
-    subject.add(_list);
+    refresh();
   }
 
   @override
   void shuffle([Random random]) {
     _list.shuffle(random);
-    subject.add(_list);
+    refresh();
   }
 
   @override
@@ -425,13 +429,13 @@ class RxList<E> implements List<E>, RxInterface<List<E>> {
   @override
   set first(E value) {
     _list.first = value;
-    subject.add(_list);
+    refresh();
   }
 
   @override
   set last(E value) {
     _list.last = value;
-    subject.add(_list);
+    refresh();
   }
 }
 
