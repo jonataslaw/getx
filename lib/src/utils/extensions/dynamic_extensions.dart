@@ -11,7 +11,7 @@ extension GetDynamicUtils on dynamic {
 
   void printError(
           {String info = '', Function logFunction = GetUtils.printFunction}) =>
-      logFunction('Error: ${this.runtimeType}', this, info);
+      logFunction('Error: ${this.runtimeType}', this, info, isError: true);
 
   void printInfo(
           {String info = '',

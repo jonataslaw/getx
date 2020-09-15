@@ -487,6 +487,7 @@ class GetUtils {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
 
-  static void printFunction(String prefix, dynamic value, String info) =>
-      GetConfig.log('$prefix $value $info'.trim());
+  static void printFunction(String prefix, dynamic value, String info,
+          {bool isError = false}) =>
+      GetConfig.log('$prefix $value $info'.trim(), isError: isError);
 }
