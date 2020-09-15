@@ -32,8 +32,8 @@ class _RxImpl<T> implements RxInterface<T> {
   ///
   /// // in your build(BuildContext) {
   /// TextField(
-  //    onChanged: myText,
-  //  ),
+  ///   onChanged: myText,
+  /// ),
   ///```
   T call([T v]) {
     if (v != null) {
