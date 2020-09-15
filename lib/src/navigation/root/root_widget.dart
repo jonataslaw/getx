@@ -231,7 +231,14 @@ class GetMaterialApp extends StatelessWidget {
                 ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
                 : <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
               ..addAll(navigatorObservers)),
-            builder: builder,
+            builder: (context, child) {
+              return Directionality(
+                textDirection: rtlLanguages.contains(Get.locale.languageCode)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+                child: builder(context, child),
+              );
+            },
             title: title ?? '',
             onGenerateTitle: onGenerateTitle,
             color: color,
@@ -257,6 +264,14 @@ class GetMaterialApp extends StatelessWidget {
         });
   }
 }
+
+const List<String> rtlLanguages = <String>[
+  'ar', // Arabic
+  'fa', // Farsi
+  'he', // Hebrew
+  'ps', // Pashto
+  'ur',
+];
 
 abstract class Translations {
   Map<String, Map<String, String>> get keys;
