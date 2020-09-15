@@ -660,7 +660,7 @@ name() ;
 
 final count = 0.obs;
 
-// Você pode usar todas as operações não mutáveis ​​das primitivas de num! 
+// Você pode usar todas as operações não mutáveis ​​de um num! 
 count + 1;
 
 // Cuidado! isso só é válido se `count` não for final, mas var
