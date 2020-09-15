@@ -16,7 +16,7 @@
 
 ![](getx.png)
 
-<h2> Pedimos desculpas por qualquer parte não traduzida aqui. O GetX é atualizado com muita frequência e as traduções podem não vir ao mesmo tempo. Então, para manter essa documentação pelo menos com tudo que a versão em inglês tem, eu vou deixar todos os textos não-traduzidos aqui (eu considero que é melhor ele estar lá em inglês do que não estar), então se alguém quiser traduzir, seria muito útil 😁</h2>
+<h2> Pedimos desculpas por qualquer parte não traduzida aqui. O GetX™ é atualizado com muita frequência e as traduções podem não vir ao mesmo tempo. Então, para manter essa documentação pelo menos com tudo que a versão em inglês tem, eu vou deixar todos os textos não-traduzidos aqui (eu considero que é melhor ele estar lá em inglês do que não estar), então se alguém quiser traduzir, seria muito útil 😁</h2>
 
 - [Canais para comunicação e suporte:](#canais-para-comunicação-e-suporte)
 - [Sobre Get](#sobre-get)
@@ -57,13 +57,13 @@
 # Sobre Get
 
 - Get é uma biblioteca poderosa e extraleve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
-- GetX possui 3 princípios básicos, o que significa que esta é a prioridade para todos os recursos da biblioteca
-  - **PERFOMANCE**: GetX é focado em desempenho e consumo mínimo de recursos. Os benchmarks quase sempre não são importantes no mundo real, mas se você quiser, há um indicador de consumo aqui ([benchmarks](https://github.com/jonataslaw/benchmarks)), onde GetX se sai melhor do que outras abordagens de gerenciamento de estado, por exemplo. A diferença não é grande, mas mostra nossa preocupação em não desperdiçar seus recursos.
-  - **PRODUTIVIDADE**: GetX usa uma sintaxe fácil e agradável. Não importa o que você queira fazer, sempre há uma maneira mais fácil com Getx. Isso economizará horas de desenvolvimento e extrairá o máximo de desempenho que seu aplicativo pode oferecer.
-  - **ORGANIZAÇÃO**: GetX permite o desacoplamento total da View, lógica de apresentação, lógica de negócios, injeção de dependência e navegação. Você não precisa de contexto para navegar entre as rotas, portanto, você não depende da árvore do widget (visualização) para isso. Você não precisa de contexto para acessar seus Controllers / BLoCs por meio de um inheritedWidget, então você desacopla completamente sua lógica de apresentação e lógica de negócios de sua camada de visualização. Você não precisa injetar suas classes Controllers / Models / BLoCs em sua árvore de widgets através de multiproviders, pois GetX usa seu próprio recurso de injeção de dependência, desacoplando a DI de sua View completamente. Com GetX você sabe onde encontrar cada recurso de sua aplicação, tendo o código limpo por padrão. Isso além de facilitar a manutenção, torna o compartilhamento dos módulos, algo que até então em Flutter era impensável, algo totalmente possível. O BLoC foi um ponto de partida para organizar o código no Flutter, ele separa a lógica de negócios da visualização. Getx é uma evolução natural disso, separando não apenas a lógica de negócios, mas a lógica de apresentação. O bônus da injeção de dependências e rotas também são dissociadas e a camada de dados está fora de tudo. Você sabe onde está tudo e tudo isso de uma maneira mais fácil do que construir um hello world. GetX é a maneira mais fácil, prática e escalonável de construir aplicativos de alto desempenho com o Flutter SDK, com um grande ecossistema em torno dele que funciona perfeitamente em conjunto, sendo fácil para iniciantes e preciso para especialistas. É seguro, estável, atualizado e oferece uma grande variedade de APIs integradas que não estão presentes no Flutter SDK padrão.
-- GetX não é inchado. Possui uma infinidade de recursos que permitem que você comece a programar sem se preocupar com nada, mas cada um desses recursos está em contêineres separados e só são iniciados após o uso. Se você usar apenas o Gerenciamento de estado, apenas o Gerenciamento de estado será compilado. Se você usar apenas rotas, nada do gerenciamento de estado será compilado. Você pode compilar o repositório de benchmark e verá que usando apenas o gerenciamento de estado Get, o aplicativo compilado com Get tornou-se menor do que todos os outros aplicativos que têm apenas o gerenciamento de estado de outros pacotes, porque nada que não seja usado será compilado em seu código e cada solução GetX foi projetada para ser extra leve. O mérito aqui também vem do tree shaking do Flutter, que é incrível e consegue eliminar recursos não utilizados como nenhum outro framework faz.
+- GetX™ possui 3 princípios básicos, o que significa que esta é a prioridade para todos os recursos da biblioteca
+  - **PERFOMANCE**: GetX™ é focado em desempenho e consumo mínimo de recursos. Os benchmarks quase sempre não são importantes no mundo real, mas se você quiser, há um indicador de consumo aqui ([benchmarks](https://github.com/jonataslaw/benchmarks)), onde GetX™ se sai melhor do que outras abordagens de gerenciamento de estado, por exemplo. A diferença não é grande, mas mostra nossa preocupação em não desperdiçar seus recursos.
+  - **PRODUTIVIDADE**: GetX™ usa uma sintaxe fácil e agradável. Não importa o que você queira fazer, sempre há uma maneira mais fácil com GetX™. Isso economizará horas de desenvolvimento e extrairá o máximo de desempenho que seu aplicativo pode oferecer.
+  - **ORGANIZAÇÃO**: GetX™ permite o desacoplamento total da View, lógica de apresentação, lógica de negócios, injeção de dependência e navegação. Você não precisa de contexto para navegar entre as rotas, portanto, você não depende da árvore do widget (visualização) para isso. Você não precisa de contexto para acessar seus Controllers / BLoCs por meio de um inheritedWidget, então você desacopla completamente sua lógica de apresentação e lógica de negócios de sua camada de visualização. Você não precisa injetar suas classes Controllers / Models / BLoCs em sua árvore de widgets através de multiproviders, pois GetX™ usa seu próprio recurso de injeção de dependência, desacoplando a DI de sua View completamente. Com GetX™ você sabe onde encontrar cada recurso de sua aplicação, tendo o código limpo por padrão. Isso além de facilitar a manutenção, torna o compartilhamento dos módulos, algo que até então em Flutter era impensável, algo totalmente possível. O BLoC foi um ponto de partida para organizar o código no Flutter, ele separa a lógica de negócios da visualização. GetX™ é uma evolução natural disso, separando não apenas a lógica de negócios, mas a lógica de apresentação. O bônus da injeção de dependências e rotas também são dissociadas e a camada de dados está fora de tudo. Você sabe onde está tudo e tudo isso de uma maneira mais fácil do que construir um hello world. GetX™ é a maneira mais fácil, prática e escalonável de construir aplicativos de alto desempenho com o Flutter SDK, com um grande ecossistema em torno dele que funciona perfeitamente em conjunto, sendo fácil para iniciantes e preciso para especialistas. É seguro, estável, atualizado e oferece uma grande variedade de APIs integradas que não estão presentes no Flutter SDK padrão.
+- GetX™ não é inchado. Possui uma infinidade de recursos que permitem que você comece a programar sem se preocupar com nada, mas cada um desses recursos está em contêineres separados e só são iniciados após o uso. Se você usar apenas o Gerenciamento de estado, apenas o Gerenciamento de estado será compilado. Se você usar apenas rotas, nada do gerenciamento de estado será compilado. Você pode compilar o repositório de benchmark e verá que usando apenas o gerenciamento de estado Get, o aplicativo compilado com Get tornou-se menor do que todos os outros aplicativos que têm apenas o gerenciamento de estado de outros pacotes, porque nada que não seja usado será compilado em seu código e cada solução GetX™ foi projetada para ser extra leve. O mérito aqui também vem do tree shaking do Flutter, que é incrível e consegue eliminar recursos não utilizados como nenhum outro framework faz.
 - Navegue por rotas sem `context`, abra `Dialog`s, `Snackbar`s ou `BottomSheet`s de qualquer lugar no código, gerencie estados e injete dependências de uma forma simples e prática.
-- Getx possui um enorme ecossistema, capaz de rodar com o mesmo código no Android, iOS, Web, Mac, Linux, Windows e em seu servidor. É possível reutilizar totalmente o código feito no front-end em seu back-end com **[Get Server](https://github.com/jonataslaw/get_server)**.
+- GetX™ possui um enorme ecossistema, capaz de rodar com o mesmo código no Android, iOS, Web, Mac, Linux, Windows e em seu servidor. É possível reutilizar totalmente o código feito no front-end em seu back-end com **[Get Server](https://github.com/jonataslaw/get_server)**.
 
 Além disso, todo o processo de desenvolvimento pode ser totalmente automatizado, tanto no servidor quanto no front-end com **[Get CLI](https://github.com/jonataslaw/get_cli)**.
 
@@ -164,7 +164,7 @@ Get tem dois gerenciadores de estado diferentes: o simple state manager (vamos c
 
 ### Reactive state manager
 
-Programação reativa pode alienar muitas pessoas porque é dito que é complicado. GetX transforma a programação reativa em algo bem simples:
+Programação reativa pode alienar muitas pessoas porque é dito que é complicado. GetX™ transforma a programação reativa em algo bem simples:
 
 * Você não precisa criar StreamControllers
 * Você não precisa criar um StreamBuilder para cada variável
@@ -203,11 +203,11 @@ Só isso. É *simples assim*;
 
 Amateur Coder fez um vídeo ótimo sobre o gerenciamento de estado! (em inglês). Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
 
-Você vai ter uma boa idea do poder do GetX
+Você vai ter uma boa idea do poder do GetX™
 
 ## Gerenciamento de rotas
 
-Se você for usar routes / snackbars / dialogs / bottomsheets sem contexto, GetX é excelente para você também, veja:
+Se você for usar routes / snackbars / dialogs / bottomsheets sem contexto, GetX™ é excelente para você também, veja:
 
 Adicione "Get" antes do seu MaterialApp, transformando-o em GetMaterialApp
 
@@ -247,11 +247,11 @@ Para navegar para a próxima rota e receber ou atualizar dados assim que retorna
 var dados = await Get.to(Pagamento());
 ```
 
-Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? Essa é uma das maiores vantagens de usar o gerenciamento de rotas do GetX. Com isso, você pode executar todos esse métodos de dentro da classe Controller, sem preocupações.
+Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? Essa é uma das maiores vantagens de usar o gerenciamento de rotas do GetX™. Com isso, você pode executar todos esse métodos de dentro da classe Controller, sem preocupações.
 
 ### Mais detalhes sobre gerenciamento de rotas
 
-**GetX funciona com rotas nomeadas também! Veja uma explicação mais completa do gerenciamento de rotas [aqui](./documentation/pt_BR/route_management.md)**
+**GetX™ funciona com rotas nomeadas também! Veja uma explicação mais completa do gerenciamento de rotas [aqui](./documentation/pt_BR/route_management.md)**
 
 ### Explicação em video do gerenciamento de rotas
 
@@ -362,7 +362,7 @@ return GetMaterialApp(
 
 ## Mudar tema (changeTheme)
 
-Por favor não use widget acima do GetMaterialApp para atualizar o tema. Isso pode causar keys duplicadas. Várias pessoas estão acostumadas com o jeito normal de criar um Widget `ThemeProvider` só pra alterar o tema do app, mas isso definitivamente NÃO é necessário com GetX.
+Por favor não use widget acima do GetMaterialApp para atualizar o tema. Isso pode causar keys duplicadas. Várias pessoas estão acostumadas com o jeito normal de criar um Widget `ThemeProvider` só pra alterar o tema do app, mas isso definitivamente NÃO é necessário com GetX™.
 
 Você pode criar seu tema customizado e simplesmente adicionar dentro do `Get.changeTheme` sem nenhum boilerplate para isso:
 
@@ -370,7 +370,7 @@ Você pode criar seu tema customizado e simplesmente adicionar dentro do `Get.ch
 Get.changeTheme(ThemeData.light())
 ```
 
-Se você quer criar algo como um botão que muda o tema com o toque, você pode combinar duas APIs GetX pra isso:
+Se você quer criar algo como um botão que muda o tema com o toque, você pode combinar duas APIs GetX™ pra isso:
 - A API que checa se o tema dark está sendo aplicado;
 - A API de mudar o tema e colocar isso no `onPressed:`
 
@@ -561,7 +561,7 @@ Get.config(
 )
 ```
 
-É possível redirecionar todas as mensagens de log do GetX. Útil quando se tem um package de logging e vc quer que ele lide com todos os logs
+É possível redirecionar todas as mensagens de log do GetX™. Útil quando se tem um package de logging e vc quer que ele lide com todos os logs
 
 ```dart
 GetMaterialApp(
@@ -755,14 +755,10 @@ Por causa do _cache_, não pode ser um `const Stateless`.
 
 > Então, quando você precisa armazenar em "cache" um Controller?
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
-Se você usar, uma outra característica "não tão comum" de **GetX**: `Get.create()`.
+Se você usar, uma outra característica "não tão comum" de **GetX™**: `Get.create()`.
 
 `Get.create(()=>Controller())` irá gerar um novo `Controller` cada vez que você chamar
 `Get.find<Controller>()`,
-
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
 
 É aí que `GetWidget` brilha... já que você pode usá-lo, por exemplo, 
 para manter uma lista de itens Todo. Portanto, se o widget for "reconstruído", ele manterá a mesma instância do controlador.
@@ -770,7 +766,7 @@ para manter uma lista de itens Todo. Portanto, se o widget for "reconstruído", 
 #### GetxService
 
 Esta classe é como um `GetxController`, ele compartilha o mesmo ciclo de vida ( `onInit()`, `onReady()`, `onClose()`). 
-Mas não tem "lógica" dentro dele. Ele apenas notifica o sistema de injeção de dependência do GetX de que esta subclasse
+Mas não tem "lógica" dentro dele. Ele apenas notifica o sistema de injeção de dependência do GetX™ de que esta subclasse
 **não pode** ser removida da memória.
 
 Portanto, é muito útil manter seus "Services" sempre acessíveis e ativos com `Get.find()`. Como: 
@@ -901,22 +897,22 @@ GetMaterialApp(
 )
 ```
 
-# Por que GetX?
+# Por que GetX™?
 
 1- Muitas vezes após uma atualização do Flutter, muitos dos seus packages irão quebrar. As vezes acontecem erros de compilação, muitas vezes aparecem erros que ainda não existem respostas sobre e o desenvolvedor necessita saber de onde o erro veio, rastreá-lo, para só então tentar abrir uma issue no repositório correspondente e ver seu problema resolvido. Get centraliza os principais recursos para o desenvolvimento (Gerência de estado, de dependências e de rotas), permitindo você adicionar um único package em seu pubspec e começar a trabalhar. Após uma atualização do Flutter, a única coisa que você precisa fazer é atualizar a dependencia do Get e começar a trabalhar. Get também resolve problemas de compatibilidade. Quantas vezes uma versão de um package não é compatível com a versão de outro, porque um utiliza uma dependência em uma versão e o outro em outra versão? Essa também não é uma preocupação usando Get, já que tudo está no mesmo package e é totalmente compatível.
 
-2- Flutter é fácil, Flutter é incrível, mas Flutter ainda tem algum boilerplate que pode ser indesejado para maioria dos desenvolvedores, como o Navigator.of(context).push(context, builder[...]. Get simplifica o desenvolvimento. Em vez de escrever 8 linhas de código para apenas chamar uma rota, você pode simplesmente fazer: Get.to(Home()) e pronto, você irá para a próxima página. Urls dinâmicas da web é algo realmente doloroso de fazer com o Flutter atualmente e isso com o GetX é estupidamente simples. Gerenciar estados no Flutter e gerenciar dependências também é algo que gera muita discussão, por haver centenas de padrões na pub. Mas não há nada que seja tão fácil quanto adicionar um ".obs" no final de sua variável, colocar o seu widget dentro de um Obx e pronto, todas atualizações daquela variável serão automaticamente atualizadas na tela.
+2- Flutter é fácil, Flutter é incrível, mas Flutter ainda tem algum boilerplate que pode ser indesejado para maioria dos desenvolvedores, como o Navigator.of(context).push(context, builder[...]. Get simplifica o desenvolvimento. Em vez de escrever 8 linhas de código para apenas chamar uma rota, você pode simplesmente fazer: Get.to(Home()) e pronto, você irá para a próxima página. Urls dinâmicas da web é algo realmente doloroso de fazer com o Flutter atualmente e isso com o GetX™ é estupidamente simples. Gerenciar estados no Flutter e gerenciar dependências também é algo que gera muita discussão, por haver centenas de padrões na pub. Mas não há nada que seja tão fácil quanto adicionar um ".obs" no final de sua variável, colocar o seu widget dentro de um Obx e pronto, todas atualizações daquela variável serão automaticamente atualizadas na tela.
 
-3- Facilidade sem se preocupar com desempenho. O desempenho do Flutter já é incrível, mas imagine que você use um gerenciador de estados e um locator para distribuir suas classes blocs/stores/controllers/ etc. Você deverá chamar manualmente a exclusão daquela dependência quando não precisar dela. Mas já pensou em simplesmente usar seu controlador e quando ele não tivesse mais sendo usado por ninguém, ele simplesmente fosse excluído da memória? É isso que GetX faz. Com o SmartManagement, tudo que não está sendo usado é excluído da memória e você não deve se preocupar em nada além de programar. Você terá garantia que está consumindo o mínimo de recursos necessários, sem ao menos ter criado uma lógica para isso.
+3- Facilidade sem se preocupar com desempenho. O desempenho do Flutter já é incrível, mas imagine que você use um gerenciador de estados e um locator para distribuir suas classes blocs/stores/controllers/ etc. Você deverá chamar manualmente a exclusão daquela dependência quando não precisar dela. Mas já pensou em simplesmente usar seu controlador e quando ele não tivesse mais sendo usado por ninguém, ele simplesmente fosse excluído da memória? É isso que GetX™ faz. Com o SmartManagement, tudo que não está sendo usado é excluído da memória e você não deve se preocupar em nada além de programar. Você terá garantia que está consumindo o mínimo de recursos necessários, sem ao menos ter criado uma lógica para isso.
 
 4- Desacoplamento real. Você já deve ter ouvido o conceito "separar a view da lógica de negócios". Isso não é uma peculiaridade do BLoC, MVC ou MVVM, qualquer outro padrão existente no mercado tem esse conceito. No entanto, muitas vezes esse conceito pode ser mitigado no Flutter por conta do uso do context.
-Se você precisa de context para localizar um InheritedWidget, você precisa disso na view ou passar o context por parâmetro. Eu particularmente acho essa solução muito feia e para trabalhar em equipes teremos sempre uma dependência da lógica de negócios da View. Getx é pouco ortodoxo com a abordagem padrão e apesar de não proibir totalmente o uso de StatefulWidgets, InitState e etc, ele tem sempre uma abordagem similar que pode ser mais limpa. Os controllers tem ciclos de vida e quando você precisa fazer uma solicitação APIREST por exemplo, você não depende de nada da view. Você pode usar onInit para iniciar a chamada http e quando os dados chegarem, as variáveis serão preenchidas. Como GetX é totalmente reativo (de verdade e trabalha sob streams), assim que os itens forem preenchidos, automaticamente será atualizado na view todos os widgets que usam aquela variável. Isso permite que as pessoas especialistas em UI trabalhem apenas com widgets e não precisem enviar nada para a lógica de negócio além de eventos do usuário (como clicar em um botão), enquanto as pessoas que trabalham com a lógica de negócio ficarão livres para criá-la e testá-la separadamente.  
+Se você precisa de context para localizar um InheritedWidget, você precisa disso na view ou passar o context por parâmetro. Eu particularmente acho essa solução muito feia e para trabalhar em equipes teremos sempre uma dependência da lógica de negócios da View. GetX™ é pouco ortodoxo com a abordagem padrão e apesar de não proibir totalmente o uso de StatefulWidgets, InitState e etc, ele tem sempre uma abordagem similar que pode ser mais limpa. Os controllers tem ciclos de vida e quando você precisa fazer uma solicitação APIREST por exemplo, você não depende de nada da view. Você pode usar onInit para iniciar a chamada http e quando os dados chegarem, as variáveis serão preenchidas. Como GetX™ é totalmente reativo (de verdade e trabalha sob streams), assim que os itens forem preenchidos, automaticamente será atualizado na view todos os widgets que usam aquela variável. Isso permite que as pessoas especialistas em UI trabalhem apenas com widgets e não precisem enviar nada para a lógica de negócio além de eventos do usuário (como clicar em um botão), enquanto as pessoas que trabalham com a lógica de negócio ficarão livres para criá-la e testá-la separadamente.  
 
 # Comunidade
 
 ## Canais da comunidade
 
-GetX tem uma comunidade altamente ativa e útil. Se você tiver dúvidas, ou quiser alguma ajuda com relação ao uso deste framework, por favor entre em nossos canais da comunidade, sua dúvida será respondida mais rapidamente, e será o lugar mais adequado. Este repositório é exclusivo para abertura de issues e solicitação de recursos, mas fique à vontade para fazer parte da Comunidade GetX.
+GetX™ tem uma comunidade altamente ativa e útil. Se você tiver dúvidas, ou quiser alguma ajuda com relação ao uso deste framework, por favor entre em nossos canais da comunidade, sua dúvida será respondida mais rapidamente, e será o lugar mais adequado. Este repositório é exclusivo para abertura de issues e solicitação de recursos, mas fique à vontade para fazer parte da Comunidade GetX™.
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
@@ -939,11 +935,11 @@ Qualquer contribuição é bem-vinda!
 
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr). (inglês)
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder. (inglês)
-- [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder. (inglês)
+- [Complete GetX™ State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder. (inglês)
 - [GetX™ Other Features](https://youtu.be/ttQtlX_Q0eU) - Utils, storage, bindings and other features video by Amateur Coder. (inglês)
-- [Firestore User with GetX | Todo App](https://www.youtube.com/watch?v=BiV0DcXgk58) - Video by Amateur Coder. (inglês)
-- [Firebase Auth with GetX | Todo App](https://www.youtube.com/watch?v=-H-T_BSgfOE) - Video by Amateur Coder. (inglês)
+- [Firestore User with GetX™ | Todo App](https://www.youtube.com/watch?v=BiV0DcXgk58) - Video by Amateur Coder. (inglês)
+- [Firebase Auth with GetX™ | Todo App](https://www.youtube.com/watch?v=-H-T_BSgfOE) - Video by Amateur Coder. (inglês)
 - [The Flutter GetX™ Ecosystem ~ State Management](https://medium.com/flutter-community/the-flutter-getx-ecosystem-state-management-881c7235511d) - State management by [Aachman Garg](https://github.com/imaachman). (inglês)
-- [GetX, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli. (inglês)
-- [Build a To-do List App from scratch using Flutter and GetX](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli. (inglês)
-- [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris. (inglês)
+- [GetX™, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli. (inglês)
+- [Build a To-do List App from scratch using Flutter and GetX™](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli. (inglês)
+- [GetX™ Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris. (inglês)
