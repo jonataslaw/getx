@@ -1056,4 +1056,4 @@ Since version 2.8 it is possible to access the properties
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
 /// Navigator.push(context, YourRoute());
-NavigatorState get navigator => Get.key.currentState;
+NavigatorState get navigator => GetNavigation(Get).key.currentState;
