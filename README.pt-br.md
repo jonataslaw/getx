@@ -432,8 +432,8 @@ Get.offUntil()
 Get.offNamedUntil()
 
 // Verifica em que plataforma o app está sendo executado
-//(Esse método é completamente compatível com o FlutterWeb,
-//diferente do método do framework "Platform.isAndroid")
+// (Esse método é completamente compatível com o FlutterWeb,
+// diferente do método do framework "Platform.isAndroid")
 GetPlatform.isAndroid
 GetPlatform.isIOS
 GetPlatform.isMacOS
@@ -441,12 +441,12 @@ GetPlatform.isWindows
 GetPlatform.isLinux
 GetPlatform.isFuchsia
 
-//Verifica o tipo de dispositivo
+// Verifica o tipo de dispositivo
 GetPlatform.isMobile
 GetPlatform.isDesktop
-//Todas as plataformas são suportadas de forma independente na web!
-//Você pode saber se está executando dentro de um navegador
-//no Windows, iOS, OSX, Android, etc.
+// Todas as plataformas são suportadas de forma independente na web!
+// Você pode saber se está executando dentro de um navegador
+// no Windows, iOS, OSX, Android, etc.
 GetPlatform.isWeb
 
 // Equivalente ao método: MediaQuery.of(context).size.width ou height, mas é imutável. 
