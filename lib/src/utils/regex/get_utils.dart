@@ -70,14 +70,13 @@ class GetUtils {
       return true;
     }
 
-    /// FIXME: null checking here is.. pointless (? see isNull above)
     if(value is String) {
-      return value.toString() == 'null' || value.toString().trim().isEmpty;
+      return value.toString().trim().isEmpty;
     }
 
     // Pretty sure that isNullOrBlank should't be validating
     // iterables... but I'm going to keep this for compatibility.
-    return _hasIsEmpty(value) ? value.isEmpty as bool : true;
+    return _hasIsEmpty(value) ? value.isEmpty as bool : false;
   }
 
   /// Checks if string is int or double.

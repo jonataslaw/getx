@@ -8,60 +8,63 @@ class TestClass {
 class EmptyClass {}
 
 void main() {
-  group('dynamic extensions', () {
-    test('var.isNullOrBlank on a string ', () {
-      var string = '';
-      expect('foo'.isNullOrBlank, equals(false));
-      expect(string.isNullOrBlank, equals(true));
-    });
-    test('var.isNullOrBlank on a int ', () {
-      expect(5.isNullOrBlank, equals(false));
-      expect(0.isNullOrBlank, equals(false));
+  group('isNullOrBlank on dynamic', () {
+    // Identity util to convert to iterables
+    dynamic _id(dynamic e) => e;
+
+    test('null isNullOrBlank should be true for null', () {
+      expect((null).isNullOrBlank, true);
     });
 
-    test('var.isNullOrBlank on a double ', () {
+    test('isNullOrBlank should be false for unsupported types', () {
+      expect(5.isNullOrBlank, false);
+      expect(0.isNullOrBlank, false);
+
       expect(5.0.isNullOrBlank, equals(false));
       expect(0.0.isNullOrBlank, equals(false));
-    });
 
-    test('var.isNullOrBlank on a list ', () {
-      var list = ['foo'];
-      expect([].isNullOrBlank, equals(true));
-      expect(['oi', 'foo'].isNullOrBlank, equals(false));
-      expect([{}, {}].isNullOrBlank, equals(false));
-      expect(list[0].isNullOrBlank, equals(false));
-    });
-
-    test('var.isNullOrBlank on a set ', () {
-      var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
-      expect(<String>{}.isNullOrBlank, equals(true));
-      expect({'foo', 'bar'}.isNullOrBlank, equals(false));
-      expect(halogens.isNullOrBlank, equals(false));
-    });
-
-    test('var.isNullOrBlank on a map ', () {
-      var map = {"foo": 'bar', "one": "um"};
-      expect({}.isNullOrBlank, equals(true));
-      expect({"other": "thing"}.isNullOrBlank, equals(false));
-      expect({'first': [], 'second': []}.isNullOrBlank, equals(false));
-      expect(map["foo"].isNullOrBlank, equals(false));
-      expect(map["other"].isNullOrBlank, equals(true));
-    });
-
-    test('var.isNullOrBlank on a function ', () {
-      someFunction({String string, int integer}) {
-        expect(string.isNullOrBlank, equals(false));
-        expect(integer.isNullOrBlank, equals(true));
-      }
-
-      someFunction(string: 'some value');
-    });
-
-    test('var.isNullOrBlank on a class ', () {
       TestClass testClass;
-      expect(TestClass().isNullOrBlank, equals(false));
       expect(testClass.isNullOrBlank, equals(true));
+      expect(TestClass().isNullOrBlank, equals(false));
       expect(EmptyClass().isNullOrBlank, equals(false));
+    });
+
+    test('isNullOrBlank should validate strings', () {
+      expect("".isNullOrBlank, true);
+      expect("  ".isNullOrBlank, true);
+
+      expect("foo".isNullOrBlank, false);
+      expect(" foo ".isNullOrBlank, false);
+
+      expect("null".isNullOrBlank, false);
+    });
+
+    test('isNullOrBlank should validate iterables', () {
+      expect([].map(_id).isNullOrBlank, true);
+      expect([1].map(_id).isNullOrBlank, false);
+    });
+
+    test('isNullOrBlank should validate lists', () {
+      expect([].isNullOrBlank, true);
+      expect(['oi', 'foo'].isNullOrBlank, false);
+      expect([{}, {}].isNullOrBlank, false);
+      expect(['foo'][0].isNullOrBlank, false);
+    });
+
+    test('isNullOrBlank should validate sets', () {
+      expect((<dynamic>{}).isNullOrBlank, true);
+      expect(({1}).isNullOrBlank, false);
+      expect({'fluorine', 'chlorine', 'bromine'}.isNullOrBlank, false);
+    });
+
+    test('isNullOrBlank should validate maps', () {
+      expect(({}).isNullOrBlank, true);
+      expect(({1: 1}).isNullOrBlank, false);
+      expect({"other": "thing"}.isNullOrBlank, false);
+
+      final map = {"foo": 'bar', "one": "um"};
+      expect(map["foo"].isNullOrBlank, false);
+      expect(map["other"].isNullOrBlank, true);
     });
   });
 
