@@ -34,6 +34,55 @@ class Routing {
   }
 }
 
+/// Extracts the name of a route based on it's instance type
+/// or null if not possible.
+String _extractRouteName(Route route) {
+  if (route?.settings?.name != null) {
+    return route.settings.name;
+  }
+
+  if (route is GetPageRoute) {
+    return route.routeName;
+  }
+
+  if (route is GetDialogRoute) {
+    return route.name;
+  }
+
+  if (route is GetModalBottomSheetRoute) {
+    return route.name;
+  }
+
+  return null;
+}
+
+/// This is basically a util for rules about 'what a route is'
+class _RouteData {
+  final bool isGetPageRoute;
+  final bool isSnackbar;
+  final bool isBottomSheet;
+  final bool isDialog;
+  final String name;
+
+  _RouteData({
+    @required this.name,
+    @required this.isGetPageRoute,
+    @required this.isSnackbar,
+    @required this.isBottomSheet,
+    @required this.isDialog,
+  });
+
+  factory _RouteData.ofRoute(Route route) {
+    return _RouteData(
+      name: _extractRouteName(route),
+      isGetPageRoute: route is GetPageRoute,
+      isSnackbar: route is SnackRoute,
+      isDialog: route is GetDialogRoute,
+      isBottomSheet: route is GetModalBottomSheetRoute,
+    );
+  }
+}
+
 class GetObserver extends NavigatorObserver {
   final Function(Routing) routing;
 
@@ -41,132 +90,119 @@ class GetObserver extends NavigatorObserver {
 
   final Routing _routeSend;
 
-  Route<dynamic> route;
-  bool isBack;
-  bool isSnackbar;
-  bool isBottomSheet;
-  bool isDialog;
-  String current;
-  String previous;
-  dynamic args;
-
-  // String previousArgs;
-  String removed;
-
-  String name(Route<dynamic> route) {
-    if (route?.settings?.name != null) {
-      return route.settings.name;
-    } else if (route is GetPageRoute) {
-      return route.routeName;
-    } else if (route is GetDialogRoute) {
-      return route.name;
-    } else if (route is GetModalBottomSheetRoute) {
-      return route.name;
-    } else {
-      return route?.settings?.name;
-    }
-  }
-
   @override
-  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
-    var isGetPageRoute = route is GetPageRoute;
-    var isSnackbar = route is SnackRoute;
-    var isDialog = route is GetDialogRoute;
-    var isBottomSheet = route is GetModalBottomSheetRoute;
-    var routeName = name(route);
+  void didPush(Route route, Route previousRoute) {
+    super.didPush(route, previousRoute);
+    final newRoute = _RouteData.ofRoute(route);
 
-    if (isSnackbar) {
-      GetConfig.log("OPEN SNACKBAR $routeName");
-    } else if (isBottomSheet || isDialog) {
-      GetConfig.log("OPEN $routeName");
-    } else if (isGetPageRoute) {
-      GetConfig.log("GOING TO ROUTE $routeName");
+    if (newRoute.isSnackbar) {
+      GetConfig.log("OPEN SNACKBAR ${newRoute.name}");
+    } else if (newRoute.isBottomSheet || newRoute.isDialog) {
+      GetConfig.log("OPEN ${newRoute.name}");
+    } else if (newRoute.isGetPageRoute) {
+      GetConfig.log("GOING TO ROUTE ${newRoute.name}");
     }
-    GetConfig.currentRoute = routeName;
 
+    GetConfig.currentRoute = newRoute.name;
     _routeSend?.update((value) {
-      if (route is PageRoute) value.current = routeName;
+      // Only PageRoute is allowed to change current value
+      if (route is PageRoute) {
+        value.current = newRoute.name ?? '';
+      }
+
       value.args = route?.settings?.arguments;
       value.route = route;
       value.isBack = false;
       value.removed = '';
-      value.previous = previousRoute?.settings?.name ?? '';
-      value.isSnackbar = isSnackbar;
-      value.isBottomSheet = isBottomSheet;
-      value.isDialog = isDialog;
+      value.previous = _extractRouteName(previousRoute) ?? '';
+      value.isSnackbar = newRoute.isSnackbar;
+      value.isBottomSheet = newRoute.isBottomSheet;
+      value.isDialog = newRoute.isDialog;
     });
-    if (routing != null) routing(_routeSend);
+
+    if (routing != null) {
+      routing(_routeSend);
+    }
   }
 
   @override
   void didPop(Route route, Route previousRoute) {
     super.didPop(route, previousRoute);
+    final newRoute = _RouteData.ofRoute(route);
 
-    var isGetPageRoute = route is GetPageRoute;
-    var isSnackbar = route is SnackRoute;
-    var isDialog = route is GetDialogRoute;
-    var isBottomSheet = route is GetModalBottomSheetRoute;
-    var routeName = name(route);
-
-    if (isSnackbar) {
-      GetConfig.log("CLOSE SNACKBAR $routeName");
-    } else if (isBottomSheet || isDialog) {
-      GetConfig.log("CLOSE $routeName");
-    } else if (isGetPageRoute) {
-      GetConfig.log("CLOSE TO ROUTE $routeName");
+    if (newRoute.isSnackbar) {
+      GetConfig.log("CLOSE SNACKBAR ${newRoute.name}");
+    } else if (newRoute.isBottomSheet || newRoute.isDialog) {
+      GetConfig.log("CLOSE ${newRoute.name}");
+    } else if (newRoute.isGetPageRoute) {
+      GetConfig.log("CLOSE TO ROUTE ${newRoute.name}");
     }
-    GetConfig.currentRoute = routeName;
 
+    GetConfig.currentRoute = newRoute.name;
+    // Here we use a 'inverse didPush set', meaning that we use
+    // previous route instead of 'route' because this is
+    // a 'inverse push'
     _routeSend?.update((value) {
+      // Only PageRoute is allowed to change current value
       if (previousRoute is PageRoute) {
-        value.current = previousRoute?.settings?.name ?? '';
+        value.current = _extractRouteName(previousRoute) ?? '';
       }
+
       value.args = route?.settings?.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
-      value.previous = route?.settings?.name ?? '';
+      value.previous = newRoute.name ?? '';
       value.isSnackbar = false;
       value.isBottomSheet = false;
       value.isDialog = false;
     });
-    if (routing != null) routing(_routeSend);
+
+    routing?.call(_routeSend);
   }
 
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    final newName = _extractRouteName(newRoute);
+    final oldName = _extractRouteName(oldRoute);
 
-    GetConfig.log("REPLACE ROUTE ${oldRoute?.settings?.name}");
-    GetConfig.log("NEW ROUTE ${newRoute?.settings?.name}");
+    GetConfig.log("REPLACE ROUTE $oldName");
+    GetConfig.log("NEW ROUTE $newName");
 
-    GetConfig.currentRoute = name(newRoute);
-
+    GetConfig.currentRoute = newName;
     _routeSend?.update((value) {
-      if (newRoute is PageRoute) value.current = newRoute?.settings?.name ?? '';
+      // Only PageRoute is allowed to change current value
+      if (newRoute is PageRoute) {
+        value.current = newName ?? '';
+      }
+
       value.args = newRoute?.settings?.arguments;
       value.route = newRoute;
       value.isBack = false;
       value.removed = '';
-      value.previous = '${oldRoute?.settings?.name}';
+      value.previous = '$oldName';
       value.isSnackbar = false;
       value.isBottomSheet = false;
       value.isDialog = false;
     });
-    if (routing != null) routing(_routeSend);
+
+    routing?.call(_routeSend);
   }
 
   @override
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
-    GetConfig.log("REMOVING ROUTE ${route?.settings?.name}");
+    final routeName = _extractRouteName(route);
 
+    GetConfig.log("REMOVING ROUTE $routeName");
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
-      value.removed = route?.settings?.name ?? '';
-      value.previous = route?.settings?.name ?? '';
+      value.removed = routeName ?? '';
+      value.previous = routeName ?? '';
     });
-    if (routing != null) routing(_routeSend);
+
+    routing?.call(_routeSend);
   }
 }
