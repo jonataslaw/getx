@@ -695,7 +695,7 @@ print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 abc.add(12); // Coloca 12 na lista, e ATUALIZA o stream.
 abc[3]; // como uma lista lê o índice 3.
 
-// a igualdade funciona com o Rx e o valor, mas hashCode é sempre obtido do valor 
+// a igualdade funciona com o Rx e o value do observável, mas o hashCode é sempre obtido do value 
 final number = 12.obs;
 print( number == 12 ); // prints > true
 
@@ -728,7 +728,7 @@ user.update((value){
   value.name='Roi';
 });
 
-print( user );
+print( user ); // Resultado (toString): Roi Doe, 33 years old
 ```
 
 #### GetView
