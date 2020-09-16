@@ -3,10 +3,6 @@ part of 'rx_impl.dart';
 /// Base Rx class for all num Rx's.
 class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// Addition operator. */
-  num operator +(num other) => value + other;
-
-  /// Subtraction operator.
-  num operator -(num other) => value - other;
 
   /// Multiplication operator.
   num operator *(num other) => value * other;
@@ -270,7 +266,18 @@ class _BaseRxNum<T extends num> extends _RxImpl<T> {
       value.toStringAsPrecision(precision);
 }
 
-class RxNum extends _BaseRxNum<num> {}
+class RxNum extends _BaseRxNum<num> {
+  num operator +(num other) {
+    value += other;
+    return value;
+  }
+
+  /// Subtraction operator.
+  num operator -(num other) {
+    value -= other;
+    return value;
+  }
+}
 
 class RxDouble extends _BaseRxNum<double> {
   RxDouble([double initial]) {
@@ -278,10 +285,16 @@ class RxDouble extends _BaseRxNum<double> {
   }
 
   /// Addition operator.
-  double operator +(num other) => value + other;
+  RxDouble operator +(num other) {
+    value += other;
+    return this;
+  }
 
   /// Subtraction operator.
-  double operator -(num other) => value - other;
+  RxDouble operator -(num other) {
+    value -= other;
+    return this;
+  }
 
   /// Multiplication operator.
   double operator *(num other) => value * other;
@@ -381,6 +394,18 @@ class RxDouble extends _BaseRxNum<double> {
 class RxInt extends _BaseRxNum<int> {
   RxInt([int initial]) {
     value = initial;
+  }
+
+  /// Addition operator.
+  RxInt operator +(int other) {
+    value += other;
+    return this;
+  }
+
+  /// Subtraction operator.
+  RxInt operator -(int other) {
+    value -= other;
+    return this;
   }
 
   /// Bit-wise and operator.
