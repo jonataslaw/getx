@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 void main() {
   testWidgets(
     "GetMaterialApp with routes null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
           () => GetMaterialApp(
                 routes: null,
@@ -15,7 +15,7 @@ void main() {
 
   testWidgets(
     "GetMaterialApp with navigatorObservers null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
           () => GetMaterialApp(
                 navigatorObservers: null,
@@ -25,7 +25,7 @@ void main() {
   );
   testWidgets(
     "GetMaterialApp with title null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
           () => GetMaterialApp(
                 title: null,
@@ -35,37 +35,40 @@ void main() {
   );
   testWidgets(
     "GetMaterialApp with debugShowMaterialGrid null",
-    (WidgetTester testr) async {
+    (test) async {
       expect(
-          () => GetMaterialApp(
-                debugShowMaterialGrid: null,
-              ),
-          throwsAssertionError);
+        () => GetMaterialApp(
+          debugShowMaterialGrid: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
   testWidgets(
     "GetMaterialApp with showPerformanceOverlay null",
-    (WidgetTester testr) async {
+    (test) async {
       expect(
-          () => GetMaterialApp(
-                showPerformanceOverlay: null,
-              ),
-          throwsAssertionError);
+        () => GetMaterialApp(
+          showPerformanceOverlay: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
   testWidgets(
     "GetMaterialApp with showSemanticsDebugger null",
-    (WidgetTester testr) async {
+    (test) async {
       expect(
-          () => GetMaterialApp(
-                showSemanticsDebugger: null,
-              ),
-          throwsAssertionError);
+        () => GetMaterialApp(
+          showSemanticsDebugger: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
   testWidgets(
     "GetMaterialApp with debugShowCheckedModeBanner null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
           () => GetMaterialApp(
                 debugShowCheckedModeBanner: null,
@@ -76,7 +79,7 @@ void main() {
 
   testWidgets(
     "GetMaterialApp with checkerboardRasterCacheImages null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
           () => GetMaterialApp(
                 checkerboardRasterCacheImages: null,
@@ -87,12 +90,13 @@ void main() {
 
   testWidgets(
     "GetMaterialApp with checkerboardOffscreenLayers null",
-    (WidgetTester testr) async {
+    (tester) async {
       expect(
-          () => GetMaterialApp(
-                checkerboardOffscreenLayers: null,
-              ),
-          throwsAssertionError);
+        () => GetMaterialApp(
+          checkerboardOffscreenLayers: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
 }

@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
-
 import 'get_state.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
 typedef ValueBuilderBuilder<T> = Widget Function(
     T snapshot, ValueBuilderUpdateCallback<T> updater);
 
-/// Manages a local state like ObxValue, but uses a callback instead of a Rx value.
+/// Manages a local state like ObxValue, but uses a callback instead of
+/// a Rx value.
 ///
-/// Sample:
+/// Example:
+/// ```
 ///  ValueBuilder<bool>(
 ///    initialValue: false,
 ///    builder: (value, update) => Switch(
@@ -21,9 +21,10 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///    },),
 ///    onUpdate: (value) => print("Value updated: $value"),
 ///  ),
+///  ```
 class ValueBuilder<T> extends StatefulWidget {
   final T initialValue;
-  final ValueBuilderBuilder builder;
+  final ValueBuilderBuilder<T> builder;
   final void Function() onDispose;
   final void Function(T) onUpdate;
 
@@ -76,38 +77,52 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
 // It's a experimental feature
 class SimpleBuilder extends StatefulWidget {
   final Widget Function(BuildContext) builder;
+
   const SimpleBuilder({Key key, @required this.builder})
       : assert(builder != null),
         super(key: key);
+
   @override
   _SimpleBuilderState createState() => _SimpleBuilderState();
 }
 
-class _SimpleBuilderState extends State<SimpleBuilder> {
-  final HashSet<Disposer> disposers = HashSet<Disposer>();
+class _SimpleBuilderState extends State<SimpleBuilder>
+    with GetStateUpdaterMixin {
+  final HashSet<VoidCallback> disposers = HashSet<VoidCallback>();
 
   @override
   void dispose() {
     super.dispose();
-    disposers.forEach((element) => element());
+    for (final disposer in disposers) {
+      disposer();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return TaskManager.instance
-        .exchange(disposers, setState, widget.builder, context);
+    return TaskManager.instance.exchange(
+      disposers,
+      getUpdate,
+      widget.builder,
+      context,
+    );
   }
 }
 
 class TaskManager {
   TaskManager._();
+
   static TaskManager _instance;
+
   static TaskManager get instance => _instance ??= TaskManager._();
 
-  StateSetter _setter;
-  HashSet<Disposer> _remove;
+//  StateSetter _setter;//<old>
+  GetStateUpdate _setter;
 
-  notify(HashSet<StateSetter> _updaters) {
+  HashSet<VoidCallback> _remove;
+
+//  void notify(HashSet<StateSetter> _updaters) { //<old>
+  void notify(HashSet<GetStateUpdate> _updaters) {
     if (_setter != null) {
       if (!_updaters.contains(_setter)) {
         _updaters.add(_setter);
@@ -117,8 +132,9 @@ class TaskManager {
   }
 
   Widget exchange(
-    HashSet<Disposer> disposers,
-    StateSetter setState,
+    HashSet<VoidCallback> disposers,
+//    StateSetter setState, //<old>
+    GetStateUpdate setState,
     Widget Function(BuildContext) builder,
     BuildContext context,
   ) {

@@ -17,11 +17,10 @@ jobs:
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '1.17.1'
+          flutter-version: '1.20.2'
           channel: 'stable'
       - run: flutter pub get
-      # run static analys code
-      #- run: flutter  analyze
+      #- run: flutter analyze
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       # Upload coverage reports to Codecov

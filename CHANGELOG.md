@@ -1,3 +1,92 @@
+## [3.10.2]
+- Fixed the use of tags with lazyPut and added Ability to overwrite "tag" in GetView and GetWidget.
+
+## [3.10.1]
+- Fix analyzer
+
+## [3.10.0]
+Getx 3.10 released with CLI and Get Server.
+- Added: analyser + effective dart (@Grohden)
+- Added TextStyle to generalDialog title and message (@roipeker)
+- renamed and added defaults transition duration and types in "GetInterface" (@roipeker)
+- added missing parameters in Get.to/Get.offAll (@roipeker)
+- added optional transitionDuration and transitionCurve to Get.dialog() (@roipeker)
+- Changed HashMap<int,GetStateUpdate> to HashSet<GetStateUpdate> and allow update IDs groups on GetBuilder (@roipeker)
+- Added a internal VoidCallback in GetStateUpdaterMixin::getUpdate (@roipeker)
+- Added Curve property to routes (@roipeker)
+- Improve docs, code cleanup, new GetStateUpdaterMixin and GetStateUpdate in favour of StateSetter on GetxController, GetBuilder, SimpleBuilder. (@roipeker)
+- Added RxBool.toggle() as an easy shortcut for switching true/false values. (@roipeker)
+- Added _RxImp.nil() to easily set the value to null (@roipeker)
+- Added missing docs to Rx classes. (@roipeker)
+- Added Get.delete(force:false) to Get extensions (@roipeker)
+- Added Docs and comments (@nipodemos)
+- Added docs to PT-br and fix typos (@eduardoflorence)
+- Cleanup route code (@justkawal)
+- Extension to facilitate insert widgets inside a CustomScrollView (@alexkharech)
+- Fix docs .obs examples (@kai-oswald)
+- Added tag capability to GetView 
+- Improve code separation of RouteManagement and Internacionalization
+
+## [3.8.0]
+- Added: Snackbar Status: Open, Opening, Closing and Closed
+example:
+```dart
+ Get.snackbar('title', 'message', snackbarStatus: (status) {
+                  if (status == SnackbarStatus.CLOSED) {
+                    // made anything
+                  }
+                });
+```
+
+## [3.7.0]
+- Added: RxSet. Sets can now also be reactive.
+- Added isDesktop/isMobile (@roipeker) 
+- Improve GetPlatform: It is now possible to know which device the user is using if GetPlatform.isWeb is true.
+context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation. (@roipeker) 
+- Change: The documentation previously stated that Iterables should not access the ".value" property.
+However, many users did not pay attention to this fact, and ended up generating unnecessary issues and bugs in their application.
+In this version, we focus on code security. Now ".value" is protected, so it cannot be accessed externally by Lists, Maps or Sets.
+- Change: Observable lists are now Dart Lists.
+There is no difference in your use:
+`RxList list = [].obs;`
+And you use
+`List list = [].obs;`
+- Change: You do not need to access the ".value" property of primitives.
+For Strings you need interpolation.
+For num, int, double, you will have the normal operators, and use it as dart types.
+This way, `.value` can be used exclusively in ModelClasses.
+Example:
+
+```dart
+var name = "Jonny" .obs;
+// usage:
+Text ("$name");
+
+var count = 0.obs;
+// usage:
+increment() => count ++;
+Text("$count");
+```
+
+Thus: List, Map, Set, num, int, double and String, as of this release, will no longer use the .value property.
+
+NOTE:
+The changes were not break changes, however, you may have missed the details of the documentation, so if you faced the message: "The member 'value' can only be used within instance members of subclasses of 'rx_list.dart' "you just need to remove the" .value "property from your list, and everything will work as planned.
+The same goes for Maps and Sets.
+
+## [3.6.2]
+- Fix more formatting issues
+
+## [3.6.1]
+- Fix formatting issues
+
+## [3.6.0]
+- Added RxSet
+- Change default logger to developer.log (@jorgegaticav)
+- Added BindingsBuilder, ValueBuilder, and ObxValue (@roipeker) 
+- Fix fallback locale not working if missing country code (@thaihuynhxyz)
+- Fix validation of email ".com.br"
+
 ## [3.5.1]
 - Remove unnecessary whitespaces
 

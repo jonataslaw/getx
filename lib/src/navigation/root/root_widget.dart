@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/src/core/log.dart';
-import 'package:get/src/instance/get_instance.dart';
-import 'package:get/src/navigation/routes/get_route.dart';
+import '../../../get.dart';
+import '../../core/log.dart';
+import '../../instance/get_instance.dart';
+import '../extension_navigation.dart';
+import '../routes/get_route.dart';
 import 'root_controller.dart';
 import 'smart_management.dart';
 
@@ -97,6 +98,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> shortcuts;
+
   // final Map<LocalKey, ActionFactory> actions;
   final bool debugShowMaterialGrid;
   final Function(Routing) routingCallback;
@@ -180,7 +182,7 @@ class GetMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GetMaterialController>(
-        init: Get.getxController,
+        init: Get.rootController,
         dispose: (d) {
           onDispose?.call();
         },
@@ -190,9 +192,9 @@ class GetMaterialApp extends StatelessWidget {
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 
           if (translations != null) {
-            Get.translations = translations.keys;
+            Get.addTranslations(translations.keys);
           } else if (translationsKeys != null) {
-            Get.translations = translationsKeys;
+            Get.addTranslations(translationsKeys);
           }
 
           Get.customTransition = customTransition;
@@ -209,13 +211,13 @@ class GetMaterialApp extends StatelessWidget {
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
-                transitionDuration ?? Get.defaultDurationTransition,
-            defaultGlobalState: defaultGlobalState ?? Get.defaultGlobalState,
+                transitionDuration ?? Get.defaultTransitionDuration,
+           
           );
         },
         builder: (_) {
           return MaterialApp(
-            key: key,
+            key: _.unikey,
             navigatorKey:
                 (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
             home: home,
@@ -230,7 +232,14 @@ class GetMaterialApp extends StatelessWidget {
                 ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
                 : <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
               ..addAll(navigatorObservers)),
-            builder: builder,
+            builder: (context, child) {
+              return Directionality(
+                textDirection: rtlLanguages.contains(Get.locale?.languageCode)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+                child: builder == null ? child : builder(context, child),
+              );
+            },
             title: title ?? '',
             onGenerateTitle: onGenerateTitle,
             color: color,
@@ -257,55 +266,14 @@ class GetMaterialApp extends StatelessWidget {
   }
 }
 
+const List<String> rtlLanguages = <String>[
+  'ar', // Arabic
+  'fa', // Farsi
+  'he', // Hebrew
+  'ps', // Pashto
+  'ur',
+];
+
 abstract class Translations {
   Map<String, Map<String, String>> get keys;
-}
-
-extension Trans on String {
-  String get tr {
-    // Returns the key if locale is null.
-    if (Get.locale?.languageCode == null) return this;
-
-    // Checks whether the language code and country code are present, and whether the key is also present.
-    if (Get.translations.containsKey(
-            "${Get.locale.languageCode}_${Get.locale.countryCode}") &&
-        Get.translations["${Get.locale.languageCode}_${Get.locale.countryCode}"]
-            .containsKey(this)) {
-      return Get.translations[
-          "${Get.locale.languageCode}_${Get.locale.countryCode}"][this];
-
-      // Checks if there is a callback language in the absence of the specific country, and if it contains that key.
-    } else if (Get.translations.containsKey(Get.locale.languageCode) &&
-        Get.translations[Get.locale.languageCode].containsKey(this)) {
-      return Get.translations[Get.locale.languageCode][this];
-      // If there is no corresponding language or corresponding key, return the key.
-    } else if (Get.fallbackLocale != null) {
-      if (Get.translations.containsKey(
-              "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}") &&
-          Get.translations[
-                  "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-              .containsKey(this)) {
-        return Get.translations[
-                "${Get.fallbackLocale.languageCode}_${Get.fallbackLocale.countryCode}"]
-            [this];
-      }
-      if (Get.translations.containsKey(Get.fallbackLocale.languageCode) &&
-          Get.translations[Get.fallbackLocale.languageCode].containsKey(this)) {
-        return Get.translations[Get.fallbackLocale.languageCode][this];
-      }
-      return this;
-    } else {
-      return this;
-    }
-  }
-
-  String trArgs([List<String> args]) {
-    String key = tr;
-    if (args != null) {
-      args.forEach((arg) {
-        key = key.replaceFirst(RegExp(r'%s'), arg.toString());
-      });
-    }
-    return key;
-  }
 }

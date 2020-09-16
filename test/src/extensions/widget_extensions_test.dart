@@ -4,7 +4,7 @@ import 'package:get/utils.dart';
 
 void main() {
   group('Group test for PaddingX Extension', () {
-    testWidgets('Test of paddingAll', (WidgetTester tester) async {
+    testWidgets('Test of paddingAll', (tester) async {
       Widget containerTest;
 
       expect(find.byType(Padding), findsNothing);
@@ -14,7 +14,7 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingOnly', (WidgetTester tester) async {
+    testWidgets('Test of paddingOnly', (tester) async {
       Widget containerTest;
 
       expect(find.byType(Padding), findsNothing);
@@ -24,7 +24,7 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingSymmetric', (WidgetTester tester) async {
+    testWidgets('Test of paddingSymmetric', (tester) async {
       Widget containerTest;
 
       expect(find.byType(Padding), findsNothing);
@@ -34,7 +34,7 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingZero', (WidgetTester tester) async {
+    testWidgets('Test of paddingZero', (tester) async {
       Widget containerTest;
 
       expect(find.byType(Padding), findsNothing);
@@ -46,7 +46,7 @@ void main() {
   });
 
   group('Group test for MarginX Extension', () {
-    testWidgets('Test of marginAll', (WidgetTester tester) async {
+    testWidgets('Test of marginAll', (tester) async {
       Widget containerTest;
 
       await tester.pumpWidget(containerTest.marginAll(16));
@@ -54,7 +54,7 @@ void main() {
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginOnly', (WidgetTester tester) async {
+    testWidgets('Test of marginOnly', (tester) async {
       Widget containerTest;
 
       await tester.pumpWidget(containerTest.marginOnly(top: 16));
@@ -62,7 +62,7 @@ void main() {
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginSymmetric', (WidgetTester tester) async {
+    testWidgets('Test of marginSymmetric', (tester) async {
       Widget containerTest;
 
       await tester.pumpWidget(containerTest.marginSymmetric(vertical: 16));
@@ -70,7 +70,7 @@ void main() {
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginZero', (WidgetTester tester) async {
+    testWidgets('Test of marginZero', (tester) async {
       Widget containerTest;
 
       await tester.pumpWidget(containerTest.marginZero);

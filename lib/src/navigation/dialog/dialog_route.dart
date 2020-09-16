@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-
 import '../../../instance_manager.dart';
 import '../../../route_manager.dart';
 
