@@ -44,23 +44,6 @@ class HomeView extends GetView<HomeController> {
                       fontSize: 30,
                     ),
                   ),
-                  RaisedButton(
-                    child: Text("data"),
-                    onPressed: (){
-                    Get.bottomSheet(
-                      BottomSheet(
-                        onClosing: (){},
-                        backgroundColor: Colors.amber,
-                        builder: (context) {
-                          return Container(
-                            height: 50,
-                            color: Colors.amber,
-                          );
-                        },
-                      ),
-                      persistent: false
-                    );
-                  }),
                   Text(
                     '${controller.cases.value.global.totalConfirmed}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
