@@ -9,7 +9,7 @@ import '../rx_typedefs/rx_typedefs.dart';
 
 class RxMap<K, V> implements RxInterface<Map<K, V>>, Map<K, V> {
   RxMap([Map<K, V> initial]) {
-    _value = initial;
+    if (initial != null) _value = initial;
   }
 
   @override
