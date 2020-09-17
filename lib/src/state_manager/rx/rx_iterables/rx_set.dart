@@ -9,7 +9,7 @@ import '../rx_typedefs/rx_typedefs.dart';
 
 class RxSet<E> implements Set<E>, RxInterface<Set<E>> {
   RxSet([Set<E> initial]) {
-    _set = initial;
+    if (initial != null) _set = initial;
   }
 
   Set<E> _set = <E>{};
