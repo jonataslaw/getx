@@ -11,7 +11,7 @@ import '../rx_typedefs/rx_typedefs.dart';
 /// Create a list similar to `List<T>`
 class RxList<E> implements List<E>, RxInterface<List<E>> {
   RxList([List<E> initial]) {
-    _list = initial;
+    _list = initial ?? [];
   }
 
   List<E> _list = <E>[];
