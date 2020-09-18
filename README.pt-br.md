@@ -345,7 +345,6 @@ return GetMaterialApp(
     translations: Messages(), // suas traduções
     locale: Locale('en', 'US'), // as traduções serão exibidas para esta localidade
     fallbackLocale: Locale('en', 'UK'), // especifica uma localidade em caso de falha na localidade definida
-    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // especifica as localidades suportados
 );
 ```
 

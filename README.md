@@ -328,7 +328,6 @@ return GetMaterialApp(
     translations: Messages(), // your translations
     locale: Locale('en', 'US'), // translations will be displayed in that locale
     fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
-    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // specify the supported locales
 );
 ```
 
