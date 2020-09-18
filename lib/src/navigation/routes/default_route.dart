@@ -113,7 +113,7 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    GetConfig.currentRoute = settings.name ?? routeName;
+    Get.reference = settings.name ?? routeName;
     binding?.dependencies();
     if (bindings != null) {
       for (final binding in bindings) {
@@ -374,7 +374,7 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   void dispose() {
-    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+    if (Get.smartManagement != SmartManagement.onlyBuilder) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
           .removeDependencyByRoute("${settings?.name ?? routeName}"));
     }

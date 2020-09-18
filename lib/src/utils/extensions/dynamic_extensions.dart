@@ -1,5 +1,5 @@
 import '../../../utils.dart';
-import '../regex/get_utils.dart';
+import '../get_utils/get_utils.dart';
 
 extension GetDynamicUtils on dynamic {
   bool get isNull => GetUtils.isNull(this);

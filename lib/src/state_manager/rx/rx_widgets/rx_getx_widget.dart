@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-
+import '../../../core/get_main.dart';
 import '../../../instance/get_instance.dart';
 import '../../../navigation/root/smart_management.dart';
 import '../rx_core/rx_impl.dart';
@@ -52,7 +52,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
 
     if (widget.global) {
       if (isPrepared) {
-        if (GetConfig.smartManagement != SmartManagement.keepFactory) {
+        if (Get.smartManagement != SmartManagement.keepFactory) {
           isCreator = true;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
@@ -70,8 +70,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
       controller?.onStart();
     }
     if (widget.initState != null) widget.initState(this);
-    if (widget.global &&
-        GetConfig.smartManagement == SmartManagement.onlyBuilder) {
+    if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
     subs = _observer.subject.stream.listen((data) => setState(() {}));

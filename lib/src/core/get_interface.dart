@@ -1,3 +1,6 @@
+import '../navigation/root/smart_management.dart';
+import 'log.dart';
+
 /// Use Get.to instead of Navigator.push, Get.off instead
 /// of Navigator.pushReplacement,
 /// Get.offAll instead of Navigator.pushAndRemoveUntil.
@@ -6,5 +9,10 @@
 /// To return to the previous screen, use Get.back().
 /// No need to pass any context to Get, just put the name of the route inside
 /// the parentheses and the magic will occur.
+abstract class GetInterface {
+  SmartManagement smartManagement = SmartManagement.full;
+  String reference;
+  bool isLogEnable = true;
+  LogWriterCallback log = defaultLogWriterCallback;
+}
 
-abstract class GetInterface {}

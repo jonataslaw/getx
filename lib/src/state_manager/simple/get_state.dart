@@ -1,8 +1,7 @@
 import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
-
 import '../../../state_manager.dart';
+import '../../core/get_main.dart';
 import '../../instance/get_instance.dart';
 import '../../navigation/root/smart_management.dart';
 import '../rx/rx_core/rx_interface.dart';
@@ -172,7 +171,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
       if (isPrepared) {
-        if (GetConfig.smartManagement != SmartManagement.keepFactory) {
+        if (Get.smartManagement != SmartManagement.keepFactory) {
           isCreator = true;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
@@ -190,8 +189,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
-    if (widget.global &&
-        GetConfig.smartManagement == SmartManagement.onlyBuilder) {
+    if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
     _subscribeToController();

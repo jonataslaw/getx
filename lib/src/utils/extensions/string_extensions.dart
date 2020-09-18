@@ -1,4 +1,4 @@
-import '../regex/get_utils.dart';
+import '../get_utils/get_utils.dart';
 
 extension GetStringUtils on String {
   bool get isNum => GetUtils.isNum(this);

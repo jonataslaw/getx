@@ -31,7 +31,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+    if (Get.smartManagement != SmartManagement.onlyBuilder) {
       WidgetsBinding.instance.addPostFrameCallback(
           (_) => GetInstance().removeDependencyByRoute(name));
     }

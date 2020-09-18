@@ -1,4 +1,4 @@
-import '../../../get.dart';
+import '../../core/get_main.dart';
 
 /// Returns whether a dynamic value PROBABLY
 /// has the isEmpty getter/method by checking
@@ -70,7 +70,7 @@ class GetUtils {
       return true;
     }
 
-    if(value is String) {
+    if (value is String) {
       return value.toString().trim().isEmpty;
     }
 
@@ -372,7 +372,7 @@ class GetUtils {
     }
 
     return isLengthGreaterOrEqual(value, minLength) &&
-        isLengthLowerOrEqual(value, maxLength);
+        isLengthLessOrEqual(value, maxLength);
   }
 
   /// Checks if a contains b (Treating or interpreting upper- and lowercase
@@ -587,6 +587,6 @@ class GetUtils {
     String info, {
     bool isError = false,
   }) {
-    GetConfig.log('$prefix $value $info'.trim(), isError: isError);
+    Get.log('$prefix $value $info'.trim(), isError: isError);
   }
 }

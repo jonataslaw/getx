@@ -8,7 +8,7 @@ extension Inst on GetInterface {
   /// the Instance and persisted as a Singleton (like you would use
   /// [Get.put()]).
   ///
-  /// Using [GetConfig.smartManagement] as [SmartManagement.keepFactory] has
+  /// Using [Get.smartManagement] as [SmartManagement.keepFactory] has
   /// the same outcome
   /// as using [fenix:true] :
   /// The internal register of [builder()] will remain in memory to recreate
@@ -73,7 +73,7 @@ extension Inst on GetInterface {
   /// of the same Type<[S]> the [tag] does **not** conflict with the same tags
   /// used by other [dependencies] Types.
   /// - [permanent] keeps the Instance in memory and persist it,
-  /// not following [GetConfig.smartManagement]
+  /// not following [Get.smartManagement]
   /// rules. Although, can be removed by [GetInstance.reset()]
   /// and [Get.delete()]
   /// - [builder] If defined, the [dependency] must be returned from here

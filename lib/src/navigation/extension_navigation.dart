@@ -11,6 +11,8 @@ import 'root/parse_route.dart';
 import 'root/root_controller.dart';
 import 'routes/bindings_interface.dart';
 
+//TODO: Split this class on "Snackbar" "Dialog" "bottomSheet"
+//and "navigation" extensions
 extension GetNavigation on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
@@ -884,10 +886,10 @@ extension GetNavigation on GetInterface {
       bool defaultGlobalState,
       Transition defaultTransition}) {
     if (enableLog != null) {
-      GetConfig.isLogEnable = enableLog;
+      Get.isLogEnable = enableLog;
     }
     if (logWriterCallback != null) {
-      GetConfig.log = logWriterCallback;
+      Get.log = logWriterCallback;
     }
     if (defaultPopGesture != null) {
       getxController.defaultPopGesture = defaultPopGesture;

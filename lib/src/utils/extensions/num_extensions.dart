@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../regex/get_utils.dart';
+import '../get_utils/get_utils.dart';
 
 extension GetNumUtils on num {
   bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);

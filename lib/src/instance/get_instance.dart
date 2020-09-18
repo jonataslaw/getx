@@ -1,18 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
-
-import '../core/log.dart';
+import '../core/get_main.dart';
 import '../navigation/root/smart_management.dart';
 import '../state_manager/rx/rx_core/rx_interface.dart';
-import '../utils/queue/get_queue.dart';
-
-// ignore: avoid_classes_with_only_static_members
-class GetConfig {
-  static SmartManagement smartManagement = SmartManagement.full;
-  static bool isLogEnable = true;
-  static LogWriterCallback log = defaultLogWriterCallback;
-  static String currentRoute;
-}
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
@@ -21,7 +11,7 @@ class GetInstance {
 
   static GetInstance _getInstance;
 
-  static final config = GetConfig();
+  // static final config = Get();
 
   /// Holds references to every registered Instance when using
   /// [Get.put()]
@@ -31,17 +21,15 @@ class GetInstance {
   /// [Get.lazyPut()]
   static final Map<String, _Lazy> _factory = {};
 
-  /// Holds a reference to [GetConfig.currentRoute] when the Instance was
+  /// Holds a reference to [Get.reference] when the Instance was
   /// created to manage the memory.
   static final Map<String, String> _routesKey = {};
 
   /// Stores the onClose() references of instances created with [Get.create()]
-  /// using the [GetConfig.currentRoute].
+  /// using the [Get.reference].
   /// Experimental feature to keep the lifecycle and memory management with
   /// non-singleton instances.
   static final Map<String, HashSet<Function>> _routesByCreate = {};
-
-  static final _queue = GetQueue();
 
   /// Creates a new Instance<S> lazily from the [<S>builder()] callback.
   ///
@@ -49,7 +37,7 @@ class GetInstance {
   /// the Instance and persisted as a Singleton (like you would
   /// use [Get.put()]).
   ///
-  /// Using [GetConfig.smartManagement] as [SmartManagement.keepFactory] has
+  /// Using [Get.smartManagement] as [SmartManagement.keepFactory] has
   /// the same outcome as using [fenix:true] :
   /// The internal register of [builder()] will remain in memory to recreate
   /// the Instance if the Instance has been removed with [Get.delete()].
@@ -94,7 +82,7 @@ class GetInstance {
   /// - [tag] optionally, use a [tag] as an "id" to create multiple records of
   /// the same Type<[S]>
   /// - [permanent] keeps the Instance in memory, not following
-  /// [GetConfig.smartManagement] rules.
+  /// [Get.smartManagement] rules.
   S put<S>(
     S dependency, {
     String tag,
@@ -113,7 +101,7 @@ class GetInstance {
   /// Every time [find]<[S]>() is used, it calls the builder method to generate
   /// a new Instance [S].
   /// It also registers each [instance.onClose()] with the current
-  /// Route [GetConfig.currentRoute] to keep the lifecycle active.
+  /// Route [Get.reference] to keep the lifecycle active.
   /// Is important to know that the instances created are only stored per Route.
   /// So, if you call `Get.delete<T>()` the "instance factory" used in this
   /// method ([Get.create<T>()]) will be removed, but NOT the instances
@@ -150,7 +138,7 @@ class GetInstance {
   }
 
   /// Clears from memory registered Instances associated with [routeName] when
-  /// using [GetConfig.smartManagement] as [SmartManagement.full] or
+  /// using [Get.smartManagement] as [SmartManagement.full] or
   /// [SmartManagement.keepFactory]
   /// Meant for internal usage of [GetPageRoute] and [GetDialogRoute]
   Future<void> removeDependencyByRoute(String routeName) async {
@@ -187,8 +175,8 @@ class GetInstance {
   /// Initializes the dependencies for a Class Instance [S] (or tag),
   /// If its a Controller, it starts the lifecycle process.
   /// Optionally associating the current Route to the lifetime of the instance,
-  /// if [GetConfig.smartManagement] is marked as [SmartManagement.full] or
-  /// [GetConfig.keepFactory]
+  /// if [Get.smartManagement] is marked as [SmartManagement.full] or
+  /// [Get.keepFactory]
   /// Only flags `isInit` if it's using `Get.create()`
   /// (not for Singletons access).
   bool _initDependencies<S>({String name}) {
@@ -198,7 +186,7 @@ class GetInstance {
       _startController<S>(tag: name);
       if (_singl[key].isSingleton) {
         _singl[key].isInit = true;
-        if (GetConfig.smartManagement != SmartManagement.onlyBuilder) {
+        if (Get.smartManagement != SmartManagement.onlyBuilder) {
           _registerRouteInstance<S>(tag: name);
         }
       }
@@ -209,7 +197,7 @@ class GetInstance {
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of [GetMaterialApp].
   void _registerRouteInstance<S>({String tag}) {
-    _routesKey.putIfAbsent(_getKey(S, tag), () => GetConfig.currentRoute);
+    _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
   }
 
   /// Finds and returns a Instance<[S]> (or [tag]) without further processing.
@@ -225,11 +213,11 @@ class GetInstance {
     if (i is DisposableInterface) {
       if (i.onStart != null) {
         i.onStart();
-        GetConfig.log('"$key" has been initialized');
+        Get.log('"$key" has been initialized');
       }
       if (!_singl[key].isSingleton && i.onClose != null) {
-        _routesByCreate[GetConfig.currentRoute] ??= HashSet<Function>();
-        _routesByCreate[GetConfig.currentRoute].add(i.onClose);
+        _routesByCreate[Get.reference] ??= HashSet<Function>();
+        _routesByCreate[Get.reference].add(i.onClose);
       }
     }
   }
@@ -243,7 +231,7 @@ class GetInstance {
   //     if (_factory.containsKey(key)) {
   //       S _value = put<S>((_factory[key].builder() as S), tag: tag);
 
-  //       if (GetConfig.smartManagement != SmartManagement.keepFactory) {
+  //       if (Get.smartManagement != SmartManagement.keepFactory) {
   //         if (!_factory[key].fenix) {
   //           _factory.remove(key);
   //         }
@@ -278,11 +266,11 @@ class GetInstance {
         throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
       }
 
-      GetConfig.log('Lazy instance "$S" created');
+      Get.log('Lazy instance "$S" created');
       final _value = put<S>(_factory[key].builder() as S, tag: tag);
       _initDependencies<S>(name: tag);
 
-      if (GetConfig.smartManagement != SmartManagement.keepFactory &&
+      if (Get.smartManagement != SmartManagement.keepFactory &&
           !_factory[key].fenix) {
         _factory.remove(key);
       }
@@ -339,40 +327,38 @@ class GetInstance {
   Future<bool> delete<S>({String tag, String key, bool force = false}) async {
     final newKey = key ?? _getKey(S, tag);
 
-    return _queue.add<bool>(() async {
-      if (!_singl.containsKey(newKey)) {
-        GetConfig.log('Instance "$newKey" already removed.', isError: true);
-        return false;
-      }
+    if (!_singl.containsKey(newKey)) {
+      Get.log('Instance "$newKey" already removed.', isError: true);
+      return false;
+    }
 
-      final builder = _singl[newKey];
-      if (builder.permanent && !force) {
-        GetConfig.log(
-          // ignore: lines_longer_than_80_chars
-          '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
-          isError: true,
-        );
-        return false;
-      }
-      final i = builder.dependency;
+    final builder = _singl[newKey];
+    if (builder.permanent && !force) {
+      Get.log(
+        // ignore: lines_longer_than_80_chars
+        '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
+        isError: true,
+      );
+      return false;
+    }
+    final i = builder.dependency;
 
-      if (i is GetxService && !force) {
-        return false;
-      }
-      if (i is DisposableInterface) {
-        await i.onClose();
-        GetConfig.log('"$newKey" onClose() called');
-      }
+    if (i is GetxService && !force) {
+      return false;
+    }
+    if (i is DisposableInterface) {
+      await i.onClose();
+      Get.log('"$newKey" onClose() called');
+    }
 
-      _singl.removeWhere((oldKey, value) => (oldKey == newKey));
-      if (_singl.containsKey(newKey)) {
-        GetConfig.log('Error removing object "$newKey"', isError: true);
-      } else {
-        GetConfig.log('"$newKey" deleted from memory');
-      }
-      // _routesKey?.remove(key);
-      return true;
-    });
+    _singl.removeWhere((oldKey, value) => (oldKey == newKey));
+    if (_singl.containsKey(newKey)) {
+      Get.log('Error removing object "$newKey"', isError: true);
+    } else {
+      Get.log('"$newKey" deleted from memory');
+    }
+    // _routesKey?.remove(key);
+    return true;
   }
 
   /// Check if a Class Instance<[S]> (or [tag]) is registered in memory.
@@ -403,7 +389,7 @@ class _InstanceBuilderFactory<S> {
   InstanceBuilderCallback<S> builderFunc;
 
   /// Flag to persist the instance in memory,
-  /// without considering [GetConfig.smartManagement]
+  /// without considering [Get.smartManagement]
   bool permanent = false;
 
   bool isInit = false;

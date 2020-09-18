@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
-
 import '../../../../route_manager.dart';
-import '../../../instance/get_instance.dart';
 import '../../dialog/dialog_route.dart';
 import '../../snackbar/snack_route.dart';
 import '../default_route.dart';
@@ -96,14 +94,14 @@ class GetObserver extends NavigatorObserver {
     final newRoute = _RouteData.ofRoute(route);
 
     if (newRoute.isSnackbar) {
-      GetConfig.log("OPEN SNACKBAR ${newRoute.name}");
+      Get.log("OPEN SNACKBAR ${newRoute.name}");
     } else if (newRoute.isBottomSheet || newRoute.isDialog) {
-      GetConfig.log("OPEN ${newRoute.name}");
+      Get.log("OPEN ${newRoute.name}");
     } else if (newRoute.isGetPageRoute) {
-      GetConfig.log("GOING TO ROUTE ${newRoute.name}");
+      Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    GetConfig.currentRoute = newRoute.name;
+    Get.reference = newRoute.name;
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
@@ -131,14 +129,14 @@ class GetObserver extends NavigatorObserver {
     final newRoute = _RouteData.ofRoute(route);
 
     if (newRoute.isSnackbar) {
-      GetConfig.log("CLOSE SNACKBAR ${newRoute.name}");
+      Get.log("CLOSE SNACKBAR ${newRoute.name}");
     } else if (newRoute.isBottomSheet || newRoute.isDialog) {
-      GetConfig.log("CLOSE ${newRoute.name}");
+      Get.log("CLOSE ${newRoute.name}");
     } else if (newRoute.isGetPageRoute) {
-      GetConfig.log("CLOSE TO ROUTE ${newRoute.name}");
+      Get.log("CLOSE TO ROUTE ${newRoute.name}");
     }
 
-    GetConfig.currentRoute = newRoute.name;
+    Get.reference = newRoute.name;
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
@@ -167,10 +165,10 @@ class GetObserver extends NavigatorObserver {
     final newName = _extractRouteName(newRoute);
     final oldName = _extractRouteName(oldRoute);
 
-    GetConfig.log("REPLACE ROUTE $oldName");
-    GetConfig.log("NEW ROUTE $newName");
+    Get.log("REPLACE ROUTE $oldName");
+    Get.log("NEW ROUTE $newName");
 
-    GetConfig.currentRoute = newName;
+    Get.reference = newName;
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (newRoute is PageRoute) {
@@ -195,7 +193,7 @@ class GetObserver extends NavigatorObserver {
     super.didRemove(route, previousRoute);
     final routeName = _extractRouteName(route);
 
-    GetConfig.log("REMOVING ROUTE $routeName");
+    Get.log("REMOVING ROUTE $routeName");
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;

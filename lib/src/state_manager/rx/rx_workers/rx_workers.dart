@@ -183,7 +183,7 @@ class Worker {
   //final bool _verbose = true;
   void _log(String msg) {
     //  if (!_verbose) return;
-    GetConfig.log('$runtimeType $type $msg');
+    Get.log('$runtimeType $type $msg');
   }
 
   void dispose() {

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../get.dart';
 import '../../core/log.dart';
-import '../../instance/get_instance.dart';
 import '../extension_navigation.dart';
 import '../routes/get_route.dart';
 import 'root_controller.dart';
@@ -201,18 +200,17 @@ class GetMaterialApp extends StatelessWidget {
 
           initialBinding?.dependencies();
           Get.addPages(getPages);
-          GetConfig.smartManagement = smartManagement;
+          Get.smartManagement = smartManagement;
           onInit?.call();
 
           Get.config(
-            enableLog: enableLog ?? GetConfig.isLogEnable,
+            enableLog: enableLog ?? Get.isLogEnable,
             logWriterCallback: logWriterCallback,
             defaultTransition: defaultTransition ?? Get.defaultTransition,
             defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
             defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
             defaultDurationTransition:
                 transitionDuration ?? Get.defaultTransitionDuration,
-           
           );
         },
         builder: (_) {
