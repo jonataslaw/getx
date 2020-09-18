@@ -226,6 +226,13 @@ Navigate to new screen:
 Get.to(NextScreen());
 ```
 
+Navigate to new screen with name:
+
+```dart
+
+Get.toNamed('/details');
+```
+
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
 
 ```dart
