@@ -1,5 +1,5 @@
 import 'package:flutter/scheduler.dart';
-import 'package:get_state_manager/get_state_manager.dart';
+import '../../get_state_manager.dart';
 
 /// Used like [SingleTickerProviderMixin] but only with Get Controllers.
 /// Simplifies AnimationController creation inside GetxController.

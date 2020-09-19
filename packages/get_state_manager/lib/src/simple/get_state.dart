@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:get_core/get_core.dart';
 import 'package:get_instance/get_instance.dart';
-import 'package:get_state_manager/get_state_manager.dart';
+import '../../get_state_manager.dart';
 
 import 'simple_builder.dart';
 

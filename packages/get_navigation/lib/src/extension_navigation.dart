@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_core/get_core.dart';
-import 'package:get_navigation/get_navigation.dart';
 import 'package:get_state_manager/get_state_manager.dart';
 import 'package:get_utils/get_utils.dart';
+import '../get_navigation.dart';
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
 import 'root/root_controller.dart';

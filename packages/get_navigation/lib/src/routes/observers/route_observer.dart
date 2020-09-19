@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_core/get_core.dart';
-import 'package:get_navigation/get_navigation.dart';
+import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
 import '../../snackbar/snack_route.dart';
 import '../default_route.dart';

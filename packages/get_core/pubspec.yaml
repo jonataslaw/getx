@@ -1,6 +1,6 @@
 name: get_core
-description: A new Flutter package project.
-version: 0.0.1
+description: A core package from GetX
+version: 3.10.2
 author:
 homepage:
 

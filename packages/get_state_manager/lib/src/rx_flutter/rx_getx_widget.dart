@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get_core/get_core.dart';
 import 'package:get_instance/get_instance.dart';
 import 'package:get_rx/get_rx.dart';
-import 'package:get_state_manager/get_state_manager.dart';
+import '../../get_state_manager.dart';
 
 class GetX<T extends DisposableInterface> extends StatefulWidget {
   final Widget Function(T) builder;

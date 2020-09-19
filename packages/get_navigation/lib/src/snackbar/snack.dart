@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_core/get_core.dart';
-import 'package:get_navigation/get_navigation.dart';
+import '../../get_navigation.dart';
 import 'snack_route.dart';
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus status);
