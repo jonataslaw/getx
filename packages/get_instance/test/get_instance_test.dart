@@ -13,6 +13,15 @@ class Mock {
 class Controller {}
 
 class DisposableController extends GetLifeCycle {
+  DisposableController() {
+    onStart.callback = _onStart;
+  }
+
+  // Internal callback that starts the cycle of this controller.
+  void _onStart() {
+    onInit();
+  }
+
   bool initialized = false;
 
   void onInit() async {

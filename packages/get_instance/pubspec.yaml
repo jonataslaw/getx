@@ -15,6 +15,7 @@ dependencies:
 
 dev_dependencies:
   test: ">=1.0.0 <2.0.0"
+  test_coverage: ">=0.4.3 <1.0.0"
 
 
 # For information on the generic Dart part of this file, see the
