@@ -24,8 +24,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: pub get
-      - name: Format
-        run: dartfmt --dry-run --set-exit-if-changed .
       - name: Analyze
         run: dartanalyzer --fatal-infos --fatal-warnings lib test example
       - name: Run tests
