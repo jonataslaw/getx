@@ -13,14 +13,11 @@ on:
       - ".github/workflows/get_rx.yaml"
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
-
-  test:
-    #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
+  build:
     defaults:
       run:
         working-directory: packages/get_rx
     runs-on: ubuntu-latest
-    #sequence of tasks called
     container:
       image: google/dart:2.8.4
     steps:
@@ -32,5 +29,4 @@ jobs:
       - name: Analyze
         run: dartanalyzer --fatal-infos --fatal-warnings lib test example
       - name: Run tests
-      - uses: codecov/codecov-action@v1.0.7
-
+        run: pub run test_coverage
