@@ -226,7 +226,7 @@ Navigate to new screen:
 Get.to(NextScreen());
 ```
 
-Navigate to new screen with name:
+Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
 
 ```dart
 
