@@ -1,8 +1,7 @@
 name: get_instance
-description: A new Flutter package project.
+description: A smart dependency injector to GetX™ framework.
 version: 3.10.2
-author:
-homepage:
+homepage: https://github.com/jonataslaw/getx
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

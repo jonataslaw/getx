@@ -1,8 +1,8 @@
 name: get_utils
-description: A new Flutter package project.
+description: A set of tools that allows you to access high-level APIs and obtain validation tools for Flutter and GetX™ framework.
 version: 3.10.2
 author:
-homepage:
+homepage: https://github.com/jonataslaw/getx
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
