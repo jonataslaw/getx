@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get_navigation/get_navigation.dart';
 
 class Wrapper extends StatelessWidget {
   final Widget child;

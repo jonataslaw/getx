@@ -11,8 +11,10 @@ environment:
 dependencies:
   get_core:
     path: ../get_core
+  
 
 dev_dependencies:
+  test: ">=1.0.0 <2.0.0"
 
 
 # For information on the generic Dart part of this file, see the

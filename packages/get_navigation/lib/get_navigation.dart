@@ -1,5 +1,6 @@
 library get_navigation;
 
+export 'package:get_core/get_core.dart';
 export 'src/bottomsheet/bottomsheet.dart';
 export 'src/extension_navigation.dart';
 export 'src/root/root_widget.dart';

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
-
-import 'util/wrapper.dart';
+import 'package:get_navigation/get_navigation.dart';
+import 'utils/wrapper.dart';
 
 void main() {
   testWidgets("Get.defaultDialog smoke test", (tester) async {

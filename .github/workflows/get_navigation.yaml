@@ -4,13 +4,13 @@ name:  build
 on:
   push:
     paths:
-      - "getx/**"
-      - ".github/workflows/main.yaml"
+      - "/**"
+      - ".github/workflows/get_navigation.yaml"
 
   pull_request:
     paths:
-      - "getx/**"
-      - ".github/workflows/main.yaml"
+      - "/**"
+      - ".github/workflows/get_navigation.yaml"
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
 
@@ -18,7 +18,7 @@ jobs:
     #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
     defaults:
       run:
-        working-directory: getx/
+        working-directory: packages/get_navigation
     runs-on: ubuntu-latest
     #sequence of tasks called
     steps:

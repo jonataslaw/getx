@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 // Copyright 2014, the Dart project authors. All rights reserved.
 // Redistribution and use in source and binary forms, with or without

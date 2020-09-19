@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
+import 'package:get_core/get_core.dart';
+import 'package:get_navigation/get_navigation.dart';
 
-import 'util/wrapper.dart';
+import 'utils/wrapper.dart';
 
 class SizeTransitions extends CustomTransition {
   @override

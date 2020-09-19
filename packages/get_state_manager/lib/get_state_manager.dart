@@ -1,6 +1,7 @@
 library get_state_manager;
 
 export 'package:get_instance/get_instance.dart';
+export 'package:get_rx/get_rx.dart';
 export 'src/rx_flutter/rx_disposable.dart';
 export 'src/rx_flutter/rx_getx_widget.dart';
 export 'src/rx_flutter/rx_obx_widget.dart';

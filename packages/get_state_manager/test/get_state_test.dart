@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
+import 'package:get_core/get_core.dart';
+import 'package:get_instance/get_instance.dart';
+import 'package:get_state_manager/get_state_manager.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
