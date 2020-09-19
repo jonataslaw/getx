@@ -1,0 +1,20 @@
+name: get_rx
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+ 
+
+dependencies:
+  get_core:
+    path: ../get_core
+  get_instance:
+    path: ../get_instance
+  meta: ">=1.1.0 <2.0.0"
+ 
+
+dev_dependencies:
+  

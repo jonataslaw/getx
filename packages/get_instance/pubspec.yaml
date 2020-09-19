@@ -1,0 +1,19 @@
+name: get_instance
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+
+dependencies:
+  get_core:
+    path: ../get_core
+
+dev_dependencies:
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
