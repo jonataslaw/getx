@@ -19,6 +19,7 @@ jobs:
         with:
           flutter-version: '1.20.2'
           channel: 'stable'
+      - run: cd getx
       - run: flutter pub get
       #- run: flutter analyze
       # run  flutter widgets tests  and unit tests
