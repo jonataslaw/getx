@@ -1,7 +1,6 @@
 name: get_rx
 description: A set of powerful tools to provide reactive programming for the GetX™ framework.
 version: 3.10.2
-author:
 homepage: https://github.com/jonataslaw/getx
 
 environment:

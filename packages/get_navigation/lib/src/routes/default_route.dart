@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_core/get_core.dart';
-import 'package:get_instance/get_instance.dart';
+import 'package:get_state_manager/get_state_manager.dart';
 import 'package:get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'custom_transition.dart';

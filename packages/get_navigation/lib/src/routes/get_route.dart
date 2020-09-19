@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get_instance/get_instance.dart';
+import 'package:get_state_manager/get_state_manager.dart';
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 

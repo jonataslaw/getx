@@ -1,7 +1,6 @@
 name: get_state_manager
 description: The most powerful, easier and flexible StateManager to Flutter and GetX™ framework.
 version: 3.10.2
-author:
 homepage: https://github.com/jonataslaw/getx
 
 environment:
