@@ -3,14 +3,9 @@ name:  build
 # Trigger the workflow on push or pull request
 on:
   push:
-    paths:
-      - "/**"
-      - ".github/workflows/get_navigation.yaml"
-
+    branches: [ master ]
   pull_request:
-    paths:
-      - "/**"
-      - ".github/workflows/get_navigation.yaml"
+    branches: [ master ]
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
 
