@@ -4,13 +4,13 @@ name:  build
 on:
   push:
     paths:
-      - "getx/**"
-      - ".github/workflows/main.yaml"
+      - "packages/get_core/**"
+      - ".github/workflows/packages.yaml"
 
   pull_request:
     paths:
-      - "getx/**"
-      - ".github/workflows/main.yaml"
+      - "packages/get_core/**"
+      - ".github/workflows/packages.yaml"
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
 
