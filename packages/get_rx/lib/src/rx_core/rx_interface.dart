@@ -26,4 +26,3 @@ abstract class RxInterface<T> {
   /// Calls [callback] with current value, when the value changes.
   StreamSubscription<T> listen(ValueCallback<T> callback);
 }
-

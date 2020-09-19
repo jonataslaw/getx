@@ -80,7 +80,6 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
           elevation:
               elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
           shape: shape,
-
           clipBehavior: clipBehavior,
           isScrollControlled: isScrollControlled,
           enableDrag: enableDrag,
@@ -145,45 +144,47 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
         final animationValue = mediaQuery.accessibleNavigation
             ? 1.0
             : widget.route.animation.value;
-        return  Semantics(
+        return Semantics(
           scopesRoute: true,
           namesRoute: true,
           label: routeLabel,
           explicitChildNodes: true,
           child: ClipRect(
             child: CustomSingleChildLayout(
-              delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled),
-              child: widget.isPersistent == false ? BottomSheet(
-                animationController: widget.route._animationController,
-                onClosing: () {
-                  if (widget.route.isCurrent) {
-                    Navigator.pop(context);
-                  }
-                },
-                builder: widget.route.builder,
-                backgroundColor: widget.backgroundColor,
-                elevation: widget.elevation,
-                shape: widget.shape,
-                clipBehavior: widget.clipBehavior,
-                enableDrag: widget.enableDrag,
-              ) : Scaffold(
-                bottomSheet: BottomSheet(
-                animationController: widget.route._animationController,
-                onClosing: () {
-                  // if (widget.route.isCurrent) {
-                  //   Navigator.pop(context);
-                  // }
-                },
-                builder: widget.route.builder,
-                backgroundColor: widget.backgroundColor,
-                elevation: widget.elevation,
-                shape: widget.shape,
-                clipBehavior: widget.clipBehavior,
-                enableDrag: widget.enableDrag,
-                ),
-              ) 
-            ),
+                delegate: _GetModalBottomSheetLayout(
+                    animationValue, widget.isScrollControlled),
+                child: widget.isPersistent == false
+                    ? BottomSheet(
+                        animationController: widget.route._animationController,
+                        onClosing: () {
+                          if (widget.route.isCurrent) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: widget.route.builder,
+                        backgroundColor: widget.backgroundColor,
+                        elevation: widget.elevation,
+                        shape: widget.shape,
+                        clipBehavior: widget.clipBehavior,
+                        enableDrag: widget.enableDrag,
+                      )
+                    : Scaffold(
+                        bottomSheet: BottomSheet(
+                          animationController:
+                              widget.route._animationController,
+                          onClosing: () {
+                            // if (widget.route.isCurrent) {
+                            //   Navigator.pop(context);
+                            // }
+                          },
+                          builder: widget.route.builder,
+                          backgroundColor: widget.backgroundColor,
+                          elevation: widget.elevation,
+                          shape: widget.shape,
+                          clipBehavior: widget.clipBehavior,
+                          enableDrag: widget.enableDrag,
+                        ),
+                      )),
           ),
         );
       },
@@ -255,38 +256,40 @@ class _GetPerModalBottomSheetState<T>
           explicitChildNodes: true,
           child: ClipRect(
             child: CustomSingleChildLayout(
-              delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled),
-             child: widget.isPersistent == false ? BottomSheet(
-                animationController: widget.route._animationController,
-                onClosing: () {
-                  if (widget.route.isCurrent) {
-                    Navigator.pop(context);
-                  }
-                },
-                builder: widget.route.builder,
-                backgroundColor: widget.backgroundColor,
-                elevation: widget.elevation,
-                shape: widget.shape,
-                clipBehavior: widget.clipBehavior,
-                enableDrag: widget.enableDrag,
-              ) : Scaffold(
-                bottomSheet: BottomSheet(
-                animationController: widget.route._animationController,
-                onClosing: () {
-                  // if (widget.route.isCurrent) {
-                  //   Navigator.pop(context);
-                  // }
-                },
-                builder: widget.route.builder,
-                backgroundColor: widget.backgroundColor,
-                elevation: widget.elevation,
-                shape: widget.shape,
-                clipBehavior: widget.clipBehavior,
-                enableDrag: widget.enableDrag,
-                ),
-              )
-            ),
+                delegate: _GetModalBottomSheetLayout(
+                    animationValue, widget.isScrollControlled),
+                child: widget.isPersistent == false
+                    ? BottomSheet(
+                        animationController: widget.route._animationController,
+                        onClosing: () {
+                          if (widget.route.isCurrent) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: widget.route.builder,
+                        backgroundColor: widget.backgroundColor,
+                        elevation: widget.elevation,
+                        shape: widget.shape,
+                        clipBehavior: widget.clipBehavior,
+                        enableDrag: widget.enableDrag,
+                      )
+                    : Scaffold(
+                        bottomSheet: BottomSheet(
+                          animationController:
+                              widget.route._animationController,
+                          onClosing: () {
+                            // if (widget.route.isCurrent) {
+                            //   Navigator.pop(context);
+                            // }
+                          },
+                          builder: widget.route.builder,
+                          backgroundColor: widget.backgroundColor,
+                          elevation: widget.elevation,
+                          shape: widget.shape,
+                          clipBehavior: widget.clipBehavior,
+                          enableDrag: widget.enableDrag,
+                        ),
+                      )),
           ),
         );
       },
