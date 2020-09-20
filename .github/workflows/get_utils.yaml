@@ -13,7 +13,7 @@ jobs:
     #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
     defaults:
       run:
-        working-directory: getx/
+        working-directory: packages/get_utils
     runs-on: ubuntu-latest
     #sequence of tasks called
     steps:

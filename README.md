@@ -66,12 +66,12 @@ _Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spani
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
 
 - Getx has a huge ecosystem, capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  It is possible to fully reuse your code made on the frontend on your backend with **[Get Server](https://github.com/jonataslaw/get_server)**.
+**It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
 
-In addition, the entire development process can be completely automated, both on the server and on the front end with **[Get CLI](https://github.com/jonataslaw/get_cli)**.
+**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-In addition, to further increase your productivity, we have the
-**[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)** and the **[extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**In addition, to further increase your productivity, we have the
+[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Installing
 
@@ -226,6 +226,13 @@ Navigate to new screen:
 Get.to(NextScreen());
 ```
 
+Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+
+```dart
+
+Get.toNamed('/details');
+```
+
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
 
 ```dart
@@ -328,7 +335,6 @@ return GetMaterialApp(
     translations: Messages(), // your translations
     locale: Locale('en', 'US'), // translations will be displayed in that locale
     fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
-    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // specify the supported locales
 );
 ```
 
