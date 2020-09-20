@@ -1,6 +1,6 @@
 ![](get.png)
 
-_Языки: Русский (Этот файл),[Английский](README.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md),[Польский](README.pl.md)._
+_Языки: Русский (этот файл),[Английский](README.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md),[Польский](README.pl.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -22,17 +22,17 @@ _Языки: Русский (Этот файл),[Английский](README.md
   - [Управление состоянием](#state-management)
     - [Реактивное управление состоянием](#reactive-state-manager)
     - [Подробнее об управлении состоянием](#more-details-about-state-management)
-  - [Управление маршрутом](#route-management)
-    - [Подробнее об управлении маршрутом](#more-details-about-route-management)
-  - [Управление зависимостями](#dependency-management)
-    - [Подробнее об управлении зависимостями](#more-details-about-dependency-management)
+  - [Управление маршрутами](#route-management)
+    - [Подробнее об управлении маршрутами](#more-details-about-route-management)
+  - [Внедрение зависимостей](#dependency-management)
+    - [Подробнее о внедрении зависимостей](#more-details-about-dependency-management)
 - [Утилиты](#utils)
   - [Интернационализация](#internationalization)
     - [Переводы](#translations)
       - [Использование переводов](#using-translations)
-    - [Locales](#locales)
-      - [Изменение locale](#change-locale)
-      - [Системный locale](#system-locale)
+    - [Локации](#locales)
+      - [Изменение локации](#change-locale)
+      - [Системная локация](#system-locale)
   - [Изменение темы](#change-theme)
   - [Другие развитые API](#other-advanced-apis)
     - [Дополнительные глобальные настройки и ручные настройки](#optional-global-settings-and-manual-configurations)
@@ -50,15 +50,15 @@ _Языки: Русский (Этот файл),[Английский](README.md
   - [Как внести свой вклад](#how-to-contribute)
   - [Статьи и видео](#articles-and-videos)
 
-# About Get
+# Про Get
 
-- GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
+- GetX  - это сверхлегное и мощное решение для Flutter. Оно совмещает в себе высокопроизводительное управление состоянием, интеллектуальное внедрение зависимостей, управление маршрутами быстрым и практичным способом.
 
-- GetX has 3 basic principles, this means that this is the priority for all resources in the library
+- GetX имеет 3 базовых принципа, являющихся приоритетом для всех ресурсов в библиотеке
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers / blocks through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through multiproviders, for this GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+  - **Производительность:** GetX сфокусирован на производительности и минимальном потреблении ресурсов. Бенчмарки почти всегда не имеют значения в реальном мире, но, если Вам угодно, здесь ([бенчмарки](https://github.com/jonataslaw/benchmarks)) есть индикаторы потребления, где GetX работает лучше, чем другие подходы к управлению состоянием. Разница небольшая, но демонстрирует нашу заботу о ресурсах.
+  - **Продуктивность:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver
+  - **Организация:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers / blocks through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through multiproviders, for this GetX uses its own dependency injection feature, decoupling the DI from its view completely.
     With GetX you know where to find each feature of your application, having clean code by default. This in addition to facilitating maintenance, makes the sharing of modules, something that until then in Flutter was unthinkable, something totally possible.
     BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. Getx is a natural evolution of this, not only separating the business logic, but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
     GetX is the easiest, most practical and scalable way to build high-performance applications with the Flutter SDK, with a large ecosystem around it that works perfectly together, being easy for beginners, and accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs build-in that are not present on default Flutter SDK.
