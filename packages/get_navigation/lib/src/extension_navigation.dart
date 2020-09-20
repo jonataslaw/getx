@@ -638,6 +638,8 @@ extension GetNavigation on GetInterface {
     bool isDismissible = true,
     bool enableDrag = true,
     RouteSettings settings,
+    Duration enterBottomSheetDuration,
+    Duration exitBottomSheetDuration,
   }) {
     assert(bottomsheet != null);
     assert(persistent != null);
