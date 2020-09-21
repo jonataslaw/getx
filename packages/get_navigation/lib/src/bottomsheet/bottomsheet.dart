@@ -16,6 +16,8 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.enableDrag = true,
     @required this.isScrollControlled,
     RouteSettings settings,
+    this.enterBottomSheetDuration = const Duration(milliseconds: 250),
+    this.exitBottomSheetDuration = const Duration(milliseconds: 200),
   })  : assert(isScrollControlled != null),
         name = "BOTTOMSHEET: ${builder.hashCode}",
         assert(isDismissible != null),
@@ -33,7 +35,8 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final bool isDismissible;
   final bool enableDrag;
   final String name;
-
+  final Duration enterBottomSheetDuration;
+  final Duration exitBottomSheetDuration;
   // remove safearea from top
   final bool removeTop;
 
@@ -56,6 +59,8 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     assert(_animationController == null);
     _animationController =
         BottomSheet.createAnimationController(navigator.overlay);
+    _animationController.duration = enterBottomSheetDuration;
+    _animationController.reverseDuration = exitBottomSheetDuration;
     return _animationController;
   }
 
