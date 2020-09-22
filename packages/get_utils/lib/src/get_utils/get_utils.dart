@@ -506,19 +506,8 @@ class GetUtils {
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   static String capitalize(String value) {
-    if (isNullOrBlank(value)) {
-      return null;
-    }
-
-    final separatedWords = value.split(' ');
-    var result = '';
-
-    for (var word in separatedWords) {
-      result += capitalizeFirst(word);
-      result += ' ';
-    }
-
-    return result.trim();
+    if (isNullOrBlank(value)) return null;
+    return value.split(' ').map(capitalizeFirst).join(' ');
   }
 
   /// Uppercase first letter inside string and let the others lowercase
