@@ -126,7 +126,7 @@ class GetMaterialApp extends StatelessWidget {
             RouteSettings(name: settings.name, arguments: settings.arguments),
         curve: unknownRoute.curve,
         opaque: unknownRoute.opaque,
-        customTransition: match.route.customTransition,
+        customTransition: unknownRoute.customTransition,
         binding: unknownRoute.binding,
         bindings: unknownRoute.bindings,
         transitionDuration:
