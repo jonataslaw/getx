@@ -11,9 +11,13 @@ import 'package:get_instance/get_instance.dart';
 /// }
 ///
 /// class AwesomeView extends GetView<AwesomeController> {
-///   /// if you need you can pass the tag for your controller
-///   /// in the super constructor.
-///   AwesomeView({Key key}):super(key:key, tag:"myControllerTag");
+///   /// if you need you can pass the tag for
+///   /// Get.find<AwesomeController>(tag:"myTag");
+///   @override
+///   final String tag = "myTag";
+///
+///   AwesomeView({Key key}):super(key:key);
+///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return Container(
@@ -24,9 +28,9 @@ import 'package:get_instance/get_instance.dart';
 /// }
 ///``
 abstract class GetView<T> extends StatelessWidget {
-  const GetView({Key key, this.tag}) : super(key: key);
+  const GetView({Key key}) : super(key: key);
 
-  final String tag;
+  final String tag = null;
 
   T get controller => GetInstance().find<T>(tag: tag);
 

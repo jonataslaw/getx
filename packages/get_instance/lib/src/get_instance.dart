@@ -116,11 +116,11 @@ class GetInstance {
   /// print(a==b); (false)```
   void create<S>(
     InstanceBuilderCallback<S> builder, {
-    String name,
+    String tag,
     bool permanent = true,
   }) {
     _insert(
-        isSingleton: false, name: name, builder: builder, permanent: permanent);
+        isSingleton: false, name: tag, builder: builder, permanent: permanent);
   }
 
   /// Injects the Instance [S] builder into the [_singleton] HashMap.
