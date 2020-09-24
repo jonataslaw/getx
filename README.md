@@ -1,6 +1,6 @@
 ![](get.png)
 
-_Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md),[Polish](README.pl.md)._
+_Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md),[Polish](README.pl.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -66,12 +66,12 @@ _Languages: English (this file), [Brazilian Portuguese](README.pt-br.md), [Spani
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
 
 - Getx has a huge ecosystem, capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  It is possible to fully reuse your code made on the frontend on your backend with **[Get Server](https://github.com/jonataslaw/get_server)**.
+**It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
 
-In addition, the entire development process can be completely automated, both on the server and on the front end with **[Get CLI](https://github.com/jonataslaw/get_cli)**.
+**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-In addition, to further increase your productivity, we have the
-**[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)** and the **[extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**In addition, to further increase your productivity, we have the
+[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Installing
 
@@ -226,6 +226,13 @@ Navigate to new screen:
 Get.to(NextScreen());
 ```
 
+Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+
+```dart
+
+Get.toNamed('/details');
+```
+
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
 
 ```dart
@@ -328,7 +335,6 @@ return GetMaterialApp(
     translations: Messages(), // your translations
     locale: Locale('en', 'US'), // translations will be displayed in that locale
     fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
-    supportedLocales: <Locale>[Locale('en', 'UK'),  Locale('en', 'US'), Locale('de','DE')] // specify the supported locales
 );
 ```
 
@@ -632,10 +638,6 @@ final name = 'GetX'.obs;
 // only "updates" the stream, if the value is different from the current one.
 name.value = 'Hey';
 
-// this weird (and kinda cool) assignment, updates the stream no matter what
-// it takes nulls, or same value... but rebuilds the observers.
-name << 'Hey'; // !
-
 // All Rx properties are "callable" and returns the new value.
 // but this approach does not accepts `null`, the UI will not rebuild.
 name('Hello');
@@ -647,7 +649,7 @@ name() ;
 
 final count = 0.obs;
 
-// you can just most basic operators acts on the property!
+// You can use all non mutable operations from num primitives!
 count + 1;
 
 // Watch out! this is only valid if `count` is not final, but var
@@ -716,10 +718,6 @@ user.update((value){
 });
 
 print( user );
-
-// this also works.
-user << user.value;
-
 ```
 
 #### GetView
@@ -912,3 +910,6 @@ Any contribution is welcome!
 - [GetX, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli.
 - [Build a To-do List App from scratch using Flutter and GetX](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli.
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
+- [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
+- [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
+

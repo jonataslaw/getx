@@ -1,0 +1,85 @@
+# Include option is buggy:
+# https://github.com/flutter/flutter/issues/62591
+# In case the include issue gets fixed, lines below INCLUDE_FIX
+# can be removed
+
+# include: package:effective_dart/analysis_options.1.2.0.yaml
+analyzer:
+  strong-mode:
+    implicit-casts: false
+linter:
+  rules:
+    await_only_futures: true
+    # This one is desirable, but that's a lot of work for now
+    public_member_api_docs: false
+    # Desirable, but would be breaking changes:
+    avoid_positional_boolean_parameters: false
+    constant_identifier_names: false
+    include_file_not_found: false
+
+    # INCLUDE_FIX (copy of effective dart 1.2.0)
+    # STYLE
+    camel_case_types: true
+    camel_case_extensions: true
+    library_names: true
+    file_names: true
+    library_prefixes: true
+    non_constant_identifier_names: true
+    directives_ordering: true
+    lines_longer_than_80_chars: true # avoid
+    curly_braces_in_flow_control_structures: true
+
+    # DOCUMENTATION
+    slash_for_doc_comments: true
+    package_api_docs: true # prefer
+    #- comment_references # Unused because https://github.com/dart-lang/sdk/issues/36974
+
+    # USAGE
+    implementation_imports: true
+    avoid_relative_lib_imports: true # prefer
+    prefer_relative_imports: true # prefer
+    prefer_adjacent_string_concatenation: true
+    prefer_interpolation_to_compose_strings: true # prefer
+    unnecessary_brace_in_string_interps: true # avoid
+    prefer_collection_literals: true
+    avoid_function_literals_in_foreach_calls: true # avoid
+    prefer_iterable_whereType: true
+    prefer_function_declarations_over_variables: true
+    unnecessary_lambdas: true
+    prefer_equal_for_default_values: true
+    avoid_init_to_null: true
+    unnecessary_getters_setters: true
+    #- unnecessary_getters # prefer # Disabled pending fix: https://github.com/dart-lang/linter/issues/23
+    #- prefer_expression_function_bodies # consider
+    unnecessary_this: true
+    prefer_initializing_formals: true
+    type_init_formals: true
+    empty_constructor_bodies: true
+    unnecessary_new: true
+    unnecessary_const: true
+    avoid_catches_without_on_clauses: true # avoid
+    avoid_catching_errors: true
+    use_rethrow_when_possible: true
+
+    # DESIGN
+    use_to_and_as_if_applicable: true # prefer
+    one_member_abstracts: true # avoid
+    avoid_classes_with_only_static_members: true # avoid
+    prefer_mixin: true
+    prefer_final_fields: true # prefer
+    use_setters_to_change_properties: true
+    avoid_setters_without_getters: true
+    avoid_returning_null: true # avoid
+    avoid_returning_this: true # avoid
+    type_annotate_public_apis: true # prefer
+    #- prefer_typing_uninitialized_variables # consider
+    omit_local_variable_types: true # avoid
+    avoid_types_on_closure_parameters: true # avoid
+    avoid_return_types_on_setters: true # avoid
+    prefer_generic_function_type_aliases: true
+    avoid_private_typedef_functions: true # prefer
+    #- use_function_type_syntax_for_parameters # consider
+    hash_and_equals: true
+    avoid_equals_and_hash_code_on_mutable_classes: true # avoid
+    avoid_null_checks_in_equality_operators: true
+
