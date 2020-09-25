@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
+
 import 'package:get_core/get_core.dart';
+
 import 'lifecircle.dart';
 
 class GetInstance {
@@ -114,11 +116,11 @@ class GetInstance {
   /// print(a==b); (false)```
   void create<S>(
     InstanceBuilderCallback<S> builder, {
-    String name,
+    String tag,
     bool permanent = true,
   }) {
     _insert(
-        isSingleton: false, name: name, builder: builder, permanent: permanent);
+        isSingleton: false, name: tag, builder: builder, permanent: permanent);
   }
 
   /// Injects the Instance [S] builder into the [_singleton] HashMap.
@@ -178,11 +180,14 @@ class GetInstance {
   /// [Get.keepFactory]
   /// Only flags `isInit` if it's using `Get.create()`
   /// (not for Singletons access).
-  bool _initDependencies<S>({String name}) {
+  /// Returns the instance if not initialized, required for Get.create() to
+  /// work properly.
+  S _initDependencies<S>({String name}) {
     final key = _getKey(S, name);
     final isInit = _singl[key].isInit;
+    S i;
     if (!isInit) {
-      _startController<S>(tag: name);
+      i = _startController<S>(tag: name);
       if (_singl[key].isSingleton) {
         _singl[key].isInit = true;
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
@@ -190,7 +195,7 @@ class GetInstance {
         }
       }
     }
-    return true;
+    return i;
   }
 
   /// Links a Class instance [S] (or [tag]) to the current route.
@@ -206,9 +211,9 @@ class GetInstance {
   }
 
   /// Initializes the controller
-  void _startController<S>({String tag}) {
+  S _startController<S>({String tag}) {
     final key = _getKey(S, tag);
-    final i = _singl[key].getDependency();
+    final i = _singl[key].getDependency() as S;
     if (i is GetLifeCycle) {
       if (i.onStart != null) {
         i.onStart();
@@ -219,6 +224,7 @@ class GetInstance {
         _routesByCreate[Get.reference].add(i.onClose);
       }
     }
+    return i;
   }
 
   // S putOrFind<S>(S Function() dep, {String tag}) {
@@ -257,8 +263,12 @@ class GetInstance {
           throw 'Class "$S" with tag "$tag" is not register';
         }
       }
-      _initDependencies<S>(name: tag);
-      return _singl[key].getDependency() as S;
+
+      /// although dirty solution, the lifecycle starts inside
+      /// `initDependencies`, so we have to return the instance from there
+      /// to make it compatible with `Get.create()`.
+      final i = _initDependencies<S>(name: tag);
+      return i ?? _singl[key].getDependency() as S;
     } else {
       if (!_factory.containsKey(key)) {
         // ignore: lines_longer_than_80_chars

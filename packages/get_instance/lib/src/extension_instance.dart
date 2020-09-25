@@ -1,4 +1,5 @@
 import 'package:get_core/get_core.dart';
+
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
@@ -47,6 +48,7 @@ extension Inst on GetInterface {
   /// So, if you call `Get.delete<T>()` the "instance factory" used in this
   /// method ([Get.create<T>()]) will be removed, but NOT the instances
   /// already created by it.
+  /// Uses `tag` as the other methods.
   ///
   /// Example:
   ///
@@ -55,8 +57,8 @@ extension Inst on GetInterface {
   /// Repl b = find();
   /// print(a==b); (false)```
   void create<S>(InstanceBuilderCallback<S> builder,
-          {String name, bool permanent = true}) =>
-      GetInstance().create<S>(builder, name: name, permanent: permanent);
+          {String tag, bool permanent = true}) =>
+      GetInstance().create<S>(builder, tag: tag, permanent: permanent);
 
   /// Finds a Instance of the required Class <[S]>(or [tag])
   /// In the case of using [Get.create()], it will generate an Instance
