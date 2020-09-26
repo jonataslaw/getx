@@ -38,7 +38,7 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
-abstract class GetWidget<T> extends StatelessWidget {
+abstract class GetWidget<T extends GetLifeCycle> extends GetStatelessWidget {
   GetWidget({Key key}) : super(key: key);
 
   final Set<T> _value = <T>{};
@@ -72,3 +72,42 @@ abstract class GetWidget<T> extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context);
 // }
+
+class GetStatelessElement extends ComponentElement {
+  GetStatelessElement(GetStatelessWidget widget) : super(widget);
+
+  @override
+  GetStatelessWidget get widget => super.widget as GetStatelessWidget;
+
+  @override
+  Widget build() => widget.build(this);
+
+  @override
+  void update(GetStatelessWidget newWidget) {
+    super.update(newWidget);
+    markNeedsBuild();
+    rebuild();
+  }
+
+  @override
+  void mount(Element parent, dynamic newSlot) {
+    widget.controller?.onStart();
+    super.mount(parent, newSlot);
+  }
+
+  @override
+  void unmount() {
+    widget.controller?.onClose();
+    super.unmount();
+  }
+}
+
+abstract class GetStatelessWidget<T extends GetLifeCycle> extends Widget {
+  const GetStatelessWidget({Key key}) : super(key: key);
+  @override
+  GetStatelessElement createElement() => GetStatelessElement(this);
+  @protected
+  Widget build(BuildContext context);
+
+  T get controller;
+}

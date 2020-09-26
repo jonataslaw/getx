@@ -7,10 +7,12 @@ extension GetDynamicUtils on dynamic {
 
   void printError(
           {String info = '', Function logFunction = GetUtils.printFunction}) =>
+      // ignore: unnecessary_this
       logFunction('Error: ${this.runtimeType}', this, info, isError: true);
 
   void printInfo(
           {String info = '',
           Function printFunction = GetUtils.printFunction}) =>
+      // ignore: unnecessary_this
       printFunction('Info: ${this.runtimeType}', this, info);
 }

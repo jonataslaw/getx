@@ -1,3 +1,30 @@
+## [3.11.1]
+- Fix docs
+
+## [3.11.0]
+- Refactor structure from scratch to split GetX completely into separate packages. When using the main package (get) you will have everything working perfectly together. However, if you only want one of the resources, you can use the packages separately. 
+- Improve Rx types 
+- Added RTL support
+- Added GetTests, a set of tools to help you create unit tests using Getx
+- RAM consumption improved by dividing resources into smaller components, preventing related classes that are unnecessary from being loaded
+- Fix example app (missing activity) (@Grohden)
+- Added Get.create() lifecycle (@roipeker)
+- Added section Contribution videos and articles in Readme (@stefandevo)
+- fix isNullOrBlank extension
+- Added all operators overload (@grohden)
+- Fixes subscription for Rx::bindStream (@roipeker)
+- Added Ability to use tags with GetX widgets (@na2axl)
+- Change Arguments from Object to dynamic (@roipeker)
+- Added Persistent bottomsheet (@mohak852)
+- Improve extensions tests (@Nipodemos)
+- Refactor Route Observer (@grohden)
+- Added print extensions (@unacorbatanegra)
+- Update PT-br Readme (@eduardoflorence)
+- Fix analyzer crash (@eduardoflorence)
+- Fix for switch types usages in GetUtils (@grohden)
+- Improvement: RxList, RxSet and RxMap null check in the constructor (@Hitsu91)
+- Improve readme example (@dafinoer)
+
 ## [3.10.2]
 - Fixed the use of tags with lazyPut and added Ability to overwrite "tag" in GetView and GetWidget.
 

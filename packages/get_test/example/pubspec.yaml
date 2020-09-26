@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   get_test:
     path: ../
+  get:
 
 
   # The following adds the Cupertino Icons font to your application.

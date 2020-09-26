@@ -185,19 +185,3 @@ class SizeTransitions {
   }
 }
 
-class CupertinoTransitions {
-  Widget buildTransitions(
-      BuildContext context,
-      bool useLinearTransition,
-      Alignment alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
-    return CupertinoPageTransition(
-      primaryRouteAnimation: animation,
-      secondaryRouteAnimation: secondaryAnimation,
-      linearTransition: useLinearTransition,
-      child: child,
-    );
-  }
-}
