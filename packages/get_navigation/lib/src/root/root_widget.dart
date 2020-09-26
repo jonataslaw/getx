@@ -20,6 +20,7 @@ class GetMaterialApp extends StatelessWidget {
     this.builder,
     this.translationsKeys,
     this.translations,
+    this.textDirection,
     this.title = '',
     this.onGenerateTitle,
     this.color,
@@ -84,6 +85,7 @@ class GetMaterialApp extends StatelessWidget {
   final Color color;
   final Map<String, Map<String, String>> translationsKeys;
   final Translations translations;
+  final TextDirection textDirection;
   final Locale locale;
   final Locale fallbackLocale;
   final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
@@ -126,7 +128,7 @@ class GetMaterialApp extends StatelessWidget {
             RouteSettings(name: settings.name, arguments: settings.arguments),
         curve: unknownRoute.curve,
         opaque: unknownRoute.opaque,
-        customTransition: match.route.customTransition,
+        customTransition: unknownRoute.customTransition,
         binding: unknownRoute.binding,
         bindings: unknownRoute.bindings,
         transitionDuration:
@@ -231,9 +233,10 @@ class GetMaterialApp extends StatelessWidget {
               ..addAll(navigatorObservers)),
             builder: (context, child) {
               return Directionality(
-                textDirection: rtlLanguages.contains(Get.locale?.languageCode)
-                    ? TextDirection.rtl
-                    : TextDirection.ltr,
+                textDirection: textDirection ??
+                    (rtlLanguages.contains(Get.locale?.languageCode)
+                        ? TextDirection.rtl
+                        : TextDirection.ltr),
                 child: builder == null ? child : builder(context, child),
               );
             },
