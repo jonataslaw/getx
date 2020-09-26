@@ -1,6 +1,6 @@
 ![](get.png)
 
-_Языки: Русский (этот файл),[Английский](README.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md),[Польский](README.pl.md)._
+_Языки: Русский (этот файл), [Английский](README.md), [Китайский](README.zh-cn.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md),[Польский](README.pl.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
