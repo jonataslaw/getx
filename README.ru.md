@@ -155,52 +155,52 @@ Get был разработан для работы с командами, но 
 
 Оптимизируйте ваши дедлайны, доставляйте всё вовремя без потери производительности. Get не для всех, но если вы идентифицировали себя с этой фразой, Get для вас!
 
-# The Three pillars
+# Три слолпа
 
-## State management
+## Управление состоянием
 
-There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
+В настоящее время для Flutter есть несколько менеджеров состояний. Однако большинство из них связано с использованием ChangeNotifier для обновления виджетов, и это плохой и очень плохой подход к производительности средних или больших приложений. Вы можете проверить в официальной документации Flutter, что [ChangeNotifier следует использовать с 1 или максимум 2 слушателями](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), что делает его практически непригодным для любого приложения среднего или большого размера.
 
-Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager.
+Get не лучше и не хуже, чем любой другой менеджер состояний, но вам следует проанализировать это, а также пункты ниже, чтобы выбрать между использованием Get в чистой форме (Vanilla) или вместе с другим менеджером состояний.
 
-Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
+Определенно, Get не враг любого другого менеджера состояний, потому что Get - это микрофреймворк, а не просто менеджер состояний, и его можно использовать отдельно или вместе с ними.
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (who has the package name, GetX)
+Get имеет два разных менеджера состояний: простой менеджер состояний (мы назовем его GetBuilder) и реактивный менеджер состояний (который называется GetX).
 
-### Reactive State Manager
+### Реактивное управление состоянием
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+Реактивное программирование может оттолкнуть многих людей, потому что считается сложным. GetX превращает реактивное программирование в нечто довольно простое:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
+- YВам не нужно создавать StreamControllers.
+- Вам не нужно создавать StreamBuilder для каждой переменной.
+- Вам не нужно создавать класс для каждого состояния.
+- Вам не нужно создавать геттер начального значения.
 
-Reactive programming with Get is as easy as using setState.
+Реактивное программирование с Get так же просто, как использование setState.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+Представим, что у вас есть переменная name и вы хотите, чтобы каждый раз, когда вы ее изменяете, все виджеты, которые ее используют, менялись автоматически.
 
-This is your count variable:
+Это ваша переменная счётчика:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+Чтобы сделать его наблюдаемым, вам просто нужно добавить в конец ".obs":
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever tha values changes, simply do this:
+А в пользовательском интерфейсе, если вы хотите отображать это значение и обновлять экран при изменении значений, просто сделайте следующее:
 
 ```dart
 Obx(() => Text("${controller.name}"));
 ```
 
-That's all. It's _that_ simple.
+Вот и все. Это _так_ просто.
 
-### More details about state management
+### Подробнее об управлении состоянием
 
 **See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
 
