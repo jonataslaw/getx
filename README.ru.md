@@ -63,15 +63,14 @@ _Языки: Русский (этот файл), [Английский](README.m
     BLoC был отправной точкой для организации кода во Flutter, он отделяет бизнес-логику от визуализации. Getx является естественным развитием этого, разделяя не только бизнес-логику, но и логику представления. Бонусная инъекция зависимостей и маршрутов также не связана, и уровень данных не учитывается. Вы знаете, где все находится, и все это проще, чем построить приветственный мир.
     GetX - это самый простой, практичный и масштабируемый способ создания высокопроизводительных приложений с помощью Flutter SDK с большой экосистемой вокруг него, которая отлично работает вместе, проста для новичков и точна для экспертов. Он безопасен, стабилен, актуален и предлагает огромный набор встроенных API, которых нет в Flutter SDK по умолчанию.
 
-- GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
+- GetX не раздут. Он имеет множество функций, которые позволяют вам начать программирование, ни о чем не беспокоясь, но каждая из этих функций находится в отдельных контейнерах и запускается только после использования. Если вы используете только управление состоянием, то будет скомпилировано только управление состоянием. Если вы используете маршрутизацию, то ничего из управления состоянием не будет скомпилировано. Вы можете воспользоваться репозиторием бенчмарка, и вы увидите, что используя только управление состоянием Get, приложение, которое скомпилированно с помощью Get, имеет меньший размер, чем приложения использующие другие пакеты для управления состоянием, потому что всё, что не используется, не будет скомпилированно в Ваш код. Таким образом каждое решение GetX было спроектировано, чтобы быть сверхлёгким. Также в этом есть и заслуга Flutter, который умеет устранять неиспользуемые ресурсы, как ни один другой фреймворк.
 
-- Getx has a huge ecosystem, capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-**It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
+- Getx имеет огромную экосистему, способную работать с одним и тем же кодом на Android, iOS, в Интернете, Mac, Linux, Windows и на вашем сервере.
+**С помощью [Get Server](https://github.com/jonataslaw/get_server) ваш код, созданный на веб-интерфейсе, можно повторно использовать на вашем сервере.**
 
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
+**Кроме того, весь процесс разработки может быть полностью автоматизирован как на сервере, так и во внешнем интерфейсе с помощью [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**Кроме того, для дальнейшего повышения вашей продуктивности у нас есть [расширение для VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) и [расширение для Android Studio / Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets).**
 
 # Installing
 
