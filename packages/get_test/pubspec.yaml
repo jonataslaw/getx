@@ -11,10 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   mockito: ">=3.0.0 <4.0.0"
-  get_navigation:
-    path: ../get_navigation
-  get_state_manager: 
-    path: ../get_state_manager
+  get:
+    path: ../../getx
   image_test_utils: ">=1.0.0 <2.0.0"
   flutter_test:
     sdk: flutter
