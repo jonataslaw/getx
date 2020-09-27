@@ -34,7 +34,7 @@ _Языки: Русский (этот файл), [Английский](README.m
       - [Изменение локации](#изменение-локации)
       - [Системная локация](#системная-локация)
   - [Изменение темы](#изменение-темы)
-  - [Другие развитые API](#другие-развитые-api)
+  - [Другие API](#другие-api)
     - [Дополнительные глобальные настройки и ручные настройки](#дополнительные-глобальные-настройки-и-ручные-настройки)
     - [Локальные виждеты состояния](#локальные-виджеты-состояний)
       - [ValueBuilder](#valuebuilder)
@@ -291,14 +291,13 @@ Text(controller.textFromApi);
 
 **Более подробное объяснение управления зависимостями [здесь](./documentation/ru_RU/dependency_management.md)**
 
-# Utils
+# Утилиты
 
-## Internationalization
+## Интернационализация
 
-### Translations
+### Переводы
 
-Translations are kept as a simple key-value dictionary map.
-To add custom translations, create a class and extend `Translations`.
+Переводы хранятся в виде карты пар "ключ-значение". Чтобы добавить собственные переводы, создайте класс и расширьте `Translations`.
 
 ```dart
 import 'package:get/get.dart';
@@ -316,17 +315,17 @@ class Messages extends Translations {
 }
 ```
 
-#### Using translations
+#### Использование переводов
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+Просто добавьте `.tr` к указанному ключу, и он будет переведен с использованием текущего значения `Get.locale` и `Get.fallbackLocale`.
 
 ```dart
 Text('title'.tr);
 ```
 
-### Locales
+### Локации
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+Передайте параметры в `GetMaterialApp`, чтобы определить языковой стандарт и переводы.
 
 ```dart
 return GetMaterialApp(
@@ -336,18 +335,18 @@ return GetMaterialApp(
 );
 ```
 
-#### Change locale
+#### Изменение локации
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+Вызовите `Get.updateLocale(locale)`, чтобы обновить локацию. Затем переводы автоматически используют новый языковой стандарт.
 
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### System locale
+#### Системная локация
 
-To read the system locale, you could use `window.locale`.
+Чтобы узнать системную локацию, вам следует использовать `window.locale`.
 
 ```dart
 import 'dart:ui' as ui;
@@ -357,28 +356,30 @@ return GetMaterialApp(
 );
 ```
 
-## Change Theme
+## Изменение темы
 
-Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
+Пожалуйста, не используйте виджет более высокого уровня, чем `GetMaterialApp`, для его обновления. Это может вызвать повторяющиеся ключи. Многие люди привыкли к старому подходу к созданию виджета «ThemeProvider» только для того, чтобы изменить тему вашего приложения, а это НЕ требуется с GetX ™.
 
-You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
+Вы можете создать свою собственную тему и просто добавить ее в `Get.changeTheme` без повторяющегося кода:
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the Theme in `onTap`, you can combine two **GetX™** APIs for that:
+Если вы хотите создать что-то вроде кнопки, которая изменяет тему, вы можете объединить для этого два API **GetX ™**:
 
-- The api that checks if the dark `Theme` is being used.
-- And the `Theme` Change API, you can just put this within an `onPressed`:
+- API, который проверяет, используется ли темная тема.
+- И API смены темы.
+
+Вы можете просто поместить это в `onPressed`:
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+Когда `.darkmode` активен, он переключится на _light theme_, и когда _light theme_ станет активной, он изменится на _dark theme_.
 
-## Other Advanced APIs
+## Другие API
 
 ```dart
 // give the current args from currentScreen
@@ -513,9 +514,9 @@ context.isTablet()
 context.responsiveValue<T>()
 ```
 
-### Optional Global Settings and Manual configurations
+### Дополнительные глобальные настройки и ручные настройки
 
-GetMaterialApp configures everything for you, but if you want to configure Get manually.
+GetMaterialApp настраивает все за вас, но если вы хотите настроить Get вручную.
 
 ```dart
 MaterialApp(
@@ -524,7 +525,7 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+Вы также сможете использовать собственное промежуточное ПО в `GetObserver`, это ни на что не повлияет.
 
 ```dart
 MaterialApp(
@@ -535,8 +536,8 @@ MaterialApp(
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+Вы можете создать _Глобальные Настройки_ Для `Get`. Просто добавьте `Get.config` в ваш код прежде чем нажимать на любой из маршрутов.
+Или сделайте это прямо в `GetMaterialApp`
 
 ```dart
 GetMaterialApp(
@@ -555,9 +556,8 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+При желании вы сможете перенаправить все сообщения из `Get`.
+Если вы хотите использовать свой любимый пакет для логгирования и собирать логи там:
 
 ```dart
 GetMaterialApp(
