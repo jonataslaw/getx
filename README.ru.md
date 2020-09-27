@@ -72,16 +72,16 @@ _Языки: Русский (этот файл), [Английский](README.m
 
 **Кроме того, для дальнейшего повышения вашей продуктивности у нас есть [расширение для VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) и [расширение для Android Studio / Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets).**
 
-# Installing
+# Установка
 
-Add Get to your pubspec.yaml file:
+Добавьте Get в файл pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+Импортируйте Get в файлы, в которых планируете его использовать:
 
 ```dart
 import 'package:get/get.dart';
