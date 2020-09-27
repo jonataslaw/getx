@@ -54,6 +54,32 @@ void main() {
     Get.reset();
   });
 
+  test('Get.put tag test', () async {
+    final instance = Get.put<Controller>(Controller(), tag: 'one');
+    final instance2 = Get.put<Controller>(Controller(), tag: 'two');
+    expect(instance == instance2, false);
+    expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'two'),
+        false);
+    expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'one'),
+        true);
+    expect(Get.find<Controller>(tag: 'two') == Get.find<Controller>(tag: 'two'),
+        true);
+    Get.reset();
+  });
+
+  test('Get.lazyPut tag test', () async {
+    Get.lazyPut<Controller>(() => Controller(), tag: 'one');
+    Get.lazyPut<Controller>(() => Controller(), tag: 'two');
+
+    expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'two'),
+        false);
+    expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'one'),
+        true);
+    expect(Get.find<Controller>(tag: 'two') == Get.find<Controller>(tag: 'two'),
+        true);
+    Get.reset();
+  });
+
   test('Get.lazyPut test', () async {
     final controller = Controller();
     Get.lazyPut<Controller>(() => controller);

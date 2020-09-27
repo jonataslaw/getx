@@ -12,7 +12,6 @@ class HomeRepository implements IHomeRepository {
   Future<CasesModel> getCases() async {
     try {
       final response = await dio.get("https://api.covid19api.com/summary");
-
       return CasesModel.fromJson(response.data as Map<String, dynamic>);
     } on Exception catch (e) {
       print(e.toString());

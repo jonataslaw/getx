@@ -6,7 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_core/get_core.dart';
 import 'package:get_state_manager/get_state_manager.dart';
-import 'package:get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'custom_transition.dart';
 import 'default_transitions.dart';
@@ -287,11 +286,10 @@ class GetPageRoute<T> extends PageRoute<T> {
                 : child);
 
       case Transition.cupertino:
-        return CupertinoTransitions().buildTransitions(
+        return CupertinoPageTransitionsBuilder().buildTransitions(
+            this,
             context,
-            hasCurve,
-            alignment,
-            hasCurve ? animation : iosAnimation,
+            iosAnimation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
                 ? _CupertinoBackGestureDetector<T>(
@@ -341,26 +339,28 @@ class GetPageRoute<T> extends PageRoute<T> {
                 : child);
 
       case Transition.native:
-      default:
-        if (GetPlatform.isIOS) {
-          return CupertinoTransitions().buildTransitions(
-              context,
-              hasCurve,
-              alignment,
-              hasCurve ? animation : iosAnimation,
-              secondaryAnimation,
-              popGesture ?? Get.defaultPopGesture
-                  ? _CupertinoBackGestureDetector<T>(
-                      enabledCallback: () => _isPopGestureEnabled<T>(this),
-                      onStartPopGesture: () => _startPopGesture<T>(this),
-                      child: child)
-                  : child);
-        }
-
-        return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+        return PageTransitionsTheme().buildTransitions(
             this,
             context,
-            animation,
+            iosAnimation,
+            secondaryAnimation,
+            popGesture ?? Get.defaultPopGesture
+                ? _CupertinoBackGestureDetector<T>(
+                    enabledCallback: () => _isPopGestureEnabled<T>(this),
+                    onStartPopGesture: () => _startPopGesture<T>(this),
+                    child: child)
+                : child);
+
+      default:
+        if (Get.customTransition != null) {
+          return Get.customTransition.buildTransition(
+              context, curve, alignment, animation, secondaryAnimation, child);
+        }
+
+        return PageTransitionsTheme().buildTransitions(
+            this,
+            context,
+            iosAnimation,
             secondaryAnimation,
             popGesture ?? Get.defaultPopGesture
                 ? _CupertinoBackGestureDetector<T>(
