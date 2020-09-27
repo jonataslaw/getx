@@ -15,7 +15,7 @@ _Языки: Русский (этот файл), [Английский](README.m
 
 ![](getx.png)
 
-- [Про Get](#about-get)
+- [Про Get](#про-get)
 - [Установка](#installing)
 - [Counter App применяя GetX](#counter-app-with-getx)
 - [Три столпа](#the-three-pillars)
