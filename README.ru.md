@@ -573,17 +573,15 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ```
 
-### Local State Widgets
+### Локальные виждеты состояния
 
-These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
-We have flavours for Reactive and Simple.
-For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
-Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
-of the body in a `Scaffold`.
+Эти виджеты позволяют управлять одним значением, сохраняя состояние эфемерным и локальным.
+У нас есть варианты для Reactive и Simple.
+Например, вы можете использовать их для переключения obscureText в `TextField`, возможно, для создания кастомного ExpandablePanel или, возможно, для изменения текущего индекса в `BottomNavigationBar` при изменении содержимого body в `Scaffold`.
 
 #### ValueBuilder
 
-A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
+Упрощение `StatefulWidget` который работает с вызовом `.setState` принимающим обновленное значение.
 
 ```dart
 ValueBuilder<bool>(
@@ -600,8 +598,8 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
-updates automatically... isn't it awesome?
+Похож на [`ValueBuilder`](#valuebuilder), но это реактивная версия, вы передаёте Rx экземпляр (помните волшебный .obs?) и
+автоматически обновляетесь... разве это не великолепно?
 
 ```dart
 ObxValue((data) => Switch(
