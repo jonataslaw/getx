@@ -171,7 +171,7 @@ Get имеет два разных менеджера состояний: про
 
 Реактивное программирование может оттолкнуть многих людей, потому что считается сложным. GetX превращает реактивное программирование в нечто довольно простое:
 
-- YВам не нужно создавать StreamControllers.
+- Вам не нужно создавать StreamControllers.
 - Вам не нужно создавать StreamBuilder для каждой переменной.
 - Вам не нужно создавать класс для каждого состояния.
 - Вам не нужно создавать геттер начального значения.
@@ -202,15 +202,15 @@ Obx(() => Text("${controller.name}"));
 
 ### Подробнее об управлении состоянием
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
+**Более подробное объяснение управления состоянием [здесь](./documentation/ru_RU/state_management.md). Там вы увидите больше примеров, а также разницу между простым менеджером состояния и реактивным менеджером состояния.
 
-You will get a good idea of GetX power.
+Вы получите хорошее представление о мощности GetX.
 
-## Route management
+## Управление маршрутами
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
+Если вы собираетесь использовать маршруты / снекбары / диалоги / bottomsheets без контекста, GetX отлично подойдет вам, просто посмотрите:
 
-Add "Get" before your MaterialApp, turning it into GetMaterialApp
+Добавьте "Get" перед MaterialApp, превратив его в GetMaterialApp.
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -218,39 +218,39 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-Navigate to new screen:
+Перейдите на новый экран:
 
 ```dart
 
 Get.to(NextScreen());
 ```
 
-Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+Перейдите на новый экран с именем. Более подробную информацию об именованных маршрутах смотрите [здесь](./documentation/ru_RU/route_management.md#navigation-with-named-routes)
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Закрыть снекбар, диалог, bottomsheets, или что-то иное, что вы обычно закрывали с помощью Navigator.pop(context);
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Для перехода к следующему экрану без возможности вернуться к предыдущему экрану (для использования в SplashScreens, экранах входа и т. д.)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Для перехода к следующему экрану и отмены всех предыдущих маршрутов (полезно в корзинах для покупок, опросах и тестах)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't had to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+Заметили, что вам не нужно было использовать контекст, чтобы делать что-либо из этого? Это одно из самых больших преимуществ использования Get. Благодаря этому вы можете без проблем выполнять все эти методы из класса контроллера.
 
 ### More details about route management
 
