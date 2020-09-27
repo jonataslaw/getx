@@ -610,24 +610,24 @@ ObxValue((data) => Switch(
 ),
 ```
 
-## Useful tips
+## Полезные советы
 
-`.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
+`.obs`ervables (наблюдатели) (также известные как Rx-типы) имеют широкий спектр внутренних методов и операторов
 
-> Is very common to _believe_ that a property with `.obs` **IS** the actual value... but make no mistake!
-> We avoid the Type declaration of the variable, because Dart's compiler is smart enough, and the code
-> looks cleaner, but:
+> Очень распространено _мнение_, что свойство с `.obs` **ЯВЛЯЕТСЯ** действительным значением... но не ошибайтесь!
+> Мы избегаем объявления типа переменной, потому что компилятор Dart достаточно умен, и
+> код выглядит чище, но:
 
 ```dart
 var message = 'Hello world'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Even if `message` _prints_ the actual String value, the Type is **RxString**!
+Даже если `message` _выводит_ значение String, его тип - **RxString**!
 
-So, you can't do `message.substring( 0, 4 )`.
-You have to access the real `value` inside the _observable_:
-The most "used way" is `.value`, but, did you know that you can also use...
+Итак, вы не сможете сделать `message.substring( 0, 4 )`.
+Вы должны получить доступ к реальному `value` внутри _observable_:
+Самый "используемый способ" это `.value`, но, знаете ли вы, что вы также можете использовать ...
 
 ```dart
 final name = 'GetX'.obs;
@@ -718,9 +718,9 @@ print( user );
 
 #### GetView
 
-I love this Widget, is so simple, yet, so useful!
+Я люблю этот виджет, он такой простой, но такой полезный!
 
-Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
+Это`const Stateless` виджет, который имеет геттер `controller` для зарегистрированного `Controller`, вот и всё.
 
 ```dart
  class AwesomeController extends GetxController {
@@ -741,27 +741,25 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
 
 #### GetWidget
 
-Most people have no idea about this Widget, or totally confuse the usage of it.
-The use case is very rare, but very specific: It `caches` a Controller.
-Because of the _cache_, can't be a `const Stateless`.
+Большинство людей понятия не имеют об этом виджете или путаются при его применении.
+Вариант его использования редок, но конкретен: он кеширует Controller.
+Так как из-за _cache_, он не может быть `const Stateless`.
 
-> So, when do you need to "cache" a Controller?
+> Итак, когда вам нужно «кэшировать» контроллер?
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
+В случаях использования другой "не распространённой" фичи **GetX**: `Get.create()`.
 
-`Get.create(()=>Controller())` will generate a new `Controller` each time you call
+`Get.create(()=>Controller())` будет создавать новый `Controller` каждый раз при вызове
 `Get.find<Controller>()`,
 
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+Это тот самый случай, когда `GetWidget` блистает... поскольку вы можете использовать его, например, для хранения списка элементов Todo. Итак, если виджет будет «перестроен», он сохранит тот же экземпляр контроллера.
 
 #### GetxService
 
-This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
-**can not** be removed from memory.
+Этот класс похожа на `GetxController`, у него такой же жизненный цикл ( `onInit()`, `onReady()`, `onClose()`).
+Но внутри нет никакой «логики». Он просто уведомляет систему **GetX** Dependency Injection о том, что этот подкласс **нельзя** удалить из памяти.
 
-So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
+Так что очень полезно держать ваши «Сервисы» всегда доступными и активными с помощью `Get.find()`. Например:
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
@@ -802,9 +800,7 @@ class SettingsService extends GetxService {
 
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
-lifetime of your app, use `GetxService`.
+Единственный способ удалить `GetxService` - использовать `Get.reset()`,  который похож на «горячую перезагрузку» вашего приложения. Так что помните, если вам нужен постоянный экземпляр класса в течение всего жизненного цикла вашего приложения, используйте `GetxService`.
 
 # Breaking changes from 2.0
 
