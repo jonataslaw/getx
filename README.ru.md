@@ -252,9 +252,9 @@ Get.offAll(NextScreen());
 
 Заметили, что вам не нужно было использовать контекст, чтобы делать что-либо из этого? Это одно из самых больших преимуществ использования Get. Благодаря этому вы можете без проблем выполнять все эти методы из класса контроллера.
 
-### More details about route management
+### Подробнее об управлении маршрутами
 
-**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Начните работать с именованными маршрутами, а также предложите более низкий уровень контроля над вашими маршрутами! [Здесь](./documentation/ru_RU/route_management.md) есть подробная документация.**
 
 ## Dependency management
 
