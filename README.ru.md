@@ -87,23 +87,23 @@ dependencies:
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# Приложение "Счётчик" с GetX
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+Проект "Счётчик", созданный по умолчанию для нового проекта на Flutter, имеет более 100 строк (с комментариями). Чтобы показать возможности Get, я продемонстрирую, как сделать "Счётчик", изменяющий состояние при каждом клике, переключении между страницами и передаче состояния между экранами. Всё это вместе с раздалением бизнес логики от представления занимает ВСЕГО ЛИШЬ 26 СТРОК КОДА, ВКЛЮЧАЯ КОММЕНТАРИИ.
 
-- Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+- Шаг 1:
+  Добавьте "Get" перед вашим MaterialApp, превращая его в GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step in only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- Примечание: это не изменяет MaterialApp, GetMaterialApp не является модифицированным MaterialApp, это просто предварительно настроенный виджет, у которого в качестве дочернего по умолчанию используется MaterialApp. Вы можете настроить это вручную, но это не обязательно. GetMaterialApp будет создавать маршруты, вводить их, вводить переводы, вводить всё, что вам нужно для навигации. Если вы используете Get только для управления состоянием или зависимостями, нет необходимости использовать GetMaterialApp. GetMaterialApp необходим для навигации, снекбаров, интернационализации, bottomSheets, диалогов и API, связанных с маршрутами и отсутствием контекста.
+- Примечание²: Этот шаг необходим только в том случае, если вы собираетесь использовать управление маршрутами (`Get.to()`, `Get.back()` и так далее). Если вы не собираетесь его использовать, то шаг 1 выполнять необязательно.
 
-- Step 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+- Шаг 2:
+  Создайте свой класс бизнес-логики и поместите в него все переменные, методы и контроллеры.
+  Вы можете сделать любую переменную наблюдаемой, используя простой ".obs".
 
 ```dart
 class Controller extends GetxController{
@@ -112,8 +112,8 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+- Шаг 3:
+  Создайте свой View, используйте StatelessWidget и сэкономьте немного оперативной памяти, с Get вам больше не нужно использовать StatefulWidget.
 
 ```dart
 class Home extends StatelessWidget {
@@ -145,15 +145,15 @@ class Other extends StatelessWidget {
 }
 ```
 
-Result:
+Результат:
 
 ![](counter-app-gif.gif)
 
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
+Это простой проект, но он уже дает понять, насколько мощным является Get. По мере роста вашего проекта эта разница будет становиться все более значительной.
 
-Get was designed to work with teams, but it makes the job of an individual developer simple.
+Get был разработан для работы с командами, но он упрощает работу отдельного разработчика.
 
-Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+Оптимизируйте ваши дедлайны, доставляйте всё вовремя без потери производительности. Get не для всех, но если вы идентифицировали себя с этой фразой, Get для вас!
 
 # The Three pillars
 
