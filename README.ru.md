@@ -868,29 +868,29 @@ GetMaterialApp(
 
 Эта библиотека всегда будет обновляться и реализовывать новые функции. Не стесняйтесь предлагать PR.
 
-# Community
+# Сообщества
 
-## Community channels
+## Каналы сообщества
 
-GetX has a highly active and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
+У GetX очень активное и готовое к взаимовыручке сообщество. Если у вас есть вопросы или вы хотите получить какую-либо помощь относительно использования этого фреймворка, присоединяйтесь к нашим каналам сообщества, на ваш вопрос ответят быстро. Этот репозиторий предназначен исключительно для открытия проблем и запроса ресурсов, но не стесняйтесь быть частью сообщества GetX.
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
-## How to contribute
+## Как внести свой вклад
 
-_Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better._
+_Хотите внести свой вклад в проект? Вы будем рады отметить вас как одного из наших соавторов. Вот несколько направлений, где вы можете сделать Get (и Flutter) лучше._
 
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
-- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
+- Помощь в переводе readme на другие языки.
+- Добавление документации в readme (многие функции Get еще не задокументированы).
+- Напишите статью или сделайте видео, обучающие использованию Get (они будут вставлены в Readme и в будущем в нашу Wiki).
+- Предложите PRs для кода/тестов.
+- Новые фичи.
 
-Any contribution is welcome!
+Приветствуется любой вклад!
 
-## Articles and videos
+## Статьи и видео
 
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
