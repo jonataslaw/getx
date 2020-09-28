@@ -39,6 +39,11 @@ dependencies:
       url: git://github.com/jonataslaw/getx.git
       path: packages/get_utils
       ref: master
+  get_test:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_test
+      ref: master   
 
 
 dev_dependencies:
