@@ -11,11 +11,20 @@ dependencies:
   flutter:
     sdk: flutter
   get_state_manager:
-    path: ../get_state_manager
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_state_manager
+      ref: master
   get_core: 
-    path: ../get_core
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_core
+      ref: master
   get_utils:
-    path: ../get_utils
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_utils
+      ref: master
 
 dev_dependencies:
   flutter_test:

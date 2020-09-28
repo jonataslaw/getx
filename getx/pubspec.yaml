@@ -9,12 +9,41 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get_core: ">=3.10.2 <4.0.0"
-  get_instance: ">=3.10.2 <4.0.0"
-  get_rx: ">=3.10.2 <4.0.0"
-  get_state_manager: ">=3.10.2 <4.0.0"
-  get_navigation: ">=3.10.2 <4.0.0"
-  get_utils: ">=3.10.2 <4.0.0"
+  get_core: 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_core
+      ref: master
+  get_instance: 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_instance
+      ref: master
+  get_rx: 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_rx
+      ref: master
+  get_state_manager:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_state_manager
+      ref: master
+  get_navigation:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_navigation
+      ref: master
+  get_utils: 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_utils
+      ref: master
+  get_test:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_test
+      ref: master   
 
 
 dev_dependencies:

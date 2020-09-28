@@ -11,8 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   mockito: ">=3.0.0 <4.0.0"
-  get_navigation: ">=3.10.2 <4.0.0"
-  get_state_manager: ">=3.10.2 <4.0.0"
+  get_navigation:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_navigation
+      ref: master
+  get_state_manager:
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_state_manager
+      ref: master
   image_test_utils: ">=1.0.0 <2.0.0"
   flutter_test:
     sdk: flutter

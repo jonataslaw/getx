@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
-
+import '../../get_navigation.dart';
 import 'snack.dart';
 
 class SnackRoute<T> extends OverlayRoute<T> {
@@ -65,7 +64,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
         OverlayEntry(
           builder: (context) {
             return GestureDetector(
-              onTap: snack.isDismissible ? () => snack.dismiss() : null,
+              onTap: snack.isDismissible ? Get.back : null,
               child: AnimatedBuilder(
                 animation: _filterBlurAnimation,
                 builder: (context, child) {

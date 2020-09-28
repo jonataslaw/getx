@@ -66,13 +66,9 @@ extension LocalesIntl on GetInterface {
 
   Locale get fallbackLocale => _intlHost.fallbackLocale;
 
-  set locale(Locale newLocale) {
-    _intlHost.locale = newLocale;
-  }
+  set locale(Locale newLocale) => _intlHost.locale = newLocale;
 
-  set fallbackLocale(Locale newLocale) {
-    _intlHost.fallbackLocale = newLocale;
-  }
+  set fallbackLocale(Locale newLocale) => _intlHost.fallbackLocale = newLocale;
 
   Map<String, Map<String, String>> get translations => _intlHost.translations;
 

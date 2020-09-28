@@ -26,6 +26,7 @@ dependencies:
   get_test:
     path: ../
   get:
+    path: ../../../getx
 
 
   # The following adds the Cupertino Icons font to your application.
