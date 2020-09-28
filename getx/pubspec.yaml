@@ -10,17 +10,35 @@ dependencies:
   flutter:
     sdk: flutter
   get_core: 
-    path: ../packages/get_core
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_core
+      ref: master
   get_instance: 
-    path: ../packages/get_instance
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_instance
+      ref: master
   get_rx: 
-    path: ../packages/get_rx 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_rx
+      ref: master
   get_state_manager:
-    path: ../packages/get_state_manager 
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_state_manager
+      ref: master
   get_navigation:
-    path: ../packages/get_navigation
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_navigation
+      ref: master
   get_utils: 
-    path: ../packages/get_utils
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: packages/get_utils
+      ref: master
 
 
 dev_dependencies:
