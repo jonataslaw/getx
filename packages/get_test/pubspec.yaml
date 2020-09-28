@@ -21,6 +21,7 @@ dependencies:
       url: git://github.com/jonataslaw/getx.git
       path: packages/get_state_manager
       ref: master
+  meta: ">=1.1.0 <2.0.0"
   flutter_test:
     sdk: flutter
 
