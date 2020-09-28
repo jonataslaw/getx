@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:async';
 
 /// Duration utilities.
 extension GetDurationUtils on Duration {
@@ -15,5 +15,5 @@ extension GetDurationUtils on Duration {
   ///   await 0.7.seconds.delay(() {
   /// }
   ///```
-  Future delay([VoidCallback callback]) async => Future.delayed(this, callback);
+  Future delay([FutureOr callback()]) async => Future.delayed(this, callback);
 }

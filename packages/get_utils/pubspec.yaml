@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   get_core:
     path: ../get_core
+  meta: ">=1.1.0 <2.0.0"
 
 dev_dependencies:
   flutter_test:

@@ -206,40 +206,6 @@ class GetBar<T extends Object> extends StatefulWidget {
     return await Get.key.currentState.push(_snackRoute);
   }
 
-  /// Dismisses the snack causing is to return a future containing [result].
-  /// When this future finishes, it is guaranteed that Snack was dismissed.
-  Future<T> dismiss([T result]) async {
-    // If route was never initialized, do nothing
-    if (_snackRoute == null) {
-      return null;
-    }
-
-    if (_snackRoute.isCurrent) {
-      _snackRoute.navigator.pop(result);
-      return _snackRoute.completed;
-    } else if (_snackRoute.isActive) {
-      // removeRoute is called every time you dismiss a Snack that is not
-      // the top route.
-      // It will not animate back and listeners will not detect
-      // SnackbarStatus.CLOSING or SnackbarStatus.CLOSED
-      // To avoid this, always make sure that Snack is the top
-      // route when it is being dismissed
-      _snackRoute.navigator.removeRoute(_snackRoute);
-    }
-
-    return null;
-  }
-
-  /// Checks if the snack is visible
-  bool isShowing() {
-    return _snackRoute?.currentStatus == SnackbarStatus.OPEN;
-  }
-
-  /// Checks if the snack is dismissed
-  bool isDismissed() {
-    return _snackRoute?.currentStatus == SnackbarStatus.CLOSED;
-  }
-
   @override
   State createState() {
     return _GetBarState<T>();
@@ -273,8 +239,9 @@ class _GetBarState<K extends Object> extends State<GetBar>
         ((widget.userInputForm != null ||
             ((widget.message != null && widget.message.isNotEmpty) ||
                 widget.messageText != null))),
-        // ignore: lines_longer_than_80_chars
-        "A message is mandatory if you are not using userInputForm. Set either a message or messageText");
+        """
+A message is mandatory if you are not using userInputForm. 
+Set either a message or messageText""");
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
