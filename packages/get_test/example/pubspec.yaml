@@ -23,10 +23,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get_test:
-    path: ../
   get:
-    path: ../../../getx
+    git:
+      url: git://github.com/jonataslaw/getx.git
+      path: getx
+      ref: master
 
 
   # The following adds the Cupertino Icons font to your application.
