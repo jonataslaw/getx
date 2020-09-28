@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_navigation/get_navigation.dart';
 import 'package:get_state_manager/get_state_manager.dart';
-import 'package:image_test_utils/image_test_utils.dart';
+import 'utils/image_test_utils.dart';
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
