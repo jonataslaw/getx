@@ -8,11 +8,7 @@ environment:
 
 
 dependencies:
-  get_core:
-    git:
-      url: git://github.com/jonataslaw/getx.git
-      path: packages/get_core
-      ref: master
+  get_core: ">=3.10.2 <4.0.0"
   
 dev_dependencies:
   test: ">=1.0.0 <2.0.0"
