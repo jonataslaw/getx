@@ -123,8 +123,11 @@ class GetxController extends DisposableInterface {
   /// }
 }
 
+typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
+    T controller);
+
 class GetBuilder<T extends GetxController> extends StatefulWidget {
-  final Widget Function(T) builder;
+  final GetControllerBuilder<T> builder;
   final bool global;
   final String id;
   final String tag;

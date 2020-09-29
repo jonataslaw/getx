@@ -6,8 +6,11 @@ import 'package:get_instance/get_instance.dart';
 import 'package:get_rx/get_rx.dart';
 import '../../get_state_manager.dart';
 
+typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
+    T controller);
+
 class GetX<T extends DisposableInterface> extends StatefulWidget {
-  final Widget Function(T) builder;
+  final GetXControllerBuilder<T> builder;
   final bool global;
 
   // final Stream Function(T) stream;
