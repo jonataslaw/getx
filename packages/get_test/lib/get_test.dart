@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_navigation/get_navigation.dart';
 import 'package:get_state_manager/get_state_manager.dart';
 import 'package:meta/meta.dart';
-import 'utils/image_test_stub.dart'
-    if (dart.library.io) 'utils/image_test_stub.dart';
+import 'utils/image_test_utils.dart';
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
