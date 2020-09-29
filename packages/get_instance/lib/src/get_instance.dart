@@ -258,9 +258,9 @@ class GetInstance {
     if (isRegistered<S>(tag: tag)) {
       if (_singl[key] == null) {
         if (tag == null) {
-          throw 'Class "$S" is not register';
+          throw 'Class "$S" is not registered';
         } else {
-          throw 'Class "$S" with tag "$tag" is not register';
+          throw 'Class "$S" with tag "$tag" is not registered';
         }
       }
 
