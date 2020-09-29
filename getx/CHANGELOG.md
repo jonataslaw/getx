@@ -1,3 +1,18 @@
+## [3.12.1]
+- Remove spaces whitespaces from dart files
+
+## [3.12.0]
+- Added BottomSheet Duration && Export SingleGetTickerProvider (@unacorbatanegra)
+- Improve docs from dependencies management (@ngxingyu)
+- Fix unknownRoute with null Custom Transition (@marcosfons)
+- Optimize capitalize method (@zl910627)
+- Added Chinese documentation (@idootop)
+- Added TextDirection property on GetMaterialApp to improve RTL layout (@justkawal)
+- Remove unnecessary files on git (@nipodemos)
+- Fix tags on Get.create() and GetWidget() (@roipeker)
+- Update mockito dependency on getTests
+- Added GetStatelessWidget, a StatelessWidget base to GetWidget with lifecycle control of controllers. Note: It's a base class, you don't need change to use it or change your GetView, GetWidget StatelessWidget to It.
+
 ## [3.11.1]
 - Fix docs
 
