@@ -1,6 +1,6 @@
 name: get_utils
 description: A set of tools that allows you to access high-level APIs and obtain validation tools for Flutter and GetX™ framework.
-version: 3.10.2
+version: 3.12.0
 homepage: https://github.com/jonataslaw/getx
 
 environment:

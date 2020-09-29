@@ -1,6 +1,6 @@
 name: get_navigation
 description: Open Screens, bottomsheets, dialogs, e snackbars with no context using GetX™ framework.
-version: 3.10.2
+version: 3.12.0
 homepage: https://github.com/jonataslaw/getx
 
 environment:
