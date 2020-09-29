@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:get_core/get_core.dart';
 
-import 'lifecircle.dart';
+import 'lifecycle.dart';
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
