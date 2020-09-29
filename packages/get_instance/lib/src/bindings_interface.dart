@@ -27,7 +27,7 @@ abstract class Bindings {
 /// ```
 class BindingsBuilder<T> extends Bindings {
   /// Register your dependencies in the [builder] callback.
-  final VoidCallback builder;
+  final void Function() builder;
 
   /// Shortcut to register 1 Controller with Get.put(),
   /// Prevents the issue of the fat arrow function with the constructor.
@@ -62,4 +62,4 @@ class BindingsBuilder<T> extends Bindings {
 // typedef Snack = Function();
 // typedef Modal = Function();
 // typedef Route = Function();
-typedef VoidCallback = void Function();
+//typedef VoidCallback = void Function();
