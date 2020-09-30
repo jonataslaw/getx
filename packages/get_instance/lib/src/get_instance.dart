@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:get_core/get_core.dart';
 
 import 'lifecycle.dart';
+import 'utils/secure_operations.dart';
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
@@ -11,8 +12,6 @@ class GetInstance {
   const GetInstance._();
 
   static GetInstance _getInstance;
-
-  // static final config = Get();
 
   /// Holds references to every registered Instance when using
   /// [Get.put()]
@@ -227,26 +226,26 @@ class GetInstance {
     return i;
   }
 
-  // S putOrFind<S>(S Function() dep, {String tag}) {
-  //   final key = _getKey(S, tag);
+  S putOrFind<S>(InstanceBuilderCallback<S> dep, {String tag}) {
+    final key = _getKey(S, tag);
 
-  //   if (_singl.containsKey(key)) {
-  //     return _singl[key].getDependency() as S;
-  //   } else {
-  //     if (_factory.containsKey(key)) {
-  //       S _value = put<S>((_factory[key].builder() as S), tag: tag);
+    if (_singl.containsKey(key)) {
+      return _singl[key].getDependency() as S;
+    } else {
+      if (_factory.containsKey(key)) {
+        final _value = put<S>((_factory[key].builder() as S), tag: tag);
 
-  //       if (Get.smartManagement != SmartManagement.keepFactory) {
-  //         if (!_factory[key].fenix) {
-  //           _factory.remove(key);
-  //         }
-  //       }
-  //       return _value;
-  //     }
+        if (Get.smartManagement != SmartManagement.keepFactory) {
+          if (!_factory[key].fenix) {
+            _factory.remove(key);
+          }
+        }
+        return _value;
+      }
 
-  //     return GetInstance().put(dep(), tag: tag);
-  //   }
-  // }
+      return GetInstance().put(dep(), tag: tag);
+    }
+  }
 
   /// Finds the registered type <[S]> (or [tag])
   /// In case of using Get.[create] to register a type <[S]> or [tag],
@@ -307,15 +306,7 @@ class GetInstance {
     return true;
   }
 
-//  Future<bool> delete<S>({
-//    String tag,
-//    String key,
-//    bool force = false,
-//  }) async {
-//    final s = await queue
-//        .add<bool>(() async => dele<S>(tag: tag, key: key, force: force));
-//    return s;
-//  }
+  static final GetQueue _queue = GetQueue();
 
   /// Delete registered Class Instance [S] (or [tag]) and, closes any open
   /// controllers [DisposableInterface], cleans up the memory
@@ -334,6 +325,12 @@ class GetInstance {
   ///   the Instance. **don't use** it unless you know what you are doing.
   /// - [force] Will delete an Instance even if marked as [permanent].
   Future<bool> delete<S>({String tag, String key, bool force = false}) async {
+    return _queue.secure<bool>(() {
+      return _delete<S>(tag: tag, key: key, force: force);
+    });
+  }
+
+  Future<bool> _delete<S>({String tag, String key, bool force = false}) async {
     final newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
