@@ -192,9 +192,10 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
-    if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
-      controller?.onStart();
-    }
+    // if (widget.global && Get.smartManagement ==
+    //SmartManagement.onlyBuilder) {
+    //   controller?.onStart();
+    // }
     _subscribeToController();
   }
 
