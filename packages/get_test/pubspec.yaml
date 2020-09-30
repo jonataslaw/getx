@@ -1,6 +1,6 @@
 name: get_test
 description: A package that facilitates the creation of tests for applications built with GetX
-version: 3.11.0
+version: 3.12.1
 homepage: https://github.com/jonataslaw/getx
 
 environment:
