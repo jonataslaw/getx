@@ -43,7 +43,6 @@ class SnackRoute<T> extends OverlayRoute<T> {
   GetBar snack;
   Builder _builder;
 
-  Future<T> get completed => _transitionCompleter.future;
   final Completer<T> _transitionCompleter = Completer<T>();
 
   SnackbarStatusCallback _snackbarStatus;
@@ -164,14 +163,11 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   /// The animation that drives the route's transition and the previous route's
   /// forward transition.
-  Animation<Alignment> get animation => _animation;
   Animation<Alignment> _animation;
 
   /// The animation controller that the route uses to drive the transitions.
   ///
   /// The animation itself is exposed by the [animation] property.
-  @protected
-  AnimationController get controller => _controller;
   AnimationController _controller;
 
   /// Called to create the animation controller that will drive the transitions
@@ -235,7 +231,6 @@ class SnackRoute<T> extends OverlayRoute<T> {
   T _result;
   SnackbarStatus currentStatus;
 
-  //copy of `routes.dart`
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
@@ -396,16 +391,4 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   /// A short description of this route useful for debugging.
   String get debugLabel => '$runtimeType';
-
-  @override
-  String toString() => '$runtimeType(animation: $_controller)';
-}
-
-SnackRoute showSnack<T>({@required GetBar snack}) {
-  assert(snack != null);
-
-  return SnackRoute<T>(
-    snack: snack,
-    settings: RouteSettings(name: "snackbar"),
-  );
 }

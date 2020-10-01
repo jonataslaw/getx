@@ -195,15 +195,10 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form userInputForm;
 
-  SnackRoute<T> _snackRoute;
-
   /// Show the snack. Kicks in [SnackbarStatus.OPENING] state
   /// followed by [SnackbarStatus.OPEN]
-  Future<T> show() async {
-    _snackRoute = showSnack<T>(
-      snack: this,
-    ) as SnackRoute<T>;
-    return await Get.key.currentState.push(_snackRoute);
+  Future<T> show<T>() async {
+    return Get.key.currentState.push(SnackRoute<T>(snack: this));
   }
 
   @override

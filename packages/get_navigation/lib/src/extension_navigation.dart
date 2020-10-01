@@ -753,6 +753,10 @@ extension GetNavigation on GetInterface {
     }
   }
 
+  Future<T> showSnackbar<T>(GetBar snackbar) {
+    return key.currentState.push(SnackRoute<T>(snack: snackbar));
+  }
+
   void snackbar(
     String title,
     String message, {
