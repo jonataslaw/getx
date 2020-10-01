@@ -912,12 +912,13 @@ extension GetNavigation on GetInterface {
   }
 
   void forceAppUpdate() {
-    void rebuild(Element el) {
-      el.markNeedsBuild();
-      el.visitChildren(rebuild);
+    void restart(Element element) {
+      element.markNeedsBuild();
+      element.visitChildren(restart);
     }
 
-    (context as Element).visitChildren(rebuild);
+    final element = Get.context as Element;
+    restart(element);
   }
 
   void changeTheme(ThemeData theme) {

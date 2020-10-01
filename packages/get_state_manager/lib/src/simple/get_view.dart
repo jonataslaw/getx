@@ -94,10 +94,16 @@ class GetStatelessElement extends ComponentElement {
   }
 
   void forceAppUpdate() {
+    void restart(Element element) {
+      element.markNeedsBuild();
+      element.rebuild();
+      element.visitChildren(restart);
+    }
+
     markNeedsBuild();
-    visitChildren((child) {
-      (child as GetStatelessElement).forceAppUpdate();
-    });
+    rebuild();
+
+    visitChildren(restart);
   }
 
   @override
