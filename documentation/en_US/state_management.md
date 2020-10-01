@@ -357,7 +357,7 @@ class User() {
 // on the controller file
 final user = User().obs;
 // when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself taht you want to update
+user.update( (user) { // this parameter is the class itself that you want to update
 user.name = 'Jonny';
 user.age = 18;
 });
