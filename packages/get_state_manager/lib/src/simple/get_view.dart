@@ -50,6 +50,10 @@ abstract class GetWidget<T extends GetLifeCycle> extends GetStatelessWidget {
     return _value.first;
   }
 
+  // void restartChilds(){
+
+  // }
+
   @override
   Widget build(BuildContext context);
 }
@@ -87,6 +91,13 @@ class GetStatelessElement extends ComponentElement {
     super.update(newWidget);
     markNeedsBuild();
     rebuild();
+  }
+
+  void forceAppUpdate() {
+    markNeedsBuild();
+    visitChildren((child) {
+      (child as GetStatelessElement).forceAppUpdate();
+    });
   }
 
   @override

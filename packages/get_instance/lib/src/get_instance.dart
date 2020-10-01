@@ -4,7 +4,6 @@ import 'dart:collection';
 import 'package:get_core/get_core.dart';
 
 import 'lifecycle.dart';
-import 'utils/secure_operations.dart';
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
@@ -141,7 +140,7 @@ class GetInstance {
   /// using [Get.smartManagement] as [SmartManagement.full] or
   /// [SmartManagement.keepFactory]
   /// Meant for internal usage of [GetPageRoute] and [GetDialogRoute]
-  Future<void> removeDependencyByRoute(String routeName) async {
+  void removeDependencyByRoute(String routeName) {
     final keysToRemove = <String>[];
     _routesKey.forEach((key, value) {
       if (value == routeName) {
@@ -155,7 +154,7 @@ class GetInstance {
         // assure the [DisposableInterface] instance holding a reference
         // to [onClose()] wasn't disposed.
         if (onClose != null) {
-          await onClose();
+          onClose();
         }
       }
       _routesByCreate[routeName].clear();
@@ -163,7 +162,7 @@ class GetInstance {
     }
 
     for (final element in keysToRemove) {
-      await delete(key: element);
+      delete(key: element);
     }
 
     for (final element in keysToRemove) {
@@ -305,8 +304,6 @@ class GetInstance {
     _singl.clear();
     return true;
   }
-
-  static final GetQueue _queue = GetQueue();
 
   /// Delete registered Class Instance [S] (or [tag]) and, closes any open
   /// controllers [DisposableInterface], cleans up the memory
