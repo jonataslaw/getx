@@ -19,6 +19,7 @@ class GetMaterialController extends GetxController {
   Curve defaultTransitionCurve = Curves.easeOutQuad;
 
   Curve defaultDialogTransitionCurve = Curves.easeOutQuad;
+  
   Duration defaultDialogTransitionDuration = Duration(milliseconds: 300);
 
   final routing = Routing();

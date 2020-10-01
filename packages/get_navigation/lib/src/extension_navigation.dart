@@ -1029,8 +1029,9 @@ Since version 2.8 it is possible to access the properties
   bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
 
   Transition get defaultTransition => getxController.defaultTransition;
+
   Duration get defaultTransitionDuration {
-    return getxController.defaultDialogTransitionDuration;
+    return getxController.defaultTransitionDuration;
   }
 
   Curve get defaultTransitionCurve => getxController.defaultTransitionCurve;
