@@ -1,5 +1,3 @@
-import 'dart:async';
-
 /// Special callable class to keep the contract of a regular method, and avoid
 /// overrides if you extend the class that uses it, as Dart has no final
 /// methods.
@@ -27,7 +25,7 @@ abstract class GetLifeCycle {
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
-  void onReady() async {}
+  void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to
   /// dispose resources used by the controller. Like closing events,
@@ -35,7 +33,7 @@ abstract class GetLifeCycle {
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
-  FutureOr onClose() async {}
+  void onClose() {}
 }
 
 /// Allow track difference between GetxServices and GetxControllers

@@ -324,13 +324,13 @@ class GetInstance {
   /// - [key] For internal usage, is the processed key used to register
   ///   the Instance. **don't use** it unless you know what you are doing.
   /// - [force] Will delete an Instance even if marked as [permanent].
-  Future<bool> delete<S>({String tag, String key, bool force = false}) async {
-    return _queue.secure<bool>(() {
-      return _delete<S>(tag: tag, key: key, force: force);
-    });
+  bool delete<S>({String tag, String key, bool force = false}) {
+    // return _queue.secure<bool>(() {
+    return _delete<S>(tag: tag, key: key, force: force);
+    // });
   }
 
-  Future<bool> _delete<S>({String tag, String key, bool force = false}) async {
+  bool _delete<S>({String tag, String key, bool force = false}) {
     final newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
@@ -353,7 +353,7 @@ class GetInstance {
       return false;
     }
     if (i is GetLifeCycle) {
-      await i.onClose();
+      i.onClose();
       Get.log('"$newKey" onClose() called');
     }
 
