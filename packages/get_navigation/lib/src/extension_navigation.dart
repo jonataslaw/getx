@@ -806,7 +806,7 @@ extension GetNavigation on GetInterface {
                 Text(
                   title,
                   style: TextStyle(
-                    color: colorText ?? Colors.black,
+                    color: colorText ?? theme.iconTheme.color,
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
                   ),
@@ -815,7 +815,7 @@ extension GetNavigation on GetInterface {
             Text(
               message,
               style: TextStyle(
-                color: colorText ?? Colors.black,
+                color: colorText ?? theme.iconTheme.color,
                 fontWeight: FontWeight.w300,
                 fontSize: 14,
               ),
@@ -923,6 +923,8 @@ extension GetNavigation on GetInterface {
 
     restart(Get.context as Element);
   }
+
+  void appUpdate() => getxController.update();
 
   void changeTheme(ThemeData theme) {
     getxController.setTheme(theme);

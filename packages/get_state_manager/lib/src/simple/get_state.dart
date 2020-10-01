@@ -23,16 +23,14 @@ typedef GetStateUpdate = void Function();
 /// Avoids the potential (but extremely unlikely) issue of having
 /// the Widget in a dispose() state, and abstracts the
 /// API from the ugly fn((){}).
-// TODO: check performance HIT for the extra method call.
 mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
   // To avoid the creation of an anonym function to be GC later.
   // ignore: prefer_function_declarations_over_variables
-  static final VoidCallback _stateCallback = () {};
 
   /// Experimental method to replace setState((){});
   /// Used with GetStateUpdate.
   void getUpdate() {
-    if (mounted) setState(_stateCallback);
+    if (mounted) setState(() {});
   }
 }
 
