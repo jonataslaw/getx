@@ -12,6 +12,29 @@ assignees: jonataslaw
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**Reproduction code
+NOTE: THIS IS MANDATORY, IF YOUR ISSUE DOES NOT CONTAIN IT, IT WILL BE CLOSED PRELIMINARY)**
+
+example:
+
+```dart
+void main() => runApp(MaterialApp(home: Home()));
+
+class Home extends StatelessWidget {
+  final count = 0.obs;
+  @override
+  Widget build(context) => Scaffold(
+      appBar: AppBar(title: Text("counter")),
+      body: Center(
+        child: Obx(() => Text("$count")),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => count.value++,
+      ));
+}
+```
+
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
