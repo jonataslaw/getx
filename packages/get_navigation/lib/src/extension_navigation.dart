@@ -917,8 +917,7 @@ extension GetNavigation on GetInterface {
       element.visitChildren(restart);
     }
 
-    final element = Get.context as Element;
-    restart(element);
+    restart(Get.context as Element);
   }
 
   void changeTheme(ThemeData theme) {
