@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:get_core/get_core.dart';
 import 'package:get_instance/get_instance.dart';
@@ -269,5 +268,38 @@ class Value<T> extends GetxController {
     if (_value == newValue) return;
     _value = newValue;
     update();
+  }
+}
+
+/// It's Experimental class, the Api can be change
+abstract class GetState<T> extends GetxController {
+  GetState(T initialValue) {
+    _state = initialValue;
+  }
+
+  // StreamController<T> _subject;
+
+  // @override
+  // void onClose() {
+  //   _subject?.close();
+  // }
+
+  // Stream<T> get stream {
+  //   if (_subject == null) {
+  //     _subject = StreamController<T>.broadcast();
+  //   }
+  //   return _subject.stream;
+  // }
+
+  T _state;
+
+  T get state => _state;
+
+  @protected
+  void change(T newState) {
+    if (newState != _state) {
+      _state = newState;
+      update();
+    }
   }
 }

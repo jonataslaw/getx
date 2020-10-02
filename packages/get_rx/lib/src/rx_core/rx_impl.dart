@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:meta/meta.dart';
+
 import '../rx_core/rx_interface.dart';
 part 'rx_num.dart';
 
@@ -228,6 +230,72 @@ class Rx<T> extends _RxImpl<T> {
   // value [T] doesn't implement toJson().
   @override
   dynamic toJson() => (value as dynamic)?.toJson();
+}
+
+/// It's Experimental class, the Api can be change
+abstract class RxState<T> extends RxInterface<T> {
+  RxState(T initial) {
+    _value = initial;
+  }
+
+  T _value;
+
+  StreamController<T> subject = StreamController<T>.broadcast();
+  final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
+
+  bool get canUpdate => _subscriptions.isNotEmpty;
+
+  @protected
+  T call([T v]) {
+    if (v != null) {
+      value = v;
+    }
+    return value;
+  }
+
+  bool firstRebuild = true;
+
+  void addListener(Stream<T> rxGetx) {
+    if (_subscriptions.containsKey(rxGetx)) {
+      return;
+    }
+    _subscriptions[rxGetx] = rxGetx.listen((data) {
+      subject.add(data);
+    });
+  }
+
+  @protected
+  set value(T val) {
+    if (_value == val && !firstRebuild) return;
+    firstRebuild = false;
+    _value = val;
+    subject.add(_value);
+  }
+
+  /// Returns the current [value]
+  T get value {
+    if (getObs != null) {
+      getObs.addListener(subject.stream);
+    }
+    return _value;
+  }
+
+  Stream<T> get stream => subject.stream;
+
+  StreamSubscription<T> listen(void Function(T) onData,
+          {Function onError, void Function() onDone, bool cancelOnError}) =>
+      stream.listen(onData, onError: onError, onDone: onDone);
+
+  void bindStream(Stream<T> stream) {
+    _subscriptions[stream] = stream.listen((va) => value = va);
+  }
+
+  @protected
+  void change(T newState) {
+    if (newState != _value) {
+      value = newState;
+    }
+  }
 }
 
 extension StringExtension on String {
