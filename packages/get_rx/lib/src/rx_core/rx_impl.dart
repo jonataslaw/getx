@@ -264,6 +264,9 @@ abstract class RxState<T> extends _RxImpl<T> {
       value = newState;
     }
   }
+
+  @override
+  dynamic toJson() => (value as dynamic)?.toJson();
 }
 
 extension StringExtension on String {
