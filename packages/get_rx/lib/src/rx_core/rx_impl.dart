@@ -11,7 +11,10 @@ part 'rx_num.dart';
 RxInterface getObs;
 
 /// Base Rx class that manages all the stream logic for any Type.
-class _RxImpl<T> implements RxInterface<T> {
+abstract class _RxImpl<T> implements RxInterface<T> {
+  _RxImpl(T initial) {
+    _value = initial;
+  }
   StreamController<T> subject = StreamController<T>.broadcast();
   final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
 
@@ -183,9 +186,7 @@ class _RxImpl<T> implements RxInterface<T> {
 
 /// Rx class for `bool` Type.
 class RxBool extends _RxImpl<bool> {
-  RxBool([bool initial]) {
-    _value = initial;
-  }
+  RxBool([bool initial]) : super(initial);
 
   bool operator &(bool other) => other && value;
 
@@ -210,9 +211,7 @@ class RxBool extends _RxImpl<bool> {
 
 /// Rx class for `String` Type.
 class RxString extends _RxImpl<String> {
-  RxString([String initial]) {
-    _value = initial;
-  }
+  RxString([String initial]) : super(initial);
 
   String operator +(String val) => _value + val;
 }
@@ -222,9 +221,7 @@ class RxString extends _RxImpl<String> {
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
-  Rx([T initial]) {
-    _value = initial;
-  }
+  Rx([T initial]) : super(initial);
 
   // TODO: Look for a way to throw the Exception with proper details when the
   // value [T] doesn't implement toJson().
@@ -233,35 +230,24 @@ class Rx<T> extends _RxImpl<T> {
 }
 
 /// It's Experimental class, the Api can be change
-abstract class RxState<T> extends RxInterface<T> {
-  RxState(T initial) {
-    _value = initial;
+abstract class RxState<T> extends _RxImpl<T> {
+  RxState(T initial) : super(initial);
+
+  @protected
+  void refresh() {
+    subject.add(_value);
   }
 
-  T _value;
-
-  StreamController<T> subject = StreamController<T>.broadcast();
-  final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
-
-  bool get canUpdate => _subscriptions.isNotEmpty;
+  @protected
+  void update(void fn(T val)) {
+    fn(_value);
+    subject.add(_value);
+  }
 
   @protected
   T call([T v]) {
-    if (v != null) {
-      value = v;
-    }
+    if (v != null) value = v;
     return value;
-  }
-
-  bool firstRebuild = true;
-
-  void addListener(Stream<T> rxGetx) {
-    if (_subscriptions.containsKey(rxGetx)) {
-      return;
-    }
-    _subscriptions[rxGetx] = rxGetx.listen((data) {
-      subject.add(data);
-    });
   }
 
   @protected
@@ -270,24 +256,6 @@ abstract class RxState<T> extends RxInterface<T> {
     firstRebuild = false;
     _value = val;
     subject.add(_value);
-  }
-
-  /// Returns the current [value]
-  T get value {
-    if (getObs != null) {
-      getObs.addListener(subject.stream);
-    }
-    return _value;
-  }
-
-  Stream<T> get stream => subject.stream;
-
-  StreamSubscription<T> listen(void Function(T) onData,
-          {Function onError, void Function() onDone, bool cancelOnError}) =>
-      stream.listen(onData, onError: onError, onDone: onDone);
-
-  void bindStream(Stream<T> stream) {
-    _subscriptions[stream] = stream.listen((va) => value = va);
   }
 
   @protected
