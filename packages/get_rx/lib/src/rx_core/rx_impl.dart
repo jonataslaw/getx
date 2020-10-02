@@ -229,9 +229,41 @@ class Rx<T> extends _RxImpl<T> {
   dynamic toJson() => (value as dynamic)?.toJson();
 }
 
+enum RxStatus { loading, error, success }
+
 /// It's Experimental class, the Api can be change
 abstract class RxState<T> extends _RxImpl<T> {
-  RxState(T initial) : super(initial);
+  RxState(T initial) : super(initial) {
+    _fillEmptyStatus();
+  }
+
+  RxStatus _status;
+
+  bool get isNullOrEmpty {
+    if (_value == null) return true;
+    dynamic val = _value;
+    var result = false;
+    if (val is Iterable) {
+      result = val.isEmpty;
+    } else if (val is String) {
+      result = val.isEmpty;
+    } else if (val is Map) {
+      result = val.isEmpty;
+    }
+    return result;
+  }
+
+  void _fillEmptyStatus() {
+    _status = isNullOrEmpty ? RxStatus.loading : RxStatus.success;
+  }
+
+  RxStatus get status {
+    return _status;
+  }
+
+  bool get isLoading => _status == RxStatus.loading;
+  bool get hasError => _status == RxStatus.error;
+  bool get hasData => _status == RxStatus.success;
 
   @protected
   void refresh() {
@@ -259,7 +291,10 @@ abstract class RxState<T> extends _RxImpl<T> {
   }
 
   @protected
-  void change(T newState) {
+  void change(T newState, {RxStatus status}) {
+    if (status != null) {
+      _status = status;
+    }
     if (newState != _value) {
       value = newState;
     }
