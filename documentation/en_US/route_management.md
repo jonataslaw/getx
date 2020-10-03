@@ -219,7 +219,7 @@ void main() {
 Send data on route name
 
 ```dart
-Get.toNamed("/second/34954");
+Get.toNamed("/profile/34954");
 ```
 
 On second screen take the data by parameter
