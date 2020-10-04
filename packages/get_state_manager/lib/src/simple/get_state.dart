@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:get_core/get_core.dart';
 import 'package:get_instance/get_instance.dart';
@@ -23,16 +22,14 @@ typedef GetStateUpdate = void Function();
 /// Avoids the potential (but extremely unlikely) issue of having
 /// the Widget in a dispose() state, and abstracts the
 /// API from the ugly fn((){}).
-// TODO: check performance HIT for the extra method call.
 mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
   // To avoid the creation of an anonym function to be GC later.
   // ignore: prefer_function_declarations_over_variables
-  static final VoidCallback _stateCallback = () {};
 
   /// Experimental method to replace setState((){});
   /// Used with GetStateUpdate.
   void getUpdate() {
-    if (mounted) setState(_stateCallback);
+    if (mounted) setState(() {});
   }
 }
 
@@ -123,8 +120,11 @@ class GetxController extends DisposableInterface {
   /// }
 }
 
+typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
+    T controller);
+
 class GetBuilder<T extends GetxController> extends StatefulWidget {
-  final Widget Function(T) builder;
+  final GetControllerBuilder<T> builder;
   final bool global;
   final String id;
   final String tag;
@@ -189,9 +189,10 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
-    if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
-      controller?.onStart();
-    }
+    // if (widget.global && Get.smartManagement ==
+    //SmartManagement.onlyBuilder) {
+    //   controller?.onStart();
+    // }
     _subscribeToController();
   }
 
@@ -267,5 +268,38 @@ class Value<T> extends GetxController {
     if (_value == newValue) return;
     _value = newValue;
     update();
+  }
+}
+
+/// It's Experimental class, the Api can be change
+abstract class GetState<T> extends GetxController {
+  GetState(T initialValue) {
+    _state = initialValue;
+  }
+
+  // StreamController<T> _subject;
+
+  // @override
+  // void onClose() {
+  //   _subject?.close();
+  // }
+
+  // Stream<T> get stream {
+  //   if (_subject == null) {
+  //     _subject = StreamController<T>.broadcast();
+  //   }
+  //   return _subject.stream;
+  // }
+
+  T _state;
+
+  T get state => _state;
+
+  @protected
+  void change(T newState) {
+    if (newState != _state) {
+      _state = newState;
+      update();
+    }
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/scheduler.dart';
 import 'package:get_instance/get_instance.dart';
 
@@ -37,7 +35,7 @@ abstract class DisposableInterface extends GetLifeCycle {
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
   @override
-  void onReady() async {}
+  void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to
   /// dispose resources used by the controller. Like closing events,
@@ -46,5 +44,5 @@ abstract class DisposableInterface extends GetLifeCycle {
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
   @override
-  FutureOr onClose() async {}
+  void onClose() {}
 }

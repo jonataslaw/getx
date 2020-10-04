@@ -1,6 +1,6 @@
 name: get_core
 description: A base package from allow use resources from GetX™ framework.
-version: 3.10.2
+version: 3.12.0
 homepage: https://github.com/jonataslaw/getx
 
 environment:

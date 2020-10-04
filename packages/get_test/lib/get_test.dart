@@ -3,7 +3,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_navigation/get_navigation.dart';
 import 'package:get_state_manager/get_state_manager.dart';
-import 'package:image_test_utils/image_test_utils.dart';
+import 'package:meta/meta.dart';
+import 'utils/image_test.dart'
+    if (dart.library.io) 'utils/image_test_utils.dart';
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
@@ -26,6 +28,7 @@ class _Wrapper extends StatelessWidget {
   }
 }
 
+@isTest
 void testController<T>(
   String description,
   void Function(T) callback, {
@@ -44,6 +47,7 @@ void testController<T>(
   });
 }
 
+@isTest
 Future<T> testGetX<T extends DisposableInterface>(
   String description, {
   @required GetX<T> widget,
@@ -60,6 +64,7 @@ Future<T> testGetX<T extends DisposableInterface>(
   return controller;
 }
 
+@isTest
 Future<T> testGetBuilder<T extends GetxController>(
   String description, {
   @required GetBuilder<T> widget,
@@ -76,6 +81,7 @@ Future<T> testGetBuilder<T extends GetxController>(
   return controller;
 }
 
+@isTest
 Future<T> testObx<T extends GetxController>(
   String description, {
   @required T controller,
@@ -91,6 +97,7 @@ Future<T> testObx<T extends GetxController>(
   return controller;
 }
 
+@isTest
 void getTest(
   String description, {
   @required WidgetTesterCallback widgetTest,

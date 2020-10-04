@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:meta/meta.dart';
+
 import '../rx_core/rx_interface.dart';
 part 'rx_num.dart';
 
@@ -9,7 +11,10 @@ part 'rx_num.dart';
 RxInterface getObs;
 
 /// Base Rx class that manages all the stream logic for any Type.
-class _RxImpl<T> implements RxInterface<T> {
+abstract class _RxImpl<T> implements RxInterface<T> {
+  _RxImpl(T initial) {
+    _value = initial;
+  }
   StreamController<T> subject = StreamController<T>.broadcast();
   final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
 
@@ -181,9 +186,7 @@ class _RxImpl<T> implements RxInterface<T> {
 
 /// Rx class for `bool` Type.
 class RxBool extends _RxImpl<bool> {
-  RxBool([bool initial]) {
-    _value = initial;
-  }
+  RxBool([bool initial]) : super(initial);
 
   bool operator &(bool other) => other && value;
 
@@ -208,9 +211,7 @@ class RxBool extends _RxImpl<bool> {
 
 /// Rx class for `String` Type.
 class RxString extends _RxImpl<String> {
-  RxString([String initial]) {
-    _value = initial;
-  }
+  RxString([String initial]) : super(initial);
 
   String operator +(String val) => _value + val;
 }
@@ -220,12 +221,85 @@ class RxString extends _RxImpl<String> {
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
-  Rx([T initial]) {
-    _value = initial;
-  }
+  Rx([T initial]) : super(initial);
 
   // TODO: Look for a way to throw the Exception with proper details when the
   // value [T] doesn't implement toJson().
+  @override
+  dynamic toJson() => (value as dynamic)?.toJson();
+}
+
+enum RxStatus { loading, error, success }
+
+/// It's Experimental class, the Api can be change
+abstract class RxState<T> extends _RxImpl<T> {
+  RxState(T initial) : super(initial) {
+    _fillEmptyStatus();
+  }
+
+  RxStatus _status;
+
+  bool get isNullOrEmpty {
+    if (_value == null) return true;
+    dynamic val = _value;
+    var result = false;
+    if (val is Iterable) {
+      result = val.isEmpty;
+    } else if (val is String) {
+      result = val.isEmpty;
+    } else if (val is Map) {
+      result = val.isEmpty;
+    }
+    return result;
+  }
+
+  void _fillEmptyStatus() {
+    _status = isNullOrEmpty ? RxStatus.loading : RxStatus.success;
+  }
+
+  RxStatus get status {
+    return _status;
+  }
+
+  bool get isLoading => _status == RxStatus.loading;
+  bool get hasError => _status == RxStatus.error;
+  bool get hasData => _status == RxStatus.success;
+
+  @protected
+  void refresh() {
+    subject.add(_value);
+  }
+
+  @protected
+  void update(void fn(T val)) {
+    fn(_value);
+    subject.add(_value);
+  }
+
+  @protected
+  T call([T v]) {
+    if (v != null) value = v;
+    return value;
+  }
+
+  @protected
+  set value(T val) {
+    if (_value == val && !firstRebuild) return;
+    firstRebuild = false;
+    _value = val;
+    subject.add(_value);
+  }
+
+  @protected
+  void change(T newState, {RxStatus status}) {
+    if (status != null) {
+      _status = status;
+    }
+    if (newState != _value) {
+      value = newState;
+    }
+  }
+
   @override
   dynamic toJson() => (value as dynamic)?.toJson();
 }

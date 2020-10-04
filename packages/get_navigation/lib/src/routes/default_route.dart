@@ -14,7 +14,7 @@ import 'transitions_type.dart';
 class GetPageRoute<T> extends PageRoute<T> {
   GetPageRoute({
     RouteSettings settings,
-    this.transitionDuration = const Duration(milliseconds: 400),
+    this.transitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
     this.parameter,
     this.curve,

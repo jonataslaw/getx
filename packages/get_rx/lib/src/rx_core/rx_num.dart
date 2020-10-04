@@ -1,7 +1,9 @@
 part of 'rx_impl.dart';
 
 /// Base Rx class for all num Rx's.
-class _BaseRxNum<T extends num> extends _RxImpl<T> {
+abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
+  _BaseRxNum(T initial) : super(initial);
+
   /// Addition operator. */
 
   /// Multiplication operator.
@@ -267,6 +269,8 @@ class _BaseRxNum<T extends num> extends _RxImpl<T> {
 }
 
 class RxNum extends _BaseRxNum<num> {
+  RxNum(num initial) : super(initial);
+
   num operator +(num other) {
     value += other;
     return value;
@@ -280,9 +284,7 @@ class RxNum extends _BaseRxNum<num> {
 }
 
 class RxDouble extends _BaseRxNum<double> {
-  RxDouble([double initial]) {
-    value = initial;
-  }
+  RxDouble([double initial]) : super(initial);
 
   /// Addition operator.
   RxDouble operator +(num other) {
@@ -392,9 +394,7 @@ class RxDouble extends _BaseRxNum<double> {
 }
 
 class RxInt extends _BaseRxNum<int> {
-  RxInt([int initial]) {
-    value = initial;
-  }
+  RxInt([int initial]) : super(initial);
 
   /// Addition operator.
   RxInt operator +(int other) {

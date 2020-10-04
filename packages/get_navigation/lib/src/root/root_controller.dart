@@ -15,11 +15,12 @@ class GetMaterialController extends GetxController {
   bool defaultOpaqueRoute = true;
 
   Transition defaultTransition;
-  Duration defaultTransitionDuration = Duration(milliseconds: 400);
+  Duration defaultTransitionDuration = Duration(milliseconds: 300);
   Curve defaultTransitionCurve = Curves.easeOutQuad;
 
   Curve defaultDialogTransitionCurve = Curves.easeOutQuad;
-  Duration defaultDialogTransitionDuration = Duration(milliseconds: 400);
+  
+  Duration defaultDialogTransitionDuration = Duration(milliseconds: 300);
 
   final routing = Routing();
 

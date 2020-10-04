@@ -31,7 +31,7 @@ class GetPage {
     this.alignment,
     this.parameter,
     this.opaque = true,
-    this.transitionDuration = const Duration(milliseconds: 400),
+    this.transitionDuration,
     this.popGesture,
     this.binding,
     this.bindings,

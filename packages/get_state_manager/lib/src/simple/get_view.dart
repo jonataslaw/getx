@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_instance/get_instance.dart';
+import '../rx_flutter/rx_disposable.dart';
 
 /// GetView is a great way of quickly access your Controller
 /// without having to call Get.find<AwesomeController>() yourself.
@@ -38,7 +39,8 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
-abstract class GetWidget<T extends GetLifeCycle> extends GetStatelessWidget {
+abstract class GetWidget<T extends DisposableInterface>
+    extends GetStatelessWidget {
   GetWidget({Key key}) : super(key: key);
 
   final Set<T> _value = <T>{};
@@ -91,18 +93,23 @@ class GetStatelessElement extends ComponentElement {
 
   @override
   void mount(Element parent, dynamic newSlot) {
-    widget.controller?.onStart();
+    if (widget?.controller?.initialized != null &&
+        !widget.controller.initialized) {
+      widget?.controller?.onStart();
+    }
+
     super.mount(parent, newSlot);
   }
 
   @override
   void unmount() {
-    widget.controller?.onClose();
+    widget?.controller?.onClose();
     super.unmount();
   }
 }
 
-abstract class GetStatelessWidget<T extends GetLifeCycle> extends Widget {
+abstract class GetStatelessWidget<T extends DisposableInterface>
+    extends Widget {
   const GetStatelessWidget({Key key}) : super(key: key);
   @override
   GetStatelessElement createElement() => GetStatelessElement(this);

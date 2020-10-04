@@ -753,6 +753,10 @@ extension GetNavigation on GetInterface {
     }
   }
 
+  Future<T> showSnackbar<T>(GetBar snackbar) {
+    return key.currentState.push(SnackRoute<T>(snack: snackbar));
+  }
+
   void snackbar(
     String title,
     String message, {
@@ -802,7 +806,7 @@ extension GetNavigation on GetInterface {
                 Text(
                   title,
                   style: TextStyle(
-                    color: colorText ?? Colors.black,
+                    color: colorText ?? theme.iconTheme.color,
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
                   ),
@@ -811,7 +815,7 @@ extension GetNavigation on GetInterface {
             Text(
               message,
               style: TextStyle(
-                color: colorText ?? Colors.black,
+                color: colorText ?? theme.iconTheme.color,
                 fontWeight: FontWeight.w300,
                 fontSize: 14,
               ),
@@ -912,13 +916,15 @@ extension GetNavigation on GetInterface {
   }
 
   void forceAppUpdate() {
-    void rebuild(Element el) {
-      el.markNeedsBuild();
-      el.visitChildren(rebuild);
+    void restart(Element element) {
+      element.markNeedsBuild();
+      element.visitChildren(restart);
     }
 
-    (context as Element).visitChildren(rebuild);
+    restart(Get.context as Element);
   }
+
+  void appUpdate() => getxController.update();
 
   void changeTheme(ThemeData theme) {
     getxController.setTheme(theme);
@@ -1025,8 +1031,9 @@ Since version 2.8 it is possible to access the properties
   bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
 
   Transition get defaultTransition => getxController.defaultTransition;
+
   Duration get defaultTransitionDuration {
-    return getxController.defaultDialogTransitionDuration;
+    return getxController.defaultTransitionDuration;
   }
 
   Curve get defaultTransitionCurve => getxController.defaultTransitionCurve;
