@@ -161,7 +161,7 @@ class GetMaterialApp extends StatelessWidget {
     final match = Get.routeTree.matchRoute(name);
     Get.parameters = match?.parameters;
 
-    //Route can be nullable, just pass the initial route
+    //Route can be nullable, just pass the unknown route
     if (match?.route == null) {
       return [
         GetPageRoute(
