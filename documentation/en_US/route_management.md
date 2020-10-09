@@ -152,6 +152,23 @@ void main() {
 }
 ```
 
+To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/second', page: () => Second()),
+      ],
+    )
+  );
+}
+```
+
 ### Send data to named Routes
 
 Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
