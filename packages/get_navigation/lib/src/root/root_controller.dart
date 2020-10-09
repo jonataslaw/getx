@@ -7,6 +7,7 @@ import '../routes/transitions_type.dart';
 import 'parse_route.dart';
 
 class GetMaterialController extends GetxController {
+  bool testMode = false;
   Key unikey;
   ThemeData theme;
   ThemeMode themeMode;
@@ -19,7 +20,7 @@ class GetMaterialController extends GetxController {
   Curve defaultTransitionCurve = Curves.easeOutQuad;
 
   Curve defaultDialogTransitionCurve = Curves.easeOutQuad;
-  
+
   Duration defaultDialogTransitionDuration = Duration(milliseconds: 300);
 
   final routing = Routing();

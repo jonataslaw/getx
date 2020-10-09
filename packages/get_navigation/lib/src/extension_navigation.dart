@@ -53,7 +53,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
-    return global(id).currentState.push(
+    return global(id)?.currentState?.push(
           GetPageRoute(
             opaque: opaque ?? true,
             page: () => page,
@@ -97,7 +97,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    return global(id).currentState.pushNamed(page, arguments: arguments);
+    return global(id)?.currentState?.pushNamed(page, arguments: arguments);
   }
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
@@ -126,8 +126,8 @@ extension GetNavigation on GetInterface {
       return null;
     }
     return global(id)
-        .currentState
-        .pushReplacementNamed(page, arguments: arguments);
+        ?.currentState
+        ?.pushReplacementNamed(page, arguments: arguments);
   }
 
   /// **Navigation.popUntil()** shortcut.<br><br>
@@ -146,7 +146,7 @@ extension GetNavigation on GetInterface {
   void until(RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id).currentState.popUntil(predicate);
+    return global(id)?.currentState?.popUntil(predicate);
   }
 
   /// **Navigation.pushAndRemoveUntil()** shortcut.<br><br>
@@ -170,7 +170,7 @@ extension GetNavigation on GetInterface {
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id).currentState.pushAndRemoveUntil(page, predicate);
+    return global(id)?.currentState?.pushAndRemoveUntil(page, predicate);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -197,8 +197,8 @@ extension GetNavigation on GetInterface {
     dynamic arguments,
   }) {
     return global(id)
-        .currentState
-        .pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
+        ?.currentState
+        ?.pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
   }
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
@@ -219,8 +219,8 @@ extension GetNavigation on GetInterface {
     dynamic result,
   }) {
     return global(id)
-        .currentState
-        .popAndPushNamed(page, arguments: arguments, result: result);
+        ?.currentState
+        ?.popAndPushNamed(page, arguments: arguments, result: result);
   }
 
   /// **Navigation.removeRoute()** shortcut.<br><br>
@@ -230,7 +230,7 @@ extension GetNavigation on GetInterface {
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   void removeRoute(Route<dynamic> route, {int id}) {
-    return global(id).currentState.removeRoute(route);
+    return global(id)?.currentState?.removeRoute(route);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -259,7 +259,7 @@ extension GetNavigation on GetInterface {
     dynamic arguments,
     int id,
   }) {
-    return global(id).currentState.pushNamedAndRemoveUntil(
+    return global(id)?.currentState?.pushNamedAndRemoveUntil(
           newRouteName,
           predicate ?? (_) => false,
           arguments: arguments,
@@ -293,16 +293,16 @@ extension GetNavigation on GetInterface {
     int id,
   }) {
     if (closeOverlays && isOverlaysOpen) {
-      navigator.popUntil((route) {
+      navigator?.popUntil((route) {
         return (isOverlaysClosed);
       });
     }
     if (canPop) {
-      if (global(id).currentState.canPop()) {
-        global(id).currentState.pop(result);
+      if (global(id)?.currentState?.canPop() == true) {
+        global(id)?.currentState?.pop(result);
       }
     } else {
-      global(id).currentState.pop(result);
+      global(id)?.currentState?.pop(result);
     }
   }
 
@@ -317,7 +317,7 @@ extension GetNavigation on GetInterface {
       times = 1;
     }
     var count = 0;
-    var back = global(id).currentState.popUntil((route) => count++ == times);
+    var back = global(id)?.currentState?.popUntil((route) => count++ == times);
 
     return back;
   }
@@ -364,7 +364,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
-    return global(id).currentState.pushReplacement(GetPageRoute(
+    return global(id)?.currentState?.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
         page: () => page,
         binding: binding,
@@ -423,7 +423,7 @@ extension GetNavigation on GetInterface {
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
-    return global(id).currentState.pushAndRemoveUntil(
+    return global(id)?.currentState?.pushAndRemoveUntil(
         GetPageRoute(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
@@ -754,7 +754,7 @@ extension GetNavigation on GetInterface {
   }
 
   Future<T> showSnackbar<T>(GetBar snackbar) {
-    return key.currentState.push(SnackRoute<T>(snack: snackbar));
+    return key?.currentState?.push(SnackRoute<T>(snack: snackbar));
   }
 
   void snackbar(
@@ -806,7 +806,7 @@ extension GetNavigation on GetInterface {
                 Text(
                   title,
                   style: TextStyle(
-                    color: colorText ?? theme.iconTheme.color,
+                    color: colorText ?? iconColor ?? Colors.black,
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
                   ),
@@ -815,7 +815,7 @@ extension GetNavigation on GetInterface {
             Text(
               message,
               style: TextStyle(
-                color: colorText ?? theme.iconTheme.color,
+                color: colorText ?? iconColor ?? Colors.black,
                 fontWeight: FontWeight.w300,
                 fontSize: 14,
               ),
@@ -852,11 +852,11 @@ extension GetNavigation on GetInterface {
         userInputForm: userInputForm);
 
     if (instantInit) {
-      getBar.show();
+      showSnackbar(getBar);
     } else {
       routing.isSnackbar = true;
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        getBar.show();
+        showSnackbar(getBar);
       });
     }
   }
@@ -988,16 +988,25 @@ Since version 2.8 it is possible to access the properties
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
   /// give access to currentContext
-  BuildContext get context => key.currentContext;
+  BuildContext get context => key?.currentContext;
 
   /// give access to current Overlay Context
-  BuildContext get overlayContext => key.currentState.overlay.context;
+  BuildContext get overlayContext => key?.currentState?.overlay?.context;
+
+  /// give access to current Overlay Context
+  BuildContext get overlayState => key?.currentState?.overlay?.context;
 
   /// give access to Theme.of(context)
-  ThemeData get theme => Theme.of(context);
+  ThemeData get theme {
+    ThemeData _theme;
+    if (context != null) {
+      _theme = Theme.of(context);
+    }
+    return _theme;
+  }
 
   /// give access to TextTheme.of(context)
-  TextTheme get textTheme => Theme.of(context).textTheme;
+  TextTheme get textTheme => theme?.textTheme;
 
   /// give access to Mediaquery.of(context)
   MediaQueryData get mediaQuery => MediaQuery.of(context);
@@ -1010,7 +1019,7 @@ Since version 2.8 it is possible to access the properties
       (mediaQuery.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
-  Color get iconColor => Theme.of(context).iconTheme.color;
+  Color get iconColor => theme?.iconTheme?.color;
 
   /// give access to FocusScope.of(context)
   FocusNode get focusScope => FocusManager.instance.primaryFocus;
@@ -1021,9 +1030,21 @@ Since version 2.8 it is possible to access the properties
   /// give access to Immutable MediaQuery.of(context).size.width
   double get width => MediaQuery.of(context).size.width;
 
-  GlobalKey<NavigatorState> get key => getxController.key;
+  GlobalKey<NavigatorState> get key {
+    final _key = getxController?.key;
+    if (_key?.currentState == null && !testMode) {
+      throw """You are trying to use contextless navigation without 
+      a GetMaterialApp or Get.key. 
+      If you are testing your app, you can use:
+      [Get.testMode = true], or if you are running your app on 
+      a physical device or emulator, you must exchange your [MaterialApp] 
+      for a [GetMaterialApp].
+      """;
+    }
+    return _key;
+  }
 
-  Map<int, GlobalKey<NavigatorState>> get keys => getxController.keys;
+  Map<int, GlobalKey<NavigatorState>> get keys => getxController?.keys;
 
   GetMaterialController get rootController => getxController;
 
@@ -1058,6 +1079,9 @@ Since version 2.8 it is possible to access the properties
   CustomTransition get customTransition => getxController.customTransition;
   set customTransition(CustomTransition newTransition) =>
       getxController.customTransition = newTransition;
+
+  bool get testMode => getxController.testMode;
+  set testMode(bool isTest) => getxController.testMode = isTest;
 
   static GetMaterialController getxController = GetMaterialController();
 }

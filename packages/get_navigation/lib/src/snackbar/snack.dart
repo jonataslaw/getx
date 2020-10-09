@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_core/get_core.dart';
 import '../../get_navigation.dart';
-import 'snack_route.dart';
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus status);
 typedef OnTap = void Function(GetBar snack);
@@ -195,10 +194,10 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form userInputForm;
 
-  /// Show the snack. Kicks in [SnackbarStatus.OPENING] state
+  /// Show the snack. It's call [SnackbarStatus.OPENING] state
   /// followed by [SnackbarStatus.OPEN]
   Future<T> show<T>() async {
-    return Get.key.currentState.push(SnackRoute<T>(snack: this));
+    return Get.showSnackbar(this);
   }
 
   @override
