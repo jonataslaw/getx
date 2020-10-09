@@ -1,3 +1,15 @@
+## [3.12.2]
+- Fix typos on code and docs (@wbemanuel and @Goddchen)
+- Improve: typedef to GetBuilder and Getx widgets
+- Improve behaviour of null route on lastest flutter version (@FiercestT)
+- Fix onReady called twice on smartManagement.onlyBuilders
+- Fix onClose called twice when GetBuilder is used
+- Fix default customTransitions, and defaultDuration be ignored on unnamedRoutes
+- Transition.native use default Flutter transitions
+- Added Get.testMode to use contextless elements on unit tests 
+- Added Get.appUpdate and improve Get.forceAppUpdate 
+- 
+
 ## [3.12.1]	
 - Remove spaces whitespaces from dart files	
 

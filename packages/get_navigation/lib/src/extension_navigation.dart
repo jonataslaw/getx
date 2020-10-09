@@ -945,13 +945,27 @@ extension GetNavigation on GetInterface {
   }
 
   GlobalKey<NavigatorState> global(int k) {
+    GlobalKey<NavigatorState> _key;
     if (k == null) {
-      return key;
+      _key = key;
     }
     if (!keys.containsKey(k)) {
       throw 'Route id ($k) not found';
+    } else {
+      _key = keys[k];
     }
-    return keys[k];
+
+    if (_key.currentContext == null) {
+      throw """You are trying to use contextless navigation without
+      a GetMaterialApp or Get.key.
+      If you are testing your app, you can use:
+      [Get.testMode = true], or if you are running your app on
+      a physical device or emulator, you must exchange your [MaterialApp]
+      for a [GetMaterialApp].
+      """;
+    }
+
+    return _key;
   }
 
   @Deprecated('''
@@ -993,9 +1007,6 @@ Since version 2.8 it is possible to access the properties
   /// give access to current Overlay Context
   BuildContext get overlayContext => key?.currentState?.overlay?.context;
 
-  /// give access to current Overlay Context
-  BuildContext get overlayState => key?.currentState?.overlay?.context;
-
   /// give access to Theme.of(context)
   ThemeData get theme {
     ThemeData _theme;
@@ -1032,15 +1043,7 @@ Since version 2.8 it is possible to access the properties
 
   GlobalKey<NavigatorState> get key {
     final _key = getxController?.key;
-    if (_key?.currentState == null && !testMode) {
-      throw """You are trying to use contextless navigation without 
-      a GetMaterialApp or Get.key. 
-      If you are testing your app, you can use:
-      [Get.testMode = true], or if you are running your app on 
-      a physical device or emulator, you must exchange your [MaterialApp] 
-      for a [GetMaterialApp].
-      """;
-    }
+
     return _key;
   }
 
