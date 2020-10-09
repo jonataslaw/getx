@@ -321,9 +321,6 @@ Jeśli interesuje Cię jak zmieniać motywy podąrzaj za samouczkiem na Medium u
 // give the current args from currentScreen
 Get.arguments
 
-// give arguments of previous route
-Get.previousArguments
-
 // give name of previous route
 Get.previousRoute
 

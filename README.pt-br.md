@@ -395,9 +395,6 @@ Se você quiser saber mais como trocar o tema, você pode seguir esse tutorial n
 // fornece os arguments da tela atual
 Get.arguments
 
-// fornece os arguments da rota anterior
-Get.previousArguments
-
 // fornece o nome da rota anterior
 Get.previousRoute
 
