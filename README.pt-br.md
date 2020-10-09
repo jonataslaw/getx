@@ -1,4 +1,4 @@
-![](get.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Idiomas: [Inglês](README.md), [Língua chinesa](README.zh-cn.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Polaco](README.pl.md).*
 
@@ -14,7 +14,7 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 
-![](getx.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 <h2> Pedimos desculpas por qualquer parte não traduzida aqui. O GetX™ é atualizado com muita frequência e as traduções podem não vir ao mesmo tempo. Então, para manter essa documentação pelo menos com tudo que a versão em inglês tem, eu vou deixar todos os textos não-traduzidos aqui (eu considero que é melhor ele estar lá em inglês do que não estar), então se alguém quiser traduzir, seria muito útil 😁</h2>
 
@@ -36,7 +36,7 @@
     - [Traduções](#traduções)
       - [Usando traduções](#usando-traduções)
     - [Localidade](#localidade)
-      - [Alterar Local](#alterar-local)
+      - [Alterar local](#alterar-local)
       - [Localidade do sistema operacional](#localidade-do-sistema-operacional)
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
   - [Outras APIs avançadas](#outras-apis-avançadas)
@@ -44,17 +44,17 @@
     - [Widgets de Estado Local](#widgets-de-estado-local)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
+    - [Explicação em vídeo sobre Outras Features do GetX](#explicação-em-vídeo-sobre-outras-features-do-getx)
   - [Dicas Úteis](#dicas-úteis)
       - [GetView](#getview)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
-  - [Explicação em vídeo sobre Outras Features do GetX](#explicação-em-vídeo-sobre-outras-features-do-getx)
 - [Breaking Changes da versão 2 para 3](#breaking-changes-da-versão-2-para-3)
   - [Tipagem Rx](#tipagem-rx)
   - [RxController e GetBuilder se uniram](#rxcontroller-e-getbuilder-se-uniram)
   - [Rotas nomeadas](#rotas-nomeadas)
-    - [Porque essa mudança](#porque-essa-mudança)
-- [Por que GetX?](#por-que-getx)
+    - [Porque essa mudança?](#porque-essa-mudança)
+- [Por que GetX™?](#por-que-getx)
 - [Comunidade](#comunidade)
   - [Canais da comunidade](#canais-da-comunidade)
   - [Como contribuir](#como-contribuir)
@@ -147,7 +147,7 @@ class Outra extends StatelessWidget {
 
 Resultado:
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 Esse é um projeto simples mas já deixa claro o quão poderoso o Get é. Enquanto seu projeto cresce, essa diferença se torna bem mais significante.
 
@@ -824,14 +824,14 @@ o ciclo de vida de seu aplicativo, use GetxService.
 
 ## Tipagem Rx
 
-| Antes    | Depois     |
-| -------- | ---------- |
-| StringX  | `RxString` |
-| IntX     | `RxInt`    |
-| MapX     | `RxMap`    |
-| ListX    | `RxList`   |
-| NumX     | `RxNum`    |
-| DoubleX  | `RxDouble` |
+| Antes   | Depois     |
+| ------- | ---------- |
+| StringX | `RxString` |
+| IntX    | `RxInt`    |
+| MapX    | `RxMap`    |
+| ListX   | `RxList`   |
+| NumX    | `RxNum`    |
+| DoubleX | `RxDouble` |
 
 ## RxController e GetBuilder se uniram
 

@@ -1,4 +1,4 @@
-![](get.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 _语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [西班牙语](README-es.md), [波兰语](README.pl.md)_
 
@@ -13,11 +13,11 @@ _语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [�
 </a>
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
-![](getx.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [关于 Get](#关于Get)
+- [关于Get](#关于get)
 - [安装](#安装)
-- [GetX 的计数器示例](#GetX的计数器示例)
+- [GetX的计数器示例](#getx的计数器示例)
 - [三大功能](#三大功能)
   - [状态管理](#状态管理)
     - [响应式状态管理器](#响应式状态管理器)
@@ -34,7 +34,7 @@ _语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [�
       - [改变语言](#改变语言)
       - [系统语言](#系统语言)
   - [改变主题](#改变主题)
-  - [其他高级API](#其他高级API)
+  - [其他高级API](#其他高级api)
     - [可选的全局设置和手动配置](#可选的全局设置和手动配置)
     - [局部状态组件](#局部状态组件)
       - [ValueBuilder](#valuebuilder)
@@ -43,10 +43,10 @@ _语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [�
       - [GetView](#getview)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
-- [从2.0开始的兼容性变化](#从2.0开始的兼容性变化)
-- [为什么选择Getx？](#为什么选择Getx？)
+- [从2.0开始的兼容性变化](#从20开始的兼容性变化)
+- [为什么选择Getx？](#为什么选择getx)
 - [社区](#社区)
-  - [社区频道](#社区频道)
+  - [社区渠道](#社区渠道)
   - [如何做贡献](#如何做贡献)
   - [文章和视频](#文章和视频)
 
@@ -151,7 +151,7 @@ class Other extends StatelessWidget {
 
 结果：
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 这是一个简单的项目，但它已经让人明白Get的强大。随着项目的发展，这种差异将变得更加显著。
 

@@ -1,3 +1,8 @@
+## [3.13.2]	
+- Reunification of the package.
+During the 2 week period, we try to keep this package as a compilation of smaller packages. We were successful in separating, getx is well decoupled and it was only necessary to send the internal folders as packages to pub.dev, however, it became very complicated to contribute to the package. This is because it was necessary to clone the repository, replace all pubspec packages with local paths, and after modification, return the original paths to do the PR. With that, the frequency of updates, which was about 4 to 5 days, became almost 2 weeks, and this is not legal for a community as active as Getx, which uses this package precisely in addition to being modern and performance, be constantly improving. This led contributors to the conclusion that getx works best together.
+Additional packages will continue to be maintained, and will have the same base as the main package, however, development will take place in the full and main package, and as the addition of new features or bug fixes arrives, we will migrate to the individual packages . Getx reached the mark of 50 contributors today, more than 1500 likes in the pub, and will continue to make development easy.
+  
 ## [3.13.1]	
 - Remove spaces whitespaces from dart files	
 - 

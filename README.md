@@ -1,4 +1,4 @@
-![](get.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 _Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md),[Polish](README.pl.md)._
 
@@ -13,7 +13,7 @@ _Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portugue
 </a>
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
-![](getx.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 - [About Get](#about-get)
 - [Installing](#installing)
@@ -148,7 +148,7 @@ class Other extends StatelessWidget {
 
 Result:
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
 

@@ -1,4 +1,4 @@
-![](get.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Languages: [English](README.md), [Język chiński](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), Polish (Jesteś tu).*
 
@@ -14,28 +14,28 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 
-![](getx.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 - [Kanały komunikacji i wsparcia:](#kanały-komunikacji-i-wsparcia)
 - [Wprowadzenie](#wprowadzenie)
 - [Instalacja](#instalacja)
 - [Counter App z GetX](#counter-app-z-getx)
-- [Trzy fialary](#trzy-filary)
+- [Trzy filary](#trzy-filary)
   - [Menadżer stanu](#menadżer-stanu)
     - [Reaktywny menadżer stanu](#reaktywny-menadżer-stanu)
     - [Bardziej szczegółowo o menadżerze stanu](#bardziej-szczegółowo-o-menadżerze-stanu)
     - [Video tłumaczące użycie menadżera stanu](#video-tłumaczące-użycie-menadżera-stanu)
-  - [Zarzadzanie routami](#zarządzanie-routami)
+  - [Zarządzanie routami](#zarządzanie-routami)
     - [Więcej o routach](#więcej-o-routach)
     - [Video tłumaczące użycie](#video-tłumaczące-użycie)
   - [Zarządzanie dependencies](#zarządzanie-dependencies)
-    - [Bardziej szczefółowo o menadżerze dependencies](#bardziej-szczegółowo-o-menadżerze-dependencies)
+    - [Bardziej szczegółowo o menadżerze dependencies](#bardziej-szczegółowo-o-menadżerze-dependencies)
 - [Jak włożyć coś od siebie](#jak-włożyć-coś-od-siebie)
 - [Narzędzia](#narzędzia)
   - [Zmiana motywu](#zmiana-motywu)
-  - [Inne zaawansowane  API](#inne-zaawansowane-api)
+  - [Inne zaawansowane API](#inne-zaawansowane-api)
     - [Opcjonalne globalne ustawienia i manualna konfiguracja](#opcjonalne-globalne-ustawienia-i-manualna-konfiguracja)
-  - [Video tłumaczace inne funkcjonalności GetX](#video-tłumaczące-inne-funkcjonalności-getx)
+  - [Video tłumaczące inne funkcjonalności GetX](#video-tłumaczące-inne-funkcjonalności-getx)
 - [Zmiany od 2.0](#zmiany-od-20)
 
 
@@ -130,7 +130,7 @@ class Other extends StatelessWidget {
 ```
 Wynik:
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 Jest to prosty projekt, ale już na jego przykładzie widać potęgę Get. Wzraz ze wzrostem rozmiaru aplikacji ta różnica tylko się powieksza.
 

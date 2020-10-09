@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 import '../rx_core/rx_impl.dart';
 import '../rx_core/rx_interface.dart';
