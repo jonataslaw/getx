@@ -386,9 +386,6 @@ When `.darkmode` is activated, it will switch to the _light theme_, and when the
 // give the current args from currentScreen
 Get.arguments
 
-// give arguments of previous route
-Get.previousArguments
-
 // give name of previous route
 Get.previousRoute
 

@@ -389,9 +389,6 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 // 给出当前页面的args。
 Get.arguments
 
-// 给出上一条路由的参数
-Get.previousArguments
-
 //给出以前的路由名称
 Get.previousRoute
 
