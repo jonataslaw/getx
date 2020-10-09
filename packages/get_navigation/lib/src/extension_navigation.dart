@@ -948,10 +948,10 @@ extension GetNavigation on GetInterface {
     GlobalKey<NavigatorState> _key;
     if (k == null) {
       _key = key;
-    }
-    if (!keys.containsKey(k)) {
-      throw 'Route id ($k) not found';
     } else {
+      if (!keys.containsKey(k)) {
+        throw 'Route id ($k) not found';
+      }
       _key = keys[k];
     }
 
