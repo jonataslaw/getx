@@ -229,6 +229,12 @@ Para navegar para uma próxima tela:
 Get.to(ProximaTela());
 ```
 
+Para navegar para uma próxima tela com uma rota nomeada. Veja mais detalhes sobre rotas nomeadas [aqui](./documentation/pt_BR/route_management.md#navegar-com-rotas-nomeadas)
+
+```dart
+Get.toNamed('/detalhes');
+```
+
 Para fechar snackbars, dialogs, bottomsheets, ou qualquer coisa que você normalmente fecharia com o `Navigator.pop(context)` (como por exemplo fechar a View atual e voltar para a anterior):
 
 ```dart
