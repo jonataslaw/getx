@@ -151,6 +151,23 @@ void main() {
 }
 ```
 
+Para manejar la navegación a rutas no definidas (error 404), puede definir una página de ruta desconocida en GetMaterialApp.
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/second', page: () => Second()),
+      ],
+    )
+  );
+}
+```
+
 ### Enviar datos a rutas nombradas
 
 Envía lo que quieras usando el parámetro arguments. GetX acepta cualquier cosa aquí, ya sea un String, Map, List o incluso una instancia de clase.

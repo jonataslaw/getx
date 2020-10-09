@@ -161,6 +161,27 @@ class GetMaterialApp extends StatelessWidget {
     final match = Get.routeTree.matchRoute(name);
     Get.parameters = match?.parameters;
 
+    //Route can be nullable, just pass the unknown route
+    if (match?.route == null) {
+      return [
+        GetPageRoute(
+          page: unknownRoute.page,
+          parameter: unknownRoute.parameter,
+          settings: RouteSettings(name: name, arguments: null),
+          curve: unknownRoute.curve,
+          opaque: unknownRoute.opaque,
+          customTransition: unknownRoute.customTransition,
+          binding: unknownRoute.binding,
+          bindings: unknownRoute.bindings,
+          transitionDuration: (unknownRoute.transitionDuration ??
+              Get.defaultTransitionDuration),
+          transition: unknownRoute.transition,
+          popGesture: unknownRoute.popGesture,
+          fullscreenDialog: unknownRoute.fullscreenDialog,
+        )
+      ];
+    }
+
     return [
       GetPageRoute(
         page: match.route.page,
