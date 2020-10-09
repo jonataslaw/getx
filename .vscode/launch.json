@@ -1,0 +1,77 @@
+{
+    // Use o IntelliSense para aprender sobre possíveis atributos.
+    // Passe o mouse para ver as descrições dos atributos existentes.
+    // Para obter mais informações, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "getx",
+            "cwd": "getx",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "example debug",
+            "cwd": "getx/example",
+            "request": "launch",
+            "flutterMode": "debug",
+            "type": "dart"
+        },
+        {
+            "name": "example profile",
+            "cwd": "getx/example",
+            "request": "launch",
+            "flutterMode": "profile",
+            "type": "dart"
+        },
+        {
+            "name": "example release",
+            "cwd": "getx/example",
+            "request": "launch",
+            "flutterMode": "release",
+            "type": "dart"
+        },
+        {
+            "name": "get_core",
+            "cwd": "packages/get_core",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_instance",
+            "cwd": "packages/get_instance",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_navigation",
+            "cwd": "packages/get_navigation",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_rx",
+            "cwd": "packages/get_rx",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_state_manager",
+            "cwd": "packages/get_state_manager",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_test",
+            "cwd": "packages/get_test",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "get_utils",
+            "cwd": "packages/get_utils",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
