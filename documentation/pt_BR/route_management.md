@@ -247,6 +247,23 @@ void main() {
 }
 ```
 
+Para lidar com a navegação para rotas não definidas (erro 404), você pode definir uma página unknownRoute em GetMaterialApp.
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/second', page: () => Second()),
+      ],
+    )
+  );
+}
+```
+
 ### Enviar dados para rotas nomeadas
 
 Apenas envie o que você quiser no parâmetro `arguments`. Get aceita qualquer coisa aqui, seja String, Map, List, ou até a instância de uma classe.

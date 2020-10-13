@@ -1,4 +1,4 @@
-![](get.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Idiomas: Español (este archivo), [Lengua china](README.zh-cn.md), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Polaco](README.pl.md).*
 
@@ -13,30 +13,30 @@
 </a>
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
-![](getx.png)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 <h3>Lamentamos la inconsistencia en la traducción. El paquete GetX se actualiza con bastante frecuencia y es posible que las traducciones a documentos no sean tan rápidas. Entonces, para que esta documentación aún tenga todo el contenido, dejaré aquí todos los textos nuevos sin traducir (considero que es mejor tener los documentos en inglés que no tenerlos), por lo que si alguien quiere traducir, sería de gran ayuda 😁</h3>
 
 - [Communication and support channels:](#communication-and-support-channels)
 - [Sobre GetX](#sobre-getx)
 - [Como contribuir](#como-contribuir)
-- [Instalando](#installing)
-- [Proyecto Counter en GetX](#proyeto-counter-no-getx)
+- [Installing](#installing)
+- [Proyecto Counter no GetX](#proyecto-counter-no-getx)
 - [Los tres pilares](#los-tres-pilares)
   - [Gestión del Estado](#gestión-del-estado)
-    - [STATE_MANAGER Reactivo](#reactivo-state_manager)
+    - [Reactivo STATE_MANAGER](#reactivo-state_manager)
     - [Más detalles sobre la gestión del estado.](#más-detalles-sobre-la-gestión-del-estado)
-    - [Explicación en video sobre state management](#video-explanation-about-state-management)
+    - [Explicación en video sobre state management](#explicación-en-video-sobre-state-management)
   - [Gestión de Rutas](#gestión-de-rutas)
     - [Más detalles sobre la gestión de rutas.](#más-detalles-sobre-la-gestión-de-rutas)
-    - [Explicación del video](#video-explanation)
+    - [Explicación del video](#explicación-del-video)
   - [Gestión de dependencias](#gestión-de-dependencias)
     - [Más detalles sobre la gestión de dependencias.](#más-detalles-sobre-la-gestión-de-dependencias)
-- [Utilidades](#utils)
+- [Utilidades](#utilidades)
   - [Cambiar de tema](#cambiar-de-tema)
   - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
     - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
-  - [Explicación en video de Other GetX Features](#video-explanation-of-other-getx-features)
+  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
 - [Rompiendo cambios desde 2.0](#rompiendo-cambios-desde-20)
 - [¿Por qué Getx?](#por-qué-getx)
 
@@ -155,7 +155,7 @@ class Other extends StatelessWidget {
 
 Resultado:
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 Este es un proyecto simple pero ya deja en claro cuán poderoso es GetX. A medida que su proyecto crezca, esta diferencia se volverá más significativa. GetX fue diseñado para trabajar con equipos, pero también simplifica el trabajo de un desarrollador individual. Mejore sus plazos, entregue todo a tiempo, sin perder rendimiento. GetX no es para todos, pero si te identificaste con esa frase, ¡GET es para ti!
 
@@ -330,9 +330,6 @@ MaterialApp(
 ```dart
 // dar los argumentos actuales de currentScreen
 Get.arguments
-
-// dar argumentos de la ruta anterior
-Get.previousArguments
 
 // dar el nombre de la ruta anterior
 Get.previousRoute

@@ -149,6 +149,23 @@ void main() {
 }
 ```
 
+要处理到未定义路线的导航（404错误），可以在GetMaterialApp中定义unknownRoute页面。
+
+```dart
+void main() {
+  runApp(
+    GetMaterialApp(
+      unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/second', page: () => Second()),
+      ],
+    )
+  );
+}
+```
+
 ### 发送数据到别名路由
 
 只要发送你想要的参数即可。Get在这里接受任何东西，无论是一个字符串，一个Map，一个List，甚至一个类的实例。
