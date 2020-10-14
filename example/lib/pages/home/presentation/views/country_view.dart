@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 
-class CountryView extends GetWidget<HomeController> {
+class CountryView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(

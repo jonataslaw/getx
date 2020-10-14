@@ -40,7 +40,7 @@ abstract class GetView<T> extends StatelessWidget {
 }
 
 abstract class GetWidget<T extends DisposableInterface>
-    extends GetStatelessWidget {
+    extends StatelessWidget {
   GetWidget({Key key}) : super(key: key);
 
   final Set<T> _value = <T>{};
@@ -103,7 +103,7 @@ class GetStatelessElement extends ComponentElement {
 
   @override
   void unmount() {
-    widget?.controller?.onClose();
+    widget?.controller?.onDelete();
     super.unmount();
   }
 }

@@ -4,8 +4,6 @@ import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../get_state_manager.dart';
 
-import 'simple_builder.dart';
-
 // Changed to VoidCallback.
 //typedef Disposer = void Function();
 
@@ -34,12 +32,12 @@ mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
 }
 
 class GetxController extends DisposableInterface {
-  final _updaters = HashSet<GetStateUpdate>();
+  final _updaters = <GetStateUpdate>[];
 
 //  final _updatersIds = HashMap<String, StateSetter>(); //<old>
   final _updatersIds = HashMap<String, GetStateUpdate>();
 
-  final _updatersGroupIds = HashMap<String, HashSet<GetStateUpdate>>();
+  final _updatersGroupIds = HashMap<String, List<GetStateUpdate>>();
 
   /// Rebuilds [GetBuilder] each time you call [update()];
   /// Can take a List of [ids], that will only update the matching
@@ -81,7 +79,7 @@ class GetxController extends DisposableInterface {
   VoidCallback addListenerId(String key, GetStateUpdate listener) {
 //    _printCurrentIds();
     if (_updatersIds.containsKey(key)) {
-      _updatersGroupIds[key] ??= HashSet<GetStateUpdate>.identity();
+      _updatersGroupIds[key] ??= <GetStateUpdate>[];
       _updatersGroupIds[key].add(listener);
       return () {
         _updatersGroupIds[key].remove(listener);
@@ -254,22 +252,22 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 /// This is a experimental feature.
 /// Meant to be used with SimpleBuilder, it auto-registers the variable
 /// like Rx() does with Obx().
-class Value<T> extends GetxController {
-  Value([this._value]);
+// class Value<T> extends GetxController {
+//   Value([this._value]);
 
-  T _value;
+//   T _value;
 
-  T get value {
-    TaskManager.instance.notify(_updaters);
-    return _value;
-  }
+//   T get value {
+//     TaskManager.instance.notify(_updaters);
+//     return _value;
+//   }
 
-  set value(T newValue) {
-    if (_value == newValue) return;
-    _value = newValue;
-    update();
-  }
-}
+//   set value(T newValue) {
+//     if (_value == newValue) return;
+//     _value = newValue;
+//     update();
+//   }
+// }
 
 /// It's Experimental class, the Api can be change
 abstract class GetState<T> extends GetxController {

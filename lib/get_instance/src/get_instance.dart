@@ -11,6 +11,10 @@ class GetInstance {
 
   static GetInstance _getInstance;
 
+  T call<T>() {
+    return find<T>();
+  }
+
   /// Holds references to every registered Instance when using
   /// [Get.put()]
   static final Map<String, _InstanceBuilderFactory> _singl = {};
@@ -60,6 +64,20 @@ class GetInstance {
     _factory.putIfAbsent(key, () => _Lazy(builder, fenix));
   }
 
+  void injector<S>(
+    InjectorBuilderCallback<S> fn, {
+    String tag,
+    bool fenix = false,
+    //  bool permanent = false,
+  }) {
+    lazyPut(
+      () => fn(this),
+      tag: tag,
+      fenix: fenix,
+      // permanent: permanent,
+    );
+  }
+
   /// async version of [Get.put()].
   /// Awaits for the resolution of the Future from [builder()] parameter and
   /// stores the Instance returned.
@@ -85,7 +103,7 @@ class GetInstance {
     S dependency, {
     String tag,
     bool permanent = false,
-    InstanceBuilderCallback<S> builder,
+    @deprecated InstanceBuilderCallback<S> builder,
   }) {
     _insert(
         isSingleton: true,
@@ -201,12 +219,6 @@ class GetInstance {
     _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
   }
 
-  /// Finds and returns a Instance<[S]> (or [tag]) without further processing.
-  S findByType<S>(Type type, {String tag}) {
-    final key = _getKey(type, tag);
-    return _singl[key].getDependency() as S;
-  }
-
   /// Initializes the controller
   S _startController<S>({String tag}) {
     final key = _getKey(S, tag);
@@ -216,9 +228,9 @@ class GetInstance {
         i.onStart();
         Get.log('"$key" has been initialized');
       }
-      if (!_singl[key].isSingleton && i.onClose != null) {
+      if (!_singl[key].isSingleton && i.onDelete != null) {
         _routesByCreate[Get.reference] ??= HashSet<Function>();
-        _routesByCreate[Get.reference].add(i.onClose);
+        _routesByCreate[Get.reference].add(i.onDelete);
       }
     }
     return i;
@@ -349,7 +361,7 @@ class GetInstance {
       return false;
     }
     if (i is GetLifeCycle) {
-      i.onClose();
+      i.onDelete();
       Get.log('"$newKey" onClose() called');
     }
 
@@ -374,6 +386,8 @@ class GetInstance {
 }
 
 typedef InstanceBuilderCallback<S> = S Function();
+
+typedef InjectorBuilderCallback<S> = S Function(GetInstance);
 
 typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
@@ -413,6 +427,7 @@ class _InstanceBuilderFactory<S> {
 /// keeps a reference to the callback to be called.
 class _Lazy {
   bool fenix;
+  bool permanent = false;
   InstanceBuilderCallback builder;
 
   _Lazy(this.builder, this.fenix);

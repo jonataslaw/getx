@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../get_core/get_core.dart';
@@ -11,6 +13,435 @@ import 'routes/transitions_type.dart';
 
 //TODO: Split this class on "Snackbar" "Dialog" "bottomSheet"
 //and "navigation" extensions
+
+extension ExtensionSnackbar on GetInterface {
+  void rawSnackbar({
+    String title,
+    String message,
+    Widget titleText,
+    Widget messageText,
+    Widget icon,
+    bool instantInit = true,
+    bool shouldIconPulse = true,
+    double maxWidth,
+    EdgeInsets margin = const EdgeInsets.all(0.0),
+    EdgeInsets padding = const EdgeInsets.all(16),
+    double borderRadius = 0.0,
+    Color borderColor,
+    double borderWidth = 1.0,
+    Color backgroundColor = const Color(0xFF303030),
+    Color leftBarIndicatorColor,
+    List<BoxShadow> boxShadows,
+    Gradient backgroundGradient,
+    FlatButton mainButton,
+    OnTap onTap,
+    Duration duration = const Duration(seconds: 3),
+    bool isDismissible = true,
+    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
+    bool showProgressIndicator = false,
+    AnimationController progressIndicatorController,
+    Color progressIndicatorBackgroundColor,
+    Animation<Color> progressIndicatorValueColor,
+    SnackPosition snackPosition = SnackPosition.BOTTOM,
+    SnackStyle snackStyle = SnackStyle.FLOATING,
+    Curve forwardAnimationCurve = Curves.easeOutCirc,
+    Curve reverseAnimationCurve = Curves.easeOutCirc,
+    Duration animationDuration = const Duration(seconds: 1),
+    SnackbarStatusCallback snackbarStatus,
+    double barBlur = 0.0,
+    double overlayBlur = 0.0,
+    Color overlayColor,
+    Form userInputForm,
+  }) async {
+    final getBar = GetBar(
+      snackbarStatus: snackbarStatus,
+      title: title,
+      message: message,
+      titleText: titleText,
+      messageText: messageText,
+      snackPosition: snackPosition,
+      borderRadius: borderRadius,
+      margin: margin,
+      duration: duration,
+      barBlur: barBlur,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      shouldIconPulse: shouldIconPulse,
+      maxWidth: maxWidth,
+      padding: padding,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      leftBarIndicatorColor: leftBarIndicatorColor,
+      boxShadows: boxShadows,
+      backgroundGradient: backgroundGradient,
+      mainButton: mainButton,
+      onTap: onTap,
+      isDismissible: isDismissible,
+      dismissDirection: dismissDirection,
+      showProgressIndicator: showProgressIndicator ?? false,
+      progressIndicatorController: progressIndicatorController,
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+      progressIndicatorValueColor: progressIndicatorValueColor,
+      snackStyle: snackStyle,
+      forwardAnimationCurve: forwardAnimationCurve,
+      reverseAnimationCurve: reverseAnimationCurve,
+      animationDuration: animationDuration,
+      overlayBlur: overlayBlur,
+      overlayColor: overlayColor,
+      userInputForm: userInputForm,
+    );
+
+    if (instantInit) {
+      getBar.show();
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        getBar.show();
+      });
+    }
+  }
+
+  Future<T> showSnackbar<T>(GetBar snackbar) {
+    return key?.currentState?.push(SnackRoute<T>(snack: snackbar));
+  }
+
+  void snackbar(
+    String title,
+    String message, {
+    Color colorText,
+    Duration duration,
+
+    /// with instantInit = false you can put snackbar on initState
+    bool instantInit = true,
+    SnackPosition snackPosition,
+    Widget titleText,
+    Widget messageText,
+    Widget icon,
+    bool shouldIconPulse,
+    double maxWidth,
+    EdgeInsets margin,
+    EdgeInsets padding,
+    double borderRadius,
+    Color borderColor,
+    double borderWidth,
+    Color backgroundColor,
+    Color leftBarIndicatorColor,
+    List<BoxShadow> boxShadows,
+    Gradient backgroundGradient,
+    FlatButton mainButton,
+    OnTap onTap,
+    bool isDismissible,
+    bool showProgressIndicator,
+    SnackDismissDirection dismissDirection,
+    AnimationController progressIndicatorController,
+    Color progressIndicatorBackgroundColor,
+    Animation<Color> progressIndicatorValueColor,
+    SnackStyle snackStyle,
+    Curve forwardAnimationCurve,
+    Curve reverseAnimationCurve,
+    Duration animationDuration,
+    double barBlur,
+    double overlayBlur,
+    SnackbarStatusCallback snackbarStatus,
+    Color overlayColor,
+    Form userInputForm,
+  }) async {
+    final getBar = GetBar(
+        snackbarStatus: snackbarStatus,
+        titleText: (title == null)
+            ? null
+            : titleText ??
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: colorText ?? iconColor ?? Colors.black,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                  ),
+                ),
+        messageText: messageText ??
+            Text(
+              message,
+              style: TextStyle(
+                color: colorText ?? iconColor ?? Colors.black,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
+              ),
+            ),
+        snackPosition: snackPosition ?? SnackPosition.TOP,
+        borderRadius: borderRadius ?? 15,
+        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        duration: duration ?? Duration(seconds: 3),
+        barBlur: barBlur ?? 7.0,
+        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        icon: icon,
+        shouldIconPulse: shouldIconPulse ?? true,
+        maxWidth: maxWidth,
+        padding: padding ?? EdgeInsets.all(16),
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        leftBarIndicatorColor: leftBarIndicatorColor,
+        boxShadows: boxShadows,
+        backgroundGradient: backgroundGradient,
+        mainButton: mainButton,
+        onTap: onTap,
+        isDismissible: isDismissible ?? true,
+        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+        showProgressIndicator: showProgressIndicator ?? false,
+        progressIndicatorController: progressIndicatorController,
+        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+        progressIndicatorValueColor: progressIndicatorValueColor,
+        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+        animationDuration: animationDuration ?? Duration(seconds: 1),
+        overlayBlur: overlayBlur ?? 0.0,
+        overlayColor: overlayColor ?? Colors.transparent,
+        userInputForm: userInputForm);
+
+    if (instantInit) {
+      showSnackbar(getBar);
+    } else {
+      routing.isSnackbar = true;
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        showSnackbar(getBar);
+      });
+    }
+  }
+}
+
+extension ExtensionDialog on GetInterface {
+  /// Show a dialog.
+  /// You can pass a [transitionDuration] and/or [transitionCurve],
+  /// overriding the defaults when the dialog shows up and closes.
+  /// When the dialog closes, uses those animations in reverse.
+  Future<T> dialog<T>(
+    Widget widget, {
+    bool barrierDismissible = true,
+    Color barrierColor,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
+    RouteSettings routeSettings,
+    Duration transitionDuration,
+    Curve transitionCurve,
+  }) {
+    assert(widget != null);
+    assert(barrierDismissible != null);
+    assert(useSafeArea != null);
+    assert(useRootNavigator != null);
+    assert(debugCheckHasMaterialLocalizations(context));
+
+    final theme = Theme.of(context, shadowThemeOnly: true);
+    return generalDialog(
+      pageBuilder: (buildContext, animation, secondaryAnimation) {
+        final pageChild = widget;
+        Widget dialog = Builder(builder: (context) {
+          return theme != null
+              ? Theme(data: theme, child: pageChild)
+              : pageChild;
+        });
+        if (useSafeArea) {
+          dialog = SafeArea(child: dialog);
+        }
+        return dialog;
+      },
+      barrierDismissible: barrierDismissible,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: barrierColor ?? Colors.black54,
+      transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: animation,
+            curve: transitionCurve ?? defaultDialogTransitionCurve,
+          ),
+          child: child,
+        );
+      },
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+    );
+  }
+
+  /// Api from showGeneralDialog with no context
+  Future<T> generalDialog<T>({
+    @required RoutePageBuilder pageBuilder,
+    bool barrierDismissible = false,
+    String barrierLabel,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder transitionBuilder,
+    bool useRootNavigator = true,
+    RouteSettings routeSettings,
+  }) {
+    assert(pageBuilder != null);
+    assert(useRootNavigator != null);
+    assert(!barrierDismissible || barrierLabel != null);
+    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
+        .push<T>(GetDialogRoute<T>(
+      pageBuilder: pageBuilder,
+      barrierDismissible: barrierDismissible,
+      barrierLabel: barrierLabel,
+      barrierColor: barrierColor,
+      transitionDuration: transitionDuration,
+      transitionBuilder: transitionBuilder,
+      settings: routeSettings,
+    ));
+  }
+
+  /// Custom UI Dialog.
+  Future<T> defaultDialog<T>({
+    String title = "Alert",
+    TextStyle titleStyle,
+    Widget content,
+    VoidCallback onConfirm,
+    VoidCallback onCancel,
+    VoidCallback onCustom,
+    Color cancelTextColor,
+    Color confirmTextColor,
+    String textConfirm,
+    String textCancel,
+    String textCustom,
+    Widget confirm,
+    Widget cancel,
+    Widget custom,
+    Color backgroundColor,
+    bool barrierDismissible = true,
+    Color buttonColor,
+    String middleText = "Dialog made in 3 lines of code",
+    TextStyle middleTextStyle,
+    double radius = 20.0,
+    //   ThemeData themeData,
+    List<Widget> actions,
+  }) {
+    var leanCancel = onCancel != null || textCancel != null;
+    var leanConfirm = onConfirm != null || textConfirm != null;
+    actions ??= [];
+
+    if (cancel != null) {
+      actions.add(cancel);
+    } else {
+      if (leanCancel) {
+        actions.add(FlatButton(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () {
+            onCancel?.call();
+            back();
+          },
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Text(
+            textCancel ?? "Cancel",
+            style: TextStyle(color: cancelTextColor ?? theme.accentColor),
+          ),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                  color: buttonColor ?? theme.accentColor,
+                  width: 2,
+                  style: BorderStyle.solid),
+              borderRadius: BorderRadius.circular(100)),
+        ));
+      }
+    }
+    if (confirm != null) {
+      actions.add(confirm);
+    } else {
+      if (leanConfirm) {
+        actions.add(FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            color: buttonColor ?? theme.accentColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100)),
+            child: Text(
+              textConfirm ?? "Ok",
+              style: TextStyle(color: confirmTextColor ?? theme.primaryColor),
+            ),
+            onPressed: () {
+              onConfirm?.call();
+            }));
+      }
+    }
+
+    return dialog(
+      AlertDialog(
+        titlePadding: EdgeInsets.all(8),
+        contentPadding: EdgeInsets.all(8),
+        backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            content ??
+                Text(middleText ?? "",
+                    textAlign: TextAlign.center, style: middleTextStyle),
+            SizedBox(height: 16),
+            ButtonTheme(
+              minWidth: 78.0,
+              height: 34.0,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: actions,
+              ),
+            )
+          ],
+        ),
+        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+        buttonPadding: EdgeInsets.zero,
+      ),
+      barrierDismissible: barrierDismissible,
+    );
+  }
+}
+
+extension ExtensionBottomSheet on GetInterface {
+  Future<T> bottomSheet<T>(
+    Widget bottomsheet, {
+    Color backgroundColor,
+    double elevation,
+    bool persistent = true,
+    ShapeBorder shape,
+    Clip clipBehavior,
+    Color barrierColor,
+    bool ignoreSafeArea,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    RouteSettings settings,
+    Duration enterBottomSheetDuration,
+    Duration exitBottomSheetDuration,
+  }) {
+    assert(bottomsheet != null);
+    assert(persistent != null);
+    assert(isScrollControlled != null);
+    assert(useRootNavigator != null);
+    assert(isDismissible != null);
+    assert(enableDrag != null);
+
+    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
+        .push(GetModalBottomSheetRoute<T>(
+      builder: (_) => bottomsheet,
+      isPersistent: persistent,
+      theme: Theme.of(key.currentContext, shadowThemeOnly: true),
+      isScrollControlled: isScrollControlled,
+      barrierLabel:
+          MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
+      backgroundColor: backgroundColor ?? Colors.transparent,
+      elevation: elevation,
+      shape: shape,
+      removeTop: ignoreSafeArea ?? true,
+      clipBehavior: clipBehavior,
+      isDismissible: isDismissible,
+      modalBarrierColor: barrierColor,
+      settings: settings,
+      enableDrag: enableDrag,
+    ));
+  }
+}
+
 extension GetNavigation on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
@@ -439,428 +870,6 @@ extension GetNavigation on GetInterface {
         predicate ?? (route) => false);
   }
 
-  /// Show a dialog.
-  /// You can pass a [transitionDuration] and/or [transitionCurve],
-  /// overriding the defaults when the dialog shows up and closes.
-  /// When the dialog closes, uses those animations in reverse.
-  Future<T> dialog<T>(
-    Widget widget, {
-    bool barrierDismissible = true,
-    Color barrierColor,
-    bool useSafeArea = true,
-    bool useRootNavigator = true,
-    RouteSettings routeSettings,
-    Duration transitionDuration,
-    Curve transitionCurve,
-  }) {
-    assert(widget != null);
-    assert(barrierDismissible != null);
-    assert(useSafeArea != null);
-    assert(useRootNavigator != null);
-    assert(debugCheckHasMaterialLocalizations(context));
-
-    final theme = Theme.of(context, shadowThemeOnly: true);
-    return generalDialog(
-      pageBuilder: (buildContext, animation, secondaryAnimation) {
-        final pageChild = widget;
-        Widget dialog = Builder(builder: (context) {
-          return theme != null
-              ? Theme(data: theme, child: pageChild)
-              : pageChild;
-        });
-        if (useSafeArea) {
-          dialog = SafeArea(child: dialog);
-        }
-        return dialog;
-      },
-      barrierDismissible: barrierDismissible,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: barrierColor ?? Colors.black54,
-      transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: CurvedAnimation(
-            parent: animation,
-            curve: transitionCurve ?? defaultDialogTransitionCurve,
-          ),
-          child: child,
-        );
-      },
-      useRootNavigator: useRootNavigator,
-      routeSettings: routeSettings,
-    );
-  }
-
-  /// Api from showGeneralDialog with no context
-  Future<T> generalDialog<T>({
-    @required RoutePageBuilder pageBuilder,
-    bool barrierDismissible = false,
-    String barrierLabel,
-    Color barrierColor = const Color(0x80000000),
-    Duration transitionDuration = const Duration(milliseconds: 200),
-    RouteTransitionsBuilder transitionBuilder,
-    bool useRootNavigator = true,
-    RouteSettings routeSettings,
-  }) {
-    assert(pageBuilder != null);
-    assert(useRootNavigator != null);
-    assert(!barrierDismissible || barrierLabel != null);
-    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
-        .push<T>(GetDialogRoute<T>(
-      pageBuilder: pageBuilder,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor,
-      transitionDuration: transitionDuration,
-      transitionBuilder: transitionBuilder,
-      settings: routeSettings,
-    ));
-  }
-
-  /// Custom UI Dialog.
-  Future<T> defaultDialog<T>({
-    String title = "Alert",
-    TextStyle titleStyle,
-    Widget content,
-    VoidCallback onConfirm,
-    VoidCallback onCancel,
-    VoidCallback onCustom,
-    Color cancelTextColor,
-    Color confirmTextColor,
-    String textConfirm,
-    String textCancel,
-    String textCustom,
-    Widget confirm,
-    Widget cancel,
-    Widget custom,
-    Color backgroundColor,
-    bool barrierDismissible = true,
-    Color buttonColor,
-    String middleText = "Dialog made in 3 lines of code",
-    TextStyle middleTextStyle,
-    double radius = 20.0,
-    //   ThemeData themeData,
-    List<Widget> actions,
-  }) {
-    var leanCancel = onCancel != null || textCancel != null;
-    var leanConfirm = onConfirm != null || textConfirm != null;
-    actions ??= [];
-
-    if (cancel != null) {
-      actions.add(cancel);
-    } else {
-      if (leanCancel) {
-        actions.add(FlatButton(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onPressed: () {
-            onCancel?.call();
-            back();
-          },
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Text(
-            textCancel ?? "Cancel",
-            style: TextStyle(color: cancelTextColor ?? theme.accentColor),
-          ),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: buttonColor ?? theme.accentColor,
-                  width: 2,
-                  style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(100)),
-        ));
-      }
-    }
-    if (confirm != null) {
-      actions.add(confirm);
-    } else {
-      if (leanConfirm) {
-        actions.add(FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            color: buttonColor ?? theme.accentColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100)),
-            child: Text(
-              textConfirm ?? "Ok",
-              style: TextStyle(color: confirmTextColor ?? theme.primaryColor),
-            ),
-            onPressed: () {
-              onConfirm?.call();
-            }));
-      }
-    }
-
-    return dialog(
-      AlertDialog(
-        titlePadding: EdgeInsets.all(8),
-        contentPadding: EdgeInsets.all(8),
-        backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(radius))),
-        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            content ??
-                Text(middleText ?? "",
-                    textAlign: TextAlign.center, style: middleTextStyle),
-            SizedBox(height: 16),
-            ButtonTheme(
-              minWidth: 78.0,
-              height: 34.0,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8,
-                runSpacing: 8,
-                children: actions,
-              ),
-            )
-          ],
-        ),
-        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-        buttonPadding: EdgeInsets.zero,
-      ),
-      barrierDismissible: barrierDismissible,
-    );
-  }
-
-  Future<T> bottomSheet<T>(
-    Widget bottomsheet, {
-    Color backgroundColor,
-    double elevation,
-    bool persistent = true,
-    ShapeBorder shape,
-    Clip clipBehavior,
-    Color barrierColor,
-    bool ignoreSafeArea,
-    bool isScrollControlled = false,
-    bool useRootNavigator = false,
-    bool isDismissible = true,
-    bool enableDrag = true,
-    RouteSettings settings,
-    Duration enterBottomSheetDuration,
-    Duration exitBottomSheetDuration,
-  }) {
-    assert(bottomsheet != null);
-    assert(persistent != null);
-    assert(isScrollControlled != null);
-    assert(useRootNavigator != null);
-    assert(isDismissible != null);
-    assert(enableDrag != null);
-
-    return Navigator.of(overlayContext, rootNavigator: useRootNavigator)
-        .push(GetModalBottomSheetRoute<T>(
-      builder: (_) => bottomsheet,
-      isPersistent: persistent,
-      theme: Theme.of(key.currentContext, shadowThemeOnly: true),
-      isScrollControlled: isScrollControlled,
-      barrierLabel:
-          MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
-      backgroundColor: backgroundColor ?? Colors.transparent,
-      elevation: elevation,
-      shape: shape,
-      removeTop: ignoreSafeArea ?? true,
-      clipBehavior: clipBehavior,
-      isDismissible: isDismissible,
-      modalBarrierColor: barrierColor,
-      settings: settings,
-      enableDrag: enableDrag,
-    ));
-  }
-
-  void rawSnackbar({
-    String title,
-    String message,
-    Widget titleText,
-    Widget messageText,
-    Widget icon,
-    bool instantInit = true,
-    bool shouldIconPulse = true,
-    double maxWidth,
-    EdgeInsets margin = const EdgeInsets.all(0.0),
-    EdgeInsets padding = const EdgeInsets.all(16),
-    double borderRadius = 0.0,
-    Color borderColor,
-    double borderWidth = 1.0,
-    Color backgroundColor = const Color(0xFF303030),
-    Color leftBarIndicatorColor,
-    List<BoxShadow> boxShadows,
-    Gradient backgroundGradient,
-    FlatButton mainButton,
-    OnTap onTap,
-    Duration duration = const Duration(seconds: 3),
-    bool isDismissible = true,
-    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
-    bool showProgressIndicator = false,
-    AnimationController progressIndicatorController,
-    Color progressIndicatorBackgroundColor,
-    Animation<Color> progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.BOTTOM,
-    SnackStyle snackStyle = SnackStyle.FLOATING,
-    Curve forwardAnimationCurve = Curves.easeOutCirc,
-    Curve reverseAnimationCurve = Curves.easeOutCirc,
-    Duration animationDuration = const Duration(seconds: 1),
-    SnackbarStatusCallback snackbarStatus,
-    double barBlur = 0.0,
-    double overlayBlur = 0.0,
-    Color overlayColor,
-    Form userInputForm,
-  }) async {
-    final getBar = GetBar(
-      snackbarStatus: snackbarStatus,
-      title: title,
-      message: message,
-      titleText: titleText,
-      messageText: messageText,
-      snackPosition: snackPosition,
-      borderRadius: borderRadius,
-      margin: margin,
-      duration: duration,
-      barBlur: barBlur,
-      backgroundColor: backgroundColor,
-      icon: icon,
-      shouldIconPulse: shouldIconPulse,
-      maxWidth: maxWidth,
-      padding: padding,
-      borderColor: borderColor,
-      borderWidth: borderWidth,
-      leftBarIndicatorColor: leftBarIndicatorColor,
-      boxShadows: boxShadows,
-      backgroundGradient: backgroundGradient,
-      mainButton: mainButton,
-      onTap: onTap,
-      isDismissible: isDismissible,
-      dismissDirection: dismissDirection,
-      showProgressIndicator: showProgressIndicator ?? false,
-      progressIndicatorController: progressIndicatorController,
-      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-      progressIndicatorValueColor: progressIndicatorValueColor,
-      snackStyle: snackStyle,
-      forwardAnimationCurve: forwardAnimationCurve,
-      reverseAnimationCurve: reverseAnimationCurve,
-      animationDuration: animationDuration,
-      overlayBlur: overlayBlur,
-      overlayColor: overlayColor,
-      userInputForm: userInputForm,
-    );
-
-    if (instantInit) {
-      getBar.show();
-    } else {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        getBar.show();
-      });
-    }
-  }
-
-  Future<T> showSnackbar<T>(GetBar snackbar) {
-    return key?.currentState?.push(SnackRoute<T>(snack: snackbar));
-  }
-
-  void snackbar(
-    String title,
-    String message, {
-    Color colorText,
-    Duration duration,
-
-    /// with instantInit = false you can put snackbar on initState
-    bool instantInit = true,
-    SnackPosition snackPosition,
-    Widget titleText,
-    Widget messageText,
-    Widget icon,
-    bool shouldIconPulse,
-    double maxWidth,
-    EdgeInsets margin,
-    EdgeInsets padding,
-    double borderRadius,
-    Color borderColor,
-    double borderWidth,
-    Color backgroundColor,
-    Color leftBarIndicatorColor,
-    List<BoxShadow> boxShadows,
-    Gradient backgroundGradient,
-    FlatButton mainButton,
-    OnTap onTap,
-    bool isDismissible,
-    bool showProgressIndicator,
-    SnackDismissDirection dismissDirection,
-    AnimationController progressIndicatorController,
-    Color progressIndicatorBackgroundColor,
-    Animation<Color> progressIndicatorValueColor,
-    SnackStyle snackStyle,
-    Curve forwardAnimationCurve,
-    Curve reverseAnimationCurve,
-    Duration animationDuration,
-    double barBlur,
-    double overlayBlur,
-    SnackbarStatusCallback snackbarStatus,
-    Color overlayColor,
-    Form userInputForm,
-  }) async {
-    final getBar = GetBar(
-        snackbarStatus: snackbarStatus,
-        titleText: (title == null)
-            ? null
-            : titleText ??
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: colorText ?? iconColor ?? Colors.black,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                  ),
-                ),
-        messageText: messageText ??
-            Text(
-              message,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-              ),
-            ),
-        snackPosition: snackPosition ?? SnackPosition.TOP,
-        borderRadius: borderRadius ?? 15,
-        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
-        duration: duration ?? Duration(seconds: 3),
-        barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
-        icon: icon,
-        shouldIconPulse: shouldIconPulse ?? true,
-        maxWidth: maxWidth,
-        padding: padding ?? EdgeInsets.all(16),
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.FLOATING,
-        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? Duration(seconds: 1),
-        overlayBlur: overlayBlur ?? 0.0,
-        overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm);
-
-    if (instantInit) {
-      showSnackbar(getBar);
-    } else {
-      routing.isSnackbar = true;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        showSnackbar(getBar);
-      });
-    }
-  }
-
   void addPages(List<GetPage> getPages) {
     if (getPages != null) {
       if (routeTree == null) {
@@ -1024,7 +1033,36 @@ Since version 2.8 it is possible to access the properties
     return _theme;
   }
 
-  WidgetsBinding get engine => WidgetsBinding.instance;
+  ///The current [WidgetsBinding]
+  WidgetsBinding get engine {
+    if (WidgetsBinding.instance == null) {
+      WidgetsFlutterBinding();
+    }
+    return WidgetsBinding.instance;
+  }
+
+  ///The window to which this binding is bound.
+  Window get window => engine.window;
+
+  ///The number of device pixels for each logical pixel.
+  double get pixelRatio => window.devicePixelRatio;
+
+  ///The horizontal extent of this size.
+  double get width => window.physicalSize.width / pixelRatio;
+
+  ///The vertical extent of this size
+  double get height => window.physicalSize.height / pixelRatio;
+
+  ///The distance from the top edge to the first unpadded pixel,
+  ///in physical pixels.
+  double get statusBarHeight => window.padding.top;
+
+  ///The distance from the bottom edge to the first unpadded pixel,
+  ///in physical pixels.
+  double get bottomBarHeight => window.padding.bottom;
+
+  ///The system-reported text scale.
+  double get textScaleFactor => window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme?.textTheme;
@@ -1036,8 +1074,7 @@ Since version 2.8 it is possible to access the properties
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
-  bool get isPlatformDarkMode =>
-      (mediaQuery.platformBrightness == Brightness.dark);
+  bool get isPlatformDarkMode => (window.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color get iconColor => theme?.iconTheme?.color;
@@ -1045,11 +1082,11 @@ Since version 2.8 it is possible to access the properties
   /// give access to FocusScope.of(context)
   FocusNode get focusScope => FocusManager.instance.primaryFocus;
 
-  /// give access to Immutable MediaQuery.of(context).size.height
-  double get height => MediaQuery.of(context).size.height;
+  // /// give access to Immutable MediaQuery.of(context).size.height
+  // double get height => MediaQuery.of(context).size.height;
 
-  /// give access to Immutable MediaQuery.of(context).size.width
-  double get width => MediaQuery.of(context).size.width;
+  // /// give access to Immutable MediaQuery.of(context).size.width
+  // double get width => MediaQuery.of(context).size.width;
 
   GlobalKey<NavigatorState> get key => getxController?.key;
 

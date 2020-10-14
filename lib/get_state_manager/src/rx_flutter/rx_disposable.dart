@@ -9,21 +9,35 @@ import '../../../get_instance/src/lifecycle.dart';
 /// it is Get.reset().
 abstract class GetxService extends DisposableInterface with GetxServiceMixin {}
 
-abstract class DisposableInterface extends GetLifeCycle {
+abstract class DisposableInterface with GetLifeCycle {
   bool _initialized = false;
 
   /// Checks whether the controller has already been initialized.
   bool get initialized => _initialized;
 
+  bool _isClosed = false;
+
+  /// Checks whether the controller has already been closed.
+  bool get isClosed => _isClosed;
+
   DisposableInterface() {
     onStart.callback = _onStart;
+    onDelete.callback = _onDelete;
   }
 
   // Internal callback that starts the cycle of this controller.
   void _onStart() {
+    if (_initialized) return;
     onInit();
     _initialized = true;
     SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+  }
+
+  // Internal callback that starts the cycle of this controller.
+  void _onDelete() {
+    if (_isClosed) return;
+    _isClosed = true;
+    onClose();
   }
 
   /// Called immediately after the widget is allocated in memory.

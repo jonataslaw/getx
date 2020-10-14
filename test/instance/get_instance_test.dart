@@ -9,19 +9,28 @@ class Mock {
   }
 }
 
-class Controller {}
-
-class DisposableController extends GetLifeCycle {
+class DisposableController with GetLifeCycle {
   DisposableController() {
     onStart.callback = _onStart;
+    onDelete.callback = _onDelete;
   }
 
   // Internal callback that starts the cycle of this controller.
   void _onStart() {
+    if (initialized) return;
     onInit();
   }
 
+  // Internal callback that starts the cycle of this controller.
+  void _onDelete() {
+    if (isClosed) return;
+    isClosed = true;
+    onClose();
+  }
+
   bool initialized = false;
+
+  bool isClosed = false;
 
   void onInit() async {
     initialized = true;
@@ -50,6 +59,17 @@ void main() {
   test('Get.put test', () async {
     final instance = Get.put<Controller>(Controller());
     expect(instance, Get.find<Controller>());
+    Get.reset();
+  });
+
+  test('Get start and delete called just one time', () async {
+    Get..put(Controller())..put(Controller());
+
+    final controller = Get.find<Controller>();
+    expect(controller.init, 1);
+
+    Get..delete<Controller>()..delete<Controller>();
+    expect(controller.close, 1);
     Get.reset();
   });
 
@@ -127,4 +147,20 @@ void main() {
       expect(instance.initialized, true);
     });
   });
+}
+
+class Controller extends DisposableController {
+  int init = 0;
+  int close = 0;
+  @override
+  void onInit() {
+    init++;
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    close++;
+    super.onClose();
+  }
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,6 +26,7 @@ class MockRepository implements IHomeRepository {
 }
 
 void main() {
+  setUpAll(() => HttpOverrides.global = null);
   final binding = BindingsBuilder(() {
     Get.lazyPut<IHomeRepository>(() => MockRepository());
     Get.lazyPut<HomeController>(
