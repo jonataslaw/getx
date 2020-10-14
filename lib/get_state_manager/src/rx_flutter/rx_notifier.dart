@@ -89,7 +89,7 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycle {
   }
 
   RxStatus get status {
-    // notifyChildrens();
+    notifyChildrens();
     return _status;
   }
 
@@ -158,4 +158,3 @@ class RxStatus {
 }
 
 typedef NotifierBuilder<T> = Widget Function(T state);
-
