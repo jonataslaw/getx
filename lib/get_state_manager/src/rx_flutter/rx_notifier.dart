@@ -108,11 +108,17 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycle {
 
   @protected
   void change(T newState, {RxStatus status}) {
+    var _canUpdate = false;
     if (status != null) {
       _status = status;
+      _canUpdate = true;
     }
     if (newState != _value) {
-      value = newState;
+      _value = newState;
+      _canUpdate = true;
+    }
+    if (_canUpdate) {
+      updater();
     }
   }
 

@@ -5,6 +5,7 @@ import 'simple_builder.dart';
 class ListNotifier implements Listenable {
   List<VoidCallback> _listeners = <VoidCallback>[];
 
+  @protected
   void updater() {
     assert(_debugAssertNotDisposed());
     for (var element in _listeners) {
