@@ -331,9 +331,6 @@ MaterialApp(
 // dar los argumentos actuales de currentScreen
 Get.arguments
 
-// dar argumentos de la ruta anterior
-Get.previousArguments
-
 // dar el nombre de la ruta anterior
 Get.previousRoute
 
