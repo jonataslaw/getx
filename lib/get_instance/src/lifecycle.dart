@@ -11,12 +11,14 @@ class _InternalFinalCallback<T> {
   T call() => callback.call();
 }
 
-abstract class GetLifeCycle {
+mixin  GetLifeCycle {
   /// Called at the exact moment the widget is allocated in memory.
   /// It uses an internal "callable" type, to avoid any @overrides in subclases.
   /// This method should be internal and is required to define the
   /// lifetime cycle of the subclass.
   final onStart = _InternalFinalCallback<void>();
+
+  final onDelete = _InternalFinalCallback<void>();
 
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.

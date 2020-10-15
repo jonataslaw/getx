@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter/widgets.dart';
 import 'get_state.dart';
 
@@ -88,7 +87,7 @@ class SimpleBuilder extends StatefulWidget {
 
 class _SimpleBuilderState extends State<SimpleBuilder>
     with GetStateUpdaterMixin {
-  final HashSet<VoidCallback> disposers = HashSet<VoidCallback>();
+  final disposers = <VoidCallback>[];
 
   @override
   void dispose() {
@@ -116,13 +115,11 @@ class TaskManager {
 
   static TaskManager get instance => _instance ??= TaskManager._();
 
-//  StateSetter _setter;//<old>
   GetStateUpdate _setter;
 
-  HashSet<VoidCallback> _remove;
+  List<VoidCallback> _remove;
 
-//  void notify(HashSet<StateSetter> _updaters) { //<old>
-  void notify(HashSet<GetStateUpdate> _updaters) {
+  void notify(List<GetStateUpdate> _updaters) {
     if (_setter != null) {
       if (!_updaters.contains(_setter)) {
         _updaters.add(_setter);
@@ -132,8 +129,7 @@ class TaskManager {
   }
 
   Widget exchange(
-    HashSet<VoidCallback> disposers,
-//    StateSetter setState, //<old>
+    List<VoidCallback> disposers,
     GetStateUpdate setState,
     Widget Function(BuildContext) builder,
     BuildContext context,
