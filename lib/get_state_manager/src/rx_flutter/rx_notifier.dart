@@ -94,13 +94,13 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycle {
   }
 
   Widget call(NotifierBuilder<T> widget, {Widget onError, Widget onLoading}) {
+    assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
         return onLoading ?? CircularProgressIndicator();
       } else if (status.isError) {
-        return onError ?? Text('A error occured');
+        return onError ?? Text('A error occured: ${status.errorMessage}');
       } else {
-        if (widget == null) throw 'Widget cannot be null';
         return widget(value);
       }
     });
