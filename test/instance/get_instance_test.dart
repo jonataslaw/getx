@@ -11,23 +11,7 @@ class Mock {
 
 class DisposableController with GetLifeCycle {
   DisposableController() {
-    onStart.callback = _onStart;
-  }
-
-  // Internal callback that starts the cycle of this controller.
-  void _onStart() {
-    if (initialized) return;
-    onInit();
-  }
-
-  bool initialized = false;
-
-  bool isClosed = false;
-
-  @override
-  void onInit() async {
-    super.onInit();
-    initialized = true;
+    initLifeCycle();
   }
 }
 
