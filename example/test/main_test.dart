@@ -172,6 +172,7 @@ class Controller extends GetxController {
 
   @override
   void onClose() {
+    super.onClose();
     print('onClose');
   }
 }
