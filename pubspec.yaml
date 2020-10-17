@@ -4,7 +4,7 @@ version: 3.13.2
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
