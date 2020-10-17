@@ -4,24 +4,32 @@ import 'package:flutter/material.dart';
 /// overrides if you extend the class that uses it, as Dart has no final
 /// methods.
 /// Used in [DisposableInterface] to avoid the danger of overriding onStart.
-///
 class _InternalFinalCallback<T> {
-  T Function() callback;
+  ValueGetter<T> _callback;
 
-  _InternalFinalCallback({this.callback});
-
-  T call() => callback.call();
-}
-
-class _InternalFinalPrivateCallback<T> {
-  T Function() _callback;
-
-  _InternalFinalPrivateCallback();
+  _InternalFinalCallback({ValueGetter<T> callback}) : _callback = callback;
 
   T call() => _callback.call();
 }
 
+/// The [GetLifeCycle]
+///
+/// ```dart
+/// class SomeController with GetLifeCycle {
+///   SomeController() {
+///     initLifeCycle();
+///   }
+/// }
+/// ```
 mixin GetLifeCycle {
+  /// The `initLifeCycle` works as a constructor for the [GetLifeCycle]
+  ///
+  /// This method must be invoked in the constructor of the implementation
+  void initLifeCycle() {
+    onStart._callback = _onStart;
+    onDelete._callback = _onDelete;
+  }
+
   /// Called at the exact moment the widget is allocated in memory.
   /// It uses an internal "callable" type, to avoid any @overrides in subclases.
   /// This method should be internal and is required to define the
@@ -29,14 +37,12 @@ mixin GetLifeCycle {
   final onStart = _InternalFinalCallback<void>();
 
   /// Internal callback that starts the cycle of this controller.
-  final onDelete = _InternalFinalPrivateCallback<void>();
+  final onDelete = _InternalFinalCallback<void>();
 
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
   @mustCallSuper
-  void onInit() {
-    onDelete._callback = _onDelete;
-  }
+  void onInit() {}
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
@@ -50,6 +56,18 @@ mixin GetLifeCycle {
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
   void onClose() {}
+
+  bool _initialized = false;
+
+  /// Checks whether the controller has already been initialized.
+  bool get initialized => _initialized;
+
+  // Internal callback that starts the cycle of this controller.
+  void _onStart() {
+    if (_initialized) return;
+    onInit();
+    _initialized = true;
+  }
 
   bool _isClosed = false;
 

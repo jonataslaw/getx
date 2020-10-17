@@ -11,28 +11,18 @@ import '../../../get_instance/src/lifecycle.dart';
 abstract class GetxService extends DisposableInterface with GetxServiceMixin {}
 
 abstract class DisposableInterface with GetLifeCycle {
-  bool _initialized = false;
-
-  /// Checks whether the controller has already been initialized.
-  bool get initialized => _initialized;
-
   DisposableInterface() {
-    onStart.callback = _onStart;
-  }
-
-  // Internal callback that starts the cycle of this controller.
-  void _onStart() {
-    if (_initialized) return;
-    onInit();
-    _initialized = true;
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+    initLifeCycle();
   }
 
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
   @override
   @mustCallSuper
-  void onInit() => super.onInit();
+  void onInit() {
+    super.onInit();
+    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+  }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
@@ -48,6 +38,5 @@ abstract class DisposableInterface with GetLifeCycle {
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
   @override
-  @mustCallSuper
   void onClose() {}
 }
