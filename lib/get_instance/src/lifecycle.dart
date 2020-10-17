@@ -48,6 +48,7 @@ mixin GetLifeCycle {
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
+  @mustCallSuper
   void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to
@@ -56,6 +57,7 @@ mixin GetLifeCycle {
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
+  @mustCallSuper
   void onClose() {}
 
   bool _initialized = false;
