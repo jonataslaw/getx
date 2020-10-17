@@ -204,7 +204,7 @@ class GetUtils {
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) => hasMatch(s,
-      r'([0-9\s\-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$');
+      r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   /// Checks if string is DateTime (UTC or Iso8601).
   static bool isDateTime(String s) =>
