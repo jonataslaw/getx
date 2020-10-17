@@ -4,22 +4,21 @@ import '../../../get_rx/get_rx.dart';
 
 typedef WidgetCallback = Widget Function();
 
-/// The simplest reactive widget in GetX.
+/// The [ObxWidget] is the base for all GetX reactive widgets
 ///
-/// Just pass your Rx variable in the root scope of the callback to have it
-/// automatically registered for changes.
-///
-/// final _name = "GetX".obs;
-/// Obx(() => Text( _name.value )),... ;
-class Obx extends StatefulWidget {
-  final WidgetCallback builder;
-
-  const Obx(this.builder);
+/// See also:
+/// - [Obx]
+/// - [ObxValue]
+abstract class ObxWidget extends StatefulWidget {
+  const ObxWidget({Key key}) : super(key: key);
 
   _ObxState createState() => _ObxState();
+
+  @protected
+  Widget build();
 }
 
-class _ObxState extends State<Obx> {
+class _ObxState extends State<ObxWidget> {
   RxInterface _observer;
   StreamSubscription subs;
 
@@ -43,7 +42,7 @@ class _ObxState extends State<Obx> {
   Widget get notifyChilds {
     final observer = getObs;
     getObs = _observer;
-    final result = widget.builder();
+    final result = widget.build();
     if (!_observer.canUpdate) {
       throw """
       [Get] the improper use of a GetX has been detected. 
@@ -62,6 +61,22 @@ class _ObxState extends State<Obx> {
   Widget build(BuildContext context) => notifyChilds;
 }
 
+/// The simplest reactive widget in GetX.
+///
+/// Just pass your Rx variable in the root scope of the callback to have it
+/// automatically registered for changes.
+///
+/// final _name = "GetX".obs;
+/// Obx(() => Text( _name.value )),... ;
+class Obx extends ObxWidget {
+  final WidgetCallback builder;
+
+  const Obx(this.builder);
+
+  @override
+  Widget build() => builder();
+}
+
 /// Similar to Obx, but manages a local state.
 /// Pass the initial data in constructor.
 /// Useful for simple local states, like toggles, visibility, themes,
@@ -76,45 +91,12 @@ class _ObxState extends State<Obx> {
 
 // TODO: change T to a proper Rx interface, that includes the accessor
 //  for ::value
-class ObxValue<T extends RxInterface> extends StatefulWidget {
+class ObxValue<T extends RxInterface> extends ObxWidget {
   final Widget Function(T) builder;
   final T data;
 
   const ObxValue(this.builder, this.data, {Key key}) : super(key: key);
 
-  _ObxValueState createState() => _ObxValueState();
-}
-
-class _ObxValueState extends State<ObxValue> {
-  RxInterface _observer;
-  StreamSubscription subs;
-
-  _ObxValueState() {
-    _observer = Rx();
-  }
-
   @override
-  void initState() {
-    subs = _observer.subject.stream.listen((data) => setState(() {}));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    subs.cancel();
-    _observer.close();
-    super.dispose();
-  }
-
-  Widget get notifyChilds {
-    final observer = getObs;
-    getObs = _observer;
-    // observable is implicity taken from the constructor.
-    final result = widget.builder(widget.data);
-    getObs = observer;
-    return result;
-  }
-
-  @override
-  Widget build(BuildContext context) => notifyChilds;
+  Widget build() => builder(data);
 }
