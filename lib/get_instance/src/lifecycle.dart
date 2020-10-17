@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import '../../get_core/get_core.dart';
 
 /// Special callable class to keep the contract of a regular method, and avoid
 /// overrides if you extend the class that uses it, as Dart has no final
 /// methods.
 /// Used in [DisposableInterface] to avoid the danger of overriding onStart.
 class _InternalFinalCallback<T> {
-  ValueGetter<T> _callback;
+  ValueUpdater<T> _callback;
 
-  _InternalFinalCallback({ValueGetter<T> callback}) : _callback = callback;
+  _InternalFinalCallback({ValueUpdater<T> callback}) : _callback = callback;
 
   T call() => _callback.call();
 }
