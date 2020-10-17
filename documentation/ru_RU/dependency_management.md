@@ -1,40 +1,40 @@
-# Dependency Management
-- [Dependency Management](#dependency-management)
-  - [Instancing methods](#instancing-methods)
+# Управление зависимостями
+- [Управление зависимостями](#управление-зависимостями)
+  - [Методы создания экземпляров](#методы-создания-экземпляров)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
-  - [Differences between methods](#differences-between-methods)
-  - [Bindings](#bindings)
-    - [How to use](#how-to-use)
+  - [Применение методов/классов создания экземпляров](#применение-методовклассов-создания-экземпляров)
+  - [Различия между методами](#различия-между-методами)
+  - [Подвязки](#подвязки)
+    - [Применение](#применение)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
-  - [Notes](#notes)
+    - [Как подвязки работают под капотом](#как-подвязки-работают-под-капотом)
+  - [Примечания](#примечания)
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Get имеет простой и мощный менеджер зависимостей, позволяющий вам получить тот же класс, что и ваш Bloc или Controller, с помощью 1 строки кода, без Provider и inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or Bloc class) normally
+Вместо того, чтобы создавать экземпляр вашего класса в классе, который вы используете, вы создаёте его в экземпляре Get, что сделает его доступным во всем приложении.
+Таким образом Вы можете использовать свой контроллер (или Bloc)
 
-- Note: If you are using Get's State Manager, pay more attention to the [Bindings](#bindings) api, which will make easier to connect your view to your controller.
-- Note²: Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to change that, you can use this dependency injection manager with no problems at all
+- Примечание: Если вы применяете менеджер состояний Get, обратите внимание на [Bindings](#bindings) api, упрощающего подключение вашего предсталения к контроллеру.
+- Примечаие²: Управление зависимостями Get отделено от других частей пакета, поэтому, если, например, ваше приложение уже использует другой менеджер состояний, вам не нужно его менять, вы можете использовать этот менеджер внедрения зависимостей без каких-либо проблем.
 
-## Instancing methods
-The methods and it's configurable parameters are:
+## Методы создания экземпляров
+Методы и настраиваемые параметры:
 
 ### Get.put()
 
-The most common way of inserting a dependency. Good for the controllers of your views for example.
+Самый распространенный способ внедрения зависимости. Например, хорош для контроллеров ваших представлений.
 
 ```dart
 Get.put<SomeClass>(SomeClass());
@@ -42,7 +42,7 @@ Get.put<LoginController>(LoginController(), permanent: true);
 Get.put<ListItemController>(ListItemController, tag: "some unique string");
 ```
 
-This is all options you can set when using put:
+Это все параметры, которые вы можете установить при использовании put:
 ```dart
 Get.put<S>(
   // mandatory: the class that you want to get to save, like a controller or anything
@@ -73,7 +73,7 @@ Get.put<S>(
 ```
 
 ### Get.lazyPut
-It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or if you want to instantiate several classes in just one place (like in a Bindings class) and you know you will not gonna use that class at that time.
+Можно отложить загрузку зависимости, чтобы она создавалась только тогда, когда она используется. Очень полезно для вычислительных ресурсоёмких классов или если вы хотите создать экземпляры нескольких классов в одном месте (например, в классе Bindings), и вы знаете, что не собираетесь использовать этот класс в то время.
 
 ```dart
 /// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
@@ -91,7 +91,7 @@ Get.lazyPut<FirebaseAuth>(
 Get.lazyPut<Controller>( () => Controller() )
 ```
 
-This is all options you can set when using lazyPut:
+Это все параметры, которые вы можете установить при использовании lazyPut:
 ```dart
 Get.lazyPut<S>(
   // mandatory: a method that will be executed when your class is called for the first time
@@ -111,7 +111,7 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
-If you want to register an asynchronous instance, you can use `Get.putAsync`:
+Если вы хотите зарегистрировать асинхронный экземпляр, вы можете использовать `Get.putAsync`:
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -123,7 +123,7 @@ Get.putAsync<SharedPreferences>(() async {
 Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
-This is all options you can set when using putAsync:
+Это все параметры, которые вы можете установить при использовании putAsync:
 ```dart
 Get.putAsync<S>(
 
@@ -142,14 +142,14 @@ Get.putAsync<S>(
 
 ### Get.create
 
-This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
+Это хитрый метод. Подробное объяснение того, что это такое, и различий между ними можно найти в разделе [Различия между методами](#различия-между-методами):
 
 ```dart
 Get.Create<SomeClass>(() => SomeClass());
 Get.Create<LoginController>(() => LoginController());
 ```
 
-This is all options you can set when using create:
+Это все параметры, которые вы можете установить при использовании create:
 
 ```dart
 Get.create<S>(
@@ -170,9 +170,9 @@ Get.create<S>(
   bool permanent = true
 ```
 
-## Using instantiated methods/classes
+## Применение методов/классов создания экземпляров
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+Представьте, что вы прошли через множество маршрутов и вам нужны данные, которые остались в вашем контроллере. Вам понадобится менеджер состояний в сочетании с Provider или Get_it, верно? Только не с Get. Вам просто нужно попросить Get «найти» ваш контроллер, никаких дополнительных зависимостей вам не потребуется:
 
 ```dart
 final controller = Get.find<Controller>();
@@ -183,44 +183,44 @@ Controller controller = Get.find();
 // You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+И тогда вы сможете восстановить данные вашего контроллера, которые были там получены:
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-Since the returned value is a normal class, you can do anything you want:
+Поскольку возвращаемое значение является обычным классом, вы можете делать все, что захотите:
 ```dart
 int count = Get.find<SharedPreferences>().getInt('counter');
 print(count); // out: 12345
 ```
 
-To remove an instance of Get:
+Чтобы удалить экземпляр Get:
 
 ```dart
 Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
 ```
 
-## Differences between methods
+## Различия между методами
 
-First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
+Сперва давайте рассмотрим параметр `fenix` метода Get.lazyPut и `permanent` других методов.
 
-The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
+Фундаментальное различие между `permanent` и `fenix` заключается в том, как вы хотите хранить свои экземпляры.
 
-Reinforcing: by default, GetX deletes instances when they are not in use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost its use so it will be erased.
+Закрепляя это: по умолчанию GetX удаляет экземпляры, когда они не используются.
+Это означает, что: если на экране 1 есть контроллер 1, а на экране 2 есть контроллер 2, и вы удаляете первый маршрут из стека (например, если вы используете `Get.off()` или `Get.offNamed()`), контроллер 1 теперь не используется, поэтому он будет стёрт.
 
-But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
+Но если вы используете `permanent: true`, тогда контроллер не будет потерян при этом переходе - что очень полезно для служб, которые вы хотите поддерживать на протяжении всего приложения.
 
-`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
+`fenix` предназначен для сервисов, о потере которых вы не беспокоитесь между сменами экрана, но когда вам нужен этот сервис, вы ожидаете, что он будет активен. По сути, он избавится от неиспользуемого контроллера/службы/класса, но когда он вам понадобится, он «воссоздает из пепла» новый экземпляр.
 
-Proceeding with the differences between methods:
+Исходя из различий между методами:
 
-- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only porpuse is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+- Get.put и Get.putAsync следует одному и тому же порядку создания, с той разницей, что второй использует асинхронный метод: эти два метода создают и инициализируют экземпляр. Они вставляются непосредственно в память с использованием внутреннего метода `insert` с параметрами `permanent: false` и `isSingleton: true` (параметр isSingleton предназначен только для того, чтобы указать, следует ли использовать зависимость от `dependency` или она должна использовать зависимость от `FcBuilderFunc`). После этого вызывается `Get.find()`, который немедленно инициализирует экземпляры, находящиеся в памяти.
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
+- Get.create: Как следует из названия, он «создаст» вашу зависимость! Подобно `Get.put()`, он также вызывает внутренний метод `insert` для создания экземпляра. Но `permanent` становится true и `isSingleton` становится false (поскольку мы «создаем» нашу зависимость, она не может быть синглтоном, поэтому false). И поскольку `permanent: true`, мы по умолчанию не теряем его между экранами! Также, `Get.find()` не вызывается немедленно, он ожидает использования на экране для вызова. Он создан таким образом, чтобы использовать параметр `permanent`, `Get.create()` был создан с целью создания не общих экземпляров, но не удаляемых, как, например, кнопка в listView, где вам нужен уникальный экземпляр для этого списка - по этой причине Get.create необходимо использовать вместе с GetWidget.
 
-- Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsable to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
+- Get.lazyPut: Как следует из названия, это ленивый процесс. Экземпляр создается, но он не вызывается для немедленного использования, он остается в ожидании вызова. В отличие от других методов, `insert` не вызывается здесь. Вместо этого экземпляр вставляется в другую часть памяти, часть, отвечающую за определение возможности воссоздания экземпляра, назовем это «фабрикой». Если мы хотим создать что-то, что будет использоваться позже, это не будет смешиваться с вещами, которые использовались сейчас. И здесь вступает в силу магия `fenix`: если вы решаете оставить `fenix: false`, и ваш `smartManagement` не является `keepFactory`, то, при использовании `Get.find`, экземпляр изменит место в памяти с «фабрики» на область памяти общего экземпляра. Сразу после этого по умолчанию удаляется с «фабрики». Теперь, если вы выберете `fenix: true`, экземпляр продолжит существовать в этой выделенной части, даже перейдя в общую область, для повторного вызова в будущем.
 
 ## Bindings
 
