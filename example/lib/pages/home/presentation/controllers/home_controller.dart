@@ -19,7 +19,10 @@ class HomeController extends GetxController {
 
   /// When the controller is initialized, make the http request
   @override
-  void onInit() => fetchDataFromApi();
+  void onInit() {
+    super.onInit();
+    fetchDataFromApi();
+  }
 
   /// fetch cases from Api
   Future<void> fetchDataFromApi() async {

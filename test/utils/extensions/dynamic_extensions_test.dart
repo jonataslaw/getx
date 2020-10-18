@@ -73,7 +73,6 @@ void main() {
     var expected = '';
     void logFunction(String prefix, dynamic value, String info,
         {bool isError = false}) {
-      print('algo');
       expected = '$prefix $value $info'.trim();
     }
 
