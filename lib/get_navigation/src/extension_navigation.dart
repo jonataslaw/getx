@@ -104,7 +104,7 @@ extension ExtensionSnackbar on GetInterface {
     return key?.currentState?.push(SnackRoute<T>(snack: snackbar));
   }
 
-  void snackbar(
+  void snackbar<T>(
     String title,
     String message, {
     Color colorText,
@@ -199,11 +199,11 @@ extension ExtensionSnackbar on GetInterface {
         userInputForm: userInputForm);
 
     if (instantInit) {
-      showSnackbar(getBar);
+      showSnackbar<T>(getBar);
     } else {
       routing.isSnackbar = true;
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        showSnackbar(getBar);
+        showSnackbar<T>(getBar);
       });
     }
   }
@@ -484,7 +484,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.push(
+    return global(id)?.currentState?.push<T>(
           GetPageRoute<T>(
             opaque: opaque ?? true,
             page: () => page,
@@ -690,7 +690,7 @@ extension GetNavigation on GetInterface {
     dynamic arguments,
     int id,
   }) {
-    return global(id)?.currentState?.pushNamedAndRemoveUntil(
+    return global(id)?.currentState?.pushNamedAndRemoveUntil<T>(
           newRouteName,
           predicate ?? (_) => false,
           arguments: arguments,
@@ -730,7 +730,7 @@ extension GetNavigation on GetInterface {
     }
     if (canPop) {
       if (global(id)?.currentState?.canPop() == true) {
-        global(id)?.currentState?.pop(result);
+        global(id)?.currentState?.pop<T>(result);
       }
     } else {
       global(id)?.currentState?.pop<T>(result);
@@ -855,7 +855,7 @@ extension GetNavigation on GetInterface {
     var routeName = "/${page.runtimeType.toString()}";
 
     return global(id)?.currentState?.pushAndRemoveUntil<T>(
-        GetPageRoute(
+        GetPageRoute<T>(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
           page: () => page,
