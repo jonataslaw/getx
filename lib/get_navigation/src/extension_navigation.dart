@@ -220,7 +220,7 @@ extension ExtensionDialog on GetInterface {
     Color barrierColor,
     bool useSafeArea = true,
     bool useRootNavigator = true,
-    RouteSettings routeSettings,
+    Object arguments,
     Duration transitionDuration,
     Curve transitionCurve,
   }) {
@@ -231,7 +231,7 @@ extension ExtensionDialog on GetInterface {
     assert(debugCheckHasMaterialLocalizations(context));
 
     final theme = Theme.of(context, shadowThemeOnly: true);
-    return generalDialog(
+    return generalDialog<T>(
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         final pageChild = widget;
         Widget dialog = Builder(builder: (context) {
@@ -258,7 +258,7 @@ extension ExtensionDialog on GetInterface {
         );
       },
       useRootNavigator: useRootNavigator,
-      routeSettings: routeSettings,
+      routeSettings: RouteSettings(arguments: arguments),
     );
   }
 
@@ -360,7 +360,7 @@ extension ExtensionDialog on GetInterface {
       }
     }
 
-    return dialog(
+    return dialog<T>(
       AlertDialog(
         titlePadding: EdgeInsets.all(8),
         contentPadding: EdgeInsets.all(8),
@@ -485,7 +485,7 @@ extension GetNavigation on GetInterface {
       return null;
     }
     return global(id)?.currentState?.push(
-          GetPageRoute(
+          GetPageRoute<T>(
             opaque: opaque ?? true,
             page: () => page,
             routeName: routeName,
@@ -528,7 +528,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.pushNamed(page, arguments: arguments);
+    return global(id)?.currentState?.pushNamed<T>(page, arguments: arguments);
   }
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
@@ -601,7 +601,7 @@ extension GetNavigation on GetInterface {
   Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id)?.currentState?.pushAndRemoveUntil(page, predicate);
+    return global(id)?.currentState?.pushAndRemoveUntil<T>(page, predicate);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -629,7 +629,7 @@ extension GetNavigation on GetInterface {
   }) {
     return global(id)
         ?.currentState
-        ?.pushNamedAndRemoveUntil(page, predicate, arguments: arguments);
+        ?.pushNamedAndRemoveUntil<T>(page, predicate, arguments: arguments);
   }
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
@@ -717,8 +717,8 @@ extension GetNavigation on GetInterface {
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
-  void back({
-    dynamic result,
+  void back<T>({
+    T result,
     bool closeOverlays = false,
     bool canPop = true,
     int id,
@@ -733,7 +733,7 @@ extension GetNavigation on GetInterface {
         global(id)?.currentState?.pop(result);
       }
     } else {
-      global(id)?.currentState?.pop(result);
+      global(id)?.currentState?.pop<T>(result);
     }
   }
 
@@ -854,7 +854,7 @@ extension GetNavigation on GetInterface {
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
-    return global(id)?.currentState?.pushAndRemoveUntil(
+    return global(id)?.currentState?.pushAndRemoveUntil<T>(
         GetPageRoute(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
