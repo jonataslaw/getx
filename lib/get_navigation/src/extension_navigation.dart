@@ -223,6 +223,8 @@ extension ExtensionDialog on GetInterface {
     Object arguments,
     Duration transitionDuration,
     Curve transitionCurve,
+    String name,
+    RouteSettings routeSettings,
   }) {
     assert(widget != null);
     assert(barrierDismissible != null);
@@ -258,7 +260,8 @@ extension ExtensionDialog on GetInterface {
         );
       },
       useRootNavigator: useRootNavigator,
-      routeSettings: RouteSettings(arguments: arguments),
+      routeSettings:
+          routeSettings ?? RouteSettings(arguments: arguments, name: name),
     );
   }
 
