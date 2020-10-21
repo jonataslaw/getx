@@ -39,17 +39,21 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
+class _Wrapper<T> {
+  T data;
+}
+
 abstract class GetWidget<T extends DisposableInterface>
     extends StatelessWidget {
   GetWidget({Key key}) : super(key: key);
 
-  final Set<T> _value = <T>{};
+  final _value = _Wrapper<T>();
 
   final String tag = null;
 
   T get controller {
-    if (_value.isEmpty) _value.add(GetInstance().find<T>(tag: tag));
-    return _value.first;
+    _value.data ??= GetInstance().find<T>(tag: tag);
+    return _value.data;
   }
 
   @override

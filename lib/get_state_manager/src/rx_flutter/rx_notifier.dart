@@ -38,34 +38,15 @@ typedef Condition = bool Function();
 
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycle {
   GetNotifier(T initial) : super(initial) {
-    onStart.callback = _onStart;
-    onDelete.callback = _onDelete;
+    initLifeCycle();
     _fillEmptyStatus();
   }
 
-  bool _initialized = false;
-
-  /// Checks whether the controller has already been initialized.
-  bool get initialized => _initialized;
-
-  bool _isClosed = false;
-
-  /// Checks whether the controller has already been closed.
-  bool get isClosed => _isClosed;
-
-  // Internal callback that starts the cycle of this controller.
-  void _onStart() {
-    if (_initialized) return;
-    onInit();
-    _initialized = true;
+  @override
+  @mustCallSuper
+  void onInit() {
+    super.onInit();
     SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
-  }
-
-  // Internal callback that starts the cycle of this controller.
-  void _onDelete() {
-    if (_isClosed) return;
-    _isClosed = true;
-    onClose();
   }
 
   RxStatus _status;

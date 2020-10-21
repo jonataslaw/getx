@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../../get_instance/src/lifecycle.dart';
 
@@ -10,45 +11,24 @@ import '../../../get_instance/src/lifecycle.dart';
 abstract class GetxService extends DisposableInterface with GetxServiceMixin {}
 
 abstract class DisposableInterface with GetLifeCycle {
-  bool _initialized = false;
-
-  /// Checks whether the controller has already been initialized.
-  bool get initialized => _initialized;
-
-  bool _isClosed = false;
-
-  /// Checks whether the controller has already been closed.
-  bool get isClosed => _isClosed;
-
   DisposableInterface() {
-    onStart.callback = _onStart;
-    onDelete.callback = _onDelete;
-  }
-
-  // Internal callback that starts the cycle of this controller.
-  void _onStart() {
-    if (_initialized) return;
-    onInit();
-    _initialized = true;
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
-  }
-
-  // Internal callback that starts the cycle of this controller.
-  void _onDelete() {
-    if (_isClosed) return;
-    _isClosed = true;
-    onClose();
+    initLifeCycle();
   }
 
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
   @override
-  void onInit() {}
+  @mustCallSuper
+  void onInit() {
+    super.onInit();
+    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+  }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
   @override
+  @mustCallSuper
   void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to

@@ -1,14 +1,13 @@
 #The name of your workflow.
-name:  build
+name: build
 # Trigger the workflow on push or pull request
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
-
   test:
     #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
     defaults:
@@ -24,8 +23,8 @@ jobs:
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '1.20.4'
-          channel: 'stable'
+          flutter-version: "1.22.2"
+          channel: "stable"
       - run: flutter pub get
       #- run: flutter analyze
       # run  flutter widgets tests  and unit tests
@@ -33,4 +32,3 @@ jobs:
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
       - uses: codecov/codecov-action@v1.0.7
-
