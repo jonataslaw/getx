@@ -8,9 +8,10 @@
   - [Применение методов/классов создания экземпляров](#применение-методовклассов-создания-экземпляров)
   - [Различия между методами](#различия-между-методами)
   - [Подвязки](#подвязки)
-    - [Применение](#применение)
+    - [Класс Bindings](#класс-bindings)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
+      - [Как поменять](#как-поменять)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
@@ -222,25 +223,25 @@ Get.delete<Controller>(); //usually you don't need to do this because GetX alrea
 
 - Get.lazyPut: Как следует из названия, это ленивый процесс. Экземпляр создается, но он не вызывается для немедленного использования, он остается в ожидании вызова. В отличие от других методов, `insert` не вызывается здесь. Вместо этого экземпляр вставляется в другую часть памяти, часть, отвечающую за определение возможности воссоздания экземпляра, назовем это «фабрикой». Если мы хотим создать что-то, что будет использоваться позже, это не будет смешиваться с вещами, которые использовались сейчас. И здесь вступает в силу магия `fenix`: если вы решаете оставить `fenix: false`, и ваш `smartManagement` не является `keepFactory`, то, при использовании `Get.find`, экземпляр изменит место в памяти с «фабрики» на область памяти общего экземпляра. Сразу после этого по умолчанию удаляется с «фабрики». Теперь, если вы выберете `fenix: true`, экземпляр продолжит существовать в этой выделенной части, даже перейдя в общую область, для повторного вызова в будущем.
 
-## Bindings
+## Подвязки
 
-One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
-When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
-In version 2.10 Get completely implemented the Bindings API.
-Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
-The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
-This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
-In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
+Возможно, одной из главных особенностей этого пакета является возможность полной интеграции маршрутов, менеджера состояний и менеджера зависимостей.
+Когда маршрут удаляется из стека, все контроллеры, переменные и экземпляры связанных с ним объектов удаляются из памяти. Если вы используете потоки или таймеры, они закроются автоматически, и вам не о чем беспокоиться.
+В версии 2.10 полностью реализован API привязок.
+Теперь вам больше не нужно использовать метод инициализации. Вам даже не нужно вводить контроллеры, если вы этого не хотите. Вы можете запустить свои контроллеры и серисы в соответствующем для этого месте.
+Класс Binding - это класс, который будет разделять внедрение зависимостей, при этом «привязывая» маршруты к диспетчеру состояний и диспетчеру зависимостей.
+Этот класс позволяет Get узнать, какой экран отображается при использовании конкретного контроллера, а также узнать, где и как его удалить.
+Кроме того, класс Binding позволит вам контролировать конфигурацию SmartManager. Вы можете настроить зависимости, которые будут упорядочены при удалении маршрута из стека, или когда виджет, который его использовал, выкладывается, или ни то, ни другое. На вас будет работать интеллектуальное управление зависимостями, но даже в этом случае вы можете настроить его по своему усмотрению.
 
-### Bindings class
+### Класс Bindings
 
-- Create a class and implements Binding
+- Создайте класс и реализуйте Binding
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
+Ваша IDE автоматически попросит вас переопределить метод «зависимостей», и вам просто нужно последовать этой просьбе, переопределить метод и вставить все классы, которые вы собираетесь использовать на этом маршруте:
 
 ```dart
 class HomeBinding implements Bindings {
@@ -259,9 +260,9 @@ class DetailsBinding implements Bindings {
 }
 ```
 
-Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
+Теперь вам просто нужно сообщить своему маршруту, что вы будете использовать эту привязку для установления связи между диспетчером маршрутов, зависимостями и состояниями.
 
-- Using named routes:
+- Используя именованные маршруты:
 
 ```dart
 getPages: [
@@ -278,16 +279,16 @@ getPages: [
 ];
 ```
 
-- Using normal routes:
+- Используя обычные маршруты:
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
 Get.to(DetailsView(), binding: DetailsBinding())
 ```
 
-There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+Вам больше не нужно беспокоиться об управлении памятью вашего приложения, Get сделает это за вас.
 
-The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+Класс Binding вызывается при вызове маршрута, вы можете создать "initialBinding" в GetMaterialApp, чтобы вставить все зависимости, которые будут созданы.
 
 ```dart
 GetMaterialApp(
@@ -298,8 +299,8 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-The default way of creating a binding is by creating a class that implements Bindings.
-But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
+По умолчанию привязка создается путем создания класса, реализующего привязки.
+Но в качестве альтернативы вы можете использовать обратный вызов `BindingsBuilder`, чтобы просто использовать функцию для создания всего, что вы хотите.
 
 Example:
 
@@ -323,19 +324,19 @@ getPages: [
 ];
 ```
 
-That way you can avoid to create one Binding class for each route making this even simpler.
+Таким образом, вы можете избежать создания одного класса привязки для каждого маршрута, что сделает это еще проще.
 
-Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
+Оба способа работают идеально, и мы хотим, чтобы вы использовали то, что больше всего соответствует вашим вкусам.
 
 ### SmartManagement
 
-GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
-This is what is called the `full` mode of dependency management.
-But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+GetX по умолчанию удаляет неиспользуемые контроллеры из памяти, даже если происходит сбой и виджет, который их использует, не удаляется должным образом.
+Это то, что называется `полным` режимом управления зависимостями.
+Но если вы хотите поменять способ, которым GetX управляет удалением классов, у вас есть класс `SmartManagement`, в котором вы можете задавать другое поведение.
 
-#### How to change
+#### Как поменять
 
-If you want to change this config (which you usually don't need) this is the way:
+Если вы хотите поменять эту конфигурацию (что обычно не требуется), вот способ:
 
 ```dart
 void main () {
@@ -350,30 +351,29 @@ void main () {
 
 #### SmartManagement.full
 
-It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
+Это значение по умолчанию. Удаляет классы, которые не используются и не были постоянными. В большинстве случаев вы захотите оставить эту конфигурацию нетронутой. Если вы новичок в GetX, не меняйте это.
 
 #### SmartManagement.onlyBuilders
-With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
+С этой опцией будут удалены только контроллеры, запущенные в `init:` или загруженные в Binding с помощью `Get.lazyPut()`.
 
-If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
+Если вы используете `Get.put()` или `Get.putAsync()` или любой другой подход, SmartManagement не будет иметь разрешений на исключение этой зависимости.
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
+При поведении по умолчанию даже виджеты, созданные с помощью Get.put, будут удалены, в отличие от SmartManagement.onlyBuilders.
 
 #### SmartManagement.keepFactory
 
-Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
+Как и SmartManagement.full, он удаляет зависимости, когда он больше не используется. Однако он сохранит свою фабрику, что означает, что он воссоздает зависимость, если вам снова понадобится этот экземпляр.
 
-### How bindings work under the hood
-Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
-This happens so fast that the analyzer will not even be able to register it.
-When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
-Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
-This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
-Use whichever is most convenient for you.
+### Как подвязки работают под капотом
+Привязки создают временные фабрики, которые создаются в тот момент, когда вы кликаете для перехода на другой экран, и будут уничтожены, как только произойдет анимация смены экрана.
+Это происходит так быстро, что анализатор даже не сможет это зарегистрировать.
+Когда вы снова перейдете на этот экран, будет вызвана новая временная фабрика, поэтому это предпочтительнее, чем использование SmartManagement.keepFactory, но если вы не хотите создавать привязки или хотите сохранить все свои зависимости в одной привязке, это вам поможет.
+Фабрики занимают мало памяти, они содержат не экземпляры, а функцию с «формой» того класса, который вам нужен.
+Это имеет очень низкую стоимость памяти, но поскольку цель этой библиотеки - получить максимально возможную производительность с использованием минимальных ресурсов, Get по умолчанию удаляет даже фабрики. Используйте то, что вам удобнее.
 
-## Notes
+## Примечания
 
-- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+- НЕ ИСПОЛЬЗУЙТЕ SmartManagement.keepFactory, если вы используете несколько привязок. Он был разработан для использования без привязок или с одной привязкой, связанной в initialBinding GetMaterialApp.
 
-- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
-However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.
+- Использование привязок совершенно необязательно, если вы хотите, вы можете без проблем использовать `Get.put()` и `Get.find()` для классов, которые используют данный контроллер.
+Однако, если вы работаете со службами или любой другой абстракцией, я рекомендую использовать привязки для лучшей организации.
