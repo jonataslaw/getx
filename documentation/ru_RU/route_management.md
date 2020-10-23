@@ -1,30 +1,30 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
-    - [Send data to named Routes](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
+- [Управление маршрутами](#управление-маршрутами)
+  - [Как использовать](#как-использовать)
+  - [Навигация без именованных маршрутов](#навигация-без-именованных-маршрутов)
+  - [Навигация по именованным маршрутам](#навигация-по-именованным-маршрутам)
+    - [Отправить данные по именованному маршруту](#отправить-данные-по-именованному-маршруту)
+    - [Динамические url-ссылки](#динамические-url-ссылки)
     - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
+  - [Навигация без контекста](#навигация-без-контекста)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [Nested Navigation](#nested-navigation)
+  - [Вложенная навигация](#вложенная-навигация)
 
-# Route Management
+# Управление маршрутами
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+Это полное объяснение всего, что нужно Getx, когда речь идет об управлении маршрутами.
 
-## How to use
+## Как использовать
 
-Add this to your pubspec.yaml file:
+Добавьте к вашему pubspec.yaml следующее:
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+Если вы собираетесь использовать маршруты/snackbars/dialogs/bottomSheets без контекста или использовать высокоуровневые API Get, вам нужно просто добавить «Get» перед вашим MaterialApp, превратив его в GetMaterialApp!
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -32,55 +32,55 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-## Navigation without named routes
+## Навигация без именованных маршрутов
 
-To navigate to a new screen:
+Для навигации на новый экран:
 
 ```dart
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Чтобы закрыть snackbars, диалог, bottomsheets, или все, что вы обычно закрывали с помощью Navigator.pop(context);
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Для перехода к следующему экрану и отсутствия возможности вернуться к предыдущему экрану (для использования в SplashScreens, экранах входа и т.д.)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Для перехода к следующему экрану и отмены всех предыдущих маршрутов (полезно в корзинах для покупок, опросах и тестах)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+Чтобы перейти к следующему маршруту и ​​получить или обновить данные, как только вы вернетесь с него:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+отправить данные на предыдущий экран:
 
 ```dart
 Get.back(result: 'success');
 ```
 
-And use it:
+И использовать их:
 
-ex:
+пример:
 
 ```dart
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+Нет желания учить наш синтаксис?
+Просто измените Navigator(верхний регистр) на navigator (нижний регистр), и вы получите все функции стандартной навигации без использования контекста.
+Пример:
 
 ```dart
 
@@ -109,29 +109,29 @@ Get.to(HomePage());
 
 ```
 
-## Navigation with named routes
+## Навигация по именованным маршрутам
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- Если вы предпочитаете перемещаться по именованным маршрутам, Get также поддерживает это.
 
-To navigate to nextScreen
+Для навигации на следующий экран
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+Для навигации и удаления предыдущего экрана из дерева.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+Для навигации и удаления всех предыдущих экранов из дерева.
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+Для определения маршрутов используйте GetMaterialApp:
 
 ```dart
 void main() {
@@ -152,7 +152,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+Для обработки навигации по неопределенным маршрутам (ошибка 404) вы можете определить страницу unknownRoute в GetMaterialApp.
 
 ```dart
 void main() {
@@ -169,30 +169,30 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### Отправить данные по именованному маршруту
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+Просто отправьте то, что хотите в качестве аргументов. Get принимает здесь всё, что угодно, будь то String, Map, List или даже экземпляр класса.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+в вашем классе или контроллере:
 
 ```dart
 print(Get.arguments);
 //print out: Get is the best
 ```
 
-### Dynamic urls links
+### Динамические url-ссылки
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+Получите расширенные динамические url-адреса, как в Интернете. Веб-разработчики, вероятно, уже хотели эту функцию на Flutter, и, скорее всего, видели, что пакет обещает эту функцию и предоставляет совершенно другой синтаксис, чем url-адрес в Интернете, но Get также решает эту проблему.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+в вашем controller/bloc/stateful/stateless классе:
 
 ```dart
 print(Get.parameters['id']);
@@ -201,7 +201,7 @@ print(Get.parameters['name']);
 // out: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+Вы также можете легко получить именованные параметры с помощью Get:
 
 ```dart
 void main() {
@@ -233,24 +233,24 @@ void main() {
 }
 ```
 
-Send data on route name
+Отправьте данные по именованному маршруту
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+На втором экране возьмите данные по параметрам
 
 ```dart
 print(Get.parameters['user']);
 // out: 34954
 ```
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+И теперь все, что вам нужно сделать, это использовать Get.toNamed() для навигации по именованным маршрутам без какого-либо контекста (вы можете вызывать свои маршруты непосредственно из класса BLoC или контроллера), а когда ваше приложение будет скомпилировано в Интернете, ваше маршруты появятся в url <3
 
 ### Middleware
 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+Если вы хотите прослушивать события Get для запуска действий, вы можете использовать для этого routingCallback
 
 ```dart
 GetMaterialApp(
@@ -262,7 +262,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+Если вы не используете GetMaterialApp, вы можете использовать ручной API для подключения наблюдателя.
 
 ```dart
 void main() {
@@ -279,7 +279,7 @@ void main() {
 }
 ```
 
-Create a MiddleWare class
+Создайте класс MiddleWare
 
 ```dart
 class MiddleWare {
@@ -296,7 +296,7 @@ class MiddleWare {
 }
 ```
 
-Now, use Get on your code:
+Теперь используйте Get в своем коде:
 
 ```dart
 class First extends StatelessWidget {
@@ -369,11 +369,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## Навигация без контекста
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+Чтобы получить простой SnackBar с Flutter, вы должны получить контекст Scaffold, или вы должны использовать GlobalKey, прикрепленный к вашему Scaffold
 
 ```dart
 final snackBar = SnackBar(
@@ -388,13 +388,13 @@ final snackBar = SnackBar(
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Реализация в Get:
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+С Get всё, что вам нужно сделать, это вызвать Get.snackbar из любого места кода или настроить его так, как вы хотите!
 
 ```dart
 Get.snackbar(
@@ -446,18 +446,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+Если вы предпочитаете традиционный snackbar, или хотите настроить его с нуля, вы можете использовать
+`Get.rawSnackbar();` который предоставляет RAW API, на котором был построен Get.snackbar.
 
 ### Dialogs
 
-To open dialog:
+Чтобы открыть:
 
 ```dart
 Get.dialog(YourDialogWidget());
 ```
 
-To open default dialog:
+Чтобы открыть диалог по умолчанию:
 
 ```dart
 Get.defaultDialog(
@@ -466,15 +466,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+Вы также можете использовать Get.generalDialog вместо showGeneralDialog.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+Для всех других виджетов диалога Flutter, включая cupertino, вы можете использовать Get.overlayContext вместо контекста и открывать его в любом месте вашего кода.
+Для виджетов, которые не используют Overlay, вы можете использовать Get.context.
+Эти два контекста будут работать в 99% случаев для замены контекста вашего пользовательского интерфейса, за исключением случаев, когда наследуемый виджет используется без контекста навигации.
 
 ### BottomSheets
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet похож на showModalBottomSheet, но не требует контекста.
 
 ```dart
 Get.bottomSheet(
@@ -497,14 +497,14 @@ Get.bottomSheet(
 );
 ```
 
-## Nested Navigation
+## Вложенная навигация
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+Get сделал вложенную навигацию Flutter еще проще.
+Вам не нужен контекст, и вы найдёте свой стек навигации по Id.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- ПРИМЕЧАНИЕ: Создание параллельных стеков навигации может быть опасным. В идеале не используйте NestedNavigators или используйте их редко. Если этого требует ваш проект, продолжайте, но имейте в виду, что хранение нескольких стеков навигации в памяти может быть не лучшим решением для потребления оперативной памяти.
 
-See how simple it is:
+Смотрите как это просто:
 
 ```dart
 Navigator(
