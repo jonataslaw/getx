@@ -72,7 +72,7 @@ var name = 'Jonatas Borges'.obs;
 Нет, вам не нужен `StreamBuilder`, но насчёт статических классов вы правы.
 
 Что ж, в представлении во Flutter, когда мы хотим изменить конкретный виджет, приходится писать много шаблоного кода.
-With **GetX** you can also forget about this boilerplate code. 
+C **GetX** вы можете забыть о шаблонном коде. 
 
 `StreamBuilder( … )`? `initialValue: …`? `builder: …`? Nope, you just need to place this variable inside an `Obx()` Widget.
 
@@ -80,23 +80,23 @@ With **GetX** you can also forget about this boilerplate code.
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>`. 
+_Что нужно запомнить?_  Только `Obx(() =>`. 
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+Вы просто передаёте этот виджет через стрелочную функцию в `Obx()` ("Observer" в _Rx_). 
 
-`Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
+`Obx` довольно умён и изменится только при изменении значения `controller.name`. 
 
-If `name` is `"John"`, and you change it to `"John"` (`name.value = "John"`), as it's the same `value` as before, nothing will change on the screen, and `Obx`, to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+Если `name` == `"John"`, и вы измените его на `"John"` (`name.value = "John"`), на экране ничего не изменится, так как это то же значение, что и раньше. `Obx` для экономии ресурсов просто проигнорирует новое значение, а не будет перестраивать виджет. **Разве это не потрясающе?**
 
-> So, what if I have 5 _Rx_ (observable) variables within an `Obx`?
+> Итак, что, если у меня есть 5 переменных _Rx_ (observable) в `Obx`?
 
-It will just update when **any** of them changes. 
+Он просто обновится, когда **любой** из них изменится. 
 
-> And if I have 30 variables in a class, when I update one, will it update **all** the variables that are in that class?
+> И если у меня есть 30 переменных в классе, когда я обновлю одну, обновятся ли **все** переменные этого класса?
 
-Nope, just the **specific Widget** that uses that _Rx_ variable.
+Нет, только **конкретный виджет**, который использует эту переменную _Rx_.
 
-So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
+Итак, **GetX** обновляет экран только тогда, когда переменная _Rx_ меняет свое значение.
 
 ```
 final isOpen = false.obs;
@@ -104,7 +104,7 @@ final isOpen = false.obs;
 // NOTHING will happen... same value.
 void onButtonTap() => isOpen.value=false;
 ```
-### Advantages
+### Преимущества
 
 **GetX()** helps you when you need **granular** control over what's being updated.
 
