@@ -1,77 +1,77 @@
-- [State Management](#state-management)
-  - [Reactive State Manager](#reactive-state-manager)
-    - [Advantages](#advantages)
-    - [Declaring a reactive variable](#declaring-a-reactive-variable)
-    - [Using the values in the view](#using-the-values-in-the-view)
-    - [Conditions to rebuild](#conditions-to-rebuild)
-    - [Where .obs can be used](#where-obs-can-be-used)
-    - [Note about Lists](#note-about-lists)
-    - [Why i have to use .value](#why-i-have-to-use-value)
+- [Управление состоянием](#управление-состоянием)
+  - [Реактивное управление состоянием](#реактивное-управление-состоянием)
+    - [Преимущества](#преимущества)
+    - [Объявление реактивной переменной](#объявление-реактивной-переменной)
+    - [Использование значений в представлении](#использование-значений-в-представлении)
+    - [Условия для перестраивания](#условия-для-перестраивания)
+    - [Где .obs может быть использован](#где-obs-может-быть-использован)
+    - [Примечание о списках](#примечание-о-списках)
+    - [Почему мне нужно использовать .value](#почему-мне-нужно-использовать-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  - [Simple State Manager](#simple-state-manager)
-    - [Advantages](#advantages-1)
-    - [Usage](#usage)
-    - [How it handles controllers](#how-it-handles-controllers)
-    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
-    - [Why it exists](#why-it-exists)
-    - [Other ways of using it](#other-ways-of-using-it)
-    - [Unique IDs](#unique-ids)
-  - [Mixing the two state managers](#mixing-the-two-state-managers)
+  - [Обычное управление состоянием](#обычное-управление-состоянием)
+    - [Преимущества](#преимущества-1)
+    - [Использование](#использование)
+    - [Как обрабатываются контроллеры](#как-обрабатываются-контроллеры)
+    - [Вам больше не понадобятся StatefulWidgets](#вам-больше-не-понадобятся-statefulwidgets)
+    - [Почему это существует](#почему-это-существует)
+    - [Другие способы использования](#другие-способы-использования)
+    - [Уникальные идентификаторы](#уникальные-идентификаторы)
+  - [Смешивание двух менеджеров состояний](#смешивание-двух-менеджеров-состояний)
   - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management
+# Управление состоянием
 
-There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
+В настоящее время для Flutter есть несколько менеджеров состояний. Однако большинство из них связано с использованием ChangeNotifier для обновления виджетов, и это плохой и очень плохой подход к производительности средних или больших приложений. Вы можете проверить в официальной документации Flutter, что [ChangeNotifier следует использовать с 1 или максимум 2 слушателями](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), что делает его практически непригодным для любого приложения среднего или большого размера.
 
-Other state managers are good, but have their nuances:
+Остальные менеджеры состояний хороши, но есть свои нюансы:
 
-- BLoC is very safe and efficient, but it is very complex for beginners, which has kept people from developing with Flutter.
-- MobX is easier than BLoC and reactive, almost perfect, I would say, but you need to use a code generator, that for large applications, reduces productivity, since you will need to drink a lot of coffees until your code is ready again after a `flutter clean` (And this is not MobX's fault, but the codegen which is really slow!).
-- Provider uses InheritedWidget to deliver the same listener, as a way of solving the problem reported above with ChangeNotifier, which implies that any access to its ChangeNotifier class must be within the widget tree because of the context to access o Inherited.
+- BLoC безопасен и эффективен, но сложен для новичков, что удерживает людей от разработки с Flutter.
+- MobX проще, чем BLoC, реактивен, и я бы сказал, почти идеален, но вам нужно использовать генератор кода, который для больших приложений снижает производительность, таким образом вам нужно будет пить много кофе, прежде чем ваш код снова не будет готов после flutter clean (И это не вина MobX, а вина кодогенерации, которая очень медленная!).
+- Provider использует InheritedWidget для доставки слушателя в качестве способа решения проблемы, описанной выше, с помощью ChangeNotifier, что подразумевает, что любой доступ к классу ChangeNotifier должен находиться в дереве виджетов из-за контекста для доступа к Inherited.
 
-Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager. Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
+Get не лучше и не хуже, чем любой другой менеджер состояний, но вам следует проанализировать эти моменты, а также приведенные ниже пункты, чтобы выбрать между использованием Get в чистом виде (Vanilla) или его вместе с другим менеджером состояний. Определенно, Get - не враг любого другого менеджера состояний, потому что Get - это микрофреймворк, а не просто менеджер состояний, и его можно использовать отдельно или вместе с ними.
 
-## Reactive State Manager
+## Реактивное управление состоянием
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+Реактивное программирование может оттолкнуть многих людей, потому что считается сложным. GetX превращает реактивное программирование в нечто довольно простое:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
+- Вам не нужно создавать StreamControllers.
+- Вам не нужно создавать StreamBuilder для каждой переменной.
+- Вам не нужно создавать класс для каждого состояния.
+- Вам не нужно создавать получение начального значения.
 
-Reactive programming with Get is as easy as using setState.
+Реактивное программирование с помощью Get так же просто, как использование setState.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+Представим, что у вас есть переменная `name` и вы хотите, чтобы каждый раз, когда вы её изменяете, все виджеты, которые её используют, менялись автоматически.
 
-This is your count variable:
+Это ваша переменная:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+Чтобы сделать его наблюдаемым, вам просто нужно добавить в конец «.obs»:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-That's all. It's *that* simple.
+Вот и всё. Это *так* просто.
 
-From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
+С этого момента мы могли бы называть эти - ".obs" (ervables) переменные как _Rx_.
 
-What did we do under the hood? We created a `Stream` of `String`s, assigned the initial value `"Jonatas Borges"`, we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+Что мы делали под капотом? Мы создали `Stream` из `String`ов, которому было присвоено начальное значение `"Jonatas Borges"`, мы уведомили все виджеты, которые используют `"Jonatas Borges"`, что они теперь «принадлежат» этой переменной, и когда значение _Rx_ изменится, они также должны будут измениться.
 
-This is the **magic of GetX**, thanks to Dart's capabilities.
+Это **волшебство GetX** возможно, благодаря возможностям Dart.
 
-But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
+Но, как мы знаем, виджет можно изменить только в том случае, если он находится внутри функции, потому что статические классы не имеют права «автоматически изменяться».
 
-You will need to create a `StreamBuilder`, subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+Вам нужно будет создать `StreamBuilder`, подписаться на эту переменную, чтобы отслеживать изменения, и создать «каскад» вложенных `StreamBuilder`, если вы хотите изменить несколько переменных в одной области, верно?
 
-No, you don't need a `StreamBuilder`, but you are right about static classes.
+Нет, вам не нужен `StreamBuilder`, но насчёт статических классов вы правы.
 
-Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
+Что ж, в представлении во Flutter, когда мы хотим изменить конкретный виджет, приходится писать много шаблоного кода.
 With **GetX** you can also forget about this boilerplate code. 
 
 `StreamBuilder( … )`? `initialValue: …`? `builder: …`? Nope, you just need to place this variable inside an `Obx()` Widget.
