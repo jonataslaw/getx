@@ -5,7 +5,7 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-mixin StatusMixin<T> on ListNotifier {
+mixin StateMixin<T> on ListNotifier {
   T _value;
   RxStatus _status;
 
@@ -31,11 +31,15 @@ mixin StatusMixin<T> on ListNotifier {
     return _status ??= _status = RxStatus.loading();
   }
 
+  T get state => value;
+
+  @protected
   T get value {
     notifyChildrens();
     return _value;
   }
 
+  @protected
   set value(T newValue) {
     if (_value == newValue) return;
     _value = newValue;
@@ -60,11 +64,31 @@ mixin StatusMixin<T> on ListNotifier {
 }
 
 class Value<T> extends ListNotifier
-    with StatusMixin<T>
+    with StateMixin<T>
     implements ValueListenable<T> {
   Value(T val) {
     _value = val;
     _fillEmptyStatus();
+  }
+
+  @override
+  T get value {
+    notifyChildrens();
+    return _value;
+  }
+
+  @override
+  set value(T newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+    refresh();
+  }
+
+  T call([T v]) {
+    if (v != null) {
+      value = v;
+    }
+    return value;
   }
 
   void update(void fn(T value)) {
@@ -97,8 +121,8 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
   }
 }
 
-extension StateExt<T> on StatusMixin<T> {
-  Widget call(NotifierBuilder<T> widget, {Widget onError, Widget onLoading}) {
+extension StateExt<T> on StateMixin<T> {
+  Widget obx(NotifierBuilder<T> widget, {Widget onError, Widget onLoading}) {
     assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {

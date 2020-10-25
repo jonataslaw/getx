@@ -27,7 +27,7 @@ class HomeView extends GetView<HomeController> {
           centerTitle: true,
         ),
         body: Center(
-          child: controller(
+          child: controller.obx(
             (state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,

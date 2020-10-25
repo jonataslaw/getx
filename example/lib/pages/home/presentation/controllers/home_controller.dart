@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../domain/adapters/repository_adapter.dart';
 import '../../domain/entity/cases_model.dart';
 
-class HomeController extends GetxController with StatusMixin<CasesModel> {
+class HomeController extends GetxController with StateMixin<CasesModel> {
   HomeController({this.homeRepository});
 
   /// inject repo abstraction dependency

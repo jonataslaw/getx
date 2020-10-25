@@ -65,12 +65,12 @@ void main() {
     await Future.delayed(Duration(milliseconds: 100));
 
     if (controller.status.isError) {
-      expect(controller.value, null);
+      expect(controller.state, null);
     }
 
     if (controller.status.isSuccess) {
-      expect(controller.value.global.totalDeaths, 100);
-      expect(controller.value.global.totalConfirmed, 200);
+      expect(controller.state.global.totalDeaths, 100);
+      expect(controller.state.global.totalConfirmed, 200);
     }
   });
 
