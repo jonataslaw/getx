@@ -27,11 +27,8 @@ class HomeView extends GetView<HomeController> {
           centerTitle: true,
         ),
         body: Center(
-          child: Obx(
-            () {
-              final status = controller.status.value;
-              if (status == Status.loading) return CircularProgressIndicator();
-              if (status == Status.error) return Text('Error on connection :(');
+          child: controller(
+            (state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -45,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   Text(
-                    '${controller.cases.value.global.totalConfirmed}',
+                    '${state.global.totalConfirmed}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -58,7 +55,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   Text(
-                    '${controller.cases.value.global.totalDeaths}',
+                    '${state.global.totalDeaths}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(

@@ -10,11 +10,7 @@ import '../../../get_instance/src/lifecycle.dart';
 /// it is Get.reset().
 abstract class GetxService extends DisposableInterface with GetxServiceMixin {}
 
-abstract class DisposableInterface with GetLifeCycle {
-  DisposableInterface() {
-    initLifeCycle();
-  }
-
+abstract class DisposableInterface extends GetLifeCycle {
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
   @override
@@ -29,7 +25,9 @@ abstract class DisposableInterface with GetLifeCycle {
   /// async request.
   @override
   @mustCallSuper
-  void onReady() {}
+  void onReady() {
+    super.onReady();
+  }
 
   /// Called before [onDelete] method. [onClose] might be used to
   /// dispose resources used by the controller. Like closing events,
@@ -38,5 +36,7 @@ abstract class DisposableInterface with GetLifeCycle {
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
   @override
-  void onClose() {}
+  void onClose() {
+    super.onClose();
+  }
 }

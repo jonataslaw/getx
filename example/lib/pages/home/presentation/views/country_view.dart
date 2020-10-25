@@ -29,9 +29,9 @@ class CountryView extends GetView<HomeController> {
             ),
             body: Center(
               child: ListView.builder(
-                  itemCount: controller.cases.value.countries.length,
+                  itemCount: controller.value.countries.length,
                   itemBuilder: (context, index) {
-                    final country = controller.cases.value.countries[index];
+                    final country = controller.value.countries[index];
                     return ListTile(
                       onTap: () {
                         Get.toNamed('/details', arguments: country);

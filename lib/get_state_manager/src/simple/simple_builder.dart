@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'get_state.dart';
+import 'list_notifier.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
 typedef ValueBuilderBuilder<T> = Widget Function(
@@ -87,7 +88,7 @@ class SimpleBuilder extends StatefulWidget {
 
 class _SimpleBuilderState extends State<SimpleBuilder>
     with GetStateUpdaterMixin {
-  final disposers = <VoidCallback>[];
+  final disposers = <Disposer>[];
 
   @override
   void dispose() {
@@ -105,40 +106,5 @@ class _SimpleBuilderState extends State<SimpleBuilder>
       widget.builder,
       context,
     );
-  }
-}
-
-class TaskManager {
-  TaskManager._();
-
-  static TaskManager _instance;
-
-  static TaskManager get instance => _instance ??= TaskManager._();
-
-  GetStateUpdate _setter;
-
-  List<VoidCallback> _remove;
-
-  void notify(List<GetStateUpdate> _updaters) {
-    if (_setter != null) {
-      if (!_updaters.contains(_setter)) {
-        _updaters.add(_setter);
-        _remove.add(() => _updaters.remove(_setter));
-      }
-    }
-  }
-
-  Widget exchange(
-    List<VoidCallback> disposers,
-    GetStateUpdate setState,
-    Widget Function(BuildContext) builder,
-    BuildContext context,
-  ) {
-    _remove = disposers;
-    _setter = setState;
-    final result = builder(context);
-    _remove = null;
-    _setter = null;
-    return result;
   }
 }

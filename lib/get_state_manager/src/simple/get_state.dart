@@ -1,16 +1,8 @@
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../get_state_manager.dart';
-
-// Changed to VoidCallback.
-//typedef Disposer = void Function();
-
-// replacing StateSetter, return if the Widget is mounted for extra validation.
-// if it brings overhead the extra call,
-typedef GetStateUpdate = void Function();
-//typedef GetStateUpdate = void Function(VoidCallback fn);
+import 'list_notifier.dart';
 
 /// Complies with [GetStateUpdater]
 ///
@@ -31,14 +23,8 @@ mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
   }
 }
 
-class GetxController extends DisposableInterface {
-  final _updaters = <GetStateUpdate>[];
-
-//  final _updatersIds = HashMap<String, StateSetter>(); //<old>
-  final _updatersIds = HashMap<String, GetStateUpdate>();
-
-  final _updatersGroupIds = HashMap<String, List<GetStateUpdate>>();
-
+// ignore: prefer_mixin
+class GetxController extends DisposableInterface with ListNotifier {
   /// Rebuilds [GetBuilder] each time you call [update()];
   /// Can take a List of [ids], that will only update the matching
   /// `GetBuilder( id: )`,
@@ -49,73 +35,13 @@ class GetxController extends DisposableInterface {
       return;
     }
     if (ids == null) {
-//      _updaters?.forEach((rs) => rs(() {})); //<old>
-      for (final updater in _updaters) {
-        updater();
-      }
+      refresh();
     } else {
-      // @jonny, remove this commented code if it's not more optimized.
-//      for (final id in ids) {
-//        if (_updatersIds[id] != null) _updatersIds[id]();
-//        if (_updatersGroupIds[id] != null)
-//          for (final rs in _updatersGroupIds[id]) rs();
-//      }
-
       for (final id in ids) {
-        _updatersIds[id]?.call();
-        // ignore: avoid_function_literals_in_foreach_calls
-        _updatersGroupIds[id]?.forEach((rs) => rs());
+        refreshGroup(id);
       }
     }
   }
-
-//  VoidCallback addListener(StateSetter listener) {//<old>
-  VoidCallback addListener(GetStateUpdate listener) {
-    _updaters.add(listener);
-    return () => _updaters.remove(listener);
-  }
-
-//  VoidCallback addListenerId(String key, StateSetter listener) {//<old>
-  VoidCallback addListenerId(String key, GetStateUpdate listener) {
-//    _printCurrentIds();
-    if (_updatersIds.containsKey(key)) {
-      _updatersGroupIds[key] ??= <GetStateUpdate>[];
-      _updatersGroupIds[key].add(listener);
-      return () {
-        _updatersGroupIds[key].remove(listener);
-      };
-    } else {
-      _updatersIds[key] = listener;
-      return () => _updatersIds.remove(key);
-    }
-  }
-
-  /// To dispose an [id] from future updates(), this ids are registered
-  /// by [GetBuilder()] or similar, so is a way to unlink the state change with
-  /// the Widget from the Controller.
-  void disposeId(String id) {
-    _updatersIds.remove(id);
-    _updatersGroupIds.remove(id);
-  }
-
-  /// Remove this after checking the new implementation makes sense.
-  /// Uncomment this if you wanna control the removal of ids..
-  ///  bool _debugging = false;
-  /// Future<void> _printCurrentIds() async {
-  /// if (_debugging) return;
-  /// _debugging = true;
-  /// print('about to debug...');
-  /// await Future.delayed(Duration(milliseconds: 10));
-  /// int totalGroups = 0;
-  /// _updatersGroupIds.forEach((key, value) {
-  /// totalGroups += value.length;
-  /// });
-  /// int totalIds = _updatersIds.length;
-  /// print(
-  ///     'Total: ${totalIds + totalGroups},'+
-  ///     'in groups:$totalGroups, solo ids:$totalIds',);
-  /// _debugging = false;
-  /// }
 }
 
 typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
@@ -187,10 +113,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
-    // if (widget.global && Get.smartManagement ==
-    //SmartManagement.onlyBuilder) {
-    //   controller?.onStart();
-    // }
     _subscribeToController();
   }
 
@@ -200,19 +122,9 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void _subscribeToController() {
     remove?.call();
     remove = (widget.id == null)
-//        ? controller?.addListener(setState) //<old>
-//        : controller?.addListenerId(widget.id, setState); //<old>
         ? controller?.addListener(getUpdate)
         : controller?.addListenerId(widget.id, getUpdate);
   }
-
-  /// Sample for [GetStateUpdate] when you don't wanna
-  /// use [GetStateHelper mixin].
-  ///  bool _getUpdater() {
-  ///    final _mounted = mounted;
-  ///    if (_mounted) setState(() {});
-  ///    return _mounted;
-  ///  }
 
   @override
   void dispose() {
@@ -248,26 +160,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   @override
   Widget build(BuildContext context) => widget.builder(controller);
 }
-
-/// This is a experimental feature.
-/// Meant to be used with SimpleBuilder, it auto-registers the variable
-/// like Rx() does with Obx().
-// class Value<T> extends GetxController {
-//   Value([this._value]);
-
-//   T _value;
-
-//   T get value {
-//     TaskManager.instance.notify(_updaters);
-//     return _value;
-//   }
-
-//   set value(T newValue) {
-//     if (_value == newValue) return;
-//     _value = newValue;
-//     update();
-//   }
-// }
 
 /// It's Experimental class, the Api can be change
 abstract class GetState<T> extends GetxController {
