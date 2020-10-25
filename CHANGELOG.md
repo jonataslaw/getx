@@ -1,3 +1,21 @@
+## [3.15.0]	- Big update
+- **Improve Performance**: We made modifications to make GetBuilder even faster. We have improved the structure behind it so that listeners are notified faster. Perhaps in version 4.0 everything will be based on this new structure, but maintaining the power and compatibility with streams. If you want to know how much Getx is faster than pure streams or ChangeNotifier (even after the last update using LinkedList), you can create run the repository tests at: (https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)
+- **Added StateMixin**
+StateMixin allows you to change the state of the controller, and display a loading, an error message, or a widget you want with 0 boilerplate. This makes things like API / Rest communication or websocket absurdly simple, and it's a real revolution in how state management has behaved so far.
+You no longer need to have a ternary in your code, and you don't need a widget like FutureBuilder, StreamBuilder or even Obx / GetBuilder to encompass your Visibility. This will change with the way you manage the state of your controllers, decrease your boilerplate absurdly, and give you more security in your code.
+- **Added GetNotifier**
+GetNotifier is a super and powerful ValueNotifier, which in addition to having the life cycle of the controllers, is extremely fast, and can manage a single state, as a simplified immutable state management solution.
+In theory, the only difference between it and GetxController is the possibility of setting an initial value in the constructor's super (exactly as ValueNotifier does). If the initial value is null, use GetxController. If you need a starting value, GetNotifier can be more useful and have less boilerplate, but both serve the same purpose: to decouple your visualization layer from your presentation logic.
+- Other Fixes and improvements:
+  - Fixed GetxController is closed twice when smartManagement.full is turn on
+  - Fixed phone number validation
+  - Fixed some inconsistencies in GetWidget and the life cycle of controllers
+  - It made controller testing completely safe with navigation.
+  - Improve docs (@eduardoflorence)
+  - Improve security types on routes (@unacorbatanegra)
+  - Improve code structure with less duplicate code: (@kranfix)
+  - Fix named route erroring when route does not exist (@FiercestT)
+
 ## [3.13.2]	
 - Reunification of the package.
 During the 2 week period, we try to keep this package as a compilation of smaller packages. We were successful in separating, getx is well decoupled and it was only necessary to send the internal folders as packages to pub.dev, however, it became very complicated to contribute to the package. This is because it was necessary to clone the repository, replace all pubspec packages with local paths, and after modification, return the original paths to do the PR. With that, the frequency of updates, which was about 4 to 5 days, became almost 2 weeks, and this is not legal for a community as active as Getx, which uses this package precisely in addition to being modern and performance, be constantly improving. This led contributors to the conclusion that getx works best together.
