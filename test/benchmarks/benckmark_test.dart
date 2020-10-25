@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get/state_manager.dart';
 
 int times = 3;
@@ -15,8 +16,8 @@ Future<String> valueNotifier() {
   value.addListener(() {
     if (last == value.value) {
       timer.stop();
-      c.complete("""${value.value} item value notifier 
-objs time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(
+          """${value.value} listeners notified | [VALUENOTIFIER] objs time: ${timer.elapsedMicroseconds}ms""");
     }
   });
 
@@ -36,8 +37,8 @@ Future<String> getValue() {
   value.addListener(() {
     if (last == value.value) {
       timer.stop();
-      c.complete("""${value.value} item get value objs 
-  time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(
+          """${value.value} listeners notified | [GETX VALUE] objs time: ${timer.elapsedMicroseconds}ms""");
     }
   });
 
@@ -58,7 +59,8 @@ Future<String> getStream() {
   value.stream.listen((v) {
     if (last == v) {
       timer.stop();
-      c.complete("$v item stream objs time: ${timer.elapsedMicroseconds}ms");
+      c.complete(
+          """$v listeners notified | [STREAM] objs time: ${timer.elapsedMicroseconds}ms""");
     }
   });
 
@@ -70,13 +72,15 @@ Future<String> getStream() {
 }
 
 void main() async {
-  print(await getValue());
-  print(await valueNotifier());
-  print(await getStream());
-  times = 30000;
-  print(await getValue());
-  print(await valueNotifier());
-  print(await getStream());
+  test('run benchmarks', () async {
+    print(await getValue());
+    print(await valueNotifier());
+    print(await getStream());
+    times = 30000;
+    print(await getValue());
+    print(await valueNotifier());
+    print(await getStream());
+  });
 }
 
 typedef VoidCallback = void Function();
