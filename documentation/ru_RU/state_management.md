@@ -133,12 +133,12 @@ void onButtonTap() => isOpen.value=false;
 
 В **GetX**, iесли вы объедините две переменные, `GetX()` (аналогично `Observer()`) будет перестраиваться только в том случае, если это подразумевает реальное изменение состояния.
 
-### Declaring a reactive variable
+### Объявление реактивной переменной
 
-You have 3 ways to turn a variable into an "observable".
+У вас есть 3 способа превратить переменную в "observable".
 
 
-1 - The first is using **`Rx{Type}`**.
+1 - Первый использует **`Rx{Type}`**.
 
 ```dart
 // initial value is recommended, but not mandatory
@@ -150,7 +150,7 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 
-2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
+2 - Второй - использовать **`Rx`** и дженерики `Rx<Type>`
 
 ```dart
 final name = Rx<String>('');
@@ -165,7 +165,7 @@ final myMap = Rx<Map<String, int>>({});
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value`:
+3 - Третий, более практичный, простой и предпочтительный подход, просто добавьте **`.obs`** в качестве свойства вашего значения:
 
 ```dart
 final name = ''.obs;
@@ -180,18 +180,18 @@ final myMap = <String, int>{}.obs;
 final user = User().obs;
 ```
 
-##### Having a reactive state, is easy.
+##### Реактивные состояния - это просто.
 
-As we know, _Dart_ is now heading towards _null safety_.
-To be prepared, from now on, you should always start your _Rx_ variables with an **initial value**.
+Как мы знаем,, _Dart_ сейчас движется в сторону _null safety_.
+Чтобы быть готовым, с этого момента вы всегда должны начинать свои переменные _Rx_ с **начальным значением**.
 
-> Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
+> Преобразование переменной в _observable_ + _начальное значение_ c **GetX** - самый простой и практичный подход.
 
-You will literally add a "`.obs`" to the end of your variable, and **that’s it**, you’ve made it observable,
-and its `.value`, well, will be the _initial value_).
+Вы буквально добавите "`.obs`" в конец своей переменной и **всё**, вы сделали её observable,
+и её `.value`, будет начальным значением.
 
 
-### Using the values in the view
+### Использование значений в представлении
 
 ```dart
 // controller file
