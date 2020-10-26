@@ -106,21 +106,19 @@ void onButtonTap() => isOpen.value=false;
 ```
 ### Преимущества
 
-**GetX()** helps you when you need **granular** control over what's being updated.
+**GetX()** поможет вам, когда вам нужен **детальный** контроль над тем, что обновляется.
 
-If you do not need `unique IDs`, because all your variables will be modified when you perform an action, then use `GetBuilder`, 
-because it's a Simple State Updater (in blocks, like `setState()`), made in just a few lines of code.
-It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
+Если вам не нужны уникальные идентификаторы, из-за того что все ваши переменные будут изменены при выполнении, используйте GetBuilder, потому что это простой модуль обновления состояния (как `setState()`), написанный всего в несколько строк кода.
+Он был сделан простым, чтобы иметь наименьшее влияние на CPU и просто выполнять единственную цель (восстановление состояния), тратя минимально возможные ресурсы.
 
-If you need a **powerful** State Manager, you can't go wrong with **GetX**.
+Если вам нужен **мощный** менеджер состояний, то вашим выбором будет **GetX**.
 
-It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
+Он не работает с переменными, а работает с потоками, все в нем - это `Streams` под капотом.
+Вы можете использовать _rxDart_ вместе с ним, потому что все это `Streams`,
+вы можете прослушивать событие каждой «переменной _Rx_», потому что всё в нём - это `Streams`.
 
-It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs`.
+Это буквально подход _BLoC_, который проще, чем _MobX_, и без генераторов кода и тд.
+Вы можете превратить что угодно в _"Observable"_ с помощью `.obs`.
 
 ### Maximum performance:
 
