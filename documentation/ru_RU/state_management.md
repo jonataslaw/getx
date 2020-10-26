@@ -222,28 +222,28 @@ GetX<Controller>(
 ),
 ```
 
-If we increment `count1.value++`, it will print:
+Если мы увеличим `count1.value++`, он выведет:
 - `count 1 rebuild` 
 - `count 3 rebuild`
 
-because `count1` has a value of `1`, and `1 + 0 = 1`, changing the `sum` getter value.
+поскольку `count1` имеет значение `1`, а `1 + 0 = 1`, изменяет геттер `sum`.
 
-If we change `count2.value++`, it will print:
+Если мы изменим `count2.value++`, он выведет:
 - `count 2 rebuild` 
 - `count 3 rebuild`
 
-because `count2.value` changed, and the result of the `sum` is now `2`.
+так как `count2.value` изменился, и теперь `sum` равен `2`.
 
-- NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
- This behavior exists due to Boolean variables.
+- Примечание: По умолчанию самое первое событие перестраивает виджет, даже если это то же значение.
+ Такое поведение существует из-за Boolean переменных.
 
-Imagine you did this:
+Представьте, что вы сделали это:
 
 ```dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever`.
+А затем вы проверили, вошел ли пользователь в систему, чтобы вызвать событие в `ever`.
 
 ```dart
 @override
@@ -261,14 +261,13 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false`, there would be no change to `isLogged`, so `ever()` would never be called.
-To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value`.
+Если `hasToken` был `false`, `isLogged` не изменится, поэтому `ever()` никогде не будет вызван.
+Чтобы избежать такого поведения, первое изменение _observable_ всегда будет запускать событие, даже если оно содержит то же самое `.value`.
 
-You can remove this behavior if you want, using:
+Вы можете убран данное поведение, если хотите, используя:
 `isLogged.firstRebuild = false;`
 
-### Conditions to rebuild
+### Условия для перестраивания
 
 In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
 
