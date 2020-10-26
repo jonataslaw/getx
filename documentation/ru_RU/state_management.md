@@ -120,19 +120,18 @@ void onButtonTap() => isOpen.value=false;
 Это буквально подход _BLoC_, который проще, чем _MobX_, и без генераторов кода и тд.
 Вы можете превратить что угодно в _"Observable"_ с помощью `.obs`.
 
-### Maximum performance:
+### Максимальная производительность:
 
-In addition to having a smart algorithm for minimal rebuilds, **GetX** uses comparators 
-to make sure the State has changed. 
+В дополнение к интеллектуальному алгоритму минимальных перестроек, **GetX** использует компараторы, чтобы убедиться, что состояние изменилось.
 
-If you experience any errors in your app, and send a duplicate change of State, 
-**GetX** will ensure it will not crash.
+Если вы столкнетесь с ошибками в своем приложении и отправите дублирующее изменение состояния,
+**GetX** гарантирует, что оно не выйдет из строя.
 
-With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _`computed` from MobX_. 
-When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
+С **GetX** состояние изменяется только при изменении значения.
+В этом основное отличие между **GetX** и применением _`computed` из MobX_.
+При объединении двух __observables__, когда один из них изменяется; слушатель этого _observable_ также изменится.
 
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()`) will only rebuild if it implies a real change of State.
+В **GetX**, iесли вы объедините две переменные, `GetX()` (аналогично `Observer()`) будет перестраиваться только в том случае, если это подразумевает реальное изменение состояния.
 
 ### Declaring a reactive variable
 
