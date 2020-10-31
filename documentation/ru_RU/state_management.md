@@ -269,7 +269,7 @@ fireRoute(logged) {
 
 ### Условия для перестраивания
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+Кроме того, Get обеспечивает усовершенствованный контроль состояния. Вы можете обусловить событие (например, добавление объекта в список) определенным условием.
 
 ```dart
 // First parameter: condition, must return true of false
@@ -277,9 +277,9 @@ In addition, Get provides refined state control. You can condition an event (suc
 list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications :smile:
+Без украшений, без генератора кода, без сложностей :smile:
 
-Do you know Flutter's counter app? Your Controller class might look like this:
+Вы ведь знаете счётчик Flutter? Ваш класс контроллера может выглядеть так:
 
 ```dart
 class CountController extends GetxController {
@@ -287,15 +287,15 @@ class CountController extends GetxController {
 }
 ```
 
-With a simple:
+С простым:
 
 ```dart
 controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+Вы можете обновить переменную счетчика в своем пользовательском интерфейсе, независимо от того, где она хранится.
 
-### Where .obs can be used
+### Где .obs может быть использован
 
 You can transform anything on obs. Here are two ways of doing it:
 
