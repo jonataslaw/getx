@@ -386,12 +386,12 @@ API "assignAll" очистит существующий список и доба
 
 ### Obx()
 
-Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
-Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+Bindings в Get необязательны. Вы можете использовать виджет Obx вместо GetX, который получает только анонимную функцию, создающую виджет.
+Очевидно, что если вы не используете тип, вам потребуется экземпляр вашего контроллера для использования переменных или использовать `Get.find<Controller>()`.value или Controller.to.value для получения значения.
 
 ### Workers
 
-Workers will assist you, triggering specific callbacks when an event occurs.
+Workers помогут вам, инициируя определенные обратные вызовы при возникновении события.
 
 ```dart
 /// Called every time `count1` changes.
@@ -406,30 +406,30 @@ debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 /// Ignore all changes within 1 second.
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
-All workers (except `debounce`) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool`.
-This `condition` defines when the `callback` function executes.
+У всех workers (кроме `debounce`) есть именованный параметр `condition`, которое может быть `bool` или обратным вызовом возвращающим `bool`.
+Этот `condition` определяет, когда выполняется функция обратного вызова.
 
-All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
+Все workers возвращают экземпляр `Worker`, который можно использовать для отмены (с помощью метода `dispose()`) worker.
  
 - **`ever`**
- is called every time the _Rx_ variable emits a new value.
+ вызывается каждый раз, когда переменная _Rx_ выдает новое значение.
 
 - **`everAll`**
- Much like `ever`, but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
+ как `ever`, но он принимает `List` значений _Rx_ вызываемый каждый раз, когда его переменная изменяется. Вот и всё.
 
 
 - **`once`**
-'once' is called only the first time the variable has been changed.
+'once' вызывается только при первом изменении переменной.
 
 - **`debounce`**
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+'debounce' очень полезен в функциях поиска, где вы хотите, чтобы API вызывался только тогда, когда пользователь заканчивает ввод. Если пользователь вводит "Jonny", у вас будет 5 поисковых запросов в API по буквам J, o, n, n и y. С Get этого не происходит, потому что у вас будет "debounce" Worker, который будет запускаться только в конце набора.
 
 - **`interval`**
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+'interval' отличается от `debouce`. В `debouce`, если пользователь внесёт 1000 изменений в переменную в течение 1 секунды, он отправит только последнее после установленного таймера (по умолчанию 800 миллисекунд). Вместо этого Interval будет игнорировать все действия пользователя в течение указанного периода. Если вы отправляете события в течение 1 минуты, 1000 в секунду, debounce отправит вам только последнее, когда пользователь прекратит стрелять событиями. Interval будет доставлять события каждую секунду, а если установлен на 3 секунды, то он будет доставлять 20 событий в эту минуту. Это рекомендуется во избежание злоупотреблений в функциях, где пользователь может быстро щелкнуть что-либо и получить некоторое преимущество (представьте, что пользователь может зарабатывать монеты, щелкая что-либо, если он щелкнет 300 раз за ту же минуту, у него будет 300 монет, используя интервал, вы можете установить временной интервал на 3 секунды, и даже если щелкнуть 300 или тысячу раз, максимум, который он получит за 1 минуту, составит 20 монет, щелкнув 300 или 1 миллион раз). Debounce подходит для защиты от DDos, для таких функций, как поиск, где каждое изменение onChange будет вызывать запрос к вашему API. Debounce будет ждать, пока пользователь перестанет вводить имя, чтобы сделать запрос. Если бы он использовался в вышеупомянутом сценарии с монетами, пользователь накликал бы только 1 монету, потому что он выполняется только тогда, когда пользователь "делает паузу" на установленное время.
 
-- NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+- ПРИМЕЧАНИЕ: должны всегда использоваться при запуске контроллера или класса, поэтому он всегда должен быть в onInit (рекомендуется), в конструкторе класса или в initState StatefulWidget (в большинстве случаев эта практика не рекомендуется, но не должна иметь побочных эффектов).
 
-## Simple State Manager
+## Обычное управление состоянием
 
 Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
 
