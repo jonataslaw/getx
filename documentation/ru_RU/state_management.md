@@ -297,9 +297,9 @@ controller.count.value++
 
 ### Где .obs может быть использован
 
-You can transform anything on obs. Here are two ways of doing it:
+Вы можете преобразовать что угодно в obs. Вот два способа сделать это:
 
-* You can convert your class values to obs
+* Вы можете преобразовать значения вашего класса в obs
 ```dart
 class RxUser {
   final name = "Camila".obs;
@@ -307,7 +307,7 @@ class RxUser {
 }
 ```
 
-* or you can convert the entire class to be an observable
+* или вы можете преобразовать весь класс в observable
 ```dart
 class User {
   User({String name, int age});
@@ -319,12 +319,12 @@ class User {
 final user = User(name: "Camila", age: 18).obs;
 ```
 
-### Note about Lists
+### Примечание о списках
 
-Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+Списки полностью наблюдаемы, как и объекты внутри них. Таким образом, если вы добавите значение в список, он автоматически перестроит виджеты, которые его используют.
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+Вам также не нужно использовать ".value" со списками, замечательный API-интерфейс Dart позволяет нам избежать этого.
+К сожалению, примитивные типы, такие как String и int, не могут быть расширены, что делает использование .value обязательным, но это не будет проблемой, если вы работаете с геттерами и сеттерами для них.
 
 ```dart
 // On the controller
@@ -338,7 +338,7 @@ ListView.builder (
 )
 ```
 
-When you are making your own classes observable, there is a different way to update them:
+Когда вы делаете свои собственные классы наблюдаемыми, есть другой способ их обновить:
 
 ```dart
 // on the model file
@@ -366,9 +366,9 @@ Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 user().name; // notice that is the user variable, not the class (variable has lowercase u)
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+Вам не нужно работать с наборами, если вы этого не хотите, вы можете использовать API "assign" и "assignAll".
+API "assign" очистит ваш список и добавит один объект, который вы хотите начать там.
+API "assignAll" очистит существующий список и добавит любые повторяемые объекты, которые вы в него вставляете.
 
 ### Why i have to use .value
 
