@@ -370,19 +370,19 @@ user().name; // notice that is the user variable, not the class (variable has lo
 API "assign" очистит ваш список и добавит один объект, который вы хотите начать там.
 API "assignAll" очистит существующий список и добавит любые повторяемые объекты, которые вы в него вставляете.
 
-### Why i have to use .value
+### Почему мне нужно использовать .value
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+Мы могли бы убрать обязательство использовать 'value' для `String` и `int` с помощью простого оформления и генератора кода, но цель этой библиотеки как раз и состоит в том, чтобы избежать внешних зависимостей. Мы хотим предложить среду, готовую для программирования, включающую в себя самое необходимое (управление маршрутами, зависимостями и состояниями) простым, легким и производительным способом без необходимости во внешнем пакете.
 
-You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
+Вы можете буквально добавить 3 буквы в свой pubspec (get), двоеточие и начать программировать. Все решения, включенные по умолчанию, от управления маршрутами до управления состоянием, нацелены на простоту, продуктивность и производительность.
 
-The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
+Общий вес этой библиотеки меньше, чем у одного менеджера состояний, хотя это полное решение, и это то, что вы должны понимать.
 
-If you are bothered by `.value`, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+Если вас беспокоит `.value`, и вам нравится генератор кода, MobX - отличная альтернатива, и вы можете использовать его вместе с Get. Для тех, кто хочет добавить одну зависимость в pubspec и начать программировать, не беспокоясь ни о совместимости версий пакетов, ни об ошибках обновления состояния исходящих от менеджеров состояний или зависимостей и не хочет беспокоиться о доступности контроллеров, а «просто программирование», Get идеален.
 
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
+Если у вас нет проблем с MobX или BLoC, вы можете просто использовать Get для маршрутов и забыть о том, что у него есть менеджер состояний. Простой и реактивный менеджеры состояний Get появились из-за то, что в моей компании был проект с более чем 90 контроллерами, а генератору кода после flutter clean требовалось более 30 минут для выполнения своих задач на достаточно хорошей машине. Если у вас 5, 10, 15 контроллеров, то вам подойдёт любой менеджер состояний. Если у вас абсурдно большой проект и генератор кода является для вас проблемой, то решение прямо перед вами.
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+Очевидно, что если кто-то хочет внести свой вклад в проект и создать генератор кода или что-то подобное, я укажу об этом в readme в качестве альтернативы. Моя потребность не в востребованности для всех разработчиков, я лишь говорю, что есть хорошие решения, которые уже делают это, например, MobX.
 
 ### Obx()
 
