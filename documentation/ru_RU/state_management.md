@@ -696,9 +696,13 @@ GetX делает это автоматически и восстанавлив�
 
 ## Смешивание двух менеджеров состояний
 
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+Некоторые открыли запрос, так как они хотели использовать только один тип реактивной переменной и другой механизм, и для этого нужно было вставить Obx в GetBuilder.
+Подумав об этом, был создан MixinBuilder.
+Он позволяет как реактивные изменения путем изменения переменных ".obs", так и механические обновления через update().
+Однако из 4 виджетов он - тот, который потребляет больше всего ресурсов, поскольку помимо подписки на получение событий изменений от своих дочерних элементов, он подписывается на метод обновления своего контроллера.
 
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
+Расширение GetxController важно, поскольку у них есть жизненные циклы, и они могут "запускать" и "завершать" события в своих методах onInit() и onClose().
+Вы можете использовать для этого любой класс, но я настоятельно рекомендую вам использовать класс GetxController для размещения ваших переменных, независимо от того, наблюдаемы они или нет.
 
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
