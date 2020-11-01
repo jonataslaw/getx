@@ -609,7 +609,7 @@ class Controller extends GetxController {
 
 ### Другие способы использования
 
-You can use Controller instance directly on GetBuilder value:
+Вы можете использовать экземпляр контроллера непосредственно со значением GetBuilder:
 
 ```dart
 GetBuilder<Controller>(
@@ -620,7 +620,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
+Вам также может понадобиться экземпляр вашего контроллера вне GetBuilder, и вы можете использовать эти подходы для достижения этой цели:
 
 ```dart
 class Controller extends GetxController {
@@ -636,7 +636,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-or
+или
 
 ```dart
 class Controller extends GetxController {
@@ -652,7 +652,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-- You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+- Для этого можно использовать "некакноничные" подходы. Если вы используете какой-либо другой менеджер зависимостей, например get_it, modular и т.д., и просто хотите доставить экземпляр контроллера, вы можете сделать это:
 
 ```dart
 Controller controller = Controller();
@@ -666,9 +666,9 @@ GetBuilder<Controller>(
 
 ```
 
-### Unique IDs
+### Уникальные идентификаторы
 
-If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
+Если вы хотите уточнить элемент управления обновлением виджета с помощью GetBuilder, вы можете назначить им уникальные идентификаторы:
 
 ```dart
 GetBuilder<Controller>(
@@ -680,21 +680,21 @@ GetBuilder<Controller>(
 ),
 ```
 
-And update it this form:
+И обновите это следующим образом:
 
 ```dart
 update(['text']);
 ```
 
-You can also impose conditions for the update:
+Также можно наложить условия на обновление:
 
 ```dart
 update(['text'], counter < 10);
 ```
 
-GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+GetX делает это автоматически и восстанавливает только виджет, который использует точную переменную, которая была изменена, если вы измените переменную на ту же самую, что и предыдущая, и это не означает изменения состояния, GetX не будет перестраивать виджет для экономии памяти и CPU (На экране отображается 3, и вы снова меняете переменную на 3. В большинстве менеджеров состояний это вызовет новую перестройку, но с GetX виджет будет перестраиваться снова только в том случае, если на самом деле его состояние изменилось).
 
-## Mixing the two state managers
+## Смешивание двух менеджеров состояний
 
 Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
 
