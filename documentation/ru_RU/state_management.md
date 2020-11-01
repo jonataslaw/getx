@@ -541,14 +541,14 @@ FloatingActionButton(
 
 В классе A контроллер ещё не находится в памяти, потому что вы его ещё не использовали (Get is lazyLoad). В классе B вы использовали контроллер, и он вошёл в память. В классе C вы использовали тот же контроллер, что и в классе B, Get будет разделять состояние контроллера B с контроллером C, и тот же контроллер всё ещё находится в памяти. Если вы закроете экран C и экран B, Get автоматически извлечёт контроллер X из памяти и освободит ресурсы, поскольку класс A не использует контроллер. Если вы снова перейдете к B, контроллер X снова войдет в память, если вместо перехода к классу C вы снова вернётесь к классу A, Get таким же образом выведет контроллер из памяти. Если класс C не использовал контроллер, а вы вынули класс B из памяти, ни один класс не будет использовать контроллер X, и, соответственно, он будет удален. Единственное исключение, которое может случиться с Get, - это если вы неожиданно удалите B из маршрута и попытаетесь использовать контроллер в C. В этом случае идентификатор создателя контроллера, который был в B, был удален, и Get был запрограммирован на удаление его из памяти каждого контроллера, у которого нет идентификатора создателя. Если вы намереваетесь сделать это, добавьте флаг "autoRemove: false" в GetBuilder класса B GetBuilder и используйте adoptID = true в GetBuilder класса C.
 
-### You won't need StatefulWidgets anymore
+### Вам больше не понадобятся StatefulWidgets
 
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
-The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
-Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get.
+Использование StatefulWidgets означает ненужное сохранение состояния всех экранов, даже если вам нужно минимально перестроить виджет, вы встроите его в Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, которые будет ещё одним StatefulWidget.
+Класс StatefulWidget - это класс большего размера, чем StatelessWidget, который будет выделять больше оперативной памяти, и это может не иметь существенного значения между одним или двумя классами, но, безусловно, будет иметь место, когда у вас их 100!
+Если вам не нужно использовать миксин, например TickerProviderStateMixin, использовать StatefulWidget с Get совершенно не нужно.
 
-You can call all methods of a StatefulWidget directly from a GetBuilder.
-If you need to call initState() or dispose() method for example, you can call them directly;
+Вы можете вызывать все методы StatefulWidget прямо из GetBuilder.
+Например, если вам нужно вызвать метод initState() или dispose(), вы можете вызвать их напрямую;
 
 ```dart
 GetBuilder<Controller>(
@@ -558,7 +558,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-A much better approach than this is to use the onInit() and onClose() method directly from your controller.
+Гораздо лучший подход, чем этот, - использовать методы onInit() и onClose() непосредственно из вашего контроллера.
 
 ```dart
 @override
@@ -568,7 +568,9 @@ void onInit() {
 }
 ```
 
-- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+- ПРИМЕЧАНИЕ: Если вы хотите запустить метод в момент первого вызова контроллера, вам НЕ НУЖНО использовать для этого конструкторы, на самом деле, используя ориентированный на производительность пакет, такой как Get, это граничит с плохой практикой, потому что отклоняется от логики, в которой контроллеры создаются или выделяются (если вы создаете экземпляр этого контроллера, конструктор будет вызываться немедленно, вы будете заполнять контроллер ещё до того, как он будет использован, вы выделяете память, не используя её , это определенно вредит принципам этой библиотеки).
+Методы onInit(); и onClose(); были созданы для этого, они будут вызываться при создании Контроллера или использоваться в первый раз, в зависимости от того, используете вы Get.lazyPut или нет.
+Если вы хотите, например, вызвать ваш API для заполнения данных, вы можете забыть о старомодном методе initState/dispose, просто начните свой вызов api в onInit, и если вам нужно выполнить любую команду как закрытие потоков, используйте для этого onClose().
 
 ### Why it exists
 
