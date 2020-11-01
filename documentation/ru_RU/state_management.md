@@ -478,13 +478,13 @@ GetBuilder<Controller>(
 //Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 
-**Done!**
+**Готово!**
 
-- You have already learned how to manage states with Get.
+- Вы уже узнали, как управлять состояниями с помощью Get.
 
-- Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+- Примечание: Возможно, вам нужна более крупная организация и не использовать свойство init. Для этого вы можете создать класс и расширить класс Bindings, указав в нем контроллеры, которые будут созданы в рамках этого маршрута. Контроллеры не будут создаваться в это время, наоборот, это просто инструкция, так что при первом использовании контроллера Get будет знать, где его искать. Get останется lazyLoad и продолжит удалять контроллеры, когда они больше не нужны. Смотрите пример в pub.dev, чтобы увидеть, как это работает.
 
-If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
+Если вы перемещаетесь по многим маршрутам и вам нужны данные, которые были в вашем ранее используемом контроллере, вам просто нужно использовать снова GetBuilder (без инициализации):
 
 ```dart
 class OtherClass extends StatelessWidget {
@@ -501,7 +501,7 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
+Если вам нужно использовать свой контроллер во многих других местах и ​​за пределами GetBuilder, просто создайте get в своем контроллере и легко его получите. (или используйте `Get.find<Controller>()`)
 
 ```dart
 class Controller extends GetxController {
@@ -520,7 +520,7 @@ class Controller extends GetxController {
 }
 ```
 
-And then you can access your controller directly, that way:
+И тогда вы можете напрямую получить доступ к своему контроллеру:
 
 ```dart
 FloatingActionButton(
@@ -531,15 +531,15 @@ FloatingActionButton(
 ),
 ```
 
-When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+Когда вы нажимаете FloatingActionButton, все виджеты, которые прослушивают переменную 'counter', будут обновлены автоматически.
 
-### How it handles controllers
+### Как обрабатываются контроллеры
 
-Let's say we have this:
+Допустим, у нас есть это:
 
 `Class a => Class B (has controller X) => Class C (has controller X)`
 
-In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+В классе A контроллер ещё не находится в памяти, потому что вы его ещё не использовали (Get is lazyLoad). В классе B вы использовали контроллер, и он вошёл в память. В классе C вы использовали тот же контроллер, что и в классе B, Get будет разделять состояние контроллера B с контроллером C, и тот же контроллер всё ещё находится в памяти. Если вы закроете экран C и экран B, Get автоматически извлечёт контроллер X из памяти и освободит ресурсы, поскольку класс A не использует контроллер. Если вы снова перейдете к B, контроллер X снова войдет в память, если вместо перехода к классу C вы снова вернётесь к классу A, Get таким же образом выведет контроллер из памяти. Если класс C не использовал контроллер, а вы вынули класс B из памяти, ни один класс не будет использовать контроллер X, и, соответственно, он будет удален. Единственное исключение, которое может случиться с Get, - это если вы неожиданно удалите B из маршрута и попытаетесь использовать контроллер в C. В этом случае идентификатор создателя контроллера, который был в B, был удален, и Get был запрограммирован на удаление его из памяти каждого контроллера, у которого нет идентификатора создателя. Если вы намереваетесь сделать это, добавьте флаг "autoRemove: false" в GetBuilder класса B GetBuilder и используйте adoptID = true в GetBuilder класса C.
 
 ### You won't need StatefulWidgets anymore
 
