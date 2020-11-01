@@ -431,33 +431,33 @@ interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 
 ## Обычное управление состоянием
 
-Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+Get имеет чрезвычайно легкий и простой менеджер состояний, который не использует ChangeNotifier, удовлетворит потребности, особенно для тех, кто плохо знаком с Flutter, и не вызовет проблем для больших приложений.
 
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this.
+GetBuilder нацелен именно на контроль нескольких состояний. Представьте, что вы добавили 30 продуктов в корзину, вы нажимаете удалить один, одновременно с этим обновляется список, обновляется цена, а значок в корзине покупок обновляется до меньшего числа. Такой подход делает GetBuilder убийственным, потому что он группирует состояния и изменяет их все сразу без какой-либо "вычислительной логики" для этого. GetBuilder был создан с учётом такого рода ситуаций, поскольку для временного изменения состояния вы можете использовать setState, и для этого вам не понадобится менеджер состояний.
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+Таким образом, если вам нужен отдельный контроллер, вы можете назначить для него идентификаторы или использовать GetX. Это зависит от вас, помните, что чем больше у вас «индивидуальных» виджетов, тем больше ресурсов будет забирать GetX, в то время как производительность GetBuilder должна быть выше при многократном изменении состояния.
 
-### Advantages
+### Преимущества
 
-1. Update only the required widgets.
+1. Обновляйте только необходимые виджетов.
 
-2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2. Не используйте changeNotifier, это менеджер состояний, который использует меньше памяти (около 0 МБ).
 
-3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. Забудьте о StatefulWidget! С Get он больше не понадобится. С другими менеджерами состояний вам, вероятно, придется использовать StatefulWidget, чтобы получить экземпляр вашего Provider, BLoC, MobX Controller и т.д. Но задумывались ли вы когда-нибудь о том, что ваш AppBar, Scaffold и большинство виджетов в вашем классе не имеют состояния и по сути являются Stateless? Так зачем хранить состояние всего класса, если можно хранить только состояние виджета, которые истинно Stateful? Get решает и эту проблему. Создавайте классы Stateless, всё делайте stateless. Если вам нужно обновить один компонент, просто оберните его GetBuilder.
 
-4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. Организуйте свой проект по-настоящему! Контроллеры не должны быть в вашем пользовательском интерфейсе, поместите ваш TextEditController или любой контроллер, который вы используете, в свой классе Controller.
 
-5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5. Вам нужно инициировать событие для обновления виджета, как только он будет отрисован? GetBuilder имеет свойство initState, как и StatefulWidget, и вы можете вызывать события вашего контроллера прямо из него.
 
-6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. Вам необходимо инициировать такие действия как закрытия потоков, таймеров и т.д.? GetBuilder также имеет свойство dispose, с помощью которого вы можете вызывать события, как только этот виджет будет уничтожен.
 
-7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. Используйте потоки только при необходимости. Вы можете использовать свои StreamControllers внутри своего контроллера в обычном режиме, а также использовать StreamBuilder как обычно, но помните, что поток разумно потребляет память и реактивное программирование - это прекрасно, но вы не должны злоупотреблять этим. 30 потоков, открытых одновременно, может быть хуже, чем changeNotifier (а changeNotifier - очень плохо).
 
-8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+8. Обновляйте виджеты, не тратя на это оперативную память. Get сохраняет только идентификатор создателя GetBuilder и обновляет этот GetBuilder при необходимости. Потребление памяти для хранения идентификатора get в памяти очень низкое даже для тысяч GetBuilders. Когда вы создаете новый GetBuilder, вы фактически передаёте состояние GetBuilder, у которого есть идентификатор создателя. Новое состояние не создается для каждого GetBuilder, что экономит МНОГО ОЗУ для больших приложений. В основном ваше приложение будет полностью Stateless, и несколько виджетов, которые Stateful (при помощи GetBuilder), будут иметь общее состояние, и поэтому обновление обного обновит их всех. Состояние всего одно.
 
-9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
+9. Get - всеведущий и в большинстве случаев точно знает, в какое время нужно извлечь контроллер из памяти. Вам не следует беспокоиться о том, когда утилизировать контроллер, Get знает, когда это сделать.
 
-### Usage
+### Использование
 
 ```dart
 // Create controller class and extends GetxController
