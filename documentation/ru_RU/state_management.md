@@ -572,15 +572,19 @@ void onInit() {
 Методы onInit(); и onClose(); были созданы для этого, они будут вызываться при создании Контроллера или использоваться в первый раз, в зависимости от того, используете вы Get.lazyPut или нет.
 Если вы хотите, например, вызвать ваш API для заполнения данных, вы можете забыть о старомодном методе initState/dispose, просто начните свой вызов api в onInit, и если вам нужно выполнить любую команду как закрытие потоков, используйте для этого onClose().
 
-### Why it exists
+### Почему это существует
 
-The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
+Цель этого пакета - предоставить вам законченное решение для навигации по маршрутам, управления зависимостями и состояниями с использованием минимально возможных зависимостей с высокой степенью разделения.
+Get включает в себя все высокоуровневые и низкоуровневые API-интерфейсы Flutter, чтобы гарантировать, что вы работаете с наименьшими взаимозависимостями.
+Мы централизуем всё в одном пакете, чтобы гарантировать, что у вас нет никакой взаимозависимости в вашем проекте.
+Таким образом, вы можете поместить в свое представление только виджеты и оставить часть своей команды, которая работает с бизнес-логикой, свободной, чтобы работать с бизнес-логикой независимо от какого-либо элемента представления.
+Это обеспечивает гораздо более чистую рабочую среду, так что часть вашей команды работает только с виджетами, не беспокоясь об отправке данных на ваш контроллер, а часть вашей команды работает только с бизнес-логикой, независимо от какого-либо элемента представления.
 
-So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
-You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
+Итак, чтобы упростить это: вам не нужно вызывать методы в initState и отправлять их по параметрам на ваш контроллер или использовать для этого конструктор вашего контроллера, у вас есть метод onInit (), который вызывается в нужное время, чтобы вы могли начать ваши сервисы.
+Вам не нужно вызывать устройство, у вас есть метод onClose(), который будет вызываться именно в тот момент, когда ваш контроллер больше не нужен и будет удален из памяти. Таким образом, оставьте представления только для виджетов, воздерживаясь от какой-либо бизнес-логики.
 
-Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+Не вызывайте метод удаления внутри GetxController, он ничего не сделает, помните, что контроллер не является виджетом, его не следует "удалять", и он будет автоматически и разумно удалён из памяти с помощью Get.
+Если вы использовали какой-либо поток и хотите закрыть его, просто вставьте его в метод close. Пример:
 
 ```dart
 class Controller extends GetxController {
@@ -597,13 +601,13 @@ class Controller extends GetxController {
 }
 ```
 
-Controller life cycle:
+Жизненный цикл контроллера:
 
-- onInit() where it is created.
-- onClose() where it is closed to make any changes in preparation for the delete method
-- deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+- onInit() когда он создается.
+- onClose() когда он закрывается для внесения каких-либо изменений при подготовке к удалению.
+- удалено: у вас нет доступа к этому API, потому что он буквально удаляет контроллер из памяти. Он буквально удаляется, не оставляя следов.
 
-### Other ways of using it
+### Другие способы использования
 
 You can use Controller instance directly on GetBuilder value:
 
