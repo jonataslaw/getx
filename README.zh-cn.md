@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [西班牙语](README-es.md), [波兰语](README.pl.md)_
+_语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README-ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md)_
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
