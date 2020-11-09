@@ -55,6 +55,8 @@ You cannot ${isClosed ? "close" : "add events to"} a closed stream.''';
     listenable.addSubscription(subs);
     return subs;
   }
+
+  Stream<T> get stream => GetStreamTransformation(listenable);
 }
 
 class LightListenable<T> {
@@ -125,7 +127,10 @@ class LightSubscription<T> extends StreamSubscription<T> {
   bool cancelOnError = false;
 
   @override
-  Future<void> cancel() async => listener.removeSubscription(this);
+  Future<void> cancel() {
+    listener.removeSubscription(this);
+    return Future.value();
+  }
 
   OnData<T> _data;
 
