@@ -62,12 +62,24 @@ You cannot ${isClosed ? "close" : "add events to"} a closed stream.''';
 class LightListenable<T> {
   List<LightSubscription<T>> _onData = <LightSubscription<T>>[];
 
-  void removeSubscription(LightSubscription<T> subs) {
-    _onData.remove(subs);
+  bool _isBusy = false;
+
+  FutureOr<bool> removeSubscription(LightSubscription<T> subs) async {
+    if (!_isBusy) {
+      return _onData.remove(subs);
+    } else {
+      await Future.delayed(Duration.zero);
+      return _onData.remove(subs);
+    }
   }
 
-  void addSubscription(LightSubscription<T> subs) {
-    _onData.add(subs);
+  FutureOr<void> addSubscription(LightSubscription<T> subs) async {
+    if (!_isBusy) {
+      return _onData.add(subs);
+    } else {
+      await Future.delayed(Duration.zero);
+      return _onData.add(subs);
+    }
   }
 
   int get length => _onData?.length;
@@ -75,23 +87,20 @@ class LightListenable<T> {
   bool get hasListeners => _onData.isNotEmpty;
 
   void notifyData(T data) {
-    _checkIfDisposed();
+    assert(!isDisposed, 'You cannot add data to a closed stream.');
+    _isBusy = true;
     for (final item in _onData) {
       if (item.isPaused) {
         break;
       }
       item._data?.call(data);
     }
-  }
-
-  void _checkIfDisposed() {
-    if (isDisposed) {
-      throw '[LightStream] Error: You cannot add events to a closed stream.';
-    }
+    _isBusy = false;
   }
 
   void notifyError(Object error, [StackTrace stackTrace]) {
-    _checkIfDisposed();
+    assert(!isDisposed, 'You cannot add errors to a closed stream.');
+    _isBusy = true;
     for (final item in _onData) {
       if (item.isPaused) {
         break;
@@ -102,19 +111,25 @@ class LightListenable<T> {
         item._onDone?.call();
       }
     }
+    _isBusy = false;
   }
 
   void notifyDone() {
-    _checkIfDisposed();
+    assert(!isDisposed, 'You cannot close a closed stream.');
+    _isBusy = true;
     for (final item in _onData) {
       if (item.isPaused) {
         break;
       }
       item._onDone?.call();
     }
+    _isBusy = false;
   }
 
-  void dispose() => _onData = null;
+  void dispose() {
+    _onData = null;
+    _isBusy = null;
+  }
 
   bool get isDisposed => _onData == null;
 }

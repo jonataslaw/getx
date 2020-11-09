@@ -104,10 +104,8 @@ Worker once<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     if (!_conditional(condition)) return;
     ref._disposed = true;
     ref._log('called');
+    sub?.cancel();
     callback(event);
-    Timer.run(() {
-      sub?.cancel();
-    });
   });
   ref = Worker(sub.cancel, '[once]');
   return ref;
