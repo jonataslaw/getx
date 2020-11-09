@@ -49,6 +49,7 @@ linter:
     prefer_equal_for_default_values: true
     avoid_init_to_null: true
     unnecessary_getters_setters: true
+    annotate_overrides: true
     #- unnecessary_getters # prefer # Disabled pending fix: https://github.com/dart-lang/linter/issues/23
     #- prefer_expression_function_bodies # consider
     unnecessary_this: true

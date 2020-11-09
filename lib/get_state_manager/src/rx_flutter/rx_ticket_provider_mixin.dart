@@ -21,5 +21,6 @@ import '../../get_state_manager.dart';
 /// ```
 mixin SingleGetTickerProviderMixin on DisposableInterface
     implements TickerProvider {
+  @override
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }

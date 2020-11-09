@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/state_manager.dart';
@@ -7,8 +6,8 @@ import 'package:get/state_manager.dart';
 int times = 3;
 int get last => times - 1;
 
-Future<String> valueNotifier() {
-  final c = Completer<String>();
+Future<int> valueNotifier() {
+  final c = Completer<int>();
   final value = ValueNotifier<int>(0);
   final timer = Stopwatch();
   timer.start();
@@ -16,8 +15,9 @@ Future<String> valueNotifier() {
   value.addListener(() {
     if (last == value.value) {
       timer.stop();
-      c.complete(
-          """${value.value} listeners notified | [VALUENOTIFIER] objs time: ${timer.elapsedMicroseconds}ms""");
+      print(
+          """${value.value} listeners notified | [VALUE_NOTIFIER] time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(timer.elapsedMicroseconds);
     }
   });
 
@@ -28,8 +28,8 @@ Future<String> valueNotifier() {
   return c.future;
 }
 
-Future<String> getValue() {
-  final c = Completer<String>();
+Future<int> getValue() {
+  final c = Completer<int>();
   final value = Value<int>(0);
   final timer = Stopwatch();
   timer.start();
@@ -37,8 +37,9 @@ Future<String> getValue() {
   value.addListener(() {
     if (last == value.value) {
       timer.stop();
-      c.complete(
-          """${value.value} listeners notified | [GETX VALUE] objs time: ${timer.elapsedMicroseconds}ms""");
+      print(
+          """${value.value} listeners notified | [GETX_VALUE] time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(timer.elapsedMicroseconds);
     }
   });
 
@@ -49,8 +50,8 @@ Future<String> getValue() {
   return c.future;
 }
 
-Future<String> getStream() {
-  final c = Completer<String>();
+Future<int> stream() {
+  final c = Completer<int>();
 
   final value = StreamController<int>();
   final timer = Stopwatch();
@@ -59,8 +60,55 @@ Future<String> getStream() {
   value.stream.listen((v) {
     if (last == v) {
       timer.stop();
-      c.complete(
-          """$v listeners notified | [STREAM] objs time: ${timer.elapsedMicroseconds}ms""");
+      print(
+          """$v listeners notified | [STREAM] time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(timer.elapsedMicroseconds);
+    }
+  });
+
+  for (var i = 0; i < times; i++) {
+    value.add(i);
+  }
+
+  return c.future;
+}
+
+Future<int> getStream() {
+  final c = Completer<int>();
+
+  final value = GetStream<int>();
+  final timer = Stopwatch();
+  timer.start();
+
+  value.listen((v) {
+    if (last == v) {
+      timer.stop();
+      print(
+          """$v listeners notified | [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(timer.elapsedMicroseconds);
+    }
+  });
+
+  for (var i = 0; i < times; i++) {
+    value.add(i);
+  }
+
+  return c.future;
+}
+
+Future<int> miniStream() {
+  final c = Completer<int>();
+
+  final value = MiniStream<int>();
+  final timer = Stopwatch();
+  timer.start();
+
+  value.listen((v) {
+    if (last == v) {
+      timer.stop();
+      print(
+          """$v listeners notified | [MINI_STREAM] time: ${timer.elapsedMicroseconds}ms""");
+      c.complete(timer.elapsedMicroseconds);
     }
   });
 
@@ -72,15 +120,43 @@ Future<String> getStream() {
 }
 
 void main() async {
-  test('run benchmarks', () async {
-    print(await getValue());
-    print(await valueNotifier());
-    print(await getStream());
+  test('run benchmarks from ValueNotifier', () async {
+    await getValue();
+    await valueNotifier();
+
     times = 30000;
-    print(await getValue());
-    print(await valueNotifier());
-    print(await getStream());
+    await getValue();
+    await valueNotifier();
+  });
+
+  test('percentage test', () {
+    final referenceValue = 200;
+    final requestedValue = 100;
+
+    print('''
+referenceValue is ${calculePercentage(referenceValue, requestedValue)}% more than requestedValue''');
+    expect(calculePercentage(referenceValue, requestedValue), 100);
+  });
+
+  test('run benchmarks from Streams', () async {
+    var dart = await stream();
+    var getx = await getStream();
+    var mini = await miniStream();
+    print('''
+GetStream is ${calculePercentage(dart, getx).round()}% more fast than Default Stream with $last listeners''');
+    times = 30000;
+    dart = await stream();
+    getx = await getStream();
+    mini = await miniStream();
+
+    print('dart is $dart');
+    print('getx is $getx');
+    print('mini is $mini');
+    print('''
+GetStream is ${calculePercentage(dart, getx).round()}% more fast than Default Stream with $last listeners''');
   });
 }
 
-typedef VoidCallback = void Function();
+int calculePercentage(int dart, int getx) {
+  return (dart / getx * 100).round() - 100;
+}

@@ -1,24 +1,61 @@
-import 'dart:async';
-import 'dart:collection';
-import '../rx_core/rx_interface.dart';
-part 'rx_num.dart';
+part of rx_types;
 
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
 RxInterface getObs;
 
-/// Base Rx class that manages all the stream logic for any Type.
-abstract class _RxImpl<T> implements RxInterface<T> {
-  _RxImpl(T initial) {
-    _value = initial;
-  }
-  StreamController<T> subject = StreamController<T>.broadcast();
-  final _subscriptions = HashMap<Stream<T>, StreamSubscription>();
+mixin RxObjectMixin<T> {
+  GetStream<T> subject = GetStream<T>();
+  final _subscriptions = <StreamSubscription>[];
+  bool get canUpdate => _subscriptions.isNotEmpty;
 
   T _value;
 
-  bool get canUpdate => _subscriptions.isNotEmpty;
+  /// Makes a direct update of [value] adding it to the Stream
+  /// useful when you make use of Rx for custom Types to referesh your UI.
+  ///
+  /// Sample:
+  /// ```
+  ///  class Person {
+  ///     String name, last;
+  ///     int age;
+  ///     Person({this.name, this.last, this.age});
+  ///     @override
+  ///     String toString() => '$name $last, $age years old';
+  ///  }
+  ///
+  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
+  /// person.value.name = 'Roi';
+  /// person.refresh();
+  /// print( person );
+  /// ```
+  void refresh() {
+    subject.add(value);
+  }
+
+  /// updates the value to [null] and adds it to the Stream.
+  /// Even with null-safety coming, is still an important feature to support, as
+  /// [call()] doesn't accept [null] values. For instance,
+  /// [InputDecoration.errorText] has to be null to not show the "error state".
+  ///
+  /// Sample:
+  /// ```
+  /// final inputError = ''.obs..nil();
+  /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
+  /// ```
+  void nil() {
+    subject.add(_value = null);
+  }
+
+  /// Closes the subscriptions for this Rx, releasing the resources.
+  void close() {
+    for (final subscription in _subscriptions) {
+      subscription?.cancel();
+    }
+    _subscriptions.clear();
+    subject.close();
+  }
 
   /// Makes this Rx looks like a function so you can update a new
   /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
@@ -43,66 +80,20 @@ abstract class _RxImpl<T> implements RxInterface<T> {
     return value;
   }
 
-  /// Makes a direct update of [value] adding it to the Stream
-  /// useful when you make use of Rx for custom Types to referesh your UI.
-  ///
-  /// Sample:
-  /// ```
-  ///  class Person {
-  ///     String name, last;
-  ///     int age;
-  ///     Person({this.name, this.last, this.age});
-  ///     @override
-  ///     String toString() => '$name $last, $age years old';
-  ///  }
-  ///
-  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
-  /// person.value.name = 'Roi';
-  /// person.refresh();
-  /// print( person );
-  /// ```
-  void refresh() {
-    subject.add(value);
+  /// This is an internal method.
+  /// Subscribe to changes on the inner stream.
+  void addListener(GetStream<T> rxGetx) {
+    if (_subscriptions.contains(rxGetx.listen)) {
+      return;
+    }
+
+    final subs = rxGetx.listen((data) {
+      subject.add(data);
+    });
+    _subscriptions.add(subs);
   }
 
-  /// Uses a callback to update [value] internally, similar to [refresh],
-  /// but provides the current value as the argument.
-  /// Makes sense for custom Rx types (like Models).
-  ///
-  /// Sample:
-  /// ```
-  ///  class Person {
-  ///     String name, last;
-  ///     int age;
-  ///     Person({this.name, this.last, this.age});
-  ///     @override
-  ///     String toString() => '$name $last, $age years old';
-  ///  }
-  ///
-  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
-  /// person.update((person) {
-  ///   person.name = 'Roi';
-  /// });
-  /// print( person );
-  /// ```
-  void update(void fn(T val)) {
-    fn(_value);
-    subject.add(_value);
-  }
-
-  /// updates the value to [null] and adds it to the Stream.
-  /// Even with null-safety coming, is still an important feature to support, as
-  /// [call()] doesn't accept [null] values. For instance,
-  /// [InputDecoration.errorText] has to be null to not show the "error state".
-  ///
-  /// Sample:
-  /// ```
-  /// final inputError = ''.obs..nil();
-  /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
-  /// ```
-  void nil() {
-    subject.add(_value = null);
-  }
+  bool firstRebuild = true;
 
   /// Same as `toString()` but using a getter.
   String get string => value.toString();
@@ -128,26 +119,6 @@ abstract class _RxImpl<T> implements RxInterface<T> {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _value.hashCode;
 
-  /// Closes the subscriptions for this Rx, releasing the resources.
-  void close() {
-    _subscriptions.forEach((observable, subscription) => subscription.cancel());
-    _subscriptions.clear();
-    subject.close();
-  }
-
-  /// This is an internal method.
-  /// Subscribe to changes on the inner stream.
-  void addListener(Stream<T> rxGetx) {
-    if (_subscriptions.containsKey(rxGetx)) {
-      return;
-    }
-    _subscriptions[rxGetx] = rxGetx.listen((data) {
-      subject.add(data);
-    });
-  }
-
-  bool firstRebuild = true;
-
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   set value(T val) {
@@ -160,26 +131,63 @@ abstract class _RxImpl<T> implements RxInterface<T> {
   /// Returns the current [value]
   T get value {
     if (getObs != null) {
-      getObs.addListener(subject.stream);
+      getObs.addListener(subject);
     }
     return _value;
   }
 
-  Stream<T> get stream => subject.stream;
+  Stream<T> get stream => GetStreamTransformation<T>(subject.listenable);
 
-  StreamSubscription<T> listen(void Function(T) onData,
-          {Function onError, void Function() onDone, bool cancelOnError}) =>
-      stream.listen(onData, onError: onError, onDone: onDone);
+  StreamSubscription<T> listen(
+    void Function(T) onData, {
+    Function onError,
+    void Function() onDone,
+    bool cancelOnError = false,
+  }) =>
+      subject.listen(onData,
+          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
 
   /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
   /// You can bind multiple sources to update the value.
   /// Closing the subscription will happen automatically when the observer
   /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    _subscriptions[stream] = stream.listen((va) => value = va);
+    _subscriptions.add(stream.listen((va) => value = va));
+  }
+}
+
+/// Base Rx class that manages all the stream logic for any Type.
+abstract class _RxImpl<T> with RxObjectMixin<T> implements RxInterface<T> {
+  _RxImpl(T initial) {
+    _value = initial;
   }
 
   Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
+
+  /// Uses a callback to update [value] internally, similar to [refresh],
+  /// but provides the current value as the argument.
+  /// Makes sense for custom Rx types (like Models).
+  ///
+  /// Sample:
+  /// ```
+  ///  class Person {
+  ///     String name, last;
+  ///     int age;
+  ///     Person({this.name, this.last, this.age});
+  ///     @override
+  ///     String toString() => '$name $last, $age years old';
+  ///  }
+  ///
+  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
+  /// person.update((person) {
+  ///   person.name = 'Roi';
+  /// });
+  /// print( person );
+  /// ```
+  void update(void fn(T val)) {
+    fn(_value);
+    subject.add(_value);
+  }
 }
 
 /// Rx class for `bool` Type.
@@ -202,6 +210,7 @@ class RxBool extends _RxImpl<bool> {
     return this;
   }
 
+  @override
   String toString() {
     return value ? "true" : "false";
   }

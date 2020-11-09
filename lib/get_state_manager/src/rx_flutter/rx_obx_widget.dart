@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import '../../../get_rx/get_rx.dart';
+import '../../../get_rx/src/rx_types/rx_types.dart';
 
 typedef WidgetCallback = Widget Function();
 
@@ -12,6 +12,7 @@ typedef WidgetCallback = Widget Function();
 abstract class ObxWidget extends StatefulWidget {
   const ObxWidget({Key key}) : super(key: key);
 
+  @override
   _ObxState createState() => _ObxState();
 
   @protected
@@ -28,7 +29,7 @@ class _ObxState extends State<ObxWidget> {
 
   @override
   void initState() {
-    subs = _observer.subject.stream.listen((data) => setState(() {}));
+    subs = _observer.subject.listen((data) => setState(() {}));
     super.initState();
   }
 

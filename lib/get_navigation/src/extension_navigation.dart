@@ -11,9 +11,6 @@ import 'root/parse_route.dart';
 import 'root/root_controller.dart';
 import 'routes/transitions_type.dart';
 
-//TODO: Split this class on "Snackbar" "Dialog" "bottomSheet"
-//and "navigation" extensions
-
 extension ExtensionSnackbar on GetInterface {
   void rawSnackbar({
     String title,

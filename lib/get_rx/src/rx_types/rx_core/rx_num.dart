@@ -1,4 +1,4 @@
-part of 'rx_impl.dart';
+part of rx_types;
 
 /// Base Rx class for all num Rx's.
 abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
@@ -299,23 +299,29 @@ class RxDouble extends _BaseRxNum<double> {
   }
 
   /// Multiplication operator.
+  @override
   double operator *(num other) => value * other;
 
+  @override
   double operator %(num other) => value % other;
 
   /// Division operator.
+  @override
   double operator /(num other) => value / other;
 
   /// Truncating division operator.
   ///
   /// The result of the truncating division `a ~/ b` is equivalent to
   /// `(a / b).truncate()`.
+  @override
   int operator ~/(num other) => value ~/ other;
 
   /// Negate operator. */
+  @override
   double operator -() => -value;
 
   /// Returns the absolute value of this [double].
+  @override
   double abs() => value.abs();
 
   /// Returns the sign of the double's numerical value.
@@ -323,6 +329,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// Returns -1.0 if the value is less than zero,
   /// +1.0 if the value is greater than zero,
   /// and the value itself if it is -0.0, 0.0 or NaN.
+  @override
   double get sign => value.sign;
 
   /// Returns the integer closest to `this`.
@@ -331,22 +338,26 @@ class RxDouble extends _BaseRxNum<double> {
   ///  `(3.5).round() == 4` and `(-3.5).round() == -4`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
+  @override
   int round() => value.round();
 
   /// Returns the greatest integer no greater than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
+  @override
   int floor() => value.floor();
 
   /// Returns the least integer no smaller than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
+  @override
   int ceil() => value.ceil();
 
   /// Returns the integer obtained by discarding any fractional
   /// digits from `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
+  @override
   int truncate() => value.truncate();
 
   /// Returns the integer double value closest to `this`.
@@ -361,6 +372,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// and `-0.0` is therefore considered closer to negative numbers than `0.0`.
   /// This means that for a value, `d` in the range `-0.5 < d < 0.0`,
   /// the result is `-0.0`.
+  @override
   double roundToDouble() => value.roundToDouble();
 
   /// Returns the greatest integer double value no greater than `this`.
@@ -370,6 +382,7 @@ class RxDouble extends _BaseRxNum<double> {
   ///
   /// For the purpose of rounding, `-0.0` is considered to be below `0.0`.
   /// A number `d` in the range `0.0 < d < 1.0` will return `0.0`.
+  @override
   double floorToDouble() => value.floorToDouble();
 
   /// Returns the least integer double value no smaller than `this`.
@@ -379,6 +392,7 @@ class RxDouble extends _BaseRxNum<double> {
   ///
   /// For the purpose of rounding, `-0.0` is considered to be below `0.0`.
   /// A number `d` in the range `-1.0 < d < 0.0` will return `-0.0`.
+  @override
   double ceilToDouble() => value.ceilToDouble();
 
   /// Returns the integer double value obtained by discarding any fractional
@@ -390,6 +404,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// For the purpose of rounding, `-0.0` is considered to be below `0.0`.
   /// A number `d` in the range `-1.0 < d < 0.0` will return `-0.0`, and
   /// in the range `0.0 < d < 1.0` it will return 0.0.
+  @override
   double truncateToDouble() => value.truncateToDouble();
 }
 
@@ -578,40 +593,51 @@ class RxInt extends _BaseRxNum<int> {
   ///
   /// The result of negating an integer always has the opposite sign, except
   /// for zero, which is its own negation.
+  @override
   int operator -() => -value;
 
   /// Returns the absolute value of this integer.
   ///
   /// For any integer `x`, the result is the same as `x < 0 ? -x : x`.
+  @override
   int abs() => value.abs();
 
   /// Returns the sign of this integer.
   ///
   /// Returns 0 for zero, -1 for values less than zero and
   /// +1 for values greater than zero.
+  @override
   int get sign => value.sign;
 
   /// Returns `this`.
+  @override
   int round() => value.round();
 
   /// Returns `this`.
+  @override
   int floor() => value.floor();
 
   /// Returns `this`.
+  @override
   int ceil() => value.ceil();
 
   /// Returns `this`.
+  @override
   int truncate() => value.truncate();
 
   /// Returns `this.toDouble()`.
+  @override
   double roundToDouble() => value.roundToDouble();
 
   /// Returns `this.toDouble()`.
+  @override
   double floorToDouble() => value.floorToDouble();
 
   /// Returns `this.toDouble()`.
+  @override
   double ceilToDouble() => value.ceilToDouble();
 
   /// Returns `this.toDouble()`.
+  @override
   double truncateToDouble() => value.truncateToDouble();
 }
