@@ -59,18 +59,18 @@ void main() {
     expect(controller.initialized, true);
 
     /// check initial Status
-    expect(controller.status.value, Status.loading);
+    expect(controller.status.isLoading, true);
 
     /// await time request
     await Future.delayed(Duration(milliseconds: 100));
 
-    if (controller.status.value == Status.error) {
-      expect(controller.cases.value, null);
+    if (controller.status.isError) {
+      expect(controller.state, null);
     }
 
-    if (controller.status.value == Status.success) {
-      expect(controller.cases.value.global.totalDeaths, 100);
-      expect(controller.cases.value.global.totalConfirmed, 200);
+    if (controller.status.isSuccess) {
+      expect(controller.state.global.totalDeaths, 100);
+      expect(controller.state.global.totalConfirmed, 200);
     }
   });
 

@@ -1,6 +1,7 @@
 import 'dart:async';
+
 import '../../../get_core/get_core.dart';
-import '../rx_core/rx_interface.dart';
+import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
 
 bool _conditional(dynamic condition) {
@@ -9,6 +10,8 @@ bool _conditional(dynamic condition) {
   if (condition is bool Function()) return condition();
   return true;
 }
+
+typedef WorkerCallback<T> = Function(T callback);
 
 ///
 /// Called every time [listener] changes. As long as the [condition]
@@ -40,9 +43,9 @@ bool _conditional(dynamic condition) {
 ///   void increment() => count + 1;
 /// }
 /// ```
-Worker ever<T>(RxInterface<T> listener, Function(T) callback,
+Worker ever<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {dynamic condition = true}) {
-  StreamSubscription sub = listener.subject.stream.listen((event) {
+  StreamSubscription sub = listener.subject.listen((event) {
     if (_conditional(condition)) callback(event);
   });
   return Worker(sub.cancel, '[ever]');
@@ -52,11 +55,11 @@ Worker ever<T>(RxInterface<T> listener, Function(T) callback,
 /// for the [callback] is common to all [listeners],
 /// and the [callback] is executed to each one of them. The [Worker] is
 /// common to all, so [worker.dispose()] will cancel all streams.
-Worker everAll(List<RxInterface> listeners, Function(dynamic) callback,
+Worker everAll(List<RxInterface> listeners, WorkerCallback callback,
     {dynamic condition = true}) {
   final evers = <StreamSubscription>[];
   for (var i in listeners) {
-    final sub = i.subject.stream.listen((event) {
+    final sub = i.subject.listen((event) {
       if (_conditional(condition)) callback(event);
     });
     evers.add(sub);
@@ -93,11 +96,11 @@ Worker everAll(List<RxInterface> listeners, Function(dynamic) callback,
 ///   void increment() => count + 1;
 /// }
 ///```
-Worker once<T>(RxInterface<T> listener, Function(T) callback,
+Worker once<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {dynamic condition}) {
   Worker ref;
   StreamSubscription sub;
-  sub = listener.subject.stream.listen((event) {
+  sub = listener.subject.listen((event) {
     if (!_conditional(condition)) return;
     ref._disposed = true;
     ref._log('called');
@@ -125,11 +128,11 @@ Worker once<T>(RxInterface<T> listener, Function(T) callback,
 ///    condition: () => count < 20,
 /// );
 /// ```
-Worker interval<T>(RxInterface<T> listener, Function(T) callback,
+Worker interval<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {Duration time = const Duration(seconds: 1), dynamic condition = true}) {
   var debounceActive = false;
   time ??= const Duration(seconds: 1);
-  StreamSubscription sub = listener.subject.stream.listen((event) async {
+  StreamSubscription sub = listener.subject.listen((event) async {
     if (debounceActive || !_conditional(condition)) return;
     debounceActive = true;
     await Future.delayed(time);
@@ -158,11 +161,11 @@ Worker interval<T>(RxInterface<T> listener, Function(T) callback,
 ///    );
 ///  }
 ///  ```
-Worker debounce<T>(RxInterface<T> listener, Function(T) callback,
+Worker debounce<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {Duration time}) {
   final _debouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
-  StreamSubscription sub = listener.subject.stream.listen((event) {
+  StreamSubscription sub = listener.subject.listen((event) {
     _debouncer(() {
       callback(event);
     });

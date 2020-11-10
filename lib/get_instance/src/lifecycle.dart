@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import '../../get_core/get_core.dart';
 
 /// Special callable class to keep the contract of a regular method, and avoid
@@ -18,37 +17,34 @@ class _InternalFinalCallback<T> {
 /// ```dart
 /// class SomeController with GetLifeCycle {
 ///   SomeController() {
-///     initLifeCycle();
+///     configureLifeCycle();
 ///   }
 /// }
 /// ```
-mixin GetLifeCycle {
-  /// The `initLifeCycle` works as a constructor for the [GetLifeCycle]
-  ///
-  /// This method must be invoked in the constructor of the implementation
-  void initLifeCycle() {
-    onStart._callback = _onStart;
-    onDelete._callback = _onDelete;
-  }
-
+mixin GetLifeCycleBase {
   /// Called at the exact moment the widget is allocated in memory.
   /// It uses an internal "callable" type, to avoid any @overrides in subclases.
   /// This method should be internal and is required to define the
   /// lifetime cycle of the subclass.
   final onStart = _InternalFinalCallback<void>();
 
+  // /// The `configureLifeCycle` works as a constructor for the [GetLifeCycle]
+  // ///
+  // /// This method must be invoked in the constructor of the implementation
+  // void configureLifeCycle() {
+  //   if (_initialized) return;
+  // }
+
   /// Internal callback that starts the cycle of this controller.
   final onDelete = _InternalFinalCallback<void>();
 
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
-  @mustCallSuper
   void onInit() {}
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
-  @mustCallSuper
   void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to
@@ -57,7 +53,6 @@ mixin GetLifeCycle {
   /// Or dispose objects that can potentially create some memory leaks,
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
-  @mustCallSuper
   void onClose() {}
 
   bool _initialized = false;
@@ -82,6 +77,26 @@ mixin GetLifeCycle {
     if (_isClosed) return;
     _isClosed = true;
     onClose();
+  }
+
+  void $configureLifeCycle() {
+    _checkIfAlreadyConfigured();
+    onStart._callback = _onStart;
+    onDelete._callback = _onDelete;
+  }
+
+  void _checkIfAlreadyConfigured() {
+    if (_initialized) {
+      throw """You can only call configureLifeCycle once. 
+The proper place to insert it is in your class's constructor 
+that inherits GetLifeCycle.""";
+    }
+  }
+}
+
+abstract class GetLifeCycle with GetLifeCycleBase {
+  GetLifeCycle() {
+    $configureLifeCycle();
   }
 }
 

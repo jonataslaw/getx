@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
-import '../../../get_rx/get_rx.dart';
+import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../get_state_manager.dart';
 
 typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
@@ -38,10 +38,11 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
     // this.streamController
   });
 
-  GetImplXState<T> createState() => GetImplXState<T>();
+  @override
+  GetXState<T> createState() => GetXState<T>();
 }
 
-class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
+class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   RxInterface _observer;
   T controller;
   bool isCreator = false;
@@ -76,7 +77,7 @@ class GetImplXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    subs = _observer.subject.stream.listen((data) => setState(() {}));
+    subs = _observer.subject.listen((data) => setState(() {}));
     super.initState();
   }
 

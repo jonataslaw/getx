@@ -1,2 +1,3 @@
 typedef Condition = bool Function();
-typedef ValueCallback<T> = Function(T v);
+typedef OnData<T> = void Function(T data);
+typedef Callback = void Function();

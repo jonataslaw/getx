@@ -9,11 +9,7 @@ class Mock {
   }
 }
 
-class DisposableController with GetLifeCycle {
-  DisposableController() {
-    initLifeCycle();
-  }
-}
+class DisposableController extends GetLifeCycle {}
 
 // ignore: one_member_abstracts
 abstract class Service {

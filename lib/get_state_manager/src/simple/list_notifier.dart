@@ -1,21 +1,41 @@
+import 'dart:collection';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
-import 'simple_builder.dart';
+// This callback remove the listener on addListener function
+typedef Disposer = void Function();
+
+// replacing StateSetter, return if the Widget is mounted for extra validation.
+// if it brings overhead the extra call,
+typedef GetStateUpdate = void Function();
 
 class ListNotifier implements Listenable {
-  List<VoidCallback> _listeners = <VoidCallback>[];
+  List<GetStateUpdate> _updaters = <GetStateUpdate>[];
+
+  HashMap<String, List<GetStateUpdate>> _updatersGroupIds =
+      HashMap<String, List<GetStateUpdate>>();
 
   @protected
-  void updater() {
+  void refresh() {
     assert(_debugAssertNotDisposed());
-    for (var element in _listeners) {
+    for (var element in _updaters) {
       element();
+    }
+  }
+
+  @protected
+  void refreshGroup(String id) {
+    assert(_debugAssertNotDisposed());
+    if (_updatersGroupIds.containsKey(id)) {
+      for (var item in _updatersGroupIds[id]) {
+        item();
+      }
     }
   }
 
   bool _debugAssertNotDisposed() {
     assert(() {
-      if (_listeners == null) {
+      if (_updaters == null) {
         throw FlutterError('''A $runtimeType was used after being disposed.\n
 'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
       }
@@ -26,29 +46,87 @@ class ListNotifier implements Listenable {
 
   @protected
   void notifyChildrens() {
-    TaskManager.instance.notify(_listeners);
+    TaskManager.instance.notify(_updaters);
   }
 
   bool get hasListeners {
     assert(_debugAssertNotDisposed());
-    return _listeners.isNotEmpty;
-  }
-
-  @override
-  void addListener(VoidCallback listener) {
-    assert(_debugAssertNotDisposed());
-    _listeners.add(listener);
+    return _updaters.isNotEmpty;
   }
 
   @override
   void removeListener(VoidCallback listener) {
     assert(_debugAssertNotDisposed());
-    _listeners.remove(listener);
+    _updaters.remove(listener);
+  }
+
+  void removeListenerId(String id, VoidCallback listener) {
+    assert(_debugAssertNotDisposed());
+    if (_updatersGroupIds.containsKey(id)) {
+      _updatersGroupIds[id].remove(listener);
+    }
+    _updaters.remove(listener);
   }
 
   @mustCallSuper
   void dispose() {
     assert(_debugAssertNotDisposed());
-    _listeners = null;
+    _updaters = null;
+    _updatersGroupIds = null;
+  }
+
+  @override
+  Disposer addListener(GetStateUpdate listener) {
+    assert(_debugAssertNotDisposed());
+    _updaters.add(listener);
+    return () => _updaters.remove(listener);
+  }
+
+  Disposer addListenerId(String key, GetStateUpdate listener) {
+    _updatersGroupIds[key] ??= <GetStateUpdate>[];
+    _updatersGroupIds[key].add(listener);
+    return () => _updatersGroupIds[key].remove(listener);
+  }
+
+  /// To dispose an [id] from future updates(), this ids are registered
+  /// by [GetBuilder()] or similar, so is a way to unlink the state change with
+  /// the Widget from the Controller.
+  void disposeId(String id) {
+    _updatersGroupIds.remove(id);
+  }
+}
+
+class TaskManager {
+  TaskManager._();
+
+  static TaskManager _instance;
+
+  static TaskManager get instance => _instance ??= TaskManager._();
+
+  GetStateUpdate _setter;
+
+  List<VoidCallback> _remove;
+
+  void notify(List<GetStateUpdate> _updaters) {
+    if (_setter != null) {
+      if (!_updaters.contains(_setter)) {
+        _updaters.add(_setter);
+        _remove.add(() => _updaters.remove(_setter));
+      }
+    }
+  }
+
+  Widget exchange(
+    List<VoidCallback> disposers,
+    GetStateUpdate setState,
+    Widget Function(BuildContext) builder,
+    BuildContext context,
+  ) {
+    _remove = disposers;
+    _setter = setState;
+    final result = builder(context);
+    _remove = null;
+    _setter = null;
+    return result;
   }
 }

@@ -127,14 +127,15 @@ class GetObserver extends NavigatorObserver {
   @override
   void didPop(Route route, Route previousRoute) {
     super.didPop(route, previousRoute);
-    final newRoute = _RouteData.ofRoute(route);
+    final currentRoute = _RouteData.ofRoute(route);
+    final newRoute = _RouteData.ofRoute(previousRoute);
 
-    if (newRoute.isSnackbar) {
-      Get.log("CLOSE SNACKBAR ${newRoute.name}");
-    } else if (newRoute.isBottomSheet || newRoute.isDialog) {
-      Get.log("CLOSE ${newRoute.name}");
-    } else if (newRoute.isGetPageRoute) {
-      Get.log("CLOSE TO ROUTE ${newRoute.name}");
+    if (currentRoute.isSnackbar) {
+      Get.log("CLOSE SNACKBAR ${currentRoute.name}");
+    } else if (currentRoute.isBottomSheet || currentRoute.isDialog) {
+      Get.log("CLOSE ${currentRoute.name}");
+    } else if (currentRoute.isGetPageRoute) {
+      Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
 
     Get.reference = newRoute.name;
