@@ -45,7 +45,7 @@ typedef WorkerCallback<T> = Function(T callback);
 /// ```
 Worker ever<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {dynamic condition = true}) {
-  StreamSubscription sub = listener.subject.listen((event) {
+  StreamSubscription sub = listener.listen((event) {
     if (_conditional(condition)) callback(event);
   });
   return Worker(sub.cancel, '[ever]');
@@ -59,7 +59,7 @@ Worker everAll(List<RxInterface> listeners, WorkerCallback callback,
     {dynamic condition = true}) {
   final evers = <StreamSubscription>[];
   for (var i in listeners) {
-    final sub = i.subject.listen((event) {
+    final sub = i.listen((event) {
       if (_conditional(condition)) callback(event);
     });
     evers.add(sub);
@@ -100,7 +100,7 @@ Worker once<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {dynamic condition}) {
   Worker ref;
   StreamSubscription sub;
-  sub = listener.subject.listen((event) {
+  sub = listener.listen((event) {
     if (!_conditional(condition)) return;
     ref._disposed = true;
     ref._log('called');
@@ -132,7 +132,7 @@ Worker interval<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {Duration time = const Duration(seconds: 1), dynamic condition = true}) {
   var debounceActive = false;
   time ??= const Duration(seconds: 1);
-  StreamSubscription sub = listener.subject.listen((event) async {
+  StreamSubscription sub = listener.listen((event) async {
     if (debounceActive || !_conditional(condition)) return;
     debounceActive = true;
     await Future.delayed(time);
@@ -165,7 +165,7 @@ Worker debounce<T>(RxInterface<T> listener, WorkerCallback<T> callback,
     {Duration time}) {
   final _debouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
-  StreamSubscription sub = listener.subject.listen((event) {
+  StreamSubscription sub = listener.listen((event) {
     _debouncer(() {
       callback(event);
     });

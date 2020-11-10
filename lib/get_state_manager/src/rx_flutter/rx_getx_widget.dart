@@ -43,6 +43,9 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
 }
 
 class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
+  GetXState() {
+    _observer = RxNotifier();
+  }
   RxInterface _observer;
   T controller;
   bool isCreator = false;
@@ -50,7 +53,6 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
 
   @override
   void initState() {
-    _observer = Rx();
     var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
     var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
@@ -77,7 +79,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    subs = _observer.subject.listen((data) => setState(() {}));
+    subs = _observer.listen((data) => setState(() {}));
     super.initState();
   }
 

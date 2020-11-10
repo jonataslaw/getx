@@ -43,8 +43,8 @@ class BindingsBuilder<T> extends Bindings {
   /// ```
   factory BindingsBuilder.put(InstanceBuilderCallback<T> builder,
       {String tag, bool permanent = false}) {
-    return BindingsBuilder(() => GetInstance()
-        .put<T>(null, tag: tag, permanent: permanent, builder: builder));
+    return BindingsBuilder(
+        () => GetInstance().put<T>(builder(), tag: tag, permanent: permanent));
   }
 
   /// WARNING: don't use `()=> Get.put(Controller())`,

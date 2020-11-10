@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -229,7 +229,8 @@ extension ExtensionDialog on GetInterface {
     assert(useRootNavigator != null);
     assert(debugCheckHasMaterialLocalizations(context));
 
-    final theme = Theme.of(context, shadowThemeOnly: true);
+    //  final theme = Theme.of(context, shadowThemeOnly: true);
+    final theme = Theme.of(context);
     return generalDialog<T>(
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         final pageChild = widget;
@@ -425,7 +426,8 @@ extension ExtensionBottomSheet on GetInterface {
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
       isPersistent: persistent,
-      theme: Theme.of(key.currentContext, shadowThemeOnly: true),
+      // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
+      theme: Theme.of(key.currentContext),
       isScrollControlled: isScrollControlled,
       barrierLabel:
           MaterialLocalizations.of(key.currentContext).modalBarrierDismissLabel,
@@ -1042,7 +1044,7 @@ Since version 2.8 it is possible to access the properties
   }
 
   ///The window to which this binding is bound.
-  Window get window => engine.window;
+  ui.Window get window => ui.window;
 
   ///The number of device pixels for each logical pixel.
   double get pixelRatio => window.devicePixelRatio;

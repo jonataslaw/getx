@@ -5,11 +5,7 @@ part of rx_types;
 /// of those `Widgets` and Rx values.
 RxInterface getObs;
 
-mixin RxObjectMixin<T> {
-  GetStream<T> subject = GetStream<T>();
-  final _subscriptions = <StreamSubscription>[];
-  bool get canUpdate => _subscriptions.isNotEmpty;
-
+mixin RxObjectMixin<T> on NotifyManager<T> {
   T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
@@ -48,15 +44,6 @@ mixin RxObjectMixin<T> {
     subject.add(_value = null);
   }
 
-  /// Closes the subscriptions for this Rx, releasing the resources.
-  void close() {
-    for (final subscription in _subscriptions) {
-      subscription?.cancel();
-    }
-    _subscriptions.clear();
-    subject.close();
-  }
-
   /// Makes this Rx looks like a function so you can update a new
   /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
   /// to some Widget that has a signature ::onChange( value )
@@ -80,19 +67,6 @@ mixin RxObjectMixin<T> {
     return value;
   }
 
-  /// This is an internal method.
-  /// Subscribe to changes on the inner stream.
-  void addListener(GetStream<T> rxGetx) {
-    if (_subscriptions.contains(rxGetx.listen)) {
-      return;
-    }
-
-    final subs = rxGetx.listen((data) {
-      subject.add(data);
-    });
-    _subscriptions.add(subs);
-  }
-
   bool firstRebuild = true;
 
   /// Same as `toString()` but using a getter.
@@ -111,7 +85,7 @@ mixin RxObjectMixin<T> {
   bool operator ==(dynamic o) {
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return value == o;
-    if (o is RxInterface<T>) return value == o.value;
+    if (o is RxObjectMixin<T>) return value == o.value;
     return false;
   }
 
@@ -138,15 +112,6 @@ mixin RxObjectMixin<T> {
 
   Stream<T> get stream => GetStreamTransformation<T>(subject.listenable);
 
-  StreamSubscription<T> listen(
-    void Function(T) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError = false,
-  }) =>
-      subject.listen(onData,
-          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-
   /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
   /// You can bind multiple sources to update the value.
   /// Closing the subscription will happen automatically when the observer
@@ -156,8 +121,48 @@ mixin RxObjectMixin<T> {
   }
 }
 
+class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
+
+mixin NotifyManager<T> {
+  GetStream<T> subject = GetStream<T>();
+  final _subscriptions = <StreamSubscription>[];
+
+  bool get canUpdate => _subscriptions.isNotEmpty;
+
+  /// This is an internal method.
+  /// Subscribe to changes on the inner stream.
+  void addListener(GetStream<T> rxGetx) {
+    if (_subscriptions.contains(rxGetx.listen)) {
+      return;
+    }
+
+    final subs = rxGetx.listen((data) {
+      subject.add(data);
+    });
+    _subscriptions.add(subs);
+  }
+
+  StreamSubscription<T> listen(
+    void Function(T) onData, {
+    Function onError,
+    void Function() onDone,
+    bool cancelOnError = false,
+  }) =>
+      subject.listen(onData,
+          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+
+  /// Closes the subscriptions for this Rx, releasing the resources.
+  void close() {
+    for (final subscription in _subscriptions) {
+      subscription?.cancel();
+    }
+    _subscriptions.clear();
+    subject.close();
+  }
+}
+
 /// Base Rx class that manages all the stream logic for any Type.
-abstract class _RxImpl<T> with RxObjectMixin<T> implements RxInterface<T> {
+abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   _RxImpl(T initial) {
     _value = initial;
   }

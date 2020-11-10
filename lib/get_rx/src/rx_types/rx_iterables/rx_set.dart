@@ -1,7 +1,7 @@
 part of rx_types;
 
 class RxSet<E> extends SetMixin<E>
-    with RxObjectMixin<Set<E>>
+    with NotifyManager<Set<E>>, RxObjectMixin<Set<E>>
     implements RxInterface<Set<E>> {
   RxSet([Set<E> initial]) {
     if (initial != null) _value = initial;
@@ -70,8 +70,6 @@ class RxSet<E> extends SetMixin<E>
     _value = val;
     refresh();
   }
-
-
 
   @override
   bool add(E value) {

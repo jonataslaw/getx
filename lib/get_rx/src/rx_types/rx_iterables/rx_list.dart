@@ -2,7 +2,7 @@ part of rx_types;
 
 /// Create a list similar to `List<T>`
 class RxList<E> extends ListMixin<E>
-    with RxObjectMixin<List<E>>
+    with NotifyManager<List<E>>, RxObjectMixin<List<E>>
     implements RxInterface<List<E>> {
   RxList([List<E> initial]) {
     _value = initial;

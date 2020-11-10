@@ -94,7 +94,7 @@ class GetUtils {
 
   /// Checks if string consist only Alphabet. (No Whitespace)
   static bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
-  
+
   /// Checks if string contains at least one Capital Letter
   static bool hasCapitalletter(String s) => hasMatch(s, r'[A-Z]');
 

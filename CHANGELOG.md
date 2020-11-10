@@ -1,3 +1,6 @@
+## [3.16.1]
+- Fix compilation error on master
+  
 ## [3.16.0]
 - Documentation translated into Russian language. (@Renat Fakhrutdinov, @Doaxan and @BatttA)
 - Added error message callback for StateMixin (@eduardoflorence)

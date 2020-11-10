@@ -7,23 +7,15 @@ part of rx_types;
 abstract class RxInterface<T> {
   RxInterface([T initial]);
 
-  GetStream<T> subject;
+  bool get canUpdate;
 
   /// Adds a listener to stream
   void addListener(GetStream<T> rxGetx);
 
-  bool get canUpdate;
-
-  set value(T val);
-
-  T get value;
-
-  /// Closes the stream
-  // FIXME: shouldn't we expose the returned future?
+  /// Close the Rx Variable
   void close();
 
   /// Calls [callback] with current value, when the value changes.
   StreamSubscription<T> listen(void Function(T event) onData,
       {Function onError, void Function() onDone, bool cancelOnError});
 }
-

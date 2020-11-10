@@ -83,8 +83,7 @@ extension Inst on GetInterface {
           {String tag,
           bool permanent = false,
           InstanceBuilderCallback<S> builder}) =>
-      GetInstance()
-          .put<S>(dependency, tag: tag, permanent: permanent, builder: builder);
+      GetInstance().put<S>(dependency, tag: tag, permanent: permanent);
 
   /// Clears all registered instances (and/or tags).
   /// Even the persistent ones.
