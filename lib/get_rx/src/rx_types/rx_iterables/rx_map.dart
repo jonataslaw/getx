@@ -3,8 +3,10 @@ part of rx_types;
 class RxMap<K, V> extends MapMixin<K, V>
     with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
     implements RxInterface<Map<K, V>> {
-  RxMap([Map<K, V> initial]) {
-    _value = initial;
+  RxMap([Map<K, V> initial = const {}]) {
+    if (initial != null) {
+      _value = Map.from(initial);
+    }
   }
 
   @override

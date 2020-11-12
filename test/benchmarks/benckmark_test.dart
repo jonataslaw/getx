@@ -163,7 +163,13 @@ GetValue is ${calculePercentage(dart, getx).round()}% more fast than Default Val
     print('''
 GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default Stream with $times listeners''');
     print('-----------');
+
     times = 30000;
+    dart = await stream();
+    getx = await getStream();
+    mini = await miniStream();
+
+    times = 60000;
     dart = await stream();
     getx = await getStream();
     mini = await miniStream();
@@ -173,7 +179,7 @@ GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default St
     print('getx_mini_stream delay $mini ms to made $times requests');
     print('-----------');
     print('''
-GetStream is ${calculePercentage(dart, getx).round()}% more fast than Default Stream with $times listeners''');
+GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default Stream with $times listeners''');
   });
 }
 

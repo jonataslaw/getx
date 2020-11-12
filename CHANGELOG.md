@@ -1,3 +1,9 @@
+## [3.16.2]
+- Clean RxList, RxMap and RxSet implementation
+- Now when declaring an `RxList()`, it will be started empty. If you want to start a null RxList, you must use `RxList(null)`.
+Improved GetStream to receive the same parameters as the StreamController, such as  `onListen`, `onPause`, `onResume` and `onCancel`.
+- Improve docs
+
 ## [3.16.1]
 - Fix compilation error on master
   
@@ -6,7 +12,7 @@
 - Added error message callback for StateMixin (@eduardoflorence)
 - Fix incorrect Get.reference when pop route (@4mb1t) 
 - Added Uppercase/Capital letter on GetUtils (@AleFachini)
-- Redraw the Streams api to use GetStream instead of StreamControllers. Why this change? GetStream is as light as a ValueNotifier, has very low latency and low consumption of RAM and CPU. There are cases where the performance gain exceeds 9000%, making Get unique when it comes to low latency and resource savings. We did this because new devices are being equipped with 120hz refresh rate, and to provide an even smoother reconstruction of the widgets, it was necessary to create a low latency solution from scratch. GetStream was then created, released in the previous version, and improved in that version. In the previous version, only a small part of GetX used this low-latency API so that it was possible to verify solidly if the api was mature enough to equip state management, which is the most used feature of this library. After two weeks of unremitting tests, we realized that in addition to being fast, the new api is reliable, and will even equip the Stable version of GetServer, which due to the low latency will have performance of low level languages ​​close to C, C ++, Rust and GO.
+- Redraw the Streams api to use GetStream instead of StreamControllers. Why this change? GetStream is as light as a ValueNotifier, has very low latency and low consumption of RAM and CPU. The performance difference between Standard Stream and GetStream can exceeds 9000% ([run benchmark by yourself](https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)), making Get unique when it comes to low latency and resource savings. We did this because GetServer needed a low latency solution to optimize the rate of requests, and because today's smartphones are being equipped with increasingly higher refresh rates. There are cell phones today that start at a rate of 120Hz, and the low latency ensures that no frames are lost, ensuring better fluidity. GetStream was then created, released in the previous version, and improved in that version. In the previous version, only a small part of GetX used this low-latency API so that it was possible to verify solidly if the api was mature enough to equip state management, which is the most used feature of this library. After two weeks of unremitting tests, we realized that in addition to being fast, the new api is reliable, and will even equip the Stable version of GetServer, which due to the low latency will have performance of low level languages ​​close to C, C ++, Rust and GO.
 
 ## [3.15.0]	- Big update
 - **Improve Performance**: We made modifications to make GetBuilder even faster. We have improved the structure behind it so that listeners are notified faster. Perhaps in version 4.0 everything will be based on this new structure, but maintaining the power and compatibility with streams. If you want to know how much Getx is faster than pure streams or ChangeNotifier (even after the last update using LinkedList), you can create run the repository tests at: (https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)

@@ -110,7 +110,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
     return _value;
   }
 
-  Stream<T> get stream => GetStreamTransformation<T>(subject.listenable);
+  Stream<T> get stream => subject.stream;
 
   /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
   /// You can bind multiple sources to update the value.

@@ -54,18 +54,22 @@ _Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portugue
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high performance state management, intelligent dependency injection, and route management in a quick and practical way.
 
-- GetX has 3 basic principles, this means that this is the priority for all resources in the library
+- GetX has 3 basic principles, this means that this is the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. Benchmarks are almost always not important in the real world, but if you want, there is a consumption indicator here([benchmarks](https://github.com/jonataslaw/benchmarks)), where GetX does better than other state management approaches, for example. The difference is not large, but it shows our concern not to waste its resources.
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers / blocks through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through multiproviders, for this GetX uses its own dependency injection feature, decoupling the DI from its view completely.
-    With GetX you know where to find each feature of your application, having clean code by default. This in addition to facilitating maintenance, makes the sharing of modules, something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. Getx is a natural evolution of this, not only separating the business logic, but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, most practical and scalable way to build high-performance applications with the Flutter SDK, with a large ecosystem around it that works perfectly together, being easy for beginners, and accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs build-in that are not present on default Flutter SDK.
+  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management. Here ([benchmarks](https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)) there is a test that aims to measure the latency time between ChangeNotifier/GetValue and Streams/GetStreams, specifically measuring the time each of these takes to make 30 to 30,000 status updates. By using simple VoidCallbacks instead of buffering for Streams, RAM consumption is also low. In addition, an application using GetX for state management is also generally smaller than using other approaches. You can test this for yourself using this repository ([state manager approachs](https://github.com/jonataslaw/flutter_state_managers)) that has a simple application with the main state managers of Flutter, which had the collaboration of the creators of each lib, however the difference is small (0.1mb), and you shouldn't choose to use GetX just for that, but mainly because of the two other principles:
+  
+  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver. 
+  Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary, because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+
+  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through multiproviders, for this GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+  With GetX you know where to find each feature of your application, having clean code by default. This in addition to facilitating maintenance, makes the sharing of modules, something that until then in Flutter was unthinkable, something totally possible.
+  BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. Getx is a natural evolution of this, not only separating the business logic, but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
+  GetX is the easiest, practical and scalable way to build high-performance applications with the Flutter SDK, with a large ecosystem around it that works perfectly together, being easy for beginners, and accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs build-in that are not present on default Flutter SDK.
 
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled. You can compile the benchmark repository, and you will see that using only Get state management, the application compiled with Get has become smaller than all other applications that have only the state management of other packages, because nothing that is not used will be compiled into your code, and each GetX solution was designed to be extra lightweight. The merit here also comes from Flutter's tree shaking which is incredible, and manages to eliminate unused resources like no other framework does.
+In case you need it, GetX also has separate packages for each resource, but this is probably not necessary, as GetX alone separates the packages in the single library.
 
-- Getx has a huge ecosystem, capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
+- Getx has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. Getx too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
 **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
 
 **In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
@@ -160,13 +164,7 @@ Improve your deadlines, deliver everything on time without losing performance. G
 
 ## State management
 
-There are currently several state managers for Flutter. However, most of them involve using ChangeNotifier to update widgets and this is a bad and very bad approach to performance of medium or large applications. You can check in the official Flutter documentation that [ChangeNotifier should be used with 1 or a maximum of 2 listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), making it practically unusable for any application medium or large.
-
-Get isn't better or worse than any other state manager, but that you should analyze these points as well as the points below to choose between using Get in pure form (Vanilla), or using it in conjunction with another state manager.
-
-Definitely, Get is not the enemy of any other state manager, because Get is a microframework, not just a state manager, and can be used either alone or in conjunction with them.
-
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (who has the package name, GetX)
+Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
 
 ### Reactive State Manager
 
@@ -176,6 +174,7 @@ Reactive programming can alienate many people because it is said to be complicat
 - You won't need to create a StreamBuilder for each variable
 - You will not need to create a class for each state.
 - You will not need to create a get for an initial value.
+- You will not need to use code generators
 
 Reactive programming with Get is as easy as using setState.
 
@@ -349,13 +348,11 @@ Get.updateLocale(locale);
 
 #### System locale
 
-To read the system locale, you could use `window.locale`.
+To read the system locale, you could use `Get.deviceLocale`.
 
 ```dart
-import 'dart:ui' as ui;
-
 return GetMaterialApp(
-    locale: ui.window.locale,
+    locale: Get.deviceLocale,
 );
 ```
 
