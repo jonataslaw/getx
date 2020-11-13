@@ -1051,11 +1051,13 @@ Since version 2.8 it is possible to access the properties
   ///The number of device pixels for each logical pixel.
   double get pixelRatio => window.devicePixelRatio;
 
+  Size get size => window.physicalSize / pixelRatio;
+
   ///The horizontal extent of this size.
-  double get width => window.physicalSize.width / pixelRatio;
+  double get width => size.width;
 
   ///The vertical extent of this size
-  double get height => window.physicalSize.height / pixelRatio;
+  double get height => size.height;
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.

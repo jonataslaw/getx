@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../get_core/get_core.dart';
@@ -19,15 +20,10 @@ class GetMaterialApp extends StatelessWidget {
     this.onUnknownRoute,
     this.navigatorObservers = const <NavigatorObserver>[],
     this.builder,
-    this.translationsKeys,
-    this.translations,
     this.textDirection,
     this.title = '',
     this.onGenerateTitle,
     this.color,
-    this.customTransition,
-    this.onInit,
-    this.onDispose,
     this.theme,
     this.darkTheme,
     this.themeMode = ThemeMode.system,
@@ -44,12 +40,14 @@ class GetMaterialApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
-    this.smartManagement = SmartManagement.full,
-    this.initialBinding,
-    this.unknownRoute,
+    this.customTransition,
+    this.translationsKeys,
+    this.translations,
+    this.onInit,
+    this.onReady,
+    this.onDispose,
     this.routingCallback,
     this.defaultTransition,
-    // this.actions,
     this.getPages,
     this.opaqueRoute,
     this.enableLog,
@@ -57,6 +55,12 @@ class GetMaterialApp extends StatelessWidget {
     this.popGesture,
     this.transitionDuration,
     this.defaultGlobalState,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.unknownRoute,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.actions,
   })  : assert(routes != null),
         assert(navigatorObservers != null),
         assert(title != null),
@@ -66,6 +70,10 @@ class GetMaterialApp extends StatelessWidget {
         assert(checkerboardOffscreenLayers != null),
         assert(showSemanticsDebugger != null),
         assert(debugShowCheckedModeBanner != null),
+        routeInformationProvider = null,
+        routeInformationParser = null,
+        routerDelegate = null,
+        backButtonDispatcher = null,
         super(key: key);
 
   final GlobalKey<NavigatorState> navigatorKey;
@@ -99,13 +107,15 @@ class GetMaterialApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> shortcuts;
-
-  // final Map<LocalKey, ActionFactory> actions;
+  final ThemeData highContrastTheme;
+  final ThemeData highContrastDarkTheme;
+  final Map<Type, Action<Intent>> actions;
   final bool debugShowMaterialGrid;
   final Function(Routing) routingCallback;
   final Transition defaultTransition;
   final bool opaqueRoute;
   final VoidCallback onInit;
+  final VoidCallback onReady;
   final VoidCallback onDispose;
   final bool enableLog;
   final LogWriterCallback logWriterCallback;
@@ -116,6 +126,77 @@ class GetMaterialApp extends StatelessWidget {
   final bool defaultGlobalState;
   final List<GetPage> getPages;
   final GetPage unknownRoute;
+  final RouteInformationProvider routeInformationProvider;
+  final RouteInformationParser<Object> routeInformationParser;
+  final RouterDelegate<Object> routerDelegate;
+  final BackButtonDispatcher backButtonDispatcher;
+
+  const GetMaterialApp.router({
+    Key key,
+    this.routeInformationProvider,
+    @required this.routeInformationParser,
+    @required this.routerDelegate,
+    this.backButtonDispatcher,
+    this.builder,
+    this.title = '',
+    this.onGenerateTitle,
+    this.color,
+    this.theme,
+    this.darkTheme,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.themeMode = ThemeMode.system,
+    this.locale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale('en', 'US')],
+    this.debugShowMaterialGrid = false,
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowCheckedModeBanner = true,
+    this.shortcuts,
+    this.actions,
+    this.customTransition,
+    this.translationsKeys,
+    this.translations,
+    this.textDirection,
+    this.fallbackLocale,
+    this.routingCallback,
+    this.defaultTransition,
+    this.opaqueRoute,
+    this.onInit,
+    this.onReady,
+    this.onDispose,
+    this.enableLog,
+    this.logWriterCallback,
+    this.popGesture,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.transitionDuration,
+    this.defaultGlobalState,
+    this.getPages,
+    this.unknownRoute,
+  })  : assert(routeInformationParser != null),
+        assert(routerDelegate != null),
+        assert(title != null),
+        assert(debugShowMaterialGrid != null),
+        assert(showPerformanceOverlay != null),
+        assert(checkerboardRasterCacheImages != null),
+        assert(checkerboardOffscreenLayers != null),
+        assert(showSemanticsDebugger != null),
+        assert(debugShowCheckedModeBanner != null),
+        navigatorObservers = null,
+        navigatorKey = null,
+        onGenerateRoute = null,
+        home = null,
+        onGenerateInitialRoutes = null,
+        onUnknownRoute = null,
+        routes = null,
+        initialRoute = null,
+        super(key: key);
 
   Route<dynamic> generator(RouteSettings settings) {
     final match = Get.routeTree.matchRoute(settings.name);
@@ -209,6 +290,9 @@ class GetMaterialApp extends StatelessWidget {
           onDispose?.call();
         },
         initState: (i) {
+          Get.engine.addPostFrameCallback((timeStamp) {
+            onReady?.call();
+          });
           if (locale != null) Get.locale = locale;
 
           if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
@@ -286,16 +370,4 @@ class GetMaterialApp extends StatelessWidget {
           );
         });
   }
-}
-
-const List<String> rtlLanguages = <String>[
-  'ar', // Arabic
-  'fa', // Farsi
-  'he', // Hebrew
-  'ps', // Pashto
-  'ur',
-];
-
-abstract class Translations {
-  Map<String, Map<String, String>> get keys;
 }

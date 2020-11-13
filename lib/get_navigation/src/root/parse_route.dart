@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-
 import '../routes/get_route.dart';
 
 class ParseRouteTree {

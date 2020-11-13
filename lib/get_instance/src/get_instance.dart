@@ -11,9 +11,7 @@ class GetInstance {
 
   static GetInstance _getInstance;
 
-  T call<T>() {
-    return find<T>();
-  }
+  T call<T>() => find<T>();
 
   /// Holds references to every registered Instance when using
   /// [Get.put()]

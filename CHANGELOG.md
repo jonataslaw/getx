@@ -1,3 +1,7 @@
+## [3.17.0]
+- Added GetCupertinoApp
+- Added initial suport to navigator 2.0 
+
 ## [3.16.2]
 - Clean RxList, RxMap and RxSet implementation
 - Now when declaring an `RxList()`, it will be started empty. If you want to start a null RxList, you must use `RxList(null)`.
@@ -12,13 +16,113 @@ Improved GetStream to receive the same parameters as the StreamController, such 
 - Added error message callback for StateMixin (@eduardoflorence)
 - Fix incorrect Get.reference when pop route (@4mb1t) 
 - Added Uppercase/Capital letter on GetUtils (@AleFachini)
-- Redraw the Streams api to use GetStream instead of StreamControllers. Why this change? GetStream is as light as a ValueNotifier, has very low latency and low consumption of RAM and CPU. The performance difference between Standard Stream and GetStream can exceeds 9000% ([run benchmark by yourself](https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)), making Get unique when it comes to low latency and resource savings. We did this because GetServer needed a low latency solution to optimize the rate of requests, and because today's smartphones are being equipped with increasingly higher refresh rates. There are cell phones today that start at a rate of 120Hz, and the low latency ensures that no frames are lost, ensuring better fluidity. GetStream was then created, released in the previous version, and improved in that version. In the previous version, only a small part of GetX used this low-latency API so that it was possible to verify solidly if the api was mature enough to equip state management, which is the most used feature of this library. After two weeks of unremitting tests, we realized that in addition to being fast, the new api is reliable, and will even equip the Stable version of GetServer, which due to the low latency will have performance of low level languages ​​close to C, C ++, Rust and GO.
+- Redraw the Streams api to use GetStream instead of StreamControllers. Why this change? 
+Dart provides a Streams API that is really rich. However, asynchronous streams add extra latency to ensure that events are delivered in the exact order.
+It is not yet known whether this latency has any performance impact in mobile applications, and probably not, however, as GetX is also a server-side framework, we need to have the lowest latency at all, since our base is shared.
+Dart also has a Synchronous Streams api that has very low latency, however, it is not suitable for use in state management for two reasons:
+1- Synchronous Streams can only have one listen (see the issue opened by Hixie on dart lang for reference: https://github.com/dart-lang/sdk/issues/22240).
+This means that we cannot use this api for more than one listener, which is the basis of global state management, where we aim to change the state of more than one location. You can test this with this simple snippet:
+
+```dart
+void main() {
+  var controller = StreamController(sync: true);
+  var stream = controller.stream;
+  stream.listen((data) {
+    print('$data');
+    if (data == 'test4') controller.add('test5');
+  });
+
+  print('test1');
+  controller.add('test2');
+  stream.listen((event) {}); // second listen throws a exception
+  print('test3');
+  controller.add('test4');
+  print('test6');
+  controller.add('test7');
+  print("test8");
+}
+```
+2- Even with a single listener, the dart's Synchronous Streams api cannot deliver events in the exact order. We plan to work on a PR in the future at dart-lang to address this. So if we remove the line above that causes the exception, we will have the following output in the log:
+
+```dart
+void main() {
+  var controller = StreamController(sync: true);
+  var stream = controller.stream;
+  stream.listen((data) {
+    print('$data');
+    if (data == 'test4') controller.add('test5');
+  });
+
+  print('test1');
+  controller.add('test2');
+  // stream.listen((event) {}); // second listen throws a exception
+  print('test3');
+  controller.add('test4');
+  print('test6');
+  controller.add('test7');
+  print("test8");
+}
+///////////////////// log:
+test1
+test2
+test3
+test4
+test6
+test8
+test5
+
+```
+As we can see, test 4 skips to test 6, which skips to test 8, which skips to test 5. Note that test 7 didn't even appear in the log.
+
+However, if we work with GetStream, everything works as expected:
+```dart
+void main() {
+  var controller = GetStream();
+  var stream = controller.stream;
+  stream.listen((data) {
+    print('$data');
+    if (data == 'test4') controller.add('test5');
+  });
+
+  print('test1');
+  controller.add('test2');
+  // stream.listen((event) {}); // second listen throws a exception
+  print('test3');
+  controller.add('test4');
+  print('test6');
+  controller.add('test7');
+  print("test8");
+}
+///////////////////// log:
+test1
+test2
+test3
+test4
+test5
+test6
+test7
+test8
+
+```
+
+The dart documentation is clear that this api should be used with caution, and in view of these tests, we were sure that it is not stable enough to be used as the core of our state management, nor of the websockets notifications and get_server requests.
+
+Clarification about the controversy over benchmarks:
+In a version prior to changeLog, we talked about the 9000% difference in performance between Streams, and GetStreams that ended up causing a lot of controversy in the community.
+Initially, we would like to clarify that this does not mean that you will have mobile applications 9000% faster. Only that one of our main resources, showed itself with a high rate of requests, 9000% faster than using traditional streams. In a real world scenario, you will hardly have so many simultaneous requests.
+Skia renders frames on new devices at up to 120fps. This means that if you have a 10 second animation, you will have 1200 reconstructions. Unless you are working with animations, or something that requires rendering at the skia boundary, you won't need that much power. So this does not mean that we are revolutionizing the mobile world, only that we have created an alternative to Stream Sincronas, which works as expected, and which has satisfactory performance for low latency resources. The benchmarks are real, but that does not mean that you will have mobile applications 9000% faster, but that you have a new feature that performs at this level to use.
+For reference only, the benchmark can be found ([HERE](https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart))
+
+In short: asynchronous streams from dart work perfectly, but add a latency that we want to remove on Get_server.
+Synchronous dart streams have unexpected behaviors, cannot have more than 1 listener and do not deliver events in the correct order, which completely prevents their use in mobile state managements, since you run the risk of displaying data on the wrong screen, since the last event will not always be the last event entered by the sink.
+The 9000% figures are real, however, they refer to the gross performance between Streams and GetStreams. This does not mean that this number will impact your applications, because you are unlikely to use all of that power.
+
 
 ## [3.15.0]	- Big update
 - **Improve Performance**: We made modifications to make GetBuilder even faster. We have improved the structure behind it so that listeners are notified faster. Perhaps in version 4.0 everything will be based on this new structure, but maintaining the power and compatibility with streams. If you want to know how much Getx is faster than pure streams or ChangeNotifier (even after the last update using LinkedList), you can create run the repository tests at: (https://github.com/jonataslaw/getx/blob/master/test/benchmarks/benckmark_test.dart)
 - **Added StateMixin**
-StateMixin allows you to change the state of the controller, and display a loading, an error message, or a widget you want with 0 boilerplate. This makes things like API / Rest communication or websocket absurdly simple, and it's a real revolution in how state management has behaved so far.
-You no longer need to have a ternary in your code, and you don't need a widget like FutureBuilder, StreamBuilder or even Obx / GetBuilder to encompass your Visibility. This will change with the way you manage the state of your controllers, decrease your boilerplate absurdly, and give you more security in your code.
+StateMixin allows you to change the state of the controller, and display a loading, an error message, or a widget you want with 0 boilerplate. This makes things like API/Rest communication or websocket absurdly simple, and it's a real revolution in how state management has behaved so far.
+You no longer need to have a ternary in your code, and you don't need a widget like FutureBuilder, StreamBuilder or even Obx/GetBuilder to encompass your Visibility. This will change with the way you manage the state of your controllers, decrease your boilerplate absurdly, and give you more security in your code.
 - **Added GetNotifier**
 GetNotifier is a super and powerful ValueNotifier, which in addition to having the life cycle of the controllers, is extremely fast, and can manage a single state, as a simplified immutable state management solution.
 In theory, the only difference between it and GetxController is the possibility of setting an initial value in the constructor's super (exactly as ValueNotifier does). If the initial value is null, use GetxController. If you need a starting value, GetNotifier can be more useful and have less boilerplate, but both serve the same purpose: to decouple your visualization layer from your presentation logic.
