@@ -1,3 +1,6 @@
+## [3.17.1]
+- Allow list.assignAll, map.assignAll and set.assignAll operate with null values
+
 ## [3.17.0]
 - Added GetCupertinoApp
 - Added initial suport to navigator 2.0 

@@ -46,6 +46,7 @@ class RxMap<K, V> extends MapMixin<K, V>
   }
 
   void assign(K key, V val) {
+    _value ??= <K, V>{};
     _value.clear();
     _value[key] = val;
     refresh();
@@ -53,6 +54,7 @@ class RxMap<K, V> extends MapMixin<K, V>
 
   void assignAll(Map<K, V> val) {
     if (_value == val) return;
+    _value ??= <K, V>{};
     _value = val;
     refresh();
   }

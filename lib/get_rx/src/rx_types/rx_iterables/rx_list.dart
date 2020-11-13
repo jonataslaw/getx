@@ -72,12 +72,14 @@ class RxList<E> extends ListMixin<E>
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
+    _value ??= <E>[];
     clear();
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
+    _value ??= <E>[];
     clear();
     addAll(items);
   }

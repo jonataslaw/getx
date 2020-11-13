@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StreamController();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,
