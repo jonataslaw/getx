@@ -352,18 +352,18 @@ class User() {
 
 // controller
 final user = User().obs;
-//当你需要更新用户变量时。
+//当你需要更新user变量时。
 user.update( (user) { // 这个参数是你要更新的类本身。
 user.name = 'Jonny';
 user.age = 18;
 });
-// 更新用户变量的另一种方式。
+// 更新user变量的另一种方式。
 user(User(name: 'João', age: 35));
 
 // view
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 // 你也可以不使用.value来访问模型值。
-user().name; // 注意是用户变量，而不是类变量（首字母是小写的）。
+user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
 ```
 
 你可以使用 "assign "和" assignAll "。
