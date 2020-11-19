@@ -114,9 +114,9 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = '';
       value.previous = _extractRouteName(previousRoute) ?? '';
-      value.isSnackbar = newRoute.isSnackbar;
-      value.isBottomSheet = newRoute.isBottomSheet;
-      value.isDialog = newRoute.isDialog;
+      value.isSnackbar = newRoute.isSnackbar ? true : value.isSnackbar ?? false;
+      value.isBottomSheet = newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
+      value.isDialog = newRoute.isDialog ? true : value.isDialog ?? false;
     });
 
     if (routing != null) {
@@ -153,9 +153,9 @@ class GetObserver extends NavigatorObserver {
       value.isBack = true;
       value.removed = '';
       value.previous = newRoute.name ?? '';
-      value.isSnackbar = false;
-      value.isBottomSheet = false;
-      value.isDialog = false;
+      value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
+      value.isBottomSheet = currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
     routing?.call(_routeSend);
@@ -166,6 +166,7 @@ class GetObserver extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     final newName = _extractRouteName(newRoute);
     final oldName = _extractRouteName(oldRoute);
+    final currentRoute = _RouteData.ofRoute(oldRoute);
 
     Get.log("REPLACE ROUTE $oldName");
     Get.log("NEW ROUTE $newName");
@@ -182,9 +183,9 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = '';
       value.previous = '$oldName';
-      value.isSnackbar = false;
-      value.isBottomSheet = false;
-      value.isDialog = false;
+      value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
+      value.isBottomSheet = currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
     routing?.call(_routeSend);
@@ -194,13 +195,18 @@ class GetObserver extends NavigatorObserver {
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
     final routeName = _extractRouteName(route);
+    final currentRoute = _RouteData.ofRoute(route);
 
     Get.log("REMOVING ROUTE $routeName");
+    
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
       value.removed = routeName ?? '';
       value.previous = routeName ?? '';
+      value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
+      value.isBottomSheet = currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
     routing?.call(_routeSend);
