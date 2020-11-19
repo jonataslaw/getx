@@ -166,7 +166,6 @@ class GetObserver extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     final newName = _extractRouteName(newRoute);
     final oldName = _extractRouteName(oldRoute);
-
     final currentRoute = _RouteData.ofRoute(oldRoute);
 
     Get.log("REPLACE ROUTE $oldName");
@@ -199,6 +198,7 @@ class GetObserver extends NavigatorObserver {
     final currentRoute = _RouteData.ofRoute(route);
 
     Get.log("REMOVING ROUTE $routeName");
+    
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
