@@ -801,7 +801,7 @@ class SettingsService extends GetxService {
 ```
 
 The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
+"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
 
 # Breaking changes from 2.0

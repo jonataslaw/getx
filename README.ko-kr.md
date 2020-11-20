@@ -738,43 +738,41 @@ print( user );
 
 #### GetWidget
 
-Most people have no idea about this Widget, or totally confuse the usage of it.
-The use case is very rare, but very specific: It `caches` a Controller.
-Because of the _cache_, can't be a `const Stateless`.
+대부분의 사람들이 이 위젯에대해 모르거나 사용법을 완전히 혼동합니다.
+사용 사례는 매우 드물지만 매우 구체적입니다: Controller를 `caches`합니다.
+_cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
-> So, when do you need to "cache" a Controller?
+> 그러면 언제 Controller를 "cache"할 필요가 있을까요?
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
+만약 **GetX**의 기능 중 또 다른 "흔하지 않은" 기능을 사용하는 경우:`Get.create()`
 
-`Get.create(()=>Controller())` will generate a new `Controller` each time you call
-`Get.find<Controller>()`,
+`Get.create(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다 새로운 `Controller`를 생성할 것 입니다.
 
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+여기서 `GetWidget`이 빛나게 됩니다... 예를 들어 Todo 리스트를 유지하려고 사용할 때 입니다.
+위젯이 "재구성"될때 동일한 controller 인스턴스를 유지할 것입니다.
 
 #### GetxService
 
-This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
-**can not** be removed from memory.
+이 클래스틑 `GetxController`와 같이 동일한 생성주기(`onInit()`, `onReady()`, `onClose()`)를 공유합니다.
+하지만 이안에 "로직"은 없습니다. 단지 **GetX** 종속성 주입 시스템이 하위클래스를 메모리에서 삭제할 수 없음을 알립니다.
 
-So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
+그래서 `Get.find()`로 활성화하고 항상 접근하는 "서비스들"을 유지하는데 매우 유용합니다. :
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
 Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
+  await initServices(); /// 서비스들 초기화를 기다림.
   runApp(SomeApp());
 }
 
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
+/// 플러터 앱이 실행되기 전에 서비스들을 초기화하는 현명한 방법입니다.
+/// 실행 흐름을 제어 할수 있으므로(테마 구성, apiKey, 사용자가 정의한 언어등을 로드해야 할 필요가 있으므로 
+/// ApiService의 구동전에 SettingService를 로드해야 합니다.
+/// 그래서 GetMaterialApp()은 재구성하지 않고 직접적으로 값을 가져옵니다.
 void initServices() async {
   print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
+  /// 여기에서 get_storage, hive, shared_pref 초기화를 하세요.
+  /// 또는 연결 고정 또는 비동기적인 무엇이든 하세요.
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
   print('All services started...');
@@ -799,15 +797,14 @@ class SettingsService extends GetxService {
 
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
-lifetime of your app, use `GetxService`.
+`GetxService`를 실질적으로 지우는 한가지 방법은 앱의 "Hot Reboot"과 같은 `Get.reset()`뿐 입니다.
+따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 `GetxService`를 사용하세요.
 
 # 2.0의 주요 변경점
 
-1- Rx types:
+1- Rx 타입들:
 
-| Before  | After      |
+| 이전     | 이후        |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
@@ -816,10 +813,10 @@ lifetime of your app, use `GetxService`.
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+RxController와 GetBuilder는 합쳐졌습니다. 더이상 사용할 controller를 기억시킬 필요가 없습니다. GetxController를 사용하세요. 단순 및 반응형 상태관리 모두에서 잘 동작합니다.
 
-2- NamedRoutes
-Before:
+2- 명명된 라우트
+이전:
 
 ```dart
 GetMaterialApp(
@@ -829,7 +826,7 @@ GetMaterialApp(
 )
 ```
 
-Now:
+지금:
 
 ```dart
 GetMaterialApp(
@@ -839,9 +836,9 @@ GetMaterialApp(
 )
 ```
 
-Why this change?
-Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
-Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
+무엇이 달라졌습니까?
+종종 매개 변수 또는 로그인 토큰에 의해 표시 할 페이지를 결정해야 할 수 있습니다. 이전 접근 방식은 이를 허용하지 않았기 때문에 유연하지 않았습니다.
+페이지를 함수에 삽입하면 앱이 시작된 이후 라우트가 메모리에 할당되지 않고 이러한 유형의 접근 방식이 가능하기 때문에 RAM 소비가 크게 감소했습니다:
 
 ```dart
 
@@ -858,16 +855,16 @@ GetMaterialApp(
 
 # 왜 Getx인가?
 
-1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
+1- 플러터가 업데이트된 이후 자주 많은 패키지가 깨졌을 것입니다. 때때로 컴파일중 에러가 발생하고 종종 이에 대해 답변을 해줄 사람이 없었을 겁니다. 그리고 개발자는 에러가 어디에서 발생했는지 추적해서 알아야합니다. 그리고 오직 리포지트리를 통해서 이슈를 오픈하고 해결책을 찾아야합니다. Get은 개발을 위한 주 리소스들(상태, 종속성, 라우트 관리)을 중앙화합니다. pubspec에 단일 패키지를 추가하고 작업을 시작 할 수 있습니다. 플러터가 업데이트 된 이후에도 Get 의존을 업데이트하면 작업할 수 있습니다. Get은 호환성 이슈도 해결합니다. 한 버전에서 종속적으로 사용하여 다른 버전에서 다른 버전을 사용할때 패키지 버전이 다른 버전과 호환되지 않는 경우가 몇 번입니까? 모든 것이 동일한 패키지에 있고 완벽하게 호환되므로 Get을 사용하면 문제가 되지 않습니다.
 
-2- Flutter is easy, Flutter is incredible, but Flutter still has some boilerplate that may be unwanted for most developers, such as `Navigator.of(context).push (context, builder [...]`. Get simplifies development. Instead of writing 8 lines of code to just call a route, you can just do it: `Get.to(Home())` and you're done, you'll go to the next page. Dynamic web urls are a really painful thing to do with Flutter currently, and that with GetX is stupidly simple. Managing states in Flutter, and managing dependencies is also something that generates a lot of discussion, as there are hundreds of patterns in the pub. But there is nothing as easy as adding a ".obs" at the end of your variable, and place your widget inside an Obx, and that's it, all updates to that variable will be automatically updated on the screen.
+2- 플러터는 쉽고 놀랍지만 대다수의 개발자들이 원하지 않는 몇가지 상용구가 있습니다. `Navigator.of(context).push (context, builder [...]` 같은 것들 입니다. Get은 개발을 단순화합니다. 라우트를 위해 8줄의 코드를 작성하고 `Get.to(Home())`만 하면 다음 페이지로 갈 수 있습니다. 동적 웹 url은 현재 플러터에서 정말로 고통스러운 것이고 GetX로 하는 것은 정말 간단합니다. 플러터에서 상태와 종속성을 관리하는 것은 pub에서 수백가지의 패턴이라 많은 논의를 생산합니다. 그러나 변수 끝에 ".obs"를 추가하고 위젯을 Obx 안에 배치하는 것만큼 쉬운 것은 없습니다. 이것으로 해당 변수가 업데이트되면 화면에 자동으로 업데이트됩니다.
 
-3- Ease without worrying about performance. Flutter's performance is already amazing, but imagine that you use a state manager, and a locator to distribute your blocs/stores/controllers/ etc. classes. You will have to manually call the exclusion of that dependency when you don't need it. But have you ever thought of simply using your controller, and when it was no longer being used by anyone, it would simply be deleted from memory? That's what GetX does. With SmartManagement, everything that is not being used is deleted from memory, and you shouldn't have to worry about anything but programming. You will be assured that you are consuming the minimum necessary resources, without even having created a logic for this.
+3- 성능에 대하여 걱정하지 않아도 됩니다. 플러터의 성능은 이미 놀랍습니다. 하지만 상태관리자를 사용하고 blocs/stores/controllers 등의 클래스들을 로케이터로 배포하는 것을 상상해보십시오. 종속성이 필요 없는 경우 종속성 제외를 수동으로 호출해야 합니다. 하지만 간단하게 controller를 사용하고 이것들을 더이상 사용하지 않을때 간단하게 메모리에서 삭제될수 있을까요? 이것이 GetX가 하는 일입니다. SmartManagement를 사용하면 사용하지 않는 모든것이 메모리에서 삭제되기 때문에 프로그래밍 말고 다른 걱정을 할 필요가 없습니다. 이러한 로직을 만들지 않고도 최소한의 리소스만 사용함을 보장합니다.
 
 4- Actual decoupling. You may have heard the concept "separate the view from the business logic". This is not a peculiarity of BLoC, MVC, MVVM, and any other standard on the market has this concept. However, this concept can often be mitigated in Flutter due to the use of context.
 If you need context to find an InheritedWidget, you need it in the view, or pass the context by parameter. I particularly find this solution very ugly, and to work in teams we will always have a dependence on View's business logic. Getx is unorthodox with the standard approach, and while it does not completely ban the use of StatefulWidgets, InitState, etc., it always has a similar approach that can be cleaner. Controllers have life cycles, and when you need to make an APIREST request for example, you don't depend on anything in the view. You can use onInit to initiate the http call, and when the data arrives, the variables will be populated. As GetX is fully reactive (really, and works under streams), once the items are filled, all widgets that use that variable will be automatically updated in the view. This allows people with UI expertise to work only with widgets, and not have to send anything to business logic other than user events (like clicking a button), while people working with business logic will be free to create and test the business logic separately.
 
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
+이 라이브러리는 항상 업데이트되고 새로운 기능이 포함됩니다. 자유롭게 PR을 제공하고 여기에 기여하세요.
 
 # 커뮤니티
 
