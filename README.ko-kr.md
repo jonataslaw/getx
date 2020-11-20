@@ -37,7 +37,7 @@ _Languages: [English](README.md), [Chinese](README.zh-cn.md), [Brazilian Portugu
   - [테마 변경](#테마-변경)
   - [기타 고급 API](#기타-고급-API)
     - [선택적 전역 설정과 수동 구성](#선택적-전역-설정과-수동-구성)
-    - [지역 State Widgets](#지역-State-Widgets)
+    - [지역 상태 위젯들](#지역-상태-위젯들)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
   - [유용한 팁](#유용한-팁)
@@ -204,13 +204,13 @@ Obx(() => Text("${controller.name}"));
 
 **상태 관리에 대한 자세한 설명은 [여기](./documentation/en_US/state_management.md)를 보십시오. 여기에서 더 많은 예제와 단순 상태 관리자와 반응형 상태 관리자의 차이점을 볼 수 있습니다.**
 
-You will get a good idea of GetX power.
+GetX 능력에 대한 좋은 아이디어를 얻을 수 있습니다.
 
 ## 라우트 관리
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
+만약 라우트/스낵바/다이얼로그/bottomsheets을 context 없이 사용하려면 GetX는 훌륭한 대안입니다. 여기를 보십시오:
 
-Add "Get" before your MaterialApp, turning it into GetMaterialApp
+MaterialApp 앞에 "Get"을 추가해서 GetMaterialApp으로 변경합니다.
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -218,71 +218,71 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-Navigate to new screen:
+새로운 화면으로 이동합니다:
 
 ```dart
 
 Get.to(NextScreen());
 ```
 
-Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/en_US/route_management.md#navigation-with-named-routes) 있습니다.
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+스낵바, 다이얼로그, bottomsheets 또는 Navigator.pop(context);로 닫아야 하는 어떤것도 닫게 합니다:
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+다음 화면으로 이동하고 이전 화면으로 돌아갈 필요가 없는 경우 (스플래시, 로그인화면 등..)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+다음 화면으로 이동하고 이전 화면들 모두 닫는 경우 (쇼핑카트, 투표, 테스트에 유용)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't had to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+이러한 작업을 수행하기 위해 컨텍스트를 사용할 필요가 없다는 것을 보셨나요? 이것이 Get 라우트 관리를 사용하는 가장 큰 장점 중 하나입니다. 이를 통해 걱정없이 컨트롤러 클래스 내에서 이러한 모든 메서드를 실행할 수 있습니다.
 
 ### 라우트 관리에 대한 자세한 내용
 
-**Get work with named routes and also offer a lower level control over your routes! There is a in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Get은 명명된 라우트로 작업하고 더 쉬운 방식으로 라우트의 제어를 제공합니다! [여기](./documentation/en_US/route_management.md)에 더 자세한 문서가 있습니다.**
 
 ## 종속성 관리
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Get은 간단하고 강력한 종속성 관리자를 가지고 있어 Bloc나 Controller와 유사한 클래스를 Provide context, inheritedWidget 없이 1줄의 코드로 끌어낼 수 있습니다:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Note: If you are using Get's State Manager, pay more attention to the bindings api, which will make easier to connect your view to your controller.
+- 주석: Get의 상태 관리자를 사용중이면 뷰를 controller에 더 쉽게 연결할 수 있는 바인딩 api에 더 주의를 기울이십시오.
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
+사용 중인 클래스에서 클래스를 인스턴스화하는 대신에 Get 인스턴스에서 인스턴스화하면 앱에서 해당 클래스를 사용할 수 있습니다.
+그래서 controller(또는 Bloc)를 정상적으로 사용할 수 있습니다.
 
-**Tip:** Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**팁:** Get 종속성 관리는 패키지의 다른 부분과 분리되어서 예제 앱이 이미 상태 관리자(하나여도 상관없음)를 사용중이면 모두 다시 작성할 필요 없이 아무 문제 없이 종속성 주입을 사용할 수 있습니다.
 
 ```dart
 controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+여러 경로를 통해 이동했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
 
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+//마법처럼 Get이 controller를 찾아서 가져올 것 입니다. 백만개의 인스턴스화 contrller를 가질수 있고 Get은 올바른 controller를 항상 가져다 줄 것입니다.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+그리고나서 가져온 controller 데이터를 사용할 수 있습니다:
 
 ```dart
 Text(controller.textFromApi);
@@ -290,7 +290,7 @@ Text(controller.textFromApi);
 
 ### 종속성 관리에 대한 자세한 내용
 
-**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
+**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/en_US/dependency_management.md)에 있습니다.**
 
 # 기능들
 
@@ -298,8 +298,8 @@ Text(controller.textFromApi);
 
 ### 번역
 
-Translations are kept as a simple key-value dictionary map.
-To add custom translations, create a class and extend `Translations`.
+번역은 간단한 key-value 맵으로 유지됩니다.
+커스텀 번역을 추가하려면 `Translations`으로 확장하여 클래스를 만드세요.
 
 ```dart
 import 'package:get/get.dart';
@@ -319,7 +319,7 @@ class Messages extends Translations {
 
 #### 번역 사용법
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+단지 `.tr`로 명시된 키만 추가하면 `Get.locale`과 `Get.fallbackLocale`의 현재값을 사용해서 번역될 것 입니다.
 
 ```dart
 Text('title'.tr);
@@ -327,19 +327,19 @@ Text('title'.tr);
 
 ### 지역화
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+`GetMaterialApp`의 파라미터를 전달하여 지역과 번역어를 정의합니다.
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // your translations
-    locale: Locale('en', 'US'), // translations will be displayed in that locale
-    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
+    translations: Messages(), // 번역들
+    locale: Locale('en', 'US'), // 해당 지역의 번역이 표시
+    fallbackLocale: Locale('en', 'UK'), // 잘못된 지역이 선택된 경우 복구될 지역을 지정
 );
 ```
 
 #### 지역 변경
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+지역을 업데이트할때 `Get.updateLocale(locale)`를 콜하십시오. 새로운 지역을 사용하여 자동적으로 번역합니다.
 
 ```dart
 var locale = Locale('en', 'US');
@@ -348,7 +348,7 @@ Get.updateLocale(locale);
 
 #### 시스템 지역
 
-To read the system locale, you could use `Get.deviceLocale`.
+`Get.deviceLocale`를 사용해서 시스템 지역을 읽어옵니다.
 
 ```dart
 return GetMaterialApp(
@@ -358,24 +358,24 @@ return GetMaterialApp(
 
 ## 테마 변경
 
-Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
+테마를 업데이트하기 위해 `GetMaterialApp` 보다 더 상위 위젯을 사용하지 말아 주십시오. 이러면 중복 키가 트리거 될 수 있습니다. 많은 사람들이 테마를 바꾸기 위해 "ThemeProvider" 위젯을 사용하고 있는데 **GetX**는 이런 방식이 필요 없습니다.
 
-You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
+다른 표준사항은 없이 `Get.changeTheme`로 추가하고 간단하게 커스텀 테마를 만들수 있습니다:
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the Theme in `onTap`, you can combine two **GetX™** APIs for that:
+`onTap`에 테마 변경이 있는 버튼 같은 무언가를 만들고 싶다면 두개의 **GetX™** API를 조합하여 가능합니다:
 
-- The api that checks if the dark `Theme` is being used.
-- And the `Theme` Change API, you can just put this within an `onPressed`:
+- 다크`테마`를 사용중인지 확인합니다.
+- 그리고 `테마` 변경 API 를 `onPressed`에 넣으면 됩니다:
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+`.darkmode`가 활성활 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
 ## 기타 고급 API
 
@@ -511,7 +511,7 @@ context.responsiveValue<T>()
 
 ### 선택적 전역 설정과 수동 구성
 
-GetMaterialApp configures everything for you, but if you want to configure Get manually.
+GetMaterialApp은 모든 것이 구성되어 있지만 원한다면 수동으로 Get을 구성할 수 있습니다.
 
 ```dart
 MaterialApp(
@@ -520,7 +520,7 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+`GetObserver`안에 Middleware를 사용할 수 있고 이로 인한 어떤 영향도 없습니다.
 
 ```dart
 MaterialApp(
@@ -531,8 +531,8 @@ MaterialApp(
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+`Get`을 위한 _Global Settings_ 을 만들수 있습니다. 어떠한 라우트도 포함되기 전에 `Get.config`에 추가하십시오.
+또는 `GetMaterialApp`에 직접 추가 하십시오.
 
 ```dart
 GetMaterialApp(
@@ -551,9 +551,9 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+선택적으로 `Get`으로 모든 로그 메세지를 리다이렉트 할 수 있습니다.
+만약 유명한 로그 패키지를 사용하고 싶으면
+여기에서 원하는 로그가 있습니다:
 
 ```dart
 GetMaterialApp(
@@ -569,17 +569,17 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ```
 
-### 지역 State Widgets
+### 지역 상태 위젯들
 
-These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
-We have flavours for Reactive and Simple.
-For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
-Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
-of the body in a `Scaffold`.
+이러한 위젯은 단일값을 관리하고 지역적이고 임시적인 상태를 유지합니다.
+우리는 반응적이고 단순함을 위해 추가할 수 있습니다.
+예를 들어 `TextField`의 obscureText의 전환으로 사용하거나 
+커스텀된 확장되는 패널을 만들거나 
+`Scaffold`의 body가 변경되는 동안 `BottomNavigationBar`의 현재 index를 수정할 수 있습니다.
 
 #### ValueBuilder
 
-A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
+업데이트된 값을 되돌려 받는 `.setState`로 작동하는 `StatefulWidget`의 단순화 입니다.
 
 ```dart
 ValueBuilder<bool>(
@@ -596,13 +596,12 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
-updates automatically... isn't it awesome?
+[`ValueBuilder`](#valuebuilder)와 비슷하지만 Rx 인스턴스(마법같은 .obs를 기억하세요)를 전달하고 자동적으로 업데이트되는 반응형 버전입니다... 놀랍지 않습니까?
 
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+        onChanged: data, // Rx에는 호출가능한 함수가 있습니다! (flag) => data.value = flag, 가 사용가능 합니다.
     ),
     false.obs,
 ),
@@ -610,82 +609,82 @@ ObxValue((data) => Switch(
 
 ## 유용한 팁
 
-`.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
+`.obs`(_Rx_ 타입이라고 알려진)는 다양한 내부 메소드와 연산자가 있습니다.
 
-> Is very common to _believe_ that a property with `.obs` **IS** the actual value... but make no mistake!
-> We avoid the Type declaration of the variable, because Dart's compiler is smart enough, and the code
-> looks cleaner, but:
+> `.obs`프로퍼티가 **실제 값**이라고 _믿는_ 것은 일반적이지만 실수하지 마십시오!
+> 다트의 컴파일러는 충분히 똑똑하고 코드가 깔끔하기 때문에 변수의 타입 선언을 하지 않습니다.
+> 하지만:
 
 ```dart
 var message = 'Hello world'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Even if `message` _prints_ the actual String value, the Type is **RxString**!
+`message`가 실제 String 값을 _출력_ 하더라도 타입은 **RxString**입니다!
 
-So, you can't do `message.substring( 0, 4 )`.
-You have to access the real `value` inside the _observable_:
-The most "used way" is `.value`, but, did you know that you can also use...
+그래서 `message.substring( 0, 4 )`은 사용하지 못합니다.
+_observable(.obs)_ 안의 실제 값에 접근해야 합니다:
+가장 많이 사용되는 방법은 `.value`지만 사용할 수 있었는지 알고 있었나요...
 
 ```dart
 final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
+// 현재 값과 다른 값이면 stream을 업데이트만 합니다.
 name.value = 'Hey';
 
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
+// 모든 Rx 프로퍼티가 "호출 가능"하고 새로운 값을 반환합니다.
+// 하지만 이 접근방식은 `null`를 허용하지 않고 UI가 재구축하지 않습니다.
 name('Hello');
 
-// is like a getter, prints 'Hello'.
+// getter와 과 같이 'Hello'를 출력합니다.
 name() ;
 
-/// numbers:
+/// 숫자 타입들:
 
 final count = 0.obs;
 
-// You can use all non mutable operations from num primitives!
+// 기존 숫자 타입으로 모든 변형 불가 작업을 사용할수 있습니다.
 count + 1;
 
-// Watch out! this is only valid if `count` is not final, but var
+// 주의하세요! 아래는 `count`가 final이 아닌 경우에만 유효합니다.
 count += 1;
 
-// You can also compare against values:
+// 값들을 비교할 수도 있습니다:
 count > 2;
 
 /// booleans:
 
 final flag = false.obs;
 
-// switches the value between true/false
+// true/false 사이의 전환이 됩니다.
 flag.toggle();
 
 
-/// all types:
+/// 모든 타입들:
 
-// Sets the `value` to null.
+// `값`을 null로 셋합니다.
 flag.nil();
 
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
+//  모든 toString(), toJson() 함수들은 `값`으로 전달됩니다.
+print( count ); // RxInt 내부에서 `toString()`이 호출됩니다.
 
 final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
+// 값을 json 배열로 바꾸고 RxList를 출력합니다.
+// Json은 모든 Rx 타입들을 지원합니다!
 print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
+// RxMap, RxList 그리고 RxSet은 그들의 native 타입들을 확장한 특별한 Rx 타입들입니다.
+// 반응형이긴 하지만 일반 list로서 RxList가 동작합니다!
+abc.add(12); // list에 12가 들어가고 stream을 업데이트합니다.
+abc[3]; // List와 같이 인덱스 3을 읽습니다.
 
 
-// equality works with the Rx and the value, but hashCode is always taken from the value
+// 동등비교는 Rx와 값에서 동작하지만 해시코드는 항상 값으로부터 받습니다.
 final number = 12.obs;
 print( number == 12 ); // prints > true
 
-/// Custom Rx Models:
+/// 커스텀 Rx 모델들:
 
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
+// toJson(), toString()은 child에게 지연됩니다. 그래서 이것들을 재정의 하고 직접 관찰하여 print() 할수 있습니다.
 
 class User {
     String name, last;
@@ -698,15 +697,15 @@ class User {
 
 final user = User(name: 'John', last: 'Doe', age: 33).obs;
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
+// `user`는 "반응형"이지만 내부 프로퍼티들은 아닙니다!
+// 그래서 만약 내부의 변수를 바꾸면...
 user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
+// 위젯은 재구성 되지 않을것 입니다!
+// user의 내부의 무언가가 바뀌어도 `Rx`는 알 수가 않습니다.
+// 그래서 커스텀 클래스들은 수동으로 바뀌었다고 "알릴" 필요가 있습니다.
 user.refresh();
 
-// or we can use the `update()` method!
+// 또는 `update()` 함수를 사용할 수 있습니다!
 user.update((value){
   value.name='Roi';
 });
@@ -716,22 +715,22 @@ print( user );
 
 #### GetView
 
-I love this Widget, is so simple, yet, so useful!
+이 위젯을 사랑합니다. 매우 간단하고 유용합니다!
 
-Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
+등록된 `Controller`인 `controller`의 gettr로 가져온 `const Stateless`위젯 입니다. 이게 전부입니다.
 
 ```dart
  class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
-  // ALWAYS remember to pass the `Type` you used to register your controller!
+  // controller를 등록할때 사용한 `타입`을 전달하는 것을 항상 기억하세요!
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text( controller.title ), // just call `controller.something`
+       child: Text( controller.title ), // 단지 `controller.something`을 호출합니다.
      );
    }
  }
