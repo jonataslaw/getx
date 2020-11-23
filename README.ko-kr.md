@@ -861,8 +861,8 @@ GetMaterialApp(
 
 3- 성능에 대하여 걱정하지 않아도 됩니다. 플러터의 성능은 이미 놀랍습니다. 하지만 상태관리자를 사용하고 blocs/stores/controllers 등의 클래스들을 로케이터로 배포하는 것을 상상해보십시오. 종속성이 필요 없는 경우 종속성 제외를 수동으로 호출해야 합니다. 하지만 간단하게 controller를 사용하고 이것들을 더이상 사용하지 않을때 간단하게 메모리에서 삭제될수 있을까요? 이것이 GetX가 하는 일입니다. SmartManagement를 사용하면 사용하지 않는 모든것이 메모리에서 삭제되기 때문에 프로그래밍 말고 다른 걱정을 할 필요가 없습니다. 이러한 로직을 만들지 않고도 최소한의 리소스만 사용함을 보장합니다.
 
-4- Actual decoupling. You may have heard the concept "separate the view from the business logic". This is not a peculiarity of BLoC, MVC, MVVM, and any other standard on the market has this concept. However, this concept can often be mitigated in Flutter due to the use of context.
-If you need context to find an InheritedWidget, you need it in the view, or pass the context by parameter. I particularly find this solution very ugly, and to work in teams we will always have a dependence on View's business logic. Getx is unorthodox with the standard approach, and while it does not completely ban the use of StatefulWidgets, InitState, etc., it always has a similar approach that can be cleaner. Controllers have life cycles, and when you need to make an APIREST request for example, you don't depend on anything in the view. You can use onInit to initiate the http call, and when the data arrives, the variables will be populated. As GetX is fully reactive (really, and works under streams), once the items are filled, all widgets that use that variable will be automatically updated in the view. This allows people with UI expertise to work only with widgets, and not have to send anything to business logic other than user events (like clicking a button), while people working with business logic will be free to create and test the business logic separately.
+4- 실질적으로 분리됨. "비즈니스 로직으로부터 뷰를 분리"라는 개념을 들어보셨을 겁니다. 이것은 BLoC, MVC, MVVM의 특징이 아니며 이미 나와 있는 또 다른 표준 개념입니다. 그러나 이 개념은 context의 사용으로 인해 플러터에서 종종 완화됩니다.
+만약 InheritedWidget을 찾기 위해 context가 필요하면 뷰나 파라미터로 conetext를 전달해야 합니다. 저는 특히 이 방식이 매우 별로이고 팀의 작업이 항상 뷰의 비즈니스 로직에 의존하게 됩니다. GetX는 표준 접근에서 비정통적이고 StatefulWidgets, InitState 등의 사용을 완전 배제하지 않지만 항상 깔끔하게 유사한 접근을 제공합니다. 예를 들어 Controllers의 수명주기에서 APIREST 요청이 필요할 때 뷰에 어떤 것도 의존할 필요가 없습니다. http 호출의 초기화를 onInit 에서 사용가능 하고 데이터가 도착하면 변수들이 채워집니다. GetX는 완전히 반응형이며(실제 스트림으로 동작) 아이탬중 하나가 채워지면 이 변수를 사용중인 모든 위젯이 자동적으로 화면에서 갱신됩니다. 이를 통해 UI 전문가는 위젯으로만 작업하고 사용자 이벤트(예 : 버튼 클릭) 이외의 비즈니스 로직에 아무것도 보낼 필요가 없으며 비즈니스 로직을 개발하는 사람들은 비즈니스 로직을 별도로 만들고 테스트 할 수 있습니다.
 
 이 라이브러리는 항상 업데이트되고 새로운 기능이 포함됩니다. 자유롭게 PR을 제공하고 여기에 기여하세요.
 
@@ -870,7 +870,7 @@ If you need context to find an InheritedWidget, you need it in the view, or pass
 
 ## 커뮤니티 채널
 
-GetX has a highly active and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
+GetX에는 매우 활동적이고 유용한 커뮤니티가 있습니다. 이 프레임워크의 사용과 관련하여 질문이 있거나 도움이 필요한 경우 커뮤니티 채널에 가입하십시오. 질문에 대한 답변이 더 빨리 제공되며 가장 적합한 장소가 될 것입니다. 이 저장소는 이슈오픈 및 리소스 요청 전용이지만 GetX 커뮤니티의 일부에 속해있습니다.
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
@@ -878,15 +878,15 @@ GetX has a highly active and helpful community. If you have questions, or would 
 
 ## 기여하는 방법
 
-_Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better._
+_프로젝트에 기여하고 싶으신가요? 우리는 귀하를 우리의 협력자 중 한 명으로 부각시켜 자랑스럽게 생각합니다. 다음은 Get(그리고 플러터)을 더욱 향상시키고 기여할 수 있는 몇 가지 사항입니다._
 
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
-- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
+- readme을 다른 언어로 번역하는 데 도움이 됩니다.
+- readme에 문서를 추가합니다(Get의 많은 기능이 아직 문서화되지 않았습니다).
+- Get 사용법을 설명하는 기사를 쓰거나 비디오를 만듭니다(읽기 및 향후 위키에 삽입될 예정).
+- 코드/테스트에 대한 PR을 제공합니다.
+- 새로운 기능을 포함합니다.
 
-Any contribution is welcome!
+어떤 기여도 환영합니다!
 
 ## 기사 및 비디오
 
