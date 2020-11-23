@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md)._
+_Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -202,7 +202,7 @@ That's all. It's _that_ simple.
 
 ### More details about state management
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple stage manager and the reactive state manager**
+**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
 
 You will get a good idea of GetX power.
 
@@ -389,7 +389,7 @@ Get.previousRoute
 // give the raw route to access for example, rawRoute.isFirst()
 Get.rawRoute
 
-// give access to Rounting API from GetObserver
+// give access to Routing API from GetObserver
 Get.routing
 
 // check if snackbar is open
@@ -801,7 +801,7 @@ class SettingsService extends GetxService {
 ```
 
 The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistance of a class instance during the
+"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
 
 # Breaking changes from 2.0
