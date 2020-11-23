@@ -389,7 +389,7 @@ Get.previousRoute
 // give the raw route to access for example, rawRoute.isFirst()
 Get.rawRoute
 
-// give access to Rounting API from GetObserver
+// give access to Routing API from GetObserver
 Get.routing
 
 // check if snackbar is open

@@ -380,40 +380,40 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ## 기타 고급 API
 
 ```dart
-// give the current args from currentScreen
+// currentScreen에서 현재 인수들을 제공
 Get.arguments
 
-// give name of previous route
+// 이전 경로의 이름을 제공
 Get.previousRoute
 
-// give the raw route to access for example, rawRoute.isFirst()
+// rawRoute.isFirst()와 같은 접근에 필요한 원시 경로를 제공
 Get.rawRoute
 
-// give access to Rounting API from GetObserver
+// GetObserver로 부터 Rounting API의 접근을 제공
 Get.routing
 
-// check if snackbar is open
+// snackbar가 열려 있는지 확인
 Get.isSnackbarOpen
 
-// check if dialog is open
+// dialog가 열려 있는지 확인
 Get.isDialogOpen
 
-// check if bottomsheet is open
+// bottomsheet가 열려 있는지 확인
 Get.isBottomSheetOpen
 
-// remove one route.
+// 1개의 경로 제거
 Get.removeRoute()
 
-// back repeatedly until the predicate returns true.
+// 값이 true가 될때까지 반복적으로 되돌림
 Get.until()
 
-// go to next route and remove all the previous routes until the predicate returns true.
+// 다음 경로로 이동하고 값이 true가 될때까지 이전 모든 경로를 제거
 Get.offUntil()
 
-// go to next named route and remove all the previous routes until the predicate returns true.
+// 명명된 다음 경로로 이동하고 값이 true가 될때까지 이전 모든 경로를 제거
 Get.offNamedUntil()
 
-//Check in what platform the app is running
+// 앱이 구동중인 플랫폼을 확인
 GetPlatform.isAndroid
 GetPlatform.isIOS
 GetPlatform.isMacOS
@@ -421,91 +421,91 @@ GetPlatform.isWindows
 GetPlatform.isLinux
 GetPlatform.isFuchsia
 
-//Check the device type
+// 장치 타입을 확인
 GetPlatform.isMobile
 GetPlatform.isDesktop
-//All platforms are supported independently in web!
-//You can tell if you are running inside a browser
-//on Windows, iOS, OSX, Android, etc.
+// 모든 플랫폼은 독립적으로 웹을 제공합니다!
+// Windows, iOS, OSX, Android 등의
+// 브러우저에서 구동중이면 알 수 있습니다.
 GetPlatform.isWeb
 
 
-// Equivalent to : MediaQuery.of(context).size.height,
-// but immutable.
+// MediaQuery.of(context).size.height 과 동일
+// 하지만 불변함.
 Get.height
 Get.width
 
-// Gives the current context of the Navigator.
+// Navigator의 현재 context를 제공
 Get.context
 
-// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
+// 코드 어디에서든지 foreground에서 snackbar/dialog/bottomsheet의 context를 제공
 Get.contextOverlay
 
-// Note: the following methods are extensions on context. Since you
-// have access to context in any place of your UI, you can use it anywhere in the UI code
+// 주석: 다음 메소드는 context의 확장입니다.
+// UI의 모든 위치에서 컨텍스트에 액세스 할 수 있으므로 UI 코드의 어느 곳에서나 사용할 수 있습니다.
 
-// If you need a changeable height/width (like Desktop or browser windows that can be scaled) you will need to use context.
+// 변경되는 height/width(데스크탑이나 브라우저와 같이 늘어날 수 있는 것)가 필요하면 context를 사용해야함
 context.width
 context.height
 
-// Gives you the power to define half the screen, a third of it and so on.
-// Useful for responsive applications.
+// 화면의 절반, 1/3 등을 정의할 수 있는 기능을 제공합니다.
+// 반응성이 높은 앱에 유용합니다.
 // param dividedBy (double) optional - default: 1
 // param reducedBy (double) optional - default: 0
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.of(context).size
+/// MediaQuery.of(context).size 와 유사함
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// MediaQuery.of(context).padding 와 유사함
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// MediaQuery.of(context).viewPadding 와 유사함
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// MediaQuery.of(context).viewInsets; 와 유사함
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// MediaQuery.of(context).orientation; 와 유사함
 context.orientation()
 
-/// Check if device is on landscape mode
+/// 장치의 가로 모드 확인
 context.isLandscape()
 
-/// Check if device is on portrait mode
+/// 장치의 세로 모드 확인
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// MediaQuery.of(context).devicePixelRatio; 와 유사함
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// MediaQuery.of(context).textScaleFactor; 와 유사함
 context.textScaleFactor()
 
-/// Get the shortestSide from screen
+/// 화면에서 shortestSide를 제공
 context.mediaQueryShortestSide()
 
 /// True if width be larger than 800
 context.showNavbar()
 
-/// True if the shortestSide is smaller than 600p
+/// shortestSide가 600p 미만이면 True
 context.isPhone()
 
-/// True if the shortestSide is largest than 600p
+/// shortestSide가 600p 이상이면 True
 context.isSmallTablet()
 
-/// True if the shortestSide is largest than 720p
+/// shortestSide가 720p 이상이면 True
 context.isLargeTablet()
 
-/// True if the current device is Tablet
+/// 현재 장치가 Tablet이면 True
 context.isTablet()
 
-/// Returns a value<T> according to the screen size
-/// can give value for:
-/// watch: if the shortestSide is smaller than 300
-/// mobile: if the shortestSide is smaller than 600
-/// tablet: if the shortestSide is smaller than 1200
-/// desktop: if width is largest than 1200
+/// 화면 사이즈에 따라 value<T>를 반환
+/// 반환될 수 있는 값들:
+/// watch: shortestSide가 300 미만일 때
+/// mobile: shortestSide가 600 미만일 때
+/// tablet: shortestSide가 1200 미만일 때
+/// desktop: shortestSide가 1200 이상일 때
 context.responsiveValue<T>()
 ```
 
