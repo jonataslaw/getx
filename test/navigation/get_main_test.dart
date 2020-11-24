@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 import 'utils/wrapper.dart';
 
 class SizeTransitions extends CustomTransition {
@@ -201,7 +202,7 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
 
     Get.offUntil(
-      MaterialPageRoute(builder: (context) => SecondScreen()),
+      SecondScreen(),
       ModalRoute.withName('/'),
     );
 
