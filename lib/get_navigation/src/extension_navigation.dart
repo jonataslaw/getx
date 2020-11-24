@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
 import '../../get_utils/get_utils.dart';
@@ -600,10 +601,44 @@ extension GetNavigation on GetInterface {
   /// or also like this:
   /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
   /// is closed
-  Future<T> offUntil<T>(Route<T> page, RoutePredicate predicate, {int id}) {
+  ///
+  /// By default, GetX will prevent you from pushing a route that you are
+  /// already in. If you want to push anyway, set [preventDuplicates] to false
+  Future<T> offUntil<T>(
+    Widget page,
+    RoutePredicate predicate, {
+    bool opaque,
+    Transition transition,
+    Curve curve,
+    Duration duration,
+    int id,
+    bool fullscreenDialog = false,
+    dynamic arguments,
+    Bindings binding,
+    bool preventDuplicates = true,
+    bool popGesture,
+  }) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id)?.currentState?.pushAndRemoveUntil<T>(page, predicate);
+    var routeName = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routeName == currentRoute) {
+      return null;
+    }
+    var route = GetPageRoute<T>(
+      opaque: opaque ?? true,
+      page: () => page,
+      routeName: routeName,
+      settings: RouteSettings(
+        arguments: arguments,
+      ),
+      popGesture: popGesture ?? defaultPopGesture,
+      transition: transition ?? defaultTransition,
+      curve: curve ?? defaultTransitionCurve,
+      fullscreenDialog: fullscreenDialog,
+      binding: binding,
+      transitionDuration: duration ?? defaultTransitionDuration,
+    );
+    return global(id)?.currentState?.pushAndRemoveUntil<T>(route, predicate);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -1101,6 +1136,7 @@ Since version 2.8 it is possible to access the properties
   GetMaterialController get rootController => getxController;
 
   bool get defaultPopGesture => getxController.defaultPopGesture;
+
   bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
 
   Transition get defaultTransition => getxController.defaultTransition;
