@@ -124,16 +124,23 @@ Crie sua View usando StatelessWidget, já que, usando Get, você não precisa ma
 
 ```dart
 class Home extends StatelessWidget {
-  // Instancie sua classe usando Get.put() para torná-la disponível para todas as rotas subsequentes
-  final Controller c = Get.put(Controller());
+
   @override
-  Widget build(context) => Scaffold(
-    appBar: AppBar(title: Obx(() => Text("Total de cliques: ${c.count}"))),
+  Widget build(context) { 
+
+    // Instancie sua classe usando Get.put() para torná-la disponível para todas as rotas subsequentes
+    final Controller c = Get.put(Controller());
+
+    return Scaffold(
+      // Use Obx(()=> para atualizar Text() sempre que a contagem é alterada.
+      appBar: AppBar(title: Obx(() => Text("Total de cliques: ${c.count}"))),
+
       // Troque o Navigator.push de 8 linhas por um simples Get.to(). Você não precisa do 'context'
-    body: Center(child: RaisedButton(
-      child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
-    floatingActionButton: FloatingActionButton(child:
-     Icon(Icons.add), onPressed: c.increment));
+      body: Center(child: RaisedButton(
+              child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
+      floatingActionButton: 
+          FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+  } 
 }
 
 class Outra extends StatelessWidget {
