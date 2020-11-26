@@ -125,11 +125,13 @@ class Controller extends GetxController {
 ```dart
 class Home extends StatelessWidget {
 
-  // Cree una instancia de su clase usando Get.put() para que esté disponible para todas las rutas "secundarias" allí.
-  final Controller c = Get.put(Controller());
-
   @override
-  Widget build(context) => Scaffold(
+  Widget build(context) {
+
+    // Cree una instancia de su clase usando Get.put() para que esté disponible para todas las rutas "secundarias" allí.
+    final Controller c = Get.put(Controller());
+    
+    return Scaffold(
       // Utilice Obx(()=> para actualizar Text() siempre que se cambie el recuento.
       appBar: AppBar(title: Obx(() => Text("Clicks: " + c.count.string))),
 
@@ -138,6 +140,7 @@ class Home extends StatelessWidget {
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+  }
 }
 
 class Other extends StatelessWidget {
