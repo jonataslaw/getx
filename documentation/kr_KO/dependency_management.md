@@ -11,10 +11,11 @@
     - [사용 방법](#사용-방법)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
+      - [변경하는 방법](#변경하는-방법)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
+    - [바인딩이 작동하는 자세한 설명](#바인딩이-작동하는-자세한-설명)
   - [주석](#주석)
 
 Get은 Provider context, inheritedWidget 없이 단 1줄의 코드로 Bloc 나 Controller 같은 클래스를 찾을수 있는 간단하고 강력한 종속성 관리자가 있습니다.
@@ -215,32 +216,31 @@ Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기
 
 메서드간 차이점 진행:
 
-Get.put과 Get.putAsync는 동일한 생성 명령을 따르지만 두번째가 비동기 메서드를 사용하는 것이 차이점입니다: 두 메서드는 인스턴스를 생성하고 초기화 합니다. 이것은 `permanent: false`와 `isSingleton: true` 파라미터들과 내부 `insert` 메서드를 사용하여 메모리에 직접 추가됩니다.(여기의 isSingleton 파라미터의 목적은 `dependency`에 의한 종속성을 사용할 것인지 `FcBuilderFunc`에 의한 종속성을 사용할 것인지 알려주는 것입니다.)
-- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only porpuse is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+- Get.put과 Get.putAsync는 동일한 생성 명령을 따르지만 두번째가 비동기 메서드를 사용하는 것이 차이점입니다: 두 메서드는 인스턴스를 생성하고 초기화 합니다. 이것은 `permanent: false`와 `isSingleton: true` 파라미터들과 내부 `insert` 메서드를 사용하여 메모리에 직접 추가됩니다.(여기의 isSingleton 파라미터의 목적은 `dependency`에 의한 종속성을 사용할 것인지 `FcBuilderFunc`에 의한 종속성을 사용할 것인지 알려주는 것입니다.) 이후에 `Get.find()`는 즉시 초기화한 메모리안의 인스턴스를 호출합니다.
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
+- Get.create: 이름 그대로 종속성을 "생성"합니다! `Get.put()`과 마찬가지로 내부 메서드 `insert`를 호출하여 인스턴스화 합니다. 그러나 `permanent`가 true가 되고 `isSingleton`이 false가 됩니다(종속성을 "생성중"인 상태라 싱글톤 인스턴스가 될 방법이 없어서 false 입니다.) 그리고 `permanent: true`이기 때문에 기본적으로 화면 전환간에 손실되지 않는 장점이 있습니다! 또한 `Get.find()`는 즉시 호출되지 않으며 호출될 화면에서 사용되기를 기다립니다. `permanent` 파라미터를 사용하기 위한 방법으로 만들어졌습니다. 다음의 가치를 가지고 있습니다. 생성을 위한 목적으로 `Get.create()`는 공유되는 인스턴스가 아니지만 폐기되지 않습니다. 예를들어 리스트뷰 안의 버튼은 리스트를 위한 고유한 인스턴스입니다. - 이때문에 Get.create는 GetWidget과 함께 사용되어야만 합니다.
 
-- Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsable to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
+- Get.lazyPut: 이름 그대로 lazy 처리됩니다. 인스턴스가 만들어지나 즉시 사용되도록 호출되지 않고 호출되기를 기다립니다. 다른 메서드와 다르게 `insert`가 여기에서 호출되지 않습니다. 대신 인스턴스는 메모리의 다른 부분에 추가됩니다. 인스턴스가 재생성 가능한지 아닌지를 책임지는 부분으로 "factory"라고 부릅니다. 나중에 사용할 어떤 것을 생성하기 원한다면 지금 사용했던 것과 섞이지 않아야 할 것입니다. 그리고 여기에서 `fenix` 마법이 시작됩니다: `fenix: false`를 그대로두고 `smartManagement`는 `keepFactory`가 아니면 `Get.find`를 사용할 때 인스턴스는 "factory"에서 공통 인스턴스 메모리 영역으로 위치가 변경됩니다. 바로 그뒤에 기본적으로 "factory"에서 제거됩니다. 이제 `fenix: true`로 설정하면 인스턴스는 전용부분에서 계속 존재하며 공통 영역으로 이동하여 미래에 다시 호출됩니다.
 
 ## 바인딩
 
-One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
-When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
-In version 2.10 Get completely implemented the Bindings API.
-Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
-The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
-This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
-In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
+이 패키지의 가장 큰 특이한점 중 하나는 아마도 라우트, 상태 관리자, 종속성 관리자의 완전한 통합의 가능성 일 것입니다.
+스택에서 라우트가 삭제되면 모든 컨르롤러, 변수 및 관련된 인스턴스 오브젝트가 메모리에서 제거됩니다. 스트림이나 타이머를 사용중이면 자동적으로 종료되고 이것에 대한 어떤 걱정도 할 필요가 없습니다.
+Get의 2.10 버전에는 Bindings API를 완전히 구현했습니다.
+이제 init 메서드는 더 이상 사용할 필요가 없습니다. 원하지 않으며 컨트롤러 타입도 필요 없습니다. 컨트롤러와 서비스를 위한 적절한 위치에서 시작할 수 있습니다.
+바인딩 클래스는 상태 관리자와 종속성 관리자에 라우트를 "결합"하는 동시에 종속성 주입을 분리하는 클래스입니다.
+이를 통해 Get은 특정 컨트롤러가 사용될때 표시되는 스크린을 알고 어디서 어떻게 이것이 제거 되는지 알수 있습니다.
+추가로 Binding 클래스로 SmartManager 구성을 제어 할 수 있습니다. 스택에서 경로를 제거하거나 경로를 사용한 위젯이 배치되거나 둘 다 배치되지 않을 때 정렬되도록 종속성을 설정 할 수 있습니다. 지능적으로 종속성 관리가 동작하지만 원하는대로 구성 할 수 있습니다.
 
 ### 사용 방법
 
-- Create a class and implements Binding
+- class를 생성하고 Binding 포함합니다.
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
+IDE가 자동적으로 "종속적인" 메서드를 재정의할지 요청하며 램프를 클릭하기만 하면 됩니다. 그리고 메서드를 재정의하고 해당 경로에 사용할 모든 클래스들을 추가하면 됩니다:
 
 ```dart
 class HomeBinding implements Bindings {
@@ -259,9 +259,9 @@ class DetailsBinding implements Bindings {
 }
 ```
 
-Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
+이제 라우트에 라우트, 종속성, 상태 관리자 사이를 연결하는데 해당 바인딩을 사용할 것이라고 알리기만 하면 됩니다.
 
-- Using named routes:
+- 명명된 라우트 사용법:
 
 ```dart
 getPages: [
@@ -278,16 +278,16 @@ getPages: [
 ];
 ```
 
-- Using normal routes:
+- 일반 라우트 사용법:
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
 Get.to(DetailsView(), binding: DetailsBinding())
 ```
 
-There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+이제 어플리케이션의 어디서도 메모리 관리에 대해서 걱정하지 않아도 됩니다. Get이 그것을 처리 할 것입니다.
 
-The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+Binding 클래스는 라우트가 호출될 때 불려집니다. GetMaterialApp의 "initialBinding"에서 모든 종속성을 추가하여 생성할 수 있습니다.
 
 ```dart
 GetMaterialApp(
@@ -298,10 +298,10 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-The default way of creating a binding is by creating a class that implements Bindings.
-But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
+바인딩을 생성하는 기본 방법은 바인딩을 구현한 클래스를 만드는 것 입니다.
+하지만 대안으로 `BindingsBuilder` 콜백을 사용하여 간단하게 원하는 것을 인스턴스화하는 함수를 사용할 수 있습니다.
 
-Example:
+예시:
 
 ```dart
 getPages: [
@@ -323,25 +323,25 @@ getPages: [
 ];
 ```
 
-That way you can avoid to create one Binding class for each route making this even simpler.
+이 방법은 각 라우트에 대해 한개의 바인딩 클래스 만드는 것을 피할수 있어서 더 간단하게 할 수 있습니다.
 
-Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
+두 방법 모두 완벽하게 작동하며 취향에 맞춰서 사용하시면 됩니다.
 
 ### SmartManagement
 
-GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
-This is what is called the `full` mode of dependency management.
-But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+GetX는 기본적으로 메모리에서 사용되지 않는 컨트롤러들을 제거합니다. 문제가 생기거나 적절히 사용하지 않는 위젯도 마찬가지 입니다.
+이것이 종속성 관리의 `full`모드 입니다.
+하지만 GetX 클래스의 제거를 제어하는 방식을 변경하기 원한다면 `SmartManagement` 클래스로 다른 행동을 설정할 수 있습니다.
 
-#### How to change
+#### 변경하는 방법
 
-If you want to change this config (which you usually don't need) this is the way:
+구성을 변경(보통은 필요 없습니다)하려면 이렇게 하세요:
 
 ```dart
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilders //here
+      smartManagement: SmartManagement.onlyBuilders // 이곳
       home: Home(),
     )
   )
@@ -350,30 +350,30 @@ void main () {
 
 #### SmartManagement.full
 
-It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
+이것이 기본입니다. permanent가 설정되지 않으면 사용되지 않는 클래스를 제거합니다. 대부분의 경우 이 구성을 변경하지 않고 유지하십시오. GetX가 처음이라면 바꾸지 마십시오.
 
 #### SmartManagement.onlyBuilders
-With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
+이 옵션은 오직 컨트롤러가 `init:`에서 시작되었거나 `Get.lazyPut()`으로 바인딩되어 로드되면 제거됩니다.
 
-If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
+`Get.put()`이나 `Get.putAsync()` 또는 다른 접근을 를 사용하면 SmartManagement는 종속성 제거를 위한 권한을 가지지 못합니다.
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
+기본 동작은 SmartManagement.onlyBuilders와 다르게 "Get.put"으로 인스턴스화된 위젯들도 삭제됩니다.
 
 #### SmartManagement.keepFactory
 
-Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
+SmartManagement.full과 같이 더이상 사용되지 않으면 종속성이 제거됩니다. 하지만 factory가 유지되어 다시 인스턴스가 필요하면 종속성이 재생성됩니다.
 
-### How bindings work under the hood
-Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
-This happens so fast that the analyzer will not even be able to register it.
-When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
-Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
-This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
-Use whichever is most convenient for you.
+### 바인딩이 작동하는 자세한 설명
+바인딩은 다른 화면으로 이동하려고 클릭하는 순간에 임시 factory를 생성합니다. 그리고 화면 전환 애니메이션이 발생하는 즉시 제거됩니다.
+이 행위는 매우 빨라 분석기에 등록도 되지 않습니다.
+다시 화면으로 이동하면 새로운 임시 factory를 호출하므로 SmartManagement.keepFactory 사용을 선택할 수도 있습니다. 그러나 바인딩을 생성하지 않거나 동일한 바인딩에 대해 모든 종속성을 유지하고 싶다면 도움이 됩니다.
+Factory는 적은 메모리만 사용하고 인스턴스를 가지지 않지만 원하는 클래스의 "형태"를 가진 함수를 가집니다.
+메모리에서 매우 적은 비용을 가지지만 이 라이브러리의 목적이 최소 리소스를 사용하여 가능한 최대 성능을 가지는 것이라 GetX는 기본적으로 factory를 제거합니다.
+가장 편한방법을 취하십시오.
 
 ## 주석
 
-- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+- 다중 바인딩을 사용한다면 SmartManagement.keepFactory를 사용하지 마세요. 바인딩을 사용하지 않거나 GetMaterialApp의 initialBinding에 연결한 1개의 바인딩만 설계하세요.
 
-- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
-However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.
+- 바인딩의 사용은 완전히 선택사항입니다. 클래스에서 `Get.put()`과 `Get.find()`를 사용하면 아무 문제없이 컨트롤러가 주어집니다.
+그러나 서비스나 다른 추상적인 동작을 원하면 더 나은 구성의 바인딩을 추천합니다.
