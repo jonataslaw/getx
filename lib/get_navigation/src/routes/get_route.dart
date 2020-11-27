@@ -23,7 +23,7 @@ class GetPage {
   final bool fullscreenDialog;
   final RouteSettings settings;
   final List<GetPage> children;
-  final List<GetPageMiddleware> middlewares;
+  final List<GetMiddleware> middlewares;
 
   const GetPage({
     @required this.name,

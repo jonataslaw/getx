@@ -66,7 +66,7 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   final Alignment alignment;
   
-  final List<GetPageMiddleware> middlewares;
+  final List<GetMiddleware> middlewares;
 
   @override
   final Color barrierColor;
