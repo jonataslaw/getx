@@ -199,53 +199,7 @@ class GetMaterialApp extends StatelessWidget {
         super(key: key);
 
   Route<dynamic> generator(RouteSettings settings) {
-    var match = Get.routeTree.matchRoute(settings.name);
-
-    final redirect =
-        MiddlewareRunner(match.route.middlewares).runRedirect();
-    if (!redirect.isNullOrBlank) {
-      match = Get.routeTree.matchRoute(redirect);
-    }
-
-    Get.parameters = match?.parameters;
-
-    if (match?.route == null) {
-      return GetPageRoute(
-        page: unknownRoute.page,
-        parameter: unknownRoute.parameter,
-        settings:
-            RouteSettings(name: settings.name, arguments: settings.arguments),
-        curve: unknownRoute.curve,
-        opaque: unknownRoute.opaque,
-        customTransition: unknownRoute.customTransition,
-        binding: unknownRoute.binding,
-        bindings: unknownRoute.bindings,
-        transitionDuration:
-            (unknownRoute.transitionDuration ?? Get.defaultTransitionDuration),
-        transition: unknownRoute.transition,
-        popGesture: unknownRoute.popGesture,
-        fullscreenDialog: unknownRoute.fullscreenDialog,
-        middlewares: unknownRoute.middlewares,
-      );
-    }
-
-    return GetPageRoute(
-      page: match.route.page,
-      parameter: match.route.parameter,
-      settings:
-          RouteSettings(name: settings.name, arguments: settings.arguments),
-      curve: match.route.curve,
-      opaque: match.route.opaque,
-      customTransition: match.route.customTransition,
-      binding: match.route.binding,
-      bindings: match.route.bindings,
-      transitionDuration:
-          (match.route.transitionDuration ?? Get.defaultTransitionDuration),
-      transition: match.route.transition,
-      popGesture: match.route.popGesture,
-      fullscreenDialog: match.route.fullscreenDialog,
-      middlewares: match.route.middlewares
-    );
+    return PageRedirect(settings, unknownRoute).page();
   }
 
   List<Route<dynamic>> initialRoutesGenerate(String name) {

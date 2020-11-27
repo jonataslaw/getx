@@ -28,7 +28,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  String redirect();
+  RouteSettings redirect();
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -68,7 +68,7 @@ class GetMiddleware implements _RouteMiddleware {
   GetMiddleware({this.priority});
 
   @override
-  String redirect() => '';
+  RouteSettings redirect() => null;
 
   @override
   GetPage onPageCalled(GetPage page) => page;
@@ -106,12 +106,12 @@ class MiddlewareRunner {
     return page;
   }
 
-  String runRedirect() {
-    var to = '';
+  RouteSettings runRedirect() {
+    RouteSettings to;
     _getMiddlewares().forEach((element) {
       to = element.redirect();
     });
-    if (!to.isNullOrBlank) {
+    if (to != null) {
       Get.log('Redirect to $to');
     }
     return to;
@@ -140,4 +140,75 @@ class MiddlewareRunner {
 
   void runOnPageDispose() =>
       _getMiddlewares().forEach((element) => element.onPageDispose());
+}
+
+class PageRedirect {
+  GetPage route;
+  GetPage unknownRoute;
+  RouteSettings settings;
+  bool isUnknown;
+
+  PageRedirect(this.settings, this.unknownRoute,
+      {this.isUnknown = false, this.route});
+
+  // redirect all pages that needes redirecting
+  GetPageRoute page() {
+    while (needRecheck()) {}
+    return isUnknown
+        ? GetPageRoute(
+            page: unknownRoute.page,
+            parameter: unknownRoute.parameter,
+            settings: RouteSettings(
+                name: settings.name, arguments: settings.arguments),
+            curve: unknownRoute.curve,
+            opaque: unknownRoute.opaque,
+            customTransition: unknownRoute.customTransition,
+            binding: unknownRoute.binding,
+            bindings: unknownRoute.bindings,
+            transitionDuration: (unknownRoute.transitionDuration ??
+                Get.defaultTransitionDuration),
+            transition: unknownRoute.transition,
+            popGesture: unknownRoute.popGesture,
+            fullscreenDialog: unknownRoute.fullscreenDialog,
+            middlewares: unknownRoute.middlewares,
+          )
+        : GetPageRoute(
+            page: route.page,
+            parameter: route.parameter,
+            settings: RouteSettings(
+                name: settings.name, arguments: settings.arguments),
+            curve: route.curve,
+            opaque: route.opaque,
+            customTransition: route.customTransition,
+            binding: route.binding,
+            bindings: route.bindings,
+            transitionDuration:
+                (route.transitionDuration ?? Get.defaultTransitionDuration),
+            transition: route.transition,
+            popGesture: route.popGesture,
+            fullscreenDialog: route.fullscreenDialog,
+            middlewares: route.middlewares);
+  }
+
+  /// check if redirect is needed
+  bool needRecheck() {
+    final match = Get.routeTree.matchRoute(settings.name);
+    Get.parameters = match?.parameters;
+
+    // No Match found
+    if (match?.route == null) {
+      isUnknown = true;
+      return false;
+    }
+
+    final runner = MiddlewareRunner(match.route.middlewares);
+    route = runner.runOnPageCalled(match.route);
+
+    // No middlewares found return match.
+    if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
+      return false;
+    }
+
+    return runner.runRedirect() != null;
+  }
 }
