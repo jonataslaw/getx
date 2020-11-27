@@ -30,6 +30,7 @@ class GetPageRoute<T> extends PageRoute<T> {
     this.barrierLabel,
     this.maintainState = true,
     bool fullscreenDialog = false,
+    this.middlewares
   })  : assert(opaque != null),
         assert(barrierDismissible != null),
         assert(maintainState != null),
@@ -64,6 +65,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   final Curve curve;
 
   final Alignment alignment;
+  
+  final List<GetPageMiddleware> middlewares;
 
   @override
   final Color barrierColor;
@@ -111,14 +114,18 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
   ) {
     Get.reference = settings.name ?? routeName;
+
+    final middlewareRunner = MiddlewareRunner(middlewares);
+    final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
     binding?.dependencies();
-    if (bindings != null) {
-      for (final binding in bindings) {
+    if (bindingsToBind != null) {
+      for (final binding in bindingsToBind) {
         binding.dependencies();
       }
     }
-    // final pageWidget = page();
-    return page();
+    
+    final pageToBuild =  middlewareRunner.runOnPageBuildStart(page);    
+    return middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
   static bool isPopGestureInProgress(PageRoute<dynamic> route) {

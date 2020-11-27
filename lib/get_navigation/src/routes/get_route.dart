@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+
 import '../../../get_instance/get_instance.dart';
+import '../../get_navigation.dart';
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 
@@ -21,6 +23,7 @@ class GetPage {
   final bool fullscreenDialog;
   final RouteSettings settings;
   final List<GetPage> children;
+  final List<GetPageMiddleware> middlewares;
 
   const GetPage({
     @required this.name,
@@ -40,6 +43,7 @@ class GetPage {
     this.customTransition,
     this.fullscreenDialog = false,
     this.children,
+    this.middlewares,
   })  : assert(page != null),
         assert(name != null),
         assert(maintainState != null),

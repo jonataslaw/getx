@@ -199,7 +199,14 @@ class GetMaterialApp extends StatelessWidget {
         super(key: key);
 
   Route<dynamic> generator(RouteSettings settings) {
-    final match = Get.routeTree.matchRoute(settings.name);
+    var match = Get.routeTree.matchRoute(settings.name);
+
+    final redirect =
+        MiddlewareRunner(match.route.middlewares).runOnPageCalled();
+    if (!redirect.isNullOrBlank) {
+      match = Get.routeTree.matchRoute(redirect);
+    }
+
     Get.parameters = match?.parameters;
 
     if (match?.route == null) {
@@ -218,6 +225,7 @@ class GetMaterialApp extends StatelessWidget {
         transition: unknownRoute.transition,
         popGesture: unknownRoute.popGesture,
         fullscreenDialog: unknownRoute.fullscreenDialog,
+        middlewares: unknownRoute.middlewares,
       );
     }
 
@@ -236,6 +244,7 @@ class GetMaterialApp extends StatelessWidget {
       transition: match.route.transition,
       popGesture: match.route.popGesture,
       fullscreenDialog: match.route.fullscreenDialog,
+      middlewares: match.route.middlewares
     );
   }
 

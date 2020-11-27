@@ -70,23 +70,24 @@ class ParseRouteTree {
   }
 
   /// Change the Path for a [GetPage]
-  GetPage _changePath(GetPage orgin, String routePath) => GetPage(
-        name: routePath + orgin.name,
-        page: orgin.page,
-        title: orgin.title,
-        alignment: orgin.alignment,
-        transition: orgin.transition,
-        binding: orgin.binding,
-        bindings: orgin.bindings,
-        curve: orgin.curve,
-        customTransition: orgin.customTransition,
-        fullscreenDialog: orgin.fullscreenDialog,
-        maintainState: orgin.maintainState,
-        opaque: orgin.opaque,
-        parameter: orgin.parameter,
-        popGesture: orgin.popGesture,
-        settings: orgin.settings,
-        transitionDuration: orgin.transitionDuration,
+  GetPage _changePath(GetPage origin, String routePath) => GetPage(
+        name: routePath + origin.name,
+        page: origin.page,
+        title: origin.title,
+        alignment: origin.alignment,
+        transition: origin.transition,
+        binding: origin.binding,
+        bindings: origin.bindings,
+        curve: origin.curve,
+        customTransition: origin.customTransition,
+        fullscreenDialog: origin.fullscreenDialog,
+        maintainState: origin.maintainState,
+        opaque: origin.opaque,
+        parameter: origin.parameter,
+        popGesture: origin.popGesture,
+        settings: origin.settings,
+        transitionDuration: origin.transitionDuration,
+        middlewares: origin.middlewares,
       );
 
   _GetPageMatch matchRoute(String path) {
