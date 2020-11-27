@@ -6,13 +6,13 @@ import 'package:get/get_navigation/src/root/parse_route.dart';
 void main() {
   test('Parse Page with children', () {
     final tree = ParseRouteTree();
-    final pageTree = GetPage(name: '/city', page: () => Container(), pages: [
-      GetPage(name: '/home', page: () => Container(), pages: [
+    final pageTree = GetPage(name: '/city', page: () => Container(), children: [
+      GetPage(name: '/home', page: () => Container(), children: [
         GetPage(name: '/bed-room', page: () => Container()),
         GetPage(name: '/living-room', page: () => Container()),
       ]),
-      GetPage(name: '/work', page: () => Container(), pages: [
-        GetPage(name: '/office', page: () => Container(), pages: [
+      GetPage(name: '/work', page: () => Container(), children: [
+        GetPage(name: '/office', page: () => Container(), children: [
           GetPage(name: '/pen', page: () => Container()),
           GetPage(name: '/paper', page: () => Container()),
         ]),

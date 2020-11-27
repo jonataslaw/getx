@@ -20,7 +20,7 @@ class GetPage {
   final Duration transitionDuration;
   final bool fullscreenDialog;
   final RouteSettings settings;
-  final List<GetPage> pages;
+  final List<GetPage> children;
 
   const GetPage({
     @required this.name,
@@ -39,7 +39,7 @@ class GetPage {
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.pages,
+    this.children,
   })  : assert(page != null),
         assert(name != null),
         assert(maintainState != null),

@@ -54,12 +54,12 @@ class ParseRouteTree {
 
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
-    if (route.pages == null || route.pages.isEmpty) {
+    if (route.children == null || route.children.isEmpty) {
       return result;
     }
 
     final routePath = route.name;
-    for (var page in route.pages) {
+    for (var page in route.children) {
       result.add(_changePath(page, routePath));
       final children = _flattenPage(page);
       for (var child in children) {
