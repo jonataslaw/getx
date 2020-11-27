@@ -5,10 +5,9 @@ class ParseRouteTree {
   final List<_ParseRouteTreeNode> _nodes = <_ParseRouteTreeNode>[];
 
   // bool _hasDefaultRoute = false;
-
   void addRoute(GetPage route) {
     var path = route.name;
-
+    
     if (path == Navigator.defaultRouteName) {
       // if (_hasDefaultRoute) {
       //   throw ("Default route was already defined");
@@ -46,7 +45,49 @@ class ParseRouteTree {
       }
       parent = node;
     }
+
+    // Add Page children.
+    for (var page in _flattenPage(route)) {
+      addRoute(page);
+    }
   }
+
+  List<GetPage> _flattenPage(GetPage route) {
+    final result = <GetPage>[];
+    if (route.pages == null || route.pages.isEmpty) {
+      return result;
+    }
+
+    final routePath = route.name;
+    for (var page in route.pages) {
+      result.add(_changePath(page, routePath));
+      final children = _flattenPage(page);
+      for (var child in children) {
+        result.add(_changePath(child, routePath));
+      }
+    }
+    return result;
+  }
+
+  /// Change the Path for a [GetPage]
+  GetPage _changePath(GetPage orgin, String routePath) => GetPage(
+        name: routePath + orgin.name,
+        page: orgin.page,
+        title: orgin.title,
+        alignment: orgin.alignment,
+        transition: orgin.transition,
+        binding: orgin.binding,
+        bindings: orgin.bindings,
+        curve: orgin.curve,
+        customTransition: orgin.customTransition,
+        fullscreenDialog: orgin.fullscreenDialog,
+        maintainState: orgin.maintainState,
+        opaque: orgin.opaque,
+        parameter: orgin.parameter,
+        popGesture: orgin.popGesture,
+        settings: orgin.settings,
+        transitionDuration: orgin.transitionDuration,
+      );
 
   _GetPageMatch matchRoute(String path) {
     var usePath = path;
@@ -126,9 +167,7 @@ class ParseRouteTree {
       var match = matches.first;
       var nodeToUse = match.node;
 
-      if (nodeToUse != null &&
-          nodeToUse.routes != null &&
-          nodeToUse.routes.length > 0) {
+      if (nodeToUse != null && nodeToUse.routes != null && nodeToUse.routes.length > 0) {
         var routes = nodeToUse.routes;
         var routeMatch = _GetPageMatch(routes[0]);
 
@@ -186,8 +225,7 @@ class ParseRouteTree {
 class _ParseRouteTreeNodeMatch {
   _ParseRouteTreeNodeMatch(this.node);
 
-  _ParseRouteTreeNodeMatch.fromMatch(
-      _ParseRouteTreeNodeMatch match, this.node) {
+  _ParseRouteTreeNodeMatch.fromMatch(_ParseRouteTreeNodeMatch match, this.node) {
     parameters = <String, String>{};
     if (match != null) {
       parameters.addAll(match.parameters);
