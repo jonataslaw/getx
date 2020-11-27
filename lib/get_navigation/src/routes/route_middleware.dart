@@ -22,13 +22,26 @@ abstract class _RouteMiddleware {
   /// you can use it to redirect befor anything in this page happend.
   /// {@tool snippet}
   /// ```dart
-  /// GetPage onPageCalled( ) {
+  /// GetPage redirect( ) {
   ///   final authService = Get.find<AuthService>();
   ///   return authService.isAuthed ? null : '/login';
   /// }
   /// ```
   /// {@end-tool}
   String redirect();
+
+  /// This function will be called when this Page is called
+  /// you can use it to change something about the page or give it new page
+  /// {@tool snippet}
+  /// ```dart
+  /// GetPage onPageCalled(GetPage page) {
+  ///   final authService = Get.find<AuthService>();
+  ///   page.title = 'Wellcome ${authService.UserName}';
+  ///   return page;
+  /// }
+  /// ```
+  /// {@end-tool}
+  GetPage onPageCalled(GetPage page);
 
   /// This function will be called right before the [Bindings] are initialize.
   /// Here you can change [Bindings] for this page
@@ -55,18 +68,22 @@ class GetMiddleware implements _RouteMiddleware {
   GetMiddleware({this.priority});
 
   @override
+  String redirect() => '';
+
+  @override
+  GetPage onPageCalled(GetPage page) => page;
+
+  @override
   List<Bindings> onBindingsStart(List<Bindings> bindings) => bindings;
 
   @override
   GetPageBuilder onPageBuildStart(GetPageBuilder page) => page;
+
   @override
   Widget onPageBuilt(Widget page) => page;
 
   @override
   void onPageDispose() {}
-
-  @override
-  String redirect() => '';
 }
 
 class MiddlewareRunner {
@@ -82,15 +99,14 @@ class MiddlewareRunner {
     return <GetMiddleware>[];
   }
 
-  List<GetMiddleware> getMiddlewares() {
-    if (_middlewares != null) {
-      _middlewares.sort((a, b) => a.priority.compareTo(b.priority));
-      return _middlewares;
-    }
-    return <GetMiddleware>[];
+  GetPage runOnPageCalled(GetPage page) {
+    _getMiddlewares().forEach((element) {
+      page = element.onPageCalled(page);
+    });
+    return page;
   }
 
-  String runOnPageCalled() {
+  String runRedirect() {
     var to = '';
     _getMiddlewares().forEach((element) {
       to = element.redirect();

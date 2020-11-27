@@ -190,14 +190,15 @@ class GetCupertinoApp extends StatelessWidget {
   Route<dynamic> generator(RouteSettings settings) {
     var match = Get.routeTree.matchRoute(settings.name);
 
-    final redirect =
-        MiddlewareRunner(match.route.middlewares).runOnPageCalled();
-    if (!redirect.isNullOrBlank) {
+    var runner = MiddlewareRunner(match.route.middlewares);
+    var redirect = runner.runRedirect();
+    while (!redirect.isNullOrBlank) {
       match = Get.routeTree.matchRoute(redirect);
+      runner = MiddlewareRunner(match.route.middlewares);
+      redirect = runner.runRedirect();
     }
 
     Get.parameters = match?.parameters;
-
     if (match?.route == null) {
       return GetPageRoute(
         page: unknownRoute.page,
@@ -218,6 +219,7 @@ class GetCupertinoApp extends StatelessWidget {
       );
     }
 
+    match.route = runner.runOnPageCalled(match.route);
     return GetPageRoute(
       page: match.route.page,
       parameter: match.route.parameter,

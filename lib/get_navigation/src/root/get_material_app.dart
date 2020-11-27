@@ -202,7 +202,7 @@ class GetMaterialApp extends StatelessWidget {
     var match = Get.routeTree.matchRoute(settings.name);
 
     final redirect =
-        MiddlewareRunner(match.route.middlewares).runOnPageCalled();
+        MiddlewareRunner(match.route.middlewares).runRedirect();
     if (!redirect.isNullOrBlank) {
       match = Get.routeTree.matchRoute(redirect);
     }
