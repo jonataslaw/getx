@@ -208,7 +208,11 @@ class PageRedirect {
     if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
       return false;
     }
-
-    return runner.runRedirect() != null;
+    final newSettings = runner.runRedirect();
+    if (newSettings == null) {
+      return false;
+    }
+    settings = newSettings;
+    return true;
   }
 }
