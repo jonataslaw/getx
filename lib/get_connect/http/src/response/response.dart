@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import '../request/request.dart';
 import '../status/http_status.dart';

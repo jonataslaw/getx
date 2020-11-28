@@ -1,31 +1,33 @@
+import 'dart:async';
+
 import '../request/request.dart';
 import '../response/response.dart';
 
-typedef RequestModifier = Future<Request> Function(Request request);
+typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T> request);
 
-typedef ResponseModifier = Future<Null> Function(
-    Request request, Response response);
+typedef ResponseModifier<T> = FutureOr Function(
+    Request<T> request, Response<T> response);
 
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
-class GetModifier {
+class GetModifier<T> {
   final _requestModifiers = <RequestModifier>[];
   final _responseModifiers = <ResponseModifier>[];
   RequestModifier authenticator;
 
-  void addRequestModifier(RequestModifier interceptor) {
-    _requestModifiers.add(interceptor);
+  void addRequestModifier<T>(RequestModifier<T> interceptor) {
+    _requestModifiers.add(interceptor as RequestModifier);
   }
 
-  void removeRequestModifier(RequestModifier interceptor) {
+  void removeRequestModifier<T>(RequestModifier<T> interceptor) {
     _requestModifiers.remove(interceptor);
   }
 
-  void addResponseModifier(ResponseModifier interceptor) {
-    _responseModifiers.add(interceptor);
+  void addResponseModifier<T>(ResponseModifier<T> interceptor) {
+    _responseModifiers.add(interceptor as ResponseModifier);
   }
 
-  void removeResponseModifier(ResponseModifier interceptor) {
+  void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
     _requestModifiers.remove(interceptor);
   }
 

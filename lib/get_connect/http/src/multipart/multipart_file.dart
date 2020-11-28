@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
+
 import '../request/request.dart';
 
 class MultipartFile {
   MultipartFile(
     List<int> bytes, {
-    this.filename,
+    @required this.filename,
     this.contentType = 'application/octet-stream',
   })  : length = bytes.length,
         stream = BodyBytes.fromBytes(bytes);

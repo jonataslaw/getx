@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 import '../src/certificates/certificates.dart';
 import '../src/exceptions/exceptions.dart';
@@ -31,9 +31,11 @@ class GetHttpClient {
 
   Duration timeout;
 
+  bool errorSafety = true;
+
   final HttpRequestBase _httpClient;
 
-  final GetModifier _interceptor;
+  final GetModifier _modifier;
 
   GetHttpClient({
     this.userAgent = 'getx-client',
@@ -48,7 +50,27 @@ class GetHttpClient {
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
         ),
-        _interceptor = GetModifier();
+        _modifier = GetModifier();
+
+  void addAuthenticator<T>(RequestModifier<T> auth) {
+    _modifier.authenticator = auth as RequestModifier;
+  }
+
+  void addRequestModifier<T>(RequestModifier<T> interceptor) {
+    _modifier.addRequestModifier<T>(interceptor);
+  }
+
+  void removeRequestModifier<T>(RequestModifier<T> interceptor) {
+    _modifier.removeRequestModifier(interceptor);
+  }
+
+  void addResponseModifier<T>(ResponseModifier<T> interceptor) {
+    _modifier.addResponseModifier(interceptor);
+  }
+
+  void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
+    _modifier.removeResponseModifier<T>(interceptor);
+  }
 
   Uri _createUri(String url, Map<String, dynamic> query) {
     if (baseUrl != null) {
@@ -91,7 +113,9 @@ class GetHttpClient {
 
         bodyBytes = utf8.encode(jsonString);
       } on Exception catch (err) {
-        throw UnexpectedFormat(err.toString());
+        if (!errorSafety) {
+          throw UnexpectedFormat(err.toString());
+        } else {}
       }
     }
 
@@ -155,15 +179,15 @@ class GetHttpClient {
         request.headers[key] = value;
       });
 
-      if (authenticate) await _interceptor.authenticator(request);
-      await _interceptor.modifyRequest(request);
+      if (authenticate) await _modifier.authenticator(request);
+      await _modifier.modifyRequest(request);
 
       var response = await _httpClient.send<T>(request);
 
-      await _interceptor.modifyResponse(request, response);
+      await _modifier.modifyResponse(request, response);
 
       if (HttpStatus.unauthorized == response.statusCode &&
-          _interceptor.authenticator != null &&
+          _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
         return _performRequest(
           handler,
@@ -172,12 +196,32 @@ class GetHttpClient {
           headers: request.headers,
         );
       } else if (HttpStatus.unauthorized == response.statusCode) {
-        throw UnauthorizedException();
+        if (!errorSafety) {
+          throw UnauthorizedException();
+        } else {
+          return Response<T>(
+            request: request,
+            headers: response.headers,
+            statusCode: response.statusCode,
+            body: response.body,
+            statusText: response.statusText,
+          );
+        }
       }
 
       return response;
     } on Exception catch (err) {
-      throw GetHttpException(err.toString());
+      if (!errorSafety) {
+        throw GetHttpException(err.toString());
+      } else {
+        return Response<T>(
+          request: null,
+          headers: null,
+          statusCode: null,
+          body: null,
+          statusText: "$err",
+        );
+      }
     }
   }
 
@@ -267,6 +311,9 @@ class GetHttpClient {
       );
       return response;
     } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
       return Future.value(Response<T>(
         request: null,
         statusCode: null,
@@ -297,6 +344,9 @@ class GetHttpClient {
       );
       return response;
     } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
       return Future.value(Response<T>(
         request: null,
         statusCode: null,
@@ -320,6 +370,9 @@ class GetHttpClient {
       );
       return response;
     } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
       return Future.value(Response<T>(
         request: null,
         statusCode: null,
@@ -343,6 +396,9 @@ class GetHttpClient {
       );
       return response;
     } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
       return Future.value(Response<T>(
         request: null,
         statusCode: null,

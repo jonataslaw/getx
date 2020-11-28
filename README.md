@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md)._
+**Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md).**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -35,6 +35,9 @@ _Languages: English (this file), [Chinese](README.zh-cn.md), [Brazilian Portugue
       - [Change locale](#change-locale)
       - [System locale](#system-locale)
   - [Change Theme](#change-theme)
+  - [GetConnect](#getconnect)
+    - [Default configuration](#default-configuration)
+    - [Custom configuration](#custom-configuration)
   - [Other Advanced APIs](#other-advanced-apis)
     - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
     - [Local State Widgets](#local-state-widgets)
@@ -379,6 +382,83 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+
+## GetConnect
+GetConnect is an easy way to communicate from your back to your front with http or websockets
+
+### Default configuration
+You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
+
+```dart
+class UserProvider extends GetConnect {
+  // Get request
+  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  // Post request
+  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  // Post request with File
+  Future<Response<CasesModel>> postCases(List<int> image) {
+    final form = FormData({
+      'file': MultipartFile(image, filename: 'avatar.png'),
+      'otherFile': MultipartFile(image, filename: 'cover.png'),
+    });
+    return post('http://youapi/users/upload', form);
+  }
+
+  GetSocket userMessages() {
+    return socket('https://yourapi/users/socket');
+  }
+}
+```
+### Custom configuration
+GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
+
+```dart
+class HomeProvider extends GetConnect {
+  @override
+  void onInit() {
+    @override
+  void onInit() {
+    // All request will pass to jsonEncode so CasesModel.fromJson()
+    httpClient.defaultDecoder = CasesModel.fromJson;
+    httpClient.baseUrl = 'https://api.covid19api.com';
+    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
+    // Http and websockets if used with no [httpClient] instance
+
+    // It's will attach 'apikey' property on header from all requests
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = '12345678';
+      return request;
+    });
+
+    // Even if the server sends data from the country "Brazil",
+    // it will never be displayed to users, because you remove
+    // that data from the response, even before the response is delivered
+    httpClient.addResponseModifier<CasesModel>((request, response) {
+      CasesModel model = response.body;
+      if (model.countries.contains('Brazil')) {
+        model.countries.remove('Brazilll');
+      }
+    });
+
+    httpClient.addAuthenticator((request) async {
+      final response = await get("http://yourapi/token");
+      final token = response.body['token'];
+      // Set the header
+      request.headers['Authorization'] = "$token";
+      return request;
+    });
+
+    //Autenticator will be called 3 times if HttpStatus is 
+    //HttpStatus.unauthorized
+    httpClient.maxAuthRetries = 3;
+  }
+  }
+
+  @override
+  Future<Response<CasesModel>> getCases(String path) => get(path);
+}
+```
+
 
 ## Other Advanced APIs
 
@@ -734,7 +814,7 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text( controller.title ), // just call `controller.something`
+       child: Text(controller.title), // just call `controller.something`
      );
    }
  }

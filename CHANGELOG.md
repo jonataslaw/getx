@@ -1,7 +1,24 @@
-## [3.20.0]
-- Added GetConnect. 
-- 
-
+## [3.20.0] - Big update
+* Added GetConnect. 
+- GetConnect is an easy way to communicate from your back to your front. With it you can:
+- Communicate through websockets
+- Send messages and events via websockets.
+- Listen to messages and events via websockets.
+- Make http requests (GET, PUT, POST, DELETE).
+- Add request modifiers (like attaching a token to each request made).
+- Add answer modifiers (how to change a value field whenever the answer arrives)
+- Add an authenticator, if the answer is 401, you can configure the renewal of your JWT, for example, and then it will again make the http request.
+- Set the number of attempts for the authenticator
+- Define a baseUrl for all requests
+- Define a standard encoder for your Model.
+- Note1: You will never need to use jsonEncoder. It will always be called automatically with each request. If you define an encoder for your model, it will return the instance of your model class ALREADY FILLED with server data.
+- Note2: all requests are safety, you do not need to insert try / catch in requests. It will always return a response. In case of an error code, Response.hasError will return true. The error code will always be returned, unless the error was a connection error, which will be returned Response.hasError, but with error code null.
+- These are relatively new features, and also inserted in separate containers. You don't have to use it if you don't want to. As it is relatively new, some functions, such as specific http methods, may be missing.
+* Translation to Korean (@rws08)
+* Fix Overlays state (@eduardoflorence)
+* Update chinese docs (@jonahzheng)
+* Added context.isDarkMode to context extensions
+  
 
 ## [3.17.1]
 - Allow list.assignAll, map.assignAll and set.assignAll operate with null values
