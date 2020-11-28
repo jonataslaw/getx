@@ -1,0 +1,117 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
+
+import '../http.dart';
+import '../multipart/form_data.dart';
+
+class Request<T> {
+  /// Headers attach to this [Request]
+  final Map<String, String> headers;
+
+  /// The [Uri] from request
+  final Uri url;
+
+  final Decoder<T> decoder;
+
+  /// The Http Method from this [Request]
+  /// ex: `GET`,`POST`,`PUT`,`DELETE`
+  final String method;
+
+  /// The BodyBytes of body from this [Request]
+  final BodyBytes bodyBytes;
+
+  /// When true, the client will follow redirects to resolves this [Request]
+  final bool followRedirects;
+
+  /// The maximum number of redirects if [followRedirects] is true.
+  final int maxRedirects;
+
+  final bool persistentConnection;
+
+  final FormData files;
+
+  const Request._({
+    @required this.method,
+    @required this.bodyBytes,
+    @required this.url,
+    @required this.headers,
+    @required this.followRedirects,
+    @required this.maxRedirects,
+    @required this.files,
+    @required this.persistentConnection,
+    @required this.decoder,
+  });
+
+  factory Request({
+    @required Uri url,
+    @required String method,
+    @required Map<String, String> headers,
+    BodyBytes bodyBytes,
+    bool followRedirects = true,
+    int maxRedirects = 4,
+    FormData files,
+    bool persistentConnection = true,
+    final Decoder<T> decoder,
+  }) {
+    assert(url != null);
+    assert(method != null);
+    assert(followRedirects != null);
+    if (followRedirects) {
+      assert(maxRedirects != null);
+      assert(maxRedirects > 0);
+    }
+    return Request._(
+      url: url,
+      method: method,
+      bodyBytes: bodyBytes ??= BodyBytes.fromBytes(const []),
+      headers: Map.from(headers ??= <String, String>{}),
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      files: files,
+      persistentConnection: persistentConnection,
+      decoder: decoder,
+    );
+  }
+
+  /// Constructs a [Request] containing the same properties as [request].
+  factory Request.copyWith(Request request) => Request(
+        method: request.method,
+        url: request.url,
+        headers: request.headers,
+        bodyBytes: request.bodyBytes,
+        followRedirects: request.followRedirects,
+        maxRedirects: request.maxRedirects,
+        files: request.files,
+        persistentConnection: request.persistentConnection,
+      );
+}
+
+class BodyBytes extends StreamView<List<int>> {
+  BodyBytes(Stream<List<int>> stream) : super(stream);
+
+  factory BodyBytes.fromBytes(List<int> bytes) =>
+      BodyBytes(Stream.fromIterable([bytes]));
+
+  Future<Uint8List> toBytes() {
+    var completer = Completer<Uint8List>();
+    var sink = ByteConversionSink.withCallback(
+      (bytes) => completer.complete(
+        Uint8List.fromList(bytes),
+      ),
+    );
+    listen(sink.add,
+        onError: completer.completeError,
+        onDone: sink.close,
+        cancelOnError: true);
+    return completer.future;
+  }
+
+  Future<String> bytesToString([Encoding encoding = utf8]) =>
+      encoding.decodeStream(this);
+
+  Stream<String> toStringStream([Encoding encoding = utf8]) =>
+      encoding.decoder.bind(this);
+}

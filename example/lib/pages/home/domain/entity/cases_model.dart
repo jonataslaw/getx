@@ -15,12 +15,12 @@ class CasesModel {
     this.date,
   });
 
-  factory CasesModel.fromRawJson(String str) =>
+  static CasesModel fromRawJson(String str) =>
       CasesModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
-  factory CasesModel.fromJson(Map<String, dynamic> json) => CasesModel(
+  static CasesModel fromJson(dynamic json) => CasesModel(
         global: json["Global"] == null
             ? null
             : Global.fromJson(json["Global"] as Map<String, dynamic>),

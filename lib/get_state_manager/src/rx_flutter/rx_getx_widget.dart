@@ -113,8 +113,8 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   }
 
   Widget get notifyChildren {
-    final observer = getObs;
-    getObs = _observer;
+    final observer = RxInterface.proxy;
+    RxInterface.proxy = _observer;
     final result = widget.builder(controller);
     if (!_observer.canUpdate) {
       throw """
@@ -126,7 +126,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
       If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
       """;
     }
-    getObs = observer;
+    RxInterface.proxy = observer;
     return result;
   }
 

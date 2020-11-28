@@ -1,21 +1,18 @@
-import 'package:dio/dio.dart';
-
 import '../domain/adapters/repository_adapter.dart';
 import '../domain/entity/cases_model.dart';
+import 'home_api_provider.dart';
 
 class HomeRepository implements IHomeRepository {
-  HomeRepository({this.dio});
-
-  final Dio dio;
+  HomeRepository({this.provider});
+  final IHomeProvider provider;
 
   @override
   Future<CasesModel> getCases() async {
-    try {
-      final response = await dio.get("https://api.covid19api.com/summary");
-      return CasesModel.fromJson(response.data as Map<String, dynamic>);
-    } on Exception catch (e) {
-      print(e.toString());
-      return Future.error(e.toString());
+    final cases = await provider.getCases("/summary");
+    if (cases.status.hasError) {
+      return Future.error(cases.statusText);
+    } else {
+      return cases.body;
     }
   }
 }
