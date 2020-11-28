@@ -18,17 +18,19 @@ abstract class _RouteMiddleware {
   /// {@end-tool}
   int priority;
 
-  /// This function will be the first thing to call when this Page is called
-  /// you can use it to redirect befor anything in this page happend.
+  /// This function will be called when the page of
+  /// the called route is being searched for.
+  /// It take RouteSettings as a result an redirect to the new settings or
+  /// give it null and there will be no redirecting.
   /// {@tool snippet}
   /// ```dart
-  /// GetPage redirect( ) {
+  /// GetPage redirect(String route) {
   ///   final authService = Get.find<AuthService>();
-  ///   return authService.isAuthed ? null : '/login';
+  ///   return authService.authed.value ? null : RouteSettings(name: '/login');
   /// }
   /// ```
   /// {@end-tool}
-  RouteSettings redirect();
+  RouteSettings redirect(String route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -36,8 +38,7 @@ abstract class _RouteMiddleware {
   /// ```dart
   /// GetPage onPageCalled(GetPage page) {
   ///   final authService = Get.find<AuthService>();
-  ///   page.title = 'Wellcome ${authService.UserName}';
-  ///   return page;
+  ///   return page.copyWith(title: 'Wellcome ${authService.UserName}');
   /// }
   /// ```
   /// {@end-tool}
@@ -45,13 +46,25 @@ abstract class _RouteMiddleware {
 
   /// This function will be called right before the [Bindings] are initialize.
   /// Here you can change [Bindings] for this page
+  /// {@tool snippet}
+  /// ```dart
+  /// List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  ///   final authService = Get.find<AuthService>();
+  ///   if (authService.isAdmin) {
+  ///     bindings.add(AdminBinding());
+  ///   }
+  ///   return bindings;
+  /// }
+  /// ```
+  /// {@end-tool}
   List<Bindings> onBindingsStart(List<Bindings> bindings);
 
   /// This function will be called right after the [Bindings] are initialize.
-  /// Here you can change the Page to build
   GetPageBuilder onPageBuildStart(GetPageBuilder page);
 
-  // Get the built page
+  /// This function will be called right after the 
+  /// GetPage.page function is called and will give you the result 
+  /// of the function. and take the widget that will be showed.
   Widget onPageBuilt(Widget page);
 
   void onPageDispose();
@@ -59,8 +72,8 @@ abstract class _RouteMiddleware {
 
 /// The Page Middlewares.
 /// The Functions will be called in this order
-/// (( [redirect] -> [onBindingsStart] -> [onPageBuildStart] ->
-/// [onPageBuilt] -> [onPageDispose] ))
+/// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
+/// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
 class GetMiddleware implements _RouteMiddleware {
   @override
   int priority = 0;
@@ -68,7 +81,7 @@ class GetMiddleware implements _RouteMiddleware {
   GetMiddleware({this.priority});
 
   @override
-  RouteSettings redirect() => null;
+  RouteSettings redirect(String route) => null;
 
   @override
   GetPage onPageCalled(GetPage page) => page;
@@ -106,10 +119,10 @@ class MiddlewareRunner {
     return page;
   }
 
-  RouteSettings runRedirect() {
+  RouteSettings runRedirect(String route) {
     RouteSettings to;
     _getMiddlewares().forEach((element) {
-      to = element.redirect();
+      to = element.redirect(route);
     });
     if (to != null) {
       Get.log('Redirect to $to');
@@ -208,7 +221,7 @@ class PageRedirect {
     if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
       return false;
     }
-    final newSettings = runner.runRedirect();
+    final newSettings = runner.runRedirect(settings.name);
     if (newSettings == null) {
       return false;
     }

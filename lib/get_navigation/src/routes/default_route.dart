@@ -11,27 +11,27 @@ import 'default_transitions.dart';
 import 'transitions_type.dart';
 
 class GetPageRoute<T> extends PageRoute<T> {
-  GetPageRoute({
-    RouteSettings settings,
-    this.transitionDuration = const Duration(milliseconds: 300),
-    this.opaque = true,
-    this.parameter,
-    this.curve,
-    this.alignment,
-    this.transition,
-    this.popGesture,
-    this.customTransition,
-    this.barrierDismissible = false,
-    this.barrierColor,
-    this.binding,
-    this.bindings,
-    this.routeName,
-    this.page,
-    this.barrierLabel,
-    this.maintainState = true,
-    bool fullscreenDialog = false,
-    this.middlewares
-  })  : assert(opaque != null),
+  GetPageRoute(
+      {RouteSettings settings,
+      this.transitionDuration = const Duration(milliseconds: 300),
+      this.opaque = true,
+      this.parameter,
+      this.curve,
+      this.alignment,
+      this.transition,
+      this.popGesture,
+      this.customTransition,
+      this.barrierDismissible = false,
+      this.barrierColor,
+      this.binding,
+      this.bindings,
+      this.routeName,
+      this.page,
+      this.barrierLabel,
+      this.maintainState = true,
+      bool fullscreenDialog = false,
+      this.middlewares})
+      : assert(opaque != null),
         assert(barrierDismissible != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
@@ -65,7 +65,7 @@ class GetPageRoute<T> extends PageRoute<T> {
   final Curve curve;
 
   final Alignment alignment;
-  
+
   final List<GetMiddleware> middlewares;
 
   @override
@@ -123,8 +123,8 @@ class GetPageRoute<T> extends PageRoute<T> {
         binding.dependencies();
       }
     }
-    
-    final pageToBuild =  middlewareRunner.runOnPageBuildStart(page);    
+
+    final pageToBuild = middlewareRunner.runOnPageBuildStart(page);
     return middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
@@ -383,6 +383,8 @@ class GetPageRoute<T> extends PageRoute<T> {
       WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
           .removeDependencyByRoute("${settings?.name ?? routeName}"));
     }
+    final middlewareRunner = MiddlewareRunner(middlewares);
+    middlewareRunner.runOnPageDispose();
     super.dispose();
   }
 }

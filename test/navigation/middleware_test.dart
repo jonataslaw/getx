@@ -6,7 +6,7 @@ import 'get_main_test.dart';
 
 class RedirectMiddleware extends GetMiddleware {
   @override
-  RouteSettings redirect() => RouteSettings(name: '/second');
+  RouteSettings redirect(String route) => RouteSettings(name: '/second');
 }
 
 main() {
@@ -33,4 +33,3 @@ main() {
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 }
-
