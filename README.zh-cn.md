@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md)_
+_语言: 中文, [英文](README.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -122,11 +122,13 @@ class Controller extends GetxController{
 ```dart
 class Home extends StatelessWidget {
 
-  // 使用Get.put()实例化你的类，使其对当下的所有子路由可用。
-  final Controller c = Get.put(Controller());
-
   @override
-  Widget build(context) => Scaffold(
+  Widget build(context) {
+
+    // 使用Get.put()实例化你的类，使其对当下的所有子路由可用。
+    final Controller c = Get.put(Controller());
+
+    return Scaffold(
       // 使用Obx(()=>每当改变计数时，就更新Text()。
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
@@ -135,6 +137,7 @@ class Home extends StatelessWidget {
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+  }
 }
 
 class Other extends StatelessWidget {

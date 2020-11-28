@@ -3,7 +3,6 @@ part of rx_types;
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
-RxInterface getObs;
 
 mixin RxObjectMixin<T> on NotifyManager<T> {
   T _value;
@@ -104,8 +103,8 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   /// Returns the current [value]
   T get value {
-    if (getObs != null) {
-      getObs.addListener(subject);
+    if (RxInterface.proxy != null) {
+      RxInterface.proxy.addListener(subject);
     }
     return _value;
   }
