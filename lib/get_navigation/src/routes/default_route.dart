@@ -35,6 +35,7 @@ class GetPageRoute<T> extends PageRoute<T> {
         assert(barrierDismissible != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
+        reference = "$routeName: ${page.hashCode}",
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
@@ -43,6 +44,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   final GetPageBuilder page;
 
   final String routeName;
+
+  final String reference;
 
   final CustomTransition customTransition;
 
@@ -113,10 +116,12 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    Get.reference = settings.name ?? routeName;
+
+ //   Get.reference = settings.name ?? routeName;
 
     final middlewareRunner = MiddlewareRunner(middlewares);
     final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
+
     binding?.dependencies();
     if (bindingsToBind != null) {
       for (final binding in bindingsToBind) {
@@ -379,13 +384,19 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   void dispose() {
+    super.dispose();
+    // if (Get.smartManagement != SmartManagement.onlyBuilder) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
+    //       .removeDependencyByRoute("${settings?.name ?? routeName}"));
+    // }
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
-          .removeDependencyByRoute("${settings?.name ?? routeName}"));
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => GetInstance().removeDependencyByRoute("$reference"));
     }
+
     final middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
-    super.dispose();
+
   }
 }
 

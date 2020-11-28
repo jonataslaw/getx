@@ -39,8 +39,8 @@ class RxMap<K, V> extends MapMixin<K, V>
   @override
   @protected
   Map<K, V> get value {
-    if (getObs != null) {
-      getObs.addListener(subject);
+    if (RxInterface.proxy != null) {
+      RxInterface.proxy.addListener(subject);
     }
     return _value;
   }

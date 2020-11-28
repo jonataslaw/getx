@@ -102,11 +102,13 @@ Tworzymy View. Użyj StatelessWidget oszczędzajac przy tym RAM. Z Get nie będz
 ```dart
 class Home extends StatelessWidget {
 
-  // Instantiate your class using Get.put() to make it available for all "child" routes there.
-  final Controller c = Get.put(Controller());
-
   @override
-  Widget build(context) => Scaffold(
+  Widget build(context) {
+
+    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    final Controller c = Get.put(Controller());
+
+    return Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
       appBar: AppBar(title: Obx(() => Text("Clicks: " + c.count.string))),
 
@@ -115,6 +117,7 @@ class Home extends StatelessWidget {
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+  }
 }
 
 class Other extends StatelessWidget {

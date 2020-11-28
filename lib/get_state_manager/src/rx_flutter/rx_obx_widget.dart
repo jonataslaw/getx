@@ -41,8 +41,8 @@ class _ObxState extends State<ObxWidget> {
   }
 
   Widget get notifyChilds {
-    final observer = getObs;
-    getObs = _observer;
+    final observer = RxInterface.proxy;
+    RxInterface.proxy = _observer;
     final result = widget.build();
     if (!_observer.canUpdate) {
       throw """
@@ -54,7 +54,7 @@ class _ObxState extends State<ObxWidget> {
       If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
       """;
     }
-    getObs = observer;
+    RxInterface.proxy = observer;
     return result;
   }
 
