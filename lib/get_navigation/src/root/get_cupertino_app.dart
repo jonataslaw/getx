@@ -188,44 +188,7 @@ class GetCupertinoApp extends StatelessWidget {
         super(key: key);
 
   Route<dynamic> generator(RouteSettings settings) {
-    final match = Get.routeTree.matchRoute(settings.name);
-    Get.parameters = match?.parameters;
-
-    if (match?.route == null) {
-      return GetPageRoute(
-        page: unknownRoute.page,
-        parameter: unknownRoute.parameter,
-        settings:
-            RouteSettings(name: settings.name, arguments: settings.arguments),
-        curve: unknownRoute.curve,
-        opaque: unknownRoute.opaque,
-        customTransition: unknownRoute.customTransition,
-        binding: unknownRoute.binding,
-        bindings: unknownRoute.bindings,
-        transitionDuration:
-            (unknownRoute.transitionDuration ?? Get.defaultTransitionDuration),
-        transition: unknownRoute.transition,
-        popGesture: unknownRoute.popGesture,
-        fullscreenDialog: unknownRoute.fullscreenDialog,
-      );
-    }
-
-    return GetPageRoute(
-      page: match.route.page,
-      parameter: match.route.parameter,
-      settings:
-          RouteSettings(name: settings.name, arguments: settings.arguments),
-      curve: match.route.curve,
-      opaque: match.route.opaque,
-      customTransition: match.route.customTransition,
-      binding: match.route.binding,
-      bindings: match.route.bindings,
-      transitionDuration:
-          (match.route.transitionDuration ?? Get.defaultTransitionDuration),
-      transition: match.route.transition,
-      popGesture: match.route.popGesture,
-      fullscreenDialog: match.route.fullscreenDialog,
-    );
+    return PageRedirect(settings, unknownRoute).page();
   }
 
   List<Route<dynamic>> initialRoutesGenerate(String name) {
