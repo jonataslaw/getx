@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:meta/meta.dart';
 
 import '../src/certificates/certificates.dart';
@@ -8,11 +9,11 @@ import '../src/http_impl/http_request_stub.dart'
     if (dart.library.html) 'http_impl/http_request_html.dart'
     if (dart.library.io) 'http_impl/http_request_io.dart';
 import '../src/http_impl/request_base.dart';
-import '../src/interceptors/get_interceptors.dart';
 import '../src/multipart/form_data.dart';
 import '../src/request/request.dart';
 import '../src/response/response.dart';
 import '../src/status/http_status.dart';
+import 'interceptors/get_modifiers.dart';
 
 typedef Decoder<T> = T Function(dynamic data);
 
@@ -74,7 +75,7 @@ class GetHttpClient {
     List<int> bodyBytes;
 
     if (body is FormData) {
-      bodyBytes = await body.readAsBytes();
+      bodyBytes = await body.toBytes();
     } else {
       try {
         var jsonString = json.encode(body);

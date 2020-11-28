@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import '../../../../get_rx/src/rx_stream/rx_stream.dart';
-
 import '../request/request.dart';
 
 bool isTokenChar(int byte) {
@@ -29,8 +27,6 @@ class CharCode {
 }
 
 const bool F = false;
-
-const String GET_BOUNDARY = '--get-boundary-';
 
 const bool T = true;
 const SEPARATOR_MAP = [
@@ -64,22 +60,19 @@ BodyBytes toBodyBytes(Stream<List<int>> stream) {
 
 final _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
 
+final newlineRegExp = RegExp(r'\r\n|\r|\n');
+
 /// Returns whether [string] is composed entirely of ASCII-compatible
 /// characters.
 bool isPlainAscii(String string) => _asciiOnly.hasMatch(string);
-
-String encodeMap(dynamic data, _Handler handler, {bool encode = true}) {
-  return urlEncode(data, '', encode, handler).toString();
-}
 
 StringBuffer urlEncode(
   dynamic sub,
   String path,
   bool encode,
-  _Handler handler,
+  String Function(String key, Object value) handler,
 ) {
   var urlData = StringBuffer('');
-  var first = true;
   var leftBracket = '[';
   var rightBracket = ']';
 
@@ -89,16 +82,7 @@ StringBuffer urlEncode(
   }
 
   var encodeComponent = encode ? Uri.encodeQueryComponent : (e) => e;
-  if (sub is List) {
-    for (var i = 0; i < sub.length; i++) {
-      urlEncode(
-          sub[i],
-          // ignore: lines_longer_than_80_chars
-          '$path$leftBracket${(sub[i] is Map || sub[i] is List) ? i : ''}$rightBracket',
-          encode,
-          handler);
-    }
-  } else if (sub is Map) {
+  if (sub is Map) {
     sub.forEach((key, value) {
       if (path == '') {
         urlEncode(
@@ -117,19 +101,13 @@ StringBuffer urlEncode(
       }
     });
   } else {
-    var str = handler(path, sub);
-    var isNotEmpty = str != null && (str as String).trim().isNotEmpty;
-    if (!first && isNotEmpty) {
-      urlData.write('&');
-    }
-    first = false;
-    if (isNotEmpty) {
-      urlData.write(str);
-    }
+    throw 'FormData need be a Map';
   }
 
   return urlData;
 }
+
+const String GET_BOUNDARY = 'getx-http-boundary-';
 
 Future streamToFuture(Stream stream, GetStream sink) {
   var completer = Completer();
@@ -142,6 +120,78 @@ void stringToBytes(String string, GetStream stream) {
   stream.add(utf8.encode(string));
 }
 
+/// Encode [value] like browsers
+String browserEncode(String value) {
+  return value.replaceAll(newlineRegExp, '%0D%0A').replaceAll('"', '%22');
+}
+
 void writeLine(GetStream stream) => stream.add([13, 10]);
 
-typedef _Handler = Function(String key, Object value);
+const List<int> boundaryCharacters = <int>[
+  43,
+  95,
+  45,
+  46,
+  48,
+  49,
+  50,
+  51,
+  52,
+  53,
+  54,
+  55,
+  56,
+  57,
+  65,
+  66,
+  67,
+  68,
+  69,
+  70,
+  71,
+  72,
+  73,
+  74,
+  75,
+  76,
+  77,
+  78,
+  79,
+  80,
+  81,
+  82,
+  83,
+  84,
+  85,
+  86,
+  87,
+  88,
+  89,
+  90,
+  97,
+  98,
+  99,
+  100,
+  101,
+  102,
+  103,
+  104,
+  105,
+  106,
+  107,
+  108,
+  109,
+  110,
+  111,
+  112,
+  113,
+  114,
+  115,
+  116,
+  117,
+  118,
+  119,
+  120,
+  121,
+  122
+];

@@ -119,14 +119,14 @@ class HeaderValue {
 
   @override
   String toString() {
-    var sb = StringBuffer();
-    sb.write(_value);
+    var stringBuffer = StringBuffer();
+    stringBuffer.write(_value);
     if (parameters != null && parameters.isNotEmpty) {
       _parameters.forEach((name, value) {
-        sb..write('; ')..write(name)..write('=')..write(value);
+        stringBuffer..write('; ')..write(name)..write('=')..write(value);
       });
     }
-    return sb.toString();
+    return stringBuffer.toString();
   }
 
   void _parse(String value, String parameterSeparator, String valueSeparator,
@@ -135,7 +135,7 @@ class HeaderValue {
 
     bool done() => index == value.length;
 
-    void skipWS() {
+    void bump() {
       while (!done()) {
         if (value[index] != ' ' && value[index] != '\t') return;
         index++;
@@ -188,7 +188,7 @@ class HeaderValue {
 
       String parseParameterValue() {
         if (!done() && value[index] == '\"') {
-          var sb = StringBuffer();
+          var stringBuffer = StringBuffer();
           index++;
           while (!done()) {
             if (value[index] == '\\') {
@@ -196,17 +196,17 @@ class HeaderValue {
                 throw StateError('Failed to parse header value');
               }
               if (preserveBackslash && value[index + 1] != '\"') {
-                sb.write(value[index]);
+                stringBuffer.write(value[index]);
               }
               index++;
             } else if (value[index] == '\"') {
               index++;
               break;
             }
-            sb.write(value[index]);
+            stringBuffer.write(value[index]);
             index++;
           }
-          return sb.toString();
+          return stringBuffer.toString();
         } else {
           var val = parseValue();
           return val == '' ? null : val;
@@ -214,16 +214,16 @@ class HeaderValue {
       }
 
       while (!done()) {
-        skipWS();
+        bump();
         if (done()) return;
         var name = parseParameterName();
-        skipWS();
+        bump();
         if (done()) {
           parameters[name] = null;
           return;
         }
         maybeExpect('=');
-        skipWS();
+        bump();
         if (done()) {
           parameters[name] = null;
           return;
@@ -233,16 +233,16 @@ class HeaderValue {
           value = value.toLowerCase();
         }
         parameters[name] = value;
-        skipWS();
+        bump();
         if (done()) return;
         if (value[index] == valueSeparator) return;
         expect(parameterSeparator);
       }
     }
 
-    skipWS();
+    bump();
     _value = parseValue();
-    skipWS();
+    bump();
     if (done()) return;
     maybeExpect(parameterSeparator);
     parseParameters();

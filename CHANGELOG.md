@@ -1,3 +1,8 @@
+## [3.20.0]
+- Added GetConnect. 
+- 
+
+
 ## [3.17.1]
 - Allow list.assignAll, map.assignAll and set.assignAll operate with null values
 

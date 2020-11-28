@@ -1,18 +1,19 @@
+import '../request/request.dart';
+
 class MultipartFile {
-  final String contentType;
-
-  final Stream<List<int>> _stream;
-
-  final int length;
-
-  final String filename;
-
   MultipartFile(
     List<int> bytes, {
     this.filename,
     this.contentType = 'application/octet-stream',
   })  : length = bytes.length,
-        _stream = Stream.fromIterable([bytes]);
+        stream = BodyBytes.fromBytes(bytes);
 
-  Stream<List<int>> get stream => _stream;
+  final String contentType;
+
+  /// This stream will emit the file content of File.
+  final BodyBytes stream;
+
+  final int length;
+
+  final String filename;
 }

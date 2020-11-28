@@ -75,18 +75,6 @@ class Request<T> {
       decoder: decoder,
     );
   }
-
-  /// Constructs a [Request] containing the same properties as [request].
-  factory Request.copyWith(Request request) => Request(
-        method: request.method,
-        url: request.url,
-        headers: request.headers,
-        bodyBytes: request.bodyBytes,
-        followRedirects: request.followRedirects,
-        maxRedirects: request.maxRedirects,
-        files: request.files,
-        persistentConnection: request.persistentConnection,
-      );
 }
 
 class BodyBytes extends StreamView<List<int>> {
@@ -111,7 +99,4 @@ class BodyBytes extends StreamView<List<int>> {
 
   Future<String> bytesToString([Encoding encoding = utf8]) =>
       encoding.decodeStream(this);
-
-  Stream<String> toStringStream([Encoding encoding = utf8]) =>
-      encoding.decoder.bind(this);
 }
