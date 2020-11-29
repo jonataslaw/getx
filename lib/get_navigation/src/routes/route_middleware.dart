@@ -62,8 +62,8 @@ abstract class _RouteMiddleware {
   /// This function will be called right after the [Bindings] are initialize.
   GetPageBuilder onPageBuildStart(GetPageBuilder page);
 
-  /// This function will be called right after the 
-  /// GetPage.page function is called and will give you the result 
+  /// This function will be called right after the
+  /// GetPage.page function is called and will give you the result
   /// of the function. and take the widget that will be showed.
   Widget onPageBuilt(Widget page);
 
