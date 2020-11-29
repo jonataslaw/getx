@@ -9,7 +9,7 @@ class RedirectMiddleware extends GetMiddleware {
   RouteSettings redirect(String route) => RouteSettings(name: '/second');
 }
 
-main() {
+void main() {
   testWidgets("Middleware redirect smoke test", (tester) async {
     await tester.pumpWidget(
       GetMaterialApp(

@@ -116,8 +116,8 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-
- //   Get.reference = settings.name ?? routeName;
+    //   Get.reference = settings.name ?? routeName;
+    Get.reference = reference;
 
     final middlewareRunner = MiddlewareRunner(middlewares);
     final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
@@ -396,7 +396,6 @@ class GetPageRoute<T> extends PageRoute<T> {
 
     final middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
-
   }
 }
 

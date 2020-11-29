@@ -1,3 +1,6 @@
+## [3.20.1] 
+* Fix wrong reference with unnamed routes and added more tests
+
 ## [3.20.0] - Big update
 * Added GetConnect. 
 - GetConnect is an easy way to communicate from your back to your front. With it you can:

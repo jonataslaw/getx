@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+import '../../get_navigation.dart';
 import '../routes/get_route.dart';
 
 class ParseRouteTree {
