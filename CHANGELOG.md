@@ -1,3 +1,6 @@
+## [3.21.1] 
+- Allow null body to POST method on GetConnect
+
 ## [3.21.0] - Big update
 - This update attaches two nice features developed by (@SchabanBo): *GetPage Children* And *GetMiddleware*
 In previous versions, to create child pages, you should do something like:

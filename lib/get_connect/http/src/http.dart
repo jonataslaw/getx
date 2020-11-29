@@ -275,8 +275,8 @@ class GetHttpClient {
   }
 
   Future<Response<T>> post<T>(
-    String url,
-    dynamic body, {
+    String url, {
+    dynamic body,
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
@@ -345,8 +345,8 @@ class GetHttpClient {
   }
 
   Future<Response<T>> put<T>(
-    String url,
-    Map<String, dynamic> body, {
+    String url, {
+    dynamic body,
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
