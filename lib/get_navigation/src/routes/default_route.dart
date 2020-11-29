@@ -11,26 +11,27 @@ import 'default_transitions.dart';
 import 'transitions_type.dart';
 
 class GetPageRoute<T> extends PageRoute<T> {
-  GetPageRoute({
-    RouteSettings settings,
-    this.transitionDuration = const Duration(milliseconds: 300),
-    this.opaque = true,
-    this.parameter,
-    this.curve,
-    this.alignment,
-    this.transition,
-    this.popGesture,
-    this.customTransition,
-    this.barrierDismissible = false,
-    this.barrierColor,
-    this.binding,
-    this.bindings,
-    this.routeName,
-    this.page,
-    this.barrierLabel,
-    this.maintainState = true,
-    bool fullscreenDialog = false,
-  })  : assert(opaque != null),
+  GetPageRoute(
+      {RouteSettings settings,
+      this.transitionDuration = const Duration(milliseconds: 300),
+      this.opaque = true,
+      this.parameter,
+      this.curve,
+      this.alignment,
+      this.transition,
+      this.popGesture,
+      this.customTransition,
+      this.barrierDismissible = false,
+      this.barrierColor,
+      this.binding,
+      this.bindings,
+      this.routeName,
+      this.page,
+      this.barrierLabel,
+      this.maintainState = true,
+      bool fullscreenDialog = false,
+      this.middlewares})
+      : assert(opaque != null),
         assert(barrierDismissible != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
@@ -67,6 +68,8 @@ class GetPageRoute<T> extends PageRoute<T> {
   final Curve curve;
 
   final Alignment alignment;
+
+  final List<GetMiddleware> middlewares;
 
   @override
   final Color barrierColor;
@@ -113,15 +116,21 @@ class GetPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    // Get.reference = settings.name ?? routeName;
+
+ //   Get.reference = settings.name ?? routeName;
+
+    final middlewareRunner = MiddlewareRunner(middlewares);
+    final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
+
     binding?.dependencies();
-    if (bindings != null) {
-      for (final binding in bindings) {
+    if (bindingsToBind != null) {
+      for (final binding in bindingsToBind) {
         binding.dependencies();
       }
     }
-    // final pageWidget = page();
-    return page();
+
+    final pageToBuild = middlewareRunner.runOnPageBuildStart(page);
+    return middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
   static bool isPopGestureInProgress(PageRoute<dynamic> route) {
@@ -384,6 +393,10 @@ class GetPageRoute<T> extends PageRoute<T> {
       WidgetsBinding.instance.addPostFrameCallback(
           (_) => GetInstance().removeDependencyByRoute("$reference"));
     }
+
+    final middlewareRunner = MiddlewareRunner(middlewares);
+    middlewareRunner.runOnPageDispose();
+
   }
 }
 
