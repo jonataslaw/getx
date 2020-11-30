@@ -10,9 +10,13 @@ class FormData {
   FormData(Map<String, dynamic> map) : boundary = _getBoundary() {
     urlEncode(map, '', false, (key, value) {
       if (value == null) return;
-      (value is MultipartFile)
-          ? files.add(MapEntry(key, value))
-          : fields.add(MapEntry(key, value.toString()));
+      if (value is MultipartFile) {
+        files.add(MapEntry(key, value));
+      } else if (value is List<MultipartFile>) {
+        files.addAll(value.map((e) => MapEntry(key, e)));
+      } else {
+        fields.add(MapEntry(key, value.toString()));
+      }
       return;
     });
   }
