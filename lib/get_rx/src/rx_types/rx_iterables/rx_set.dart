@@ -61,8 +61,8 @@ class RxSet<E> extends SetMixin<E>
   @override
   @protected
   Set<E> get value {
-    if (getObs != null) {
-      getObs.addListener(subject);
+    if (RxInterface.proxy != null) {
+      RxInterface.proxy.addListener(subject);
     }
     return _value;
   }

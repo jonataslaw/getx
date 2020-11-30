@@ -221,7 +221,7 @@ class GetInstance {
   S _startController<S>({String tag}) {
     final key = _getKey(S, tag);
     final i = _singl[key].getDependency() as S;
-    if (i is GetLifeCycle) {
+    if (i is GetLifeCycleBase) {
       if (i.onStart != null) {
         i.onStart();
         Get.log('"$key" has been initialized');

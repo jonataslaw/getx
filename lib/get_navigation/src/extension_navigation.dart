@@ -1043,15 +1043,17 @@ Since version 2.8 it is possible to access the properties
     return WidgetsBinding.instance;
   }
 
-  ///The window to which this binding is bound.
-  ui.Window get window => ui.window;
+  //TODO: Change to ui.SingletonFlutterWindow rather dynamic
+  //when Flutter update stable. dynamic is used to avoid Breaking Changes
+  /// The window to which this binding is bound.
+  dynamic get window => ui.window;
 
-  Locale get deviceLocale => window.locale;
+  Locale get deviceLocale => ui.window.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => window.devicePixelRatio;
+  double get pixelRatio => ui.window.devicePixelRatio;
 
-  Size get size => window.physicalSize / pixelRatio;
+  Size get size => ui.window.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1061,14 +1063,14 @@ Since version 2.8 it is possible to access the properties
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => window.padding.top;
+  double get statusBarHeight => ui.window.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => window.padding.bottom;
+  double get bottomBarHeight => ui.window.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => window.textScaleFactor;
+  double get textScaleFactor => ui.window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme?.textTheme;
@@ -1080,7 +1082,8 @@ Since version 2.8 it is possible to access the properties
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
-  bool get isPlatformDarkMode => (window.platformBrightness == Brightness.dark);
+  bool get isPlatformDarkMode =>
+      (ui.window.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color get iconColor => theme?.iconTheme?.color;

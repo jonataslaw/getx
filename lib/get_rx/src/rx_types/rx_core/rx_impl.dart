@@ -3,7 +3,6 @@ part of rx_types;
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
 /// of those `Widgets` and Rx values.
-RxInterface getObs;
 
 mixin RxObjectMixin<T> on NotifyManager<T> {
   T _value;
@@ -104,8 +103,8 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   /// Returns the current [value]
   T get value {
-    if (getObs != null) {
-      getObs.addListener(subject);
+    if (RxInterface.proxy != null) {
+      RxInterface.proxy.addListener(subject);
     }
     return _value;
   }
@@ -235,10 +234,14 @@ class RxString extends _RxImpl<String> {
 class Rx<T> extends _RxImpl<T> {
   Rx([T initial]) : super(initial);
 
-  // TODO: Look for a way to throw the Exception with proper details when the
-  // value [T] doesn't implement toJson().
   @override
-  dynamic toJson() => (value as dynamic)?.toJson();
+  dynamic toJson() {
+    try {
+      return (value as dynamic)?.toJson();
+    } on Exception catch (_) {
+      throw '$T has not method [toJson]';
+    }
+  }
 }
 
 extension StringExtension on String {

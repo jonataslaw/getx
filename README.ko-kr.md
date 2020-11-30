@@ -123,11 +123,13 @@ class Controller extends GetxController{
 ```dart
 class Home extends StatelessWidget {
 
-  // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 "child'에서 사용가능하게 합니다.
-  final Controller c = Get.put(Controller());
-
   @override
-  Widget build(context) => Scaffold(
+  Widget build(context) {
+
+    // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 "child'에서 사용가능하게 합니다.
+    final Controller c = Get.put(Controller());
+    
+    return Scaffold(
       // count가 변경 될 때마다 Obx(()=> 를 사용하여 Text()에 업데이트합니다.
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
@@ -136,6 +138,7 @@ class Home extends StatelessWidget {
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
+  }
 }
 
 class Other extends StatelessWidget {

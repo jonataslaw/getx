@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
+import '../../get_navigation.dart';
 import '../routes/get_route.dart';
 
 class ParseRouteTree {
   final List<_ParseRouteTreeNode> _nodes = <_ParseRouteTreeNode>[];
 
   // bool _hasDefaultRoute = false;
-
   void addRoute(GetPage route) {
     var path = route.name;
 
@@ -46,7 +46,56 @@ class ParseRouteTree {
       }
       parent = node;
     }
+
+    // Add Page children.
+    for (var page in _flattenPage(route)) {
+      addRoute(page);
+    }
   }
+
+  List<GetPage> _flattenPage(GetPage route) {
+    final result = <GetPage>[];
+    if (route.children == null || route.children.isEmpty) {
+      return result;
+    }
+
+    final parentPath = route.name;
+    for (var page in route.children) {
+      // Add Parent middlewares to children
+      final pageMiddlewares = page.middlewares ?? <GetMiddleware>[];
+      pageMiddlewares.addAll(route.middlewares ?? <GetMiddleware>[]);
+      result.add(_addChild(page, parentPath, pageMiddlewares));
+      final children = _flattenPage(page);
+      for (var child in children) {
+        pageMiddlewares.addAll(child.middlewares ?? <GetMiddleware>[]);
+        result.add(_addChild(child, parentPath, pageMiddlewares));
+      }
+    }
+    return result;
+  }
+
+  /// Change the Path for a [GetPage]
+  GetPage _addChild(
+          GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
+      GetPage(
+        name: parentPath + origin.name,
+        page: origin.page,
+        title: origin.title,
+        alignment: origin.alignment,
+        transition: origin.transition,
+        binding: origin.binding,
+        bindings: origin.bindings,
+        curve: origin.curve,
+        customTransition: origin.customTransition,
+        fullscreenDialog: origin.fullscreenDialog,
+        maintainState: origin.maintainState,
+        opaque: origin.opaque,
+        parameter: origin.parameter,
+        popGesture: origin.popGesture,
+        settings: origin.settings,
+        transitionDuration: origin.transitionDuration,
+        middlewares: middlewares,
+      );
 
   _GetPageMatch matchRoute(String path) {
     var usePath = path;
