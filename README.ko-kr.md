@@ -36,8 +36,8 @@
       - [시스템 지역](#시스템-지역)
   - [테마 변경](#테마-변경)
   - [GetConnect](#getconnect)
-    - [Default configuration](#default-configuration)
-    - [Custom configuration](#custom-configuration)
+    - [기본 구성](#기본-구성)
+    - [커스텀 구성](#커스텀-구성)
   - [GetPage Middleware](#getpage-middleware)
     - [Priority](#priority)
     - [Redirect](#redirect)
@@ -392,10 +392,10 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 `.darkmode`가 활성활 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
 ## GetConnect
-GetConnect is an easy way to communicate from your back to your front with http or websockets
+GetConnect는 http나 websockets으로 프론트와 백엔드의 통신을 위한 쉬운 방법입니다.
 
-### Default configuration
-You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
+### 기본 구성
+GetConnect를 간단하게 확장하고 Rest API나 websockets의 GET/POST/PUT/DELETE/SOCKET 메서드를 사용할 수 있습니다.
 
 ```dart
 class UserProvider extends GetConnect {
@@ -417,28 +417,27 @@ class UserProvider extends GetConnect {
   }
 }
 ```
-### Custom configuration
-GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
+### 커스텀 구성
+GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
 
 ```dart
 class HomeProvider extends GetConnect {
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
+    // 모든 요청은 jsonEncode로 CasesModel.fromJson()를 거칩니다.
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
-
-    // It's will attach 'apikey' property on header from all requests
+    // baseUrl = 'https://api.covid19api.com'; // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
+    
+    // 모든 요청의 헤더에 'apikey' 속성을 첨부합니다.
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
 
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
+    // 서버가 "Brazil"이란 데이터를 보내더라도
+    // 응답이 전달되기 전에 응답의 데이터를 지우기 때문에 
+    // 사용자에게 표시되지 않을 것입니다.
     httpClient.addResponseModifier<CasesModel>((request, response) {
       CasesModel model = response.body;
       if (model.countries.contains('Brazil')) {
@@ -449,13 +448,13 @@ class HomeProvider extends GetConnect {
     httpClient.addAuthenticator((request) async {
       final response = await get("http://yourapi/token");
       final token = response.body['token'];
-      // Set the header
+      // 헤더 설정
       request.headers['Authorization'] = "$token";
       return request;
     });
 
-    //Autenticator will be called 3 times if HttpStatus is 
-    //HttpStatus.unauthorized
+    // 인증자가 HttpStatus가 HttpStatus.unauthorized이면
+    // 3번 호출됩니다.
     httpClient.maxAuthRetries = 3;
   }
   }
@@ -467,13 +466,13 @@ class HomeProvider extends GetConnect {
 
 ## GetPage Middleware
 
-The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
+GetPage는 GetMiddleWare의 목록을 특정 순서로 실행하는 새로운 프로퍼티를 가집니다.
 
-**Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
+**주석**: GetPage가 Middleware를 가질때 페이지의 모든 하위는 같은 Middleware를 자동적으로 가지게 됩니다.
 
 ### Priority
 
-The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+Middleware의 실행 순서는 GetMiddleware안의 priority에 따라서 설정할 수 있습니다.
 
 ```dart
 final middlewares = [
@@ -483,11 +482,11 @@ final middlewares = [
   GetMiddleware(priority: -8),
 ];
 ```
-those middlewares will be run in this order **-8 => 2 => 4 => 5**
+이 Middleware는 다음 순서로 실행됩니다. **-8 => 2 => 4 => 5**
 
 ### Redirect
 
-This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다.
 
 ```dart
 GetPage redirect( ) {
@@ -498,8 +497,8 @@ GetPage redirect( ) {
 
 ### onPageCalled
 
-This function will be called when this Page is called before anything created
-you can use it to change something about the page or give it new page
+이 함수는 생성되지 않은 페이지가 호출될 때 호출됩니다.
+페이지에 대한 어떤것을 변경하는데 사용하거나 새로운 페이지를 줄 수 있습니다.
 
 ```dart
 GetPage onPageCalled(GetPage page) {
@@ -510,8 +509,8 @@ GetPage onPageCalled(GetPage page) {
 
 ### OnBindingsStart
 
-This function will be called right before the Bindings are initialize.
-Here you can change Bindings for this page.
+이 함수는 Bindings가 초기화되기 바로 직전에 호출됩니다.
+여기에서 이 페이지를 위해 Bindings을 변경할 수 있습니다.
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -525,8 +524,8 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 
 ### OnPageBuildStart
 
-This function will be called right after the Bindings are initialize.
-Here you can do something after that you created the bindings and before creating the page widget.
+이 함수는 Bindings가 초기화된 직후에 호출됩니다.
+여기에서 bindings를 생성한 후 페이지 위젯을 생성하기 전에 무엇이든 할 수 있습니다.
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -537,11 +536,11 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 
 ### OnPageBuilt
 
-This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
+이 함수는 GetPage.page 함수가 호출된 직후에 호출며 함수의 결과를 제공합니다. 그리고 표시될 위젯을 가져옵니다.
 
 ### OnPageDispose
 
-This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
+이 함수는 페이지의 연관된 모든 오브젝트들(Controllers, views, ...)이 해제된 직후에 호출됩니다.
 
 ## 기타 고급 API
 
