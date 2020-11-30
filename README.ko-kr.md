@@ -275,7 +275,7 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 controller.fetchApi();
 ```
 
-여러 경로를 통해 이동했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
+여러 경로들을 탐색했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
 
 ```dart
 Controller controller = Get.find();

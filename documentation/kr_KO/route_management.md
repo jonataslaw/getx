@@ -1,90 +1,90 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
-    - [Send data to named Routes](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
-    - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
+- [라우트 관리](#라우트-관리)
+  - [사용하는 방법](#사용하는-방법)
+  - [이름없는 라우트 탐색](#이름없는-라우트-탐색)
+  - [이름있는 라우트 탐색](#이름있는-라우트-탐색)
+    - [이름있는 라우트에 데이터 보내기](#이름있는-라우트에-데이터-보내기)
+    - [동적 url 링크](#동적-url-링크)
+    - [미들웨어](#미들웨어)
+  - [context 없이 탐색](#context-없이-탐색)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [Nested Navigation](#nested-navigation)
+  - [중첩된 탐색](#중첩된-탐색)
 
-# Route Management
+# 라우트 관리
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+라우트 관리가 문제 있는 경우 GetX가 모든 것을 완벽히 설명해줍니다.
 
-## How to use
+## 사용하는 방법
 
-Add this to your pubspec.yaml file:
+pubspec.yaml 파일에 추가:
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+context 없이 routes/snackbars/dialogs/bottomsheets을 사용하거나 고급 GetX API를 사용하려면 MaterialApp 앞에 "Get"만 추가하여 GetMaterialApp으로 바꿔서 이용하세요!
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // 이전: MaterialApp(
   home: MyHome(),
 )
 ```
 
-## Navigation without named routes
+## 이름없는 라우트 탐색
 
-To navigate to a new screen:
+새 화면으로 이동:
 
 ```dart
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+snackbars, dialogs, bottomsheets 또는 Navigator.pop(context);로 보통 닫았던 것들을 닫기
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+다음 화면으로 이동하고 이전 화면에서 돌아오지 않는 경우 (스플래시나 로그인 화면 등을 사용하는 경우)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+다음 화면으로 이동하고 이전 화면이 모두 닫히는 경우 (장바구니, 투표, 테스트에 유용함)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+다음 화면으로 이동하고 돌아올때 바로 데이터를 받거나 업데이트할 경우:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+다른 화면에서 이전화면으로 데이터를 전달할때:
 
 ```dart
 Get.back(result: 'success');
 ```
 
-And use it:
+그리고 사용방법:
 
-ex:
+예시:
 
 ```dart
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+우리의 문법을 배우고 싶지 않습니까?
+Navigator를 navigator로 바꾸시면 됩니다. 그리고 context를 사용하지 않아도 표준 navigator의 모든 기능이 가능합니다.
+예시:
 
 ```dart
 
-// Default Flutter navigator
+// 기본 Flutter navigator
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -94,7 +94,7 @@ Navigator.of(context).push(
   ),
 );
 
-// Get using Flutter syntax without needing context
+// GetX는 context 필요 없이 Flutter 문법을 사용
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -103,35 +103,35 @@ navigator.push(
   ),
 );
 
-// Get syntax (It is much better, but you have the right to disagree)
+// GetX 문법 (이것은 동의하지 않겠지만 더 좋습니다)
 Get.to(HomePage());
 
 
 ```
 
-## Navigation with named routes
+## 이름있는 라우트 탐색
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- namedRoutes로 탐색하기를 선호하면 GetX도 지원합니다.
 
-To navigate to nextScreen
+nextScreen으로 이동
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+다음으로 이동하고 트리에서 이전 화면을 지웁니다.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+다음으로 이동하고 트리에서 이전 화면 전체를 지웁니다.
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+GetMaterialApp를 사용하여 라우트들을 정의:
 
 ```dart
 void main() {
@@ -152,7 +152,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+정의 안된 라우트로 이동시 제어 (404 에러), GetMaterialApp에 unknownRoute를 정의할 수 있습니다.
 
 ```dart
 void main() {
@@ -169,39 +169,39 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### 이름있는 라우트에 데이터 보내기
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+무엇이든 인수를 통해 전달합니다. GetX는 String, Map, List, 클래스 인스턴스등 모든 것을 허용합니다.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+클래스 또는 컨트롤러에서:
 
 ```dart
 print(Get.arguments);
-//print out: Get is the best
+// 출력: Get is the best
 ```
 
-### Dynamic urls links
+### 동적 url 링크
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+GetX는 웹과 같이 향상된 동적 url을 제공합니다. 웹 개발자들은 아마 Flutter에서 이미 이 기능을 원하고 있을 것 입니다. 대부분의 경우 패키지가 이 기능을 약속하고 URL이 웹에서 제공하는 것과 완전히 다른 구문을 제공하는 것을 보았을 것입니다. 하지만 GetX는 이 기능을 해결합니다.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+controller/bloc/stateful/stateless 클래스에서:
 
 ```dart
 print(Get.parameters['id']);
-// out: 354
+// 출력: 354
 print(Get.parameters['name']);
-// out: Enzo
+// 출력: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+GetX는 쉽게 NamedParameters 전달을 할 수 있습니다:
 
 ```dart
 void main() {
@@ -233,13 +233,13 @@ void main() {
 }
 ```
 
-Send data on route name
+경로 명으로 데이터 보냄
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+다음 화면에서 파라미터로 데이터를 가져옴
 
 ```dart
 print(Get.parameters['user']);
@@ -248,7 +248,7 @@ print(Get.parameters['user']);
 
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
 
-### Middleware
+### 미들웨어
 
 If you want listen Get events to trigger actions, you can to use routingCallback to it
 
@@ -369,7 +369,7 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## context 없이 탐색
 
 ### SnackBars
 
@@ -497,7 +497,7 @@ Get.bottomSheet(
 );
 ```
 
-## Nested Navigation
+## 중첩된 탐색
 
 Get made Flutter's nested navigation even easier.
 You don't need the context, and you will find your navigation stack by Id.
