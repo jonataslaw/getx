@@ -170,8 +170,9 @@ class GetConnect extends GetConnectInterface {
     Decoder<T> decoder,
   }) {
     _checkIfDisposed();
-    return httpClient.put(
+    return httpClient.request(
       url,
+      method,
       body: body,
       headers: headers,
       contentType: contentType,

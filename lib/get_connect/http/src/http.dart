@@ -312,7 +312,7 @@ class GetHttpClient {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    Map<String, dynamic> body,
+    dynamic body,
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,

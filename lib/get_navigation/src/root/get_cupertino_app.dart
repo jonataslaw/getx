@@ -204,6 +204,7 @@ class GetCupertinoApp extends StatelessWidget {
           settings: RouteSettings(name: name, arguments: null),
           curve: unknownRoute.curve,
           opaque: unknownRoute.opaque,
+          routeName: unknownRoute.name,
           customTransition: unknownRoute.customTransition,
           binding: unknownRoute.binding,
           bindings: unknownRoute.bindings,
@@ -223,6 +224,7 @@ class GetCupertinoApp extends StatelessWidget {
         settings: RouteSettings(name: name, arguments: null),
         curve: match.route.curve,
         opaque: match.route.opaque,
+        routeName: match.route.name,
         binding: match.route.binding,
         bindings: match.route.bindings,
         transitionDuration:

@@ -215,6 +215,7 @@ class GetMaterialApp extends StatelessWidget {
           settings: RouteSettings(name: name, arguments: null),
           curve: unknownRoute.curve,
           opaque: unknownRoute.opaque,
+          routeName: unknownRoute.name,
           customTransition: unknownRoute.customTransition,
           binding: unknownRoute.binding,
           bindings: unknownRoute.bindings,
@@ -235,6 +236,7 @@ class GetMaterialApp extends StatelessWidget {
         curve: match.route.curve,
         opaque: match.route.opaque,
         binding: match.route.binding,
+        routeName: match.route.name,
         bindings: match.route.bindings,
         transitionDuration:
             (match.route.transitionDuration ?? Get.defaultTransitionDuration),
