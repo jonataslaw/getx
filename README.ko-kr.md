@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Languages: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일)._
+**언어: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일).**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -35,6 +35,17 @@ _Languages: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르
       - [지역 변경](#지역-변경)
       - [시스템 지역](#시스템-지역)
   - [테마 변경](#테마-변경)
+  - [GetConnect](#getconnect)
+    - [Default configuration](#default-configuration)
+    - [Custom configuration](#custom-configuration)
+  - [GetPage Middleware](#getpage-middleware)
+    - [Priority](#priority)
+    - [Redirect](#redirect)
+    - [onPageCalled](#onpagecalled)
+    - [OnBindingsStart](#onbindingsstart)
+    - [OnPageBuildStart](#onpagebuildstart)
+    - [OnPageBuilt](#onpagebuilt)
+    - [OnPageDispose](#onpagedispose)
   - [기타 고급 API](#기타-고급-API)
     - [선택적 전역 설정과 수동 구성](#선택적-전역-설정과-수동-구성)
     - [지역 상태 위젯들](#지역-상태-위젯들)
@@ -379,6 +390,158 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
 `.darkmode`가 활성활 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
+
+## GetConnect
+GetConnect is an easy way to communicate from your back to your front with http or websockets
+
+### Default configuration
+You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
+
+```dart
+class UserProvider extends GetConnect {
+  // Get request
+  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  // Post request
+  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  // Post request with File
+  Future<Response<CasesModel>> postCases(List<int> image) {
+    final form = FormData({
+      'file': MultipartFile(image, filename: 'avatar.png'),
+      'otherFile': MultipartFile(image, filename: 'cover.png'),
+    });
+    return post('http://youapi/users/upload', form);
+  }
+
+  GetSocket userMessages() {
+    return socket('https://yourapi/users/socket');
+  }
+}
+```
+### Custom configuration
+GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
+
+```dart
+class HomeProvider extends GetConnect {
+  @override
+  void onInit() {
+    // All request will pass to jsonEncode so CasesModel.fromJson()
+    httpClient.defaultDecoder = CasesModel.fromJson;
+    httpClient.baseUrl = 'https://api.covid19api.com';
+    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
+    // Http and websockets if used with no [httpClient] instance
+
+    // It's will attach 'apikey' property on header from all requests
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = '12345678';
+      return request;
+    });
+
+    // Even if the server sends data from the country "Brazil",
+    // it will never be displayed to users, because you remove
+    // that data from the response, even before the response is delivered
+    httpClient.addResponseModifier<CasesModel>((request, response) {
+      CasesModel model = response.body;
+      if (model.countries.contains('Brazil')) {
+        model.countries.remove('Brazilll');
+      }
+    });
+
+    httpClient.addAuthenticator((request) async {
+      final response = await get("http://yourapi/token");
+      final token = response.body['token'];
+      // Set the header
+      request.headers['Authorization'] = "$token";
+      return request;
+    });
+
+    //Autenticator will be called 3 times if HttpStatus is 
+    //HttpStatus.unauthorized
+    httpClient.maxAuthRetries = 3;
+  }
+  }
+
+  @override
+  Future<Response<CasesModel>> getCases(String path) => get(path);
+}
+```
+
+## GetPage Middleware
+
+The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
+
+**Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
+
+### Priority
+
+The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+
+```dart
+final middlewares = [
+  GetMiddleware(priority: 2),
+  GetMiddleware(priority: 5),
+  GetMiddleware(priority: 4),
+  GetMiddleware(priority: -8),
+];
+```
+those middlewares will be run in this order **-8 => 2 => 4 => 5**
+
+### Redirect
+
+This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+
+```dart
+GetPage redirect( ) {
+  final authService = Get.find<AuthService>();
+  return authService.authed.value ? null : RouteSettings(name: '/login')
+}
+```
+
+### onPageCalled
+
+This function will be called when this Page is called before anything created
+you can use it to change something about the page or give it new page
+
+```dart
+GetPage onPageCalled(GetPage page) {
+  final authService = Get.find<AuthService>();
+  return page.copyWith(title: 'Welcome ${authService.UserName}');
+}
+```
+
+### OnBindingsStart
+
+This function will be called right before the Bindings are initialize.
+Here you can change Bindings for this page.
+
+```dart
+List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  final authService = Get.find<AuthService>();
+  if (authService.isAdmin) {
+    bindings.add(AdminBinding());
+  }
+  return bindings;
+}
+```
+
+### OnPageBuildStart
+
+This function will be called right after the Bindings are initialize.
+Here you can do something after that you created the bindings and before creating the page widget.
+
+```dart
+GetPageBuilder onPageBuildStart(GetPageBuilder page) {
+  print('bindings are ready');
+  return page;
+}
+```
+
+### OnPageBuilt
+
+This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
+
+### OnPageDispose
+
+This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
 
 ## 기타 고급 API
 
@@ -733,7 +896,7 @@ print( user );
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text( controller.title ), // 단지 `controller.something`을 호출합니다.
+       child: Text(controller.title), // 단지 `controller.something`을 호출합니다.
      );
    }
  }
