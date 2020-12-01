@@ -1,3 +1,6 @@
+## [3.21.2] 
+- Fix GetConnect.request returning a PUT request
+
 ## [3.21.1] 
 - Allow null body to POST method on GetConnect
 
