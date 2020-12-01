@@ -243,14 +243,14 @@ Get.toNamed("/profile/34954");
 
 ```dart
 print(Get.parameters['user']);
-// out: 34954
+// 출력: 34954
 ```
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+이제 Get.toNamed()를 사용하여 어떤 context도 없이 명명된 라우트를 탐색하고 (BLoC 또는 Controller 클래스로 부터 직접 라우트를 호출할 수 있음) 앱이 웹으로 컴파일되면 경로는 url에 표시됩니다. <3
 
 ### 미들웨어
 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+만약 GetX 이벤트를 받아서 행동을 트리거 하려면 routingCallback을 사용하면 가능합니다.
 
 ```dart
 GetMaterialApp(
@@ -262,7 +262,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+GetMaterialApp을 사용하지 않는다면 수동 API를 사용해서 Middleware observer를 추가할 수 있습니다.
 
 ```dart
 void main() {
@@ -272,14 +272,14 @@ void main() {
       initialRoute: "/",
       navigatorKey: Get.key,
       navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
+        GetObserver(MiddleWare.observer), // 여기 !!!
       ],
     ),
   );
 }
 ```
 
-Create a MiddleWare class
+MiddleWare class 생성
 
 ```dart
 class MiddleWare {
@@ -296,7 +296,7 @@ class MiddleWare {
 }
 ```
 
-Now, use Get on your code:
+이제, 코드에서 Get을 사용하세요:
 
 ```dart
 class First extends StatelessWidget {
