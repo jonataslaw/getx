@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Languages: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일)._
+**언어: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일).**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -35,6 +35,17 @@ _Languages: [영어](README.md), [중국어](README.zh-cn.md), [브라질 포르
       - [지역 변경](#지역-변경)
       - [시스템 지역](#시스템-지역)
   - [테마 변경](#테마-변경)
+  - [GetConnect](#getconnect)
+    - [기본 구성](#기본-구성)
+    - [커스텀 구성](#커스텀-구성)
+  - [GetPage Middleware](#getpage-middleware)
+    - [Priority](#priority)
+    - [Redirect](#redirect)
+    - [onPageCalled](#onpagecalled)
+    - [OnBindingsStart](#onbindingsstart)
+    - [OnPageBuildStart](#onpagebuildstart)
+    - [OnPageBuilt](#onpagebuilt)
+    - [OnPageDispose](#onpagedispose)
   - [기타 고급 API](#기타-고급-API)
     - [선택적 전역 설정과 수동 구성](#선택적-전역-설정과-수동-구성)
     - [지역 상태 위젯들](#지역-상태-위젯들)
@@ -228,7 +239,7 @@ GetMaterialApp( // Before: MaterialApp(
 Get.to(NextScreen());
 ```
 
-명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/en_US/route_management.md#navigation-with-named-routes) 있습니다.
+명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/kr_KO/route_management.md#이름있는-라우트-탐색) 있습니다.
 
 ```dart
 
@@ -257,7 +268,7 @@ Get.offAll(NextScreen());
 
 ### 라우트 관리에 대한 자세한 내용
 
-**Get은 명명된 라우트로 작업하고 더 쉬운 방식으로 라우트의 제어를 제공합니다! [여기](./documentation/en_US/route_management.md)에 더 자세한 문서가 있습니다.**
+**Get은 명명된 라우트로 작업하고 더 쉬운 방식으로 라우트의 제어를 제공합니다! [여기](./documentation/kr_KO/route_management.md)에 더 자세한 문서가 있습니다.**
 
 ## 종속성 관리
 
@@ -278,7 +289,7 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 controller.fetchApi();
 ```
 
-여러 경로를 통해 이동했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
+여러 경로들을 탐색했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
 
 ```dart
 Controller controller = Get.find();
@@ -293,7 +304,7 @@ Text(controller.textFromApi);
 
 ### 종속성 관리에 대한 자세한 내용
 
-**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/en_US/dependency_management.md)에 있습니다.**
+**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
 
 # 기능들
 
@@ -380,6 +391,157 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 `.darkmode`가 활성활 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
+## GetConnect
+GetConnect는 http나 websockets으로 프론트와 백엔드의 통신을 위한 쉬운 방법입니다.
+
+### 기본 구성
+GetConnect를 간단하게 확장하고 Rest API나 websockets의 GET/POST/PUT/DELETE/SOCKET 메서드를 사용할 수 있습니다.
+
+```dart
+class UserProvider extends GetConnect {
+  // Get request
+  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  // Post request
+  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  // Post request with File
+  Future<Response<CasesModel>> postCases(List<int> image) {
+    final form = FormData({
+      'file': MultipartFile(image, filename: 'avatar.png'),
+      'otherFile': MultipartFile(image, filename: 'cover.png'),
+    });
+    return post('http://youapi/users/upload', form);
+  }
+
+  GetSocket userMessages() {
+    return socket('https://yourapi/users/socket');
+  }
+}
+```
+### 커스텀 구성
+GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
+
+```dart
+class HomeProvider extends GetConnect {
+  @override
+  void onInit() {
+    // 모든 요청은 jsonEncode로 CasesModel.fromJson()를 거칩니다.
+    httpClient.defaultDecoder = CasesModel.fromJson;
+    httpClient.baseUrl = 'https://api.covid19api.com';
+    // baseUrl = 'https://api.covid19api.com'; // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
+    
+    // 모든 요청의 헤더에 'apikey' 속성을 첨부합니다.
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = '12345678';
+      return request;
+    });
+
+    // 서버가 "Brazil"이란 데이터를 보내더라도
+    // 응답이 전달되기 전에 응답의 데이터를 지우기 때문에 
+    // 사용자에게 표시되지 않을 것입니다.
+    httpClient.addResponseModifier<CasesModel>((request, response) {
+      CasesModel model = response.body;
+      if (model.countries.contains('Brazil')) {
+        model.countries.remove('Brazilll');
+      }
+    });
+
+    httpClient.addAuthenticator((request) async {
+      final response = await get("http://yourapi/token");
+      final token = response.body['token'];
+      // 헤더 설정
+      request.headers['Authorization'] = "$token";
+      return request;
+    });
+
+    // 인증자가 HttpStatus가 HttpStatus.unauthorized이면
+    // 3번 호출됩니다.
+    httpClient.maxAuthRetries = 3;
+  }
+  }
+
+  @override
+  Future<Response<CasesModel>> getCases(String path) => get(path);
+}
+```
+
+## GetPage Middleware
+
+GetPage는 GetMiddleWare의 목록을 특정 순서로 실행하는 새로운 프로퍼티를 가집니다.
+
+**주석**: GetPage가 Middleware를 가질때 페이지의 모든 하위는 같은 Middleware를 자동적으로 가지게 됩니다.
+
+### Priority
+
+Middleware의 실행 순서는 GetMiddleware안의 priority에 따라서 설정할 수 있습니다.
+
+```dart
+final middlewares = [
+  GetMiddleware(priority: 2),
+  GetMiddleware(priority: 5),
+  GetMiddleware(priority: 4),
+  GetMiddleware(priority: -8),
+];
+```
+이 Middleware는 다음 순서로 실행됩니다. **-8 => 2 => 4 => 5**
+
+### Redirect
+
+이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다.
+
+```dart
+GetPage redirect( ) {
+  final authService = Get.find<AuthService>();
+  return authService.authed.value ? null : RouteSettings(name: '/login')
+}
+```
+
+### onPageCalled
+
+이 함수는 생성되지 않은 페이지가 호출될 때 호출됩니다.
+페이지에 대한 어떤것을 변경하는데 사용하거나 새로운 페이지를 줄 수 있습니다.
+
+```dart
+GetPage onPageCalled(GetPage page) {
+  final authService = Get.find<AuthService>();
+  return page.copyWith(title: 'Welcome ${authService.UserName}');
+}
+```
+
+### OnBindingsStart
+
+이 함수는 Bindings가 초기화되기 바로 직전에 호출됩니다.
+여기에서 이 페이지를 위해 Bindings을 변경할 수 있습니다.
+
+```dart
+List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  final authService = Get.find<AuthService>();
+  if (authService.isAdmin) {
+    bindings.add(AdminBinding());
+  }
+  return bindings;
+}
+```
+
+### OnPageBuildStart
+
+이 함수는 Bindings가 초기화된 직후에 호출됩니다.
+여기에서 bindings를 생성한 후 페이지 위젯을 생성하기 전에 무엇이든 할 수 있습니다.
+
+```dart
+GetPageBuilder onPageBuildStart(GetPageBuilder page) {
+  print('bindings are ready');
+  return page;
+}
+```
+
+### OnPageBuilt
+
+이 함수는 GetPage.page 함수가 호출된 직후에 호출며 함수의 결과를 제공합니다. 그리고 표시될 위젯을 가져옵니다.
+
+### OnPageDispose
+
+이 함수는 페이지의 연관된 모든 오브젝트들(Controllers, views, ...)이 해제된 직후에 호출됩니다.
+
 ## 기타 고급 API
 
 ```dart
@@ -444,7 +606,7 @@ Get.context
 // 코드 어디에서든지 foreground에서 snackbar/dialog/bottomsheet의 context를 제공
 Get.contextOverlay
 
-// 주석: 다음 메소드는 context의 확장입니다.
+// 주석: 다음 메서드는 context의 확장입니다.
 // UI의 모든 위치에서 컨텍스트에 액세스 할 수 있으므로 UI 코드의 어느 곳에서나 사용할 수 있습니다.
 
 // 변경되는 height/width(데스크탑이나 브라우저와 같이 늘어날 수 있는 것)가 필요하면 context를 사용해야함
@@ -612,7 +774,7 @@ ObxValue((data) => Switch(
 
 ## 유용한 팁
 
-`.obs`(_Rx_ 타입이라고 알려진)는 다양한 내부 메소드와 연산자가 있습니다.
+`.obs`(_Rx_ 타입이라고 알려진)는 다양한 내부 메서드와 연산자가 있습니다.
 
 > `.obs`프로퍼티가 **실제 값**이라고 _믿는_ 것은 일반적이지만 실수하지 마십시오!
 > 다트의 컴파일러는 충분히 똑똑하고 코드가 깔끔하기 때문에 변수의 타입 선언을 하지 않습니다.
@@ -733,7 +895,7 @@ print( user );
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text( controller.title ), // 단지 `controller.something`을 호출합니다.
+       child: Text(controller.title), // 단지 `controller.something`을 호출합니다.
      );
    }
  }
