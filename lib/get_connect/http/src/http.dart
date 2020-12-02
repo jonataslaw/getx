@@ -129,14 +129,15 @@ class GetHttpClient {
     }
 
     final uri = _createUri(url, query);
-    print(headers);
-    return Request(
+
+    return Request<T>(
       method: method,
       url: uri,
       headers: headers,
       bodyBytes: bodyStream,
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
+      decoder: decoder,
     );
   }
 
@@ -171,7 +172,7 @@ class GetHttpClient {
       if (HttpStatus.unauthorized == response.statusCode &&
           _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
-        return _performRequest(
+        return _performRequest<T>(
           handler,
           authenticate: true,
           requestNumber: requestNumber + 1,
@@ -238,7 +239,7 @@ class GetHttpClient {
       body,
       'post',
       query,
-      decoder,
+      decoder ?? (defaultDecoder as Decoder<T>),
     );
   }
 
@@ -250,7 +251,14 @@ class GetHttpClient {
     @required Map<String, dynamic> query,
     Decoder<T> decoder,
   }) {
-    return _requestWithBody(url, contentType, body, method, query, decoder);
+    return _requestWithBody<T>(
+      url,
+      contentType,
+      body,
+      method,
+      query,
+      decoder ?? (defaultDecoder as Decoder<T>),
+    );
   }
 
   Future<Request<T>> _put<T>(
@@ -260,7 +268,14 @@ class GetHttpClient {
     @required Map<String, dynamic> query,
     Decoder<T> decoder,
   }) {
-    return _requestWithBody(url, contentType, body, 'put', query, decoder);
+    return _requestWithBody<T>(
+      url,
+      contentType,
+      body,
+      'put',
+      query,
+      decoder ?? (defaultDecoder as Decoder<T>),
+    );
   }
 
   Request<T> _delete<T>(
@@ -274,7 +289,11 @@ class GetHttpClient {
     final uri = _createUri(url, query);
 
     return Request<T>(
-        method: 'delete', url: uri, headers: headers, decoder: decoder);
+      method: 'delete',
+      url: uri,
+      headers: headers,
+      decoder: decoder ?? (defaultDecoder as Decoder<T>),
+    );
   }
 
   Future<Response<T>> post<T>(
@@ -322,8 +341,8 @@ class GetHttpClient {
     Decoder<T> decoder,
   }) async {
     try {
-      var response = await _performRequest(
-        () => _request(
+      var response = await _performRequest<T>(
+        () => _request<T>(
           url,
           method,
           contentType: contentType,
@@ -356,8 +375,8 @@ class GetHttpClient {
     Decoder<T> decoder,
   }) async {
     try {
-      var response = await _performRequest(
-        () => _put(
+      var response = await _performRequest<T>(
+        () => _put<T>(
           url,
           contentType: contentType,
           query: query,
@@ -414,7 +433,7 @@ class GetHttpClient {
     Decoder<T> decoder,
   }) async {
     try {
-      var response = await _performRequest(
+      var response = await _performRequest<T>(
         () async => _delete<T>(url, contentType, query, decoder),
         headers: headers,
       );
