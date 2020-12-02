@@ -239,7 +239,7 @@ GetMaterialApp( // Before: MaterialApp(
 Get.to(NextScreen());
 ```
 
-명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/en_US/route_management.md#navigation-with-named-routes) 있습니다.
+명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/kr_KO/route_management.md#이름있는-라우트-탐색) 있습니다.
 
 ```dart
 
@@ -268,7 +268,7 @@ Get.offAll(NextScreen());
 
 ### 라우트 관리에 대한 자세한 내용
 
-**Get은 명명된 라우트로 작업하고 더 쉬운 방식으로 라우트의 제어를 제공합니다! [여기](./documentation/en_US/route_management.md)에 더 자세한 문서가 있습니다.**
+**Get은 명명된 라우트로 작업하고 더 쉬운 방식으로 라우트의 제어를 제공합니다! [여기](./documentation/kr_KO/route_management.md)에 더 자세한 문서가 있습니다.**
 
 ## 종속성 관리
 
@@ -304,7 +304,7 @@ Text(controller.textFromApi);
 
 ### 종속성 관리에 대한 자세한 내용
 
-**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/en_US/dependency_management.md)에 있습니다.**
+**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
 
 # 기능들
 
