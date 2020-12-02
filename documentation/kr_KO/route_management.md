@@ -284,12 +284,12 @@ MiddleWare class 생성
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen.
-    ///If you need to enter any of these 3 events directly here,
-    ///you must specify that the event is != Than you are trying to do.
+    /// 각 화면의 routes, snackbars, dialogs와 bottomsheets에서 추가하여 받을 수 있습니다.
+    /// If you need to enter any of these 3 events directly here,
+    /// you must specify that the event is != Than you are trying to do.
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
-    } else if (routing.current =='/third'){
+    } else if (routing.current == '/third'){
       print('last route called');
     }
   }
@@ -373,7 +373,7 @@ class Third extends StatelessWidget {
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+Flutter로 간단한 SnackBar를 사용하려면 Scaffold의 context가 반드시 주어지거나 Scaffold에 GlobalKey를 추가해서 사용해야만 합니다.
 
 ```dart
 final snackBar = SnackBar(
@@ -383,18 +383,18 @@ final snackBar = SnackBar(
     onPressed: (){}
   ),
 );
-// Find the Scaffold in the widget tree and use
-// it to show a SnackBar.
+// 위젯 트리에서 Scaffold를 찾아서 사용하면
+// SnackBar가 보여집니다.
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Get을 사용할때:
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+Get을 사용하면 코드의 어디에서든지 Get.snackbar를 호출하거나 원하는데로 수정하기만 하면 됩니다!
 
 ```dart
 Get.snackbar(
@@ -446,18 +446,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+기존 스낵바를 선호하거나 한 줄만 추가하는 것을 포함하여 처음부터 커스텀하려는 경우(Get.snackbar는 필수로 제목과 메시지를 사용함) 다음을 사용할 수 있습니다.
+Get.snackbar가 빌드된 RAW API를 제공하는`Get.rawSnackbar ();`.
 
 ### Dialogs
 
-To open dialog:
+dialog 열기:
 
 ```dart
 Get.dialog(YourDialogWidget());
 ```
 
-To open default dialog:
+default dialog 열기:
 
 ```dart
 Get.defaultDialog(
@@ -466,15 +466,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+showGeneralDialog 대신에 Get.generalDialog를 사용할 수 있습니다.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+cupertinos를 포함한 다른 모든 Flutter 대화 상자 위젯의 경우 context 대신 Get.overlayContext를 사용하고 코드의 어느 곳에서나 열 수 있습니다.
+오버레이를 사용하지 않는 위젯의 경우 Get.context를 사용할 수 있습니다.
+이 두 context는 탐색 context 없이 inheritedWidget이 사용되는 경우를 제외하고 99%의 경우에 UI의 context를 대체하여 동작합니다.
 
 ### BottomSheets
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet는 showModalBottomSheet와 같지만 context가 필요 없습니다.
 
 ```dart
 Get.bottomSheet(
@@ -499,16 +499,16 @@ Get.bottomSheet(
 
 ## 중첩된 탐색
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+GetX는 Fultter의 중첩된 탐색을 더 쉽게 만듭니다.
+context가 필요 없고 Id로 탐색 스택을 찾을 수 있습니다.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- 주석: 병렬 탐색 스택을 만드는 것은 위험 할 수 있습니다. 이상적인 것은 NestedNavigators를 사용하지 않거나 아껴서 사용하는 것입니다. 프로젝트에 필요한 경우 여러 탐색 스택을 메모리에 유지하는 것이 RAM 소비에 좋지 않을 수 있음을 명심하십시오.
 
-See how simple it is:
+간단합니다:
 
 ```dart
 Navigator(
-  key: Get.nestedKey(1), // create a key by index
+  key: Get.nestedKey(1), // index로 key를 생성
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -521,7 +521,7 @@ Navigator(
             child: FlatButton(
               color: Colors.blue,
               onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
+                Get.toNamed('/second', id:1); // index로 중첩된 경로를 탐색
               },
               child: Text("Go to second"),
             ),
