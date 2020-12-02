@@ -94,15 +94,17 @@ class GetHttpClient {
     List<int> bodyBytes;
     BodyBytes bodyStream;
     final headers = <String, String>{};
-    headers['content-type'] = contentType ?? defaultContentType;
+
     headers['user-agent'] = userAgent;
 
     if (body is FormData) {
       bodyBytes = await body.toBytes();
       headers['content-length'] = bodyBytes.length.toString();
+      headers['content-type'] =
+          'multipart/form-data; boundary=${body.boundary}';
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
-
+      headers['content-type'] = contentType ?? defaultContentType;
       //TODO check this implementation
       if (contentType != null) {
         if (contentType.toLowerCase() == 'application/x-www-form-urlencoded') {
@@ -114,6 +116,7 @@ class GetHttpClient {
       bodyBytes = utf8.encode(jsonString);
       headers['content-length'] = bodyBytes.length.toString();
     } else if (body == null) {
+      headers['content-type'] = contentType ?? defaultContentType;
       headers['content-length'] = '0';
     } else {
       if (!errorSafety) {
@@ -126,7 +129,7 @@ class GetHttpClient {
     }
 
     final uri = _createUri(url, query);
-
+    print(headers);
     return Request(
       method: method,
       url: uri,

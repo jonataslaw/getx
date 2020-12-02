@@ -1,9 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 
-void main() {
+void main() async {
+  final client = GetConnect();
+  final form = FormData({
+    'file': MultipartFile(
+      File('README.md').readAsBytesSync(),
+      filename: 'readme.md',
+    ),
+  });
+  final response = await client.post('http://localhost:8080/upload', form);
+
+  print(response.body);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 

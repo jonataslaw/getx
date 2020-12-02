@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import '../../../../get_rx/src/rx_stream/rx_stream.dart';
 import '../request/request.dart';
 
 bool isTokenChar(int byte) {
@@ -66,66 +65,12 @@ final newlineRegExp = RegExp(r'\r\n|\r|\n');
 /// characters.
 bool isPlainAscii(String string) => _asciiOnly.hasMatch(string);
 
-StringBuffer urlEncode(
-  dynamic sub,
-  String path,
-  bool encode,
-  String Function(String key, Object value) handler,
-) {
-  var urlData = StringBuffer('');
-  var leftBracket = '[';
-  var rightBracket = ']';
-
-  if (encode) {
-    leftBracket = '%5B';
-    rightBracket = '%5D';
-  }
-
-  var encodeComponent = encode ? Uri.encodeQueryComponent : (e) => e;
-  if (sub is Map) {
-    sub.forEach((key, value) {
-      if (path == '') {
-        urlEncode(
-          value,
-          '${encodeComponent(key as String)}',
-          encode,
-          handler,
-        );
-      } else {
-        urlEncode(
-          value,
-          '$path$leftBracket${encodeComponent(key as String)}$rightBracket',
-          encode,
-          handler,
-        );
-      }
-    });
-  } else {
-    throw 'FormData need be a Map';
-  }
-
-  return urlData;
-}
-
 const String GET_BOUNDARY = 'getx-http-boundary-';
-
-Future streamToFuture(Stream stream, GetStream sink) {
-  var completer = Completer();
-  stream.listen(sink.add,
-      onError: sink.addError, onDone: () => completer.complete());
-  return completer.future;
-}
-
-void stringToBytes(String string, GetStream stream) {
-  stream.add(utf8.encode(string));
-}
 
 /// Encode [value] like browsers
 String browserEncode(String value) {
   return value.replaceAll(newlineRegExp, '%0D%0A').replaceAll('"', '%22');
 }
-
-void writeLine(GetStream stream) => stream.add([13, 10]);
 
 const List<int> boundaryCharacters = <int>[
   43,
