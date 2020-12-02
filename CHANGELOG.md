@@ -1,3 +1,6 @@
+## [3.21.3] 
+- Improve multipart file and defaultDecoder on GetConnect
+
 ## [3.21.2] 
 - Fix GetConnect.request returning a PUT request
 
