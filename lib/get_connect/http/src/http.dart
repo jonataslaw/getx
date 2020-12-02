@@ -104,6 +104,9 @@ class GetHttpClient {
           'multipart/form-data; boundary=${body.boundary}';
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
+
+      bodyBytes = utf8.encode(jsonString);
+      headers['content-length'] = bodyBytes.length.toString();
       headers['content-type'] = contentType ?? defaultContentType;
       //TODO check this implementation
       if (contentType != null) {
@@ -112,9 +115,6 @@ class GetHttpClient {
           jsonString = '$paramName=${Uri.encodeQueryComponent(jsonString)}';
         }
       }
-
-      bodyBytes = utf8.encode(jsonString);
-      headers['content-length'] = bodyBytes.length.toString();
     } else if (body == null) {
       headers['content-type'] = contentType ?? defaultContentType;
       headers['content-length'] = '0';

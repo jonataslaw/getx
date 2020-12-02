@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io' as io;
 
 import '../certificates/certificates.dart';
 import '../exceptions/exceptions.dart';
 import '../request/request.dart';
 import '../response/response.dart';
+import 'body_decoder.dart';
 import 'request_base.dart';
 
 /// A `dart:io` implementation of `HttpRequestBase`.
@@ -50,19 +50,9 @@ class HttpRequestImpl extends HttpRequestBase {
       });
 
       final bodyBytes = BodyBytes(response);
-
       final stringBody = await bodyBytesToString(bodyBytes, headers);
 
-      T body;
-      try {
-        if (request.decoder == null) {
-          body = jsonDecode(stringBody) as T;
-        } else {
-          body = request.decoder(jsonDecode(stringBody));
-        }
-      } on Exception catch (_) {
-        body = stringBody as T;
-      }
+      final body = bodyDecoded<T>(request, stringBody);
 
       return Response(
         headers: headers,

@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:typed_data';
-
 import '../certificates/certificates.dart';
 import '../exceptions/exceptions.dart';
 import '../request/request.dart';
 import '../response/response.dart';
+import 'body_decoder.dart';
 import 'request_base.dart';
 
 /// A `dart:html` implementation of `HttpRequestBase`.
@@ -29,24 +28,6 @@ class HttpRequestImpl implements HttpRequestBase {
     var bytes = await request.bodyBytes.toBytes();
     html.HttpRequest xhr;
 
-    // if (request.files != null) {
-    //   var data = html.FormData();
-    //   if (request.files != null) {
-    //     for (MultipartFile element in request.files) {
-    //       var stream = element.finalize();
-    //       data.appendBlob(element., html.File(element.finalize(),
-    // element.filename),
-    //           element.filename);
-    //     }
-    //   }
-
-    //   xhr = await html.HttpRequest.request('${request.url}',
-    //       method: request.method, sendData: data);
-    // } else {
-    //   xhr = html.HttpRequest()
-    //     ..open(request.method, '${request.url}', async: true);
-    // }
-
     xhr = html.HttpRequest()
       ..open(request.method, '${request.url}', async: true); // check this
 
@@ -68,19 +49,7 @@ class HttpRequestImpl implements HttpRequestBase {
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);
 
-        T body;
-        try {
-          if (request.decoder == null) {
-            body = jsonDecode(stringBody) as T;
-          } else {
-            body = request.decoder(jsonDecode(stringBody));
-          }
-          // body = request.decoder(stringBody);
-        } on Exception catch (_) {
-          body = stringBody as T;
-        }
-
-        // final body = jsonDecode(stringBody);
+        final body = bodyDecoded<T>(request, stringBody);
 
         final response = Response<T>(
           bodyBytes: bodyBytes,
