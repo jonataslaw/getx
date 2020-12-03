@@ -227,9 +227,9 @@ class HeaderValue {
           parameters[name] = null;
           return;
         }
-        var val = parseParameterValue();
-        if (name == 'charset' && val != null) {
-          val = val.toLowerCase();
+        var valueParameter = parseParameterValue();
+        if (name == 'charset' && valueParameter != null) {
+          valueParameter = val.toLowerCase();
         }
         parameters[name] = val;
         bump();
