@@ -231,7 +231,7 @@ class HeaderValue {
         if (name == 'charset' && valueParameter != null) {
           valueParameter = val.toLowerCase();
         }
-        parameters[name] = val;
+        parameters[name] = valueParameter;
         bump();
         if (done()) return;
         if (value[index] == valueSeparator) return;
