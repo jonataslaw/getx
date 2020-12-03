@@ -227,11 +227,11 @@ class HeaderValue {
           parameters[name] = null;
           return;
         }
-        var value = parseParameterValue();
-        if (name == 'charset' && value != null) {
-          value = value.toLowerCase();
+        var valueParameter = parseParameterValue();
+        if (name == 'charset' && valueParameter != null) {
+          valueParameter = valueParameter .toLowerCase();
         }
-        parameters[name] = value;
+        parameters[name] = valueParameter;
         bump();
         if (done()) return;
         if (value[index] == valueSeparator) return;
