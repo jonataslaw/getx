@@ -209,7 +209,7 @@ Obx(() => Text("${controller.name}"));
 
 ### 关于状态管理的更多细节
 
-**关于状态管理更深入的解释请查看[这里](./documentation/zh_CN/state_management.md)。在那里你将看到更多的例子，以及简单的阶段管理器和响应式状态管理器之间的区别**。
+**关于状态管理更深入的解释请查看[这里](./documentation/zh_CN/state_management.md)。在那里你将看到更多的例子，以及简单的状态管理器和响应式状态管理器之间的区别**。
 
 你会对GetX的能力有一个很好的了解。
 
