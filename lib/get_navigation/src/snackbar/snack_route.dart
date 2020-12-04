@@ -13,7 +13,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
     @required this.snack,
     RouteSettings settings,
   }) : super(settings: settings) {
-    _builder = Builder(builder: (innerContext) {
+    _builder = Builder(builder: (_) {
       return GestureDetector(
         child: snack,
         onTap: snack.onTap != null ? () => snack.onTap(snack) : null,
@@ -57,10 +57,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
-    var overlays = <OverlayEntry>[];
-
-    if (snack.overlayBlur > 0.0) {
-      overlays.add(
+    return <OverlayEntry>[
+      if (snack.overlayBlur > 0.0) ...[
         OverlayEntry(
           builder: (context) {
             return GestureDetector(
@@ -84,10 +82,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
           maintainState: false,
           opaque: opaque,
         ),
-      );
-    }
-
-    overlays.add(
+      ],
       OverlayEntry(
         builder: (context) {
           final Widget annotatedChild = Semantics(
@@ -106,9 +101,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
         maintainState: false,
         opaque: opaque,
       ),
-    );
-
-    return overlays;
+    ];
   }
 
   String dismissibleKeyGen = "";
@@ -260,7 +253,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
         if (!isCurrent) {
           navigator.finalizeRoute(this);
-          assert(overlayEntries.isEmpty);
+          // assert(overlayEntries.isEmpty);
         }
         break;
     }

@@ -95,7 +95,8 @@ class GetObserver extends NavigatorObserver {
     final newRoute = _RouteData.ofRoute(route);
 
     if (newRoute.isSnackbar) {
-      Get.log("OPEN SNACKBAR ${newRoute.name}");
+      // Get.log("OPEN SNACKBAR ${newRoute.name}");
+      Get.log("OPEN SNACKBAR");
     } else if (newRoute.isBottomSheet || newRoute.isDialog) {
       Get.log("OPEN ${newRoute.name}");
     } else if (newRoute.isGetPageRoute) {
@@ -132,7 +133,8 @@ class GetObserver extends NavigatorObserver {
     final newRoute = _RouteData.ofRoute(previousRoute);
 
     if (currentRoute.isSnackbar) {
-      Get.log("CLOSE SNACKBAR ${currentRoute.name}");
+      // Get.log("CLOSE SNACKBAR ${currentRoute.name}");
+      Get.log("CLOSE SNACKBAR");
     } else if (currentRoute.isBottomSheet || currentRoute.isDialog) {
       Get.log("CLOSE ${currentRoute.name}");
     } else if (currentRoute.isGetPageRoute) {

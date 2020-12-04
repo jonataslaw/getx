@@ -1,3 +1,6 @@
+## [3.22.2]
+- Fix overlayEntries is null on Master/Dev branch of Flutter
+
 ## [3.22.1]
 - Improve: auto jsonDecode occurs only if response.header.contentType is "application/json"
 - Improve and fix requests types (@eduardoflorence)
