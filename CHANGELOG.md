@@ -1,3 +1,9 @@
+## [3.22.1]
+- Improve: auto jsonDecode occurs only if response.header.contentType is "application/json"
+- Improve and fix requests types (@eduardoflorence)
+- Fix HeaderValue variables with same name (@haidang93)
+
+
 ## [3.22.0]
 - Added: more multipart options. Now you can send as multipart: 
   
@@ -10,12 +16,9 @@ String path:
 Or bytes (Flutter web work only with bytes):
 'file':MultipartFile(File('file').readAsBytesSync(), filename: 'avatar.png'),
 
-- Improve: auto jsonDecode occurs only if response.header.contentType is "application/json"
-
 - Added: Upload Progress to MultipartRequest
 - Added support to List<MultipartFile> (@jasonlaw)
-- Improve and fix requests types (@eduardoflorence)
-- Fix HeaderValue variables with same name (@haidang93)
+
 
 ## [3.21.3] 
 - Improve multipart file and defaultDecoder on GetConnect
