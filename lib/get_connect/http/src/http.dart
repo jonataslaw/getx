@@ -1,21 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 import '../src/certificates/certificates.dart';
 import '../src/exceptions/exceptions.dart';
-import '../src/http_impl/http_request_stub.dart'
-    if (dart.library.html) 'http_impl/http_request_html.dart'
-    if (dart.library.io) 'http_impl/http_request_io.dart';
-import '../src/http_impl/request_base.dart';
 import '../src/multipart/form_data.dart';
 import '../src/request/request.dart';
 import '../src/response/response.dart';
 import '../src/status/http_status.dart';
+import 'http/interface/request_base.dart';
+import 'http/stub/http_request_stub.dart'
+    if (dart.library.html) 'http/html/http_request_html.dart'
+    if (dart.library.io) 'http/io/http_request_io.dart';
 import 'interceptors/get_modifiers.dart';
 
 typedef Decoder<T> = T Function(dynamic data);
+
+typedef Progress = Function(double percent);
 
 class GetHttpClient {
   String userAgent;
@@ -90,9 +91,10 @@ class GetHttpClient {
     String method,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   ) async {
     List<int> bodyBytes;
-    BodyBytes bodyStream;
+    BodyBytesStream bodyStream;
     final headers = <String, String>{};
 
     headers['user-agent'] = userAgent;
@@ -125,11 +127,10 @@ class GetHttpClient {
     }
 
     if (bodyBytes != null) {
-      bodyStream = BodyBytes.fromBytes(bodyBytes);
+      bodyStream = _trackProgress(bodyBytes, uploadProgress);
     }
 
     final uri = _createUri(url, query);
-
     return Request<T>(
       method: method,
       url: uri,
@@ -139,6 +140,27 @@ class GetHttpClient {
       maxRedirects: maxRedirects,
       decoder: decoder,
     );
+  }
+
+  BodyBytesStream _trackProgress(
+    List<int> bodyBytes,
+    Progress uploadProgress,
+  ) {
+    var total = 0;
+    var length = bodyBytes.length;
+
+    var byteStream =
+        Stream.fromIterable(bodyBytes.map((i) => [i])).transform<List<int>>(
+      StreamTransformer.fromHandlers(handleData: (data, sink) {
+        total += data.length;
+        if (uploadProgress != null) {
+          var percent = total / length * 100;
+          uploadProgress(percent);
+        }
+        sink.add(data);
+      }),
+    );
+    return BodyBytesStream(byteStream);
   }
 
   void _setSimpleHeaders(
@@ -187,6 +209,8 @@ class GetHttpClient {
             headers: response.headers,
             statusCode: response.statusCode,
             body: response.body,
+            bodyBytes: response.bodyBytes,
+            bodyString: response.bodyString,
             statusText: response.statusText,
           );
         }
@@ -232,6 +256,7 @@ class GetHttpClient {
     @required dynamic body,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    @required Progress uploadProgress,
   }) {
     return _requestWithBody<T>(
       url,
@@ -240,6 +265,7 @@ class GetHttpClient {
       'post',
       query,
       decoder ?? (defaultDecoder as Decoder<T>),
+      uploadProgress,
     );
   }
 
@@ -250,6 +276,7 @@ class GetHttpClient {
     @required dynamic body,
     @required Map<String, dynamic> query,
     Decoder<T> decoder,
+    @required Progress uploadProgress,
   }) {
     return _requestWithBody<T>(
       url,
@@ -258,6 +285,7 @@ class GetHttpClient {
       method,
       query,
       decoder ?? (defaultDecoder as Decoder<T>),
+      uploadProgress,
     );
   }
 
@@ -267,6 +295,7 @@ class GetHttpClient {
     @required dynamic body,
     @required Map<String, dynamic> query,
     Decoder<T> decoder,
+    @required Progress uploadProgress,
   }) {
     return _requestWithBody<T>(
       url,
@@ -275,6 +304,7 @@ class GetHttpClient {
       'put',
       query,
       decoder ?? (defaultDecoder as Decoder<T>),
+      uploadProgress,
     );
   }
 
@@ -303,6 +333,7 @@ class GetHttpClient {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
     // List<MultipartFile> files,
   }) async {
     try {
@@ -313,7 +344,7 @@ class GetHttpClient {
           body: body,
           query: query,
           decoder: decoder,
-          //  files: files,
+          uploadProgress: uploadProgress,
         ),
         headers: headers,
       );
@@ -323,9 +354,6 @@ class GetHttpClient {
         throw GetHttpException(e.toString());
       }
       return Future.value(Response<T>(
-        request: null,
-        statusCode: null,
-        body: null,
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -339,6 +367,7 @@ class GetHttpClient {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   }) async {
     try {
       var response = await _performRequest<T>(
@@ -349,6 +378,7 @@ class GetHttpClient {
           query: query,
           body: body,
           decoder: decoder,
+          uploadProgress: uploadProgress,
         ),
         headers: headers,
       );
@@ -358,9 +388,6 @@ class GetHttpClient {
         throw GetHttpException(e.toString());
       }
       return Future.value(Response<T>(
-        request: null,
-        statusCode: null,
-        body: null,
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -373,6 +400,7 @@ class GetHttpClient {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   }) async {
     try {
       var response = await _performRequest<T>(
@@ -382,6 +410,7 @@ class GetHttpClient {
           query: query,
           body: body,
           decoder: decoder,
+          uploadProgress: uploadProgress,
         ),
         headers: headers,
       );
@@ -391,9 +420,6 @@ class GetHttpClient {
         throw GetHttpException(e.toString());
       }
       return Future.value(Response<T>(
-        request: null,
-        statusCode: null,
-        body: null,
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -417,13 +443,71 @@ class GetHttpClient {
         throw GetHttpException(e.toString());
       }
       return Future.value(Response<T>(
-        request: null,
-        statusCode: null,
-        body: null,
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
   }
+
+  // Future<Response<T>> download<T>(
+  //   String url,
+  //   String path, {
+  //   Map<String, String> headers,
+  //   String contentType = 'application/octet-stream',
+  //   Map<String, dynamic> query,
+  // }) async {
+  //   try {
+  //     var response = await _performRequest<T>(
+  //       () => _get<T>(url, contentType, query, null),
+  //       headers: headers,
+  //     );
+  //     response.bodyBytes.listen((value) {});
+  //     return response;
+  //   } on Exception catch (e) {
+  //     if (!errorSafety) {
+  //       throw GetHttpException(e.toString());
+  //     }
+  //     return Future.value(Response<T>(
+  //       statusText: 'Can not connect to server. Reason: $e',
+  //     ));
+  //   }
+
+  //   int byteCount = 0;
+  //   int totalBytes = httpResponse.contentLength;
+
+  //   Directory appDocDir = await getApplicationDocumentsDirectory();
+  //   String appDocPath = appDocDir.path;
+
+  //   File file = File(path);
+
+  //   var raf = file.openSync(mode: FileMode.write);
+
+  //   Completer completer = Completer<String>();
+
+  //   httpResponse.listen(
+  //     (data) {
+  //       byteCount += data.length;
+
+  //       raf.writeFromSync(data);
+
+  //       if (onDownloadProgress != null) {
+  //         onDownloadProgress(byteCount, totalBytes);
+  //       }
+  //     },
+  //     onDone: () {
+  //       raf.closeSync();
+
+  //       completer.complete(file.path);
+  //     },
+  //     onError: (e) {
+  //       raf.closeSync();
+  //       file.deleteSync();
+  //       completer.completeError(e);
+  //     },
+  //     cancelOnError: true,
+  //   );
+
+  //   return completer.future;
+  // }
 
   Future<Response<T>> delete<T>(
     String url, {
@@ -443,9 +527,6 @@ class GetHttpClient {
         throw GetHttpException(e.toString());
       }
       return Future.value(Response<T>(
-        request: null,
-        statusCode: null,
-        body: null,
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }

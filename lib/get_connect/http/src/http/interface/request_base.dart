@@ -1,5 +1,5 @@
-import '../request/request.dart';
-import '../response/response.dart';
+import '../../request/request.dart';
+import '../../response/response.dart';
 
 /// Abstract interface of [HttpRequestImpl].
 abstract class HttpRequestBase {

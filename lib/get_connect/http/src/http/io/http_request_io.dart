@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:io' as io;
 
-import '../certificates/certificates.dart';
-import '../exceptions/exceptions.dart';
-import '../request/request.dart';
-import '../response/response.dart';
-import 'body_decoder.dart';
-import 'request_base.dart';
+import '../../certificates/certificates.dart';
+import '../../exceptions/exceptions.dart';
+import '../../request/request.dart';
+import '../../response/response.dart';
+import '../interface/request_base.dart';
+import '../utils/body_decoder.dart';
 
 /// A `dart:io` implementation of `HttpRequestBase`.
 class HttpRequestImpl extends HttpRequestBase {
@@ -32,7 +33,7 @@ class HttpRequestImpl extends HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var requestBody = await request.bodyBytes.toBytes();
-    var stream = BodyBytes.fromBytes(requestBody ?? const []);
+    var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
 
     try {
       var ioRequest = (await _httpClient.openUrl(request.method, request.url))
@@ -42,6 +43,12 @@ class HttpRequestImpl extends HttpRequestBase {
         ..contentLength = requestBody.length ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
+      // var response = await stream.map((s) {
+      //   received += s.length;
+      //   print("${(received / total) * 100} %");
+      //   return s;
+      // }).pipe(ioRequest) as io.HttpClientResponse;
+
       var response = await stream.pipe(ioRequest) as io.HttpClientResponse;
 
       var headers = <String, String>{};
@@ -49,10 +56,16 @@ class HttpRequestImpl extends HttpRequestBase {
         headers[key] = values.join(',');
       });
 
-      final bodyBytes = BodyBytes(response);
+      final bodyBytes = BodyBytesStream(response);
       final stringBody = await bodyBytesToString(bodyBytes, headers);
 
-      final body = bodyDecoded<T>(request, stringBody);
+      // response.headers.contentType.mimeType == 'application/json'
+
+      final body = bodyDecoded<T>(
+        request,
+        stringBody,
+        response.headers.contentType.mimeType,
+      );
 
       return Response(
         headers: headers,
@@ -61,6 +74,7 @@ class HttpRequestImpl extends HttpRequestBase {
         statusText: response.reasonPhrase,
         bodyBytes: bodyBytes,
         body: body,
+        bodyString: stringBody,
       );
     } on io.HttpException catch (error) {
       throw GetHttpException(error.message, error.uri);
@@ -77,8 +91,8 @@ class HttpRequestImpl extends HttpRequestBase {
   }
 }
 
-extension FileExt on io.FileSystemEntity {
-  String get fileName {
-    return this?.path?.split(io.Platform.pathSeparator)?.last;
-  }
-}
+// extension FileExt on io.FileSystemEntity {
+//   String get fileName {
+//     return this?.path?.split(io.Platform.pathSeparator)?.last;
+//   }
+// }

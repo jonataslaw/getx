@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:html' as html;
 import 'dart:typed_data';
-import '../certificates/certificates.dart';
-import '../exceptions/exceptions.dart';
-import '../request/request.dart';
-import '../response/response.dart';
-import 'body_decoder.dart';
-import 'request_base.dart';
+
+import '../../certificates/certificates.dart';
+import '../../exceptions/exceptions.dart';
+import '../../request/request.dart';
+import '../../response/response.dart';
+import '../interface/request_base.dart';
+import '../utils/body_decoder.dart';
 
 /// A `dart:html` implementation of `HttpRequestBase`.
 class HttpRequestImpl implements HttpRequestBase {
@@ -44,12 +45,24 @@ class HttpRequestImpl implements HttpRequestBase {
       var reader = html.FileReader();
 
       reader.onLoad.first.then((_) async {
-        var bodyBytes = BodyBytes.fromBytes(reader.result as Uint8List);
+        var bodyBytes = BodyBytesStream.fromBytes(reader.result as Uint8List);
 
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);
 
-        final body = bodyDecoded<T>(request, stringBody);
+        String contentType;
+
+        if (xhr.responseHeaders.containsKey('content-type')) {
+          contentType = xhr.responseHeaders['content-type'];
+        } else {
+          contentType = 'application/json';
+        }
+        // xhr.responseHeaders.containsKey(key)
+        final body = bodyDecoded<T>(
+          request,
+          stringBody,
+          contentType,
+        );
 
         final response = Response<T>(
           bodyBytes: bodyBytes,
@@ -58,6 +71,7 @@ class HttpRequestImpl implements HttpRequestBase {
           headers: xhr.responseHeaders,
           statusText: xhr.statusText,
           body: body,
+          bodyString: stringBody,
         );
         completer.complete(response);
       });

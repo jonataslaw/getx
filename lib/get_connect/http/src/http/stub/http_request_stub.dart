@@ -1,7 +1,7 @@
-import '../certificates/certificates.dart';
-import '../request/request.dart';
-import '../response/response.dart';
-import 'request_base.dart';
+import '../../certificates/certificates.dart';
+import '../../request/request.dart';
+import '../../response/response.dart';
+import '../interface/request_base.dart';
 
 class HttpRequestImpl extends HttpRequestBase {
   HttpRequestImpl({

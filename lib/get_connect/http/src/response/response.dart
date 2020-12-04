@@ -1,20 +1,17 @@
 import 'dart:collection';
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
 import '../request/request.dart';
 import '../status/http_status.dart';
 
 class Response<T> {
   const Response({
-    @required this.request,
-    @required this.statusCode,
-    // ignore: always_require_non_null_named_parameters
+    this.request,
+    this.statusCode,
     this.bodyBytes,
+    this.bodyString,
     this.statusText = '',
     this.headers = const {},
-    @required this.body,
+    this.body,
   });
 
   /// The Http [Request] linked with this [Response].
@@ -46,7 +43,10 @@ class Response<T> {
   bool get unauthorized => status.isUnauthorized;
 
   /// The response body as a Stream of Bytes.
-  final BodyBytes bodyBytes;
+  final BodyBytesStream bodyBytes;
+
+  /// The response body as a Stream of Bytes.
+  final String bodyString;
 
   /// The decoded body of this [Response]. You can access the
   /// body parameters as Map
@@ -55,7 +55,7 @@ class Response<T> {
 }
 
 Future<String> bodyBytesToString(
-    BodyBytes bodyBytes, Map<String, String> headers) {
+    BodyBytesStream bodyBytes, Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 

@@ -127,6 +127,7 @@ class GetConnect extends GetConnectInterface {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.post<T>(
@@ -136,6 +137,7 @@ class GetConnect extends GetConnectInterface {
       contentType: contentType,
       query: query,
       decoder: decoder,
+      uploadProgress: uploadProgress,
     );
   }
 
@@ -147,6 +149,7 @@ class GetConnect extends GetConnectInterface {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.put<T>(
@@ -156,6 +159,7 @@ class GetConnect extends GetConnectInterface {
       contentType: contentType,
       query: query,
       decoder: decoder,
+      uploadProgress: uploadProgress,
     );
   }
 
@@ -168,6 +172,7 @@ class GetConnect extends GetConnectInterface {
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
+    Progress uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.request<T>(
@@ -178,6 +183,7 @@ class GetConnect extends GetConnectInterface {
       contentType: contentType,
       query: query,
       decoder: decoder,
+      uploadProgress: uploadProgress,
     );
   }
 

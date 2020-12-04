@@ -89,7 +89,7 @@ class FormData {
   }
 
   Future<List<int>> toBytes() {
-    return BodyBytes(_encode()).toBytes();
+    return BodyBytesStream(_encode()).toBytes();
   }
 
   Stream<List<int>> _encode() async* {

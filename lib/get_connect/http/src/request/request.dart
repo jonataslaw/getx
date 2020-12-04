@@ -20,8 +20,8 @@ class Request<T> {
   /// ex: `GET`,`POST`,`PUT`,`DELETE`
   final String method;
 
-  /// The BodyBytes of body from this [Request]
-  final BodyBytes bodyBytes;
+  /// The BodyBytesStream of body from this [Request]
+  final BodyBytesStream bodyBytes;
 
   /// When true, the client will follow redirects to resolves this [Request]
   final bool followRedirects;
@@ -49,7 +49,7 @@ class Request<T> {
     @required Uri url,
     @required String method,
     @required Map<String, String> headers,
-    BodyBytes bodyBytes,
+    BodyBytesStream bodyBytes,
     bool followRedirects = true,
     int maxRedirects = 4,
     FormData files,
@@ -66,7 +66,7 @@ class Request<T> {
     return Request._(
       url: url,
       method: method,
-      bodyBytes: bodyBytes ??= BodyBytes.fromBytes(const []),
+      bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
       headers: Map.from(headers ??= <String, String>{}),
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
@@ -77,11 +77,11 @@ class Request<T> {
   }
 }
 
-class BodyBytes extends StreamView<List<int>> {
-  BodyBytes(Stream<List<int>> stream) : super(stream);
+class BodyBytesStream extends StreamView<List<int>> {
+  BodyBytesStream(Stream<List<int>> stream) : super(stream);
 
-  factory BodyBytes.fromBytes(List<int> bytes) =>
-      BodyBytes(Stream.fromIterable([bytes]));
+  factory BodyBytesStream.fromBytes(List<int> bytes) =>
+      BodyBytesStream(Stream.fromIterable([bytes]));
 
   Future<Uint8List> toBytes() {
     var completer = Completer<Uint8List>();
