@@ -209,6 +209,12 @@ void main() {
 
     await tester.pumpAndSettle();
 
+    expect(find.byType(ThirdScreen), findsOneWidget);
+
+    Get.back();
+
+    await tester.pumpAndSettle();
+
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
@@ -240,7 +246,13 @@ void main() {
 
     expect(find.byType(SecondScreen), findsOneWidget);
 
-    Get.offNamedUntil('/third', ModalRoute.withName('/first'));
+    Get.offNamedUntil('/third', (route) => Get.currentRoute == '/FirstScreen');
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ThirdScreen), findsOneWidget);
+
+    Get.back();
 
     await tester.pumpAndSettle();
 
