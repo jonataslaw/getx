@@ -3,20 +3,32 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 import 'get_view.dart';
 
-abstract class GetResponsive<T> extends GetView<T> {
+abstract class _GetResponsive<T> extends GetView<T> {
   final ResponsiveScreen screen;
-  GetResponsive(ResponsiveScreenSettings settings, {Key key})
+  _GetResponsive(ResponsiveScreenSettings settings, {Key key})
       : screen = ResponsiveScreen(settings),
         super(key: key);
 
   Widget builder();
-  Widget mobile();
+  Widget phone();
   Widget tablet();
   Widget desktop();
   Widget watch();
 }
 
-class GetResponsiveView<T> extends GetResponsive<T> {
+/// Extend this widget to build responsive view.
+/// this widget contains the `screen` property that have all
+/// information about the screen size and type.
+/// You have two options to build it.
+/// 1- with `builder` method you return the widget to build.
+/// 2- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
+/// method will be built when the screen type matches the method
+/// when the screen is [ScreenType.Tablet] the `tablet` method
+/// will be exuded and so on.
+/// Note if you use this method please set the 
+/// property `alwaysUseBuilder` to false
+/// With `settings` property you can set the width limit for the screen types.
+class GetResponsiveView<T> extends _GetResponsive<T> {
   final bool alwaysUseBuilder = true;
   GetResponsiveView(
       {alwaysUseBuilder,
@@ -40,10 +52,10 @@ class GetResponsiveView<T> extends GetResponsive<T> {
       if (widget != null) return widget;
     }
     if (screen.isPhone) {
-      widget = mobile() ?? tablet() ?? desktop();
+      widget = phone() ?? tablet() ?? desktop();
       if (widget != null) return widget;
     }
-    return watch() ?? mobile() ?? tablet() ?? desktop() ?? builder();
+    return watch() ?? phone() ?? tablet() ?? desktop() ?? builder();
   }
 
   @override
@@ -53,7 +65,7 @@ class GetResponsiveView<T> extends GetResponsive<T> {
   Widget desktop() => null;
 
   @override
-  Widget mobile() => null;
+  Widget phone() => null;
 
   @override
   Widget tablet() => null;
