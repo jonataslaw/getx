@@ -53,6 +53,8 @@
       - [ObxValue](#obxvalue)
   - [Useful tips](#useful-tips)
       - [GetView](#getview)
+      - [GetResponsiveView](#getresponsiveview)
+        - [How to use it](#how-to-use-it)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
 - [Breaking changes from 2.0](#breaking-changes-from-20)
@@ -902,6 +904,29 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
    }
  }
 ```
+
+#### GetResponsiveView
+
+Extend this widget to build responsive view.
+this widget contains the `screen` property that have all
+information about the screen size and type.
+
+##### How to use it
+
+You have two options to build it.
+
+- with `builder` method you return the widget to build.
+- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
+method will be built when the screen type matches the method
+when the screen is [ScreenType.Tablet] the `tablet` method
+will be exuded and so on.
+**Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
+
+With `settings` property you can set the width limit for the screen types.
+
+![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
+Code to this screen
+[code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
 #### GetWidget
 
