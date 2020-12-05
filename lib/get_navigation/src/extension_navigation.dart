@@ -618,7 +618,7 @@ extension GetNavigation on GetInterface {
   /// as explained in documentation
   ///
   /// [predicate] can be used like this:
-  /// `Get.offNamedUntil(page, (route) => (route as GetPageRoute).routeName == '/home')`
+  /// `Get.offNamedUntil(page, ModalRoute.withName('/home'))`
   /// to pop routes in stack until home,
   /// or like this:
   /// `Get.offNamedUntil((route) => !Get.isDialogOpen())`,
