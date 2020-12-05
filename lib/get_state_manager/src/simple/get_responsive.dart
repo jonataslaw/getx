@@ -26,23 +26,24 @@ class GetResponsiveView<T> extends GetResponsive<T> {
   @override
   Widget build(BuildContext context) {
     screen.context = context;
-    if (alwaysUseBuilder) {
-      return builder();
-    }
     Widget widget;
+    if (alwaysUseBuilder) {
+      widget = builder();
+      if (widget != null) return widget;
+    }
     if (screen.isDesktop) {
-      widget = desktop();
+      widget = desktop() ?? widget;
       if (widget != null) return widget;
     }
     if (screen.isTablet) {
-      widget = tablet();
+      widget = tablet() ?? desktop();
       if (widget != null) return widget;
     }
-    if (screen.isMobile) {
-      widget = mobile();
+    if (screen.isPhone) {
+      widget = mobile() ?? tablet() ?? desktop();
       if (widget != null) return widget;
     }
-    return watch();
+    return watch() ?? mobile() ?? tablet() ?? desktop() ?? builder();
   }
 
   @override
@@ -103,7 +104,7 @@ class ResponsiveScreen {
   bool get isTablet => (screenType == ScreenType.Tablet);
 
   /// Is [screenType] [ScreenType.Mobile]
-  bool get isMobile => (screenType == ScreenType.Mobile);
+  bool get isPhone => (screenType == ScreenType.Phone);
 
   /// Is [screenType] [ScreenType.Watch]
   bool get isWatch => (screenType == ScreenType.Watch);
@@ -120,7 +121,7 @@ class ResponsiveScreen {
     if (deviceWidth >= settings.desktopChangePoint) return ScreenType.Desktop;
     if (deviceWidth >= settings.tabletChangePoint) return ScreenType.Tablet;
     if (deviceWidth < settings.watchChangePoint) return ScreenType.Watch;
-    return ScreenType.Mobile;
+    return ScreenType.Phone;
   }
 
   /// Return widget according to screen type
@@ -137,14 +138,14 @@ class ResponsiveScreen {
   }) {
     if (isDesktop && desktop != null) return desktop;
     if (isTablet && tablet != null) return tablet;
-    if (isMobile && mobile != null) return mobile;
+    if (isPhone && mobile != null) return mobile;
     return watch;
   }
 }
 
 enum ScreenType {
   Watch,
-  Mobile,
+  Phone,
   Tablet,
   Desktop,
 }
