@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
 import '../../get_utils/get_utils.dart';
@@ -592,11 +593,11 @@ extension GetNavigation on GetInterface {
   ///
   /// Obs: unlike other get methods, this one you need to send a function
   /// that returns the widget to the page argument, like this:
-  /// Get.offUntil( () => HomePage() )
+  /// Get.offUntil(GetPageRoute(page: () => HomePage()), predicate)
   ///
   /// [predicate] can be used like this:
-  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
-  ///
+  /// `Get.offUntil(page, (route) => (route as GetPageRoute).routeName == '/home')`
+  /// to pop routes in stack until home,
   /// or also like this:
   /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
   /// is closed
@@ -617,12 +618,13 @@ extension GetNavigation on GetInterface {
   /// as explained in documentation
   ///
   /// [predicate] can be used like this:
-  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
-  /// or also like
-  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
-  /// is closed
+  /// `Get.offNamedUntil(page, (route) => (route as GetPageRoute).routeName == '/home')`
+  /// to pop routes in stack until home,
+  /// or like this:
+  /// `Get.offNamedUntil((route) => !Get.isDialogOpen())`,
+  /// to make sure the dialog is closed
   ///
-  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  /// Note: Always put a slash on the route name ('/page1'), to avoid unexpected errors
   Future<T> offNamedUntil<T>(
     String page,
     RoutePredicate predicate, {
