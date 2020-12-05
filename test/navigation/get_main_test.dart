@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 import 'utils/wrapper.dart';
 
 class SizeTransitions extends CustomTransition {
@@ -198,16 +199,21 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    Get.offUntil(
-      MaterialPageRoute(builder: (context) => SecondScreen()),
-      ModalRoute.withName('/'),
-    );
+    Get.to(SecondScreen());
 
     await tester.pumpAndSettle();
 
-    expect(find.byType(SecondScreen), findsOneWidget);
+    Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
+        (route) => (route as GetPageRoute).routeName == '/FirstScreen');
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ThirdScreen), findsOneWidget);
+    Get.back();
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FirstScreen), findsOneWidget);
   });
 
   testWidgets("Get.offNamedUntil smoke test", (tester) async {
@@ -232,12 +238,19 @@ void main() {
     );
 
     Get.toNamed('/first');
+    Get.toNamed('/second');
 
     await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+    expect(find.byType(SecondScreen), findsOneWidget);
 
-    Get.offNamedUntil('/first', ModalRoute.withName('/'));
+    Get.offNamedUntil('/third', ModalRoute.withName('/first'));
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ThirdScreen), findsOneWidget);
+
+    Get.back();
 
     await tester.pumpAndSettle();
 
