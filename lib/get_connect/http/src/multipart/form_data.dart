@@ -13,6 +13,8 @@ class FormData {
         files.add(MapEntry(key, value));
       } else if (value is List<MultipartFile>) {
         files.addAll(value.map((e) => MapEntry(key, e)));
+      } else if (value is List) {
+        fields.addAll(value.map((e) => MapEntry(key, e.toString())));
       } else {
         fields.add(MapEntry(key, value.toString()));
       }
