@@ -79,7 +79,7 @@ class GetHttpClient {
     }
     final uri = Uri.parse(url);
     if (query != null) {
-      uri.replace(queryParameters: query);
+      return uri.replace(queryParameters: query);
     }
     return uri;
   }
