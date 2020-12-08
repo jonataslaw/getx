@@ -335,27 +335,32 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
-  testWidgets("Get.back smoke test", (tester) async {
+  testWidgets("Get.back navigates back", (tester) async {
     await tester.pumpWidget(
-      Wrapper(child: Container()),
+      Wrapper(child: FirstScreen()),
     );
 
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
     Get.to(SecondScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(SecondScreen), findsOneWidget);
-
     Get.back();
 
     await tester.pumpAndSettle();
 
+    expect(find.byType(FirstScreen), findsOneWidget);
+  });
+
+  testWidgets("Get.back closeOverlays closes both snackbar and current route",
+      (tester) async {
+    await tester.pumpWidget(
+      Wrapper(child: FirstScreen()),
+    );
+
+    Get.to(SecondScreen());
+    Get.snackbar('title', "message");
+    Get.back(closeOverlays: true);
+
+    await tester.pumpAndSettle();
+
+    expect(Get.isSnackbarOpen, false);
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
