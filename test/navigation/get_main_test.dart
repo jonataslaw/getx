@@ -214,7 +214,9 @@ void main() {
   });
 
   testWidgets("Get.offUntil navigates to provided route", (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(Wrapper(child: Container()));
+
+    Get.to(FirstScreen());
 
     Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
         (route) => (route as GetPageRoute).routeName == '/FirstScreen');
