@@ -227,8 +227,9 @@ void main() {
   testWidgets(
       "Get.offUntil removes previous routes if they don't match predicate",
       (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(Wrapper(child: Container()));
 
+    Get.to(FirstScreen());
     Get.to(SecondScreen());
     Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
         (route) => (route as GetPageRoute).routeName == '/FirstScreen');
