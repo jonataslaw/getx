@@ -1,3 +1,139 @@
+## [3.21.3] 
+- Improve multipart file and defaultDecoder on GetConnect
+
+## [3.21.2] 
+- Fix GetConnect.request returning a PUT request
+
+## [3.21.1] 
+- Allow null body to POST method on GetConnect
+
+## [3.21.0] - Big update
+- This update attaches two nice features developed by (@SchabanBo): *GetPage Children* And *GetMiddleware*
+In previous versions, to create child pages, you should do something like:
+
+```dart
+GetPage(
+  name: '/home',
+  page: () => HomeView(),
+  binding: HomeBinding(),
+),
+GetPage(
+  name: '/home/products',
+  page: () => ProductsView(),
+  binding: ProductsBinding(),
+),
+GetPage(
+  name: '/home/products/electronics',
+  page: () => ElectronicsView(),
+  binding: ElectronicsBinding(),
+),
+```
+Although the feature works well, it could be improved in several ways:
+1- If you had many pages, the page file could become huge and difficult to read. Besides, it was difficult to know which page was the daughter of which module.
+2- It was not possible to delegate the function of naming routes to a subroutine file.
+With this update, it is possible to create a declarative structure, very similar to the Flutter widget tree for your route, which might look like this:
+```dart
+GetPage(
+      name: '/home',
+      page: () => HomeView(),
+      binding: HomeBinding(),
+      children: [
+        GetPage(
+            name: '/products',
+            page: () => ProductsView(),
+            binding: ProductsBinding(),
+            children: [
+              GetPage(
+                 name: '/electronics',
+                 page: () => ElectronicsView(),
+                 binding: ElectronicsBinding(),
+              ),
+            ],
+          ),
+      ], 
+  );
+```
+Thus, when accessing the url: '/home/products/electronics'
+Or use Get.toNamed('/home/products/electronics') it will go directly to the page [ElectronicsView], because the child pages, automatically inherit the name of the ancestral page, so _with any small change on any father in the tree all children will be updated._ If you change [/products] to [/accessories], you don't nesse update on all child links. 
+
+However, the most powerful feature of this version is *GetMiddlewares*.
+The GetPage has now new property that takes a list of GetMiddleWare than can perform actions and run them in the specific order.
+
+### Priority
+
+The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+
+```dart
+final middlewares = [
+  GetMiddleware(priority: 2),
+  GetMiddleware(priority: 5),
+  GetMiddleware(priority: 4),
+  GetMiddleware(priority: -8),
+];
+```
+those middlewares will be run in this order **-8 => 2 => 4 => 5**
+
+### Redirect
+
+This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+
+```dart
+GetPage redirect( ) {
+  final authService = Get.find<AuthService>();
+  return authService.authed.value ? null : RouteSettings(name: '/login')
+}
+```
+
+### onPageCalled
+
+This function will be called when this Page is called before anything created
+you can use it to change something about the page or give it new page
+
+```dart
+GetPage onPageCalled(GetPage page) {
+  final authService = Get.find<AuthService>();
+  return page.copyWith(title: 'Welcome ${authService.UserName}');
+}
+```
+
+### OnBindingsStart
+
+This function will be called right before the Bindings are initialize.
+Here you can change Bindings for this page.
+
+```dart
+List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  final authService = Get.find<AuthService>();
+  if (authService.isAdmin) {
+    bindings.add(AdminBinding());
+  }
+  return bindings;
+}
+```
+
+### OnPageBuildStart
+
+This function will be called right after the Bindings are initialize.
+Here you can do something after that you created the bindings and before creating the page widget.
+
+```dart
+GetPageBuilder onPageBuildStart(GetPageBuilder page) {
+  print('bindings are ready');
+  return page;
+}
+```
+
+### OnPageBuilt
+
+This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
+
+### OnPageDispose
+
+This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
+
+## [3.20.1] 
+* Fix wrong reference with unnamed routes and added more tests
+
 ## [3.20.0] - Big update
 * Added GetConnect. 
 - GetConnect is an easy way to communicate from your back to your front. With it you can:

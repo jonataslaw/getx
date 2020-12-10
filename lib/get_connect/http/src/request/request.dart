@@ -54,7 +54,7 @@ class Request<T> {
     int maxRedirects = 4,
     FormData files,
     bool persistentConnection = true,
-    final Decoder<T> decoder,
+    Decoder<T> decoder,
   }) {
     assert(url != null);
     assert(method != null);

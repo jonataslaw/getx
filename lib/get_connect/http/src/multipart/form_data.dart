@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import '../../../../get_rx/src/rx_stream/rx_stream.dart';
 import '../request/request.dart';
 import '../utils/utils.dart';
 import 'multipart_file.dart';
 
 class FormData {
   FormData(Map<String, dynamic> map) : boundary = _getBoundary() {
-    urlEncode(map, '', false, (key, value) {
-      if (value == null) return;
-      (value is MultipartFile)
-          ? files.add(MapEntry(key, value))
-          : fields.add(MapEntry(key, value.toString()));
-      return;
+    map.forEach((key, value) {
+      if (value == null) return null;
+      if (value is MultipartFile) {
+        files.add(MapEntry(key, value));
+      } else if (value is List<MultipartFile>) {
+        files.addAll(value.map((e) => MapEntry(key, e)));
+      } else {
+        fields.add(MapEntry(key, value.toString()));
+      }
     });
   }
 
@@ -87,25 +89,27 @@ class FormData {
   }
 
   Future<List<int>> toBytes() {
-    final getStream = GetStream<List<int>>();
+    return BodyBytes(_encode()).toBytes();
+  }
 
-    for (final item in fields) {
-      stringToBytes('--$boundary\r\n', getStream);
-      stringToBytes(_fieldHeader(item.key, item.value), getStream);
-      stringToBytes(item.value, getStream);
-      writeLine(getStream);
+  Stream<List<int>> _encode() async* {
+    const line = [13, 10];
+    final separator = utf8.encode('--$boundary\r\n');
+    final close = utf8.encode('--$boundary--\r\n');
+
+    for (var field in fields) {
+      yield separator;
+      yield utf8.encode(_fieldHeader(field.key, field.value));
+      yield utf8.encode(field.value);
+      yield line;
     }
 
-    Future.forEach<MapEntry<String, MultipartFile>>(files, (file) {
-      stringToBytes('--$boundary\r\n', getStream);
-      stringToBytes(_fileHeader(file), getStream);
-
-      return streamToFuture(file.value.stream, getStream)
-          .then((_) => writeLine(getStream));
-    }).then((_) {
-      stringToBytes('--$boundary--\r\n', getStream);
-      getStream.close();
-    });
-    return BodyBytes(getStream.stream).toBytes();
+    for (final file in files) {
+      yield separator;
+      yield utf8.encode(_fileHeader(file));
+      yield* file.value.stream;
+      yield line;
+    }
+    yield close;
   }
 }

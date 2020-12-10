@@ -198,139 +198,135 @@ class GetMaterialApp extends StatelessWidget {
         initialRoute = null,
         super(key: key);
 
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings, unknownRoute).page();
-  }
+  Route<dynamic> generator(RouteSettings settings) =>
+      PageRedirect(settings, unknownRoute).page();
 
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    final match = Get.routeTree.matchRoute(name);
-    Get.parameters = match?.parameters;
-
-    //Route can be nullable, just pass the unknown route
-    if (match?.route == null) {
-      return [
-        GetPageRoute(
-          page: unknownRoute.page,
-          parameter: unknownRoute.parameter,
-          settings: RouteSettings(name: name, arguments: null),
-          curve: unknownRoute.curve,
-          opaque: unknownRoute.opaque,
-          customTransition: unknownRoute.customTransition,
-          binding: unknownRoute.binding,
-          bindings: unknownRoute.bindings,
-          transitionDuration: (unknownRoute.transitionDuration ??
-              Get.defaultTransitionDuration),
-          transition: unknownRoute.transition,
-          popGesture: unknownRoute.popGesture,
-          fullscreenDialog: unknownRoute.fullscreenDialog,
-        )
-      ];
-    }
-
-    return [
-      GetPageRoute(
-        page: match.route.page,
-        parameter: match.route.parameter,
-        settings: RouteSettings(name: name, arguments: null),
-        curve: match.route.curve,
-        opaque: match.route.opaque,
-        binding: match.route.binding,
-        bindings: match.route.bindings,
-        transitionDuration:
-            (match.route.transitionDuration ?? Get.defaultTransitionDuration),
-        transition: match.route.transition,
-        popGesture: match.route.popGesture,
-        fullscreenDialog: match.route.fullscreenDialog,
-      )
-    ];
-  }
+  List<Route<dynamic>> initialRoutesGenerate(String name) =>
+      [PageRedirect(RouteSettings(name: name), unknownRoute).page()];
 
   @override
-  Widget build(BuildContext context) {
-    return GetBuilder<GetMaterialController>(
-        init: Get.rootController,
-        dispose: (d) {
-          onDispose?.call();
-        },
-        initState: (i) {
-          Get.engine.addPostFrameCallback((timeStamp) {
-            onReady?.call();
-          });
-          if (locale != null) Get.locale = locale;
-
-          if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
-
-          if (translations != null) {
-            Get.addTranslations(translations.keys);
-          } else if (translationsKeys != null) {
-            Get.addTranslations(translationsKeys);
-          }
-
-          Get.customTransition = customTransition;
-
-          initialBinding?.dependencies();
-          Get.addPages(getPages);
-          Get.smartManagement = smartManagement;
-          onInit?.call();
-
-          Get.config(
-            enableLog: enableLog ?? Get.isLogEnable,
-            logWriterCallback: logWriterCallback,
-            defaultTransition: defaultTransition ?? Get.defaultTransition,
-            defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
-            defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
-            defaultDurationTransition:
-                transitionDuration ?? Get.defaultTransitionDuration,
-          );
-        },
-        builder: (_) {
-          return MaterialApp(
-            key: _.unikey,
-            navigatorKey:
-                (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
-            home: home,
-            routes: routes ?? const <String, WidgetBuilder>{},
-            initialRoute: initialRoute,
-            onGenerateRoute: (getPages != null ? generator : onGenerateRoute),
-            onGenerateInitialRoutes: (getPages == null || home != null)
-                ? onGenerateInitialRoutes
-                : initialRoutesGenerate,
-            onUnknownRoute: onUnknownRoute,
-            navigatorObservers: (navigatorObservers == null
-                ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
-                : <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
-              ..addAll(navigatorObservers)),
-            builder: (context, child) {
-              return Directionality(
-                textDirection: textDirection ??
-                    (rtlLanguages.contains(Get.locale?.languageCode)
-                        ? TextDirection.rtl
-                        : TextDirection.ltr),
-                child: builder == null ? child : builder(context, child),
-              );
-            },
-            title: title ?? '',
-            onGenerateTitle: onGenerateTitle,
-            color: color,
-            theme: _.theme ?? theme ?? ThemeData.fallback(),
-            darkTheme: darkTheme,
-            themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
-            locale: Get.locale ?? locale,
-            localizationsDelegates: localizationsDelegates,
-            localeListResolutionCallback: localeListResolutionCallback,
-            localeResolutionCallback: localeResolutionCallback,
-            supportedLocales:
-                supportedLocales ?? const <Locale>[Locale('en', 'US')],
-            debugShowMaterialGrid: debugShowMaterialGrid ?? false,
-            showPerformanceOverlay: showPerformanceOverlay ?? false,
-            checkerboardRasterCacheImages:
-                checkerboardRasterCacheImages ?? false,
-            checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
-            showSemanticsDebugger: showSemanticsDebugger ?? false,
-            debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
-            shortcuts: shortcuts,
-            //   actions: actions,
-          );
+  Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
+      init: Get.rootController,
+      dispose: (d) {
+        onDispose?.call();
+      },
+      initState: (i) {
+        Get.engine.addPostFrameCallback((timeStamp) {
+          onReady?.call();
         });
-  }
+        if (locale != null) Get.locale = locale;
+
+        if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
+
+        if (translations != null) {
+          Get.addTranslations(translations.keys);
+        } else if (translationsKeys != null) {
+          Get.addTranslations(translationsKeys);
+        }
+
+        Get.customTransition = customTransition;
+
+        initialBinding?.dependencies();
+        Get.addPages(getPages);
+        Get.smartManagement = smartManagement;
+        onInit?.call();
+
+        Get.config(
+          enableLog: enableLog ?? Get.isLogEnable,
+          logWriterCallback: logWriterCallback,
+          defaultTransition: defaultTransition ?? Get.defaultTransition,
+          defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
+          defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
+          defaultDurationTransition:
+              transitionDuration ?? Get.defaultTransitionDuration,
+        );
+      },
+      builder: (_) => routerDelegate != null
+          ? MaterialApp.router(
+              routerDelegate: routerDelegate,
+              routeInformationParser: routeInformationParser,
+              backButtonDispatcher: backButtonDispatcher,
+              routeInformationProvider: routeInformationProvider,
+              key: _.unikey,
+              builder: (context, child) {
+                return Directionality(
+                  textDirection: textDirection ??
+                      (rtlLanguages.contains(Get.locale?.languageCode)
+                          ? TextDirection.rtl
+                          : TextDirection.ltr),
+                  child: builder == null ? child : builder(context, child),
+                );
+              },
+              title: title ?? '',
+              onGenerateTitle: onGenerateTitle,
+              color: color,
+              theme: _.theme ?? theme ?? ThemeData.fallback(),
+              darkTheme: darkTheme,
+              themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
+              locale: Get.locale ?? locale,
+              localizationsDelegates: localizationsDelegates,
+              localeListResolutionCallback: localeListResolutionCallback,
+              localeResolutionCallback: localeResolutionCallback,
+              supportedLocales:
+                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
+              debugShowMaterialGrid: debugShowMaterialGrid ?? false,
+              showPerformanceOverlay: showPerformanceOverlay ?? false,
+              checkerboardRasterCacheImages:
+                  checkerboardRasterCacheImages ?? false,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
+              showSemanticsDebugger: showSemanticsDebugger ?? false,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              shortcuts: shortcuts,
+            )
+          : MaterialApp(
+              key: _.unikey,
+              navigatorKey:
+                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
+              home: home,
+              routes: routes ?? const <String, WidgetBuilder>{},
+              initialRoute: initialRoute,
+              onGenerateRoute: (getPages != null ? generator : onGenerateRoute),
+              onGenerateInitialRoutes: (getPages == null || home != null)
+                  ? onGenerateInitialRoutes
+                  : initialRoutesGenerate,
+              onUnknownRoute: onUnknownRoute,
+              navigatorObservers: (navigatorObservers == null
+                  ? <NavigatorObserver>[
+                      GetObserver(routingCallback, Get.routing)
+                    ]
+                  : <NavigatorObserver>[
+                      GetObserver(routingCallback, Get.routing)
+                    ]
+                ..addAll(navigatorObservers)),
+              builder: (context, child) {
+                return Directionality(
+                  textDirection: textDirection ??
+                      (rtlLanguages.contains(Get.locale?.languageCode)
+                          ? TextDirection.rtl
+                          : TextDirection.ltr),
+                  child: builder == null ? child : builder(context, child),
+                );
+              },
+              title: title ?? '',
+              onGenerateTitle: onGenerateTitle,
+              color: color,
+              theme: _.theme ?? theme ?? ThemeData.fallback(),
+              darkTheme: darkTheme,
+              themeMode: _.themeMode ?? themeMode ?? ThemeMode.system,
+              locale: Get.locale ?? locale,
+              localizationsDelegates: localizationsDelegates,
+              localeListResolutionCallback: localeListResolutionCallback,
+              localeResolutionCallback: localeResolutionCallback,
+              supportedLocales:
+                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
+              debugShowMaterialGrid: debugShowMaterialGrid ?? false,
+              showPerformanceOverlay: showPerformanceOverlay ?? false,
+              checkerboardRasterCacheImages:
+                  checkerboardRasterCacheImages ?? false,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
+              showSemanticsDebugger: showSemanticsDebugger ?? false,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              shortcuts: shortcuts,
+              //   actions: actions,
+            ));
 }

@@ -11,6 +11,7 @@
     - [Bindings类](#Bindings类)
     - [BindingsBuilder](#BindingsBuilder)
     - [智能管理](#智能管理)
+      - [如何改变](#如何改变)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#SmartManagement.onlyBuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepFactory)

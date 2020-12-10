@@ -91,71 +91,54 @@ class GetHttpClient {
     Map<String, dynamic> query,
     Decoder<T> decoder,
   ) async {
-    assert(method != null);
-    assert(body != null);
-
     List<int> bodyBytes;
+    BodyBytes bodyStream;
+    final headers = <String, String>{};
+
+    headers['user-agent'] = userAgent;
 
     if (body is FormData) {
       bodyBytes = await body.toBytes();
-    } else {
-      try {
-        var jsonString = json.encode(body);
+      headers['content-length'] = bodyBytes.length.toString();
+      headers['content-type'] =
+          'multipart/form-data; boundary=${body.boundary}';
+    } else if (body is Map || body is List) {
+      var jsonString = json.encode(body);
 
-        //TODO check this implementation
-        if (contentType != null) {
-          if (contentType.toLowerCase() ==
-              'application/x-www-form-urlencoded') {
-            var paramName = 'param';
-            jsonString = '$paramName=${Uri.encodeQueryComponent(jsonString)}';
-          }
+      bodyBytes = utf8.encode(jsonString);
+      headers['content-length'] = bodyBytes.length.toString();
+      headers['content-type'] = contentType ?? defaultContentType;
+      //TODO check this implementation
+      if (contentType != null) {
+        if (contentType.toLowerCase() == 'application/x-www-form-urlencoded') {
+          var paramName = 'param';
+          jsonString = '$paramName=${Uri.encodeQueryComponent(jsonString)}';
         }
-
-        bodyBytes = utf8.encode(jsonString);
-      } on Exception catch (err) {
-        if (!errorSafety) {
-          throw UnexpectedFormat(err.toString());
-        } else {}
+      }
+    } else if (body == null) {
+      headers['content-type'] = contentType ?? defaultContentType;
+      headers['content-length'] = '0';
+    } else {
+      if (!errorSafety) {
+        throw UnexpectedFormat('body cannot be ${body.runtimeType}');
       }
     }
 
-    final bodyStream = BodyBytes.fromBytes(bodyBytes);
-
-    final headers = <String, String>{};
-
-    _setHeadersWithBody(contentType, headers, bodyBytes);
+    if (bodyBytes != null) {
+      bodyStream = BodyBytes.fromBytes(bodyBytes);
+    }
 
     final uri = _createUri(url, query);
 
-    return Request(
+    return Request<T>(
       method: method,
       url: uri,
       headers: headers,
       bodyBytes: bodyStream,
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
+      decoder: decoder,
     );
-  }
-
-  void _setHeadersWithBody(
-    String contentType,
-    // String jsonString,
-    Map<String, String> headers,
-    List<int> bodyBytes,
-    // List<MultipartFile> files,
-  ) {
-    // if (files != null) {
-    //   headers['content-type'] = 'multipart/form-data';
-    //   headers['x-requested-with'] = 'XMLHttpRequest';
-    // } else {
-    //   headers['content-type'] = contentType ?? defaultContentType;
-    // }
-
-    headers['content-type'] =
-        contentType ?? defaultContentType; // verify if this is better location
-
-    headers['user-agent'] = userAgent;
-    headers['content-length'] = bodyBytes.length.toString();
   }
 
   void _setSimpleHeaders(
@@ -189,7 +172,7 @@ class GetHttpClient {
       if (HttpStatus.unauthorized == response.statusCode &&
           _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
-        return _performRequest(
+        return _performRequest<T>(
           handler,
           authenticate: true,
           requestNumber: requestNumber + 1,
@@ -249,16 +232,32 @@ class GetHttpClient {
     @required dynamic body,
     Map<String, dynamic> query,
     Decoder<T> decoder,
-    // List<MultipartFile> files,
   }) {
-    assert(body != null);
     return _requestWithBody<T>(
       url,
       contentType,
       body,
       'post',
       query,
-      decoder,
+      decoder ?? (defaultDecoder as Decoder<T>),
+    );
+  }
+
+  Future<Request<T>> _request<T>(
+    String url,
+    String method, {
+    String contentType,
+    @required dynamic body,
+    @required Map<String, dynamic> query,
+    Decoder<T> decoder,
+  }) {
+    return _requestWithBody<T>(
+      url,
+      contentType,
+      body,
+      method,
+      query,
+      decoder ?? (defaultDecoder as Decoder<T>),
     );
   }
 
@@ -268,10 +267,15 @@ class GetHttpClient {
     @required dynamic body,
     @required Map<String, dynamic> query,
     Decoder<T> decoder,
-    //  List<MultipartFile> files,
   }) {
-    assert(body != null);
-    return _requestWithBody(url, contentType, body, 'put', query, decoder);
+    return _requestWithBody<T>(
+      url,
+      contentType,
+      body,
+      'put',
+      query,
+      decoder ?? (defaultDecoder as Decoder<T>),
+    );
   }
 
   Request<T> _delete<T>(
@@ -285,12 +289,16 @@ class GetHttpClient {
     final uri = _createUri(url, query);
 
     return Request<T>(
-        method: 'delete', url: uri, headers: headers, decoder: decoder);
+      method: 'delete',
+      url: uri,
+      headers: headers,
+      decoder: decoder ?? (defaultDecoder as Decoder<T>),
+    );
   }
 
   Future<Response<T>> post<T>(
-    String url,
-    dynamic body, {
+    String url, {
+    dynamic body,
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
@@ -323,17 +331,52 @@ class GetHttpClient {
     }
   }
 
-  Future<Response<T>> put<T>(
+  Future<Response<T>> request<T>(
     String url,
-    Map<String, dynamic> body, {
+    String method, {
+    dynamic body,
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
   }) async {
     try {
-      var response = await _performRequest(
-        () => _put(
+      var response = await _performRequest<T>(
+        () => _request<T>(
+          url,
+          method,
+          contentType: contentType,
+          query: query,
+          body: body,
+          decoder: decoder,
+        ),
+        headers: headers,
+      );
+      return response;
+    } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
+      return Future.value(Response<T>(
+        request: null,
+        statusCode: null,
+        body: null,
+        statusText: 'Can not connect to server. Reason: $e',
+      ));
+    }
+  }
+
+  Future<Response<T>> put<T>(
+    String url, {
+    dynamic body,
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+  }) async {
+    try {
+      var response = await _performRequest<T>(
+        () => _put<T>(
           url,
           contentType: contentType,
           query: query,
@@ -390,7 +433,7 @@ class GetHttpClient {
     Decoder<T> decoder,
   }) async {
     try {
-      var response = await _performRequest(
+      var response = await _performRequest<T>(
         () async => _delete<T>(url, contentType, query, decoder),
         headers: headers,
       );

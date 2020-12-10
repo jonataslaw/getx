@@ -22,20 +22,32 @@ abstract class GetConnectInterface with GetLifeCycleBase {
     Map<String, dynamic> query,
     Decoder<T> decoder,
   });
+
+  Future<Response<T>> request<T>(
+    String url,
+    String method, {
+    dynamic body,
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+  });
   Future<Response<T>> post<T>(
     String url,
     dynamic body, {
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
+    Decoder<T> decoder,
   });
 
   Future<Response<T>> put<T>(
     String url,
-    Map<String, dynamic> body, {
+    dynamic body, {
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
+    Decoder<T> decoder,
   });
 
   Future<Response<T>> delete<T>(
@@ -43,6 +55,7 @@ abstract class GetConnectInterface with GetLifeCycleBase {
     Map<String, String> headers,
     String contentType,
     Map<String, dynamic> query,
+    Decoder<T> decoder,
   });
 
   GetSocket socket(String url, {Duration ping = const Duration(seconds: 5)});
@@ -97,7 +110,7 @@ class GetConnect extends GetConnectInterface {
     Decoder<T> decoder,
   }) {
     _checkIfDisposed();
-    return httpClient.get(
+    return httpClient.get<T>(
       url,
       headers: headers,
       contentType: contentType,
@@ -118,7 +131,7 @@ class GetConnect extends GetConnectInterface {
     _checkIfDisposed();
     return httpClient.post<T>(
       url,
-      body,
+      body: body,
       headers: headers,
       contentType: contentType,
       query: query,
@@ -129,16 +142,38 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> put<T>(
     String url,
-    Map<String, dynamic> body, {
+    dynamic body, {
     String contentType,
     Map<String, String> headers,
     Map<String, dynamic> query,
     Decoder<T> decoder,
   }) {
     _checkIfDisposed();
-    return httpClient.put(
+    return httpClient.put<T>(
       url,
-      body,
+      body: body,
+      headers: headers,
+      contentType: contentType,
+      query: query,
+      decoder: decoder,
+    );
+  }
+
+  @override
+  Future<Response<T>> request<T>(
+    String url,
+    String method, {
+    dynamic body,
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+  }) {
+    _checkIfDisposed();
+    return httpClient.request<T>(
+      url,
+      method,
+      body: body,
       headers: headers,
       contentType: contentType,
       query: query,
