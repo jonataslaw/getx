@@ -198,54 +198,11 @@ class GetMaterialApp extends StatelessWidget {
         initialRoute = null,
         super(key: key);
 
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings, unknownRoute).page();
-  }
+  Route<dynamic> generator(RouteSettings settings) =>
+      PageRedirect(settings, unknownRoute).page();
 
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    final match = Get.routeTree.matchRoute(name);
-    Get.parameters = match?.parameters;
-
-    //Route can be nullable, just pass the unknown route
-    if (match?.route == null) {
-      return [
-        GetPageRoute(
-          page: unknownRoute.page,
-          parameter: unknownRoute.parameter,
-          settings: RouteSettings(name: name, arguments: null),
-          curve: unknownRoute.curve,
-          opaque: unknownRoute.opaque,
-          routeName: unknownRoute.name,
-          customTransition: unknownRoute.customTransition,
-          binding: unknownRoute.binding,
-          bindings: unknownRoute.bindings,
-          transitionDuration: (unknownRoute.transitionDuration ??
-              Get.defaultTransitionDuration),
-          transition: unknownRoute.transition,
-          popGesture: unknownRoute.popGesture,
-          fullscreenDialog: unknownRoute.fullscreenDialog,
-        )
-      ];
-    }
-
-    return [
-      GetPageRoute(
-        page: match.route.page,
-        parameter: match.route.parameter,
-        settings: RouteSettings(name: name, arguments: null),
-        curve: match.route.curve,
-        opaque: match.route.opaque,
-        binding: match.route.binding,
-        routeName: match.route.name,
-        bindings: match.route.bindings,
-        transitionDuration:
-            (match.route.transitionDuration ?? Get.defaultTransitionDuration),
-        transition: match.route.transition,
-        popGesture: match.route.popGesture,
-        fullscreenDialog: match.route.fullscreenDialog,
-      )
-    ];
-  }
+  List<Route<dynamic>> initialRoutesGenerate(String name) =>
+      [PageRedirect(RouteSettings(name: name), unknownRoute).page()];
 
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
