@@ -1,8 +1,9 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-*Idiomas: [Inglês](README.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreana](README.ko-kr.md).*
+**Idiomas: [Inglês](README.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreana](README.ko-kr.md).**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
+[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -39,6 +40,17 @@
       - [Alterar local](#alterar-local)
       - [Localidade do sistema operacional](#localidade-do-sistema-operacional)
   - [Mudar tema (changeTheme)](#mudar-tema-changetheme)
+  - [GetConnect](#getconnect)
+    - [Configuração Padrão](#configuração-padrão)
+    - [Configuração Personalizada](#configuração-personalizada)
+  - [GetPage Middleware](#getpage-middleware)
+    - [Priority](#priority)
+    - [Redirect](#redirect)
+    - [onPageCalled](#onpagecalled)
+    - [OnBindingsStart](#onbindingsstart)
+    - [OnPageBuildStart](#onpagebuildstart)
+    - [OnPageBuilt](#onpagebuilt)
+    - [OnPageDispose](#onpagedispose)
   - [Outras APIs avançadas](#outras-apis-avançadas)
     - [Configurações Globais opcionais e configurações manuais](#configurações-globais-opcionais-e-configurações-manuais)
     - [Widgets de Estado Local](#widgets-de-estado-local)
@@ -63,17 +75,27 @@
 # Sobre Get
 
 - Get é uma biblioteca poderosa e extraleve para Flutter. Ela combina um gerenciador de estado de alta performance, injeção de dependência inteligente e gerenciamento de rotas de uma forma rápida e prática.
-- GetX™ possui 3 princípios básicos, o que significa que esta é a prioridade para todos os recursos da biblioteca
-  - **PERFOMANCE**: GetX™ é focado em desempenho e consumo mínimo de recursos. Os benchmarks quase sempre não são importantes no mundo real, mas se você quiser, há um indicador de consumo aqui ([benchmarks](https://github.com/jonataslaw/benchmarks)), onde GetX™ se sai melhor do que outras abordagens de gerenciamento de estado, por exemplo. A diferença não é grande, mas mostra nossa preocupação em não desperdiçar seus recursos.
+
+- GetX™ possui 3 princípios básicos, o que significa que esta é a prioridade para todos os recursos da biblioteca: **PRODUTIVIDADE, PERFORMANCE AND ORGANIZAÇÃO.**
+
+  - **PERFOMANCE**: GetX™ é focado em desempenho e consumo mínimo de recursos. GetX não usa Streams ou ChangeNotifier. 
+
   - **PRODUTIVIDADE**: GetX™ usa uma sintaxe fácil e agradável. Não importa o que você queira fazer, sempre há uma maneira mais fácil com GetX™. Isso economizará horas de desenvolvimento e extrairá o máximo de desempenho que seu aplicativo pode oferecer.
-  - **ORGANIZAÇÃO**: GetX™ permite o desacoplamento total da View, lógica de apresentação, lógica de negócios, injeção de dependência e navegação. Você não precisa de contexto para navegar entre as rotas, portanto, você não depende da árvore do widget (visualização) para isso. Você não precisa de contexto para acessar seus Controllers / BLoCs por meio de um inheritedWidget, então você desacopla completamente sua lógica de apresentação e lógica de negócios de sua camada de visualização. Você não precisa injetar suas classes Controllers / Models / BLoCs em sua árvore de widgets através de multiproviders, pois GetX™ usa seu próprio recurso de injeção de dependência, desacoplando a DI de sua View completamente. Com GetX™ você sabe onde encontrar cada recurso de sua aplicação, tendo o código limpo por padrão. Isso além de facilitar a manutenção, torna o compartilhamento dos módulos, algo que até então em Flutter era impensável, algo totalmente possível. O BLoC foi um ponto de partida para organizar o código no Flutter, ele separa a lógica de negócios da visualização. GetX™ é uma evolução natural disso, separando não apenas a lógica de negócios, mas a lógica de apresentação. O bônus da injeção de dependências e rotas também são dissociadas e a camada de dados está fora de tudo. Você sabe onde está tudo e tudo isso de uma maneira mais fácil do que construir um hello world. GetX™ é a maneira mais fácil, prática e escalonável de construir aplicativos de alto desempenho com o Flutter SDK, com um grande ecossistema em torno dele que funciona perfeitamente em conjunto, sendo fácil para iniciantes e preciso para especialistas. É seguro, estável, atualizado e oferece uma grande variedade de APIs integradas que não estão presentes no Flutter SDK padrão.
-- GetX™ não é inchado. Possui uma infinidade de recursos que permitem que você comece a programar sem se preocupar com nada, mas cada um desses recursos está em contêineres separados e só são iniciados após o uso. Se você usar apenas o Gerenciamento de estado, apenas o Gerenciamento de estado será compilado. Se você usar apenas rotas, nada do gerenciamento de estado será compilado. Você pode compilar o repositório de benchmark e verá que usando apenas o gerenciamento de estado Get, o aplicativo compilado com Get tornou-se menor do que todos os outros aplicativos que têm apenas o gerenciamento de estado de outros pacotes, porque nada que não seja usado será compilado em seu código e cada solução GetX™ foi projetada para ser extra leve. O mérito aqui também vem do tree shaking do Flutter, que é incrível e consegue eliminar recursos não utilizados como nenhum outro framework faz.
-- Navegue por rotas sem `context`, abra `Dialog`s, `Snackbar`s ou `BottomSheet`s de qualquer lugar no código, gerencie estados e injete dependências de uma forma simples e prática.
-- GetX™ possui um enorme ecossistema, capaz de rodar com o mesmo código no Android, iOS, Web, Mac, Linux, Windows e em seu servidor. É possível reutilizar totalmente o código feito no front-end em seu back-end com **[Get Server](https://github.com/jonataslaw/get_server)**.
+  Geralmente, o desenvolvedor deve se preocupar em remover os controladores da memória. Com GetX™, isso não é necessário porque, por padrão, os recursos são removidos da memória quando não são usados. Se quiser mantê-lo na memória, você deve declarar explicitamente "permanent: true" em sua dependência. Dessa forma, além de economizar tempo, você corre menos risco de ter dependências desnecessárias na memória. O carregamento da dependência também é lazy por padrão.
 
-Além disso, todo o processo de desenvolvimento pode ser totalmente automatizado, tanto no servidor quanto no front-end com **[Get CLI](https://github.com/jonataslaw/get_cli)**.
+  - **ORGANIZAÇÃO**: GetX™ permite o desacoplamento total da View, lógica de apresentação, lógica de negócios, injeção de dependência e navegação. Você não precisa de contexto para navegar entre as rotas, portanto, você não depende da árvore do widget (visualização) para isso. Você não precisa de contexto para acessar seus Controllers/BLoCs por meio de um inheritedWidget, então você desacopla completamente sua lógica de apresentação e lógica de negócios de sua camada de visualização. Você não precisa injetar suas classes Controllers/Models/BLoCs em sua árvore de widgets através de multiproviders, pois GetX™ usa seu próprio recurso de injeção de dependência, desacoplando a DI de sua View completamente. 
+  Com GetX™ você sabe onde encontrar cada recurso de sua aplicação, tendo o código limpo por padrão. Isso além de facilitar a manutenção, torna o compartilhamento dos módulos, algo que até então em Flutter era impensável, em algo totalmente possível.
+  O BLoC foi um ponto de partida para organizar o código no Flutter, ele separa a lógica de negócios da visualização. GetX™ é uma evolução natural disso, separando não apenas a lógica de negócios, mas a lógica de apresentação. O bônus da injeção de dependências e rotas também são dissociadas e a camada de dados está fora de tudo. Você sabe onde está tudo e tudo isso de uma maneira mais fácil do que construir um hello world. 
+  GetX™ é a maneira mais fácil, prática e escalonável de construir aplicativos de alto desempenho com o Flutter SDK, com um grande ecossistema em torno dele que funciona perfeitamente em conjunto, sendo fácil para iniciantes e preciso para especialistas. É seguro, estável, atualizado e oferece uma grande variedade de APIs integradas que não estão presentes no Flutter SDK padrão.
 
-Além disso, para aumentar ainda mais sua produtividade, temos a **[extensão para VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)** e a **[extensão para Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+- GetX™ não é inchado. Possui uma infinidade de recursos que permitem que você comece a programar sem se preocupar com nada, mas cada um desses recursos está em contêineres separados e só são iniciados após o uso. Se você usar apenas o Gerenciamento de estado, apenas o Gerenciamento de estado será compilado. Se você usar apenas rotas, nada do gerenciamento de estado será compilado. 
+
+- GetX™ possui um enorme ecossistema, uma grande comunidade, um grande número de colaboradores e será mantido enquanto o Flutter existir. Getx também é capaz de rodar com o mesmo código no Android, iOS, Web, Mac, Linux, Windows e em seu servidor.
+**É possível reutilizar totalmente seu código feito no frontend em seu backend com [Get Server](https://github.com/jonataslaw/get_server)**.
+
+**Além disso, todo o processo de desenvolvimento pode ser totalmente automatizado, tanto no servidor quanto no front-end com **[Get CLI](https://github.com/jonataslaw/get_cli)**.
+
+**Além disso, para aumentar ainda mais sua produtividade, temos a [extensão para VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) e a [extensão para Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Instalando
 
@@ -167,13 +189,7 @@ Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é p
 
 ## Gerenciamento de estado
 
-Há atualmente vários gerenciadores de estados para o Flutter. Porém, a maioria deles envolve usar `ChangeNotifier` para atualizar os widgets e isso é uma abordagem muito ruim no quesito performance em aplicações de médio ou grande porte. Você pode checar na documentação oficial do Flutter que o [`ChangeNotifier` deveria ser usado com um ou no máximo dois listeners](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), fazendo-o praticamente inutilizável em qualquer aplicação média ou grande.
-
-Get não é melhor ou pior que nenhum gerenciador de estado, mas você deveria analisar esses pontos tanto quanto os argumentos abaixo para escolher entre usar Get na sua forma pura, ou usando-o em conjunto com outro gerenciador de estado.
-
-Definitivamente, Get não é o inimigo de nenhum gerenciador, porque Get é um microframework, não apenas um gerenciador, e pode ser usado tanto sozinho quanto em conjunto com eles.
-
-Get tem dois gerenciadores de estado diferentes: o simple state manager (vamos chamá-lo de GetBuilder) e o reactive state manager (que tem o nome do pacote, GetX)
+GetX™ posuui dois gerenciadores de estado diferentes: o gerenciador de estado simples (vamos chamá-lo de GetBuilder) e o gerenciador de estado reativo (GetX/Obx)
 
 ### Reactive state manager
 
@@ -183,6 +199,7 @@ Programação reativa pode alienar muitas pessoas porque é dito que é complica
 * Você não precisa criar um StreamBuilder para cada variável
 * Você não precisa criar uma classe para cada estado
 * Você não precisa criar um get para o valor inicial
+* Você não precisará usar geradores de código
 
 Programação reativa com o Get é tão fácil quanto usar setState.
 
@@ -369,12 +386,12 @@ Get.updateLocale(locale);
 ```
 
 #### Localidade do sistema operacional
-Para ler a localidade do sistema operacional, você pode usar `window.locale`.
+Para ler a localidade do sistema operacional, você pode usar `Get.deviceLocale`.
 ```dart
 import 'dart:ui' as ui;
 
 return GetMaterialApp(
-    locale: ui.window.locale,
+    locale: Get.deviceLocale,
 );
 ```
 
@@ -401,6 +418,159 @@ Quando o modo Dark está ativado, ele vai trocar pro modo light e vice versa.
 Se você quiser saber mais como trocar o tema, você pode seguir esse tutorial no Medium que até ensina persistência do tema usando Get (e SharedPreferences):
 
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
+
+
+## GetConnect
+GetConnect é uma maneira fácil de se comunicar de trás para a frente com http ou websockets
+
+### Configuração Padrão
+Você pode simplesmente estender GetConnect e usar os métodos GET/POST/PUT/DELETE/SOCKET para se comunicar com sua API Rest ou websockets.
+
+```dart
+class UserProvider extends GetConnect {
+  // Requisição Get
+  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  // Requisição Post
+  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  // Requisição Post com Arquivo
+  Future<Response<CasesModel>> postCases(List<int> image) {
+    final form = FormData({
+      'file': MultipartFile(image, filename: 'avatar.png'),
+      'otherFile': MultipartFile(image, filename: 'cover.png'),
+    });
+    return post('http://youapi/users/upload', form);
+  }
+
+  GetSocket userMessages() {
+    return socket('https://yourapi/users/socket');
+  }
+}
+```
+### Configuração Personalizada
+GetConnect é altamente personalizável, você pode definir uma base Url, modificadores de resposta, modificadores de Requests, definir um autenticador e até o número de tentativas em que tentará se autenticar, além de dar a possibilidade de definir um decodificador padrão que irá transformar todas as suas solicitações em seus modelos sem qualquer configuração adicional.
+
+```dart
+class HomeProvider extends GetConnect {
+  @override
+  void onInit() {
+    // Todas as requisições passam por jsonEncode e então por CasesModel.fromJson()
+    httpClient.defaultDecoder = CasesModel.fromJson;
+    httpClient.baseUrl = 'https://api.covid19api.com';
+    // baseUrl = 'https://api.covid19api.com'; // Define baseUrl para
+    // Http e websockets se usado sem uma instância [httpClient]
+
+    // Anexa a propriedade 'apikey' no cabeçalho de todas as requisições
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = '12345678';
+      return request;
+    });
+
+    // Mesmo que o servidor envie dados do país "Brasil",
+    // eles nunca serão exibidos para os usuários, porque você removeu
+    // os dados da resposta, mesmo antes de a resposta ser entregue
+    httpClient.addResponseModifier<CasesModel>((request, response) {
+      CasesModel model = response.body;
+      if (model.countries.contains('Brazil')) {
+        model.countries.remove('Brazil');
+      }
+    });
+
+    httpClient.addAuthenticator((request) async {
+      final response = await get("http://yourapi/token");
+      final token = response.body['token'];
+      // Configurando um cabeçalho
+      request.headers['Authorization'] = "$token";
+      return request;
+    });
+
+    // O autenticador será chamado 3 vezes se HttpStatus for 
+    // HttpStatus.unauthorized
+    httpClient.maxAuthRetries = 3;
+  }
+  }
+
+  @override
+  Future<Response<CasesModel>> getCases(String path) => get(path);
+}
+```
+
+## GetPage Middleware
+
+O GetPage agora tem uma nova propriedade que recebe uma lista de GetMiddleWare e executa cada item na ordem específica.
+
+**Nota**: Quando GetPage tem Middlewares, todos os filhos desta página terão os mesmos middlewares automaticamente.
+
+### Priority
+
+A ordem dos middlewares a serem executados pode ser definida pela prioridade no GetMiddleware.
+
+```dart
+final middlewares = [
+  GetMiddleware(priority: 2),
+  GetMiddleware(priority: 5),
+  GetMiddleware(priority: 4),
+  GetMiddleware(priority: -8),
+];
+```
+Esses middlewares serão executados nesta ordem:  **-8 => 2 => 4 => 5**
+
+### Redirect
+
+Esta função será chamada quando a página da rota chamada estiver sendo pesquisada. RouteSettings se torna o resultado do redirecionamento. Ou retorne nulo e não haverá redirecionamento.
+
+```dart
+GetPage redirect( ) {
+  final authService = Get.find<AuthService>();
+  return authService.authed.value ? null : RouteSettings(name: '/login')
+}
+```
+
+### onPageCalled
+
+Esta função será chamada quando uma página for chamada, antes de qualquer coisa ser criada e
+você pode usá-la para mudar algo sobre a página ou dar-lhe uma nova página
+
+```dart
+GetPage onPageCalled(GetPage page) {
+  final authService = Get.find<AuthService>();
+  return page.copyWith(title: 'Welcome ${authService.UserName}');
+}
+```
+
+### OnBindingsStart
+
+Esta função será chamada logo antes da inicialização dos Bindings.
+Aqui você pode alterar as ligações desta página.
+
+```dart
+List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  final authService = Get.find<AuthService>();
+  if (authService.isAdmin) {
+    bindings.add(AdminBinding());
+  }
+  return bindings;
+}
+```
+
+### OnPageBuildStart
+
+Esta função será chamada logo após a inicialização dos Bindings.
+Aqui você pode fazer algo depois de criar as ligações e antes de criar o widget da página.
+
+```dart
+GetPageBuilder onPageBuildStart(GetPageBuilder page) {
+  print('bindings are ready');
+  return page;
+}
+```
+
+### OnPageBuilt
+
+Esta função será chamada logo após a função GetPage.page ser chamada e fornecerá o resultado da função e obtém o widget que será mostrado.
+
+### OnPageDispose
+
+Esta função será chamada logo após descartar todos os objetos relacionados (controladores, visualizações, ...) da página.
 
 ## Outras APIs avançadas
 
@@ -757,7 +927,7 @@ class AwesomeView extends GetView<AwesomeController> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
-      child: Text( controller.title ), // apenas chame `controller.something`
+      child: Text(controller.title ), // apenas chame `controller.something`
     );
   }
 }
