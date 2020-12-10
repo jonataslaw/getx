@@ -77,11 +77,12 @@ class GetHttpClient {
     if (baseUrl != null) {
       url = baseUrl + url;
     }
-    final uri = Uri.parse(url);
-    if (query != null) {
-      return uri.replace(queryParameters: query);
+    if(query != null){
+      final uriParams = Uri(queryParameters: query);
+      url = '$url?${uriParams.query}';
     }
-    return uri;
+    
+    return Uri.parse(url);
   }
 
   Future<Request<T>> _requestWithBody<T>(
