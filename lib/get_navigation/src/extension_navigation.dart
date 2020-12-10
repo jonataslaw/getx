@@ -976,7 +976,7 @@ extension GetNavigation on GetInterface {
       _key = keys[k];
     }
 
-    if (_key.currentContext == null) {
+    if (_key.currentContext == null && !testMode) {
       throw """You are trying to use contextless navigation without
       a GetMaterialApp or Get.key.
       If you are testing your app, you can use:
