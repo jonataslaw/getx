@@ -1,7 +1,12 @@
 class BaseWebSocket {
   String url;
   Duration ping;
-  BaseWebSocket(this.url, {this.ping = const Duration(seconds: 5)}) {
+  bool allowSelfSigned;
+  BaseWebSocket(
+    this.url, {
+    this.ping = const Duration(seconds: 5),
+    allowSelfSigned = true,
+  }) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
