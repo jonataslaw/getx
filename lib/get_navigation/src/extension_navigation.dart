@@ -314,6 +314,9 @@ extension ExtensionDialog on GetInterface {
     double radius = 20.0,
     //   ThemeData themeData,
     List<Widget> actions,
+
+    // onWillPop Scope
+    WillPopCallback onWillPop,
   }) {
     var leanCancel = onCancel != null || textCancel != null;
     var leanConfirm = onConfirm != null || textConfirm != null;
@@ -362,37 +365,49 @@ extension ExtensionDialog on GetInterface {
       }
     }
 
-    return dialog<T>(
-      AlertDialog(
-        titlePadding: EdgeInsets.all(8),
-        contentPadding: EdgeInsets.all(8),
-        backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(radius))),
-        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            content ??
-                Text(middleText ?? "",
-                    textAlign: TextAlign.center, style: middleTextStyle),
-            SizedBox(height: 16),
-            ButtonTheme(
-              minWidth: 78.0,
-              height: 34.0,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8,
-                runSpacing: 8,
-                children: actions,
-              ),
-            )
-          ],
-        ),
-        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-        buttonPadding: EdgeInsets.zero,
+    Widget baseAlertDialog = AlertDialog(
+      titlePadding: EdgeInsets.all(8),
+      contentPadding: EdgeInsets.all(8),
+      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius))),
+      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          content ??
+              Text(middleText ?? "",
+                  textAlign: TextAlign.center, style: middleTextStyle),
+          SizedBox(height: 16),
+          ButtonTheme(
+            minWidth: 78.0,
+            height: 34.0,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: actions,
+            ),
+          )
+        ],
       ),
+      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+      buttonPadding: EdgeInsets.zero,
+    );
+
+    if (onWillPop != null) {
+      return dialog<T>(
+        WillPopScope(
+          onWillPop: onWillPop,
+          child: baseAlertDialog,
+        ),
+        barrierDismissible: barrierDismissible,
+      );
+    }
+
+    return dialog<T>(
+      baseAlertDialog,
       barrierDismissible: barrierDismissible,
     );
   }
