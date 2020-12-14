@@ -1,6 +1,6 @@
 ﻿![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**🌎 اردو ( Selected ✔) [| انگریزی |](README.md) [چینی |](README.zh-cn.md) [برازیلی پرتگالی |](README.pt-br.md) [ہسپانوی |](README-es.md) [روسی |](README.ru.md) [پولش |](README.pl.md) [کورین |](README.ko-kr.md)**
+**🌎 اردو ( Selected ✔) [| انگریزی |](README.md) [| انڈونیشی |](README.id-ID.md) [چینی |](README.zh-cn.md) [برازیلی پرتگالی |](README.pt-br.md) [ہسپانوی |](README-es.md) [روسی |](README.ru.md) [پولش |](README.pl.md) [کورین |](README.ko-kr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
