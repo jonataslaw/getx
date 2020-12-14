@@ -6,5 +6,6 @@ class GetSocket extends BaseWebSocket {
   GetSocket(
     String url, {
     Duration ping = const Duration(seconds: 5),
-  }) : super(url, ping: ping);
+    bool allowSelfSigned = true
+  }) : super(url, ping: ping, allowSelfSigned: allowSelfSigned);
 }
