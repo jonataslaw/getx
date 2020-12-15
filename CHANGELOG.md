@@ -1,3 +1,6 @@
+## [3.23.1]
+- Fix allowSelfSigned on Flutter web
+  
 ## [3.23.0]
 - Add GetResponsive (@SchabanBo)
 - Update tests, fix predicate for offNamedUntil (@vbuberen)

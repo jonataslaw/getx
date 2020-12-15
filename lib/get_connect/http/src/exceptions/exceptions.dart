@@ -9,6 +9,15 @@ class GetHttpException implements Exception {
   String toString() => message;
 }
 
+class GraphQLError {
+  GraphQLError({this.code, this.message});
+  final String message;
+  final String code;
+
+  @override
+  String toString() => 'GETCONNECT ERROR:\n\tcode:$code\n\tmessage:$message';
+}
+
 class UnauthorizedException implements Exception {
   @override
   String toString() {

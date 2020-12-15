@@ -1,5 +1,6 @@
 import '../get_instance/src/lifecycle.dart';
 import 'http/src/certificates/certificates.dart';
+import 'http/src/exceptions/exceptions.dart';
 import 'http/src/http.dart';
 import 'http/src/response/response.dart';
 import 'sockets/sockets.dart';
@@ -206,12 +207,103 @@ class GetConnect extends GetConnectInterface {
   }
 
   @override
-  GetSocket socket(String url, {Duration ping = const Duration(seconds: 5)}) {
+  GetSocket socket(
+    String url, {
+    Duration ping = const Duration(seconds: 5),
+  }) {
     _checkIfDisposed(isHttp: false);
-    final _url = baseUrl == null ? url : baseUrl + url;
-    final _socket = GetSocket(_url, ping: ping);
+
+    final _socket = GetSocket(_concatUrl(url), ping: ping);
     sockets.add(_socket);
     return _socket;
+  }
+
+  String _concatUrl(String url) {
+    if (url == null) return baseUrl;
+    return baseUrl == null ? url : baseUrl + url;
+  }
+
+  /// query allow made GraphQL raw querys
+  /// final connect = GetConnect();
+  /// connect.baseUrl = 'https://countries.trevorblades.com/';
+  /// final response = await connect.query(
+  /// r"""
+  /// {
+  ///  country(code: "BR") {
+  ///    name
+  ///    native
+  ///    currency
+  ///    languages {
+  ///      code
+  ///      name
+  ///    }
+  ///  }
+  ///}
+  ///""",
+  ///);
+  ///print(response.body);
+  Future<GraphQLResponse<T>> query<T>(
+    String query, {
+    String url,
+    Map<String, dynamic> variables,
+    Map<String, String> headers,
+  }) async {
+    try {
+      final res =
+          await post(_concatUrl(url), {'query': query, 'variables': variables});
+
+      final listError = res.body['errors'];
+      if ((listError is List) && listError.isNotEmpty) {
+        // return GraphQLResponse<T>(body: res.body['data'] as T);
+        return GraphQLResponse<T>(
+            graphQLErrors: listError
+                .map((e) => GraphQLError(
+                      code: e['extensions']['code']?.toString(),
+                      message: e['message']?.toString(),
+                    ))
+                .toList());
+      }
+      return GraphQLResponse<T>(body: res.body['data'] as T);
+    } on Exception catch (_) {
+      return GraphQLResponse<T>(graphQLErrors: [
+        GraphQLError(
+          code: null,
+          message: _.toString(),
+        )
+      ]);
+    }
+  }
+
+  Future<GraphQLResponse<T>> mutation<T>(
+    String mutation, {
+    String url,
+    Map<String, dynamic> variables,
+    Map<String, String> headers,
+  }) async {
+    try {
+      final res = await post(
+          _concatUrl(url), {'query': mutation, 'variables': variables});
+
+      final listError = res.body['errors'];
+      if ((listError is List) && listError.isNotEmpty) {
+        // return GraphQLResponse<T>(body: res.body['data'] as T);
+        return GraphQLResponse<T>(
+            graphQLErrors: listError
+                .map((e) => GraphQLError(
+                      code: e['extensions']['code']?.toString(),
+                      message: e['message']?.toString(),
+                    ))
+                .toList());
+      }
+      return GraphQLResponse<T>(body: res.body['data'] as T);
+    } on Exception catch (_) {
+      return GraphQLResponse<T>(graphQLErrors: [
+        GraphQLError(
+          code: null,
+          message: _.toString(),
+        )
+      ]);
+    }
   }
 
   bool _isDisposed = false;
