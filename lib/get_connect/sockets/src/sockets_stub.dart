@@ -31,7 +31,7 @@ class BaseWebSocket {
   void onMessage(MessageSocket fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
-  
+
   void on(String event, MessageSocket message) {
     throw 'To use sockets you need dart:io or dart:html';
   }
@@ -51,5 +51,4 @@ class BaseWebSocket {
   void emit(String event, dynamic data) {
     throw 'To use sockets you need dart:io or dart:html';
   }
-
 }

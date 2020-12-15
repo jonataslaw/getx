@@ -43,12 +43,6 @@ class HttpRequestImpl extends HttpRequestBase {
         ..contentLength = requestBody.length ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
-      // var response = await stream.map((s) {
-      //   received += s.length;
-      //   print("${(received / total) * 100} %");
-      //   return s;
-      // }).pipe(ioRequest) as io.HttpClientResponse;
-
       var response = await stream.pipe(ioRequest) as io.HttpClientResponse;
 
       var headers = <String, String>{};
@@ -58,8 +52,6 @@ class HttpRequestImpl extends HttpRequestBase {
 
       final bodyBytes = BodyBytesStream(response);
       final stringBody = await bodyBytesToString(bodyBytes, headers);
-
-      // response.headers.contentType.mimeType == 'application/json'
 
       final body = bodyDecoded<T>(
         request,

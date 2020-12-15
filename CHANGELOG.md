@@ -1,3 +1,17 @@
+## [3.23.0]
+- Add GetResponsive (@SchabanBo)
+- Update tests, fix predicate for offNamedUntil (@vbuberen)
+- Added Urdu Version for Pakistani Developers (@UsamaSarwar)
+- Handle for List field with native datatype on GetConnect(@jasonlaw)
+- Added WillPopScope to defaultDialog (@rakeshlanjewar)
+- Fix optional query params not attach on createUri from GetConnect (@reinaldowebdev)
+- Effective Get.testMode from navigator on tests (@eduardoflorence)
+- Fix Navigator 2.0 on GetMaterialApp and CupertinoMaterialApp (@SchabanBo)
+- Added Middlewares with initial Routes (@SchabanBo)
+- Improve PT-br Docs (@eduardoflorence)
+- Added the allowSelfSigned parameter to GetSocket(@eduardoflorence)
+- Added Indonesian version to Indonesian Developers (@pratamatama)
+
 ## [3.22.2]
 - Fix overlayEntries is null on Master/Dev branch of Flutter
 
