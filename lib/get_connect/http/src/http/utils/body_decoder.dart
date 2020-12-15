@@ -20,7 +20,9 @@ T bodyDecoded<T>(Request<T> request, String stringBody, String mimeType) {
   }
 
   try {
-    if (request.decoder == null) {
+    if (stringBody == '') {
+      body = null;
+    } else if (request.decoder == null) {
       body = bodyToDecode as T;
     } else {
       body = request.decoder(bodyToDecode);

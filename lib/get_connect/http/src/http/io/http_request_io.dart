@@ -56,7 +56,7 @@ class HttpRequestImpl extends HttpRequestBase {
       final body = bodyDecoded<T>(
         request,
         stringBody,
-        response.headers.contentType.mimeType,
+        response.headers.contentType?.mimeType,
       );
 
       return Response(
