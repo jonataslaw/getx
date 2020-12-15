@@ -19,8 +19,13 @@ class BaseWebSocket {
   SocketNotifier socketNotifier = SocketNotifier();
   Duration ping;
   bool isDisposed = false;
+  bool allowSelfSigned;
 
-  BaseWebSocket(this.url, {this.ping = const Duration(seconds: 5)}) {
+  BaseWebSocket(
+    this.url, {
+    this.ping = const Duration(seconds: 5),
+    this.allowSelfSigned = true,
+  }) {
     url = url.startsWith('https')
         ? url.replaceAll('https:', 'wss:')
         : url.replaceAll('http:', 'ws:');
