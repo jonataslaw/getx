@@ -82,15 +82,15 @@ void main() {
     widgetTest: (tester) async {
       expect('/home', Get.currentRoute);
 
-      Get.toNamed('/country');
-      expect('/country', Get.currentRoute);
+      Get.toNamed('/home/country');
+      expect('/home/country', Get.currentRoute);
 
-      Get.toNamed('/details');
-      expect('/details', Get.currentRoute);
+      Get.toNamed('/home/country/details');
+      expect('/home/country/details', Get.currentRoute);
 
       Get.back();
 
-      expect('/country', Get.currentRoute);
+      expect('/home/country', Get.currentRoute);
     },
   );
 
