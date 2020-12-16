@@ -117,6 +117,10 @@ class GetHttpClient {
           jsonString = '$paramName=${Uri.encodeQueryComponent(jsonString)}';
         }
       }
+    } else if (body is String) {
+      bodyBytes = utf8.encode(body);
+      headers['content-length'] = bodyBytes.length.toString();
+      headers['content-type'] = contentType ?? defaultContentType;
     } else if (body == null) {
       headers['content-type'] = contentType ?? defaultContentType;
       headers['content-length'] = '0';
