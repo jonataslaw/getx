@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
@@ -123,10 +124,11 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T> widget, {
-    Widget Function(String error) onError,
-    Widget onLoading,
-  }) {
+      NotifierBuilder<T> widget, {
+        Widget Function(String error) onError,
+        Widget onLoading,
+        Widget onEmpty,
+      }) {
     assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
@@ -134,10 +136,13 @@ extension StateExt<T> on StateMixin<T> {
       } else if (status.isError) {
         return onError != null
             ? onError(status.errorMessage)
-            : Center(child: Text('A error occured: ${status.errorMessage}'));
-      } else {
-        return widget(value);
+            : Center(child: Text('A error occurred: ${status.errorMessage}'));
+      } else if (status.isEmpty) {
+        return onEmpty != null
+            ? onEmpty
+            : SizedBox.shrink(); // Also can be widget(null); but is risky
       }
+      return widget(value);
     });
   }
 }
@@ -146,8 +151,11 @@ class RxStatus {
   final bool isLoading;
   final bool isError;
   final bool isSuccess;
+  final bool isEmpty;
   final String errorMessage;
+
   RxStatus._({
+    this.isEmpty,
     this.isLoading,
     this.isError,
     this.isSuccess,
@@ -159,6 +167,7 @@ class RxStatus {
       isLoading: true,
       isError: false,
       isSuccess: false,
+      isEmpty: false,
     );
   }
 
@@ -167,6 +176,7 @@ class RxStatus {
       isLoading: false,
       isError: false,
       isSuccess: true,
+      isEmpty: false,
     );
   }
 
@@ -175,7 +185,17 @@ class RxStatus {
       isLoading: false,
       isError: true,
       isSuccess: false,
+      isEmpty: false,
       errorMessage: message,
+    );
+  }
+
+  factory RxStatus.empty() {
+    return RxStatus._(
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+      isEmpty: true,
     );
   }
 }
