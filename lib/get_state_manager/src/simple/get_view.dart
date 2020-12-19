@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import '../../../get_instance/src/get_instance.dart';
-import '../rx_flutter/rx_disposable.dart';
+import '../../../instance_manager.dart';
+import 'get_widget_cache.dart';
 
 /// GetView is a great way of quickly access your Controller
 /// without having to call Get.find<AwesomeController>() yourself.
@@ -39,27 +40,6 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
-class _Wrapper<T> {
-  T data;
-}
-
-abstract class GetWidget<T extends DisposableInterface>
-    extends StatelessWidget {
-  GetWidget({Key key}) : super(key: key);
-
-  final _value = _Wrapper<T>();
-
-  final String tag = null;
-
-  T get controller {
-    _value.data ??= GetInstance().find<T>(tag: tag);
-    return _value.data;
-  }
-
-  @override
-  Widget build(BuildContext context);
-}
-
 // abstract class GetView<A, B> extends StatelessWidget {
 //   const GetView({Key key}) : super(key: key);
 //   A get controller => GetInstance().find();
@@ -79,46 +59,46 @@ abstract class GetWidget<T extends DisposableInterface>
 //   Widget build(BuildContext context);
 // }
 
-class GetStatelessElement extends ComponentElement {
-  GetStatelessElement(GetStatelessWidget widget) : super(widget);
+/// GetWidget is a great way of quickly access your individual Controller
+/// without having to call Get.find<AwesomeController>() yourself.
+/// Get save you controller on cache, so, you can to use Get.create() safely
+/// GetWidget is perfect to multiples instance of a same controller. Each
+/// GetWidget will have your own controller, and will be call events as [onInit]
+/// and [onClose] when the controller get in/get out on memory.
+abstract class GetWidget<S extends GetLifeCycleBase> extends GetWidgetCache {
+  const GetWidget({Key key}) : super(key: key);
 
-  @override
-  GetStatelessWidget get widget => super.widget as GetStatelessWidget;
+  @protected
+  final String tag = null;
 
-  @override
-  Widget build() => widget.build(this);
+  S get controller => GetWidget._cache[this] as S;
 
-  @override
-  void update(GetStatelessWidget newWidget) {
-    super.update(newWidget);
-    markNeedsBuild();
-    rebuild();
-  }
+  static final _cache = <GetWidget, GetLifeCycleBase>{};
 
-  @override
-  void mount(Element parent, dynamic newSlot) {
-    if (widget?.controller?.initialized != null &&
-        !widget.controller.initialized) {
-      widget?.controller?.onStart();
-    }
-
-    super.mount(parent, newSlot);
-  }
-
-  @override
-  void unmount() {
-    widget?.controller?.onDelete();
-    super.unmount();
-  }
-}
-
-abstract class GetStatelessWidget<T extends DisposableInterface>
-    extends Widget {
-  const GetStatelessWidget({Key key}) : super(key: key);
-  @override
-  GetStatelessElement createElement() => GetStatelessElement(this);
   @protected
   Widget build(BuildContext context);
 
-  T get controller;
+  @override
+  WidgetCache createWidgetCache() => _GetCache<S>();
+}
+
+class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
+  S _controller;
+  @override
+  void onInit() {
+    _controller = Get.find<S>(tag: widget.tag);
+    GetWidget._cache[widget] = _controller;
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    GetWidget._cache.remove(widget);
+    super.onClose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.build(context);
+  }
 }
