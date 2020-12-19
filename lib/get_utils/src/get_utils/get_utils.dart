@@ -5,8 +5,14 @@ import '../../../get_core/get_core.dart';
 /// standard dart types that contains it.
 ///
 /// This is here to for the 'DRY'
-bool _hasIsEmpty(dynamic value) {
-  return value is Iterable || value is String || value is Map;
+bool _isEmpty(dynamic value) {
+  if (value is String) {
+    return value.toString().trim().isEmpty;
+  }
+  if (value is Iterable || value is Map) {
+    return value.isEmpty as bool;
+  }
+  return false;
 }
 
 /// Returns whether a dynamic value PROBABLY
@@ -70,13 +76,14 @@ class GetUtils {
       return true;
     }
 
-    if (value is String) {
-      return value.toString().trim().isEmpty;
-    }
-
     // Pretty sure that isNullOrBlank should't be validating
     // iterables... but I'm going to keep this for compatibility.
-    return _hasIsEmpty(value) ? value.isEmpty as bool : false;
+    return _isEmpty(value);
+  }
+
+  /// Checks if data is null or blank (empty or only contains whitespace).
+  static bool isBlank(dynamic value) {
+    return _isEmpty(value);
   }
 
   /// Checks if string is int or double.
@@ -584,3 +591,10 @@ class GetUtils {
     Get.log('$prefix $value $info'.trim(), isError: isError);
   }
 }
+
+typedef PrintFunctionCallback = void Function(
+  String prefix,
+  dynamic value,
+  String info, {
+  bool isError,
+});

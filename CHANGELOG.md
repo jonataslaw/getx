@@ -1,4 +1,7 @@
 ## [3.23.1]
+- Fix allowSelfSigned 
+
+## [3.23.1]
 - Fix allowSelfSigned on Flutter web
   
 ## [3.23.0]

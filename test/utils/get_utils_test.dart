@@ -1,11 +1,71 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
-// Identity util to convert to iterables
-dynamic _id(dynamic e) => e;
+class TestClass {
+  final name = "John";
+}
+
+class EmptyClass {}
 
 void main() {
-  // Tests for GetUtils.isNullOrBlank are located at dynamic extensions
+  dynamic _id(dynamic e) => e;
+
+  Null _test;
+
+  test('null isNullOrBlank should be true for null', () {
+    expect(GetUtils.isNullOrBlank(_test), true);
+  });
+
+  test('isNullOrBlank should be false for unsupported types', () {
+    expect(GetUtils.isNullOrBlank(5), false);
+    expect(GetUtils.isNullOrBlank(0), false);
+
+    expect(GetUtils.isNullOrBlank(5.0), equals(false));
+    expect(GetUtils.isNullOrBlank(0.0), equals(false));
+
+    TestClass testClass;
+    expect(GetUtils.isNullOrBlank(testClass), equals(true));
+    expect(GetUtils.isNullOrBlank(TestClass()), equals(false));
+    expect(GetUtils.isNullOrBlank(EmptyClass()), equals(false));
+  });
+
+  test('isNullOrBlank should validate strings', () {
+    expect(GetUtils.isNullOrBlank(""), true);
+    expect(GetUtils.isNullOrBlank("  "), true);
+
+    expect(GetUtils.isNullOrBlank("foo"), false);
+    expect(GetUtils.isNullOrBlank(" foo "), false);
+
+    expect(GetUtils.isNullOrBlank("null"), false);
+  });
+
+  test('isNullOrBlank should validate iterables', () {
+    expect(GetUtils.isNullOrBlank([].map(_id)), true);
+    expect(GetUtils.isNullOrBlank([1].map(_id)), false);
+  });
+
+  test('isNullOrBlank should validate lists', () {
+    expect(GetUtils.isNullOrBlank(const []), true);
+    expect(GetUtils.isNullOrBlank(['oi', 'foo']), false);
+    expect(GetUtils.isNullOrBlank([{}, {}]), false);
+    expect(GetUtils.isNullOrBlank(['foo'][0]), false);
+  });
+
+  test('isNullOrBlank should validate sets', () {
+    expect(GetUtils.isNullOrBlank(<dynamic>{}), true);
+    expect(GetUtils.isNullOrBlank({1}), false);
+    expect(GetUtils.isNullOrBlank({'fluorine', 'chlorine', 'bromine'}), false);
+  });
+
+  test('isNullOrBlank should validate maps', () {
+    expect(GetUtils.isNullOrBlank({}), true);
+    expect(GetUtils.isNullOrBlank({1: 1}), false);
+    expect(GetUtils.isNullOrBlank({"other": "thing"}), false);
+
+    final map = {"foo": 'bar', "one": "um"};
+    expect(GetUtils.isNullOrBlank(map["foo"]), false);
+    expect(GetUtils.isNullOrBlank(map["other"]), true);
+  });
   group('GetUtils.isLength* functions', () {
     test('isLengthEqualTo should validate iterable lengths', () {
       // iterables should cover list and set

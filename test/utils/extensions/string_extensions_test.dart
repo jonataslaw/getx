@@ -9,7 +9,7 @@ void main() {
     final alphaNumeric = "123asd";
     final numbers = "123";
     final letters = "foo";
-    String notInitializedVar;
+    // String notInitializedVar;
 
     test('var.isNum', () {
       expect(digit.isNum, true);
@@ -31,7 +31,7 @@ void main() {
 
     test('var.isBool', () {
       final trueString = 'true';
-      expect(notInitializedVar.isBool, false);
+      // expect(notInitializedVar.isBool, false);
       expect(letters.isBool, false);
       expect(trueString.isBool, true);
     });

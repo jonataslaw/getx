@@ -113,8 +113,7 @@ class GetHttpClient {
       //TODO check this implementation
       if (contentType != null) {
         if (contentType.toLowerCase() == 'application/x-www-form-urlencoded') {
-          var paramName = 'param';
-          jsonString = '$paramName=${Uri.encodeQueryComponent(jsonString)}';
+          jsonString = Uri.encodeQueryComponent(jsonString);
         }
       }
     } else if (body is String) {
