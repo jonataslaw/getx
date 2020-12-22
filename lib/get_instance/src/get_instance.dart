@@ -315,13 +315,13 @@ class GetInstance {
   /// - [key] For internal usage, is the processed key used to register
   ///   the Instance. **don't use** it unless you know what you are doing.
   /// - [force] Will delete an Instance even if marked as [permanent].
-  Future<bool> delete<S>({String tag, String key, bool force = false}) {
+  bool delete<S>({String tag, String key, bool force = false}) {
     // return _queue.secure<bool>(() {
     return _delete<S>(tag: tag, key: key, force: force);
     // });
   }
 
-  Future<bool> _delete<S>({String tag, String key, bool force = false}) async {
+  bool _delete<S>({String tag, String key, bool force = false}) {
     final newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
@@ -343,20 +343,20 @@ class GetInstance {
     if (i is GetxServiceMixin && !force) {
       return false;
     }
-    await Get.asap(() {
-      if (i is GetLifeCycle) {
-        i.onDelete();
-        Get.log('"$newKey" onClose() called');
-      }
 
-      _singl.remove(newKey);
+    if (i is GetLifeCycle) {
+      i.onDelete();
+      Get.log('"$newKey" onClose() called');
+    }
 
-      if (_singl.containsKey(newKey)) {
-        Get.log('Error removing object "$newKey"', isError: true);
-      } else {
-        Get.log('"$newKey" deleted from memory');
-      }
-    });
+    _singl.remove(newKey);
+
+    if (_singl.containsKey(newKey)) {
+      Get.log('Error removing object "$newKey"', isError: true);
+    } else {
+      Get.log('"$newKey" deleted from memory');
+    }
+
     return true;
   }
 

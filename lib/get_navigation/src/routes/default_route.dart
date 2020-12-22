@@ -384,15 +384,15 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   void dispose() {
-    // if (Get.smartManagement != SmartManagement.onlyBuilder) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) => GetInstance()
-    //       .removeDependencyByRoute("${settings?.name ?? routeName}"));
-    // }
-
     super.dispose();
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      GetInstance().removeDependencyByRoute("$reference");
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => GetInstance().removeDependencyByRoute("$reference"));
     }
+
+    // if (Get.smartManagement != SmartManagement.onlyBuilder) {
+    //   GetInstance().removeDependencyByRoute("$reference");
+    // }
 
     final middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
