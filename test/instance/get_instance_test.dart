@@ -103,12 +103,13 @@ void main() {
     tearDownAll(Get.reset);
 
     test('Get.put test with init check', () async {
-      final instance = Get.put<DisposableController>(DisposableController());
+      final instance = Get.put(DisposableController());
       expect(instance, Get.find<DisposableController>());
       expect(instance.initialized, true);
     });
 
     test('Get.delete test with disposable controller', () async {
+      // Get.put(DisposableController());
       expect(await Get.delete<DisposableController>(), true);
       expect(() => Get.find<DisposableController>(),
           throwsA(m.TypeMatcher<String>()));

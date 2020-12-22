@@ -43,11 +43,22 @@ typedef WorkerCallback<T> = Function(T callback);
 ///   void increment() => count + 1;
 /// }
 /// ```
-Worker ever<T>(RxInterface<T> listener, WorkerCallback<T> callback,
-    {dynamic condition = true}) {
-  StreamSubscription sub = listener.listen((event) {
-    if (_conditional(condition)) callback(event);
-  });
+Worker ever<T>(
+  RxInterface<T> listener,
+  WorkerCallback<T> callback, {
+  dynamic condition = true,
+  Function onError,
+  void Function() onDone,
+  bool cancelOnError,
+}) {
+  StreamSubscription sub = listener.listen(
+    (event) {
+      if (_conditional(condition)) callback(event);
+    },
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+  );
   return Worker(sub.cancel, '[ever]');
 }
 
@@ -55,13 +66,24 @@ Worker ever<T>(RxInterface<T> listener, WorkerCallback<T> callback,
 /// for the [callback] is common to all [listeners],
 /// and the [callback] is executed to each one of them. The [Worker] is
 /// common to all, so [worker.dispose()] will cancel all streams.
-Worker everAll(List<RxInterface> listeners, WorkerCallback callback,
-    {dynamic condition = true}) {
+Worker everAll(
+  List<RxInterface> listeners,
+  WorkerCallback callback, {
+  dynamic condition = true,
+  Function onError,
+  void Function() onDone,
+  bool cancelOnError,
+}) {
   final evers = <StreamSubscription>[];
   for (var i in listeners) {
-    final sub = i.listen((event) {
-      if (_conditional(condition)) callback(event);
-    });
+    final sub = i.listen(
+      (event) {
+        if (_conditional(condition)) callback(event);
+      },
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
     evers.add(sub);
   }
 
@@ -96,17 +118,28 @@ Worker everAll(List<RxInterface> listeners, WorkerCallback callback,
 ///   void increment() => count + 1;
 /// }
 ///```
-Worker once<T>(RxInterface<T> listener, WorkerCallback<T> callback,
-    {dynamic condition}) {
+Worker once<T>(
+  RxInterface<T> listener,
+  WorkerCallback<T> callback, {
+  dynamic condition = true,
+  Function onError,
+  void Function() onDone,
+  bool cancelOnError,
+}) {
   Worker ref;
   StreamSubscription sub;
-  sub = listener.listen((event) {
-    if (!_conditional(condition)) return;
-    ref._disposed = true;
-    ref._log('called');
-    sub?.cancel();
-    callback(event);
-  });
+  sub = listener.listen(
+    (event) {
+      if (!_conditional(condition)) return;
+      ref._disposed = true;
+      ref._log('called');
+      sub?.cancel();
+      callback(event);
+    },
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+  );
   ref = Worker(sub.cancel, '[once]');
   return ref;
 }
@@ -128,17 +161,29 @@ Worker once<T>(RxInterface<T> listener, WorkerCallback<T> callback,
 ///    condition: () => count < 20,
 /// );
 /// ```
-Worker interval<T>(RxInterface<T> listener, WorkerCallback<T> callback,
-    {Duration time = const Duration(seconds: 1), dynamic condition = true}) {
+Worker interval<T>(
+  RxInterface<T> listener,
+  WorkerCallback<T> callback, {
+  Duration time = const Duration(seconds: 1),
+  dynamic condition = true,
+  Function onError,
+  void Function() onDone,
+  bool cancelOnError,
+}) {
   var debounceActive = false;
   time ??= const Duration(seconds: 1);
-  StreamSubscription sub = listener.listen((event) async {
-    if (debounceActive || !_conditional(condition)) return;
-    debounceActive = true;
-    await Future.delayed(time);
-    debounceActive = false;
-    callback(event);
-  });
+  StreamSubscription sub = listener.listen(
+    (event) async {
+      if (debounceActive || !_conditional(condition)) return;
+      debounceActive = true;
+      await Future.delayed(time);
+      debounceActive = false;
+      callback(event);
+    },
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+  );
   return Worker(sub.cancel, '[interval]');
 }
 
@@ -161,15 +206,26 @@ Worker interval<T>(RxInterface<T> listener, WorkerCallback<T> callback,
 ///    );
 ///  }
 ///  ```
-Worker debounce<T>(RxInterface<T> listener, WorkerCallback<T> callback,
-    {Duration time}) {
+Worker debounce<T>(
+  RxInterface<T> listener,
+  WorkerCallback<T> callback, {
+  Duration time,
+  Function onError,
+  void Function() onDone,
+  bool cancelOnError,
+}) {
   final _debouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
-  StreamSubscription sub = listener.listen((event) {
-    _debouncer(() {
-      callback(event);
-    });
-  });
+  StreamSubscription sub = listener.listen(
+    (event) {
+      _debouncer(() {
+        callback(event);
+      });
+    },
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+  );
   return Worker(sub.cancel, '[debounce]');
 }
 
@@ -182,6 +238,8 @@ class Worker {
   /// type of worker (debounce, interval, ever)..
   final String type;
   bool _disposed = false;
+
+  bool get disposed => _disposed;
 
   //final bool _verbose = true;
   void _log(String msg) {

@@ -10,6 +10,35 @@ class RxList<E> extends ListMixin<E>
     }
   }
 
+  factory RxList.filled(int length, E fill, {bool growable = false}) {
+    return RxList(List.filled(length, fill, growable: growable));
+  }
+
+  factory RxList.empty({bool growable = false}) {
+    return RxList(List.empty(growable: growable));
+  }
+
+  /// Creates a list containing all [elements].
+  factory RxList.from(Iterable elements, {bool growable = true}) {
+    return RxList(List.from(elements, growable: growable));
+  }
+
+  /// Creates a list from [elements].
+  factory RxList.of(Iterable<E> elements, {bool growable = true}) {
+    return RxList(List.of(elements, growable: growable));
+  }
+
+  /// Generates a list of values.
+  factory RxList.generate(int length, E generator(int index),
+      {bool growable = true}) {
+    return RxList(List.generate(length, generator, growable: growable));
+  }
+
+  /// Creates an unmodifiable list containing all [elements].
+  factory RxList.unmodifiable(Iterable elements) {
+    return RxList(List.unmodifiable(elements));
+  }
+
   @override
   Iterator<E> get iterator => value.iterator;
 
@@ -136,10 +165,6 @@ class RxList<E> extends ListMixin<E>
 
 extension ListExtension<E> on List<E> {
   RxList<E> get obs {
-    if (this != null) {
-      return RxList<E>(this);
-    } else {
-      return RxList<E>(null);
-    }
+    return RxList<E>(this);
   }
 }

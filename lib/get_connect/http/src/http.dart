@@ -253,25 +253,6 @@ class GetHttpClient {
     ));
   }
 
-  Future<Request<T>> _post<T>(
-    String url, {
-    String contentType,
-    @required dynamic body,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    @required Progress uploadProgress,
-  }) {
-    return _requestWithBody<T>(
-      url,
-      contentType,
-      body,
-      'post',
-      query,
-      decoder ?? (defaultDecoder as Decoder<T>),
-      uploadProgress,
-    );
-  }
-
   Future<Request<T>> _request<T>(
     String url,
     String method, {
@@ -286,25 +267,6 @@ class GetHttpClient {
       contentType,
       body,
       method,
-      query,
-      decoder ?? (defaultDecoder as Decoder<T>),
-      uploadProgress,
-    );
-  }
-
-  Future<Request<T>> _put<T>(
-    String url, {
-    String contentType,
-    @required dynamic body,
-    @required Map<String, dynamic> query,
-    Decoder<T> decoder,
-    @required Progress uploadProgress,
-  }) {
-    return _requestWithBody<T>(
-      url,
-      contentType,
-      body,
-      'put',
       query,
       decoder ?? (defaultDecoder as Decoder<T>),
       uploadProgress,
@@ -329,6 +291,40 @@ class GetHttpClient {
     );
   }
 
+  Future<Response<T>> patch<T>(
+    String url, {
+    dynamic body,
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+    Progress uploadProgress,
+    // List<MultipartFile> files,
+  }) async {
+    try {
+      var response = await _performRequest<T>(
+        () => _request<T>(
+          url,
+          'patch',
+          contentType: contentType,
+          body: body,
+          query: query,
+          decoder: decoder,
+          uploadProgress: uploadProgress,
+        ),
+        headers: headers,
+      );
+      return response;
+    } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
+      return Future.value(Response<T>(
+        statusText: 'Can not connect to server. Reason: $e',
+      ));
+    }
+  }
+
   Future<Response<T>> post<T>(
     String url, {
     dynamic body,
@@ -341,8 +337,9 @@ class GetHttpClient {
   }) async {
     try {
       var response = await _performRequest<T>(
-        () => _post<T>(
+        () => _request<T>(
           url,
+          'post',
           contentType: contentType,
           body: body,
           query: query,
@@ -407,8 +404,9 @@ class GetHttpClient {
   }) async {
     try {
       var response = await _performRequest<T>(
-        () => _put<T>(
+        () => _request<T>(
           url,
+          'put',
           contentType: contentType,
           query: query,
           body: body,

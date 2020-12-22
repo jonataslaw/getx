@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import '../../../get_instance/src/get_instance.dart';
+
 import '../../../instance_manager.dart';
+import '../../../utils.dart';
 import 'get_widget_cache.dart';
 
 /// GetView is a great way of quickly access your Controller
@@ -40,25 +41,6 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
-// abstract class GetView<A, B> extends StatelessWidget {
-//   const GetView({Key key}) : super(key: key);
-//   A get controller => GetInstance().find();
-//   B get controller2 => GetInstance().find();
-
-//   @override
-//   Widget build(BuildContext context);
-// }
-
-// abstract class GetView2<A, B, C> extends StatelessWidget {
-//   const GetView2({Key key}) : super(key: key);
-//   A get controller => GetInstance().find();
-//   B get controller2 => GetInstance().find();
-//  C get controller3 => GetInstance().find();
-
-//   @override
-//   Widget build(BuildContext context);
-// }
-
 /// GetWidget is a great way of quickly access your individual Controller
 /// without having to call Get.find<AwesomeController>() yourself.
 /// Get save you controller on cache, so, you can to use Get.create() safely
@@ -73,7 +55,9 @@ abstract class GetWidget<S extends GetLifeCycleBase> extends GetWidgetCache {
 
   S get controller => GetWidget._cache[this] as S;
 
-  static final _cache = <GetWidget, GetLifeCycleBase>{};
+  // static final _cache = <GetWidget, GetLifeCycleBase>{};
+
+  static final _cache = Expando<GetLifeCycleBase>();
 
   @protected
   Widget build(BuildContext context);
@@ -84,8 +68,10 @@ abstract class GetWidget<S extends GetLifeCycleBase> extends GetWidgetCache {
 
 class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
   S _controller;
+  bool _isCreator = false;
   @override
   void onInit() {
+    _isCreator = Get.isPrepared<S>(tag: widget.tag);
     _controller = Get.find<S>(tag: widget.tag);
     GetWidget._cache[widget] = _controller;
     super.onInit();
@@ -93,7 +79,14 @@ class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
 
   @override
   void onClose() {
-    GetWidget._cache.remove(widget);
+    if (_isCreator) {
+      Get.asap(() {
+        widget.controller.onDelete();
+        Get.log('"${widget.controller.runtimeType}" onClose() called');
+        Get.log('"${widget.controller.runtimeType}" deleted from memory');
+        GetWidget._cache[widget] = null;
+      });
+    }
     super.onClose();
   }
 

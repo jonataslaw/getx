@@ -29,8 +29,14 @@ class _ObxState extends State<ObxWidget> {
 
   @override
   void initState() {
-    subs = _observer.listen((data) => setState(() {}));
+    subs = _observer.listen(_updateTree);
     super.initState();
+  }
+
+  void _updateTree(_) {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

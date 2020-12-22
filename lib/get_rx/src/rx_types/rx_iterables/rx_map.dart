@@ -9,6 +9,25 @@ class RxMap<K, V> extends MapMixin<K, V>
     }
   }
 
+  factory RxMap.from(Map<K, V> other) {
+    return RxMap(Map.from(other));
+  }
+
+  /// Creates a [LinkedHashMap] with the same keys and values as [other].
+  factory RxMap.of(Map<K, V> other) {
+    return RxMap(Map.of(other));
+  }
+
+  ///Creates an unmodifiable hash based map containing the entries of [other].
+  factory RxMap.unmodifiable(Map<dynamic, dynamic> other) {
+    return RxMap(Map.unmodifiable(other));
+  }
+
+  /// Creates an identity map with the default implementation, [LinkedHashMap].
+  factory RxMap.identity() {
+    return RxMap(Map.identity());
+  }
+
   @override
   V operator [](Object key) {
     return value[key];

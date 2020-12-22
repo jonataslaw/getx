@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../get_state_manager.dart';
 import 'list_notifier.dart';
@@ -89,19 +88,18 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void initState() {
     super.initState();
 
-    if (widget.initState != null) widget.initState(this);
-    if (widget.global) {
-      final isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-      final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+    widget.initState?.call(this);
 
-      if (isPrepared) {
-        if (Get.smartManagement != SmartManagement.keepFactory) {
+    var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+
+    if (widget.global) {
+      if (isRegistered) {
+        if (GetInstance().isPrepared<T>(tag: widget.tag)) {
           isCreator = true;
+        } else {
+          isCreator = false;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
-      } else if (isRegistered) {
-        controller = GetInstance().find<T>(tag: widget.tag);
-        isCreator = false;
       } else {
         controller = widget.init;
         isCreator = true;
@@ -159,37 +157,4 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 
   @override
   Widget build(BuildContext context) => widget.builder(controller);
-}
-
-/// It's Experimental class, the Api can be change
-abstract class GetState<T> extends GetxController {
-  GetState(T initialValue) {
-    _state = initialValue;
-  }
-
-  // StreamController<T> _subject;
-
-  // @override
-  // void onClose() {
-  //   _subject?.close();
-  // }
-
-  // Stream<T> get stream {
-  //   if (_subject == null) {
-  //     _subject = StreamController<T>.broadcast();
-  //   }
-  //   return _subject.stream;
-  // }
-
-  T _state;
-
-  T get state => _state;
-
-  @protected
-  void change(T newState) {
-    if (newState != _state) {
-      _state = newState;
-      update();
-    }
-  }
 }

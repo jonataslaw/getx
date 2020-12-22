@@ -56,7 +56,12 @@ class GetStream<T> {
     var itemsToRemove = <LightSubscription<T>>[];
     for (final item in _onData) {
       if (!item.isPaused) {
-        item._onError?.call(error, stackTrace);
+        if (stackTrace != null) {
+          item._onError?.call(error, stackTrace);
+        } else {
+          item._onError?.call(error);
+        }
+
         if (item.cancelOnError) {
           //item.cancel?.call();
           itemsToRemove.add(item);
@@ -147,7 +152,7 @@ class LightSubscription<T> extends StreamSubscription<T> {
 
   OnData<T> _data;
 
-  dynamic _onError;
+  Function _onError;
 
   Callback _onDone;
 
