@@ -1,5 +1,23 @@
-## [3.23.1]
-- Fix allowSelfSigned 
+## [3.24.0]
+- GetWidget has been completely redesigned.
+Throughout its lifetime, GetWidget has always been mentioned in the documentation as "something you shouldn't use unless you're sure you need it", and it had a very small use case. A short time ago we realized that it could have some unexpected behaviors, when compared to GetView, so we decided to rebuild it from scratch, creating a really useful widget for the ecosystem.
+Objectively, GetWidget is now a Widget that caches the controller and protects children from their parents' reconstructions. This means that if you have a ListView or gridview, you can add items to it without the child (being a GetWidget) being rebuilt. The api is now more concise, as you can use Get.put / Get.lazyput for global dependencies, and Get.create with GetWidget for ephemeral dependencies, or when you need several identical controllers for the same widget, eliminating the need for tags for most cases.
+
+- Workers now have error handlers, so if an error occurs in your stream, you can recover it from your workers.
+
+- `isTrue` and `isFalse` setters were added to [RxBool], this will make the code more readable, and will mitigate the use of ".value" in Booleans.
+
+- [Patch] method was added in GetConnect.
+
+- Native methods for RxString (trim, contains, startWith, etc.) have been added.
+   
+- Standard constructors for RxList and RxMap have been added (RxList.generate, RxList.from, Map.of, Map.from, etc).
+
+- Added "onEmpty" status in StateMixin (@alizera)
+
+- Added query and mutation methods of graphql for getconnect.
+  
+- Added body string for content-type application/x-www-form-urlencoded on GetConnect (@eduardoflorence)
 
 ## [3.23.1]
 - Fix allowSelfSigned on Flutter web

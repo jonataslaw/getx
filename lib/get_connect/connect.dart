@@ -59,7 +59,34 @@ abstract class GetConnectInterface with GetLifeCycleBase {
     Decoder<T> decoder,
   });
 
-  GetSocket socket(String url, {Duration ping = const Duration(seconds: 5)});
+  Future<Response<T>> patch<T>(
+    String url,
+    dynamic body, {
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+    Progress uploadProgress,
+  });
+
+  Future<GraphQLResponse<T>> query<T>(
+    String query, {
+    String url,
+    Map<String, dynamic> variables,
+    Map<String, String> headers,
+  });
+
+  Future<GraphQLResponse<T>> mutation<T>(
+    String mutation, {
+    String url,
+    Map<String, dynamic> variables,
+    Map<String, String> headers,
+  });
+
+  GetSocket socket(
+    String url, {
+    Duration ping = const Duration(seconds: 5),
+  });
 }
 
 class GetConnect extends GetConnectInterface {
@@ -165,6 +192,28 @@ class GetConnect extends GetConnectInterface {
   }
 
   @override
+  Future<Response<T>> patch<T>(
+    String url,
+    dynamic body, {
+    String contentType,
+    Map<String, String> headers,
+    Map<String, dynamic> query,
+    Decoder<T> decoder,
+    Progress uploadProgress,
+  }) {
+    _checkIfDisposed();
+    return httpClient.patch<T>(
+      url,
+      body: body,
+      headers: headers,
+      contentType: contentType,
+      query: query,
+      decoder: decoder,
+      uploadProgress: uploadProgress,
+    );
+  }
+
+  @override
   Future<Response<T>> request<T>(
     String url,
     String method, {
@@ -242,6 +291,7 @@ class GetConnect extends GetConnectInterface {
   ///""",
   ///);
   ///print(response.body);
+  @override
   Future<GraphQLResponse<T>> query<T>(
     String query, {
     String url,
@@ -274,6 +324,7 @@ class GetConnect extends GetConnectInterface {
     }
   }
 
+  @override
   Future<GraphQLResponse<T>> mutation<T>(
     String mutation, {
     String url,

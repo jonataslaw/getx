@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:get/utils.dart';
+import '../../get_core/get_core.dart';
 
 import 'lifecycle.dart';
 

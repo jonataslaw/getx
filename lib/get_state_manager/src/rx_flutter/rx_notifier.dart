@@ -124,11 +124,11 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-      NotifierBuilder<T> widget, {
-        Widget Function(String error) onError,
-        Widget onLoading,
-        Widget onEmpty,
-      }) {
+    NotifierBuilder<T> widget, {
+    Widget Function(String error) onError,
+    Widget onLoading,
+    Widget onEmpty,
+  }) {
     assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
