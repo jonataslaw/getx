@@ -58,7 +58,6 @@ extension Trans on String {
     var trans = tr;
     if (params.isNotEmpty) {
       params.forEach((key, value) {
-        print(key);
         trans = trans.replaceAll('@$key', value);
       });
     }
