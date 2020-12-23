@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -10,6 +11,12 @@ typedef Disposer = void Function();
 typedef GetStateUpdate = void Function();
 
 class ListNotifier implements Listenable {
+  int _version = 0;
+  int _microtask = 0;
+
+  int get notifierVersion => _version;
+  int get notifierMicrotask => _microtask;
+
   List<GetStateUpdate> _updaters = <GetStateUpdate>[];
 
   HashMap<String, List<GetStateUpdate>> _updatersGroupIds =
@@ -18,18 +25,47 @@ class ListNotifier implements Listenable {
   @protected
   void refresh() {
     assert(_debugAssertNotDisposed());
+
+    /// This debounce the call to update.
+    /// It prevent errors and duplicates builds
+    if (_microtask == _version) {
+      _microtask++;
+      scheduleMicrotask(() {
+        _version++;
+        _microtask = _version;
+        _notifyUpdate();
+      });
+    }
+  }
+
+  void _notifyUpdate() {
     for (var element in _updaters) {
       element();
+    }
+  }
+
+  void _notifyIdUpdate(String id) {
+    if (_updatersGroupIds.containsKey(id)) {
+      final listGroup = _updatersGroupIds[id];
+      for (var item in listGroup) {
+        item();
+      }
     }
   }
 
   @protected
   void refreshGroup(String id) {
     assert(_debugAssertNotDisposed());
-    if (_updatersGroupIds.containsKey(id)) {
-      for (var item in _updatersGroupIds[id]) {
-        item();
-      }
+
+    /// This debounce the call to update.
+    /// It prevent errors and duplicates builds
+    if (_microtask == _version) {
+      _microtask++;
+      scheduleMicrotask(() {
+        _version++;
+        _microtask = _version;
+        _notifyIdUpdate(id);
+      });
     }
   }
 

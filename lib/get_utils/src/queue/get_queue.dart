@@ -1,5 +1,24 @@
 import 'dart:async';
 
+class GetMicrotask {
+  int _version = 0;
+  int _microtask = 0;
+
+  int get version => _version;
+  int get microtask => _microtask;
+
+  void exec(Function callback) {
+    if (_microtask == _version) {
+      _microtask++;
+      scheduleMicrotask(() {
+        _version++;
+        _microtask = _version;
+        callback();
+      });
+    }
+  }
+}
+
 class GetQueue {
   final List<_Item> _queue = [];
   bool _active = false;
