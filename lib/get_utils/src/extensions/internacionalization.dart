@@ -53,6 +53,22 @@ extension Trans on String {
   String trPlural([String pluralKey, int i, List<String> args = const []]) {
     return i > 1 ? pluralKey.trArgs(args) : trArgs(args);
   }
+
+  String trParams([Map<String, String> params = const {}]) {
+    var trans = tr;
+    if (params.isNotEmpty) {
+      params.forEach((key, value) {
+        print(key);
+        trans = trans.replaceAll('\$$key', value);
+      });
+    }
+    return trans;
+  }
+
+  String trPluralParams(
+      [String pluralKey, int i, Map<String, String> params = const {}]) {
+    return i > 1 ? pluralKey.trParams(params) : trParams(params);
+  }
 }
 
 class _IntlHost {
