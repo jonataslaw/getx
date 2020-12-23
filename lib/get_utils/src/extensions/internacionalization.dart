@@ -59,7 +59,7 @@ extension Trans on String {
     if (params.isNotEmpty) {
       params.forEach((key, value) {
         print(key);
-        trans = trans.replaceAll('\$$key', value);
+        trans = trans.replaceAll('@$key', value);
       });
     }
     return trans;

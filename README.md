@@ -348,6 +348,27 @@ var products = [];
 Text('singularKey'.trPlural('pluralKey', products.length, Args));
 ```
 
+#### Using translation with parameters
+
+```dart
+import 'package:get/get.dart';
+
+
+Map<String, Map<String, String>> get keys => {
+    'en_US': {
+        'logged_in': 'logged in as @name with email @email',
+    },
+    'es_ES': {
+       'logged_in': 'iniciado sesión como @name con e-mail @email',
+    }
+};
+
+Text('logged_in'.trParams({
+  'name': 'Jhon',
+  'email': 'jhon@example.com'
+  }));
+```
+
 ### Locales
 
 Pass parameters to `GetMaterialApp` to define the locale and translations.
