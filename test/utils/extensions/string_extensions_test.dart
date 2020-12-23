@@ -690,14 +690,17 @@ void main() {
     });
 
     test('var.removeAllWhitespace', () {
+      String nullString;
       expect('foo bar'.removeAllWhitespace, 'foobar');
       expect('foo'.removeAllWhitespace, 'foo');
-      expect(''.removeAllWhitespace, null);
+      expect(''.removeAllWhitespace, '');
+      expect(nullString.removeAllWhitespace, null);
     });
 
     test('var.camelCase', () {
       expect('foo bar'.camelCase, 'fooBar');
       expect('the fox jumped in the water'.camelCase, 'theFoxJumpedInTheWater');
+      expect('foo_bar'.camelCase, 'fooBar');
       expect(''.camelCase, null);
     });
 
