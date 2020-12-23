@@ -535,11 +535,7 @@ class GetUtils {
   /// Remove all whitespace inside string
   /// Example: your name => yourname
   static String removeAllWhitespace(String value) {
-    if (isNullOrBlank(value)) {
-      return null;
-    }
-
-    return value.replaceAll(' ', '');
+    return value?.replaceAll(' ', '');
   }
 
   /// Camelcase string
@@ -549,7 +545,8 @@ class GetUtils {
       return null;
     }
 
-    final separatedWords = value.split(' ');
+    final separatedWords =
+        value.split(RegExp(r'[!@#<>?":`~;[\]\\|=+)(*&^%-\s_]+'));
     var newString = '';
 
     for (final word in separatedWords) {

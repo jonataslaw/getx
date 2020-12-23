@@ -40,14 +40,18 @@ extension Trans on String {
     }
   }
 
-  String trArgs([List<String> args]) {
+  String trArgs([List<String> args = const []]) {
     var key = tr;
-    if (args != null) {
+    if (args.isNotEmpty) {
       for (final arg in args) {
         key = key.replaceFirst(RegExp(r'%s'), arg.toString());
       }
     }
     return key;
+  }
+
+  String trPlural([String pluralKey, int i, List<String> args = const []]) {
+    return i > 1 ? pluralKey.trArgs(args) : trArgs(args);
   }
 }
 
