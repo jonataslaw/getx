@@ -52,11 +52,11 @@
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
   - [Useful tips](#useful-tips)
-      - [GetView](#getview)
-      - [GetResponsiveView](#getresponsiveview)
-        - [How to use it](#how-to-use-it)
-      - [GetWidget](#getwidget)
-      - [GetxService](#getxservice)
+    - [GetView](#getview)
+    - [GetResponsiveView](#getresponsiveview)
+      - [How to use it](#how-to-use-it)
+    - [GetWidget](#getwidget)
+    - [GetxService](#getxservice)
 - [Breaking changes from 2.0](#breaking-changes-from-20)
 - [Why Getx?](#why-getx)
 - [Community](#community)
@@ -71,19 +71,19 @@
 - GetX has 3 basic principles, this means that this is the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
 
   - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
-  
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver. 
-  Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary, because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+
+  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with Getx. It will save hours of development, and will extract the maximum performance that your application can deliver.
+    Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary, because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
 
   - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through multiproviders, for this GetX uses its own dependency injection feature, decoupling the DI from its view completely.
-  With GetX you know where to find each feature of your application, having clean code by default. This in addition to facilitating maintenance, makes the sharing of modules, something that until then in Flutter was unthinkable, something totally possible.
-  BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. Getx is a natural evolution of this, not only separating the business logic, but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-  GetX is the easiest, practical and scalable way to build high-performance applications with the Flutter SDK, with a large ecosystem around it that works perfectly together, being easy for beginners, and accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs build-in that are not present on default Flutter SDK.
+    With GetX you know where to find each feature of your application, having clean code by default. This in addition to facilitating maintenance, makes the sharing of modules, something that until then in Flutter was unthinkable, something totally possible.
+    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. Getx is a natural evolution of this, not only separating the business logic, but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
+    GetX is the easiest, practical and scalable way to build high-performance applications with the Flutter SDK, with a large ecosystem around it that works perfectly together, being easy for beginners, and accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs build-in that are not present on default Flutter SDK.
 
 - GetX is not a bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers, and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
 
 - Getx has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. Getx too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-**It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
+  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
 
 **In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
@@ -138,7 +138,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(context) {
-    
+
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
     final Controller c = Get.put(Controller());
 
@@ -341,6 +341,13 @@ Just append `.tr` to the specified key and it will be translated, using the curr
 Text('title'.tr);
 ```
 
+#### Using translation with singular and plural
+
+```dart
+var products = [];
+Text('singularKey'.trPlural('pluralKey', products.length, Args));
+```
+
 ### Locales
 
 Pass parameters to `GetMaterialApp` to define the locale and translations.
@@ -394,9 +401,11 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
 
 ## GetConnect
+
 GetConnect is an easy way to communicate from your back to your front with http or websockets
 
 ### Default configuration
+
 You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
 
 ```dart
@@ -419,7 +428,9 @@ class UserProvider extends GetConnect {
   }
 }
 ```
+
 ### Custom configuration
+
 GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
 
 ```dart
@@ -456,7 +467,7 @@ class HomeProvider extends GetConnect {
       return request;
     });
 
-    //Autenticator will be called 3 times if HttpStatus is 
+    //Autenticator will be called 3 times if HttpStatus is
     //HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
@@ -485,6 +496,7 @@ final middlewares = [
   GetMiddleware(priority: -8),
 ];
 ```
+
 those middlewares will be run in this order **-8 => 2 => 4 => 5**
 
 ### Redirect
@@ -917,10 +929,10 @@ You have two options to build it.
 
 - with `builder` method you return the widget to build.
 - with methods `desktop`, `tablet`,`phone`, `watch`. the specific
-method will be built when the screen type matches the method
-when the screen is [ScreenType.Tablet] the `tablet` method
-will be exuded and so on.
-**Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
+  method will be built when the screen type matches the method
+  when the screen is [ScreenType.Tablet] the `tablet` method
+  will be exuded and so on.
+  **Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
 
 With `settings` property you can set the width limit for the screen types.
 
@@ -1098,4 +1110,3 @@ Any contribution is welcome!
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
-

@@ -24,7 +24,6 @@ abstract class DisposableInterface extends GetLifeCycle {
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
   @override
-  @mustCallSuper
   void onReady() {
     super.onReady();
   }

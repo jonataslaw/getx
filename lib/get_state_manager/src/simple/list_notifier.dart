@@ -90,6 +90,11 @@ class ListNotifier implements Listenable {
     return _updaters.isNotEmpty;
   }
 
+  int get listeners {
+    assert(_debugAssertNotDisposed());
+    return _updaters.length;
+  }
+
   @override
   void removeListener(VoidCallback listener) {
     assert(_debugAssertNotDisposed());

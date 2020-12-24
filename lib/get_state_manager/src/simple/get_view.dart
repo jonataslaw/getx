@@ -72,7 +72,10 @@ class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
   @override
   void onInit() {
     _isCreator = Get.isPrepared<S>(tag: widget.tag);
-    _controller = Get.find<S>(tag: widget.tag);
+    if (Get.isPrepared<S>()) {
+      _controller = Get.find<S>(tag: widget.tag);
+    }
+
     GetWidget._cache[widget] = _controller;
     super.onInit();
   }

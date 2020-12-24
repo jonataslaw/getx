@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../get_instance/src/get_instance.dart';
+import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import 'list_notifier.dart';
 
@@ -22,29 +23,25 @@ mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
   }
 }
 
-// ignore: prefer_mixin
-class GetxController extends DisposableInterface with ListNotifier {
-  /// Rebuilds [GetBuilder] each time you call [update()];
-  /// Can take a List of [ids], that will only update the matching
-  /// `GetBuilder( id: )`,
-  /// [ids] can be reused among `GetBuilders` like group tags.
-  /// The update will only notify the Widgets, if [condition] is true.
-  void update([List<String> ids, bool condition = true]) {
-    if (!condition) {
-      return;
-    }
-    if (ids == null) {
-      refresh();
-    } else {
-      for (final id in ids) {
-        refreshGroup(id);
-      }
-    }
-  }
-}
-
 typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
     T controller);
+
+class _InheritedGetxController<T extends GetxController>
+    extends InheritedWidget {
+  final T model;
+  final int version;
+
+  _InheritedGetxController({
+    Key key,
+    @required Widget child,
+    @required this.model,
+  })  : version = model.notifierVersion,
+        super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_InheritedGetxController<T> oldWidget) =>
+      (oldWidget.version != version);
+}
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
@@ -72,6 +69,25 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.didUpdateWidget,
   })  : assert(builder != null),
         super(key: key);
+
+  static T of<T extends GetxController>(
+    BuildContext context, {
+    bool rebuild = false,
+  }) {
+    var widget = rebuild
+        ? context
+            .dependOnInheritedWidgetOfExactType<_InheritedGetxController<T>>()
+        : context
+            .getElementForInheritedWidgetOfExactType<
+                _InheritedGetxController<T>>()
+            ?.widget;
+
+    if (widget == null) {
+      throw 'Error: Could not find the correct dependency.';
+    } else {
+      return (widget as _InheritedGetxController<T>).model;
+    }
+  }
 
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
@@ -156,5 +172,23 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(controller);
+  Widget build(BuildContext context) {
+    return _InheritedGetxController<T>(
+      model: controller,
+      child: widget.builder(controller),
+    );
+  }
 }
+
+extension FindExt on BuildContext {
+  T find<T extends GetxController>() {
+    return GetBuilder.of<T>(this, rebuild: false);
+  }
+}
+
+extension ObserverEtx on BuildContext {
+  T obs<T extends GetxController>() {
+    return GetBuilder.of<T>(this, rebuild: true);
+  }
+}
+

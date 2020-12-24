@@ -32,15 +32,15 @@ class HttpRequestImpl extends HttpRequestBase {
 
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
-    var requestBody = await request.bodyBytes.toBytes();
-    var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
+    var stream = request.bodyBytes.asBroadcastStream();
+    //var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
 
     try {
       var ioRequest = (await _httpClient.openUrl(request.method, request.url))
         ..followRedirects = request.followRedirects
         ..persistentConnection = request.persistentConnection
         ..maxRedirects = request.maxRedirects
-        ..contentLength = requestBody.length ?? -1;
+        ..contentLength = request.contentLength ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
       var response = await stream.pipe(ioRequest) as io.HttpClientResponse;

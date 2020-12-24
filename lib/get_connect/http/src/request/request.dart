@@ -20,6 +20,8 @@ class Request<T> {
   /// ex: `GET`,`POST`,`PUT`,`DELETE`
   final String method;
 
+  final int contentLength;
+
   /// The BodyBytesStream of body from this [Request]
   final BodyBytesStream bodyBytes;
 
@@ -38,6 +40,7 @@ class Request<T> {
     @required this.bodyBytes,
     @required this.url,
     @required this.headers,
+    @required this.contentLength,
     @required this.followRedirects,
     @required this.maxRedirects,
     @required this.files,
@@ -52,6 +55,7 @@ class Request<T> {
     BodyBytesStream bodyBytes,
     bool followRedirects = true,
     int maxRedirects = 4,
+    int contentLength,
     FormData files,
     bool persistentConnection = true,
     Decoder<T> decoder,
@@ -70,6 +74,7 @@ class Request<T> {
       headers: Map.from(headers ??= <String, String>{}),
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
+      contentLength: contentLength,
       files: files,
       persistentConnection: persistentConnection,
       decoder: decoder,

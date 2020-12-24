@@ -139,6 +139,7 @@ class GetHttpClient {
       url: uri,
       headers: headers,
       bodyBytes: bodyStream,
+      contentLength: bodyBytes.length,
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
       decoder: decoder,
