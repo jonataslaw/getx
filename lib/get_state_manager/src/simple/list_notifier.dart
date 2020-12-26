@@ -19,8 +19,8 @@ class ListNotifier implements Listenable {
 
   List<GetStateUpdate> _updaters = <GetStateUpdate>[];
 
-  HashMap<String, List<GetStateUpdate>> _updatersGroupIds =
-      HashMap<String, List<GetStateUpdate>>();
+  HashMap<Object, List<GetStateUpdate>> _updatersGroupIds =
+      HashMap<Object, List<GetStateUpdate>>();
 
   @protected
   void refresh() {
@@ -44,7 +44,7 @@ class ListNotifier implements Listenable {
     }
   }
 
-  void _notifyIdUpdate(String id) {
+  void _notifyIdUpdate(Object id) {
     if (_updatersGroupIds.containsKey(id)) {
       final listGroup = _updatersGroupIds[id];
       for (var item in listGroup) {
@@ -54,7 +54,7 @@ class ListNotifier implements Listenable {
   }
 
   @protected
-  void refreshGroup(String id) {
+  void refreshGroup(Object id) {
     assert(_debugAssertNotDisposed());
 
     /// This debounce the call to update.
@@ -101,7 +101,7 @@ class ListNotifier implements Listenable {
     _updaters.remove(listener);
   }
 
-  void removeListenerId(String id, VoidCallback listener) {
+  void removeListenerId(Object id, VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     if (_updatersGroupIds.containsKey(id)) {
       _updatersGroupIds[id].remove(listener);
@@ -123,7 +123,7 @@ class ListNotifier implements Listenable {
     return () => _updaters.remove(listener);
   }
 
-  Disposer addListenerId(String key, GetStateUpdate listener) {
+  Disposer addListenerId(Object key, GetStateUpdate listener) {
     _updatersGroupIds[key] ??= <GetStateUpdate>[];
     _updatersGroupIds[key].add(listener);
     return () => _updatersGroupIds[key].remove(listener);
@@ -132,7 +132,7 @@ class ListNotifier implements Listenable {
   /// To dispose an [id] from future updates(), this ids are registered
   /// by [GetBuilder()] or similar, so is a way to unlink the state change with
   /// the Widget from the Controller.
-  void disposeId(String id) {
+  void disposeId(Object id) {
     _updatersGroupIds.remove(id);
   }
 }

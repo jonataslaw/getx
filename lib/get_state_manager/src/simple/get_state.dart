@@ -46,7 +46,7 @@ class _InheritedGetxController<T extends GetxController>
 class GetBuilder<T extends GetxController> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
   final bool global;
-  final String id;
+  final Object id;
   final String tag;
   final bool autoRemove;
   final bool assignId;
@@ -191,4 +191,3 @@ extension ObserverEtx on BuildContext {
     return GetBuilder.of<T>(this, rebuild: true);
   }
 }
-

@@ -12,7 +12,7 @@ abstract class GetxController extends DisposableInterface with ListNotifier {
   /// `GetBuilder( id: )`,
   /// [ids] can be reused among `GetBuilders` like group tags.
   /// The update will only notify the Widgets, if [condition] is true.
-  void update([List<String> ids, bool condition = true]) {
+  void update([List<Object> ids, bool condition = true]) {
     if (!condition) {
       return;
     }
