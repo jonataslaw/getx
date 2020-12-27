@@ -50,6 +50,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final String tag;
   final bool autoRemove;
   final bool assignId;
+  final Object Function(T value) selector;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
@@ -62,6 +63,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.autoRemove = true,
     this.assignId = false,
     this.initState,
+    this.selector,
     this.tag,
     this.dispose,
     this.id,
@@ -96,14 +98,13 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
 class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
   T controller;
-
   bool isCreator = false;
   VoidCallback remove;
+  Object _selector;
 
   @override
   void initState() {
     super.initState();
-
     widget.initState?.call(this);
 
     var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
@@ -127,6 +128,10 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
+    if (widget.selector != null) {
+      _selector = widget.selector(controller);
+    }
+
     _subscribeToController();
   }
 
@@ -136,14 +141,27 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void _subscribeToController() {
     remove?.call();
     remove = (widget.id == null)
-        ? controller?.addListener(getUpdate)
-        : controller?.addListenerId(widget.id, getUpdate);
+        ? controller?.addListener(
+            _selector != null ? _selectorUpdate : getUpdate,
+          )
+        : controller?.addListenerId(
+            widget.id,
+            _selector != null ? _selectorUpdate : getUpdate,
+          );
+  }
+
+  void _selectorUpdate() {
+    var newSelector = widget.selector(controller);
+    if (newSelector != _selector) {
+      _selector = newSelector;
+      getUpdate();
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    if (widget.dispose != null) widget.dispose(this);
+    widget.dispose?.call(this);
     if (isCreator || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         GetInstance().delete<T>(tag: widget.tag);
@@ -151,14 +169,17 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     }
 
     remove?.call();
+
+    controller = null;
+    isCreator = null;
+    remove = null;
+    _selector = null;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.didChangeDependencies != null) {
-      widget.didChangeDependencies(this);
-    }
+    widget.didChangeDependencies?.call(this);
   }
 
   @override
@@ -168,7 +189,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     if (oldWidget.id != widget.id) {
       _subscribeToController();
     }
-    if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
+    widget.didUpdateWidget?.call(oldWidget, this);
   }
 
   @override
