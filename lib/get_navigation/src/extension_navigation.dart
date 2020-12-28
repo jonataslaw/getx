@@ -895,9 +895,7 @@ extension GetNavigation on GetInterface {
         routeTree = ParseRouteTree();
       }
 
-      for (final element in getPages) {
-        routeTree.addRoute(element);
-      }
+      routeTree.addRoutes(getPages);
     }
   }
 

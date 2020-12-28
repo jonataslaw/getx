@@ -1,3 +1,5 @@
+## [3.25.0]
+
 ## [3.24.0]
 - GetWidget has been completely redesigned.
 Throughout its lifetime, GetWidget has always been mentioned in the documentation as "something you shouldn't use unless you're sure you need it", and it had a very small use case. A short time ago we realized that it could have some unexpected behaviors, when compared to GetView, so we decided to rebuild it from scratch, creating a really useful widget for the ecosystem.

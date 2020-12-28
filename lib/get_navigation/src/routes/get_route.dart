@@ -24,8 +24,9 @@ class GetPage {
   final RouteSettings settings;
   final List<GetPage> children;
   final List<GetMiddleware> middlewares;
-
-  const GetPage({
+  final Map<String, dynamic> path;
+  final List<String> keys;
+  GetPage({
     @required this.name,
     @required this.page,
     this.title,
@@ -43,11 +44,39 @@ class GetPage {
     this.customTransition,
     this.fullscreenDialog = false,
     this.children,
+    this.keys,
     this.middlewares,
-  })  : assert(page != null),
+  })  : path = normalize(name, keysList: keys),
+        assert(page != null),
         assert(name != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null);
+
+  static Map<String, dynamic> normalize(
+    String path, {
+    List<String> keysList,
+  }) {
+    var keys = List<String>.from(keysList ?? const <String>[]);
+    var stringPath =
+        '$path/?'.replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), (placeholder) {
+      var replace = StringBuffer('(?:');
+
+      if (placeholder[1] != null) {
+        replace.write('\.');
+      }
+
+      replace.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+
+      if (placeholder[3] != null) {
+        replace.write('?');
+      }
+
+      keys.add(placeholder[2]);
+      return replace.toString();
+    }).replaceAll('//', '/');
+
+    return {'regex': RegExp('^$stringPath\$'), 'keys': keys};
+  }
 
   GetPage copyWith({
     String name,
@@ -66,6 +95,7 @@ class GetPage {
     Duration transitionDuration,
     bool fullscreenDialog,
     RouteSettings settings,
+    List<String> keys,
     List<GetPage> children,
     List<GetMiddleware> middlewares,
   }) {
@@ -86,6 +116,7 @@ class GetPage {
       transitionDuration: transitionDuration ?? this.transitionDuration,
       fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
       settings: settings ?? this.settings,
+      keys: keys ?? this.keys,
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
     );
