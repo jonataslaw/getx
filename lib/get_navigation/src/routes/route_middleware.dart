@@ -30,7 +30,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  RouteSettings redirect(String route);
+  RouteSettings redirect(String route, {Object arguments});
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -81,7 +81,7 @@ class GetMiddleware implements _RouteMiddleware {
   GetMiddleware({this.priority});
 
   @override
-  RouteSettings redirect(String route) => null;
+  RouteSettings redirect(String route, {Object arguments}) => null;
 
   @override
   GetPage onPageCalled(GetPage page) => page;
@@ -119,10 +119,10 @@ class MiddlewareRunner {
     return page;
   }
 
-  RouteSettings runRedirect(String route) {
+  RouteSettings runRedirect(String route, {Object arguments}) {
     RouteSettings to;
     _getMiddlewares().forEach((element) {
-      to = element.redirect(route);
+      to = element.redirect(route, arguments: arguments);
     });
     if (to != null) {
       Get.log('Redirect to $to');
@@ -221,7 +221,8 @@ class PageRedirect {
     if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
       return false;
     }
-    final newSettings = runner.runRedirect(settings.name);
+    final newSettings =
+        runner.runRedirect(settings.name, arguments: settings.arguments);
     if (newSettings == null) {
       return false;
     }
