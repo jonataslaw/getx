@@ -955,7 +955,7 @@ extension GetNavigation on GetInterface {
   /// Your entire application will be rebuilt, and touch events will not
   /// work until the end of rendering.
   void forceAppUpdate() {
-    engine.reassembleApplication();
+    engine.performReassemble();
   }
 
   void appUpdate() => getxController.update();
