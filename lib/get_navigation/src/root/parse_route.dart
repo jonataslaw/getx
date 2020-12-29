@@ -47,11 +47,14 @@ class ParseRouteTree {
       // Add Parent middlewares to children
       final pageMiddlewares = page.middlewares ?? <GetMiddleware>[];
       pageMiddlewares.addAll(route.middlewares ?? <GetMiddleware>[]);
-      result.add(_addChild(page, parentPath, pageMiddlewares));
+      result.add(_addChild(page, parentPath, pageMiddlewares));   
+      page.bindings.addAll(route.bindings);
+      
       final children = _flattenPage(page);
       for (var child in children) {
         pageMiddlewares.addAll(child.middlewares ?? <GetMiddleware>[]);
         result.add(_addChild(child, parentPath, pageMiddlewares));
+        page.bindings.addAll(route.bindings);
       }
     }
     return result;
@@ -85,7 +88,7 @@ class ParseRouteTree {
       (route) {
         return _match(
           name,
-          route.path['regex'] as RegExp,
+          route.path.regex,
         );
       },
       orElse: () => null,
@@ -94,18 +97,13 @@ class ParseRouteTree {
     return route;
   }
 
-  Map<String, String> _parseParams(
-      String path, Map<String, dynamic> routePath) {
+  Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
-    Match paramsMatch = (routePath['regex'] as RegExp).firstMatch(path);
-    for (var i = 0; i < (routePath['keys'].length as int); i++) {
-      String param;
-      try {
-        param = Uri.decodeQueryComponent(paramsMatch[i + 1]);
-      } on Exception catch (_) {
-        param = paramsMatch[i + 1];
-      }
-      params[routePath['keys'][i] as String] = param;
+    Match paramsMatch = routePath.regex.firstMatch(path);
+
+    for (var i = 0; i < routePath.keys.length; i++) {
+      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]);
+      params[routePath.keys[i]] = param;
     }
     return params;
   }

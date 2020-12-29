@@ -102,8 +102,6 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   VoidCallback remove;
   Object _selector;
 
-  List<VoidCallback> _removeToOthers = <VoidCallback>[];
-
   @override
   void initState() {
     super.initState();

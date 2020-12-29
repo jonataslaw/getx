@@ -5,6 +5,12 @@ import '../../get_navigation.dart';
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 
+class PathDecoded {
+  const PathDecoded(this.regex, this.keys);
+  final RegExp regex;
+  final List<String> keys;
+}
+
 class GetPage {
   final String name;
   final GetPageBuilder page;
@@ -24,8 +30,8 @@ class GetPage {
   final RouteSettings settings;
   final List<GetPage> children;
   final List<GetMiddleware> middlewares;
-  final Map<String, dynamic> path;
-  final List<String> keys;
+  final PathDecoded path;
+
   GetPage({
     @required this.name,
     @required this.page,
@@ -39,43 +45,37 @@ class GetPage {
     this.transitionDuration,
     this.popGesture,
     this.binding,
-    this.bindings,
+    this.bindings = const [],
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
     this.children,
-    this.keys,
     this.middlewares,
-  })  : path = normalize(name, keysList: keys),
+  })  : path = _nameToRegex(name),
         assert(page != null),
         assert(name != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null);
 
-  static Map<String, dynamic> normalize(
-    String path, {
-    List<String> keysList,
-  }) {
-    var keys = List<String>.from(keysList ?? const <String>[]);
-    var stringPath =
-        '$path/?'.replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), (placeholder) {
-      var replace = StringBuffer('(?:');
+  static PathDecoded _nameToRegex(String path) {
+    var keys = <String>[];
 
-      if (placeholder[1] != null) {
-        replace.write('\.');
-      }
+    String _replace(Match pattern) {
+      var buffer = StringBuffer('(?:');
 
-      replace.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      if (pattern[1] != null) buffer.write('\.');
+      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      if (pattern[3] != null) buffer.write('?');
 
-      if (placeholder[3] != null) {
-        replace.write('?');
-      }
+      keys.add(pattern[2]);
+      return "$buffer";
+    }
 
-      keys.add(placeholder[2]);
-      return replace.toString();
-    }).replaceAll('//', '/');
+    var stringPath = '$path/?'
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
+        .replaceAll('//', '/');
 
-    return {'regex': RegExp('^$stringPath\$'), 'keys': keys};
+    return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
   GetPage copyWith({
@@ -95,7 +95,6 @@ class GetPage {
     Duration transitionDuration,
     bool fullscreenDialog,
     RouteSettings settings,
-    List<String> keys,
     List<GetPage> children,
     List<GetMiddleware> middlewares,
   }) {
@@ -116,7 +115,6 @@ class GetPage {
       transitionDuration: transitionDuration ?? this.transitionDuration,
       fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
       settings: settings ?? this.settings,
-      keys: keys ?? this.keys,
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
     );
