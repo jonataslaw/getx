@@ -47,14 +47,12 @@ class ParseRouteTree {
       // Add Parent middlewares to children
       final pageMiddlewares = page.middlewares ?? <GetMiddleware>[];
       pageMiddlewares.addAll(route.middlewares ?? <GetMiddleware>[]);
-      result.add(_addChild(page, parentPath, pageMiddlewares));   
-      page.bindings.addAll(route.bindings);
-      
+      result.add(_addChild(page, parentPath, pageMiddlewares));
+
       final children = _flattenPage(page);
       for (var child in children) {
         pageMiddlewares.addAll(child.middlewares ?? <GetMiddleware>[]);
         result.add(_addChild(child, parentPath, pageMiddlewares));
-        page.bindings.addAll(route.bindings);
       }
     }
     return result;
@@ -84,17 +82,10 @@ class ParseRouteTree {
       );
 
   GetPage _findRoute(String name) {
-    final route = _routes.firstWhere(
-      (route) {
-        return _match(
-          name,
-          route.path.regex,
-        );
-      },
+    return _routes.firstWhere(
+      (route) => route.path.regex.hasMatch(name),
       orElse: () => null,
     );
-
-    return route;
   }
 
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
@@ -106,9 +97,5 @@ class ParseRouteTree {
       params[routePath.keys[i]] = param;
     }
     return params;
-  }
-
-  bool _match(String name, RegExp path) {
-    return path.hasMatch(name);
   }
 }
