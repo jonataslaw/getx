@@ -206,6 +206,7 @@ class PageRedirect {
   /// check if redirect is needed
   bool needRecheck() {
     final match = Get.routeTree.matchRoute(settings.name);
+    Get.parameters = match?.parameters;
 
     // No Match found
     if (match?.route == null) {
@@ -215,7 +216,7 @@ class PageRedirect {
 
     final runner = MiddlewareRunner(match.route.middlewares);
     route = runner.runOnPageCalled(match.route);
-    Get.parameters = route?.parameter;
+    addPageParameter(route);
 
     // No middlewares found return match.
     if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
@@ -227,5 +228,17 @@ class PageRedirect {
     }
     settings = newSettings;
     return true;
+  }
+
+  void addPageParameter(GetPage route) {
+    if (route.parameter == null) return;
+
+    if (Get.parameters == null) {
+      Get.parameters = route.parameter;
+    } else {
+      final parameters = Get.parameters;
+      parameters.addEntries(route.parameter.entries);
+      Get.parameters = parameters;
+    }
   }
 }
