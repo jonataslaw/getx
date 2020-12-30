@@ -204,7 +204,7 @@ class RxBool extends _RxImpl<bool> {
 
   bool get isTrue => value;
 
-  bool get isfalse => !isTrue;
+  bool get isFalse => !isTrue;
 
   bool operator &(bool other) => other && value;
 
