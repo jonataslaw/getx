@@ -279,8 +279,8 @@ You can remove this behavior if you want, using:
 In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
 
 ```dart
-// First parameter: condition, must return true of false
-// Second parameter: the new value to aplly if the condition is true
+// First parameter: condition, must return true or false.
+// Second parameter: the new value to apply if the condition is true.
 list.addIf(item < limit, item);
 ```
 
