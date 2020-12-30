@@ -121,28 +121,28 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
     
-    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    // Создайте экземпляр вашего класса с помощью Get.put(), чтобы сделать его доступным для всех "дочерних" маршрутов.
     final Controller c = Get.put(Controller());
 
     return Scaffold(
-      // Use Obx(()=> to update Text() whenever count is changed.
-      appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
+      // Используйте Obx(()=> чтобы обновить Text() как только count изменится.
+      appBar: AppBar(title: Obx(() => Text("Кликов: ${c.count}"))),
 
-      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+      // Замените 8 строк Navigator.push простым Get.to(). Вам не нужен context!
       body: Center(child: RaisedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Перейти к Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
 }
 
 class Other extends StatelessWidget {
-  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
+  // "Попросите" Get найти и предоставить вам ваш Controller, используемый на другой странице.
   final Controller c = Get.find();
 
   @override
   Widget build(context){
-     // Access the updated count variable
+     // Получите доступ к обновленной переменной count
      return Scaffold(body: Center(child: Text("${c.count}")));
   }
 }
@@ -186,13 +186,13 @@ Get имеет два разных менеджера состояний: про
 Это ваша переменная:
 
 ```dart
-var name = 'Jonatas Borges';
+var name = 'Джонатас Борхес';
 ```
 
 Чтобы сделать его наблюдаемым, вам просто нужно добавить в конец ".obs":
 
 ```dart
-var name = 'Jonatas Borges'.obs;
+var name = 'Джонатас Борхес'.obs;
 ```
 
 А в пользовательском интерфейсе, если вы хотите отображать это значение и обновлять экран при изменении значений, просто сделайте следующее:
@@ -216,7 +216,7 @@ Obx(() => Text("${controller.name}"));
 Добавьте "Get" перед MaterialApp, превратив его в GetMaterialApp.
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // Ранее: MaterialApp(
   home: MyHome(),
 )
 ```
@@ -264,7 +264,7 @@ Get.offAll(NextScreen());
 Get имеет простой и мощный менеджер зависимостей, который позволяет вам получить тот же класс, что и ваш BLoC или контроллер, всего одной строкой кода, без Provider context, без InheritedWidget:
 
 ```dart
-Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+Controller controller = Get.put(Controller()); // Вместо Controller controller = Controller();
 ```
 
 - Примечание: Если вы используете Get State Manager, обратите больше внимания на API привязок, который упростит подключение вашего представления к контроллеру.
@@ -281,7 +281,7 @@ controller.fetchApi();
 
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+// Да, это выглядит как Магия! Get найдет ваш controller и доставит его вам. У вас может быть миллион созданных контроллеров, и Get всегда найдет нужный.
 ```
 
 И тогда вы сможете восстановить данные вашего контроллера, которые были там получены:
@@ -332,9 +332,9 @@ Text('title'.tr);
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // your translations
-    locale: Locale('en', 'US'), // translations will be displayed in that locale
-    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
+    translations: Messages(), // ваши переводы
+    locale: Locale('en', 'US'), // перевод будет осуществлен в этой локализации
+    fallbackLocale: Locale('en', 'UK'), // установите резервную локализацию на случай если будет выбрана невалидный локализация.
 );
 ```
 
@@ -385,43 +385,43 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ## Другие API
 
 ```dart
-// give the current args from currentScreen
+// получить текущие аргументы текущего экрана
 Get.arguments
 
-// give arguments of previous route
+// получить аргументы предыдущего маршрута
 Get.previousArguments
 
-// give name of previous route
+// получить имя предыдущего маршрута
 Get.previousRoute
 
-// give the raw route to access for example, rawRoute.isFirst()
+// получить чистый маршрут, например, чтобы узнать: rawRoute.isFirst()
 Get.rawRoute
 
-// give access to Rounting API from GetObserver
+// получить доступ к Rounting API из GetObserver
 Get.routing
 
-// check if snackbar is open
+// проверить, открыт ли снэкбар
 Get.isSnackbarOpen
 
-// check if dialog is open
+// открыт ли диалог
 Get.isDialogOpen
 
-// check if bottomsheet is open
+// открыт ли bottomsheets
 Get.isBottomSheetOpen
 
-// remove one route.
+// удалить один маршрут
 Get.removeRoute()
 
-// back repeatedly until the predicate returns true.
+// возвращаться назад, пока данный предикат не выполнится
 Get.until()
 
-// go to next route and remove all the previous routes until the predicate returns true.
+// идти вперед, удалив предыдущие маршруты, пока данный предикат не выполнится
 Get.offUntil()
 
-// go to next named route and remove all the previous routes until the predicate returns true.
+// перейти к следующему именованному маршруту, удалив предыдущие маршруты, пока данный предикат не выполнится
 Get.offNamedUntil()
 
-//Check in what platform the app is running
+// проверить на какой платформе работает приложение
 GetPlatform.isAndroid
 GetPlatform.isIOS
 GetPlatform.isMacOS
@@ -429,91 +429,92 @@ GetPlatform.isWindows
 GetPlatform.isLinux
 GetPlatform.isFuchsia
 
-//Check the device type
+// проверить тип устройства
 GetPlatform.isMobile
 GetPlatform.isDesktop
-//All platforms are supported independently in web!
-//You can tell if you are running inside a browser
-//on Windows, iOS, OSX, Android, etc.
+// В вебе все платформы поддерживаются независимо!
+// Можно узнать, работает ли приложение сейчас в браузере
+// и на Windows, и на iOS, и на OSX, и на Android и так далее
 GetPlatform.isWeb
 
 
-// Equivalent to : MediaQuery.of(context).size.height,
-// but immutable.
+// Эквивалент : MediaQuery.of(context).size.height,
+// но неизменяемый.
 Get.height
 Get.width
 
-// Gives the current context of the Navigator.
+// Текущий котекст навигации
 Get.context
 
-// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
+// Получить контекст показанного снэкбара/диалога/bottomsheets в любом месте вызова.
 Get.contextOverlay
 
-// Note: the following methods are extensions on context. Since you
-// have access to context in any place of your UI, you can use it anywhere in the UI code
+// Внимание: методы ниже являются расширениями класса BuildContext.
+// Поскольку доступ к контексту есть в любом месте из вашего UI,
+// вы можете использовать расширения в любом месте UI кода
 
-// If you need a changeable height/width (like Desktop or browser windows that can be scaled) you will need to use context.
+// Если вам нужна изменяемая высота/ширина (например, настольное или браузерное окно, размер которого можно изменить), вам нужно использовать context
 context.width
 context.height
 
-// Gives you the power to define half the screen, a third of it and so on.
-// Useful for responsive applications.
+// Дает возможность определить половину экрана, треть и так далее.
+// Полезно для отзывчивых приложений.
 // param dividedBy (double) optional - default: 1
 // param reducedBy (double) optional - default: 0
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.of(context).size
+/// Схоже с MediaQuery.of(context).size
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// Схоже с MediaQuery.of(context).padding
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// Схоже с MediaQuery.of(context).viewPadding
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// Схоже с MediaQuery.of(context).viewInsets;
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// Схоже с MediaQuery.of(context).orientation;
 context.orientation()
 
-/// Check if device is on landscape mode
+/// Проверить, в горизонтальном ли режиме устройство
 context.isLandscape()
 
-/// Check if device is on portrait mode
+/// Проверить, в вертикальном ли режиме устройство
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// Схоже с to MediaQuery.of(context).devicePixelRatio;
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// Схоже с MediaQuery.of(context).textScaleFactor;
 context.textScaleFactor()
 
-/// Get the shortestSide from screen
+/// Получить shortestSide экрана
 context.mediaQueryShortestSide()
 
-/// True if width be larger than 800
+/// Вернет True, если ширина больше 800
 context.showNavbar()
 
-/// True if the shortestSide is smaller than 600p
+/// Вернет True, если меньшая сторона меньше 600p
 context.isPhone()
 
-/// True if the shortestSide is largest than 600p
+/// Вернет True, если меньшая сторона больше 600p
 context.isSmallTablet()
 
-/// True if the shortestSide is largest than 720p
+/// Вернет True, если меньшая сторона больше 720p
 context.isLargeTablet()
 
-/// True if the current device is Tablet
+/// Вернет True, если текущее устройство — Планшет
 context.isTablet()
 
-/// Returns a value<T> according to the screen size
-/// can give value for:
-/// watch: if the shortestSide is smaller than 300
-/// mobile: if the shortestSide is smaller than 600
-/// tablet: if the shortestSide is smaller than 1200
-/// desktop: if width is largest than 1200
+/// Возвращает value<T> в зависимости от размера экрана
+/// Можно устанавливать значения для:
+/// watch: Если меньшая сторона меньше 300
+/// mobile: Если меньшая сторона меньше 600
+/// tablet: Если меньшая сторона меньше 1200
+/// desktop: Если ширина больше 1200
 context.responsiveValue<T>()
 ```
 
@@ -569,9 +570,9 @@ GetMaterialApp(
 );
 
 void localLogWriter(String text, {bool isError = false}) {
-  // pass the message to your favourite logging package here
-  // please note that even if enableLog: false log messages will be pushed in this callback
-  // you get check the flag if you want through GetConfig.isLogEnable
+  // передайте сообщение вашей любимой log-библиотеке
+  // но учитывайте, что даже если enableLog: false, сообщения все равно будут передаваться сюда
+  // узнать значение этого флага можно с помощью GetConfig.isLogEnable
 }
 
 ```
@@ -591,11 +592,11 @@ ValueBuilder<bool>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
     value: value,
-    onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
+    onChanged: updateFn, // такая же сигнатура! Вы можете использовать ( newValue ) => updateFn( newValue )
   ),
-  // if you need to call something outside the builder method.
-  onUpdate: (value) => print("Value updated: $value"),
-  onDispose: () => print("Widget unmounted"),
+  // Если нужно вызвать что-то вне метода builder
+  onUpdate: (value) => print("Значение обновлено: $value"),
+  onDispose: () => print("Виджет удален"),
 ),
 ```
 
@@ -607,7 +608,7 @@ ValueBuilder<bool>(
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+        onChanged: data, // У Rx есть _callable_ функция! Вы можете использовать (flag) => data.value = flag,
     ),
     false.obs,
 ),
@@ -622,8 +623,8 @@ ObxValue((data) => Switch(
 > код выглядит чище, но:
 
 ```dart
-var message = 'Hello world'.obs;
-print( 'Message "$message" has Type ${message.runtimeType}');
+var message = 'Привет, мир'.obs;
+print( 'Тип "$message" — ${message.runtimeType}');
 ```
 
 Даже если `message` _выводит_ значение String, его тип - **RxString**!
@@ -634,63 +635,63 @@ print( 'Message "$message" has Type ${message.runtimeType}');
 
 ```dart
 final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
-name.value = 'Hey';
+// "обновляет" поток только если значение отличается от текущего.
+name.value = 'Хей';
 
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
-name('Hello');
+// Все свойства Rx являются "вызываемыми" и возвращают новые значения.
+// но это не работает с `null`: UI не будет перестроен.
+name('Привет');
 
-// is like a getter, prints 'Hello'.
+// как геттер, напечатает 'Привет'.
 name() ;
 
-/// numbers:
+/// числа:
 
 final count = 0.obs;
 
-// You can use all non mutable operations from num primitives!
+// Вы можете использовать все неизменяемые операции с числами!
 count + 1;
 
-// Watch out! this is only valid if `count` is not final, but var
+// Осторожно! Это можно использовать только если `count` не final, а var
 count += 1;
 
-// You can also compare against values:
+// Сравнения так же работают:
 count > 2;
 
-/// booleans:
+/// логические:
 
 final flag = false.obs;
 
-// switches the value between true/false
+// переключает значение между true/false
 flag.toggle();
 
 
-/// all types:
+/// все типы:
 
-// Sets the `value` to null.
+// обнуляет значение переменной `value`.
 flag.nil();
 
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
+// Все toString(), toJson() операции применяются к `value`
+print( count ); // вызывает `toString()` внутри RxInt
 
 final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
+// Преобразует значение в json массив, выводит RxList
+// Json поддерживается всеми Rx типами!
+print('json: ${jsonEncode(abc)}, тип: ${abc.runtimeType}');
 
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
+// RxMap, RxList и RxSet являются особенными Rx типами: они расширяют нативные типы.
+// Но вы можете работать со списком как и с обычным списком, хоть и реактивным!
+abc.add(12); // добавлеет 12 в список, and ОБНОВЛЯЕТ поток.
+abc[3]; // как списки, возвращает значение с индексом 3.
 
 
-// equality works with the Rx and the value, but hashCode is always taken from the value
+// Сравнение равенства работает с Rx и с его value, но хэш код всегда берется у value
 final number = 12.obs;
-print( number == 12 ); // prints > true
+print( number == 12 ); // печатает true
 
-/// Custom Rx Models:
+/// Кастомные Rx Модели:
 
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
+// toJson(), toString() передаются child, так что вы можете перегрузить эти методы в нем, и вызвать print напрямую.
 
 class User {
     String name, last;
@@ -698,22 +699,22 @@ class User {
     User({this.name, this.last, this.age});
 
     @override
-    String toString() => '$name $last, $age years old';
+    String toString() => '$name $last, возраст: $age';
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+final user = User(name: 'Джон', last: 'Доу', age: 33).obs;
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
-user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
+// `user` – "реактивный", но его свойства – НЕТ!
+// Так что если мы обновим что-либо внутри user...
+user.value.name = 'Рой';
+// Виджет перестроен не будет!
+// `Rx` не знает, изменили ли вы что-то у user.
+// Так что для кастомных классов вам нужно явно "уведомлять" об изменении.
 user.refresh();
 
-// or we can use the `update()` method!
+// или мы можем использовать метод `update()`!
 user.update((value){
-  value.name='Roi';
+  value.name='Рой';
 });
 
 print( user );
@@ -723,20 +724,20 @@ print( user );
 
 Я люблю этот виджет, он такой простой, но такой полезный!
 
-Это`const Stateless` виджет, который имеет геттер `controller` для зарегистрированного `Controller`, вот и всё.
+Это `const Stateless` виджет, который имеет геттер `controller` для зарегистрированного `Controller`, вот и всё.
 
 ```dart
  class AwesomeController extends GetxController {
-   final String title = 'My Awesome View';
+   final String title = 'Моя Удивительная View';
  }
 
-  // ALWAYS remember to pass the `Type` you used to register your controller!
+  // ВСЕГДА передавайте `Тип` вашего контроллера!
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text( controller.title ), // just call `controller.something`
+       child: Text( controller.title ), // просто вызовите `controller.что-то`
      );
    }
  }
@@ -767,37 +768,38 @@ print( user );
 
 ```dart
 Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
+  await initServices(); /// ПОДОЖДИТЕ ИНИЦИАЛИЗАЦИЮ СЕРВИСОВ.
   runApp(SomeApp());
 }
 
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
+/// Умным решением будет проинициализировать сервисы перед вызовом runApp,
+/// поскольку вы можете контроллировать процесс инициализации
+/// (может, вам нужно загрузить конфигурацию Темы, ключи API, язык, определенный пользователем...
+/// Загружайте SettingService прежде чем запускать ApiService.
+/// Таким образом GetMaterialApp() принимает параметры напрямую, и ему не нужно будет перезагружаться
 void initServices() async {
-  print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
+  print('запуск сервисов ...');
+  /// Здесь вы инициализируете get_storage, hive, shared_pref,
+  /// или что-либо другое асинхронное.
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
-  print('All services started...');
+  print('Все сервисы запущены...');
 }
 
 class DbService extends GetxService {
   Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
+    print('$runtimeType задержка 2 секунды');
     await 2.delay();
-    print('$runtimeType ready!');
+    print('$runtimeType готов!');
     return this;
   }
 }
 
 class SettingsService extends GetxService {
   void init() async {
-    print('$runtimeType delays 1 sec');
+    print('$runtimeType задержка 1 секунду');
     await 1.delay();
-    print('$runtimeType ready!');
+    print('$runtimeType готов!');
   }
 }
 
