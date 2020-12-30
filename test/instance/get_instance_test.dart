@@ -81,6 +81,19 @@ void main() {
     Get.reset();
   });
 
+  test('Get.reloadInstance test', () async {
+    Get.lazyPut<Controller>(() => Controller());
+    var ct1 = Get.find<Controller>();
+    ct1.increment();
+    expect(ct1.count, 1);
+    ct1 = Get.find<Controller>();
+    expect(ct1.count, 1);
+    GetInstance().reload<Controller>();
+    ct1 = Get.find<Controller>();
+    expect(ct1.count, 0);
+    Get.reset();
+  });
+
   test('Get.lazyPut with abstract class test', () async {
     final api = Api();
     Get.lazyPut<Service>(() => api);
@@ -127,6 +140,7 @@ void main() {
 class Controller extends DisposableController {
   int init = 0;
   int close = 0;
+  int count = 0;
   @override
   void onInit() {
     init++;
@@ -137,5 +151,9 @@ class Controller extends DisposableController {
   void onClose() {
     close++;
     super.onClose();
+  }
+
+  void increment() {
+    count++;
   }
 }

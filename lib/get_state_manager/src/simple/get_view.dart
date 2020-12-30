@@ -69,10 +69,14 @@ abstract class GetWidget<S extends GetLifeCycleBase> extends GetWidgetCache {
 class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
   S _controller;
   bool _isCreator = false;
+  InstanceInfo info;
   @override
   void onInit() {
-    _isCreator = Get.isPrepared<S>(tag: widget.tag);
-    if (Get.isPrepared<S>()) {
+    info = GetInstance().getInstanceInfo<S>(tag: widget.tag);
+
+    _isCreator = info.isPrepared && info.isCreate;
+
+    if (info.isRegistered) {
       _controller = Get.find<S>(tag: widget.tag);
     }
 
@@ -90,6 +94,7 @@ class _GetCache<S extends GetLifeCycleBase> extends WidgetCache<GetWidget<S>> {
         GetWidget._cache[widget] = null;
       });
     }
+    info = null;
     super.onClose();
   }
 

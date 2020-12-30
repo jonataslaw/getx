@@ -386,8 +386,11 @@ class GetPageRoute<T> extends PageRoute<T> {
   void dispose() {
     super.dispose();
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => GetInstance().removeDependencyByRoute("$reference"));
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (Get.reference != reference) {
+          GetInstance().removeDependencyByRoute("$reference");
+        }
+      });
     }
 
     // if (Get.smartManagement != SmartManagement.onlyBuilder) {

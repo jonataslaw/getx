@@ -1,9 +1,27 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 import '../../get_core/get_core.dart';
 
 import 'lifecycle.dart';
+
+class InstanceInfo {
+  final bool isPermanent;
+  final bool isSingleton;
+  bool get isCreate => !isSingleton;
+  final bool isRegistered;
+  final bool isPrepared;
+  final bool isInit;
+  const InstanceInfo({
+    @required this.isPermanent,
+    @required this.isSingleton,
+    @required this.isRegistered,
+    @required this.isPrepared,
+    @required this.isInit,
+  });
+}
 
 class GetInstance {
   factory GetInstance() => _getInstance ??= GetInstance._();
@@ -155,9 +173,14 @@ class GetInstance {
     assert(builder != null);
     final key = _getKey(S, name);
     _singl.putIfAbsent(
-        key,
-        () =>
-            _InstanceBuilderFactory<S>(isSingleton, builder, permanent, false));
+      key,
+      () => _InstanceBuilderFactory<S>(
+        isSingleton,
+        builder,
+        permanent,
+        false,
+      ),
+    );
   }
 
   /// Clears from memory registered Instances associated with [routeName] when
@@ -224,6 +247,29 @@ class GetInstance {
   /// Requires usage of [GetMaterialApp].
   void _registerRouteInstance<S>({String tag}) {
     _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
+  }
+
+  InstanceInfo getInstanceInfo<S>({String tag}) {
+    final build = _getDependency<S>(tag: tag);
+
+    return InstanceInfo(
+      isPermanent: build?.permanent,
+      isSingleton: build?.isSingleton,
+      isRegistered: isRegistered<S>(tag: tag),
+      isPrepared: !(build?.isInit ?? true),
+      isInit: build?.isInit,
+    );
+  }
+
+  _InstanceBuilderFactory _getDependency<S>({String tag, String key}) {
+    final newKey = key ?? _getKey(S, tag);
+
+    if (!_singl.containsKey(newKey)) {
+      Get.log('Instance "$newKey" is not registered.', isError: true);
+      return null;
+    } else {
+      return _singl[newKey];
+    }
   }
 
   /// Initializes the controller
@@ -316,12 +362,6 @@ class GetInstance {
   ///   the Instance. **don't use** it unless you know what you are doing.
   /// - [force] Will delete an Instance even if marked as [permanent].
   bool delete<S>({String tag, String key, bool force = false}) {
-    // return _queue.secure<bool>(() {
-    return _delete<S>(tag: tag, key: key, force: force);
-    // });
-  }
-
-  bool _delete<S>({String tag, String key, bool force = false}) {
     final newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
@@ -360,6 +400,37 @@ class GetInstance {
     return true;
   }
 
+  void reloadAll({bool force = false}) {
+    _singl.forEach((key, value) {
+      if (value.permanent && !force) {
+        Get.log('Instance "$key" is permanent. Skipping reload');
+      } else {
+        value.dependency = null;
+        value.isInit = false;
+        Get.log('Instance "$key" was reloaded.');
+      }
+    });
+  }
+
+  void reload<S>({String tag, String key, bool force = false}) {
+    final newKey = key ?? _getKey(S, tag);
+
+    final builder = _getDependency<S>(tag: tag, key: newKey);
+    if (builder == null) return;
+
+    if (builder.permanent && !force) {
+      Get.log(
+        '''Instance "$newKey" is permanent. Use [force = true] to force the restart.''',
+        isError: true,
+      );
+      return;
+    }
+
+    builder.dependency = null;
+    builder.isInit = false;
+    Get.log('Instance "$newKey" was restarted.');
+  }
+
   /// Check if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] is optional, if you used a [tag] to register the Instance.
   bool isRegistered<S>({String tag}) => _singl.containsKey(_getKey(S, tag));
@@ -370,12 +441,11 @@ class GetInstance {
   bool isPrepared<S>({String tag}) {
     final newKey = _getKey(S, tag);
 
-    if (!_singl.containsKey(newKey)) {
-      Get.log('Instance "$newKey" not found.', isError: true);
+    final builder = _getDependency<S>(tag: tag, key: newKey);
+    if (builder == null) {
       return false;
     }
 
-    final builder = _singl[newKey];
     if (!builder.isInit) {
       return true;
     }
