@@ -43,6 +43,14 @@ class _InheritedGetxController<T extends GetxController>
       (oldWidget.version != version);
 }
 
+extension WatchEtx on GetxController {
+  T watch<T extends GetxController>() {
+    final instance = Get.find<T>();
+    _GetBuilderState._currentState.watch(instance.update);
+    return instance;
+  }
+}
+
 class GetBuilder<T extends GetxController> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
   final bool global;
@@ -101,9 +109,17 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   bool isCreator = false;
   VoidCallback remove;
   Object _selector;
+  List<VoidCallback> _watchs;
+
+  static _GetBuilderState _currentState;
+
+  void watch(VoidCallback listener) {
+    (_watchs ??= <VoidCallback>[]).add(listener);
+  }
 
   @override
   void initState() {
+    _GetBuilderState._currentState = this;
     super.initState();
     widget.initState?.call(this);
 
@@ -174,6 +190,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     isCreator = null;
     remove = null;
     _selector = null;
+    _watchs = null;
   }
 
   @override

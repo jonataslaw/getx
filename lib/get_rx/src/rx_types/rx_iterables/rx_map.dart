@@ -64,20 +64,6 @@ class RxMap<K, V> extends MapMixin<K, V>
     return _value;
   }
 
-  void assign(K key, V val) {
-    _value ??= <K, V>{};
-    _value.clear();
-    _value[key] = val;
-    refresh();
-  }
-
-  void assignAll(Map<K, V> val) {
-    if (_value == val) return;
-    _value ??= <K, V>{};
-    _value = val;
-    refresh();
-  }
-
   @override
   @protected
   @Deprecated('Map.value is deprecated. use [yourMap.assignAll(newMap)]')
@@ -86,12 +72,17 @@ class RxMap<K, V> extends MapMixin<K, V>
     _value = val;
     refresh();
   }
+}
+
+extension MapExtension<K, V> on Map<K, V> {
+  RxMap<K, V> get obs {
+    return RxMap<K, V>(this);
+  }
 
   void addIf(dynamic condition, K key, V value) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) {
-      _value[key] = value;
-      refresh();
+      this[key] = value;
     }
   }
 
@@ -99,10 +90,29 @@ class RxMap<K, V> extends MapMixin<K, V>
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) addAll(values);
   }
-}
 
-extension MapExtension<K, V> on Map<K, V> {
-  RxMap<K, V> get obs {
-    return RxMap<K, V>(this);
+  void assign(K key, V val) {
+    if (this is RxMap) {
+      final map = (this as RxMap);
+      map._value ??= <K, V>{};
+      map._value.clear();
+      this[key] = val;
+    } else {
+      clear();
+      this[key] = val;
+    }
+  }
+
+  void assignAll(Map<K, V> val) {
+    if (this is RxMap) {
+      final map = (this as RxMap);
+      if (map._value == val || map == val) return;
+      map._value = val;
+      map.refresh();
+    } else {
+      if (this == val) return;
+      clear();
+      addAll(val);
+    }
   }
 }

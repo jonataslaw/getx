@@ -85,6 +85,10 @@ class GetInstance {
     );
   }
 
+  void printInstanceStack() {
+    Get.log(_routesKey.toString());
+  }
+
   void injector<S>(
     InjectorBuilderCallback<S> fn, {
     String tag,

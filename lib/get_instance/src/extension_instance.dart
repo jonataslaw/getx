@@ -32,6 +32,10 @@ extension Inst on GetInterface {
     GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
+  void printInstanceStack() {
+    GetInstance().printInstanceStack();
+  }
+
   /// async version of [Get.put()].
   /// Awaits for the resolution of the Future from [builder()] parameter and
   /// stores the Instance returned.

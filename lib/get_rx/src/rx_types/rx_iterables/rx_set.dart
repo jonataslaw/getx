@@ -9,18 +9,6 @@ class RxSet<E> extends SetMixin<E>
     }
   }
 
-  /// Adds [item] only if [condition] resolves to true.
-  void addIf(dynamic condition, E item) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) add(item);
-  }
-
-  /// Adds all [items] only if [condition] resolves to true.
-  void addAllIf(dynamic condition, Iterable<E> items) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) addAll(items);
-  }
-
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
   RxSet<E> operator +(Set<E> val) {
@@ -29,33 +17,9 @@ class RxSet<E> extends SetMixin<E>
     return this;
   }
 
-  /// Adds only if [item] is not null.
-  void addNonNull(E item) {
-    if (item != null) add(item);
-  }
-
-  /// Adds only if [item] is not null.
-  void addAllNonNull(Iterable<E> item) {
-    if (item != null) addAll(item);
-  }
-
-  /// Replaces all existing items of this list with [item]
-  void assign(E item) {
-    _value ??= <E>{};
-    clear();
-    add(item);
-  }
-
   void update(void fn(Iterable<E> value)) {
     fn(value);
     refresh();
-  }
-
-  /// Replaces all existing items of this list with [items]
-  void assignAll(Iterable<E> items) {
-    _value ??= <E>{};
-    clear();
-    addAll(items);
   }
 
   @override
@@ -150,5 +114,46 @@ extension SetExtension<E> on Set<E> {
     } else {
       return RxSet<E>(null);
     }
+  }
+
+  /// Add [item] to [List<E>] only if [item] is not null.
+  void addNonNull(E item) {
+    if (item != null) add(item);
+  }
+
+  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
+  void addAllNonNull(Iterable<E> item) {
+    if (item != null) addAll(item);
+  }
+
+  /// Add [item] to [List<E>] only if [condition] is true.
+  void addIf(dynamic condition, E item) {
+    if (condition is Condition) condition = condition();
+    if (condition is bool && condition) add(item);
+  }
+
+  /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
+  void addAllIf(dynamic condition, Iterable<E> items) {
+    if (condition is Condition) condition = condition();
+    if (condition is bool && condition) addAll(items);
+  }
+
+  /// Replaces all existing items of this list with [item]
+  void assign(E item) {
+    if (this is RxSet) {
+      (this as RxSet)._value ??= <E>{};
+    }
+
+    clear();
+    add(item);
+  }
+
+  /// Replaces all existing items of this list with [items]
+  void assignAll(Iterable<E> items) {
+    if (this is RxSet) {
+      (this as RxSet)._value ??= <E>{};
+    }
+    clear();
+    addAll(items);
   }
 }
