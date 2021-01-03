@@ -299,8 +299,11 @@ class GetConnect extends GetConnectInterface {
     Map<String, String> headers,
   }) async {
     try {
-      final res =
-          await post(_concatUrl(url), {'query': query, 'variables': variables});
+      final res = await post(
+        _concatUrl(url),
+        {'query': query, 'variables': variables},
+        headers: headers,
+      );
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
@@ -333,7 +336,10 @@ class GetConnect extends GetConnectInterface {
   }) async {
     try {
       final res = await post(
-          _concatUrl(url), {'query': mutation, 'variables': variables});
+        _concatUrl(url),
+        {'query': mutation, 'variables': variables},
+        headers: headers,
+      );
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
