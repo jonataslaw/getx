@@ -81,9 +81,9 @@ Get.put<S>(
 Get.lazyPut<ApiMock>(() => ApiMock());
 
 Get.lazyPut<FirebaseAuth>(
-  () => {
-  // ... some logic if needed
-    return FirebaseAuth()
+  () {
+    // ... some logic if needed
+    return FirebaseAuth();
   },
   tag: Math.random().toString(),
   fenix: true
@@ -309,7 +309,7 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: BindingsBuilder(() => {
+    binding: BindingsBuilder(() {
       Get.lazyPut<ControllerX>(() => ControllerX());
       Get.put<Service>(()=> Api());
     }),
@@ -317,7 +317,7 @@ getPages: [
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: BindingsBuilder(() => {
+    binding: BindingsBuilder(() {
       Get.lazyPut<DetailsController>(() => DetailsController());
     }),
   ),

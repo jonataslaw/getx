@@ -83,9 +83,9 @@ Nesses casos pode ser usado o lazyPut que só cria a instância no momento que e
 Get.lazyPut<ApiMock>(() => ApiMock());
 
 Get.lazyPut<FirebaseAuth>(
-  () => {
-  // ... alguma lógica se necessário
-    return FirebaseAuth()
+  () {
+    // ... alguma lógica se necessário
+    return FirebaseAuth();
   },
   tag: Math.random().toString(),
   fenix: true
@@ -313,7 +313,7 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: BindingsBuilder(() => {
+    binding: BindingsBuilder(() {
       Get.lazyPut<ControllerX>(() => ControllerX());
       Get.put<Service>(()=> Api());
     }),
@@ -321,7 +321,7 @@ getPages: [
   GetPage(
     name: '/detalhes',
     page: () => DetalhesView(),
-    binding: BindingsBuilder(() => {
+    binding: BindingsBuilder(() {
       Get.lazyPut<DetalhesController>(() => DetalhesController());
     }),
   ),
