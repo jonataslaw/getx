@@ -679,14 +679,17 @@ void main() {
       expect('foo bar'.capitalize, 'Foo Bar');
       expect('FoO bAr'.capitalize, 'Foo Bar');
       expect('FOO BAR'.capitalize, 'Foo Bar');
-      expect(''.capitalize, null);
+      expect(null.capitalize, null);
+      expect(''.capitalize, '');
+      expect('foo  bar '.capitalize, 'Foo  Bar ');
     });
 
     test('var.capitalizeFirst', () {
       expect('foo bar'.capitalizeFirst, 'Foo bar');
       expect('FoO bAr'.capitalizeFirst, 'Foo bar');
       expect('FOO BAR'.capitalizeFirst, 'Foo bar');
-      expect(''.capitalizeFirst, null);
+      expect(null.capitalizeFirst, null);
+      expect(''.capitalizeFirst, '');
     });
 
     test('var.removeAllWhitespace', () {
