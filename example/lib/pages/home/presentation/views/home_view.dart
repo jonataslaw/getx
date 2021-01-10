@@ -21,7 +21,7 @@ class HomeView extends GetView<HomeController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Corona Virus"),
+          title: Text('covid'.tr),
           backgroundColor: Colors.white10,
           elevation: 0,
           centerTitle: true,
@@ -36,7 +36,7 @@ class HomeView extends GetView<HomeController> {
                     height: 100,
                   ),
                   Text(
-                    "Total Confirmed",
+                    'total_confirmed'.tr,
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
                     height: 10,
                   ),
                   Text(
-                    "Total Deaths",
+                    'total_deaths'.tr,
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -71,7 +71,7 @@ class HomeView extends GetView<HomeController> {
                       Get.toNamed('/home/country');
                     },
                     child: Text(
-                      "Fetch by country",
+                      'fetch_country'.tr,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   )
