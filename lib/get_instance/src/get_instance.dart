@@ -388,9 +388,9 @@ class GetInstance {
       return false;
     }
 
-    if (i is GetLifeCycle) {
+    if (i is GetLifeCycleBase && i.onDelete != null) {
       i.onDelete();
-      Get.log('"$newKey" onClose() called');
+      Get.log('"$newKey" onDelete() called');
     }
 
     _singl.remove(newKey);
