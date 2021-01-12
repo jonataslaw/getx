@@ -17,7 +17,7 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 - [A Propos de Get](#a-propos-de-get)
-- [Installing](#installing)
+- [Installation](#installation)
 - [Counter App with GetX](#counter-app-with-getx)
 - [The Three pillars](#the-three-pillars)
   - [State management](#state-management)
@@ -76,32 +76,31 @@
 
     En règle générale, le développeur doit s'occuper lui-même de la suppression des contrôleurs de la mémoire. Avec GetX, cela n'est pas nécessaire car les ressources sont, par défaut, supprimées de la mémoire lorsqu'elles ne sont pas utilisées. Si vous souhaitez les conserver en mémoire, vous devez déclarer explicitement "permanent: true" comme paramètre lors de la création de la ressource. De cette façon, en plus de gagner du temps, vous risquez moins d'avoir des ressources inutiles dans la mémoire. L'initialisation des ressources est également 'lazy' par défaut (i.e. se fait seulement lorsque la ressource est nécessaire).
     
-  - **ORGANIZATION:** GetX permet le découplage total de la Vue (View), de la Logique de Présentation (Presentation Logic), de la Business Logic, de l'injection de dépendances (Dependency Injection) et de la Navigation. Vous n'avez pas besoin de contexte pour naviguer entre les routes, vous n'êtes donc pas dépendant de la hiérarchisation des widgets (visualisation) pour cela. Vous n'avez pas besoin de 'context' pour accéder à vos contrôleurs/blocs via un inheritedWidget, vous dissociez donc complètement votre logique de présentation (Vue) et votre Business logic de votre couche de visualisation. Vous n'avez pas besoin d'injecter vos classes Controlleûrs / Modèles / Blocs le long de la hiérarchie de Widgets via `MultiProvider`s. Pour cela, GetX utilise sa propre fonction d'injection de dépendances (DI), découplant complètement la DI de sa Vue.
+  - **ORGANIZATION:** GetX permet le découplage total de la Vue (View), de la Logique de Présentation (Presentation Logic), de la Business Logic, de l'injection de dépendances (Dependency Injection) et de la Navigation. Vous n'avez pas besoin de contexte pour naviguer entre les routes, vous n'êtes donc pas dépendant de la hiérarchisation des widgets (visualisation) pour cela. Vous n'avez pas besoin de 'context' pour accéder à vos contrôleurs/blocs via un inheritedWidget, vous dissociez donc complètement votre logique de présentation (Vue) et votre Business logic de votre couche de visualisation. Vous n'avez pas besoin d'injecter vos classes Controlleûrs / Modèles / Blocs le long de la hiérarchie de Widgets via `MultiProvider`. Pour cela, GetX utilise sa propre fonction d'injection de dépendances (DI), découplant complètement la DI de sa Vue.
   
-    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
+    Avec GetX, vous savez où trouver chaque module de votre application, avec un code propre par défaut. En plus de rendre la maintenance facile, cela rend le partage de modules quelque chose qui jusque-là dans Flutter était impensable, quelque chose de totalement possible.
+    BLoC était un point de départ pour organiser le code dans Flutter, il sépare la Business logic de la visualisation. GetX en est une évolution naturelle, séparant non seulement la Business logic mais aussi la logique de présentation. L'injection de dépendances et les routes sont également découplées, et la couche de données est séparée du tout. Vous savez où tout se trouve, et tout cela d'une manière plus facile que de construire un 'Hello World''.
+    GetX est le moyen le plus simple, pratique et évolutif de créer des applications hautes performances avec le SDK Flutter. Il possède un vaste écosystème qui fonctionne parfaitement, c'est facile pour les débutants et précis pour les experts. Il est sécurisé, stable, à jour et offre une vaste gamme d'API intégrées qui ne sont pas présentes dans le SDK Flutter par défaut.
+    
+- GetX possède une multitude de fonctionnalités qui vous permettent de démarrer la programmation sans vous soucier de quoi que ce soit, mais chacune de ces fonctionnalités se trouve dans des conteneurs séparés et ne démarre qu'après utilisation. Si vous n'utilisez que la gestion des états (State Management), seule la gestion des états sera compilée. Si vous n'utilisez que des routes, rien de la gestion d'état ne sera compilé.
 
-- GetX is not bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
+- GetX a un énorme écosystème, une grande communauté, un grand nombre de collaborateurs, et sera maintenu tant que Flutter existera. GetX est également capable de fonctionner avec le même code sur Android, iOS, Web, Mac, Linux, Windows et sur votre serveur. Il est possible de réutiliser entièrement votre code créé sur le frontend et le backend avec Get Server.
+  **Il est possible d'entièrement réutiliser votre code écrit sur le frontend, pour le backend avec [Get Server](https://github.com/jonataslaw/get_server)**.
 
-- GetX has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. GetX too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
+**De plus, l'ensemble du processus de développement peut être complètement automatisé, à la fois sur le serveur et sur le front-end avec [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
+**De plus, pour augmenter encore votre productivité, nous avons l'[extension pour VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) et l'[extension pour Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+# Installation
 
-# Installing
-
-Add Get to your pubspec.yaml file:
+Ajoutez Get à votre fichier pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+Importez get dans les fichiers dans lesquels il doit être utilisé:
 
 ```dart
 import 'package:get/get.dart';
