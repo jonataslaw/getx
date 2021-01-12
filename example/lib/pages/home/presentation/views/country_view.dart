@@ -22,7 +22,7 @@ class CountryView extends GetView<HomeController> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text("Corona By Country"),
+              title: Text('corona_by_country'.tr),
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
@@ -43,7 +43,7 @@ class CountryView extends GetView<HomeController> {
                       ),
                       title: Text(country.country),
                       subtitle:
-                          Text("Total infecteds: ${country.totalConfirmed}"),
+                          Text('total_infecteds'.tr +' ${country.totalConfirmed}'),
                     );
                   }),
             ),
