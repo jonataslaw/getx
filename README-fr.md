@@ -18,7 +18,7 @@
 
 - [A Propos de Get](#a-propos-de-get)
 - [Installation](#installation)
-- [Counter App with GetX](#counter-app-with-getx)
+- [L'application 'Counter' avec GetX](#application-counter-avec-getx)
 - [The Three pillars](#the-three-pillars)
   - [State management](#state-management)
     - [Reactive State Manager](#reactive-state-manager)
@@ -100,16 +100,15 @@ dependencies:
   get:
 ```
 
-Importez get dans les fichiers dans lesquels il doit être utilisé:
+Importez Get dans les fichiers dans lesquels il doit être utilisé:
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# Application Counter avec Getx
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
-
+Le projet "compteur" créé par défaut sur un nouveau projet sur Flutter comporte plus de 100 lignes (avec commentaires). Pour montrer la puissance de Get, je vais vous montrer comment faire un "compteur" changeant d'état à chaque clic, basculant entre les pages et partageant l'état entre les écrans, le tout de manière organisée, en séparant la logique métier de la vue, en UNIQUEMENT 26 LIGNES CODE INCLUANT LES COMMENTAIRES.
 - Step 1:
   Add "Get" before your MaterialApp, turning it into GetMaterialApp
 
