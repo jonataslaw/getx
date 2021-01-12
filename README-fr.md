@@ -108,20 +108,21 @@ import 'package:get/get.dart';
 
 # Application Counter avec Getx
 
-Le projet "compteur" créé par défaut sur un nouveau projet sur Flutter comporte plus de 100 lignes (avec commentaires). Pour montrer la puissance de Get, je vais vous montrer comment faire un "compteur" changeant d'état à chaque clic, basculant entre les pages et partageant l'état entre les écrans, le tout de manière organisée, en séparant la logique métier de la vue, en UNIQUEMENT 26 LIGNES CODE INCLUANT LES COMMENTAIRES.
+Le projet "Counter" créé par défaut sur chaque nouveau projet Flutter comporte plus de 100 lignes (avec commentaires). Pour montrer la puissance de Get, je vais vous montrer comment faire un "compteur" changeant d'état à chaque clic, naviguer entre les pages et partager l'état entre les écrans, le tout de manière organisée, en séparant la Business logic de la Vue, en SEULEMENT 26 LIGNES DE CODE INCLUANT LES COMMENTAIRES.
 - Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+  Ajoutez "Get" avant MaterialApp, pour le transformer en GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step in only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- Note: cela ne modifie pas le MaterialApp de Flutter, GetMaterialApp n'est pas un MaterialApp modifié, il s'agit simplement d'un widget préconfiguré, qui a le MaterialApp par défaut comme enfant (child: ). Vous pouvez le configurer manuellement, mais ce n'est certainement pas nécessaire. GetMaterialApp créera des routes, les injectera, injectera les traductions, injectera tout ce dont vous avez besoin pour la navigation de routes. Si vous utilisez Get uniquement pour la gestion de l'état (State management) ou la gestion des dépendances (DI), il n'est pas nécessaire d'utiliser GetMaterialApp. GetMaterialApp est nécessaire pour les routes, les 'snackbars', l'internationalisation, les 'bottomSheets', les dialogues et les API de haut niveau liés aux routes et à l'absence de 'context'.
+
+- Note²: Cette étape n'est nécessaire que si vous allez utiliser la gestion de routes (Get.to(), Get.back(), etc). Si vous ne l'utiliserez pas, il n'est pas nécessaire de faire l'étape 1.
 
 - Step 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+  Créez votre classe de Business logic et placez-y toutes les variables, méthodes et contrôleurs.
+    Vous pouvez rendre toute variable observable en utilisant un simple ".obs".
 
 ```dart
 class Controller extends GetxController{
@@ -131,7 +132,7 @@ class Controller extends GetxController{
 ```
 
 - Step 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+  Créez votre Vue, utilisez StatelessWidget et économisez de la RAM, avec Get, vous n'aurez peut-être plus besoin d'utiliser StatefulWidget.
 
 ```dart
 class Home extends StatelessWidget {
@@ -139,14 +140,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
 
-    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    // Instanciez votre classe en utilisant Get.put() pour le rendre disponible pour tous les routes "descendantes".
     final Controller c = Get.put(Controller());
 
     return Scaffold(
-      // Use Obx(()=> to update Text() whenever count is changed.
+      // Utilisez Obx(()=> pour mettre à jour Text() chaque fois que count est changé.
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
-      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+      // Remplacez les 8 lignes Navigator.push par un simple Get.to(). Vous n'avez pas besoin de 'context'
       body: Center(child: RaisedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
@@ -155,26 +156,26 @@ class Home extends StatelessWidget {
 }
 
 class Other extends StatelessWidget {
-  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
+  // Vous pouvez demander à Get de trouver un contrôleur utilisé par une autre page et de vous y rediriger.
   final Controller c = Get.find();
 
   @override
   Widget build(context){
-     // Access the updated count variable
+     // Accéder à la variable 'count' qui est mise à jour
      return Scaffold(body: Center(child: Text("${c.count}")));
   }
 }
 ```
 
-Result:
+Résultat:
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
+C'est un projet simple mais il montre déjà à quel point Get est puissant. Au fur et à mesure que votre projet se développe, cette différence deviendra plus significative.
 
-Get was designed to work with teams, but it makes the job of an individual developer simple.
+Get a été conçu pour fonctionner avec des équipes, mais il simplifie le travail d'un développeur individuel.
 
-Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+Améliorez vos délais, livrez tout à temps sans perte de performances. Get n'est pas pour tout le monde, mais si vous vous êtes identifié à cette phrase, Get est fait pour vous!
 
 # The Three pillars
 
