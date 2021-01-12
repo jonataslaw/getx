@@ -484,12 +484,12 @@ Get.bottomSheet(
         ListTile(
           leading: Icon(Icons.music_note),
           title: Text('Music'),
-          onTap: () => {}
+          onTap: () {}
         ),
         ListTile(
           leading: Icon(Icons.videocam),
           title: Text('Video'),
-          onTap: () => {},
+          onTap: () {},
         ),
       ],
     ),
