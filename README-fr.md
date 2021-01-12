@@ -66,9 +66,9 @@
 
 # A Propos de Get
 
-- GetX est une solution extra-légère et puissante pour Flutter. Il combine une gestion d'état de haute performance, une injection de dépendances intelligente et une gestion des routes rapide et pratique.
+- GetX est une solution extra-légère et puissante pour Flutter. Il combine une gestion d'état (state management) de haute performance, une injection de dépendances (dependency injection) intelligente et une gestion de route (route management) rapide et pratique.
 
-- GetX a 3 principes de base. Cela signifie que ce sont les priorités pour toutes les ressources de la bibliothèque GetX: **PRODUCTIVITÉ, PERFORMANCE ET ORGANIZATION.**
+- GetX a 3 principes de base. Cela signifie que ces principes sont les priorités pour toutes les ressources de la bibliothèque GetX: **PRODUCTIVITÉ, PERFORMANCE ET ORGANIZATION.**
 
   - **PERFORMANCE:** GetX se concentre sur la performance et la consommation minimale de ressources. GetX n'utilise ni Streams ni ChangeNotifier.
 
@@ -76,8 +76,8 @@
 
     En règle générale, le développeur doit s'occuper lui-même de la suppression des contrôleurs de la mémoire. Avec GetX, cela n'est pas nécessaire car les ressources sont, par défaut, supprimées de la mémoire lorsqu'elles ne sont pas utilisées. Si vous souhaitez les conserver en mémoire, vous devez déclarer explicitement "permanent: true" comme paramètre lors de la création de la ressource. De cette façon, en plus de gagner du temps, vous risquez moins d'avoir des ressources inutiles dans la mémoire. L'initialisation des ressources est également 'lazy' par défaut (i.e. se fait seulement lorsque la ressource est nécessaire).
     
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
-
+  - **ORGANIZATION:** GetX permet le découplage total de la Vue (View), de la Logique de Présentation (Presentation Logic), de la Business Logic, de l'injection de dépendances (Dependency Injection) et de la Navigation. Vous n'avez pas besoin de contexte pour naviguer entre les routes, vous n'êtes donc pas dépendant de la hiérarchisation des widgets (visualisation) pour cela. Vous n'avez pas besoin de 'context' pour accéder à vos contrôleurs/blocs via un inheritedWidget, vous dissociez donc complètement votre logique de présentation (Vue) et votre Business logic de votre couche de visualisation. Vous n'avez pas besoin d'injecter vos classes Controlleûrs / Modèles / Blocs le long de la hiérarchie de Widgets via `MultiProvider`s. Pour cela, GetX utilise sa propre fonction d'injection de dépendances (DI), découplant complètement la DI de sa Vue.
+  
     With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
     BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
     GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
