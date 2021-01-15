@@ -1,5 +1,5 @@
-- [State Management](#state-management)
-  - [Reactive State Manager](#reactive-state-manager)
+* [State Management](#state-management)
+  + [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
     - [Maximum performance:](#maximum-performance)
     - [Declaring a reactive variable](#declaring-a-reactive-variable)
@@ -11,7 +11,7 @@
     - [Why i have to use .value](#why-i-have-to-use-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  - [Simple State Manager](#simple-state-manager)
+  + [Simple State Manager](#simple-state-manager)
     - [Advantages](#advantages-1)
     - [Usage](#usage)
     - [How it handles controllers](#how-it-handles-controllers)
@@ -19,30 +19,35 @@
     - [Why it exists](#why-it-exists)
     - [Other ways of using it](#other-ways-of-using-it)
     - [Unique IDs](#unique-ids)
-  - [Mixing the two state managers](#mixing-the-two-state-managers)
-  - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
+  + [Mixing the two state managers](#mixing-the-two-state-managers)
+  + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # State Management
 
 GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
 
-- _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
-- _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
+* _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
+* _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
+
 With GetX everything is reactive, and nothing depends on code generators, increasing your productivity in all aspects of your development.
-- _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
-- _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
+
+* _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
+* _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
+
 With GetX, even nested widgets are respected. If you have Obx watching your ListView, and another watching a checkbox inside the ListView, when changing the CheckBox value, only it will be updated, when changing the List value, only the ListView will be updated.
-- _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
+
+* _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
+
 Most (if not all) current state managers will rebuild on the screen.
 
 ## Reactive State Manager
 
 Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
+* You won't need to create StreamControllers.
+* You won't need to create a StreamBuilder for each variable
+* You will not need to create a class for each state.
+* You will not need to create a get for an initial value.
 
 Reactive programming with Get is as easy as using setState.
 
@@ -50,13 +55,13 @@ Let's imagine that you have a name variable and want that every time you change 
 
 This is your count variable:
 
-```dart
+``` dart
 var name = 'Jonatas Borges';
 ```
 
 To make it observable, you just need to add ".obs" to the end of it:
 
-```dart
+``` dart
 var name = 'Jonatas Borges'.obs;
 ```
 
@@ -64,34 +69,34 @@ That's all. It's *that* simple.
 
 From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
 
-What did we do under the hood? We created a `Stream` of `String`s, assigned the initial value `"Jonatas Borges"`, we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+What did we do under the hood? We created a `Stream` of `String` s, assigned the initial value `"Jonatas Borges"` , we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
 
 This is the **magic of GetX**, thanks to Dart's capabilities.
 
 But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
 
-You will need to create a `StreamBuilder`, subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+You will need to create a `StreamBuilder` , subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
 
-No, you don't need a `StreamBuilder`, but you are right about static classes.
+No, you don't need a `StreamBuilder` , but you are right about static classes.
 
 Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
 With **GetX** you can also forget about this boilerplate code. 
 
-`StreamBuilder( … )`? `initialValue: …`? `builder: …`? Nope, you just need to place this variable inside an `Obx()` Widget.
+`StreamBuilder( … )` ? `initialValue: …` ? `builder: …` ? Nope, you just need to place this variable inside an `Obx()` Widget.
 
-```dart
+``` dart
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>`. 
+_What do you need to memorize?_  Only `Obx(() =>` . 
 
 You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
 
 `Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
 
-If `name` is `"John"`, and you change it to `"John"` (`name.value = "John"`), as it's the same `value` as before, nothing will change on the screen, and `Obx`, to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+If `name` is `"John"` , and you change it to `"John"` ( `name.value = "John"` ), as it's the same `value` as before, nothing will change on the screen, and `Obx` , to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
 
-> So, what if I have 5 _Rx_ (observable) variables within an `Obx`?
+> So, what if I have 5 _Rx_ (observable) variables within an `Obx` ?
 
 It will just update when **any** of them changes. 
 
@@ -101,29 +106,31 @@ Nope, just the **specific Widget** that uses that _Rx_ variable.
 
 So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
 
-```
+``` 
+
 final isOpen = false.obs;
 
 // NOTHING will happen... same value.
 void onButtonTap() => isOpen.value=false;
 ```
+
 ### Advantages
 
 **GetX()** helps you when you need **granular** control over what's being updated.
 
-If you do not need `unique IDs`, because all your variables will be modified when you perform an action, then use `GetBuilder`, 
-because it's a Simple State Updater (in blocks, like `setState()`), made in just a few lines of code.
+If you do not need `unique IDs` , because all your variables will be modified when you perform an action, then use `GetBuilder` , 
+because it's a Simple State Updater (in blocks, like `setState()` ), made in just a few lines of code.
 It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
 
 If you need a **powerful** State Manager, you can't go wrong with **GetX**.
 
 It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
+You can use _rxDart_ in conjunction with it, because everything are `Streams` , 
 you can listen the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
+because everything in it are `Streams` . 
 
 It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs`.
+You can turn **anything** into an _"Observable"_ with just a `.obs` .
 
 ### Maximum performance:
 
@@ -134,19 +141,18 @@ If you experience any errors in your app, and send a duplicate change of State,
 **GetX** will ensure it will not crash.
 
 With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _`computed` from MobX_. 
+That's the main difference between **GetX**, and using _ `computed` from MobX_. 
 When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
 
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()`) will only rebuild if it implies a real change of State.
+With **GetX**, if you join two variables, `GetX()` (similar to `Observer()` ) will only rebuild if it implies a real change of State.
 
 ### Declaring a reactive variable
 
 You have 3 ways to turn a variable into an "observable".
 
-
 1 - The first is using **`Rx{Type}`**.
 
-```dart
+``` dart
 // initial value is recommended, but not mandatory
 final name = RxString('');
 final isLogged = RxBool(false);
@@ -158,7 +164,7 @@ final myMap = RxMap<String, int>({});
 
 2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
 
-```dart
+``` dart
 final name = Rx<String>('');
 final isLogged = Rx<Bool>(false);
 final count = Rx<Int>(0);
@@ -171,9 +177,9 @@ final myMap = Rx<Map<String, int>>({});
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value`:
+3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value` :
 
-```dart
+``` dart
 final name = ''.obs;
 final isLogged = false.obs;
 final count = 0.obs;
@@ -193,20 +199,19 @@ To be prepared, from now on, you should always start your _Rx_ variables with an
 
 > Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
 
-You will literally add a "`.obs`" to the end of your variable, and **that’s it**, you’ve made it observable,
-and its `.value`, well, will be the _initial value_).
-
+You will literally add a " `.obs` " to the end of your variable, and **that’s it**, you’ve made it observable, 
+and its `.value` , well, will be the _initial value_).
 
 ### Using the values in the view
 
-```dart
+``` dart
 // controller file
 final count1 = 0.obs;
 final count2 = 0.obs;
 int get sum => count1.value + count2.value;
 ```
 
-```dart
+``` dart
 // view file
 GetX<Controller>(
   builder: (controller) {
@@ -228,30 +233,35 @@ GetX<Controller>(
 ),
 ```
 
-If we increment `count1.value++`, it will print:
-- `count 1 rebuild` 
-- `count 3 rebuild`
+If we increment `count1.value++` , it will print:
 
-because `count1` has a value of `1`, and `1 + 0 = 1`, changing the `sum` getter value.
+* `count 1 rebuild`
 
-If we change `count2.value++`, it will print:
-- `count 2 rebuild` 
-- `count 3 rebuild`
+* `count 3 rebuild`
 
-because `count2.value` changed, and the result of the `sum` is now `2`.
+because `count1` has a value of `1` , and `1 + 0 = 1` , changing the `sum` getter value.
 
-- NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
+If we change `count2.value++` , it will print:
+
+* `count 2 rebuild`
+
+* `count 3 rebuild`
+
+because `count2.value` changed, and the result of the `sum` is now `2` .
+
+* NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
+
  This behavior exists due to Boolean variables.
 
 Imagine you did this:
 
-```dart
+``` dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever`.
+And then, you checked if a user is "logged in" to trigger an event in `ever` .
 
-```dart
+``` dart
 @override
 onInit(){
   ever(isLogged, fireRoute);
@@ -267,18 +277,18 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false`, there would be no change to `isLogged`, so `ever()` would never be called.
+if `hasToken` was `false` , there would be no change to `isLogged` , so `ever()` would never be called.
 To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value`.
+even if it contains the same `.value` .
 
 You can remove this behavior if you want, using:
-`isLogged.firstRebuild = false;`
+ `isLogged.firstRebuild = false;`
 
 ### Conditions to rebuild
 
 In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
 
-```dart
+``` dart
 // First parameter: condition, must return true or false.
 // Second parameter: the new value to apply if the condition is true.
 list.addIf(item < limit, item);
@@ -288,7 +298,7 @@ Without decorations, without a code generator, without complications :smile:
 
 Do you know Flutter's counter app? Your Controller class might look like this:
 
-```dart
+``` dart
 class CountController extends GetxController {
   final count = 0.obs;
 }
@@ -296,7 +306,7 @@ class CountController extends GetxController {
 
 With a simple:
 
-```dart
+``` dart
 controller.count.value++
 ```
 
@@ -307,7 +317,8 @@ You could update the counter variable in your UI, regardless of where it is stor
 You can transform anything on obs. Here are two ways of doing it:
 
 * You can convert your class values to obs
-```dart
+
+``` dart
 class RxUser {
   final name = "Camila".obs;
   final age = 18.obs;
@@ -315,7 +326,8 @@ class RxUser {
 ```
 
 * or you can convert the entire class to be an observable
-```dart
+
+``` dart
 class User {
   User({String name, int age});
   var name;
@@ -333,7 +345,7 @@ Lists are completely observable as are the objects within it. That way, if you a
 You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
 Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
 
-```dart
+``` dart
 // On the controller
 final String title = 'User Info:'.obs
 final list = List<User>().obs;
@@ -347,7 +359,7 @@ ListView.builder (
 
 When you are making your own classes observable, there is a different way to update them:
 
-```dart
+``` dart
 // on the model file
 // we are going to make the entire class observable instead of each attribute
 class User() {
@@ -355,7 +367,6 @@ class User() {
   String name;
   int age;
 }
-
 
 // on the controller file
 final user = User().obs;
@@ -385,7 +396,7 @@ You can literally add 3 letters to your pubspec (get) and a colon and start prog
 
 The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
 
-If you are bothered by `.value`, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+If you are bothered by `.value` , and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
 
 If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
@@ -400,7 +411,7 @@ Obviously, if you don't use a type, you will need to have an instance of your co
 
 Workers will assist you, triggering specific callbacks when an event occurs.
 
-```dart
+``` dart
 /// Called every time `count1` changes.
 ever(count1, (_) => print("$_ has been changed"));
 
@@ -413,28 +424,34 @@ debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 /// Ignore all changes within 1 second.
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
-All workers (except `debounce`) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool`.
+
+All workers (except `debounce` ) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool` .
 This `condition` defines when the `callback` function executes.
 
 All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
  
-- **`ever`**
+
+* **`ever`**
+
  is called every time the _Rx_ variable emits a new value.
 
-- **`everAll`**
- Much like `ever`, but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
+* **`everAll`**
 
+ Much like `ever` , but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
 
-- **`once`**
+* **`once`**
+
 'once' is called only the first time the variable has been changed.
 
-- **`debounce`**
+* **`debounce`**
+
 'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
 
-- **`interval`**
+* **`interval`**
+
 'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
 
-- NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+* NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
 
 ## Simple State Manager
 
@@ -466,7 +483,7 @@ That way, if you want an individual controller, you can assign IDs for that, or 
 
 ### Usage
 
-```dart
+``` dart
 // Create controller class and extends GetxController
 class Controller extends GetxController {
   int counter = 0;
@@ -487,13 +504,13 @@ GetBuilder<Controller>(
 
 **Done!**
 
-- You have already learned how to manage states with Get.
+* You have already learned how to manage states with Get.
 
-- Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+* Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
 
 If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
 
-```dart
+``` dart
 class OtherClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -508,9 +525,9 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
+If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()` )
 
-```dart
+``` dart
 class Controller extends GetxController {
 
   /// You do not need that. I recommend using it just for ease of syntax.
@@ -529,7 +546,7 @@ class Controller extends GetxController {
 
 And then you can access your controller directly, that way:
 
-```dart
+``` dart
 FloatingActionButton(
   onPressed: () {
     Controller.to.increment(),
@@ -544,7 +561,7 @@ When you press FloatingActionButton, all widgets that are listening to the 'coun
 
 Let's say we have this:
 
-`Class a => Class B (has controller X) => Class C (has controller X)`
+ `Class a => Class B (has controller X) => Class C (has controller X)`
 
 In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
 
@@ -557,7 +574,7 @@ Unless you need to use a mixin, like TickerProviderStateMixin, it will be totall
 You can call all methods of a StatefulWidget directly from a GetBuilder.
 If you need to call initState() or dispose() method for example, you can call them directly;
 
-```dart
+``` dart
 GetBuilder<Controller>(
   initState: (_) => Controller.to.fetchApi(),
   dispose: (_) => Controller.to.closeStreams(),
@@ -567,7 +584,7 @@ GetBuilder<Controller>(
 
 A much better approach than this is to use the onInit() and onClose() method directly from your controller.
 
-```dart
+``` dart
 @override
 void onInit() {
   fetchApi();
@@ -575,7 +592,7 @@ void onInit() {
 }
 ```
 
-- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+* NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
 
 ### Why it exists
 
@@ -587,7 +604,7 @@ You do not need to call the device, you have the onClose() method that will be c
 
 Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
 
-```dart
+``` dart
 class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
@@ -604,15 +621,15 @@ class Controller extends GetxController {
 
 Controller life cycle:
 
-- onInit() where it is created.
-- onClose() where it is closed to make any changes in preparation for the delete method
-- deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+* onInit() where it is created.
+* onClose() where it is closed to make any changes in preparation for the delete method
+* deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
 
 ### Other ways of using it
 
 You can use Controller instance directly on GetBuilder value:
 
-```dart
+``` dart
 GetBuilder<Controller>(
   init: Controller(),
   builder: (value) => Text(
@@ -623,7 +640,7 @@ GetBuilder<Controller>(
 
 You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
 
-```dart
+``` dart
 class Controller extends GetxController {
   static Controller get to => Get.find();
 [...]
@@ -639,7 +656,7 @@ GetBuilder<Controller>(
 
 or
 
-```dart
+``` dart
 class Controller extends GetxController {
  // static Controller get to => Get.find(); // with no static get
 [...]
@@ -653,9 +670,9 @@ GetBuilder<Controller>(
 ),
 ```
 
-- You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+* You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
 
-```dart
+``` dart
 Controller controller = Controller();
 [...]
 GetBuilder<Controller>(
@@ -671,7 +688,7 @@ GetBuilder<Controller>(
 
 If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
 
-```dart
+``` dart
 GetBuilder<Controller>(
   id: 'text'
   init: Controller(), // use it only first time on each controller
@@ -683,13 +700,13 @@ GetBuilder<Controller>(
 
 And update it this form:
 
-```dart
+``` dart
 update(['text']);
 ```
 
 You can also impose conditions for the update:
 
-```dart
+``` dart
 update(['text'], counter < 10);
 ```
 
@@ -701,6 +718,55 @@ Some people opened a feature request, as they wanted to use only one type of rea
 
 Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
 
+## StateMixin
+
+Another way to handle your `UI` state is use the `StateMixin<T>` .
+To implement it, use the `with` to add the `StateMixin<T>`
+to your controller which allows a T model.
+
+``` dart
+class Controller extends GetController with StateMixin<User>{}
+```
+
+The `change()` method change the State whenever we want.
+Just pass the data and the status in this way:
+
+```dart
+change(data, status: RxStatus.success());
+```
+
+RxStatus allow these status:
+
+``` dart
+RxStatus.loading();
+RxStatus.success();
+RxStatus.empty();
+RxStatus.error('message');
+```
+
+To represent it in the UI, use:
+
+```dart
+class OtherClass extends GetView<Controller> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: controller.obx(
+        (state)=>Text(state.name),
+        
+        // here you can put your custom loading indicator, but
+        // by default would be Center(child:CircularProgressIndicator())
+        onLoading: CustomLoadingIndicator(),
+        onEmpty: Text('No data found'),
+
+        // here also you can set your own error widget, but by
+        // default will be an Center(child:Text(error))
+        onError: (error)=>Text(error),
+      ),
+    );
+}
+```
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 

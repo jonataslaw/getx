@@ -111,7 +111,7 @@ class GetMaterialApp extends StatelessWidget {
   final ThemeData highContrastDarkTheme;
   final Map<Type, Action<Intent>> actions;
   final bool debugShowMaterialGrid;
-  final Function(Routing) routingCallback;
+  final ValueChanged<Routing> routingCallback;
   final Transition defaultTransition;
   final bool opaqueRoute;
   final VoidCallback onInit;
@@ -198,8 +198,10 @@ class GetMaterialApp extends StatelessWidget {
         initialRoute = null,
         super(key: key);
 
-  Route<dynamic> generator(RouteSettings settings) =>
-      PageRedirect(settings, unknownRoute).page();
+  Route<dynamic> generator(RouteSettings settings) {
+    print(settings.name);
+    return PageRedirect(settings, unknownRoute).page();
+  }
 
   List<Route<dynamic>> initialRoutesGenerate(String name) =>
       [PageRedirect(RouteSettings(name: name), unknownRoute).page()];
