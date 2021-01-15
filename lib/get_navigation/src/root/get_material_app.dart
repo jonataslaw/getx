@@ -198,10 +198,8 @@ class GetMaterialApp extends StatelessWidget {
         initialRoute = null,
         super(key: key);
 
-  Route<dynamic> generator(RouteSettings settings) {
-    print(settings.name);
-    return PageRedirect(settings, unknownRoute).page();
-  }
+  Route<dynamic> generator(RouteSettings settings) =>
+      PageRedirect(settings, unknownRoute).page();
 
   List<Route<dynamic>> initialRoutesGenerate(String name) =>
       [PageRedirect(RouteSettings(name: name), unknownRoute).page()];
