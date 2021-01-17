@@ -21,9 +21,9 @@
 - [L'application 'Counter' avec GetX](#application-counter-avec-getx)
 - [Les trois pilliers](#les-trois-pilliers)
   - [Gestion d'état (State management)](#gestion-dtat-state-management)
-    - [Reactive State Manager](#reactive-state-manager)
-    - [More details about state management](#more-details-about-state-management)
-  - [Route management](#route-management)
+    - [Gestionnaire d'état réactif (Reactive State Manager)](#gestionnaire-dtat-ractif-reactive-state-manager)
+    - [Plus de détails sur la gestion d'état](#plus-de-dtails-sur-la-gestion-dtat)
+  - [Gestion de route](#gestion-de-route)
     - [More details about route management](#more-details-about-route-management)
   - [Dependency management](#dependency-management)
     - [More details about dependency management](#more-details-about-dependency-management)
@@ -203,7 +203,7 @@ Voici votre variable:
 var name = 'Jonatas Borges';
 ```
 
-Pour le rendre observable, il vous suffit d'ajouter ".obs" à la fin:
+Pour la rendre observable, il vous suffit d'ajouter ".obs" à la fin:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
@@ -217,13 +217,13 @@ Obx(() => Text("${controller.name}"));
 
 C'est _tout_. Si simple que ca.
 
-### More details about state management
+### Plus de détails sur la gestion d'état
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
+**Lire une explication plus approfondie de la gestion d'état [ici](./documentation/fr_FR/state_management.md). Là-bas, vous verrez plus d'exemples surtout pour la différence entre le gestionnaire d'état simple et le gestionnaire d'état réactif.**
 
-You will get a good idea of GetX power.
+Vous pourrez vous faire une meilleure idée de la puissance de GetX.
 
-## Route management
+## Gestion de route
 
 If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
 
