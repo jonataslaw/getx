@@ -225,37 +225,37 @@ Vous pourrez vous faire une meilleure idée de la puissance de GetX.
 
 ## Gestion de route
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
+Si vous envisagez d'utiliser des routes/snackbars/dialogs/bottomsheets sans 'context', GetX est également excellent pour vous, voyez par vous-même:
 
-Add "Get" before your MaterialApp, turning it into GetMaterialApp
+Ajoutez "Get" avant votre MaterialApp, en le transformant en GetMaterialApp
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // Avant: MaterialApp(
   home: MyHome(),
 )
 ```
 
-Navigate to a new screen:
+Accédez à un nouvel écran:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(ÉcranSuivant());
 ```
 
-Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+Accédez au nouvel écran par le nom. Voir plus de détails sur les itinéraires nommés (named routes) [ici](./documentation/fr_FR/route_management.md#navigation-avec-des-itinraires-nomms)
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Pour fermer des snackbars, dialogs, bottomsheets, ou tout ce que vous auriez normalement fermé avec Navigator.pop(context);
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens, etc.)
+Pour aller à l'écran suivant avec aucune option pour revenir à l'écran précédent (pour une utilisation dans SplashScreens, écrans de connexion, etc.)
 
 ```dart
 Get.off(NextScreen());

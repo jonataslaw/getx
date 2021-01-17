@@ -1,7 +1,7 @@
 - [Route Management](#route-management)
   - [How to use](#how-to-use)
   - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
+  - [Navigation avec des itinéraires nommés](#navigation-avec-des-itinraires-nomms)
     - [Send data to named Routes](#send-data-to-named-routes)
     - [Dynamic urls links](#dynamic-urls-links)
     - [Middleware](#middleware)
@@ -109,7 +109,7 @@ Get.to(HomePage());
 
 ```
 
-## Navigation with named routes
+## Navigation avec des itinéraires nommés
 
 - If you prefer to navigate by namedRoutes, Get also supports this.
 
