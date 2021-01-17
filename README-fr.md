@@ -12,7 +12,7 @@
 <a href="https://github.com/Solido/awesome-flutter">
 <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Achetez moi un cafe" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
@@ -181,41 +181,41 @@ Améliorez vos délais, livrez tout à temps sans perte de performances. Get n'e
 
 ## Gestion d'état (State management)
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+Get a deux gestionnaires d'état différents: le gestionnaire d'état simple (nous l'appellerons GetBuilder) et le gestionnaire d'état réactif (GetX / Obx).
 
-### Reactive State Manager
+### Gestionnaire d'état réactif (Reactive State Manager)
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+La programmation réactive peut aliéner de nombreuses personnes car on dit qu'elle est compliquée. GetX fait de la programmation réactive quelque chose d'assez simple:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
-- You will not need to use code generators
+- Vous n'aurez pas besoin de créer des StreamControllers.
+- Vous n'aurez pas besoin de créer un StreamBuilder pour chaque variable
+- Vous n'aurez pas besoin de créer une classe pour chaque état.
+- Vous n'aurez pas besoin de créer un 'get' pour une valeur initiale.
+- Vous n'aurez pas besoin d'utiliser des générateurs de code
 
-Reactive programming with Get is as easy as using setState.
+La programmation réactive avec Get est aussi simple que d'utiliser setState.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+Imaginons que vous ayez une variable 'name' et que vous souhaitiez que chaque fois que vous la modifiez, tous les widgets qui l'utilisent soient automatiquement modifiés.
 
-This is your count variable:
+Voici votre variable:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+Pour le rendre observable, il vous suffit d'ajouter ".obs" à la fin:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever tha values changes, simply do this:
+Et dans l'interface utilisateur, lorsque vous souhaitez afficher cette valeur et mettre à jour l'écran chaque fois qu'elle change, faites simplement:
 
 ```dart
 Obx(() => Text("${controller.name}"));
 ```
 
-That's all. It's _that_ simple.
+C'est _tout_. Si simple que ca.
 
 ### More details about state management
 
