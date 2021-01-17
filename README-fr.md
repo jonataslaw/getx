@@ -21,10 +21,10 @@
 - [L'application 'Counter' avec GetX](#application-counter-avec-getx)
 - [Les trois pilliers](#les-trois-pilliers)
   - [Gestion d'état (State management)](#gestion-d-etat)
-    - [Gestionnaire d'état réactif (Reactive State Manager)](#gestionnaire-dtat-ractif-reactive-state-manager)
-    - [Plus de détails sur la gestion d'état](#plus-de-dtails-sur-la-gestion-dtat)
+    - [Gestionnaire d'état réactif (Reactive State Manager)](#gestionnaire-d-etat-reactif)
+    - [Plus de détails sur la gestion d'état](#plus-de-details-sur-la-gestion-d-etat)
   - [Gestion de route](#gestion-de-route)
-    - [More details about route management](#more-details-about-route-management)
+    - [Plus de details sur la gestion de route](#plus-de-details-sur-la-gestion-de-route)
   - [Dependency management](#dependency-management)
     - [More details about dependency management](#more-details-about-dependency-management)
 - [Utils](#utils)
@@ -183,7 +183,7 @@ Améliorez vos délais, livrez tout à temps sans perte de performances. Get n'e
 
 Get a deux gestionnaires d'état différents: le gestionnaire d'état simple (nous l'appellerons GetBuilder) et le gestionnaire d'état réactif (GetX / Obx).
 
-### Gestionnaire d'état réactif (Reactive State Manager)
+### Gestionnaire d Etat Reactif
 
 La programmation réactive peut aliéner de nombreuses personnes car on dit qu'elle est compliquée. GetX fait de la programmation réactive quelque chose d'assez simple:
 
@@ -217,7 +217,7 @@ Obx(() => Text("${controller.name}"));
 
 C'est _tout_. Si simple que ca.
 
-### Plus de détails sur la gestion d'état
+### Plus de details sur la gestion d Etat 
 
 **Lire une explication plus approfondie de la gestion d'état [ici](./documentation/fr_FR/state_management.md). Là-bas, vous verrez plus d'exemples surtout pour la différence entre le gestionnaire d'état simple et le gestionnaire d'état réactif.**
 
@@ -261,17 +261,17 @@ Pour aller à l'écran suivant avec aucune option pour revenir à l'écran préc
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Pour aller à l'écran suivant et annuler tous les itinéraires précédents (utile dans les paniers d'achat en ligne, les sondages et les tests)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't have to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+Vous avez remarqué que vous n'avez pas eu besoin d'utiliser 'context' pour aucune de ces opérations? C'est l'un des plus grands avantages de l'utilisation de la gestion de route avec Get. Avec cela, vous pouvez appeler toutes ces méthodes à partir de votre classe de contrôleur, sans soucis.
 
-### More details about route management
+### Plus de details sur la gestion de route
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Get fonctionne avec des itinéraires nommés (named routes) et offre également un contrôle plus granulaire de vos routes! Il y a une documentation approfondie [ici](./documentation/fr_FR/route_management.md)**
 
 ## Dependency management
 
