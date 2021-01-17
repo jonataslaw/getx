@@ -20,7 +20,7 @@
 - [Installation](#installation)
 - [L'application 'Counter' avec GetX](#application-counter-avec-getx)
 - [Les trois pilliers](#les-trois-pilliers)
-  - [Gestion d'état (State management)](#gestion-dtat-state-management)
+  - [Gestion d'état (State management)](#gestion-dtat)
     - [Gestionnaire d'état réactif (Reactive State Manager)](#gestionnaire-dtat-ractif-reactive-state-manager)
     - [Plus de détails sur la gestion d'état](#plus-de-dtails-sur-la-gestion-dtat)
   - [Gestion de route](#gestion-de-route)
@@ -179,7 +179,7 @@ Améliorez vos délais, livrez tout à temps sans perte de performances. Get n'e
 
 # Les trois pilliers
 
-## Gestion d'état (State management)
+## Gestion d'état
 
 Get a deux gestionnaires d'état différents: le gestionnaire d'état simple (nous l'appellerons GetBuilder) et le gestionnaire d'état réactif (GetX / Obx).
 
