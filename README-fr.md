@@ -286,20 +286,19 @@ Controller controller = Get.put(Controller()); // Au lieu de Controller controll
 Au lieu d'instancier votre classe dans la classe que vous utilisez, vous l'instanciez dans l'instance Get, ce qui la rendra disponible dans toute votre application.
 Vous pouvez donc utiliser votre contrôleur (ou classe Bloc) normalement.
 
-**Conseil:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**Conseil:** La gestion des dépendances est découplée des autres parties du package, donc si, par exemple, votre application utilise déjà un gestionnaire d'état (n'importe lequel, peu importe), vous n'avez pas besoin de tout réécrire, vous pouvez l'utiliser avec l'injection de dépendance de Get sans aucun problème.
 
 ```dart
 controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
-
+Imaginez que vous ayez parcouru de nombreuses routes et que vous ayez besoin de données qui ont été laissées dans votre contrôleur, vous auriez besoin d'un gestionnaire d'état combiné avec le 'Provider' ou 'Get_it', n'est-ce pas? Pas avec Get. Il vous suffit de demander à Get de "trouver" votre contrôleur, vous n'avez pas besoin de dépendances supplémentaires:
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+//Oui, cela ressemble à de la magie. Get trouvera votre contrôleur et vous le livrera. Vous pouvez avoir 1 million de contrôleurs instanciés, Get vous retournera toujours le bon contrôleur.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+Et puis vous pourrez récupérer les données de votre contrôleur obtenu précédemment:
 
 ```dart
 Text(controller.textFromApi);
