@@ -275,18 +275,18 @@ Vous avez remarqué que vous n'avez pas eu besoin d'utiliser 'context' pour aucu
 
 ## Gestion des dependances
 
-Get a un gestionnaire de dépendances (dependency manager) simple et puissant qui vous permet de récupérer la même classe que votre Bloc ou Controller avec seulement 1 ligne de code, pas de 'context' Provider, pas de inheritedWidget:
+Get a un gestionnaire de dépendances (dependency manager) simple et puissant qui vous permet de récupérer la même classe que votre Bloc ou Controller avec seulement 1 ligne de code, pas de 'context' Provider, pas d'inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Au lieu de Controller controller = Controller();
 ```
 
-- Note: If you are using Get's State Manager, pay more attention to the bindings API, which will make it easier to connect your view to your controller.
+- Remarque: Si vous utilisez le gestionnaire d'état de Get, accordez plus d'attention à l'API 'Bindings', qui facilitera la connexion de vos Vues à vos contrôleurs.
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
+Au lieu d'instancier votre classe dans la classe que vous utilisez, vous l'instanciez dans l'instance Get, ce qui la rendra disponible dans toute votre application.
+Vous pouvez donc utiliser votre contrôleur (ou classe Bloc) normalement.
 
-**Tip:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**Conseil:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
 
 ```dart
 controller.fetchApi();
