@@ -25,7 +25,7 @@
     - [Plus de détails sur la gestion d'état](#plus-de-details-sur-la-gestion-d-etat)
   - [Gestion de route](#gestion-de-route)
     - [Plus de details sur la gestion de route](#plus-de-details-sur-la-gestion-de-route)
-  - [Dependency management](#dependency-management)
+  - [Gestion des dépendances](#gestion-des-dependances)
     - [More details about dependency management](#more-details-about-dependency-management)
 - [Utils](#utils)
   - [Internationalization](#internationalization)
@@ -273,7 +273,7 @@ Vous avez remarqué que vous n'avez pas eu besoin d'utiliser 'context' pour aucu
 
 **Get fonctionne avec des itinéraires nommés (named routes) et offre également un contrôle plus granulaire de vos routes! Il y a une documentation approfondie [ici](./documentation/fr_FR/route_management.md)**
 
-## Dependency management
+## Gestion des dependances
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
