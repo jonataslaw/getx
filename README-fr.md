@@ -275,7 +275,6 @@ Vous avez remarqué que vous n'avez pas eu besoin d'utiliser 'context' pour aucu
 
 ## Gestion des dependances
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 Get a un gestionnaire de dépendances (dependency manager) simple et puissant qui vous permet de récupérer la même classe que votre Bloc ou Controller avec seulement 1 ligne de code, pas de 'context' Provider, pas de inheritedWidget:
 
 ```dart
