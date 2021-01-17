@@ -19,8 +19,8 @@
 - [A Propos de Get](#a-propos-de-get)
 - [Installation](#installation)
 - [L'application 'Counter' avec GetX](#application-counter-avec-getx)
-- [The Three pillars](#the-three-pillars)
-  - [State management](#state-management)
+- [Les trois pilliers](#les-trois-pilliers)
+  - [Gestion d'état (State management)](#gestion-dtat-state-management)
     - [Reactive State Manager](#reactive-state-manager)
     - [More details about state management](#more-details-about-state-management)
   - [Route management](#route-management)
@@ -177,9 +177,9 @@ Get a été conçu pour fonctionner avec des équipes, mais il simplifie le trav
 
 Améliorez vos délais, livrez tout à temps sans perte de performances. Get n'est pas pour tout le monde, mais si vous vous êtes identifié à cette phrase, Get est fait pour vous!
 
-# The Three pillars
+# Les trois pilliers
 
-## State management
+## Gestion d'état (State management)
 
 Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
 
