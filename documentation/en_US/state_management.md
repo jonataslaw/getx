@@ -119,7 +119,7 @@ If you need a **powerful** State Manager, you can't go wrong with **GetX**.
 
 It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
 You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen the `event` of each "_Rx_ variable", 
+you can listen to the `event` of each "_Rx_ variable", 
 because everything in it are `Streams`. 
 
 It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
