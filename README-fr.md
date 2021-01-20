@@ -24,13 +24,13 @@
     - [Gestionnaire d'état réactif (Reactive State Manager)](#gestionnaire-d-etat-reactif)
     - [Plus de détails sur la gestion d'état](#plus-de-details-sur-la-gestion-d-etat)
   - [Gestion de route](#gestion-de-route)
-    - [Plus de details sur la gestion de route](#plus-de-details-sur-la-gestion-de-route)
+    - [Plus de détails sur la gestion de route](#plus-de-details-sur-la-gestion-de-route)
   - [Gestion des dépendances](#gestion-des-dependances)
-    - [More details about dependency management](#more-details-about-dependency-management)
+    - [Plus de détails sur la gestion des dépendances](#plus-de-details-sur-la-gestion-des-dependances)
 - [Utils](#utils)
   - [Internationalization](#internationalization)
-    - [Translations](#translations)
-      - [Using translations](#using-translations)
+    - [Traductions](#traductions)
+      - [Utiliser les traductions](#utiliser-les-traductions)
     - [Locales](#locales)
       - [Change locale](#change-locale)
       - [System locale](#system-locale)
@@ -267,7 +267,7 @@ Pour aller à l'écran suivant et annuler tous les itinéraires précédents (ut
 Get.offAll(NextScreen());
 ```
 
-Vous avez remarqué que vous n'avez pas eu besoin d'utiliser 'context' pour aucune de ces opérations? C'est l'un des plus grands avantages de l'utilisation de la gestion de route avec Get. Avec cela, vous pouvez appeler toutes ces méthodes à partir de votre classe de contrôleur, sans soucis.
+Avez-vous remarqué que vous n'avez eu besoin d'utiliser 'context' pour aucune de ces opérations? C'est l'un des plus grands avantages de l'utilisation de la gestion de route avec Get. Avec cela, vous pouvez appeler toutes ces méthodes à partir de votre classe de contrôleur, sans soucis.
 
 ### Plus de details sur la gestion de route
 
@@ -304,18 +304,18 @@ Et puis vous pourrez récupérer les données de votre contrôleur obtenu préc�
 Text(controller.textFromApi);
 ```
 
-### More details about dependency management
+### Plus de details sur la gestion des dependances
 
-**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
+**Trouvez une explication plus détaillée sur la gestion des dépendances [ici](./documentation/fr_FR/dependency_management.md)**
 
 # Utils
 
 ## Internationalization
 
-### Translations
+### Traductions
 
-Translations are kept as a simple key-value dictionary map.
-To add custom translations, create a class and extend `Translations`.
+Les traductions sont enregistrées sous forme de dictionaire clé-valeur simple.
+Pour ajouter des traductions, créez une classe qui 'extend' `Translations`.
 
 ```dart
 import 'package:get/get.dart';
@@ -333,22 +333,22 @@ class Messages extends Translations {
 }
 ```
 
-#### Using translations
+#### Utiliser les traductions
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+Ajouter juste `.tr` à la clé et elle sera traduite selon la valeur actuelle `Get.locale` et de `Get.fallbackLocale`.
 
 ```dart
 Text('title'.tr);
 ```
 
-#### Using translation with singular and plural
+#### Utiliser les traductions avec le singulier et le pluriel
 
 ```dart
 var products = [];
-Text('singularKey'.trPlural('pluralKey', products.length, Args));
+Text('cléAuSingulier'.trPlural('cléAuPluriel', products.length, Args));
 ```
 
-#### Using translation with parameters
+#### Utiliser les traductions avec paramètres
 
 ```dart
 import 'package:get/get.dart';
