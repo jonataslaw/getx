@@ -372,12 +372,13 @@ Text('logged_in'.trParams({
 ### Locales
 
 Pass parameters to `GetMaterialApp` to define the locale and translations.
+Pour definir les traductions, passer les paramètres 'locale' et 'translations' à GetMaterialApp. 
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // your translations
-    locale: Locale('en', 'US'), // translations will be displayed in that locale
-    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
+    translations: Messages(), // Vos traductions
+    locale: Locale('en', 'US'), // Les traductions seront faites dans cette 'locale' (langue)
+    fallbackLocale: Locale('en', 'UK'), // definit le 'language de secours' au cas oú un language invalide est sélectionné.
 );
 ```
 
