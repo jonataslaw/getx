@@ -916,6 +916,55 @@ user.update((value){
 
 print( user );
 ```
+## StateMixin
+
+Another way to handle your `UI` state is use the `StateMixin<T>` .
+To implement it, use the `with` to add the `StateMixin<T>`
+to your controller which allows a T model.
+
+``` dart
+class Controller extends GetController with StateMixin<User>{}
+```
+
+The `change()` method change the State whenever we want.
+Just pass the data and the status in this way:
+
+```dart
+change(data, status: RxStatus.success());
+```
+
+RxStatus allow these status:
+
+``` dart
+RxStatus.loading();
+RxStatus.success();
+RxStatus.empty();
+RxStatus.error('message');
+```
+
+To represent it in the UI, use:
+
+```dart
+class OtherClass extends GetView<Controller> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: controller.obx(
+        (state)=>Text(state.name),
+        
+        // here you can put your custom loading indicator, but
+        // by default would be Center(child:CircularProgressIndicator())
+        onLoading: CustomLoadingIndicator(),
+        onEmpty: Text('No data found'),
+
+        // here also you can set your own error widget, but by
+        // default will be an Center(child:Text(error))
+        onError: (error)=>Text(error),
+      ),
+    );
+}
+```
 
 #### GetView
 
@@ -924,7 +973,7 @@ I love this Widget, is so simple, yet, so useful!
 Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
 
 ```dart
- class AwesomeController extends GetxController {
+ class AwesomeController extends GetController {
    final String title = 'My Awesome View';
  }
 
