@@ -36,9 +36,9 @@
       - [Locale du Système](#locale-du-systeme)
   - [Changer le Thème](#changer-le-theme)
   - [GetConnect](#getconnect)
-    - [Default configuration](#default-configuration)
-    - [Custom configuration](#custom-configuration)
-  - [GetPage Middleware](#getpage-middleware)
+    - [Configuration par défaut](#configuration-par-defaut)
+    - [Configuration personnalisée](#configuration-personnalisee)
+  - [Middleware GetPage](#middleware-getpage)
     - [Priority](#priority)
     - [Redirect](#redirect)
     - [onPageCalled](#onpagecalled)
@@ -46,9 +46,9 @@
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [Other Advanced APIs](#other-advanced-apis)
-    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-    - [Local State Widgets](#local-state-widgets)
+  - [Autres APIs](#autres-apis)
+    - [Paramètres globaux et configurations manuelles facultatifs](#parametres-globaux-et-configurations-manuelles-facultatifs)
+    - [State Widgets Locaux](#state-widgets-locaux)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
   - [Useful tips](#useful-tips)
@@ -578,7 +578,7 @@ Cette fonction sera appelée juste après l'appel de la fonction GetPage.page et
 
 Cette fonction sera appelée juste après avoir disposé tous les objets associés (contrôleurs, vues, ...) à la page.
 
-## Other Advanced APIs
+## Autres APIs
 
 ```dart
 // donne les arguments actuels de currentScreen
@@ -776,117 +776,117 @@ Ces Widgets vous permettent de gérer une valeur unique, et de garder l'état é
 Nous avons des saveurs pour réactif et simple.
 Par exemple, vous pouvez les utiliser pour basculer obscureText dans un `TextField`, peut-être créer un
 Panneau extensible, ou peut-être modifier l'index actuel dans `BottomNavigationBar` tout en modifiant le contenu
-de 'body' dans un «Scaffold».
+de 'body' dans un `Scaffold`.
 
 #### ValueBuilder
 
-A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
+Une simplification de `StatefulWidget` qui fonctionne avec un callback `.setState` qui prend la valeur mise à jour.
 
 ```dart
 ValueBuilder<bool>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
     value: value,
-    onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
+    onChanged: updateFn, // même signature! vous pouvez utiliser (newValue) => updateFn (newValue)
   ),
-  // if you need to call something outside the builder method.
-  onUpdate: (value) => print("Value updated: $value"),
-  onDispose: () => print("Widget unmounted"),
+  // si vous devez appeler quelque chose en dehors de la méthode du builder.
+  onUpdate: (value) => print("Valeur mise à jour: $value"),
+  onDispose: () => print("Widget détruit"),
 ),
 ```
 
 #### ObxValue
 
-Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
-updates automatically... isn't it awesome?
+Similaire à [`ValueBuilder`](#valuebuilder), mais c'est la version Reactive, vous passez une instance Rx (rappelez-vous les .obs magiques?) et il
+ se met à jour automatiquement ... n'est-ce pas génial?
 
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+        onChanged: data, // Rx a une fonction _callable_! Vous pouvez utiliser (flag) => data.value = flag,
     ),
     false.obs,
 ),
 ```
 
-## Useful tips
+## Conseils utiles
 
-`.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
+`.obs`ervables (également appelés types _Rx_) ont une grande variété de méthodes et d'opérateurs internes.
 
-> Is very common to _believe_ that a property with `.obs` **IS** the actual value... but make no mistake!
-> We avoid the Type declaration of the variable, because Dart's compiler is smart enough, and the code
-> looks cleaner, but:
+> Il est très courant de croire qu'une propriété avec `.obs` ** EST ** la valeur réelle ... mais ne vous y trompez pas!
+> Nous évitons la déclaration Type de la variable, car le compilateur de Dart est assez intelligent, et le code
+> semble plus propre, mais:
 
 ```dart
 var message = 'Hello world'.obs;
-print( 'Message "$message" has Type ${message.runtimeType}');
+print( 'Message "$message" est de Type ${message.runtimeType}');
 ```
 
-Even if `message` _prints_ the actual String value, the Type is **RxString**!
+Bien que `message` _prints_ la vraie valeur du String, le Type est **RxString**!
 
-So, you can't do `message.substring( 0, 4 )`.
-You have to access the real `value` inside the _observable_:
-The most "used way" is `.value`, but, did you know that you can also use...
+Donc, vous ne pouvez pas faire `message.substring( 0, 4 )`.
+Vous devez utiliser la vraie `valeur` dans _observable_:
+La façon "la plus utilisée" est `.value`, mais, que vous pouviez aussi...
 
 ```dart
 final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
+// "met à jour" le flux, uniquement si la valeur est différente de la valeur actuelle.
 name.value = 'Hey';
 
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
+// Toutes les propriétés Rx sont "appelables" et renvoie la nouvelle valeur.
+// mais cette approche n'accepte pas `null`, l'interface utilisateur ne sera pas reconstruite.
 name('Hello');
 
-// is like a getter, prints 'Hello'.
+// est comme un getter, affiche «Hello».
 name() ;
 
-/// numbers:
+/// nombres:
 
 final count = 0.obs;
 
-// You can use all non mutable operations from num primitives!
+// Vous pouvez utiliser toutes les opérations non mutables à partir de num primitives!
 count + 1;
 
-// Watch out! this is only valid if `count` is not final, but var
+// Fais attention! ceci n'est valable que si `count` n'est pas final, mais var
 count += 1;
 
-// You can also compare against values:
+// Vous pouvez également comparer avec des valeurs:
 count > 2;
 
 /// booleans:
 
 final flag = false.obs;
 
-// switches the value between true/false
+// bascule la valeur entre true / false
 flag.toggle();
 
 
-/// all types:
+/// tous les types:
 
-// Sets the `value` to null.
+// Définit la `valeur` sur null.
 flag.nil();
 
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
+// Toutes les opérations toString (), toJson () sont transmises à la `valeur`
+print( count ); // appelle `toString ()` à l'intérieur de RxInt
 
 final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
+// Convertit la valeur en un Array json, affiche RxList
+// Json est pris en charge par tous les types Rx!
 print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
+// RxMap, RxList et RxSet sont des types Rx spéciaux, qui étendent leurs types natifs.
+// mais vous pouvez travailler avec une liste comme une liste régulière, bien qu'elle soit réactive!
+abc.add(12); // pousse 12 dans la liste et MET À JOUR le flux.
+abc[3]; // comme Lists, lit l'index 3.
 
 
-// equality works with the Rx and the value, but hashCode is always taken from the value
+// l'égalité fonctionne avec le Rx et la valeur, mais hashCode est toujours pris à partir de la valeur
 final number = 12.obs;
-print( number == 12 ); // prints > true
+print( number == 12 ); // retource > true
 
-/// Custom Rx Models:
+/// Modèles Rx personnalisés:
 
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
+// toJson (), toString () sont différés à l'enfant, vous pouvez donc implémenter 'override' sur eux, et print() l'observable directement.
 
 class User {
     String name, last;
@@ -894,20 +894,20 @@ class User {
     User({this.name, this.last, this.age});
 
     @override
-    String toString() => '$name $last, $age years old';
+    String toString() => '$name $last, $age ans';
 }
 
 final user = User(name: 'John', last: 'Doe', age: 33).obs;
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
+// `user` est" réactif ", mais les propriétés à l'intérieur NE SONT PAS!
+// Donc, si nous changeons une variable à l'intérieur ...
 user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
+// Le widget ne se reconstruira pas !,
+// `Rx` n'a aucun indice lorsque vous changez quelque chose à l'intérieur de l'utilisateur.
+// Donc, pour les classes personnalisées, nous devons "notifier" manuellement le changement.
 user.refresh();
 
-// or we can use the `update()` method!
+// ou utiliser `update()`!
 user.update((value){
   value.name='Roi';
 });
@@ -917,22 +917,22 @@ print( user );
 
 #### GetView
 
-I love this Widget, is so simple, yet, so useful!
+J'adore ce widget. Si simple, mais si utile!
 
-Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
+C'est un widget `const Stateless` qui a un getter` controller` pour un `Controller` enregistré, c'est tout.
 
 ```dart
  class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
-  // ALWAYS remember to pass the `Type` you used to register your controller!
+  // N'oubliez PAS de passer le `Type` que vous avez utilisé pour enregistrer votre contrôleur!
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text(controller.title), // just call `controller.something`
+       child: Text(controller.title), // appelez `controller.quelqueChose`
      );
    }
  }
@@ -940,11 +940,11 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
 
 #### GetResponsiveView
 
-Extend this widget to build responsive view.
-this widget contains the `screen` property that have all
-information about the screen size and type.
+Étendez ce widget pour créer une vue réactive.
+ce widget contient la propriété `screen` qui a toutes les
+informations sur la taille et le type de l'écran.
 
-##### How to use it
+##### Guide d utilisation
 
 You have two options to build it.
 
