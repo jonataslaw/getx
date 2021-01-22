@@ -1,4 +1,4 @@
-- [State Management](#state-management)
+- [Gestion d'État](#gestion-d-etat)
   - [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
     - [Maximum performance:](#maximum-performance)
@@ -22,7 +22,7 @@
   - [Mixing the two state managers](#mixing-the-two-state-managers)
   - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management
+# Gestion d Etat
 
 GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
 
