@@ -32,9 +32,9 @@
     - [Traductions](#traductions)
       - [Utiliser les traductions](#utiliser-les-traductions)
     - [Locales](#locales)
-      - [Change locale](#change-locale)
-      - [System locale](#system-locale)
-  - [Change Theme](#change-theme)
+      - [Changer la locale](#changer-la-locale)
+      - [Locale du Système](#locale-du-systeme)
+  - [Changer le Thème](#changer-le-theme)
   - [GetConnect](#getconnect)
     - [Default configuration](#default-configuration)
     - [Custom configuration](#custom-configuration)
@@ -391,7 +391,7 @@ var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### Locale du système
+#### Locale du systeme
 
 Pour lire les paramètres régionaux ('locales') du système, vous pouvez utiliser `Get.deviceLocale`.
 
@@ -420,15 +420,15 @@ Si vous voulez créer quelque chose comme un bouton qui change le thème dans `o
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-Lorsque `.darkmode` est activé, il passera au _thème clair_, et lorsque le _thème clair_ deviendra actif, il passera au _thème sombre_.
+Lorsque 'onPressed' est appelé, si `.darkmode` est activé, il passera au _thème clair_, et lorsque le _thème clair_ est actif, il passera au _thème sombre_.
 
 ## GetConnect
 
-GetConnect is an easy way to communicate from your back to your front with http or websockets
+GetConnect est un moyen facile de communiquer de votre backend à votre frontend avec http ou websockets.
 
-### Default configuration
+### Configuration par defaut
 
-You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
+Vous pouvez simplement 'extends' GetConnect et utiliser les méthodes GET / POST / PUT / DELETE / SOCKET pour communiquer avec votre API Rest ou vos websockets.
 
 ```dart
 class UserProvider extends GetConnect {
@@ -451,64 +451,64 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Custom configuration
+### Configuration personnalisee
 
-GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
+
+GetConnect est hautement personnalisable. Vous pouvez définir l'URL de base, comme modificateurs de réponse, comme modificateurs de requêtes, définir un authentificateur, et même le nombre de tentatives oú il tentera de s'authentifier, en plus de donner la possibilité de définir un décodeur standard qui transformera toutes vos Requêtes dans vos Modèles sans aucune configuration supplémentaire.
 
 ```dart
 class HomeProvider extends GetConnect {
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
+    // Toute 'Request' passera à jsonEncode donc CasesModel.fromJson()
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
+    // baseUrl = 'https://api.covid19api.com'; 
+    // Il définit baseUrl pour Http et websockets si utilisé sans instance [httpClient]
 
-    // It's will attach 'apikey' property on header from all requests
+    // Cela attachera la propriété 'apikey' sur l'en-tête ('header') de toutes les 'request's
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
 
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
+    // Même si le serveur envoie des données avec le pays "Brésil",
+    // cela ne sera jamais affiché aux utilisateurs, car vous supprimez
+    // ces données de la réponse, même avant que la réponse ne soit délivrée
     httpClient.addResponseModifier<CasesModel>((request, response) {
       CasesModel model = response.body;
       if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
+        model.countries.remove('Brazil');
       }
     });
 
     httpClient.addAuthenticator((request) async {
       final response = await get("http://yourapi/token");
       final token = response.body['token'];
-      // Set the header
+      // Définit l'en-tête
       request.headers['Authorization'] = "$token";
       return request;
     });
 
-    //Autenticator will be called 3 times if HttpStatus is
-    //HttpStatus.unauthorized
+    // L'Autenticator sera appelé 3 fois si HttpStatus est HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
-  }
+  
 
   @override
   Future<Response<CasesModel>> getCases(String path) => get(path);
 }
 ```
 
-## GetPage Middleware
+## Middleware GetPage
 
-The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
+GetPage a maintenant une nouvelle propriété qui prend une liste de GetMiddleWare et les exécute dans l'ordre spécifique.
 
-**Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
+**Note**: Lorsque GetPage a un Middleware, tous les enfants de cette page auront automatiquement les mêmes middlewares.
 
 ### Priority
 
-The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+L'ordre des middlewares à exécuter peut être défini par la priorité dans GetMiddleware.
 
 ```dart
 final middlewares = [
@@ -519,23 +519,23 @@ final middlewares = [
 ];
 ```
 
-those middlewares will be run in this order **-8 => 2 => 4 => 5**
+ces middlewares seront exécutés dans cet ordre **-8 => 2 => 4 => 5**
 
 ### Redirect
-
-This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+    
+    Cette fonction sera appelée lors de la recherche de la page de l'itinéraire appelé. Elle reçoit RouteSettings comme résultat vers oú rediriger. Sinon donnez-lui la valeur null et il n'y aura pas de redirection.
 
 ```dart
 GetPage redirect( ) {
   final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+  return authService.authed.value ? null : RouteSettings(name: '/login');
 }
 ```
 
 ### onPageCalled
 
-This function will be called when this Page is called before anything created
-you can use it to change something about the page or give it new page
+Cette fonction sera appelée lorsque cette page sera appelée.
+Vous pouvez l'utiliser pour changer quelque chose sur la page ou lui donner une nouvelle page.
 
 ```dart
 GetPage onPageCalled(GetPage page) {
@@ -546,8 +546,8 @@ GetPage onPageCalled(GetPage page) {
 
 ### OnBindingsStart
 
-This function will be called right before the Bindings are initialize.
-Here you can change Bindings for this page.
+Cette fonction sera appelée juste avant l'initialisation des liaisons ('bidings').
+Ici, vous pouvez modifier les liaisons de cette page.
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -561,61 +561,60 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 
 ### OnPageBuildStart
 
-This function will be called right after the Bindings are initialize.
-Here you can do something after that you created the bindings and before creating the page widget.
+Cette fonction sera appelée juste après l'initialisation des liaisons ('bidings').
+Ici, vous pouvez faire quelque chose après avoir créé les liaisons et avant de créer le widget de page.
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
+  print('les liaisons sont prêtes');
   return page;
 }
 ```
 
 ### OnPageBuilt
-
-This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
+Cette fonction sera appelée juste après l'appel de la fonction GetPage.page et vous donnera le résultat de la fonction et prendra le widget qui sera affiché.
 
 ### OnPageDispose
 
-This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
+Cette fonction sera appelée juste après avoir disposé tous les objets associés (contrôleurs, vues, ...) à la page.
 
 ## Other Advanced APIs
 
 ```dart
-// give the current args from currentScreen
+// donne les arguments actuels de currentScreen
 Get.arguments
 
-// give name of previous route
+// donne le nom de l'itinéraire précédent
 Get.previousRoute
 
-// give the raw route to access for example, rawRoute.isFirst()
+// donne la route brute d'accès par exemple, rawRoute.isFirst()
 Get.rawRoute
 
-// give access to Routing API from GetObserver
+// donne accès à l'API de routing de GetObserver
 Get.routing
 
-// check if snackbar is open
+// vérifier si le snackbar est ouvert
 Get.isSnackbarOpen
 
-// check if dialog is open
+// vérifier si la boîte de dialogue est ouverte
 Get.isDialogOpen
 
-// check if bottomsheet is open
+// vérifie si la bottomSheet est ouverte
 Get.isBottomSheetOpen
 
-// remove one route.
+// supprime une route.
 Get.removeRoute()
 
-// back repeatedly until the predicate returns true.
+// retourne à plusieurs reprises jusqu'à ce que le prédicat retourne 'true'.
 Get.until()
 
-// go to next route and remove all the previous routes until the predicate returns true.
+// passe à la route suivante et supprime toutes les routes précédentes jusqu'à ce que le prédicat retourne 'true'.
 Get.offUntil()
 
-// go to next named route and remove all the previous routes until the predicate returns true.
+// passe à la route nommée suivante et supprime toutes les routes précédentes jusqu'à ce que le prédicat retourne 'true'.
 Get.offNamedUntil()
 
-//Check in what platform the app is running
+// Vérifie sur quelle plate-forme l'application s'exécute
 GetPlatform.isAndroid
 GetPlatform.isIOS
 GetPlatform.isMacOS
@@ -623,97 +622,97 @@ GetPlatform.isWindows
 GetPlatform.isLinux
 GetPlatform.isFuchsia
 
-//Check the device type
+// Vérifie le type d'appareil
 GetPlatform.isMobile
 GetPlatform.isDesktop
-//All platforms are supported independently in web!
-//You can tell if you are running inside a browser
-//on Windows, iOS, OSX, Android, etc.
+// Toutes les plates-formes sont prises en charge indépendamment, dans le Web!
+// Vous pouvez dire si vous utilisez un navigateur
+// sur Windows, iOS, OSX, Android, etc.
 GetPlatform.isWeb
 
 
-// Equivalent to : MediaQuery.of(context).size.height,
-// but immutable.
+// Équivaut à: MediaQuery.of(context).size.height,
+// mais immuable.
 Get.height
 Get.width
 
-// Gives the current context of the Navigator.
+// Donne le 'context' actuel de 'Navigator'.
 Get.context
 
-// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
+// Donne le contexte du snackbar / dialogue / bottomsheet au premier plan, n'importe où dans votre code.
 Get.contextOverlay
 
-// Note: the following methods are extensions on context. Since you
-// have access to context in any place of your UI, you can use it anywhere in the UI code
+// Remarque: les méthodes suivantes sont des extensions sur le 'context'. Puisque vous
+// avez accès au contexte à n'importe quel endroit de votre interface utilisateur, vous pouvez l'utiliser n'importe où dans le code de l'interface utilisateur
 
-// If you need a changeable height/width (like Desktop or browser windows that can be scaled) you will need to use context.
+// Si vous avez besoin d'une hauteur / largeur variable (comme les fenêtres de bureau ou de navigateur qui peuvent être mises à l'échelle), vous devrez utiliser le contexte.
 context.width
 context.height
 
-// Gives you the power to define half the screen, a third of it and so on.
-// Useful for responsive applications.
-// param dividedBy (double) optional - default: 1
-// param reducedBy (double) optional - default: 0
-context.heightTransformer()
-context.widthTransformer()
+// Vous donne le pouvoir de définir la moitié de l'écran, un tiers de celui-ci et ainsi de suite.
+// Utile pour les applications responsives.
+// paramètre dividedBy (double) optionnel - par défaut: 1
+// paramètre reducedBy (double) facultatif - par défaut: 0
+context.heightTransformer ()
+context.widthTransformer ()
 
-/// Similar to MediaQuery.of(context).size
+/// Similaire à MediaQuery.of(context).size
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// Similaire à MediaQuery.of(context).padding
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// Similaire à MediaQuery.of(context).viewPadding
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// Similaire à MediaQuery.of(context).viewInsets;
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// Similaire à MediaQuery.of(context).orientation;
 context.orientation()
 
-/// Check if device is on landscape mode
+/// Vérifie si l'appareil est en mode paysage
 context.isLandscape()
 
-/// Check if device is on portrait mode
+/// Vérifie si l'appareil est en mode portrait
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// Similaire à MediaQuery.of(context).devicePixelRatio;
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// Similaire à MediaQuery.of(context).textScaleFactor;
 context.textScaleFactor()
 
-/// Get the shortestSide from screen
+/// Obtenir le côté le plus court de l'écran
 context.mediaQueryShortestSide()
 
-/// True if width be larger than 800
+/// Vrai si la largeur est supérieure à 800p
 context.showNavbar()
 
-/// True if the shortestSide is smaller than 600p
+/// Vrai si le côté le plus court est inférieur à 600p
 context.isPhone()
 
-/// True if the shortestSide is largest than 600p
+/// Vrai si le côté le plus court est plus grand que 600p
 context.isSmallTablet()
 
-/// True if the shortestSide is largest than 720p
+/// Vrai si le côté le plus court est plus grand que 720p
 context.isLargeTablet()
 
-/// True if the current device is Tablet
+/// Vrai si l'appareil actuel est une tablette
 context.isTablet()
 
-/// Returns a value<T> according to the screen size
-/// can give value for:
-/// watch: if the shortestSide is smaller than 300
-/// mobile: if the shortestSide is smaller than 600
-/// tablet: if the shortestSide is smaller than 1200
-/// desktop: if width is largest than 1200
+/// Renvoie une valeur <T> en fonction de la taille de l'écran
+/// peut donner une valeur pour:
+/// watch: si le côté le plus court est inférieur à 300
+/// mobile: si le côté le plus court est inférieur à 600
+/// tablette: si le côté le plus court est inférieur à 1200
+/// bureautique: si la largeur est supérieure à 1200
 context.responsiveValue<T>()
 ```
 
-### Optional Global Settings and Manual configurations
+### Parametres globaux et configurations manuelles facultatifs
 
-GetMaterialApp configures everything for you, but if you want to configure Get manually.
+GetMaterialApp configure tout pour vous, mais si vous souhaitez configurer Get manuellement:
 
 ```dart
 MaterialApp(
@@ -722,19 +721,19 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+Vous pourrez également utiliser votre propre middleware dans `GetObserver`, cela n'influencera rien.
 
 ```dart
 MaterialApp(
   navigatorKey: Get.key,
   navigatorObservers: [
-    GetObserver(MiddleWare.observer) // Here
+    GetObserver(MiddleWare.observer) // Ici
   ],
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+Vous pouvez créer _Global Settings_ pour `Get`. Ajoutez simplement `Get.config` à votre code avant de changer de route.
+Ou faites-le directement dans votre `GetMaterialApp`
 
 ```dart
 GetMaterialApp(
@@ -753,9 +752,9 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+Vous pouvez éventuellement rediriger tous les messages de journalisation (logging) de `Get`.
+Si vous souhaitez utiliser votre propre package de journalisation préféré,
+et souhaitez capturer les logs là-bas:
 
 ```dart
 GetMaterialApp(
@@ -764,20 +763,20 @@ GetMaterialApp(
 );
 
 void localLogWriter(String text, {bool isError = false}) {
-  // pass the message to your favourite logging package here
-  // please note that even if enableLog: false log messages will be pushed in this callback
-  // you get check the flag if you want through GetConfig.isLogEnable
+  // transmettez le message à votre package de journalisation préféré ici
+  // veuillez noter que même si enableLog: false, les messages du journal seront poussés dans ce 'callback'
+  // vérifiez le 'flag' si vous le souhaitez via GetConfig.isLogEnable
 }
 
 ```
 
-### Local State Widgets
+### State Widgets Locaux
 
-These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
-We have flavours for Reactive and Simple.
-For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
-Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
-of the body in a `Scaffold`.
+Ces Widgets vous permettent de gérer une valeur unique, et de garder l'état éphémère et localement.
+Nous avons des saveurs pour réactif et simple.
+Par exemple, vous pouvez les utiliser pour basculer obscureText dans un `TextField`, peut-être créer un
+Panneau extensible, ou peut-être modifier l'index actuel dans `BottomNavigationBar` tout en modifiant le contenu
+de 'body' dans un «Scaffold».
 
 #### ValueBuilder
 
