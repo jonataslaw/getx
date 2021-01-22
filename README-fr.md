@@ -371,7 +371,7 @@ Text('logged_in'.trParams({
 
 ### Locales
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+'Locales' signifie lieux.
 Pour definir les traductions, passer les paramètres 'locale' et 'translations' à GetMaterialApp. 
 
 ```dart
@@ -382,18 +382,18 @@ return GetMaterialApp(
 );
 ```
 
-#### Change locale
+#### Changer la locale
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+Appelez `Get.updateLocale (locale)` pour mettre à jour la locale. Les traductions utilisent alors automatiquement la nouvelle langue.
 
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### System locale
+#### Locale du système
 
-To read the system locale, you could use `Get.deviceLocale`.
+Pour lire les paramètres régionaux ('locales') du système, vous pouvez utiliser `Get.deviceLocale`.
 
 ```dart
 return GetMaterialApp(
@@ -401,9 +401,9 @@ return GetMaterialApp(
 );
 ```
 
-## Change Theme
+## Changer le Theme
 
-Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
+Veuillez ne pas utiliser de widget de niveau supérieur à `GetMaterialApp` pour le mettre à jour. Cela peut créer des clés ('keys') en double. Beaucoup de gens sont habitués à l'approche préhistorique de la création d'un widget "ThemeProvider" juste pour changer le thème de votre application, et ce n'est certainement PAS nécessaire avec ** GetX ™ **.
 
 You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
 
