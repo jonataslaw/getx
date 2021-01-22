@@ -57,12 +57,12 @@
       - [Guide d'utilisation](#guide-d-utilisation)
     - [GetWidget](#getwidget)
     - [GetxService](#getxservice)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
-- [Why Getx?](#why-getx)
-- [Community](#community)
-  - [Community channels](#community-channels)
-  - [How to contribute](#how-to-contribute)
-  - [Articles and videos](#articles-and-videos)
+- [Changements par rapport à 2.0](#changements-par-rapport-a-20)
+- [Pourquoi Getx?](#pourquoi-getx)
+- [Communité](#communite)
+  - [Chaînes communautaires](#chaines-communautaires)
+  - [Comment contribuer](#comment-contribuer)
+  - [Articles et videos](#articles-et-videos)
 
 # A Propos de Get
 
@@ -946,93 +946,91 @@ informations sur la taille et le type de l'écran.
 
 ##### Guide d utilisation
 
-You have two options to build it.
+Vous avez deux options pour le créer:
 
-- with `builder` method you return the widget to build.
-- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
-  method will be built when the screen type matches the method
-  when the screen is [ScreenType.Tablet] the `tablet` method
-  will be exuded and so on.
-  **Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
+- avec la méthode `builder` vous renvoyez le widget à construire.
+- avec les méthodes `desktop`,` tablet`, `phone`,` watch`. la méthode spécifique sera exécutée lorsque le type d'écran correspond à la méthode.
+  Lorsque l'écran est [ScreenType.Tablet], la méthode `tablet` sera exécutée et ainsi de suite.
+  **Note:** Si vous utilisez cette méthode, veuillez définir la propriété `alwaysUseBuilder` à `false`
 
-With `settings` property you can set the width limit for the screen types.
+Avec la propriété `settings`, vous pouvez définir la limite de largeur pour les types d'écran.
 
-![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
-Code to this screen
+![exemple](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
+Code pour cet écran
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
 #### GetWidget
 
-Most people have no idea about this Widget, or totally confuse the usage of it.
-The use case is very rare, but very specific: It `caches` a Controller.
-Because of the _cache_, can't be a `const Stateless`.
+La plupart des gens n'ont aucune idée de ce widget ou confondent totalement son utilisation.
+Le cas d'utilisation est très rare, mais très spécifique: il `met en cache` un contrôleur.
+En raison du _cache_, ne peut pas être un `const Stateless`.
 
-> So, when do you need to "cache" a Controller?
+> Alors, quand avez-vous besoin de "mettre en cache" un contrôleur?
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
+Si vous utilisez, une autre fonctionnalité "pas si courante" de **GetX**: `Get.create ()`.
 
-`Get.create(()=>Controller())` will generate a new `Controller` each time you call
-`Get.find<Controller>()`,
+`Get.create(()=>Controller())` générera un nouveau `Controller` chaque fois que vous appelez
+`Get.find<Controller>()`.
 
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+C'est là que `GetWidget` brille ... comme vous pouvez l'utiliser, par exemple,
+pour conserver une liste de <Todo>s. Donc, si le widget est "reconstruit", il conservera la même instance de contrôleur.
 
 #### GetxService
 
-This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
-**can not** be removed from memory.
+Cette classe est comme un `GetxController`, elle partage le même cycle de vie ( `onInit()`, `onReady()`, `onClose()`), mais n'a pas de "logique" en elle. 
+Il notifie simplement le **GetX** Dependency Injection system, que cette sous-classe
+**ne peut pas** être supprimé de la mémoire.
 
-So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
-`ApiService`, `StorageService`, `CacheService`.
+Donc est très utile pour garder vos "Services" toujours à portée de main et actifs avec `Get.find()`. Comme:
+`ServiceAPI`, `ServiceDeSauvegarde`, `ServiceDeCaching`.
 
 ```dart
 Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
+  await initServices(); /// Attend l'initialisation des services.
   runApp(SomeApp());
 }
 
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
+/// Est une démarche intelligente pour que vos services s'initialisent avant d'exécuter l'application Flutter.
+/// car vous pouvez contrôler le flux d'exécution (peut-être devez-vous charger une configuration de thème,
+/// apiKey, langue définie par l'utilisateur ... donc chargez SettingService avant d'exécuter ApiService.
+/// donc GetMaterialApp () n'a pas besoin de se reconstruire et prend les valeurs directement.
 void initServices() async {
   print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
+  /// C'est ici que vous mettez get_storage, hive, shared_pref initialization.
+  /// ou les connexions moor, ou autres choses async.
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
-  print('All services started...');
+  print('Tous les services ont démarré...');
 }
 
 class DbService extends GetxService {
   Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
+    print('$runtimeType retarde de 2 sec');
     await 2.delay();
-    print('$runtimeType ready!');
+    print('$runtimeType prêts!');
     return this;
   }
 }
 
 class SettingsService extends GetxService {
   void init() async {
-    print('$runtimeType delays 1 sec');
+    print("$runtimeType retarde d'1 sec");
     await 1.delay();
-    print('$runtimeType ready!');
+    print('$runtimeType prêts!');
   }
 }
 
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
-lifetime of your app, use `GetxService`.
+La seule façon de supprimer réellement un `GetxService`, est d'utiliser` Get.reset () `qui est comme un
+"Hot Reboot" de votre application. N'oubliez donc pas que si vous avez besoin d'une persistance absolue d'une instance de classe
+durée de vie de votre application, utilisez `GetxService`.
 
-# Breaking changes from 2.0
+# Changements par rapport a 2.0
 
-1- Rx types:
+1- Types Rx:
 
-| Before  | After      |
+| Avant   | Après      |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
@@ -1041,10 +1039,12 @@ lifetime of your app, use `GetxService`.
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+RxController et GetBuilder ont maintenant fusionné, vous n'avez plus besoin de mémoriser le contrôleur que vous souhaitez utiliser, utilisez simplement GetxController, cela fonctionnera pour une gestion simple de l'état et également pour la réactivité.
+
 
 2- NamedRoutes
-Before:
+
+Avant:
 
 ```dart
 GetMaterialApp(
@@ -1054,7 +1054,7 @@ GetMaterialApp(
 )
 ```
 
-Now:
+Maintenant:
 
 ```dart
 GetMaterialApp(
@@ -1064,10 +1064,9 @@ GetMaterialApp(
 )
 ```
 
-Why this change?
-Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
-Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
-
+Pourquoi ce changement?
+Souvent, il peut être nécessaire de décider quelle page sera affichée à partir d'un paramètre, ou d'un 'login token', l'approche précédente était inflexible, car elle ne le permettait pas.
+L'insertion de la page dans une fonction a considérablement réduit la consommation de RAM, puisque les routes ne seront pas allouées en mémoire depuis le démarrage de l'application, et cela a également permis de faire ce type d'approche:
 ```dart
 
 GetStorage box = GetStorage();
@@ -1081,42 +1080,41 @@ GetMaterialApp(
 )
 ```
 
-# Why Getx?
+# Pourquoi Getx?
 
-1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
+1- Plusieurs fois après une mise à jour de Flutter, plusieurs de vos packages seront invalides. Parfois, des erreurs de compilation se produisent, des erreurs apparaissent souvent pour lesquelles il n'y a toujours pas de réponses, et le développeur doit savoir d'où vient l'erreur, suivre l'erreur, puis seulement essayer d'ouvrir un problème dans le référentiel correspondant et voir son problème résolu. Get centralise les principales ressources pour le développement (gestion des états, des dépendances et des routes), vous permettant d'ajouter un package unique à votre pubspec et de commencer à travailler. Après une mise à jour Flutter, la seule chose à faire est de mettre à jour la dépendance Get et de vous mettre au travail. Get résout également les problèmes de compatibilité. Combien de fois une version d'un package n'est pas compatible avec la version d'un autre, parce que l'une utilise une dépendance dans une version et l'autre dans une autre version? Ce n'est pas non plus un problème avec Get, car tout est dans le même package et est entièrement compatible.
 
-2- Flutter is easy, Flutter is incredible, but Flutter still has some boilerplate that may be unwanted for most developers, such as `Navigator.of(context).push (context, builder [...]`. Get simplifies development. Instead of writing 8 lines of code to just call a route, you can just do it: `Get.to(Home())` and you're done, you'll go to the next page. Dynamic web urls are a really painful thing to do with Flutter currently, and that with GetX is stupidly simple. Managing states in Flutter, and managing dependencies is also something that generates a lot of discussion, as there are hundreds of patterns in the pub. But there is nothing as easy as adding a ".obs" at the end of your variable, and place your widget inside an Obx, and that's it, all updates to that variable will be automatically updated on the screen.
+2- Flutter est facile, Flutter est incroyable, mais Flutter a encore quelques règles standard qui peuvent être indésirables pour la plupart des développeurs, comme `Navigator.of (context) .push (context, builder [...]`. Get simplifie le développement. Au lieu de écrire 8 lignes de code pour simplement appeler une route, vous pouvez simplement le faire: `Get.to (Home ())` et vous avez terminé, vous passerez à la page suivante. Les URL Web dynamiques sont une chose vraiment pénible à voir avec Flutter actuellement, et cela avec GetX est stupidement simple. La gestion des états dans Flutter et la gestion des dépendances sont également quelque chose qui génère beaucoup de discussions, car il y a des centaines de modèles dans la pub. Mais rien n'est aussi simple que d'ajouter un ".obs" à la fin de votre variable, et placez votre widget dans un Obx, et c'est tout, toutes les mises à jour de cette variable seront automatiquement mises à jour à l'écran.
 
-3- Ease without worrying about performance. Flutter's performance is already amazing, but imagine that you use a state manager, and a locator to distribute your blocs/stores/controllers/ etc. classes. You will have to manually call the exclusion of that dependency when you don't need it. But have you ever thought of simply using your controller, and when it was no longer being used by anyone, it would simply be deleted from memory? That's what GetX does. With SmartManagement, everything that is not being used is deleted from memory, and you shouldn't have to worry about anything but programming. You will be assured that you are consuming the minimum necessary resources, without even having created a logic for this.
+3- Facilité sans vous soucier des performances. Les performances de Flutter sont déjà étonnantes, mais imaginez que vous utilisez un gestionnaire d'état et un localisateur pour distribuer vos classes blocs / stores / contrôleurs / etc. Vous devrez appeler manuellement l'exclusion de cette dépendance lorsque vous n'en avez pas besoin. Mais avez-vous déjà pensé à simplement utiliser votre «contrôleur», et quand il n'était plus utilisé par personne, il serait simplement supprimé de la mémoire? C'est ce que fait GetX. Avec SmartManagement, tout ce qui n'est pas utilisé est supprimé de la mémoire et vous ne devriez pas avoir à vous soucier d'autre chose que de la programmation. Vous serez assuré de consommer le minimum de ressources nécessaires, sans même avoir créé de logique pour cela.
 
-4- Actual decoupling. You may have heard the concept "separate the view from the business logic". This is not a peculiarity of BLoC, MVC, MVVM, and any other standard on the market has this concept. However, this concept can often be mitigated in Flutter due to the use of context.
-If you need context to find an InheritedWidget, you need it in the view, or pass the context by parameter. I particularly find this solution very ugly, and to work in teams we will always have a dependence on View's business logic. Getx is unorthodox with the standard approach, and while it does not completely ban the use of StatefulWidgets, InitState, etc., it always has a similar approach that can be cleaner. Controllers have life cycles, and when you need to make an APIREST request for example, you don't depend on anything in the view. You can use onInit to initiate the http call, and when the data arrives, the variables will be populated. As GetX is fully reactive (really, and works under streams), once the items are filled, all widgets that use that variable will be automatically updated in the view. This allows people with UI expertise to work only with widgets, and not have to send anything to business logic other than user events (like clicking a button), while people working with business logic will be free to create and test the business logic separately.
+4- Découplage réel. Vous avez peut-être entendu le concept "séparer la vue de la business logic". Ce n'est pas une particularité de BLoC, MVC, MVVM, et tout autre standard sur le marché a ce concept. Cependant, ce concept peut souvent être atténué dans Flutter en raison de l'utilisation de «context».
+   Si vous avez besoin de contexte pour trouver un InheritedWidget, vous en avez besoin dans la vue, ou passez le «context» par paramètre. Je trouve particulièrement cette solution très moche, et pour travailler en équipe, nous serons toujours dépendants de la 'business logic' de View. Getx n'est pas orthodoxe avec l'approche standard, et même s'il n'interdit pas complètement l'utilisation de StatefulWidgets, InitState, etc., il a toujours une approche similaire qui peut être plus propre. Les contrôleurs ont des cycles de vie, et lorsque vous devez faire une requête APIREST par exemple, vous ne dépendez de rien de la vue. Vous pouvez utiliser onInit pour lancer l'appel http et lorsque les données arrivent, les variables sont remplies. Comme GetX est totalement réactif (vraiment, et fonctionne sous streams), une fois les éléments remplis, tous les widgets qui utilisent cette variable seront automatiquement mis à jour dans la vue. 
+   Cela permet aux personnes ayant une expertise de l'interface utilisateur de travailler uniquement avec des widgets et de ne pas avoir à envoyer quoi que ce soit à la business logic autre que des événements utilisateur (comme cliquer sur un bouton), tandis que les personnes travaillant avec la business logic seront libres de créer et de tester la Business logic séparément.
 
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
 
-# Community
+# Communite
 
-## Community channels
+## Chaines communautaires
 
-GetX has a highly active and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
-
+GetX a une communauté très active et utile. Si vous avez des questions, ou souhaitez obtenir de l'aide concernant l'utilisation de ce framework, veuillez rejoindre nos canaux communautaires, votre question sera répondue plus rapidement, et ce sera l'endroit le plus approprié. Ce référentiel est exclusif pour l'ouverture des issues Github et la demande de ressources, mais n'hésitez pas à faire partie de la communauté GetX.
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
-| [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+| [![Get sur Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
-## How to contribute
+## Comment contribuer
 
-_Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better._
+_Voulez-vous contribuer au projet? Nous serons fiers de vous mettre en avant comme l'un de nos collaborateurs. Voici quelques points sur lesquels vous pouvez contribuer et améliorer encore Get (et Flutter)._
 
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
-- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
+- Aider à traduire les 'Readme's dans d'autres langues.
+- Ajout de documentation au readme (beaucoup de fonctions de Get n'ont pas encore été documentées).
+- Rédiger des articles ou réaliser des vidéos pour apprendre à utiliser Get (ils seront insérés dans le Readme et à l'avenir dans notre Wiki).
+- Offrir des PRs pour code / tests.
+- Ajouter de nouvelles fonctions.
 
-Any contribution is welcome!
+Toute contribution est bienvenue!
 
-## Articles and videos
+## Articles et videos
 
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
