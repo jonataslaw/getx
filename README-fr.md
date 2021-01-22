@@ -403,24 +403,24 @@ return GetMaterialApp(
 
 ## Changer le Theme
 
-Veuillez ne pas utiliser de widget de niveau supérieur à `GetMaterialApp` pour le mettre à jour. Cela peut créer des clés ('keys') en double. Beaucoup de gens sont habitués à l'approche préhistorique de la création d'un widget "ThemeProvider" juste pour changer le thème de votre application, et ce n'est certainement PAS nécessaire avec ** GetX ™ **.
+Veuillez ne pas utiliser de widget de niveau supérieur à `GetMaterialApp` pour le mettre à jour. Cela peut créer des clés ('keys') en double. Beaucoup de gens sont habitués à l'approche préhistorique de la création d'un widget "ThemeProvider" juste pour changer le thème de votre application, et ce n'est certainement PAS nécessaire avec **GetX ™**.
 
-You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
+Vous pouvez créer votre thème personnalisé et l'ajouter simplement dans `Get.changeTheme` sans aucune préconfiguration pour cela:
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the Theme in `onTap`, you can combine two **GetX™** APIs for that:
+Si vous voulez créer quelque chose comme un bouton qui change le thème dans `onTap`, vous pouvez combiner deux API **GetX ™** pour cela:
 
-- The api that checks if the dark `Theme` is being used.
-- And the `Theme` Change API, you can just put this within an `onPressed`:
+- L'API qui vérifie si le "Thème" sombre est utilisé.
+- Et l'API de changement de thème, vous pouvez simplement le mettre dans un 'onPressed':
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+Lorsque `.darkmode` est activé, il passera au _thème clair_, et lorsque le _thème clair_ deviendra actif, il passera au _thème sombre_.
 
 ## GetConnect
 
