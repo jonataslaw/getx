@@ -1,5 +1,5 @@
 - [Gestion d'État](#gestion-d-etat)
-  - [Reactive State Manager](#reactive-state-manager)
+  - [Gestionnaire d'état réactif](#gestionnaire-d-etat-reactif)
     - [Advantages](#advantages)
     - [Maximum performance:](#maximum-performance)
     - [Declaring a reactive variable](#declaring-a-reactive-variable)
@@ -24,47 +24,48 @@
 
 # Gestion d Etat
 
-GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
+GetX n'utilise pas Streams ou ChangeNotifier comme les autres gestionnaires d'état. Pourquoi? En plus de créer des applications pour Android, iOS, Web, Linux, MacOS et Linux, GetX vous permet de créer des applications serveur avec la même syntaxe que Flutter / GetX. Afin d'améliorer le temps de réponse et de réduire la consommation de RAM, nous avons créé GetValue et GetStream, des solutions à faible latence qui offrent beaucoup de performances, à un faible coût d'exploitation. Nous utilisons cette base pour construire toutes nos ressources, y compris la gestion d'état.
 
-- _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
-- _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
-With GetX everything is reactive, and nothing depends on code generators, increasing your productivity in all aspects of your development.
-- _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
-- _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
-With GetX, even nested widgets are respected. If you have Obx watching your ListView, and another watching a checkbox inside the ListView, when changing the CheckBox value, only it will be updated, when changing the List value, only the ListView will be updated.
-- _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
-Most (if not all) current state managers will rebuild on the screen.
+- _Complexité_: Certains gestionnaires d'État sont complexes et ont beaucoup de code standard. Avec GetX, vous n'avez pas à définir une classe pour chaque événement, le code est très propre et clair, et vous faites beaucoup plus en écrivant moins. Beaucoup de gens ont abandonné Flutter à cause de ce sujet, et ils ont enfin une solution stupidement simple pour gérer les états.
+- _Aucun générateur de code_: Vous passez la moitié de votre temps de développement à écrire la logique de votre application. Certains gestionnaires d'état s'appuient sur des générateurs de code pour avoir un code lisible minimal. Changer une variable et avoir à exécuter build_runner peut être improductif, et souvent le temps d'attente après un redémarrage sera long, et vous devrez boire beaucoup de café.
+                              Avec GetX, tout est réactif, et rien ne dépend des générateurs de code, augmentant votre productivité dans tous les aspects de votre développement.
+- _Cela ne dépend pas de 'context'_: Vous avez probablement déjà eu besoin d'envoyer le contexte de votre vue à un contrôleur, ce qui rend le couplage de la vue avec votre logique métier élevé. Vous avez probablement dû utiliser une dépendance dans un endroit qui n'a pas de contexte, et avez dû passer le contexte à travers différentes classes et fonctions. Cela n'existe tout simplement pas avec GetX. Vous avez accès à vos contrôleurs depuis vos contrôleurs sans aucun contexte. Vous n'avez pas besoin d'envoyer le contexte par paramètre pour rien.
+- _Contrôle granulaire_: la plupart des gestionnaires d'état sont basés sur ChangeNotifier. ChangeNotifier notifiera tous les widgets qui en dépendent lors de l'appel de notifyListeners. Si vous avez 40 widgets sur un écran, qui ont une variable de votre classe ChangeNotifier, lorsque vous en mettez un à jour, tous seront reconstruits.
+                          Avec GetX, même les widgets imbriqués sont respectés. Si Obx gère votre ListView et un autre gère une case à cocher dans ListView, lors de la modification de la valeur CheckBox, il ne sera mis à jour que, lors de la modification de la valeur List, seul le ListView sera mis à jour.
+- _Il ne reconstruit que si sa variable change VRAIMENT_: GetX a un contrôle de flux, cela signifie que si vous affichez un texte avec 'Paola', si vous changez à nouveau la variable observable en 'Paola', le widget ne sera pas reconstruit. C'est parce que GetX sait que «Paola» est déjà affiché dans Text et ne fera pas de reconstructions inutiles.
+                                                          La plupart (sinon tous) les gestionnaires d'état actuels se reconstruiront à l'écran.
 
-## Reactive State Manager
+## Gestionnaire d etat reactif
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+La programmation réactive peut aliéner de nombreuses personnes car on dit qu'elle est compliquée. GetX transforme la programmation réactive en quelque chose d'assez simple:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
+- Vous n'aurez pas besoin de créer des StreamControllers.
+- Vous n'aurez pas besoin de créer un StreamBuilder pour chaque variable
+- Vous n'aurez pas besoin de créer une classe pour chaque état.
+- Vous n'aurez pas besoin de créer un 'get' pour une valeur initiale.
 
-Reactive programming with Get is as easy as using setState.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+La programmation réactive avec Get est aussi simple que d'utiliser setState.
 
-This is your count variable:
+Imaginons que vous ayez une variable de 'name' et que vous souhaitiez que chaque fois que vous la modifiez, tous les widgets qui l'utilisent soient automatiquement modifiés.
+
+Voici votre variable:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+Pour la rendre observable, il vous suffit d'ajouter ".obs" à la fin:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-That's all. It's *that* simple.
+C'est *tout*. Si simple que ca.
 
-From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
+A partir de maintenant, nous pourrions désigner ces variables réactives - ". Obs" (ervables) comme _Rx_.
 
-What did we do under the hood? We created a `Stream` of `String`s, assigned the initial value `"Jonatas Borges"`, we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+Qu'est ce qui s'est passé derrière les rideaux? Nous avons créé un `Stream` de` String`s, assigné la valeur initiale `" Jonatas Borges "`, nous avons notifié tous les widgets qui utilisent `" Jonatas Borges "` qu'ils "appartiennent" maintenant à cette variable, et quand la valeur _Rx_ changements, ils devront également changer.
 
 This is the **magic of GetX**, thanks to Dart's capabilities.
 
