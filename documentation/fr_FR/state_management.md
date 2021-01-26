@@ -1,14 +1,14 @@
 - [Gestion d'État](#gestion-d-etat)
   - [Gestionnaire d'état réactif](#gestionnaire-d-etat-reactif)
-    - [Advantages](#advantages)
+    - [Avantages](#avantages)
     - [Maximum performance:](#maximum-performance)
     - [Declaring a reactive variable](#declaring-a-reactive-variable)
-        - [Having a reactive state, is easy.](#having-a-reactive-state-is-easy)
+        - [Having a reactive state, is easy.](#avoir-un-tat-ractif-cest-facile)
     - [Using the values in the view](#using-the-values-in-the-view)
     - [Conditions to rebuild](#conditions-to-rebuild)
     - [Where .obs can be used](#where-obs-can-be-used)
     - [Note about Lists](#note-about-lists)
-    - [Why i have to use .value](#why-i-have-to-use-value)
+    - [Pourquoi je dois utiliser .value](#pourquoi-je-dois-utiliser-value)
     - [Obx()](#obx)
     - [Workers](#workers)
   - [Simple State Manager](#simple-state-manager)
@@ -32,7 +32,7 @@ GetX n'utilise pas Streams ou ChangeNotifier comme les autres gestionnaires d'é
 - _Cela ne dépend pas de 'context'_: Vous avez probablement déjà eu besoin d'envoyer le contexte de votre vue à un contrôleur, ce qui rend le couplage de la vue avec votre logique métier élevé. Vous avez probablement dû utiliser une dépendance dans un endroit qui n'a pas de contexte, et avez dû passer le contexte à travers différentes classes et fonctions. Cela n'existe tout simplement pas avec GetX. Vous avez accès à vos contrôleurs depuis vos contrôleurs sans aucun contexte. Vous n'avez pas besoin d'envoyer le contexte par paramètre pour rien.
 - _Contrôle granulaire_: la plupart des gestionnaires d'état sont basés sur ChangeNotifier. ChangeNotifier notifiera tous les widgets qui en dépendent lors de l'appel de notifyListeners. Si vous avez 40 widgets sur un écran, qui ont une variable de votre classe ChangeNotifier, lorsque vous en mettez un à jour, tous seront reconstruits.
                           Avec GetX, même les widgets imbriqués sont respectés. Si Obx gère votre ListView et un autre gère une case à cocher dans ListView, lors de la modification de la valeur CheckBox, il ne sera mis à jour que, lors de la modification de la valeur List, seul le ListView sera mis à jour.
-- _Il ne reconstruit que si sa variable change VRAIMENT_: GetX a un contrôle de flux, cela signifie que si vous affichez un texte avec 'Paola', si vous changez à nouveau la variable observable en 'Paola', le widget ne sera pas reconstruit. C'est parce que GetX sait que «Paola» est déjà affiché dans Text et ne fera pas de reconstructions inutiles.
+- _Il ne reconstruit que si sa variable change VRAIMENT_: GetX a un contrôle de flux, cela signifie que si vous affichez un texte avec 'Paola', si vous changez à nouveau la variable observable en 'Paola', le widget ne sera pas reconstruit. C'est parce que GetX sait que `Paola` est déjà affiché dans Text et ne fera pas de reconstructions inutiles.
                                                           La plupart (sinon tous) les gestionnaires d'état actuels se reconstruiront à l'écran.
 
 ## Gestionnaire d etat reactif
@@ -67,88 +67,89 @@ A partir de maintenant, nous pourrions désigner ces variables réactives - ". O
 
 Qu'est ce qui s'est passé derrière les rideaux? Nous avons créé un `Stream` de` String`s, assigné la valeur initiale `" Jonatas Borges "`, nous avons notifié tous les widgets qui utilisent `" Jonatas Borges "` qu'ils "appartiennent" maintenant à cette variable, et quand la valeur _Rx_ changements, ils devront également changer.
 
-This is the **magic of GetX**, thanks to Dart's capabilities.
+C'est la **magie de GetX**, grâce aux performances de Dart.
 
-But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
+Mais, comme nous le savons, un `Widget` ne peut être changé que s'il est à l'intérieur d'une fonction, car les classes statiques n'ont pas le pouvoir de" changer automatiquement ".
 
-You will need to create a `StreamBuilder`, subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+Vous devrez créer un `StreamBuilder`, vous abonner à cette variable pour écouter les changements et créer une" cascade "de` StreamBuilder` imbriqués si vous voulez changer plusieurs variables dans la même portée, non?
 
-No, you don't need a `StreamBuilder`, but you are right about static classes.
+Non, vous n'avez pas besoin d'un `StreamBuilder`, mais vous avez raison pour les classes statiques.
 
-Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
-With **GetX** you can also forget about this boilerplate code. 
+Eh bien, dans la vue, nous avons généralement beaucoup de code standard lorsque nous voulons changer un widget spécifique, c'est la manière Flutter.
+Avec **GetX**, vous pouvez également oublier ce code passe-partout.
 
-`StreamBuilder( … )`? `initialValue: …`? `builder: …`? Nope, you just need to place this variable inside an `Obx()` Widget.
+`StreamBuilder( … )`? `initialValue: …`? `builder: …`? Non, il vous suffit de placer cette variable dans un widget `Obx ()`.
 
 ```dart
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>`. 
+_Que devez-vous mémoriser?_  Seulement `Obx(() =>`. 
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+Vous passez simplement ce Widget via une fonction dans un `Obx ()` (l' "Observateur" du _Rx_).
 
-`Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
+`Obx` est assez intelligent et ne changera que si la valeur de` controller.name` change.
 
-If `name` is `"John"`, and you change it to `"John"` (`name.value = "John"`), as it's the same `value` as before, nothing will change on the screen, and `Obx`, to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+Si `name` est` "John" `, et que vous le changez en` "John" `(` name.value = "John" `), comme c'est la même` valeur` qu'avant, rien ne changera à l'écran, et `Obx`, pour économiser les ressources, ignorera simplement la nouvelle valeur et ne reconstruira pas le widget. **N'est-ce pas incroyable?**
 
-> So, what if I have 5 _Rx_ (observable) variables within an `Obx`?
+> Alors, que faire si j'ai 5 variables _Rx_ (observables) dans un `Obx`?
 
-It will just update when **any** of them changes. 
+Il sera simplement mis à jour lorsque **l'un d'entre eux** change.
 
-> And if I have 30 variables in a class, when I update one, will it update **all** the variables that are in that class?
+> Et si j'ai 30 variables dans une classe, lorsque j'en mets une à jour, est-ce que cela va mettre à jour **toutes** les variables qui sont dans cette classe?
 
-Nope, just the **specific Widget** that uses that _Rx_ variable.
+Non, juste le **Widget spécifique** qui utilise cette variable _Rx_.
 
-So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
+Ainsi, **GetX** ne met à jour l'écran que lorsque la variable _Rx_ change sa valeur.
 
 ```
 final isOpen = false.obs;
 
-// NOTHING will happen... same value.
+// Rien de ne change... valeur identique.
 void onButtonTap() => isOpen.value=false;
 ```
-### Advantages
+### Avantages
 
-**GetX()** helps you when you need **granular** control over what's being updated.
-
-If you do not need `unique IDs`, because all your variables will be modified when you perform an action, then use `GetBuilder`, 
-because it's a Simple State Updater (in blocks, like `setState()`), made in just a few lines of code.
-It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
-
-If you need a **powerful** State Manager, you can't go wrong with **GetX**.
-
-It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
-
-It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs`.
-
-### Maximum performance:
-
-In addition to having a smart algorithm for minimal rebuilds, **GetX** uses comparators 
-to make sure the State has changed. 
-
-If you experience any errors in your app, and send a duplicate change of State, 
-**GetX** will ensure it will not crash.
-
-With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _`computed` from MobX_. 
-When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
-
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()`) will only rebuild if it implies a real change of State.
-
-### Declaring a reactive variable
-
-You have 3 ways to turn a variable into an "observable".
+**GetX ()** vous aide lorsque vous avez besoin d'un contrôle **granulaire** sur ce qui est mis à jour.
 
 
-1 - The first is using **`Rx{Type}`**.
+Si vous n'avez pas besoin d'ID uniques, car toutes vos variables seront modifiées lorsque vous effectuez une action, utilisez `GetBuilder`,
+parce que c'est un Simple State Updater (en blocs, comme `setState ()`), fait en seulement quelques lignes de code.
+Il a été rendu simple, pour avoir le moins d'impact sur le processeur, et juste pour remplir un seul objectif (une reconstruction de _l'état_) et dépenser le minimum de ressources possible.
+
+Si vous avez besoin d'un State Manager **puissant** , vous ne pouvez pas vous tromper avec **GetX**.
+
+Cela ne fonctionne pas avec les variables, mais __flows__, tout ce qu'il contient sont des `Streams` en réalité.
+Vous pouvez utiliser _rxDart_ en conjonction avec lui, car tout est `Streams`.
+Vous pouvez écouter les changements de chaque "variable _Rx_",
+parce que tout ce qui se trouve dedans est un `Streams`.
+
+
+C'est littéralement une approche _BLoC_, plus facile que _MobX_, et sans générateurs de code ni décorations.
+Vous pouvez transformer **n'importe quoi** en un _"Observable"_ avec juste un `.obs`.
+
+###  Performance maximale:
+
+En plus d'avoir un algorithme intelligent pour des reconstructions minimales, **GetX** utilise des comparateurs
+pour s'assurer que l'État a changé. 
+
+Si vous rencontrez des erreurs dans votre application et envoyez un changement d'état en double,
+**GetX** garantira qu'il ne plantera pas.
+
+Avec **GetX**, l'état ne change que si la `valeur` change.
+C'est la principale différence entre **GetX** et l'utilisation de _`computed` de MobX_.
+Lors de la jonction de deux __observables__, si l'une change; le listener de cet _observable_ changera également.
+
+Avec **GetX**, si vous joignez deux variables, `GetX ()` (similaire à `Observer ()`), ne se reconstruira que si cela implique un réel changement d'état.
+
+### Déclaration d'une variable réactive
+
+Vous avez 3 façons de transformer une variable en "observable".
+
+1 - La première est d'utiliser **`Rx{Type}`**.
 
 ```dart
-// initial value is recommended, but not mandatory
+// la valeur initiale est recommandée, mais pas obligatoire
 final name = RxString('');
 final isLogged = RxBool(false);
 final count = RxInt(0);
@@ -157,22 +158,22 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 
-2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
+2 - La seconde consiste à utiliser **`Rx`** et à utiliser les types `Rx<Type>` Génériques Darts 
 
 ```dart
 final name = Rx<String>('');
 final isLogged = Rx<Bool>(false);
 final count = Rx<Int>(0);
 final balance = Rx<Double>(0.0);
-final number = Rx<Num>(0)
+final number = Rx<Num>(0);
 final items = Rx<List<String>>([]);
 final myMap = Rx<Map<String, int>>({});
 
-// Custom classes - it can be any class, literally
+// Classes personnalisées - il peut s'agir de n'importe quelle classe, littéralement
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value`:
+3 - TLa troisième approche, plus pratique, plus facile et préférée, ajoutez simplement **`.obs`** comme propriété de votre` valeur`:
 
 ```dart
 final name = ''.obs;
@@ -183,74 +184,73 @@ final number = 0.obs;
 final items = <String>[].obs;
 final myMap = <String, int>{}.obs;
 
-// Custom classes - it can be any class, literally
+// Classes personnalisées - il peut s'agir de n'importe quelle classe, littéralement
 final user = User().obs;
 ```
 
-##### Having a reactive state, is easy.
+##### Avoir un état réactif, c'est facile.
 
-As we know, _Dart_ is now heading towards _null safety_.
-To be prepared, from now on, you should always start your _Rx_ variables with an **initial value**.
+Comme nous le savons, _Dart_ se dirige maintenant vers _null safety_.
+Pour être prêt, à partir de maintenant, vous devez toujours commencer vos variables _Rx_ avec une **valeur initiale**.
 
-> Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
+> Transformer une variable en _observable_ + _valeurInitiale_ avec **GetX** est l'approche la plus simple et la plus pratique.
 
-You will literally add a "`.obs`" to the end of your variable, and **that’s it**, you’ve made it observable,
-and its `.value`, well, will be the _initial value_).
+Vous allez littéralement ajouter un "".obs"" à la fin de votre variable, et **c'est tout**, vous l'avez rendue observable,
+et sa `.value`, eh bien, sera la _valeurInitiale_.
 
-
-### Using the values in the view
+### Utilisation des valeurs de la vue
 
 ```dart
-// controller file
+// dans le controlleur
 final count1 = 0.obs;
 final count2 = 0.obs;
 int get sum => count1.value + count2.value;
 ```
 
 ```dart
-// view file
+// dans la vue
 GetX<Controller>(
   builder: (controller) {
-    print("count 1 rebuild");
+    print("count 1 reconstruction");
     return Text('${controller.count1.value}');
   },
 ),
 GetX<Controller>(
   builder: (controller) {
-    print("count 2 rebuild");
+    print("count 2 reconstruction");
     return Text('${controller.count2.value}');
   },
 ),
 GetX<Controller>(
   builder: (controller) {
-    print("count 3 rebuild");
+    print("count 3 reconstruction");
     return Text('${controller.sum}');
   },
 ),
 ```
 
-If we increment `count1.value++`, it will print:
-- `count 1 rebuild` 
-- `count 3 rebuild`
+Si nous incrémentons `count1.value++`, cela affichera:
+- `count 1 reconstruction` 
+- `count 3 reconstruction`
 
-because `count1` has a value of `1`, and `1 + 0 = 1`, changing the `sum` getter value.
+parce que `count1` a une valeur de `1`, et `1 + 0 = 1`, changeant la valeur du getter `sum`.
 
-If we change `count2.value++`, it will print:
-- `count 2 rebuild` 
-- `count 3 rebuild`
+Si nous incrémentons `count2.value++`, cela affichera:
+- `count 2 reconstruction` 
+- `count 3 reconstruction`
 
-because `count2.value` changed, and the result of the `sum` is now `2`.
+parce que `count2.value` a changé et que le résultat de `sum` est maintenant `2`.
 
-- NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
- This behavior exists due to Boolean variables.
+- NOTE: Par défaut, le tout premier événement reconstruira le widget, même s'il s'agit de la même `valeur`.
+         Ce comportement existe en raison de variables booléennes.
 
-Imagine you did this:
+Imaginez que vous fassiez ceci:
 
 ```dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever`.
+Et puis, vous vérifiez si un utilisateur est "connecté" pour déclencher un événement dans `ever`.
 
 ```dart
 @override
@@ -268,26 +268,26 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false`, there would be no change to `isLogged`, so `ever()` would never be called.
-To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value`.
+si `hasToken` était `false`, il n'y aurait pas de changement à `isLogged`, donc` ever () `ne serait jamais appelé.
+Pour éviter ce type de comportement, la première modification d'un _observable_ déclenchera toujours un événement,
+même s'il contient la même `.value`.
 
-You can remove this behavior if you want, using:
+Vous pouvez supprimer ce comportement si vous le souhaitez, en utilisant:
 `isLogged.firstRebuild = false;`
 
-### Conditions to rebuild
+### Conditions pour reconstruire
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+En outre, Get fournit un contrôle d'état raffiné. Vous pouvez conditionner un événement (comme l'ajout d'un objet à une liste), à ​​une certaine condition.
 
 ```dart
-// First parameter: condition, must return true or false.
-// Second parameter: the new value to apply if the condition is true.
+// Premier paramètre: condition, doit retourner vrai ou faux.
+// Deuxième paramètre: la nouvelle valeur à appliquer si la condition est vraie.
 list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications :smile:
+Sans décorations, sans générateur de code, sans complications :smile:
 
-Do you know Flutter's counter app? Your Controller class might look like this:
+Connaissez-vous l'application de counter de Flutter? Votre classe Controller pourrait ressembler à ceci:
 
 ```dart
 class CountController extends GetxController {
@@ -295,19 +295,19 @@ class CountController extends GetxController {
 }
 ```
 
-With a simple:
+Avec un simple:
 
 ```dart
 controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+Vous pouvez mettre à jour la variable de compteur dans votre interface utilisateur, quel que soit l'endroit où elle est stockée.
 
-### Where .obs can be used
+### Quand utiliser .obs
 
-You can transform anything on obs. Here are two ways of doing it:
+Vous pouvez tout transformer sur obs. Voici deux façons de procéder:
 
-* You can convert your class values to obs
+* Vous pouvez convertir vos valeurs de classe en obs
 ```dart
 class RxUser {
   final name = "Camila".obs;
@@ -315,7 +315,7 @@ class RxUser {
 }
 ```
 
-* or you can convert the entire class to be an observable
+* ou vous pouvez convertir la classe entière en un observable:
 ```dart
 class User {
   User({String name, int age});
@@ -323,34 +323,34 @@ class User {
   var age;
 }
 
-// when instantianting:
+// en instanciant:
 final user = User(name: "Camila", age: 18).obs;
 ```
 
-### Note about Lists
+### Remarque sur List
 
-Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+Les listes sont complètement observables, tout comme les objets qu'elles contiennent. De cette façon, si vous ajoutez une valeur à une liste, cela reconstruira automatiquement les widgets qui l'utilisent.
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+Vous n'avez pas non plus besoin d'utiliser ".value" avec des listes, l'incroyable api de Dart nous a permis de supprimer cela.
+Malheureusement, les types primitifs comme String et int ne peuvent pas être étendus, ce qui rend l'utilisation de .value obligatoire, mais ce ne sera pas un problème si vous travaillez avec des getters et des setters pour ceux-ci.
 
 ```dart
-// On the controller
-final String title = 'User Info:'.obs
+// Dans le controlleur
+final String title = 'User Info:'.obs;
 final list = List<User>().obs;
 
-// on the view
-Text(controller.title.value), // String need to have .value in front of it
+// Dans la vue
+Text(controller.title.value), // La String doit avoir .value devant elle
 ListView.builder (
-  itemCount: controller.list.length // lists don't need it
+  itemCount: controller.list.length // pas besoin pour List
 )
 ```
 
-When you are making your own classes observable, there is a different way to update them:
+Lorsque vous rendez vos propres classes observables, il existe une manière différente de les mettre à jour:
 
 ```dart
-// on the model file
-// we are going to make the entire class observable instead of each attribute
+// sur le fichier modèle
+// nous allons rendre la classe entière observable au lieu de chaque attribut
 class User() {
   User({this.name = '', this.age = 0});
   String name;
@@ -358,27 +358,27 @@ class User() {
 }
 
 
-// on the controller file
+// Dans le controlleur
 final user = User().obs;
-// when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
+// lorsque vous devez mettre à jour la variable utilisateur:
+user.update( (user) { // ce paramètre est la classe même que vous souhaitez mettre à jour
 user.name = 'Jonny';
 user.age = 18;
 });
-// an alternative way of update the user variable:
+// une autre manière de mettre à jour la variable user:
 user(User(name: 'João', age: 35));
 
-// on view:
+// Dans la vue:
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
-// you can also access the model values without the .value:
-user().name; // notice that is the user variable, not the class (variable has lowercase u)
+// vous pouvez également accéder aux valeurs du modèle sans le .value:
+user().name; //notez que c'est la variable utilisateur, pas la classe (la variable a un u minuscule)
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+Vous n'êtes pas obligé de travailler avec des setters si vous ne le souhaitez pas. vous pouvez utiliser les API «assign» et «assignAll».
+L'API «assign» effacera votre liste et ajoutera un seul objet que vous souhaitez y démarrer.
+L'API "assignAll" effacera la liste existante et ajoutera tous les objets itérables que vous y injecterez.
 
-### Why i have to use .value
+### Pourquoi je dois utiliser .value
 
 We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
 
