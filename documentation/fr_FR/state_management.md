@@ -3,7 +3,7 @@
     - [Avantages](#avantages)
     - [Maximum performance:](#maximum-performance)
     - [Declaring a reactive variable](#declaring-a-reactive-variable)
-        - [Having a reactive state, is easy.](#avoir-un-tat-ractif-cest-facile)
+        - [Having a reactive state, is easy.](#avoir-un-état-réactif-cest-facile)
     - [Using the values in the view](#using-the-values-in-the-view)
     - [Conditions to rebuild](#conditions-to-rebuild)
     - [Where .obs can be used](#where-obs-can-be-used)
