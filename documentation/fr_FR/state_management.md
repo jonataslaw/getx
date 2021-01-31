@@ -1,13 +1,13 @@
 - [Gestion d'État](#gestion-d-etat)
   - [Gestionnaire d'état réactif](#gestionnaire-d-etat-reactif)
     - [Avantages](#avantages)
-    - [Maximum performance:](#maximum-performance)
-    - [Declaring a reactive variable](#declaring-a-reactive-variable)
-        - [Having a reactive state, is easy.](#avoir-un-état-réactif-cest-facile)
-    - [Using the values in the view](#using-the-values-in-the-view)
-    - [Conditions to rebuild](#conditions-to-rebuild)
-    - [Where .obs can be used](#where-obs-can-be-used)
-    - [Note about Lists](#note-about-lists)
+    - [Performance maximale:](#performance-maximale)
+    - [Déclaration d'une variable réactive](#declaration-d-une-variable-reactive)
+        - [Avoir un état réactif, c'est facile.](#avoir-un-etat-reactif-c-est-facile)
+    - [Utilisation des valeurs dans la Vue](#utilisation-des-valeurs-dans-la-vue)
+    - [Conditions pour reconstruire](#conditions-pour-reconstruire)
+    - [Quand utiliser .obs](#quand-utiliser-obs)
+    - [Remarque sur List](#remarque-sur-list)
     - [Pourquoi je dois utiliser .value](#pourquoi-je-dois-utiliser-value)
     - [Obx()](#obx)
     - [Workers](#workers)
@@ -142,7 +142,7 @@ Lors de la jonction de deux __observables__, si l'une change; le listener de cet
 
 Avec **GetX**, si vous joignez deux variables, `GetX ()` (similaire à `Observer ()`), ne se reconstruira que si cela implique un réel changement d'état.
 
-### Déclaration d'une variable réactive
+### Declaration d une variable reactive
 
 Vous avez 3 façons de transformer une variable en "observable".
 
@@ -173,7 +173,7 @@ final myMap = Rx<Map<String, int>>({});
 final user = Rx<User>();
 ```
 
-3 - TLa troisième approche, plus pratique, plus facile et préférée, ajoutez simplement **`.obs`** comme propriété de votre` valeur`:
+3 - La troisième approche, plus pratique, plus facile et préférée, ajoutez simplement **`.obs`** comme propriété de votre` valeur`:
 
 ```dart
 final name = ''.obs;
@@ -188,7 +188,7 @@ final myMap = <String, int>{}.obs;
 final user = User().obs;
 ```
 
-##### Avoir un état réactif, c'est facile.
+##### Avoir un etat reactif, c est facile.
 
 Comme nous le savons, _Dart_ se dirige maintenant vers _null safety_.
 Pour être prêt, à partir de maintenant, vous devez toujours commencer vos variables _Rx_ avec une **valeur initiale**.
@@ -198,7 +198,7 @@ Pour être prêt, à partir de maintenant, vous devez toujours commencer vos var
 Vous allez littéralement ajouter un "".obs"" à la fin de votre variable, et **c'est tout**, vous l'avez rendue observable,
 et sa `.value`, eh bien, sera la _valeurInitiale_.
 
-### Utilisation des valeurs de la vue
+### Utilisation des valeurs dans la Vue
 
 ```dart
 // dans le controlleur
@@ -287,7 +287,7 @@ list.addIf(item < limit, item);
 
 Sans décorations, sans générateur de code, sans complications :smile:
 
-Connaissez-vous l'application de counter de Flutter? Votre classe Controller pourrait ressembler à ceci:
+Connaissez-vous l'application 'counter' de Flutter? Votre classe Controller pourrait ressembler à ceci:
 
 ```dart
 class CountController extends GetxController {
@@ -375,43 +375,43 @@ user().name; //notez que c'est la variable utilisateur, pas la classe (la variab
 ```
 
 Vous n'êtes pas obligé de travailler avec des setters si vous ne le souhaitez pas. vous pouvez utiliser les API «assign» et «assignAll».
-L'API «assign» effacera votre liste et ajoutera un seul objet que vous souhaitez y démarrer.
+L'API «assign» effacera votre liste et ajoutera un seul objet que vous souhaitez.
 L'API "assignAll" effacera la liste existante et ajoutera tous les objets itérables que vous y injecterez.
 
 ### Pourquoi je dois utiliser .value
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+Nous pourrions supprimer l'obligation d'utiliser 'value' pour `String` et` int` avec une simple décoration et un générateur de code, mais le but de cette bibliothèque est précisément d'éviter les dépendances externes. Nous souhaitons proposer un environnement prêt à la programmation, impliquant l'essentiel (gestion des routes, des dépendances et des états), de manière simple, légère et performante, sans avoir besoin d'un package externe.
 
-You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
+Vous pouvez littéralement ajouter 3 lettres à votre pubspec (get) et un signe deux-points et commencer la programmation. Toutes les solutions incluses par défaut, de la gestion des routes à la gestion des états, visent la facilité, la productivité et la performance.
 
-The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
+Le poids total de cette bibliothèque est inférieur à celui d'un seul gestionnaire d'état, bien qu'il s'agisse d'une solution complète, et c'est ce que vous devez comprendre.
 
-If you are bothered by `.value`, and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+Si vous êtes dérangé par `.value`, et comme un générateur de code, MobX est une excellente alternative, et vous pouvez l'utiliser en conjonction avec Get. Pour ceux qui veulent ajouter une seule dépendance dans pubspec et commencer à programmer sans se soucier de l'incompatibilité de la version d'un package avec un autre, ou si l'erreur d'une mise à jour d'état vient du gestionnaire d'état ou de la dépendance, ou encore, ne veulent pas s'inquiéter de la disponibilité des contrôleurs, que ce soit littéralement "juste de la programmation", get est tout simplement parfait.
 
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
+Si vous n'avez aucun problème avec le générateur de code MobX, ou si vous n'avez aucun problème avec le code standard BLoC, vous pouvez simplement utiliser Get pour les routes et oublier qu'il a un gestionnaire d'état. Get SEM et RSM sont nés par nécessité, mon entreprise avait un projet avec plus de 90 contrôleurs, et le générateur de code a simplement pris plus de 30 minutes pour terminer ses tâches après un Flutter Clean sur une machine raisonnablement bonne, si votre projet il a 5, 10, 15 contrôleurs, n'importe quel gestionnaire d'état vous suffira bien. Si vous avez un projet d'une taille absurde et que le générateur de code est un problème pour vous, cette solution vous a été attribuée.
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+Évidemment, si quelqu'un veut contribuer au projet et créer un générateur de code, ou quelque chose de similaire, je vais créer un lien dans ce readme comme alternative, mon besoin n'est pas le besoin de tous les développeurs, mais pour l'instant je dis q'il y a de bonnes solutions qui font déjà cela, comme MobX.
 
 ### Obx()
 
-Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
-Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+Les types dans Get à l'aide de Bindings ne sont pas nécessaires. Vous pouvez utiliser le widget Obx, au lieu de GetX, qui ne reçoit que la fonction anonyme qui crée un widget.
+Évidemment, si vous n'utilisez pas de type, vous devrez avoir une instance de votre contrôleur pour utiliser les variables, ou utiliser `Get.find <Controller> ()` .value ou Controller.to.value pour récupérer la valeur .
 
 ### Workers
 
-Workers will assist you, triggering specific callbacks when an event occurs.
+Les 'workers' vous assisteront, déclenchant des callbacks spécifiques lorsqu'un événement se produit.
 
 ```dart
-/// Called every time `count1` changes.
-ever(count1, (_) => print("$_ has been changed"));
+/// Appelé à chaque fois que «count1» change.
+ever(count1, (_) => print("$_ a été modifié"));
 
-/// Called only first time the variable $_ is changed
-once(count1, (_) => print("$_ was changed once"));
+/// Appelé uniquement la première fois que la variable est modifiée
+once(count1, (_) => print("$_ a été changé une fois"));
 
-/// Anti DDos - Called every time the user stops typing for 1 second, for example.
+/// Anti DDos - Appelé chaque fois que l'utilisateur arrête de taper pendant 1 seconde, par exemple.
 debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 
-/// Ignore all changes within 1 second.
+/// Ignore toutes les modifications en 1 seconde.
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
 All workers (except `debounce`) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool`.
