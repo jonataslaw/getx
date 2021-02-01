@@ -11,7 +11,7 @@
     - [Pourquoi je dois utiliser .value](#pourquoi-je-dois-utiliser-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  - [Simple State Manager](#simple-state-manager)
+  - [Gestionnaire d'état simple](#gestionnaire-d-etat-simple)
     - [Advantages](#advantages-1)
     - [Usage](#usage)
     - [How it handles controllers](#how-it-handles-controllers)
@@ -402,68 +402,67 @@ Les types dans Get à l'aide de Bindings ne sont pas nécessaires. Vous pouvez u
 Les 'workers' vous assisteront, déclenchant des callbacks spécifiques lorsqu'un événement se produit.
 
 ```dart
-/// Appelé à chaque fois que «count1» change.
+/// Appelée à chaque fois que «count1» change.
 ever(count1, (_) => print("$_ a été modifié"));
 
-/// Appelé uniquement la première fois que la variable est modifiée
+/// Appelée uniquement la première fois que la variable est modifiée
 once(count1, (_) => print("$_ a été changé une fois"));
 
-/// Anti DDos - Appelé chaque fois que l'utilisateur arrête de taper pendant 1 seconde, par exemple.
+/// Anti DDos - Appelée chaque fois que l'utilisateur arrête de taper pendant 1 seconde, par exemple.
 debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 
-/// Ignore toutes les modifications en 1 seconde.
+/// Ignore toutes les modifications pendant 1 seconde.
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
-All workers (except `debounce`) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool`.
-This `condition` defines when the `callback` function executes.
+Tous les workers (sauf `debounce`) ont un paramètre nommé `condition`, qui peut etre un `bool` ou un callback qui retourne un `bool`.
+Cette `condition` definit quand la fonction `callback` est executée.
 
-All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
+Tous les workers renvoyent un objet `Worker`, qui peut être utilisé pour annuler ( via `dispose()` ) le `worker`.
  
 - **`ever`**
- is called every time the _Rx_ variable emits a new value.
+ est appelée chaque fois que la variable _Rx_ émet une nouvelle valeur.
 
 - **`everAll`**
- Much like `ever`, but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
-
+ Un peu comme `ever`, mais il prend une` List` de valeurs _Rx_. Appelée chaque fois que sa variable est changée. C'est tout.
 
 - **`once`**
-'once' is called only the first time the variable has been changed.
+'once' est appelée uniquement la première fois que la variable a été modifiée.
 
 - **`debounce`**
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+'debounce' est très utile dans les fonctions de recherche, où vous souhaitez que l'API ne soit appelée que lorsque l'utilisateur a fini de taper. Si l'utilisateur tape "Jonny", vous aurez 5 recherches dans les API, par la lettre J, o, n, n et y. Avec Get, cela ne se produit pas, car vous aurez un Worker "anti-rebond" qui ne sera déclenché qu'à la fin de la saisie.
 
 - **`interval`**
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+'interval' est différent de 'debounce'. Avec «debounce» si l'utilisateur fait 1000 changements à une variable en 1 seconde, il n'enverra que le dernier après le temporisateur stipulé (la valeur par défaut est 800 millisecondes). 'Interval' ignorera à la place toutes les actions de l'utilisateur pour la période stipulée. Si vous envoyez des événements pendant 1 minute, 1000 par seconde, debounce ne vous enverra que le dernier, lorsque l'utilisateur arrête de mitrailler les événements. interval délivrera des événements toutes les secondes, et s'il est réglé sur 3 secondes, il fournira 20 événements cette minute. Ceci est recommandé pour éviter les abus, dans des fonctions où l'utilisateur peut rapidement cliquer sur quelque chose et obtenir un avantage (imaginez que l'utilisateur puisse gagner des pièces en cliquant sur quelque chose, s'il cliquait 300 fois dans la même minute, il aurait 300 pièces, en utilisant l'intervalle, vous pouvez définir une période de 3 secondes, et même en cliquant 300 ou mille fois, le maximum qu'il obtiendrait en 1 minute serait de 20 pièces, en cliquant 300 ou 1 million de fois). Le 'debounce' convient aux anti-DDos, pour des fonctions comme la recherche où chaque changement de onChange entraînerait une requête à votre api. Debounce attendra que l'utilisateur arrête de taper le nom, pour faire la demande. S'il était utilisé dans le scénario de pièces mentionné ci-dessus, l'utilisateur ne gagnerait qu'une pièce, car il n'est exécuté que lorsque l'utilisateur "fait une pause" pendant le temps établi.
 
-- NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+- NOTE: Les 'workers' doivent toujours être utilisés lors du démarrage d'un contrôleur ou d'une classe, il doit donc toujours être dans onInit (recommandé), le constructeur de classe ou l'initState d'un StatefulWidget (cette pratique n'est pas recommandée dans la plupart des cas, mais cela ne devrait poser aucun problème).
 
-## Simple State Manager
+## Gestionnaire d etat simple
 
-Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+Get a un gestionnaire d'état extrêmement léger et facile, qui n'utilise pas ChangeNotifier, répondra aux besoins en particulier des nouveaux utilisateurs de Flutter et ne posera pas de problèmes pour les applications volumineuses.
 
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this.
+GetBuilder vise précisément le contrôle de plusieurs états. Imaginez que vous avez ajouté 30 produits à un panier, que vous cliquez sur supprimer un, en même temps que la liste est mise à jour, le prix est mis à jour et le badge dans le panier est mis à jour avec un nombre plus petit. Ce type d'approche fait de GetBuilder un tueur, car il regroupe les états et les modifie tous à la fois sans aucune "logique de calcul" pour cela. GetBuilder a été créé avec ce type de situation à l'esprit, car pour un changement d'état éphémère, vous pouvez utiliser setState et vous n'aurez pas besoin d'un gestionnaire d'état pour cela.
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+De cette façon, si vous voulez un contrôleur individuel, vous pouvez lui attribuer des ID ou utiliser GetX. Cela dépend de vous, en vous rappelant que plus vous avez de widgets "individuels", plus les performances de GetX se démarqueront, tandis que les performances de GetBuilder devraient être supérieures, en cas de changement d'état multiple.
 
 ### Advantages
 
-1. Update only the required widgets.
+1. Met à jour uniquement les widgets requis.
 
-2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2. N'utilise pas changeNotifier, c'est le gestionnaire d'état qui utilise le moins de mémoire (proche de 0 Mo).
 
-3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. Oubliez StatefulWidget! Avec Get, vous n'en aurez jamais besoin. Avec les autres gestionnaires d'états, vous devrez probablement utiliser un StatefulWidget pour obtenir l'instance de votre fournisseur, BLoC, MobX Controller, etc. Mais vous êtes-vous déjà arrêté pour penser que votre appBar, votre 'scaffold', et la plupart des les widgets de votre classe sont sans état (stateless)? Alors pourquoi sauvegarder l'état d'une classe entière, si vous pouvez sauvegarder l'état du widget qui est «avec état» (statefull)? Get résout cela aussi. Créez une classe sans état, rendez tout «sans état». Si vous devez mettre à jour un seul composant, enveloppez-le avec GetBuilder et son état sera conservé.
 
-4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. Organisez votre projet pour de vrai! Les contrôleurs ne doivent pas être dans votre interface utilisateur, placer votre TextEditController ou tout contrôleur que vous utilisez dans votre classe Controller.
 
-5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5. Avez-vous besoin de déclencher un événement pour mettre à jour un widget dès son rendu? GetBuilder a la propriété "initState", tout comme StatefulWidget, et vous pouvez appeler des événements depuis votre contrôleur, directement depuis celui-ci, aucun événement n'étant placé dans votre initState.
 
-6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. Avez-vous besoin de déclencher une action comme la fermeture de stream, de timers, etc.? GetBuilder a également la propriété dispose(), où vous pouvez appeler des événements dès que ce widget est détruit.
 
-7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. N'utilisez les streams que si nécessaire. Vous pouvez utiliser vos StreamControllers à l'intérieur de votre contrôleur normalement, et utiliser StreamBuilder également normalement, mais rappelez-vous qu'un stream consomme raisonnablement de la mémoire, la programmation réactive est belle, mais vous ne devriez pas en abuser. 30 streams ouverts simultanément peuvent être pires que changeNotifier (et changeNotifier est très mauvais).
 
-8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+8. Mettez à jour les widgets sans dépenser de RAM pour cela. Get stocke uniquement l'ID de créateur GetBuilder et met à jour ce GetBuilder si nécessaire. La consommation de mémoire du stockage get ID en mémoire est très faible, même pour des milliers de GetBuilders. Lorsque vous créez un nouveau GetBuilder, vous partagez en fait l'état de GetBuilder qui a un ID de créateur. Un nouvel état n'est pas créé pour chaque GetBuilder, ce qui économise BEAUCOUP de RAM pour les applications volumineuses. Fondamentalement, votre application sera entièrement sans état (stateless), et les quelques widgets qui seront stateful (dans GetBuilder) auront un seul état, et par conséquent, la mise à jour d'un seul les mettra tous à jour. L'état  est unique.
 
-9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
+9. Get est omniscient et, dans la plupart des cas, il sait exactement quand sortir de mémoire un contrôleur. Vous ne devez pas vous soucier du moment de vous débarrasser d'un contrôleur, Get connaît le meilleur moment pour le faire.
 
 ### Usage
 
