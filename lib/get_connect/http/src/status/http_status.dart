@@ -1,10 +1,12 @@
 class HttpStatus {
   HttpStatus(this.code);
+
   final int code;
 
   static const int continue_ = 100;
   static const int switchingProtocols = 101;
   static const int processing = 102;
+  static const int earlyHints = 103;
   static const int ok = 200;
   static const int created = 201;
   static const int accepted = 202;
@@ -22,6 +24,7 @@ class HttpStatus {
   static const int seeOther = 303;
   static const int notModified = 304;
   static const int useProxy = 305;
+  static const int switchProxy = 306;
   static const int temporaryRedirect = 307;
   static const int permanentRedirect = 308;
   static const int badRequest = 400;
@@ -42,10 +45,12 @@ class HttpStatus {
   static const int unsupportedMediaType = 415;
   static const int requestedRangeNotSatisfiable = 416;
   static const int expectationFailed = 417;
+  static const int imATeapot = 418;
   static const int misdirectedRequest = 421;
   static const int unprocessableEntity = 422;
   static const int locked = 423;
   static const int failedDependency = 424;
+  static const int tooEarly = 425;
   static const int upgradeRequired = 426;
   static const int preconditionRequired = 428;
   static const int tooManyRequests = 429;
