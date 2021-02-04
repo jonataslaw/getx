@@ -12,10 +12,10 @@
     - [Obx()](#obx)
     - [Workers](#workers)
   - [Gestionnaire d'état simple](#gestionnaire-d-etat-simple)
-    - [Advantages](#advantages-1)
-    - [Usage](#usage)
-    - [How it handles controllers](#how-it-handles-controllers)
-    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
+    - [Atouts](#atouts)
+    - [Utilisation](#utilisation)
+    - [Comment il gère les contrôleurs](#comment-il-gre-les-contrleurs)
+    - [Vous n'aurez plus besoin de StatefulWidgets](#vous-naurez-plus-besoin-de-statefulwidgets)
     - [Why it exists](#why-it-exists)
     - [Other ways of using it](#other-ways-of-using-it)
     - [Unique IDs](#unique-ids)
@@ -444,7 +444,7 @@ GetBuilder vise précisément le contrôle de plusieurs états. Imaginez que vou
 
 De cette façon, si vous voulez un contrôleur individuel, vous pouvez lui attribuer des ID ou utiliser GetX. Cela dépend de vous, en vous rappelant que plus vous avez de widgets "individuels", plus les performances de GetX se démarqueront, tandis que les performances de GetBuilder devraient être supérieures, en cas de changement d'état multiple.
 
-### Advantages
+### Atouts
 
 1. Met à jour uniquement les widgets requis.
 
@@ -464,34 +464,34 @@ De cette façon, si vous voulez un contrôleur individuel, vous pouvez lui attri
 
 9. Get est omniscient et, dans la plupart des cas, il sait exactement quand sortir de mémoire un contrôleur. Vous ne devez pas vous soucier du moment de vous débarrasser d'un contrôleur, Get connaît le meilleur moment pour le faire.
 
-### Usage
+### Utilisation
 
 ```dart
-// Create controller class and extends GetxController
+// Créez la classe controller qui 'extends' GetxController
 class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
-    update(); // use update() to update counter variable on UI when increment be called
+    update(); // utilisez update () pour mettre à jour la variable de compteur sur l'interface utilisateur lorsque incrément() est appelé
   }
 }
-// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called
+// Sur votre classe Stateless / Stateful, utilisez GetBuilder pour mettre à jour le texte lorsque incrément() est appelé
 GetBuilder<Controller>(
-  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  init: Controller(), // INITIER CA UNIQUEMENT LA PREMIÈRE FOIS
   builder: (_) => Text(
     '${_.counter}',
   ),
 )
-//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
+//Initialisez votre contrôleur uniquement la première fois. La deuxième fois que vous utilisez ReBuilder pour le même contrôleur, ne recommencez pas. Votre contrôleur sera automatiquement supprimé de la mémoire dès que le widget qui l'a marqué comme «init» sera déployé. Vous n'avez pas à vous en soucier, Get le fera automatiquement, assurez-vous simplement de ne pas démarrer deux fois le même contrôleur.
 ```
 
-**Done!**
+**Fait!**
 
-- You have already learned how to manage states with Get.
+- Vous avez déjà appris à gérer les états avec Get.
 
-- Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+- Note: Vous pouvez souhaiter une organisation plus grande et ne pas utiliser la propriété init. Pour cela, vous pouvez créer une classe et étendre la classe Bindings, et y mentionner les contrôleurs qui seront créés dans cette route. Les contrôleurs ne seront pas créés à ce moment-là, au contraire, il ne s'agit que d'une déclaration, de sorte que la première fois que vous utilisez un contrôleur, Get saura où chercher. Get restera lazyLoad et continuera à supprimer les contrôleurs lorsqu'ils ne seront plus nécessaires. Voir l'exemple pub.dev pour voir comment cela fonctionne.
 
-If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
+Si vous parcourez de nombreuses routes et avez besoin de données qui se trouvaient dans votre contrôleur précédemment utilisé, il vous suffit de réutiliser GetBuilder (sans init):
 
 ```dart
 class OtherClass extends StatelessWidget {
@@ -508,16 +508,16 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
+Si vous devez utiliser votre contrôleur dans de nombreux autres endroits, et en dehors de GetBuilder, créez simplement un get dans votre contrôleur et ayez-le facilement. (ou utilisez `Get.find <Controller> ()`)
 
 ```dart
 class Controller extends GetxController {
 
-  /// You do not need that. I recommend using it just for ease of syntax.
-  /// with static method: Controller.to.counter();
-  /// with no static method: Get.find<Controller>().counter();
-  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other the IDE will autocomplete it.
-  static Controller get to => Get.find(); // add this line
+  /// Vous n'en avez pas besoin. Je recommande de l'utiliser uniquement pour faciliter la syntaxe.
+  /// avec la méthode statique: Controller.to.counter ();
+  /// sans méthode statique: Get.find <Controller> () .counter ();
+  /// Il n'y a aucune différence de performances, ni aucun effet secondaire de l'utilisation de l'une ou l'autre syntaxe. Un seul n'a pas besoin du type, et l'autre l'EDI le complétera automatiquement.
+   static Controller get to => Get.find(); // Ajouter cette ligne
 
   int counter = 0;
   void increment() {
@@ -527,7 +527,7 @@ class Controller extends GetxController {
 }
 ```
 
-And then you can access your controller directly, that way:
+Et puis vous pouvez accéder directement à votre contrôleur, de cette façon:
 
 ```dart
 FloatingActionButton(
@@ -538,17 +538,17 @@ FloatingActionButton(
 ),
 ```
 
-When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+Lorsque vous appuyez sur FloatingActionButton, tous les widgets qui écoutent la variable «counter» seront mis à jour automatiquement.
 
-### How it handles controllers
+### Comment il gère les contrôleurs
 
-Let's say we have this:
+Disons que nous avons ceci:
 
 `Class a => Class B (has controller X) => Class C (has controller X)`
 
-In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+Dans la classe A, le contrôleur n'est pas encore en mémoire, car vous ne l'avez pas encore utilisé (Get est lazyLoad). Dans la classe B, vous avez utilisé le contrôleur et il est entré en mémoire. Dans la classe C, vous avez utilisé le même contrôleur que dans la classe B, Get partagera l'état du contrôleur B avec le contrôleur C, et le même contrôleur est toujours en mémoire. Si vous fermez l'écran C et l'écran B, Get retirera automatiquement le contrôleur X de la mémoire et libèrera des ressources, car la classe A n'utilise pas le contrôleur. Si vous naviguez à nouveau vers B, le contrôleur X entrera à nouveau en mémoire, si au lieu de passer à la classe C, vous revenez en classe A, Get retirera le contrôleur de la mémoire de la même manière. Si la classe C n'utilisait pas le contrôleur et que vous retiriez la classe B de la mémoire, aucune classe n'utiliserait le contrôleur X et de même, elle serait éliminée. La seule exception qui peut gâcher Get, est si vous supprimez B de l'itinéraire de manière inattendue et essayez d'utiliser le contrôleur dans C.Dans ce cas, l'ID de créateur du contrôleur qui était dans B a été supprimé et Get a été programmé pour supprimer de la mémoire tous les contrôleurs qui n'ont pas d'ID de créateur. Si vous avez l'intention de faire cela, ajoutez l'indicateur "autoRemove: false" au GetBuilder de la classe B et utilisez adoptID = true; dans GetBuilder de la classe C.
 
-### You won't need StatefulWidgets anymore
+### Vous n'aurez plus besoin de StatefulWidgets
 
 Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
 The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
