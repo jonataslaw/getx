@@ -16,10 +16,10 @@
     - [Utilisation](#utilisation)
     - [Comment il gère les contrôleurs](#comment-il-gre-les-contrleurs)
     - [Vous n'aurez plus besoin de StatefulWidgets](#vous-naurez-plus-besoin-de-statefulwidgets)
-    - [Why it exists](#why-it-exists)
-    - [Other ways of using it](#other-ways-of-using-it)
-    - [Unique IDs](#unique-ids)
-  - [Mixing the two state managers](#mixing-the-two-state-managers)
+    - [Pourquoi ça existe](#pourquoi-ca-existe)
+    - [Autres façons de l'utiliser](#autres-formes-d-utilisation)
+    - [IDs Uniques](#ids-uniques)
+  - [Mélanger les deux gestionnaires d'état](#mixing-the-two-state-managers)
   - [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # Gestion d Etat
@@ -550,12 +550,12 @@ Dans la classe A, le contrôleur n'est pas encore en mémoire, car vous ne l'ave
 
 ### Vous n'aurez plus besoin de StatefulWidgets
 
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
-The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
-Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get.
+Utiliser StatefulWidgets signifie stocker inutilement l'état d'écrans entiers, même parce que si vous avez besoin de reconstruire au minimum un widget, vous l'intègrerez dans un Consumer / Observer / BlocProvider / GetBuilder / GetX / Obx, qui sera un autre StatefulWidget.
+La classe StatefulWidget est une classe plus grande que StatelessWidget, qui allouera plus de RAM, et cela ne fera peut-être pas une différence significative entre une ou deux classes, mais cela le fera très certainement lorsque vous en aurez 100!
+À moins que vous n'ayez besoin d'utiliser un mixin, comme TickerProviderStateMixin, il sera totalement inutile d'utiliser un StatefulWidget avec Get.
 
-You can call all methods of a StatefulWidget directly from a GetBuilder.
-If you need to call initState() or dispose() method for example, you can call them directly;
+Vous pouvez appeler toutes les méthodes d'un StatefulWidget directement à partir d'un GetBuilder.
+Si vous devez appeler la méthode initState () ou dispose () par exemple, vous pouvez les appeler directement:
 
 ```dart
 GetBuilder<Controller>(
@@ -565,7 +565,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-A much better approach than this is to use the onInit() and onClose() method directly from your controller.
+Une bien meilleure approche que celle-ci consiste à utiliser les méthodes onInit () et onClose () directement à partir de votre contrôleur.
 
 ```dart
 @override
@@ -575,24 +575,24 @@ void onInit() {
 }
 ```
 
-- NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+- NOTE: Si vous voulez démarrer une méthode au moment où le contrôleur est appelé pour la première fois, vous N'AVEZ PAS BESOIN d'utiliser des constructeurs pour cela, en fait, en utilisant un package orienté performance comme Get, cela frôle la mauvaise pratique, car il s'écarte de la logique dans laquelle les contrôleurs sont créés ou alloués (si vous créez une instance de ce contrôleur, le constructeur sera appelé immédiatement, vous remplirez un contrôleur avant même qu'il ne soit utilisé, vous allouez de la mémoire sans qu'elle ne soit utilisée , cela nuit définitivement aux principes de cette bibliothèque). Les méthodes onInit (); et onClose (); ont été créés pour cela, ils seront appelés lors de la création du Controller, ou lors de sa première utilisation, selon que vous utilisez Get.lazyPut ou non. Si vous voulez, par exemple, faire un appel à votre API pour remplir des données, vous pouvez oublier la méthode à l'ancienne de initState / dispose, lancez simplement votre appel à l'API dans onInit, et si vous devez exécuter une commande comme la fermeture des flux, utilisez onClose () pour cela.
 
-### Why it exists
+### Pourquoi ca existe
 
-The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
+Le but de ce package est précisément de vous donner une solution complète pour la navigation des routes, la gestion des dépendances et des états, en utilisant le moins de dépendances possible, avec un haut degré de découplage. Get engage toutes les API Flutter de haut et bas niveau en lui-même, pour vous assurer de travailler avec le moins de couplage possible. Nous centralisons tout dans un seul package, pour vous assurer que vous n'avez aucun type de couplage dans votre projet. De cette façon, vous pouvez mettre uniquement des widgets dans votre vue et laisser la partie de votre équipe qui travaille avec la «business logique» libre, pour travailler avec la business logique sans dépendre d'aucun élément de la vue. Cela fournit un environnement de travail beaucoup plus propre, de sorte qu'une partie de votre équipe ne travaille qu'avec des widgets, sans se soucier d'envoyer des données à votre contrôleur, et une partie de votre équipe ne travaille qu'avec la business logique dans toute son ampleur, sans dépendre d'aucun élément de la Vue.
 
-So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
-You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
+Donc, pour simplifier cela:
+Vous n'avez pas besoin d'appeler des méthodes dans initState et de les envoyer par paramètre à votre contrôleur, ni d'utiliser votre constructeur de contrôleur pour cela, vous avez la méthode onInit () qui est appelée au bon moment pour démarrer vos services.
+Vous n'avez pas besoin d'appeler l'appareil, vous avez la méthode onClose () qui sera appelée au moment exact où votre contrôleur n'est plus nécessaire et sera supprimé de la mémoire. De cette façon, ne laissez les vues que pour les widgets, abstenez-vous d'y mettre tout type de business logique.
 
-Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+N'appelez pas une méthode dispose() dans GetxController, cela ne fera rien, rappelez-vous que le contrôleur n'est pas un Widget, vous ne devez pas le «supprimer», et il sera automatiquement et intelligemment supprimé de la mémoire par Get. Si vous avez utilisé un Stream et que vous souhaitez le fermer, insérez-le simplement dans la méthode close(). Exemple:
 
 ```dart
 class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
 
-  /// close stream = onClose method, not dispose.
+  /// pour fermer stream = méthode onClose(), pas dispose().
   @override
   void onClose() {
     user.close();
@@ -602,121 +602,120 @@ class Controller extends GetxController {
 }
 ```
 
-Controller life cycle:
+Cycle de vie du controlleur:
 
-- onInit() where it is created.
-- onClose() where it is closed to make any changes in preparation for the delete method
-- deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+- onInit () quand il est créé.
+- onClose () quand il est fermé pour apporter des modifications en préparation de la méthode delete.
+- supprimé: vous n'avez pas accès à cette API car elle supprime littéralement le contrôleur de la mémoire. Il est littéralement supprimé, sans laisser de trace.
 
-### Other ways of using it
+### Autres formes d utilisation
 
-You can use Controller instance directly on GetBuilder value:
+Vous pouvez utiliser l'instance Controller directement sur la valeur GetBuilder:
 
 ```dart
 GetBuilder<Controller>(
   init: Controller(),
   builder: (value) => Text(
-    '${value.counter}', //here
+    '${value.counter}', // ici
   ),
 ),
 ```
 
-You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
+Vous pouvez également avoir besoin d'une instance de votre contrôleur en dehors de votre GetBuilder, et vous pouvez utiliser ces approches pour y parvenir:
 
 ```dart
 class Controller extends GetxController {
   static Controller get to => Get.find();
 [...]
 }
-// on you view:
+// Dans la vue:
 GetBuilder<Controller>(  
-  init: Controller(), // use it only first time on each controller
+  init: Controller(), // utilisez-le seulement la première fois sur chaque contrôleur
   builder: (_) => Text(
-    '${Controller.to.counter}', //here
+    '${Controller.to.counter}', // ici
   )
 ),
 ```
 
-or
+ou encore
 
 ```dart
 class Controller extends GetxController {
- // static Controller get to => Get.find(); // with no static get
+ // static Controller get to => Get.find(); // sans static get
 [...]
 }
-// on stateful/stateless class
+// Dans la classe stateful/stateless
 GetBuilder<Controller>(  
-  init: Controller(), // use it only first time on each controller
+  init: Controller(), // utilisez-le seulement la première fois sur chaque contrôleur
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // ici
   ),
 ),
 ```
 
-- You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+- Vous pouvez utiliser des approches «non canoniques» pour ce faire. Si vous utilisez un autre gestionnaire de dépendances, comme get_it, modular, etc., et que vous souhaitez simplement fournir l'instance de contrôleur, vous pouvez le faire:
 
 ```dart
 Controller controller = Controller();
 [...]
 GetBuilder<Controller>(
-  init: controller, //here
+  init: controller, // ici
   builder: (_) => Text(
-    '${controller.counter}', // here
+    '${controller.counter}', // ici
   ),
 ),
 
 ```
 
-### Unique IDs
+### IDs Uniques
 
-If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
+Si vous souhaitez affiner le contrôle de mise à jour d'un widget avec GetBuilder, vous pouvez leur attribuer des ID uniques:
 
 ```dart
 GetBuilder<Controller>(
   id: 'text'
-  init: Controller(), // use it only first time on each controller
+  init: Controller(), // utilisez-le seulement la première fois sur chaque contrôleur
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // ici
   ),
 ),
 ```
 
-And update it this form:
+Et mettez-le à jour de cette façon:
 
 ```dart
 update(['text']);
 ```
 
-You can also impose conditions for the update:
+Vous pouvez également imposer des conditions pour la mise à jour:
 
 ```dart
 update(['text'], counter < 10);
 ```
 
-GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+GetX le fait automatiquement et ne reconstruit que le widget qui utilise la variable exacte qui a été modifiée, si vous remplacez une variable par la même que la précédente et que cela n'implique pas un changement d'état, GetX ne reconstruira pas le widget pour économiser de la mémoire et Cycles CPU (3 est affiché à l'écran, et vous changez à nouveau la variable à 3. Dans la plupart des gestionnaires d'états, cela entraînera une nouvelle reconstruction, mais avec GetX, le widget ne sera reconstruit qu'à nouveau, si en fait son état a changé ).
 
-## Mixing the two state managers
+## Mélanger les deux gestionnaires d'état
 
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+Certaines personnes ont ouvert une demande de fonctionnalité, car elles ne voulaient utiliser qu'un seul type de variable réactive, et les autres mécanismes, et devaient insérer un Obx dans un GetBuilder pour cela. En y réfléchissant, MixinBuilder a été créé. Il permet à la fois des changements réactifs en changeant les variables ".obs" et des mises à jour mécaniques via update (). Cependant, des 4 widgets c'est celui qui consomme le plus de ressources, car en plus d'avoir un Abonnement pour recevoir les événements de changement de ses enfants, il souscrit à la méthode de mise à jour de son contrôleur.
 
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
-
+L'extension de GetxController est importante, car ils ont des cycles de vie et peuvent «démarrer» et «terminer» des événements dans leurs méthodes onInit () et onClose (). Vous pouvez utiliser n'importe quelle classe pour cela, mais je vous recommande fortement d'utiliser la classe GetxController pour placer vos variables, qu'elles soient observables ou non.
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 
-In a decade working with programming I was able to learn some valuable lessons.
+En une décennie de travail avec la programmation, j'ai pu apprendre de précieuses leçons.
 
-My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
-However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
+Mon premier contact avec la programmation réactive a été tellement "wow, c'est incroyable" et en fait la programmation réactive est incroyable.
+Cependant, elle ne convient pas à toutes les situations. Souvent, il suffit de changer l'état de 2 ou 3 widgets en même temps, ou d'un changement d'état éphémère, auquel cas la programmation réactive n'est pas mauvaise, mais elle n'est pas appropriée.
 
-Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+La programmation réactive a une consommation de RAM plus élevée qui peut être compensée par le flux de travail individuel, ce qui garantira qu'un seul widget est reconstruit et si nécessaire, mais créer une liste avec 80 objets, chacun avec plusieurs flux n'est pas une bonne idée . Ouvrez le 'dart inspect' et vérifiez combien un StreamBuilder consomme, et vous comprendrez ce que j'essaie de vous dire.
 
-With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
+Dans cet esprit, j'ai créé le gestionnaire d'état simple. C'est simple, et c'est exactement ce que vous devriez lui demander: mettre à jour l'état par blocs de manière simple et de la manière la plus économique.
 
-GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
+GetBuilder est très économique en RAM, et il n'y a guère d'approche plus économique que lui (du moins je ne peux pas en imaginer une, si elle existe, merci de nous le faire savoir).
 
-However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
+Cependant, GetBuilder est toujours un gestionnaire d'état mécanique, vous devez appeler update () comme vous auriez besoin d'appeler les notifyListeners () de Provider.
 
-There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
+Il y a d'autres situations où la programmation réactive est vraiment intéressante, et ne pas travailler avec elle revient à réinventer la roue. Dans cet esprit, GetX a été créé pour fournir tout ce qui est le plus moderne et le plus avancé dans un gestionnaire d'état. Il met à jour uniquement ce qui est nécessaire et si nécessaire, si vous avez une erreur et envoyez 300 changements d'état simultanément, GetX filtrera et mettra à jour l'écran uniquement si l'état change réellement.
 
-GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
+GetX est toujours plus économique que tout autre gestionnaire d'état réactif, mais il consomme un peu plus de RAM que GetBuilder. En y réfléchissant et en visant à maximiser la consommation de ressources, Obx a été créé. Contrairement à GetX et GetBuilder, vous ne pourrez pas initialiser un contrôleur à l'intérieur d'un Obx, c'est juste un widget avec un StreamSubscription qui reçoit les événements de changement de vos widgets enfants, c'est tout. Il est plus économique que GetX, mais perd face à GetBuilder, ce qui était prévisible, car il est réactif, et GetBuilder a l'approche la plus simpliste qui existe, de stocker le hashcode d'un widget et son StateSetter. Avec Obx, vous n'avez pas besoin d'écrire votre type de contrôleur, et vous pouvez entendre le changement de plusieurs contrôleurs différents, mais il doit être initialisé avant, soit en utilisant l'approche d'exemple au début de ce readme, soit en utilisant la classe Bindings.
