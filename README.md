@@ -210,7 +210,7 @@ To make it observable, you just need to add ".obs" to the end of it:
 var name = 'Jonatas Borges'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever tha values changes, simply do this:
+And in the UI, when you want to show that value and update the screen whenever the values changes, simply do this:
 
 ```dart
 Obx(() => Text("${controller.name}"));
