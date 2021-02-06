@@ -1,6 +1,6 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
+- [Gestion de route](#gestion-de-route)
+  - [Utilisation](#utilisation)
+  - [xNavigation sans routes nommées](#navigation-sans-routes-nommees)
   - [Navigation par nom](#navigation-par-nom)
     - [Send data to named Routes](#send-data-to-named-routes)
     - [Dynamic urls links](#dynamic-urls-links)
@@ -11,66 +11,67 @@
     - [BottomSheets](#bottomsheets)
   - [Nested Navigation](#nested-navigation)
 
-# Route Management
+# Gestion de route
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+C'est l'explication complète de tout ce qu'il y a à savoir sur Getx quand il s'agit de la gestion des routes.
 
-## How to use
+## Utilisation
 
-Add this to your pubspec.yaml file:
+Ajoutez ceci à votre fichier pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+Si vous allez utiliser des routes/snackbars/dialogs/bottomsheets sans contexte, ou utiliser les API Get de haut niveau, vous devez simplement ajouter "Get" avant votre MaterialApp, en le transformant en GetMaterialApp et en profiter!
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // Avant: MaterialApp(
   home: MyHome(),
 )
 ```
 
-## Navigation without named routes
+## Navigation sans nom
 
-To navigate to a new screen:
+Pour accéder à un nouvel écran:
 
 ```dart
 Get.to(NextScreen());
 ```
 
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Pour fermer les snackbars, dialogs, bottomsheets ou tout ce que vous fermez normalement avec Navigator.pop (context);
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Pour aller à l'écran suivant et aucune option pour revenir à l'écran précédent (pour une utilisation dans SplashScreens, écrans de connexion, etc.)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Pour aller à l'écran suivant et annuler toutes les routes précédents (utile dans les paniers d'achat e-commerce, les sondages et les tests)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+Pour naviguer vers l'écran suivant et recevoir ou mettre à jour des données dès que vous en revenez:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+sur l'autre écran, envoyez les données pour l'écran précédent:
 
 ```dart
 Get.back(result: 'success');
 ```
 
-And use it:
+Et utilisez-les:
 
 ex:
 
@@ -78,13 +79,13 @@ ex:
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+Vous ne voulez pas apprendre notre syntaxe?
+Changez simplement le Navigateur (majuscule) en navigateur (minuscule), et vous aurez toutes les fonctions de la navigation standard, sans avoir à utiliser 'context'.
+Exemple:
 
 ```dart
 
-// Default Flutter navigator
+// Navigateur Flutter par défaut
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -94,7 +95,7 @@ Navigator.of(context).push(
   ),
 );
 
-// Get using Flutter syntax without needing context
+// Utilisez la syntaxe Flutter sans avoir besoin de 'context'
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -103,7 +104,7 @@ navigator.push(
   ),
 );
 
-// Get syntax (It is much better, but you have the right to disagree)
+// Syntaxe Get (c'est beaucoup mieux, mais vous avez le droit d'être en désaccord)
 Get.to(HomePage());
 
 
@@ -111,27 +112,27 @@ Get.to(HomePage());
 
 ## Navigation Par Nom
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- Si vous préférez naviguer par namedRoutes, Get prend également en charge cela.
 
-To navigate to nextScreen
+Pour aller à nextScreen
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+Pour naviguer et supprimer l'écran précédent du stack.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+Pour naviguer et supprimer tous les écrans précédents du stack.
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+Pour définir des routes, utilisez GetMaterialApp:
 
 ```dart
 void main() {
@@ -152,7 +153,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+Pour gérer la navigation vers des routes non définies (erreur 404), vous pouvez définir une page 'unknownRoute' dans GetMaterialApp.
 
 ```dart
 void main() {
@@ -169,39 +170,39 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### Envoyer des données aux routes nommées
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+Envoyez simplement ce que vous voulez comme arguments. Get accepte n'importe quoi ici, qu'il s'agisse d'une String, d'une Map, d'une List ou même d'une instance de classe.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+dans votre classe ou contrôleur:
 
 ```dart
 print(Get.arguments);
-//print out: Get is the best
+//montre: Get is the best
 ```
 
-### Dynamic urls links
+### Liens URL dynamiques
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+Get propose des URL dynamiques avancées, tout comme sur le Web. Les développeurs Web ont probablement déjà voulu cette fonctionnalité sur Flutter, et ont très probablement vu un package promettre cette fonctionnalité et fournir une syntaxe totalement différente de celle d'une URL sur le Web, mais Get résout également cela.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+sur votre classe controller/bloc/stateful/stateless:
 
 ```dart
 print(Get.parameters['id']);
-// out: 354
+// donne: 354
 print(Get.parameters['name']);
-// out: Enzo
+// donne: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+Vous pouvez également recevoir facilement des paramètres nommés avec Get:
 
 ```dart
 void main() {
@@ -217,7 +218,7 @@ void main() {
         name: '/profile/',
         page: () => MyProfile(),
       ),
-       //You can define a different page for routes with arguments, and another without arguments, but for that you must use the slash '/' on the route that will not receive arguments as above.
+       //Vous pouvez définir une page différente pour les routes avec arguments, et une autre sans arguments, mais pour cela vous devez utiliser la barre oblique '/' sur la route qui ne recevra pas d'arguments comme ci-dessus.
        GetPage(
         name: '/profile/:user',
         page: () => UserProfile(),
@@ -233,20 +234,20 @@ void main() {
 }
 ```
 
-Send data on route name
+Envoyer des données sur le nom de la route
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+Sur le deuxième écran, recevez les données par paramètre
 
 ```dart
 print(Get.parameters['user']);
-// out: 34954
+// donne: 34954
 ```
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+Et maintenant, tout ce que vous avez à faire est d'utiliser Get.toNamed () pour parcourir vos routes nommées, sans aucun contexte (vous pouvez appeler vos routes directement à partir de votre classe BLoC ou Controller), et lorsque votre application est compilée sur le Web, vos routes apparaîtront dans l'url <3
 
 ### Middleware
 

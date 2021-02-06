@@ -78,7 +78,7 @@ Non, vous n'avez pas besoin d'un `StreamBuilder`, mais vous avez raison pour les
 Eh bien, dans la vue, nous avons généralement beaucoup de code standard lorsque nous voulons changer un widget spécifique, c'est la manière Flutter.
 Avec **GetX**, vous pouvez également oublier ce code passe-partout.
 
-`StreamBuilder( … )`? `initialValue: …`? `builder: …`? Non, il vous suffit de placer cette variable dans un widget `Obx ()`.
+`StreamBuilder( … )`? `initialValue: …`? `builder: …`? Non, il vous suffit de placer cette variable dans un widget `Obx()`.
 
 ```dart
 Obx (() => Text (controller.name));
@@ -86,7 +86,7 @@ Obx (() => Text (controller.name));
 
 _Que devez-vous mémoriser?_  Seulement `Obx(() =>`. 
 
-Vous passez simplement ce Widget via une fonction dans un `Obx ()` (l' "Observateur" du _Rx_).
+Vous passez simplement ce Widget via une fonction dans un `Obx()` (l' "Observateur" du _Rx_).
 
 `Obx` est assez intelligent et ne changera que si la valeur de` controller.name` change.
 
@@ -110,11 +110,11 @@ void onButtonTap() => isOpen.value=false;
 ```
 ### Avantages
 
-**GetX ()** vous aide lorsque vous avez besoin d'un contrôle **granulaire** sur ce qui est mis à jour.
+**GetX()** vous aide lorsque vous avez besoin d'un contrôle **granulaire** sur ce qui est mis à jour.
 
 
 Si vous n'avez pas besoin d'ID uniques, car toutes vos variables seront modifiées lorsque vous effectuez une action, utilisez `GetBuilder`,
-parce que c'est un Simple State Updater (en blocs, comme `setState ()`), fait en seulement quelques lignes de code.
+parce que c'est un Simple State Updater (en blocs, comme `setState()`), fait en seulement quelques lignes de code.
 Il a été rendu simple, pour avoir le moins d'impact sur le processeur, et juste pour remplir un seul objectif (une reconstruction de _l'état_) et dépenser le minimum de ressources possible.
 
 Si vous avez besoin d'un State Manager **puissant** , vous ne pouvez pas vous tromper avec **GetX**.
@@ -140,7 +140,7 @@ Avec **GetX**, l'état ne change que si la `valeur` change.
 C'est la principale différence entre **GetX** et l'utilisation de _`computed` de MobX_.
 Lors de la jonction de deux __observables__, si l'une change; le listener de cet _observable_ changera également.
 
-Avec **GetX**, si vous joignez deux variables, `GetX ()` (similaire à `Observer ()`), ne se reconstruira que si cela implique un réel changement d'état.
+Avec **GetX**, si vous joignez deux variables, `GetX()` (similaire à `Observer()`), ne se reconstruira que si cela implique un réel changement d'état.
 
 ### Declaration d une variable reactive
 
@@ -268,7 +268,7 @@ fireRoute(logged) {
 }
 ```
 
-si `hasToken` était `false`, il n'y aurait pas de changement à `isLogged`, donc` ever () `ne serait jamais appelé.
+si `hasToken` était `false`, il n'y aurait pas de changement à `isLogged`, donc` ever() `ne serait jamais appelé.
 Pour éviter ce type de comportement, la première modification d'un _observable_ déclenchera toujours un événement,
 même s'il contient la même `.value`.
 
@@ -395,7 +395,7 @@ Si vous n'avez aucun problème avec le générateur de code MobX, ou si vous n'a
 ### Obx()
 
 Les types dans Get à l'aide de Bindings ne sont pas nécessaires. Vous pouvez utiliser le widget Obx, au lieu de GetX, qui ne reçoit que la fonction anonyme qui crée un widget.
-Évidemment, si vous n'utilisez pas de type, vous devrez avoir une instance de votre contrôleur pour utiliser les variables, ou utiliser `Get.find <Controller> ()` .value ou Controller.to.value pour récupérer la valeur .
+Évidemment, si vous n'utilisez pas de type, vous devrez avoir une instance de votre contrôleur pour utiliser les variables, ou utiliser `Get.find<Controller>()` .value ou Controller.to.value pour récupérer la valeur .
 
 ### Workers
 
@@ -472,7 +472,7 @@ class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
-    update(); // utilisez update () pour mettre à jour la variable de compteur sur l'interface utilisateur lorsque incrément() est appelé
+    update(); // utilisez update() pour mettre à jour la variable de compteur sur l'interface utilisateur lorsque incrément() est appelé
   }
 }
 // Sur votre classe Stateless / Stateful, utilisez GetBuilder pour mettre à jour le texte lorsque incrément() est appelé
@@ -508,14 +508,14 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-Si vous devez utiliser votre contrôleur dans de nombreux autres endroits, et en dehors de GetBuilder, créez simplement un get dans votre contrôleur et ayez-le facilement. (ou utilisez `Get.find <Controller> ()`)
+Si vous devez utiliser votre contrôleur dans de nombreux autres endroits, et en dehors de GetBuilder, créez simplement un get dans votre contrôleur et ayez-le facilement. (ou utilisez `Get.find<Controller>()`)
 
 ```dart
 class Controller extends GetxController {
 
   /// Vous n'en avez pas besoin. Je recommande de l'utiliser uniquement pour faciliter la syntaxe.
-  /// avec la méthode statique: Controller.to.counter ();
-  /// sans méthode statique: Get.find <Controller> () .counter ();
+  /// avec la méthode statique: Controller.to.counter();
+  /// sans méthode statique: Get.find<Controller>() .counter();
   /// Il n'y a aucune différence de performances, ni aucun effet secondaire de l'utilisation de l'une ou l'autre syntaxe. Un seul n'a pas besoin du type, et l'autre l'EDI le complétera automatiquement.
    static Controller get to => Get.find(); // Ajouter cette ligne
 
@@ -531,7 +531,7 @@ Et puis vous pouvez accéder directement à votre contrôleur, de cette façon:
 
 ```dart
 FloatingActionButton(
-  onPressed: () {
+  onPressed:() {
     Controller.to.increment(),
   } // This is incredibly simple!
   child: Text("${Controller.to.counter}"),
@@ -555,7 +555,7 @@ La classe StatefulWidget est une classe plus grande que StatelessWidget, qui all
 À moins que vous n'ayez besoin d'utiliser un mixin, comme TickerProviderStateMixin, il sera totalement inutile d'utiliser un StatefulWidget avec Get.
 
 Vous pouvez appeler toutes les méthodes d'un StatefulWidget directement à partir d'un GetBuilder.
-Si vous devez appeler la méthode initState () ou dispose () par exemple, vous pouvez les appeler directement:
+Si vous devez appeler la méthode initState() ou dispose() par exemple, vous pouvez les appeler directement:
 
 ```dart
 GetBuilder<Controller>(
@@ -565,7 +565,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-Une bien meilleure approche que celle-ci consiste à utiliser les méthodes onInit () et onClose () directement à partir de votre contrôleur.
+Une bien meilleure approche que celle-ci consiste à utiliser les méthodes onInit() et onClose() directement à partir de votre contrôleur.
 
 ```dart
 @override
@@ -575,15 +575,15 @@ void onInit() {
 }
 ```
 
-- NOTE: Si vous voulez démarrer une méthode au moment où le contrôleur est appelé pour la première fois, vous N'AVEZ PAS BESOIN d'utiliser des constructeurs pour cela, en fait, en utilisant un package orienté performance comme Get, cela frôle la mauvaise pratique, car il s'écarte de la logique dans laquelle les contrôleurs sont créés ou alloués (si vous créez une instance de ce contrôleur, le constructeur sera appelé immédiatement, vous remplirez un contrôleur avant même qu'il ne soit utilisé, vous allouez de la mémoire sans qu'elle ne soit utilisée , cela nuit définitivement aux principes de cette bibliothèque). Les méthodes onInit (); et onClose (); ont été créés pour cela, ils seront appelés lors de la création du Controller, ou lors de sa première utilisation, selon que vous utilisez Get.lazyPut ou non. Si vous voulez, par exemple, faire un appel à votre API pour remplir des données, vous pouvez oublier la méthode à l'ancienne de initState / dispose, lancez simplement votre appel à l'API dans onInit, et si vous devez exécuter une commande comme la fermeture des flux, utilisez onClose () pour cela.
+- NOTE: Si vous voulez démarrer une méthode au moment où le contrôleur est appelé pour la première fois, vous N'AVEZ PAS BESOIN d'utiliser des constructeurs pour cela, en fait, en utilisant un package orienté performance comme Get, cela frôle la mauvaise pratique, car il s'écarte de la logique dans laquelle les contrôleurs sont créés ou alloués (si vous créez une instance de ce contrôleur, le constructeur sera appelé immédiatement, vous remplirez un contrôleur avant même qu'il ne soit utilisé, vous allouez de la mémoire sans qu'elle ne soit utilisée , cela nuit définitivement aux principes de cette bibliothèque). Les méthodes onInit(); et onClose(); ont été créés pour cela, ils seront appelés lors de la création du Controller, ou lors de sa première utilisation, selon que vous utilisez Get.lazyPut ou non. Si vous voulez, par exemple, faire un appel à votre API pour remplir des données, vous pouvez oublier la méthode à l'ancienne de initState / dispose, lancez simplement votre appel à l'API dans onInit, et si vous devez exécuter une commande comme la fermeture des flux, utilisez onClose() pour cela.
 
 ### Pourquoi ca existe
 
 Le but de ce package est précisément de vous donner une solution complète pour la navigation des routes, la gestion des dépendances et des états, en utilisant le moins de dépendances possible, avec un haut degré de découplage. Get engage toutes les API Flutter de haut et bas niveau en lui-même, pour vous assurer de travailler avec le moins de couplage possible. Nous centralisons tout dans un seul package, pour vous assurer que vous n'avez aucun type de couplage dans votre projet. De cette façon, vous pouvez mettre uniquement des widgets dans votre vue et laisser la partie de votre équipe qui travaille avec la «business logique» libre, pour travailler avec la business logique sans dépendre d'aucun élément de la vue. Cela fournit un environnement de travail beaucoup plus propre, de sorte qu'une partie de votre équipe ne travaille qu'avec des widgets, sans se soucier d'envoyer des données à votre contrôleur, et une partie de votre équipe ne travaille qu'avec la business logique dans toute son ampleur, sans dépendre d'aucun élément de la Vue.
 
 Donc, pour simplifier cela:
-Vous n'avez pas besoin d'appeler des méthodes dans initState et de les envoyer par paramètre à votre contrôleur, ni d'utiliser votre constructeur de contrôleur pour cela, vous avez la méthode onInit () qui est appelée au bon moment pour démarrer vos services.
-Vous n'avez pas besoin d'appeler l'appareil, vous avez la méthode onClose () qui sera appelée au moment exact où votre contrôleur n'est plus nécessaire et sera supprimé de la mémoire. De cette façon, ne laissez les vues que pour les widgets, abstenez-vous d'y mettre tout type de business logique.
+Vous n'avez pas besoin d'appeler des méthodes dans initState et de les envoyer par paramètre à votre contrôleur, ni d'utiliser votre constructeur de contrôleur pour cela, vous avez la méthode onInit() qui est appelée au bon moment pour démarrer vos services.
+Vous n'avez pas besoin d'appeler l'appareil, vous avez la méthode onClose() qui sera appelée au moment exact où votre contrôleur n'est plus nécessaire et sera supprimé de la mémoire. De cette façon, ne laissez les vues que pour les widgets, abstenez-vous d'y mettre tout type de business logique.
 
 N'appelez pas une méthode dispose() dans GetxController, cela ne fera rien, rappelez-vous que le contrôleur n'est pas un Widget, vous ne devez pas le «supprimer», et il sera automatiquement et intelligemment supprimé de la mémoire par Get. Si vous avez utilisé un Stream et que vous souhaitez le fermer, insérez-le simplement dans la méthode close(). Exemple:
 
@@ -604,9 +604,9 @@ class Controller extends GetxController {
 
 Cycle de vie du controlleur:
 
-- onInit () quand il est créé.
-- onClose () quand il est fermé pour apporter des modifications en préparation de la méthode delete.
-- supprimé: vous n'avez pas accès à cette API car elle supprime littéralement le contrôleur de la mémoire. Il est littéralement supprimé, sans laisser de trace.
+- onInit() quand il est créé.
+- onClose() quand il est fermé pour apporter des modifications en préparation de la méthode delete.
+- deleted: vous n'avez pas accès à cette API car elle supprime littéralement le contrôleur de la mémoire. Il est littéralement supprimé, sans laisser de trace.
 
 ### Autres formes d utilisation
 
@@ -697,9 +697,9 @@ GetX le fait automatiquement et ne reconstruit que le widget qui utilise la vari
 
 ## Mélanger les deux gestionnaires d'état
 
-Certaines personnes ont ouvert une demande de fonctionnalité, car elles ne voulaient utiliser qu'un seul type de variable réactive, et les autres mécanismes, et devaient insérer un Obx dans un GetBuilder pour cela. En y réfléchissant, MixinBuilder a été créé. Il permet à la fois des changements réactifs en changeant les variables ".obs" et des mises à jour mécaniques via update (). Cependant, des 4 widgets c'est celui qui consomme le plus de ressources, car en plus d'avoir un Abonnement pour recevoir les événements de changement de ses enfants, il souscrit à la méthode de mise à jour de son contrôleur.
+Certaines personnes ont ouvert une demande de fonctionnalité, car elles ne voulaient utiliser qu'un seul type de variable réactive, et les autres mécanismes, et devaient insérer un Obx dans un GetBuilder pour cela. En y réfléchissant, MixinBuilder a été créé. Il permet à la fois des changements réactifs en changeant les variables ".obs" et des mises à jour mécaniques via update(). Cependant, des 4 widgets c'est celui qui consomme le plus de ressources, car en plus d'avoir un Abonnement pour recevoir les événements de changement de ses enfants, il souscrit à la méthode de mise à jour de son contrôleur.
 
-L'extension de GetxController est importante, car ils ont des cycles de vie et peuvent «démarrer» et «terminer» des événements dans leurs méthodes onInit () et onClose (). Vous pouvez utiliser n'importe quelle classe pour cela, mais je vous recommande fortement d'utiliser la classe GetxController pour placer vos variables, qu'elles soient observables ou non.
+L'extension de GetxController est importante, car ils ont des cycles de vie et peuvent «démarrer» et «terminer» des événements dans leurs méthodes onInit() et onClose(). Vous pouvez utiliser n'importe quelle classe pour cela, mais je vous recommande fortement d'utiliser la classe GetxController pour placer vos variables, qu'elles soient observables ou non.
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 
@@ -714,7 +714,7 @@ Dans cet esprit, j'ai créé le gestionnaire d'état simple. C'est simple, et c'
 
 GetBuilder est très économique en RAM, et il n'y a guère d'approche plus économique que lui (du moins je ne peux pas en imaginer une, si elle existe, merci de nous le faire savoir).
 
-Cependant, GetBuilder est toujours un gestionnaire d'état mécanique, vous devez appeler update () comme vous auriez besoin d'appeler les notifyListeners () de Provider.
+Cependant, GetBuilder est toujours un gestionnaire d'état mécanique, vous devez appeler update() comme vous auriez besoin d'appeler les notifyListeners() de Provider.
 
 Il y a d'autres situations où la programmation réactive est vraiment intéressante, et ne pas travailler avec elle revient à réinventer la roue. Dans cet esprit, GetX a été créé pour fournir tout ce qui est le plus moderne et le plus avancé dans un gestionnaire d'état. Il met à jour uniquement ce qui est nécessaire et si nécessaire, si vous avez une erreur et envoyez 300 changements d'état simultanément, GetX filtrera et mettra à jour l'écran uniquement si l'état change réellement.
 
