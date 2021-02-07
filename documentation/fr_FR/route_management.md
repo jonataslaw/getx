@@ -1,11 +1,11 @@
 - [Gestion de route](#gestion-de-route)
   - [Utilisation](#utilisation)
-  - [xNavigation sans routes nommées](#navigation-sans-routes-nommees)
+  - [Navigation sans nom](#navigation-sans-nom)
   - [Navigation par nom](#navigation-par-nom)
-    - [Send data to named Routes](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
+    - [Envoyer des données aux routes nommées](#envoyer-des-donnes-aux-routes-nommes)
+    - [Liens URL dynamiques](#liens-url-dynamiques)
     - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
+  - [Navigation sans context](#navigation-sans-context)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
@@ -247,11 +247,11 @@ print(Get.parameters['user']);
 // donne: 34954
 ```
 
-Et maintenant, tout ce que vous avez à faire est d'utiliser Get.toNamed () pour parcourir vos routes nommées, sans aucun contexte (vous pouvez appeler vos routes directement à partir de votre classe BLoC ou Controller), et lorsque votre application est compilée sur le Web, vos routes apparaîtront dans l'url <3
+Et maintenant, tout ce que vous avez à faire est d'utiliser Get.toNamed() pour parcourir vos routes nommées, sans aucun contexte (vous pouvez appeler vos routes directement à partir de votre classe BLoC ou Controller), et lorsque votre application est compilée sur le Web, vos routes apparaîtront dans l'url <3
 
 ### Middleware
 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+Si vous souhaitez écouter les événements Get pour déclencher des actions, vous pouvez utiliser routingCallback pour le faire:
 
 ```dart
 GetMaterialApp(
@@ -263,7 +263,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+Si vous n'utilisez pas GetMaterialApp, vous pouvez utiliser l'API manuelle pour attacher l'observateur Middleware.
 
 ```dart
 void main() {
@@ -273,31 +273,31 @@ void main() {
       initialRoute: "/",
       navigatorKey: Get.key,
       navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
+        GetObserver(MiddleWare.observer), // ICI !!!
       ],
     ),
   );
 }
 ```
 
-Create a MiddleWare class
+Créez une classe MiddleWare
 
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen.
-    ///If you need to enter any of these 3 events directly here,
-    ///you must specify that the event is != Than you are trying to do.
+    /// Vous pouvez écouter en plus des routes, des snackbars, des dialogs et des bottomsheets sur chaque écran.
+    /// Si vous devez saisir l'un de ces 3 événements directement ici,
+    /// vous devez spécifier que l'événement est != Ce que vous essayez de faire.
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
     } else if (routing.current =='/third'){
-      print('last route called');
+      print('dernière route');
     }
   }
 }
 ```
 
-Now, use Get on your code:
+Maintenant, utilisez Get sur votre code:
 
 ```dart
 class First extends StatelessWidget {
@@ -370,11 +370,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## Navigation sans context
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+Pour avoir un simple SnackBar avec Flutter, vous devez obtenir le 'context' de Scaffold, ou vous devez utiliser un GlobalKey attaché à votre Scaffold
 
 ```dart
 final snackBar = SnackBar(
@@ -384,23 +384,22 @@ final snackBar = SnackBar(
     onPressed: (){}
   ),
 );
-// Find the Scaffold in the widget tree and use
-// it to show a SnackBar.
+// Trouvez le scaffold dans l'arborescence des widgets et utilisez-le pour afficher un SnackBar.
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Avec Get:
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+Avec Get, tout ce que vous avez à faire est d'appeler votre Get.snackbar à partir de n'importe où dans votre code ou de le personnaliser comme vous le souhaitez!
 
 ```dart
 Get.snackbar(
   "Hey i'm a Get SnackBar!", // title
-  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
+  "C'est incroyable! J'utilise SnackBar sans context, sans code standard, sans Scaffold, c'est quelque chose de vraiment incroyable!", // message
   icon: Icon(Icons.alarm),
   shouldIconPulse: true,
   onTap:(){},
@@ -410,7 +409,7 @@ Get.snackbar(
 );
 
 
-  ////////// ALL FEATURES //////////
+  ////////// TOUTES LES FONCTIONNALITÉS //////////
   //     Color colorText,
   //     Duration duration,
   //     SnackPosition snackPosition,
@@ -447,18 +446,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+Si vous préférez le snack-bar traditionnel, ou souhaitez le personnaliser à partir de zéro, y compris en ajoutant une seule ligne (Get.snackbar utilise un titre et un message obligatoires), vous pouvez utiliser
+`Get.rawSnackbar ();` qui fournit l'API brute sur laquelle Get.snackbar a été construit.
 
 ### Dialogs
 
-To open dialog:
+Pour ouvrir un 'dialog':
 
 ```dart
-Get.dialog(YourDialogWidget());
+Get.dialog(VotreDialogWidget());
 ```
 
-To open default dialog:
+Pour ouvrir le 'dialog' par défaut:
 
 ```dart
 Get.defaultDialog(
@@ -467,15 +466,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+Vous pouvez également utiliser Get.generalDialog au lieu de showGeneralDialog.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+Pour tous les autres widgets de la boîte de dialogue Flutter, y compris cupertinos, vous pouvez utiliser Get.overlayContext au lieu du context et l'ouvrir n'importe où dans votre code.
+Pour les widgets qui n'utilisent pas Overlay, vous pouvez utiliser Get.context.
+Ces deux contextes fonctionneront dans 99% des cas pour remplacer le context de votre interface utilisateur, sauf dans les cas où inheritedWidget est utilisé sans context de navigation.
 
 ### BottomSheets
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet est comme showModalBottomSheet, mais n'a pas besoin de 'context'.
 
 ```dart
 Get.bottomSheet(
@@ -500,16 +499,16 @@ Get.bottomSheet(
 
 ## Nested Navigation
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+Getx a rendu la navigation imbriquée de Flutter encore plus facile.
+Vous n'avez pas besoin de 'context' et vous trouverez votre stack de navigation par ID.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- NOTE: La création de stacks de navigation parallèles peut être dangereuse. L'idéal est de ne pas utiliser NestedNavigators, ou de l'utiliser avec parcimonie. Si votre projet l'exige, allez-y, mais gardez à l'esprit que conserver plusieurs stacks de navigation en mémoire n'est peut-être pas une bonne idée pour la consommation de RAM.
 
-See how simple it is:
+Voyez comme c'est simple:
 
 ```dart
 Navigator(
-  key: Get.nestedKey(1), // create a key by index
+  key: Get.nestedKey(1), // créez une clé par index
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -522,7 +521,7 @@ Navigator(
             child: FlatButton(
               color: Colors.blue,
               onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
+                Get.toNamed('/second', id:1); // naviguer votre itinéraire imbriqué par index
               },
               child: Text("Go to second"),
             ),
