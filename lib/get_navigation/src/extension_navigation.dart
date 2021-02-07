@@ -31,7 +31,7 @@ extension ExtensionSnackbar on GetInterface {
     Color leftBarIndicatorColor,
     List<BoxShadow> boxShadows,
     Gradient backgroundGradient,
-    FlatButton mainButton,
+    Widget mainButton,
     OnTap onTap,
     Duration duration = const Duration(seconds: 3),
     bool isDismissible = true,

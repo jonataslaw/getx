@@ -91,8 +91,8 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// An option to animate the icon (if present). Defaults to true.
   final bool shouldIconPulse;
 
-  /// A [FlatButton] widget if you need an action from the user.
-  final FlatButton mainButton;
+  /// A [TextButton] widget if you need an action from the user.
+  final Widget mainButton;
 
   /// A callback that registers the user's click anywhere.
   /// An alternative to [mainButton]
@@ -659,7 +659,7 @@ Set either a message or messageText""");
     );
   }
 
-  FlatButton _getMainActionButton() {
+  Widget _getMainActionButton() {
     return widget.mainButton;
   }
 }

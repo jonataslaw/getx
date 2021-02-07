@@ -116,7 +116,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Closing the subscription will happen automatically when the observer
   /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    _subscriptions.add(stream.listen((va) => value = va));
+    _subscriptions[subject].add(stream.listen((va) => value = va));
   }
 }
 
@@ -124,21 +124,19 @@ class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
 
 mixin NotifyManager<T> {
   GetStream<T> subject = GetStream<T>();
-  final _subscriptions = <StreamSubscription>[];
+  final _subscriptions = <GetStream, List<StreamSubscription>>{};
 
   bool get canUpdate => _subscriptions.isNotEmpty;
 
   /// This is an internal method.
   /// Subscribe to changes on the inner stream.
   void addListener(GetStream<T> rxGetx) {
-    if (_subscriptions.contains(rxGetx.listen)) {
-      return;
+    if (!_subscriptions.containsKey(rxGetx)) {
+      final subs = rxGetx.listen(subject.add);
+      final listSubscriptions =
+          _subscriptions[rxGetx] ??= <StreamSubscription>[];
+      listSubscriptions.add(subs);
     }
-
-    final subs = rxGetx.listen((data) {
-      subject.add(data);
-    });
-    _subscriptions.add(subs);
   }
 
   StreamSubscription<T> listen(
@@ -152,9 +150,12 @@ mixin NotifyManager<T> {
 
   /// Closes the subscriptions for this Rx, releasing the resources.
   void close() {
-    for (final subscription in _subscriptions) {
-      subscription?.cancel();
-    }
+    _subscriptions.forEach((getStream, _subscriptions) {
+      for (final subscription in _subscriptions) {
+        subscription?.cancel();
+      }
+    });
+
     _subscriptions.clear();
     subject.close();
   }

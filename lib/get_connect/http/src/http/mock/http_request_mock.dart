@@ -43,7 +43,5 @@ class MockClient extends HttpRequestBase {
   }
 
   @override
-  void close() {
-    // TODO: implement close
-  }
+  void close() {}
 }
