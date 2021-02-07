@@ -13,9 +13,10 @@ void main() {
       child: Wrap(
         children: <Widget>[
           ListTile(
-              leading: Icon(Icons.music_note),
-              title: Text('Music'),
-              onTap: () => {}),
+            leading: Icon(Icons.music_note),
+            title: Text('Music'),
+            onTap: () {},
+          ),
         ],
       ),
     ));
@@ -34,9 +35,10 @@ void main() {
       child: Wrap(
         children: <Widget>[
           ListTile(
-              leading: Icon(Icons.music_note),
-              title: Text('Music'),
-              onTap: () => {}),
+            leading: Icon(Icons.music_note),
+            title: Text('Music'),
+            onTap: () {},
+          ),
         ],
       ),
     ));

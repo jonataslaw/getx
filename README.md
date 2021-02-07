@@ -916,6 +916,55 @@ user.update((value){
 
 print( user );
 ```
+## StateMixin
+
+Another way to handle your `UI` state is use the `StateMixin<T>` .
+To implement it, use the `with` to add the `StateMixin<T>`
+to your controller which allows a T model.
+
+``` dart
+class Controller extends GetController with StateMixin<User>{}
+```
+
+The `change()` method change the State whenever we want.
+Just pass the data and the status in this way:
+
+```dart
+change(data, status: RxStatus.success());
+```
+
+RxStatus allow these status:
+
+``` dart
+RxStatus.loading();
+RxStatus.success();
+RxStatus.empty();
+RxStatus.error('message');
+```
+
+To represent it in the UI, use:
+
+```dart
+class OtherClass extends GetView<Controller> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: controller.obx(
+        (state)=>Text(state.name),
+        
+        // here you can put your custom loading indicator, but
+        // by default would be Center(child:CircularProgressIndicator())
+        onLoading: CustomLoadingIndicator(),
+        onEmpty: Text('No data found'),
+
+        // here also you can set your own error widget, but by
+        // default will be an Center(child:Text(error))
+        onError: (error)=>Text(error),
+      ),
+    );
+}
+```
 
 #### GetView
 
@@ -924,7 +973,7 @@ I love this Widget, is so simple, yet, so useful!
 Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
 
 ```dart
- class AwesomeController extends GetxController {
+ class AwesomeController extends GetController {
    final String title = 'My Awesome View';
  }
 
@@ -1120,6 +1169,7 @@ Any contribution is welcome!
 
 ## Articles and videos
 
+- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
 - [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder.
@@ -1133,3 +1183,4 @@ Any contribution is welcome!
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
+- [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)

@@ -50,6 +50,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
   Alignment _initialAlignment;
   Alignment _endAlignment;
   bool _wasDismissedBySwipe = false;
+  bool _onTappedDismiss = false;
 
   Timer _timer;
 
@@ -62,7 +63,12 @@ class SnackRoute<T> extends OverlayRoute<T> {
         OverlayEntry(
           builder: (context) {
             return GestureDetector(
-              onTap: snack.isDismissible ? Get.back : null,
+              onTap: () {
+                if (snack.isDismissible && !_onTappedDismiss) {
+                  _onTappedDismiss = true;
+                  Get.back();
+                }
+              },
               child: AnimatedBuilder(
                 animation: _filterBlurAnimation,
                 builder: (context, child) {

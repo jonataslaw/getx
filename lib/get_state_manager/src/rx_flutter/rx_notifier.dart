@@ -132,7 +132,7 @@ extension StateExt<T> on StateMixin<T> {
     assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
-        return onLoading ?? Center(child: CircularProgressIndicator());
+        return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
         return onError != null
             ? onError(status.errorMessage)

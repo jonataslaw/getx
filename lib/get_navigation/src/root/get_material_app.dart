@@ -111,7 +111,7 @@ class GetMaterialApp extends StatelessWidget {
   final ThemeData highContrastDarkTheme;
   final Map<Type, Action<Intent>> actions;
   final bool debugShowMaterialGrid;
-  final Function(Routing) routingCallback;
+  final ValueChanged<Routing> routingCallback;
   final Transition defaultTransition;
   final bool opaqueRoute;
   final VoidCallback onInit;

@@ -48,14 +48,14 @@
 [**Telegram (Portuguese)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Wprowadzenie
-- GetX jest bardzo lekką i potężną biblioteką do Flattera. Łączy wysoką wydajność menadżera stanu, inteligętne dodawanie dependencies i zarządzanie routami w szybki i praktyczny sposób.
+- GetX jest bardzo lekką, a zarazem potężną biblioteką do Flattera. Łączy wysoką wydajność menadżera stanu, inteligętne dodawanie dependencies i zarządzanie routami w szybki i praktyczny sposób.
 - GetX nie jest dla wszystkich, skupia się na jak najmniejszej konsumpcji zasobów (wydajności) ([zobacz benchmarki](https://github.com/jonataslaw/benchmarks)), używaniu łatwej skłani (produktywności) i daniu możliwości pełnego rozbicia View na z logiki biznesowej (organizacja).
-- GetX która da Ci supermoce i zwiększy produktywność w tworzeniu projektu. Oszczędzi godziny zarówno początkującym jak i ekspoertom.
+- GetX da Ci supermoce i zwiększy produktywność w tworzeniu projektu. Oszczędzi godziny zarówno początkującym jak i ekspertom.
 -  Nawiguj bez podawania `context`, używaj open `dialogs`, `snackbarów` oraz `bottomsheetów` z każdego miejsca w kodzie. Zarządzaj stanami i dodawaj dependencies w prosty i praktyczny sposób!
 - Get jest bezpieczny, stabilny i aktualny. Oprócz tego oferuje szeroki zakres API, które nie są zawarte w standardowym frameworku.
-- GetX nie jest przytłaczający. Ma wiele funkcjonalności pozwalajacych na rozpoczęcie programowania bez martwienia się o nic, ale wszystkie te funkcjonalności są w osobnych kontenerach będących dodane dopiero po ich użyciu. Jeśli tylko używasz menadżera stanu, tylko on będzie kompilowany. Jeśli używasz routów, lecz nic z menadżera stanu on nie będzie kompilowany. Możesz skompilować repozytorium benchmark i zobaczysz że używa tylko menadżera stanu. Aplikacje używajace Get są mniejsze niz inne ponieważ wszystkie rozwiązania GetX sa projektowane dla lekkości i wydajności. Jest to też zasługa Flutterowego AOT, które jest niesamowite i eliminuje nieużywane zasoby jak żaden inny framework.
+- GetX nie jest przytłaczający. Ma wiele funkcjonalności pozwalajacych na rozpoczęcie programowania bez martwienia się zupełnie nic. Wszystkie funkcjonalności są w osobnych kontenerach, które dodawane są dopiero po ich użyciu. Jeśli tylko używasz menadżera stanu, tylko on będzie kompilowany. Jeśli używasz routów, lecz nic z menadżera stanu to nie będzie on kompilowany. Możesz skompilować repozytorium benchmark i zobaczysz że używa tylko menadżera stanu. Aplikacje używajace Get są mniejsze niz inne, ponieważ wszystkie rozwiązania GetX są projektowane z myślą o lekkości i wydajności. Jest to też zasługa Flutterowego AOT, które jest niesamowite i eliminuje nieużywane zasoby jak żaden inny framework.
 
-**GetX zwiększa stwoja produktywność, lecz mozesz to jeszcze przyspieszyć instalując rozszerzenie [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) do swojego VSCode**. Jeszcze nie dostępne w innych IDE.
+**GetX zwiększa twoja produktywność, lecz możesz to jeszcze przyspieszyć instalując rozszerzenie [GetX extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) do swojego VSCode**. Jeszcze nie dostępne w innych IDE.
 
 # Instalacja
 
@@ -74,7 +74,7 @@ import 'package:get/get.dart';
 
 # Counter App z GetX
 
-Przykładowa aplikaja tworzona domyślnie podczas kreacji nowego projektu we Flaterze ma ponad 100 lini kodu (z komentarzami). By pokazać siłę Get pokarzę jak zrobić "licznik" ze zmienianą stan z każdym kliknięciem, zmianą stron i udostępniajac stan pomiędzy ekranami. Wszystko w zorganizowany sposób dzieląc buissnes logic z view w zaledwie 26 LINI KODU WŁĄCZAJĄC W TO KOMENTARZE.
+Przykładowa aplikaja tworzona domyślnie podczas kreacji nowego projektu we Flaterze ma ponad 100 lini kodu (z komentarzami). By pokazać siłę Get pokażę jak zrobić "licznik" ze zmianą stanu przy każdym kliknięciu, zmianą stron i udostępniajac stan pomiędzy ekranami. Wszystko w zorganizowany sposób dzieląc bussines logic z view w zaledwie 26 LINI KODU WŁĄCZAJĄC W TO KOMENTARZE.
 
 -Krok 1:
 Dodaj "Get" przed MaterialApp, zamieniając je na GetMaterialApp
@@ -84,10 +84,10 @@ Dodaj "Get" przed MaterialApp, zamieniając je na GetMaterialApp
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: nie jest to modyfikaja MaterialApp, ponieważ GetMaterialApp nie jest zmodyfikowanym MaterialApp z Fluttera, jest tylko zkonfigurowanym Widgetem mającym domyślnie MaterialApp jako dziecko. Możesz to konfigurować ręcznie, ale nie jest to konieczne. GetMaterialApp jest niezbędne dla działania routów, snackbarów, bootomsheetów, internacjonalizacji, dialogów i wysokopoziomowych api powiązanych z routami i nieobecnościa kontekstu. Nie jest to jednak wymagane do używania zarzadzania stanem i dependencies.
+- Note: nie jest to modyfikaja MaterialApp, ponieważ GetMaterialApp nie jest zmodyfikowanym MaterialApp z Fluttera, jest tylko skonfigurowanym Widgetem mającym domyślnie MaterialApp jako dziecko. Możesz to konfigurować ręcznie, ale nie jest to konieczne. GetMaterialApp jest niezbędne dla działania routów, snackbarów, bootomsheetów, internacjonalizacji, dialogów i wysokopoziomowych api powiązanych z routami i nieobecnościa kontekstu. Nie jest to jednak wymagane do używania zarzadzania stanem i dependencies.
 
 -Krok 2:
-Tworzymy klasę business logic i umieszczmy w niej wszystkie zmienne, metody oraz kontrolery. Możesz zmienić zmienna=ą na obserwowalną używajac prostego ".obs"
+Tworzymy klasę business logic i umieszczmy w niej wszystkie zmienne, metody oraz kontrolery. Możesz zmienić zmiennaą na obserwowalną używajac prostego subfixu ".obs"
 
 ```dart
 class Controller extends GetxController{
@@ -135,11 +135,11 @@ Wynik:
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
-Jest to prosty projekt, ale już na jego przykładzie widać potęgę Get. Wzraz ze wzrostem rozmiaru aplikacji ta różnica tylko się powieksza.
+Jest to prosty projekt, ale już na jego przykładzie widać potęgę Get. Wraz ze wzrostem rozmiaru aplikacji ta różnica tylko się powiększa.
 
-Get był projektowany dla pracy z zespołem, ale równie dobrze sprawdza się w indywidualnej pracy.
+Get był projektowany dla pracy z zespołem, ale równie dobrze sprawdza się w indywidualnych projektach.
 
-Zawsze dotrzymuj deadlinów i dostarczaj swoje rozwiązania na czas bez straty na wydajności. Get nie jest dla wszystkich jak już wspominałem, ale jeśli identyfikujesz się z powyższym zdaniem Get jest dla ciebie.
+Zawsze dotrzymuj deadlinów i dostarczaj swoje rozwiązania na czas bez straty na wydajności. Get nie jest dla wszystkich jak już wspominałem, ale jeśli identyfikujesz się z powyższym zdaniem Get jest właśnie dla Ciebie.
 
 # Trzy filary
 
@@ -151,15 +151,15 @@ Get nie jest ani lepszy, ani gorszy od innych menadżerów stanów, ale powinien
 
 Definitywnie Get nie jest przeciwnikiem żadnego innego menadżera, ponieważ jest on mikroframeworkiem, nie tylko menadżerem stanu. Może być użyty samodzielnie, lub w koegzystencji.
 
-Get ma bardzo lekki i prosty menadżer stanu (napisany w tylko 95 lini kodu), który nie używa ChangeNotifier. Sprosta on wymaganiom szczególnie nowych we Flutterze i nie sprawi problemu nawer w dużych aplikacjach.
+Get ma bardzo lekki i prosty menadżer stanu (napisany w tylko 95 lini kodu), który nie używa ChangeNotifier. Sprosta on wymaganiom szczególnie nowych we Flutterze i nie sprawi problemu nawet w dużych aplikacjach.
 
 ### Reaktywny menadżer stanu
 
-Reaktywne programowanie możee dotrącać niektórych, ponieważ powszechnie jest uważane za skomplikowane. GetX zamienia to w coś prostego:
+Reaktywne programowanie może odtrącać niektórych, ponieważ powszechnie jest uważane za skomplikowane. GetX zamienia to w coś prostego:
 
-- Nie musisz tworzyć Strw=eamControllerów,
+- Nie musisz tworzyć StreamControllerów,
 - Nie musisz tworzyć StreamBuildera dla każdej zmiennej,
-- Nie ma potrzeby tworzenia klasy dla kżdego stanu,
+- Nie ma potrzeby tworzenia klasy dla każdego stanu,
 - Nie musisz tworzyć Get dla inicjalnej zmiennej
 
 Wyobraź sobie, że masz zmienną i za każdym razem jak zmienisz ją chcesz żeby wszystkie widżety używające jej automatycznie się zmieniły
@@ -183,11 +183,11 @@ Obx (() => Text (controller.name));
 To wszystko. *Proste*, co nie?
 
 ### Bardziej szczegółowo o menadżerze stanu
-**Zobacz bardziej szczegółowe wytłumaczenie menadz=żera sranu [tutaj](./documentation/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
+**Zobacz bardziej szczegółowe wytłumaczenie menadżera stanu [tutaj](./documentation/en_US/state_management.md). Znajdują się  tam przykłady jak o różnice między prostym menadżerem stanu oraz reaktywnym**
 
 ### Video tłumaczące użycie menadżera stanu
 
-Amateur COder nagrał o tym niezwykły film: 
+Tadas Petra nagrał o tym niezwykły film: 
 
 Link: [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw)
 
@@ -239,42 +239,42 @@ I użyj następujące np.:
 ```dart
 if(data == 'sucess') madeAnything();
 ```
-Zobacz, ze do żadnej z tych operacji nie potrzebowałeś contextu. Jest to jedna z głównych zalet GetX oszczędzającego na niepotrzebnej ogudowie z kod i dającego możliwość uzywania tych metod w klasie kontrolera.
+Zobacz, ze do żadnej z tych operacji nie potrzebowałeś contextu. Jest to jedna z głównych zalet GetX oszczędzającego na niepotrzebnej obudowie w kod i dającego możliwość używania tych metod w klasie kontrolera.
 
 
 ### Więcej o routach
 
-**Get używa named routes i także oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./documentation/en_US/route_management.md)**
+**Get używa named routes oraz oferuje niskopoziomową obsługę routów! Zobacz bardziej szczegółową dokumentacje [tutaj](./documentation/en_US/route_management.md)**
 
 ### Video tłumaczące użycie
 
-Amateur Coder nagrał o tym niezwykły film: 
+Tadas Petra nagrał o tym niezwykły film: 
 
 Link: [Complete GetX Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI)
 
 ## Zarządzanie dependencies
 
-Get  ma prosty i potężny menadżer dependencies. Pozwala on na otrzymanie tych samych klas jak twoje Bloc lub Kontroler piszac jedną linię kodu bez Provider context i inheritedWidget:
+Get  ma prosty, a zarazem potężny menadżer dependencies. Pozwala on na otrzymanie tych samych klas jak twoje Bloc lub Kontroler pisząc jedną linię kodu bez Provider context i inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Note: Jeśli używasz menadżera stanu Get zwróć uwafę na binding api, które pozwoli Ci łatwiej połączyć twój widok z kontrolerem.
+- Note: Jeśli używasz menadżera stanu Get zwróć uwagę na binding api, które pozwoli Ci łatwiej połączyć twój widok z kontrolerem.
 https://github.com/jonataslaw/get
-**Tip:** Menadżer dependency Get jest oddzielony od innych części pakietu więc jeśli już używasz menadzera stanu(którego kolwiek,bez różnicy) nie musisz przepisywać tego wszystkiego na nowo. Możesz używać tego dodawania dependencies bez poroblemu.
+**Tip:** Menadżer dependency Get jest oddzielony od innych części pakietu więc jeśli już używasz menadżera stanu(którego kolwiek, bez różnicy) nie musisz przepisywać tego wszystkiego na nowo. Możesz używać tego dodawania dependencies bez poroblemu.
 
 ```dart
 controller.fetchApi();
 ```
-Wyobraź sobie, że musisz nawigować pomiędzy wieloma routami i potrzebujesz dane z kontrolerów z poprzednich ekranów. Musiałbyś użyć menadżera stanu z dodatkiem Providera albo Get_it, prawda? Otuż nie z Fet. Muszisz po prostu poprosić Get o znalezienie tego kontrolera i nie potrzebujesz przy tym dodatkowych dependencies.
+Wyobraź sobie, że musisz nawigować pomiędzy wieloma routami i potrzebujesz dane z kontrolerów z poprzednich ekranów. Musiałbyś użyć menadżera stanu z dodatkiem Providera albo Get_it, prawda? Otóż nie z Fet. Musisz po prostu poprosić Get o znalezienie tego kontrolera i nie potrzebujesz przy tym dodatkowych dependencies.
 
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllersfeatury instantiated, Get will always give you the right controller.
+//Tak, to wygląda jak Magia, Get znjadzie Twój kontroler i Ci go dostarczy. Możesz mieć nawet MILION kontrolerów, a Get zawsze da Ci prawidłowy kontroler.
 ```
 
-I wtedy będziesz mógł otrzymać bez problemu z niego dane
+I wtedy będziesz mógł otrzymać z niego dane bez żadnego problemu
 
 ```dart
 Text(controller.textFromApi);
@@ -287,8 +287,8 @@ Text(controller.textFromApi);
 
 Możesz uczestniczyć w rozwoju projektu na różny sposób:
 - Pomagając w tłumaczeniu readme na inne języki.
-- Dodając dokumentację do readme ( nawet nie połowa funkcji została jeszcze opisana).
-- Pisząc artykuły i nagrywając filmy uczące użycia biblioteki Get (będą zamieszczone w readme, a w przyszłości na naszej Wiki).
+- Dodając dokumentację do readme (nawet połowa funkcji została jeszcze opisana).
+- Pisząc artykuły i nagrywając filmy pokazujące użycie biblioteki Get (będą zamieszczone w readme, a w przyszłości na naszej Wiki).
 - Oferując PR-y dla kodu i testów.
 - Dodając nowe funkcje.
 
@@ -298,7 +298,7 @@ Każda współpraca jest mile widziana!
 
 ## Zmiana motywu
 
-Nie powinno się uzywać innego widżetu niż GetMaterialApp by go zaktualizować. To może powodować duplikacje kluczy. Wiele osób nawykło do prehistorycznego podejścia tworzenia widżetu "ThemeProvider" tylko po to by zmienić motyw aplikacji. Z Get nie jest to absolutnie wymagane.
+Nie powinno się używać innego widżetu niż GetMaterialApp by go zaktualizować. To może powodować duplikacje kluczy. Wiele osób nawykło do prehistorycznego podejścia tworzenia widżetu "ThemeProvider" tylko po to by zmienić motyw aplikacji. Z Get nie jest to wymagane.
 
 Możesz stworzyć customowy motyw i łatwo go dodać z Get.changeTheme bez niepotrzebnego kodu.
 
@@ -314,7 +314,7 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());featury
 
 Kiedy ciemny motyw jest aktywny zmieni się on na jasny, w przeciwnym wypadku zmieni się na ciemny.
 
-Jeśli interesuje Cię jak zmieniać motywy podąrzaj za samouczkiem na Medium uczącym zmiany motywu z Get:
+Jeśli interesuje Cię jak zmieniać motywy podążaj za samouczkiem na Medium pokazującum zmianę motywu przy użyciu Get:
 
 - [Dynamic Themes in 3 lines using Get](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Samouczek stworzony przez [Rod Brown](https://github.com/RodBr).
 
@@ -486,7 +486,7 @@ GetMaterialApp(
 ## Video tłumaczące inne funkcjonalności GetX
 
 
-Amateur Coder nagrał niezwykły film tłumaczący powyższe zagadnienia! 
+Tadas Petra nagrał niezwykły film tłumaczący powyższe zagadnienia! 
 
 Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
@@ -504,7 +504,7 @@ Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RXController i GetBuilder teraz zostały połączone. Nie musisz już pamiętać którego kontrolerachcesz użyć, po prostu korzystaj z GetxController, będzie działać zarówno dla prostego jak i reaktywnego menadżera stanów.
+RXController i GetBuilder teraz zostały połączone. Nie musisz już pamiętać którego kontrolera chcesz użyć, po prostu korzystaj z GetxController, będzie działać zarówno dla prostego jak i reaktywnego menadżera stanów.
 
 2- NamedRoutes
 Wcześniej:
@@ -528,7 +528,7 @@ GetMaterialApp(
 ```
 
 Po co ta zmiana?
-Często może być niezbędnym decydowanie która strona będzie wyswietlana w zależności od parametru, lub tokenu logowania. Wczesniejsze podejscie było nieelastyczne nie pozwalając na to. Zawarcie strony w funkcji zmniejszyło sporzycie RAM-u, ze względu na niealokowanie routów od początku działania aplikacji. Pozwoliło to także na takie podejscie:
+Często może być niezbędnym decydowanie która strona będzie wyświetlana w zależności od parametru, lub tokenu logowania. Wczesniejsze podejście było nieelastyczne, ponieważ na to nie pozwalało. Zawarcie strony w funkcji zmniejszyło sporzycie RAM-u, ze względu na niealokowanie routów od początku działania aplikacji. Pozwoliło to także na takie podejscie:
 
 ```dart
 
