@@ -543,6 +543,13 @@ extension GetNavigation on GetInterface {
     int id,
     bool preventDuplicates = true,
   }) {
+    Get.parameters.forEach((key, value) {
+      if (page.contains('?')){
+        page = page + "&$key=$value";
+      }else{
+        page = page + "?$key=$value";
+      };
+    });
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
