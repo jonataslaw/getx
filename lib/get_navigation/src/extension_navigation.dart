@@ -544,11 +544,11 @@ extension GetNavigation on GetInterface {
     bool preventDuplicates = true,
   }) {
     Get.parameters.forEach((key, value) {
-      if (page.contains('?')){
+      if (page.contains('?')) {
         page = page + "&$key=$value";
-      }else{
+      } else {
         page = page + "?$key=$value";
-      };
+      }
     });
     if (preventDuplicates && page == currentRoute) {
       return null;
