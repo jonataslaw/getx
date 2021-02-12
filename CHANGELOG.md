@@ -1,4 +1,5 @@
 ## [3.25.0] - Big update
+- Added [reload] and [reloadAll] methods to reload your Controller to original values
 - Added [FullLifeCycleController] - A GetxController capable of observing all the life cycles of your application. FullLifeCycleController has the life cycles:
   * onInit: called when the controller enters the application's memory
   * onReady: called after onInit, when build method from widget relationed to controller is done.
@@ -10,7 +11,6 @@
   * didChangeMetrics: called when the window size is changed
 - Added SuperController, a complete life circle controller with StateMixin 
 - Improve Iterable Rx Api. Now, you can to use dart List, Map and Set as reactive, like: List<String> names = <String>['juan', 'pedro', 'maria'].obs;
-- Added [reload] and [reloadAll] methods to reload your Controller to original values
 - Added assign and assignAll extensions to default dart List
 - Added parameters options from Get.toNamed, Get.offNamed, and Get.offAllNamed (@enghitalo)
 - Improve Rx disposal logic to completely prevent memory leaks
@@ -28,7 +28,8 @@
 - Improve upload time from GetConnect
 - Create minified version to DartPad(@roipeker)
 - Suggested to use `Get.to(() => Page())` instead of `Get.to(Page())`.
-- Fix and improve docs: @unacorbatanegra, @lsm, @nivisi, @ThinkDigitalSoftware, @martwozniak, @UsamaElgendy, @@DominusKelvin, @jintak0401, 
+- Added more status codes to GetConnect (@romavic)
+- Fix and improve docs: @unacorbatanegra, @lsm, @nivisi, @ThinkDigitalSoftware, @martwozniak, @UsamaElgendy, @@DominusKelvin, @jintak0401, @goondeal
 
 
 ## [3.24.0]
