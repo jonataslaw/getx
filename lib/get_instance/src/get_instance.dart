@@ -50,41 +50,6 @@ class GetInstance {
   /// non-singleton instances.
   static final Map<String, HashSet<Function>> _routesByCreate = {};
 
-  /// Creates a new Instance<S> lazily from the [<S>builder()] callback.
-  ///
-  /// The first time you call [Get.find()], the [builder()] callback will create
-  /// the Instance and persisted as a Singleton (like you would
-  /// use [Get.put()]).
-  ///
-  /// Using [Get.smartManagement] as [SmartManagement.keepFactory] has
-  /// the same outcome as using [fenix:true] :
-  /// The internal register of [builder()] will remain in memory to recreate
-  /// the Instance if the Instance has been removed with [Get.delete()].
-  /// Therefore, future calls to [Get.find()] will return the same Instance.
-  ///
-  /// If you need to make use of GetxController's life-cycle
-  /// ([onInit(), onStart(), onClose()]) [fenix] is a great choice to mix with
-  /// [GetBuilder()] and [GetX()] widgets, and/or [GetMaterialApp] Navigation.
-  ///
-  /// You could use [Get.lazyPut(fenix:true)] in your app's [main()] instead
-  /// of [Bindings()] for each [GetPage].
-  /// And the memory management will be similar.
-  ///
-  /// Subsequent calls to [Get.lazyPut()] with the same parameters
-  /// (<[S]> and optionally [tag] will **not** override the original).
-  void lazyPut<S>(
-    InstanceBuilderCallback<S> builder, {
-    String tag,
-    bool fenix,
-  }) {
-    _insert(
-      isSingleton: true,
-      name: tag,
-      permanent: fenix ?? Get.smartManagement == SmartManagement.keepFactory,
-      builder: builder,
-    );
-  }
-
   void printInstanceStack() {
     Get.log(_routesKey.toString());
   }
@@ -138,6 +103,43 @@ class GetInstance {
     return find<S>(tag: tag);
   }
 
+  /// Creates a new Instance<S> lazily from the [<S>builder()] callback.
+  ///
+  /// The first time you call [Get.find()], the [builder()] callback will create
+  /// the Instance and persisted as a Singleton (like you would
+  /// use [Get.put()]).
+  ///
+  /// Using [Get.smartManagement] as [SmartManagement.keepFactory] has
+  /// the same outcome as using [fenix:true] :
+  /// The internal register of [builder()] will remain in memory to recreate
+  /// the Instance if the Instance has been removed with [Get.delete()].
+  /// Therefore, future calls to [Get.find()] will return the same Instance.
+  ///
+  /// If you need to make use of GetxController's life-cycle
+  /// ([onInit(), onStart(), onClose()]) [fenix] is a great choice to mix with
+  /// [GetBuilder()] and [GetX()] widgets, and/or [GetMaterialApp] Navigation.
+  ///
+  /// You could use [Get.lazyPut(fenix:true)] in your app's [main()] instead
+  /// of [Bindings()] for each [GetPage].
+  /// And the memory management will be similar.
+  ///
+  /// Subsequent calls to [Get.lazyPut()] with the same parameters
+  /// (<[S]> and optionally [tag] will **not** override the original).
+  void lazyPut<S>(
+    InstanceBuilderCallback<S> builder, {
+    String tag,
+    bool fenix,
+    bool permanent = false,
+  }) {
+    _insert(
+      isSingleton: true,
+      name: tag,
+      permanent: permanent,
+      builder: builder,
+      fenix: fenix ?? Get.smartManagement == SmartManagement.keepFactory,
+    );
+  }
+
   /// Creates a new Class Instance [S] from the builder callback[S].
   /// Every time [find]<[S]>() is used, it calls the builder method to generate
   /// a new Instance [S].
@@ -173,6 +175,7 @@ class GetInstance {
     String name,
     bool permanent = false,
     InstanceBuilderCallback<S> builder,
+    bool fenix = false,
   }) {
     assert(builder != null);
     final key = _getKey(S, name);
@@ -183,6 +186,7 @@ class GetInstance {
         builder,
         permanent,
         false,
+        fenix,
       ),
     );
   }
@@ -374,6 +378,7 @@ class GetInstance {
     }
 
     final builder = _singl[newKey];
+
     if (builder.permanent && !force) {
       Get.log(
         // ignore: lines_longer_than_80_chars
@@ -393,12 +398,16 @@ class GetInstance {
       Get.log('"$newKey" onDelete() called');
     }
 
-    _singl.remove(newKey);
-
-    if (_singl.containsKey(newKey)) {
-      Get.log('Error removing object "$newKey"', isError: true);
+    if (builder.fenix) {
+      builder.dependency = null;
+      builder.isInit = false;
     } else {
-      Get.log('"$newKey" deleted from memory');
+      _singl.remove(newKey);
+      if (_singl.containsKey(newKey)) {
+        Get.log('Error removing object "$newKey"', isError: true);
+      } else {
+        Get.log('"$newKey" deleted from memory');
+      }
     }
 
     return true;
@@ -469,6 +478,10 @@ class _InstanceBuilderFactory<S> {
   /// For reusing [dependency] instead of [builderFunc]
   bool isSingleton;
 
+  /// When fenix mode is avaliable, when a new instance is need
+  /// Instance manager will recreate a new instance of S
+  bool fenix;
+
   /// Stores the actual object instance when [isSingleton]=true.
   S dependency;
 
@@ -487,6 +500,7 @@ class _InstanceBuilderFactory<S> {
     this.builderFunc,
     this.permanent,
     this.isInit,
+    this.fenix,
   );
 
   /// Gets the actual instance by it's [builderFunc] or the persisted instance.

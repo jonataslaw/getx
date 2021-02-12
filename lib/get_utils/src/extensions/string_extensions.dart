@@ -79,4 +79,9 @@ extension GetStringUtils on String {
 
   String numericOnly({bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
+
+  String createPath([Iterable segments]) {
+    final path = startsWith('/') ? this : '/$this';
+    return GetUtils.createPath(path, segments);
+  }
 }

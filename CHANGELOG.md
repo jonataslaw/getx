@@ -1,4 +1,35 @@
-## [3.25.0]
+## [3.25.0] - Big update
+- Added [FullLifeCycleController] - A GetxController capable of observing all the life cycles of your application. FullLifeCycleController has the life cycles:
+  * onInit: called when the controller enters the application's memory
+  * onReady: called after onInit, when build method from widget relationed to controller is done.
+  * onClose: called when controller is deleted from memory. 
+  * onPaused: called when the application is not currently visible to the user, and running in the background.
+  * onInactive: called when the application is in an inactive state and is not receiving user input, when the user receives a call, for example
+  * onResumed: The application is now visible and in the foreground
+  * onDetached: The application is still hosted on a flutter engine but is detached from any host views.
+  * didChangeMetrics: called when the window size is changed
+- Added SuperController, a complete life circle controller with StateMixin 
+- Improve Iterable Rx Api. Now, you can to use dart List, Map and Set as reactive, like: List<String> names = <String>['juan', 'pedro', 'maria'].obs;
+- Added [reload] and [reloadAll] methods to reload your Controller to original values
+- Added assign and assignAll extensions to default dart List
+- Added parameters options from Get.toNamed, Get.offNamed, and Get.offAllNamed (@enghitalo)
+- Improve Rx disposal logic to completely prevent memory leaks
+- Improve Capitalize methods from GetUtils (@eduardoflorence)
+- Prevent a close snackbar from close a Screen with double tap (@eduardoflorence)
+- Includes GetLifeCycleBase mixin on delete/dispose (@saviogrossi)
+- Added internacionalization example to sample app (@rodriguesJeff)
+- Added headers to Graphql query and mutation(@asalvi0)
+- Added translation with parameter extension (@CpdnCristiano)
+- Added Get.parameter access to Middleware (@eduardoflorence)
+- Fix RxBool typo (@emanuelmutschlechner)
+- Added Filter to GetBuilder
+- Added debouce to GetBuilder update 
+- Added ability to insert an Enum, class, or type of an object as a GetBuilder's Id
+- Improve upload time from GetConnect
+- Create minified version to DartPad(@roipeker)
+- Suggested to use `Get.to(() => Page())` instead of `Get.to(Page())`.
+- Fix and improve docs: @unacorbatanegra, @lsm, @nivisi, @ThinkDigitalSoftware, @martwozniak, @UsamaElgendy, @@DominusKelvin, @jintak0401, 
+
 
 ## [3.24.0]
 - GetWidget has been completely redesigned.

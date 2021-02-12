@@ -486,7 +486,7 @@ extension GetNavigation on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T> to<T>(
-    Widget page, {
+    dynamic page, {
     bool opaque,
     Transition transition,
     Curve curve,
@@ -505,7 +505,7 @@ extension GetNavigation on GetInterface {
     return global(id)?.currentState?.push<T>(
           GetPageRoute<T>(
             opaque: opaque ?? true,
-            page: () => page,
+            page: _resolve(page, 'to'),
             routeName: routeName,
             settings: RouteSettings(
               //  name: forceRouteName ? '${a.runtimeType}' : '',
@@ -519,6 +519,21 @@ extension GetNavigation on GetInterface {
             transitionDuration: duration ?? defaultTransitionDuration,
           ),
         );
+  }
+
+  GetPageBuilder _resolve(dynamic page, String method) {
+    if (page is GetPageBuilder) {
+      return page;
+    } else if (page is Widget) {
+      Get.log(
+          '''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.to(Page())".
+Using a widget function instead of a widget fully guarantees that the widget and its controllers will be removed from memory when they are no longer used.
+      ''');
+      return () => page;
+    } else {
+      throw '''Unexpected format,
+you can only use widgets and widget functions here''';
+    }
   }
 
   /// **Navigation.pushNamed()** shortcut.<br><br>
@@ -836,7 +851,7 @@ extension GetNavigation on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T> off<T>(
-    Widget page, {
+    dynamic page, {
     bool opaque = false,
     Transition transition,
     Curve curve,
@@ -854,7 +869,7 @@ extension GetNavigation on GetInterface {
     }
     return global(id)?.currentState?.pushReplacement(GetPageRoute(
         opaque: opaque ?? true,
-        page: () => page,
+        page: _resolve(page, 'off'),
         binding: binding,
         settings: RouteSettings(arguments: arguments),
         routeName: routeName,
@@ -897,7 +912,7 @@ extension GetNavigation on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T> offAll<T>(
-    Widget page, {
+    dynamic page, {
     RoutePredicate predicate,
     bool opaque = false,
     bool popGesture,
@@ -915,7 +930,7 @@ extension GetNavigation on GetInterface {
         GetPageRoute<T>(
           opaque: opaque ?? true,
           popGesture: popGesture ?? defaultPopGesture,
-          page: () => page,
+          page: _resolve(page, 'offAll'),
           binding: binding,
           settings: RouteSettings(arguments: arguments),
           fullscreenDialog: fullscreenDialog,

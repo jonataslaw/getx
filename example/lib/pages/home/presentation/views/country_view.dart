@@ -42,8 +42,9 @@ class CountryView extends GetView<HomeController> {
                             "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
                       ),
                       title: Text(country.country),
-                      subtitle:
-                          Text('total_infecteds'.tr +' ${country.totalConfirmed}'),
+                      subtitle: Text(
+                          // ignore: lines_longer_than_80_chars
+                          '${'total_infecteds'.tr}${' ${country.totalConfirmed}'}'),
                     );
                   }),
             ),

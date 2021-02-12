@@ -578,6 +578,14 @@ class GetUtils {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
 
+  static String createPath(String path, [Iterable segments]) {
+    if (segments == null || segments.isEmpty) {
+      return path;
+    }
+    final list = segments.map((e) => '/$e');
+    return path + list.join();
+  }
+
   static void printFunction(
     String prefix,
     dynamic value,

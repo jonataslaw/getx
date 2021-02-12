@@ -26,30 +26,30 @@ mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
 typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
     T controller);
 
-class _InheritedGetxController<T extends GetxController>
-    extends InheritedWidget {
-  final T model;
-  final int version;
+// class _InheritedGetxController<T extends GetxController>
+//     extends InheritedWidget {
+//   final T model;
+//   final int version;
 
-  _InheritedGetxController({
-    Key key,
-    @required Widget child,
-    @required this.model,
-  })  : version = model.notifierVersion,
-        super(key: key, child: child);
+//   _InheritedGetxController({
+//     Key key,
+//     @required Widget child,
+//     @required this.model,
+//   })  : version = model.notifierVersion,
+//         super(key: key, child: child);
 
-  @override
-  bool updateShouldNotify(_InheritedGetxController<T> oldWidget) =>
-      (oldWidget.version != version);
-}
+//   @override
+//   bool updateShouldNotify(_InheritedGetxController<T> oldWidget) =>
+//       (oldWidget.version != version);
+// }
 
-extension WatchEtx on GetxController {
-  T watch<T extends GetxController>() {
-    final instance = Get.find<T>();
-    _GetBuilderState._currentState.watch(instance.update);
-    return instance;
-  }
-}
+// extension WatchEtx on GetxController {
+//   T watch<T extends GetxController>() {
+//     final instance = Get.find<T>();
+//     _GetBuilderState._currentState.watch(instance.update);
+//     return instance;
+//   }
+// }
 
 class GetBuilder<T extends GetxController> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
@@ -58,7 +58,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final String tag;
   final bool autoRemove;
   final bool assignId;
-  final Object Function(T value) selector;
+  final Object Function(T value) filter;
   final void Function(State state) initState, dispose, didChangeDependencies;
   final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
   final T init;
@@ -71,7 +71,7 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.autoRemove = true,
     this.assignId = false,
     this.initState,
-    this.selector,
+    this.filter,
     this.tag,
     this.dispose,
     this.id,
@@ -80,24 +80,24 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   })  : assert(builder != null),
         super(key: key);
 
-  static T of<T extends GetxController>(
-    BuildContext context, {
-    bool rebuild = false,
-  }) {
-    var widget = rebuild
-        ? context
-            .dependOnInheritedWidgetOfExactType<_InheritedGetxController<T>>()
-        : context
-            .getElementForInheritedWidgetOfExactType<
-                _InheritedGetxController<T>>()
-            ?.widget;
+  // static T of<T extends GetxController>(
+  //   BuildContext context, {
+  //   bool rebuild = false,
+  // }) {
+  //   var widget = rebuild
+  //       ? context
+  //       .dependOnInheritedWidgetOfExactType<_InheritedGetxController<T>>()
+  //       : context
+  //           .getElementForInheritedWidgetOfExactType<
+  //               _InheritedGetxController<T>>()
+  //           ?.widget;
 
-    if (widget == null) {
-      throw 'Error: Could not find the correct dependency.';
-    } else {
-      return (widget as _InheritedGetxController<T>).model;
-    }
-  }
+  //   if (widget == null) {
+  //     throw 'Error: Could not find the correct dependency.';
+  //   } else {
+  //     return (widget as _InheritedGetxController<T>).model;
+  //   }
+  // }
 
   @override
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
@@ -108,10 +108,10 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   T controller;
   bool isCreator = false;
   VoidCallback remove;
-  Object _selector;
+  Object _filter;
   List<VoidCallback> _watchs;
 
-  static _GetBuilderState _currentState;
+  // static _GetBuilderState _currentState;
 
   void watch(VoidCallback listener) {
     (_watchs ??= <VoidCallback>[]).add(listener);
@@ -119,7 +119,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 
   @override
   void initState() {
-    _GetBuilderState._currentState = this;
+    // _GetBuilderState._currentState = this;
     super.initState();
     widget.initState?.call(this);
 
@@ -144,8 +144,8 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       controller?.onStart();
     }
 
-    if (widget.selector != null) {
-      _selector = widget.selector(controller);
+    if (widget.filter != null) {
+      _filter = widget.filter(controller);
     }
 
     _subscribeToController();
@@ -158,18 +158,18 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     remove?.call();
     remove = (widget.id == null)
         ? controller?.addListener(
-            _selector != null ? _selectorUpdate : getUpdate,
+            _filter != null ? _filterUpdate : getUpdate,
           )
         : controller?.addListenerId(
             widget.id,
-            _selector != null ? _selectorUpdate : getUpdate,
+            _filter != null ? _filterUpdate : getUpdate,
           );
   }
 
-  void _selectorUpdate() {
-    var newSelector = widget.selector(controller);
-    if (newSelector != _selector) {
-      _selector = newSelector;
+  void _filterUpdate() {
+    var newFilter = widget.filter(controller);
+    if (newFilter != _filter) {
+      _filter = newFilter;
       getUpdate();
     }
   }
@@ -189,7 +189,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     controller = null;
     isCreator = null;
     remove = null;
-    _selector = null;
+    _filter = null;
     _watchs = null;
   }
 
@@ -211,21 +211,22 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedGetxController<T>(
-      model: controller,
-      child: widget.builder(controller),
-    );
+    // return _InheritedGetxController<T>(
+    //   model: controller,
+    //   child: widget.builder(controller),
+    // );
+    return widget.builder(controller);
   }
 }
 
-extension FindExt on BuildContext {
-  T find<T extends GetxController>() {
-    return GetBuilder.of<T>(this, rebuild: false);
-  }
-}
+// extension FindExt on BuildContext {
+//   T find<T extends GetxController>() {
+//     return GetBuilder.of<T>(this, rebuild: false);
+//   }
+// }
 
-extension ObserverEtx on BuildContext {
-  T obs<T extends GetxController>() {
-    return GetBuilder.of<T>(this, rebuild: true);
-  }
-}
+// extension ObserverEtx on BuildContext {
+//   T obs<T extends GetxController>() {
+//     return GetBuilder.of<T>(this, rebuild: true);
+//   }
+// }
