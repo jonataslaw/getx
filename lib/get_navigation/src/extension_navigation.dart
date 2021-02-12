@@ -541,25 +541,24 @@ extension GetNavigation on GetInterface {
     String page, {
     dynamic arguments,
     int id,
+    Map<String, String> parameters,
     bool preventDuplicates = true,
   }) {
-    Get.parameters.forEach((key, value) async {
-      if (await page.contains('?')) {
-        page = "$page${"&$key=$value"}";
-      } else {
-        page = "$page${"?$key=$value"}";
+    Get.parameters = ({});
+    if (parameters != null) {
+      for (var item in parameters.keys) {
+        if (page.contains('?')) {
+          page += "&$item=${parameters[item]}";
+        } else {
+          page += "?$item=${parameters[item]}";
+        }
       }
-    });
+    }
+
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    // Get.parameters.clear();
-    return global(id)
-        ?.currentState
-        ?.pushNamed<T>(page, arguments: arguments)
-        ?.then((_) {
-      Get.parameters.clear();
-    });
+    return global(id)?.currentState?.pushNamed<T>(page, arguments: arguments);
   }
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
