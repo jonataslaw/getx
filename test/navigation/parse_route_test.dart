@@ -87,4 +87,40 @@ void main() {
       expect(Get.parameters['name'], 'ana');
     },
   );
+
+  testWidgets(
+    'params in url by parameters',
+    (tester) async {
+      print("Iniciando test");
+      await tester.pumpWidget(GetMaterialApp(
+        initialRoute: '/first/juan',
+        getPages: [
+          GetPage(page: () => Container(), name: '/buda'),
+          GetPage(page: () => Container(), name: '/italy'),
+        ],
+      ));
+
+      // Get.parameters = ({"varginias": "varginia", "vinis": "viniiss"});
+      var parameters = <String, String>{
+        "varginias": "varginia",
+        "vinis": "viniiss"
+      };
+      // print("Get.parameters: ${Get.parameters}");
+      parameters.addAll({"a": "b", "c": "d"});
+      Get.toNamed("/buda", parameters: parameters);
+
+      await tester.pumpAndSettle();
+      expect(Get.parameters['varginias'], 'varginia');
+      expect(Get.parameters['vinis'], 'viniiss');
+      expect(Get.parameters['a'], 'b');
+      expect(Get.parameters['c'], 'd');
+
+      Map<String, String> italyParameters;
+      italyParameters = {"ja": "ca", "que": "i"};
+      Get.toNamed("/italy", parameters: italyParameters);
+      await tester.pumpAndSettle();
+      expect(Get.parameters['ja'], 'ca');
+      expect(Get.parameters['que'], 'i');
+    },
+  );
 }

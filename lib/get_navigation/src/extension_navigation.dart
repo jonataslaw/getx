@@ -541,8 +541,20 @@ extension GetNavigation on GetInterface {
     String page, {
     dynamic arguments,
     int id,
+    Map<String, String> parameters,
     bool preventDuplicates = true,
   }) {
+    Get.parameters = ({});
+    if (parameters != null) {
+      for (var item in parameters.keys) {
+        if (page.contains('?')) {
+          page += "&$item=${parameters[item]}";
+        } else {
+          page += "?$item=${parameters[item]}";
+        }
+      }
+    }
+
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
