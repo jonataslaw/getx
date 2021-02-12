@@ -550,7 +550,6 @@ extension GetNavigation on GetInterface {
         page = "$page${"?$key=$value"}";
       }
     });
-    // Get.parameters.clear();
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
