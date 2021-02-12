@@ -187,6 +187,7 @@ class GetInstance {
         permanent,
         false,
         fenix,
+        name,
       ),
     );
   }
@@ -287,7 +288,11 @@ class GetInstance {
     if (i is GetLifeCycleBase) {
       if (i.onStart != null) {
         i.onStart();
-        Get.log('"$key" has been initialized');
+        if (tag == null) {
+          Get.log('Instance "$S" has been initialized');
+        } else {
+          Get.log('Instance "$S" with tag "$tag" has been initialized');
+        }
       }
       if (!_singl[key].isSingleton && i.onDelete != null) {
         _routesByCreate[Get.reference] ??= HashSet<Function>();
@@ -495,16 +500,35 @@ class _InstanceBuilderFactory<S> {
 
   bool isInit = false;
 
+  String tag;
+
   _InstanceBuilderFactory(
     this.isSingleton,
     this.builderFunc,
     this.permanent,
     this.isInit,
     this.fenix,
+    this.tag,
   );
+
+  void _showInitLog() {
+    if (tag == null) {
+      Get.log('Instance "$S" has been created');
+    } else {
+      Get.log('Instance "$S" has been created with tag "$tag"');
+    }
+  }
 
   /// Gets the actual instance by it's [builderFunc] or the persisted instance.
   S getDependency() {
-    return isSingleton ? dependency ??= builderFunc() : builderFunc();
+    if (isSingleton) {
+      if (dependency == null) {
+        _showInitLog();
+        dependency = builderFunc();
+      }
+      return dependency;
+    } else {
+      return builderFunc();
+    }
   }
 }

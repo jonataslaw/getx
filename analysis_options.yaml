@@ -61,6 +61,7 @@ linter:
     avoid_catches_without_on_clauses: true # avoid
     avoid_catching_errors: true
     use_rethrow_when_possible: true
+    unrelated_type_equality_checks: true
 
     # DESIGN
     use_to_and_as_if_applicable: true # prefer

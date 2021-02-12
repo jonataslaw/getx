@@ -104,9 +104,12 @@ extension MapExtension<K, V> on Map<K, V> {
   }
 
   void assignAll(Map<K, V> val) {
+    if (val is RxMap && this is RxMap) {
+      if ((val as RxMap)._value == (this as RxMap)._value) return;
+    }
     if (this is RxMap) {
       final map = (this as RxMap);
-      if (map._value == val || map == val) return;
+      if (map._value == val) return;
       map._value = val;
       map.refresh();
     } else {

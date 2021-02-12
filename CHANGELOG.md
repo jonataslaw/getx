@@ -1,3 +1,6 @@
+## [3.25.1] - Big update
+- Improved the log system to display the tag used in the controller that was created.
+
 ## [3.25.0] - Big update
 - Added [reload] and [reloadAll] methods to reload your Controller to original values
 - Added [FullLifeCycleController] - A GetxController capable of observing all the life cycles of your application. FullLifeCycleController has the life cycles:
