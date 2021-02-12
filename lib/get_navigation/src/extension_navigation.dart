@@ -541,24 +541,22 @@ extension GetNavigation on GetInterface {
     String page, {
     dynamic arguments,
     int id,
-    Map<String, String> parameters,
     bool preventDuplicates = true,
+    Map<String, String> parameters,
   }) {
-    Get.parameters = ({});
-    if (parameters != null) {
-      for (var item in parameters.keys) {
-        if (page.contains('?')) {
-          page += "&$item=${parameters[item]}";
-        } else {
-          page += "?$item=${parameters[item]}";
-        }
-      }
-    }
-
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.pushNamed<T>(page, arguments: arguments);
+
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    return global(id)?.currentState?.pushNamed<T>(
+          page,
+          arguments: arguments,
+        );
   }
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
@@ -582,13 +580,20 @@ extension GetNavigation on GetInterface {
     dynamic arguments,
     int id,
     bool preventDuplicates = true,
+    Map<String, String> parameters,
   }) {
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    return global(id)
-        ?.currentState
-        ?.pushReplacementNamed(page, arguments: arguments);
+
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+    return global(id)?.currentState?.pushReplacementNamed(
+          page,
+          arguments: arguments,
+        );
   }
 
   /// **Navigation.popUntil()** shortcut.<br><br>
@@ -657,10 +662,18 @@ extension GetNavigation on GetInterface {
     RoutePredicate predicate, {
     int id,
     dynamic arguments,
+    Map<String, String> parameters,
   }) {
-    return global(id)
-        ?.currentState
-        ?.pushNamedAndRemoveUntil<T>(page, predicate, arguments: arguments);
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    return global(id)?.currentState?.pushNamedAndRemoveUntil<T>(
+          page,
+          predicate,
+          arguments: arguments,
+        );
   }
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
@@ -679,10 +692,17 @@ extension GetNavigation on GetInterface {
     dynamic arguments,
     int id,
     dynamic result,
+    Map<String, String> parameters,
   }) {
-    return global(id)
-        ?.currentState
-        ?.popAndPushNamed(page, arguments: arguments, result: result);
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+    return global(id)?.currentState?.popAndPushNamed(
+          page,
+          arguments: arguments,
+          result: result,
+        );
   }
 
   /// **Navigation.removeRoute()** shortcut.<br><br>
@@ -720,7 +740,13 @@ extension GetNavigation on GetInterface {
     RoutePredicate predicate,
     dynamic arguments,
     int id,
+    Map<String, String> parameters,
   }) {
+    if (parameters != null) {
+      final uri = Uri(path: newRouteName, queryParameters: parameters);
+      newRouteName = uri.toString();
+    }
+
     return global(id)?.currentState?.pushNamedAndRemoveUntil<T>(
           newRouteName,
           predicate ?? (_) => false,
