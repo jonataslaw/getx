@@ -543,17 +543,23 @@ extension GetNavigation on GetInterface {
     int id,
     bool preventDuplicates = true,
   }) {
-    Get.parameters.forEach((key, value) {
-      if (page.contains('?')) {
-        page = page + "&$key=$value";
+    Get.parameters.forEach((key, value) async {
+      if (await page.contains('?')) {
+        page = "$page${"&$key=$value"}";
       } else {
-        page = page + "?$key=$value";
+        page = "$page${"?$key=$value"}";
       }
     });
     if (preventDuplicates && page == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.pushNamed<T>(page, arguments: arguments);
+    // Get.parameters.clear();
+    return global(id)
+        ?.currentState
+        ?.pushNamed<T>(page, arguments: arguments)
+        ?.then((_) {
+      Get.parameters.clear();
+    });
   }
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
