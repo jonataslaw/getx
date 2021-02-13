@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
@@ -76,5 +78,21 @@ void main() {
     await Future.delayed(Duration.zero);
     await Future.delayed(Duration(milliseconds: 100));
     expect(5, result);
+  });
+
+  test('bindStream test', () async {
+    var count = 0;
+    final controller = StreamController<int>();
+    final rx = 0.obs;
+
+    rx.listen((value) {
+      count = value;
+    });
+    rx.bindStream(controller.stream);
+    expect(count, 0);
+    controller.add(555);
+
+    await Future.delayed(Duration.zero);
+    expect(count, 555);
   });
 }

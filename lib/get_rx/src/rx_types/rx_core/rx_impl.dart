@@ -116,7 +116,9 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Closing the subscription will happen automatically when the observer
   /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    _subscriptions[subject].add(stream.listen((va) => value = va));
+    final listSubscriptions =
+        _subscriptions[subject] ??= <StreamSubscription>[];
+    listSubscriptions.add(stream.listen((va) => value = va));
   }
 }
 

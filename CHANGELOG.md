@@ -1,3 +1,6 @@
+## [3.25.3] 
+- Fix bindStream error 'Object.noSuchMethod'.
+
 ## [3.25.2] 
 - Improved Workers system to accept a list of works
 
