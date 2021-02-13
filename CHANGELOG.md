@@ -1,4 +1,7 @@
-## [3.25.1] - Big update
+## [3.25.2] 
+- Improved Workers system to accept a list of works
+
+## [3.25.1] 
 - Improved the log system to display the tag used in the controller that was created.
 
 ## [3.25.0] - Big update

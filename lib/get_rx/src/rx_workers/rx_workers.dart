@@ -13,6 +13,19 @@ bool _conditional(dynamic condition) {
 
 typedef WorkerCallback<T> = Function(T callback);
 
+class Workers {
+  Workers(this.workers);
+  final List<Worker> workers;
+
+  void dispose() {
+    for (final worker in workers) {
+      if (!worker._disposed) {
+        worker.dispose();
+      }
+    }
+  }
+}
+
 ///
 /// Called every time [listener] changes. As long as the [condition]
 /// returns true.
