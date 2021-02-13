@@ -498,7 +498,12 @@ extension GetNavigation on GetInterface {
     bool preventDuplicates = true,
     bool popGesture,
   }) {
-    var routeName = "/${page.runtimeType.toString()}";
+    String routeName;
+    if (page is GetPageBuilder) {
+      routeName = "/${page().runtimeType.toString()}";
+    } else {
+      routeName = "/${page.runtimeType.toString()}";
+    }
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
