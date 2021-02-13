@@ -1,3 +1,5 @@
+import 'package:get/get_core/src/get_main.dart';
+
 import '../../get_navigation.dart';
 import '../routes/get_route.dart';
 
@@ -14,10 +16,15 @@ class ParseRouteTree {
     final uri = Uri.parse(name);
     final route = _findRoute(uri.path);
     final params = Map<String, String>.from(uri.queryParameters);
-    final parsedParams = _parseParams(name, route?.path);
-    if (parsedParams != null && parsedParams.isNotEmpty) {
-      params.addAll(parsedParams);
+    if (route != null) {
+      final parsedParams = _parseParams(name, route.path);
+      if (parsedParams != null && parsedParams.isNotEmpty) {
+        params.addAll(parsedParams);
+      }
+    } else {
+      Get.log('Route "${uri.path}" not found');
     }
+
     return RouteDecoder(route, params);
   }
 

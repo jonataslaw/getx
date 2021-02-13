@@ -32,6 +32,24 @@ void main() {
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 
+  testWidgets("unknowroute", (tester) async {
+    await tester.pumpWidget(GetMaterialApp(
+      initialRoute: '/first',
+      unknownRoute: GetPage(name: '/404', page: () => Scaffold()),
+      getPages: [
+        GetPage(page: () => FirstScreen(), name: '/first'),
+        GetPage(page: () => SecondScreen(), name: '/second'),
+        GetPage(page: () => ThirdScreen(), name: '/third')
+      ],
+    ));
+
+    Get.toNamed('/secondd');
+
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/404');
+  });
+
   testWidgets("Get.off navigates to provided route", (tester) async {
     await tester.pumpWidget(Wrapper(child: FirstScreen()));
 

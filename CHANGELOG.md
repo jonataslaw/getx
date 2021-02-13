@@ -1,3 +1,6 @@
+## [3.25.4] 
+- Added logs and tests to unknownRoute
+
 ## [3.25.3] 
 - Fix bindStream error 'Object.noSuchMethod'.
 
