@@ -70,7 +70,7 @@ _语言: 中文, [英文](README.md), [印度尼西亚](README.id-ID.md), [乌�
 **此外，为了进一步提高您的生产效率，我们还为您准备了一些插件**
 
 - **getx_template**：一键生成每个页面必需的文件夹、文件、模板代码等等
-  - [Android Studio/Intellij插件](https://plugins.jetbrains.com/plugin/15919-getx)
+  - [Android Studio/Intellij插件](https://plugins.jetbrains.com/plugin/15919-getx)：使用参考
 - **GetX Snippets**：输入少量字母，自动提示选择后，可生成常用的模板代码
   - [Android Studio/Intellij扩展](https://plugins.jetbrains.com/plugin/14975-getx-snippets)
   - [VSCode扩展](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)
@@ -911,4 +911,6 @@ _想为项目做贡献吗？我们将自豪地强调你是我们的合作者之�
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
+- [Flutter GetX use --- simple charm!](https://github.com/CNAD666/getx_template/blob/main/docs/Use of Flutter GetX---simple charm!.md) - CNAD666
+  - [Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
 
