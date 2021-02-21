@@ -837,7 +837,7 @@ name.value = 'Hey';
 // mais cette approche n'accepte pas `null`, l'interface utilisateur ne sera pas reconstruite.
 name('Hello');
 
-// est comme un getter, affiche «Hello».
+// est comme un getter, affiche `Hello`.
 name() ;
 
 /// nombres:
@@ -967,7 +967,7 @@ En raison du _cache_, ne peut pas être un `const Stateless`.
 
 > Alors, quand avez-vous besoin de "mettre en cache" un contrôleur?
 
-Si vous utilisez, une autre fonctionnalité "pas si courante" de **GetX**: `Get.create ()`.
+Si vous utilisez, une autre fonctionnalité "pas si courante" de **GetX**: `Get.create()`.
 
 `Get.create(()=>Controller())` générera un nouveau `Controller` chaque fois que vous appelez
 `Get.find<Controller>()`.
@@ -1086,10 +1086,10 @@ GetMaterialApp(
 
 2- Flutter est facile, Flutter est incroyable, mais Flutter a encore quelques règles standard qui peuvent être indésirables pour la plupart des développeurs, comme `Navigator.of (context) .push (context, builder [...]`. Get simplifie le développement. Au lieu de écrire 8 lignes de code pour simplement appeler une route, vous pouvez simplement le faire: `Get.to (Home ())` et vous avez terminé, vous passerez à la page suivante. Les URL Web dynamiques sont une chose vraiment pénible à voir avec Flutter actuellement, et cela avec GetX est stupidement simple. La gestion des états dans Flutter et la gestion des dépendances sont également quelque chose qui génère beaucoup de discussions, car il y a des centaines de modèles dans la pub. Mais rien n'est aussi simple que d'ajouter un ".obs" à la fin de votre variable, et placez votre widget dans un Obx, et c'est tout, toutes les mises à jour de cette variable seront automatiquement mises à jour à l'écran.
 
-3- Facilité sans vous soucier des performances. Les performances de Flutter sont déjà étonnantes, mais imaginez que vous utilisez un gestionnaire d'état et un localisateur pour distribuer vos classes blocs / stores / contrôleurs / etc. Vous devrez appeler manuellement l'exclusion de cette dépendance lorsque vous n'en avez pas besoin. Mais avez-vous déjà pensé à simplement utiliser votre «contrôleur», et quand il n'était plus utilisé par personne, il serait simplement supprimé de la mémoire? C'est ce que fait GetX. Avec SmartManagement, tout ce qui n'est pas utilisé est supprimé de la mémoire et vous ne devriez pas avoir à vous soucier d'autre chose que de la programmation. Vous serez assuré de consommer le minimum de ressources nécessaires, sans même avoir créé de logique pour cela.
+3- Facilité sans vous soucier des performances. Les performances de Flutter sont déjà étonnantes, mais imaginez que vous utilisez un gestionnaire d'état et un localisateur pour distribuer vos classes blocs / stores / contrôleurs / etc. Vous devrez appeler manuellement l'exclusion de cette dépendance lorsque vous n'en avez pas besoin. Mais avez-vous déjà pensé à simplement utiliser votre «contrôleur`, et quand il n'était plus utilisé par personne, il serait simplement supprimé de la mémoire? C'est ce que fait GetX. Avec SmartManagement, tout ce qui n'est pas utilisé est supprimé de la mémoire et vous ne devriez pas avoir à vous soucier d'autre chose que de la programmation. Vous serez assuré de consommer le minimum de ressources nécessaires, sans même avoir créé de logique pour cela.
 
-4- Découplage réel. Vous avez peut-être entendu le concept "séparer la vue de la business logic". Ce n'est pas une particularité de BLoC, MVC, MVVM, et tout autre standard sur le marché a ce concept. Cependant, ce concept peut souvent être atténué dans Flutter en raison de l'utilisation de «context».
-   Si vous avez besoin de contexte pour trouver un InheritedWidget, vous en avez besoin dans la vue, ou passez le «context» par paramètre. Je trouve particulièrement cette solution très moche, et pour travailler en équipe, nous serons toujours dépendants de la 'business logic' de View. Getx n'est pas orthodoxe avec l'approche standard, et même s'il n'interdit pas complètement l'utilisation de StatefulWidgets, InitState, etc., il a toujours une approche similaire qui peut être plus propre. Les contrôleurs ont des cycles de vie, et lorsque vous devez faire une requête APIREST par exemple, vous ne dépendez de rien de la vue. Vous pouvez utiliser onInit pour lancer l'appel http et lorsque les données arrivent, les variables sont remplies. Comme GetX est totalement réactif (vraiment, et fonctionne sous streams), une fois les éléments remplis, tous les widgets qui utilisent cette variable seront automatiquement mis à jour dans la vue. 
+4- Découplage réel. Vous avez peut-être entendu le concept "séparer la vue de la business logic". Ce n'est pas une particularité de BLoC, MVC, MVVM, et tout autre standard sur le marché a ce concept. Cependant, ce concept peut souvent être atténué dans Flutter en raison de l'utilisation de `context`.
+   Si vous avez besoin de contexte pour trouver un InheritedWidget, vous en avez besoin dans la vue, ou passez le `context` par paramètre. Je trouve particulièrement cette solution très moche, et pour travailler en équipe, nous serons toujours dépendants de la 'business logic' de View. Getx n'est pas orthodoxe avec l'approche standard, et même s'il n'interdit pas complètement l'utilisation de StatefulWidgets, InitState, etc., il a toujours une approche similaire qui peut être plus propre. Les contrôleurs ont des cycles de vie, et lorsque vous devez faire une requête APIREST par exemple, vous ne dépendez de rien de la vue. Vous pouvez utiliser onInit pour lancer l'appel http et lorsque les données arrivent, les variables sont remplies. Comme GetX est totalement réactif (vraiment, et fonctionne sous streams), une fois les éléments remplis, tous les widgets qui utilisent cette variable seront automatiquement mis à jour dans la vue.
    Cela permet aux personnes ayant une expertise de l'interface utilisateur de travailler uniquement avec des widgets et de ne pas avoir à envoyer quoi que ce soit à la business logic autre que des événements utilisateur (comme cliquer sur un bouton), tandis que les personnes travaillant avec la business logic seront libres de créer et de tester la Business logic séparément.
 
 

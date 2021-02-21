@@ -374,9 +374,9 @@ Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 user().name; //notez que c'est la variable utilisateur, pas la classe (la variable a un u minuscule)
 ```
 
-Vous n'êtes pas obligé de travailler avec des setters si vous ne le souhaitez pas. vous pouvez utiliser les API «assign» et «assignAll».
-L'API «assign» effacera votre liste et ajoutera un seul objet que vous souhaitez.
-L'API "assignAll" effacera la liste existante et ajoutera tous les objets itérables que vous y injecterez.
+Vous n'êtes pas obligé de travailler avec des setters si vous ne le souhaitez pas. vous pouvez utiliser les API `assign` et `assignAll`.
+L'API `assign` effacera votre liste et ajoutera un seul objet que vous souhaitez.
+L'API `assignAll` effacera la liste existante et ajoutera tous les objets itérables que vous y injecterez.
 
 ### Pourquoi je dois utiliser .value
 
@@ -402,7 +402,7 @@ Les types dans Get à l'aide de Bindings ne sont pas nécessaires. Vous pouvez u
 Les 'workers' vous assisteront, déclenchant des callbacks spécifiques lorsqu'un événement se produit.
 
 ```dart
-/// Appelée à chaque fois que «count1» change.
+/// Appelée à chaque fois que `count1` change.
 ever(count1, (_) => print("$_ a été modifié"));
 
 /// Appelée uniquement la première fois que la variable est modifiée
@@ -432,7 +432,7 @@ Tous les workers renvoyent un objet `Worker`, qui peut être utilisé pour annul
 'debounce' est très utile dans les fonctions de recherche, où vous souhaitez que l'API ne soit appelée que lorsque l'utilisateur a fini de taper. Si l'utilisateur tape "Jonny", vous aurez 5 recherches dans les API, par la lettre J, o, n, n et y. Avec Get, cela ne se produit pas, car vous aurez un Worker "anti-rebond" qui ne sera déclenché qu'à la fin de la saisie.
 
 - **`interval`**
-'interval' est différent de 'debounce'. Avec «debounce» si l'utilisateur fait 1000 changements à une variable en 1 seconde, il n'enverra que le dernier après le temporisateur stipulé (la valeur par défaut est 800 millisecondes). 'Interval' ignorera à la place toutes les actions de l'utilisateur pour la période stipulée. Si vous envoyez des événements pendant 1 minute, 1000 par seconde, debounce ne vous enverra que le dernier, lorsque l'utilisateur arrête de mitrailler les événements. interval délivrera des événements toutes les secondes, et s'il est réglé sur 3 secondes, il fournira 20 événements cette minute. Ceci est recommandé pour éviter les abus, dans des fonctions où l'utilisateur peut rapidement cliquer sur quelque chose et obtenir un avantage (imaginez que l'utilisateur puisse gagner des pièces en cliquant sur quelque chose, s'il cliquait 300 fois dans la même minute, il aurait 300 pièces, en utilisant l'intervalle, vous pouvez définir une période de 3 secondes, et même en cliquant 300 ou mille fois, le maximum qu'il obtiendrait en 1 minute serait de 20 pièces, en cliquant 300 ou 1 million de fois). Le 'debounce' convient aux anti-DDos, pour des fonctions comme la recherche où chaque changement de onChange entraînerait une requête à votre api. Debounce attendra que l'utilisateur arrête de taper le nom, pour faire la demande. S'il était utilisé dans le scénario de pièces mentionné ci-dessus, l'utilisateur ne gagnerait qu'une pièce, car il n'est exécuté que lorsque l'utilisateur "fait une pause" pendant le temps établi.
+'interval' est différent de 'debounce'. Avec `debounce` si l'utilisateur fait 1000 changements à une variable en 1 seconde, il n'enverra que le dernier après le temporisateur stipulé (la valeur par défaut est 800 millisecondes). 'Interval' ignorera à la place toutes les actions de l'utilisateur pour la période stipulée. Si vous envoyez des événements pendant 1 minute, 1000 par seconde, debounce ne vous enverra que le dernier, lorsque l'utilisateur arrête de mitrailler les événements. interval délivrera des événements toutes les secondes, et s'il est réglé sur 3 secondes, il fournira 20 événements cette minute. Ceci est recommandé pour éviter les abus, dans des fonctions où l'utilisateur peut rapidement cliquer sur quelque chose et obtenir un avantage (imaginez que l'utilisateur puisse gagner des pièces en cliquant sur quelque chose, s'il cliquait 300 fois dans la même minute, il aurait 300 pièces, en utilisant l'intervalle, vous pouvez définir une période de 3 secondes, et même en cliquant 300 ou mille fois, le maximum qu'il obtiendrait en 1 minute serait de 20 pièces, en cliquant 300 ou 1 million de fois). Le 'debounce' convient aux anti-DDos, pour des fonctions comme la recherche où chaque changement de onChange entraînerait une requête à votre api. Debounce attendra que l'utilisateur arrête de taper le nom, pour faire la demande. S'il était utilisé dans le scénario de pièces mentionné ci-dessus, l'utilisateur ne gagnerait qu'une pièce, car il n'est exécuté que lorsque l'utilisateur "fait une pause" pendant le temps établi.
 
 - NOTE: Les 'workers' doivent toujours être utilisés lors du démarrage d'un contrôleur ou d'une classe, il doit donc toujours être dans onInit (recommandé), le constructeur de classe ou l'initState d'un StatefulWidget (cette pratique n'est pas recommandée dans la plupart des cas, mais cela ne devrait poser aucun problème).
 
@@ -450,7 +450,7 @@ De cette façon, si vous voulez un contrôleur individuel, vous pouvez lui attri
 
 2. N'utilise pas changeNotifier, c'est le gestionnaire d'état qui utilise le moins de mémoire (proche de 0 Mo).
 
-3. Oubliez StatefulWidget! Avec Get, vous n'en aurez jamais besoin. Avec les autres gestionnaires d'états, vous devrez probablement utiliser un StatefulWidget pour obtenir l'instance de votre fournisseur, BLoC, MobX Controller, etc. Mais vous êtes-vous déjà arrêté pour penser que votre appBar, votre 'scaffold', et la plupart des les widgets de votre classe sont sans état (stateless)? Alors pourquoi sauvegarder l'état d'une classe entière, si vous pouvez sauvegarder l'état du widget qui est «avec état» (statefull)? Get résout cela aussi. Créez une classe sans état, rendez tout «sans état». Si vous devez mettre à jour un seul composant, enveloppez-le avec GetBuilder et son état sera conservé.
+3. Oubliez StatefulWidget! Avec Get, vous n'en aurez jamais besoin. Avec les autres gestionnaires d'états, vous devrez probablement utiliser un StatefulWidget pour obtenir l'instance de votre fournisseur, BLoC, MobX Controller, etc. Mais vous êtes-vous déjà arrêté pour penser que votre appBar, votre 'scaffold', et la plupart des les widgets de votre classe sont sans état (stateless)? Alors pourquoi sauvegarder l'état d'une classe entière, si vous pouvez sauvegarder l'état du widget qui est `avec état` (statefull)? Get résout cela aussi. Créez une classe sans état, rendez tout `sans état`. Si vous devez mettre à jour un seul composant, enveloppez-le avec GetBuilder et son état sera conservé.
 
 4. Organisez votre projet pour de vrai! Les contrôleurs ne doivent pas être dans votre interface utilisateur, placer votre TextEditController ou tout contrôleur que vous utilisez dans votre classe Controller.
 
@@ -482,7 +482,7 @@ GetBuilder<Controller>(
     '${_.counter}',
   ),
 )
-//Initialisez votre contrôleur uniquement la première fois. La deuxième fois que vous utilisez ReBuilder pour le même contrôleur, ne recommencez pas. Votre contrôleur sera automatiquement supprimé de la mémoire dès que le widget qui l'a marqué comme «init» sera déployé. Vous n'avez pas à vous en soucier, Get le fera automatiquement, assurez-vous simplement de ne pas démarrer deux fois le même contrôleur.
+//Initialisez votre contrôleur uniquement la première fois. La deuxième fois que vous utilisez ReBuilder pour le même contrôleur, ne recommencez pas. Votre contrôleur sera automatiquement supprimé de la mémoire dès que le widget qui l'a marqué comme `init` sera déployé. Vous n'avez pas à vous en soucier, Get le fera automatiquement, assurez-vous simplement de ne pas démarrer deux fois le même contrôleur.
 ```
 
 **Fait!**
@@ -538,7 +538,7 @@ FloatingActionButton(
 ),
 ```
 
-Lorsque vous appuyez sur FloatingActionButton, tous les widgets qui écoutent la variable «counter» seront mis à jour automatiquement.
+Lorsque vous appuyez sur FloatingActionButton, tous les widgets qui écoutent la variable `counter` seront mis à jour automatiquement.
 
 ### Comment il gère les contrôleurs
 
@@ -579,13 +579,13 @@ void onInit() {
 
 ### Pourquoi ca existe
 
-Le but de ce package est précisément de vous donner une solution complète pour la navigation des routes, la gestion des dépendances et des états, en utilisant le moins de dépendances possible, avec un haut degré de découplage. Get engage toutes les API Flutter de haut et bas niveau en lui-même, pour vous assurer de travailler avec le moins de couplage possible. Nous centralisons tout dans un seul package, pour vous assurer que vous n'avez aucun type de couplage dans votre projet. De cette façon, vous pouvez mettre uniquement des widgets dans votre vue et laisser la partie de votre équipe qui travaille avec la «business logique» libre, pour travailler avec la business logique sans dépendre d'aucun élément de la vue. Cela fournit un environnement de travail beaucoup plus propre, de sorte qu'une partie de votre équipe ne travaille qu'avec des widgets, sans se soucier d'envoyer des données à votre contrôleur, et une partie de votre équipe ne travaille qu'avec la business logique dans toute son ampleur, sans dépendre d'aucun élément de la Vue.
+Le but de ce package est précisément de vous donner une solution complète pour la navigation des routes, la gestion des dépendances et des états, en utilisant le moins de dépendances possible, avec un haut degré de découplage. Get engage toutes les API Flutter de haut et bas niveau en lui-même, pour vous assurer de travailler avec le moins de couplage possible. Nous centralisons tout dans un seul package, pour vous assurer que vous n'avez aucun type de couplage dans votre projet. De cette façon, vous pouvez mettre uniquement des widgets dans votre vue et laisser la partie de votre équipe qui travaille avec la `business logique` libre, pour travailler avec la business logique sans dépendre d'aucun élément de la vue. Cela fournit un environnement de travail beaucoup plus propre, de sorte qu'une partie de votre équipe ne travaille qu'avec des widgets, sans se soucier d'envoyer des données à votre contrôleur, et une partie de votre équipe ne travaille qu'avec la business logique dans toute son ampleur, sans dépendre d'aucun élément de la Vue.
 
 Donc, pour simplifier cela:
 Vous n'avez pas besoin d'appeler des méthodes dans initState et de les envoyer par paramètre à votre contrôleur, ni d'utiliser votre constructeur de contrôleur pour cela, vous avez la méthode onInit() qui est appelée au bon moment pour démarrer vos services.
 Vous n'avez pas besoin d'appeler l'appareil, vous avez la méthode onClose() qui sera appelée au moment exact où votre contrôleur n'est plus nécessaire et sera supprimé de la mémoire. De cette façon, ne laissez les vues que pour les widgets, abstenez-vous d'y mettre tout type de business logique.
 
-N'appelez pas une méthode dispose() dans GetxController, cela ne fera rien, rappelez-vous que le contrôleur n'est pas un Widget, vous ne devez pas le «supprimer», et il sera automatiquement et intelligemment supprimé de la mémoire par Get. Si vous avez utilisé un Stream et que vous souhaitez le fermer, insérez-le simplement dans la méthode close(). Exemple:
+N'appelez pas une méthode dispose() dans GetxController, cela ne fera rien, rappelez-vous que le contrôleur n'est pas un Widget, vous ne devez pas le `supprimer`, et il sera automatiquement et intelligemment supprimé de la mémoire par Get. Si vous avez utilisé un Stream et que vous souhaitez le fermer, insérez-le simplement dans la méthode close(). Exemple:
 
 ```dart
 class Controller extends GetxController {
@@ -653,7 +653,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-- Vous pouvez utiliser des approches «non canoniques» pour ce faire. Si vous utilisez un autre gestionnaire de dépendances, comme get_it, modular, etc., et que vous souhaitez simplement fournir l'instance de contrôleur, vous pouvez le faire:
+- Vous pouvez utiliser des approches `non canoniques` pour ce faire. Si vous utilisez un autre gestionnaire de dépendances, comme get_it, modular, etc., et que vous souhaitez simplement fournir l'instance de contrôleur, vous pouvez le faire:
 
 ```dart
 Controller controller = Controller();
@@ -699,7 +699,7 @@ GetX le fait automatiquement et ne reconstruit que le widget qui utilise la vari
 
 Certaines personnes ont ouvert une demande de fonctionnalité, car elles ne voulaient utiliser qu'un seul type de variable réactive, et les autres mécanismes, et devaient insérer un Obx dans un GetBuilder pour cela. En y réfléchissant, MixinBuilder a été créé. Il permet à la fois des changements réactifs en changeant les variables ".obs" et des mises à jour mécaniques via update(). Cependant, des 4 widgets c'est celui qui consomme le plus de ressources, car en plus d'avoir un Abonnement pour recevoir les événements de changement de ses enfants, il souscrit à la méthode de mise à jour de son contrôleur.
 
-L'extension de GetxController est importante, car ils ont des cycles de vie et peuvent «démarrer» et «terminer» des événements dans leurs méthodes onInit() et onClose(). Vous pouvez utiliser n'importe quelle classe pour cela, mais je vous recommande fortement d'utiliser la classe GetxController pour placer vos variables, qu'elles soient observables ou non.
+L'extension de GetxController est importante, car ils ont des cycles de vie et peuvent `démarrer` et `terminer` des événements dans leurs méthodes onInit() et onClose(). Vous pouvez utiliser n'importe quelle classe pour cela, mais je vous recommande fortement d'utiliser la classe GetxController pour placer vos variables, qu'elles soient observables ou non.
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 
