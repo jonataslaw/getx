@@ -70,7 +70,7 @@ _语言: 中文, [英文](README.md), [印度尼西亚](README.id-ID.md), [乌�
 **此外，为了进一步提高您的生产效率，我们还为您准备了一些插件**
 
 - **getx_template**：一键生成每个页面必需的文件夹、文件、模板代码等等
-  - [Android Studio/Intellij插件](https://plugins.jetbrains.com/plugin/15919-getx)：使用参考
+  - [Android Studio/Intellij插件](https://plugins.jetbrains.com/plugin/15919-getx)
 - **GetX Snippets**：输入少量字母，自动提示选择后，可生成常用的模板代码
   - [Android Studio/Intellij扩展](https://plugins.jetbrains.com/plugin/14975-getx-snippets)
   - [VSCode扩展](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)
