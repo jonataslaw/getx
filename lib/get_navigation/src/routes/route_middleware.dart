@@ -38,7 +38,7 @@ abstract class _RouteMiddleware {
   /// ```dart
   /// GetPage onPageCalled(GetPage page) {
   ///   final authService = Get.find<AuthService>();
-  ///   return page.copyWith(title: 'Wellcome ${authService.UserName}');
+  ///   return page.copyWith(title: 'Welcome ${authService.UserName}');
   /// }
   /// ```
   /// {@end-tool}
