@@ -1,4 +1,4 @@
-import 'package:get/get_core/src/get_main.dart';
+import '../../../get_core/src/get_main.dart';
 
 import '../../get_navigation.dart';
 import '../routes/get_route.dart';

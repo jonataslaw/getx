@@ -57,16 +57,16 @@ class ListNotifier implements Listenable {
   void refreshGroup(Object id) {
     assert(_debugAssertNotDisposed());
 
-    /// This debounce the call to update.
-    /// It prevent errors and duplicates builds
-    if (_microtask == _version) {
-      _microtask++;
-      scheduleMicrotask(() {
-        _version++;
-        _microtask = _version;
-        _notifyIdUpdate(id);
-      });
-    }
+    // /// This debounce the call to update.
+    // /// It prevent errors and duplicates builds
+    // if (_microtask == _version) {
+    //   _microtask++;
+    //   scheduleMicrotask(() {
+    //     _version++;
+    //     _microtask = _version;
+    _notifyIdUpdate(id);
+    // });
+    // }
   }
 
   bool _debugAssertNotDisposed() {
