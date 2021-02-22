@@ -51,7 +51,7 @@ extension Trans on String {
   }
 
   String trPlural([String pluralKey, int i, List<String> args = const []]) {
-    return i > 1 ? pluralKey.trArgs(args) : trArgs(args);
+    return i == 1 ? pluralKey.trArgs(args) : trArgs(args);
   }
 
   String trParams([Map<String, String> params = const {}]) {
@@ -66,7 +66,7 @@ extension Trans on String {
 
   String trPluralParams(
       [String pluralKey, int i, Map<String, String> params = const {}]) {
-    return i > 1 ? pluralKey.trParams(params) : trParams(params);
+    return i == 1 ? pluralKey.trParams(params) : trParams(params);
   }
 }
 
