@@ -911,6 +911,6 @@ _想为项目做贡献吗？我们将自豪地强调你是我们的合作者之�
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
-- [Flutter GetX use --- simple charm!](https://github.com/CNAD666/getx_template/blob/main/docs/Use of Flutter GetX---simple charm!.md) - CNAD666
+- [Flutter GetX use --- simple charm!](https://github.com/CNAD666/getx_template/blob/main/docs/Use%20of%20Flutter%20GetX---simple%20charm!.md) - CNAD666
   - [Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
 
