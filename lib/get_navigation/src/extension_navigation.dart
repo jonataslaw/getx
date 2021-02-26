@@ -1092,7 +1092,13 @@ Since version 2.8 it is possible to access the properties
   BuildContext get context => key?.currentContext;
 
   /// give access to current Overlay Context
-  BuildContext get overlayContext => key?.currentState?.overlay?.context;
+  BuildContext get overlayContext {
+    BuildContext overlay;
+    key?.currentState?.overlay?.context?.visitChildElements((element) {
+      overlay = element;
+    });
+    return overlay;
+  }
 
   /// give access to Theme.of(context)
   ThemeData get theme {

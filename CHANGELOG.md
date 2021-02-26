@@ -1,3 +1,6 @@
+## [3.25.5] 
+- Fix Get.isDialogOpen when two or more open dialogs are closed
+
 ## [3.25.4] 
 - Added logs and tests to unknownRoute
 

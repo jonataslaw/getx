@@ -156,11 +156,12 @@ class GetObserver extends NavigatorObserver {
       value.isBack = true;
       value.removed = '';
       value.previous = newRoute.name ?? '';
-      value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
-      value.isBottomSheet =
-          currentRoute.isBottomSheet ? false : value.isBottomSheet;
-      value.isDialog = currentRoute.isDialog ? false : value.isDialog;
+      value.isSnackbar = newRoute.isSnackbar;
+      value.isBottomSheet = newRoute.isBottomSheet;
+      value.isDialog = newRoute.isDialog;
     });
+
+    print('currentRoute.isDialog ${currentRoute.isDialog}');
 
     routing?.call(_routeSend);
   }
