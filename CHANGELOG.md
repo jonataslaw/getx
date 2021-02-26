@@ -1,3 +1,11 @@
+## [3.25.6] 
+- Added documentation in French (@kamazoun)
+- Fix logs messages (@damphat)
+- Fix plural to zero on internacionalization (@RafaRuiz)
+- Fix error when body hasn't content on GetConnect (@jasonlaw)
+- Fix typos on readme (@bashleigh)
+- Fix group updates to GetBuilder
+
 ## [3.25.5] 
 - Fix Get.isDialogOpen when two or more open dialogs are closed
 

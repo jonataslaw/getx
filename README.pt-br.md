@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Idiomas: [Inglês](README.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreana](README.ko-kr.md).**
+**Idiomas: [Inglês](README.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreano](README.ko-kr.md), [Francês](README-fr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)

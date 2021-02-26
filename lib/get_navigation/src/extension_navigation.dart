@@ -526,7 +526,7 @@ extension GetNavigation on GetInterface {
       return page;
     } else if (page is Widget) {
       Get.log(
-          '''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.to(Page())".
+          '''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.$method(Page())".
 Using a widget function instead of a widget fully guarantees that the widget and its controllers will be removed from memory when they are no longer used.
       ''');
       return () => page;
