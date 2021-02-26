@@ -19,21 +19,13 @@ bool _hasLength(dynamic value) {
 }
 
 /// Obtains a length of a dynamic value
-/// by previously validating it's type
+/// by previously validating it's type.
+/// Returns -1 if length cannot be determined.
 ///
 /// Note: if [value] is double/int
 /// it will be taking the .toString
 /// length of the given value.
-///
-/// Note 2: **this may return null!**
-///
-/// Note 3: null [value] returns null.
 int _obtainDynamicLength(dynamic value) {
-  if (value == null) {
-    // ignore: avoid_returning_null
-    return null;
-  }
-
   if (_hasLength(value)) {
     return value.length as int;
   }
@@ -46,8 +38,7 @@ int _obtainDynamicLength(dynamic value) {
     return value.toString().replaceAll('.', '').length;
   }
 
-  // ignore: avoid_returning_null
-  return null;
+  return -1;
 }
 
 class GetUtils {
@@ -207,7 +198,7 @@ class GetUtils {
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) {
-    if (s == null || s.length > 16 || s.length < 9) return false;
+    if (s.length > 16 || s.length < 9) return false;
     return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   }
 
@@ -305,22 +296,12 @@ class GetUtils {
   /// Checks if length of data is GREATER than maxLength.
   static bool isLengthGreaterThan(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
-
-    if (length == null) {
-      return false;
-    }
-
     return length > maxLength;
   }
 
   /// Checks if length of data is GREATER OR EQUAL to maxLength.
   static bool isLengthGreaterOrEqual(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
-
-    if (length == null) {
-      return false;
-    }
-
     return length >= maxLength;
   }
 
@@ -334,10 +315,6 @@ class GetUtils {
   /// Checks if length of data is LESS than maxLength.
   static bool isLengthLessThan(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
-    if (length == null) {
-      return false;
-    }
-
     return length < maxLength;
   }
 
@@ -351,22 +328,12 @@ class GetUtils {
   /// Checks if length of data is LESS OR EQUAL to maxLength.
   static bool isLengthLessOrEqual(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
-
-    if (length == null) {
-      return false;
-    }
-
     return length <= maxLength;
   }
 
   /// Checks if length of data is EQUAL to maxLength.
   static bool isLengthEqualTo(dynamic value, int otherLength) {
     final length = _obtainDynamicLength(value);
-
-    if (length == null) {
-      return false;
-    }
-
     return length == otherLength;
   }
 
@@ -406,10 +373,6 @@ class GetUtils {
 
   //Check if num is a cnpj
   static bool isCnpj(String cnpj) {
-    if (cnpj == null) {
-      return false;
-    }
-
     // Obter somente os números do CNPJ
     final numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -459,10 +422,6 @@ class GetUtils {
 
   /// Checks if the cpf is valid.
   static bool isCpf(String cpf) {
-    if (cpf == null) {
-      return false;
-    }
-
     // get only the numbers
     final numbers = cpf.replaceAll(RegExp(r'[^0-9]'), '');
     // Test if the CPF has 11 digits
@@ -511,7 +470,6 @@ class GetUtils {
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   static String capitalize(String value) {
-    if (isNullOrBlank(value)) return null;
     return value.split(' ').map(capitalizeFirst).join(' ');
   }
 
@@ -519,7 +477,7 @@ class GetUtils {
   /// Example: your name => Your name
   static String capitalizeFirst(String s) {
     if (isNullOrBlank(s)) {
-      return null;
+      return '';
     }
 
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
@@ -529,7 +487,7 @@ class GetUtils {
   /// Example: your name => yourname
   static String removeAllWhitespace(String value) {
     if (isNullOrBlank(value)) {
-      return null;
+      return '';
     }
 
     return value.replaceAll(' ', '');
@@ -539,7 +497,7 @@ class GetUtils {
   /// Example: your name => yourName
   static String camelCase(String value) {
     if (isNullOrBlank(value)) {
-      return null;
+      return '';
     }
 
     final separatedWords = value.split(' ');
@@ -572,7 +530,7 @@ class GetUtils {
   }
 
   static bool hasMatch(String value, String pattern) {
-    return (value == null) ? false : RegExp(pattern).hasMatch(value);
+    return RegExp(pattern).hasMatch(value);
   }
 
   static void printFunction(
