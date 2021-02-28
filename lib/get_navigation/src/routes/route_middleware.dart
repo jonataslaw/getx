@@ -173,6 +173,7 @@ class PageRedirect {
             parameter: unknownRoute.parameter,
             settings: RouteSettings(
                 name: unknownRoute.name, arguments: settings.arguments),
+            routeName: unknownRoute.name,
             curve: unknownRoute.curve,
             opaque: unknownRoute.opaque,
             customTransition: unknownRoute.customTransition,
@@ -190,6 +191,7 @@ class PageRedirect {
             parameter: route.parameter,
             settings: RouteSettings(
                 name: settings.name, arguments: settings.arguments),
+            routeName: settings.name,
             curve: route.curve,
             opaque: route.opaque,
             customTransition: route.customTransition,
