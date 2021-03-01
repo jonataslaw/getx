@@ -379,6 +379,30 @@ class Rx<T> extends _RxImpl<T> {
   }
 }
 
+/// Similar class to Rx<T> but this also will refresh the listeners if the same
+/// value has been provided. This is useful when maintaining a state with the
+/// same user = User("foo").
+/// For example, supposed we have a `int seconds = 2` and we want to animate
+/// from invisible to visible a widget in two seconds:
+/// RxEvent<int>.call(seconds);
+/// then after a click happens, you want to call a RxEvent<int>.call(seconds).
+/// This will refresh the listener of an AnimatedWidget and will keep the value
+/// if the Rx is kept in memory.
+///
+class RxEvent<T> extends Rx<T> {
+  RxEvent([T initial]) : super(initial);
+
+  void trigger([T v]) {
+    var firstRebuild = this.firstRebuild;
+    value = v;
+    // If it's not the first rebuild, the listeners have been called already
+    // So we won't call them again.
+    if (!firstRebuild) {
+      subject.add(v);
+    }
+  }
+}
+
 extension StringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get obs => RxString(this);
