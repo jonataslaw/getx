@@ -152,51 +152,36 @@ class RxStatus {
   final bool isError;
   final bool isSuccess;
   final bool isEmpty;
+  final bool isLoadingMore;
   final String errorMessage;
 
   RxStatus._({
-    this.isEmpty,
-    this.isLoading,
-    this.isError,
-    this.isSuccess,
+    this.isEmpty = false,
+    this.isLoading = false,
+    this.isError = false,
+    this.isSuccess = false,
     this.errorMessage,
+    this.isLoadingMore = false,
   });
 
   factory RxStatus.loading() {
-    return RxStatus._(
-      isLoading: true,
-      isError: false,
-      isSuccess: false,
-      isEmpty: false,
-    );
+    return RxStatus._(isLoading: true);
+  }
+
+  factory RxStatus.loadingMore() {
+    return RxStatus._(isSuccess: true, isLoadingMore: true);
   }
 
   factory RxStatus.success() {
-    return RxStatus._(
-      isLoading: false,
-      isError: false,
-      isSuccess: true,
-      isEmpty: false,
-    );
+    return RxStatus._(isSuccess: true);
   }
 
   factory RxStatus.error([String message]) {
-    return RxStatus._(
-      isLoading: false,
-      isError: true,
-      isSuccess: false,
-      isEmpty: false,
-      errorMessage: message,
-    );
+    return RxStatus._(isError: true, errorMessage: message);
   }
 
   factory RxStatus.empty() {
-    return RxStatus._(
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      isEmpty: true,
-    );
+    return RxStatus._(isEmpty: true);
   }
 }
 
