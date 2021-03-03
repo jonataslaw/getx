@@ -62,6 +62,15 @@ mixin StateMixin<T> on ListNotifier {
       refresh();
     }
   }
+
+  void append(Future<T> Function() body(), {String errorMessage}) {
+    final compute = body();
+    compute().then((newValue) {
+      change(newValue, status: RxStatus.success());
+    }, onError: (err) {
+      change(state, status: RxStatus.error(errorMessage ?? err.toString()));
+    });
+  }
 }
 
 class Value<T> extends ListNotifier
