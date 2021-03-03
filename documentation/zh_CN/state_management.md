@@ -343,25 +343,24 @@ ListView.builder (
 ```dart
 // model
 // 我们将使整个类成为可观察的，而不是每个属性。
-class User() {
-  User({this.name = '', this.age = 0});
-  String name;
-  int age;
+class User{
+    User({this.name = '', this.age = 0});
+    String name;
+    int age;
 }
-
 
 // controller
 final user = User().obs;
 //当你需要更新user变量时。
 user.update( (user) { // 这个参数是你要更新的类本身。
-user.name = 'Jonny';
-user.age = 18;
+    user.name = 'Jonny';
+    user.age = 18;
 });
 // 更新user变量的另一种方式。
 user(User(name: 'João', age: 35));
 
 // view
-Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
+Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"));
 // 你也可以不使用.value来访问模型值。
 user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
 ```
@@ -410,7 +409,7 @@ interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 这个`condition`定义了`callback`函数何时执行。
 
 所有worker都会返回一个`Worker`实例，你可以用它来取消（通过`dispose()`）worker。
- 
+
 - **`ever`**
  每当_Rx_变量发出一个新的值时，就会被调用。
 
