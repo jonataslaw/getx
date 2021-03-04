@@ -1,6 +1,6 @@
 name: get
 description: Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
-version: 3.25.6
+version: 4.0.0-nullsafety.0
 homepage: https://github.com/jonataslaw/getx
 
 environment:
@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
   integration_test:
