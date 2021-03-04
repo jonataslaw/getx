@@ -13,7 +13,7 @@ abstract class GetxController extends DisposableInterface with ListNotifier {
   /// `GetBuilder( id: )`,
   /// [ids] can be reused among `GetBuilders` like group tags.
   /// The update will only notify the Widgets, if [condition] is true.
-  void update([List<Object> ids, bool condition = true]) {
+  void update([List<Object>? ids, bool condition = true]) {
     if (!condition) {
       return;
     }
@@ -86,13 +86,13 @@ mixin FullLifeCycle on FullLifeCycleController {
   @override
   void onInit() {
     super.onInit();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @mustCallSuper
   @override
   void onClose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.onClose();
   }
 

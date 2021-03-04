@@ -60,9 +60,9 @@ Worker ever<T>(
   RxInterface<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
-  Function onError,
-  void Function() onDone,
-  bool cancelOnError,
+  Function? onError,
+  void Function()? onDone,
+  bool? cancelOnError,
 }) {
   StreamSubscription sub = listener.listen(
     (event) {
@@ -83,9 +83,9 @@ Worker everAll(
   List<RxInterface> listeners,
   WorkerCallback callback, {
   dynamic condition = true,
-  Function onError,
-  void Function() onDone,
-  bool cancelOnError,
+  Function? onError,
+  void Function()? onDone,
+  bool? cancelOnError,
 }) {
   final evers = <StreamSubscription>[];
   for (var i in listeners) {
@@ -135,12 +135,12 @@ Worker once<T>(
   RxInterface<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
-  Function onError,
-  void Function() onDone,
-  bool cancelOnError,
+  Function? onError,
+  void Function()? onDone,
+  bool? cancelOnError,
 }) {
-  Worker ref;
-  StreamSubscription sub;
+  late Worker ref;
+  StreamSubscription? sub;
   sub = listener.listen(
     (event) {
       if (!_conditional(condition)) return;
@@ -179,9 +179,9 @@ Worker interval<T>(
   WorkerCallback<T> callback, {
   Duration time = const Duration(seconds: 1),
   dynamic condition = true,
-  Function onError,
-  void Function() onDone,
-  bool cancelOnError,
+  Function? onError,
+  void Function()? onDone,
+  bool? cancelOnError,
 }) {
   var debounceActive = false;
   time ??= const Duration(seconds: 1);
@@ -222,10 +222,10 @@ Worker interval<T>(
 Worker debounce<T>(
   RxInterface<T> listener,
   WorkerCallback<T> callback, {
-  Duration time,
-  Function onError,
-  void Function() onDone,
-  bool cancelOnError,
+  Duration? time,
+  Function? onError,
+  void Function()? onDone,
+  bool? cancelOnError,
 }) {
   final _debouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));

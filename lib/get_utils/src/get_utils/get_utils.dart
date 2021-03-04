@@ -5,12 +5,12 @@ import '../../../get_core/get_core.dart';
 /// standard dart types that contains it.
 ///
 /// This is here to for the 'DRY'
-bool _isEmpty(dynamic value) {
+bool? _isEmpty(dynamic value) {
   if (value is String) {
     return value.toString().trim().isEmpty;
   }
   if (value is Iterable || value is Map) {
-    return value.isEmpty as bool;
+    return value.isEmpty as bool?;
   }
   return false;
 }
@@ -34,14 +34,14 @@ bool _hasLength(dynamic value) {
 /// Note 2: **this may return null!**
 ///
 /// Note 3: null [value] returns null.
-int _obtainDynamicLength(dynamic value) {
+int? _obtainDynamicLength(dynamic value) {
   if (value == null) {
     // ignore: avoid_returning_null
     return null;
   }
 
   if (_hasLength(value)) {
-    return value.length as int;
+    return value.length as int?;
   }
 
   if (value is int) {
@@ -71,7 +71,7 @@ class GetUtils {
   static dynamic nil(dynamic s) => s == null ? null : s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
-  static bool isNullOrBlank(dynamic value) {
+  static bool? isNullOrBlank(dynamic value) {
     if (isNull(value)) {
       return true;
     }
@@ -82,7 +82,7 @@ class GetUtils {
   }
 
   /// Checks if data is null or blank (empty or only contains whitespace).
-  static bool isBlank(dynamic value) {
+  static bool? isBlank(dynamic value) {
     return _isEmpty(value);
   }
 
@@ -272,7 +272,7 @@ class GetUtils {
   /// Checks if all data have same value.
   /// Example: 111111 -> true, wwwww -> true, [1,1,1,1] -> true
   static bool isOneAKind(dynamic value) {
-    if ((value is String || value is List) && !isNullOrBlank(value)) {
+    if ((value is String || value is List) && !isNullOrBlank(value)!) {
       final first = value[0];
       final len = value.length as num;
 
@@ -517,17 +517,17 @@ class GetUtils {
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
-  static String capitalize(String value) {
+  static String? capitalize(String value) {
     if (isNull(value)) return null;
-    if (isBlank(value)) return value;
+    if (isBlank(value)!) return value;
     return value.split(' ').map(capitalizeFirst).join(' ');
   }
 
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
-  static String capitalizeFirst(String s) {
+  static String? capitalizeFirst(String s) {
     if (isNull(s)) return null;
-    if (isBlank(s)) return s;
+    if (isBlank(s)!) return s;
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 
@@ -539,8 +539,8 @@ class GetUtils {
 
   /// Camelcase string
   /// Example: your name => yourName
-  static String camelCase(String value) {
-    if (isNullOrBlank(value)) {
+  static String? camelCase(String value) {
+    if (isNullOrBlank(value)!) {
       return null;
     }
 
@@ -574,11 +574,11 @@ class GetUtils {
     return numericOnlyStr;
   }
 
-  static bool hasMatch(String value, String pattern) {
+  static bool hasMatch(String? value, String pattern) {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
 
-  static String createPath(String path, [Iterable segments]) {
+  static String createPath(String path, [Iterable? segments]) {
     if (segments == null || segments.isEmpty) {
       return path;
     }
@@ -600,5 +600,5 @@ typedef PrintFunctionCallback = void Function(
   String prefix,
   dynamic value,
   String info, {
-  bool isError,
+  bool? isError,
 });

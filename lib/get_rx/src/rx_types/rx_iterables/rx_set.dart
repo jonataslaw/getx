@@ -17,23 +17,23 @@ class RxSet<E> extends SetMixin<E>
     return this;
   }
 
-  void update(void fn(Iterable<E> value)) {
+  void update(void fn(Iterable<E>? value)) {
     fn(value);
     refresh();
   }
 
   @override
   @protected
-  Set<E> get value {
+  Set<E>? get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
   }
 
   @override
   @protected
-  set value(Set<E> val) {
+  set value(Set<E>? val) {
     if (_value == val) return;
     _value = val;
     refresh();
@@ -41,30 +41,30 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   bool add(E value) {
-    final val = _value.add(value);
+    final val = _value!.add(value);
     refresh();
     return val;
   }
 
   @override
-  bool contains(Object element) {
-    return value.contains(element);
+  bool contains(Object? element) {
+    return value!.contains(element);
   }
 
   @override
-  Iterator<E> get iterator => value.iterator;
+  Iterator<E> get iterator => value!.iterator;
 
   @override
-  int get length => value.length;
+  int get length => value!.length;
 
   @override
-  E lookup(Object object) {
-    return value.lookup(object);
+  E? lookup(Object? object) {
+    return value!.lookup(object);
   }
 
   @override
-  bool remove(Object item) {
-    var hasRemoved = _value.remove(item);
+  bool remove(Object? item) {
+    var hasRemoved = _value!.remove(item);
     if (hasRemoved) {
       refresh();
     }
@@ -73,36 +73,36 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   Set<E> toSet() {
-    return value.toSet();
+    return value!.toSet();
   }
 
   @override
   void addAll(Iterable<E> item) {
-    _value.addAll(item);
+    _value!.addAll(item);
     refresh();
   }
 
   @override
   void clear() {
-    _value.clear();
+    _value!.clear();
     refresh();
   }
 
   @override
-  void removeAll(Iterable<Object> elements) {
-    _value.removeAll(elements);
+  void removeAll(Iterable<Object?> elements) {
+    _value!.removeAll(elements);
     refresh();
   }
 
   @override
-  void retainAll(Iterable<Object> elements) {
-    _value.retainAll(elements);
+  void retainAll(Iterable<Object?> elements) {
+    _value!.retainAll(elements);
     refresh();
   }
 
   @override
   void retainWhere(bool Function(E) E) {
-    _value.retainWhere(E);
+    _value!.retainWhere(E);
     refresh();
   }
 }

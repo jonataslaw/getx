@@ -693,7 +693,7 @@ void main() {
     });
 
     test('var.removeAllWhitespace', () {
-      String nullString;
+      late String nullString;
       expect('foo bar'.removeAllWhitespace, 'foobar');
       expect('foo'.removeAllWhitespace, 'foo');
       expect(''.removeAllWhitespace, '');

@@ -29,37 +29,37 @@ class RxMap<K, V> extends MapMixin<K, V>
   }
 
   @override
-  V operator [](Object key) {
-    return value[key];
+  V? operator [](Object? key) {
+    return value![key as K];
   }
 
   @override
   void operator []=(K key, V value) {
-    _value[key] = value;
+    _value![key] = value;
     refresh();
   }
 
   @override
   void clear() {
-    _value.clear();
+    _value!.clear();
     refresh();
   }
 
   @override
-  Iterable<K> get keys => value.keys;
+  Iterable<K> get keys => value!.keys;
 
   @override
-  V remove(Object key) {
-    final val = _value.remove(key);
+  V? remove(Object? key) {
+    final val = _value!.remove(key);
     refresh();
     return val;
   }
 
   @override
   @protected
-  Map<K, V> get value {
+  Map<K, V>? get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
   }
@@ -67,7 +67,7 @@ class RxMap<K, V> extends MapMixin<K, V>
   @override
   @protected
   @Deprecated('Map.value is deprecated. use [yourMap.assignAll(newMap)]')
-  set value(Map<K, V> val) {
+  set value(Map<K, V>? val) {
     if (_value == val) return;
     _value = val;
     refresh();
@@ -95,7 +95,7 @@ extension MapExtension<K, V> on Map<K, V> {
     if (this is RxMap) {
       final map = (this as RxMap);
       map._value ??= <K, V>{};
-      map._value.clear();
+      map._value!.clear();
       this[key] = val;
     } else {
       clear();

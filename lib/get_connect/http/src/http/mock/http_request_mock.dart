@@ -20,10 +20,10 @@ class MockClient extends HttpRequestBase {
 
     var response = await _handler(request);
 
-    final stringBody = await bodyBytesToString(bodyBytes, response.headers);
+    final stringBody = await bodyBytesToString(bodyBytes, response.headers!);
 
-    var mimeType = response.headers.containsKey('content-type')
-        ? response.headers['content-type']
+    var mimeType = response.headers!.containsKey('content-type')
+        ? response.headers!['content-type']
         : '';
 
     final body = bodyDecoded<T>(

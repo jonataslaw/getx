@@ -13,7 +13,7 @@ import '../utils/body_decoder.dart';
 class HttpRequestImpl implements HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
-    List<TrustedCertificate> trustedCertificates,
+    List<TrustedCertificate>? trustedCertificates,
   });
 
   /// The currently active XHRs.
@@ -41,16 +41,16 @@ class HttpRequestImpl implements HttpRequestBase {
 
     var completer = Completer<Response<T>>();
     xhr.onLoad.first.then((_) {
-      var blob = xhr.response as html.Blob ?? html.Blob([]);
+      var blob = xhr.response as html.Blob? ?? html.Blob([]);
       var reader = html.FileReader();
 
       reader.onLoad.first.then((_) async {
-        var bodyBytes = BodyBytesStream.fromBytes(reader.result as Uint8List);
+        var bodyBytes = BodyBytesStream.fromBytes(reader.result as Uint8List?);
 
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);
 
-        String contentType;
+        String? contentType;
 
         if (xhr.responseHeaders.containsKey('content-type')) {
           contentType = xhr.responseHeaders['content-type'];

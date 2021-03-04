@@ -1,7 +1,7 @@
 import './socket_notifier.dart';
 
 class BaseWebSocket {
-  String url;
+  String? url;
   Duration ping;
   bool allowSelfSigned;
   BaseWebSocket(
@@ -36,7 +36,7 @@ class BaseWebSocket {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void close([int status, String reason]) {
+  void close([int? status, String? reason]) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 

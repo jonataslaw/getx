@@ -51,7 +51,7 @@ void main() {
     expect(find.text("List: 0"), findsOneWidget);
     expect(find.text("Map: 0"), findsOneWidget);
 
-    Controller.to.increment();
+    Controller.to!.increment();
 
     await tester.pump();
 
@@ -79,7 +79,7 @@ void main() {
 }
 
 class Controller extends GetxController {
-  static Controller get to => Get.find();
+  static Controller? get to => Get.find();
   int count = 0;
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;

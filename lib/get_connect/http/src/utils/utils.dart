@@ -53,7 +53,7 @@ String validateField(String field) {
 }
 
 BodyBytesStream toBodyBytesStream(Stream<List<int>> stream) {
-  if (stream is BodyBytesStream) return stream;
+  if (stream is BodyBytesStream) return stream as BodyBytesStream;
   return BodyBytesStream(stream);
 }
 

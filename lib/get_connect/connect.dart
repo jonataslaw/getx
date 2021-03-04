@@ -13,74 +13,74 @@ export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
 abstract class GetConnectInterface with GetLifeCycleBase {
-  List<GetSocket> sockets;
+  List<GetSocket>? sockets;
   GetHttpClient get httpClient;
 
   Future<Response<T>> get<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   });
 
   Future<Response<T>> request<T>(
     String url,
     String method, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   });
   Future<Response<T>> post<T>(
     String url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   });
 
   Future<Response<T>> put<T>(
     String url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   });
 
   Future<Response<T>> delete<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   });
 
   Future<Response<T>> patch<T>(
     String url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   });
 
   Future<GraphQLResponse<T>> query<T>(
     String query, {
-    String url,
-    Map<String, dynamic> variables,
-    Map<String, String> headers,
+    String? url,
+    Map<String, dynamic>? variables,
+    Map<String, String>? headers,
   });
 
   Future<GraphQLResponse<T>> mutation<T>(
     String mutation, {
-    String url,
-    Map<String, dynamic> variables,
-    Map<String, String> headers,
+    String? url,
+    Map<String, dynamic>? variables,
+    Map<String, String>? headers,
   });
 
   GetSocket socket(
@@ -103,16 +103,16 @@ class GetConnect extends GetConnectInterface {
 
   bool allowAutoSignedCert;
   String userAgent;
-  String baseUrl;
+  String? baseUrl;
   String defaultContentType = 'application/json; charset=utf-8';
   bool followRedirects;
   int maxRedirects;
   int maxAuthRetries;
-  Decoder defaultDecoder;
+  Decoder? defaultDecoder;
   Duration timeout;
-  List<TrustedCertificate> trustedCertificates;
-  GetHttpClient _httpClient;
-  List<GetSocket> _sockets;
+  List<TrustedCertificate>? trustedCertificates;
+  GetHttpClient? _httpClient;
+  List<GetSocket>? _sockets;
 
   @override
   List<GetSocket> get sockets => _sockets ??= <GetSocket>[];
@@ -132,10 +132,10 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> get<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   }) {
     _checkIfDisposed();
     return httpClient.get<T>(
@@ -149,13 +149,13 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> post<T>(
-    String url,
+    String? url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.post<T>(
@@ -173,11 +173,11 @@ class GetConnect extends GetConnectInterface {
   Future<Response<T>> put<T>(
     String url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.put<T>(
@@ -195,11 +195,11 @@ class GetConnect extends GetConnectInterface {
   Future<Response<T>> patch<T>(
     String url,
     dynamic body, {
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.patch<T>(
@@ -218,11 +218,11 @@ class GetConnect extends GetConnectInterface {
     String url,
     String method, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.request<T>(
@@ -240,10 +240,10 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> delete<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   }) {
     _checkIfDisposed();
     return httpClient.delete(
@@ -267,9 +267,9 @@ class GetConnect extends GetConnectInterface {
     return _socket;
   }
 
-  String _concatUrl(String url) {
+  String? _concatUrl(String? url) {
     if (url == null) return baseUrl;
-    return baseUrl == null ? url : baseUrl + url;
+    return baseUrl == null ? url : baseUrl! + url;
   }
 
   /// query allow made GraphQL raw querys
@@ -294,9 +294,9 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<GraphQLResponse<T>> query<T>(
     String query, {
-    String url,
-    Map<String, dynamic> variables,
-    Map<String, String> headers,
+    String? url,
+    Map<String, dynamic>? variables,
+    Map<String, String>? headers,
   }) async {
     try {
       final res = await post(
@@ -316,7 +316,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T);
+      return GraphQLResponse<T>(body: res.body['data'] as T?);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
@@ -330,9 +330,9 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<GraphQLResponse<T>> mutation<T>(
     String mutation, {
-    String url,
-    Map<String, dynamic> variables,
-    Map<String, String> headers,
+    String? url,
+    Map<String, dynamic>? variables,
+    Map<String, String>? headers,
   }) async {
     try {
       final res = await post(
@@ -352,7 +352,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T);
+      return GraphQLResponse<T>(body: res.body['data'] as T?);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(

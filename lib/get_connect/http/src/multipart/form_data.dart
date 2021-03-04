@@ -83,7 +83,7 @@ class FormData {
           _maxBoundaryLength +
           '\r\n'.length +
           utf8.encode(_fileHeader(file)).length +
-          file.value.length +
+          file.value.length! +
           '\r\n'.length;
     }
 
@@ -109,7 +109,7 @@ class FormData {
     for (final file in files) {
       yield separator;
       yield utf8.encode(_fileHeader(file));
-      yield* file.value.stream;
+      yield* file.value.stream! as Stream<List<int>>;
       yield line;
     }
     yield close;

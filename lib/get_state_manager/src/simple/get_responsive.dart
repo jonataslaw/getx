@@ -5,15 +5,15 @@ import 'get_view.dart';
 
 abstract class _GetResponsive<T> extends GetView<T> {
   final ResponsiveScreen screen;
-  _GetResponsive(ResponsiveScreenSettings settings, {Key key})
+  _GetResponsive(ResponsiveScreenSettings settings, {Key? key})
       : screen = ResponsiveScreen(settings),
         super(key: key);
 
-  Widget builder();
-  Widget phone();
-  Widget tablet();
-  Widget desktop();
-  Widget watch();
+  Widget? builder();
+  Widget? phone();
+  Widget? tablet();
+  Widget? desktop();
+  Widget? watch();
 }
 
 /// Extend this widget to build responsive view.
@@ -33,12 +33,12 @@ class GetResponsiveView<T> extends _GetResponsive<T> {
   GetResponsiveView(
       {alwaysUseBuilder,
       ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-      Key key})
+      Key? key})
       : super(settings, key: key);
   @override
   Widget build(BuildContext context) {
     screen.context = context;
-    Widget widget;
+    Widget? widget;
     if (alwaysUseBuilder) {
       widget = builder();
       if (widget != null) return widget;
@@ -55,23 +55,23 @@ class GetResponsiveView<T> extends _GetResponsive<T> {
       widget = phone() ?? tablet() ?? desktop();
       if (widget != null) return widget;
     }
-    return watch() ?? phone() ?? tablet() ?? desktop() ?? builder();
+    return watch() ?? phone() ?? tablet() ?? desktop() ?? builder()!;
   }
 
   @override
-  Widget builder() => null;
+  Widget? builder() => null;
 
   @override
-  Widget desktop() => null;
+  Widget? desktop() => null;
 
   @override
-  Widget phone() => null;
+  Widget? phone() => null;
 
   @override
-  Widget tablet() => null;
+  Widget? tablet() => null;
 
   @override
-  Widget watch() => null;
+  Widget? watch() => null;
 }
 
 class ResponsiveScreenSettings {
@@ -98,10 +98,10 @@ class ResponsiveScreenSettings {
 }
 
 class ResponsiveScreen {
-  BuildContext context;
+  late BuildContext context;
   final ResponsiveScreenSettings settings;
 
-  bool _isPaltformDesktop;
+  late bool _isPaltformDesktop;
   ResponsiveScreen(this.settings) {
     _isPaltformDesktop = GetPlatform.isDesktop;
   }
@@ -142,11 +142,11 @@ class ResponsiveScreen {
   /// and if `tablet` object is null the `mobile` object will be returned
   /// and if `mobile` object is null the `watch` object will be returned
   ///  also when it is null.
-  T responsiveValue<T>({
-    T mobile,
-    T tablet,
-    T desktop,
-    T watch,
+  T? responsiveValue<T>({
+    T? mobile,
+    T? tablet,
+    T? desktop,
+    T? watch,
   }) {
     if (isDesktop && desktop != null) return desktop;
     if (isTablet && tablet != null) return tablet;

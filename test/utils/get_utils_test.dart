@@ -23,7 +23,7 @@ void main() {
     expect(GetUtils.isNullOrBlank(5.0), equals(false));
     expect(GetUtils.isNullOrBlank(0.0), equals(false));
 
-    TestClass testClass;
+    TestClass? testClass;
     expect(GetUtils.isNullOrBlank(testClass), equals(true));
     expect(GetUtils.isNullOrBlank(TestClass()), equals(false));
     expect(GetUtils.isNullOrBlank(EmptyClass()), equals(false));

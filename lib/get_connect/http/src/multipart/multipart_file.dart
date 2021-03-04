@@ -9,7 +9,7 @@ import '../request/request.dart';
 class MultipartFile {
   MultipartFile(
     dynamic data, {
-    @required this.filename,
+    required this.filename,
     this.contentType = 'application/octet-stream',
   }) : _bytes = fileToBytes(data) {
     _length = _bytes.length;
@@ -21,13 +21,13 @@ class MultipartFile {
   final String contentType;
 
   /// This stream will emit the file content of File.
-  BodyBytesStream _stream;
+  BodyBytesStream? _stream;
 
-  int _length;
+  int? _length;
 
-  BodyBytesStream get stream => _stream;
+  BodyBytesStream? get stream => _stream;
 
-  int get length => _length;
+  int? get length => _length;
 
   final String filename;
 }

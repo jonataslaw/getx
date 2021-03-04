@@ -5,8 +5,8 @@ import '../request/request.dart';
 import '../status/http_status.dart';
 
 class GraphQLResponse<T> extends Response<T> {
-  final List<GraphQLError> graphQLErrors;
-  GraphQLResponse({T body, this.graphQLErrors}) : super(body: body);
+  final List<GraphQLError>? graphQLErrors;
+  GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
 }
 
 class Response<T> {
@@ -21,16 +21,16 @@ class Response<T> {
   });
 
   /// The Http [Request] linked with this [Response].
-  final Request request;
+  final Request? request;
 
   /// The response headers.
-  final Map<String, String> headers;
+  final Map<String, String>? headers;
 
   /// The status code returned by the server.
-  final int statusCode;
+  final int? statusCode;
 
   /// Human-readable context for [statusCode].
-  final String statusText;
+  final String? statusText;
 
   /// [HttpStatus] from [Response]. `status.connectionError` is true
   /// when statusCode is null. `status.isUnauthorized` is true when
@@ -49,15 +49,15 @@ class Response<T> {
   bool get unauthorized => status.isUnauthorized;
 
   /// The response body as a Stream of Bytes.
-  final BodyBytesStream bodyBytes;
+  final BodyBytesStream? bodyBytes;
 
   /// The response body as a Stream of Bytes.
-  final String bodyString;
+  final String? bodyString;
 
   /// The decoded body of this [Response]. You can access the
   /// body parameters as Map
   /// Ex: body['title'];
-  final T body;
+  final T? body;
 }
 
 Future<String> bodyBytesToString(
@@ -70,13 +70,13 @@ Future<String> bodyBytesToString(
 /// Defaults to [latin1] if the headers don't specify a charset or if that
 /// charset is unknown.
 Encoding _encodingForHeaders(Map<String, String> headers) =>
-    _encodingForCharset(_contentTypeForHeaders(headers).parameters['charset']);
+    _encodingForCharset(_contentTypeForHeaders(headers).parameters!['charset']);
 
 /// Returns the [Encoding] that corresponds to [charset].
 ///
 /// Returns [fallback] if [charset] is null or if no [Encoding] was found that
 /// corresponds to [charset].
-Encoding _encodingForCharset(String charset, [Encoding fallback = latin1]) {
+Encoding _encodingForCharset(String? charset, [Encoding fallback = latin1]) {
   if (charset == null) return fallback;
   return Encoding.getByName(charset) ?? fallback;
 }
@@ -92,10 +92,10 @@ HeaderValue _contentTypeForHeaders(Map<String, String> headers) {
 
 class HeaderValue {
   String _value;
-  Map<String, String> _parameters;
-  Map<String, String> _unmodifiableParameters;
+  Map<String, String?>? _parameters;
+  Map<String, String?>? _unmodifiableParameters;
 
-  HeaderValue([this._value = '', Map<String, String> parameters]) {
+  HeaderValue([this._value = '', Map<String, String>? parameters]) {
     if (parameters != null) {
       _parameters = HashMap<String, String>.from(parameters);
     }
@@ -103,7 +103,7 @@ class HeaderValue {
 
   static HeaderValue parse(String value,
       {String parameterSeparator = ';',
-      String valueSeparator,
+      String? valueSeparator,
       bool preserveBackslash = false}) {
     var result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
@@ -116,9 +116,9 @@ class HeaderValue {
     _parameters ??= HashMap<String, String>();
   }
 
-  Map<String, String> get parameters {
+  Map<String, String?>? get parameters {
     _ensureParameters();
-    _unmodifiableParameters ??= UnmodifiableMapView(_parameters);
+    _unmodifiableParameters ??= UnmodifiableMapView(_parameters!);
     return _unmodifiableParameters;
   }
 
@@ -126,15 +126,15 @@ class HeaderValue {
   String toString() {
     var stringBuffer = StringBuffer();
     stringBuffer.write(_value);
-    if (parameters != null && parameters.isNotEmpty) {
-      _parameters.forEach((name, value) {
+    if (parameters != null && parameters!.isNotEmpty) {
+      _parameters!.forEach((name, value) {
         stringBuffer..write('; ')..write(name)..write('=')..write(value);
       });
     }
     return stringBuffer.toString();
   }
 
-  void _parse(String value, String parameterSeparator, String valueSeparator,
+  void _parse(String value, String parameterSeparator, String? valueSeparator,
       bool preserveBackslash) {
     var index = 0;
 
@@ -173,7 +173,7 @@ class HeaderValue {
     }
 
     void parseParameters() {
-      var parameters = HashMap<String, String>();
+      var parameters = HashMap<String, String?>();
       _parameters = UnmodifiableMapView(parameters);
 
       String parseParameterName() {
@@ -191,7 +191,7 @@ class HeaderValue {
         return value.substring(start, index).toLowerCase();
       }
 
-      String parseParameterValue() {
+      String? parseParameterValue() {
         if (!done() && value[index] == '\"') {
           var stringBuffer = StringBuffer();
           index++;

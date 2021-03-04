@@ -40,11 +40,11 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  Iterator<E> get iterator => value.iterator;
+  Iterator<E> get iterator => value!.iterator;
 
   @override
   void operator []=(int index, E val) {
-    _value[index] = val;
+    _value![index] = val;
     refresh();
   }
 
@@ -59,29 +59,29 @@ class RxList<E> extends ListMixin<E>
 
   @override
   E operator [](int index) {
-    return value[index];
+    return value![index];
   }
 
   @override
   void add(E item) {
-    _value.add(item);
+    _value!.add(item);
     refresh();
   }
 
   @override
   void addAll(Iterable<E> item) {
-    _value.addAll(item);
+    _value!.addAll(item);
     refresh();
   }
 
   @override
-  int get length => value.length;
+  int get length => value!.length;
 
   @override
   @protected
-  List<E> get value {
+  List<E>? get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
   }
@@ -89,7 +89,7 @@ class RxList<E> extends ListMixin<E>
   @override
   @protected
   @Deprecated('List.value is deprecated. use [yourList.assignAll(newList)]')
-  set value(List<E> val) {
+  set value(List<E>? val) {
     if (_value == val) return;
     _value = val;
     refresh();
@@ -97,32 +97,32 @@ class RxList<E> extends ListMixin<E>
 
   @override
   set length(int newLength) {
-    _value.length = newLength;
+    _value!.length = newLength;
     refresh();
   }
 
   @override
   void insertAll(int index, Iterable<E> iterable) {
-    _value.insertAll(index, iterable);
+    _value!.insertAll(index, iterable);
     refresh();
   }
 
   @override
-  Iterable<E> get reversed => value.reversed;
+  Iterable<E> get reversed => value!.reversed;
 
   @override
   Iterable<E> where(bool Function(E) test) {
-    return value.where(test);
+    return value!.where(test);
   }
 
   @override
   Iterable<T> whereType<T>() {
-    return value.whereType<T>();
+    return value!.whereType<T>();
   }
 
   @override
-  void sort([int compare(E a, E b)]) {
-    _value.sort(compare);
+  void sort([int compare(E a, E b)?]) {
+    _value!.sort(compare);
     refresh();
   }
 }

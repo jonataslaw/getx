@@ -28,7 +28,7 @@ extension Inst on GetInterface {
   /// Subsequent calls to [Get.lazyPut()] with the same parameters
   /// (<[S]> and optionally [tag] will **not** override the original).
   void lazyPut<S>(InstanceBuilderCallback<S> builder,
-      {String tag, bool fenix = false}) {
+      {String? tag, bool fenix = false}) {
     GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
@@ -39,8 +39,8 @@ extension Inst on GetInterface {
   /// async version of [Get.put()].
   /// Awaits for the resolution of the Future from [builder()] parameter and
   /// stores the Instance returned.
-  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
-          {String tag, bool permanent = false}) async =>
+  Future<S?> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
+          {String? tag, bool permanent = false}) async =>
       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
   /// Creates a new Class Instance [S] from the builder callback[S].
@@ -61,13 +61,13 @@ extension Inst on GetInterface {
   /// Repl b = find();
   /// print(a==b); (false)```
   void create<S>(InstanceBuilderCallback<S> builder,
-          {String tag, bool permanent = true}) =>
+          {String? tag, bool permanent = true}) =>
       GetInstance().create<S>(builder, tag: tag, permanent: permanent);
 
   /// Finds a Instance of the required Class <[S]>(or [tag])
   /// In the case of using [Get.create()], it will generate an Instance
   /// each time you call [Get.find()].
-  S find<S>({String tag}) => GetInstance().find<S>(tag: tag);
+  S? find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
 
   /// Injects an [Instance<S>] in memory.
   ///
@@ -83,10 +83,10 @@ extension Inst on GetInterface {
   /// rules. Although, can be removed by [GetInstance.reset()]
   /// and [Get.delete()]
   /// - [builder] If defined, the [dependency] must be returned from here
-  S put<S>(S dependency,
-          {String tag,
+  S? put<S>(S dependency,
+          {String? tag,
           bool permanent = false,
-          InstanceBuilderCallback<S> builder}) =>
+          InstanceBuilderCallback<S>? builder}) =>
       GetInstance().put<S>(dependency, tag: tag, permanent: permanent);
 
   /// Clears all registered instances (and/or tags).
@@ -104,15 +104,15 @@ extension Inst on GetInterface {
   ///
   /// - [tag] Optional "tag" used to register the Instance
   /// - [force] Will delete an Instance even if marked as [permanent].
-  Future<bool> delete<S>({String tag, bool force = false}) async =>
+  Future<bool> delete<S>({String? tag, bool force = false}) async =>
       GetInstance().delete<S>(tag: tag, force: force);
 
   /// Checks if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
-  bool isRegistered<S>({String tag}) => GetInstance().isRegistered<S>(tag: tag);
+  bool isRegistered<S>({String? tag}) => GetInstance().isRegistered<S>(tag: tag);
 
   /// Checks if an Instance<[S]> (or [tag]) returned from a factory builder
   /// [Get.lazyPut()], is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
-  bool isPrepared<S>({String tag}) => GetInstance().isPrepared<S>(tag: tag);
+  bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
 }

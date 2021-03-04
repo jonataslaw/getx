@@ -536,7 +536,7 @@ void main() {
 }
 
 class FirstScreen extends StatelessWidget {
-  const FirstScreen({Key key}) : super(key: key);
+  const FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -545,7 +545,7 @@ class FirstScreen extends StatelessWidget {
 }
 
 class SecondScreen extends StatelessWidget {
-  const SecondScreen({Key key}) : super(key: key);
+  const SecondScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -554,7 +554,7 @@ class SecondScreen extends StatelessWidget {
 }
 
 class ThirdScreen extends StatelessWidget {
-  const ThirdScreen({Key key}) : super(key: key);
+  const ThirdScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

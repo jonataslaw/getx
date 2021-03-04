@@ -51,23 +51,23 @@ typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
 //   }
 // }
 
-class GetBuilder<T extends GetxController> extends StatefulWidget {
+class GetBuilder<T extends GetxController?> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
   final bool global;
-  final Object id;
-  final String tag;
+  final Object? id;
+  final String? tag;
   final bool autoRemove;
   final bool assignId;
-  final Object Function(T value) filter;
-  final void Function(State state) initState, dispose, didChangeDependencies;
-  final void Function(GetBuilder oldWidget, State state) didUpdateWidget;
-  final T init;
+  final Object Function(T value)? filter;
+  final void Function(State state)? initState, dispose, didChangeDependencies;
+  final void Function(GetBuilder oldWidget, State state)? didUpdateWidget;
+  final T? init;
 
   const GetBuilder({
-    Key key,
+    Key? key,
     this.init,
     this.global = true,
-    @required this.builder,
+    required this.builder,
     this.autoRemove = true,
     this.assignId = false,
     this.initState,
@@ -103,13 +103,13 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
+class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
     with GetStateUpdaterMixin {
-  T controller;
-  bool isCreator = false;
-  VoidCallback remove;
-  Object _filter;
-  List<VoidCallback> _watchs;
+  T? controller;
+  bool? isCreator = false;
+  VoidCallback? remove;
+  Object? _filter;
+  List<VoidCallback>? _watchs;
 
   // static _GetBuilderState _currentState;
 
@@ -136,7 +136,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
       } else {
         controller = widget.init;
         isCreator = true;
-        GetInstance().put<T>(controller, tag: widget.tag);
+        GetInstance().put<T?>(controller, tag: widget.tag);
       }
     } else {
       controller = widget.init;
@@ -145,7 +145,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     }
 
     if (widget.filter != null) {
-      _filter = widget.filter(controller);
+      _filter = widget.filter!(controller);
     }
 
     _subscribeToController();
@@ -167,7 +167,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   }
 
   void _filterUpdate() {
-    var newFilter = widget.filter(controller);
+    var newFilter = widget.filter!(controller);
     if (newFilter != _filter) {
       _filter = newFilter;
       getUpdate();
@@ -178,7 +178,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void dispose() {
     super.dispose();
     widget.dispose?.call(this);
-    if (isCreator || widget.assignId) {
+    if (isCreator! || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         GetInstance().delete<T>(tag: widget.tag);
       }
@@ -201,7 +201,7 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
 
   @override
   void didUpdateWidget(GetBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget as GetBuilder<T>);
+    super.didUpdateWidget(oldWidget as GetBuilder<T?>);
     // to avoid conflicts when modifying a "grouped" id list.
     if (oldWidget.id != widget.id) {
       _subscribeToController();

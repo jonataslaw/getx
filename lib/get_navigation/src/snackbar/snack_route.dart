@@ -6,17 +6,17 @@ import '../../get_navigation.dart';
 import 'snack.dart';
 
 class SnackRoute<T> extends OverlayRoute<T> {
-  Animation<double> _filterBlurAnimation;
-  Animation<Color> _filterColorAnimation;
+  late Animation<double> _filterBlurAnimation;
+  late Animation<Color?> _filterColorAnimation;
 
   SnackRoute({
-    @required this.snack,
-    RouteSettings settings,
+    required this.snack,
+    RouteSettings? settings,
   }) : super(settings: settings) {
     _builder = Builder(builder: (_) {
       return GestureDetector(
         child: snack,
-        onTap: snack.onTap != null ? () => snack.onTap(snack) : null,
+        onTap: snack.onTap != null ? () => snack.onTap!(snack) : null,
       );
     });
 
@@ -42,17 +42,17 @@ class SnackRoute<T> extends OverlayRoute<T> {
   }
 
   GetBar snack;
-  Builder _builder;
+  Builder? _builder;
 
   final Completer<T> _transitionCompleter = Completer<T>();
 
-  SnackbarStatusCallback _snackbarStatus;
-  Alignment _initialAlignment;
-  Alignment _endAlignment;
+  late SnackbarStatusCallback _snackbarStatus;
+  Alignment? _initialAlignment;
+  Alignment? _endAlignment;
   bool _wasDismissedBySwipe = false;
   bool _onTappedDismiss = false;
 
-  Timer _timer;
+  Timer? _timer;
 
   bool get opaque => false;
 
@@ -93,7 +93,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
         builder: (context) {
           final Widget annotatedChild = Semantics(
             child: AlignTransition(
-              alignment: _animation,
+              alignment: _animation!,
               child: snack.isDismissible
                   ? _getDismissibleSnack(_builder)
                   : _getSnack(),
@@ -112,7 +112,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   String dismissibleKeyGen = "";
 
-  Widget _getDismissibleSnack(Widget child) {
+  Widget _getDismissibleSnack(Widget? child) {
     return Dismissible(
       direction: _getDismissDirection(),
       resizeDuration: null,
@@ -130,9 +130,9 @@ class SnackRoute<T> extends OverlayRoute<T> {
         _wasDismissedBySwipe = true;
 
         if (isCurrent) {
-          navigator.pop();
+          navigator!.pop();
         } else {
-          navigator.removeRoute(this);
+          navigator!.removeRoute(this);
         }
       },
       child: _getSnack(),
@@ -159,16 +159,16 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   @override
   bool get finishedWhenPopped =>
-      _controller.status == AnimationStatus.dismissed;
+      _controller!.status == AnimationStatus.dismissed;
 
   /// The animation that drives the route's transition and the previous route's
   /// forward transition.
-  Animation<Alignment> _animation;
+  Animation<Alignment>? _animation;
 
   /// The animation controller that the route uses to drive the transitions.
   ///
   /// The animation itself is exposed by the [animation] property.
-  AnimationController _controller;
+  AnimationController? _controller;
 
   /// Called to create the animation controller that will drive the transitions
   /// to this route from the previous one, and back to the previous route
@@ -181,7 +181,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
     return AnimationController(
       duration: snack.animationDuration,
       debugLabel: debugLabel,
-      vsync: navigator,
+      vsync: navigator!,
     );
   }
 
@@ -194,7 +194,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
     assert(_controller != null);
     return AlignmentTween(begin: _initialAlignment, end: _endAlignment).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _controller!,
         curve: snack.forwardAnimationCurve,
         reverseCurve: snack.reverseAnimationCurve,
       ),
@@ -204,7 +204,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
   Animation<double> createBlurFilterAnimation() {
     return Tween(begin: 0.0, end: snack.overlayBlur).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _controller!,
         curve: Interval(
           0.0,
           0.35,
@@ -214,11 +214,11 @@ class SnackRoute<T> extends OverlayRoute<T> {
     );
   }
 
-  Animation<Color> createColorFilterAnimation() {
+  Animation<Color?> createColorFilterAnimation() {
     return ColorTween(begin: Color(0x00000000), end: snack.overlayColor)
         .animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _controller!,
         curve: Interval(
           0.0,
           0.35,
@@ -228,8 +228,8 @@ class SnackRoute<T> extends OverlayRoute<T> {
     );
   }
 
-  T _result;
-  SnackbarStatus currentStatus;
+  T? _result;
+  SnackbarStatus? currentStatus;
 
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
@@ -258,7 +258,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
         _snackbarStatus(currentStatus);
 
         if (!isCurrent) {
-          navigator.finalizeRoute(this);
+          navigator!.finalizeRoute(this);
           // assert(overlayEntries.isEmpty);
         }
         break;
@@ -292,13 +292,13 @@ class SnackRoute<T> extends OverlayRoute<T> {
       !_transitionCompleter.isCompleted,
       'Cannot reuse a $runtimeType after disposing it.',
     );
-    _animation.addStatusListener(_handleStatusChanged);
+    _animation!.addStatusListener(_handleStatusChanged);
     _configureTimer();
-    return _controller.forward();
+    return _controller!.forward();
   }
 
   @override
-  void didReplace(Route<dynamic> oldRoute) {
+  void didReplace(Route<dynamic>? oldRoute) {
     assert(
       _controller != null,
       // ignore: lines_longer_than_80_chars
@@ -310,14 +310,14 @@ class SnackRoute<T> extends OverlayRoute<T> {
     );
 
     if (oldRoute is SnackRoute) {
-      _controller.value = oldRoute._controller.value;
+      _controller!.value = oldRoute._controller!.value;
     }
-    _animation.addStatusListener(_handleStatusChanged);
+    _animation!.addStatusListener(_handleStatusChanged);
     super.didReplace(oldRoute);
   }
 
   @override
-  bool didPop(T result) {
+  bool didPop(T? result) {
     assert(
       _controller != null,
       // ignore: lines_longer_than_80_chars
@@ -333,12 +333,12 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
     if (_wasDismissedBySwipe) {
       Timer(Duration(milliseconds: 200), () {
-        _controller.reset();
+        _controller!.reset();
       });
 
       _wasDismissedBySwipe = false;
     } else {
-      _controller.reverse();
+      _controller!.reverse();
     }
 
     return super.didPop(result);
@@ -346,26 +346,26 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   void _configureTimer() {
     if (snack.duration != null) {
-      if (_timer != null && _timer.isActive) {
-        _timer.cancel();
+      if (_timer != null && _timer!.isActive) {
+        _timer!.cancel();
       }
-      _timer = Timer(snack.duration, () {
+      _timer = Timer(snack.duration!, () {
         if (isCurrent) {
-          navigator.pop();
+          navigator!.pop();
         } else if (isActive) {
-          navigator.removeRoute(this);
+          navigator!.removeRoute(this);
         }
       });
     } else {
       if (_timer != null) {
-        _timer.cancel();
+        _timer!.cancel();
       }
     }
   }
 
   void _cancelTimer() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
     }
   }
 

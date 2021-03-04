@@ -4,14 +4,15 @@ version: 3.25.6
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
-  flutter_test:
+  integration_test:
     sdk: flutter
  
 

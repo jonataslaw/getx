@@ -10,33 +10,33 @@ import '../utils/body_decoder.dart';
 
 /// A `dart:io` implementation of `HttpRequestBase`.
 class HttpRequestImpl extends HttpRequestBase {
-  io.HttpClient _httpClient;
-  io.SecurityContext _securityContext;
+  io.HttpClient? _httpClient;
+  io.SecurityContext? _securityContext;
 
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
-    List<TrustedCertificate> trustedCertificates,
+    List<TrustedCertificate>? trustedCertificates,
   }) {
     _httpClient = io.HttpClient();
     if (trustedCertificates != null) {
       _securityContext = io.SecurityContext();
       for (final trustedCertificate in trustedCertificates) {
-        _securityContext
+        _securityContext!
             .setTrustedCertificatesBytes(List.from(trustedCertificate.bytes));
       }
     }
 
     _httpClient = io.HttpClient(context: _securityContext);
-    _httpClient.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
+    _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
   }
 
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
-    var stream = request.bodyBytes.asBroadcastStream();
+    Stream<List<int>?> stream = request.bodyBytes.asBroadcastStream();
     //var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
 
     try {
-      var ioRequest = (await _httpClient.openUrl(request.method, request.url))
+      var ioRequest = (await _httpClient!.openUrl(request.method, request.url))
         ..followRedirects = request.followRedirects
         ..persistentConnection = request.persistentConnection
         ..maxRedirects = request.maxRedirects
@@ -77,7 +77,7 @@ class HttpRequestImpl extends HttpRequestBase {
   @override
   void close() {
     if (_httpClient != null) {
-      _httpClient.close(force: true);
+      _httpClient!.close(force: true);
       _httpClient = null;
     }
   }
