@@ -18,10 +18,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     RouteSettings? settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
-  })  : assert(isScrollControlled != null),
-        name = "BOTTOMSHEET: ${builder.hashCode}",
-        assert(isDismissible != null),
-        assert(enableDrag != null),
+  })  : name = "BOTTOMSHEET: ${builder.hashCode}",
         super(settings: settings);
   final bool? isPersistent;
   final WidgetBuilder? builder;
@@ -80,10 +77,10 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
         child: _GetModalBottomSheet<T>(
           route: this,
           backgroundColor: backgroundColor ??
-              sheetTheme?.modalBackgroundColor ??
-              sheetTheme?.backgroundColor,
+              sheetTheme.modalBackgroundColor ??
+              sheetTheme.backgroundColor,
           elevation:
-              elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
+              elevation ?? sheetTheme.modalElevation ?? sheetTheme.elevation,
           shape: shape,
           clipBehavior: clipBehavior,
           isScrollControlled: isScrollControlled,
@@ -107,9 +104,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.isScrollControlled = false,
     this.enableDrag = true,
     this.isPersistent = false,
-  })  : assert(isScrollControlled != null),
-        assert(enableDrag != null),
-        super(key: key);
+  }) : super(key: key);
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;
@@ -208,9 +203,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
-  })  : assert(isScrollControlled != null),
-        assert(enableDrag != null),
-        super(key: key);
+  }) : super(key: key);
   final bool? isPersistent;
   final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;

@@ -23,8 +23,7 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
-  })  : assert(builder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

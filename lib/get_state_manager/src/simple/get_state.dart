@@ -51,7 +51,7 @@ typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
 //   }
 // }
 
-class GetBuilder<T extends GetxController?> extends StatefulWidget {
+class GetBuilder<T extends GetxController> extends StatefulWidget {
   final GetControllerBuilder<T> builder;
   final bool global;
   final Object? id;
@@ -77,8 +77,7 @@ class GetBuilder<T extends GetxController?> extends StatefulWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
-  })  : assert(builder != null),
-        super(key: key);
+  }) : super(key: key);
 
   // static T of<T extends GetxController>(
   //   BuildContext context, {
@@ -103,7 +102,7 @@ class GetBuilder<T extends GetxController?> extends StatefulWidget {
   _GetBuilderState<T> createState() => _GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
+class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
   T? controller;
   bool? isCreator = false;
@@ -136,7 +135,7 @@ class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
       } else {
         controller = widget.init;
         isCreator = true;
-        GetInstance().put<T?>(controller, tag: widget.tag);
+        GetInstance().put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
@@ -145,7 +144,7 @@ class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
     }
 
     if (widget.filter != null) {
-      _filter = widget.filter!(controller);
+      _filter = widget.filter!(controller!);
     }
 
     _subscribeToController();
@@ -167,7 +166,7 @@ class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
   }
 
   void _filterUpdate() {
-    var newFilter = widget.filter!(controller);
+    var newFilter = widget.filter!(controller!);
     if (newFilter != _filter) {
       _filter = newFilter;
       getUpdate();
@@ -201,7 +200,7 @@ class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
 
   @override
   void didUpdateWidget(GetBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget as GetBuilder<T?>);
+    super.didUpdateWidget(oldWidget as GetBuilder<T>);
     // to avoid conflicts when modifying a "grouped" id list.
     if (oldWidget.id != widget.id) {
       _subscribeToController();
@@ -215,7 +214,7 @@ class _GetBuilderState<T extends GetxController?> extends State<GetBuilder<T?>>
     //   model: controller,
     //   child: widget.builder(controller),
     // );
-    return widget.builder(controller);
+    return widget.builder(controller!);
   }
 }
 

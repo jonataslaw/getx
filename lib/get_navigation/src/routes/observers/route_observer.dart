@@ -36,7 +36,7 @@ class Routing {
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
 String? _extractRouteName(Route? route) {
-  if (route?.settings?.name != null) {
+  if (route?.settings.name != null) {
     return route!.settings.name;
   }
 
@@ -110,7 +110,7 @@ class GetObserver extends NavigatorObserver {
         value.current = newRoute.name ?? '';
       }
 
-      value.args = route?.settings?.arguments;
+      value.args = route.settings.arguments;
       value.route = route;
       value.isBack = false;
       value.removed = '';
@@ -151,7 +151,7 @@ class GetObserver extends NavigatorObserver {
         value.current = _extractRouteName(previousRoute) ?? '';
       }
 
-      value.args = route?.settings?.arguments;
+      value.args = route.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
@@ -183,7 +183,7 @@ class GetObserver extends NavigatorObserver {
         value.current = newName ?? '';
       }
 
-      value.args = newRoute?.settings?.arguments;
+      value.args = newRoute?.settings.arguments;
       value.route = newRoute;
       value.isBack = false;
       value.removed = '';

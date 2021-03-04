@@ -51,11 +51,7 @@ class GetPage {
     this.fullscreenDialog = false,
     this.children,
     this.middlewares,
-  })  : path = _nameToRegex(name),
-        assert(page != null),
-        assert(name != null),
-        assert(maintainState != null),
-        assert(fullscreenDialog != null);
+  }) : path = _nameToRegex(name);
 
   static PathDecoded _nameToRegex(String path) {
     var keys = <String?>[];

@@ -109,7 +109,8 @@ extension Inst on GetInterface {
 
   /// Checks if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
-  bool isRegistered<S>({String? tag}) => GetInstance().isRegistered<S>(tag: tag);
+  bool isRegistered<S>({String? tag}) =>
+      GetInstance().isRegistered<S>(tag: tag);
 
   /// Checks if an Instance<[S]> (or [tag]) returned from a factory builder
   /// [Get.lazyPut()], is registered in memory.

@@ -184,7 +184,6 @@ Worker interval<T>(
   bool? cancelOnError,
 }) {
   var debounceActive = false;
-  time ??= const Duration(seconds: 1);
   StreamSubscription sub = listener.listen(
     (event) async {
       if (debounceActive || !_conditional(condition)) return;

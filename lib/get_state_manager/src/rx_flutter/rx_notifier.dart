@@ -138,7 +138,6 @@ extension StateExt<T> on StateMixin<T> {
     Widget? onLoading,
     Widget? onEmpty,
   }) {
-    assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());

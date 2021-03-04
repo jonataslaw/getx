@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../http/stub/file_decoder_stub.dart'
     if (dart.library.html) '../http/html/file_decoder_html.dart'
     if (dart.library.io) '../http/io/file_decoder_io.dart';

@@ -601,10 +601,9 @@ Set either a message or messageText""");
           ),
         ),
         Padding(
-              padding: EdgeInsets.only(right: buttonRightPadding),
-              child: _getMainActionButton(),
-            ) ??
-            _emptyWidget,
+          padding: EdgeInsets.only(right: buttonRightPadding),
+          child: _getMainActionButton(),
+        ),
       ];
     }
   }

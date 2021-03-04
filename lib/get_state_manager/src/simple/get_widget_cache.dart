@@ -21,7 +21,7 @@ class GetWidgetCacheElement extends ComponentElement {
 
   @override
   void mount(Element? parent, dynamic newSlot) {
-    cache?.onInit();
+    cache.onInit();
     super.mount(parent, newSlot);
   }
 

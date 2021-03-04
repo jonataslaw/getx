@@ -113,7 +113,7 @@ class MiddlewareRunner {
   }
 
   GetPage? runOnPageCalled(GetPage? page) {
-    _getMiddlewares()!.forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageCalled(page);
     });
     return page;
@@ -121,7 +121,7 @@ class MiddlewareRunner {
 
   RouteSettings? runRedirect(String? route) {
     RouteSettings? to;
-    _getMiddlewares()!.forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       to = element.redirect(route);
     });
     if (to != null) {
@@ -131,28 +131,28 @@ class MiddlewareRunner {
   }
 
   List<Bindings>? runOnBindingsStart(List<Bindings>? bindings) {
-    _getMiddlewares()!.forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       bindings = element.onBindingsStart(bindings);
     });
     return bindings;
   }
 
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
-    _getMiddlewares()!.forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageBuildStart(page);
     });
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares()!.forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageBuilt(page);
     });
     return page;
   }
 
   void runOnPageDispose() =>
-      _getMiddlewares()!.forEach((element) => element.onPageDispose());
+      _getMiddlewares()?.forEach((element) => element.onPageDispose());
 }
 
 class PageRedirect {
@@ -205,11 +205,11 @@ class PageRedirect {
 
   /// check if redirect is needed
   bool needRecheck() {
-    final match = Get.routeTree!.matchRoute(settings.name!);
-    Get.parameters = match?.parameters;
+    final match = Get.routeTree.matchRoute(settings.name!);
+    Get.parameters = match.parameters;
 
     // No Match found
-    if (match?.route == null) {
+    if (match.route == null) {
       isUnknown = true;
       return false;
     }
@@ -233,12 +233,8 @@ class PageRedirect {
   void addPageParameter(GetPage route) {
     if (route.parameter == null) return;
 
-    if (Get.parameters == null) {
-      Get.parameters = route.parameter!;
-    } else {
-      final parameters = Get.parameters;
-      parameters.addEntries(route.parameter!.entries);
-      Get.parameters = parameters;
-    }
+    final parameters = Get.parameters;
+    parameters.addEntries(route.parameter!.entries);
+    Get.parameters = parameters;
   }
 }

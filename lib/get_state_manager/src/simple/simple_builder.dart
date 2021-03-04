@@ -64,7 +64,7 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
   @override
   void dispose() {
     super.dispose();
-    widget?.onDispose?.call();
+    widget.onDispose?.call();
     if (value is ChangeNotifier) {
       (value as ChangeNotifier?)?.dispose();
     } else if (value is StreamController) {
@@ -78,9 +78,7 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
 class SimpleBuilder extends StatefulWidget {
   final Widget Function(BuildContext) builder;
 
-  const SimpleBuilder({Key? key, required this.builder})
-      : assert(builder != null),
-        super(key: key);
+  const SimpleBuilder({Key? key, required this.builder}) : super(key: key);
 
   @override
   _SimpleBuilderState createState() => _SimpleBuilderState();

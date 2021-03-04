@@ -145,17 +145,15 @@ extension ExtensionSnackbar on GetInterface {
   }) async {
     final getBar = GetBar(
         snackbarStatus: snackbarStatus,
-        titleText: (title == null)
-            ? null
-            : titleText ??
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: colorText ?? iconColor ?? Colors.black,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                  ),
-                ),
+        titleText: titleText ??
+            Text(
+              title,
+              style: TextStyle(
+                color: colorText ?? iconColor ?? Colors.black,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
+            ),
         messageText: messageText ??
             Text(
               message,
@@ -224,10 +222,6 @@ extension ExtensionDialog on GetInterface {
     String? name,
     RouteSettings? routeSettings,
   }) {
-    assert(widget != null);
-    assert(barrierDismissible != null);
-    assert(useSafeArea != null);
-    assert(useRootNavigator != null);
     assert(debugCheckHasMaterialLocalizations(context!));
 
     //  final theme = Theme.of(context, shadowThemeOnly: true);
@@ -236,9 +230,7 @@ extension ExtensionDialog on GetInterface {
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         final pageChild = widget;
         Widget dialog = Builder(builder: (context) {
-          return theme != null
-              ? Theme(data: theme, child: pageChild)
-              : pageChild;
+          return Theme(data: theme, child: pageChild);
         });
         if (useSafeArea) {
           dialog = SafeArea(child: dialog);
@@ -275,8 +267,6 @@ extension ExtensionDialog on GetInterface {
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
   }) {
-    assert(pageBuilder != null);
-    assert(useRootNavigator != null);
     assert(!barrierDismissible || barrierLabel != null);
     return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
         .push<T>(GetDialogRoute<T>(
@@ -383,7 +373,7 @@ extension ExtensionDialog on GetInterface {
         mainAxisSize: MainAxisSize.min,
         children: [
           content ??
-              Text(middleText ?? "",
+              Text(middleText,
                   textAlign: TextAlign.center, style: middleTextStyle),
           SizedBox(height: 16),
           ButtonTheme(
@@ -437,13 +427,6 @@ extension ExtensionBottomSheet on GetInterface {
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
   }) {
-    assert(bottomsheet != null);
-    assert(persistent != null);
-    assert(isScrollControlled != null);
-    assert(useRootNavigator != null);
-    assert(isDismissible != null);
-    assert(enableDrag != null);
-
     return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
@@ -822,7 +805,7 @@ you can only use widgets and widget functions here''';
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   void close(int times, [int? id]) {
-    if ((times == null) || (times < 1)) {
+    if (times < 1) {
       times = 1;
     }
     var count = 0;
@@ -874,7 +857,7 @@ you can only use widgets and widget functions here''';
       return null;
     }
     return global(id)?.currentState?.pushReplacement(GetPageRoute(
-        opaque: opaque ?? true,
+        opaque: opaque,
         page: _resolve(page, 'off'),
         binding: binding,
         settings: RouteSettings(arguments: arguments),
@@ -934,7 +917,7 @@ you can only use widgets and widget functions here''';
 
     return global(id)?.currentState?.pushAndRemoveUntil<T>(
         GetPageRoute<T>(
-          opaque: opaque ?? true,
+          opaque: opaque,
           popGesture: popGesture ?? defaultPopGesture,
           page: _resolve(page, 'offAll'),
           binding: binding,
@@ -950,19 +933,15 @@ you can only use widgets and widget functions here''';
 
   void addPages(List<GetPage>? getPages) {
     if (getPages != null) {
-      if (routeTree == null) {
-        routeTree = ParseRouteTree();
-      }
+      routeTree = ParseRouteTree();
 
-      routeTree!.addRoutes(getPages);
+      routeTree.addRoutes(getPages);
     }
   }
 
   void addPage(GetPage getPage) {
-    if (getPage != null) {
-      if (routeTree == null) routeTree = ParseRouteTree();
-      routeTree!.addRoute(getPage);
-    }
+    routeTree = ParseRouteTree();
+    routeTree.addRoute(getPage);
   }
 
   /// change default config of Get
@@ -1100,7 +1079,7 @@ Since version 2.8 it is possible to access the properties
   /// give access to current Overlay Context
   BuildContext? get overlayContext {
     BuildContext? overlay;
-    key?.currentState?.overlay?.context?.visitChildElements((element) {
+    key?.currentState?.overlay?.context.visitChildElements((element) {
       overlay = element;
     });
     return overlay;
@@ -1166,7 +1145,7 @@ Since version 2.8 it is possible to access the properties
       (ui.window.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
-  Color? get iconColor => theme?.iconTheme?.color;
+  Color? get iconColor => theme?.iconTheme.color;
 
   /// give access to FocusScope.of(context)
   FocusNode? get focusScope => FocusManager.instance.primaryFocus;
@@ -1204,8 +1183,8 @@ Since version 2.8 it is possible to access the properties
 
   Routing get routing => getxController.routing;
 
-  Map<String?, String> get parameters => getxController.parameters;
-  set parameters(Map<String?, String> newParameters) =>
+  Map<String, String?> get parameters => getxController.parameters;
+  set parameters(Map<String, String?> newParameters) =>
       getxController.parameters = newParameters;
 
   ParseRouteTree get routeTree => getxController.routeTree;

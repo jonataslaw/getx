@@ -4,9 +4,7 @@ class RxMap<K, V> extends MapMixin<K, V>
     with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
     implements RxInterface<Map<K, V>> {
   RxMap([Map<K, V> initial = const {}]) {
-    if (initial != null) {
-      _value = Map.from(initial);
-    }
+    _value = Map.from(initial);
   }
 
   factory RxMap.from(Map<K, V> other) {
@@ -30,27 +28,27 @@ class RxMap<K, V> extends MapMixin<K, V>
 
   @override
   V? operator [](Object? key) {
-    return value![key as K];
+    return value[key as K];
   }
 
   @override
   void operator []=(K key, V value) {
-    _value![key] = value;
+    _value[key] = value;
     refresh();
   }
 
   @override
   void clear() {
-    _value!.clear();
+    _value.clear();
     refresh();
   }
 
   @override
-  Iterable<K> get keys => value!.keys;
+  Iterable<K> get keys => value.keys;
 
   @override
   V? remove(Object? key) {
-    final val = _value!.remove(key);
+    final val = _value.remove(key);
     refresh();
     return val;
   }
@@ -85,8 +83,8 @@ extension MapExtension<K, V> on Map<K, V> {
   void assign(K key, V val) {
     if (this is RxMap) {
       final map = (this as RxMap);
-      map._value ??= <K, V>{};
-      map._value!.clear();
+      map._value;
+      map._value.clear();
       this[key] = val;
     } else {
       clear();

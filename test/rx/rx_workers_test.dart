@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 void main() {
   test('once', () async {
     final count = 0.obs;
-    int? result = -1;
+    var result = -1;
     once(count, (dynamic _) {
-      result = _ as int?;
+      result = _ as int;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -23,9 +23,9 @@ void main() {
 
   test('ever', () async {
     final count = 0.obs;
-    int? result = -1;
-    ever(count, (dynamic _) {
-      result = _ as int?;
+    var result = -1;
+    ever<int>(count, (value) {
+      result = value;
     });
     count.value++;
     await Future.delayed(Duration.zero);

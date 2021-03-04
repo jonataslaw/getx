@@ -176,8 +176,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
   AnimationController createAnimationController() {
     assert(!_transitionCompleter.isCompleted,
         'Cannot reuse a $runtimeType after disposing it.');
-    assert(snack.animationDuration != null &&
-        snack.animationDuration >= Duration.zero);
+    assert(snack.animationDuration >= Duration.zero);
     return AnimationController(
       duration: snack.animationDuration,
       debugLabel: debugLabel,

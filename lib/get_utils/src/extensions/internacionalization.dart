@@ -10,7 +10,8 @@ extension Trans on String? {
     // whether the key is also present.
     if (Get.translations.containsKey(
             "${Get.locale!.languageCode}_${Get.locale!.countryCode}") &&
-        Get.translations["${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
+        Get.translations[
+                "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
             .containsKey(this)) {
       return Get.translations[
           "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this!];

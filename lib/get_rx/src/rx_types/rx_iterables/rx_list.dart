@@ -5,9 +5,7 @@ class RxList<E> extends ListMixin<E>
     with NotifyManager<List<E>>, RxObjectMixin<List<E>>
     implements RxInterface<List<E>> {
   RxList([List<E> initial = const []]) {
-    if (initial != null) {
-      _value = List.from(initial);
-    }
+    _value = List.from(initial);
   }
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
@@ -40,11 +38,11 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  Iterator<E> get iterator => value!.iterator;
+  Iterator<E> get iterator => value.iterator;
 
   @override
   void operator []=(int index, E val) {
-    _value![index] = val;
+    _value[index] = val;
     refresh();
   }
 
@@ -59,18 +57,18 @@ class RxList<E> extends ListMixin<E>
 
   @override
   E operator [](int index) {
-    return value![index];
+    return value[index];
   }
 
   @override
   void add(E item) {
-    _value!.add(item);
+    _value.add(item);
     refresh();
   }
 
   @override
   void addAll(Iterable<E> item) {
-    _value!.addAll(item);
+    _value.addAll(item);
     refresh();
   }
 
@@ -103,17 +101,17 @@ class RxList<E> extends ListMixin<E>
 
   @override
   Iterable<E> where(bool Function(E) test) {
-    return value!.where(test);
+    return value.where(test);
   }
 
   @override
   Iterable<T> whereType<T>() {
-    return value!.whereType<T>();
+    return value.whereType<T>();
   }
 
   @override
   void sort([int compare(E a, E b)?]) {
-    _value!.sort(compare);
+    _value.sort(compare);
     refresh();
   }
 }
@@ -126,10 +124,10 @@ extension ListExtension<E> on List<E> {
     if (item != null) add(item);
   }
 
-  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  void addAllNonNull(Iterable<E> item) {
-    if (item != null) addAll(item);
-  }
+  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
+  // void addAllNonNull(Iterable<E> item) {
+  //   if (item != null) addAll(item);
+  // }
 
   /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {
@@ -146,7 +144,7 @@ extension ListExtension<E> on List<E> {
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
     if (this is RxList) {
-      (this as RxList)._value ??= <E>[];
+      (this as RxList)._value;
     }
 
     clear();
@@ -156,7 +154,7 @@ extension ListExtension<E> on List<E> {
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
     if (this is RxList) {
-      (this as RxList)._value ??= <E>[];
+      (this as RxList)._value;
     }
     clear();
     addAll(items);

@@ -67,7 +67,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
       } else {
         controller = widget.init;
         isCreator = true;
-        GetInstance().put<T?>(controller, tag: widget.tag);
+        GetInstance().put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;

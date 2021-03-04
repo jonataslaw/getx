@@ -14,59 +14,61 @@ class MiniSubscription<T> {
   final Callback? onDone;
   final bool cancelOnError;
 
-  Future<void> cancel() async => listener!.removeListener(this);
+  Future<void> cancel() async => listener.removeListener(this);
 
-  final FastList<T>? listener;
+  final FastList<T> listener;
 }
 
 class MiniStream<T> {
-  FastList<T?>? listenable = FastList<T>();
+  FastList<T> listenable = FastList<T>();
 
-  T? _value;
+  late T _value;
 
-  T? get value => _value;
+  T get value => _value;
 
-  set value(T? val) {
+  set value(T val) {
     add(val);
   }
 
-  void add(T? event) {
-    assert(listenable != null);
+  void add(T event) {
     _value = event;
-    listenable!._notifyData(event);
+    listenable._notifyData(event);
   }
 
   void addError(Object error, [StackTrace? stackTrace]) {
-    assert(listenable != null);
-    listenable!._notifyError(error, stackTrace);
+    listenable._notifyError(error, stackTrace);
   }
 
-  int get length => listenable!.length;
+  int get length => listenable.length;
 
-  bool get hasListeners => listenable!.isNotEmpty;
+  bool get hasListeners => listenable.isNotEmpty;
 
-  bool get isClosed => listenable == null;
+  bool get isClosed => _isClosed;
 
-  MiniSubscription<T?> listen(void Function(T? event) onData,
-      {Function? onError, void Function()? onDone, bool cancelOnError = false}) {
-    final subs = MiniSubscription<T?>(
+  MiniSubscription<T> listen(void Function(T event) onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool cancelOnError = false}) {
+    final subs = MiniSubscription<T>(
       onData,
       onError,
       onDone,
       cancelOnError,
       listenable,
     );
-    listenable!.addListener(subs);
+    listenable.addListener(subs);
     return subs;
   }
 
+  bool _isClosed = false;
+
   void close() {
-    if (listenable == null) {
+    if (_isClosed) {
       throw 'You can not close a closed Stream';
     }
-    listenable!._notifyDone();
-    listenable = null;
-    _value = null;
+    listenable._notifyDone();
+    listenable.clear();
+    _isClosed = true;
   }
 }
 
@@ -74,18 +76,18 @@ class FastList<T> {
   Node<MiniSubscription<T>>? _head;
 
   void _notifyData(T data) {
-    var currentNode = _head!;
+    var currentNode = _head;
     do {
-      currentNode.data!.data(data);
-      currentNode = currentNode.next!;
+      currentNode?.data?.data(data);
+      currentNode = currentNode?.next;
     } while (currentNode != null);
   }
 
   void _notifyDone() {
-    var currentNode = _head!;
+    var currentNode = _head;
     do {
-      currentNode.data!.onDone?.call();
-      currentNode = currentNode.next!;
+      currentNode?.data?.onDone?.call();
+      currentNode = currentNode?.next;
     } while (currentNode != null);
   }
 
@@ -161,6 +163,13 @@ class FastList<T> {
         _removeAt(i);
         break;
       }
+    }
+  }
+
+  void clear() {
+    var length = this.length;
+    for (var i = 0; i < length; i++) {
+      _removeAt(i);
     }
   }
 

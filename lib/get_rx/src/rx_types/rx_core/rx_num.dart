@@ -408,18 +408,18 @@ class RxDouble extends _BaseRxNum<double?> {
   double truncateToDouble() => value!.truncateToDouble();
 }
 
-class RxInt extends _BaseRxNum<int?> {
-  RxInt([int? initial]) : super(initial);
+class RxInt extends _BaseRxNum<int> {
+  RxInt(int initial) : super(initial);
 
   /// Addition operator.
   RxInt operator +(int other) {
-    value = value! + other;
+    value = value + other;
     return this;
   }
 
   /// Subtraction operator.
   RxInt operator -(int other) {
-    value = value! - other;
+    value = value - other;
     return this;
   }
 
@@ -431,7 +431,7 @@ class RxInt extends _BaseRxNum<int?> {
   ///
   /// If both operands are negative, the result is negative, otherwise
   /// the result is non-negative.
-  int operator &(int other) => value! & other;
+  int operator &(int other) => value & other;
 
   /// Bit-wise or operator.
   ///
@@ -441,7 +441,7 @@ class RxInt extends _BaseRxNum<int?> {
   ///
   /// If both operands are non-negative, the result is non-negative,
   /// otherwise the result is negative.
-  int operator |(int other) => value! | other;
+  int operator |(int other) => value | other;
 
   /// Bit-wise exclusive-or operator.
   ///
@@ -451,7 +451,7 @@ class RxInt extends _BaseRxNum<int?> {
   ///
   /// If the operands have the same sign, the result is non-negative,
   /// otherwise the result is negative.
-  int operator ^(int other) => value! ^ other;
+  int operator ^(int other) => value ^ other;
 
   /// The bit-wise negate operator.
   ///
@@ -459,7 +459,7 @@ class RxInt extends _BaseRxNum<int?> {
   /// the result is a number with the opposite bits set.
   ///
   /// This maps any integer `x` to `-x - 1`.
-  int operator ~() => ~value!;
+  int operator ~() => ~value;
 
   /// Shift the bits of this integer to the left by [shiftAmount].
   ///
@@ -471,7 +471,7 @@ class RxInt extends _BaseRxNum<int?> {
   /// mask.
   ///
   /// It is an error if [shiftAmount] is negative.
-  int operator <<(int shiftAmount) => value! << shiftAmount;
+  int operator <<(int shiftAmount) => value << shiftAmount;
 
   /// Shift the bits of this integer to the right by [shiftAmount].
   ///
@@ -480,13 +480,13 @@ class RxInt extends _BaseRxNum<int?> {
   ///`pow(2, shiftIndex)`.
   ///
   /// It is an error if [shiftAmount] is negative.
-  int operator >>(int shiftAmount) => value! >> shiftAmount;
+  int operator >>(int shiftAmount) => value >> shiftAmount;
 
   /// Returns this integer to the power of [exponent] modulo [modulus].
   ///
   /// The [exponent] must be non-negative and [modulus] must be
   /// positive.
-  int modPow(int exponent, int modulus) => value!.modPow(exponent, modulus);
+  int modPow(int exponent, int modulus) => value.modPow(exponent, modulus);
 
   /// Returns the modular multiplicative inverse of this integer
   /// modulo [modulus].
@@ -494,7 +494,7 @@ class RxInt extends _BaseRxNum<int?> {
   /// The [modulus] must be positive.
   ///
   /// It is an error if no modular inverse exists.
-  int modInverse(int modulus) => value!.modInverse(modulus);
+  int modInverse(int modulus) => value.modInverse(modulus);
 
   /// Returns the greatest common divisor of this integer and [other].
   ///
@@ -507,13 +507,13 @@ class RxInt extends _BaseRxNum<int?> {
   /// For any integer `x`, `x.gcd(x)` is `x.abs()`.
   ///
   /// If both `this` and `other` is zero, the result is also zero.
-  int gcd(int other) => value!.gcd(other);
+  int gcd(int other) => value.gcd(other);
 
   /// Returns true if and only if this integer is even.
-  bool get isEven => value!.isEven;
+  bool get isEven => value.isEven;
 
   /// Returns true if and only if this integer is odd.
-  bool get isOdd => value!.isOdd;
+  bool get isOdd => value.isOdd;
 
   /// Returns the minimum number of bits required to store this integer.
   ///
@@ -535,7 +535,7 @@ class RxInt extends _BaseRxNum<int?> {
   /// (-3).bitLength == 2;  // 11111101
   /// (-4).bitLength == 2;  // 11111100
   /// ```
-  int get bitLength => value!.bitLength;
+  int get bitLength => value.bitLength;
 
   /// Returns the least significant [width] bits of this integer as a
   /// non-negative number (i.e. unsigned representation).  The returned value
@@ -557,7 +557,7 @@ class RxInt extends _BaseRxNum<int?> {
   /// ```
   /// x == x.toUnsigned(x.bitLength);
   /// ```
-  int toUnsigned(int width) => value!.toUnsigned(width);
+  int toUnsigned(int width) => value.toUnsigned(width);
 
   /// Returns the least significant [width] bits of this integer, extending the
   /// highest retained bit to the sign.  This is the same as truncating the
@@ -587,57 +587,57 @@ class RxInt extends _BaseRxNum<int?> {
   /// ```
   /// x == x.toSigned(x.bitLength + 1);
   /// ```
-  int toSigned(int width) => value!.toSigned(width);
+  int toSigned(int width) => value.toSigned(width);
 
   /// Return the negative value of this integer.
   ///
   /// The result of negating an integer always has the opposite sign, except
   /// for zero, which is its own negation.
   @override
-  int operator -() => -value!;
+  int operator -() => -value;
 
   /// Returns the absolute value of this integer.
   ///
   /// For any integer `x`, the result is the same as `x < 0 ? -x : x`.
   @override
-  int abs() => value!.abs();
+  int abs() => value.abs();
 
   /// Returns the sign of this integer.
   ///
   /// Returns 0 for zero, -1 for values less than zero and
   /// +1 for values greater than zero.
   @override
-  int get sign => value!.sign;
+  int get sign => value.sign;
 
   /// Returns `this`.
   @override
-  int round() => value!.round();
+  int round() => value.round();
 
   /// Returns `this`.
   @override
-  int floor() => value!.floor();
+  int floor() => value.floor();
 
   /// Returns `this`.
   @override
-  int ceil() => value!.ceil();
+  int ceil() => value.ceil();
 
   /// Returns `this`.
   @override
-  int truncate() => value!.truncate();
+  int truncate() => value.truncate();
 
   /// Returns `this.toDouble()`.
   @override
-  double roundToDouble() => value!.roundToDouble();
+  double roundToDouble() => value.roundToDouble();
 
   /// Returns `this.toDouble()`.
   @override
-  double floorToDouble() => value!.floorToDouble();
+  double floorToDouble() => value.floorToDouble();
 
   /// Returns `this.toDouble()`.
   @override
-  double ceilToDouble() => value!.ceilToDouble();
+  double ceilToDouble() => value.ceilToDouble();
 
   /// Returns `this.toDouble()`.
   @override
-  double truncateToDouble() => value!.truncateToDouble();
+  double truncateToDouble() => value.truncateToDouble();
 }

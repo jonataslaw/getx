@@ -32,7 +32,7 @@ class HttpRequestImpl extends HttpRequestBase {
 
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
-    Stream<List<int>?> stream = request.bodyBytes.asBroadcastStream();
+    var stream = request.bodyBytes.asBroadcastStream();
     //var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
 
     try {

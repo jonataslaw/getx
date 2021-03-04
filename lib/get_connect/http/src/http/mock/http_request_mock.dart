@@ -16,7 +16,7 @@ class MockClient extends HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var requestBody = await request.bodyBytes.toBytes();
-    var bodyBytes = BodyBytesStream.fromBytes(requestBody ?? const []);
+    var bodyBytes = BodyBytesStream.fromBytes(requestBody);
 
     var response = await _handler(request);
 

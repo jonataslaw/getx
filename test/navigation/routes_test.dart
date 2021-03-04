@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:get/get.dart';
 
 void main() {
   // testWidgets(
@@ -24,7 +24,8 @@ void main() {
   //   "GetPage name null",
   //   (tester) async {
   //     expect(
-  //       () => GetPage(page: () => Scaffold(), maintainState: null, name: null),
+  //       () => GetPage(page: () => Scaffold(),
+  // maintainState: null, name: null),
   //       throwsAssertionError,
   //     );
   //   },

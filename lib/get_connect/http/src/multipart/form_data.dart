@@ -57,9 +57,7 @@ class FormData {
   String _fileHeader(MapEntry<String, MultipartFile> file) {
     var header =
         'content-disposition: form-data; name="${browserEncode(file.key)}"';
-    if (file.value.filename != null) {
-      header = '$header; filename="${browserEncode(file.value.filename)}"';
-    }
+    header = '$header; filename="${browserEncode(file.value.filename)}"';
     header = '$header\r\n'
         'content-type: ${file.value.contentType}';
     return '$header\r\n\r\n';

@@ -214,7 +214,7 @@ class GetUtils {
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) {
-    if (s == null || s.length > 16 || s.length < 9) return false;
+    if (s.length > 16 || s.length < 9) return false;
     return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   }
 
@@ -413,10 +413,6 @@ class GetUtils {
 
   //Check if num is a cnpj
   static bool isCnpj(String cnpj) {
-    if (cnpj == null) {
-      return false;
-    }
-
     // Obter somente os números do CNPJ
     final numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -466,9 +462,9 @@ class GetUtils {
 
   /// Checks if the cpf is valid.
   static bool isCpf(String cpf) {
-    if (cpf == null) {
-      return false;
-    }
+    // if (cpf == null) {
+    //   return false;
+    // }
 
     // get only the numbers
     final numbers = cpf.replaceAll(RegExp(r'[^0-9]'), '');

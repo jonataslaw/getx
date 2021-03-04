@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
-
 import '../../get_core/get_core.dart';
 
 import 'lifecycle.dart';
@@ -177,7 +175,6 @@ class GetInstance {
     required InstanceBuilderCallback<S> builder,
     bool fenix = false,
   }) {
-    assert(builder != null);
     final key = _getKey(S, name);
     _singl.putIfAbsent(
       key,
@@ -209,9 +206,7 @@ class GetInstance {
       for (final onClose in _routesByCreate[routeName]!) {
         // assure the [DisposableInterface] instance holding a reference
         // to [onClose()] wasn't disposed.
-        if (onClose != null) {
-          onClose();
-        }
+        onClose();
       }
       _routesByCreate[routeName]!.clear();
       _routesByCreate.remove(routeName);
@@ -222,7 +217,7 @@ class GetInstance {
     }
 
     for (final element in keysToRemove) {
-      _routesKey?.remove(element);
+      _routesKey.remove(element);
     }
     keysToRemove.clear();
   }
@@ -286,15 +281,13 @@ class GetInstance {
     final key = _getKey(S, tag);
     final i = _singl[key]!.getDependency() as S?;
     if (i is GetLifeCycleBase) {
-      if (i.onStart != null) {
-        i.onStart();
-        if (tag == null) {
-          Get.log('Instance "$S" has been initialized');
-        } else {
-          Get.log('Instance "$S" with tag "$tag" has been initialized');
-        }
+      i.onStart();
+      if (tag == null) {
+        Get.log('Instance "$S" has been initialized');
+      } else {
+        Get.log('Instance "$S" with tag "$tag" has been initialized');
       }
-      if (!_singl[key]!.isSingleton! && i.onDelete != null) {
+      if (!_singl[key]!.isSingleton!) {
         _routesByCreate[Get.reference] ??= HashSet<Function>();
         _routesByCreate[Get.reference]!.add(i.onDelete as Function);
       }
@@ -398,7 +391,7 @@ class GetInstance {
       return false;
     }
 
-    if (i is GetLifeCycleBase && i.onDelete != null) {
+    if (i is GetLifeCycleBase) {
       i.onDelete();
       Get.log('"$newKey" onDelete() called');
     }

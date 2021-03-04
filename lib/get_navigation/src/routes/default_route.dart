@@ -31,11 +31,7 @@ class GetPageRoute<T> extends PageRoute<T> {
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  })  : assert(opaque != null),
-        assert(barrierDismissible != null),
-        assert(maintainState != null),
-        assert(fullscreenDialog != null),
-        reference = "$routeName: ${page.hashCode}",
+  })  : reference = "$routeName: ${page.hashCode}",
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
@@ -416,10 +412,7 @@ class _CupertinoBackGestureDetector<T> extends StatefulWidget {
     required this.enabledCallback,
     required this.onStartPopGesture,
     required this.child,
-  })   : assert(enabledCallback != null),
-        assert(onStartPopGesture != null),
-        assert(child != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Widget child;
 
@@ -533,8 +526,7 @@ class _CupertinoBackGestureController<T> {
   _CupertinoBackGestureController({
     required this.navigator,
     required this.controller,
-  })   : assert(navigator != null),
-        assert(controller != null) {
+  }) {
     navigator.didStartUserGesture();
   }
 
