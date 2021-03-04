@@ -416,7 +416,7 @@ class _CupertinoBackGestureDetector<T> extends StatefulWidget {
     required this.enabledCallback,
     required this.onStartPopGesture,
     required this.child,
-  })  : assert(enabledCallback != null),
+  })   : assert(enabledCallback != null),
         assert(onStartPopGesture != null),
         assert(child != null),
         super(key: key);
@@ -493,11 +493,9 @@ class _CupertinoBackGestureDetectorState<T>
         return -value;
       case TextDirection.ltr:
         return value;
+      default:
+        return value;
     }
-    // FIXME: shouldn't we return a default here?
-    //  or perhaps throw error
-    // ignore: avoid_returning_null
-    return null;
   }
 
   @override
@@ -535,7 +533,7 @@ class _CupertinoBackGestureController<T> {
   _CupertinoBackGestureController({
     required this.navigator,
     required this.controller,
-  })  : assert(navigator != null),
+  })   : assert(navigator != null),
         assert(controller != null) {
     navigator.didStartUserGesture();
   }
@@ -579,7 +577,8 @@ class _CupertinoBackGestureController<T> {
           _kMaxDroppedSwipePageForwardAnimationTime,
           0,
           controller.value,
-        )!.floor(),
+        )!
+            .floor(),
         _kMaxPageBackAnimationTime,
       );
       controller.animateTo(1.0,
@@ -597,7 +596,8 @@ class _CupertinoBackGestureController<T> {
           0,
           _kMaxDroppedSwipePageForwardAnimationTime,
           controller.value,
-        )!.floor();
+        )!
+            .floor();
         controller.animateBack(
           0.0,
           duration: Duration(milliseconds: droppedPageBackAnimationTime),

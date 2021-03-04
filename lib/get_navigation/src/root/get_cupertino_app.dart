@@ -14,12 +14,14 @@ class GetCupertinoApp extends StatelessWidget {
     this.theme,
     this.navigatorKey,
     this.home,
-    Map<String, Widget Function(BuildContext)> this.routes = const <String, WidgetBuilder>{},
+    Map<String, Widget Function(BuildContext)> this.routes =
+        const <String, WidgetBuilder>{},
     this.initialRoute,
     this.onGenerateRoute,
     this.onGenerateInitialRoutes,
     this.onUnknownRoute,
-    List<NavigatorObserver> this.navigatorObservers = const <NavigatorObserver>[],
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
     this.builder,
     this.translationsKeys,
     this.translations,
@@ -58,15 +60,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
-  })  : assert(routes != null),
-        assert(navigatorObservers != null),
-        assert(title != null),
-        assert(showPerformanceOverlay != null),
-        assert(checkerboardRasterCacheImages != null),
-        assert(checkerboardOffscreenLayers != null),
-        assert(showSemanticsDebugger != null),
-        assert(debugShowCheckedModeBanner != null),
-        routeInformationProvider = null,
+  })  : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
         backButtonDispatcher = null,
@@ -103,7 +97,7 @@ class GetCupertinoApp extends StatelessWidget {
   final ThemeData? highContrastTheme;
   final ThemeData? highContrastDarkTheme;
   final Map<Type, Action<Intent>>? actions;
-  final Function(Routing)? routingCallback;
+  final Function(Routing?)? routingCallback;
   final Transition? defaultTransition;
   final bool? opaqueRoute;
   final VoidCallback? onInit;
@@ -169,15 +163,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
-  })  : assert(routeInformationParser != null),
-        assert(routerDelegate != null),
-        assert(title != null),
-        assert(showPerformanceOverlay != null),
-        assert(checkerboardRasterCacheImages != null),
-        assert(checkerboardOffscreenLayers != null),
-        assert(showSemanticsDebugger != null),
-        assert(debugShowCheckedModeBanner != null),
-        navigatorObservers = null,
+  })  : navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,
@@ -248,21 +234,19 @@ class GetCupertinoApp extends StatelessWidget {
                   child: builder == null ? child! : builder!(context, child),
                 );
               },
-              title: title ?? '',
+              title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
               localeListResolutionCallback: localeListResolutionCallback,
               localeResolutionCallback: localeResolutionCallback,
-              supportedLocales:
-                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
-              showPerformanceOverlay: showPerformanceOverlay ?? false,
-              checkerboardRasterCacheImages:
-                  checkerboardRasterCacheImages ?? false,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
-              showSemanticsDebugger: showSemanticsDebugger ?? false,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              supportedLocales: supportedLocales,
+              showPerformanceOverlay: showPerformanceOverlay,
+              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+              showSemanticsDebugger: showSemanticsDebugger,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
             )
           : CupertinoApp(
@@ -295,21 +279,19 @@ class GetCupertinoApp extends StatelessWidget {
                   child: builder == null ? child! : builder!(context, child),
                 );
               },
-              title: title ?? '',
+              title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
               localeListResolutionCallback: localeListResolutionCallback,
               localeResolutionCallback: localeResolutionCallback,
-              supportedLocales:
-                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
-              showPerformanceOverlay: showPerformanceOverlay ?? false,
-              checkerboardRasterCacheImages:
-                  checkerboardRasterCacheImages ?? false,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
-              showSemanticsDebugger: showSemanticsDebugger ?? false,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              supportedLocales: supportedLocales,
+              showPerformanceOverlay: showPerformanceOverlay,
+              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+              showSemanticsDebugger: showSemanticsDebugger,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
               //   actions: actions,
             ));

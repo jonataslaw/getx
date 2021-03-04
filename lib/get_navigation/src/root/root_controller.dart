@@ -25,9 +25,9 @@ class GetMaterialController extends GetxController {
 
   final routing = Routing();
 
-  Map<String?, String> parameters = {};
+  Map<String, String?> parameters = {};
 
-  ParseRouteTree? routeTree;
+  late ParseRouteTree routeTree;
 
   CustomTransition? customTransition;
 
