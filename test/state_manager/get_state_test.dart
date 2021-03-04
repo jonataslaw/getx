@@ -14,11 +14,11 @@ void main() {
               Text(
                 '${controller.counter}',
               ),
-              FlatButton(
+              TextButton(
                 child: Text("increment"),
                 onPressed: () => controller.increment(),
               ),
-              FlatButton(
+              TextButton(
                 child: Text("incrementWithId"),
                 onPressed: () => controller.incrementWithId(),
               ),

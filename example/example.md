@@ -53,7 +53,7 @@ class Home extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -120,7 +120,7 @@ class Home extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -161,7 +161,7 @@ class Home extends StatelessWidget {
             Obx(() => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -362,13 +362,13 @@ class First extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${_.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.toNamed('/second');
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Change locale to English'),
               onPressed: () {
                 Get.updateLocale(Locale('en', 'UK'));
@@ -421,13 +421,13 @@ class Second extends GetView<ControllerX> {
             GetX<ControllerX>(
               builder: (_) => Text('Age: ${_.user.value.age}'),
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Go to last page"),
               onPressed: () {
                 Get.toNamed('/third', arguments: 'arguments of second');
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Back page and open snackbar"),
               onPressed: () {
                 Get.back();
@@ -437,25 +437,25 @@ class Second extends GetView<ControllerX> {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Increment"),
               onPressed: () {
                 Get.find<ControllerX>().increment();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Increment"),
               onPressed: () {
                 Get.find<ControllerX>().increment2();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Update name"),
               onPressed: () {
                 Get.find<ControllerX>().updateUser();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Dispose worker"),
               onPressed: () {
                 Get.find<ControllerX>().disposeWorker();

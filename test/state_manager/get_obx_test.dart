@@ -17,7 +17,7 @@ void main() {
                 Text('List: ${controller.list.length}'),
                 Text('Bool: ${controller.boolean.value}'),
                 Text('Map: ${controller.map.length}'),
-                FlatButton(
+                TextButton(
                   child: Text("increment"),
                   onPressed: controller.increment,
                 ),
