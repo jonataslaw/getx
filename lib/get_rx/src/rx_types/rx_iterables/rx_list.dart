@@ -75,11 +75,11 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  int get length => value!.length;
+  int get length => value.length;
 
   @override
   @protected
-  List<E>? get value {
+  List<E> get value {
     if (RxInterface.proxy != null) {
       RxInterface.proxy!.addListener(subject);
     }
@@ -87,28 +87,19 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  @protected
-  @Deprecated('List.value is deprecated. use [yourList.assignAll(newList)]')
-  set value(List<E>? val) {
-    if (_value == val) return;
-    _value = val;
-    refresh();
-  }
-
-  @override
   set length(int newLength) {
-    _value!.length = newLength;
+    _value.length = newLength;
     refresh();
   }
 
   @override
   void insertAll(int index, Iterable<E> iterable) {
-    _value!.insertAll(index, iterable);
+    _value.insertAll(index, iterable);
     refresh();
   }
 
   @override
-  Iterable<E> get reversed => value!.reversed;
+  Iterable<E> get reversed => value.reversed;
 
   @override
   Iterable<E> where(bool Function(E) test) {

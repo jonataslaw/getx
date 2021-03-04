@@ -24,7 +24,7 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   @protected
-  Set<E>? get value {
+  Set<E> get value {
     if (RxInterface.proxy != null) {
       RxInterface.proxy!.addListener(subject);
     }
@@ -33,7 +33,7 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   @protected
-  set value(Set<E>? val) {
+  set value(Set<E> val) {
     if (_value == val) return;
     _value = val;
     refresh();
@@ -109,22 +109,18 @@ class RxSet<E> extends SetMixin<E>
 
 extension SetExtension<E> on Set<E> {
   RxSet<E> get obs {
-    if (this != null) {
-      return RxSet<E>(<E>{})..addAllNonNull(this);
-    } else {
-      return RxSet<E>(null);
-    }
+    return RxSet<E>(<E>{})..addAll(this);
   }
 
-  /// Add [item] to [List<E>] only if [item] is not null.
-  void addNonNull(E item) {
-    if (item != null) add(item);
-  }
+  // /// Add [item] to [List<E>] only if [item] is not null.
+  // void addNonNull(E item) {
+  //   if (item != null) add(item);
+  // }
 
-  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  void addAllNonNull(Iterable<E> item) {
-    if (item != null) addAll(item);
-  }
+  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
+  // void addAllNonNull(Iterable<E> item) {
+  //   if (item != null) addAll(item);
+  // }
 
   /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {

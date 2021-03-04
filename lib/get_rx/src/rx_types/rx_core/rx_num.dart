@@ -288,13 +288,13 @@ class RxDouble extends _BaseRxNum<double?> {
 
   /// Addition operator.
   RxDouble operator +(num other) {
-    value += other;
+    value = value! + other;
     return this;
   }
 
   /// Subtraction operator.
   RxDouble operator -(num other) {
-    value -= other;
+    value = value! - other;
     return this;
   }
 
@@ -413,13 +413,13 @@ class RxInt extends _BaseRxNum<int?> {
 
   /// Addition operator.
   RxInt operator +(int other) {
-    value += other;
+    value = value! + other;
     return this;
   }
 
   /// Subtraction operator.
   RxInt operator -(int other) {
-    value -= other;
+    value = value! - other;
     return this;
   }
 

@@ -5,8 +5,6 @@ part of rx_types;
 /// This interface is the contract that [_RxImpl]<[T]> uses in all it's
 /// subclass.
 abstract class RxInterface<T> {
-  RxInterface([T? initial]);
-
   bool get canUpdate;
 
   /// Adds a listener to stream

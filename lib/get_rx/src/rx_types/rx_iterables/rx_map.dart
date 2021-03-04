@@ -57,20 +57,11 @@ class RxMap<K, V> extends MapMixin<K, V>
 
   @override
   @protected
-  Map<K, V>? get value {
+  Map<K, V> get value {
     if (RxInterface.proxy != null) {
       RxInterface.proxy!.addListener(subject);
     }
     return _value;
-  }
-
-  @override
-  @protected
-  @Deprecated('Map.value is deprecated. use [yourMap.assignAll(newMap)]')
-  set value(Map<K, V>? val) {
-    if (_value == val) return;
-    _value = val;
-    refresh();
   }
 }
 

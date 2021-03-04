@@ -534,7 +534,7 @@ class GetUtils {
   /// Remove all whitespace inside string
   /// Example: your name => yourname
   static String removeAllWhitespace(String value) {
-    return value?.replaceAll(' ', '');
+    return value.replaceAll(' ', '');
   }
 
   /// Camelcase string

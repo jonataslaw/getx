@@ -28,13 +28,13 @@
 import 'package:flutter_test/flutter_test.dart';
 
 class _FunctionMatcher<T> extends CustomMatcher {
-  final dynamic Function(T? value) _feature;
+  final Object Function(T value) _feature;
 
   _FunctionMatcher(String name, this._feature, matcher)
       : super('`$name`:', '`$name`', matcher);
 
   @override
-  Object featureValueOf(covariant T? actual) => _feature(actual);
+  Object featureValueOf(covariant T actual) => _feature(actual);
 }
 
 class HavingMatcher<T> implements TypeMatcher<T> {

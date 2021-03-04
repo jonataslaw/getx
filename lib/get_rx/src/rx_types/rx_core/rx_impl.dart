@@ -4,8 +4,8 @@ part of rx_types;
 /// reactivity
 /// of those `Widgets` and Rx values.
 
-mixin RxObjectMixin<T> on NotifyManager<T?> {
-  T? _value;
+mixin RxObjectMixin<T> on NotifyManager<T> {
+  late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
   /// useful when you make use of Rx for custom Types to referesh your UI.
@@ -39,9 +39,9 @@ mixin RxObjectMixin<T> on NotifyManager<T?> {
   /// final inputError = ''.obs..nil();
   /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
   /// ```
-  void nil() {
-    subject.add(_value = null);
-  }
+  // void nil() {
+  //   subject.add(_value = null);
+  // }
 
   /// Makes this Rx looks like a function so you can update a new
   /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
@@ -59,7 +59,7 @@ mixin RxObjectMixin<T> on NotifyManager<T?> {
   ///   onChanged: myText,
   /// ),
   ///```
-  T? call([T? v]) {
+  T call([T? v]) {
     if (v != null) {
       value = v;
     }
@@ -94,7 +94,7 @@ mixin RxObjectMixin<T> on NotifyManager<T?> {
 
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
-  set value(T? val) {
+  set value(T val) {
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
     _value = val;
@@ -102,7 +102,7 @@ mixin RxObjectMixin<T> on NotifyManager<T?> {
   }
 
   /// Returns the current [value]
-  T? get value {
+  T get value {
     if (RxInterface.proxy != null) {
       RxInterface.proxy!.addListener(subject);
     }
@@ -145,7 +145,7 @@ mixin NotifyManager<T> {
     void Function(T) onData, {
     Function? onError,
     void Function()? onDone,
-    bool cancelOnError = false,
+    bool? cancelOnError,
   }) =>
       subject.listen(onData,
           onError: onError, onDone: onDone, cancelOnError: cancelOnError);
@@ -154,7 +154,7 @@ mixin NotifyManager<T> {
   void close() {
     _subscriptions.forEach((getStream, _subscriptions) {
       for (final subscription in _subscriptions) {
-        subscription?.cancel();
+        subscription.cancel();
       }
     });
 
@@ -164,7 +164,7 @@ mixin NotifyManager<T> {
 }
 
 /// Base Rx class that manages all the stream logic for any Type.
-abstract class _RxImpl<T> extends RxNotifier<T?> with RxObjectMixin<T> {
+abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   _RxImpl(T initial) {
     _value = initial;
   }
