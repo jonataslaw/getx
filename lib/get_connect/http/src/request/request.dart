@@ -21,7 +21,7 @@ class Request<T> {
   final int? contentLength;
 
   /// The BodyBytesStream of body from this [Request]
-  final BodyBytesStream bodyBytes;
+  final Stream<List<int>> bodyBytes;
 
   /// When true, the client will follow redirects to resolves this [Request]
   final bool followRedirects;
@@ -50,7 +50,7 @@ class Request<T> {
     required Uri url,
     required String method,
     required Map<String, String> headers,
-    BodyBytesStream? bodyBytes,
+    Stream<List<int>>? bodyBytes,
     bool followRedirects = true,
     int maxRedirects = 4,
     int? contentLength,
@@ -76,11 +76,9 @@ class Request<T> {
   }
 }
 
-class BodyBytesStream extends StreamView<List<int>?> {
-  BodyBytesStream(Stream<List<int>?> stream) : super(stream);
-
-  factory BodyBytesStream.fromBytes(List<int>? bytes) =>
-      BodyBytesStream(Stream.fromIterable([bytes]));
+extension BodyBytesStream on Stream<List<int>> {
+  static Stream<List<int>> fromBytes(List<int> bytes) =>
+      Stream.fromIterable([bytes]);
 
   Future<Uint8List> toBytes() {
     var completer = Completer<Uint8List>();
@@ -89,7 +87,7 @@ class BodyBytesStream extends StreamView<List<int>?> {
         Uint8List.fromList(bytes),
       ),
     );
-    listen((val) => sink.add(val!),
+    listen((val) => sink.add(val),
         onError: completer.completeError,
         onDone: sink.close,
         cancelOnError: true);
@@ -97,5 +95,5 @@ class BodyBytesStream extends StreamView<List<int>?> {
   }
 
   Future<String> bytesToString([Encoding encoding = utf8]) =>
-      encoding.decodeStream(this as Stream<List<int>>);
+      encoding.decodeStream(this);
 }

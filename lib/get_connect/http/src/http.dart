@@ -93,7 +93,7 @@ class GetHttpClient {
     Progress? uploadProgress,
   ) async {
     List<int>? bodyBytes;
-    BodyBytesStream? bodyStream;
+    Stream<List<int>>? bodyStream;
     final headers = <String, String>{};
 
     headers['user-agent'] = userAgent;
@@ -145,7 +145,7 @@ class GetHttpClient {
     );
   }
 
-  BodyBytesStream _trackProgress(
+  Stream<List<int>> _trackProgress(
     List<int> bodyBytes,
     Progress? uploadProgress,
   ) {
@@ -163,7 +163,7 @@ class GetHttpClient {
         sink.add(data);
       }),
     );
-    return BodyBytesStream(byteStream);
+    return byteStream;
   }
 
   void _setSimpleHeaders(

@@ -49,7 +49,7 @@ class Response<T> {
   bool get unauthorized => status.isUnauthorized;
 
   /// The response body as a Stream of Bytes.
-  final BodyBytesStream? bodyBytes;
+  final Stream<List<int>>? bodyBytes;
 
   /// The response body as a Stream of Bytes.
   final String? bodyString;
@@ -61,7 +61,7 @@ class Response<T> {
 }
 
 Future<String> bodyBytesToString(
-    BodyBytesStream bodyBytes, Map<String, String> headers) {
+    Stream<List<int>> bodyBytes, Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 

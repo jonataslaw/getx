@@ -46,7 +46,7 @@ class HttpRequestImpl implements HttpRequestBase {
       var reader = html.FileReader();
 
       reader.onLoad.first.then((_) async {
-        var bodyBytes = BodyBytesStream.fromBytes(reader.result as Uint8List?);
+        var bodyBytes = BodyBytesStream.fromBytes(reader.result as List<int>);
 
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);

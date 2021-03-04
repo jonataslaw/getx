@@ -1,8 +1,8 @@
 import 'dart:ui';
 import '../../../get_core/get_core.dart';
 
-extension Trans on String? {
-  String? get tr {
+extension Trans on String {
+  String get tr {
     // Returns the key if locale is null.
     if (Get.locale?.languageCode == null) return this;
 
@@ -14,13 +14,13 @@ extension Trans on String? {
                 "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
             .containsKey(this)) {
       return Get.translations[
-          "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this!];
+          "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!;
 
       // Checks if there is a callback language in the absence of the specific
       // country, and if it contains that key.
     } else if (Get.translations.containsKey(Get.locale!.languageCode) &&
         Get.translations[Get.locale!.languageCode]!.containsKey(this)) {
-      return Get.translations[Get.locale!.languageCode]![this!];
+      return Get.translations[Get.locale!.languageCode]![this]!;
       // If there is no corresponding language or corresponding key, return
       // the key.
     } else if (Get.fallbackLocale != null) {
@@ -29,11 +29,11 @@ extension Trans on String? {
 
       if (Get.translations.containsKey(key) &&
           Get.translations[key]!.containsKey(this)) {
-        return Get.translations[key]![this!];
+        return Get.translations[key]![this]!;
       }
       if (Get.translations.containsKey(fallback.languageCode) &&
           Get.translations[fallback.languageCode]!.containsKey(this)) {
-        return Get.translations[fallback.languageCode]![this!];
+        return Get.translations[fallback.languageCode]![this]!;
       }
       return this;
     } else {
@@ -41,25 +41,25 @@ extension Trans on String? {
     }
   }
 
-  String? trArgs([List<String> args = const []]) {
+  String trArgs([List<String> args = const []]) {
     var key = tr;
     if (args.isNotEmpty) {
       for (final arg in args) {
-        key = key!.replaceFirst(RegExp(r'%s'), arg.toString());
+        key = key.replaceFirst(RegExp(r'%s'), arg.toString());
       }
     }
     return key;
   }
 
-  String? trPlural([String? pluralKey, int? i, List<String> args = const []]) {
-    return i == 1 ? pluralKey.trArgs(args) : trArgs(args);
+  String trPlural([String? pluralKey, int? i, List<String> args = const []]) {
+    return i == 1 ? pluralKey!.trArgs(args) : trArgs(args);
   }
 
   String? trParams([Map<String, String> params = const {}]) {
     var trans = tr;
     if (params.isNotEmpty) {
       params.forEach((key, value) {
-        trans = trans!.replaceAll('@$key', value);
+        trans = trans.replaceAll('@$key', value);
       });
     }
     return trans;
@@ -67,7 +67,7 @@ extension Trans on String? {
 
   String? trPluralParams(
       [String? pluralKey, int? i, Map<String, String> params = const {}]) {
-    return i == 1 ? pluralKey.trParams(params) : trParams(params);
+    return i == 1 ? pluralKey!.trParams(params) : trParams(params);
   }
 }
 

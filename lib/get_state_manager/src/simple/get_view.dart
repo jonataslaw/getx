@@ -35,7 +35,7 @@ abstract class GetView<T> extends StatelessWidget {
 
   final String? tag = null;
 
-  T? get controller => GetInstance().find<T>(tag: tag);
+  T get controller => GetInstance().find<T>(tag: tag)!;
 
   @override
   Widget build(BuildContext context);
@@ -53,7 +53,7 @@ abstract class GetWidget<S extends GetLifeCycleBase?> extends GetWidgetCache {
   @protected
   final String? tag = null;
 
-  S? get controller => GetWidget._cache[this] as S?;
+  S get controller => GetWidget._cache[this] as S;
 
   // static final _cache = <GetWidget, GetLifeCycleBase>{};
 

@@ -19,11 +19,11 @@ class MultipartFile {
   final String contentType;
 
   /// This stream will emit the file content of File.
-  BodyBytesStream? _stream;
+  Stream<List<int>>? _stream;
 
   int? _length;
 
-  BodyBytesStream? get stream => _stream;
+  Stream<List<int>>? get stream => _stream;
 
   int? get length => _length;
 

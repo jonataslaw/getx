@@ -50,7 +50,7 @@ class HttpRequestImpl extends HttpRequestBase {
         headers[key] = values.join(',');
       });
 
-      final bodyBytes = BodyBytesStream(response);
+      final bodyBytes = (response);
       final stringBody = await bodyBytesToString(bodyBytes, headers);
 
       final body = bodyDecoded<T>(

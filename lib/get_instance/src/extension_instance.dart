@@ -67,7 +67,7 @@ extension Inst on GetInterface {
   /// Finds a Instance of the required Class <[S]>(or [tag])
   /// In the case of using [Get.create()], it will generate an Instance
   /// each time you call [Get.find()].
-  S? find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
+  S find<S>({String? tag}) => GetInstance().find<S>(tag: tag)!;
 
   /// Injects an [Instance<S>] in memory.
   ///

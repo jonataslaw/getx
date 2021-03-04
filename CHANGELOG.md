@@ -1,3 +1,6 @@
+## [4.0.0-nullsafety.2] 
+- Added append function to StateMixin. Now is possible track loading, success and error handle of your application with ONE LINE OF CODE. Ex: append(()=> api.getUser);
+
 ## [4.0.0-nullsafety.0] 
 - Migrate to null-safety 
 - Added ScrollMixin to controllers

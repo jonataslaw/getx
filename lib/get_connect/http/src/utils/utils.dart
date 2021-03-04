@@ -52,10 +52,9 @@ String validateField(String field) {
   return field.toLowerCase();
 }
 
-BodyBytesStream toBodyBytesStream(Stream<List<int>> stream) {
-  if (stream is BodyBytesStream) return stream as BodyBytesStream;
-  return BodyBytesStream(stream);
-}
+// Stream<List<int>> toBodyBytesStream(Stream<List<int>> stream) {
+//   return (stream);
+// }
 
 final _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
 

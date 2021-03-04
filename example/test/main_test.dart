@@ -17,7 +17,18 @@ class MockRepository implements IHomeRepository {
 
     if (Random().nextBool()) {
       return CasesModel(
-        global: Global(totalDeaths: 100, totalConfirmed: 200),
+        global: Global(
+            totalDeaths: 100,
+            totalConfirmed: 200,
+            date: DateTime.now(),
+            newConfirmed: 0,
+            newDeaths: 0,
+            newRecovered: 0,
+            totalRecovered: 0),
+        countries: [],
+        date: DateTime.now(),
+        id: '',
+        message: '',
       );
     }
 
@@ -30,7 +41,7 @@ void main() {
   final binding = BindingsBuilder(() {
     Get.lazyPut<IHomeRepository>(() => MockRepository());
     Get.lazyPut<HomeController>(
-        () => HomeController(homeRepository: Get.find()));
+        () => HomeController(homeRepository: Get.find()!));
   });
 
   test('Test Binding', () {
@@ -69,8 +80,8 @@ void main() {
     }
 
     if (controller.status.isSuccess) {
-      expect(controller.state.global.totalDeaths, 100);
-      expect(controller.state.global.totalConfirmed, 200);
+      expect(controller.state!.global.totalDeaths, 100);
+      expect(controller.state!.global.totalConfirmed, 200);
     }
   });
 
@@ -104,33 +115,6 @@ void main() {
     ),
     test: (e) {
       expect(find.text("ban:0"), findsOneWidget);
-      expect(e.count.value, 0);
-    },
-  );
-
-  testGetBuilder(
-    'GetBuilder test',
-    widget: GetBuilder<Controller>(
-      init: Controller(),
-      builder: (controller) {
-        return Text("ban:${controller.count}");
-      },
-    ),
-    test: (e) {
-      expect(find.text("ban:0"), findsOneWidget);
-      expect(e.count.value, 0);
-    },
-  );
-
-  testObx(
-    'Obx test',
-    widget: (controller) => Obx(
-      () => Text("ban:${controller.count}"),
-    ),
-    controller: Controller(),
-    test: (e) {
-      expect(find.text("ban:0"), findsOneWidget);
-      expect(e.count.value, 0);
     },
   );
 

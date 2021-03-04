@@ -1105,9 +1105,9 @@ Since version 2.8 it is possible to access the properties
   //TODO: Change to ui.SingletonFlutterWindow rather dynamic
   //when Flutter update stable. dynamic is used to avoid Breaking Changes
   /// The window to which this binding is bound.
-  dynamic get window => ui.window;
+  ui.SingletonFlutterWindow get window => ui.window;
 
-  Locale get deviceLocale => ui.window.locale;
+  Locale? get deviceLocale => ui.window.locale;
 
   ///The number of device pixels for each logical pixel.
   double get pixelRatio => ui.window.devicePixelRatio;

@@ -39,7 +39,7 @@ void main() {
   test('Get start and delete called just one time', () async {
     Get..put(Controller())..put(Controller());
 
-    final controller = Get.find<Controller>()!;
+    final controller = Get.find<Controller>();
     expect(controller.init, 1);
 
     Get..delete<Controller>()..delete<Controller>();
@@ -83,19 +83,19 @@ void main() {
 
   test('Get.lazyPut fenix test', () async {
     Get.lazyPut<Controller>(() => Controller(), fenix: true);
-    Get.find<Controller>()!.increment();
+    Get.find<Controller>().increment();
 
-    expect(Get.find<Controller>()!.count, 1);
+    expect(Get.find<Controller>().count, 1);
     Get.delete<Controller>();
-    expect(Get.find<Controller>()!.count, 0);
+    expect(Get.find<Controller>().count, 0);
     Get.reset();
   });
 
   test('Get.lazyPut without fenix', () async {
     Get.lazyPut<Controller>(() => Controller());
-    Get.find<Controller>()!.increment();
+    Get.find<Controller>().increment();
 
-    expect(Get.find<Controller>()!.count, 1);
+    expect(Get.find<Controller>().count, 1);
     Get.delete<Controller>();
     expect(() => Get.find<Controller>(), throwsA(m.TypeMatcher<String>()));
     Get.reset();
@@ -103,13 +103,13 @@ void main() {
 
   test('Get.reloadInstance test', () async {
     Get.lazyPut<Controller>(() => Controller());
-    var ct1 = Get.find<Controller>()!;
+    var ct1 = Get.find<Controller>();
     ct1.increment();
     expect(ct1.count, 1);
-    ct1 = Get.find<Controller>()!;
+    ct1 = Get.find<Controller>();
     expect(ct1.count, 1);
     GetInstance().reload<Controller>();
-    ct1 = Get.find<Controller>()!;
+    ct1 = Get.find<Controller>();
     expect(ct1.count, 0);
     Get.reset();
   });
