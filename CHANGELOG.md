@@ -1,3 +1,9 @@
+## [4.0.0-nullsafety.0] 
+- Migrate to null-safety 
+- Added ScrollMixin to controllers
+- Added loadingMore status to RxStatus
+- Breaking: It is not possible to initialize Rx with null values.
+
 ## [3.25.6] 
 - Added documentation in French (@kamazoun)
 - Fix logs messages (@damphat)
