@@ -129,7 +129,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Кликов: ${c.count}"))),
 
       // Замените 8 строк Navigator.push простым Get.to(). Вам не нужен context!
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Перейти к Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));

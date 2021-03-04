@@ -485,7 +485,7 @@ void main() {
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
-        home: RaisedButton(
+        home: ElevatedButton(
           child: Text('Open Snackbar'),
           onPressed: () {
             Get.snackbar('title', "message", duration: Duration(seconds: 1));
@@ -504,7 +504,7 @@ void main() {
   testWidgets("Get.rawSnackbar test", (tester) async {
     await tester.pumpWidget(
       Wrapper(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open Snackbar'),
           onPressed: () {
             Get.rawSnackbar(

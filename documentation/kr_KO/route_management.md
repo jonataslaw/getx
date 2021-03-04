@@ -313,7 +313,7 @@ class First extends StatelessWidget {
         title: Text('First Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/second");
@@ -338,7 +338,7 @@ class Second extends StatelessWidget {
         title: Text('second Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/third");
@@ -357,7 +357,7 @@ class Third extends StatelessWidget {
         title: Text("Third Route"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -428,7 +428,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -518,7 +518,7 @@ Navigator(
             title: Text("Main"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               onPressed: () {
                 Get.toNamed('/second', id:1); // index로 중첩된 경로를 탐색

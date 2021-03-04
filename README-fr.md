@@ -148,7 +148,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
       // Remplacez les 8 lignes Navigator.push par un simple Get.to(). Vous n'avez pas besoin de 'context'
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));

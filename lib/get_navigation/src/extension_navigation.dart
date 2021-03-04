@@ -125,7 +125,7 @@ extension ExtensionSnackbar on GetInterface {
     Color leftBarIndicatorColor,
     List<BoxShadow> boxShadows,
     Gradient backgroundGradient,
-    FlatButton mainButton,
+    TextButton mainButton,
     OnTap onTap,
     bool isDismissible,
     bool showProgressIndicator,
@@ -326,23 +326,25 @@ extension ExtensionDialog on GetInterface {
       actions.add(cancel);
     } else {
       if (leanCancel) {
-        actions.add(FlatButton(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        actions.add(TextButton(
+          style: TextButton.styleFrom(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                    color: buttonColor ?? theme.accentColor,
+                    width: 2,
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(100)),
+          ),
           onPressed: () {
             onCancel?.call();
             back();
           },
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Text(
             textCancel ?? "Cancel",
             style: TextStyle(color: cancelTextColor ?? theme.accentColor),
           ),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: buttonColor ?? theme.accentColor,
-                  width: 2,
-                  style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(100)),
         ));
       }
     }
@@ -350,14 +352,18 @@ extension ExtensionDialog on GetInterface {
       actions.add(confirm);
     } else {
       if (leanConfirm) {
-        actions.add(FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            color: buttonColor ?? theme.accentColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100)),
+        actions.add(TextButton(
+            style: TextButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              //color: buttonColor ?? theme.accentColor,
+              backgroundColor: buttonColor ?? theme.accentColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100)),
+            ),
             child: Text(
               textConfirm ?? "Ok",
-              style: TextStyle(color: confirmTextColor ?? theme.primaryColor),
+              style:
+                  TextStyle(color: confirmTextColor ?? theme.backgroundColor),
             ),
             onPressed: () {
               onConfirm?.call();

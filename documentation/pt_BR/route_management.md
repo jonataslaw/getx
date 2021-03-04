@@ -140,7 +140,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -393,7 +393,7 @@ class Primeira extends StatelessWidget {
         title: Text('Primeira rota'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Abrir rota'),
           onPressed: () {
             Get.toNamed("/segunda");
@@ -418,7 +418,7 @@ class Segunda extends StatelessWidget {
         title: Text('Segunda rota'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Abrir rota'),
           onPressed: () {
             Get.toNamed("/terceira");
@@ -437,7 +437,7 @@ class Terceira extends StatelessWidget {
         title: Text("Terceira Rota"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -512,7 +512,7 @@ Navigator(
             title: Text("Principal"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               child: Text("Ir para a segunda"),
               onPressed: () {

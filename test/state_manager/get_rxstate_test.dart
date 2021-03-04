@@ -30,7 +30,7 @@ void main() {
                 Text(
                   'Map: ${controller.map.length}',
                 ),
-                FlatButton(
+                TextButton(
                   child: Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
