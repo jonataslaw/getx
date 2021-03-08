@@ -136,7 +136,7 @@ void main() {
     tearDownAll(Get.reset);
 
     test('Get.put test with init check', () async {
-      final instance = Get.put(DisposableController())!;
+      final instance = Get.put(DisposableController());
       expect(instance, Get.find<DisposableController>());
       expect(instance.initialized, true);
     });
@@ -150,7 +150,7 @@ void main() {
 
     test('Get.put test after delete with disposable controller and init check',
         () async {
-      final instance = Get.put<DisposableController>(DisposableController())!;
+      final instance = Get.put<DisposableController>(DisposableController());
       expect(instance, Get.find<DisposableController>());
       expect(instance.initialized, true);
     });

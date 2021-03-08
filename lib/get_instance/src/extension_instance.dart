@@ -39,7 +39,7 @@ extension Inst on GetInterface {
   /// async version of [Get.put()].
   /// Awaits for the resolution of the Future from [builder()] parameter and
   /// stores the Instance returned.
-  Future<S?> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
           {String? tag, bool permanent = false}) async =>
       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
@@ -67,7 +67,7 @@ extension Inst on GetInterface {
   /// Finds a Instance of the required Class <[S]>(or [tag])
   /// In the case of using [Get.create()], it will generate an Instance
   /// each time you call [Get.find()].
-  S find<S>({String? tag}) => GetInstance().find<S>(tag: tag)!;
+  S find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
 
   /// Injects an [Instance<S>] in memory.
   ///
@@ -83,7 +83,7 @@ extension Inst on GetInterface {
   /// rules. Although, can be removed by [GetInstance.reset()]
   /// and [Get.delete()]
   /// - [builder] If defined, the [dependency] must be returned from here
-  S? put<S>(S dependency,
+  S put<S>(S dependency,
           {String? tag,
           bool permanent = false,
           InstanceBuilderCallback<S>? builder}) =>
