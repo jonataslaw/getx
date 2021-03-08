@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
 import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
 import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
-import 'package:get_demo/routes/app_pages.dart';
-import 'package:get_test/get_test.dart';
+// import 'package:get_demo/routes/app_pages.dart';
+// import 'package:get_test/get_test.dart';
 import 'package:matcher/matcher.dart' as m;
 
 class MockRepository implements IHomeRepository {
@@ -37,11 +37,12 @@ class MockRepository implements IHomeRepository {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => HttpOverrides.global = null);
   final binding = BindingsBuilder(() {
     Get.lazyPut<IHomeRepository>(() => MockRepository());
     Get.lazyPut<HomeController>(
-        () => HomeController(homeRepository: Get.find()!));
+        () => HomeController(homeRepository: Get.find()));
   });
 
   test('Test Binding', () {
@@ -86,7 +87,9 @@ void main() {
   });
 
   /// Tests with GetTests
-  getTest(
+  /// TEMPORARILY REMOVED from the null-safetym branch as
+  /// get_test is not yet null safety.
+  /* getTest(
     "test description",
     getPages: AppPages.routes,
     initialRoute: AppPages.INITIAL,
@@ -135,7 +138,7 @@ void main() {
     onClose: (c) {
       print('onClose');
     },
-  );
+  );*/
 }
 
 class Controller extends GetxController {

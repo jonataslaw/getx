@@ -47,7 +47,7 @@ void main() {
 
     expect(find.text("0"), findsOneWidget);
 
-    Controller.to!.increment();
+    Controller.to.increment();
 
     await test.pump();
 
@@ -83,7 +83,7 @@ void main() {
 }
 
 class Controller extends GetxController {
-  static Controller? get to => Get.find();
+  static Controller get to => Get.find();
 
   int counter = 0;
 
