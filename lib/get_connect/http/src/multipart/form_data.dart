@@ -107,7 +107,7 @@ class FormData {
     for (final file in files) {
       yield separator;
       yield utf8.encode(_fileHeader(file));
-      yield* file.value.stream! as Stream<List<int>>;
+      yield* file.value.stream!;
       yield line;
     }
     yield close;
