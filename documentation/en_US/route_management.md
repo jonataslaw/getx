@@ -246,6 +246,22 @@ print(Get.parameters['user']);
 // out: 34954
 ```
 
+or send multiple parameters like this
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+On second screen take the data by parameters as usually
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// out: 34954 true
+```
+
+
+
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
 
 ### Middleware

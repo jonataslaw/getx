@@ -242,7 +242,21 @@ Y en la segunda pantalla tome los datos por parámetro
 
 ```dart
 print(Get.parameters['user']);
-// out: 34954
+// salida: 34954
+```
+
+o envie multiples parametros de la siguiente manera
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+En la segunda pantalla tome los parametros como lo haria normalmente
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// salida: 34954 true
 ```
 
 Y ahora, todo lo que necesita hacer es usar Get.toNamed() para navegar por sus rutas nombradas, sin ningún contexto (puede llamar a sus rutas directamente desde su clase BLoC o Controller), y cuando su aplicación se compila para web, sus rutas aparecerán en la url del navegador <3
