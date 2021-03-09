@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-import '../request/request.dart';
 
 bool isTokenChar(int byte) {
   return byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
