@@ -243,6 +243,21 @@ print(Get.parameters['user']);
 // out: 34954
 ```
 
+或像这样发送多个参数
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+在第二个屏幕上，通常按参数获取数据
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// out: 34954 true
+```
+
+
 现在，你需要做的就是使用Get.toNamed()来导航你的别名路由，不需要任何context(你可以直接从你的BLoC或Controller类中调用你的路由)，当你的应用程序被编译到web时，你的路由将出现在URL中。
 
 ### 中间件
