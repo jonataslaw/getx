@@ -357,6 +357,9 @@ Set either a message or messageText""");
           future: _boxHeightCompleter.future,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (widget.barBlur == 0) {
+                return _emptyWidget;
+              }
               return ClipRRect(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 child: BackdropFilter(
