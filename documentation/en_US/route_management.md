@@ -249,7 +249,12 @@ print(Get.parameters['user']);
 or send multiple parameters like this
 
 ```dart
-Get.toNamed("/profile/34954?flag=true");
+Get.toNamed("/profile/34954?flag=true&country=italy");
+```
+or
+```dart
+var parameters = <String, String>{"flag": "true","country": "italy",};
+Get.toNamed("/profile/34954", parameters: parameters);
 ```
 
 On second screen take the data by parameters as usually
@@ -257,7 +262,8 @@ On second screen take the data by parameters as usually
 ```dart
 print(Get.parameters['user']);
 print(Get.parameters['flag']);
-// out: 34954 true
+print(Get.parameters['country']);
+// out: 34954 true italy
 ```
 
 
