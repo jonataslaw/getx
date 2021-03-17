@@ -6,7 +6,8 @@ import 'get_main_test.dart';
 
 class RedirectMiddleware extends GetMiddleware {
   @override
-  RouteSettings redirect(String route) => RouteSettings(name: '/second');
+  RouteSettings redirect(String route, {Object arguments}) =>
+      RouteSettings(name: '/second');
 }
 
 void main() {
