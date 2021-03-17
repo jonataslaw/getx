@@ -96,7 +96,7 @@ void main() {
     expect(count, 555);
   });
 
-  test('Rx same value will not call the same listener', () async {
+  test('Rx same value will not call the same listener when `call`', () async {
     var reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
@@ -113,8 +113,8 @@ void main() {
     expect(1, timesCalled);
   });
 
-  test('RxEvent same value will trigger the listener when trigger', () async {
-    var reactiveInteger = RxEvent<int>(2);
+  test('Rx same value will call the listener when `trigger`', () async {
+    var reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
       timesCalled++;
@@ -128,22 +128,5 @@ void main() {
 
     await Future.delayed(Duration(milliseconds: 100));
     expect(3, timesCalled);
-  });
-
-  test('RxEvent same value will not trigger the listener when call', () async {
-    var reactiveInteger = RxEvent<int>(2);
-    var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
-      timesCalled++;
-    });
-
-    // we call 3
-    reactiveInteger.call(3);
-    // then repeat twice
-    reactiveInteger.call(3);
-    reactiveInteger.call(3);
-
-    await Future.delayed(Duration(milliseconds: 100));
-    expect(1, timesCalled);
   });
 }
