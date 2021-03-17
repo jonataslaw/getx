@@ -665,7 +665,7 @@ GetBuilder<Controller>(
 
 ```dart
 GetBuilder<Controller>(
-  id: 'text' 、、这里
+  id: 'text', //这里
   init: Controller(), // 每个控制器只用一次
   builder: (_) => Text(
     '${Get.find<Controller>().counter}', //here
