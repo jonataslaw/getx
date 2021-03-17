@@ -55,6 +55,16 @@ String _extractRouteName(Route route) {
   return null;
 }
 
+/// Extracts the reference of a route based on it's instance type
+/// or null if not possible.
+String _extractRouteReference(Route route) {
+  if (route is GetPageRoute) {
+    return route.reference;
+  }
+
+  return null;
+}
+
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
   final bool isGetPageRoute;
@@ -62,9 +72,11 @@ class _RouteData {
   final bool isBottomSheet;
   final bool isDialog;
   final String name;
+  final String reference;
 
   _RouteData({
     @required this.name,
+    @required this.reference,
     @required this.isGetPageRoute,
     @required this.isSnackbar,
     @required this.isBottomSheet,
@@ -74,6 +86,7 @@ class _RouteData {
   factory _RouteData.ofRoute(Route route) {
     return _RouteData(
       name: _extractRouteName(route),
+      reference: _extractRouteReference(route),
       isGetPageRoute: route is GetPageRoute,
       isSnackbar: route is SnackRoute,
       isDialog: route is GetDialogRoute,
@@ -103,7 +116,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    Get.reference = newRoute.name;
+    Get.reference = newRoute.reference ?? newRoute.name;
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
@@ -141,7 +154,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
 
-    Get.reference = newRoute.name;
+    Get.reference = newRoute.reference ?? newRoute.name;
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
@@ -176,7 +189,7 @@ class GetObserver extends NavigatorObserver {
     Get.log("REPLACE ROUTE $oldName");
     Get.log("NEW ROUTE $newName");
 
-    Get.reference = newName;
+    Get.reference = _extractRouteReference(newRoute) ?? newName;
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (newRoute is PageRoute) {

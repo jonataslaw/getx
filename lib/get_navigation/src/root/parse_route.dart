@@ -17,7 +17,7 @@ class ParseRouteTree {
     final route = _findRoute(uri.path);
     final params = Map<String, String>.from(uri.queryParameters);
     if (route != null) {
-      final parsedParams = _parseParams(name, route.path);
+      final parsedParams = _parseParams(uri.path, route.path);
       if (parsedParams != null && parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
