@@ -199,6 +199,41 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
     fn(_value);
     subject.add(_value);
   }
+
+  /// Following certain practices on Rx data, we might want to react to certain
+  /// listeners when a value has been provided, even if the value is the same.
+  /// At the moment, we ignore part of the process if we `.call(value)` with
+  /// the same value since it holds the value and there's no real
+  /// need triggering the entire process for the same value inside, but
+  /// there are other situations where we might be interested in
+  /// triggering this.
+  ///
+  /// For example, supposed we have a `int seconds = 2` and we want to animate
+  /// from invisible to visible a widget in two seconds:
+  /// RxEvent<int>.call(seconds);
+  /// then after a click happens, you want to call a RxEvent<int>.call(seconds).
+  /// By doing `call(seconds)`, if the value being held is the same,
+  /// the listeners won't trigger, hence we need this new `trigger` function.
+  /// This will refresh the listener of an AnimatedWidget and will keep
+  /// the value if the Rx is kept in memory.
+  /// Sample:
+  /// ```
+  /// Rx<Int> secondsRx = RxInt();
+  /// secondsRx.listen((value) => print("$value seconds set"));
+  ///
+  /// secondsRx.call(2);      // This won't trigger any listener, since the value is the same
+  /// secondsRx.trigger(2);   // This will trigger the listener independently from the value.
+  /// ```
+  ///
+  void trigger([T v]) {
+    var firstRebuild = this.firstRebuild;
+    value = v;
+    // If it's not the first rebuild, the listeners have been called already
+    // So we won't call them again.
+    if (!firstRebuild) {
+      subject.add(v);
+    }
+  }
 }
 
 /// Rx class for `bool` Type.
