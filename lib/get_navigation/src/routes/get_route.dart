@@ -8,33 +8,33 @@ import 'transitions_type.dart';
 class PathDecoded {
   const PathDecoded(this.regex, this.keys);
   final RegExp regex;
-  final List<String> keys;
+  final List<String?> keys;
 }
 
 class GetPage {
   final String name;
   final GetPageBuilder page;
-  final bool popGesture;
-  final Map<String, String> parameter;
-  final String title;
-  final Transition transition;
+  final bool? popGesture;
+  final Map<String, String>? parameter;
+  final String? title;
+  final Transition? transition;
   final Curve curve;
-  final Alignment alignment;
+  final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
-  final Bindings binding;
+  final Bindings? binding;
   final List<Bindings> bindings;
-  final CustomTransition customTransition;
-  final Duration transitionDuration;
+  final CustomTransition? customTransition;
+  final Duration? transitionDuration;
   final bool fullscreenDialog;
-  final RouteSettings settings;
-  final List<GetPage> children;
-  final List<GetMiddleware> middlewares;
+  final RouteSettings? settings;
+  final List<GetPage>? children;
+  final List<GetMiddleware>? middlewares;
   final PathDecoded path;
 
   GetPage({
-    @required this.name,
-    @required this.page,
+    required this.name,
+    required this.page,
     this.title,
     this.settings,
     this.maintainState = true,
@@ -51,14 +51,10 @@ class GetPage {
     this.fullscreenDialog = false,
     this.children,
     this.middlewares,
-  })  : path = _nameToRegex(name),
-        assert(page != null),
-        assert(name != null),
-        assert(maintainState != null),
-        assert(fullscreenDialog != null);
+  }) : path = _nameToRegex(name);
 
   static PathDecoded _nameToRegex(String path) {
-    var keys = <String>[];
+    var keys = <String?>[];
 
     String _replace(Match pattern) {
       var buffer = StringBuffer('(?:');
@@ -79,24 +75,24 @@ class GetPage {
   }
 
   GetPage copyWith({
-    String name,
-    GetPageBuilder page,
-    bool popGesture,
-    Map<String, String> parameter,
-    String title,
-    Transition transition,
-    Curve curve,
-    Alignment alignment,
-    bool maintainState,
-    bool opaque,
-    Bindings binding,
-    List<Bindings> bindings,
-    CustomTransition customTransition,
-    Duration transitionDuration,
-    bool fullscreenDialog,
-    RouteSettings settings,
-    List<GetPage> children,
-    List<GetMiddleware> middlewares,
+    String? name,
+    GetPageBuilder? page,
+    bool? popGesture,
+    Map<String, String>? parameter,
+    String? title,
+    Transition? transition,
+    Curve? curve,
+    Alignment? alignment,
+    bool? maintainState,
+    bool? opaque,
+    Bindings? binding,
+    List<Bindings>? bindings,
+    CustomTransition? customTransition,
+    Duration? transitionDuration,
+    bool? fullscreenDialog,
+    RouteSettings? settings,
+    List<GetPage>? children,
+    List<GetMiddleware>? middlewares,
   }) {
     return GetPage(
       name: name ?? this.name,

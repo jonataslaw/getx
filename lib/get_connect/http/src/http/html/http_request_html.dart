@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:typed_data';
 
 import '../../certificates/certificates.dart';
 import '../../exceptions/exceptions.dart';
@@ -13,7 +12,7 @@ import '../utils/body_decoder.dart';
 class HttpRequestImpl implements HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
-    List<TrustedCertificate> trustedCertificates,
+    List<TrustedCertificate>? trustedCertificates,
   });
 
   /// The currently active XHRs.
@@ -38,19 +37,20 @@ class HttpRequestImpl implements HttpRequestBase {
       ..responseType = 'blob'
       ..withCredentials = withCredentials;
     request.headers.forEach(xhr.setRequestHeader);
+    request.contentLength ?? -1;
 
     var completer = Completer<Response<T>>();
     xhr.onLoad.first.then((_) {
-      var blob = xhr.response as html.Blob ?? html.Blob([]);
+      var blob = xhr.response as html.Blob? ?? html.Blob([]);
       var reader = html.FileReader();
 
       reader.onLoad.first.then((_) async {
-        var bodyBytes = BodyBytesStream.fromBytes(reader.result as Uint8List);
+        var bodyBytes = BodyBytesStream.fromBytes(reader.result as List<int>);
 
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);
 
-        String contentType;
+        String? contentType;
 
         if (xhr.responseHeaders.containsKey('content-type')) {
           contentType = xhr.responseHeaders['content-type'];

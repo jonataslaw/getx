@@ -15,8 +15,8 @@ enum ConnectionStatus {
 
 class BaseWebSocket {
   String url;
-  WebSocket socket;
-  SocketNotifier socketNotifier = SocketNotifier();
+  WebSocket? socket;
+  SocketNotifier? socketNotifier = SocketNotifier();
   bool isDisposed = false;
   BaseWebSocket(
     this.url, {
@@ -26,7 +26,7 @@ class BaseWebSocket {
   Duration ping;
   bool allowSelfSigned;
 
-  ConnectionStatus connectionStatus;
+  ConnectionStatus? connectionStatus;
 
   Future connect() async {
     if (isDisposed) {
@@ -38,51 +38,52 @@ class BaseWebSocket {
           ? await _connectForSelfSignedCert(url)
           : await WebSocket.connect(url);
 
-      socket.pingInterval = ping;
+      socket!.pingInterval = ping;
       socketNotifier?.open();
       connectionStatus = ConnectionStatus.connected;
 
-      socket.listen((data) {
-        socketNotifier.notifyData(data);
+      socket!.listen((data) {
+        socketNotifier!.notifyData(data);
       }, onError: (err) {
-        socketNotifier.notifyError(Close(err.toString(), 1005));
+        socketNotifier!.notifyError(Close(err.toString(), 1005));
       }, onDone: () {
         connectionStatus = ConnectionStatus.closed;
-        socketNotifier
-            .notifyClose(Close('Connection Closed', socket.closeCode));
+        socketNotifier!
+            .notifyClose(Close('Connection Closed', socket!.closeCode));
       }, cancelOnError: true);
       return;
     } on SocketException catch (e) {
       connectionStatus = ConnectionStatus.closed;
-      socketNotifier.notifyError(Close(e.osError.message, e.osError.errorCode));
+      socketNotifier!
+          .notifyError(Close(e.osError!.message, e.osError!.errorCode));
       return;
     }
   }
 
   // ignore: use_setters_to_change_properties
   void onOpen(OpenSocket fn) {
-    socketNotifier.open = fn;
+    socketNotifier!.open = fn;
   }
 
   void onClose(CloseSocket fn) {
-    socketNotifier.addCloses(fn);
+    socketNotifier!.addCloses(fn);
   }
 
   void onError(CloseSocket fn) {
-    socketNotifier.addErrors(fn);
+    socketNotifier!.addErrors(fn);
   }
 
   void onMessage(MessageSocket fn) {
-    socketNotifier.addMessages(fn);
+    socketNotifier!.addMessages(fn);
   }
 
   void on(String event, MessageSocket message) {
-    socketNotifier.addEvents(event, message);
+    socketNotifier!.addEvents(event, message);
   }
 
-  void close([int status, String reason]) {
+  void close([int? status, String? reason]) {
     if (socket != null) {
-      socket.close(status, reason);
+      socket!.close(status, reason);
     }
   }
 
@@ -92,12 +93,12 @@ class BaseWebSocket {
     }
 
     if (socket != null) {
-      socket.add(data);
+      socket!.add(data);
     }
   }
 
   void dispose() {
-    socketNotifier.dispose();
+    socketNotifier!.dispose();
     socketNotifier = null;
     isDisposed = true;
   }

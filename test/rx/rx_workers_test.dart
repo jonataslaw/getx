@@ -7,7 +7,7 @@ void main() {
   test('once', () async {
     final count = 0.obs;
     var result = -1;
-    once(count, (_) {
+    once(count, (dynamic _) {
       result = _ as int;
     });
     count.value++;
@@ -24,8 +24,8 @@ void main() {
   test('ever', () async {
     final count = 0.obs;
     var result = -1;
-    ever(count, (_) {
-      result = _ as int;
+    ever<int>(count, (value) {
+      result = value;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -40,10 +40,10 @@ void main() {
 
   test('debounce', () async {
     final count = 0.obs;
-    var result = -1;
-    debounce(count, (_) {
+    int? result = -1;
+    debounce(count, (dynamic _) {
       // print(_);
-      result = _ as int;
+      result = _ as int?;
     }, time: Duration(milliseconds: 100));
 
     count.value++;
@@ -58,10 +58,10 @@ void main() {
 
   test('interval', () async {
     final count = 0.obs;
-    var result = -1;
-    interval(count, (_) {
+    int? result = -1;
+    interval(count, (dynamic _) {
       // print(_);
-      result = _ as int;
+      result = _ as int?;
     }, time: Duration(milliseconds: 100));
 
     count.value++;
@@ -81,7 +81,7 @@ void main() {
   });
 
   test('bindStream test', () async {
-    var count = 0;
+    int? count = 0;
     final controller = StreamController<int>();
     final rx = 0.obs;
 

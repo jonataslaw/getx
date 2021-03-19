@@ -23,25 +23,25 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
-  final T initialValue;
+  final T? initialValue;
   final ValueBuilderBuilder<T> builder;
-  final void Function() onDispose;
-  final void Function(T) onUpdate;
+  final void Function()? onDispose;
+  final void Function(T)? onUpdate;
 
   const ValueBuilder({
-    Key key,
+    Key? key,
     this.initialValue,
     this.onDispose,
     this.onUpdate,
-    @required this.builder,
+    required this.builder,
   }) : super(key: key);
 
   @override
   _ValueBuilderState<T> createState() => _ValueBuilderState<T>();
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  T value;
+class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
+  T? value;
 
   @override
   void initState() {
@@ -52,9 +52,9 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
 
-  void updater(T newValue) {
+  void updater(T? newValue) {
     if (widget.onUpdate != null) {
-      widget.onUpdate(newValue);
+      widget.onUpdate!(newValue);
     }
     setState(() {
       value = newValue;
@@ -64,11 +64,11 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   @override
   void dispose() {
     super.dispose();
-    widget?.onDispose?.call();
+    widget.onDispose?.call();
     if (value is ChangeNotifier) {
-      (value as ChangeNotifier)?.dispose();
+      (value as ChangeNotifier?)?.dispose();
     } else if (value is StreamController) {
-      (value as StreamController)?.close();
+      (value as StreamController?)?.close();
     }
     value = null;
   }
@@ -78,9 +78,7 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
 class SimpleBuilder extends StatefulWidget {
   final Widget Function(BuildContext) builder;
 
-  const SimpleBuilder({Key key, @required this.builder})
-      : assert(builder != null),
-        super(key: key);
+  const SimpleBuilder({Key? key, required this.builder}) : super(key: key);
 
   @override
   _SimpleBuilderState createState() => _SimpleBuilderState();

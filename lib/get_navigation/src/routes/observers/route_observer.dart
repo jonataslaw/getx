@@ -10,11 +10,11 @@ class Routing {
   String previous;
   dynamic args;
   String removed;
-  Route<dynamic> route;
-  bool isBack;
-  bool isSnackbar;
-  bool isBottomSheet;
-  bool isDialog;
+  Route<dynamic>? route;
+  bool? isBack;
+  bool? isSnackbar;
+  bool? isBottomSheet;
+  bool? isDialog;
 
   Routing({
     this.current = '',
@@ -35,9 +35,9 @@ class Routing {
 
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
-String _extractRouteName(Route route) {
-  if (route?.settings?.name != null) {
-    return route.settings.name;
+String? _extractRouteName(Route? route) {
+  if (route?.settings.name != null) {
+    return route!.settings.name;
   }
 
   if (route is GetPageRoute) {
@@ -61,17 +61,17 @@ class _RouteData {
   final bool isSnackbar;
   final bool isBottomSheet;
   final bool isDialog;
-  final String name;
+  final String? name;
 
   _RouteData({
-    @required this.name,
-    @required this.isGetPageRoute,
-    @required this.isSnackbar,
-    @required this.isBottomSheet,
-    @required this.isDialog,
+    required this.name,
+    required this.isGetPageRoute,
+    required this.isSnackbar,
+    required this.isBottomSheet,
+    required this.isDialog,
   });
 
-  factory _RouteData.ofRoute(Route route) {
+  factory _RouteData.ofRoute(Route? route) {
     return _RouteData(
       name: _extractRouteName(route),
       isGetPageRoute: route is GetPageRoute,
@@ -83,14 +83,14 @@ class _RouteData {
 }
 
 class GetObserver extends NavigatorObserver {
-  final Function(Routing) routing;
+  final Function(Routing?)? routing;
 
   GetObserver([this.routing, this._routeSend]);
 
-  final Routing _routeSend;
+  final Routing? _routeSend;
 
   @override
-  void didPush(Route route, Route previousRoute) {
+  void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
     final newRoute = _RouteData.ofRoute(route);
 
@@ -110,7 +110,7 @@ class GetObserver extends NavigatorObserver {
         value.current = newRoute.name ?? '';
       }
 
-      value.args = route?.settings?.arguments;
+      value.args = route.settings.arguments;
       value.route = route;
       value.isBack = false;
       value.removed = '';
@@ -122,12 +122,12 @@ class GetObserver extends NavigatorObserver {
     });
 
     if (routing != null) {
-      routing(_routeSend);
+      routing!(_routeSend);
     }
   }
 
   @override
-  void didPop(Route route, Route previousRoute) {
+  void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
     final currentRoute = _RouteData.ofRoute(route);
     final newRoute = _RouteData.ofRoute(previousRoute);
@@ -151,7 +151,7 @@ class GetObserver extends NavigatorObserver {
         value.current = _extractRouteName(previousRoute) ?? '';
       }
 
-      value.args = route?.settings?.arguments;
+      value.args = route.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
@@ -167,7 +167,7 @@ class GetObserver extends NavigatorObserver {
   }
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
+  void didReplace({Route? newRoute, Route? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     final newName = _extractRouteName(newRoute);
     final oldName = _extractRouteName(oldRoute);
@@ -183,7 +183,7 @@ class GetObserver extends NavigatorObserver {
         value.current = newName ?? '';
       }
 
-      value.args = newRoute?.settings?.arguments;
+      value.args = newRoute?.settings.arguments;
       value.route = newRoute;
       value.isBack = false;
       value.removed = '';
@@ -198,7 +198,7 @@ class GetObserver extends NavigatorObserver {
   }
 
   @override
-  void didRemove(Route route, Route previousRoute) {
+  void didRemove(Route route, Route? previousRoute) {
     super.didRemove(route, previousRoute);
     final routeName = _extractRouteName(route);
     final currentRoute = _RouteData.ofRoute(route);

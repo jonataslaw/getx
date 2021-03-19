@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Wrapper extends StatelessWidget {
-  final Widget child;
-  final List<GetPage> namedRoutes;
-  final String initialRoute;
-  final Transition defaultTransition;
+  final Widget? child;
+  final List<GetPage>? namedRoutes;
+  final String? initialRoute;
+  final Transition? defaultTransition;
 
   const Wrapper({
-    Key key,
+    Key? key,
     this.child,
     this.namedRoutes,
     this.initialRoute,
@@ -29,13 +29,13 @@ class Wrapper extends StatelessWidget {
 }
 
 class WrapperNamed extends StatelessWidget {
-  final Widget child;
-  final List<GetPage> namedRoutes;
-  final String initialRoute;
-  final Transition defaultTransition;
+  final Widget? child;
+  final List<GetPage>? namedRoutes;
+  final String? initialRoute;
+  final Transition? defaultTransition;
 
   const WrapperNamed({
-    Key key,
+    Key? key,
     this.child,
     this.namedRoutes,
     this.initialRoute,

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 
 import '../src/certificates/certificates.dart';
 import '../src/exceptions/exceptions.dart';
@@ -20,7 +19,7 @@ typedef Progress = Function(double percent);
 
 class GetHttpClient {
   String userAgent;
-  String baseUrl;
+  String? baseUrl;
 
   String defaultContentType = 'application/json; charset=utf-8';
 
@@ -28,7 +27,7 @@ class GetHttpClient {
   int maxRedirects;
   int maxAuthRetries;
 
-  Decoder defaultDecoder;
+  Decoder? defaultDecoder;
 
   Duration timeout;
 
@@ -46,7 +45,7 @@ class GetHttpClient {
     this.maxAuthRetries = 1,
     bool allowAutoSignedCert = false,
     this.baseUrl,
-    List<TrustedCertificate> trustedCertificates,
+    List<TrustedCertificate>? trustedCertificates,
   })  : _httpClient = HttpRequestImpl(
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
@@ -73,11 +72,11 @@ class GetHttpClient {
     _modifier.removeResponseModifier<T>(interceptor);
   }
 
-  Uri _createUri(String url, Map<String, dynamic> query) {
+  Uri _createUri(String? url, Map<String, dynamic>? query) {
     if (baseUrl != null) {
-      url = baseUrl + url;
+      url = baseUrl! + url!;
     }
-    final uri = Uri.parse(url);
+    final uri = Uri.parse(url!);
     if (query != null) {
       return uri.replace(queryParameters: query);
     }
@@ -85,16 +84,16 @@ class GetHttpClient {
   }
 
   Future<Request<T>> _requestWithBody<T>(
-    String url,
-    String contentType,
+    String? url,
+    String? contentType,
     dynamic body,
     String method,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   ) async {
-    List<int> bodyBytes;
-    BodyBytesStream bodyStream;
+    List<int>? bodyBytes;
+    Stream<List<int>>? bodyStream;
     final headers = <String, String>{};
 
     headers['user-agent'] = userAgent;
@@ -146,9 +145,9 @@ class GetHttpClient {
     );
   }
 
-  BodyBytesStream _trackProgress(
+  Stream<List<int>> _trackProgress(
     List<int> bodyBytes,
-    Progress uploadProgress,
+    Progress? uploadProgress,
   ) {
     var total = 0;
     var length = bodyBytes.length;
@@ -164,12 +163,12 @@ class GetHttpClient {
         sink.add(data);
       }),
     );
-    return BodyBytesStream(byteStream);
+    return byteStream;
   }
 
   void _setSimpleHeaders(
     Map<String, String> headers,
-    String contentType,
+    String? contentType,
   ) {
     headers['content-type'] = contentType ?? defaultContentType;
     headers['user-agent'] = userAgent;
@@ -179,7 +178,7 @@ class GetHttpClient {
     HandlerExecute<T> handler, {
     bool authenticate = false,
     int requestNumber = 1,
-    Map<String, String> headers,
+    Map<String, String>? headers,
   }) async {
     try {
       var request = await handler();
@@ -188,7 +187,7 @@ class GetHttpClient {
         request.headers[key] = value;
       });
 
-      if (authenticate) await _modifier.authenticator(request);
+      if (authenticate) await _modifier.authenticator!(request);
       await _modifier.modifyRequest(request);
 
       var response = await _httpClient.send<T>(request);
@@ -238,9 +237,9 @@ class GetHttpClient {
 
   Future<Request<T>> _get<T>(
     String url,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   ) {
     final headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
@@ -256,13 +255,13 @@ class GetHttpClient {
   }
 
   Future<Request<T>> _request<T>(
-    String url,
+    String? url,
     String method, {
-    String contentType,
-    @required dynamic body,
-    @required Map<String, dynamic> query,
-    Decoder<T> decoder,
-    @required Progress uploadProgress,
+    String? contentType,
+    required dynamic body,
+    required Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    required Progress? uploadProgress,
   }) {
     return _requestWithBody<T>(
       url,
@@ -270,16 +269,16 @@ class GetHttpClient {
       body,
       method,
       query,
-      decoder ?? (defaultDecoder as Decoder<T>),
+      decoder ?? (defaultDecoder as Decoder<T>?),
       uploadProgress,
     );
   }
 
   Request<T> _delete<T>(
     String url,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   ) {
     final headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
@@ -289,18 +288,18 @@ class GetHttpClient {
       method: 'delete',
       url: uri,
       headers: headers,
-      decoder: decoder ?? (defaultDecoder as Decoder<T>),
+      decoder: decoder ?? (defaultDecoder as Decoder<T>?),
     );
   }
 
   Future<Response<T>> patch<T>(
     String url, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
     // List<MultipartFile> files,
   }) async {
     try {
@@ -328,13 +327,13 @@ class GetHttpClient {
   }
 
   Future<Response<T>> post<T>(
-    String url, {
+    String? url, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
     // List<MultipartFile> files,
   }) async {
     try {
@@ -365,11 +364,11 @@ class GetHttpClient {
     String url,
     String method, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) async {
     try {
       var response = await _performRequest<T>(
@@ -398,11 +397,11 @@ class GetHttpClient {
   Future<Response<T>> put<T>(
     String url, {
     dynamic body,
-    String contentType,
-    Map<String, String> headers,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
-    Progress uploadProgress,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
   }) async {
     try {
       var response = await _performRequest<T>(
@@ -430,10 +429,10 @@ class GetHttpClient {
 
   Future<Response<T>> get<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   }) async {
     try {
       var response = await _performRequest<T>(
@@ -514,10 +513,10 @@ class GetHttpClient {
 
   Future<Response<T>> delete<T>(
     String url, {
-    Map<String, String> headers,
-    String contentType,
-    Map<String, dynamic> query,
-    Decoder<T> decoder,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
   }) async {
     try {
       var response = await _performRequest<T>(

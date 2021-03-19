@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-import '../request/request.dart';
 
 bool isTokenChar(int byte) {
   return byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
@@ -52,10 +50,9 @@ String validateField(String field) {
   return field.toLowerCase();
 }
 
-BodyBytesStream toBodyBytesStream(Stream<List<int>> stream) {
-  if (stream is BodyBytesStream) return stream;
-  return BodyBytesStream(stream);
-}
+// Stream<List<int>> toBodyBytesStream(Stream<List<int>> stream) {
+//   return (stream);
+// }
 
 final _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
 

@@ -1,13 +1,13 @@
 part of rx_types;
 
 /// Base Rx class for all num Rx's.
-abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
+abstract class _BaseRxNum<T extends num?> extends _RxImpl<T> {
   _BaseRxNum(T initial) : super(initial);
 
   /// Addition operator. */
 
   /// Multiplication operator.
-  num operator *(num other) => value * other;
+  num operator *(num other) => value! * other;
 
   /// Euclidean modulo operator.
   ///
@@ -22,10 +22,10 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The sign of the returned value `r` is always positive.
   ///
   /// See [remainder] for the remainder of the truncating division.
-  num operator %(num other) => value % other;
+  num operator %(num other) => value! % other;
 
   /// Division operator.
-  double operator /(num other) => value / other;
+  double operator /(num other) => value! / other;
 
   /// Truncating division operator.
   ///
@@ -34,10 +34,10 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///
   /// If both operands are [int]s then `a ~/ b` performs the truncating
   /// integer division.
-  int operator ~/(num other) => value ~/ other;
+  int operator ~/(num other) => value! ~/ other;
 
   /// Negate operator.
-  num operator -() => -value;
+  num operator -() => -value!;
 
   /// Returns the remainder of the truncating division of `this` by [other].
   ///
@@ -45,40 +45,40 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// `this == (this ~/ other) * other + r`.
   /// As a consequence the remainder `r` has the same sign as the divider
   /// `this`.
-  num remainder(num other) => value.remainder(other);
+  num remainder(num other) => value!.remainder(other);
 
   /// Relational less than operator.
-  bool operator <(num other) => value < other;
+  bool operator <(num other) => value! < other;
 
   /// Relational less than or equal operator.
-  bool operator <=(num other) => value <= other;
+  bool operator <=(num other) => value! <= other;
 
   /// Relational greater than operator.
-  bool operator >(num other) => value > other;
+  bool operator >(num other) => value! > other;
 
   /// Relational greater than or equal operator.
-  bool operator >=(num other) => value >= other;
+  bool operator >=(num other) => value! >= other;
 
   /// True if the number is the double Not-a-Number value; otherwise, false.
-  bool get isNaN => value.isNaN;
+  bool get isNaN => value!.isNaN;
 
   /// True if the number is negative; otherwise, false.
   ///
   /// Negative numbers are those less than zero, and the double `-0.0`.
-  bool get isNegative => value.isNegative;
+  bool get isNegative => value!.isNegative;
 
   /// True if the number is positive infinity or negative infinity; otherwise,
   /// false.
-  bool get isInfinite => value.isInfinite;
+  bool get isInfinite => value!.isInfinite;
 
   /// True if the number is finite; otherwise, false.
   ///
   /// The only non-finite numbers are NaN, positive infinity, and
   /// negative infinity.
-  bool get isFinite => value.isFinite;
+  bool get isFinite => value!.isFinite;
 
   /// Returns the absolute value of this [num].
-  num abs() => value.abs();
+  num abs() => value!.abs();
 
   /// Returns minus one, zero or plus one depending on the sign and
   /// numerical value of the number.
@@ -96,7 +96,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///     n == n.sign * n.abs()
   ///
   /// for all numbers `n` (except NaN, because NaN isn't `==` to itself).
-  num get sign => value.sign;
+  num get sign => value!.sign;
 
   /// Returns the integer closest to `this`.
   ///
@@ -104,23 +104,23 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///  `(3.5).round() == 4` and `(-3.5).round() == -4`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
-  int round() => value.round();
+  int round() => value!.round();
 
   /// Returns the greatest integer no greater than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
-  int floor() => value.floor();
+  int floor() => value!.floor();
 
   /// Returns the least integer no smaller than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
-  int ceil() => value.ceil();
+  int ceil() => value!.ceil();
 
   /// Returns the integer obtained by discarding any fractional
   /// digits from `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
-  int truncate() => value.truncate();
+  int truncate() => value!.truncate();
 
   /// Returns the double integer value closest to `this`.
   ///
@@ -138,7 +138,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The result is always a double.
   /// If this is a numerically large integer, the result may be an infinite
   /// double.
-  double roundToDouble() => value.roundToDouble();
+  double roundToDouble() => value!.roundToDouble();
 
   /// Returns the greatest double integer value no greater than `this`.
   ///
@@ -151,7 +151,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The result is always a double.
   /// If this is a numerically large integer, the result may be an infinite
   /// double.
-  double floorToDouble() => value.floorToDouble();
+  double floorToDouble() => value!.floorToDouble();
 
   /// Returns the least double integer value no smaller than `this`.
   ///
@@ -164,7 +164,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The result is always a double.
   /// If this is a numerically large integer, the result may be an infinite
   /// double.
-  double ceilToDouble() => value.ceilToDouble();
+  double ceilToDouble() => value!.ceilToDouble();
 
   /// Returns the double integer value obtained by discarding any fractional
   /// digits from the double value of `this`.
@@ -179,7 +179,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The result is always a double.
   /// If this is a numerically large integer, the result may be an infinite
   /// double.
-  double truncateToDouble() => value.truncateToDouble();
+  double truncateToDouble() => value!.truncateToDouble();
 
   /// Returns this [num] clamped to be in the range [lowerLimit]-[upperLimit].
   ///
@@ -190,17 +190,17 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   /// The arguments [lowerLimit] and [upperLimit] must form a valid range where
   /// `lowerLimit.compareTo(upperLimit) <= 0`.
   num clamp(num lowerLimit, num upperLimit) =>
-      value.clamp(lowerLimit, upperLimit);
+      value!.clamp(lowerLimit, upperLimit);
 
   /// Truncates this [num] to an integer and returns the result as an [int]. */
-  int toInt() => value.toInt();
+  int toInt() => value!.toInt();
 
   /// Return this [num] as a [double].
   ///
   /// If the number is not representable as a [double], an
   /// approximation is returned. For numerically large integers, the
   /// approximation may be infinite.
-  double toDouble() => value.toDouble();
+  double toDouble() => value!.toDouble();
 
   /// Returns a decimal-point string-representation of `this`.
   ///
@@ -225,7 +225,7 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///     10000000000000000.toStringAsFixed(4); // 10000000000000000.0000
   ///     5.25.toStringAsFixed(0); // 5
   String toStringAsFixed(int fractionDigits) =>
-      value.toStringAsFixed(fractionDigits);
+      value!.toStringAsFixed(fractionDigits);
 
   /// Returns an exponential string-representation of `this`.
   ///
@@ -245,8 +245,8 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///     123456.toStringAsExponential();  // 1.23456e+5
   ///     123456.toStringAsExponential(3); // 1.235e+5
   ///     123.toStringAsExponential(0);    // 1e+2
-  String toStringAsExponential([int fractionDigits]) =>
-      value.toStringAsExponential(fractionDigits);
+  String toStringAsExponential([int? fractionDigits]) =>
+      value!.toStringAsExponential(fractionDigits);
 
   /// Converts `this` to a double and returns a string representation with
   /// exactly [precision] significant digits.
@@ -265,64 +265,64 @@ abstract class _BaseRxNum<T extends num> extends _RxImpl<T> {
   ///     0.00000012345.toStringAsPrecision(15); // 1.23450000000000e-7
   ///     0.0000012345.toStringAsPrecision(15);  // 0.00000123450000000000
   String toStringAsPrecision(int precision) =>
-      value.toStringAsPrecision(precision);
+      value!.toStringAsPrecision(precision);
 }
 
 class RxNum extends _BaseRxNum<num> {
   RxNum(num initial) : super(initial);
 
-  num operator +(num other) {
+  num? operator +(num other) {
     value += other;
     return value;
   }
 
   /// Subtraction operator.
-  num operator -(num other) {
+  num? operator -(num other) {
     value -= other;
     return value;
   }
 }
 
-class RxDouble extends _BaseRxNum<double> {
-  RxDouble([double initial]) : super(initial);
+class RxDouble extends _BaseRxNum<double?> {
+  RxDouble([double? initial]) : super(initial);
 
   /// Addition operator.
   RxDouble operator +(num other) {
-    value += other;
+    value = value! + other;
     return this;
   }
 
   /// Subtraction operator.
   RxDouble operator -(num other) {
-    value -= other;
+    value = value! - other;
     return this;
   }
 
   /// Multiplication operator.
   @override
-  double operator *(num other) => value * other;
+  double operator *(num other) => value! * other;
 
   @override
-  double operator %(num other) => value % other;
+  double operator %(num other) => value! % other;
 
   /// Division operator.
   @override
-  double operator /(num other) => value / other;
+  double operator /(num other) => value! / other;
 
   /// Truncating division operator.
   ///
   /// The result of the truncating division `a ~/ b` is equivalent to
   /// `(a / b).truncate()`.
   @override
-  int operator ~/(num other) => value ~/ other;
+  int operator ~/(num other) => value! ~/ other;
 
   /// Negate operator. */
   @override
-  double operator -() => -value;
+  double operator -() => -value!;
 
   /// Returns the absolute value of this [double].
   @override
-  double abs() => value.abs();
+  double abs() => value!.abs();
 
   /// Returns the sign of the double's numerical value.
   ///
@@ -330,7 +330,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// +1.0 if the value is greater than zero,
   /// and the value itself if it is -0.0, 0.0 or NaN.
   @override
-  double get sign => value.sign;
+  double get sign => value!.sign;
 
   /// Returns the integer closest to `this`.
   ///
@@ -339,26 +339,26 @@ class RxDouble extends _BaseRxNum<double> {
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
   @override
-  int round() => value.round();
+  int round() => value!.round();
 
   /// Returns the greatest integer no greater than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
   @override
-  int floor() => value.floor();
+  int floor() => value!.floor();
 
   /// Returns the least integer no smaller than `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
   @override
-  int ceil() => value.ceil();
+  int ceil() => value!.ceil();
 
   /// Returns the integer obtained by discarding any fractional
   /// digits from `this`.
   ///
   /// If `this` is not finite (`NaN` or infinity), throws an [UnsupportedError].
   @override
-  int truncate() => value.truncate();
+  int truncate() => value!.truncate();
 
   /// Returns the integer double value closest to `this`.
   ///
@@ -373,7 +373,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// This means that for a value, `d` in the range `-0.5 < d < 0.0`,
   /// the result is `-0.0`.
   @override
-  double roundToDouble() => value.roundToDouble();
+  double roundToDouble() => value!.roundToDouble();
 
   /// Returns the greatest integer double value no greater than `this`.
   ///
@@ -383,7 +383,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// For the purpose of rounding, `-0.0` is considered to be below `0.0`.
   /// A number `d` in the range `0.0 < d < 1.0` will return `0.0`.
   @override
-  double floorToDouble() => value.floorToDouble();
+  double floorToDouble() => value!.floorToDouble();
 
   /// Returns the least integer double value no smaller than `this`.
   ///
@@ -393,7 +393,7 @@ class RxDouble extends _BaseRxNum<double> {
   /// For the purpose of rounding, `-0.0` is considered to be below `0.0`.
   /// A number `d` in the range `-1.0 < d < 0.0` will return `-0.0`.
   @override
-  double ceilToDouble() => value.ceilToDouble();
+  double ceilToDouble() => value!.ceilToDouble();
 
   /// Returns the integer double value obtained by discarding any fractional
   /// digits from `this`.
@@ -405,21 +405,21 @@ class RxDouble extends _BaseRxNum<double> {
   /// A number `d` in the range `-1.0 < d < 0.0` will return `-0.0`, and
   /// in the range `0.0 < d < 1.0` it will return 0.0.
   @override
-  double truncateToDouble() => value.truncateToDouble();
+  double truncateToDouble() => value!.truncateToDouble();
 }
 
 class RxInt extends _BaseRxNum<int> {
-  RxInt([int initial]) : super(initial);
+  RxInt(int initial) : super(initial);
 
   /// Addition operator.
   RxInt operator +(int other) {
-    value += other;
+    value = value + other;
     return this;
   }
 
   /// Subtraction operator.
   RxInt operator -(int other) {
-    value -= other;
+    value = value - other;
     return this;
   }
 

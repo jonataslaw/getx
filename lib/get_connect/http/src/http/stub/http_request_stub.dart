@@ -6,7 +6,7 @@ import '../interface/request_base.dart';
 class HttpRequestImpl extends HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
-    List<TrustedCertificate> trustedCertificates,
+    List<TrustedCertificate>? trustedCertificates,
   });
   @override
   void close() {}
