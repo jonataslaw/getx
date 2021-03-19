@@ -93,16 +93,17 @@ class ParseRouteTree {
     );
   }
 
-
   Map<String, String?> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String?>{};
     var idx = path.indexOf('?');
     if (idx > -1) {
       path = path.substring(0, idx);
       final uri = Uri.tryParse(path);
-      params.addAll(uri.queryParameters);
+      if (uri != null) {
+        params.addAll(uri.queryParameters);
+      }
     }
-    Match paramsMatch = routePath.regex.firstMatch(path);
+    var paramsMatch = routePath.regex.firstMatch(path);
 
     for (var i = 0; i < routePath.keys.length; i++) {
       var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);

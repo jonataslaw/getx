@@ -225,7 +225,7 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   /// secondsRx.trigger(2);   // This will trigger the listener independently from the value.
   /// ```
   ///
-  void trigger([T v]) {
+  void trigger(T v) {
     var firstRebuild = this.firstRebuild;
     value = v;
     // If it's not the first rebuild, the listeners have been called already
@@ -237,16 +237,16 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
 }
 
 /// Rx class for `bool` Type.
-class RxBool extends _RxImpl<bool?> {
-  RxBool([bool? initial]) : super(initial);
+class RxBool extends _RxImpl<bool> {
+  RxBool(bool initial) : super(initial);
 
   bool? get isTrue => value;
 
   bool get isFalse => !isTrue!;
 
-  bool operator &(bool other) => other && value!;
+  bool operator &(bool other) => other && value;
 
-  bool operator |(bool other) => other || value!;
+  bool operator |(bool other) => other || value;
 
   bool operator ^(bool other) => !other == value;
 
@@ -256,53 +256,53 @@ class RxBool extends _RxImpl<bool?> {
   ///  not really a dart thing since we have '..' operator
   // ignore: avoid_returning_this
   RxBool toggle() {
-    subject.add(_value = !_value!);
+    subject.add(_value = !_value);
     return this;
   }
 
   @override
   String toString() {
-    return value! ? "true" : "false";
+    return value ? "true" : "false";
   }
 }
 
 /// Rx class for `String` Type.
-class RxString extends _RxImpl<String?> implements Comparable<String>, Pattern {
-  RxString([String? initial]) : super(initial);
+class RxString extends _RxImpl<String> implements Comparable<String>, Pattern {
+  RxString(String initial) : super(initial);
 
-  String operator +(String val) => _value! + val;
+  String operator +(String val) => _value + val;
 
   /// Compares this string to [other].
   @override
   int compareTo(String other) {
-    return value!.compareTo(other);
+    return value.compareTo(other);
   }
 
   /// Returns true if this string ends with [other]. For example:
   ///
   ///     'Dart'.endsWith('t'); // true
   bool endsWith(String other) {
-    return value!.endsWith(other);
+    return value.endsWith(other);
   }
 
   /// Returns true if this string starts with a match of [pattern].
   bool startsWith(Pattern pattern, [int index = 0]) {
-    return value!.startsWith(pattern, index);
+    return value.startsWith(pattern, index);
   }
 
   /// Returns the position of the first match of [pattern] in this string
   int indexOf(Pattern pattern, [int start = 0]) {
-    return value!.indexOf(pattern, start);
+    return value.indexOf(pattern, start);
   }
 
   /// Returns the starting position of the last match [pattern] in this string,
   /// searching backward starting at [start], inclusive:
   int lastIndexOf(Pattern pattern, [int? start]) {
-    return value!.lastIndexOf(pattern, start);
+    return value.lastIndexOf(pattern, start);
   }
 
   /// Returns true if this string is empty.
-  bool get isEmpty => value!.isEmpty;
+  bool get isEmpty => value.isEmpty;
 
   /// Returns true if this string is not empty.
   bool get isNotEmpty => !isEmpty;
@@ -310,26 +310,26 @@ class RxString extends _RxImpl<String?> implements Comparable<String>, Pattern {
   /// Returns the substring of this string that extends from [startIndex],
   /// inclusive, to [endIndex], exclusive
   String substring(int startIndex, [int? endIndex]) {
-    return value!.substring(startIndex, endIndex);
+    return value.substring(startIndex, endIndex);
   }
 
   /// Returns the string without any leading and trailing whitespace.
   String trim() {
-    return value!.trim();
+    return value.trim();
   }
 
   /// Returns the string without any leading whitespace.
   ///
   /// As [trim], but only removes leading whitespace.
   String trimLeft() {
-    return value!.trimLeft();
+    return value.trimLeft();
   }
 
   /// Returns the string without any trailing whitespace.
   ///
   /// As [trim], but only removes trailing whitespace.
   String trimRight() {
-    return value!.trimRight();
+    return value.trimRight();
   }
 
   /// Pads this string on the left if it is shorter than [width].
@@ -337,7 +337,7 @@ class RxString extends _RxImpl<String?> implements Comparable<String>, Pattern {
   /// Return a new string that prepends [padding] onto this string
   /// one time for each position the length is less than [width].
   String padLeft(int width, [String padding = ' ']) {
-    return value!.padLeft(width, padding);
+    return value.padLeft(width, padding);
   }
 
   /// Pads this string on the right if it is shorter than [width].
@@ -345,55 +345,55 @@ class RxString extends _RxImpl<String?> implements Comparable<String>, Pattern {
   /// Return a new string that appends [padding] after this string
   /// one time for each position the length is less than [width].
   String padRight(int width, [String padding = ' ']) {
-    return value!.padRight(width, padding);
+    return value.padRight(width, padding);
   }
 
   /// Returns true if this string contains a match of [other]:
   bool contains(Pattern other, [int startIndex = 0]) {
-    return value!.contains(other, startIndex);
+    return value.contains(other, startIndex);
   }
 
   /// Replaces all substrings that match [from] with [replace].
   String replaceAll(Pattern from, String replace) {
-    return value!.replaceAll(from, replace);
+    return value.replaceAll(from, replace);
   }
 
   /// Splits the string at matches of [pattern] and returns a list
   /// of substrings.
   List<String> split(Pattern pattern) {
-    return value!.split(pattern);
+    return value.split(pattern);
   }
 
   /// Returns an unmodifiable list of the UTF-16 code units of this string.
-  List<int> get codeUnits => value!.codeUnits;
+  List<int> get codeUnits => value.codeUnits;
 
   /// Returns an [Iterable] of Unicode code-points of this string.
   ///
   /// If the string contains surrogate pairs, they are combined and returned
   /// as one integer by this iterator. Unmatched surrogate halves are treated
   /// like valid 16-bit code-units.
-  Runes get runes => value!.runes;
+  Runes get runes => value.runes;
 
   /// Converts all characters in this string to lower case.
   /// If the string is already in all lower case, this method returns `this`.
   String toLowerCase() {
-    return value!.toLowerCase();
+    return value.toLowerCase();
   }
 
   /// Converts all characters in this string to upper case.
   /// If the string is already in all upper case, this method returns `this`.
   String toUpperCase() {
-    return value!.toUpperCase();
+    return value.toUpperCase();
   }
 
   @override
   Iterable<Match> allMatches(String string, [int start = 0]) {
-    return value!.allMatches(string, start);
+    return value.allMatches(string, start);
   }
 
   @override
   Match? matchAsPrefix(String string, [int start = 0]) {
-    return value!.matchAsPrefix(string, start);
+    return value.matchAsPrefix(string, start);
   }
 }
 

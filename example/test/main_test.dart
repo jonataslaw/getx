@@ -86,6 +86,16 @@ void main() {
     }
   });
 
+  test('ever', () async {
+    RxString count = ''.obs;
+    var result = '';
+    ever<String>(count, (value) {
+      result = value;
+    });
+    count.value = '1';
+    expect('1', result);
+  });
+
   /// Tests with GetTests
   /// TEMPORARILY REMOVED from the null-safetym branch as
   /// get_test is not yet null safety.
