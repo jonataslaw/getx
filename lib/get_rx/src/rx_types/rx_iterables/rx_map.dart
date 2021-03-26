@@ -83,7 +83,7 @@ extension MapExtension<K, V> on Map<K, V> {
   void assign(K key, V val) {
     if (this is RxMap) {
       final map = (this as RxMap);
-      map._value;
+      // map._value;
       map._value.clear();
       this[key] = val;
     } else {

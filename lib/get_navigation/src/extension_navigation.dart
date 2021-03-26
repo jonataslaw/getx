@@ -1102,8 +1102,6 @@ Since version 2.8 it is possible to access the properties
     return WidgetsBinding.instance;
   }
 
-  //TODO: Change to ui.SingletonFlutterWindow rather dynamic
-  //when Flutter update stable. dynamic is used to avoid Breaking Changes
   /// The window to which this binding is bound.
   ui.SingletonFlutterWindow get window => ui.window;
 

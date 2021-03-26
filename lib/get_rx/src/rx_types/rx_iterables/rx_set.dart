@@ -134,9 +134,9 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
-    if (this is RxSet) {
-      (this as RxSet)._value;
-    }
+    // if (this is RxSet) {
+    //   (this as RxSet)._value;
+    // }
 
     clear();
     add(item);
@@ -144,9 +144,9 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    if (this is RxSet) {
-      (this as RxSet)._value;
-    }
+    // if (this is RxSet) {
+    //   (this as RxSet)._value;
+    // }
     clear();
     addAll(items);
   }

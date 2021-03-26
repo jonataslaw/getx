@@ -143,9 +143,9 @@ extension ListExtension<E> on List<E> {
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
-    if (this is RxList) {
-      (this as RxList)._value;
-    }
+    // if (this is RxList) {
+    //   (this as RxList)._value;
+    // }
 
     clear();
     add(item);
@@ -153,9 +153,9 @@ extension ListExtension<E> on List<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    if (this is RxList) {
-      (this as RxList)._value;
-    }
+    // if (this is RxList) {
+    //   (this as RxList)._value;
+    // }
     clear();
     addAll(items);
   }
