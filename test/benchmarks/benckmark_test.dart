@@ -62,6 +62,7 @@ Future<int> stream() {
       print(
           """$v listeners notified | [STREAM] time: ${timer.elapsedMicroseconds}ms""");
       c.complete(timer.elapsedMicroseconds);
+      value.close();
     }
   });
 

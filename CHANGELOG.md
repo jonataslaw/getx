@@ -1,3 +1,6 @@
+## [4.0.2] 
+- Removed "!" of if else conditions until the null-safety of the dart is consistent for using it.
+
 ## [4.0.1] 
 - Fix changelog
 

@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.theme!.accentColor;
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,

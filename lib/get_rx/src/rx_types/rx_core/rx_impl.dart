@@ -250,13 +250,7 @@ class RxnBool extends Rx<bool?> {
   RxnBool(bool initial) : super(initial);
   @override
   String toString() {
-    if (value == null) {
-      return "null";
-    } else if (value) {
-      return "true";
-    } else {
-      return "false";
-    }
+    return "$value";
   }
 }
 

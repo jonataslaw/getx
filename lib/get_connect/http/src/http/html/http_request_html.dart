@@ -37,7 +37,6 @@ class HttpRequestImpl implements HttpRequestBase {
       ..responseType = 'blob'
       ..withCredentials = withCredentials;
     request.headers.forEach(xhr.setRequestHeader);
-    request.contentLength ?? -1;
 
     var completer = Completer<Response<T>>();
     xhr.onLoad.first.then((_) {
