@@ -1011,7 +1011,7 @@ you can only use widgets and widget functions here''';
     return key;
   }
 
-  GlobalKey<NavigatorState>? nestedKey(int key) {
+  GlobalKey<NavigatorState>? nestedKey(dynamic key) {
     keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
     return keys[key];
   }
@@ -1158,7 +1158,7 @@ Since version 2.8 it is possible to access the properties
 
   GlobalKey<NavigatorState>? get key => getxController.key;
 
-  Map<int, GlobalKey<NavigatorState>> get keys => getxController.keys;
+  Map<dynamic, GlobalKey<NavigatorState>> get keys => getxController.keys;
 
   GetMaterialController get rootController => getxController;
 

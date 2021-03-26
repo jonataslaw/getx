@@ -28,7 +28,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   get:
     path: ../
-  get_test: ^3.13.3
+  #get_test: ^3.13.3
 
 dependency_overrides:
   get:

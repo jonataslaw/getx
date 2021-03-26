@@ -104,24 +104,3 @@ class ObxValue<T extends RxInterface> extends ObxWidget {
   @override
   Widget build() => builder(data);
 }
-
-/// Similar to Obx, but manages a local state.
-/// Pass the initial data in constructor.
-/// Useful for simple local states, like toggles, visibility, themes,
-/// button states, etc.
-///  Sample:
-///    ObxValue((data) => Switch(
-///      value: data.value,
-///      onChanged: (flag) => data.value = flag,
-///    ),
-///    false.obs,
-///   ),
-class RxValue<T> extends ObxWidget {
-  final Widget Function(T? data) builder;
-  final Rx<T> data = Rx<T>();
-
-  RxValue(this.builder, {Key? key}) : super(key: key);
-
-  @override
-  Widget build() => builder(data.value);
-}

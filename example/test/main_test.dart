@@ -87,7 +87,7 @@ void main() {
   });
 
   test('ever', () async {
-    RxString count = ''.obs;
+    final count = ''.obs;
     var result = '';
     ever<String>(count, (value) {
       result = value;

@@ -129,4 +129,36 @@ void main() {
     await Future.delayed(Duration(milliseconds: 100));
     expect(3, timesCalled);
   });
+
+  test('Rx String with non null values', () async {
+    final reactiveString = Rx<String>("abc");
+    var currentString;
+    reactiveString.listen((newString) {
+      currentString = newString;
+    });
+
+    expect(reactiveString.endsWith("c"), true);
+
+    // we call 3
+    reactiveString("b");
+
+    await Future.delayed(Duration.zero);
+    expect(currentString, "b");
+  });
+
+  test('Rx String with null values', () async {
+    var reactiveString = Rx<String?>(null);
+    var currentString;
+
+    reactiveString.listen((newString) {
+      currentString = newString;
+    });
+
+    // we call 3
+    reactiveString("abc");
+
+    await Future.delayed(Duration.zero);
+    expect(reactiveString.endsWith("c"), true);
+    expect(currentString, "abc");
+  });
 }

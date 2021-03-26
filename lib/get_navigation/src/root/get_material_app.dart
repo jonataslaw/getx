@@ -310,3 +310,64 @@ class GetMaterialApp extends StatelessWidget {
               //   actions: actions,
             ));
 }
+
+class GetNavigator extends StatelessWidget {
+  final List<GetPage> getPages;
+
+  const GetNavigator(
+      {Key? key,
+      required this.getPages,
+      this.pages = const <Page<dynamic>>[],
+      this.onPopPage,
+      this.initialRoute,
+      this.onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
+      this.onGenerateRoute,
+      this.onUnknownRoute,
+      this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
+      this.reportsRouteUpdateToEngine = false,
+      this.observers = const <NavigatorObserver>[],
+      this.restorationScopeId,
+      this.unKnownRoute})
+      : super(key: key);
+
+  final List<Page<dynamic>> pages;
+
+  final GetPage? unKnownRoute;
+
+  final PopPageCallback? onPopPage;
+
+  final TransitionDelegate<dynamic> transitionDelegate;
+
+  final String? initialRoute;
+
+  final RouteFactory? onGenerateRoute;
+
+  final RouteFactory? onUnknownRoute;
+
+  final List<NavigatorObserver> observers;
+
+  final String? restorationScopeId;
+
+  static const String defaultRouteName = '/';
+
+  final RouteListFactory onGenerateInitialRoutes;
+
+  final bool reportsRouteUpdateToEngine;
+
+  @override
+  Widget build(Object context) {
+    return Navigator(
+      pages: getPages,
+      onPopPage: onPopPage,
+      initialRoute: initialRoute,
+      onGenerateInitialRoutes: onGenerateInitialRoutes,
+      onGenerateRoute: onGenerateRoute,
+      onUnknownRoute: onUnknownRoute,
+      transitionDelegate: transitionDelegate,
+      reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
+      observers: observers,
+      restorationScopeId: restorationScopeId,
+      key: Get.nestedKey(key),
+    );
+  }
+}

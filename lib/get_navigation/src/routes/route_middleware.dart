@@ -165,10 +165,10 @@ class PageRedirect {
       {this.isUnknown = false, this.route});
 
   // redirect all pages that needes redirecting
-  GetPageRoute page() {
+  GetPageRoute<T> page<T>() {
     while (needRecheck()) {}
     return isUnknown
-        ? GetPageRoute(
+        ? GetPageRoute<T>(
             page: unknownRoute!.page,
             parameter: unknownRoute!.parameter,
             settings: RouteSettings(
@@ -185,7 +185,7 @@ class PageRedirect {
             fullscreenDialog: unknownRoute!.fullscreenDialog,
             middlewares: unknownRoute!.middlewares,
           )
-        : GetPageRoute(
+        : GetPageRoute<T>(
             page: route!.page,
             parameter: route!.parameter,
             settings: RouteSettings(

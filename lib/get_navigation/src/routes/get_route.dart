@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../get_core/src/get_main.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../get_navigation.dart';
 import 'custom_transition.dart';
@@ -11,7 +12,8 @@ class PathDecoded {
   final List<String?> keys;
 }
 
-class GetPage {
+class GetPage<T> extends Page<T> {
+  @override
   final String name;
   final GetPageBuilder page;
   final bool? popGesture;
@@ -31,6 +33,7 @@ class GetPage {
   final List<GetPage>? children;
   final List<GetMiddleware>? middlewares;
   final PathDecoded path;
+  final GetPage? unknownRoute;
 
   GetPage({
     required this.name,
@@ -51,6 +54,7 @@ class GetPage {
     this.fullscreenDialog = false,
     this.children,
     this.middlewares,
+    this.unknownRoute,
   }) : path = _nameToRegex(name);
 
   static PathDecoded _nameToRegex(String path) {
@@ -74,7 +78,7 @@ class GetPage {
     return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
-  GetPage copyWith({
+  GetPage copy({
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
@@ -114,5 +118,15 @@ class GetPage {
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
     );
+  }
+
+  @override
+  Object? get arguments => Get.arguments;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return PageRedirect(
+            RouteSettings(name: name, arguments: Get.arguments), unknownRoute)
+        .page<T>();
   }
 }
