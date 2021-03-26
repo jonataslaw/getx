@@ -94,6 +94,7 @@ void main() {
 
     await Future.delayed(Duration.zero);
     expect(count, 555);
+    controller.close();
   });
 
   test('Rx same value will not call the same listener when `call`', () async {

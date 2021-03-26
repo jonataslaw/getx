@@ -95,9 +95,11 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   set value(T val) {
+    if (subject.isClosed) return;
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
     _value = val;
+
     subject.add(_value);
   }
 
@@ -236,15 +238,32 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   }
 }
 
-extension RxBoolExt on Rx<bool> {}
-
-/// Rx class for `bool` Type.
-class RxBool extends _RxImpl<bool> {
+class RxBool extends Rx<bool> {
   RxBool(bool initial) : super(initial);
+  @override
+  String toString() {
+    return value ? "true" : "false";
+  }
+}
 
-  bool? get isTrue => value;
+class RxnBool extends Rx<bool?> {
+  RxnBool(bool initial) : super(initial);
+  @override
+  String toString() {
+    if (value == null) {
+      return "null";
+    } else if (value) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
+}
 
-  bool get isFalse => !isTrue!;
+extension RxBoolExt on Rx<bool> {
+  bool get isTrue => value;
+
+  bool get isFalse => !isTrue;
 
   bool operator &(bool other) => other && value;
 
@@ -257,14 +276,43 @@ class RxBool extends _RxImpl<bool> {
   /// FIXME: why return this? fluent interface is not
   ///  not really a dart thing since we have '..' operator
   // ignore: avoid_returning_this
-  RxBool toggle() {
+  Rx<bool> toggle() {
     subject.add(_value = !_value);
     return this;
   }
+}
 
-  @override
-  String toString() {
-    return value ? "true" : "false";
+extension RxnBoolExt on Rx<bool?> {
+  bool? get isTrue => value;
+
+  bool? get isFalse {
+    if (value != null) return !isTrue!;
+  }
+
+  bool? operator &(bool other) {
+    if (value != null) {
+      return other && value!;
+    }
+  }
+
+  bool? operator |(bool other) {
+    if (value != null) {
+      return other || value!;
+    }
+  }
+
+  bool? operator ^(bool other) => !other == value;
+
+  /// Toggles the bool [value] between false and true.
+  /// A shortcut for `flag.value = !flag.value;`
+  /// FIXME: why return this? fluent interface is not
+  ///  not really a dart thing since we have '..' operator
+  // ignore: avoid_returning_this
+  Rx<bool?>? toggle() {
+    if (_value != null) {
+      subject.add(_value = !_value!);
+      return this;
+    }
   }
 }
 

@@ -90,7 +90,7 @@ class BaseWebSocket {
   }
 
   void close([int? status, String? reason]) {
-    if (socket != null) socket!.close(status, reason);
+    socket?.close(status, reason);
   }
 
   void send(dynamic data) {
