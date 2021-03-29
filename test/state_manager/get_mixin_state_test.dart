@@ -32,7 +32,7 @@ void main() {
                 Text(
                   'Map: ${controller.map.length}',
                 ),
-                FlatButton(
+                TextButton(
                   child: Text("increment"),
                   onPressed: () => controller.increment(),
                 )
@@ -64,18 +64,18 @@ void main() {
     expect(find.text("Count: 2"), findsOneWidget);
   });
 
-  testWidgets(
-    "MixinBuilder with build null",
-    (tester) async {
-      expect(
-        () => MixinBuilder<Controller>(
-          init: Controller(),
-          builder: null,
-        ),
-        throwsAssertionError,
-      );
-    },
-  );
+  // testWidgets(
+  //   "MixinBuilder with build null",
+  //   (tester) async {
+  //     expect(
+  //       () => MixinBuilder<Controller>(
+  //         init: Controller(),
+  //         builder: null,
+  //       ),
+  //       throwsAssertionError,
+  //     );
+  //   },
+  // );
 }
 
 class Controller extends GetxController {

@@ -248,6 +248,21 @@ print(Get.parameters['user']);
 // keluaran: 34954
 ```
 
+atau kirim beberapa parameter seperti ini
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+Pada layar kedua, ambil data berdasarkan parameter seperti biasanya
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// keluaran: 34954 true
+```
+
+
 Dan sekarang, yang anda perlu lakukan adalah menggunakan Get.toNamed() untuk bernavigasi ke named route anda, tanpa konteks (anda bisa memanggil route secara langsung dari kelas BLoC atau Controller), dan ketika aplikasi anda di-compile di web, route anda akan muncul di url <3
 
 ### Middleware
@@ -315,7 +330,7 @@ class First extends StatelessWidget {
         title: Text('Halaman Pertama'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Pindah halaman'),
           onPressed: () {
             Get.toNamed("/second");
@@ -340,7 +355,7 @@ class Second extends StatelessWidget {
         title: Text('Halaman kedua'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Pindah halaman'),
           onPressed: () {
             Get.toNamed("/third");
@@ -359,7 +374,7 @@ class Third extends StatelessWidget {
         title: Text("Halaman ketiga"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -430,7 +445,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -520,7 +535,7 @@ Navigator(
             title: Text("Main"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               onPressed: () {
                 Get.toNamed('/second', id:1); // pindah ke halaman bersarang anda menggunakan index

@@ -18,14 +18,14 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   // final StreamController Function(T) streamController;
   final bool autoRemove;
   final bool assignId;
-  final void Function(State state) initState, dispose, didChangeDependencies;
-  final void Function(GetX oldWidget, State state) didUpdateWidget;
-  final T init;
-  final String tag;
+  final void Function(State state)? initState, dispose, didChangeDependencies;
+  final void Function(GetX oldWidget, State state)? didUpdateWidget;
+  final T? init;
+  final String? tag;
 
   const GetX({
     this.tag,
-    this.builder,
+    required this.builder,
     this.global = true,
     this.autoRemove = true,
     this.initState,
@@ -46,10 +46,10 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   GetXState() {
     _observer = RxNotifier();
   }
-  RxInterface _observer;
-  T controller;
-  bool isCreator = false;
-  StreamSubscription subs;
+  RxInterface? _observer;
+  T? controller;
+  bool? isCreator = false;
+  late StreamSubscription subs;
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
       } else {
         controller = widget.init;
         isCreator = true;
-        GetInstance().put<T>(controller, tag: widget.tag);
+        GetInstance().put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
@@ -78,7 +78,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    subs = _observer.listen((data) => setState(() {}));
+    subs = _observer!.listen((data) => setState(() {}));
     super.initState();
   }
 
@@ -86,26 +86,26 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (widget.didChangeDependencies != null) {
-      widget.didChangeDependencies(this);
+      widget.didChangeDependencies!(this);
     }
   }
 
   @override
   void didUpdateWidget(GetX oldWidget) {
     super.didUpdateWidget(oldWidget as GetX<T>);
-    if (widget.didUpdateWidget != null) widget.didUpdateWidget(oldWidget, this);
+    widget.didUpdateWidget?.call(oldWidget, this);
   }
 
   @override
   void dispose() {
-    if (widget.dispose != null) widget.dispose(this);
-    if (isCreator || widget.assignId) {
+    if (widget.dispose != null) widget.dispose!(this);
+    if (isCreator! || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
     subs.cancel();
-    _observer.close();
+    _observer!.close();
     controller = null;
     isCreator = null;
     super.dispose();
@@ -114,8 +114,8 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   Widget get notifyChildren {
     final observer = RxInterface.proxy;
     RxInterface.proxy = _observer;
-    final result = widget.builder(controller);
-    if (!_observer.canUpdate) {
+    final result = widget.builder(controller!);
+    if (!_observer!.canUpdate) {
       throw """
       [Get] the improper use of a GetX has been detected. 
       You should only use GetX or Obx for the specific widget that will be updated.

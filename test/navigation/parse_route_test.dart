@@ -24,7 +24,7 @@ void main() {
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
-    expect(match.route.name, searchRoute);
+    expect(match.route!.name, searchRoute);
   });
 
   test('Parse Page without children', () {
@@ -48,7 +48,7 @@ void main() {
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
-    expect(match.route.name, searchRoute);
+    expect(match.route!.name, searchRoute);
   });
 
   testWidgets(

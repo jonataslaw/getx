@@ -4,8 +4,8 @@ import '../../../../../get_core/get_core.dart';
 
 import '../../request/request.dart';
 
-T bodyDecoded<T>(Request<T> request, String stringBody, String mimeType) {
-  T body;
+T? bodyDecoded<T>(Request<T> request, String stringBody, String? mimeType) {
+  T? body;
   var bodyToDecode;
 
   if (mimeType != null && mimeType.contains('application/json')) {
@@ -23,9 +23,9 @@ T bodyDecoded<T>(Request<T> request, String stringBody, String mimeType) {
     if (stringBody == '') {
       body = null;
     } else if (request.decoder == null) {
-      body = bodyToDecode as T;
+      body = bodyToDecode as T?;
     } else {
-      body = request.decoder(bodyToDecode);
+      body = request.decoder!(bodyToDecode);
     }
   } on Exception catch (_) {
     body = stringBody as T;

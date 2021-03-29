@@ -679,7 +679,7 @@ void main() {
       expect('foo bar'.capitalize, 'Foo Bar');
       expect('FoO bAr'.capitalize, 'Foo Bar');
       expect('FOO BAR'.capitalize, 'Foo Bar');
-      expect(null.capitalize, null);
+      // expect(null.capitalize, null);
       expect(''.capitalize, '');
       expect('foo  bar '.capitalize, 'Foo  Bar ');
     });
@@ -688,16 +688,16 @@ void main() {
       expect('foo bar'.capitalizeFirst, 'Foo bar');
       expect('FoO bAr'.capitalizeFirst, 'Foo bar');
       expect('FOO BAR'.capitalizeFirst, 'Foo bar');
-      expect(null.capitalizeFirst, null);
+      // expect(null.capitalizeFirst, null);
       expect(''.capitalizeFirst, '');
     });
 
     test('var.removeAllWhitespace', () {
-      String nullString;
+      //late String nullString;
       expect('foo bar'.removeAllWhitespace, 'foobar');
       expect('foo'.removeAllWhitespace, 'foo');
       expect(''.removeAllWhitespace, '');
-      expect(nullString.removeAllWhitespace, null);
+      // expect(nullString.removeAllWhitespace, null);
     });
 
     test('var.camelCase', () {

@@ -16,7 +16,7 @@ abstract class _RouteMiddleware {
   /// ```
   ///  -8 => 2 => 4 => 5
   /// {@end-tool}
-  int priority;
+  int? priority;
 
   /// This function will be called when the page of
   /// the called route is being searched for.
@@ -30,7 +30,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  RouteSettings redirect(String route);
+  RouteSettings? redirect(String route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -38,11 +38,11 @@ abstract class _RouteMiddleware {
   /// ```dart
   /// GetPage onPageCalled(GetPage page) {
   ///   final authService = Get.find<AuthService>();
-  ///   return page.copyWith(title: 'Wellcome ${authService.UserName}');
+  ///   return page.copyWith(title: 'Welcome ${authService.UserName}');
   /// }
   /// ```
   /// {@end-tool}
-  GetPage onPageCalled(GetPage page);
+  GetPage? onPageCalled(GetPage page);
 
   /// This function will be called right before the [Bindings] are initialize.
   /// Here you can change [Bindings] for this page
@@ -57,10 +57,10 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  List<Bindings> onBindingsStart(List<Bindings> bindings);
+  List<Bindings>? onBindingsStart(List<Bindings> bindings);
 
   /// This function will be called right after the [Bindings] are initialize.
-  GetPageBuilder onPageBuildStart(GetPageBuilder page);
+  GetPageBuilder? onPageBuildStart(GetPageBuilder page);
 
   /// This function will be called right after the
   /// GetPage.page function is called and will give you the result
@@ -76,21 +76,21 @@ abstract class _RouteMiddleware {
 /// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
 class GetMiddleware implements _RouteMiddleware {
   @override
-  int priority = 0;
+  int? priority = 0;
 
   GetMiddleware({this.priority});
 
   @override
-  RouteSettings redirect(String route) => null;
+  RouteSettings? redirect(String? route) => null;
 
   @override
-  GetPage onPageCalled(GetPage page) => page;
+  GetPage? onPageCalled(GetPage? page) => page;
 
   @override
-  List<Bindings> onBindingsStart(List<Bindings> bindings) => bindings;
+  List<Bindings>? onBindingsStart(List<Bindings>? bindings) => bindings;
 
   @override
-  GetPageBuilder onPageBuildStart(GetPageBuilder page) => page;
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 
   @override
   Widget onPageBuilt(Widget page) => page;
@@ -102,26 +102,26 @@ class GetMiddleware implements _RouteMiddleware {
 class MiddlewareRunner {
   MiddlewareRunner(this._middlewares);
 
-  final List<GetMiddleware> _middlewares;
+  final List<GetMiddleware>? _middlewares;
 
-  List<GetMiddleware> _getMiddlewares() {
+  List<GetMiddleware>? _getMiddlewares() {
     if (_middlewares != null) {
-      _middlewares.sort((a, b) => a.priority.compareTo(b.priority));
+      _middlewares!.sort((a, b) => a.priority!.compareTo(b.priority!));
       return _middlewares;
     }
     return <GetMiddleware>[];
   }
 
-  GetPage runOnPageCalled(GetPage page) {
-    _getMiddlewares().forEach((element) {
+  GetPage? runOnPageCalled(GetPage? page) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageCalled(page);
     });
     return page;
   }
 
-  RouteSettings runRedirect(String route) {
-    RouteSettings to;
-    _getMiddlewares().forEach((element) {
+  RouteSettings? runRedirect(String? route) {
+    RouteSettings? to;
+    _getMiddlewares()?.forEach((element) {
       to = element.redirect(route);
     });
     if (to != null) {
@@ -130,34 +130,34 @@ class MiddlewareRunner {
     return to;
   }
 
-  List<Bindings> runOnBindingsStart(List<Bindings> bindings) {
-    _getMiddlewares().forEach((element) {
+  List<Bindings>? runOnBindingsStart(List<Bindings>? bindings) {
+    _getMiddlewares()?.forEach((element) {
       bindings = element.onBindingsStart(bindings);
     });
     return bindings;
   }
 
-  GetPageBuilder runOnPageBuildStart(GetPageBuilder page) {
-    _getMiddlewares().forEach((element) {
+  GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageBuildStart(page);
     });
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares().forEach((element) {
+    _getMiddlewares()?.forEach((element) {
       page = element.onPageBuilt(page);
     });
     return page;
   }
 
   void runOnPageDispose() =>
-      _getMiddlewares().forEach((element) => element.onPageDispose());
+      _getMiddlewares()?.forEach((element) => element.onPageDispose());
 }
 
 class PageRedirect {
-  GetPage route;
-  GetPage unknownRoute;
+  GetPage? route;
+  GetPage? unknownRoute;
   RouteSettings settings;
   bool isUnknown;
 
@@ -165,61 +165,61 @@ class PageRedirect {
       {this.isUnknown = false, this.route});
 
   // redirect all pages that needes redirecting
-  GetPageRoute page() {
+  GetPageRoute<T> page<T>() {
     while (needRecheck()) {}
     return isUnknown
-        ? GetPageRoute(
-            page: unknownRoute.page,
-            parameter: unknownRoute.parameter,
+        ? GetPageRoute<T>(
+            page: unknownRoute!.page,
+            parameter: unknownRoute!.parameter,
             settings: RouteSettings(
-                name: unknownRoute.name, arguments: settings.arguments),
-            curve: unknownRoute.curve,
-            opaque: unknownRoute.opaque,
-            customTransition: unknownRoute.customTransition,
-            binding: unknownRoute.binding,
-            bindings: unknownRoute.bindings,
-            transitionDuration: (unknownRoute.transitionDuration ??
+                name: unknownRoute!.name, arguments: settings.arguments),
+            curve: unknownRoute!.curve,
+            opaque: unknownRoute!.opaque,
+            customTransition: unknownRoute!.customTransition,
+            binding: unknownRoute!.binding,
+            bindings: unknownRoute!.bindings,
+            transitionDuration: (unknownRoute!.transitionDuration ??
                 Get.defaultTransitionDuration),
-            transition: unknownRoute.transition,
-            popGesture: unknownRoute.popGesture,
-            fullscreenDialog: unknownRoute.fullscreenDialog,
-            middlewares: unknownRoute.middlewares,
+            transition: unknownRoute!.transition,
+            popGesture: unknownRoute!.popGesture,
+            fullscreenDialog: unknownRoute!.fullscreenDialog,
+            middlewares: unknownRoute!.middlewares,
           )
-        : GetPageRoute(
-            page: route.page,
-            parameter: route.parameter,
+        : GetPageRoute<T>(
+            page: route!.page,
+            parameter: route!.parameter,
             settings: RouteSettings(
                 name: settings.name, arguments: settings.arguments),
-            curve: route.curve,
-            opaque: route.opaque,
-            customTransition: route.customTransition,
-            binding: route.binding,
-            bindings: route.bindings,
+            curve: route!.curve,
+            opaque: route!.opaque,
+            customTransition: route!.customTransition,
+            binding: route!.binding,
+            bindings: route!.bindings,
             transitionDuration:
-                (route.transitionDuration ?? Get.defaultTransitionDuration),
-            transition: route.transition,
-            popGesture: route.popGesture,
-            fullscreenDialog: route.fullscreenDialog,
-            middlewares: route.middlewares);
+                (route!.transitionDuration ?? Get.defaultTransitionDuration),
+            transition: route!.transition,
+            popGesture: route!.popGesture,
+            fullscreenDialog: route!.fullscreenDialog,
+            middlewares: route!.middlewares);
   }
 
   /// check if redirect is needed
   bool needRecheck() {
-    final match = Get.routeTree.matchRoute(settings.name);
-    Get.parameters = match?.parameters;
+    final match = Get.routeTree.matchRoute(settings.name!);
+    Get.parameters = match.parameters;
 
     // No Match found
-    if (match?.route == null) {
+    if (match.route == null) {
       isUnknown = true;
       return false;
     }
 
-    final runner = MiddlewareRunner(match.route.middlewares);
+    final runner = MiddlewareRunner(match.route!.middlewares);
     route = runner.runOnPageCalled(match.route);
-    addPageParameter(route);
+    addPageParameter(route!);
 
     // No middlewares found return match.
-    if (match.route.middlewares == null || match.route.middlewares.isEmpty) {
+    if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
       return false;
     }
     final newSettings = runner.runRedirect(settings.name);
@@ -233,12 +233,8 @@ class PageRedirect {
   void addPageParameter(GetPage route) {
     if (route.parameter == null) return;
 
-    if (Get.parameters == null) {
-      Get.parameters = route.parameter;
-    } else {
-      final parameters = Get.parameters;
-      parameters.addEntries(route.parameter.entries);
-      Get.parameters = parameters;
-    }
+    final parameters = Get.parameters;
+    parameters.addEntries(route.parameter!.entries);
+    Get.parameters = parameters;
   }
 }

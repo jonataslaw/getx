@@ -8,14 +8,14 @@ import 'parse_route.dart';
 
 class GetMaterialController extends GetxController {
   bool testMode = false;
-  Key unikey;
-  ThemeData theme;
-  ThemeMode themeMode;
+  Key? unikey;
+  ThemeData? theme;
+  ThemeMode? themeMode;
 
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
 
-  Transition defaultTransition;
+  Transition? defaultTransition;
   Duration defaultTransitionDuration = Duration(milliseconds: 300);
   Curve defaultTransitionCurve = Curves.easeOutQuad;
 
@@ -25,13 +25,13 @@ class GetMaterialController extends GetxController {
 
   final routing = Routing();
 
-  Map<String, String> parameters = {};
+  Map<String, String?> parameters = {};
 
-  ParseRouteTree routeTree;
+  late ParseRouteTree routeTree;
 
-  CustomTransition customTransition;
+  CustomTransition? customTransition;
 
-  GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState>? key = GlobalKey<NavigatorState>();
 
   Map<int, GlobalKey<NavigatorState>> keys = {};
 

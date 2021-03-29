@@ -3,17 +3,17 @@ import 'dart:async';
 import '../request/request.dart';
 import '../response/response.dart';
 
-typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T> request);
+typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T?> request);
 
 typedef ResponseModifier<T> = FutureOr Function(
-    Request<T> request, Response<T> response);
+    Request<T?> request, Response<T?> response);
 
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
 class GetModifier<T> {
   final _requestModifiers = <RequestModifier>[];
   final _responseModifiers = <ResponseModifier>[];
-  RequestModifier authenticator;
+  RequestModifier? authenticator;
 
   void addRequestModifier<T>(RequestModifier<T> interceptor) {
     _requestModifiers.add(interceptor as RequestModifier);

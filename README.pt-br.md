@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Idiomas: [Inglês](README.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português Brasileiro (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreana](README.ko-kr.md).**
+**Idiomas: [Inglês](README.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreano](README.ko-kr.md), [Francês](README-fr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -158,7 +158,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Total de cliques: ${c.count}"))),
 
       // Troque o Navigator.push de 8 linhas por um simples Get.to(). Você não precisa do 'context'
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
       floatingActionButton: 
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));

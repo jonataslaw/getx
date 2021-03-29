@@ -7,8 +7,8 @@ import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
 mixin StateMixin<T> on ListNotifier {
-  T _value;
-  RxStatus _status;
+  T? _value;
+  RxStatus? _status;
 
   bool _isNullOrEmpty(dynamic val) {
     if (val == null) return true;
@@ -32,23 +32,23 @@ mixin StateMixin<T> on ListNotifier {
     return _status ??= _status = RxStatus.loading();
   }
 
-  T get state => value;
+  T? get state => value;
 
   @protected
-  T get value {
+  T? get value {
     notifyChildrens();
     return _value;
   }
 
   @protected
-  set value(T newValue) {
+  set value(T? newValue) {
     if (_value == newValue) return;
     _value = newValue;
     refresh();
   }
 
   @protected
-  void change(T newState, {RxStatus status}) {
+  void change(T? newState, {RxStatus? status}) {
     var _canUpdate = false;
     if (status != null) {
       _status = status;
@@ -62,37 +62,46 @@ mixin StateMixin<T> on ListNotifier {
       refresh();
     }
   }
+
+  void append(Future<T> Function() body(), {String? errorMessage}) {
+    final compute = body();
+    compute().then((newValue) {
+      change(newValue, status: RxStatus.success());
+    }, onError: (err) {
+      change(state, status: RxStatus.error(errorMessage ?? err.toString()));
+    });
+  }
 }
 
 class Value<T> extends ListNotifier
     with StateMixin<T>
-    implements ValueListenable<T> {
+    implements ValueListenable<T?> {
   Value(T val) {
     _value = val;
     _fillEmptyStatus();
   }
 
   @override
-  T get value {
+  T? get value {
     notifyChildrens();
     return _value;
   }
 
   @override
-  set value(T newValue) {
+  set value(T? newValue) {
     if (_value == newValue) return;
     _value = newValue;
     refresh();
   }
 
-  T call([T v]) {
+  T? call([T? v]) {
     if (v != null) {
       value = v;
     }
     return value;
   }
 
-  void update(void fn(T value)) {
+  void update(void fn(T? value)) {
     fn(value);
     refresh();
   }
@@ -124,12 +133,11 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T> widget, {
-    Widget Function(String error) onError,
-    Widget onLoading,
-    Widget onEmpty,
+    NotifierBuilder<T?> widget, {
+    Widget Function(String? error)? onError,
+    Widget? onLoading,
+    Widget? onEmpty,
   }) {
-    assert(widget != null);
     return SimpleBuilder(builder: (_) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
@@ -152,51 +160,36 @@ class RxStatus {
   final bool isError;
   final bool isSuccess;
   final bool isEmpty;
-  final String errorMessage;
+  final bool isLoadingMore;
+  final String? errorMessage;
 
   RxStatus._({
-    this.isEmpty,
-    this.isLoading,
-    this.isError,
-    this.isSuccess,
+    this.isEmpty = false,
+    this.isLoading = false,
+    this.isError = false,
+    this.isSuccess = false,
     this.errorMessage,
+    this.isLoadingMore = false,
   });
 
   factory RxStatus.loading() {
-    return RxStatus._(
-      isLoading: true,
-      isError: false,
-      isSuccess: false,
-      isEmpty: false,
-    );
+    return RxStatus._(isLoading: true);
+  }
+
+  factory RxStatus.loadingMore() {
+    return RxStatus._(isSuccess: true, isLoadingMore: true);
   }
 
   factory RxStatus.success() {
-    return RxStatus._(
-      isLoading: false,
-      isError: false,
-      isSuccess: true,
-      isEmpty: false,
-    );
+    return RxStatus._(isSuccess: true);
   }
 
-  factory RxStatus.error([String message]) {
-    return RxStatus._(
-      isLoading: false,
-      isError: true,
-      isSuccess: false,
-      isEmpty: false,
-      errorMessage: message,
-    );
+  factory RxStatus.error([String? message]) {
+    return RxStatus._(isError: true, errorMessage: message);
   }
 
   factory RxStatus.empty() {
-    return RxStatus._(
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      isEmpty: true,
-    );
+    return RxStatus._(isEmpty: true);
   }
 }
 

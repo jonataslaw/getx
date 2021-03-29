@@ -5,7 +5,7 @@ import 'smart_management.dart';
 /// class through extensions
 abstract class GetInterface {
   SmartManagement smartManagement = SmartManagement.full;
-  String reference;
+  String? reference;
   bool isLogEnable = true;
   LogWriterCallback log = defaultLogWriterCallback;
 }

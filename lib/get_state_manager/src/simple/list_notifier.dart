@@ -17,10 +17,10 @@ class ListNotifier implements Listenable {
   int get notifierVersion => _version;
   int get notifierMicrotask => _microtask;
 
-  List<GetStateUpdate> _updaters = <GetStateUpdate>[];
+  List<GetStateUpdate?>? _updaters = <GetStateUpdate?>[];
 
-  HashMap<Object, List<GetStateUpdate>> _updatersGroupIds =
-      HashMap<Object, List<GetStateUpdate>>();
+  HashMap<Object?, List<GetStateUpdate>>? _updatersGroupIds =
+      HashMap<Object?, List<GetStateUpdate>>();
 
   @protected
   void refresh() {
@@ -39,14 +39,14 @@ class ListNotifier implements Listenable {
   }
 
   void _notifyUpdate() {
-    for (var element in _updaters) {
-      element();
+    for (var element in _updaters!) {
+      element!();
     }
   }
 
   void _notifyIdUpdate(Object id) {
-    if (_updatersGroupIds.containsKey(id)) {
-      final listGroup = _updatersGroupIds[id];
+    if (_updatersGroupIds!.containsKey(id)) {
+      final listGroup = _updatersGroupIds![id]!;
       for (var item in listGroup) {
         item();
       }
@@ -57,16 +57,16 @@ class ListNotifier implements Listenable {
   void refreshGroup(Object id) {
     assert(_debugAssertNotDisposed());
 
-    /// This debounce the call to update.
-    /// It prevent errors and duplicates builds
-    if (_microtask == _version) {
-      _microtask++;
-      scheduleMicrotask(() {
-        _version++;
-        _microtask = _version;
-        _notifyIdUpdate(id);
-      });
-    }
+    // /// This debounce the call to update.
+    // /// It prevent errors and duplicates builds
+    // if (_microtask == _version) {
+    //   _microtask++;
+    //   scheduleMicrotask(() {
+    //     _version++;
+    //     _microtask = _version;
+    _notifyIdUpdate(id);
+    // });
+    // }
   }
 
   bool _debugAssertNotDisposed() {
@@ -87,26 +87,26 @@ class ListNotifier implements Listenable {
 
   bool get hasListeners {
     assert(_debugAssertNotDisposed());
-    return _updaters.isNotEmpty;
+    return _updaters!.isNotEmpty;
   }
 
   int get listeners {
     assert(_debugAssertNotDisposed());
-    return _updaters.length;
+    return _updaters!.length;
   }
 
   @override
   void removeListener(VoidCallback listener) {
     assert(_debugAssertNotDisposed());
-    _updaters.remove(listener);
+    _updaters!.remove(listener);
   }
 
   void removeListenerId(Object id, VoidCallback listener) {
     assert(_debugAssertNotDisposed());
-    if (_updatersGroupIds.containsKey(id)) {
-      _updatersGroupIds[id].remove(listener);
+    if (_updatersGroupIds!.containsKey(id)) {
+      _updatersGroupIds![id]!.remove(listener);
     }
-    _updaters.remove(listener);
+    _updaters!.remove(listener);
   }
 
   @mustCallSuper
@@ -119,40 +119,40 @@ class ListNotifier implements Listenable {
   @override
   Disposer addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
-    _updaters.add(listener);
-    return () => _updaters.remove(listener);
+    _updaters!.add(listener);
+    return () => _updaters!.remove(listener);
   }
 
-  Disposer addListenerId(Object key, GetStateUpdate listener) {
-    _updatersGroupIds[key] ??= <GetStateUpdate>[];
-    _updatersGroupIds[key].add(listener);
-    return () => _updatersGroupIds[key].remove(listener);
+  Disposer addListenerId(Object? key, GetStateUpdate listener) {
+    _updatersGroupIds![key] ??= <GetStateUpdate>[];
+    _updatersGroupIds![key]!.add(listener);
+    return () => _updatersGroupIds![key]!.remove(listener);
   }
 
   /// To dispose an [id] from future updates(), this ids are registered
   /// by [GetBuilder()] or similar, so is a way to unlink the state change with
   /// the Widget from the Controller.
   void disposeId(Object id) {
-    _updatersGroupIds.remove(id);
+    _updatersGroupIds!.remove(id);
   }
 }
 
 class TaskManager {
   TaskManager._();
 
-  static TaskManager _instance;
+  static TaskManager? _instance;
 
   static TaskManager get instance => _instance ??= TaskManager._();
 
-  GetStateUpdate _setter;
+  GetStateUpdate? _setter;
 
-  List<VoidCallback> _remove;
+  List<VoidCallback>? _remove;
 
-  void notify(List<GetStateUpdate> _updaters) {
+  void notify(List<GetStateUpdate?>? _updaters) {
     if (_setter != null) {
-      if (!_updaters.contains(_setter)) {
+      if (!_updaters!.contains(_setter)) {
         _updaters.add(_setter);
-        _remove.add(() => _updaters.remove(_setter));
+        _remove!.add(() => _updaters.remove(_setter));
       }
     }
   }

@@ -246,6 +246,22 @@ print(Get.parameters['user']);
 // out: 34954
 ```
 
+или отправьте несколько таких параметров
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+На втором экране взять данные по параметрам как обычно.
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// out: 34954 true
+```
+
+
+
 И теперь все, что вам нужно сделать, это использовать Get.toNamed() для навигации по именованным маршрутам без какого-либо контекста (вы можете вызывать свои маршруты непосредственно из класса BLoC или контроллера), а когда ваше приложение будет скомпилировано в Интернете, ваше маршруты появятся в url <3
 
 ### Middleware
@@ -313,7 +329,7 @@ class First extends StatelessWidget {
         title: Text('First Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/second");
@@ -338,7 +354,7 @@ class Second extends StatelessWidget {
         title: Text('second Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/third");
@@ -357,7 +373,7 @@ class Third extends StatelessWidget {
         title: Text("Third Route"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -428,7 +444,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -518,7 +534,7 @@ Navigator(
             title: Text("Main"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               onPressed: () {
                 Get.toNamed('/second', id:1); // navigate by your nested route by index

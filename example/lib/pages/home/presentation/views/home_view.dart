@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   Text(
-                    '${state.global.totalConfirmed}',
+                    '${state!.global.totalConfirmed}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -61,18 +61,24 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: 10,
                   ),
-                  OutlineButton(
-                    borderSide: BorderSide(
-                      color: Colors.deepPurple,
-                      width: 3,
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.black),
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
+                      ),
+                      shape: StadiumBorder(),
                     ),
-                    shape: StadiumBorder(),
                     onPressed: () {
                       Get.toNamed('/home/country');
                     },
                     child: Text(
                       'fetch_country'.tr,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   )
                 ],

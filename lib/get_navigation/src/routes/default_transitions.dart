@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class LeftToRightFadeTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -30,8 +30,8 @@ class LeftToRightFadeTransition {
 class RightToLeftFadeTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -68,8 +68,8 @@ class NoTransition {
 class FadeInTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -80,8 +80,8 @@ class FadeInTransition {
 class SlideDownTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -98,8 +98,8 @@ class SlideDownTransition {
 class SlideLeftTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -116,8 +116,8 @@ class SlideLeftTransition {
 class SlideRightTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -134,8 +134,8 @@ class SlideRightTransition {
 class SlideTopTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -152,8 +152,8 @@ class SlideTopTransition {
 class ZoomInTransition {
   Widget buildTransitions(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -168,7 +168,7 @@ class SizeTransitions {
   Widget buildTransitions(
       BuildContext context,
       Curve curve,
-      Alignment alignment,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {

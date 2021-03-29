@@ -1,90 +1,91 @@
-- [라우트 관리](#라우트-관리)
-  - [사용하는 방법](#사용하는-방법)
-  - [이름없는 라우트 탐색](#이름없는-라우트-탐색)
-  - [이름있는 라우트 탐색](#이름있는-라우트-탐색)
-    - [이름있는 라우트에 데이터 보내기](#이름있는-라우트에-데이터-보내기)
-    - [동적 url 링크](#동적-url-링크)
-    - [미들웨어](#미들웨어)
-  - [context 없이 탐색](#context-없이-탐색)
+- [Gestion de route](#gestion-de-route)
+  - [Utilisation](#utilisation)
+  - [Navigation sans nom](#navigation-sans-nom)
+  - [Navigation par nom](#navigation-par-nom)
+    - [Envoyer des données aux routes nommées](#envoyer-des-donnes-aux-routes-nommes)
+    - [Liens URL dynamiques](#liens-url-dynamiques)
+    - [Middleware](#middleware)
+  - [Navigation sans context](#navigation-sans-context)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [중첩된 탐색](#중첩된-탐색)
+  - [Nested Navigation](#nested-navigation)
 
-# 라우트 관리
+# Gestion de route
 
-라우트 관리가 문제 있는 경우 GetX가 모든 것을 완벽히 설명해줍니다.
+C'est l'explication complète de tout ce qu'il y a à savoir sur Getx quand il s'agit de la gestion des routes.
 
-## 사용하는 방법
+## Utilisation
 
-pubspec.yaml 파일에 추가:
+Ajoutez ceci à votre fichier pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-context 없이 routes/snackbars/dialogs/bottomsheets을 사용하거나 고급 GetX API를 사용하려면 MaterialApp 앞에 "Get"만 추가하여 GetMaterialApp으로 바꿔서 이용하세요!
+Si vous allez utiliser des routes/snackbars/dialogs/bottomsheets sans contexte, ou utiliser les API Get de haut niveau, vous devez simplement ajouter "Get" avant votre MaterialApp, en le transformant en GetMaterialApp et en profiter!
 
 ```dart
-GetMaterialApp( // 이전: MaterialApp(
+GetMaterialApp( // Avant: MaterialApp(
   home: MyHome(),
 )
 ```
 
-## 이름없는 라우트 탐색
+## Navigation sans nom
 
-새 화면으로 이동:
+Pour accéder à un nouvel écran:
 
 ```dart
 Get.to(NextScreen());
 ```
 
-snackbars, dialogs, bottomsheets 또는 Navigator.pop(context);로 보통 닫았던 것들을 닫기
+To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Pour fermer les snackbars, dialogs, bottomsheets ou tout ce que vous fermez normalement avec Navigator.pop (context);
 
 ```dart
 Get.back();
 ```
 
-다음 화면으로 이동하고 이전 화면에서 돌아오지 않는 경우 (스플래시나 로그인 화면 등을 사용하는 경우)
+Pour aller à l'écran suivant et aucune option pour revenir à l'écran précédent (pour une utilisation dans SplashScreens, écrans de connexion, etc.)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-다음 화면으로 이동하고 이전 화면이 모두 닫히는 경우 (장바구니, 투표, 테스트에 유용함)
+Pour aller à l'écran suivant et annuler toutes les routes précédents (utile dans les paniers d'achat e-commerce, les sondages et les tests)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-다음 화면으로 이동하고 돌아올때 바로 데이터를 받거나 업데이트할 경우:
+Pour naviguer vers l'écran suivant et recevoir ou mettre à jour des données dès que vous en revenez:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-다른 화면에서 이전화면으로 데이터를 전달할때:
+sur l'autre écran, envoyez les données pour l'écran précédent:
 
 ```dart
 Get.back(result: 'success');
 ```
 
-그리고 사용방법:
+Et utilisez-les:
 
-예시:
+ex:
 
 ```dart
 if(data == 'success') madeAnything();
 ```
 
-우리의 문법을 배우고 싶지 않습니까?
-Navigator를 navigator로 바꾸시면 됩니다. 그리고 context를 사용하지 않아도 표준 navigator의 모든 기능이 가능합니다.
-예시:
+Vous ne voulez pas apprendre notre syntaxe?
+Changez simplement le Navigateur (majuscule) en navigateur (minuscule), et vous aurez toutes les fonctions de la navigation standard, sans avoir à utiliser 'context'.
+Exemple:
 
 ```dart
 
-// 기본 Flutter navigator
+// Navigateur Flutter par défaut
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -94,7 +95,7 @@ Navigator.of(context).push(
   ),
 );
 
-// GetX는 context 필요 없이 Flutter 문법을 사용
+// Utilisez la syntaxe Flutter sans avoir besoin de 'context'
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -103,35 +104,35 @@ navigator.push(
   ),
 );
 
-// GetX 문법 (이것은 동의하지 않겠지만 더 좋습니다)
+// Syntaxe Get (c'est beaucoup mieux, mais vous avez le droit d'être en désaccord)
 Get.to(HomePage());
 
 
 ```
 
-## 이름있는 라우트 탐색
+## Navigation Par Nom
 
-- namedRoutes로 탐색하기를 선호하면 GetX도 지원합니다.
+- Si vous préférez naviguer par namedRoutes, Get prend également en charge cela.
 
-nextScreen으로 이동
+Pour aller à nextScreen
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-다음으로 이동하고 트리에서 이전 화면을 지웁니다.
+Pour naviguer et supprimer l'écran précédent du stack.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-다음으로 이동하고 트리에서 이전 화면 전체를 지웁니다.
+Pour naviguer et supprimer tous les écrans précédents du stack.
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-GetMaterialApp를 사용하여 라우트들을 정의:
+Pour définir des routes, utilisez GetMaterialApp:
 
 ```dart
 void main() {
@@ -152,7 +153,7 @@ void main() {
 }
 ```
 
-정의 안된 라우트로 이동시 제어 (404 에러), GetMaterialApp에 unknownRoute를 정의할 수 있습니다.
+Pour gérer la navigation vers des routes non définies (erreur 404), vous pouvez définir une page 'unknownRoute' dans GetMaterialApp.
 
 ```dart
 void main() {
@@ -169,39 +170,39 @@ void main() {
 }
 ```
 
-### 이름있는 라우트에 데이터 보내기
+### Envoyer des données aux routes nommées
 
-무엇이든 인수를 통해 전달합니다. GetX는 String, Map, List, 클래스 인스턴스등 모든 것을 허용합니다.
+Envoyez simplement ce que vous voulez comme arguments. Get accepte n'importe quoi ici, qu'il s'agisse d'une String, d'une Map, d'une List ou même d'une instance de classe.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-클래스 또는 컨트롤러에서:
+dans votre classe ou contrôleur:
 
 ```dart
 print(Get.arguments);
-// 출력: Get is the best
+//montre: Get is the best
 ```
 
-### 동적 url 링크
+### Liens URL dynamiques
 
-GetX는 웹과 같이 향상된 동적 url을 제공합니다. 웹 개발자들은 아마 Flutter에서 이미 이 기능을 원하고 있을 것 입니다. 대부분의 경우 패키지가 이 기능을 약속하고 URL이 웹에서 제공하는 것과 완전히 다른 구문을 제공하는 것을 보았을 것입니다. 하지만 GetX는 이 기능을 해결합니다.
+Get propose des URL dynamiques avancées, tout comme sur le Web. Les développeurs Web ont probablement déjà voulu cette fonctionnalité sur Flutter, et ont très probablement vu un package promettre cette fonctionnalité et fournir une syntaxe totalement différente de celle d'une URL sur le Web, mais Get résout également cela.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-controller/bloc/stateful/stateless 클래스에서:
+sur votre classe controller/bloc/stateful/stateless:
 
 ```dart
 print(Get.parameters['id']);
-// 출력: 354
+// donne: 354
 print(Get.parameters['name']);
-// 출력: Enzo
+// donne: Enzo
 ```
 
-GetX는 쉽게 NamedParameters 전달을 할 수 있습니다:
+Vous pouvez également recevoir facilement des paramètres nommés avec Get:
 
 ```dart
 void main() {
@@ -217,7 +218,7 @@ void main() {
         name: '/profile/',
         page: () => MyProfile(),
       ),
-       //You can define a different page for routes with arguments, and another without arguments, but for that you must use the slash '/' on the route that will not receive arguments as above.
+       //Vous pouvez définir une page différente pour les routes avec arguments, et une autre sans arguments, mais pour cela vous devez utiliser la barre oblique '/' sur la route qui ne recevra pas d'arguments comme ci-dessus.
        GetPage(
         name: '/profile/:user',
         page: () => UserProfile(),
@@ -233,41 +234,38 @@ void main() {
 }
 ```
 
-경로 명으로 데이터 보냄
+Envoyer des données sur le nom de la route
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-다음 화면에서 파라미터로 데이터를 가져옴
+Sur le deuxième écran, recevez les données par paramètre
 
 ```dart
 print(Get.parameters['user']);
-// 출력: 34954
+// donne: 34954
 ```
 
-
-또는 이와 같은 여러 매개 변수를 보냅니다.
+ou envoyer plusieurs paramètres comme celui-ci
 
 ```dart
 Get.toNamed("/profile/34954?flag=true");
 ```
 
-두 번째 화면에서 일반적으로 매개 변수별로 데이터를 가져옵니다.
+Sur le deuxième écran, prenez les données par paramètres comme d'habitude
 
 ```dart
 print(Get.parameters['user']);
 print(Get.parameters['flag']);
-// 출력: 34954 true
+// donne: 34954 true
 ```
 
+Et maintenant, tout ce que vous avez à faire est d'utiliser Get.toNamed() pour parcourir vos routes nommées, sans aucun contexte (vous pouvez appeler vos routes directement à partir de votre classe BLoC ou Controller), et lorsque votre application est compilée sur le Web, vos routes apparaîtront dans l'url <3
 
+### Middleware
 
-이제 Get.toNamed()를 사용하여 어떤 context도 없이 명명된 라우트를 탐색하고 (BLoC 또는 Controller 클래스로 부터 직접 라우트를 호출할 수 있음) 앱이 웹으로 컴파일되면 경로는 url에 표시됩니다. <3
-
-### 미들웨어
-
-만약 GetX 이벤트를 받아서 행동을 트리거 하려면 routingCallback을 사용하면 가능합니다.
+Si vous souhaitez écouter les événements Get pour déclencher des actions, vous pouvez utiliser routingCallback pour le faire:
 
 ```dart
 GetMaterialApp(
@@ -279,7 +277,7 @@ GetMaterialApp(
 )
 ```
 
-GetMaterialApp을 사용하지 않는다면 수동 API를 사용해서 Middleware observer를 추가할 수 있습니다.
+Si vous n'utilisez pas GetMaterialApp, vous pouvez utiliser l'API manuelle pour attacher l'observateur Middleware.
 
 ```dart
 void main() {
@@ -289,31 +287,31 @@ void main() {
       initialRoute: "/",
       navigatorKey: Get.key,
       navigatorObservers: [
-        GetObserver(MiddleWare.observer), // 여기 !!!
+        GetObserver(MiddleWare.observer), // ICI !!!
       ],
     ),
   );
 }
 ```
 
-MiddleWare class 생성
+Créez une classe MiddleWare
 
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// 각 화면의 routes, snackbars, dialogs와 bottomsheets에서 추가하여 받을 수 있습니다.
-    /// If you need to enter any of these 3 events directly here,
-    /// you must specify that the event is != Than you are trying to do.
+    /// Vous pouvez écouter en plus des routes, des snackbars, des dialogs et des bottomsheets sur chaque écran.
+    /// Si vous devez saisir l'un de ces 3 événements directement ici,
+    /// vous devez spécifier que l'événement est != Ce que vous essayez de faire.
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
-    } else if (routing.current == '/third'){
-      print('last route called');
+    } else if (routing.current =='/third'){
+      print('dernière route');
     }
   }
 }
 ```
 
-이제, 코드에서 Get을 사용하세요:
+Maintenant, utilisez Get sur votre code:
 
 ```dart
 class First extends StatelessWidget {
@@ -386,11 +384,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## context 없이 탐색
+## Navigation sans context
 
 ### SnackBars
 
-Flutter로 간단한 SnackBar를 사용하려면 Scaffold의 context가 반드시 주어지거나 Scaffold에 GlobalKey를 추가해서 사용해야만 합니다.
+Pour avoir un simple SnackBar avec Flutter, vous devez obtenir le 'context' de Scaffold, ou vous devez utiliser un GlobalKey attaché à votre Scaffold
 
 ```dart
 final snackBar = SnackBar(
@@ -400,23 +398,22 @@ final snackBar = SnackBar(
     onPressed: (){}
   ),
 );
-// 위젯 트리에서 Scaffold를 찾아서 사용하면
-// SnackBar가 보여집니다.
+// Trouvez le scaffold dans l'arborescence des widgets et utilisez-le pour afficher un SnackBar.
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-Get을 사용할때:
+Avec Get:
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-Get을 사용하면 코드의 어디에서든지 Get.snackbar를 호출하거나 원하는데로 수정하기만 하면 됩니다!
+Avec Get, tout ce que vous avez à faire est d'appeler votre Get.snackbar à partir de n'importe où dans votre code ou de le personnaliser comme vous le souhaitez!
 
 ```dart
 Get.snackbar(
   "Hey i'm a Get SnackBar!", // title
-  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
+  "C'est incroyable! J'utilise SnackBar sans context, sans code standard, sans Scaffold, c'est quelque chose de vraiment incroyable!", // message
   icon: Icon(Icons.alarm),
   shouldIconPulse: true,
   onTap:(){},
@@ -426,7 +423,7 @@ Get.snackbar(
 );
 
 
-  ////////// ALL FEATURES //////////
+  ////////// TOUTES LES FONCTIONNALITÉS //////////
   //     Color colorText,
   //     Duration duration,
   //     SnackPosition snackPosition,
@@ -463,18 +460,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-기존 스낵바를 선호하거나 한 줄만 추가하는 것을 포함하여 처음부터 커스텀하려는 경우(Get.snackbar는 필수로 제목과 메시지를 사용함) 다음을 사용할 수 있습니다.
-Get.snackbar가 빌드된 RAW API를 제공하는`Get.rawSnackbar ();`.
+Si vous préférez le snack-bar traditionnel, ou souhaitez le personnaliser à partir de zéro, y compris en ajoutant une seule ligne (Get.snackbar utilise un titre et un message obligatoires), vous pouvez utiliser
+`Get.rawSnackbar ();` qui fournit l'API brute sur laquelle Get.snackbar a été construit.
 
 ### Dialogs
 
-dialog 열기:
+Pour ouvrir un 'dialog':
 
 ```dart
-Get.dialog(YourDialogWidget());
+Get.dialog(VotreDialogWidget());
 ```
 
-default dialog 열기:
+Pour ouvrir le 'dialog' par défaut:
 
 ```dart
 Get.defaultDialog(
@@ -483,15 +480,15 @@ Get.defaultDialog(
 );
 ```
 
-showGeneralDialog 대신에 Get.generalDialog를 사용할 수 있습니다.
+Vous pouvez également utiliser Get.generalDialog au lieu de showGeneralDialog.
 
-cupertinos를 포함한 다른 모든 Flutter 대화 상자 위젯의 경우 context 대신 Get.overlayContext를 사용하고 코드의 어느 곳에서나 열 수 있습니다.
-오버레이를 사용하지 않는 위젯의 경우 Get.context를 사용할 수 있습니다.
-이 두 context는 탐색 context 없이 inheritedWidget이 사용되는 경우를 제외하고 99%의 경우에 UI의 context를 대체하여 동작합니다.
+Pour tous les autres widgets de la boîte de dialogue Flutter, y compris cupertinos, vous pouvez utiliser Get.overlayContext au lieu du context et l'ouvrir n'importe où dans votre code.
+Pour les widgets qui n'utilisent pas Overlay, vous pouvez utiliser Get.context.
+Ces deux contextes fonctionneront dans 99% des cas pour remplacer le context de votre interface utilisateur, sauf dans les cas où inheritedWidget est utilisé sans context de navigation.
 
 ### BottomSheets
 
-Get.bottomSheet는 showModalBottomSheet와 같지만 context가 필요 없습니다.
+Get.bottomSheet est comme showModalBottomSheet, mais n'a pas besoin de 'context'.
 
 ```dart
 Get.bottomSheet(
@@ -514,18 +511,18 @@ Get.bottomSheet(
 );
 ```
 
-## 중첩된 탐색
+## Nested Navigation
 
-GetX는 Fultter의 중첩된 탐색을 더 쉽게 만듭니다.
-context가 필요 없고 Id로 탐색 스택을 찾을 수 있습니다.
+Getx a rendu la navigation imbriquée de Flutter encore plus facile.
+Vous n'avez pas besoin de 'context' et vous trouverez votre stack de navigation par ID.
 
-- 주석: 병렬 탐색 스택을 만드는 것은 위험 할 수 있습니다. 이상적인 것은 NestedNavigators를 사용하지 않거나 아껴서 사용하는 것입니다. 프로젝트에 필요한 경우 여러 탐색 스택을 메모리에 유지하는 것이 RAM 소비에 좋지 않을 수 있음을 명심하십시오.
+- NOTE: La création de stacks de navigation parallèles peut être dangereuse. L'idéal est de ne pas utiliser NestedNavigators, ou de l'utiliser avec parcimonie. Si votre projet l'exige, allez-y, mais gardez à l'esprit que conserver plusieurs stacks de navigation en mémoire n'est peut-être pas une bonne idée pour la consommation de RAM.
 
-간단합니다:
+Voyez comme c'est simple:
 
 ```dart
 Navigator(
-  key: Get.nestedKey(1), // index로 key를 생성
+  key: Get.nestedKey(1), // créez une clé par index
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -538,7 +535,7 @@ Navigator(
             child: TextButton(
               color: Colors.blue,
               onPressed: () {
-                Get.toNamed('/second', id:1); // index로 중첩된 경로를 탐색
+                Get.toNamed('/second', id:1); // naviguer votre itinéraire imbriqué par index
               },
               child: Text("Go to second"),
             ),
