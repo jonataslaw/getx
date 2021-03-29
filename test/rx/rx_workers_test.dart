@@ -162,4 +162,118 @@ void main() {
     expect(reactiveString.endsWith("c"), true);
     expect(currentString, "abc");
   });
+
+  test('RxnString from non null to null value', () async {
+    var reactiveString = RxnString(null);
+    var currentString;
+
+    reactiveString.listen((newString) {
+      currentString = newString;
+    });
+
+    reactiveString("abc");
+    await Future.delayed(Duration.zero);
+
+    expect(currentString == "abc", true);
+
+    reactiveString(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentString == null, true);
+  });
+
+  test('RxnNum from non null to null value', () async {
+    var reactiveNum = RxnNum(3);
+    var currentNum;
+
+    reactiveNum.listen((newString) {
+      currentNum = newString;
+    });
+
+    reactiveNum(5);
+    await Future.delayed(Duration.zero);
+
+    expect(currentNum == 5, true);
+
+    reactiveNum(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentNum == null, true);
+  });
+
+  test('RxnNum from non null to null value', () async {
+    var reactiveNum = RxnNum(3);
+    var currentNum;
+
+    reactiveNum.listen((newString) {
+      currentNum = newString;
+    });
+
+    reactiveNum(5);
+    await Future.delayed(Duration.zero);
+
+    expect(currentNum == 5, true);
+
+    reactiveNum(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentNum == null, true);
+  });
+
+  test('RxnInt from non null to null value', () async {
+    var reactiveInt = RxnInt(3);
+    var currentInt;
+
+    reactiveInt.listen((newString) {
+      currentInt = newString;
+    });
+
+    reactiveInt(5);
+    await Future.delayed(Duration.zero);
+
+    expect(currentInt == 5, true);
+
+    reactiveInt(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentInt == null, true);
+  });
+
+  test('RxnDouble from non null to null value', () async {
+    var reactiveDouble = RxnDouble(3.5);
+    var currentDouble;
+
+    reactiveDouble.listen((newString) {
+      currentDouble = newString;
+    });
+
+    reactiveDouble(5.7);
+    await Future.delayed(Duration.zero);
+
+    expect(currentDouble == 5.7, true);
+
+    reactiveDouble(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentDouble == null, true);
+  });
+
+  test('RxnBool from non null to null value', () async {
+    var reactiveBool = RxnBool(true);
+    var currentBool;
+
+    reactiveBool.listen((newString) {
+      currentBool = newString;
+    });
+
+    reactiveBool(false);
+    await Future.delayed(Duration.zero);
+
+    expect(currentBool, false);
+
+    reactiveBool(null);
+    await Future.delayed(Duration.zero);
+
+    expect(currentBool == null, true);
+  });
 }
