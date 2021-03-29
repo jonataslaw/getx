@@ -247,7 +247,7 @@ class RxBool extends Rx<bool> {
 }
 
 class RxnBool extends Rx<bool?> {
-  RxnBool(bool initial) : super(initial);
+  RxnBool(bool? initial) : super(initial);
   @override
   String toString() {
     return "$value";
