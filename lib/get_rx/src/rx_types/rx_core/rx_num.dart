@@ -598,8 +598,9 @@ class RxnNum extends Rx<num?> {
   num? call([num? v]) {
     if (v == null) {
       value = null;
+      return value;
     } else {
-      super.call();
+      return super.call();
     }
   }
 }
@@ -856,8 +857,9 @@ class RxnDouble extends Rx<double?> {
   double? call([double? v]) {
     if  (v == null) {
       value = null;
+      return value;
     } else {
-      super.call();
+      return super.call();
     }
   }
 }
@@ -872,8 +874,9 @@ class RxnInt extends Rx<int?> {
   int? call([int? v]) {
     if  (v == null) {
       value = null;
+      return value;
     } else {
-      super.call();
+      return super.call();
     }
   }
 }

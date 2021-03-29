@@ -290,8 +290,9 @@ class RxnString extends Rx<String?> implements Comparable<String>, Pattern {
   String? call([String? v]) {
     if (v == null) {
       value = null;
+      return value;
     } else {
-      super.call();
+      return super.call();
     }
   }
 }
