@@ -258,7 +258,7 @@ class RxnBool extends Rx<bool?> {
       value = null;
       return value;
     } else {
-      return super.call();
+      return super.call(v);
     }
   }
 }

@@ -292,7 +292,7 @@ class RxnString extends Rx<String?> implements Comparable<String>, Pattern {
       value = null;
       return value;
     } else {
-      return super.call();
+      return super.call(v);
     }
   }
 }

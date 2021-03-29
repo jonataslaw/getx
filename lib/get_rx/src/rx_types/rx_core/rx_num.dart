@@ -600,7 +600,7 @@ class RxnNum extends Rx<num?> {
       value = null;
       return value;
     } else {
-      return super.call();
+      return super.call(v);
     }
   }
 }
@@ -859,7 +859,7 @@ class RxnDouble extends Rx<double?> {
       value = null;
       return value;
     } else {
-      return super.call();
+      return super.call(v);
     }
   }
 }
@@ -872,11 +872,11 @@ class RxnInt extends Rx<int?> {
   RxnInt([int? initial]) : super(initial);
 
   int? call([int? v]) {
-    if  (v == null) {
+    if (v == null) {
       value = null;
       return value;
     } else {
-      return super.call();
+      return super.call(v);
     }
   }
 }
