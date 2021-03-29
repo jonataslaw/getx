@@ -594,6 +594,14 @@ class RxnNum extends Rx<num?> {
       return value;
     }
   }
+
+  num? call([num? v]) {
+    if (v == null) {
+      value = null;
+    } else {
+      super.call();
+    }
+  }
 }
 
 extension RxDoubleExt on Rx<double> {
@@ -844,6 +852,14 @@ class RxDouble extends Rx<double> {
 
 class RxnDouble extends Rx<double?> {
   RxnDouble([double? initial]) : super(initial);
+
+  double? call([double? v]) {
+    if  (v == null) {
+      value = null;
+    } else {
+      super.call();
+    }
+  }
 }
 
 class RxInt extends Rx<int> {
@@ -852,6 +868,14 @@ class RxInt extends Rx<int> {
 
 class RxnInt extends Rx<int?> {
   RxnInt([int? initial]) : super(initial);
+
+  int? call([int? v]) {
+    if  (v == null) {
+      value = null;
+    } else {
+      super.call();
+    }
+  }
 }
 
 extension RxIntExt on Rx<int> {

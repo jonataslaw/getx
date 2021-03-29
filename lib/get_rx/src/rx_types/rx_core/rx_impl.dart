@@ -252,6 +252,14 @@ class RxnBool extends Rx<bool?> {
   String toString() {
     return "$value";
   }
+
+  bool? call([bool? v]) {
+    if (v == null) {
+      value = null;
+    } else {
+      super.call();
+    }
+  }
 }
 
 extension RxBoolExt on Rx<bool> {
