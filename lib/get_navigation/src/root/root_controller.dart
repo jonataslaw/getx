@@ -37,10 +37,14 @@ class GetMaterialController extends GetxController {
   Map<int, GlobalKey<NavigatorState>> keys = {};
 
   void setTheme(ThemeData value) {
-    if (value.brightness == Brightness.light) {
+    if (darkTheme == null) {
       theme = value;
     } else {
-      darkTheme = value;
+      if (value.brightness == Brightness.light) {
+        theme = value;
+      } else {
+        darkTheme = value;
+      }
     }
     update();
   }
