@@ -31,7 +31,8 @@ class GetPageRoute<T> extends PageRoute<T> {
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  })  : reference = "$routeName: ${page.hashCode}",
+    // })  : reference = "$routeName: ${page.hashCode}",
+  })  : reference = "$routeName: ${settings?.hashCode ?? page.hashCode}",
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
