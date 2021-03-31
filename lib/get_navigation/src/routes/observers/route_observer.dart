@@ -161,7 +161,7 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = newRoute.isDialog;
     });
 
-    print('currentRoute.isDialog ${currentRoute.isDialog}');
+    // print('currentRoute.isDialog ${currentRoute.isDialog}');
 
     routing?.call(_routeSend);
   }
