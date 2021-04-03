@@ -187,6 +187,7 @@ class PageRedirect {
           )
         : GetPageRoute<T>(
             page: route!.page,
+            routeName: route!.name,
             parameter: route!.parameter,
             settings: RouteSettings(
                 name: settings.name, arguments: settings.arguments),

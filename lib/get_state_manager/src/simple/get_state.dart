@@ -59,8 +59,11 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final bool autoRemove;
   final bool assignId;
   final Object Function(T value)? filter;
-  final void Function(State state)? initState, dispose, didChangeDependencies;
-  final void Function(GetBuilder oldWidget, State state)? didUpdateWidget;
+  final void Function(GetBuilderState<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(GetBuilder oldWidget, GetBuilderState<T> state)?
+      didUpdateWidget;
   final T? init;
 
   const GetBuilder({
@@ -99,22 +102,15 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   // }
 
   @override
-  _GetBuilderState<T> createState() => _GetBuilderState<T>();
+  GetBuilderState<T> createState() => GetBuilderState<T>();
 }
 
-class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
+class GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     with GetStateUpdaterMixin {
   T? controller;
-  bool? isCreator = false;
-  VoidCallback? remove;
+  bool? _isCreator = false;
+  VoidCallback? _remove;
   Object? _filter;
-  List<VoidCallback>? _watchs;
-
-  // static _GetBuilderState _currentState;
-
-  void watch(VoidCallback listener) {
-    (_watchs ??= <VoidCallback>[]).add(listener);
-  }
 
   @override
   void initState() {
@@ -127,19 +123,19 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     if (widget.global) {
       if (isRegistered) {
         if (GetInstance().isPrepared<T>(tag: widget.tag)) {
-          isCreator = true;
+          _isCreator = true;
         } else {
-          isCreator = false;
+          _isCreator = false;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
-        isCreator = true;
+        _isCreator = true;
         GetInstance().put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
-      isCreator = true;
+      _isCreator = true;
       controller?.onStart();
     }
 
@@ -154,8 +150,8 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   /// It gets a reference to the remove() callback, to delete the
   /// setState "link" from the Controller.
   void _subscribeToController() {
-    remove?.call();
-    remove = (widget.id == null)
+    _remove?.call();
+    _remove = (widget.id == null)
         ? controller?.addListener(
             _filter != null ? _filterUpdate : getUpdate,
           )
@@ -177,19 +173,18 @@ class _GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   void dispose() {
     super.dispose();
     widget.dispose?.call(this);
-    if (isCreator! || widget.assignId) {
+    if (_isCreator! || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
 
-    remove?.call();
+    _remove?.call();
 
     controller = null;
-    isCreator = null;
-    remove = null;
+    _isCreator = null;
+    _remove = null;
     _filter = null;
-    _watchs = null;
   }
 
   @override

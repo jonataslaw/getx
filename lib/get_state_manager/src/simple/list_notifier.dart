@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -11,11 +10,11 @@ typedef Disposer = void Function();
 typedef GetStateUpdate = void Function();
 
 class ListNotifier implements Listenable {
-  int _version = 0;
-  int _microtask = 0;
+  // int _version = 0;
+  // int _microtask = 0;
 
-  int get notifierVersion => _version;
-  int get notifierMicrotask => _microtask;
+  // int get notifierVersion => _version;
+  // int get notifierMicrotask => _microtask;
 
   List<GetStateUpdate?>? _updaters = <GetStateUpdate?>[];
 
@@ -28,14 +27,14 @@ class ListNotifier implements Listenable {
 
     /// This debounce the call to update.
     /// It prevent errors and duplicates builds
-    if (_microtask == _version) {
-      _microtask++;
-      scheduleMicrotask(() {
-        _version++;
-        _microtask = _version;
-        _notifyUpdate();
-      });
-    }
+    // if (_microtask == _version) {
+    //   _microtask++;
+    //   scheduleMicrotask(() {
+    //     _version++;
+    //     _microtask = _version;
+    _notifyUpdate();
+    // });
+    // }
   }
 
   void _notifyUpdate() {

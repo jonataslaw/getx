@@ -18,7 +18,6 @@ class CountryView extends GetView<HomeController> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(

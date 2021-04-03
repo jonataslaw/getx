@@ -1,5 +1,17 @@
+## [4.1.2] 
+- Fix warning ˜can add data to a closed stream˜ when GetBuilder and Obx are nested
+- Fix get_connect decoder can not be null (@Goddchen)
+- Migrate example code (@3lB4rt0)
+- Fix initial value of nullables (@RafaRuiz)
+- Improve error message to navigation (@maxzod)
+- Fix typo on docs (@Rahulshahare)
+- Fixed darktheme being changed only through Get.changeTheme and not through the DarkTheme theme property in MaterialApp (@GoldenSoju)
+- Fix controller is removed when navigate to same page (@eduardoflorence)
+- Fix missing reload() and reloadAll() to Get extensions (@lkloon123)
+
+
 ## [4.1.1] 
-- default type to non nullables types
+- Remove mandatory initialValue to nullables types
 
 ## [4.1.0] 
 - Added Rxn to non nullables reactives types

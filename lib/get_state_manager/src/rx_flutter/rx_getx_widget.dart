@@ -18,8 +18,10 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   // final StreamController Function(T) streamController;
   final bool autoRemove;
   final bool assignId;
-  final void Function(State state)? initState, dispose, didChangeDependencies;
-  final void Function(GetX oldWidget, State state)? didUpdateWidget;
+  final void Function(GetXState<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(GetX oldWidget, GetXState<T> state)? didUpdateWidget;
   final T? init;
   final String? tag;
 
@@ -48,8 +50,8 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   }
   RxInterface? _observer;
   T? controller;
-  bool? isCreator = false;
-  late StreamSubscription subs;
+  bool? _isCreator = false;
+  late StreamSubscription _subs;
 
   @override
   void initState() {
@@ -59,26 +61,26 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global) {
       if (isRegistered) {
         if (GetInstance().isPrepared<T>(tag: widget.tag)) {
-          isCreator = true;
+          _isCreator = true;
         } else {
-          isCreator = false;
+          _isCreator = false;
         }
         controller = GetInstance().find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
-        isCreator = true;
+        _isCreator = true;
         GetInstance().put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
-      isCreator = true;
+      _isCreator = true;
       controller?.onStart();
     }
     widget.initState?.call(this);
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    subs = _observer!.listen((data) => setState(() {}));
+    _subs = _observer!.listen((data) => setState(() {}), cancelOnError: false);
     super.initState();
   }
 
@@ -99,15 +101,15 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void dispose() {
     if (widget.dispose != null) widget.dispose!(this);
-    if (isCreator! || widget.assignId) {
+    if (_isCreator! || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
-    subs.cancel();
+    _subs.cancel();
     _observer!.close();
     controller = null;
-    isCreator = null;
+    _isCreator = null;
     super.dispose();
   }
 

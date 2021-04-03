@@ -136,7 +136,9 @@ mixin NotifyManager<T> {
   /// Subscribe to changes on the inner stream.
   void addListener(GetStream<T> rxGetx) {
     if (!_subscriptions.containsKey(rxGetx)) {
-      final subs = rxGetx.listen(subject.add);
+      final subs = rxGetx.listen((data) {
+        if (!subject.isClosed) subject.add(data);
+      });
       final listSubscriptions =
           _subscriptions[rxGetx] ??= <StreamSubscription>[];
       listSubscriptions.add(subs);
@@ -149,8 +151,12 @@ mixin NotifyManager<T> {
     void Function()? onDone,
     bool? cancelOnError,
   }) =>
-      subject.listen(onData,
-          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+      subject.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError ?? false,
+      );
 
   /// Closes the subscriptions for this Rx, releasing the resources.
   void close() {

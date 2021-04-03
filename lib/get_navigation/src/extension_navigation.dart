@@ -345,7 +345,6 @@ extension ExtensionDialog on GetInterface {
         actions.add(TextButton(
             style: TextButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              //color: buttonColor ?? theme.accentColor,
               backgroundColor: buttonColor ?? theme.accentColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
@@ -364,6 +363,7 @@ extension ExtensionDialog on GetInterface {
     Widget baseAlertDialog = AlertDialog(
       titlePadding: EdgeInsets.all(8),
       contentPadding: EdgeInsets.all(8),
+
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius))),
@@ -434,8 +434,10 @@ extension ExtensionBottomSheet on GetInterface {
       // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       theme: Theme.of(key.currentContext!),
       isScrollControlled: isScrollControlled,
+
       barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
+
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
       shape: shape,
@@ -519,6 +521,9 @@ extension GetNavigation on GetInterface {
 Using a widget function instead of a widget fully guarantees that the widget and its controllers will be removed from memory when they are no longer used.
       ''');
       return () => page;
+    } else if (page is String) {
+      throw '''Unexpected String,
+use toNamed() instead''';
     } else {
       throw '''Unexpected format,
 you can only use widgets and widget functions here''';

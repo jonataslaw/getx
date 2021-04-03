@@ -249,7 +249,7 @@ class GetHttpClient {
       method: 'get',
       url: uri,
       headers: headers,
-      decoder: decoder ?? (defaultDecoder as Decoder<T>),
+      decoder: decoder ?? (defaultDecoder as Decoder<T>?),
       contentLength: 0,
     ));
   }
