@@ -10,6 +10,7 @@ class GetMaterialController extends GetxController {
   bool testMode = false;
   Key? unikey;
   ThemeData? theme;
+  ThemeData? darkTheme;
   ThemeMode? themeMode;
 
   bool defaultPopGesture = GetPlatform.isIOS;
@@ -36,7 +37,15 @@ class GetMaterialController extends GetxController {
   Map<int, GlobalKey<NavigatorState>> keys = {};
 
   void setTheme(ThemeData value) {
-    theme = value;
+    if (darkTheme == null) {
+      theme = value;
+    } else {
+      if (value.brightness == Brightness.light) {
+        theme = value;
+      } else {
+        darkTheme = value;
+      }
+    }
     update();
   }
 
