@@ -251,8 +251,7 @@ extension ExtensionDialog on GetInterface {
         );
       },
       useRootNavigator: useRootNavigator,
-      routeSettings:
-          routeSettings ?? RouteSettings(arguments: arguments, name: name),
+      routeSettings: routeSettings ?? RouteSettings(arguments: arguments, name: name),
     );
   }
 
@@ -268,8 +267,7 @@ extension ExtensionDialog on GetInterface {
     RouteSettings? routeSettings,
   }) {
     assert(!barrierDismissible || barrierLabel != null);
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push<T>(GetDialogRoute<T>(
+    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push<T>(GetDialogRoute<T>(
       pageBuilder: pageBuilder,
       barrierDismissible: barrierDismissible,
       barrierLabel: barrierLabel,
@@ -321,10 +319,7 @@ extension ExtensionDialog on GetInterface {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: buttonColor ?? theme!.accentColor,
-                    width: 2,
-                    style: BorderStyle.solid),
+                side: BorderSide(color: buttonColor ?? theme!.accentColor, width: 2, style: BorderStyle.solid),
                 borderRadius: BorderRadius.circular(100)),
           ),
           onPressed: () {
@@ -347,13 +342,11 @@ extension ExtensionDialog on GetInterface {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               //color: buttonColor ?? theme.accentColor,
               backgroundColor: buttonColor ?? theme!.accentColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
             ),
             child: Text(
               textConfirm ?? "Ok",
-              style:
-                  TextStyle(color: confirmTextColor ?? theme!.backgroundColor),
+              style: TextStyle(color: confirmTextColor ?? theme!.backgroundColor),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -365,16 +358,13 @@ extension ExtensionDialog on GetInterface {
       titlePadding: EdgeInsets.all(8),
       contentPadding: EdgeInsets.all(8),
       backgroundColor: backgroundColor ?? theme!.dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(radius))),
       title: Text(title, textAlign: TextAlign.center, style: titleStyle),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          content ??
-              Text(middleText,
-                  textAlign: TextAlign.center, style: middleTextStyle),
+          content ?? Text(middleText, textAlign: TextAlign.center, style: middleTextStyle),
           SizedBox(height: 16),
           ButtonTheme(
             minWidth: 78.0,
@@ -427,15 +417,13 @@ extension ExtensionBottomSheet on GetInterface {
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
   }) {
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push(GetModalBottomSheetRoute<T>(
+    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
       isPersistent: persistent,
       // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       theme: Theme.of(key!.currentContext!),
       isScrollControlled: isScrollControlled,
-      barrierLabel: MaterialLocalizations.of(key!.currentContext!)
-          .modalBarrierDismissLabel,
+      barrierLabel: MaterialLocalizations.of(key!.currentContext!).modalBarrierDismissLabel,
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
       shape: shape,
@@ -514,11 +502,13 @@ extension GetNavigation on GetInterface {
     if (page is GetPageBuilder) {
       return page;
     } else if (page is Widget) {
-      Get.log(
-          '''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.$method(Page())".
+      Get.log('''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.$method(Page())".
 Using a widget function instead of a widget fully guarantees that the widget and its controllers will be removed from memory when they are no longer used.
       ''');
       return () => page;
+    } else if (page is String) {
+      throw '''Unexpected String,
+use toNamed() instead''';
     } else {
       throw '''Unexpected format,
 you can only use widgets and widget functions here''';
@@ -759,12 +749,10 @@ you can only use widgets and widget functions here''';
   }
 
   /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
-  bool get isOverlaysOpen =>
-      (isSnackbarOpen! || isDialogOpen! || isBottomSheetOpen!);
+  bool get isOverlaysOpen => (isSnackbarOpen! || isDialogOpen! || isBottomSheetOpen!);
 
   /// Returns true if there is no Snackbar, Dialog or BottomSheet open
-  bool get isOverlaysClosed =>
-      (!isSnackbarOpen! && !isDialogOpen! && !isBottomSheetOpen!);
+  bool get isOverlaysClosed => (!isSnackbarOpen! && !isDialogOpen! && !isBottomSheetOpen!);
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
@@ -1139,8 +1127,7 @@ Since version 2.8 it is possible to access the properties
   bool get isDarkMode => (theme!.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
-  bool get isPlatformDarkMode =>
-      (ui.window.platformBrightness == Brightness.dark);
+  bool get isPlatformDarkMode => (ui.window.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme?.iconTheme.color;
@@ -1182,15 +1169,13 @@ Since version 2.8 it is possible to access the properties
   Routing get routing => getxController.routing;
 
   Map<String, String?> get parameters => getxController.parameters;
-  set parameters(Map<String, String?> newParameters) =>
-      getxController.parameters = newParameters;
+  set parameters(Map<String, String?> newParameters) => getxController.parameters = newParameters;
 
   ParseRouteTree get routeTree => getxController.routeTree;
   set routeTree(ParseRouteTree tree) => getxController.routeTree = tree;
 
   CustomTransition? get customTransition => getxController.customTransition;
-  set customTransition(CustomTransition? newTransition) =>
-      getxController.customTransition = newTransition;
+  set customTransition(CustomTransition? newTransition) => getxController.customTransition = newTransition;
 
   bool get testMode => getxController.testMode;
   set testMode(bool isTest) => getxController.testMode = isTest;
