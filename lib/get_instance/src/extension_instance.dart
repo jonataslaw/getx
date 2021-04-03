@@ -107,6 +107,11 @@ extension Inst on GetInterface {
   Future<bool> delete<S>({String? tag, bool force = false}) async =>
       GetInstance().delete<S>(tag: tag, force: force);
 
+  void reloadAll({bool force = false}) => GetInstance().reloadAll(force: force);
+
+  void reload<S>({String? tag, String? key, bool force = false}) =>
+      GetInstance().reload<S>(tag: tag, key: key, force: force);
+
   /// Checks if a Class Instance<[S]> (or [tag]) is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isRegistered<S>({String? tag}) =>
