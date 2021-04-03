@@ -578,7 +578,7 @@ class RxNum extends Rx<num> {
 }
 
 class RxnNum extends Rx<num?> {
-  RxnNum(num initial) : super(initial);
+  RxnNum(num? initial) : super(initial);
 
   num? operator +(num other) {
     if (value != null) {
