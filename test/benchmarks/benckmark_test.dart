@@ -149,7 +149,7 @@ referenceValue is ${calculePercentage(referenceValue, requestedValue)}% more tha
     print('GetValue delay $getx ms to made $times requests');
     print('-----------');
     print('''
-GetValue is ${calculePercentage(dart, getx).round()}% more fast than Default ValueNotifier with $times requests''');
+GetValue is ${calculePercentage(dart, getx).round()}% faster than Default ValueNotifier with $times requests''');
   });
 
   test('run benchmarks from Streams', () async {
@@ -162,7 +162,7 @@ GetValue is ${calculePercentage(dart, getx).round()}% more fast than Default Val
     var dart = await stream();
     print('-----------');
     print('''
-GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default Stream with $times requests''');
+GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Stream with $times requests''');
     print('-----------');
 
     times = 30000;
@@ -180,7 +180,7 @@ GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default St
     print('getx_mini_stream delay $mini ms to made $times requests');
     print('-----------');
     print('''
-GetStream is ${calculePercentage(dart, mini).round()}% more fast than Default Stream with $times requests''');
+GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Stream with $times requests''');
   });
 }
 
