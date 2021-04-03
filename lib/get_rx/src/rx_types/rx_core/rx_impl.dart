@@ -5,7 +5,7 @@ part of rx_types;
 /// of those `Widgets` and Rx values.
 
 mixin RxObjectMixin<T> on NotifyManager<T> {
-  T _value;
+  late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
   /// useful when you make use of Rx for custom Types to referesh your UI.
@@ -39,9 +39,9 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// final inputError = ''.obs..nil();
   /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
   /// ```
-  void nil() {
-    subject.add(_value = null);
-  }
+  // void nil() {
+  //   subject.add(_value = null);
+  // }
 
   /// Makes this Rx looks like a function so you can update a new
   /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
@@ -59,7 +59,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   ///   onChanged: myText,
   /// ),
   ///```
-  T call([T v]) {
+  T call([T? v]) {
     if (v != null) {
       value = v;
     }
@@ -95,21 +95,23 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   set value(T val) {
+    if (subject.isClosed) return;
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
     _value = val;
+
     subject.add(_value);
   }
 
   /// Returns the current [value]
   T get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
   }
 
-  Stream<T> get stream => subject.stream;
+  Stream<T?> get stream => subject.stream;
 
   /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
   /// You can bind multiple sources to update the value.
@@ -134,7 +136,9 @@ mixin NotifyManager<T> {
   /// Subscribe to changes on the inner stream.
   void addListener(GetStream<T> rxGetx) {
     if (!_subscriptions.containsKey(rxGetx)) {
-      final subs = rxGetx.listen(subject.add);
+      final subs = rxGetx.listen((data) {
+        if (!subject.isClosed) subject.add(data);
+      });
       final listSubscriptions =
           _subscriptions[rxGetx] ??= <StreamSubscription>[];
       listSubscriptions.add(subs);
@@ -143,18 +147,22 @@ mixin NotifyManager<T> {
 
   StreamSubscription<T> listen(
     void Function(T) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError = false,
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
   }) =>
-      subject.listen(onData,
-          onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+      subject.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError ?? false,
+      );
 
   /// Closes the subscriptions for this Rx, releasing the resources.
   void close() {
     _subscriptions.forEach((getStream, _subscriptions) {
       for (final subscription in _subscriptions) {
-        subscription?.cancel();
+        subscription.cancel();
       }
     });
 
@@ -169,11 +177,11 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
     _value = initial;
   }
 
-  void addError(Object error, [StackTrace stackTrace]) {
+  void addError(Object error, [StackTrace? stackTrace]) {
     subject.addError(error, stackTrace);
   }
 
-  Stream<R> map<R>(R mapper(T data)) => stream.map(mapper);
+  Stream<R> map<R>(R mapper(T? data)) => stream.map(mapper);
 
   /// Uses a callback to update [value] internally, similar to [refresh],
   /// but provides the current value as the argument.
@@ -195,16 +203,64 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   /// });
   /// print( person );
   /// ```
-  void update(void fn(T val)) {
+  void update(void fn(T? val)) {
     fn(_value);
     subject.add(_value);
   }
+
+  /// Following certain practices on Rx data, we might want to react to certain
+  /// listeners when a value has been provided, even if the value is the same.
+  /// At the moment, we ignore part of the process if we `.call(value)` with
+  /// the same value since it holds the value and there's no real
+  /// need triggering the entire process for the same value inside, but
+  /// there are other situations where we might be interested in
+  /// triggering this.
+  ///
+  /// For example, supposed we have a `int seconds = 2` and we want to animate
+  /// from invisible to visible a widget in two seconds:
+  /// RxEvent<int>.call(seconds);
+  /// then after a click happens, you want to call a RxEvent<int>.call(seconds).
+  /// By doing `call(seconds)`, if the value being held is the same,
+  /// the listeners won't trigger, hence we need this new `trigger` function.
+  /// This will refresh the listener of an AnimatedWidget and will keep
+  /// the value if the Rx is kept in memory.
+  /// Sample:
+  /// ```
+  /// Rx<Int> secondsRx = RxInt();
+  /// secondsRx.listen((value) => print("$value seconds set"));
+  ///
+  /// secondsRx.call(2);      // This won't trigger any listener, since the value is the same
+  /// secondsRx.trigger(2);   // This will trigger the listener independently from the value.
+  /// ```
+  ///
+  void trigger(T v) {
+    var firstRebuild = this.firstRebuild;
+    value = v;
+    // If it's not the first rebuild, the listeners have been called already
+    // So we won't call them again.
+    if (!firstRebuild) {
+      subject.add(v);
+    }
+  }
 }
 
-/// Rx class for `bool` Type.
-class RxBool extends _RxImpl<bool> {
-  RxBool([bool initial]) : super(initial);
+class RxBool extends Rx<bool> {
+  RxBool(bool initial) : super(initial);
+  @override
+  String toString() {
+    return value ? "true" : "false";
+  }
+}
 
+class RxnBool extends Rx<bool?> {
+  RxnBool([bool? initial]) : super(initial);
+  @override
+  String toString() {
+    return "$value";
+  }
+}
+
+extension RxBoolExt on Rx<bool> {
   bool get isTrue => value;
 
   bool get isFalse => !isTrue;
@@ -220,145 +276,43 @@ class RxBool extends _RxImpl<bool> {
   /// FIXME: why return this? fluent interface is not
   ///  not really a dart thing since we have '..' operator
   // ignore: avoid_returning_this
-  RxBool toggle() {
+  Rx<bool> toggle() {
     subject.add(_value = !_value);
     return this;
   }
-
-  @override
-  String toString() {
-    return value ? "true" : "false";
-  }
 }
 
-/// Rx class for `String` Type.
-class RxString extends _RxImpl<String> implements Comparable<String>, Pattern {
-  RxString([String initial]) : super(initial);
+extension RxnBoolExt on Rx<bool?> {
+  bool? get isTrue => value;
 
-  String operator +(String val) => _value + val;
-
-  /// Compares this string to [other].
-  @override
-  int compareTo(String other) {
-    return value.compareTo(other);
+  bool? get isFalse {
+    if (value != null) return !isTrue!;
   }
 
-  /// Returns true if this string ends with [other]. For example:
-  ///
-  ///     'Dart'.endsWith('t'); // true
-  bool endsWith(String other) {
-    return value.endsWith(other);
+  bool? operator &(bool other) {
+    if (value != null) {
+      return other && value!;
+    }
   }
 
-  /// Returns true if this string starts with a match of [pattern].
-  bool startsWith(Pattern pattern, [int index = 0]) {
-    return value.startsWith(pattern, index);
+  bool? operator |(bool other) {
+    if (value != null) {
+      return other || value!;
+    }
   }
 
-  /// Returns the position of the first match of [pattern] in this string
-  int indexOf(Pattern pattern, [int start = 0]) {
-    return value.indexOf(pattern, start);
-  }
+  bool? operator ^(bool other) => !other == value;
 
-  /// Returns the starting position of the last match [pattern] in this string,
-  /// searching backward starting at [start], inclusive:
-  int lastIndexOf(Pattern pattern, [int start]) {
-    return value.lastIndexOf(pattern, start);
-  }
-
-  /// Returns true if this string is empty.
-  bool get isEmpty => value.isEmpty;
-
-  /// Returns true if this string is not empty.
-  bool get isNotEmpty => !isEmpty;
-
-  /// Returns the substring of this string that extends from [startIndex],
-  /// inclusive, to [endIndex], exclusive
-  String substring(int startIndex, [int endIndex]) {
-    return value.substring(startIndex, endIndex);
-  }
-
-  /// Returns the string without any leading and trailing whitespace.
-  String trim() {
-    return value.trim();
-  }
-
-  /// Returns the string without any leading whitespace.
-  ///
-  /// As [trim], but only removes leading whitespace.
-  String trimLeft() {
-    return value.trimLeft();
-  }
-
-  /// Returns the string without any trailing whitespace.
-  ///
-  /// As [trim], but only removes trailing whitespace.
-  String trimRight() {
-    return value.trimRight();
-  }
-
-  /// Pads this string on the left if it is shorter than [width].
-  ///
-  /// Return a new string that prepends [padding] onto this string
-  /// one time for each position the length is less than [width].
-  String padLeft(int width, [String padding = ' ']) {
-    return value.padLeft(width, padding);
-  }
-
-  /// Pads this string on the right if it is shorter than [width].
-
-  /// Return a new string that appends [padding] after this string
-  /// one time for each position the length is less than [width].
-  String padRight(int width, [String padding = ' ']) {
-    return value.padRight(width, padding);
-  }
-
-  /// Returns true if this string contains a match of [other]:
-  bool contains(Pattern other, [int startIndex = 0]) {
-    return value.contains(other, startIndex);
-  }
-
-  /// Replaces all substrings that match [from] with [replace].
-  String replaceAll(Pattern from, String replace) {
-    return value.replaceAll(from, replace);
-  }
-
-  /// Splits the string at matches of [pattern] and returns a list
-  /// of substrings.
-  List<String> split(Pattern pattern) {
-    return value.split(pattern);
-  }
-
-  /// Returns an unmodifiable list of the UTF-16 code units of this string.
-  List<int> get codeUnits => value.codeUnits;
-
-  /// Returns an [Iterable] of Unicode code-points of this string.
-  ///
-  /// If the string contains surrogate pairs, they are combined and returned
-  /// as one integer by this iterator. Unmatched surrogate halves are treated
-  /// like valid 16-bit code-units.
-  Runes get runes => value.runes;
-
-  /// Converts all characters in this string to lower case.
-  /// If the string is already in all lower case, this method returns `this`.
-  String toLowerCase() {
-    return value.toLowerCase();
-  }
-
-  /// Converts all characters in this string to upper case.
-  /// If the string is already in all upper case, this method returns `this`.
-  String toUpperCase() {
-    return value.toUpperCase();
-  }
-
-  @override
-  Iterable<Match> allMatches(String string, [int start = 0]) {
-    return value.allMatches(string, start);
-  }
-
-  @override
-  Match matchAsPrefix(String string, [int start = 0]) {
-    return value.matchAsPrefix(string, start);
+  /// Toggles the bool [value] between false and true.
+  /// A shortcut for `flag.value = !flag.value;`
+  /// FIXME: why return this? fluent interface is not
+  ///  not really a dart thing since we have '..' operator
+  // ignore: avoid_returning_this
+  Rx<bool?>? toggle() {
+    if (_value != null) {
+      subject.add(_value = !_value!);
+      return this;
+    }
   }
 }
 
@@ -367,7 +321,20 @@ class RxString extends _RxImpl<String> implements Comparable<String>, Pattern {
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
-  Rx([T initial]) : super(initial);
+  Rx(T initial) : super(initial);
+
+  @override
+  dynamic toJson() {
+    try {
+      return (value as dynamic)?.toJson();
+    } on Exception catch (_) {
+      throw '$T has not method [toJson]';
+    }
+  }
+}
+
+class Rxn<T> extends Rx<T?> {
+  Rxn([T? initial]) : super(initial);
 
   @override
   dynamic toJson() {

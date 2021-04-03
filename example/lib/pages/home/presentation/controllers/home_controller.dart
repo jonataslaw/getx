@@ -4,22 +4,16 @@ import '../../domain/adapters/repository_adapter.dart';
 import '../../domain/entity/cases_model.dart';
 
 class HomeController extends SuperController<CasesModel> {
-  HomeController({this.homeRepository});
+  HomeController({required this.homeRepository});
 
-  /// inject repo abstraction dependency
   final IHomeRepository homeRepository;
 
-  /// When the controller is initialized, make the http request
   @override
   void onInit() {
     super.onInit();
-    // show loading on start, data on success
-    // and error message on error with 0 boilerplate
-    homeRepository.getCases().then((data) {
-      change(data, status: RxStatus.success());
-    }, onError: (err) {
-      change(null, status: RxStatus.error(err.toString()));
-    });
+
+    //Loading, Success, Error handle with 1 line of code
+    append(() => homeRepository.getCases);
   }
 
   @override

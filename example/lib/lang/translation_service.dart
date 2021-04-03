@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'en_US.dart';
-import 'pt_BR.dart';
+import 'en_us.dart';
+import 'pt_br.dart';
 
 class TranslationService extends Translations {
-  static final locale = Get.deviceLocale;
+  static Locale get locale => Get.deviceLocale;
   static final fallbackLocale = Locale('en', 'US');
-  @override 
+  @override
   Map<String, Map<String, String>> get keys => {
-    'en_US': en_US,
-    'pt_BR': pt_BR,
-  };
+        'en_US': en_US,
+        'pt_BR': pt_BR,
+      };
 }

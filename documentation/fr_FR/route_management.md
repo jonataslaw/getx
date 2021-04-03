@@ -247,6 +247,20 @@ print(Get.parameters['user']);
 // donne: 34954
 ```
 
+ou envoyer plusieurs paramètres comme celui-ci
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+Sur le deuxième écran, prenez les données par paramètres comme d'habitude
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// donne: 34954 true
+```
+
 Et maintenant, tout ce que vous avez à faire est d'utiliser Get.toNamed() pour parcourir vos routes nommées, sans aucun contexte (vous pouvez appeler vos routes directement à partir de votre classe BLoC ou Controller), et lorsque votre application est compilée sur le Web, vos routes apparaîtront dans l'url <3
 
 ### Middleware

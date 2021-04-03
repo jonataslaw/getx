@@ -1,7 +1,7 @@
 class HttpStatus {
   HttpStatus(this.code);
 
-  final int code;
+  final int? code;
 
   static const int continue_ = 100;
   static const int switchingProtocols = 101;
@@ -83,7 +83,7 @@ class HttpStatus {
       between(internalServerError, networkConnectTimeoutError);
 
   bool between(int begin, int end) {
-    return !connectionError && code >= begin && code <= end;
+    return !connectionError && code! >= begin && code! <= end;
   }
 
   bool get isOk => between(200, 299);

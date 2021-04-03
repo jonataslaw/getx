@@ -5,11 +5,11 @@ import '../../get_core/get_core.dart';
 /// methods.
 /// Used in [DisposableInterface] to avoid the danger of overriding onStart.
 class _InternalFinalCallback<T> {
-  ValueUpdater<T> _callback;
+  ValueUpdater<T>? _callback;
 
-  _InternalFinalCallback({ValueUpdater<T> callback}) : _callback = callback;
+  _InternalFinalCallback({ValueUpdater<T>? callback}) : _callback = callback;
 
-  T call() => _callback.call();
+  T call() => _callback!.call();
 }
 
 /// The [GetLifeCycle]

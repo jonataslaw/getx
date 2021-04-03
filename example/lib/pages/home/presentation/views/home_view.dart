@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   Text(
-                    '${state.global.totalConfirmed}',
+                    '${state!.global.totalConfirmed}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(

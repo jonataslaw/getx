@@ -1,3 +1,50 @@
+## [4.1.2] 
+- Fix warning ˜can add data to a closed stream˜ when GetBuilder and Obx are nested
+- Fix get_connect decoder can not be null (@Goddchen)
+- Migrate example code (@3lB4rt0)
+- Fix initial value of nullables (@RafaRuiz)
+- Improve error message to navigation (@maxzod)
+- Fix typo on docs (@Rahulshahare)
+- Fixed darktheme being changed only through Get.changeTheme and not through the DarkTheme theme property in MaterialApp (@GoldenSoju)
+- Fix controller is removed when navigate to same page (@eduardoflorence)
+- Fix missing reload() and reloadAll() to Get extensions (@lkloon123)
+
+
+## [4.1.1] 
+- Remove mandatory initialValue to nullables types
+
+## [4.1.0] 
+- Added Rxn to non nullables reactives types
+
+## [4.0.3] 
+- Added new linter rules to improve score
+
+## [4.0.2] 
+- Removed "!" of if else conditions until the null-safety of the dart is consistent for using it.
+
+## [4.0.1] 
+- Fix changelog
+
+## [4.0.0] 
+- Added append function to StateMixin. Now is possible track loading, success and error handle of your application with ONE LINE OF CODE. Ex: append(()=> api.getUser);
+- Migrate to null-safety 
+- Added ScrollMixin to controllers
+- Added loadingMore status to RxStatus
+- Fix content-type qual null (@katekko)
+- Made GetInstance non nullable (@eduardoflorence)
+- Fix multi-parameters url (@iMrLopez)
+- Fix Expected value of SkDeletable error (@obadajasm)
+- Added triggers, an Rx method that triggers events, even if they are the same as the previous event (@RafaRuiz)
+- Improve docs: (@CNAD666), (@dhhAndroid), (@Jackylee1992),
+
+Switching to null-safety:
+You can continue using GetX as normal, with as little breaking changes as possible.
+It is still possible to declare the var.obs variable, and this remains the preferred way, forcing null-safety and giving you all the security that sound null-safety delivers to your app. However, if you need to use null, we also provide a solution for you.
+Declare the variables with `?` Ex: `final Rx<int?> count = 0.obs`.
+You can also use custom Rxn types with null-safety:
+`RxInt` == not nullable
+`RxnInt` == nullable.
+
 ## [3.25.6] 
 - Added documentation in French (@kamazoun)
 - Fix logs messages (@damphat)

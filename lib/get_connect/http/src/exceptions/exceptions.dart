@@ -1,7 +1,7 @@
 class GetHttpException implements Exception {
   final String message;
 
-  final Uri uri;
+  final Uri? uri;
 
   GetHttpException(this.message, [this.uri]);
 
@@ -11,8 +11,8 @@ class GetHttpException implements Exception {
 
 class GraphQLError {
   GraphQLError({this.code, this.message});
-  final String message;
-  final String code;
+  final String? message;
+  final String? code;
 
   @override
   String toString() => 'GETCONNECT ERROR:\n\tcode:$code\n\tmessage:$message';

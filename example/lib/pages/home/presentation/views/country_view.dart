@@ -18,7 +18,6 @@ class CountryView extends GetView<HomeController> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -29,9 +28,9 @@ class CountryView extends GetView<HomeController> {
             ),
             body: Center(
               child: ListView.builder(
-                  itemCount: controller.state.countries.length,
+                  itemCount: controller.state!.countries.length,
                   itemBuilder: (context, index) {
-                    final country = controller.state.countries[index];
+                    final country = controller.state!.countries[index];
                     return ListTile(
                       onTap: () {
                         Get.toNamed('/home/country/details',

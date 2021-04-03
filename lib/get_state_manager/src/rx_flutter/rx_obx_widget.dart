@@ -10,7 +10,7 @@ typedef WidgetCallback = Widget Function();
 /// - [Obx]
 /// - [ObxValue]
 abstract class ObxWidget extends StatefulWidget {
-  const ObxWidget({Key key}) : super(key: key);
+  const ObxWidget({Key? key}) : super(key: key);
 
   @override
   _ObxState createState() => _ObxState();
@@ -20,8 +20,8 @@ abstract class ObxWidget extends StatefulWidget {
 }
 
 class _ObxState extends State<ObxWidget> {
-  RxInterface _observer;
-  StreamSubscription subs;
+  RxInterface? _observer;
+  late StreamSubscription subs;
 
   _ObxState() {
     _observer = RxNotifier();
@@ -29,7 +29,7 @@ class _ObxState extends State<ObxWidget> {
 
   @override
   void initState() {
-    subs = _observer.listen(_updateTree);
+    subs = _observer!.listen(_updateTree, cancelOnError: false);
     super.initState();
   }
 
@@ -42,7 +42,7 @@ class _ObxState extends State<ObxWidget> {
   @override
   void dispose() {
     subs.cancel();
-    _observer.close();
+    _observer!.close();
     super.dispose();
   }
 
@@ -50,7 +50,7 @@ class _ObxState extends State<ObxWidget> {
     final observer = RxInterface.proxy;
     RxInterface.proxy = _observer;
     final result = widget.build();
-    if (!_observer.canUpdate) {
+    if (!_observer!.canUpdate) {
       throw """
       [Get] the improper use of a GetX has been detected. 
       You should only use GetX or Obx for the specific widget that will be updated.
@@ -99,29 +99,8 @@ class ObxValue<T extends RxInterface> extends ObxWidget {
   final Widget Function(T) builder;
   final T data;
 
-  const ObxValue(this.builder, this.data, {Key key}) : super(key: key);
+  const ObxValue(this.builder, this.data, {Key? key}) : super(key: key);
 
   @override
   Widget build() => builder(data);
-}
-
-/// Similar to Obx, but manages a local state.
-/// Pass the initial data in constructor.
-/// Useful for simple local states, like toggles, visibility, themes,
-/// button states, etc.
-///  Sample:
-///    ObxValue((data) => Switch(
-///      value: data.value,
-///      onChanged: (flag) => data.value = flag,
-///    ),
-///    false.obs,
-///   ),
-class RxValue<T> extends ObxWidget {
-  final Widget Function(T data) builder;
-  final Rx<T> data = Rx<T>();
-
-  RxValue(this.builder, {Key key}) : super(key: key);
-
-  @override
-  Widget build() => builder(data.value);
 }

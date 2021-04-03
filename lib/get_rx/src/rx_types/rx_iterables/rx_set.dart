@@ -4,9 +4,7 @@ class RxSet<E> extends SetMixin<E>
     with NotifyManager<Set<E>>, RxObjectMixin<Set<E>>
     implements RxInterface<Set<E>> {
   RxSet([Set<E> initial = const {}]) {
-    if (initial != null) {
-      _value = Set.from(initial);
-    }
+    _value = Set.from(initial);
   }
 
   /// Special override to push() element(s) in a reactive way
@@ -17,7 +15,7 @@ class RxSet<E> extends SetMixin<E>
     return this;
   }
 
-  void update(void fn(Iterable<E> value)) {
+  void update(void fn(Iterable<E>? value)) {
     fn(value);
     refresh();
   }
@@ -26,7 +24,7 @@ class RxSet<E> extends SetMixin<E>
   @protected
   Set<E> get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
   }
@@ -47,7 +45,7 @@ class RxSet<E> extends SetMixin<E>
   }
 
   @override
-  bool contains(Object element) {
+  bool contains(Object? element) {
     return value.contains(element);
   }
 
@@ -58,12 +56,12 @@ class RxSet<E> extends SetMixin<E>
   int get length => value.length;
 
   @override
-  E lookup(Object object) {
+  E? lookup(Object? object) {
     return value.lookup(object);
   }
 
   @override
-  bool remove(Object item) {
+  bool remove(Object? item) {
     var hasRemoved = _value.remove(item);
     if (hasRemoved) {
       refresh();
@@ -89,13 +87,13 @@ class RxSet<E> extends SetMixin<E>
   }
 
   @override
-  void removeAll(Iterable<Object> elements) {
+  void removeAll(Iterable<Object?> elements) {
     _value.removeAll(elements);
     refresh();
   }
 
   @override
-  void retainAll(Iterable<Object> elements) {
+  void retainAll(Iterable<Object?> elements) {
     _value.retainAll(elements);
     refresh();
   }
@@ -109,22 +107,18 @@ class RxSet<E> extends SetMixin<E>
 
 extension SetExtension<E> on Set<E> {
   RxSet<E> get obs {
-    if (this != null) {
-      return RxSet<E>(<E>{})..addAllNonNull(this);
-    } else {
-      return RxSet<E>(null);
-    }
+    return RxSet<E>(<E>{})..addAll(this);
   }
 
-  /// Add [item] to [List<E>] only if [item] is not null.
-  void addNonNull(E item) {
-    if (item != null) add(item);
-  }
+  // /// Add [item] to [List<E>] only if [item] is not null.
+  // void addNonNull(E item) {
+  //   if (item != null) add(item);
+  // }
 
-  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  void addAllNonNull(Iterable<E> item) {
-    if (item != null) addAll(item);
-  }
+  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
+  // void addAllNonNull(Iterable<E> item) {
+  //   if (item != null) addAll(item);
+  // }
 
   /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {
@@ -140,9 +134,9 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
-    if (this is RxSet) {
-      (this as RxSet)._value ??= <E>{};
-    }
+    // if (this is RxSet) {
+    //   (this as RxSet)._value;
+    // }
 
     clear();
     add(item);
@@ -150,9 +144,9 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    if (this is RxSet) {
-      (this as RxSet)._value ??= <E>{};
-    }
+    // if (this is RxSet) {
+    //   (this as RxSet)._value;
+    // }
     clear();
     addAll(items);
   }

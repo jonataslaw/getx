@@ -3,16 +3,16 @@ import '../domain/entity/cases_model.dart';
 import 'home_api_provider.dart';
 
 class HomeRepository implements IHomeRepository {
-  HomeRepository({this.provider});
+  HomeRepository({required this.provider});
   final IHomeProvider provider;
 
   @override
   Future<CasesModel> getCases() async {
     final cases = await provider.getCases("/summary");
     if (cases.status.hasError) {
-      return Future.error(cases.statusText);
+      return Future.error(cases.statusText!);
     } else {
-      return cases.body;
+      return cases.body!;
     }
   }
 }

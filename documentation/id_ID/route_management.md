@@ -248,6 +248,21 @@ print(Get.parameters['user']);
 // keluaran: 34954
 ```
 
+atau kirim beberapa parameter seperti ini
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+Pada layar kedua, ambil data berdasarkan parameter seperti biasanya
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// keluaran: 34954 true
+```
+
+
 Dan sekarang, yang anda perlu lakukan adalah menggunakan Get.toNamed() untuk bernavigasi ke named route anda, tanpa konteks (anda bisa memanggil route secara langsung dari kelas BLoC atau Controller), dan ketika aplikasi anda di-compile di web, route anda akan muncul di url <3
 
 ### Middleware
