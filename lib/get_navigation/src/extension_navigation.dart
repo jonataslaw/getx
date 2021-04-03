@@ -99,7 +99,7 @@ extension ExtensionSnackbar on GetInterface {
   }
 
   Future<T?>? showSnackbar<T>(GetBar snackbar) {
-    return key?.currentState?.push(SnackRoute<T>(snack: snackbar));
+    return key.currentState?.push(SnackRoute<T>(snack: snackbar));
   }
 
   void snackbar<T>(
@@ -322,7 +322,7 @@ extension ExtensionDialog on GetInterface {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
                 side: BorderSide(
-                    color: buttonColor ?? theme!.accentColor,
+                    color: buttonColor ?? theme.accentColor,
                     width: 2,
                     style: BorderStyle.solid),
                 borderRadius: BorderRadius.circular(100)),
@@ -333,7 +333,7 @@ extension ExtensionDialog on GetInterface {
           },
           child: Text(
             textCancel ?? "Cancel",
-            style: TextStyle(color: cancelTextColor ?? theme!.accentColor),
+            style: TextStyle(color: cancelTextColor ?? theme.accentColor),
           ),
         ));
       }
@@ -346,14 +346,14 @@ extension ExtensionDialog on GetInterface {
             style: TextButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               //color: buttonColor ?? theme.accentColor,
-              backgroundColor: buttonColor ?? theme!.accentColor,
+              backgroundColor: buttonColor ?? theme.accentColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
             ),
             child: Text(
               textConfirm ?? "Ok",
               style:
-                  TextStyle(color: confirmTextColor ?? theme!.backgroundColor),
+                  TextStyle(color: confirmTextColor ?? theme.backgroundColor),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -364,7 +364,7 @@ extension ExtensionDialog on GetInterface {
     Widget baseAlertDialog = AlertDialog(
       titlePadding: EdgeInsets.all(8),
       contentPadding: EdgeInsets.all(8),
-      backgroundColor: backgroundColor ?? theme!.dialogBackgroundColor,
+      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius))),
       title: Text(title, textAlign: TextAlign.center, style: titleStyle),
@@ -432,9 +432,9 @@ extension ExtensionBottomSheet on GetInterface {
       builder: (_) => bottomsheet,
       isPersistent: persistent,
       // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
-      theme: Theme.of(key!.currentContext!),
+      theme: Theme.of(key.currentContext!),
       isScrollControlled: isScrollControlled,
-      barrierLabel: MaterialLocalizations.of(key!.currentContext!)
+      barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
@@ -491,7 +491,7 @@ extension GetNavigation on GetInterface {
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.push<T>(
+    return global(id).currentState?.push<T>(
           GetPageRoute<T>(
             opaque: opaque ?? true,
             page: _resolve(page, 'to'),
@@ -557,7 +557,7 @@ you can only use widgets and widget functions here''';
       page = uri.toString();
     }
 
-    return global(id)?.currentState?.pushNamed<T>(
+    return global(id).currentState?.pushNamed<T>(
           page,
           arguments: arguments,
         );
@@ -594,7 +594,7 @@ you can only use widgets and widget functions here''';
       final uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
-    return global(id)?.currentState?.pushReplacementNamed(
+    return global(id).currentState?.pushReplacementNamed(
           page,
           arguments: arguments,
         );
@@ -616,7 +616,7 @@ you can only use widgets and widget functions here''';
   void until(RoutePredicate predicate, {int? id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id)?.currentState?.popUntil(predicate);
+    return global(id).currentState?.popUntil(predicate);
   }
 
   /// **Navigation.pushAndRemoveUntil()** shortcut.<br><br>
@@ -640,7 +640,7 @@ you can only use widgets and widget functions here''';
   Future<T?>? offUntil<T>(Route<T> page, RoutePredicate predicate, {int? id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
-    return global(id)?.currentState?.pushAndRemoveUntil<T>(page, predicate);
+    return global(id).currentState?.pushAndRemoveUntil<T>(page, predicate);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -673,7 +673,7 @@ you can only use widgets and widget functions here''';
       page = uri.toString();
     }
 
-    return global(id)?.currentState?.pushNamedAndRemoveUntil<T>(
+    return global(id).currentState?.pushNamedAndRemoveUntil<T>(
           page,
           predicate,
           arguments: arguments,
@@ -702,7 +702,7 @@ you can only use widgets and widget functions here''';
       final uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
-    return global(id)?.currentState?.popAndPushNamed(
+    return global(id).currentState?.popAndPushNamed(
           page,
           arguments: arguments,
           result: result,
@@ -716,7 +716,7 @@ you can only use widgets and widget functions here''';
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   void removeRoute(Route<dynamic> route, {int? id}) {
-    return global(id)?.currentState?.removeRoute(route);
+    return global(id).currentState?.removeRoute(route);
   }
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
@@ -751,7 +751,7 @@ you can only use widgets and widget functions here''';
       newRouteName = uri.toString();
     }
 
-    return global(id)?.currentState?.pushNamedAndRemoveUntil<T>(
+    return global(id).currentState?.pushNamedAndRemoveUntil<T>(
           newRouteName,
           predicate ?? (_) => false,
           arguments: arguments,
@@ -790,11 +790,11 @@ you can only use widgets and widget functions here''';
       });
     }
     if (canPop) {
-      if (global(id)?.currentState?.canPop() == true) {
-        global(id)?.currentState?.pop<T>(result);
+      if (global(id).currentState?.canPop() == true) {
+        global(id).currentState?.pop<T>(result);
       }
     } else {
-      global(id)?.currentState?.pop<T>(result);
+      global(id).currentState?.pop<T>(result);
     }
   }
 
@@ -809,7 +809,7 @@ you can only use widgets and widget functions here''';
       times = 1;
     }
     var count = 0;
-    var back = global(id)?.currentState?.popUntil((route) => count++ == times);
+    var back = global(id).currentState?.popUntil((route) => count++ == times);
 
     return back;
   }
@@ -856,7 +856,7 @@ you can only use widgets and widget functions here''';
     if (preventDuplicates && routeName == currentRoute) {
       return null;
     }
-    return global(id)?.currentState?.pushReplacement(GetPageRoute(
+    return global(id).currentState?.pushReplacement(GetPageRoute(
         opaque: opaque,
         page: _resolve(page, 'off'),
         binding: binding,
@@ -915,7 +915,7 @@ you can only use widgets and widget functions here''';
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
-    return global(id)?.currentState?.pushAndRemoveUntil<T>(
+    return global(id).currentState?.pushAndRemoveUntil<T>(
         GetPageRoute<T>(
           opaque: opaque,
           popGesture: popGesture ?? defaultPopGesture,
@@ -1006,7 +1006,7 @@ you can only use widgets and widget functions here''';
     getxController.setThemeMode(themeMode);
   }
 
-  GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState>? newKey) {
+  GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
     getxController.key = newKey;
     return key;
   }
@@ -1016,18 +1016,18 @@ you can only use widgets and widget functions here''';
     return keys[key];
   }
 
-  GlobalKey<NavigatorState>? global(int? k) {
-    GlobalKey<NavigatorState>? _key;
+  GlobalKey<NavigatorState> global(int? k) {
+    GlobalKey<NavigatorState> _key;
     if (k == null) {
       _key = key;
     } else {
       if (!keys.containsKey(k)) {
         throw 'Route id ($k) not found';
       }
-      _key = keys[k];
+      _key = keys[k]!;
     }
 
-    if (_key!.currentContext == null && !testMode) {
+    if (_key.currentContext == null && !testMode) {
       throw """You are trying to use contextless navigation without
       a GetMaterialApp or Get.key.
       If you are testing your app, you can use:
@@ -1039,12 +1039,6 @@ you can only use widgets and widget functions here''';
 
     return _key;
   }
-
-  @Deprecated('''
-Since version 2.8 it is possible to access the properties 
-[Get.arguments] and [Get.currentRoute] directly. 
-[routeSettings] is useless and should not be used.''')
-  RouteSettings? get routeSettings => null;
 
   /// give current arguments
   dynamic get arguments => routing.args;
@@ -1074,20 +1068,20 @@ Since version 2.8 it is possible to access the properties
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
   /// give access to currentContext
-  BuildContext? get context => key?.currentContext;
+  BuildContext? get context => key.currentContext;
 
   /// give access to current Overlay Context
   BuildContext? get overlayContext {
     BuildContext? overlay;
-    key?.currentState?.overlay?.context.visitChildElements((element) {
+    key.currentState?.overlay?.context.visitChildElements((element) {
       overlay = element;
     });
     return overlay;
   }
 
   /// give access to Theme.of(context)
-  ThemeData? get theme {
-    ThemeData? _theme;
+  ThemeData get theme {
+    var _theme = ThemeData.fallback();
     if (context != null) {
       _theme = Theme.of(context!);
     }
@@ -1105,7 +1099,7 @@ Since version 2.8 it is possible to access the properties
   /// The window to which this binding is bound.
   ui.SingletonFlutterWindow get window => ui.window;
 
-  Locale? get deviceLocale => ui.window.locale;
+  Locale get deviceLocale => ui.window.locale;
 
   ///The number of device pixels for each logical pixel.
   double get pixelRatio => ui.window.devicePixelRatio;
@@ -1130,20 +1124,20 @@ Since version 2.8 it is possible to access the properties
   double get textScaleFactor => ui.window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
-  TextTheme? get textTheme => theme?.textTheme;
+  TextTheme get textTheme => theme.textTheme;
 
   /// give access to Mediaquery.of(context)
   MediaQueryData get mediaQuery => MediaQuery.of(context!);
 
   /// Check if dark mode theme is enable
-  bool get isDarkMode => (theme!.brightness == Brightness.dark);
+  bool get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// Check if dark mode theme is enable on platform on android Q+
   bool get isPlatformDarkMode =>
       (ui.window.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
-  Color? get iconColor => theme?.iconTheme.color;
+  Color? get iconColor => theme.iconTheme.color;
 
   /// give access to FocusScope.of(context)
   FocusNode? get focusScope => FocusManager.instance.primaryFocus;
@@ -1154,7 +1148,7 @@ Since version 2.8 it is possible to access the properties
   // /// give access to Immutable MediaQuery.of(context).size.width
   // double get width => MediaQuery.of(context).size.width;
 
-  GlobalKey<NavigatorState>? get key => getxController.key;
+  GlobalKey<NavigatorState> get key => getxController.key;
 
   Map<dynamic, GlobalKey<NavigatorState>> get keys => getxController.keys;
 
@@ -1201,4 +1195,4 @@ Since version 2.8 it is possible to access the properties
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
 /// Navigator.push(context, YourRoute());
-NavigatorState? get navigator => GetNavigation(Get).key!.currentState;
+NavigatorState? get navigator => GetNavigation(Get).key.currentState;

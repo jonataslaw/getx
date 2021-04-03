@@ -263,7 +263,7 @@ class GetMaterialApp extends StatelessWidget {
           : MaterialApp(
               key: _.unikey,
               navigatorKey:
-                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
+                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
               home: home,
               routes: routes ?? const <String, WidgetBuilder>{},
               initialRoute: initialRoute,

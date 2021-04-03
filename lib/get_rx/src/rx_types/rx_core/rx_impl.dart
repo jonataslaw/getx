@@ -247,7 +247,7 @@ class RxBool extends Rx<bool> {
 }
 
 class RxnBool extends Rx<bool?> {
-  RxnBool(bool initial) : super(initial);
+  RxnBool([bool? initial]) : super(initial);
   @override
   String toString() {
     return "$value";
@@ -316,6 +316,19 @@ extension RxnBoolExt on Rx<bool?> {
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
   Rx(T initial) : super(initial);
+
+  @override
+  dynamic toJson() {
+    try {
+      return (value as dynamic)?.toJson();
+    } on Exception catch (_) {
+      throw '$T has not method [toJson]';
+    }
+  }
+}
+
+class Rxn<T> extends Rx<T?> {
+  Rxn([T? initial]) : super(initial);
 
   @override
   dynamic toJson() {

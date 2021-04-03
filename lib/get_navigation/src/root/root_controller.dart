@@ -31,9 +31,9 @@ class GetMaterialController extends GetxController {
 
   CustomTransition? customTransition;
 
-  GlobalKey<NavigatorState>? key = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
 
-  Map<int, GlobalKey<NavigatorState>> keys = {};
+  Map<dynamic, GlobalKey<NavigatorState>> keys = {};
 
   void setTheme(ThemeData value) {
     theme = value;

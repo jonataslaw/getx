@@ -270,7 +270,7 @@ class RxString extends Rx<String> implements Comparable<String>, Pattern {
 
 /// Rx class for `String` Type.
 class RxnString extends Rx<String?> implements Comparable<String>, Pattern {
-  RxnString(String? initial) : super(initial);
+  RxnString([String? initial]) : super(initial);
 
   @override
   Iterable<Match> allMatches(String string, [int start = 0]) {

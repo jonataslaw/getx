@@ -1,3 +1,9 @@
+## [4.1.1] 
+- default type to non nullables types
+
+## [4.1.0] 
+- Added Rxn to non nullables reactives types
+
 ## [4.0.3] 
 - Added new linter rules to improve score
 

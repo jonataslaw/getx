@@ -253,7 +253,7 @@ class GetCupertinoApp extends StatelessWidget {
               key: _.unikey,
               theme: theme,
               navigatorKey:
-                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
+                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
               home: home,
               routes: routes ?? const <String, WidgetBuilder>{},
               initialRoute: initialRoute,
