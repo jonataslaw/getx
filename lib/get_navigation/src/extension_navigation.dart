@@ -1104,7 +1104,7 @@ you can only use widgets and widget functions here''';
   /// The window to which this binding is bound.
   ui.SingletonFlutterWindow get window => ui.window;
 
-  Locale get deviceLocale => ui.window.locale;
+  Locale? get deviceLocale => ui.window.locale;
 
   ///The number of device pixels for each logical pixel.
   double get pixelRatio => ui.window.devicePixelRatio;
