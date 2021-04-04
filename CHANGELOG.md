@@ -1,3 +1,7 @@
+## [4.1.3] 
+- Fix "Error: A value of type 'Locale?' can't be returned from a function"on flutter web (@nickwri)
+- Fix plural translations to expressions >1 (@WolfVic)
+
 ## [4.1.2] 
 - Fix warning ˜can add data to a closed stream˜ when GetBuilder and Obx are nested
 - Fix get_connect decoder can not be null (@Goddchen)
