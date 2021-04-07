@@ -848,25 +848,41 @@ class RxnDouble extends Rx<double?> {
 
 class RxInt extends Rx<int> {
   RxInt(int initial) : super(initial);
-}
 
-class RxnInt extends Rx<int?> {
-  RxnInt([int? initial]) : super(initial);
-}
-
-extension RxIntExt on Rx<int> {
   /// Addition operator.
-  Rx<int> operator +(int other) {
+  RxInt operator +(int other) {
     value = value + other;
     return this;
   }
 
   /// Subtraction operator.
-  Rx<int> operator -(int other) {
+  RxInt operator -(int other) {
     value = value - other;
     return this;
   }
+}
 
+class RxnInt extends Rx<int?> {
+  RxnInt([int? initial]) : super(initial);
+
+  /// Addition operator.
+  RxnInt operator +(int other) {
+    if (value != null) {
+      value = value! + other;
+    }
+    return this;
+  }
+
+  /// Subtraction operator.
+  RxnInt operator -(int other) {
+    if (value != null) {
+      value = value! - other;
+    }
+    return this;
+  }
+}
+
+extension RxIntExt on Rx<int> {
   /// Bit-wise and operator.
   ///
   /// Treating both `this` and [other] as sufficiently large two's component
@@ -1076,22 +1092,6 @@ extension RxIntExt on Rx<int> {
 }
 
 extension RxnIntExt on Rx<int?> {
-  /// Addition operator.
-  Rx<int?>? operator +(int other) {
-    if (value != null) {
-      value = value! + other;
-      return this;
-    }
-  }
-
-  /// Subtraction operator.
-  Rx<int?>? operator -(int other) {
-    if (value != null) {
-      value = value! - other;
-      return this;
-    }
-  }
-
   /// Bit-wise and operator.
   ///
   /// Treating both `this` and [other] as sufficiently large two's component
