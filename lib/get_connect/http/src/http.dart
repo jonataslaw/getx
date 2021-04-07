@@ -103,18 +103,20 @@ class GetHttpClient {
       headers['content-length'] = bodyBytes.length.toString();
       headers['content-type'] =
           'multipart/form-data; boundary=${body.boundary}';
+    } else if (contentType != null && contentType.toLowerCase() == 'application/x-www-form-urlencoded' && body is Map) {
+      var parts = [];
+      (body as Map<String, dynamic>).forEach((key, value) {
+        parts.add('${Uri.encodeQueryComponent(key)}='
+            '${Uri.encodeQueryComponent(value.toString())}');
+      });
+      var formData = parts.join('&');
+      bodyBytes = utf8.encode(formData);
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
 
       bodyBytes = utf8.encode(jsonString);
       headers['content-length'] = bodyBytes.length.toString();
       headers['content-type'] = contentType ?? defaultContentType;
-      //TODO check this implementation
-      if (contentType != null) {
-        if (contentType.toLowerCase() == 'application/x-www-form-urlencoded') {
-          jsonString = Uri.encodeQueryComponent(jsonString);
-        }
-      }
     } else if (body is String) {
       bodyBytes = utf8.encode(body);
       headers['content-length'] = bodyBytes.length.toString();
