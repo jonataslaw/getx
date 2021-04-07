@@ -245,7 +245,8 @@ class GetMaterialApp extends StatelessWidget {
               onGenerateTitle: onGenerateTitle,
               color: color,
               theme: _.theme ?? theme ?? ThemeData.fallback(),
-              darkTheme: _.darkTheme ?? darkTheme ?? ThemeData.fallback(),
+              darkTheme:
+                  _.darkTheme ?? darkTheme ?? theme ?? ThemeData.fallback(),
               themeMode: _.themeMode ?? themeMode,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
@@ -293,7 +294,8 @@ class GetMaterialApp extends StatelessWidget {
               onGenerateTitle: onGenerateTitle,
               color: color,
               theme: _.theme ?? theme ?? ThemeData.fallback(),
-              darkTheme: _.darkTheme ?? darkTheme ?? ThemeData.fallback(),
+              darkTheme:
+                  _.darkTheme ?? darkTheme ?? theme ?? ThemeData.fallback(),
               themeMode: _.themeMode ?? themeMode,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
