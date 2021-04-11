@@ -1,3 +1,9 @@
+## [4.1.4] 
+- Adjust operator + and - to RxInt (@eduardoflorence)
+- Fix dark theme (@eduardoflorence)
+- Fix form-urlencoded on GetConnect (@aramayyes)
+
+
 ## [4.1.3] 
 - Fix "Error: A value of type 'Locale?' can't be returned from a function"on flutter web (@nickwri)
 - Fix plural translations to expressions >1 (@WolfVic)

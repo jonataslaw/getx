@@ -103,7 +103,9 @@ class GetHttpClient {
       headers['content-length'] = bodyBytes.length.toString();
       headers['content-type'] =
           'multipart/form-data; boundary=${body.boundary}';
-    } else if (contentType != null && contentType.toLowerCase() == 'application/x-www-form-urlencoded' && body is Map) {
+    } else if (contentType != null &&
+        contentType.toLowerCase() == 'application/x-www-form-urlencoded' &&
+        body is Map) {
       var parts = [];
       (body as Map<String, dynamic>).forEach((key, value) {
         parts.add('${Uri.encodeQueryComponent(key)}='
