@@ -161,7 +161,7 @@ mixin NotifyManager<T> {
   /// Cancel the subscriptions.
   void cancelAllSubscriptions() {
     _subscriptions[subject]
-      ..forEach((subscription) {
+      ?..forEach((subscription) {
         subscription.cancel();
       })
       ..clear();
