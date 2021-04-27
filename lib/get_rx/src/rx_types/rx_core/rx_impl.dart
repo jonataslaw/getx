@@ -81,7 +81,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// values.
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(dynamic o) {
+  bool operator ==(Object o) {
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return value == o;
     if (o is RxObjectMixin<T>) return value == o.value;
@@ -337,7 +337,7 @@ class Rxn<T> extends Rx<T?> {
   Rxn([T? initial]) : super(initial);
 
   @override
-  dynamic toJson() {
+  Object toJson() {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
