@@ -4,11 +4,11 @@ extension GetDynamicUtils<T> on T {
   @Deprecated('isNull is deprecated and cannot be used, use "==" operator')
   bool get isNull => GetUtils.isNull(this);
 
-  bool get isBlank => GetUtils.isBlank(this);
+  bool? get isBlank => GetUtils.isBlank(this);
 
   @Deprecated(
       'isNullOrBlank is deprecated and cannot be used, use "isBlank" instead')
-  bool get isNullOrBlank => GetUtils.isNullOrBlank(this);
+  bool? get isNullOrBlank => GetUtils.isNullOrBlank(this);
 
   void printError(
           {String info = '', Function logFunction = GetUtils.printFunction}) =>

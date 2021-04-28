@@ -14,24 +14,21 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.modalBarrierColor,
     this.isDismissible = true,
     this.enableDrag = true,
-    @required this.isScrollControlled,
-    RouteSettings settings,
+    required this.isScrollControlled,
+    RouteSettings? settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
-  })  : assert(isScrollControlled != null),
-        name = "BOTTOMSHEET: ${builder.hashCode}",
-        assert(isDismissible != null),
-        assert(enableDrag != null),
+  })  : name = "BOTTOMSHEET: ${builder.hashCode}",
         super(settings: settings);
-  final bool isPersistent;
-  final WidgetBuilder builder;
-  final ThemeData theme;
+  final bool? isPersistent;
+  final WidgetBuilder? builder;
+  final ThemeData? theme;
   final bool isScrollControlled;
-  final Color backgroundColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
-  final Color modalBarrierColor;
+  final Color? backgroundColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
+  final Color? modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
   final String name;
@@ -47,21 +44,21 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   bool get barrierDismissible => isDismissible;
 
   @override
-  final String barrierLabel;
+  final String? barrierLabel;
 
   @override
   Color get barrierColor => modalBarrierColor ?? Colors.black54;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
     _animationController =
-        BottomSheet.createAnimationController(navigator.overlay);
-    _animationController.duration = enterBottomSheetDuration;
-    _animationController.reverseDuration = exitBottomSheetDuration;
-    return _animationController;
+        BottomSheet.createAnimationController(navigator!.overlay!);
+    _animationController!.duration = enterBottomSheetDuration;
+    _animationController!.reverseDuration = exitBottomSheetDuration;
+    return _animationController!;
   }
 
   @override
@@ -80,10 +77,10 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
         child: _GetModalBottomSheet<T>(
           route: this,
           backgroundColor: backgroundColor ??
-              sheetTheme?.modalBackgroundColor ??
-              sheetTheme?.backgroundColor,
+              sheetTheme.modalBackgroundColor ??
+              sheetTheme.backgroundColor,
           elevation:
-              elevation ?? sheetTheme?.modalElevation ?? sheetTheme?.elevation,
+              elevation ?? sheetTheme.modalElevation ?? sheetTheme.elevation,
           shape: shape,
           clipBehavior: clipBehavior,
           isScrollControlled: isScrollControlled,
@@ -91,14 +88,14 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
         ),
       ),
     );
-    if (theme != null) bottomSheet = Theme(data: theme, child: bottomSheet);
+    if (theme != null) bottomSheet = Theme(data: theme!, child: bottomSheet);
     return bottomSheet;
   }
 }
 
 class _GetModalBottomSheet<T> extends StatefulWidget {
   const _GetModalBottomSheet({
-    Key key,
+    Key? key,
     this.route,
     this.backgroundColor,
     this.elevation,
@@ -107,16 +104,14 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.isScrollControlled = false,
     this.enableDrag = true,
     this.isPersistent = false,
-  })  : assert(isScrollControlled != null),
-        assert(enableDrag != null),
-        super(key: key);
+  }) : super(key: key);
   final bool isPersistent;
-  final GetModalBottomSheetRoute<T> route;
+  final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;
-  final Color backgroundColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
+  final Color? backgroundColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
   final bool enableDrag;
 
   @override
@@ -142,13 +137,13 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
     final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
-      animation: widget.route.animation,
+      animation: widget.route!.animation!,
       builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
         final animationValue = mediaQuery.accessibleNavigation
             ? 1.0
-            : widget.route.animation.value;
+            : widget.route!.animation!.value;
         return Semantics(
           scopesRoute: true,
           namesRoute: true,
@@ -160,13 +155,13 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                     animationValue, widget.isScrollControlled),
                 child: widget.isPersistent == false
                     ? BottomSheet(
-                        animationController: widget.route._animationController,
+                        animationController: widget.route!._animationController,
                         onClosing: () {
-                          if (widget.route.isCurrent) {
+                          if (widget.route!.isCurrent) {
                             Navigator.pop(context);
                           }
                         },
-                        builder: widget.route.builder,
+                        builder: widget.route!.builder!,
                         backgroundColor: widget.backgroundColor,
                         elevation: widget.elevation,
                         shape: widget.shape,
@@ -176,13 +171,13 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                     : Scaffold(
                         bottomSheet: BottomSheet(
                           animationController:
-                              widget.route._animationController,
+                              widget.route!._animationController,
                           onClosing: () {
                             // if (widget.route.isCurrent) {
                             //   Navigator.pop(context);
                             // }
                           },
-                          builder: widget.route.builder,
+                          builder: widget.route!.builder!,
                           backgroundColor: widget.backgroundColor,
                           elevation: widget.elevation,
                           shape: widget.shape,
@@ -199,7 +194,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
 
 class _GetPerModalBottomSheet<T> extends StatefulWidget {
   const _GetPerModalBottomSheet({
-    Key key,
+    Key? key,
     this.route,
     this.isPersistent,
     this.backgroundColor,
@@ -208,16 +203,14 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
-  })  : assert(isScrollControlled != null),
-        assert(enableDrag != null),
-        super(key: key);
-  final bool isPersistent;
-  final GetModalBottomSheetRoute<T> route;
+  }) : super(key: key);
+  final bool? isPersistent;
+  final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;
-  final Color backgroundColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
+  final Color? backgroundColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
   final bool enableDrag;
 
   @override
@@ -247,13 +240,13 @@ class _GetPerModalBottomSheetState<T>
     final routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
-      animation: widget.route.animation,
+      animation: widget.route!.animation!,
       builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
         final animationValue = mediaQuery.accessibleNavigation
             ? 1.0
-            : widget.route.animation.value;
+            : widget.route!.animation!.value;
         return Semantics(
           scopesRoute: true,
           namesRoute: true,
@@ -265,13 +258,13 @@ class _GetPerModalBottomSheetState<T>
                     animationValue, widget.isScrollControlled),
                 child: widget.isPersistent == false
                     ? BottomSheet(
-                        animationController: widget.route._animationController,
+                        animationController: widget.route!._animationController,
                         onClosing: () {
-                          if (widget.route.isCurrent) {
+                          if (widget.route!.isCurrent) {
                             Navigator.pop(context);
                           }
                         },
-                        builder: widget.route.builder,
+                        builder: widget.route!.builder!,
                         backgroundColor: widget.backgroundColor,
                         elevation: widget.elevation,
                         shape: widget.shape,
@@ -281,13 +274,13 @@ class _GetPerModalBottomSheetState<T>
                     : Scaffold(
                         bottomSheet: BottomSheet(
                           animationController:
-                              widget.route._animationController,
+                              widget.route!._animationController,
                           onClosing: () {
                             // if (widget.route.isCurrent) {
                             //   Navigator.pop(context);
                             // }
                           },
-                          builder: widget.route.builder,
+                          builder: widget.route!.builder!,
                           backgroundColor: widget.backgroundColor,
                           elevation: widget.elevation,
                           shape: widget.shape,

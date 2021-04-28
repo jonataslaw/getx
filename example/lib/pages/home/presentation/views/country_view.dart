@@ -18,20 +18,19 @@ class CountryView extends GetView<HomeController> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text("Corona By Country"),
+              title: Text('corona_by_country'.tr),
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
             ),
             body: Center(
               child: ListView.builder(
-                  itemCount: controller.state.countries.length,
+                  itemCount: controller.state!.countries.length,
                   itemBuilder: (context, index) {
-                    final country = controller.state.countries[index];
+                    final country = controller.state!.countries[index];
                     return ListTile(
                       onTap: () {
                         Get.toNamed('/home/country/details',
@@ -42,8 +41,9 @@ class CountryView extends GetView<HomeController> {
                             "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
                       ),
                       title: Text(country.country),
-                      subtitle:
-                          Text("Total infecteds: ${country.totalConfirmed}"),
+                      subtitle: Text(
+                          // ignore: lines_longer_than_80_chars
+                          '${'total_infecteds'.tr}${' ${country.totalConfirmed}'}'),
                     );
                   }),
             ),

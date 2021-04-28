@@ -21,11 +21,10 @@ class DetailsView extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text("Details"),
+              title: Text('details'.tr),
               backgroundColor: Colors.black12,
               elevation: 0,
               centerTitle: true,
@@ -42,7 +41,7 @@ class DetailsView extends StatelessWidget {
                   height: 35,
                 ),
                 Text(
-                  "Total Confirmed",
+                  'total_confirmed'.tr,
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -55,7 +54,7 @@ class DetailsView extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Total Deaths",
+                  'total_deaths'.tr,
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -68,7 +67,7 @@ class DetailsView extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Total Recovered",
+                  'total_recovered'.tr,
                   style: TextStyle(
                     fontSize: 25,
                   ),

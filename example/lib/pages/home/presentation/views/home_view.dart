@@ -21,7 +21,7 @@ class HomeView extends GetView<HomeController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Corona Virus"),
+          title: Text('covid'.tr),
           backgroundColor: Colors.white10,
           elevation: 0,
           centerTitle: true,
@@ -36,20 +36,20 @@ class HomeView extends GetView<HomeController> {
                     height: 100,
                   ),
                   Text(
-                    "Total Confirmed",
+                    'total_confirmed'.tr,
                     style: TextStyle(
                       fontSize: 30,
                     ),
                   ),
                   Text(
-                    '${state.global.totalConfirmed}',
+                    '${state!.global.totalConfirmed}',
                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Total Deaths",
+                    'total_deaths'.tr,
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -61,18 +61,24 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: 10,
                   ),
-                  OutlineButton(
-                    borderSide: BorderSide(
-                      color: Colors.deepPurple,
-                      width: 3,
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.black),
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
+                      ),
+                      shape: StadiumBorder(),
                     ),
-                    shape: StadiumBorder(),
                     onPressed: () {
                       Get.toNamed('/home/country');
                     },
                     child: Text(
-                      "Fetch by country",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      'fetch_country'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   )
                 ],

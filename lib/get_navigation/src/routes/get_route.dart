@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../get_core/src/get_main.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../get_navigation.dart';
 import 'custom_transition.dart';
@@ -8,33 +9,35 @@ import 'transitions_type.dart';
 class PathDecoded {
   const PathDecoded(this.regex, this.keys);
   final RegExp regex;
-  final List<String> keys;
+  final List<String?> keys;
 }
 
-class GetPage {
+class GetPage<T> extends Page<T> {
+  @override
   final String name;
   final GetPageBuilder page;
-  final bool popGesture;
-  final Map<String, String> parameter;
-  final String title;
-  final Transition transition;
+  final bool? popGesture;
+  final Map<String, String>? parameter;
+  final String? title;
+  final Transition? transition;
   final Curve curve;
-  final Alignment alignment;
+  final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
-  final Bindings binding;
+  final Bindings? binding;
   final List<Bindings> bindings;
-  final CustomTransition customTransition;
-  final Duration transitionDuration;
+  final CustomTransition? customTransition;
+  final Duration? transitionDuration;
   final bool fullscreenDialog;
-  final RouteSettings settings;
-  final List<GetPage> children;
-  final List<GetMiddleware> middlewares;
+  final RouteSettings? settings;
+  final List<GetPage>? children;
+  final List<GetMiddleware>? middlewares;
   final PathDecoded path;
+  final GetPage? unknownRoute;
 
   GetPage({
-    @required this.name,
-    @required this.page,
+    required this.name,
+    required this.page,
     this.title,
     this.settings,
     this.maintainState = true,
@@ -51,14 +54,11 @@ class GetPage {
     this.fullscreenDialog = false,
     this.children,
     this.middlewares,
-  })  : path = _nameToRegex(name),
-        assert(page != null),
-        assert(name != null),
-        assert(maintainState != null),
-        assert(fullscreenDialog != null);
+    this.unknownRoute,
+  }) : path = _nameToRegex(name);
 
   static PathDecoded _nameToRegex(String path) {
-    var keys = <String>[];
+    var keys = <String?>[];
 
     String _replace(Match pattern) {
       var buffer = StringBuffer('(?:');
@@ -78,25 +78,25 @@ class GetPage {
     return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
-  GetPage copyWith({
-    String name,
-    GetPageBuilder page,
-    bool popGesture,
-    Map<String, String> parameter,
-    String title,
-    Transition transition,
-    Curve curve,
-    Alignment alignment,
-    bool maintainState,
-    bool opaque,
-    Bindings binding,
-    List<Bindings> bindings,
-    CustomTransition customTransition,
-    Duration transitionDuration,
-    bool fullscreenDialog,
-    RouteSettings settings,
-    List<GetPage> children,
-    List<GetMiddleware> middlewares,
+  GetPage copy({
+    String? name,
+    GetPageBuilder? page,
+    bool? popGesture,
+    Map<String, String>? parameter,
+    String? title,
+    Transition? transition,
+    Curve? curve,
+    Alignment? alignment,
+    bool? maintainState,
+    bool? opaque,
+    Bindings? binding,
+    List<Bindings>? bindings,
+    CustomTransition? customTransition,
+    Duration? transitionDuration,
+    bool? fullscreenDialog,
+    RouteSettings? settings,
+    List<GetPage>? children,
+    List<GetMiddleware>? middlewares,
   }) {
     return GetPage(
       name: name ?? this.name,
@@ -118,5 +118,15 @@ class GetPage {
       children: children ?? this.children,
       middlewares: middlewares ?? this.middlewares,
     );
+  }
+
+  @override
+  Object? get arguments => Get.arguments;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return PageRedirect(
+            RouteSettings(name: name, arguments: Get.arguments), unknownRoute)
+        .page<T>();
   }
 }

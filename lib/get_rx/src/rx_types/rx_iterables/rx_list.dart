@@ -5,9 +5,7 @@ class RxList<E> extends ListMixin<E>
     with NotifyManager<List<E>>, RxObjectMixin<List<E>>
     implements RxInterface<List<E>> {
   RxList([List<E> initial = const []]) {
-    if (initial != null) {
-      _value = List.from(initial);
-    }
+    _value = List.from(initial);
   }
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
@@ -81,18 +79,9 @@ class RxList<E> extends ListMixin<E>
   @protected
   List<E> get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
-  }
-
-  @override
-  @protected
-  @Deprecated('List.value is deprecated. use [yourList.assignAll(newList)]')
-  set value(List<E> val) {
-    if (_value == val) return;
-    _value = val;
-    refresh();
   }
 
   @override
@@ -121,7 +110,7 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  void sort([int compare(E a, E b)]) {
+  void sort([int compare(E a, E b)?]) {
     _value.sort(compare);
     refresh();
   }
@@ -135,10 +124,10 @@ extension ListExtension<E> on List<E> {
     if (item != null) add(item);
   }
 
-  /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  void addAllNonNull(Iterable<E> item) {
-    if (item != null) addAll(item);
-  }
+  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
+  // void addAllNonNull(Iterable<E> item) {
+  //   if (item != null) addAll(item);
+  // }
 
   /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {
@@ -154,9 +143,9 @@ extension ListExtension<E> on List<E> {
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
-    if (this is RxList) {
-      (this as RxList)._value ??= <E>[];
-    }
+    // if (this is RxList) {
+    //   (this as RxList)._value;
+    // }
 
     clear();
     add(item);
@@ -164,9 +153,9 @@ extension ListExtension<E> on List<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    if (this is RxList) {
-      (this as RxList)._value ??= <E>[];
-    }
+    // if (this is RxList) {
+    //   (this as RxList)._value;
+    // }
     clear();
     addAll(items);
   }

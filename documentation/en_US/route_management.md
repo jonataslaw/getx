@@ -246,6 +246,28 @@ print(Get.parameters['user']);
 // out: 34954
 ```
 
+or send multiple parameters like this
+
+```dart
+Get.toNamed("/profile/34954?flag=true&country=italy");
+```
+or
+```dart
+var parameters = <String, String>{"flag": "true","country": "italy",};
+Get.toNamed("/profile/34954", parameters: parameters);
+```
+
+On second screen take the data by parameters as usually
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+print(Get.parameters['country']);
+// out: 34954 true italy
+```
+
+
+
 And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
 
 ### Middleware
@@ -313,7 +335,7 @@ class First extends StatelessWidget {
         title: Text('First Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/second");
@@ -338,7 +360,7 @@ class Second extends StatelessWidget {
         title: Text('second Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/third");
@@ -357,7 +379,7 @@ class Third extends StatelessWidget {
         title: Text("Third Route"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -428,7 +450,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -484,12 +506,12 @@ Get.bottomSheet(
         ListTile(
           leading: Icon(Icons.music_note),
           title: Text('Music'),
-          onTap: () => {}
+          onTap: () {}
         ),
         ListTile(
           leading: Icon(Icons.videocam),
           title: Text('Video'),
-          onTap: () => {},
+          onTap: () {},
         ),
       ],
     ),
@@ -518,7 +540,7 @@ Navigator(
             title: Text("Main"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               onPressed: () {
                 Get.toNamed('/second', id:1); // navigate by your nested route by index

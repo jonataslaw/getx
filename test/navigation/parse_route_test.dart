@@ -24,7 +24,7 @@ void main() {
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
-    expect(match.route.name, searchRoute);
+    expect(match.route!.name, searchRoute);
   });
 
   test('Parse Page without children', () {
@@ -48,7 +48,7 @@ void main() {
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
-    expect(match.route.name, searchRoute);
+    expect(match.route!.name, searchRoute);
   });
 
   testWidgets(
@@ -85,6 +85,35 @@ void main() {
 
       expect(Get.parameters['id'], '1234');
       expect(Get.parameters['name'], 'ana');
+    },
+  );
+
+  testWidgets(
+    'params in url by parameters',
+    (tester) async {
+      print("Iniciando test");
+      await tester.pumpWidget(GetMaterialApp(
+        initialRoute: '/first/juan',
+        getPages: [
+          GetPage(page: () => Container(), name: '/first/:name'),
+          GetPage(page: () => Container(), name: '/italy'),
+        ],
+      ));
+
+      // Get.parameters = ({"varginias": "varginia", "vinis": "viniiss"});
+      var parameters = <String, String>{
+        "varginias": "varginia",
+        "vinis": "viniiss"
+      };
+      // print("Get.parameters: ${Get.parameters}");
+      parameters.addAll({"a": "b", "c": "d"});
+      Get.toNamed("/italy", parameters: parameters);
+
+      await tester.pumpAndSettle();
+      expect(Get.parameters['varginias'], 'varginia');
+      expect(Get.parameters['vinis'], 'viniiss');
+      expect(Get.parameters['a'], 'b');
+      expect(Get.parameters['c'], 'd');
     },
   );
 }

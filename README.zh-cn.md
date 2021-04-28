@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_语言: 中文, [英文](README.md), [印度尼西亚](README.id-ID.md), [乌尔都语](README.ur-PK.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md)._
+_语言: 中文, [英文](README.md), [印度尼西亚](README.id-ID.md), [乌尔都语](README.ur-PK.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md), [法语](README-fr.md), [French](README-fr.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -67,8 +67,13 @@ _语言: 中文, [英文](README.md), [印度尼西亚](README.id-ID.md), [乌�
 
 **此外，通过[Get CLI](https://github.com/jonataslaw/get_cli)**，无论是在服务器上还是在前端，整个开发过程都可以完全自动化。
 
-**此外，为了进一步提高您的生产效率，我们还为您准备了
-[VSCode扩展](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)和[Android Studio/Intellij扩展](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**。
+**此外，为了进一步提高您的生产效率，我们还为您准备了一些插件**
+
+- **getx_template**：一键生成每个页面必需的文件夹、文件、模板代码等等
+  - [Android Studio/Intellij插件](https://plugins.jetbrains.com/plugin/15919-getx)
+- **GetX Snippets**：输入少量字母，自动提示选择后，可生成常用的模板代码
+  - [Android Studio/Intellij扩展](https://plugins.jetbrains.com/plugin/14975-getx-snippets)
+  - [VSCode扩展](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)
 
 # 安装
 
@@ -133,7 +138,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
       // 用一个简单的Get.to()即可代替Navigator.push那8行，无需上下文！
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
@@ -209,7 +214,7 @@ Obx(() => Text("${controller.name}"));
 
 ### 关于状态管理的更多细节
 
-**关于状态管理更深入的解释请查看[这里](./documentation/zh_CN/state_management.md)。在那里你将看到更多的例子，以及简单的阶段管理器和响应式状态管理器之间的区别**。
+**关于状态管理更深入的解释请查看[这里](./documentation/zh_CN/state_management.md)。在那里你将看到更多的例子，以及简单的状态管理器和响应式状态管理器之间的区别**。
 
 你会对GetX的能力有一个很好的了解。
 
@@ -906,4 +911,6 @@ _想为项目做贡献吗？我们将自豪地强调你是我们的合作者之�
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
+- [Flutter GetX use --- simple charm!](https://github.com/CNAD666/getx_template/blob/main/docs/Use%20of%20Flutter%20GetX---simple%20charm!.md) - CNAD666
+  - [Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
 

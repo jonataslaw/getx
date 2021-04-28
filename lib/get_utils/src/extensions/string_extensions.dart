@@ -69,14 +69,19 @@ extension GetStringUtils on String {
   bool isCaseInsensitiveContainsAny(String b) =>
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
-  String get capitalize => GetUtils.capitalize(this);
+  String? get capitalize => GetUtils.capitalize(this);
 
-  String get capitalizeFirst => GetUtils.capitalizeFirst(this);
+  String? get capitalizeFirst => GetUtils.capitalizeFirst(this);
 
   String get removeAllWhitespace => GetUtils.removeAllWhitespace(this);
 
-  String get camelCase => GetUtils.camelCase(this);
+  String? get camelCase => GetUtils.camelCase(this);
 
   String numericOnly({bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
+
+  String createPath([Iterable? segments]) {
+    final path = startsWith('/') ? this : '/$this';
+    return GetUtils.createPath(path, segments);
+  }
 }

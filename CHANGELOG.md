@@ -1,4 +1,116 @@
-## [3.25.0]
+## [4.1.4] 
+- Adjust operator + and - to RxInt (@eduardoflorence)
+- Fix dark theme (@eduardoflorence)
+- Fix form-urlencoded on GetConnect (@aramayyes)
+
+
+## [4.1.3] 
+- Fix "Error: A value of type 'Locale?' can't be returned from a function"on flutter web (@nickwri)
+- Fix plural translations to expressions >1 (@WolfVic)
+
+## [4.1.2] 
+- Fix warning ˜can add data to a closed stream˜ when GetBuilder and Obx are nested
+- Fix get_connect decoder can not be null (@Goddchen)
+- Migrate example code (@3lB4rt0)
+- Fix initial value of nullables (@RafaRuiz)
+- Improve error message to navigation (@maxzod)
+- Fix typo on docs (@Rahulshahare)
+- Fixed darktheme being changed only through Get.changeTheme and not through the DarkTheme theme property in MaterialApp (@GoldenSoju)
+- Fix controller is removed when navigate to same page (@eduardoflorence)
+- Fix missing reload() and reloadAll() to Get extensions (@lkloon123)
+
+
+## [4.1.1] 
+- Remove mandatory initialValue to nullables types
+
+## [4.1.0] 
+- Added Rxn to non nullables reactives types
+
+## [4.0.3] 
+- Added new linter rules to improve score
+
+## [4.0.2] 
+- Removed "!" of if else conditions until the null-safety of the dart is consistent for using it.
+
+## [4.0.1] 
+- Fix changelog
+
+## [4.0.0] 
+- Added append function to StateMixin. Now is possible track loading, success and error handle of your application with ONE LINE OF CODE. Ex: append(()=> api.getUser);
+- Migrate to null-safety 
+- Added ScrollMixin to controllers
+- Added loadingMore status to RxStatus
+- Fix content-type qual null (@katekko)
+- Made GetInstance non nullable (@eduardoflorence)
+- Fix multi-parameters url (@iMrLopez)
+- Fix Expected value of SkDeletable error (@obadajasm)
+- Added triggers, an Rx method that triggers events, even if they are the same as the previous event (@RafaRuiz)
+- Improve docs: (@CNAD666), (@dhhAndroid), (@Jackylee1992),
+
+Switching to null-safety:
+You can continue using GetX as normal, with as little breaking changes as possible.
+It is still possible to declare the var.obs variable, and this remains the preferred way, forcing null-safety and giving you all the security that sound null-safety delivers to your app. However, if you need to use null, we also provide a solution for you.
+Declare the variables with `?` Ex: `final Rx<int?> count = 0.obs`.
+You can also use custom Rxn types with null-safety:
+`RxInt` == not nullable
+`RxnInt` == nullable.
+
+## [3.25.6] 
+- Added documentation in French (@kamazoun)
+- Fix logs messages (@damphat)
+- Fix plural to zero on internacionalization (@RafaRuiz)
+- Fix error when body hasn't content on GetConnect (@jasonlaw)
+- Fix typos on readme (@bashleigh)
+- Fix group updates to GetBuilder
+
+## [3.25.5] 
+- Fix Get.isDialogOpen when two or more open dialogs are closed
+
+## [3.25.4] 
+- Added logs and tests to unknownRoute
+
+## [3.25.3] 
+- Fix bindStream error 'Object.noSuchMethod'.
+
+## [3.25.2] 
+- Improved Workers system to accept a list of works
+
+## [3.25.1] 
+- Improved the log system to display the tag used in the controller that was created.
+
+## [3.25.0] - Big update
+- Added [reload] and [reloadAll] methods to reload your Controller to original values
+- Added [FullLifeCycleController] - A GetxController capable of observing all the life cycles of your application. FullLifeCycleController has the life cycles:
+  * onInit: called when the controller enters the application's memory
+  * onReady: called after onInit, when build method from widget relationed to controller is done.
+  * onClose: called when controller is deleted from memory. 
+  * onPaused: called when the application is not currently visible to the user, and running in the background.
+  * onInactive: called when the application is in an inactive state and is not receiving user input, when the user receives a call, for example
+  * onResumed: The application is now visible and in the foreground
+  * onDetached: The application is still hosted on a flutter engine but is detached from any host views.
+  * didChangeMetrics: called when the window size is changed
+- Added SuperController, a complete life circle controller with StateMixin 
+- Improve Iterable Rx Api. Now, you can to use dart List, Map and Set as reactive, like: List<String> names = <String>['juan', 'pedro', 'maria'].obs;
+- Added assign and assignAll extensions to default dart List
+- Added parameters options from Get.toNamed, Get.offNamed, and Get.offAllNamed (@enghitalo)
+- Improve Rx disposal logic to completely prevent memory leaks
+- Improve Capitalize methods from GetUtils (@eduardoflorence)
+- Prevent a close snackbar from close a Screen with double tap (@eduardoflorence)
+- Includes GetLifeCycleBase mixin on delete/dispose (@saviogrossi)
+- Added internacionalization example to sample app (@rodriguesJeff)
+- Added headers to Graphql query and mutation(@asalvi0)
+- Added translation with parameter extension (@CpdnCristiano)
+- Added Get.parameter access to Middleware (@eduardoflorence)
+- Fix RxBool typo (@emanuelmutschlechner)
+- Added Filter to GetBuilder
+- Added debouce to GetBuilder update 
+- Added ability to insert an Enum, class, or type of an object as a GetBuilder's Id
+- Improve upload time from GetConnect
+- Create minified version to DartPad(@roipeker)
+- Suggested to use `Get.to(() => Page())` instead of `Get.to(Page())`.
+- Added more status codes to GetConnect (@romavic)
+- Fix and improve docs: @unacorbatanegra, @lsm, @nivisi, @ThinkDigitalSoftware, @martwozniak, @UsamaElgendy, @@DominusKelvin, @jintak0401, @goondeal
+
 
 ## [3.24.0]
 - GetWidget has been completely redesigned.

@@ -10,16 +10,18 @@ import 'root_controller.dart';
 
 class GetCupertinoApp extends StatelessWidget {
   const GetCupertinoApp({
-    Key key,
+    Key? key,
     this.theme,
     this.navigatorKey,
     this.home,
-    this.routes = const <String, WidgetBuilder>{},
+    Map<String, Widget Function(BuildContext)> this.routes =
+        const <String, WidgetBuilder>{},
     this.initialRoute,
     this.onGenerateRoute,
     this.onGenerateInitialRoutes,
     this.onUnknownRoute,
-    this.navigatorObservers = const <NavigatorObserver>[],
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
     this.builder,
     this.translationsKeys,
     this.translations,
@@ -58,78 +60,70 @@ class GetCupertinoApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
-  })  : assert(routes != null),
-        assert(navigatorObservers != null),
-        assert(title != null),
-        assert(showPerformanceOverlay != null),
-        assert(checkerboardRasterCacheImages != null),
-        assert(checkerboardOffscreenLayers != null),
-        assert(showSemanticsDebugger != null),
-        assert(debugShowCheckedModeBanner != null),
-        routeInformationProvider = null,
+  })  : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
         backButtonDispatcher = null,
         super(key: key);
 
-  final GlobalKey<NavigatorState> navigatorKey;
-  final Widget home;
-  final Map<String, WidgetBuilder> routes;
-  final String initialRoute;
-  final RouteFactory onGenerateRoute;
-  final InitialRouteListFactory onGenerateInitialRoutes;
-  final RouteFactory onUnknownRoute;
-  final List<NavigatorObserver> navigatorObservers;
-  final TransitionBuilder builder;
+  final GlobalKey<NavigatorState>? navigatorKey;
+  final Widget? home;
+  final Map<String, WidgetBuilder>? routes;
+  final String? initialRoute;
+  final RouteFactory? onGenerateRoute;
+  final InitialRouteListFactory? onGenerateInitialRoutes;
+  final RouteFactory? onUnknownRoute;
+  final List<NavigatorObserver>? navigatorObservers;
+  final TransitionBuilder? builder;
   final String title;
-  final GenerateAppTitle onGenerateTitle;
-  final CustomTransition customTransition;
-  final Color color;
-  final Map<String, Map<String, String>> translationsKeys;
-  final Translations translations;
-  final TextDirection textDirection;
-  final Locale locale;
-  final Locale fallbackLocale;
-  final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
-  final LocaleListResolutionCallback localeListResolutionCallback;
-  final LocaleResolutionCallback localeResolutionCallback;
+  final GenerateAppTitle? onGenerateTitle;
+  final CustomTransition? customTransition;
+  final Color? color;
+  final Map<String, Map<String, String>>? translationsKeys;
+  final Translations? translations;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final Locale? fallbackLocale;
+  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  final LocaleListResolutionCallback? localeListResolutionCallback;
+  final LocaleResolutionCallback? localeResolutionCallback;
   final Iterable<Locale> supportedLocales;
   final bool showPerformanceOverlay;
   final bool checkerboardRasterCacheImages;
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
-  final Map<LogicalKeySet, Intent> shortcuts;
-  final ThemeData highContrastTheme;
-  final ThemeData highContrastDarkTheme;
-  final Map<Type, Action<Intent>> actions;
-  final Function(Routing) routingCallback;
-  final Transition defaultTransition;
-  final bool opaqueRoute;
-  final VoidCallback onInit;
-  final VoidCallback onReady;
-  final VoidCallback onDispose;
-  final bool enableLog;
-  final LogWriterCallback logWriterCallback;
-  final bool popGesture;
+  final Map<LogicalKeySet, Intent>? shortcuts;
+  final ThemeData? highContrastTheme;
+  final ThemeData? highContrastDarkTheme;
+  final Map<Type, Action<Intent>>? actions;
+  final Function(Routing?)? routingCallback;
+  final Transition? defaultTransition;
+  final bool? opaqueRoute;
+  final VoidCallback? onInit;
+  final VoidCallback? onReady;
+  final VoidCallback? onDispose;
+  final bool? enableLog;
+  final LogWriterCallback? logWriterCallback;
+  final bool? popGesture;
   final SmartManagement smartManagement;
-  final Bindings initialBinding;
-  final Duration transitionDuration;
-  final bool defaultGlobalState;
-  final List<GetPage> getPages;
-  final GetPage unknownRoute;
-  final RouteInformationProvider routeInformationProvider;
-  final RouteInformationParser<Object> routeInformationParser;
-  final RouterDelegate<Object> routerDelegate;
-  final BackButtonDispatcher backButtonDispatcher;
-  final CupertinoThemeData theme;
+  final Bindings? initialBinding;
+  final Duration? transitionDuration;
+  final bool? defaultGlobalState;
+  final List<GetPage>? getPages;
+  final GetPage? unknownRoute;
+  final RouteInformationProvider? routeInformationProvider;
+  final RouteInformationParser<Object>? routeInformationParser;
+  final RouterDelegate<Object>? routerDelegate;
+  final BackButtonDispatcher? backButtonDispatcher;
+  final CupertinoThemeData? theme;
 
   const GetCupertinoApp.router({
-    Key key,
+    Key? key,
     this.theme,
     this.routeInformationProvider,
-    @required this.routeInformationParser,
-    @required this.routerDelegate,
+    required RouteInformationParser<Object> this.routeInformationParser,
+    required RouterDelegate<Object> this.routerDelegate,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -169,15 +163,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
-  })  : assert(routeInformationParser != null),
-        assert(routerDelegate != null),
-        assert(title != null),
-        assert(showPerformanceOverlay != null),
-        assert(checkerboardRasterCacheImages != null),
-        assert(checkerboardOffscreenLayers != null),
-        assert(showSemanticsDebugger != null),
-        assert(debugShowCheckedModeBanner != null),
-        navigatorObservers = null,
+  })  : navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,
@@ -201,7 +187,7 @@ class GetCupertinoApp extends StatelessWidget {
         onDispose?.call();
       },
       initState: (i) {
-        Get.engine.addPostFrameCallback((timeStamp) {
+        Get.engine!.addPostFrameCallback((timeStamp) {
           onReady?.call();
         });
         if (locale != null) Get.locale = locale;
@@ -209,9 +195,9 @@ class GetCupertinoApp extends StatelessWidget {
         if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 
         if (translations != null) {
-          Get.addTranslations(translations.keys);
+          Get.addTranslations(translations!.keys);
         } else if (translationsKeys != null) {
-          Get.addTranslations(translationsKeys);
+          Get.addTranslations(translationsKeys!);
         }
 
         Get.customTransition = customTransition;
@@ -233,8 +219,8 @@ class GetCupertinoApp extends StatelessWidget {
       },
       builder: (_) => routerDelegate != null
           ? CupertinoApp.router(
-              routerDelegate: routerDelegate,
-              routeInformationParser: routeInformationParser,
+              routerDelegate: routerDelegate!,
+              routeInformationParser: routeInformationParser!,
               backButtonDispatcher: backButtonDispatcher,
               routeInformationProvider: routeInformationProvider,
               key: _.unikey,
@@ -245,31 +231,29 @@ class GetCupertinoApp extends StatelessWidget {
                       (rtlLanguages.contains(Get.locale?.languageCode)
                           ? TextDirection.rtl
                           : TextDirection.ltr),
-                  child: builder == null ? child : builder(context, child),
+                  child: builder == null ? child! : builder!(context, child),
                 );
               },
-              title: title ?? '',
+              title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
               localeListResolutionCallback: localeListResolutionCallback,
               localeResolutionCallback: localeResolutionCallback,
-              supportedLocales:
-                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
-              showPerformanceOverlay: showPerformanceOverlay ?? false,
-              checkerboardRasterCacheImages:
-                  checkerboardRasterCacheImages ?? false,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
-              showSemanticsDebugger: showSemanticsDebugger ?? false,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              supportedLocales: supportedLocales,
+              showPerformanceOverlay: showPerformanceOverlay,
+              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+              showSemanticsDebugger: showSemanticsDebugger,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
             )
           : CupertinoApp(
               key: _.unikey,
               theme: theme,
               navigatorKey:
-                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey)),
+                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
               home: home,
               routes: routes ?? const <String, WidgetBuilder>{},
               initialRoute: initialRoute,
@@ -285,31 +269,29 @@ class GetCupertinoApp extends StatelessWidget {
                   : <NavigatorObserver>[
                       GetObserver(routingCallback, Get.routing)
                     ]
-                ..addAll(navigatorObservers)),
+                ..addAll(navigatorObservers!)),
               builder: (context, child) {
                 return Directionality(
                   textDirection: textDirection ??
                       (rtlLanguages.contains(Get.locale?.languageCode)
                           ? TextDirection.rtl
                           : TextDirection.ltr),
-                  child: builder == null ? child : builder(context, child),
+                  child: builder == null ? child! : builder!(context, child),
                 );
               },
-              title: title ?? '',
+              title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
               locale: Get.locale ?? locale,
               localizationsDelegates: localizationsDelegates,
               localeListResolutionCallback: localeListResolutionCallback,
               localeResolutionCallback: localeResolutionCallback,
-              supportedLocales:
-                  supportedLocales ?? const <Locale>[Locale('en', 'US')],
-              showPerformanceOverlay: showPerformanceOverlay ?? false,
-              checkerboardRasterCacheImages:
-                  checkerboardRasterCacheImages ?? false,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? false,
-              showSemanticsDebugger: showSemanticsDebugger ?? false,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? true,
+              supportedLocales: supportedLocales,
+              showPerformanceOverlay: showPerformanceOverlay,
+              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+              showSemanticsDebugger: showSemanticsDebugger,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
               //   actions: actions,
             ));

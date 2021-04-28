@@ -140,7 +140,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -195,12 +195,12 @@ Get.bottomSheet(
         ListTile(
           leading: Icon(Icons.music_note),
           title: Text('Música'),
-          onTap: () => {}
+          onTap: () {}
         ),
         ListTile(
           leading: Icon(Icons.videocam),
           title: Text('Vídeo'),
-          onTap: () => {},
+          onTap: () {},
         ),
       ],
     ),
@@ -322,8 +322,25 @@ Get.toNamed("/segunda/34954");
 Na segunda tela receba os dados usando `Get.parameters[]`
 
 ```dart
-print(Get.parameters['user']); // valor: 34954
+print(Get.parameters['user']);
+// valor: 34954
 ```
+
+
+ou envie vários parâmetros como este
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+Na segunda tela, pegue os dados por parâmetros normalmente
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// valor: 34954 true
+```
+
+
 
 E agora, tudo que você precisa fazer é usar `Get.toNamed)` para navegar por suas rotas nomeadas, sem nenhum `context` (você pode chamar suas rotas diretamente do seu BLoc ou do Controller), e quando seu aplicativo é compilado para a web, suas rotas vão aparecer na url ❤
 
@@ -393,7 +410,7 @@ class Primeira extends StatelessWidget {
         title: Text('Primeira rota'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Abrir rota'),
           onPressed: () {
             Get.toNamed("/segunda");
@@ -418,7 +435,7 @@ class Segunda extends StatelessWidget {
         title: Text('Segunda rota'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Abrir rota'),
           onPressed: () {
             Get.toNamed("/terceira");
@@ -437,7 +454,7 @@ class Terceira extends StatelessWidget {
         title: Text("Terceira Rota"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -512,7 +529,7 @@ Navigator(
             title: Text("Principal"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               child: Text("Ir para a segunda"),
               onPressed: () {

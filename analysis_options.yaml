@@ -20,6 +20,8 @@ linter:
     # INCLUDE_FIX (copy of effective dart 1.2.0)
     # STYLE
     camel_case_types: true
+    close_sinks: true
+    unnecessary_statements: true
     camel_case_extensions: true
     library_names: true
     file_names: true
@@ -61,6 +63,7 @@ linter:
     avoid_catches_without_on_clauses: true # avoid
     avoid_catching_errors: true
     use_rethrow_when_possible: true
+    unrelated_type_equality_checks: true
 
     # DESIGN
     use_to_and_as_if_applicable: true # prefer

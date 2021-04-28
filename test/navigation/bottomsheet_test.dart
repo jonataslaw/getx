@@ -13,9 +13,10 @@ void main() {
       child: Wrap(
         children: <Widget>[
           ListTile(
-              leading: Icon(Icons.music_note),
-              title: Text('Music'),
-              onTap: () => {}),
+            leading: Icon(Icons.music_note),
+            title: Text('Music'),
+            onTap: () {},
+          ),
         ],
       ),
     ));
@@ -34,9 +35,10 @@ void main() {
       child: Wrap(
         children: <Widget>[
           ListTile(
-              leading: Icon(Icons.music_note),
-              title: Text('Music'),
-              onTap: () => {}),
+            leading: Icon(Icons.music_note),
+            title: Text('Music'),
+            onTap: () {},
+          ),
         ],
       ),
     ));
@@ -46,27 +48,27 @@ void main() {
     Get.back();
     expect(Get.isBottomSheetOpen, false);
 
-    expect(() => Get.bottomSheet(Container(), isScrollControlled: null),
-        throwsAssertionError);
+    // expect(() => Get.bottomSheet(Container(), isScrollControlled: null),
+    //     throwsAssertionError);
 
-    expect(() => Get.bottomSheet(Container(), isDismissible: null),
-        throwsAssertionError);
+    // expect(() => Get.bottomSheet(Container(), isDismissible: null),
+    //     throwsAssertionError);
 
-    expect(() => Get.bottomSheet(Container(), enableDrag: null),
-        throwsAssertionError);
+    // expect(() => Get.bottomSheet(Container(), enableDrag: null),
+    //     throwsAssertionError);
 
     await tester.pumpAndSettle();
   });
 
-  testWidgets(
-    "GetMaterialApp with debugShowMaterialGrid null",
-    (tester) async {
-      expect(
-        () => GetMaterialApp(
-          debugShowMaterialGrid: null,
-        ),
-        throwsAssertionError,
-      );
-    },
-  );
+  // testWidgets(
+  //   "GetMaterialApp with debugShowMaterialGrid null",
+  //   (tester) async {
+  //     expect(
+  //       () => GetMaterialApp(
+  //         debugShowMaterialGrid: null,
+  //       ),
+  //       throwsAssertionError,
+  //     );
+  //   },
+  // );
 }

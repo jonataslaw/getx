@@ -16,14 +16,14 @@ class MockClient extends HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var requestBody = await request.bodyBytes.toBytes();
-    var bodyBytes = BodyBytesStream.fromBytes(requestBody ?? const []);
+    var bodyBytes = BodyBytesStream.fromBytes(requestBody);
 
     var response = await _handler(request);
 
-    final stringBody = await bodyBytesToString(bodyBytes, response.headers);
+    final stringBody = await bodyBytesToString(bodyBytes, response.headers!);
 
-    var mimeType = response.headers.containsKey('content-type')
-        ? response.headers['content-type']
+    var mimeType = response.headers!.containsKey('content-type')
+        ? response.headers!['content-type']
         : '';
 
     final body = bodyDecoded<T>(
@@ -43,7 +43,5 @@ class MockClient extends HttpRequestBase {
   }
 
   @override
-  void close() {
-    // TODO: implement close
-  }
+  void close() {}
 }

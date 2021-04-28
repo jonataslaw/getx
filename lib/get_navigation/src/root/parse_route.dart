@@ -1,9 +1,10 @@
+import '../../../get_core/src/get_main.dart';
 import '../../get_navigation.dart';
 import '../routes/get_route.dart';
 
 class RouteDecoder {
-  final GetPage route;
-  final Map<String, String> parameters;
+  final GetPage? route;
+  final Map<String, String?> parameters;
   const RouteDecoder(this.route, this.parameters);
 }
 
@@ -13,11 +14,16 @@ class ParseRouteTree {
   RouteDecoder matchRoute(String name) {
     final uri = Uri.parse(name);
     final route = _findRoute(uri.path);
-    final params = Map<String, String>.from(uri.queryParameters);
-    final parsedParams = _parseParams(name, route?.path);
-    if (parsedParams != null && parsedParams.isNotEmpty) {
-      params.addAll(parsedParams);
+    final params = Map<String, String?>.from(uri.queryParameters);
+    if (route != null) {
+      final parsedParams = _parseParams(name, route.path);
+      if (parsedParams.isNotEmpty) {
+        params.addAll(parsedParams);
+      }
+    } else {
+      Get.log('Route "${uri.path}" not found');
     }
+
     return RouteDecoder(route, params);
   }
 
@@ -38,12 +44,12 @@ class ParseRouteTree {
 
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
-    if (route.children == null || route.children.isEmpty) {
+    if (route.children == null || route.children!.isEmpty) {
       return result;
     }
 
     final parentPath = route.name;
-    for (var page in route.children) {
+    for (var page in route.children!) {
       // Add Parent middlewares to children
       final pageMiddlewares = page.middlewares ?? <GetMiddleware>[];
       pageMiddlewares.addAll(route.middlewares ?? <GetMiddleware>[]);
@@ -81,21 +87,38 @@ class ParseRouteTree {
         middlewares: middlewares,
       );
 
-  GetPage _findRoute(String name) {
-    return _routes.firstWhere(
+  GetPage? _findRoute(String name) {
+    return _routes.firstWhereOrNull(
       (route) => route.path.regex.hasMatch(name),
-      orElse: () => null,
     );
   }
 
-  Map<String, String> _parseParams(String path, PathDecoded routePath) {
-    final params = <String, String>{};
-    Match paramsMatch = routePath.regex.firstMatch(path);
+  Map<String, String?> _parseParams(String path, PathDecoded routePath) {
+    final params = <String, String?>{};
+    var idx = path.indexOf('?');
+    if (idx > -1) {
+      path = path.substring(0, idx);
+      final uri = Uri.tryParse(path);
+      if (uri != null) {
+        params.addAll(uri.queryParameters);
+      }
+    }
+    var paramsMatch = routePath.regex.firstMatch(path);
 
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]);
-      params[routePath.keys[i]] = param;
+      var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      params[routePath.keys[i]!] = param;
     }
     return params;
+  }
+}
+
+extension FirstWhereExt<T> on List<T> {
+  /// The first element satisfying [test], or `null` if there are none.
+  T? firstWhereOrNull(bool Function(T element) test) {
+    for (var element in this) {
+      if (test(element)) return element;
+    }
+    return null;
   }
 }

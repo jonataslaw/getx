@@ -246,6 +246,23 @@ print(Get.parameters['user']);
 // 출력: 34954
 ```
 
+
+또는 이와 같은 여러 매개 변수를 보냅니다.
+
+```dart
+Get.toNamed("/profile/34954?flag=true");
+```
+
+두 번째 화면에서 일반적으로 매개 변수별로 데이터를 가져옵니다.
+
+```dart
+print(Get.parameters['user']);
+print(Get.parameters['flag']);
+// 출력: 34954 true
+```
+
+
+
 이제 Get.toNamed()를 사용하여 어떤 context도 없이 명명된 라우트를 탐색하고 (BLoC 또는 Controller 클래스로 부터 직접 라우트를 호출할 수 있음) 앱이 웹으로 컴파일되면 경로는 url에 표시됩니다. <3
 
 ### 미들웨어
@@ -313,7 +330,7 @@ class First extends StatelessWidget {
         title: Text('First Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/second");
@@ -338,7 +355,7 @@ class Second extends StatelessWidget {
         title: Text('second Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open route'),
           onPressed: () {
             Get.toNamed("/third");
@@ -357,7 +374,7 @@ class Third extends StatelessWidget {
         title: Text("Third Route"),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             Get.back();
           },
@@ -428,7 +445,7 @@ Get.snackbar(
   //     Color leftBarIndicatorColor,
   //     List<BoxShadow> boxShadows,
   //     Gradient backgroundGradient,
-  //     FlatButton mainButton,
+  //     TextButton mainButton,
   //     OnTap onTap,
   //     bool isDismissible,
   //     bool showProgressIndicator,
@@ -484,12 +501,12 @@ Get.bottomSheet(
         ListTile(
           leading: Icon(Icons.music_note),
           title: Text('Music'),
-          onTap: () => {}
+          onTap: () {}
         ),
         ListTile(
           leading: Icon(Icons.videocam),
           title: Text('Video'),
-          onTap: () => {},
+          onTap: () {},
         ),
       ],
     ),
@@ -518,7 +535,7 @@ Navigator(
             title: Text("Main"),
           ),
           body: Center(
-            child: FlatButton(
+            child: TextButton(
               color: Colors.blue,
               onPressed: () {
                 Get.toNamed('/second', id:1); // index로 중첩된 경로를 탐색

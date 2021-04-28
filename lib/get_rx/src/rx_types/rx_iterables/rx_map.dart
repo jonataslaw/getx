@@ -4,9 +4,7 @@ class RxMap<K, V> extends MapMixin<K, V>
     with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
     implements RxInterface<Map<K, V>> {
   RxMap([Map<K, V> initial = const {}]) {
-    if (initial != null) {
-      _value = Map.from(initial);
-    }
+    _value = Map.from(initial);
   }
 
   factory RxMap.from(Map<K, V> other) {
@@ -29,8 +27,8 @@ class RxMap<K, V> extends MapMixin<K, V>
   }
 
   @override
-  V operator [](Object key) {
-    return value[key];
+  V? operator [](Object? key) {
+    return value[key as K];
   }
 
   @override
@@ -49,7 +47,7 @@ class RxMap<K, V> extends MapMixin<K, V>
   Iterable<K> get keys => value.keys;
 
   @override
-  V remove(Object key) {
+  V? remove(Object? key) {
     final val = _value.remove(key);
     refresh();
     return val;
@@ -59,18 +57,9 @@ class RxMap<K, V> extends MapMixin<K, V>
   @protected
   Map<K, V> get value {
     if (RxInterface.proxy != null) {
-      RxInterface.proxy.addListener(subject);
+      RxInterface.proxy!.addListener(subject);
     }
     return _value;
-  }
-
-  @override
-  @protected
-  @Deprecated('Map.value is deprecated. use [yourMap.assignAll(newMap)]')
-  set value(Map<K, V> val) {
-    if (_value == val) return;
-    _value = val;
-    refresh();
   }
 }
 
@@ -94,7 +83,7 @@ extension MapExtension<K, V> on Map<K, V> {
   void assign(K key, V val) {
     if (this is RxMap) {
       final map = (this as RxMap);
-      map._value ??= <K, V>{};
+      // map._value;
       map._value.clear();
       this[key] = val;
     } else {
@@ -104,9 +93,12 @@ extension MapExtension<K, V> on Map<K, V> {
   }
 
   void assignAll(Map<K, V> val) {
+    if (val is RxMap && this is RxMap) {
+      if ((val as RxMap)._value == (this as RxMap)._value) return;
+    }
     if (this is RxMap) {
       final map = (this as RxMap);
-      if (map._value == val || map == val) return;
+      if (map._value == val) return;
       map._value = val;
       map.refresh();
     } else {

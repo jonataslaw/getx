@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Bahasa: Indonesia (file ini), [Inggris](README.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md).**
+**Bahasa: Indonesia (file ini), [Inggris](README.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -148,7 +148,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
       // Ganti 8 baris Navigator.push menggunan Get.to() agar lebih sederhana. Anda tidak perlu `context`.
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));

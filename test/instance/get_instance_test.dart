@@ -81,6 +81,26 @@ void main() {
     Get.reset();
   });
 
+  test('Get.lazyPut fenix test', () async {
+    Get.lazyPut<Controller>(() => Controller(), fenix: true);
+    Get.find<Controller>().increment();
+
+    expect(Get.find<Controller>().count, 1);
+    Get.delete<Controller>();
+    expect(Get.find<Controller>().count, 0);
+    Get.reset();
+  });
+
+  test('Get.lazyPut without fenix', () async {
+    Get.lazyPut<Controller>(() => Controller());
+    Get.find<Controller>().increment();
+
+    expect(Get.find<Controller>().count, 1);
+    Get.delete<Controller>();
+    expect(() => Get.find<Controller>(), throwsA(m.TypeMatcher<String>()));
+    Get.reset();
+  });
+
   test('Get.reloadInstance test', () async {
     Get.lazyPut<Controller>(() => Controller());
     var ct1 = Get.find<Controller>();

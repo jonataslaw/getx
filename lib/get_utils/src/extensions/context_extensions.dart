@@ -63,7 +63,7 @@ extension ContextExtensionss on BuildContext {
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
-  Color get iconColor => theme.iconTheme.color;
+  Color? get iconColor => theme.iconTheme.color;
 
   /// similar to [MediaQuery.of(context).padding]
   TextTheme get textTheme => Theme.of(this).textTheme;
@@ -119,11 +119,11 @@ extension ContextExtensionss on BuildContext {
   /// and less than 1200 return [tablet] value.
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
-  T responsiveValue<T>({
-    T mobile,
-    T tablet,
-    T desktop,
-    T watch,
+  T? responsiveValue<T>({
+    T? mobile,
+    T? tablet,
+    T? desktop,
+    T? watch,
   }) {
     var deviceWidth = mediaQuerySize.shortestSide;
     if (GetPlatform.isDesktop) {

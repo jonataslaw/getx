@@ -32,6 +32,24 @@ void main() {
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 
+  testWidgets("unknowroute", (tester) async {
+    await tester.pumpWidget(GetMaterialApp(
+      initialRoute: '/first',
+      unknownRoute: GetPage(name: '/404', page: () => Scaffold()),
+      getPages: [
+        GetPage(page: () => FirstScreen(), name: '/first'),
+        GetPage(page: () => SecondScreen(), name: '/second'),
+        GetPage(page: () => ThirdScreen(), name: '/third')
+      ],
+    ));
+
+    Get.toNamed('/secondd');
+
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/404');
+  });
+
   testWidgets("Get.off navigates to provided route", (tester) async {
     await tester.pumpWidget(Wrapper(child: FirstScreen()));
 
@@ -467,7 +485,7 @@ void main() {
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
-        home: RaisedButton(
+        home: ElevatedButton(
           child: Text('Open Snackbar'),
           onPressed: () {
             Get.snackbar('title', "message", duration: Duration(seconds: 1));
@@ -486,7 +504,7 @@ void main() {
   testWidgets("Get.rawSnackbar test", (tester) async {
     await tester.pumpWidget(
       Wrapper(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Open Snackbar'),
           onPressed: () {
             Get.rawSnackbar(
@@ -518,7 +536,7 @@ void main() {
 }
 
 class FirstScreen extends StatelessWidget {
-  const FirstScreen({Key key}) : super(key: key);
+  const FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -527,7 +545,7 @@ class FirstScreen extends StatelessWidget {
 }
 
 class SecondScreen extends StatelessWidget {
-  const SecondScreen({Key key}) : super(key: key);
+  const SecondScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +554,7 @@ class SecondScreen extends StatelessWidget {
 }
 
 class ThirdScreen extends StatelessWidget {
-  const ThirdScreen({Key key}) : super(key: key);
+  const ThirdScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

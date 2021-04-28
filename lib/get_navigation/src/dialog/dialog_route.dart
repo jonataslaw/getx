@@ -4,15 +4,14 @@ import '../../../get_instance/src/get_instance.dart';
 
 class GetDialogRoute<T> extends PopupRoute<T> {
   GetDialogRoute({
-    @required RoutePageBuilder pageBuilder,
+    required RoutePageBuilder pageBuilder,
     bool barrierDismissible = true,
-    String barrierLabel,
+    String? barrierLabel,
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
-    RouteTransitionsBuilder transitionBuilder,
-    RouteSettings settings,
-  })  : assert(barrierDismissible != null),
-        widget = pageBuilder,
+    RouteTransitionsBuilder? transitionBuilder,
+    RouteSettings? settings,
+  })  : widget = pageBuilder,
         name = "DIALOG: ${pageBuilder.hashCode}",
         _barrierDismissible = barrierDismissible,
         _barrierLabel = barrierLabel,
@@ -32,15 +31,15 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   @override
   void dispose() {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance.addPostFrameCallback(
+      WidgetsBinding.instance!.addPostFrameCallback(
           (_) => GetInstance().removeDependencyByRoute(name));
     }
     super.dispose();
   }
 
   @override
-  String get barrierLabel => _barrierLabel;
-  final String _barrierLabel;
+  String? get barrierLabel => _barrierLabel;
+  final String? _barrierLabel;
 
   @override
   Color get barrierColor => _barrierColor;
@@ -50,7 +49,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   Duration get transitionDuration => _transitionDuration;
   final Duration _transitionDuration;
 
-  final RouteTransitionsBuilder _transitionBuilder;
+  final RouteTransitionsBuilder? _transitionBuilder;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
@@ -73,6 +72,6 @@ class GetDialogRoute<T> extends PopupRoute<T> {
           ),
           child: child);
     } // Some default transition
-    return _transitionBuilder(context, animation, secondaryAnimation, child);
+    return _transitionBuilder!(context, animation, secondaryAnimation, child);
   }
 }

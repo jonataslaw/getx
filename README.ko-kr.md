@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**언어: [우르두어](README.ur-PK.md), [영어](README.md), [인도네시아 인](README.id-ID.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일).**
+**언어: [우르두어](README.ur-PK.md), [영어](README.md), [인도네시아 인](README.id-ID.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일), [French](README-fr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -16,9 +16,9 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Get에 대하여](#Get에-대하여)
+- [Get에 대하여](#get에-대하여)
 - [설치](#설치)
-- [GetX를 사용한 Counter 앱](#GetX를-사용한-Counter-앱)
+- [GetX를 사용한 Counter 앱](#getx를-사용한-counter-앱)
 - [세가지 주요점](#세가지-주요점)
   - [상태 관리](#상태-관리)
     - [반응형 상태 관리자](#반응형-상태-관리자)
@@ -46,7 +46,7 @@
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [기타 고급 API](#기타-고급-API)
+  - [기타 고급 API](#기타-고급-api)
     - [선택적 전역 설정과 수동 구성](#선택적-전역-설정과-수동-구성)
     - [지역 상태 위젯들](#지역-상태-위젯들)
       - [ValueBuilder](#valuebuilder)
@@ -55,8 +55,8 @@
       - [GetView](#getview)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
-- [2.0의 주요 변경점](#2.0의-주요-변경점)
-- [왜-Getx인가?](#왜-Getx인가?)
+- [2.0의 주요 변경점](#20의-주요-변경점)
+- [왜 Getx인가?](#왜-getx인가)
 - [커뮤니티](#커뮤니티)
   - [커뮤니티 채널](#커뮤니티-채널)
   - [기여하는 방법](#기여하는-방법)
@@ -145,7 +145,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
       // 8줄의 Navigator.push를 간단한 Get.to()로 변경합니다. context는 필요없습니다.
-      body: Center(child: RaisedButton(
+      body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
@@ -188,7 +188,7 @@ Get은 두가지 상태 관리자가 있습니다: 단순 상태관리자(GetBui
 - 각 변수에 대해 StreamBuilder를 만들 필요가 없습니다.
 - 각각의 상태(state)를 위한 클래스를 만들 필요가 없습니다.
 - 초기값을 위한 get이 필요하지 않습니다.
-- 코드 생성기를 사용할 필요가 없스빈다.
+- 코드 생성기를 사용할 필요가 없습니다.
 
 Get의 반응형 프로그램은 setState를 사용하는 것 만큼 쉽습니다.
 
@@ -216,7 +216,7 @@ Obx(() => Text("${controller.name}"));
 
 ### 상태 관리에 대한 자세한 내용
 
-**상태 관리에 대한 자세한 설명은 [여기](./documentation/en_US/state_management.md)를 보십시오. 여기에서 더 많은 예제와 단순 상태 관리자와 반응형 상태 관리자의 차이점을 볼 수 있습니다.**
+**상태 관리에 대한 자세한 설명은 [여기](./documentation/kr_KO/state_management.md)를 보십시오. 여기에서 더 많은 예제와 단순 상태 관리자와 반응형 상태 관리자의 차이점을 볼 수 있습니다.**
 
 GetX 능력에 대한 좋은 아이디어를 얻을 수 있습니다.
 
@@ -969,7 +969,7 @@ class SettingsService extends GetxService {
 
 1- Rx 타입들:
 
-| 이전     | 이후        |
+| 이전    | 이후       |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |

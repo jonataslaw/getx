@@ -53,7 +53,7 @@ class Home extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -120,7 +120,7 @@ class Home extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -161,7 +161,7 @@ class Home extends StatelessWidget {
             Obx(() => Text(
                       'clicks: ${controller.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.to(Second());
@@ -282,6 +282,7 @@ As the view has only widgets, you can use a view for android, and another for iO
 However, some examples like internationalization, Snackbars without context, validators, responsiveness and other Getx resources, were not explored (and it would not even be possible to explore all resources in such a simple example), so below is an example not very complete, but trying demonstrate how to use internationalization, reactive custom classes, reactive lists, snackbars contextless, workers etc.
 
 ```dart
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -362,13 +363,13 @@ class First extends StatelessWidget {
                 builder: (_) => Text(
                       'clicks: ${_.count}',
                     )),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
                 Get.toNamed('/second');
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Change locale to English'),
               onPressed: () {
                 Get.updateLocale(Locale('en', 'UK'));
@@ -397,37 +398,35 @@ class Second extends GetView<ControllerX> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GetX<ControllerX>(
-              // Using bindings you don't need of init: method
-              // Using Getx you can take controller instance of "builder: (_)"
-              builder: (_) {
+            Obx(
+              () {
                 print("count1 rebuild");
-                return Text('${_.count1}');
+                return Text('${controller.count1}');
               },
             ),
-            GetX<ControllerX>(
-              builder: (_) {
+            Obx(
+              () {
                 print("count2 rebuild");
                 return Text('${controller.count2}');
               },
             ),
-            GetX<ControllerX>(builder: (_) {
+            Obx(() {
               print("sum rebuild");
-              return Text('${_.sum}');
+              return Text('${controller.sum}');
             }),
-            GetX<ControllerX>(
-              builder: (_) => Text('Name: ${controller.user.value.name}'),
+            Obx(
+              () => Text('Name: ${controller.user.value?.name}'),
             ),
-            GetX<ControllerX>(
-              builder: (_) => Text('Age: ${_.user.value.age}'),
+            Obx(
+              () => Text('Age: ${controller.user.value?.age}'),
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Go to last page"),
               onPressed: () {
                 Get.toNamed('/third', arguments: 'arguments of second');
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Back page and open snackbar"),
               onPressed: () {
                 Get.back();
@@ -437,28 +436,28 @@ class Second extends GetView<ControllerX> {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Increment"),
               onPressed: () {
-                Get.find<ControllerX>().increment();
+                controller.increment();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Increment"),
               onPressed: () {
-                Get.find<ControllerX>().increment2();
+                controller.increment2();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Update name"),
               onPressed: () {
-                Get.find<ControllerX>().updateUser();
+                controller.updateUser();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Dispose worker"),
               onPressed: () {
-                Get.find<ControllerX>().disposeWorker();
+                controller.disposeWorker();
               },
             ),
           ],
@@ -509,7 +508,7 @@ class ControllerX extends GetxController {
 
   updateUser() {
     user.update((value) {
-      value.name = 'Jose';
+      value!.name = 'Jose';
       value.age = 30;
     });
   }
@@ -523,7 +522,7 @@ class ControllerX extends GetxController {
   /// Here is an outline of how you can use them:
 
   /// made this if you need cancel you worker
-  Worker _ever;
+  late Worker _ever;
 
   @override
   onInit() {
@@ -562,8 +561,8 @@ class SizeTransitions extends CustomTransition {
   @override
   Widget buildTransition(
       BuildContext context,
-      Curve curve,
-      Alignment alignment,
+      Curve? curve,
+      Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -572,7 +571,7 @@ class SizeTransitions extends CustomTransition {
       child: SizeTransition(
         sizeFactor: CurvedAnimation(
           parent: animation,
-          curve: curve,
+          curve: curve!,
         ),
         child: child,
       ),
