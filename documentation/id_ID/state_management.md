@@ -534,8 +534,8 @@ Jika anda perlu menggunakan controller anda di banyak tempat, dan diluar dari Ge
 class Controller extends GetxController {
 
   /// Anda tidak membutuhkan itu. Saya menyarankan menggunakannya hanya untuk kemudahan sintaks.
-  /// dengan static method: Controller.to.counter();
-  /// tanpa static method: Get.find<Controller>().counter();
+  /// dengan static method: Controller.to.increment();
+  /// tanpa static method: Get.find<Controller>().increment();
   /// Tidak ada perbedaan dari segi performa, atau efek samping apapun dalam menggunakan kedua sintaks diatas. Yang berbeda hanyalah yang satu tidak memerlukan type, dan yang satu lagi akan di autocomplete oleh IDE.
   static Controller get to => Get.find(); // Tambahkan baris ini
 
