@@ -515,12 +515,11 @@ GetBuilder 밖의 여러 곳에서 controller를 사용해야 하는 경우, 간
 ```dart
 class Controller extends GetxController {
 
-  /// 꼭 이렇게 할 필요는 없지만, 문법적으로 용이하게 사용하게 위해 이렇게 하시기를 권장합니다.
-  /// static 메소드로 사용할 경우: Controller.to.counter();
-  /// static 메소드로 사용하지 않을 경우: Get.find<Controller>().counter();
-  /// 이 둘 간의 성능적 차이는 없으며, 문법적 차이로 오는 부작용도 없습니다. 
-  /// 단순히 하나는 type을 적을 필요가 없고, 다른 하나는 IDE가 자동완성 해준다는 차이점밖에 없습니다.
-  static Controller get to => Get.find(); // 이 코드만 추가하세요
+  /// You do not need that. I recommend using it just for ease of syntax.
+  /// with static method: Controller.to.increment();
+  /// with no static method: Get.find<Controller>().increment();
+  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other the IDE will autocomplete it.
+  static Controller get to => Get.find(); // add this line
 
   int counter = 0;
   void increment() {
