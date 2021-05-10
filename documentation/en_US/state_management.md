@@ -170,7 +170,7 @@ final name = Rx<String>('');
 final isLogged = Rx<Bool>(false);
 final count = Rx<Int>(0);
 final balance = Rx<Double>(0.0);
-final number = Rx<Num>(0)
+final number = Rx<Num>(0);
 final items = Rx<List<String>>([]);
 final myMap = Rx<Map<String, int>>({});
 
