@@ -5,7 +5,6 @@ import 'package:get/get_navigation/src/root/parse_route.dart';
 
 void main() {
   test('Parse Page with children', () {
-    final tree = ParseRouteTree();
     final pageTree = GetPage(name: '/city', page: () => Container(), children: [
       GetPage(name: '/home', page: () => Container(), children: [
         GetPage(name: '/bed-room', page: () => Container()),
@@ -20,7 +19,9 @@ void main() {
       ]),
     ]);
 
-    tree.addRoute(pageTree);
+    final tree = ParseRouteTree(routes: <GetPage>[pageTree]);
+
+    // tree.addRoute(pageTree);
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
@@ -28,7 +29,6 @@ void main() {
   });
 
   test('Parse Page without children', () {
-    final tree = ParseRouteTree();
     final pageTree = [
       GetPage(name: '/city', page: () => Container()),
       GetPage(name: '/city/home', page: () => Container()),
@@ -41,9 +41,11 @@ void main() {
       GetPage(name: '/city/work/meeting-room', page: () => Container()),
     ];
 
-    for (var p in pageTree) {
-      tree.addRoute(p);
-    }
+    final tree = ParseRouteTree(routes: pageTree);
+
+    // for (var p in pageTree) {
+    //   tree.addRoute(p);
+    // }
 
     final searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);

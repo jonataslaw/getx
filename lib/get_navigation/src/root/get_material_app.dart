@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
+import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'root_controller.dart';
@@ -313,63 +315,204 @@ class GetMaterialApp extends StatelessWidget {
             ));
 }
 
-class GetNavigator extends StatelessWidget {
-  final List<GetPage> getPages;
-
-  const GetNavigator(
-      {Key? key,
-      required this.getPages,
-      this.pages = const <Page<dynamic>>[],
-      this.onPopPage,
-      this.initialRoute,
-      this.onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
-      this.onGenerateRoute,
-      this.onUnknownRoute,
-      this.transitionDelegate = const DefaultTransitionDelegate<dynamic>(),
-      this.reportsRouteUpdateToEngine = false,
-      this.observers = const <NavigatorObserver>[],
-      this.restorationScopeId,
-      this.unKnownRoute})
-      : super(key: key);
-
-  final List<Page<dynamic>> pages;
-
-  final GetPage? unKnownRoute;
-
-  final PopPageCallback? onPopPage;
-
-  final TransitionDelegate<dynamic> transitionDelegate;
-
-  final String? initialRoute;
-
-  final RouteFactory? onGenerateRoute;
-
-  final RouteFactory? onUnknownRoute;
-
-  final List<NavigatorObserver> observers;
-
-  final String? restorationScopeId;
-
-  static const String defaultRouteName = '/';
-
-  final RouteListFactory onGenerateInitialRoutes;
-
-  final bool reportsRouteUpdateToEngine;
+class GetInformationParser extends RouteInformationParser<GetPage> {
+  @override
+  SynchronousFuture<GetPage> parseRouteInformation(
+      RouteInformation routeInformation) {
+    if (routeInformation.location == '/') {
+      return SynchronousFuture(Get.routeTree.routes.first);
+    }
+    print('route location: ${routeInformation.location}');
+    final page = Get.routeTree.matchRoute(routeInformation.location!);
+    print(page.parameters);
+    final val = page.route!.copy(
+      name: routeInformation.location,
+      parameter: Map.from(page.parameters),
+    );
+    return SynchronousFuture(val);
+  }
 
   @override
-  Widget build(Object context) {
+  RouteInformation restoreRouteInformation(GetPage uri) {
+    print('restore $uri');
+
+    return RouteInformation(location: uri.name);
+  }
+}
+
+class GetNav {
+  GetNav({GetDelegate? routerDelegate, required this.pages})
+      : routerDelegate = routerDelegate ?? GetDelegate() {
+    Get.registerList(pages);
+    Get.addKey(this.routerDelegate.navigatorKey);
+  }
+
+  Future<T?> toNamed<T>(String route) {
+    return routerDelegate.toNamed(route);
+  }
+
+  Future<T?> pushRoute<T>(
+    GetPage route, {
+    bool removeUntil = false,
+    bool replaceCurrent = false,
+    bool rebuildStack = true,
+  }) {
+    return routerDelegate.pushRoute(route,
+        removeUntil: removeUntil,
+        replaceCurrent: replaceCurrent,
+        rebuildStack: rebuildStack);
+  }
+
+  Future<bool> popRoute() {
+    return routerDelegate.popRoute();
+  }
+
+  Future<T?> offUntil<T>(String route) {
+    return routerDelegate.offUntil(route);
+  }
+
+  final GetDelegate routerDelegate;
+  final GetInformationParser routeInformationParser = GetInformationParser();
+  final List<GetPage> pages;
+}
+
+class GetDelegate extends RouterDelegate<GetPage>
+    with
+        // ignore: prefer_mixin
+        ListNotifier,
+        PopNavigatorRouterDelegateMixin<GetPage> {
+  final List<GetPage> routes = <GetPage>[];
+
+  final GetPage? notFoundRoute;
+
+  final List<NavigatorObserver>? dipNavObservers;
+  final TransitionDelegate<dynamic>? transitionDelegate;
+
+  GetDelegate(
+      {this.notFoundRoute, this.dipNavObservers, this.transitionDelegate});
+
+  /// Called by the [Router] at startup with the structure that the
+  /// [RouteInformationParser] obtained from parsing the initial route.
+  @override
+  Widget build(BuildContext context) {
     return Navigator(
-      pages: getPages,
-      onPopPage: onPopPage,
-      initialRoute: initialRoute,
-      onGenerateInitialRoutes: onGenerateInitialRoutes,
-      onGenerateRoute: onGenerateRoute,
-      onUnknownRoute: onUnknownRoute,
-      transitionDelegate: transitionDelegate,
-      reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-      observers: observers,
-      restorationScopeId: restorationScopeId,
-      key: Get.nestedKey(key),
+      key: navigatorKey,
+      onPopPage: _onPopPage,
+      pages: routes.toList(),
+      observers: [GetObserver()],
+      transitionDelegate:
+          transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
     );
+  }
+
+  @override
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Future<void> setInitialRoutePath(GetPage configuration) async {
+    return pushRoute(configuration);
+  }
+
+  @override
+  Future<void> setNewRoutePath(GetPage configuration) {
+    routes.clear();
+    return pushRoute(configuration);
+  }
+
+  /// Called by the [Router] when it detects a route information may have
+  /// changed as a result of rebuild.
+  @override
+  GetPage get currentConfiguration {
+    final route = routes.last;
+    return route;
+  }
+
+  Future<T?> toNamed<T>(String route) {
+    final page = Get.routeTree.matchRoute(route);
+    if (page.route != null) {
+      return pushRoute(page.route!.copy(name: route));
+    } else {
+      return pushRoute(_notFound());
+    }
+  }
+
+  Future<T?> offUntil<T>(String route) {
+    final page = Get.routeTree.matchRoute(route);
+    if (page.route != null) {
+      return pushRoute(page.route!.copy(name: route), removeUntil: true);
+    } else {
+      return pushRoute(_notFound());
+    }
+  }
+
+  GetPage _notFound() {
+    return notFoundRoute ??
+        GetPage(
+          name: '/404',
+          page: () => Scaffold(
+            body: Text('not found'),
+          ),
+        );
+  }
+
+  Future<T?> pushRoute<T>(
+    GetPage route, {
+    bool removeUntil = false,
+    bool replaceCurrent = false,
+    bool rebuildStack = true,
+  }) async {
+    route = route.copy(unknownRoute: _notFound());
+    assert(!(removeUntil && replaceCurrent),
+        'Only removeUntil or replaceCurrent should by true!');
+    if (removeUntil) {
+      routes.clear();
+    } else if (replaceCurrent && routes.isNotEmpty) {
+      routes.removeLast();
+    }
+    _addRoute(route);
+    if (rebuildStack) {
+      refresh();
+    }
+  }
+
+  @override
+  Future<bool> popRoute() {
+    if (routes.length > 1) {
+      _removePage(routes.last);
+      return Future.value(true);
+    }
+    return Future.value(false);
+  }
+
+  bool canPop() {
+    return routes.isNotEmpty;
+  }
+
+  bool _onPopPage(Route<dynamic> route, dynamic result) {
+    final didPop = route.didPop(result);
+    if (!didPop) {
+      return false;
+    }
+    routes.remove(route.settings);
+    refresh();
+    return true;
+  }
+
+  void _removePage(GetPage page) {
+    routes.remove(page);
+
+    refresh();
+  }
+
+  void _addRoute(GetPage route) {
+    routes.add(
+      route,
+    );
+    refresh();
+  }
+
+  void addRoutes(List<GetPage> pages) {
+    routes.addAll(pages);
+    refresh();
   }
 }

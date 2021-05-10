@@ -936,16 +936,18 @@ you can only use widgets and widget functions here''';
         predicate ?? (route) => false);
   }
 
+  void registerList(List<GetPage> getPages) {
+    routeTree = ParseRouteTree(routes: getPages);
+  }
+
   void addPages(List<GetPage>? getPages) {
     if (getPages != null) {
-      routeTree = ParseRouteTree();
-
-      routeTree.addRoutes(getPages);
+      registerList(getPages);
     }
   }
 
   void addPage(GetPage getPage) {
-    routeTree = ParseRouteTree();
+    //  routeTree = ParseRouteTree();
     routeTree.addRoute(getPage);
   }
 

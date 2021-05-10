@@ -9,7 +9,11 @@ class RouteDecoder {
 }
 
 class ParseRouteTree {
-  final _routes = <GetPage>[];
+  ParseRouteTree({
+    required this.routes,
+  });
+
+  final List<GetPage> routes;
 
   RouteDecoder matchRoute(String name) {
     final uri = Uri.parse(name);
@@ -34,7 +38,7 @@ class ParseRouteTree {
   }
 
   void addRoute(GetPage route) {
-    _routes.add(route);
+    routes.add(route);
 
     // Add Page children.
     for (var page in _flattenPage(route)) {
@@ -82,13 +86,13 @@ class ParseRouteTree {
         opaque: origin.opaque,
         parameter: origin.parameter,
         popGesture: origin.popGesture,
-        settings: origin.settings,
+        //  settings: origin.settings,
         transitionDuration: origin.transitionDuration,
         middlewares: middlewares,
       );
 
   GetPage? _findRoute(String name) {
-    return _routes.firstWhereOrNull(
+    return routes.firstWhereOrNull(
       (route) => route.path.regex.hasMatch(name),
     );
   }

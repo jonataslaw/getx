@@ -189,8 +189,7 @@ class PageRedirect {
             page: route!.page,
             routeName: route!.name,
             parameter: route!.parameter,
-            settings: RouteSettings(
-                name: settings.name, arguments: settings.arguments),
+            settings: settings,
             curve: route!.curve,
             opaque: route!.opaque,
             customTransition: route!.customTransition,
