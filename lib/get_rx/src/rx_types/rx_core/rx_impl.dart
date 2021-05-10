@@ -337,7 +337,7 @@ class Rxn<T> extends Rx<T?> {
   Rxn([T? initial]) : super(initial);
 
   @override
-  Object toJson() {
+  dynamic toJson() {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
