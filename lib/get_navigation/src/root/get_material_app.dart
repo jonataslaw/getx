@@ -343,7 +343,7 @@ class GetInformationParser extends RouteInformationParser<GetPage> {
 class GetNav {
   GetNav({GetDelegate? routerDelegate, required this.pages})
       : routerDelegate = routerDelegate ?? GetDelegate() {
-    Get.registerList(pages);
+    Get.registerRoutes(pages);
     Get.addKey(this.routerDelegate.navigatorKey);
   }
 

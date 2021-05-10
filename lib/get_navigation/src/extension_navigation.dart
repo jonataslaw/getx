@@ -936,13 +936,15 @@ you can only use widgets and widget functions here''';
         predicate ?? (route) => false);
   }
 
-  void registerList(List<GetPage> getPages) {
-    routeTree = ParseRouteTree(routes: getPages);
+  void registerRoutes(List<GetPage> getPages) {
+    //TODO: only replace if null???
+    routeTree = ParseRouteTree(routes: <GetPage>[]);
+    routeTree.addRoutes(getPages);
   }
 
   void addPages(List<GetPage>? getPages) {
     if (getPages != null) {
-      registerList(getPages);
+      registerRoutes(getPages);
     }
   }
 

@@ -19,7 +19,9 @@ void main() {
       ]),
     ]);
 
-    final tree = ParseRouteTree(routes: <GetPage>[pageTree]);
+    final tree = ParseRouteTree(routes: <GetPage>[]);
+
+    tree.addRoute(pageTree);
 
     // tree.addRoute(pageTree);
     final searchRoute = '/city/work/office/pen';
