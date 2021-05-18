@@ -86,10 +86,17 @@ class Request<T> {
     FormData? files,
     bool persistentConnection = true,
     Decoder<T>? decoder,
+    bool appendHeader = true,
   }) {
     if (followRedirects) {
       assert(maxRedirects > 0);
     }
+
+    // If appendHeader is set to true, we will merge origin headers with that
+    if (appendHeader && headers != null) {
+      headers.addAll(this.headers);
+    }
+
     return Request._(
       url: url ?? this.url,
       method: method ?? this.method,
