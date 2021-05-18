@@ -498,7 +498,7 @@ middleware diatas akan dijalankan dengan urutan sebagai berikut **-8 => 2 => 4 =
 Fungsi ini akan terpanggil ketika halaman dari route yang dipanggil sedang dicari. RouteSettings diperlukan untuk mengatur tujuan dari fungsi redirect. Atau berikan null jika tidak ingin ada redirect.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }
