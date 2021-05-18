@@ -60,14 +60,13 @@ class Response<T> {
   final T? body;
 }
 
-Future<String> bodyBytesToString(
-    Stream<List<int>> bodyBytes, Map<String, String> headers) {
+Future<String> bodyBytesToString(Stream<List<int>> bodyBytes, Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 
 /// Returns the encoding to use for a response with the given headers.
 ///
-/// Defaults to [latin1] if the headers don't specify a charset or if that
+/// Defaults to [utf8] if the headers don't specify a charset or if that
 /// charset is unknown.
 Encoding _encodingForHeaders(Map<String, String> headers) =>
     _encodingForCharset(_contentTypeForHeaders(headers).parameters!['charset']);
@@ -76,7 +75,7 @@ Encoding _encodingForHeaders(Map<String, String> headers) =>
 ///
 /// Returns [fallback] if [charset] is null or if no [Encoding] was found that
 /// corresponds to [charset].
-Encoding _encodingForCharset(String? charset, [Encoding fallback = latin1]) {
+Encoding _encodingForCharset(String? charset, [Encoding fallback = utf8]) {
   if (charset == null) return fallback;
   return Encoding.getByName(charset) ?? fallback;
 }
@@ -102,9 +101,7 @@ class HeaderValue {
   }
 
   static HeaderValue parse(String value,
-      {String parameterSeparator = ';',
-      String? valueSeparator,
-      bool preserveBackslash = false}) {
+      {String parameterSeparator = ';', String? valueSeparator, bool preserveBackslash = false}) {
     var result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
     return result;
@@ -134,8 +131,7 @@ class HeaderValue {
     return stringBuffer.toString();
   }
 
-  void _parse(String value, String parameterSeparator, String? valueSeparator,
-      bool preserveBackslash) {
+  void _parse(String value, String parameterSeparator, String? valueSeparator, bool preserveBackslash) {
     var index = 0;
 
     bool done() => index == value.length;
