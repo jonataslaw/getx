@@ -192,38 +192,39 @@ class GetHttpClient {
       });
 
       if (authenticate) await _modifier.authenticator!(request);
-      await _modifier.modifyRequest(request);
+      final newRequest = await _modifier.modifyRequest<T>(request);
 
-      var response = await _httpClient.send<T>(request);
+      var response = await _httpClient.send<T>(newRequest);
 
-      await _modifier.modifyResponse(request, response);
+      final newResponse =
+          await _modifier.modifyResponse<T>(newRequest, response);
 
-      if (HttpStatus.unauthorized == response.statusCode &&
+      if (HttpStatus.unauthorized == newResponse.statusCode &&
           _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
         return _performRequest<T>(
           handler,
           authenticate: true,
           requestNumber: requestNumber + 1,
-          headers: request.headers,
+          headers: newRequest.headers,
         );
-      } else if (HttpStatus.unauthorized == response.statusCode) {
+      } else if (HttpStatus.unauthorized == newResponse.statusCode) {
         if (!errorSafety) {
           throw UnauthorizedException();
         } else {
           return Response<T>(
-            request: request,
-            headers: response.headers,
-            statusCode: response.statusCode,
-            body: response.body,
-            bodyBytes: response.bodyBytes,
-            bodyString: response.bodyString,
-            statusText: response.statusText,
+            request: newRequest,
+            headers: newResponse.headers,
+            statusCode: newResponse.statusCode,
+            body: newResponse.body,
+            bodyBytes: newResponse.bodyBytes,
+            bodyString: newResponse.bodyString,
+            statusText: newResponse.statusText,
           );
         }
       }
 
-      return response;
+      return newResponse;
     } on Exception catch (err) {
       if (!errorSafety) {
         throw GetHttpException(err.toString());
