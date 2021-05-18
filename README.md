@@ -527,7 +527,7 @@ those middlewares will be run in this order **-8 => 2 => 4 => 5**
 This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }

@@ -489,7 +489,7 @@ final middlewares = [
 이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }

@@ -519,7 +519,7 @@ Esses middlewares serão executados nesta ordem:  **-8 => 2 => 4 => 5**
 Esta função será chamada quando a página da rota chamada estiver sendo pesquisada. RouteSettings se torna o resultado do redirecionamento. Ou retorne nulo e não haverá redirecionamento.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }
