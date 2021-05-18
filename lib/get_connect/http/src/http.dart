@@ -192,11 +192,11 @@ class GetHttpClient {
       });
 
       if (authenticate) await _modifier.authenticator!(request);
-      await _modifier.modifyRequest(request);
+      final newRequest = await _modifier.modifyRequest<T>(request);
 
-      var response = await _httpClient.send<T>(request);
+      var response = await _httpClient.send<T>(newRequest);
 
-      await _modifier.modifyResponse(request, response);
+      await _modifier.modifyResponse(newRequest, response);
 
       if (HttpStatus.unauthorized == response.statusCode &&
           _modifier.authenticator != null &&
@@ -205,14 +205,14 @@ class GetHttpClient {
           handler,
           authenticate: true,
           requestNumber: requestNumber + 1,
-          headers: request.headers,
+          headers: newRequest.headers,
         );
       } else if (HttpStatus.unauthorized == response.statusCode) {
         if (!errorSafety) {
           throw UnauthorizedException();
         } else {
           return Response<T>(
-            request: request,
+            request: newRequest,
             headers: response.headers,
             statusCode: response.statusCode,
             body: response.body,

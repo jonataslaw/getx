@@ -31,12 +31,15 @@ class GetModifier<T> {
     _requestModifiers.remove(interceptor);
   }
 
-  Future<void> modifyRequest(Request request) async {
+  Future<Request<T>> modifyRequest<T>(Request<T> request) async {
+    var newRequest = request;
     if (_requestModifiers.isNotEmpty) {
       for (var interceptor in _requestModifiers) {
-        await interceptor(request);
+        newRequest = await interceptor(newRequest) as Request<T>;
       }
     }
+
+    return newRequest;
   }
 
   Future<void> modifyResponse(Request request, Response response) async {
