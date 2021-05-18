@@ -76,9 +76,9 @@ class Request<T> {
   }
 
   Request copyWith({
-    required Uri url,
-    required String method,
-    required Map<String, String> headers,
+    Uri? url,
+    String? method,
+    Map<String, String>? headers,
     Stream<List<int>>? bodyBytes,
     bool followRedirects = true,
     int maxRedirects = 4,
@@ -91,10 +91,10 @@ class Request<T> {
       assert(maxRedirects > 0);
     }
     return Request._(
-      url: url,
-      method: method,
+      url: url ?? this.url,
+      method: method ?? this.method,
       bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
-      headers: Map.from(headers),
+      headers: headers == null ? this.headers : Map.from(headers),
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
       contentLength: contentLength,

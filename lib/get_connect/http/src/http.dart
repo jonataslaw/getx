@@ -196,9 +196,10 @@ class GetHttpClient {
 
       var response = await _httpClient.send<T>(newRequest);
 
-      await _modifier.modifyResponse(newRequest, response);
+      final newResponse =
+          await _modifier.modifyResponse<T>(newRequest, response);
 
-      if (HttpStatus.unauthorized == response.statusCode &&
+      if (HttpStatus.unauthorized == newResponse.statusCode &&
           _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
         return _performRequest<T>(
@@ -207,23 +208,23 @@ class GetHttpClient {
           requestNumber: requestNumber + 1,
           headers: newRequest.headers,
         );
-      } else if (HttpStatus.unauthorized == response.statusCode) {
+      } else if (HttpStatus.unauthorized == newResponse.statusCode) {
         if (!errorSafety) {
           throw UnauthorizedException();
         } else {
           return Response<T>(
             request: newRequest,
-            headers: response.headers,
-            statusCode: response.statusCode,
-            body: response.body,
-            bodyBytes: response.bodyBytes,
-            bodyString: response.bodyString,
-            statusText: response.statusText,
+            headers: newResponse.headers,
+            statusCode: newResponse.statusCode,
+            body: newResponse.body,
+            bodyBytes: newResponse.bodyBytes,
+            bodyString: newResponse.bodyString,
+            statusText: newResponse.statusText,
           );
         }
       }
 
-      return response;
+      return newResponse;
     } on Exception catch (err) {
       if (!errorSafety) {
         throw GetHttpException(err.toString());
