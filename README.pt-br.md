@@ -189,7 +189,7 @@ Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é p
 
 ## Gerenciamento de estado
 
-GetX™ posuui dois gerenciadores de estado diferentes: o gerenciador de estado simples (vamos chamá-lo de GetBuilder) e o gerenciador de estado reativo (GetX/Obx)
+GetX™ possui dois gerenciadores de estado diferentes: o gerenciador de estado simples (vamos chamá-lo de GetBuilder) e o gerenciador de estado reativo (GetX/Obx)
 
 ### Reactive state manager
 
