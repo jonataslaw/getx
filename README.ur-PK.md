@@ -470,7 +470,7 @@ final middlewares = [
 اس فنکشن کو اس وقت کہا جائے گا جب کال والے راستے کے صفحے کی تلاش کی جا رہی ہو۔ اس کو ری ڈائریکٹ کرنے کے نتیجے میں روٹ سیٹنگز لیتے ہیں۔ یا اسے کالعدم کردیں اور کوئی ردوبدل نہیں ہوگا۔
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }
