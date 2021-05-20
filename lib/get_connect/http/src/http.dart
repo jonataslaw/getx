@@ -113,6 +113,8 @@ class GetHttpClient {
       });
       var formData = parts.join('&');
       bodyBytes = utf8.encode(formData);
+      headers['content-length'] = bodyBytes.length.toString();
+      headers['content-type'] = contentType;
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
 
