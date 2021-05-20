@@ -111,12 +111,26 @@ class RxList<E> extends ListMixin<E>
     return value.whereType<T>();
   }
 
-  T? firstWhereN<T>(bool Function(T element) test, {T? Function()? orElse}) {
+  /// Returns the first element that satisfies the given predicate [test].
+  ///
+  /// Iterates through elements and returns the first to satisfy [test].
+  ///
+  /// If no element satisfies [test], the result of invoking the [orElse]
+  /// function is returned.
+  /// If [orElse] is omitted, it defaults to throwing a [StateError].
+  ///
+  /// The [orElse] function can return a [Null] type
+  ///
+  T? firstWhereNullable<T>(
+    bool Function(T element) test, {
+    T? Function()? orElse,
+  }) {
     final list = whereType<T>().toList();
     final index = list.indexWhere(test);
+
     if (index != -1) return list[index];
     if (orElse == null) {
-      throw 'Iterable Error no element';
+      throw StateError('No element');
     }
     return orElse.call();
   }
