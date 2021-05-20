@@ -121,13 +121,12 @@ class RxList<E> extends ListMixin<E>
   ///
   /// The [orElse] function can return a [Null] type
   ///
-  T? firstWhereOrNull<T>(
-    bool Function(T element) test, {
-    T? Function()? orElse,
+  E? firstWhereOrNull(
+    bool Function(E e) test, {
+    E? Function()? orElse,
   }) {
-    final list = whereType<T>().toList();
+    final list = value;
     final index = list.indexWhere(test);
-
     if (index != -1) return list[index];
     if (orElse == null) {
       throw StateError('No element');
