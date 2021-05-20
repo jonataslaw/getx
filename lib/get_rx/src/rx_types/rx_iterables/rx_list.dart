@@ -121,7 +121,7 @@ class RxList<E> extends ListMixin<E>
   ///
   /// The [orElse] function can return a [Null] type
   ///
-  T? firstWhereNullable<T>(
+  T? firstWhereOrNull<T>(
     bool Function(T element) test, {
     T? Function()? orElse,
   }) {
