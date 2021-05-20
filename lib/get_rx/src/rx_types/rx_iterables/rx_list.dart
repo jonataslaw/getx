@@ -40,6 +40,8 @@ class RxList<E> extends ListMixin<E>
   @override
   Iterator<E> get iterator => value.iterator;
 
+  Iterable get iterable => value;
+
   @override
   void operator []=(int index, E val) {
     _value[index] = val;
@@ -109,9 +111,19 @@ class RxList<E> extends ListMixin<E>
     return value.whereType<T>();
   }
 
+  T? firstWhereN<T>(bool Function(T element) test, {T? Function()? orElse}) {
+    final list = whereType<T>().toList();
+    final index = list.indexWhere(test);
+    if (index != -1) return list[index];
+    if (orElse == null) {
+      throw 'Iterable Error no element';
+    }
+    return orElse.call();
+  }
+
   @override
   void sort([int compare(E a, E b)?]) {
-    _value.sort(compare);
+    _value.sort(compare?.call);
     refresh();
   }
 }
