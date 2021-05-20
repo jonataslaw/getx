@@ -100,7 +100,7 @@ class RxList<E> extends ListMixin<E>
   Iterable<E> get reversed => value.reversed;
 
   @override
-  Iterable<E> where(bool Function(E) test) {
+  Iterable<E> where(bool Function(E e) test) {
     return value.where(test);
   }
 

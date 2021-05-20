@@ -59,6 +59,9 @@ extension ContextExtensionss on BuildContext {
   /// similar to [MediaQuery.of(context).padding]
   ThemeData get theme => Theme.of(this);
 
+  /// Check alwaysUse24HourFormat
+  bool get alwaysUse24HourFormat => MediaQuery.of(this).alwaysUse24HourFormat;
+
   /// Check if dark mode theme is enable
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 

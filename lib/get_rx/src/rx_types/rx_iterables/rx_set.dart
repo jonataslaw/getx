@@ -99,7 +99,7 @@ class RxSet<E> extends SetMixin<E>
   }
 
   @override
-  void retainWhere(bool Function(E) E) {
+  void retainWhere(bool Function(E e) E) {
     _value.retainWhere(E);
     refresh();
   }

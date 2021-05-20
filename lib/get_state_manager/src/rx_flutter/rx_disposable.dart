@@ -16,7 +16,6 @@ abstract class DisposableInterface extends GetLifeCycle {
   @override
   @mustCallSuper
   void onInit() {
-    super.onInit();
     SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
   }
 
@@ -24,9 +23,7 @@ abstract class DisposableInterface extends GetLifeCycle {
   /// navigation events, like snackbar, dialogs, or a new route, or
   /// async request.
   @override
-  void onReady() {
-    super.onReady();
-  }
+  void onReady() {}
 
   /// Called before [onDelete] method. [onClose] might be used to
   /// dispose resources used by the controller. Like closing events,
@@ -35,7 +32,5 @@ abstract class DisposableInterface extends GetLifeCycle {
   /// like TextEditingControllers, AnimationControllers.
   /// Might be useful as well to persist some data on disk.
   @override
-  void onClose() {
-    super.onClose();
-  }
+  void onClose() {}
 }

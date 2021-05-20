@@ -96,7 +96,7 @@ class Obx extends ObxWidget {
 ///    false.obs,
 ///   ),
 class ObxValue<T extends RxInterface> extends ObxWidget {
-  final Widget Function(T) builder;
+  final Widget Function(T data) builder;
   final T data;
 
   const ObxValue(this.builder, this.data, {Key? key}) : super(key: key);

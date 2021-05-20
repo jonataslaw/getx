@@ -4,7 +4,7 @@ import 'get_state.dart';
 
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
   @required
-  final Widget Function(T) builder;
+  final Widget Function(T value) builder;
   final bool global;
   final String? id;
   final bool autoRemove;

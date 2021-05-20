@@ -26,7 +26,7 @@ class ValueBuilder<T> extends StatefulWidget {
   final T? initialValue;
   final ValueBuilderBuilder<T> builder;
   final void Function()? onDispose;
-  final void Function(T)? onUpdate;
+  final void Function(T value)? onUpdate;
 
   const ValueBuilder({
     Key? key,
