@@ -159,4 +159,12 @@ extension ListExtension<E> on List<E> {
     clear();
     addAll(items);
   }
+
+  /// Replaces all existing items of this list with [items] if non null
+  void asignAllIfNonNull(Iterable<E>? items) {
+    if (items != null) {
+      clear();
+      addAll(items);
+    }
+  }
 }

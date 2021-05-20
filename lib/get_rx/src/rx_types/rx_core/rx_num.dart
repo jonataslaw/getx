@@ -577,7 +577,7 @@ class RxNum extends Rx<num> {
   }
 }
 
-class RxnNum extends Rx<num?> {
+class RxnNum extends Rxn<num?> {
   RxnNum([num? initial]) : super(initial);
 
   num? operator +(num other) {
@@ -704,7 +704,7 @@ extension RxDoubleExt on Rx<double> {
   double truncateToDouble() => value.truncateToDouble();
 }
 
-extension RxnDoubleExt on Rx<double?> {
+extension RxnDoubleExt on Rxn<double> {
   /// Addition operator.
   Rx<double?>? operator +(num other) {
     if (value != null) {
@@ -842,7 +842,7 @@ class RxDouble extends Rx<double> {
   RxDouble(double initial) : super(initial);
 }
 
-class RxnDouble extends Rx<double?> {
+class RxnDouble extends Rxn<double> {
   RxnDouble([double? initial]) : super(initial);
 }
 
@@ -862,7 +862,7 @@ class RxInt extends Rx<int> {
   }
 }
 
-class RxnInt extends Rx<int?> {
+class RxnInt extends Rxn<int> {
   RxnInt([int? initial]) : super(initial);
 
   /// Addition operator.
@@ -1091,7 +1091,7 @@ extension RxIntExt on Rx<int> {
   double truncateToDouble() => value.truncateToDouble();
 }
 
-extension RxnIntExt on Rx<int?> {
+extension RxnIntExt on Rxn<int> {
   /// Bit-wise and operator.
   ///
   /// Treating both `this` and [other] as sufficiently large two's component

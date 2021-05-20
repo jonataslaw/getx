@@ -269,7 +269,7 @@ class RxString extends Rx<String> implements Comparable<String>, Pattern {
 }
 
 /// Rx class for `String` Type.
-class RxnString extends Rx<String?> implements Comparable<String>, Pattern {
+class RxnString extends Rxn<String> implements Comparable<String>, Pattern {
   RxnString([String? initial]) : super(initial);
 
   @override

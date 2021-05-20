@@ -252,7 +252,7 @@ class RxBool extends Rx<bool> {
   }
 }
 
-class RxnBool extends Rx<bool?> {
+class RxnBool extends Rxn<bool?> {
   RxnBool([bool? initial]) : super(initial);
   @override
   String toString() {
@@ -344,29 +344,49 @@ class Rxn<T> extends Rx<T?> {
       throw '$T has not method [toJson]';
     }
   }
+
+  /// On nullable types set it to null
+  void clear() {
+    value = null;
+  }
 }
 
 extension StringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get obs => RxString(this);
+
+  /// Returns a `RxnString` with [this] `String` as initial value.
+  RxnString get obsn => RxnString(this);
 }
 
 extension IntExtension on int {
   /// Returns a `RxInt` with [this] `int` as initial value.
   RxInt get obs => RxInt(this);
+
+  /// Returns a `RxnInt` with [this] `int` as initial value.
+  RxnInt get obsn => RxnInt(this);
 }
 
 extension DoubleExtension on double {
   /// Returns a `RxDouble` with [this] `double` as initial value.
   RxDouble get obs => RxDouble(this);
+
+  /// Returns a `RxnDouble` with [this] `double` as initial value.
+  RxnDouble get obsn => RxnDouble(this);
 }
 
 extension BoolExtension on bool {
   /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get obs => RxBool(this);
+
+  /// Returns a `RxnBool` with [this] `bool` as initial value.
+  RxnBool get obsn => RxnBool(this);
 }
 
 extension RxT<T> on T {
   /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
+
+  /// Returns a `Rxn` instace with [this] `T` as initial value.
+  Rxn<T> get obsn => Rxn<T>(this);
 }
