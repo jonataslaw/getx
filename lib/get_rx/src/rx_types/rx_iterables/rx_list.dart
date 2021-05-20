@@ -125,9 +125,8 @@ class RxList<E> extends ListMixin<E>
     bool Function(E e) test, {
     E? Function()? orElse,
   }) {
-    final list = value;
-    final index = list.indexWhere(test);
-    if (index != -1) return list[index];
+    final index = value.indexWhere(test);
+    if (index != -1) return value[index];
     if (orElse == null) {
       throw StateError('No element');
     }
