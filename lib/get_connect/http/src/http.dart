@@ -46,9 +46,11 @@ class GetHttpClient {
     bool allowAutoSignedCert = false,
     this.baseUrl,
     List<TrustedCertificate>? trustedCertificates,
+    bool withCredentials = false,
   })  : _httpClient = HttpRequestImpl(
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
+          withCredentials: withCredentials,
         ),
         _modifier = GetModifier();
 

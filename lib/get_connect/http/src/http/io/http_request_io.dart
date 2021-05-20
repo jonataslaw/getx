@@ -16,6 +16,7 @@ class HttpRequestImpl extends HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
+    bool withCredentials = false,
   }) {
     _httpClient = io.HttpClient();
     if (trustedCertificates != null) {
