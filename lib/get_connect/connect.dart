@@ -97,6 +97,7 @@ class GetConnect extends GetConnectInterface {
     this.maxRedirects = 5,
     this.maxAuthRetries = 1,
     this.allowAutoSignedCert = false,
+    this.withCredentials = false,
   }) {
     $configureLifeCycle();
   }
@@ -113,6 +114,7 @@ class GetConnect extends GetConnectInterface {
   List<TrustedCertificate>? trustedCertificates;
   GetHttpClient? _httpClient;
   List<GetSocket>? _sockets;
+  bool withCredentials;
 
   @override
   List<GetSocket> get sockets => _sockets ??= <GetSocket>[];
@@ -127,6 +129,7 @@ class GetConnect extends GetConnectInterface {
         allowAutoSignedCert: allowAutoSignedCert,
         baseUrl: baseUrl,
         trustedCertificates: trustedCertificates,
+        withCredentials: withCredentials,
       );
 
   @override
