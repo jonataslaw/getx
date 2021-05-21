@@ -7,6 +7,7 @@ class HttpRequestImpl extends HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
+    bool withCredentials = false,
   });
   @override
   void close() {}

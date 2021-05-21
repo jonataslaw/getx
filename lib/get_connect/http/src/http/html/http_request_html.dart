@@ -13,6 +13,7 @@ class HttpRequestImpl implements HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
+    this.withCredentials = false,
   });
 
   /// The currently active XHRs.
@@ -20,7 +21,7 @@ class HttpRequestImpl implements HttpRequestBase {
 
   ///This option requires that you submit credentials for requests
   ///on different sites. The default is false
-  bool withCredentials = false;
+  final bool withCredentials;
 
   /// Sends an HTTP request and asynchronously returns the response.
   @override
