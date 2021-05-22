@@ -303,7 +303,7 @@ class GetConnect extends GetConnectInterface {
   }) async {
     try {
       final res = await post(
-        _concatUrl(url),
+        url,
         {'query': query, 'variables': variables},
         headers: headers,
       );
@@ -339,7 +339,7 @@ class GetConnect extends GetConnectInterface {
   }) async {
     try {
       final res = await post(
-        _concatUrl(url),
+        url,
         {'query': mutation, 'variables': variables},
         headers: headers,
       );
