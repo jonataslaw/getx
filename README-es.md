@@ -21,7 +21,7 @@
 - [Sobre GetX](#sobre-getx)
 - [Cómo contribuir](#cómo-contribuir)
 - [Instalación](#instalación)
-- [Proyecto Counter con GetX](#proyecto-counter-no-getx)
+- [Proyecto contador con GetX](#proyecto-contador-con-getx)
 - [Los tres pilares](#los-tres-pilares)
   - [Gestión del Estado](#gestión-del-estado)
     - [Reactivo STATE_MANAGER](#reactivo-state_manager)
