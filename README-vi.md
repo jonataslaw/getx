@@ -51,7 +51,7 @@
     - [Local State Widgets](#local-state-widgets)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
-  - [Useful tips](#useful-tips)
+  - [Mẹo hữu ích](#useful-tips)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
       - [Hướng dẫn sử dụng trước khi dùng](#how-to-use-it)
@@ -810,7 +810,7 @@ ObxValue((data) => Switch(
 ),
 ```
 
-## Useful tips
+## Mẹo hữu ích
 
 `.obs` observable (variable có thể quan sát được) (còn được gọi là loại _Rx_) có nhiều phương thức và toán tử bên trong.
 
@@ -819,7 +819,7 @@ ObxValue((data) => Switch(
 > looks cleaner, but:
 
 ```dart
-var message = 'Hello world'.obs;
+var message = 'Xin Chào'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
@@ -896,11 +896,11 @@ class User {
     String toString() => '$name $last, $age years old';
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+final user = User(name: 'Khang', last: 'Huỳnh', age: 33).obs;
 
 // `user` is "reactive", but the properties inside ARE NOT!
 // So, if we change some variable inside of it...
-user.value.name = 'Roi';
+user.value.name = 'Kaiser';
 // The widget will not rebuild!,
 // `Rx` don't have any clue when you change something inside user.
 // So, for custom classes, we need to manually "notify" the change.
@@ -908,7 +908,7 @@ user.refresh();
 
 // or we can use the `update()` method!
 user.update((value){
-  value.name='Roi';
+  value.name='Kaiser';
 });
 
 print( user );
@@ -1022,7 +1022,7 @@ Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.create()`.
 
 #### GetxService
 
-Class này giống như một `GetxController`, nó chia sẻ cùng một vòng đời (` onInit () `,` onReady () `,` onClose () `).
+Class này giống như một `GetxController`, nó chia sẻ cùng một vòng đời (`onInit ()`,`onReady ()`,`onClose ()`).
 Nhưng không có "logic" bên trong của nó. Nó chỉ thông báo cho ** GetX ** Hệ thống Nạp Dependency rằng class con này ** không thể ** bị xóa khỏi bộ nhớ.
 
 Vì vậy, rất hữu ích để giữ cho "Service" của bạn luôn có thể truy cập và hoạt động với `Get.find ()`. Giống:
@@ -1066,7 +1066,7 @@ class SettingsService extends GetxService {
 
 ```
 
-Cách duy nhất để thực sự xóa một `GetxService`, là với` Get.reset () `giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
+Cách duy nhất để thực sự xóa một `GetxService`, là với`Get.reset ()`giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
 
 # Thay đổi đột phá 2.0
 

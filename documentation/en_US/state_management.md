@@ -1,110 +1,109 @@
-* [State Management](#state-management)
-  + [Reactive State Manager](#reactive-state-manager)
-    - [Advantages](#advantages)
-    - [Maximum performance:](#maximum-performance)
-    - [Declaring a reactive variable](#declaring-a-reactive-variable)
-        - [Having a reactive state, is easy.](#having-a-reactive-state-is-easy)
-    - [Using the values in the view](#using-the-values-in-the-view)
-    - [Conditions to rebuild](#conditions-to-rebuild)
-    - [Where .obs can be used](#where-obs-can-be-used)
-    - [Note about Lists](#note-about-lists)
-    - [Why i have to use .value](#why-i-have-to-use-value)
+* [Quản lý State](#state-management)
+  + [Quản lý Reactive State](#reactive-state-manager)
+    - [Lợi thế](#advantages)
+    - [Hiệu suất tối đa:](#maximum-performance)
+    - [Khai báo một biến phản ứng (reactive variable)](#declaring-a-reactive-variable)
+        - [Thât dễ khi có reactive state.](#having-a-reactive-state-is-easy)
+    - [Sử dụng values trong View](#using-the-values-in-the-view)
+    - [Điều kiện để tái tạo lại](#conditions-to-rebuild)
+    - [Nơi .obs có thể dùng](#where-obs-can-be-used)
+    - [Chí ú về Lists](#note-about-lists)
+    - [Tại sao tôi phải dùng .value](#why-i-have-to-use-value)
     - [Obx()](#obx)
     - [Workers](#workers)
-  + [Simple State Manager](#simple-state-manager)
-    - [Advantages](#advantages-1)
-    - [Usage](#usage)
-    - [How it handles controllers](#how-it-handles-controllers)
-    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
-    - [Why it exists](#why-it-exists)
-    - [Other ways of using it](#other-ways-of-using-it)
-    - [Unique IDs](#unique-ids)
-  + [Mixing the two state managers](#mixing-the-two-state-managers)
+  + [Quản lý State đơn giản](#simple-state-manager)
+    - [Lợi thế](#advantages-1)
+    - [Sử dụng](#usage)
+    - [Cách GetX sử dụng controllers](#how-it-handles-controllers)
+    - [Không cần StatefulWidget nữa!](#you-wont-need-statefulwidgets-anymore)
+    - [Tại sao GetX tồn tại?](#why-it-exists)
+    - [Cách sử dụng khác](#other-ways-of-using-it)
+    - [IDs độc nhất](#unique-ids)
+  + [Trộn hai trình quản lý state](#mixing-the-two-state-managers)
   + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management
+# Quản lý State
 
-GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
+GetX không sử dụng Streams hoặc ChangeNotifier như các quản lý state khác. Tại sao? Ngoài việc xây dựng các ứng dụng cho android, iOS, web, linux, macos và linux, với GetX bạn có thể xây dựng các ứng dụng máy chủ với cú pháp tương tự như Flutter / GetX. Để cải thiện thời gian phản hồi và giảm mức tiêu thụ RAM, chúng tôi đã tạo GetValue và GetStream, là các giải pháp có độ trễ thấp mang lại nhiều hiệu suất với chi phí vận hành thấp. Chúng tôi sử dụng cơ sở này để xây dựng tất cả các nguồn lực của mình, bao gồm cả quản lý state.
 
-* _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
-* _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
+* _Phức hợp_: Một số quản lý state rất phức tạp và có rất nhiều cơ sở hạ tầng. Với GetX, bạn không phải xác định một class cho mỗi event, code rất rõ ràng và rõ ràng, và bạn làm được nhiều việc hơn bằng cách viết ít hơn. Nhiều người đã từ bỏ Flutter vì chủ đề này, và cuối cùng họ đã có một giải pháp đơn giản đến mức đần độn để quản lý các state.
+* _Không trình tạo mã_: Bạn dành một nửa thời gian phát triển để viết logic ứng dụng của mình. Một số quản lý state dựa vào trình tạo mã để có mã có thể đọc được ở mức tối thiểu. Việc thay đổi một biến và phải chạy build_runner có thể gây mất hiệu quả, chuyện này rất ngốn thời gian chờ đợi sau khi quét sạch sẽ rất lâu và bạn phải uống rất nhiều cà phê.
 
-With GetX everything is reactive, and nothing depends on code generators, increasing your productivity in all aspects of your development.
+Với GetX, mọi thứ đều hoạt động và độc lập với trình tạo mã, giúp tăng năng suất của bạn trong mọi khía cạnh phát triển của bạn.
 
-* _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
-* _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
+* _Không phụ thuộc vào context_: Có thể bạn đã cần gửi context của chế độ xem của mình tới controller, làm cho khả năng kết hợp của View với business logic của bạn cao hơn. Bạn có thể phải sử dụng một dependency cho một nơi không có context và phải chuyển context qua các class và hàm khác nhau. Điều này không tồn tại với GetX. Bạn có quyền truy cập vào controller của mình từ bên trong controller mà không cần bất kỳ context nào. Bạn không cần phải gửi context theo tham số vì không có gì theo nghĩa đen.
+* _Kiểm soát hạt_: Hầu hết các quản lý state đều dựa trên ChangeNotifier. ChangeNotifier sẽ thông báo cho tất cả các widget phụ thuộc vào nó khi thông báo cho các widget được gọi. Nếu bạn có 40 widget con trên một màn hình, trong đó có một biến thuộc class ChangeNotifier của bạn, khi bạn cập nhật một widget con, tất cả chúng sẽ được xây dựng lại.
 
-With GetX, even nested widgets are respected. If you have Obx watching your ListView, and another watching a checkbox inside the ListView, when changing the CheckBox value, only it will be updated, when changing the List value, only the ListView will be updated.
+Với GetX, ngay cả các widget lồng nhau cũng được tôn trọng. Nếu bạn có Obx đang xem ListView của bạn và người khác đang xem hộp kiểm bên trong ListView, thì khi thay đổi giá trị CheckBox, chỉ nó mới được cập nhật, khi thay đổi giá trị List, chỉ ListView sẽ được cập nhật.
 
-* _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
+* _Chỉ tái tạo lại nếu biến CẦN thay đổi_: GetX có tính năng kiểm soát streams, điều đó có nghĩa là nếu bạn hiển thị Text là 'Kaiser', nếu bạn thay đổi lại biến có thể quan sát thành 'Kaiser', widget sẽ không được tạo lại. Đó là bởi vì GetX biết rằng 'Kaiser' đã được hiển thị trong Văn bản và sẽ không thực hiện các thao tác tái tạo không cần thiết.
 
-Most (if not all) current state managers will rebuild on the screen.
+Hầu hết (nếu không phải tất cả) các trình quản lý state hiện tại sẽ xây dựng lại trên màn hình.
 
-## Reactive State Manager
+## Quản lý Reactive State
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+Lập trình phản ứng (Reactive programming) có thể khiến nhiều người xa lánh vì nó được cho là phức tạp. GetX biến lập trình phản ứng thành một thứ khá đơn giản:
 
-* You won't need to create StreamControllers.
-* You won't need to create a StreamBuilder for each variable
-* You will not need to create a class for each state.
-* You will not need to create a get for an initial value.
+* Bạn sẽ không cần tạo StreamControllers.
+* Bạn sẽ không cần tạo StreamBuilder cho mỗi biến
+* Bạn sẽ không cần phải tạo một class cho mỗi state.
+* Bạn sẽ không cần tạo get cho một giá trị ban đầu.
 
-Reactive programming with Get is as easy as using setState.
+Lập trình phản ứng với Get dễ dàng như sử dụng setState.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+Hãy tưởng tượng rằng bạn có một biến tên và muốn rằng mỗi khi bạn thay đổi nó, tất cả các widget sử dụng nó sẽ được tự động thay đổi.
 
-This is your count variable:
-
-``` dart
-var name = 'Jonatas Borges';
-```
-
-To make it observable, you just need to add ".obs" to the end of it:
+Đây là count variable của bạn:
 
 ``` dart
-var name = 'Jonatas Borges'.obs;
+var name = 'Khang Huỳnh';
 ```
 
-That's all. It's *that* simple.
+Để làm cho nó có thể quan sát được, bạn chỉ cần thêm ".obs" vào cuối nó:
 
-From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
+``` dart
+var name = 'Khang Huỳnh'.obs;
+```
 
-What did we do under the hood? We created a `Stream` of `String` s, assigned the initial value `"Jonatas Borges"` , we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+Chỉ vậy thôi, chỉ *vậy thôi* người ơi~
 
-This is the **magic of GetX**, thanks to Dart's capabilities.
+Từ bây giờ, chúng ta có thể tham chiếu đến các biến reactive - ". Obs" (có thể thay thế) này là _Rx_.   
 
-But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
+Chúng tôi đã làm gì phía dưới class code? Chúng tôi đã tạo một `Stream` của `String`, được gán giá trị ban đầu `"Khang Huỳnh"`, chúng tôi đã thông báo cho tất cả các widget con sử dụng `"Khang Huỳnh"` rằng chúng hiện "thuộc về" biến này và khi giá trị _Rx_ thay đổi, chúng phải thay đổi theo.
+Đây là **phép màu của GetX**, nhờ vào khả năng của Dart.
 
-You will need to create a `StreamBuilder` , subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+Tuy nhiên, như chúng ta đã biết, một `Widget` chỉ có thể được thay đổi nếu nó nằm bên trong một hàm, bởi vì các class tĩnh không có quyền" tự động thay đổi ".
 
-No, you don't need a `StreamBuilder` , but you are right about static classes.
+Bạn sẽ cần tạo một `StreamBuilder`, đăng ký biến này để lắng nghe các thay đổi và tạo một "stream" các` StreamBuilder` lồng nhau nếu bạn muốn thay đổi một số biến trong cùng một phạm vi, phải không?
 
-Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
-With **GetX** you can also forget about this boilerplate code. 
+Không, bạn không cần `StreamBuilder`, nhưng bạn đã đúng về các class tĩnh.
 
-`StreamBuilder( … )` ? `initialValue: …` ? `builder: …` ? Nope, you just need to place this variable inside an `Obx()` Widget.
+Theo quan điểm, chúng ta thường có rất nhiều bảng soạn sẵn khi chúng ta muốn thay đổi một Widget cụ thể, đó là cách Flutter.
+Với ** GetX **, bạn cũng có thể quên mã soạn sẵn này.
+
+`StreamBuilder (…)`? `initialValue:…`? `builder:…`? Không, bạn chỉ cần đặt biến này bên trong Widget `Obx ()`.
 
 ``` dart
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>` . 
+_Bạn cần nhớ gì?_  Chỉ `Obx(() =>` . 
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+Bạn chỉ đang chuyển Widget đó thông qua một hàm mũi tên vào một `Obx ()` ("Observer" của _Rx_).
 
-`Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
+`Obx` khá thông minh và sẽ chỉ thay đổi nếu giá trị của `controller.name` thay đổi.
 
-If `name` is `"John"` , and you change it to `"John"` ( `name.value = "John"` ), as it's the same `value` as before, nothing will change on the screen, and `Obx` , to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+Nếu `name` là` "Kaiser" `và bạn thay đổi nó thành` "Kaiser" `(` name.value = "Kaiser" `), vì nó giống như` giá trị` như trước, sẽ không có gì thay đổi trên màn hình, và `Obx`, để tiết kiệm tài nguyên, sẽ đơn giản bỏ qua giá trị mới và không xây dựng lại Widget. **Tuyệt vời ông mặt trời chứ?**
 
 > So, what if I have 5 _Rx_ (observable) variables within an `Obx` ?
 
-It will just update when **any** of them changes. 
+Nó sẽ chỉ cập nhật khi ** bất kỳ ** nào trong số chúng thay đổi.
 
 > And if I have 30 variables in a class, when I update one, will it update **all** the variables that are in that class?
 
-Nope, just the **specific Widget** that uses that _Rx_ variable.
+Không, chỉ **Widget cụ thể** sử dụng biến _Rx_ đó.
 
-So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
+Vì vậy, **GetX** chỉ cập nhật màn hình, khi biến _Rx_ thay đổi giá trị của nó.
 
 ``` 
 
@@ -114,44 +113,42 @@ final isOpen = false.obs;
 void onButtonTap() => isOpen.value=false;
 ```
 
-### Advantages
+### Lợi thế
 
-**GetX()** helps you when you need **granular** control over what's being updated.
+**GetX()** giúp bạn khi bạn cần kiểm soát **chi tiết** đối với những gì đang được cập nhật.
 
-If you do not need `unique IDs` , because all your variables will be modified when you perform an action, then use `GetBuilder` , 
-because it's a Simple State Updater (in blocks, like `setState()` ), made in just a few lines of code.
-It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
+Nếu bạn không cần `ID duy nhất`, vì tất cả các biến của bạn sẽ được sửa đổi khi bạn thực hiện một hành động, thì hãy sử dụng` GetBuilder`,
+bởi vì nó là một Trình cập nhật state đơn giản (trong các khối, như `setState ()` '), được tạo chỉ trong một vài dòng mã.
+Nó được làm đơn giản, ít ảnh hưởng đến CPU nhất và chỉ để thực hiện một mục đích duy nhất (xây dựng lại _State_) và sử dụng tài nguyên tối thiểu có thể.
 
-If you need a **powerful** State Manager, you can't go wrong with **GetX**.
+Nếu bạn cần một Trình quản lý state **mạnh mẽ**, bạn không thể làm sai với **GetX**.
 
-It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
+Nó không hoạt động với các biến, nhưng __flows__, mọi thứ trong đó đều là `Streams`.
 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen to the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
+Bạn có thể sử dụng _rxDart_ kết hợp với nó, vì mọi thứ đều là `Luồng`,
+bạn có thể nghe `event` của từng" biến _Rx_ ",
+bởi vì mọi thứ trong đó đều là `Streams`.
 
-It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs` .
+Nó thực sự là một cách tiếp cận _BLoC_, dễ dàng hơn _MobX_ và không có trình tạo code hoặc decorations.
+Bạn có thể biến **mọi thứ** thành một _"Observable" _ chỉ với một `.obs`.
 
-### Maximum performance:
+### Hiệu suất tối đa:
 
-In addition to having a smart algorithm for minimal rebuilds, **GetX** uses comparators 
-to make sure the State has changed. 
+Ngoài việc có một thuật toán thông minh để xây dựng lại tối thiểu, **GetX** sử dụng trình so sánh để đảm bảo rằng Bang đã thay đổi.
 
-If you experience any errors in your app, and send a duplicate change of State, 
-**GetX** will ensure it will not crash.
+Nếu bạn gặp bất kỳ lỗi nào trong ứng dụng của mình và gửi một bản thay đổi state, **GetX** sẽ đảm bảo rằng nó sẽ không gặp sự cố.
 
-With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _ `computed` from MobX_. 
-When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
+Với **GetX** State chỉ thay đổi nếu `giá trị` thay đổi.
+Đó là sự khác biệt chính giữa **GetX** và việc sử dụng _ `computed` từ MobX_.
+Khi kết hợp hai __observables__, và một thay đổi; trình nghe của _observable_ đó cũng sẽ thay đổi.
 
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()` ) will only rebuild if it implies a real change of State.
+Với **GetX**, nếu bạn nối hai biến, `GetX ()` (tương tự như `Observer ()`) sẽ chỉ xây dựng lại nếu nó ngụ ý thay đổi state thực sự.
 
-### Declaring a reactive variable
+### Khai báo một biến phản ứng (reactive variable)
 
-You have 3 ways to turn a variable into an "observable".
+Bạn có 3 cách để thay đổi variable thành "observable".
 
-1 - The first is using **`Rx{Type}`**.
+1 - Sử dụng **`Rx{Type}`**.
 
 ``` dart
 // initial value is recommended, but not mandatory
@@ -163,7 +160,7 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 
-2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
+2 - Sử dụng **`Rx`** và dùng Darts Generics, `Rx<Type>`
 
 ``` dart
 final name = Rx<String>('');
@@ -178,7 +175,7 @@ final myMap = Rx<Map<String, int>>({});
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value` :
+3 - Cách tối ưu nhất, thêm **`.obs`** ở `value` :
 
 ``` dart
 final name = ''.obs;
@@ -193,17 +190,16 @@ final myMap = <String, int>{}.obs;
 final user = User().obs;
 ```
 
-##### Having a reactive state, is easy.
+##### Thât dễ khi có reactive state.
 
-As we know, _Dart_ is now heading towards _null safety_.
-To be prepared, from now on, you should always start your _Rx_ variables with an **initial value**.
+Như chúng ta biết, _Dart_ đang hướng tới _null safety_.
+Để chuẩn bị, từ bây giờ, bạn phải luôn bắt đầu các biến _Rx_ của mình bằng một **initial value**.
 
 > Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
 
-You will literally add a " `.obs` " to the end of your variable, and **that’s it**, you’ve made it observable, 
-and its `.value` , well, will be the _initial value_).
+Theo đúng nghĩa đen, bạn sẽ thêm một "` .obs` "vào cuối biến của mình và **vậy thôi người ơi~**, bạn đã làm cho nó có thể quan sát được, và `.value` của nó sẽ là _initial value_).
 
-### Using the values in the view
+### Sử dụng values trong View
 
 ``` dart
 // controller file
@@ -234,33 +230,33 @@ GetX<Controller>(
 ),
 ```
 
-If we increment `count1.value++` , it will print:
+Nếu chúng ta cộng `count1.value++` , nó sẽ in:
 
 * `count 1 rebuild`
 
 * `count 3 rebuild`
 
-because `count1` has a value of `1` , and `1 + 0 = 1` , changing the `sum` getter value.
+bởi vì `count1` có giá trị là` 1` và `1 + 0 = 1`, thay đổi giá trị getter` sum`.
 
-If we change `count2.value++` , it will print:
+Nếu ta thay đổi `count2.value++` , nó sẽ in:
 
 * `count 2 rebuild`
 
 * `count 3 rebuild`
 
-because `count2.value` changed, and the result of the `sum` is now `2` .
+bởi vì `count2.value` đã thay đổi, và kết quả của` sum` bây giờ là `2`.
 
-* NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
+* LƯU Ý: Theo mặc định, event đầu tiên sẽ xây dựng lại widget con, ngay cả khi nó là cùng một `giá trị`.
 
- This behavior exists due to Boolean variables.
+Hành vi này tồn tại do các biến Boolean.
 
-Imagine you did this:
+Ví dụ, bạn code thế này:
 
 ``` dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever` .
+Và sau đó, bạn đã kiểm tra xem người dùng có "đăng nhập" để kích hoạt event trong `ever` không.
 
 ``` dart
 @override
@@ -278,16 +274,16 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false` , there would be no change to `isLogged` , so `ever()` would never be called.
-To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value` .
+nếu `hasToken` là` false`, sẽ không có thay đổi thành `isLogged`, vì vậy `ever ()` sẽ không bao giờ được gọi.
+Để tránh loại hành vi này, thay đổi đầu tiên đối với _observable_ sẽ luôn kích hoạt một event,
+ngay cả khi nó chứa cùng một `.value`.
 
-You can remove this behavior if you want, using:
+Bạn có thể xóa hành vi này nếu muốn, bằng cách sử dụng:
  `isLogged.firstRebuild = false;`
 
-### Conditions to rebuild
+### Điều kiện để tái tạo lại
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+Ngoài ra, Get cung cấp khả năng kiểm soát state đã được tinh chỉnh. Bạn có thể điều kiện một event (chẳng hạn như thêm một đối tượng vào danh sách), với một điều kiện nhất định.
 
 ``` dart
 // First parameter: condition, must return true or false.
@@ -295,9 +291,9 @@ In addition, Get provides refined state control. You can condition an event (suc
 list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications :smile:
+Không có decoration, không có trình tạo mã, không có phức tạp hóa vấn đề: smile:
 
-Do you know Flutter's counter app? Your Controller class might look like this:
+Bạn có biết ứng dụng counter của Flutter không? Class controller của bạn có thể trông giống như sau:
 
 ``` dart
 class CountController extends GetxController {
@@ -305,19 +301,19 @@ class CountController extends GetxController {
 }
 ```
 
-With a simple:
+Đơn giản hơn:
 
 ``` dart
 controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+Bạn có thể cập nhật counter trong UI của mình, bất kể nó được lưu trữ ở đâu.
 
-### Where .obs can be used
+### Nơi .obs có thể dùng
 
-You can transform anything on obs. Here are two ways of doing it:
+Bạn có thể biến đổi bất cứ thứ gì trên obs. Đây là hai cách để làm điều đó:
 
-* You can convert your class values to obs
+* Bạn có thể chuyển đổi các giá trị class của mình thành obs
 
 ``` dart
 class RxUser {
@@ -326,7 +322,7 @@ class RxUser {
 }
 ```
 
-* or you can convert the entire class to be an observable
+* hoặc bạn có thể biến cả 1 class thành observable
 
 ``` dart
 class User {
@@ -339,12 +335,12 @@ class User {
 final user = User(name: "Camila", age: 18).obs;
 ```
 
-### Note about Lists
+### Chí ú về Lists
 
-Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+List hoàn toàn có thể quan sát được cũng như các đối tượng bên trong nó. Bằng cách đó, nếu bạn thêm một giá trị vào danh sách, nó sẽ tự động xây dựng lại các widget con sử dụng nó.
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+Bạn cũng không cần phải sử dụng ".value" với các danh sách, api phi tiêu tuyệt vời đã cho phép chúng tôi loại bỏ điều đó.
+Tiếc thay, các kiểu nguyên thủy như String và int không thể được mở rộng, khiến việc sử dụng .value là bắt buộc, nhưng điều đó sẽ không thành vấn đề nếu bạn làm việc với getters và setters cho những thứ này.
 
 ``` dart
 // On the controller
@@ -358,7 +354,7 @@ ListView.builder (
 )
 ```
 
-When you are making your own classes observable, there is a different way to update them:
+Khi bạn đang làm cho các class của riêng mình có thể quan sát được, có một cách khác để cập nhật chúng:
 
 ``` dart
 // on the model file
@@ -385,32 +381,32 @@ Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 user().name; // notice that is the user variable, not the class (variable has lowercase u)
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+Bạn không cần phải làm việc với các bộ nếu bạn không muốn. bạn có thể sử dụng api "assign" và "assignAll".
+Api "assign" sẽ xóa danh sách của bạn và thêm một đối tượng duy nhất mà bạn muốn bắt đầu ở đó.
+Api "allowAll" sẽ xóa danh sách hiện có và thêm bất kỳ đối tượng có thể lặp lại nào mà bạn đưa vào đó.
 
-### Why i have to use .value
+### Tại sao tôi phải dùng .value
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+Chúng ta có thể loại bỏ việc sử dụng 'value' đối với `String` và` int` bằng một trình tạo mã và decoration đơn giản, nhưng mục đích của thư viện này chính là tránh các dependency bên ngoài. Chúng tôi muốn cung cấp một môi trường sẵn sàng cho việc lập trình, liên quan đến các yếu tố cần thiết (quản lý các route, dependency và state), theo cách đơn giản, nhẹ và hiệu quả mà không cần gói bên ngoài.
 
-You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
+Theo nghĩa đen, bạn có thể thêm 3 chữ cái vào pubspec (get) của mình và dấu hai chấm và bắt đầu lập trình. Tất cả các giải pháp được bao gồm theo mặc định, từ quản lý route đến quản lý state, nhằm mục đích dễ dàng, năng suất và hiệu suất.
 
-The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
+Tổng trọng lượng của thư viện này ít hơn của một trình quản lý state duy nhất, mặc dù nó là một giải pháp hoàn chỉnh và đó là những gì bạn phải hiểu.
 
-If you are bothered by `.value` , and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+Nếu bạn bị làm phiền bởi `.value`, và giống như một trình tạo mã, MobX là một giải pháp thay thế tuyệt vời và bạn có thể sử dụng nó cùng với Get. Đối với những người muốn thêm một gói dependency duy nhất vào pubspec và bắt đầu lập trình mà không cần lo lắng về phiên bản của gói không tương thích với gói khác hoặc nếu lỗi cập nhật state đến từ trình quản lý state hoặc dependency, hoặc vẫn không muốn lo lắng về sự sẵn có của controller, cho dù theo nghĩa đen là "chỉ là lập trình", GetX là lựa chọn hoàn hảo.
 
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
+Nếu bạn không gặp vấn đề gì với trình tạo mã MobX hoặc không gặp vấn đề gì với bảng soạn sẵn BLoC, bạn có thể chỉ cần sử dụng Get cho các route và quên rằng nó có trình quản lý state. Get SEM và RSM ra đời không cần thiết, công ty của tôi có một dự án với hơn 90 controller và trình tạo mã chỉ mất hơn 30 phút để hoàn thành nhiệm vụ của nó sau khi Flutter Clean trên một máy khá tốt, nếu dự án của bạn có 5, 10, 15 controller, bất kỳ nhà quản lý state sẽ cung cấp cho bạn tốt. Nếu bạn có một dự án lớn đến mức ngớ ngẩn và trình tạo mã là một vấn đề đối với bạn, thì bạn đã được trao giải pháp này.
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+Rõ ràng, nếu ai đó muốn đóng góp vào dự án và tạo trình tạo mã, hoặc thứ gì đó tương tự, tôi sẽ liên kết trong readme này như một giải pháp thay thế, nhu cầu của tôi không phải là nhu cầu của tất cả các nhà phát triển, nhưng ý tôi là thế, đã có những giải pháp tốt đã làm được điều đó, như MobX.
 
 ### Obx()
 
-Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
-Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+Nhập vào Get bằng cách sử dụng Bindings là không cần thiết. bạn có thể sử dụng widget Obx thay vì GetX, widget chỉ nhận được chức năng ẩn danh tạo widget.
+Rõ ràng, nếu bạn không sử dụng một kiểu, bạn sẽ cần phải có một phiên bản của controller để sử dụng các biến hoặc sử dụng `Get.find <Controller> ()` .value hoặc Controller.to.value để truy xuất giá trị .
 
 ### Workers
 
-Workers will assist you, triggering specific callbacks when an event occurs.
+Workers sẽ hỗ trợ bạn, kích hoạt các lệnh gọi lại cụ thể khi một event xảy ra.
 
 ``` dart
 /// Called every time `count1` changes.
@@ -426,63 +422,63 @@ debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
 
-All workers (except `debounce` ) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool` .
-This `condition` defines when the `callback` function executes.
+Tất cả các workers (except `debounce` ) có `condition` tham số được đặt tên, mà có thể là loại `bool` hoặc lệnh gọi lại trả về một `bool` .
+`condition` này mô tả khi `callback` kích hoạt.
 
-All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
+Tất cả các workers đều trả về trường hợp `Worker`, mà bạn có thể đóng ( thông qua `dispose()` ) của worker.
  
 
 * **`ever`**
 
- is called every time the _Rx_ variable emits a new value.
+ được gọi mỗi khi biến _Rx_ tạo ra một giá trị mới.
 
 * **`everAll`**
 
- Much like `ever` , but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
+Giống như `ever`, nhưng nó có một` List` gồm các giá trị _Rx_ Được gọi mỗi khi biến của nó bị thay đổi. Chỉ vậy thôi người ơi~ 😊
 
 * **`once`**
 
-'once' is called only the first time the variable has been changed.
+'once' chỉ được gọi lần đầu tiên biến được thay đổi.
 
 * **`debounce`**
 
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+'debounce' rất hữu ích trong các hàm tìm kiếm, nơi bạn chỉ muốn API được gọi khi người dùng nhập xong. Nếu người dùng nhập "Kaiser", bạn sẽ có 6 tìm kiếm trong các API, theo ký tự K, a, i, s, e và r. Với Get, điều này không xảy ra, bởi vì bạn sẽ có một Worker "debounce" sẽ chỉ được kích hoạt khi kết thúc nhập.
 
 * **`interval`**
 
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+'interval' khác với debounce. Debounce xảy ra nếu người dùng thực hiện 1000 thay đổi đối với một biến trong vòng 1 giây, y sẽ chỉ gửi biến cuối cùng sau bộ hẹn giờ quy định (mặc định là 800 mili giây). Thay vào đó, interval sẽ bỏ qua tất cả các hành động của người dùng trong interval quy định. Nếu bạn gửi event trong 1 phút, 1000 mỗi giây, tính năng gỡ lỗi sẽ chỉ gửi cho bạn event cuối cùng, khi người dùng ngừng phân chia event. interval sẽ phân phối các event mỗi giây và nếu được đặt thành 3 giây, nó sẽ phân phối 20 event trong phút đó. Điều này được khuyến nghị để tránh lạm dụng, trong các chức năng mà người dùng có thể nhanh chóng nhấp vào một thứ gì đó và có được một số lợi thế (hãy tưởng tượng rằng người dùng có thể kiếm được xu bằng cách nhấp vào thứ gì đó, nếu y nhấp 300 lần trong cùng một phút, y sẽ có 300 xu, bằng cách sử dụng interval, bạn có thể đặt khung thời gian trong 3 giây, và thậm chí sau đó nhấp vào 300 hoặc một nghìn lần, tối đa y sẽ nhận được trong 1 phút sẽ là 20 xu, nhấp 300 hoặc 1 triệu lần). Việc gỡ lỗi này phù hợp cho việc chống DDos, cho các chức năng như tìm kiếm trong đó mỗi thay đổi đối với onChange sẽ gây ra một truy vấn tới api của bạn. Debounce sẽ đợi người dùng ngừng nhập tên để thực hiện yêu cầu. Nếu nó được sử dụng trong kịch bản đồng xu được đề cập ở trên, người dùng sẽ chỉ giành được 1 đồng xu, bởi vì nó chỉ được thực thi, khi người dùng "tạm dừng" trong thời gian đã thiết lập.
 
-* NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+* CHÍ Ú: Workers phải luôn được sử dụng khi khởi động Controller hoặc Class, vì vậy nó phải luôn ở trên onInit (được khuyến nghị), phương thức khởi tạo Class hoặc initState của StatefulWidget (phương pháp này không được khuyến khích trong hầu hết các trường hợp, nhưng nó không nên có hiệu ứng phụ nào khác).
 
-## Simple State Manager
+## Quản lý State đơn giản
 
-Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+Get có một trình quản lý state cực kỳ nhẹ và dễ dàng, không sử dụng ChangeNotifier, sẽ đáp ứng nhu cầu đặc biệt cho những người mới sử dụng Flutter và sẽ không gây ra sự cố cho các ứng dụng lớn.
 
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this.
+GetBuilder nhắm chính xác vào việc kiểm soát nhiều state. Hãy tưởng tượng rằng bạn đã thêm 30 sản phẩm vào giỏ hàng, bạn nhấp vào xóa một sản phẩm, đồng thời danh sách được cập nhật, giá được cập nhật và huy hiệu trong giỏ hàng được cập nhật thành số lượng nhỏ hơn. Kiểu tiếp cận này khiến GetBuilder trở thành kẻ giết người, bởi vì nó nhóm các state và thay đổi tất cả chúng cùng một lúc mà không có bất kỳ "logic tính toán" nào cho điều đó. GetBuilder được tạo ra với loại tình huống này, vì để thay đổi state tạm thời, bạn có thể sử dụng setState và bạn sẽ không cần trình quản lý state cho việc này.
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+Bằng cách đó, nếu bạn muốn một controller riêng lẻ, bạn có thể gán ID cho controller đó hoặc sử dụng GetX. Điều này là tùy thuộc vào bạn, hãy nhớ rằng bạn càng có nhiều widget "riêng lẻ" thì hiệu suất của GetX càng nổi bật, trong khi hiệu suất của GetBuilder phải vượt trội hơn khi có nhiều thay đổi state.
 
-### Advantages
+### Lợi thế
 
-1. Update only the required widgets.
+1. Chỉ cập nhật các widget được yêu cầu.
 
-2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2. Không sử dụng changeNotifier, đó là trình quản lý state sử dụng ít bộ nhớ hơn (gần như bằng 0mb).
 
-3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. Quên StatefulWidget! Với Get, bạn sẽ không bao giờ cần đến nó. Với các trình quản lý state khác, bạn có thể sẽ phải sử dụng StatefulWidget để lấy phiên bản của Provider, BLoC, MobX, v.v. Nhưng bạn đã bao giờ nghĩ rằng AppBar, Scaffole và hầu hết các widget trong class của bạn là stateless? Vậy tại sao phải lưu state của toàn bộ class, nếu bạn chỉ có thể lưu state của Widget là stateful? Get giải quyết được điều đó bằng cách tạo một class Stateless, làm cho mọi thứ trở nên vô trạng. Nếu bạn cần cập nhật một thành phần riêng lẻ, hãy bọc nó bằng GetBuilder và state của nó sẽ được duy trì.
 
-4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. Tái cơ cấu cho dự án của bạn xanh, sạch và đẹp! Controller không được nằm trong UI của bạn, hãy đặt TextEditController của bạn hoặc bất kỳ controller nào bạn sử dụng trong class Controller của mình.
 
-5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5. Bạn có cần kích hoạt event để cập nhật widget con ngay khi nó được hiển thị không? GetBuilder có thuộc tính "initState", giống như StatefulWidget và bạn có thể gọi các event từ controller của mình, trực tiếp từ nó, không có thêm event nào được đặt trong initState của bạn.
 
-6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. Bạn có cần phải kích hoạt một hành động như đóng streams, hẹn giờ, v.v. không? GetBuilder cũng có dispose property, nơi bạn có thể gọi các event ngay khi widget đó bị phá hủy.
 
-7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. Chỉ sử dụng các streams nếu cần thiết. Bạn có thể sử dụng StreamControllers bên trong controller của mình một cách bình thường và sử dụng StreamBuilder cũng bình thường, nhưng hãy nhớ rằng, một streams tiêu thụ bộ nhớ một kha khá, lập trình phản ứng rất đẹp, nhưng bạn không nên lạm dụng nó. 30 streams mở cùng lúc có thể tệ hơn changeNotifier (và changeNotifier đã rất là tệ).
 
-8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+8. Cập nhật các widgets mà không tốn ram. Chỉ lưu trữ ID người tạo GetBuilder và cập nhật GetBuilder đó khi cần thiết. Mức tiêu thụ bộ nhớ của get ID trong bộ nhớ là rất thấp ngay cả đối với hàng nghìn GetBuilders. Khi bạn tạo GetBuilder mới, bạn thực sự đang chia sẻ state GetBuilder có ID người tạo. Một state mới không được tạo cho mỗi GetBuilder, giúp tiết kiệm RẤT NHIỀU ram cho các ứng dụng lớn. Về cơ bản, ứng dụng của bạn sẽ hoàn toàn là Không state và một số ít Tiện ích sẽ có state (trong GetBuilder) sẽ có một state duy nhất, và do đó cập nhật một sẽ cập nhật tất cả. Nhà nước chỉ là một.
 
-9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
+9. Get là toàn trí và trong hầu hết các trường hợp, nó biết chính xác thời gian để lấy controller ra khỏi bộ nhớ. Bạn không nên lo lắng về việc khi nào nên vứt bỏ controller, Get biết thời điểm tốt nhất để thực hiện việc này.
 
-### Usage
+### Sử dụng
 
 ``` dart
 // Create controller class and extends GetxController
@@ -503,13 +499,13 @@ GetBuilder<Controller>(
 //Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 
-**Done!**
+**OK, giải thích xong rồi!**
 
-* You have already learned how to manage states with Get.
+* Bạn đã học cách quản lý state với Get.
 
-* Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+* Lưu ý: Bạn có thể muốn một tổ chức lớn hơn và không sử dụng thuộc tính init. Vì vậy, bạn có thể tạo một class và mở rộng class Bindings và trong đó đề cập đến các controller sẽ được tạo trong route đó. Khi đó các Controllers sẽ không được tạo, ngược lại, đây chỉ là một câu lệnh, để lần đầu sử dụng Controller, Get sẽ biết cần tìm ở đâu. Get sẽ vẫn là lazyLoad và sẽ tiếp tục loại bỏ Controller khi chúng không còn cần thiết nữa. Hãy xem ví dụ pub.dev để xem nó hoạt động như thế nào.
 
-If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
+Nếu bạn điều hướng nhiều route và cần dữ liệu trong controller đã sử dụng trước đó, bạn chỉ cần sử dụng GetBuilder Again (không có init):
 
 ``` dart
 class OtherClass extends StatelessWidget {
@@ -526,7 +522,7 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()` )
+Nếu bạn cần sử dụng controller của mình ở nhiều nơi khác và bên ngoài GetBuilder, chỉ cần tạo quyền truy cập vào controller của bạn và có nó một cách dễ dàng. (hoặc sử dụng `Get.find <Controller> ()`)
 
 ``` dart
 class Controller extends GetxController {
@@ -545,7 +541,7 @@ class Controller extends GetxController {
 }
 ```
 
-And then you can access your controller directly, that way:
+Sau đó, truy cập thẳng vào controller của bạn:
 
 ``` dart
 FloatingActionButton(
@@ -556,24 +552,24 @@ FloatingActionButton(
 ),
 ```
 
-When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+Khi bạn nhấn FloatingActionButton, tất cả các widget đang lắng nghe biến 'counter' sẽ được cập nhật tự động.
 
-### How it handles controllers
+### Cách GetX sử dụng controllers
 
-Let's say we have this:
+Ví dụ:
 
  `Class a => Class B (has controller X) => Class C (has controller X)`
 
-In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+Trong class A, controller chưa có trong bộ nhớ, vì bạn chưa sử dụng nó (Get là lazyLoad). Trong class B, bạn đã sử dụng controller và nó đã vào bộ nhớ. Trong class C, bạn đã sử dụng cùng một controller như trong class B, Get sẽ chia sẻ state của controller B với controller C, và controller tương tự vẫn còn trong bộ nhớ. Nếu bạn đóng màn hình C và màn hình B, Get sẽ tự động lấy controller X ra khỏi bộ nhớ và giải phóng tài nguyên, vì Class A không sử dụng controller. Nếu bạn điều hướng đến B một lần nữa, controller X sẽ nhập lại bộ nhớ, nếu thay vì đi đến class C, bạn quay lại class A một lần nữa, Get sẽ đưa controller ra khỏi bộ nhớ theo cách tương tự. Nếu class C không sử dụng controller và bạn đã lấy class B ra khỏi bộ nhớ, thì sẽ không có class nào sử dụng controller X và tương tự như vậy, nó sẽ bị loại bỏ. Ngoại lệ duy nhất có thể gây rắc rối với Get là nếu bạn xóa B khỏi route một cách bất ngờ và cố gắng sử dụng controller trong C. Trong trường hợp này, ID người tạo của controller ở B đã bị xóa và Get được lập trình để xóa nó khỏi bộ nhớ mọi controller không có ID người tạo. Nếu bạn dự định làm điều này, hãy thêm flag "autoRemove: false" vào GetBuilder của class B và sử dụng adoptID = true trong GetBuilder của class C.
 
-### You won't need StatefulWidgets anymore
+### Không cần StatefulWidget nữa!
 
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
-The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
-Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get.
+Sử dụng StatefulWidgets có nghĩa là lưu trữ state của toàn bộ màn hình một cách không cần thiết, ngay cả khi bạn cần xây dựng lại một cách tối thiểu widget, bạn sẽ nhúng nó vào Consumer / Observer / BlocProvider / GetBuilder / GetX / Obx, đây sẽ là một StatefulWidget khác.
+Class StatefulWidget là một class lớn hơn StatelessWidget, class này sẽ phân bổ nhiều RAM hơn và điều này có thể không tạo ra sự khác biệt đáng kể giữa một hoặc hai class, nhưng chắc chắn nó sẽ làm được khi bạn có 100 class trong số chúng!
+Trừ khi bạn cần sử dụng một mixin, như TickerProviderStateMixin, thì việc sử dụng StatefulWidget với Get là hoàn toàn không cần thiết.
 
-You can call all methods of a StatefulWidget directly from a GetBuilder.
-If you need to call initState() or dispose() method for example, you can call them directly;
+Bạn có thể gọi trực tiếp tất cả các phương thức của StatefulWidget từ GetBuilder.
+Nếu bạn cần gọi phương thức initState () hoặc dispose () chẳng hạn, bạn có thể gọi chúng trực tiếp;
 
 ``` dart
 GetBuilder<Controller>(
@@ -583,7 +579,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-A much better approach than this is to use the onInit() and onClose() method directly from your controller.
+Một cách tiếp cận tốt hơn nhiều so với cách này là sử dụng phương thức onInit () và onClose () trực tiếp từ controller của bạn.
 
 ``` dart
 @override
@@ -593,17 +589,17 @@ void onInit() {
 }
 ```
 
-* NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+* CHÍ Ú: Nếu bạn muốn bắt đầu một phương thức tại thời điểm controller được gọi lần đầu tiên, bạn KHÔNG CẦN sử dụng các hàm tạo cho việc này, trên thực tế, bằng cách sử dụng gói hướng hiệu suất như Get, điều này không phù hợp với thực tiễn xấu, bởi vì nó lệch khỏi logic trong đó controller được tạo hoặc chỉ định (nếu bạn tạo một phiên bản của controller này, hàm tạo sẽ được gọi ngay lập tức, bạn sẽ điền controller trước khi nó được sử dụng, bạn đang cấp phát bộ nhớ mà không sử dụng nó , điều này chắc chắn làm hỏng các nguyên tắc của thư viện này). Các phương thức onInit(); và onClose(); được tạo ra cho mục đích này, chúng sẽ được gọi khi Controller được tạo hoặc được sử dụng lần đầu tiên, tùy thuộc vào việc bạn có đang sử dụng Get.lazyPut hay không. Ví dụ: nếu bạn muốn thực hiện lệnh gọi tới API của mình để điền dữ liệu, bạn có thể quên phương thức cũ của initState / dispose, chỉ cần bắt đầu lệnh gọi tới api trong onInit. Nếu bạn cần thực thi bất kỳ lệnh nào, như đóng streams, hãy sử dụng onClose() cho việc đó.
 
-### Why it exists
+### Tại sao GetX tồn tại?
 
-The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
+Mục đích của gói này chính xác là cung cấp cho bạn một giải pháp hoàn chỉnh để điều hướng các route, quản lý các dependency và state, sử dụng các dependency ít nhất có thể, với mức độ tách biệt cao. Nhận tất cả các API Flutter cấp cao và cấp thấp trong chính nó, để đảm bảo rằng bạn làm việc với ít khớp nối nhất có thể. Chúng tôi tập trung mọi thứ trong một gói duy nhất, để đảm bảo rằng bạn không có bất kỳ loại khớp nối nào trong dự án của mình. Bằng cách đó, bạn có thể chỉ đặt các widget trong chế độ xem của mình và để phần của nhóm làm việc với logic nghiệp vụ tự do làm việc với logic nghiệp vụ độc lập với View. Điều này cung cấp một môi trường làm việc sạch hơn nhiều, để một phần nhóm của bạn chỉ hoạt động với các widget mà không phải lo lắng về việc gửi dữ liệu đến controller của bạn và một phần nhóm của bạn chỉ làm việc với logic nghiệp vụ trong phạm vi bề rộng của nó mà không dependency vào bất kỳ yếu tố View.
 
-So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
-You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
+Vì vậy, để đơn giản hóa điều này:
+Bạn không cần gọi các phương thức trong initState và gửi chúng theo tham số đến controller của mình, cũng như không sử dụng phương thức khởi tạo controller cho việc đó, bạn có phương thức onInit() được gọi vào đúng thời điểm để bạn khởi động các dịch vụ của mình.
+Bạn không cần phải gọi thiết bị, bạn có phương thức onClose() sẽ được gọi vào thời điểm chính xác khi controller của bạn không còn cần thiết nữa và sẽ bị xóa khỏi bộ nhớ. Bằng cách đó, chỉ để lại chế độ xem cho các widget, tránh bất kỳ loại logic nghiệp vụ nào từ nó.
 
-Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+Đừng gọi một phương thức vứt bỏ bên trong GetxController, nó sẽ không làm được gì cả, hãy nhớ rằng controller không phải là một Widget, bạn không nên "vứt bỏ" nó, và nó sẽ được Get tự động và thông minh xóa khỏi bộ nhớ. Nếu bạn đã sử dụng bất kỳ streams nào trên đó và muốn đóng streams đó, chỉ cần chèn streams đó vào phương thức đóng. Thí dụ:
 
 ``` dart
 class Controller extends GetxController {
@@ -620,15 +616,15 @@ class Controller extends GetxController {
 }
 ```
 
-Controller life cycle:
+Vòng đời của controller:
 
-* onInit() where it is created.
-* onClose() where it is closed to make any changes in preparation for the delete method
-* deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+* onInit() nơi nó được tạo.
+* onClose() nơi nó được đóng để thực hiện bất kỳ thay đổi nào nhằm chuẩn bị cho phương thức xóa
+* deleted: bạn không có quyền truy cập vào API này vì nó sẽ xóa controller khỏi bộ nhớ theo đúng nghĩa đen. Nó được xóa theo đúng nghĩa đen, mà không để lại bất kỳ dấu vết nào.
 
-### Other ways of using it
+### Cách sử dụng khác
 
-You can use Controller instance directly on GetBuilder value:
+Bạn có thể sử dụng phiên bản Controller trực tiếp trên giá trị GetBuilder:
 
 ``` dart
 GetBuilder<Controller>(
@@ -639,7 +635,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
+Bạn cũng có thể cần một phiên bản của controller bên ngoài GetBuilder và bạn có thể sử dụng các phương pháp này để đạt được điều này:
 
 ``` dart
 class Controller extends GetxController {
@@ -671,7 +667,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-* You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+* Bạn có thể sử dụng các phương pháp tiếp cận "không chuẩn" để thực hiện việc này. Nếu bạn đang sử dụng một số trình quản lý dependency khác, như get_it, modular, v.v. và chỉ muốn cung cấp phiên bản controller, bạn có thể thực hiện điều này:
 
 ``` dart
 Controller controller = Controller();
@@ -685,9 +681,9 @@ GetBuilder<Controller>(
 
 ```
 
-### Unique IDs
+### IDs độc nhất
 
-If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
+Nếu bạn muốn tinh chỉnh kiểm soát cập nhật của widget con với GetBuilder, bạn có thể gán cho chúng các ID độc:
 
 ``` dart
 GetBuilder<Controller>(
@@ -699,44 +695,43 @@ GetBuilder<Controller>(
 ),
 ```
 
-And update it this form:
+Và cập nhật nó vào biểu mẫu này:
 
 ``` dart
 update(['text']);
 ```
 
-You can also impose conditions for the update:
+Bạn cũng có thể áp đặt các điều kiện cho bản cập nhật:
 
 ``` dart
 update(['text'], counter < 10);
 ```
 
-GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+GetX thực hiện điều này tự động và chỉ cấu trúc lại widget con sử dụng biến chính xác đã được thay đổi, nếu bạn thay đổi một biến thành giống với biến trước đó và điều đó không ngụ ý thay đổi state, GetX sẽ không xây dựng lại widget con để tiết kiệm bộ nhớ và Chu kỳ CPU ( 3 đang được hiển thị trên màn hình và bạn lại thay đổi biến thành 3. Trong hầu hết các trình quản lý state, điều này sẽ gây ra việc xây dựng lại mới, nhưng với GetX, widget sẽ chỉ được xây dựng lại, nếu trên thực tế state của nó đã thay đổi ).
 
-## Mixing the two state managers
+## Trộn hai trình quản lý state
 
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+Một số người đã mở một yêu cầu tính năng, vì họ chỉ muốn sử dụng một loại biến phản ứng và cơ chế khác và cần chèn Obx vào GetBuilder cho việc này. Suy nghĩ về nó MixinBuilder đã được tạo ra. Nó cho phép cả những thay đổi phản ứng bằng cách thay đổi các biến ".obs" và cập nhật thủ công thông qua update(). Tuy nhiên, trong số 4 widget, nó là widget tiêu tốn nhiều tài nguyên nhất, vì ngoài việc có Subscription để nhận các event thay đổi từ con mình, nó còn đăng ký phương thức cập nhật của controller của mình.
 
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
+Việc mở rộng GetxController rất quan trọng, vì chúng có vòng đời và có thể "bắt đầu" và "kết thúc" các event trong các phương thức onInit() và onClose() của chúng. Bạn có thể sử dụng bất kỳ lớp nào cho việc này, nhưng tôi thực sự khuyên bạn nên sử dụng lớp GetxController để đặt các biến của bạn, cho dù chúng có thể quan sát được hay không.
 
 ## StateMixin
 
-Another way to handle your `UI` state is use the `StateMixin<T>` .
-To implement it, use the `with` to add the `StateMixin<T>`
-to your controller which allows a T model.
+Một cách khác để xử lý state `UI` của bạn là sử dụng` StateMixin <T> `.
+Để triển khai nó, hãy sử dụng dấu `với` để thêm` StateMixin <T> ` bộ điều khiển của bạn cho phép một mô hình T.
 
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-The `change()` method change the State whenever we want.
-Just pass the data and the status in this way:
+Phương thức `change()` thay đổi state bất cứ khi nào chúng ta muốn.
+Chỉ cần truyền dữ liệu và state theo cách này:
 
 ```dart
 change(data, status: RxStatus.success());
 ```
 
-RxStatus allow these status:
+RxStatus cho phép các state này:
 
 ``` dart
 RxStatus.loading();
@@ -745,7 +740,7 @@ RxStatus.empty();
 RxStatus.error('message');
 ```
 
-To represent it in the UI, use:
+Để diễn tả nó trên UI, sử dụng:
 
 ```dart
 class OtherClass extends GetView<Controller> {
@@ -771,19 +766,19 @@ class OtherClass extends GetView<Controller> {
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
 
-In a decade working with programming I was able to learn some valuable lessons.
+Trong một thập kỷ làm việc với lập trình, tôi đã có thể học được một số bài học quý giá.
 
-My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
-However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
+Lần đầu tiên tôi tiếp xúc với lập trình phản ứng là rất "Trời thần ơi, tuyệt vời ông mặt trời!" và trên thực tế, lập trình phản ứng là không thể tin được.
+Tuy nhiên, nó không phải là thích hợp cho tất cả các trường hợp. Thông thường, tất cả những gì bạn cần là thay đổi state của 2 hoặc 3 widget cùng lúc, hoặc thay đổi state trong thời gian ngắn, trong trường hợp này, lập trình phản ứng không phải là xấu, nhưng nó không phù hợp.
 
-Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+Lập trình phản ứng có mức tiêu thụ RAM cao hơn có thể được bù đắp bởi quy trình làm việc riêng lẻ, điều này sẽ đảm bảo rằng chỉ một widget con được xây dựng lại và khi cần thiết, nhưng tạo danh sách với 80 đối tượng, mỗi đối tượng có nhiều streams không phải là một ý kiến hay . Mở thanh kiểm tra phi tiêu và kiểm tra xem StreamBuilder tiêu thụ bao nhiêu và bạn sẽ hiểu những gì tôi đang cố gắng nói với bạn.
 
-With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
+Với ý nghĩ đó, tôi đã tạo trình quản lý state đơn giản. Nó đơn giản, và đó chính xác là những gì bạn cần ở nó: cập nhật state trong các khối theo cách đơn giản và tiết kiệm nhất.
 
-GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
+GetBuilder rất tiết kiệm RAM và khó có cách tiếp cận nào tiết kiệm hơn nó (ít nhất là tôi không thể tưởng tượng được, nếu đã tồn tại cách khác, vui lòng cho chúng tôi biết).
 
-However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
+Tuy nhiên, GetBuilder vẫn là một trình quản lý state cơ học, bạn cần phải gọi update () giống như bạn sẽ cần gọi tới Provider's InformListaries ().
 
-There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
+Có những tình huống khác mà lập trình phản ứng thực sự thú vị và nếu không dùng nó đồng nghĩa như đang phát minh lại cái bánh xe. Với suy nghĩ đó, GetX được tạo ra để cung cấp mọi thứ hiện đại và tiên tiến nhất trong một trình quản lý state. Nó chỉ cập nhật những gì cần thiết và khi cần thiết, nếu bạn gặp lỗi và gửi 300 state thay đổi đồng thời, GetX sẽ lọc và cập nhật màn hình chỉ khi state thực sự thay đổi.
 
-GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
+GetX vẫn tiết kiệm hơn bất kỳ trình quản lý state phản ứng nào khác, nhưng nó tiêu tốn nhiều RAM hơn GetBuilder một chút. Suy nghĩ về điều đó và hướng tới việc tiêu thụ tối đa tài nguyên mà Obx đã tạo ra. Không giống như GetX và GetBuilder, bạn sẽ không thể khởi tạo controller bên trong Obx, nó chỉ là một Widget với StreamSubscription nhận các event thay đổi từ con bạn, vậy thôi. Nó tiết kiệm hơn GetX, nhưng thua GetBuilder, điều được mong đợi, vì nó có tính phản ứng và GetBuilder có cách tiếp cận đơn giản nhất tồn tại, đó là lưu trữ hashCode của widget con và StateSetter của nó. Với Obx, bạn không cần phải viết loại controller của mình và bạn có thể nghe thấy sự thay đổi từ nhiều controller khác nhau, nhưng nó cần được khởi tạo trước đó, sử dụng phương pháp ví dụ ở đầu readme này hoặc sử dụng class Bindings.
