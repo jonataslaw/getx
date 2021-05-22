@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-*Idiomas: Español (este archivo), [Indonesio](README.id-ID.md), [Urdu](README.ur-PK.md), [Lengua china](README.zh-cn.md), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Ruso](README.ru.md), [Polaco](README.pl.md), [Coreano](README.ko-kr.md), [Francés](README-fr.md).*
+*Idiomas: Español (este archivo), [Indonesio](README.id-ID.md), [Urdu](README.ur-PK.md), [Chino](README.zh-cn.md), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Ruso](README.ru.md), [Polaco](README.pl.md), [Coreano](README.ko-kr.md), [Francés](README-fr.md).*
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -17,11 +17,11 @@
 
 <h3>Lamentamos la inconsistencia en la traducción. El paquete GetX se actualiza con bastante frecuencia y es posible que las traducciones a documentos no sean tan rápidas. Entonces, para que esta documentación aún tenga todo el contenido, dejaré aquí todos los textos nuevos sin traducir (considero que es mejor tener los documentos en inglés que no tenerlos), por lo que si alguien quiere traducir, sería de gran ayuda 😁</h3>
 
-- [Communication and support channels:](#communication-and-support-channels)
+- [Canales de comunicación y soporte:](#communication-and-support-channels)
 - [Sobre GetX](#sobre-getx)
-- [Como contribuir](#como-contribuir)
-- [Installing](#installing)
-- [Proyecto Counter no GetX](#proyecto-counter-no-getx)
+- [Cómo contribuir](#cómo-contribuir)
+- [Instalación](#instalación)
+- [Proyecto Counter con GetX](#proyecto-counter-no-getx)
 - [Los tres pilares](#los-tres-pilares)
   - [Gestión del Estado](#gestión-del-estado)
     - [Reactivo STATE_MANAGER](#reactivo-state_manager)
@@ -37,25 +37,25 @@
   - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
     - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
   - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
-- [Rompiendo cambios desde 2.0](#rompiendo-cambios-desde-20)
+- [Cambios importantes desde 2.0](#cambios-importantes-desde-20)
 - [¿Por qué Getx?](#por-qué-getx)
 
 # Communication and support channels:
 
 [**Slack (Inglés)**](https://communityinviter.com/apps/getxworkspace/getx)
 
-[**Discord (Ingles y Portugués)**](https://discord.com/invite/9Y3wK9)
+[**Discord (Inglés y Portugués)**](https://discord.com/invite/9Y3wK9)
 
 [**Telegram (Portugués)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
 
 # Sobre GetX
 
-- GetX es una solución extra ligera y potente para Flutter. Combina gestión de estádo de alto rendimiento, inyección de dependencia inteligente y gestión de rutas, de forma rápida y práctica.
+- GetX es una solución extra ligera y potente para Flutter. Combina gestión de estádo de alto rendimiento, inyección de dependencia inteligente y gestión de rutas de forma rápida y práctica.
 
 - GetX tiene 3 principios básicos, esto significa que esta es la prioridad para todos los recursos de la biblioteca.
-  **PERFORMANCE:** GetX se centra en el rendimiento y el consumo mínimo de recursos. Los puntos de referencia casi siempre no son importantes en el mundo real, pero si lo desea, aquí hay un indicador de consumo.([benchmarks](https://github.com/jonataslaw/benchmarks)), donde GetX lo hace mejor que otros enfoques de gestión estatal, por ejemplo. La diferencia no es grande, pero muestra nuestra preocupación por no desperdiciar sus recursos.
-  **PRODUCTIVITY:** GetX utiliza una sintaxis fácil y agradable.
-  **ORGANIZATION:** GetX permite el desacoplamiento total de la vista de la lógica empresarial.
+  - **RENDIMIENTO:** GetX se centra en el rendimiento y el consumo mínimo de recursos. Los puntos de referencia casi siempre no son importantes en el mundo real, pero si lo desea, aquí hay un indicador de consumo.([benchmarks](https://github.com/jonataslaw/benchmarks)), donde GetX lo hace mejor que otros enfoques de gestión estatal, por ejemplo. La diferencia no es grande, pero muestra nuestra preocupación por no desperdiciar sus recursos.
+  - **PRODUCTIVIDAD:** GetX utiliza una sintaxis fácil y agradable.
+  - **ORGANIZACIÓN:** GetX permite el desacoplamiento total de la vista de la lógica de negocio.
 
 * GetX ahorrará horas de desarrollo y extraerá el máximo rendimiento que su aplicación puede ofrecer, siendo fácil para los principiantes y precisa para los expertos. Navega sin contexto, abre diálogos, snackbars o bottomsheets desde cualquier lugar de tu código, gestiona estados e inyecta dependencias de forma fácil y práctica. Get es seguro, estable, actualizado y ofrece una amplia gama de API que no están presentes en el marco predeterminado.
 
@@ -63,7 +63,7 @@
 
 **GetX hace que su desarrollo sea productivo, pero ¿quiere hacerlo aún más productivo? [Agregue la extensión a su VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)**
 
-# Como contribuir
+# Cómo contribuir
 
 _¿Quieres contribuir al proyecto? Estaremos orgullosos de destacarte como uno de nuestros colaboradores. Aquí hay algunos puntos en los que puede contribuir y hacer que GetX (y Flutter) sea aún mejor._
 
@@ -77,40 +77,38 @@ _¿Quieres contribuir al proyecto? Estaremos orgullosos de destacarte como uno d
 
 - Incluyendo nuevas funciones.
 
-# Installing
+# Instalación
 
-Add Get to your pubspec.yaml file:
+Añada la librería Get en tu archivo pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Importar archivos get que se utilizarán:
+Importe Get en los archivos en los que se utilizará:
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-# Proyecto Counter no GetX
+# Proyecto Contador con GetX
 
 Vea una explicación más detallada de la administración del estado [aquí](./documentation/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo
 
 El proyecto "contador" creado por defecto en un nuevo proyecto en Flutter tiene más de 100 líneas (con comentarios). Para mostrar el poder de GetX, demostraré cómo hacer un "contador" cambiando el estado con cada clic, cambiando de página y compartiendo el estado entre pantallas, todo de manera organizada, separando la vista de la lógica de negocio, SOLO 26 LÍNEAS DE CÓDIGO INCLUIDOS COMENTARIOS.
 
-- Paso 1:  
-  Agregue "Get" antes de su materialApp, convirtiéndolo en GetMaterialApp
+- Paso 1: Agregue "Get" antes de su materialApp, convirtiéndolo en GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-**Nota**: esto no modifica el MaterialApp del Flutter, GetMaterialApp no es una MaterialApp modificado, es solo un Widget preconfigurado, que tiene como child un MaterialApp por defecto. Puede configurar esto manualmente, pero definitivamente no es necesario. GetMaterialApp creará rutas, las inyectará, inyectará traducciones, inyectará todo lo que necesita para la navegación de rutas. Si usa Get solo para la gestión de estado o dependencias, no es necesario usar GetMaterialApp. GetMaterialApp es necesario para rutas, snackbars, internacionalización, bottomSheets, diálogos y APIs de alto nivel relacionadas con rutas y ausencia de contexto.
+**Nota**: esto no modifica el MaterialApp del Flutter, GetMaterialApp no es una MaterialApp modificado, es solo un Widget preconfigurado que tiene como child un MaterialApp por defecto. Puede configurar esto manualmente, pero definitivamente no es necesario. GetMaterialApp creará rutas, las inyectará, inyectará traducciones, inyectará todo lo que necesita para la navegación de rutas. Si usa Get solo para la gestión de estado o dependencias, no es necesario usar GetMaterialApp. GetMaterialApp es necesario para rutas, snackbars, internacionalización, bottomSheets, diálogos y APIs de alto nivel relacionadas con rutas y ausencia de contexto.
 
-**Note²:** Este paso solo es necesario si vas a usar route management (`Get.to()`, `Get.back()` y así). Si no lo va a usar, no es necesario que realice el paso 1
+**Nota²:** Este paso solo es necesario si va a usar route management (`Get.to()`, `Get.back()` y así). Si no lo va a usar, no es necesario que realice el paso 1
 
-- Paso 2:  
-  Cree su clase con la lógica de negocio colocando todas las variables, métodos y controladores dentro de ella. Puede hacer que cualquier variable sea observable usando un simple ".obs".
+- Paso 2: Cree su clase con la lógica de negocio colocando todas las variables, métodos y controladores dentro de ella. Puede hacer que cualquier variable sea observable usando un simple ".obs".
 
 ```dart
 class Controller extends GetxController {
@@ -119,8 +117,7 @@ class Controller extends GetxController {
 }
 ```
 
-- Paso 3:
-  Cree su vista, use StatelessWidget y ahorre algo de RAM, con GetX ya no necesitará usar StatefulWidget.
+- Paso 3: Cree su vista, use StatelessWidget y ahorre algo de RAM, con GetX ya no necesitará usar StatefulWidget.
 
 ```dart
 class Home extends StatelessWidget {
@@ -483,7 +480,7 @@ void localLogWriter(String text, {bool isError = false}) {
 
 Amateur Coder hizo un video asombroso sobre utilidades, almacenamiento, enlaces y otras características! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
 
-# Rompiendo cambios desde 2.0
+# Cambios importantes desde 2.0
 
 1- Rx types:
 
@@ -553,3 +550,21 @@ GetMaterialApp(
 Si necesita contexto para encontrar un InheritedWidget, lo necesita en la vista o pasado por parámetro. En particular, encuentro esta solución muy fea, y para trabajar en equipo siempre tendremos una dependencia de la lógica de negocios de la vista. Getx no es ortodoxo con el enfoque estándar, y aunque no prohíbe completamente el uso de StatefulWidgets, InitState, etc., siempre tiene un enfoque similar que puede ser más limpio. Los controladores tienen ciclos de vida, y cuando necesita hacer una solicitud API REST, por ejemplo, no depende de nada en la vista. Puede usar onInit para iniciar la llamada http, y cuando lleguen los datos, se rellenarán las variables. Como GetX es completamente reactivo (realmente, y funciona bajo streams), una vez que se llenan los elementos, todos los widgets que usan esa variable se actualizarán automáticamente en la vista. Esto permite que las personas con experiencia en IU trabajen solo con widgets y no tengan que enviar nada a la lógica de negocios que no sean eventos de usuario (como hacer clic en un botón), mientras que las personas que trabajan con lógica de negocios podrán crearla y probarla por separado.
 
 Esta librería siempre se actualizará e implementará nuevas características. Siéntase libre de ofrecer PRs y contribuir a ellas.
+
+## Artículos y vídeos (inglés)
+
+- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
+- [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
+- [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
+- [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder.
+- [GetX™ Other Features](https://youtu.be/ttQtlX_Q0eU) - Utils, storage, bindings and other features video by Amateur Coder.
+- [Firestore User with GetX | Todo App](https://www.youtube.com/watch?v=BiV0DcXgk58) - Video by Amateur Coder.
+- [Firebase Auth with GetX | Todo App](https://www.youtube.com/watch?v=-H-T_BSgfOE) - Video by Amateur Coder.
+- [The Flutter GetX™ Ecosystem ~ State Management](https://medium.com/flutter-community/the-flutter-getx-ecosystem-state-management-881c7235511d) - State management by [Aachman Garg](https://github.com/imaachman).
+- [The Flutter GetX™ Ecosystem ~ Dependency Injection](https://medium.com/flutter-community/the-flutter-getx-ecosystem-dependency-injection-8e763d0ec6b9) - Dependency Injection by [Aachman Garg](https://github.com/imaachman).
+- [GetX, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli.
+- [Build a To-do List App from scratch using Flutter and GetX](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli.
+- [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
+- [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
+- [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
+- [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)
