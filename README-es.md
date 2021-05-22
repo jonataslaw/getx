@@ -40,7 +40,7 @@
 - [Comunidad](#comunidad)
   - [Canales de la comunidad](#canales-de-la-comunidad)
   - [Cómo contribuir](#cómo-contribuir)
-  - [Artículos y vídeos](#artículos-y-vídeos)
+  - [Artículos y vídeos](#artículos-y-vídeos-inglés)
 
 # Sobre GetX
 
