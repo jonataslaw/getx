@@ -1,41 +1,41 @@
-# Quản lý dependency
-- [Quản lý dependency](#dependency-management)
+# Dependency Management
+- [Dependency Management](#dependency-management)
   - [Instancing methods](#instancing-methods)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Sử dụng các phương thức / class](#using-instantiated-methodsclasses)
-  - [Khác nhau giữa phương thức (methods)](#differences-between-methods)
+  - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
+  - [Differences between methods](#differences-between-methods)
   - [Bindings](#bindings)
-    - [Cách sử dụng](#how-to-use)
+    - [How to use](#how-to-use)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [Cách thay đổi](#How-to-change)
+      - [How to change](#How-to-change)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [Cách bindings làm việc ngầm](#how-bindings-work-under-the-hood)
-  - [Chí ú](#notes)
+    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
+  - [Notes](#notes)
 
-Get có một trình quản lý dependency đơn giản và mạnh mẽ cho phép bạn truy xuất cùng một class với Blocs hoặc Controller của bạn chỉ với 1 dòng mã, không có "context", không có InheritedWidget
+Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-Thay vì khởi tạo class của bạn trong class bạn đang sử dụng, bạn đang khởi tạo nó trong phiên bản Get, điều này sẽ làm cho nó có sẵn trên toàn bộ Ứng dụng của bạn.
-Vì vậy, bạn có thể sử dụng controller (hoặc class Blocs) của mình một cách bình thường
+Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
+So you can use your controller (or Bloc class) normally
 
-- Note: Nếu bạn đang sử dụng Get's State Manager, hãy chú ý hơn đến [Bindings](#bindings) api, điều này sẽ giúp kết nối chế độ xem với controller của bạn dễ dàng hơn.
-- Note²: Quản lý state của Get được tách biệt khỏi các phần khác của gói, vì vậy, nếu ví dụ: nếu ứng dụng của bạn đã sử dụng trình quản lý state (bất kỳ cái nào, không quan trọng), bạn không cần phải thay đổi điều đó, bạn có thể sử dụng phần dependency này người quản lý không có vấn đề gì cả
+- Note: If you are using Get's State Manager, pay more attention to the [Bindings](#bindings) api, which will make easier to connect your view to your controller.
+- Note²: Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to change that, you can use this dependency injection manager with no problems at all
 
 ## Instancing methods
-Các phương thức và các tham số có thể định cấu hình của nó là:
+The methods and it's configurable parameters are:
 
 ### Get.put()
 
-Cách phổ biến nhất để chèn một dependency, là một điều tốt cho controller của View của bạn.
+The most common way of inserting a dependency. Good for the controllers of your views for example.
 
 ```dart
 Get.put<SomeClass>(SomeClass());
@@ -43,7 +43,7 @@ Get.put<LoginController>(LoginController(), permanent: true);
 Get.put<ListItemController>(ListItemController, tag: "some unique string");
 ```
 
-Đây là tùy chọn mà bạn có thể đặt lệnh:
+This is all options you can set when using put:
 ```dart
 Get.put<S>(
   // mandatory: the class that you want to get to save, like a controller or anything
@@ -74,7 +74,7 @@ Get.put<S>(
 ```
 
 ### Get.lazyPut
-Có thể lazyLoad một dependecy để nó chỉ được khởi tạo khi được sử dụng. Rất hữu ích cho các class ngốn nhiều tài nguyên hoặc nếu bạn muốn khởi tạo một số class chỉ ở một nơi (như trong class Bindings) và bạn biết rằng mình sẽ không sử dụng class đó tại thời điểm nhất định.
+It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or if you want to instantiate several classes in just one place (like in a Bindings class) and you know you will not gonna use that class at that time.
 
 ```dart
 /// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
@@ -92,7 +92,7 @@ Get.lazyPut<FirebaseAuth>(
 Get.lazyPut<Controller>( () => Controller() )
 ```
 
-Đây là các tùy chọn bạn có thể đặt lệnh:
+This is all options you can set when using lazyPut:
 ```dart
 Get.lazyPut<S>(
   // mandatory: a method that will be executed when your class is called for the first time
@@ -112,7 +112,7 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
- Đây là khi bạn muốn xài asynchronize code `Get.putAsync`:
+If you want to register an asynchronous instance, you can use `Get.putAsync`:
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -124,7 +124,7 @@ Get.putAsync<SharedPreferences>(() async {
 Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
-Đây là tùy chọn bạn có thể đặt lệnh với putAsync:
+This is all options you can set when using putAsync:
 ```dart
 Get.putAsync<S>(
 
@@ -143,14 +143,14 @@ Get.putAsync<S>(
 
 ### Get.create
 
-Cái này hơi khó giải thích, nhưng sự khác nhau giữa chúng có thể được tìm thấy trên mục [Differences between methods:](#differences-between-methods)
+This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
 
 ```dart
 Get.Create<SomeClass>(() => SomeClass());
 Get.Create<LoginController>(() => LoginController());
 ```
 
-Tùy chọn có thể sử dụng:
+This is all options you can set when using create:
 
 ```dart
 Get.create<S>(
@@ -171,9 +171,9 @@ Get.create<S>(
   bool permanent = true
 ```
 
-## Sử dụng các phương thức / class
+## Using instantiated methods/classes
 
-Hãy tưởng tượng rằng bạn đã điều hướng qua nhiều route và bạn cần một dữ liệu còn sót trong controller của mình, bạn sẽ cần một trình quản lý state kết hợp với Provider hoặc Get_it, phải hem? Với Get, bạn chỉ cần yêu cầu Get to "find" cho controller của mình và thế là xong:
+Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
 
 ```dart
 final controller = Get.find<Controller>();
@@ -184,64 +184,64 @@ Controller controller = Get.find();
 // You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
-Và sau đó, bạn sẽ có thể khôi phục dữ liệu controller của mình đã lấy được ở đó:
+And then you will be able to recover your controller data that was obtained back there:
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-Vì giá trị trả về là một class bình thường, bạn có thể làm bất cứ điều gì bạn muốn:
+Since the returned value is a normal class, you can do anything you want:
 ```dart
 int count = Get.find<SharedPreferences>().getInt('counter');
 print(count); // out: 12345
 ```
 
-Để xóa một controller đang chạy ngầm của Get:
+To remove an instance of Get:
 
 ```dart
-Get.delete<Controller>(); //thường thì Get tự xóa, bạn không cần phải đặt lệnh này.
+Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
 ```
 
-## Khác nhau giữa phương thức (methods)
+## Differences between methods
 
-Đầu tiên, hãy nói về `fenix` của Get.lazyPut và `permanent`của các phương thức khác.
+First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
 
-Sự khác biệt cơ bản giữa `permanent` và `fenix` là cách bạn muốn lưu trữ các cá thể của mình.
+The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
 
-Củng cố: theo mặc định, GetX xóa các trường hợp khi chúng không được sử dụng.
-Có nghĩa là: Nếu màn hình 1 có controller 1 và màn hình 2 có controller 2 và bạn xóa route đầu tiên khỏi stack, (chẳng hạn như nếu bạn sử dụng `` Get.off () 'hoặc' `Get.offNamed()``) thì controller 1 bị mất việc sử dụng nó vì vậy nó sẽ bị xóa.
+Reinforcing: by default, GetX deletes instances when they are not in use.
+It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost its use so it will be erased.
 
-Nhưng nếu bạn muốn chọn sử dụng `permanent: true`, thì controller sẽ không bị mất trong quá trình chuyển đổi này - điều này rất hữu ích cho các dịch vụ mà bạn muốn duy trì hoạt động trong toàn bộ ứng dụng.
+But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
 
-Mặt khác, `fenix` dành cho các dịch vụ mà bạn không lo bị mất giữa các lần thay đổi màn hình, nhưng khi bạn cần dịch vụ đó, bạn hy vọng rằng nó vẫn tồn tại. Vì vậy, về cơ bản, nó sẽ loại bỏ controller / service / class không sử dụng, nhưng khi bạn cần, nó sẽ "tạo lại từ đống tro tàn" ở một trường hợp (instance) mới.
+`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
 
-Tiếp tục với sự khác biệt giữa các phương pháp:
+Proceeding with the differences between methods:
 
-- Get.put và Get.putAsync tuân theo cùng một thứ tự tạo, với sự khác biệt là một cái sử dụng phương thức không đồng bộ: hai phương thức đó đều tạo và khởi tạo các trường hợp. Cái sử dụng không đồng bộ được chèn trực tiếp vào bộ nhớ, bằng cách sử dụng phương thức nội bộ `insert` với các tham số `permanent: false` và` isSingleton: true` (tham số isSingleton này chỉ nhằm mục đích cho biết liệu nó có sử dụng dependency vào `dependency` hay không hoặc nếu nó được sử dụng dependency vào `FcBuilderFunc`). Sau đó, `Get.find ()` được gọi để khởi tạo ngay lập tức các các trường hợp trên bộ nhớ.
+- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only purpose is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
 
-- Get.create: Như tên của nó, nó sẽ "tạo ra" sự dependency cho bạn! Tương tự như `Get.put ()`, nó cũng gọi phương thức nội bộ là `insert` để các trường hợp. Nhưng `permanent` trở thành true và` isSingleton` trở thành false (vì chúng ta đang "tạo" dependency của mình, không có cách nào để nó là một instace singleton, đó là lý do tại sao lại là false). Và bởi vì nó có `permanent: true`, chúng tôi mặc định có lợi ích là không bị mất nó giữa các màn hình! Ngoài ra, `` Get.find () 'không được gọi ngay lập tức, nó phải chờ được sử dụng trong màn hình để được gọi. Nó được tạo ra theo cách này để sử dụng tham số `permanent ', vì vậy, đáng chú ý là` Get.create () `được tạo ra với mục tiêu tạo ra các phiên bản không được chia sẻ, nhưng không bị loại bỏ, như ví dụ: trong listView, mà bạn muốn có một phiên bản duy nhất cho danh sách đó - do đó, Get.create phải được sử dụng cùng với GetWidget.
+- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
 
-- Get.lazyPut: Như tên của nó, nó là một quy trình lười biếng. Cá thể được tạo, nhưng nó không được gọi để sử dụng ngay lập tức, nó vẫn đang chờ được gọi. Trái ngược với các phương thức khác, `insert` không được gọi ở đây. Thay vào đó, cá thể được chèn vào một phần khác của bộ nhớ, một phần chịu trách nhiệm cho biết liệu cá thể đó có thể được tạo lại hay không, chúng ta hãy gọi nó là "nhà máy". Nếu chúng ta muốn tạo ra thứ gì đó để sử dụng sau này, nó sẽ không bị trộn lẫn với những thứ đã được sử dụng ngay bây giờ. Và đây là nơi phép thuật của `fenix` đi vào: nếu bạn chọn bỏ` fenix: false`, và `smartManagement` của bạn không phải là` keepFactory`, thì khi sử dụng `Get.find`, instance sẽ thay đổi vị trí trong bộ nhớ từ "nhà máy" đến vùng bộ nhớ cá thể chung. Ngay sau đó, theo mặc định, nó được xóa khỏi "nhà máy". Bây giờ, nếu bạn chọn `fenix: true`, cá thể vẫn tiếp tục tồn tại trong phần dành riêng này, thậm chí sẽ chuyển sang vùng chung, sẽ được gọi lại trong tương lai.
+- Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsible to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
 
 ## Bindings
 
-Có lẽ, một trong những điểm khác biệt lớn của gói này là khả năng tích hợp đầy đủ các route, trình quản lý state và trình quản lý dependency.
-Khi một route bị xóa khỏi stack, tất cả các controller, biến và phiên bản của các đối tượng liên quan đến nó sẽ bị xóa khỏi bộ nhớ. Nếu bạn đang sử dụng luồng hoặc bộ hẹn giờ, chúng sẽ tự động bị đóng và bạn không phải lo lắng về bất kỳ điều gì trong số đó.
-Trong phiên bản 2.10 Được triển khai hoàn toàn API bindings.
-Bây giờ bạn không cần sử dụng phương thức init nữa. Bạn thậm chí không cần phải nhập controller của mình nếu bạn không muốn. Bạn có thể khởi động controller và dịch vụ của mình ở nơi thích hợp cho việc đó.
-Lớp Binding là một class sẽ tách riêng việc tiêm dependency, trong khi "bindings" các route đường tới trình quản lý state và trình quản lý dependency.
-Điều này cho phép Nhận biết màn hình nào đang được hiển thị khi một controller cụ thể được sử dụng và biết vị trí và cách vứt bỏ nó.
-Ngoài ra, class Binding sẽ cho phép bạn kiểm soát cấu hình SmartManager. Bạn có thể định cấu hình các phần dependency được sắp xếp khi xóa một route khỏi ngăn xếp hoặc khi widget con đã sử dụng nó được bố trí hoặc không. Bạn sẽ có quản lý dependency thông minh làm việc cho bạn, nhưng ngay cả như vậy, bạn có thể định cấu hình nó theo ý muốn.
+One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
+When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
+In version 2.10 Get completely implemented the Bindings API.
+Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
+The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
+This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
+In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
 
 ### Bindings class
 
-- Tạo một class và implements Binding
+- Create a class and implements Binding
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-IDE của bạn sẽ tự động yêu cầu bạn ghi đè phương thức "dependency" và bạn chỉ cần nhấp vào đèn, ghi đè phương thức và chèn tất cả các class bạn sẽ sử dụng trên route đó:
+Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
 
 ```dart
 class HomeBinding implements Bindings {
@@ -260,9 +260,9 @@ class DetailsBinding implements Bindings {
 }
 ```
 
-Bây giờ bạn chỉ cần thông báo route của mình, rằng bạn sẽ sử dụng bindings đó để tạo kết nối giữa trình quản lý route, các dependency và state.
+Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
 
-- Sử dụng routes có tên:
+- Using named routes:
 
 ```dart
 getPages: [
@@ -279,16 +279,16 @@ getPages: [
 ];
 ```
 
-- Sử dụng routes thường:
+- Using normal routes:
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
 Get.to(DetailsView(), binding: DetailsBinding())
 ```
 
-Ở đó, bạn không phải lo lắng về việc quản lý bộ nhớ của ứng dụng của mình nữa, Get sẽ thay bạn làm điều đó.
+There, you don't have to worry about memory management of your application anymore, Get will do it for you.
 
-Lớp Binding được gọi khi một route được gọi, bạn có thể tạo một "InitialBinding trong GetMaterialApp của mình để chèn tất cả các dependency sẽ được tạo.
+The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
 
 ```dart
 GetMaterialApp(
@@ -299,8 +299,8 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-Cách mặc định để tạo bindings là tạo một class thực hiện các bindings.
-Nhưng cách khác, bạn có thể sử dụng lệnh gọi lại `BindingsBuilder` để bạn có thể chỉ cần sử dụng một hàm để khởi tạo bất cứ thứ gì bạn muốn.
+The default way of creating a binding is by creating a class that implements Bindings.
+But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
 
 Example:
 
@@ -324,19 +324,19 @@ getPages: [
 ];
 ```
 
-Bằng cách đó, bạn có thể tránh tạo một class Binding cho mỗi routes, làm cho việc này trở nên đơn giản hơn.
+That way you can avoid to create one Binding class for each route making this even simpler.
 
-Cả hai cách làm việc đều hoàn toàn tốt và chúng tôi muốn bạn sử dụng những gì phù hợp với sở thích của bạn nhất.
+Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
 
 ### SmartManagement
 
-GetX theo mặc định loại bỏ controller không sử dụng khỏi bộ nhớ, ngay cả khi xảy ra lỗi và widget con sử dụng nó không được xử lý đúng cách.
-Đây được gọi là chế độ quản lý dependency `` đầy đủ`.
-Nhưng nếu bạn muốn thay đổi cách GetX kiểm soát việc xử lý các class, bạn có class `SmartManagement` để bạn có thể thiết lập các hành vi khác nhau.
+GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
+This is what is called the `full` mode of dependency management.
+But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
 
-#### Cách thay đổi
+#### How to change
 
-Nếu bạn muốn thay đổi cấu hình này (mà bạn thường không cần) thì đây là cách:
+If you want to change this config (which you usually don't need) this is the way:
 
 ```dart
 void main () {
@@ -351,30 +351,30 @@ void main () {
 
 #### SmartManagement.full
 
-Nó là một trong những mặc định. Loại bỏ các class không được sử dụng và không được đặt thành vĩnh viễn. Trong phần lớn các trường hợp, bạn sẽ muốn giữ nguyên cấu hình này. Nếu bạn mới sử dụng GetX thì đừng thay đổi điều này.
+It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
 
 #### SmartManagement.onlyBuilders
-Với tùy chọn này, chỉ những controller bắt đầu trong `init: 'hoặc được tải vào Binding với` `Get.lazyPut ()` mới được xử lý.
+With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
 
-Nếu bạn sử dụng `Get.put () 'hoặc' Get.putAsync ()` hoặc bất kỳ cách tiếp cận nào khác, SmartManagement sẽ không có quyền loại trừ sự dependency này.
+If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
 
-Với hành vi mặc định, ngay cả các widget con được khởi tạo bằng "Get.put" sẽ bị xóa, không giống như SmartManagement.onlyBuilders.
+With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
 
 #### SmartManagement.keepFactory
 
-Cũng giống như SmartManagement.full, nó sẽ loại bỏ các phần dependency của nó khi nó không được sử dụng nữa. Tuy nhiên, nó sẽ giữ nguyên chế độ factory của họ, có nghĩa là nó sẽ tạo lại phần dependency nếu bạn cần lại phiên bản đó.
+Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
 
-### Cách bindings làm việc ngầm
-Các liên kết tạo ra các factory tạm thời, được tạo ra ngay khi bạn nhấp để chuyển sang màn hình khác và sẽ bị phá hủy ngay sau khi hoạt ảnh thay đổi màn hình xảy ra.
-Điều này xảy ra quá nhanh đến nỗi máy phân tích thậm chí sẽ không thể đăng ký nó.
-Khi bạn điều hướng đến màn hình này một lần nữa, một factory tạm thời mới sẽ được gọi, vì vậy điều này thích hợp hơn khi sử dụng SmartManagement.keepFactory, nhưng nếu bạn không muốn tạo Bindings hoặc muốn giữ tất cả các dependency của mình trên cùng một Binding, thì chắc chắn sẽ giúp ích cho bạn.
-Các factory chiếm ít bộ nhớ, chúng không chứa các cá thể mà là một chức năng có "hình dạng" của class đó mà bạn muốn.
-Điều này có chi phí bộ nhớ rất thấp, nhưng vì mục đích của lib này là để đạt được hiệu suất tối đa có thể bằng cách sử dụng tài nguyên tối thiểu, Get xóa ngay cả các factory theo mặc định.
-Sử dụng cái nào thuận tiện nhất cho bạn.
+### How bindings work under the hood
+Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
+This happens so fast that the analyzer will not even be able to register it.
+When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
+Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
+This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
+Use whichever is most convenient for you.
 
-## Chí ú
+## Notes
 
-- KHÔNG SỬ DỤNG SmartManagement.keepFactory nếu bạn đang sử dụng nhiều Binding. Nó được thiết kế để sử dụng mà không có Bindings, hoặc với một Bindings duy nhất được liên kết trong `initialBinding` của GetMaterialApp.
+- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
 
-- Việc sử dụng Bindings là hoàn toàn tùy chọn, nếu muốn, bạn có thể sử dụng `Get.put () 'và' Get.find()` trên các class sử dụng controller nhất định mà không gặp bất kỳ vấn đề gì.
-Tuy nhiên, nếu bạn làm việc với Service hoặc bất kỳ abstract nào khác, tôi khuyên bạn nên sử dụng Bindings để tổ chức tốt hơn.
+- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
+However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.

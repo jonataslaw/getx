@@ -1,30 +1,30 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
-    - [Send data to named Routes](#send-data-to-named-routes)
+- [Quản lý route](#route-management)
+  - [Hướng dẫn sử dụng trước khi dùng](#how-to-use)
+  - [Điều hướng không cần tên](#navigation-without-named-routes)
+  - [Điều hướng cần tên](#navigation-with-named-routes)
+    - [Gửi data cho route có tên](#send-data-to-named-routes)
     - [Dynamic urls links](#dynamic-urls-links)
     - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
+  - [Điều hướng không cần context](#navigation-without-context)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [Nested Navigation](#nested-navigation)
+  - [Điều hướng lồng (Nested Navigation)](#nested-navigation)
 
-# Route Management
+# Quản lý route
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+Đây là lời giải thích đầy đủ về tất cả những gì có cho Getx khi vấn đề là quản lý routes.
 
-## How to use
+## Hướng dẫn sử dụng trước khi dùng
 
-Add this to your pubspec.yaml file:
+Thêm cái này vào file pubspec.yaml của bạn:
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+Nếu bạn định sử dụng các routes / snackbars / dialogs / bottomsheets mà không có "context" hoặc sử dụng các API cấp cao, bạn chỉ cần thêm Get trước MaterialApp của mình, biến nó thành GetMaterialApp và tung hành!
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -32,39 +32,39 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-## Navigation without named routes
+## Điều hướng không cần tên
 
-To navigate to a new screen:
+Để điều hướng đến một màn hình mới:
 
 ```dart
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Để đóng snackbars, dialog, bottomsheets hoặc bất cứ thứ gì bạn thường đóng bằng Navigator.pop (context);
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Để chuyển đến màn hình tiếp theo và không có tùy chọn nào để quay lại màn hình trước đó (để sử dụng trong SplashScreens, màn hình đăng nhập, v.v.)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Để chuyển đến màn hình tiếp theo và hủy tất cả các lộ trình trước đó (hữu ích trong giỏ hàng, polls và test)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+Để điều hướng đến routes tiếp theo và nhận hoặc cập nhật dữ liệu ngay sau khi bạn trở về từ routes đó:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+trên màn hình khác, gửi dữ liệu cho routes trước đó:
 
 ```dart
 Get.back(result: 'success');
@@ -78,9 +78,9 @@ ex:
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+Bạn không muốn học cú pháp của chúng tôi?
+Chỉ cần thay đổi Navigator (chữ in hoa) thành navigator (chữ thường) và bạn sẽ có tất cả các chức năng của điều hướng tiêu chuẩn mà không cần phải sử dụng "context"
+Thí dụ:
 
 ```dart
 
@@ -109,9 +109,9 @@ Get.to(HomePage());
 
 ```
 
-## Navigation with named routes
+## Điều hướng cần tên
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- Nếu bạn thích điều hướng bằng tên, Get cũng hỗ trợ điều này.
 
 To navigate to nextScreen
 
@@ -119,19 +119,19 @@ To navigate to nextScreen
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+Để điều hướng và xóa màn hình trước đó khỏi cây widget.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+Để điều hướng và xóa tất cả các màn hình trước đó khỏi cây widget.
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+Để định dạng routes, sử dụng GetMaterialApp:
 
 ```dart
 void main() {
@@ -152,7 +152,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+Để xử lý điều hướng đến các routes không được xác định (lỗi 404), bạn có thể xác định trang 'không xác định' trong GetMaterialApp.
 
 ```dart
 void main() {
@@ -169,15 +169,15 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### Gửi data cho route có tên
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+Chỉ cần gửi những gì bạn muốn cho các đối số (arguments). Get chấp nhận bất kỳ thứ gì ở đây, cho dù đó là String, Map, List hay thậm chí là một class trường hợp.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+Trong class controller của bạn:
 
 ```dart
 print(Get.arguments);
@@ -186,13 +186,13 @@ print(Get.arguments);
 
 ### Dynamic urls links
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+Get hỗ trợ các url động nâng cao giống như trên Web. Các nhà phát triển web có lẽ đã muốn tính năng này trên Flutter và rất có thể đã thấy một gói hứa hẹn tính năng này và cung cấp một cú pháp hoàn toàn khác so với một URL sẽ có trên web, và Get cũng giải quyết được điều này.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+trong controller/bloc/stateful/stateless của class:
 
 ```dart
 print(Get.parameters['id']);
@@ -201,7 +201,7 @@ print(Get.parameters['name']);
 // out: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+Bạn có thể đặt NamedParameters với Get dễ dàng:
 
 ```dart
 void main() {
@@ -233,20 +233,20 @@ void main() {
 }
 ```
 
-Send data on route name
+Gửi data bằng tên
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+Trên màn hình thứ hai, lấy dữ liệu theo tham số (parameters)
 
 ```dart
 print(Get.parameters['user']);
 // out: 34954
 ```
 
-or send multiple parameters like this
+hoặc gửi nhiều tham số như thế này
 
 ```dart
 Get.toNamed("/profile/34954?flag=true&country=italy");
@@ -257,7 +257,7 @@ var parameters = <String, String>{"flag": "true","country": "italy",};
 Get.toNamed("/profile/34954", parameters: parameters);
 ```
 
-On second screen take the data by parameters as usually
+Trên màn hình thứ hai, lấy dữ liệu theo các tham số như thường lệ
 
 ```dart
 print(Get.parameters['user']);
@@ -268,11 +268,11 @@ print(Get.parameters['country']);
 
 
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+Và bây giờ, tất cả những gì bạn cần làm là sử dụng Get.toNamed () để điều hướng các routes đã đặt tên của bạn mà không cần bất kỳ "context" nào (bạn có thể gọi các routes của mình trực tiếp từ BLoC hoặc lớp Bộ điều khiển) và khi ứng dụng của bạn được biên dịch lên web, các routes sẽ xuất hiện trong url <3
 
 ### Middleware
 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+Nếu bạn muốn nghe Get events để kích hoạt các hành động, bạn có thể sử dụng routingCallback cho nó
 
 ```dart
 GetMaterialApp(
@@ -284,7 +284,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+Nếu bạn không sử dụng GetMaterialApp, bạn có thể sử dụng API thủ công để đính kèm trình quan sát Middleware.
 
 ```dart
 void main() {
@@ -301,7 +301,7 @@ void main() {
 }
 ```
 
-Create a MiddleWare class
+Tạo một MiddleWare class
 
 ```dart
 class MiddleWare {
@@ -318,7 +318,7 @@ class MiddleWare {
 }
 ```
 
-Now, use Get on your code:
+Bây giờ, hãy sử dụng Get trên code của bạn:
 
 ```dart
 class First extends StatelessWidget {
@@ -391,11 +391,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## Điều hướng không cần context
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+Để có một SnackBar đơn giản với Flutter, bạn phải lấy context của Scaffold, hoặc bạn phải sử dụng GlobalKey được gắn vào Scaffold của bạn
 
 ```dart
 final snackBar = SnackBar(
@@ -416,7 +416,7 @@ With Get:
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+Với Get, tất cả những gì bạn phải làm là gọi thanh Get.snackbar từ bất kỳ đâu trong code của bạn hoặc tùy chỉnh nó theo cách bạn muốn!
 
 ```dart
 Get.snackbar(
@@ -468,8 +468,8 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+Nếu bạn thích snackbar truyền thống hoặc muốn tùy chỉnh nó từ đầu, bao gồm chỉ thêm một dòng (Get.snackbar sử dụng tiêu đề và thông báo bắt buộc), bạn có thể sử dụng
+`Get.rawSnackbar ()`; 'cung cấp API RAW trên đó Get.
 
 ### Dialogs
 
@@ -488,15 +488,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+Bạn cũng có thể sử dụng Get.generalDialog thay vì showGeneralDialog.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+Đối với tất cả các tiện ích hộp thoại Flutter khác, bao gồm cả cupertinos, bạn có thể sử dụng Get.overlayContext thay vì context và mở nó ở bất kỳ đâu trong mã của bạn.
+Đối với các widget không sử dụng Overlay, bạn có thể sử dụng Get.context.
+Hai context này sẽ hoạt động trong 99% trường hợp để thay thế context của UI của bạn, ngoại trừ các trường hợp trong đó inheritWidget được sử dụng mà không có context điều hướng.
 
 ### BottomSheets
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet giống như showModalBottomSheet, nhưng không cần context.
 
 ```dart
 Get.bottomSheet(
@@ -519,14 +519,14 @@ Get.bottomSheet(
 );
 ```
 
-## Nested Navigation
+## Điều hướng lồng (Nested Navigation)
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+Làm cho điều hướng lồng (nested navigation) của Flutter thậm chí còn dễ dàng hơn.
+Bạn không cần context và bạn sẽ tìm thấy stack điều hướng của mình theo Id.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- CHÍ Ú: Việc tạo các stack điều hướng song song có thể gây nguy hiểm. Lý tưởng nhất là không sử dụng NestedNavigators, hoặc sử dụng một cách tối thiểu. Nếu dự án của bạn yêu cầu, hãy tiếp tục, nhưng hãy nhớ rằng việc giữ nhiều stack điều hướng trong bộ nhớ có thể không phải là một ý tưởng hay cho việc tiêu thụ RAM.
 
-See how simple it is:
+Xem nó code đơn giản nè:
 
 ```dart
 Navigator(
