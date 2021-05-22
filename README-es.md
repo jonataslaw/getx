@@ -17,9 +17,7 @@
 
 <h3>Lamentamos la inconsistencia en la traducción. El paquete GetX se actualiza con bastante frecuencia y es posible que las traducciones a documentos no sean tan rápidas. Entonces, para que esta documentación aún tenga todo el contenido, dejaré aquí todos los textos nuevos sin traducir (considero que es mejor tener los documentos en inglés que no tenerlos), por lo que si alguien quiere traducir, sería de gran ayuda 😁</h3>
 
-- [Canales de comunicación y soporte:](#communication-and-support-channels)
 - [Sobre GetX](#sobre-getx)
-- [Cómo contribuir](#cómo-contribuir)
 - [Instalación](#instalación)
 - [Proyecto contador con GetX](#proyecto-contador-con-getx)
 - [Los tres pilares](#los-tres-pilares)
@@ -39,14 +37,10 @@
   - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
 - [Cambios importantes desde 2.0](#cambios-importantes-desde-20)
 - [¿Por qué Getx?](#por-qué-getx)
-
-# Communication and support channels:
-
-[**Slack (Inglés)**](https://communityinviter.com/apps/getxworkspace/getx)
-
-[**Discord (Inglés y Portugués)**](https://discord.com/invite/9Y3wK9)
-
-[**Telegram (Portugués)**](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g)
+- [Comunidad](#comunidad)
+  - [Canales de la comunidad](#canales-de-la-comunidad)
+  - [Cómo contribuir](#cómo-contribuir)
+  - [Artículos y vídeos](#artículos-y-vídeos)
 
 # Sobre GetX
 
@@ -62,20 +56,6 @@
 - GetX no es bloated. Tiene una multitud de características que le permiten comenzar a programar sin preocuparse por nada, pero cada una de estas características se encuentran en contenedores separados y solo se inician después de su uso. Si solo usa State Management, solo se compilará State Management. Si solo usa rutas, no se compilará nada de la administración estatal. Puede compilar el repositorio de referencia y verá que al usar solo la administración de estado de Get, la aplicación compilada con Get se ha vuelto más pequeña que todas las demás aplicaciones que solo tienen la administración de estado de otros paquetes, porque nada que no se use se compilará en su código, y cada solución GetX fue diseñada para ser muy liviana. El mérito aquí también proviene del movimiento del árbol de Flutter, que es increíble y logra eliminar los recursos no utilizados como ningún otro marco lo hace.
 
 **GetX hace que su desarrollo sea productivo, pero ¿quiere hacerlo aún más productivo? [Agregue la extensión a su VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)**
-
-# Cómo contribuir
-
-_¿Quieres contribuir al proyecto? Estaremos orgullosos de destacarte como uno de nuestros colaboradores. Aquí hay algunos puntos en los que puede contribuir y hacer que GetX (y Flutter) sea aún mejor._
-
-- Ayudando a traducir el archivo Léame a otros idiomas.
-
-- Agregar documentación al archivo Léame (ni siquiera la mitad de las funciones de GetX han sido documentadas todavía).
-
-- Escriba artículos o haga videos que enseñen cómo usar GetX (se insertarán en el archivo Léame y en el futuro en nuestro Wiki).
-
-- Ofreciendo PRs para código/pruebas.
-
-- Incluyendo nuevas funciones.
 
 # Instalación
 
@@ -484,17 +464,14 @@ Amateur Coder hizo un video asombroso sobre utilidades, almacenamiento, enlaces 
 
 1- Rx types:
 
-Antes: StringX ahora: RxString
-
-Antes: IntX ahora: RxInt
-
-Antes: MapX ahora: RxMap
-
-Antes: ListX ahora: RxList
-
-Antes: NumX ahora: RxNum
-
-Antes: RxDouble ahora: RxDouble
+| Antes   | Ahora      |
+| ------- | ---------- |
+| StringX | `RxString` |
+| IntX    | `RxInt`    |
+| MapX    | `RxMap`    |
+| ListX   | `RxList`   |
+| NumX    | `RxNum`    |
+| DoubleX | `RxDouble` |
 
 RxController y GetBuilder ahora se han fusionado, ya no necesita memorizar qué controlador desea usar, solo use GetXController, funcionará para gestión de estádo simple y también para reactivo.
 
@@ -550,6 +527,34 @@ GetMaterialApp(
 Si necesita contexto para encontrar un InheritedWidget, lo necesita en la vista o pasado por parámetro. En particular, encuentro esta solución muy fea, y para trabajar en equipo siempre tendremos una dependencia de la lógica de negocios de la vista. Getx no es ortodoxo con el enfoque estándar, y aunque no prohíbe completamente el uso de StatefulWidgets, InitState, etc., siempre tiene un enfoque similar que puede ser más limpio. Los controladores tienen ciclos de vida, y cuando necesita hacer una solicitud API REST, por ejemplo, no depende de nada en la vista. Puede usar onInit para iniciar la llamada http, y cuando lleguen los datos, se rellenarán las variables. Como GetX es completamente reactivo (realmente, y funciona bajo streams), una vez que se llenan los elementos, todos los widgets que usan esa variable se actualizarán automáticamente en la vista. Esto permite que las personas con experiencia en IU trabajen solo con widgets y no tengan que enviar nada a la lógica de negocios que no sean eventos de usuario (como hacer clic en un botón), mientras que las personas que trabajan con lógica de negocios podrán crearla y probarla por separado.
 
 Esta librería siempre se actualizará e implementará nuevas características. Siéntase libre de ofrecer PRs y contribuir a ellas.
+
+# Comunidad
+
+## Canales de la comunidad
+
+GetX tiene una comunidad muy activa e implicada. Si tiene dudas, o necesita cualquier tipo de asistencia sobre el uso de este framework, no dude en unirse a nuestr, tu duda será resuelta lo antes posible. Este repositorio es de uso exclusivo para abrir issues, pero siéntase libre de unirse a la Comunidad de GetX.
+
+
+| **Slack (🇬🇧)**                                                                                                                   | **Discord (🇬🇧 y 🇵🇹)**                                                                                                                 | **Telegram (🇵🇹)**                                                                                                          |
+| :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+
+# Cómo contribuir
+
+_¿Quieres contribuir al proyecto? Estaremos orgullosos de destacarte como uno de nuestros colaboradores. Aquí hay algunos puntos en los que puede contribuir y hacer que GetX (y Flutter) sea aún mejor._
+
+- Ayudando a traducir el archivo Léame a otros idiomas.
+
+- Agregar documentación al archivo Léame (ni siquiera la mitad de las funciones de GetX han sido documentadas todavía).
+
+- Escriba artículos o haga videos que enseñen cómo usar GetX (se insertarán en el archivo Léame y en el futuro en nuestro Wiki).
+
+- Ofreciendo PRs para código/pruebas.
+
+- Incluyendo nuevas funciones.
+
+¡Cualquier contribución es bienvenida!
 
 ## Artículos y vídeos (inglés)
 
