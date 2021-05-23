@@ -39,3 +39,41 @@ abstract class DisposableInterface extends GetLifeCycle {
     super.onClose();
   }
 }
+
+mixin DisposableInterfaceRestoration on DisposableInterface {
+  void restoreState(Object? state);
+  Object? saveState();
+}
+
+class RestorableDisposableInterface
+    extends RestorableValue<DisposableInterfaceRestoration> {
+  RestorableDisposableInterface(this._defaultValue);
+
+  final DisposableInterfaceRestoration _defaultValue;
+
+  @override
+  DisposableInterfaceRestoration createDefaultValue() {
+    return _defaultValue;
+  }
+
+  @override
+  void didUpdateValue(DisposableInterfaceRestoration? oldValue) {
+    if (oldValue == null || oldValue != value) update();
+  }
+
+  @override
+  DisposableInterfaceRestoration fromPrimitives(Object? data) {
+    final controller = createDefaultValue();
+    controller.restoreState(data);
+    return controller;
+  }
+
+  @override
+  Object? toPrimitives() {
+    return value.saveState();
+  }
+
+  void update() {
+    notifyListeners();
+  }
+}
