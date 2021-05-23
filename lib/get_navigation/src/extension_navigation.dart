@@ -447,8 +447,10 @@ extension ExtensionBottomSheet on GetInterface {
       modalBarrierColor: barrierColor,
       settings: settings,
       enableDrag: enableDrag,
-      enterBottomSheetDuration: enterBottomSheetDuration ?? const Duration(milliseconds: 250),
-      exitBottomSheetDuration: exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+      enterBottomSheetDuration:
+          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
+      exitBottomSheetDuration:
+          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
     ));
   }
 }
@@ -1201,6 +1203,402 @@ you can only use widgets and widget functions here''';
   set testMode(bool isTest) => getxController.testMode = isTest;
 
   static GetMaterialController getxController = GetMaterialController();
+}
+
+extension GetRestorableNavigation on GetInterface {
+  /// **Navigation.restorablePush()** shortcut.<br><br>
+  ///
+  /// Pushes a new [page] to the stack, which can be restored later.
+  ///
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
+  ///
+  /// You can set a custom [transition], and a transition [duration].
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  String? restorableTo<T>(
+    dynamic page, {
+    bool? opaque,
+    Transition? transition,
+    Curve? curve,
+    Duration? duration,
+    int? id,
+    bool fullscreenDialog = false,
+    dynamic arguments,
+    Bindings? binding,
+    bool preventDuplicates = true,
+    bool? popGesture,
+  }) {
+    var routeName = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routeName == currentRoute) {
+      return null;
+    }
+    return global(id).currentState?.restorablePush<T>(
+          (context, arguments) => GetPageRoute<T>(
+            opaque: opaque ?? true,
+            page: _resolve(page, 'to'),
+            routeName: routeName,
+            settings: RouteSettings(
+              //  name: forceRouteName ? '${a.runtimeType}' : '',
+              arguments: arguments,
+            ),
+            popGesture: popGesture ?? defaultPopGesture,
+            transition: transition ?? defaultTransition,
+            curve: curve ?? defaultTransitionCurve,
+            fullscreenDialog: fullscreenDialog,
+            binding: binding,
+            transitionDuration: duration ?? defaultTransitionDuration,
+          ),
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorablePushNamed()** shortcut.<br><br>
+  ///
+  /// Pushes a new named [page] to the stack, which can be restored later.
+  ///
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  String? restorableToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+  }) {
+    if (preventDuplicates && page == currentRoute) {
+      return null;
+    }
+
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    return global(id).currentState?.restorablePushNamed<T>(
+          page,
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorablePushReplacementNamed()** shortcut.<br><br>
+  ///
+  /// Pop the current named [page] in the stack and push a new one in its place.
+  ///
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  String? restorableOffNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+  }) {
+    if (preventDuplicates && page == currentRoute) {
+      return null;
+    }
+
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+    return global(id).currentState?.restorablePushReplacementNamed(
+          page,
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorablePushAndRemoveUntil()** shortcut.<br><br>
+  ///
+  /// Push the given [page], and then pop several pages in the stack until
+  /// [predicate] returns true
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// Obs: unlike other get methods, this one you need to send a function
+  /// that returns the widget to the page argument, like this:
+  /// Get.offUntil(GetPageRoute(page: () => HomePage()), predicate)
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.offUntil(page, (route) => (route as GetPageRoute).routeName == '/home')`
+  /// to pop routes in stack until home,
+  /// or also like this:
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
+  String? restorableOffUntil<T>(
+    Route<T> page,
+    RoutePredicate predicate, {
+    int? id,
+  }) {
+    // if (key.currentState.mounted) // add this if appear problems on future with route navigate
+    // when widget don't mounted
+    return global(id).currentState?.restorablePushAndRemoveUntil<T>(
+          (context, arguments) => page,
+          predicate,
+        );
+  }
+
+  /// **Navigation.restorablePushNamedAndRemoveUntil()** shortcut.<br><br>
+  ///
+  /// Push the given named [page], and then pop several pages in the stack
+  /// until [predicate] returns true
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.offNamedUntil(page, ModalRoute.withName('/home'))`
+  /// to pop routes in stack until home,
+  /// or like this:
+  /// `Get.offNamedUntil((route) => !Get.isDialogOpen())`,
+  /// to make sure the dialog is closed
+  ///
+  /// Note: Always put a slash on the route name ('/page1'), to avoid unexpected errors
+  String? restorableOffNamedUntil<T>(
+    String page,
+    RoutePredicate predicate, {
+    int? id,
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    return global(id).currentState?.restorablePushNamedAndRemoveUntil<T>(
+          page,
+          predicate,
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorablePopAndPushNamed()** shortcut.<br><br>
+  ///
+  /// Pop the current named page and pushes a new [page] to the stack
+  /// in its place
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  /// It is very similar to `offNamed()` but use a different approach
+  ///
+  /// The `offNamed()` pop a page, and goes to the next. The
+  /// `offAndToNamed()` goes to the next page, and removes the previous one.
+  /// The route transition animation is different.
+  String? restorableOffAndToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    dynamic result,
+    Map<String, String>? parameters,
+  }) {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+    return global(id).currentState?.restorablePopAndPushNamed(
+          page,
+          arguments: arguments,
+          result: result,
+        );
+  }
+
+  /// **Navigation.restorablePushNamedAndRemoveUntil()** shortcut.<br><br>
+  ///
+  /// Push a named [page] and pop several pages in the stack
+  /// until [predicate] returns true. [predicate] is optional
+  ///
+  /// It has the advantage of not needing context, so you can
+  /// call from your business logic.
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
+  /// or also like
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
+  String? restorableOffAllNamed<T>(
+    String newRouteName, {
+    RoutePredicate? predicate,
+    dynamic arguments,
+    int? id,
+    Map<String, String>? parameters,
+  }) {
+    if (parameters != null) {
+      final uri = Uri(path: newRouteName, queryParameters: parameters);
+      newRouteName = uri.toString();
+    }
+
+    return global(id).currentState?.restorablePushNamedAndRemoveUntil<T>(
+          newRouteName,
+          predicate ?? (_) => false,
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorePushReplacement()** shortcut .<br><br>
+  ///
+  /// Pop the current page and pushes a new [page] to the stack
+  ///
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
+  ///
+  /// You can set a custom [transition], define a Tween [curve],
+  /// and a transition [duration].
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  String? restorableOff<T>(
+    dynamic page, {
+    bool opaque = false,
+    Transition? transition,
+    Curve? curve,
+    bool? popGesture,
+    int? id,
+    dynamic arguments,
+    Bindings? binding,
+    bool fullscreenDialog = false,
+    bool preventDuplicates = true,
+    Duration? duration,
+  }) {
+    var routeName = "/${page.runtimeType.toString()}";
+    if (preventDuplicates && routeName == currentRoute) {
+      return null;
+    }
+    return global(id).currentState?.restorablePushReplacement(
+          (context, arguments) => GetPageRoute(
+              opaque: opaque,
+              page: _resolve(page, 'off'),
+              binding: binding,
+              settings: RouteSettings(arguments: arguments),
+              routeName: routeName,
+              fullscreenDialog: fullscreenDialog,
+              popGesture: popGesture ?? defaultPopGesture,
+              transition: transition ?? defaultTransition,
+              curve: curve ?? defaultTransitionCurve,
+              transitionDuration: duration ?? defaultTransitionDuration),
+          arguments: arguments,
+        );
+  }
+
+  /// **Navigation.restorablePushAndRemoveUntil()** shortcut .<br><br>
+  ///
+  /// Push a [page] and pop several pages in the stack
+  /// until [predicate] returns true. [predicate] is optional
+  ///
+  /// It has the advantage of not needing context,
+  /// so you can call from your business logic
+  ///
+  /// You can set a custom [transition], a [curve] and a transition [duration].
+  ///
+  /// You can send any type of value to the other route in the [arguments].
+  ///
+  /// Just like native routing in Flutter, you can push a route
+  /// as a [fullscreenDialog],
+  ///
+  /// [predicate] can be used like this:
+  /// `Get.until((route) => Get.currentRoute == '/home')`so when you get to home page,
+  /// or also like
+  /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the dialog
+  /// is closed
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// If you want the same behavior of ios that pops a route when the user drag,
+  /// you can set [popGesture] to true
+  ///
+  /// If you're using the [Bindings] api, you must define it here
+  ///
+  /// By default, GetX will prevent you from push a route that you already in,
+  /// if you want to push anyway, set [preventDuplicates] to false
+  String? restorableOffAll<T>(
+    dynamic page, {
+    RoutePredicate? predicate,
+    bool opaque = false,
+    bool? popGesture,
+    int? id,
+    dynamic arguments,
+    Bindings? binding,
+    bool fullscreenDialog = false,
+    Transition? transition,
+    Curve? curve,
+    Duration? duration,
+  }) {
+    var routeName = "/${page.runtimeType.toString()}";
+
+    return global(id).currentState?.restorablePushAndRemoveUntil<T>(
+          (context, arguments) => GetPageRoute<T>(
+            opaque: opaque,
+            popGesture: popGesture ?? defaultPopGesture,
+            page: _resolve(page, 'offAll'),
+            binding: binding,
+            settings: RouteSettings(arguments: arguments),
+            fullscreenDialog: fullscreenDialog,
+            routeName: routeName,
+            transition: transition ?? defaultTransition,
+            curve: curve ?? defaultTransitionCurve,
+            transitionDuration: duration ?? defaultTransitionDuration,
+          ),
+          predicate ?? (route) => false,
+          arguments: arguments,
+        );
+  }
 }
 
 /// It replaces the Flutter Navigator, but needs no context.
