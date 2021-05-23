@@ -60,6 +60,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
+    this.restorationScopeId,
   })  : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
@@ -117,6 +118,7 @@ class GetCupertinoApp extends StatelessWidget {
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
+  final String? restorationScopeId;
 
   const GetCupertinoApp.router({
     Key? key,
@@ -163,6 +165,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
+    this.restorationScopeId,
   })  : navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
@@ -248,6 +251,7 @@ class GetCupertinoApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              restorationScopeId: restorationScopeId,
             )
           : CupertinoApp(
               key: _.unikey,
@@ -293,6 +297,7 @@ class GetCupertinoApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              restorationScopeId: restorationScopeId,
               //   actions: actions,
             ));
 }
