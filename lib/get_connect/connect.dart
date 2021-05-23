@@ -319,7 +319,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T?);
+      return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
@@ -355,7 +355,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T?);
+      return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
