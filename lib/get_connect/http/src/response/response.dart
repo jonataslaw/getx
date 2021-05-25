@@ -7,6 +7,16 @@ import '../status/http_status.dart';
 class GraphQLResponse<T> extends Response<T> {
   final List<GraphQLError>? graphQLErrors;
   GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
+  GraphQLResponse.fromResponse(Response res)
+      : graphQLErrors = null,
+        super(
+            request: res.request,
+            statusCode: res.statusCode,
+            bodyBytes: res.bodyBytes,
+            bodyString: res.bodyString,
+            statusText: res.statusText,
+            headers: res.headers,
+            body: res.body['data'] as T?);
 }
 
 class Response<T> {
@@ -60,7 +70,8 @@ class Response<T> {
   final T? body;
 }
 
-Future<String> bodyBytesToString(Stream<List<int>> bodyBytes, Map<String, String> headers) {
+Future<String> bodyBytesToString(
+    Stream<List<int>> bodyBytes, Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 
@@ -101,7 +112,9 @@ class HeaderValue {
   }
 
   static HeaderValue parse(String value,
-      {String parameterSeparator = ';', String? valueSeparator, bool preserveBackslash = false}) {
+      {String parameterSeparator = ';',
+      String? valueSeparator,
+      bool preserveBackslash = false}) {
     var result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
     return result;
@@ -131,7 +144,8 @@ class HeaderValue {
     return stringBuffer.toString();
   }
 
-  void _parse(String value, String parameterSeparator, String? valueSeparator, bool preserveBackslash) {
+  void _parse(String value, String parameterSeparator, String? valueSeparator,
+      bool preserveBackslash) {
     var index = 0;
 
     bool done() => index == value.length;

@@ -283,8 +283,10 @@ extension ExtensionDialog on GetInterface {
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
     String title = "Alert",
+    EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
+    EdgeInsetsGeometry? contentPadding,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
     VoidCallback? onCustom,
@@ -361,8 +363,8 @@ extension ExtensionDialog on GetInterface {
     }
 
     Widget baseAlertDialog = AlertDialog(
-      titlePadding: EdgeInsets.all(8),
-      contentPadding: EdgeInsets.all(8),
+      titlePadding: titlePadding ?? EdgeInsets.all(8),
+      contentPadding: contentPadding ?? EdgeInsets.all(8),
 
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
