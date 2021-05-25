@@ -301,6 +301,7 @@ extension ExtensionDialog on GetInterface {
     Color? backgroundColor,
     bool barrierDismissible = true,
     Color? buttonColor,
+    EdgeInsetsGeometry? buttonPadding,
     String middleText = "Dialog made in 3 lines of code",
     TextStyle? middleTextStyle,
     double radius = 20.0,
@@ -391,7 +392,7 @@ extension ExtensionDialog on GetInterface {
         ],
       ),
       // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-      buttonPadding: EdgeInsets.zero,
+      buttonPadding: buttonPadding??EdgeInsets.zero,
     );
 
     if (onWillPop != null) {
