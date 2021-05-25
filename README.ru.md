@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Языки: Русский (этот файл), [индонезийский](README.id-ID.md), [урду](README.ur-PK.md), [Английский](README.md), [Китайский](README.zh-cn.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md), [Польский](README.pl.md), [Kорейский](README.ko-kr.md), [French](README-fr.md)._
+_Языки: Русский (этот файл), [вьетнамский](README-vi.md), [индонезийский](README.id-ID.md), [урду](README.ur-PK.md), [Английский](README.md), [Китайский](README.zh-cn.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md), [Польский](README.pl.md), [Kорейский](README.ko-kr.md), [French](README-fr.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)

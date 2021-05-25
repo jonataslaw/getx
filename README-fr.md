@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Langues: Français (Ce fichier), [Anglais](README.md),  [Indonésien](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinois](README.zh-cn.md), [Portuguais du Brésil](README.pt-br.md), [Espagnol](README-es.md), [Russe](README.ru.md), [Polonais](README.pl.md), [Koréen](README.ko-kr.md).**
+**Langues: Français (Ce fichier), [Anglais](README.md), [Vietnamien](README-vi.md), [Indonésien](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinois](README.zh-cn.md), [Portuguais du Brésil](README.pt-br.md), [Espagnol](README-es.md), [Russe](README.ru.md), [Polonais](README.pl.md), [Koréen](README.ko-kr.md).**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -75,13 +75,13 @@
   - **PRODUCTIVITÉ:** GetX utilise une syntaxe simple et agréable. Peu importe ce que vous voulez faire, il existe toujours un moyen plus simple avec GetX. Cela économisera des heures de développement et fournira les performances maximales que votre application peut offrir.
 
     En règle générale, le développeur doit s'occuper lui-même de la suppression des contrôleurs de la mémoire. Avec GetX, cela n'est pas nécessaire car les ressources sont, par défaut, supprimées de la mémoire lorsqu'elles ne sont pas utilisées. Si vous souhaitez les conserver en mémoire, vous devez déclarer explicitement "permanent: true" comme paramètre lors de la création de la ressource. De cette façon, en plus de gagner du temps, vous risquez moins d'avoir des ressources inutiles dans la mémoire. L'initialisation des ressources est également 'lazy' par défaut (i.e. se fait seulement lorsque la ressource est nécessaire).
-    
+
   - **ORGANIZATION:** GetX permet le découplage total de la Vue (View), de la Logique de Présentation (Presentation Logic), de la Business Logic, de l'injection de dépendances (Dependency Injection) et de la Navigation. Vous n'avez pas besoin de contexte pour naviguer entre les routes, vous n'êtes donc pas dépendant de la hiérarchisation des widgets (visualisation) pour cela. Vous n'avez pas besoin de 'context' pour accéder à vos contrôleurs/blocs via un inheritedWidget, vous dissociez donc complètement votre logique de présentation (Vue) et votre Business logic de votre couche de visualisation. Vous n'avez pas besoin d'injecter vos classes Controlleûrs / Modèles / Blocs le long de la hiérarchie de Widgets via `MultiProvider`. Pour cela, GetX utilise sa propre fonction d'injection de dépendances (DI), découplant complètement la DI de sa Vue.
-  
+
     Avec GetX, vous savez où trouver chaque module de votre application, avec un code propre par défaut. En plus de rendre la maintenance facile, cela rend le partage de modules quelque chose qui jusque-là dans Flutter était impensable, quelque chose de totalement possible.
     BLoC était un point de départ pour organiser le code dans Flutter, il sépare la Business logic de la visualisation. GetX en est une évolution naturelle, séparant non seulement la Business logic mais aussi la logique de présentation. L'injection de dépendances et les routes sont également découplées, et la couche de données est séparée du tout. Vous savez où tout se trouve, et tout cela d'une manière plus facile que de construire un 'Hello World''.
     GetX est le moyen le plus simple, pratique et évolutif de créer des applications hautes performances avec le SDK Flutter. Il possède un vaste écosystème qui fonctionne parfaitement, c'est facile pour les débutants et précis pour les experts. Il est sécurisé, stable, à jour et offre une vaste gamme d'API intégrées qui ne sont pas présentes dans le SDK Flutter par défaut.
-    
+
 - GetX possède une multitude de fonctionnalités qui vous permettent de démarrer la programmation sans vous soucier de quoi que ce soit, mais chacune de ces fonctionnalités se trouve dans des conteneurs séparés et ne démarre qu'après utilisation. Si vous n'utilisez que la gestion des états (State Management), seule la gestion des états sera compilée. Si vous n'utilisez que des routes, rien de la gestion d'état ne sera compilé.
 
 - GetX a un énorme écosystème, une grande communauté, un grand nombre de collaborateurs, et sera maintenu tant que Flutter existera. GetX est également capable de fonctionner avec le même code sur Android, iOS, Web, Mac, Linux, Windows et sur votre serveur. Il est possible de réutiliser entièrement votre code créé sur le frontend et le backend avec Get Server.
@@ -109,6 +109,7 @@ import 'package:get/get.dart';
 # Application Counter avec Getx
 
 Le projet "Counter" créé par défaut sur chaque nouveau projet Flutter comporte plus de 100 lignes (avec commentaires). Pour montrer la puissance de Get, je vais vous montrer comment faire un "compteur" changeant d'état à chaque clic, naviguer entre les pages et partager l'état entre les écrans, le tout de manière organisée, en séparant la Business logic de la Vue, en SEULEMENT 26 LIGNES DE CODE INCLUANT LES COMMENTAIRES.
+
 - Step 1:
   Ajoutez "Get" avant MaterialApp, pour le transformer en GetMaterialApp
 
@@ -122,7 +123,7 @@ void main() => runApp(GetMaterialApp(home: Home()));
 
 - Step 2:
   Créez votre classe de Business logic et placez-y toutes les variables, méthodes et contrôleurs.
-    Vous pouvez rendre toute variable observable en utilisant un simple ".obs".
+  Vous pouvez rendre toute variable observable en utilisant un simple ".obs".
 
 ```dart
 class Controller extends GetxController{
@@ -217,7 +218,7 @@ Obx(() => Text("${controller.name}"));
 
 C'est _tout_. Si simple que ca.
 
-### Plus de details sur la gestion d Etat 
+### Plus de details sur la gestion d Etat
 
 **Lire une explication plus approfondie de la gestion d'état [ici](./documentation/fr_FR/state_management.md). Là-bas, vous verrez plus d'exemples surtout pour la différence entre le gestionnaire d'état simple et le gestionnaire d'état réactif.**
 
@@ -293,6 +294,7 @@ controller.fetchApi();
 ```
 
 Imaginez que vous ayez parcouru de nombreuses routes et que vous ayez besoin de données qui ont été laissées dans votre contrôleur, vous auriez besoin d'un gestionnaire d'état combiné avec le 'Provider' ou 'Get_it', n'est-ce pas? Pas avec Get. Il vous suffit de demander à Get de "trouver" votre contrôleur, vous n'avez pas besoin de dépendances supplémentaires:
+
 ```dart
 Controller controller = Get.find();
 //Oui, cela ressemble à de la magie. Get trouvera votre contrôleur et vous le livrera. Vous pouvez avoir 1 million de contrôleurs instanciés, Get vous retournera toujours le bon contrôleur.
@@ -372,7 +374,7 @@ Text('logged_in'.trParams({
 ### Locales
 
 'Locales' signifie lieux.
-Pour definir les traductions, passer les paramètres 'locale' et 'translations' à GetMaterialApp. 
+Pour definir les traductions, passer les paramètres 'locale' et 'translations' à GetMaterialApp.
 
 ```dart
 return GetMaterialApp(
@@ -453,7 +455,6 @@ class UserProvider extends GetConnect {
 
 ### Configuration personnalisee
 
-
 GetConnect est hautement personnalisable. Vous pouvez définir l'URL de base, comme modificateurs de réponse, comme modificateurs de requêtes, définir un authentificateur, et même le nombre de tentatives oú il tentera de s'authentifier, en plus de donner la possibilité de définir un décodeur standard qui transformera toutes vos Requêtes dans vos Modèles sans aucune configuration supplémentaire.
 
 ```dart
@@ -463,7 +464,7 @@ class HomeProvider extends GetConnect {
     // Toute 'Request' passera à jsonEncode donc CasesModel.fromJson()
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; 
+    // baseUrl = 'https://api.covid19api.com';
     // Il définit baseUrl pour Http et websockets si utilisé sans instance [httpClient]
 
     // Cela attachera la propriété 'apikey' sur l'en-tête ('header') de toutes les 'request's
@@ -493,7 +494,7 @@ class HomeProvider extends GetConnect {
     // L'Autenticator sera appelé 3 fois si HttpStatus est HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
-  
+
 
   @override
   Future<Response<CasesModel>> getCases(String path) => get(path);
@@ -522,7 +523,7 @@ final middlewares = [
 ces middlewares seront exécutés dans cet ordre **-8 => 2 => 4 => 5**
 
 ### Redirect
-    
+
     Cette fonction sera appelée lors de la recherche de la page de l'itinéraire appelé. Elle reçoit RouteSettings comme résultat vers oú rediriger. Sinon donnez-lui la valeur null et il n'y aura pas de redirection.
 
 ```dart
@@ -572,6 +573,7 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 ```
 
 ### OnPageBuilt
+
 Cette fonction sera appelée juste après l'appel de la fonction GetPage.page et vous donnera le résultat de la fonction et prendra le widget qui sera affiché.
 
 ### OnPageDispose
@@ -798,7 +800,7 @@ ValueBuilder<bool>(
 #### ObxValue
 
 Similaire à [`ValueBuilder`](#valuebuilder), mais c'est la version Reactive, vous passez une instance Rx (rappelez-vous les .obs magiques?) et il
- se met à jour automatiquement ... n'est-ce pas génial?
+se met à jour automatiquement ... n'est-ce pas génial?
 
 ```dart
 ObxValue((data) => Switch(
@@ -977,7 +979,7 @@ pour conserver une liste de <Todo>s. Donc, si le widget est "reconstruit", il co
 
 #### GetxService
 
-Cette classe est comme un `GetxController`, elle partage le même cycle de vie ( `onInit()`, `onReady()`, `onClose()`), mais n'a pas de "logique" en elle. 
+Cette classe est comme un `GetxController`, elle partage le même cycle de vie ( `onInit()`, `onReady()`, `onClose()`), mais n'a pas de "logique" en elle.
 Il notifie simplement le **GetX** Dependency Injection system, que cette sous-classe
 **ne peut pas** être supprimé de la mémoire.
 
@@ -1022,7 +1024,7 @@ class SettingsService extends GetxService {
 
 ```
 
-La seule façon de supprimer réellement un `GetxService`, est d'utiliser` Get.reset () `qui est comme un
+La seule façon de supprimer réellement un `GetxService`, est d'utiliser`Get.reset ()`qui est comme un
 "Hot Reboot" de votre application. N'oubliez donc pas que si vous avez besoin d'une persistance absolue d'une instance de classe
 durée de vie de votre application, utilisez `GetxService`.
 
@@ -1040,7 +1042,6 @@ durée de vie de votre application, utilisez `GetxService`.
 | DoubleX | `RxDouble` |
 
 RxController et GetBuilder ont maintenant fusionné, vous n'avez plus besoin de mémoriser le contrôleur que vous souhaitez utiliser, utilisez simplement GetxController, cela fonctionnera pour une gestion simple de l'état et également pour la réactivité.
-
 
 2- NamedRoutes
 
@@ -1067,6 +1068,7 @@ GetMaterialApp(
 Pourquoi ce changement?
 Souvent, il peut être nécessaire de décider quelle page sera affichée à partir d'un paramètre, ou d'un 'login token', l'approche précédente était inflexible, car elle ne le permettait pas.
 L'insertion de la page dans une fonction a considérablement réduit la consommation de RAM, puisque les routes ne seront pas allouées en mémoire depuis le démarrage de l'application, et cela a également permis de faire ce type d'approche:
+
 ```dart
 
 GetStorage box = GetStorage();
@@ -1089,16 +1091,15 @@ GetMaterialApp(
 3- Facilité sans vous soucier des performances. Les performances de Flutter sont déjà étonnantes, mais imaginez que vous utilisez un gestionnaire d'état et un localisateur pour distribuer vos classes blocs / stores / contrôleurs / etc. Vous devrez appeler manuellement l'exclusion de cette dépendance lorsque vous n'en avez pas besoin. Mais avez-vous déjà pensé à simplement utiliser votre «contrôleur`, et quand il n'était plus utilisé par personne, il serait simplement supprimé de la mémoire? C'est ce que fait GetX. Avec SmartManagement, tout ce qui n'est pas utilisé est supprimé de la mémoire et vous ne devriez pas avoir à vous soucier d'autre chose que de la programmation. Vous serez assuré de consommer le minimum de ressources nécessaires, sans même avoir créé de logique pour cela.
 
 4- Découplage réel. Vous avez peut-être entendu le concept "séparer la vue de la business logic". Ce n'est pas une particularité de BLoC, MVC, MVVM, et tout autre standard sur le marché a ce concept. Cependant, ce concept peut souvent être atténué dans Flutter en raison de l'utilisation de `context`.
-   Si vous avez besoin de contexte pour trouver un InheritedWidget, vous en avez besoin dans la vue, ou passez le `context` par paramètre. Je trouve particulièrement cette solution très moche, et pour travailler en équipe, nous serons toujours dépendants de la 'business logic' de View. Getx n'est pas orthodoxe avec l'approche standard, et même s'il n'interdit pas complètement l'utilisation de StatefulWidgets, InitState, etc., il a toujours une approche similaire qui peut être plus propre. Les contrôleurs ont des cycles de vie, et lorsque vous devez faire une requête APIREST par exemple, vous ne dépendez de rien de la vue. Vous pouvez utiliser onInit pour lancer l'appel http et lorsque les données arrivent, les variables sont remplies. Comme GetX est totalement réactif (vraiment, et fonctionne sous streams), une fois les éléments remplis, tous les widgets qui utilisent cette variable seront automatiquement mis à jour dans la vue.
-   Cela permet aux personnes ayant une expertise de l'interface utilisateur de travailler uniquement avec des widgets et de ne pas avoir à envoyer quoi que ce soit à la business logic autre que des événements utilisateur (comme cliquer sur un bouton), tandis que les personnes travaillant avec la business logic seront libres de créer et de tester la Business logic séparément.
-
+Si vous avez besoin de contexte pour trouver un InheritedWidget, vous en avez besoin dans la vue, ou passez le `context` par paramètre. Je trouve particulièrement cette solution très moche, et pour travailler en équipe, nous serons toujours dépendants de la 'business logic' de View. Getx n'est pas orthodoxe avec l'approche standard, et même s'il n'interdit pas complètement l'utilisation de StatefulWidgets, InitState, etc., il a toujours une approche similaire qui peut être plus propre. Les contrôleurs ont des cycles de vie, et lorsque vous devez faire une requête APIREST par exemple, vous ne dépendez de rien de la vue. Vous pouvez utiliser onInit pour lancer l'appel http et lorsque les données arrivent, les variables sont remplies. Comme GetX est totalement réactif (vraiment, et fonctionne sous streams), une fois les éléments remplis, tous les widgets qui utilisent cette variable seront automatiquement mis à jour dans la vue.
+Cela permet aux personnes ayant une expertise de l'interface utilisateur de travailler uniquement avec des widgets et de ne pas avoir à envoyer quoi que ce soit à la business logic autre que des événements utilisateur (comme cliquer sur un bouton), tandis que les personnes travaillant avec la business logic seront libres de créer et de tester la Business logic séparément.
 
 # Communite
 
 ## Chaines communautaires
 
 GetX a une communauté très active et utile. Si vous avez des questions, ou souhaitez obtenir de l'aide concernant l'utilisation de ce framework, veuillez rejoindre nos canaux communautaires, votre question sera répondue plus rapidement, et ce sera l'endroit le plus approprié. Ce référentiel est exclusif pour l'ouverture des issues Github et la demande de ressources, mais n'hésitez pas à faire partie de la communauté GetX.
-| **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
+| **Slack** | **Discord** | **Telegram** |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get sur Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
