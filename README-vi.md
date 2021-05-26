@@ -16,53 +16,53 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Về Getx](#about-get)
-- [Cài Đặt](#installing)
-- [Counter App với GetX](#counter-app-with-getx)
-- [Tam Trụ](#the-three-pillars)
-  - [Quản lý State](#state-management)
-    - [Quản lý Reactive State](#reactive-state-manager)
-    - [Thêm thông tin về quản lý state](#more-details-about-state-management)
-  - [Quản lý route](#route-management)
-    - [Thêm thông tin về quản lý route](#more-details-about-route-management)
-  - [Quản lý dependency](#dependency-management)
-    - [Thêm thông tin về quản lý dependency](#more-details-about-dependency-management)
+- [Về Getx](#về-getx)
+- [Cài Đặt](#cài-đặt)
+- [Counter App với GetX](#counter-app-với-getx)
+- [Tam Trụ](#tam-trụ)
+  - [Quản lý State](#quản-lý-state)
+    - [Quản lý Reactive State](#quản-lý-reactive-state)
+    - [Thêm thông tin về quản lý state](#thêm-thông-tin-về-quản-lý-state)
+  - [Quản lý route](#quản-lý-route)
+    - [Thêm thông tin về quản lý route](#thêm-thông-tin-về-quản-lý-route)
+  - [Quản lý dependency](#quản-lý-dependency)
+    - [Thêm thông tin về quản lý dependency](#thêm-thông-tin-về-quản-lý-dependency)
 - [Utils](#utils)
   - [Internationalization](#internationalization)
-    - [Dịch thuật](#translations)
-      - [Sử dụng bản dịch thuật](#using-translations)
+    - [Dịch thuật](#dịch-thuật)
+      - [Sử dụng bản dịch thuật](#sử-dụng-bản-dịch-thuật)
     - [Locales](#locales)
-      - [Change locale](#change-locale)
+      - [Đổi locale](#đổi-locale)
       - [System locale](#system-locale)
-  - [Đổi Theme](#change-theme)
+  - [Đổi Theme](#đổi-theme)
   - [GetConnect](#getconnect)
-    - [Cấu hình mặc định](#default-configuration)
-    - [Cấu hình tùy chỉnh](#custom-configuration)
+    - [Cấu hình mặc định](#cấu-hình-mặc-định)
+    - [Tùy chỉnh](#tùy-chỉnh)
   - [GetPage Middleware](#getpage-middleware)
-    - [Ưu tiên](#priority)
-    - [Chuyển hướng](#redirect)
+    - [Ưu tiên](#ưu-tiên)
+    - [Chuyển hướng](#chuyển-hướng)
     - [onPageCalled](#onpagecalled)
     - [OnBindingsStart](#onbindingsstart)
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [APIs nâng cao khác](#other-advanced-apis)
-    - [Cấu hình thủ công và cài đặt chung tùy chọn](#optional-global-settings-and-manual-configurations)
+  - [APIs nâng cao khác](#apis-nâng-cao-khác)
+    - [Cấu hình thủ công và cài đặt chung tuỳ chọn](#cấu-hình-thủ-công-và-cài-đặt-chung-tuỳ-chọn)
     - [Local State Widgets](#local-state-widgets)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
-  - [Mẹo hữu ích](#useful-tips)
+  - [Mẹo hữu ích](#mẹo-hữu-ích)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
-      - [Hướng dẫn sử dụng trước khi dùng](#how-to-use-it)
+      - [Hướng dẫn sử dụng trước khi dùng](#hướng-dẫn-sử-dụng-trước-khi-dùng)
     - [GetWidget](#getwidget)
     - [GetxService](#getxservice)
-- [Thay đổi đột phá 2.0](#breaking-changes-from-20)
-- [Tại sao lại dùng GetX](#why-getx)
-- [Cộng đồng](#community)
-  - [Kênh Cộng đồng](#community-channels)
-  - [Cách cống hiến](#how-to-contribute)
-  - [Các bài báo và video](#articles-and-videos)
+- [Thay đổi đột phá 2.0](#thay-đổi-đột-phá-2.0)
+- [Tại sao lại dùng GetX](#tại-sao-lại-dùng-getx)
+- [Cộng đồng](#cộng-đồng)
+  - [Kênh Cộng đồng](#kênh-cộng-đồng)
+  - [Cách cống hiến](#cách-cống-hiến)
+  - [Các bài báo và video](#các-bài-báo-và-video)
 
 # Về Getx
 
@@ -109,21 +109,21 @@ Import get vào file cần sử dụng:
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# Counter App với GetX
 
 Dự án "counter" được tạo theo mặc định trên dự án mới trên Flutter có hơn 100 dòng (có comments). Để thể hiện sức mạnh của Get, tôi sẽ trình bày cách tạo "counter" thay đổi trạng thái với mỗi lần nhấp, chuyển đổi giữa các trang và chia sẻ trạng thái giữa các màn hình, tất cả đều theo cách có tổ chức, tách biệt logic nghiệp vụ khỏi chế độ xem, CHỈ VỚI 26 DÒNG!
 
-- Step 1:
+- Bước 1:
   Thêm "Get" trước MaterialApp, nó sẽ thành GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Chí ú: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp CHỈ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
-- Chí ú²: Một lần nữa, bước này CHỈ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back () ', v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
+- Chú ý: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp CHỈ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
+- Chú ý²: Một lần nữa, bước này CHỈ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back () ', v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
 
-- Step 2:
+- Bước 2:
   Tạo lớp business logic của bạn và đặt tất cả các variables, function và controller bên trong nó.
   Bạn có thể làm cho bất kỳ variables nào có thể quan sát được bằng cách sử dụng ".obs" đơn giản.
 
@@ -134,7 +134,7 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
+- Bước 3:
   Tạo widget của bạn, sử dụng StatelessWidget và tiết kiệm RAM, với Get, bạn có thể không cần sử dụng StatefulWidget nữa.
 
 ```dart
@@ -191,10 +191,10 @@ Get has two different state managers: the simple state manager (we'll call it Ge
 Lập trình phản ứng (reactive programming) có thể khiến nhiều người xa lánh vì nó được cho là phức tạp. GetX biến lập trình phản ứng thành một thứ khá đơn giản:
 
 - Bạn sẽ không cần tạo StreamControllers.
-- Bạn sẽ không cần tạo StreamBuilder cho mỗi biến
+- Bạn sẽ không cần tạo StreamBuilder cho mỗi biến.
 - Bạn sẽ không cần tạo một lớp cho mỗi trạng thái.
 - Bạn sẽ không cần tạo get cho một giá trị ban đầu.
-- Bạn sẽ không cần sử dụng trình tạo mã
+- Bạn sẽ không cần sử dụng trình tạo mã.
 
 Lập trình phản ứng với Get dễ dàng như sử dụng setState.
 
@@ -712,7 +712,7 @@ context.isTablet()
 context.responsiveValue<T>()
 ```
 
-### Cấu hình thủ công và cài đặt chung tùy chọn
+### Cấu hình thủ công và cài đặt chung tuỳ chọn
 
 GetMaterialApp configures everything for you, but if you want to configure Get manually.
 
