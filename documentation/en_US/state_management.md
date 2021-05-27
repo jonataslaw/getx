@@ -264,7 +264,7 @@ And then, you checked if a user is "logged in" to trigger an event in `ever` .
 
 ``` dart
 @override
-onInit(){
+onInit() async {
   ever(isLogged, fireRoute);
   isLogged.value = await Preferences.hasToken();
 }
@@ -776,7 +776,7 @@ In a decade working with programming I was able to learn some valuable lessons.
 My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
 However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
 
-Reactive programming has a higher consumption of RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+Reactive programming has a higher RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
 
 With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
 
