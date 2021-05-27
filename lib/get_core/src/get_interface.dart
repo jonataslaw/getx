@@ -1,3 +1,6 @@
+import 'package:flutter/widgets.dart';
+import 'package:get/get_navigation/src/nav2/get_router_delegate.dart';
+
 import 'log.dart';
 import 'smart_management.dart';
 
@@ -5,6 +8,7 @@ import 'smart_management.dart';
 /// class through extensions
 abstract class GetInterface {
   SmartManagement smartManagement = SmartManagement.full;
+  RouterDelegate? routerDelegate;
   String? reference;
   bool isLogEnable = true;
   LogWriterCallback log = defaultLogWriterCallback;

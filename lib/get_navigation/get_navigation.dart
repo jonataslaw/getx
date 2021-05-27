@@ -2,6 +2,7 @@ library get_navigation;
 
 export 'src/bottomsheet/bottomsheet.dart';
 export 'src/extension_navigation.dart';
+export 'src/nav2/get_information_parser.dart';
 export 'src/root/get_cupertino_app.dart';
 export 'src/root/get_material_app.dart';
 export 'src/root/internacionalization.dart';

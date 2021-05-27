@@ -6,7 +6,7 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-mixin StateMixin<T> on ListNotifier {
+mixin StateMixin<T> on ListNotifierMixin {
   T? _value;
   RxStatus? _status;
 

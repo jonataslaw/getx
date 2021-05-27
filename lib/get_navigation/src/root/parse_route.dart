@@ -24,9 +24,11 @@ class ParseRouteTree {
       if (parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
-    } else {
-      Get.log('Route "${uri.path}" not found');
     }
+    // This logger sends confusing messages
+    // else {
+    //   // Get.log('Route "${uri.path}" not found');
+    // }
 
     return RouteDecoder(route, params);
   }
