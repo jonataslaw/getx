@@ -91,7 +91,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
               SizedBox.shrink(),
           currentNavStack: (routerDelegate) => routerDelegate.routes,
           pickPages: pickPages,
-          delegate: Get.routerDelegate as GetDelegate,
+          delegate: Get.getDelegate(),
         );
 }
 
