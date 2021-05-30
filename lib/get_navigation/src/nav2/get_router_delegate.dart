@@ -33,7 +33,7 @@ class GetDelegate extends RouterDelegate<GetPage>
     );
   }
 
-  final _resultCompleter = <Completer<Object>>[];
+  final _resultCompleter = <GetPage, Completer<Object?>>{};
 
   @override
   Future<void> setInitialRoutePath(GetPage configuration) async {
@@ -82,14 +82,14 @@ class GetDelegate extends RouterDelegate<GetPage>
         );
   }
 
-  Future<T?> pushRoute<T extends Object>(
+  Future<T?> pushRoute<T>(
     GetPage route, {
     bool removeUntil = false,
     bool replaceCurrent = false,
     bool rebuildStack = true,
   }) {
-    final completer = Completer<T>();
-    _resultCompleter.add(completer);
+    final completer = Completer<T?>();
+    _resultCompleter[route] = completer;
 
     route = route.copy(unknownRoute: _notFound());
     assert(!(removeUntil && replaceCurrent),
@@ -130,10 +130,11 @@ class GetDelegate extends RouterDelegate<GetPage>
 
     if (canPop()) {
       //emulate the old pop with result
-      final lastCompleter = _resultCompleter.removeLast();
-      lastCompleter.complete(result);
+      final lastRoute = routes.last;
+      final lastCompleter = _resultCompleter.remove(lastRoute);
+      lastCompleter?.complete(result);
       //route to be removed
-      removePage(routes.last);
+      removePage(lastRoute);
       return Future.value(true);
     }
     return Future.value(false);
