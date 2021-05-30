@@ -4,18 +4,20 @@ import 'package:get/get.dart';
 
 import '../controllers/product_details_controller.dart';
 
-class ProductDetailsView extends GetView<ProductDetailsController> {
+class ProductDetailsView extends GetWidget<ProductDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ProductDetailsView'),
-        centerTitle: true,
-      ),
       body: Center(
-        child: Text(
-          'ProductDetailsView is working',
-          style: TextStyle(fontSize: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'ProductDetailsView is working',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text('ProductId: ${controller.productId}')
+          ],
         ),
       ),
     );

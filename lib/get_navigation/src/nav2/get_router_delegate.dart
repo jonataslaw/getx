@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/nav2/router_outlet.dart';
 import '../../../get.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 
@@ -8,7 +9,7 @@ class GetDelegate extends RouterDelegate<GetPage>
     with ListenableMixin, ListNotifierMixin {
   final List<GetPage> routes = <GetPage>[];
 
-  final GetPage? notFoundRoute;
+  GetPage? notFoundRoute;
 
   final List<NavigatorObserver>? dipNavObservers;
   final TransitionDelegate<dynamic>? transitionDelegate;
@@ -19,15 +20,27 @@ class GetDelegate extends RouterDelegate<GetPage>
   GetDelegate(
       {this.notFoundRoute, this.dipNavObservers, this.transitionDelegate});
 
+  List<GetPage> getVisiblePages() {
+    return routes.where((r) {
+      final mware =
+          (r.middlewares ?? []).whereType<RouterOutletContainerMiddleWare>();
+      if (mware.length == 0) return true;
+      return r.name == mware.first.stayAt;
+    }).toList();
+  }
+
   /// Called by the [Router] at startup with the structure that the
   /// [RouteInformationParser] obtained from parsing the initial route.
   @override
   Widget build(BuildContext context) {
+    final pages = getVisiblePages();
     return Navigator(
       key: navigatorKey,
       onPopPage: _onPopPage,
-      pages: routes.toList(),
-      observers: [GetObserver()],
+      pages: pages,
+      observers: [
+        GetObserver(),
+      ],
       transitionDelegate:
           transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
     );
@@ -73,13 +86,12 @@ class GetDelegate extends RouterDelegate<GetPage>
   }
 
   GetPage _notFound() {
-    return notFoundRoute ??
-        GetPage(
-          name: '/404',
-          page: () => Scaffold(
-            body: Text('not found'),
-          ),
-        );
+    return notFoundRoute ??= GetPage(
+      name: '/404',
+      page: () => Scaffold(
+        body: Text('not found'),
+      ),
+    );
   }
 
   Future<T?> pushRoute<T>(

@@ -1,20 +1,21 @@
+import 'package:example_nav2/app/models/demo_product.dart';
 import 'package:get/get.dart';
 
 class ProductsController extends GetxController {
-  //TODO: Implement ProductsController
+  final products = <DemoProduct>[].obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void loadDemoProductsFromSomeWhere() {
+    products.add(
+      DemoProduct(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+    );
   }
 
   @override
   void onReady() {
     super.onReady();
+    loadDemoProductsFromSomeWhere();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }

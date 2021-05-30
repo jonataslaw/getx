@@ -1,3 +1,4 @@
+import 'package:example_nav2/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,14 +9,29 @@ class ProductsView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ProductsView'),
-        centerTitle: true,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: controller.loadDemoProductsFromSomeWhere,
+        label: Text('Add'),
       ),
-      body: Center(
-        child: Text(
-          'ProductsView is working',
-          style: TextStyle(fontSize: 20),
+      body: Obx(
+        () => RefreshIndicator(
+          onRefresh: () async {
+            controller.products.clear();
+            controller.loadDemoProductsFromSomeWhere();
+          },
+          child: ListView.builder(
+            itemCount: controller.products.length,
+            itemBuilder: (context, index) {
+              final item = controller.products[index];
+              return ListTile(
+                onTap: () {
+                  Get.getDelegate()?.toNamed(Routes.PRODUCT_DETAILS(item.id));
+                },
+                title: Text(item.name),
+                subtitle: Text(item.id),
+              );
+            },
+          ),
         ),
       ),
     );

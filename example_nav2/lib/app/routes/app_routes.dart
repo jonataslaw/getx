@@ -5,12 +5,12 @@ abstract class Routes {
   Routes._();
 
   static const HOME = _Paths.HOME;
-  static const PROFILE = _Paths.PROFILE;
+  static const PROFILE = _Paths.HOME + _Paths.PROFILE;
 
   static const SETTINGS = _Paths.SETTINGS;
 
-  static const PRODUCTS = _Paths.PRODUCTS;
-  static PRODUCT_DETAILS(String productId) => '${_Paths.PRODUCTS}/$productId';
+  static const PRODUCTS = _Paths.HOME + _Paths.PRODUCTS;
+  static String PRODUCT_DETAILS(String productId) => '$PRODUCTS/$productId';
 }
 
 abstract class _Paths {
