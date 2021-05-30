@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/get_navigation/src/nav2/get_router_delegate.dart';
+import '../../get_navigation/src/nav2/get_router_delegate.dart';
+import '../../get_navigation/src/routes/get_route.dart';
 
 import 'log.dart';
 import 'smart_management.dart';
