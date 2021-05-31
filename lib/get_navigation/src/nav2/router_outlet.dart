@@ -22,13 +22,15 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     TDelegate? delegate,
     required List<T> Function(TDelegate routerDelegate) currentNavStack,
     required List<T> Function(List<T> currentNavStack) pickPages,
-    required Widget Function(TDelegate, T? page) pageBuilder,
+    required Widget Function(BuildContext context, TDelegate, T? page)
+        pageBuilder,
   }) : this.builder(
           builder: (context, rDelegate, currentConfig) {
             final currentStack = currentNavStack(rDelegate);
             final picked = pickPages(currentStack);
-            if (picked.length == 0) return pageBuilder(rDelegate, null);
-            return pageBuilder(rDelegate, picked.last);
+            if (picked.length == 0)
+              return pageBuilder(context, rDelegate, null);
+            return pageBuilder(context, rDelegate, picked.last);
           },
           delegate: delegate,
         );
@@ -84,11 +86,21 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
     Widget Function(GetDelegate delegate)? emptyStackPage,
     required List<GetPage> Function(List<GetPage> currentNavStack) pickPages,
   }) : super(
-          pageBuilder: (rDelegate, page) =>
-              (page?.page() ??
-                  emptyStackPage?.call(rDelegate) ??
-                  rDelegate.notFoundRoute?.page()) ??
-              SizedBox.shrink(),
+          pageBuilder: (context, rDelegate, page) {
+            final pageRoute = rDelegate.pageRoutes[page];
+            if (pageRoute != null) {
+              return pageRoute.buildPage(
+                context,
+                pageRoute.animation,
+                pageRoute.secondaryAnimation,
+              );
+            }
+
+            /// improve this logic abit
+            return (emptyStackPage?.call(rDelegate) ??
+                    rDelegate.notFoundRoute?.page()) ??
+                SizedBox.shrink();
+          },
           currentNavStack: (routerDelegate) => routerDelegate.routes,
           pickPages: pickPages,
           delegate: Get.getDelegate(),
@@ -99,11 +111,11 @@ class RouterOutletContainerMiddleWare extends GetMiddleware {
   final String stayAt;
 
   RouterOutletContainerMiddleWare(this.stayAt);
-  @override
-  RouteSettings? redirect(String? route) {
-    print('RouterOutletContainerMiddleWare: Redirect called ($route)');
-    return null;
-  }
+  // @override
+  // RouteSettings? redirect(String? route) {
+  //   print('RouterOutletContainerMiddleWare: Redirect called ($route)');
+  //   return null;
+  // }
 }
 
 extension PagesListExt on List<GetPage> {

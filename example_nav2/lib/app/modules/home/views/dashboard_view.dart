@@ -8,9 +8,17 @@ class DashboardView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          'DashboardView is working',
-          style: TextStyle(fontSize: 20),
+        child: Obx(
+          () => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'DashboardView is working',
+                style: TextStyle(fontSize: 20),
+              ),
+              Text('Time: ${controller.now.value.toString()}')
+            ],
+          ),
         ),
       ),
     );

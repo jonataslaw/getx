@@ -30,9 +30,9 @@ class HomeView extends GetView<HomeController> {
             pickPages: (currentNavStack) {
               // will take any route after home
               final res = currentNavStack.pickAfterRoute(Routes.HOME);
-              print('''RouterOutlet rebuild:
-                currentStack: $currentNavStack
-                pickedStack: $res''');
+              // print('''RouterOutlet rebuild:
+              //   currentStack: $currentNavStack
+              //   pickedStack: $res''');
               return res;
             },
           ),

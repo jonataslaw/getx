@@ -18,4 +18,10 @@ class ProductsController extends GetxController {
     super.onReady();
     loadDemoProductsFromSomeWhere();
   }
+
+  @override
+  void onClose() {
+    Get.printInfo(info: 'Products: onClose');
+    super.onClose();
+  }
 }

@@ -22,13 +22,8 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
-      //TODO: don't group bindings in one place, and instead make each page use its own binding
       bindings: [
         HomeBinding(),
-        //These must use [Get.lazyPut] or [Get.create] because their view is created long after they are declared
-        ProfileBinding(),
-        ProductsBinding(),
-        ProductDetailsBinding(),
       ],
       title: null,
       middlewares: [
@@ -39,15 +34,18 @@ class AppPages {
           name: _Paths.PROFILE,
           page: () => ProfileView(),
           title: 'Profile',
+          binding: ProfileBinding(),
         ),
         GetPage(
           name: _Paths.PRODUCTS,
           page: () => ProductsView(),
           title: 'Products',
+          binding: ProductsBinding(),
           children: [
             GetPage(
               name: _Paths.PRODUCT_DETAILS,
               page: () => ProductDetailsView(),
+              binding: ProductDetailsBinding(),
             ),
           ],
         ),
