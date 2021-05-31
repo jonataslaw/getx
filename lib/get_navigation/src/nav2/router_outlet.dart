@@ -83,7 +83,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
         );
 
   GetRouterOutlet({
-    Widget Function(GetDelegate delegate)? emptyStackPage,
+    Widget Function(GetDelegate delegate)? emptyPage,
     required List<GetPage> Function(List<GetPage> currentNavStack) pickPages,
   }) : super(
           pageBuilder: (context, rDelegate, page) {
@@ -97,7 +97,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
             }
 
             /// improve this logic abit
-            return (emptyStackPage?.call(rDelegate) ??
+            return (emptyPage?.call(rDelegate) ??
                     rDelegate.notFoundRoute?.page()) ??
                 SizedBox.shrink();
           },

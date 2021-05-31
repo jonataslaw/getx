@@ -13,6 +13,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
+        //This router outlet handles the appbar and the bottom navigation bar
         final title = currentRoute?.title;
         final currentName = currentRoute?.name;
         var currentIndex = 0;
@@ -26,7 +27,7 @@ class HomeView extends GetView<HomeController> {
                   centerTitle: true,
                 ),
           body: GetRouterOutlet(
-            emptyStackPage: (delegate) => DashboardView(),
+            emptyPage: (delegate) => DashboardView(),
             pickPages: (currentNavStack) {
               // will take any route after home
               final res = currentNavStack.pickAfterRoute(Routes.HOME);
@@ -39,33 +40,31 @@ class HomeView extends GetView<HomeController> {
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (value) {
-              final getDelegate = Get.getDelegate();
-              if (getDelegate == null) return;
               switch (value) {
                 case 0:
-                  getDelegate.offUntil(Routes.HOME);
+                  delegate.offUntil(Routes.HOME);
                   break;
                 case 1:
-                  getDelegate.toNamed(Routes.PROFILE);
+                  delegate.toNamed(Routes.PROFILE);
                   break;
                 case 2:
-                  getDelegate.toNamed(Routes.PRODUCTS);
+                  delegate.toNamed(Routes.PRODUCTS);
                   break;
                 default:
               }
             },
             items: [
-              // Routes.Home + [Empty]
+              // _Paths.HOME + [Empty]
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
-              // Routes.Home + Routes.Profile
+              // _Paths.HOME + Routes.PROFILE
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_box_rounded),
                 label: 'Profile',
               ),
-              // Routes.Home + Routes.Products
+              // _Paths.HOME + _Paths.PRODUCTS
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_box_rounded),
                 label: 'Products',
