@@ -9,6 +9,8 @@ class GetDelegate extends RouterDelegate<GetPage>
     with ListenableMixin, ListNotifierMixin {
   final List<GetPage> routes = <GetPage>[];
 
+  final pageRoutes = <GetPage, GetPageRoute>{};
+
   GetPage? notFoundRoute;
 
   final List<NavigatorObserver>? dipNavObservers;
@@ -56,6 +58,7 @@ class GetDelegate extends RouterDelegate<GetPage>
   @override
   Future<void> setNewRoutePath(GetPage configuration) {
     routes.clear();
+    pageRoutes.clear();
     return pushRoute(configuration);
   }
 
@@ -66,6 +69,8 @@ class GetDelegate extends RouterDelegate<GetPage>
     final route = routes.last;
     return route;
   }
+
+  GetPageRoute? get currentRoute => pageRoutes[currentConfiguration];
 
   Future<T?> toNamed<T>(String route) {
     final page = Get.routeTree.matchRoute(route);
@@ -95,23 +100,25 @@ class GetDelegate extends RouterDelegate<GetPage>
   }
 
   Future<T?> pushRoute<T>(
-    GetPage route, {
+    GetPage page, {
     bool removeUntil = false,
     bool replaceCurrent = false,
     bool rebuildStack = true,
   }) {
     final completer = Completer<T?>();
-    _resultCompleter[route] = completer;
+    _resultCompleter[page] = completer;
 
-    route = route.copy(unknownRoute: _notFound());
+    page = page.copy(unknownRoute: _notFound());
     assert(!(removeUntil && replaceCurrent),
         'Only removeUntil or replaceCurrent should by true!');
     if (removeUntil) {
       routes.clear();
+      pageRoutes.clear();
     } else if (replaceCurrent && routes.isNotEmpty) {
-      routes.removeLast();
+      final lastPage = routes.removeLast();
+      pageRoutes.remove(lastPage);
     }
-    addPage(route);
+    addPage(page);
     if (rebuildStack) {
       refresh();
     }
@@ -153,7 +160,7 @@ class GetDelegate extends RouterDelegate<GetPage>
   }
 
   bool canPop() {
-    return routes.isNotEmpty;
+    return routes.length > 1;
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
@@ -161,14 +168,24 @@ class GetDelegate extends RouterDelegate<GetPage>
     if (!didPop) {
       return false;
     }
-    routes.remove(route.settings);
+    final settings = route.settings;
+    if (settings is GetPage) {
+      removePage(settings);
+    }
     refresh();
     return true;
   }
 
   void removePage(GetPage page) {
+    final isLast = routes.last == page;
+    //check if it's last
     routes.remove(page);
-
+    final oldPageRoute = pageRoutes.remove(page);
+    if (isLast && oldPageRoute != null) {
+      _currentRoutePopped(oldPageRoute);
+      final newPageRoute = pageRoutes[routes.last];
+      if (newPageRoute != null) _currentRouteChanged(newPageRoute);
+    }
     refresh();
   }
 
@@ -176,11 +193,28 @@ class GetDelegate extends RouterDelegate<GetPage>
     routes.add(
       route,
     );
+    final pageRoute =
+        pageRoutes[route] = PageRedirect(route, _notFound()).page();
+    _currentRouteChanged(pageRoute);
     refresh();
   }
 
   void addRoutes(List<GetPage> pages) {
     routes.addAll(pages);
+    for (var item in pages) {
+      pageRoutes[item] = PageRedirect(item, _notFound()).page();
+    }
+    final pageRoute = pageRoutes[routes.last];
+    if (pageRoute != null) _currentRouteChanged(pageRoute);
     refresh();
+  }
+
+  void _currentRoutePopped(GetPageRoute route) {
+    route.dispose();
+  }
+
+  void _currentRouteChanged(GetPageRoute route) {
+    //transition?
+    //buildPage? -> in router outlet
   }
 }
