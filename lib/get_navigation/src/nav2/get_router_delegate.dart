@@ -214,7 +214,8 @@ class GetDelegate extends RouterDelegate<GetPage>
   }
 
   void _currentRouteChanged(GetPageRoute route) {
-    //transition?
+    //is this method useful ?
+    //transition? -> in router outlet ??
     //buildPage? -> in router outlet
   }
 }

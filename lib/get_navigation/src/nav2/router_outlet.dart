@@ -89,6 +89,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
           pageBuilder: (context, rDelegate, page) {
             final pageRoute = rDelegate.pageRoutes[page];
             if (pageRoute != null) {
+              //TODO: transitions go here !
               return pageRoute.buildPage(
                 context,
                 pageRoute.animation,
@@ -96,7 +97,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
               );
             }
 
-            /// improve this logic abit
+            /// TODO: improve this logic abit
             return (emptyPage?.call(rDelegate) ??
                     rDelegate.notFoundRoute?.page()) ??
                 SizedBox.shrink();
