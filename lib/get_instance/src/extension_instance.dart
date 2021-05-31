@@ -1,5 +1,9 @@
+import 'package:flutter/widgets.dart';
+import 'package:get/get_navigation/src/nav2/get_router_delegate.dart';
+
 import '../../get_core/src/get_interface.dart';
 
+import '../../route_manager.dart';
 import 'get_instance.dart';
 
 extension Inst on GetInterface {
@@ -121,4 +125,10 @@ extension Inst on GetInterface {
   /// [Get.lazyPut()], is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
+
+  /// Casts the stored router delegate to a desired type
+  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
+      routerDelegate as TDelegate?;
+
+  GetDelegate? getDelegate() => delegate<GetDelegate, GetPage>();
 }

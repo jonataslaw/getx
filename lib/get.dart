@@ -10,3 +10,4 @@ export 'get_navigation/get_navigation.dart';
 export 'get_rx/get_rx.dart';
 export 'get_state_manager/get_state_manager.dart';
 export 'get_utils/get_utils.dart';
+export 'route_manager.dart';

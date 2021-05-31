@@ -108,9 +108,9 @@ class GetPageRoute<T> extends PageRoute<T> {
 
   @override
   Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
+    BuildContext? context,
+    Animation<double>? animation,
+    Animation<double>? secondaryAnimation,
   ) {
     //   Get.reference = settings.name ?? routeName;
     Get.reference = reference;
