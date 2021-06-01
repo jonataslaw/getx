@@ -54,6 +54,9 @@ class GetPage<T> extends Page<T> {
   @override
   final String name;
 
+  @override
+  final String? restorationId;
+
   final List<GetPage>? children;
   final List<GetMiddleware>? middlewares;
   final PathDecoded path;
@@ -79,11 +82,13 @@ class GetPage<T> extends Page<T> {
     this.children,
     this.middlewares,
     this.unknownRoute,
+    this.restorationId,
   })  : path = _nameToRegex(name),
         super(
           key: ValueKey(name),
           name: name,
           arguments: Get.arguments,
+          restorationId: restorationId,
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 

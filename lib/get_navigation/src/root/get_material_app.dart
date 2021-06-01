@@ -65,6 +65,7 @@ class GetMaterialApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
+    this.restorationScopeId,
   })  : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
@@ -125,6 +126,7 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
+  final String? restorationScopeId;
 
   const GetMaterialApp.router({
     Key? key,
@@ -174,6 +176,7 @@ class GetMaterialApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
+    this.restorationScopeId,
   })  : navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
@@ -263,6 +266,7 @@ class GetMaterialApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              restorationScopeId: restorationScopeId,
             )
           : MaterialApp(
               key: _.unikey,
@@ -312,6 +316,7 @@ class GetMaterialApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              restorationScopeId: restorationScopeId,
               //   actions: actions,
             ));
 }
