@@ -926,6 +926,7 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
 ```dart
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized()
   await initServices(); /// 서비스들 초기화를 기다림.
   runApp(SomeApp());
 }
@@ -934,7 +935,7 @@ Future<void> main() async {
 /// 실행 흐름을 제어 할수 있으므로(테마 구성, apiKey, 사용자가 정의한 언어등을 로드해야 할 필요가 있으므로 
 /// ApiService의 구동전에 SettingService를 로드해야 합니다.
 /// 그래서 GetMaterialApp()은 재구성하지 않고 직접적으로 값을 가져옵니다.
-void initServices() async {
+Future<void> initServices() async {
   print('starting services ...');
   /// 여기에서 get_storage, hive, shared_pref 초기화를 하세요.
   /// 또는 연결 고정 또는 비동기적인 무엇이든 하세요.
