@@ -20,6 +20,13 @@
             "cwd": "example_nav2",
             "request": "launch",
             "type": "dart"
+        },
+        {
+            "name": "example_nav2 WEB",
+            "cwd": "example_nav2",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "Chrome"
         }
     ]
 }

@@ -57,6 +57,8 @@ class GetDelegate extends RouterDelegate<GetPage>
 
   @override
   Future<void> setNewRoutePath(GetPage configuration) {
+    /// incorrect, remove routes until you reach the page in configuration.
+    /// if it's not found push it.
     routes.clear();
     pageRoutes.clear();
     return pushRoute(configuration);
