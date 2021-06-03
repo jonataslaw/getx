@@ -1,12 +1,9 @@
-import 'package:example_nav2/app/modules/home/views/dashboard_view.dart';
-import 'package:example_nav2/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/nav2/get_router_delegate.dart';
-import 'package:get/get_navigation/src/nav2/router_outlet.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
+import 'dashboard_view.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -14,26 +11,21 @@ class HomeView extends GetView<HomeController> {
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
         //This router outlet handles the appbar and the bottom navigation bar
-        final title = currentRoute?.title;
-        final currentName = currentRoute?.name;
+        final currentLocation = currentRoute?.location;
         var currentIndex = 0;
-        if (currentName?.startsWith(Routes.PRODUCTS) == true) currentIndex = 2;
-        if (currentName?.startsWith(Routes.PROFILE) == true) currentIndex = 1;
+        if (currentLocation?.startsWith(Routes.PRODUCTS) == true) {
+          currentIndex = 2;
+        }
+        if (currentLocation?.startsWith(Routes.PROFILE) == true) {
+          currentIndex = 1;
+        }
         return Scaffold(
-          appBar: title == null
-              ? null
-              : AppBar(
-                  title: Text(title),
-                  centerTitle: true,
-                ),
           body: GetRouterOutlet(
             emptyPage: (delegate) => DashboardView(),
             pickPages: (currentNavStack) {
               // will take any route after home
-              final res = currentNavStack.pickAfterRoute(Routes.HOME);
-              // print('''RouterOutlet rebuild:
-              //   currentStack: $currentNavStack
-              //   pickedStack: $res''');
+              final res =
+                  currentNavStack.currentTreeBranch.pickAfterRoute(Routes.HOME);
               return res;
             },
           ),
@@ -42,7 +34,7 @@ class HomeView extends GetView<HomeController> {
             onTap: (value) {
               switch (value) {
                 case 0:
-                  delegate.offUntil(Routes.HOME);
+                  delegate.until(Routes.HOME);
                   break;
                 case 1:
                   delegate.toNamed(Routes.PROFILE);

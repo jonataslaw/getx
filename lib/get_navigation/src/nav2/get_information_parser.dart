@@ -2,28 +2,44 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 
-class GetInformationParser extends RouteInformationParser<GetPage> {
+class GetInformationParser extends RouteInformationParser<GetNavConfig> {
+  final String initialRoute;
+
+  GetInformationParser({
+    this.initialRoute = '/',
+  });
   @override
-  SynchronousFuture<GetPage> parseRouteInformation(
+  SynchronousFuture<GetNavConfig> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
-    if (routeInformation.location == '/') {
-      return SynchronousFuture(Get.routeTree.routes.first);
+    print('GetInformationParser: route location: ${routeInformation.location}');
+    var location = routeInformation.location;
+    if (location == '/') {
+      //check if there is a corresponding page
+      //if not, relocate to initialRoute
+      if (!Get.routeTree.routes.any((element) => element.name == '/')) {
+        location = initialRoute;
+      }
     }
-    print('route location: ${routeInformation.location}');
-    final page = Get.routeTree.matchRoute(routeInformation.location!);
-    print(page.parameters);
-    final val = page.route!.copy(
-      name: routeInformation.location,
-      parameter: Map.from(page.parameters),
+
+    final matchResult = Get.routeTree.matchRoute(location ?? initialRoute);
+
+    return SynchronousFuture(
+      GetNavConfig(
+        currentTreeBranch: matchResult.treeBranch,
+        location: location,
+        state: routeInformation.state,
+      ),
     );
-    return SynchronousFuture(val);
   }
 
   @override
-  RouteInformation restoreRouteInformation(GetPage uri) {
-    print('restore $uri');
+  RouteInformation restoreRouteInformation(GetNavConfig config) {
+    print('restore $config');
 
-    return RouteInformation(location: uri.name);
+    return RouteInformation(
+      location: config.location,
+      state: config.state,
+    );
   }
 }

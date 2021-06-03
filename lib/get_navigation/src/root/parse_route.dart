@@ -1,11 +1,14 @@
-import '../../../get_core/src/get_main.dart';
 import '../../get_navigation.dart';
 import '../routes/get_route.dart';
 
 class RouteDecoder {
-  final GetPage? route;
-  final Map<String, String?> parameters;
-  const RouteDecoder(this.route, this.parameters);
+  final List<GetPage> treeBranch;
+  GetPage? get route => treeBranch.isEmpty ? null : treeBranch.last;
+  final Map<String, String> parameters;
+  const RouteDecoder(
+    this.treeBranch,
+    this.parameters,
+  );
 }
 
 class ParseRouteTree {
@@ -17,20 +20,53 @@ class ParseRouteTree {
 
   RouteDecoder matchRoute(String name) {
     final uri = Uri.parse(name);
-    final route = _findRoute(uri.path);
-    final params = Map<String, String?>.from(uri.queryParameters);
-    if (route != null) {
-      final parsedParams = _parseParams(name, route.path);
+    // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
+    final split = uri.path.split('/').where((element) => element.isNotEmpty);
+    var curPath = '/';
+    final cumulativePaths = <String>[
+      '/',
+    ];
+    for (var item in split) {
+      if (curPath.endsWith('/')) {
+        curPath += '$item';
+      } else {
+        curPath += '/$item';
+      }
+      cumulativePaths.add(curPath);
+    }
+
+    final treeBranch = cumulativePaths
+        .map((e) => MapEntry(e, _findRoute(e)))
+        .where((element) => element.value != null)
+        .toList();
+
+    final params = Map<String, String>.from(uri.queryParameters);
+    if (treeBranch.isNotEmpty) {
+      //route is found, do further parsing to get nested query params
+      final lastRoute = treeBranch.last;
+      final parsedParams = _parseParams(name, lastRoute.value!.path);
       if (parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
+      //copy parameters to all pages.
+      final mappedTreeBranch = treeBranch
+          .map(
+            (e) => e.value!.copy(
+              parameter: params,
+            ),
+          )
+          .toList();
+      return RouteDecoder(
+        mappedTreeBranch,
+        params,
+      );
     }
-    // This logger sends confusing messages
-    // else {
-    //   // Get.log('Route "${uri.path}" not found');
-    // }
 
-    return RouteDecoder(route, params);
+    //route not found
+    return RouteDecoder(
+      treeBranch.map((e) => e.value!).toList(),
+      params,
+    );
   }
 
   void addRoutes(List<GetPage> getPages) {
@@ -88,6 +124,7 @@ class ParseRouteTree {
         opaque: origin.opaque,
         parameter: origin.parameter,
         popGesture: origin.popGesture,
+
         //  settings: origin.settings,
         transitionDuration: origin.transitionDuration,
         middlewares: middlewares,
@@ -99,8 +136,8 @@ class ParseRouteTree {
     );
   }
 
-  Map<String, String?> _parseParams(String path, PathDecoded routePath) {
-    final params = <String, String?>{};
+  Map<String, String> _parseParams(String path, PathDecoded routePath) {
+    final params = <String, String>{};
     var idx = path.indexOf('?');
     if (idx > -1) {
       path = path.substring(0, idx);

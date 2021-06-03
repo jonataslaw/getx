@@ -1,3 +1,5 @@
+import 'package:example_nav2/app/modules/root/bindings/root_binding.dart';
+import 'package:example_nav2/app/modules/root/views/root_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/nav2/router_outlet.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -20,41 +22,49 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => HomeView(),
-      bindings: [
-        HomeBinding(),
-      ],
-      title: null,
+      name: '/',
+      page: () => RootView(),
       middlewares: [
-        RouterOutletContainerMiddleWare(_Paths.HOME),
+        RouterOutletContainerMiddleWare('/'),
       ],
+      binding: RootBinding(),
       children: [
         GetPage(
-          name: _Paths.PROFILE,
-          page: () => ProfileView(),
-          title: 'Profile',
-          binding: ProfileBinding(),
-        ),
-        GetPage(
-          name: _Paths.PRODUCTS,
-          page: () => ProductsView(),
-          title: 'Products',
-          binding: ProductsBinding(),
+          name: _Paths.HOME,
+          preventDuplicates: true,
+          page: () => HomeView(),
+          bindings: [
+            HomeBinding(),
+          ],
+          title: null,
           children: [
             GetPage(
-              name: _Paths.PRODUCT_DETAILS,
-              page: () => ProductDetailsView(),
-              binding: ProductDetailsBinding(),
+              name: _Paths.PROFILE,
+              page: () => ProfileView(),
+              title: 'Profile',
+              binding: ProfileBinding(),
+            ),
+            GetPage(
+              name: _Paths.PRODUCTS,
+              page: () => ProductsView(),
+              title: 'Products',
+              binding: ProductsBinding(),
+              children: [
+                GetPage(
+                  name: _Paths.PRODUCT_DETAILS,
+                  page: () => ProductDetailsView(),
+                  binding: ProductDetailsBinding(),
+                ),
+              ],
             ),
           ],
         ),
+        GetPage(
+          name: _Paths.SETTINGS,
+          page: () => SettingsView(),
+          binding: SettingsBinding(),
+        ),
       ],
-    ),
-    GetPage(
-      name: _Paths.SETTINGS,
-      page: () => SettingsView(),
-      binding: SettingsBinding(),
     ),
   ];
 }
