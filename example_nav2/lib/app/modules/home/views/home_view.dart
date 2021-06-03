@@ -23,6 +23,8 @@ class HomeView extends GetView<HomeController> {
           body: GetRouterOutlet(
             emptyPage: (delegate) => DashboardView(),
             pickPages: (currentNavStack) {
+              print('Home RouterOutlet: $currentNavStack');
+
               // will take any route after home
               final res =
                   currentNavStack.currentTreeBranch.pickAfterRoute(Routes.HOME);

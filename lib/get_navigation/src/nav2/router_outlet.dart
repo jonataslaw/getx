@@ -50,6 +50,7 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   @override
   void initState() {
     super.initState();
+    _getCurrentRoute();
     delegate.addListener(onRouterDelegateChanged);
   }
 
@@ -60,11 +61,12 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   }
 
   T? currentRoute;
+  void _getCurrentRoute() {
+    currentRoute = delegate.currentConfiguration;
+  }
 
   void onRouterDelegateChanged() {
-    setState(() {
-      currentRoute = delegate.currentConfiguration;
-    });
+    setState(_getCurrentRoute);
   }
 
   @override
@@ -92,8 +94,8 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
   }) : super(
           pageBuilder: (context, rDelegate, page) {
-            final pageRoute = rDelegate.pageRoutes[page?.name];
-            if (pageRoute != null) {
+            final pageRoute = rDelegate.getPageRoute(page);
+            if (page != null) {
               //TODO: transitions go here !
               return pageRoute.buildPage(
                 context,
@@ -104,8 +106,8 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
 
             /// TODO: improve this logic abit
             return (emptyPage?.call(rDelegate) ??
-                    rDelegate.notFoundRoute?.page()) ??
-                SizedBox.shrink();
+                pageRoute.page?.call() ??
+                SizedBox.shrink());
           },
           pickPages: pickPages,
           delegate: Get.getDelegate(),
