@@ -35,8 +35,6 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
 
   @override
   RouteInformation restoreRouteInformation(GetNavConfig config) {
-    print('restore $config');
-
     return RouteInformation(
       location: config.location,
       state: config.state,

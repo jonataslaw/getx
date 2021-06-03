@@ -46,7 +46,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   final List<GetNavConfig> history = <GetNavConfig>[];
   final PopMode backButtonPopMode;
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
-  final pageRoutes = <String, GetPageRoute>{};
 
   GetPage? notFoundRoute;
 
@@ -82,7 +81,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   void _removeHistoryEntry(GetNavConfig entry) {
     history.remove(entry);
-    pageRoutes.remove(entry.location);
     final lastCompleter = _resultCompleter.remove(entry);
     lastCompleter?.complete(entry);
   }
@@ -92,7 +90,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       if (history.any((element) => element.location == config.location)) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            until(config.location!, popMode: PopMode.History);
+            until(config.location!, popMode: PopMode.Page);
             return;
           case PreventDuplicateHandlingMode.DoNothing:
           default:
@@ -101,8 +99,11 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       }
     }
     history.add(config);
-    pageRoutes[config.location!] =
-        PageRedirect(config.currentPage!, _notFound()).page();
+  }
+
+  GetPageRoute getPageRoute(RouteSettings? settings) {
+    return PageRedirect(settings ?? RouteSettings(name: '/404'), _notFound())
+        .page();
   }
 
   GetNavConfig? _popHistory() {
@@ -112,7 +113,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   GetNavConfig _doPopHistory() {
     final res = history.removeLast();
-    pageRoutes.remove(res.location);
     return res;
   }
 
@@ -190,6 +190,16 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return SynchronousFuture(_canPopPage());
   }
 
+  bool _canPop(PopMode mode) {
+    switch (mode) {
+      case PopMode.History:
+        return _canPopHistory();
+      case PopMode.Page:
+      default:
+        return _canPopPage();
+    }
+  }
+
   /// gets the visual pages from the current history entry
   ///
   /// visual pages must have the [RouterOutletContainerMiddleWare] middleware
@@ -225,7 +235,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   @override
   Future<void> setInitialRoutePath(GetNavConfig configuration) async {
     history.clear();
-    pageRoutes.clear();
     _resultCompleter.clear();
     await pushHistory(configuration);
   }
@@ -240,11 +249,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     if (history.isEmpty) return null;
     final route = history.last;
     return route;
-  }
-
-  GetPageRoute? get currentRoute {
-    final curPage = currentConfiguration?.currentPage;
-    return curPage == null ? null : pageRoutes[curPage];
   }
 
   Future<T?> toNamed<T>(String fullRoute) {
@@ -263,12 +267,12 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   /// DOES NOT remove the [fullRoute]
   void until(
     String fullRoute, {
-    PopMode popMode = PopMode.History,
+    PopMode popMode = PopMode.Page,
   }) {
     // remove history or page entries until you meet route
-    final currentEntry = currentConfiguration;
-    var iterator = currentEntry;
-    while (history.length > 0 &&
+
+    var iterator = currentConfiguration;
+    while (_canPop(popMode) &&
         iterator != null &&
         iterator.location != fullRoute) {
       _pop(popMode);
@@ -304,7 +308,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   @override
   Future<bool> popRoute({
     Object? result,
-    PopMode popMode = PopMode.History,
+    PopMode popMode = PopMode.Page,
   }) async {
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);

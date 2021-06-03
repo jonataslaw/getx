@@ -53,6 +53,7 @@ class ParseRouteTree {
           .map(
             (e) => e.value!.copy(
               parameter: params,
+              name: e.key,
             ),
           )
           .toList();
@@ -110,7 +111,7 @@ class ParseRouteTree {
   GetPage _addChild(
           GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
       GetPage(
-        name: parentPath + origin.name,
+        name: (parentPath + origin.name).replaceAll(r'//', '/'),
         page: origin.page,
         title: origin.title,
         alignment: origin.alignment,
