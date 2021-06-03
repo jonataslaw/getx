@@ -10,8 +10,14 @@ void main() {
     GetMaterialApp.router(
       title: "Application",
       getPages: AppPages.routes,
-      routeInformationParser: GetInformationParser(),
-      routerDelegate: GetDelegate(),
+      routeInformationParser: GetInformationParser(
+          // initialRoute: Routes.HOME,
+          ),
+      routerDelegate: GetDelegate(
+        backButtonPopMode: PopMode.History,
+        preventDuplicateHandlingMode:
+            PreventDuplicateHandlingMode.PopUntilOriginalRoute,
+      ),
     ),
   );
 }

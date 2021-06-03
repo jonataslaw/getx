@@ -41,7 +41,7 @@ class GetPage<T> extends Page<T> {
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
   final bool fullscreenDialog;
-
+  final bool preventDuplicates;
   // @override
   // final LocalKey? key;
 
@@ -79,6 +79,7 @@ class GetPage<T> extends Page<T> {
     this.children,
     this.middlewares,
     this.unknownRoute,
+    this.preventDuplicates = false,
   })  : path = _nameToRegex(name),
         super(
           key: ValueKey(name),
@@ -128,8 +129,10 @@ class GetPage<T> extends Page<T> {
     List<GetPage>? children,
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
+    bool? preventDuplicates,
   }) {
     return GetPage(
+      preventDuplicates: preventDuplicates ?? this.preventDuplicates,
       name: name ?? this.name,
       page: page ?? this.page,
       popGesture: popGesture ?? this.popGesture,
@@ -145,7 +148,6 @@ class GetPage<T> extends Page<T> {
       customTransition: customTransition ?? this.customTransition,
       transitionDuration: transitionDuration ?? this.transitionDuration,
       fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
-      // settings: settings ?? this.settings,
       children: children ?? this.children,
       unknownRoute: unknownRoute ?? this.unknownRoute,
       middlewares: middlewares ?? this.middlewares,
@@ -171,6 +173,8 @@ class GetPage<T> extends Page<T> {
         other.page.runtimeType == page.runtimeType &&
         other.popGesture == popGesture &&
         //   mapEquals(other.parameter, parameter) &&
+
+        other.preventDuplicates == preventDuplicates &&
         other.title == title &&
         other.transition == transition &&
         other.curve == curve &&
@@ -194,6 +198,7 @@ class GetPage<T> extends Page<T> {
     return //page.hashCode ^
         popGesture.hashCode ^
             // parameter.hashCode ^
+            preventDuplicates.hashCode ^
             title.hashCode ^
             transition.hashCode ^
             curve.hashCode ^

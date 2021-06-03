@@ -8,10 +8,6 @@ class SettingsView extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('SettingsView'),
-        centerTitle: true,
-      ),
       body: Center(
         child: Text(
           'SettingsView is working',

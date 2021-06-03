@@ -20,16 +20,21 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
 
   RouterOutlet({
     TDelegate? delegate,
-    required List<T> Function(TDelegate routerDelegate) currentNavStack,
-    required List<T> Function(List<T> currentNavStack) pickPages,
-    required Widget Function(BuildContext context, TDelegate, T? page)
+    required List<RouteSettings> Function(T currentNavStack) pickPages,
+    required Widget Function(
+      BuildContext context,
+      TDelegate,
+      RouteSettings? page,
+    )
         pageBuilder,
   }) : this.builder(
           builder: (context, rDelegate, currentConfig) {
-            final currentStack = currentNavStack(rDelegate);
-            final picked = pickPages(currentStack);
-            if (picked.length == 0)
+            final picked = currentConfig == null
+                ? <RouteSettings>[]
+                : pickPages(currentConfig);
+            if (picked.length == 0) {
               return pageBuilder(context, rDelegate, null);
+            }
             return pageBuilder(context, rDelegate, picked.last);
           },
           delegate: delegate,
@@ -68,12 +73,12 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   }
 }
 
-class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
+class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
   GetRouterOutlet.builder({
     required Widget Function(
       BuildContext context,
       GetDelegate delegate,
-      GetPage? currentRoute,
+      GetNavConfig? currentRoute,
     )
         builder,
     GetDelegate? routerDelegate,
@@ -84,10 +89,10 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
 
   GetRouterOutlet({
     Widget Function(GetDelegate delegate)? emptyPage,
-    required List<GetPage> Function(List<GetPage> currentNavStack) pickPages,
+    required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
   }) : super(
           pageBuilder: (context, rDelegate, page) {
-            final pageRoute = rDelegate.pageRoutes[page];
+            final pageRoute = rDelegate.pageRoutes[page?.name];
             if (pageRoute != null) {
               //TODO: transitions go here !
               return pageRoute.buildPage(
@@ -102,21 +107,18 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetPage> {
                     rDelegate.notFoundRoute?.page()) ??
                 SizedBox.shrink();
           },
-          currentNavStack: (routerDelegate) => routerDelegate.routes,
           pickPages: pickPages,
           delegate: Get.getDelegate(),
         );
 }
 
+/// A marker outlet to identify which pages are visual
+/// (handled by the navigator) and which are logical
+/// (handled by the delegate)
 class RouterOutletContainerMiddleWare extends GetMiddleware {
   final String stayAt;
 
   RouterOutletContainerMiddleWare(this.stayAt);
-  // @override
-  // RouteSettings? redirect(String? route) {
-  //   print('RouterOutletContainerMiddleWare: Redirect called ($route)');
-  //   return null;
-  // }
 }
 
 extension PagesListExt on List<GetPage> {
