@@ -218,7 +218,8 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   Widget build(BuildContext context) {
     final pages = getVisualPages();
     final extraObservers = navigatorObservers;
-    return Navigator(
+    return GetNavigator(
+      name: 'root',
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
       pages: pages,
