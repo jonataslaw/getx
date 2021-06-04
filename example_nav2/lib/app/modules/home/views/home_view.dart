@@ -21,6 +21,7 @@ class HomeView extends GetView<HomeController> {
         }
         return Scaffold(
           body: GetRouterOutlet(
+            name: Routes.HOME,
             emptyPage: (delegate) => DashboardView(),
             pickPages: (currentNavStack) {
               print('Home RouterOutlet: $currentNavStack');

@@ -42,12 +42,14 @@ class AppPages {
               name: _Paths.PROFILE,
               page: () => ProfileView(),
               title: 'Profile',
+              transition: Transition.size,
               binding: ProfileBinding(),
             ),
             GetPage(
               name: _Paths.PRODUCTS,
               page: () => ProductsView(),
               title: 'Products',
+              transition: Transition.zoom,
               binding: ProductsBinding(),
               children: [
                 GetPage(

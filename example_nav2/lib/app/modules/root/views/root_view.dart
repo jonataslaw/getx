@@ -19,6 +19,7 @@ class RootView extends GetView<RootController> {
             centerTitle: true,
           ),
           body: GetRouterOutlet(
+            name: '/',
             emptyPage: (delegate) {
               return Center(
                 child: Column(

@@ -20,18 +20,17 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
 
   RouterOutlet({
     TDelegate? delegate,
-    required List<RouteSettings> Function(T currentNavStack) pickPages,
+    required List<GetPage> Function(T currentNavStack) pickPages,
     required Widget Function(
       BuildContext context,
       TDelegate,
-      RouteSettings? page,
+      GetPage? page,
     )
         pageBuilder,
   }) : this.builder(
           builder: (context, rDelegate, currentConfig) {
-            final picked = currentConfig == null
-                ? <RouteSettings>[]
-                : pickPages(currentConfig);
+            final picked =
+                currentConfig == null ? <GetPage>[] : pickPages(currentConfig);
             if (picked.length == 0) {
               return pageBuilder(context, rDelegate, null);
             }
@@ -92,15 +91,20 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
   GetRouterOutlet({
     Widget Function(GetDelegate delegate)? emptyPage,
     required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
+    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    required String name,
   }) : super(
           pageBuilder: (context, rDelegate, page) {
             final pageRoute = rDelegate.getPageRoute(page);
+
             if (page != null) {
-              //TODO: transitions go here !
-              return pageRoute.buildPage(
-                context,
-                pageRoute.animation,
-                pageRoute.secondaryAnimation,
+              return GetNavigator(
+                onPopPage: onPopPage ??
+                    (a, c) {
+                      return true;
+                    },
+                pages: [page],
+                name: name,
               );
             }
 

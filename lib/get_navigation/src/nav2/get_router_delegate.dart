@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/nav2/router_outlet.dart';
 import '../../../get.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 
@@ -341,5 +340,39 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
     refresh();
     return true;
+  }
+}
+
+class GetNavigator extends StatelessWidget {
+  const GetNavigator({
+    Key? key,
+    this.navigatorKey,
+    required this.onPopPage,
+    required this.pages,
+    this.observers,
+    this.transitionDelegate,
+    required this.name,
+  }) : super(key: key);
+  final GlobalKey<NavigatorState>? navigatorKey;
+  final bool Function(Route<dynamic>, dynamic) onPopPage;
+  final List<Page> pages;
+  final List<NavigatorObserver>? observers;
+  final TransitionDelegate? transitionDelegate;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    Get.key;
+    return Navigator(
+      key: navigatorKey ?? Get.nestedKey(name),
+      onPopPage: onPopPage,
+      pages: pages,
+      observers: [
+        GetObserver(),
+        if (observers != null) ...observers!,
+      ],
+      transitionDelegate:
+          transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+    );
   }
 }
