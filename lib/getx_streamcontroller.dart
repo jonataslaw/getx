@@ -4,17 +4,17 @@ import 'get.dart';
 class GetxStreamController<T, S extends StreamController<T>>
     extends GetxController {
   final S _s;
-  final _data = Rx<T?>(null);
+  final _value = Rx<T?>(null);
 
   GetxStreamController(S s) : _s = s {
     _s.stream.listen((event) {
-      data = event;
+      value = event;
     });
   }
 
-  T? get data => _data.value;
-  set data(T? t) {
-    _data.value = t;
+  T? get value => _value.value;
+  set value(T? t) {
+    _value.value = t;
     update();
   }
 }

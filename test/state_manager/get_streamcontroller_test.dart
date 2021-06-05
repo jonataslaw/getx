@@ -22,7 +22,7 @@ void main() {
               return Column(
                 children: [
                   Text(
-                    'Count: ${controller.data ?? 0}',
+                    'Count: ${controller.value ?? 0}',
                   ),
                   TextButton(
                     child: Text("increment"),
@@ -33,10 +33,10 @@ void main() {
             },
           ),
           Obx(() => Text(
-                'Count1: ${controller.data ?? 0}',
+                'Count1: ${controller.value ?? 0}',
               )),
           Obx(() => Text(
-                'Count2: ${f.data ?? 0}',
+                'Count2: ${f.value ?? 0}',
               )),
         ]),
       ),
