@@ -20,24 +20,8 @@ class RootView extends GetView<RootController> {
           ),
           body: GetRouterOutlet(
             name: '/',
-            emptyPage: (delegate) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('<<<< Select something from the drawer on the left'),
-                    Builder(
-                      builder: (context) => MaterialButton(
-                        child: Icon(Icons.open_in_new_outlined),
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
+            emptyPage: (delegate) =>
+                Get.routeTree.matchRoute(Routes.HOME).route!,
             pickPages: (currentNavStack) {
               //show all routes here except the root view
               print('Root RouterOutlet: $currentNavStack');

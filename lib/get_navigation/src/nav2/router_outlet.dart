@@ -89,29 +89,30 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
         );
 
   GetRouterOutlet({
-    Widget Function(GetDelegate delegate)? emptyPage,
+    Widget Function(GetDelegate delegate)? emptyWidget,
+    GetPage Function(GetDelegate delegate)? emptyPage,
     required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     required String name,
-  }) : super(
+  })  : assert(
+            (emptyPage == null && emptyWidget == null) ||
+                (emptyPage != null && emptyWidget == null) ||
+                (emptyPage == null && emptyWidget != null),
+            'Either use emptyPage or emptyWidget'),
+        super(
           pageBuilder: (context, rDelegate, page) {
-            final pageRoute = rDelegate.getPageRoute(page);
-
-            if (page != null) {
+            var pageRes = page ?? emptyPage?.call(rDelegate);
+            if (pageRes != null) {
               return GetNavigator(
                 onPopPage: onPopPage ??
                     (a, c) {
                       return true;
                     },
-                pages: [page],
+                pages: [pageRes],
                 name: name,
               );
             }
-
-            /// TODO: improve this logic abit
-            return (emptyPage?.call(rDelegate) ??
-                pageRoute.page?.call() ??
-                SizedBox.shrink());
+            return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
           pickPages: pickPages,
           delegate: Get.getDelegate(),
