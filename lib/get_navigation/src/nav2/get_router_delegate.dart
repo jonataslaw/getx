@@ -100,10 +100,10 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     history.add(config);
   }
 
-  GetPageRoute getPageRoute(RouteSettings? settings) {
-    return PageRedirect(settings ?? RouteSettings(name: '/404'), _notFound())
-        .page();
-  }
+  // GetPageRoute getPageRoute(RouteSettings? settings) {
+  //   return PageRedirect(settings ?? RouteSettings(name: '/404'), _notFound())
+  //       .page();
+  // }
 
   GetNavConfig? _popHistory() {
     if (!_canPopHistory()) return null;
@@ -344,36 +344,25 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 }
 
-class GetNavigator extends StatelessWidget {
-  const GetNavigator({
-    Key? key,
-    this.navigatorKey,
-    required this.onPopPage,
-    required this.pages,
-    this.observers,
-    this.transitionDelegate,
-    required this.name,
-  }) : super(key: key);
-  final GlobalKey<NavigatorState>? navigatorKey;
-  final bool Function(Route<dynamic>, dynamic) onPopPage;
-  final List<Page> pages;
-  final List<NavigatorObserver>? observers;
-  final TransitionDelegate? transitionDelegate;
-  final String name;
-
-  @override
-  Widget build(BuildContext context) {
-    Get.key;
-    return Navigator(
-      key: navigatorKey ?? Get.nestedKey(name),
-      onPopPage: onPopPage,
-      pages: pages,
-      observers: [
-        GetObserver(),
-        if (observers != null) ...observers!,
-      ],
-      transitionDelegate:
-          transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-    );
-  }
+class GetNavigator extends Navigator {
+  GetNavigator({
+    GlobalKey<NavigatorState>? key,
+    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    required List<Page> pages,
+    List<NavigatorObserver>? observers,
+    TransitionDelegate? transitionDelegate,
+    String? name,
+  })  : assert(key != null || name != null,
+            'GetNavigator should either have a key or a name set'),
+        super(
+          key: key ?? Get.nestedKey(name),
+          onPopPage: onPopPage,
+          pages: pages,
+          observers: [
+            GetObserver(),
+            if (observers != null) ...observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
 }
