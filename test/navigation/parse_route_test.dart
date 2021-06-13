@@ -5,19 +5,39 @@ import 'package:get/get_navigation/src/root/parse_route.dart';
 
 void main() {
   test('Parse Page with children', () {
-    final pageTree = GetPage(name: '/city', page: () => Container(), children: [
-      GetPage(name: '/home', page: () => Container(), children: [
-        GetPage(name: '/bed-room', page: () => Container()),
-        GetPage(name: '/living-room', page: () => Container()),
-      ]),
-      GetPage(name: '/work', page: () => Container(), children: [
-        GetPage(name: '/office', page: () => Container(), children: [
-          GetPage(name: '/pen', page: () => Container()),
-          GetPage(name: '/paper', page: () => Container()),
+    final testParams = {'hi': 'value'};
+    final pageTree = GetPage(
+      name: '/city',
+      page: () => Container(),
+      children: [
+        GetPage(name: '/home', page: () => Container(), children: [
+          GetPage(name: '/bed-room', page: () => Container()),
+          GetPage(name: '/living-room', page: () => Container()),
         ]),
-        GetPage(name: '/meeting-room', page: () => Container()),
-      ]),
-    ]);
+        GetPage(
+          name: '/work',
+          page: () => Container(),
+          children: [
+            GetPage(
+              name: '/office',
+              page: () => Container(),
+              children: [
+                GetPage(
+                  name: '/pen',
+                  page: () => Container(),
+                  parameter: testParams,
+                ),
+                GetPage(name: '/paper', page: () => Container()),
+              ],
+            ),
+            GetPage(
+              name: '/meeting-room',
+              page: () => Container(),
+            ),
+          ],
+        ),
+      ],
+    );
 
     final tree = ParseRouteTree(routes: <GetPage>[]);
 
@@ -28,6 +48,10 @@ void main() {
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
+    final testRouteParam = match.route!.parameter!;
+    for (final tParam in testParams.entries) {
+      expect(testRouteParam[tParam.key], tParam.value);
+    }
   });
 
   test('Parse Page without children', () {
