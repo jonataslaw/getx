@@ -53,15 +53,11 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void initState() {
     // var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-    var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+    final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
-        if (GetInstance().isPrepared<T>(tag: widget.tag)) {
-          _isCreator = true;
-        } else {
-          _isCreator = false;
-        }
+        _isCreator = GetInstance().isPrepared<T>(tag: widget.tag);
         controller = GetInstance().find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
