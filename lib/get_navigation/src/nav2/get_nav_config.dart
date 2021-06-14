@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:get/get.dart';
+import '../../../get.dart';
 
 /// This config enables us to navigate directly to a sub-url
 class GetNavConfig extends RouteInformation {

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
-import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'root_controller.dart';

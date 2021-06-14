@@ -449,8 +449,10 @@ extension ExtensionBottomSheet on GetInterface {
       modalBarrierColor: barrierColor,
       settings: settings,
       enableDrag: enableDrag,
-      enterBottomSheetDuration: enterBottomSheetDuration ?? const Duration(milliseconds: 250),
-      exitBottomSheetDuration: exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+      enterBottomSheetDuration:
+          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
+      exitBottomSheetDuration:
+          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
     ));
   }
 }

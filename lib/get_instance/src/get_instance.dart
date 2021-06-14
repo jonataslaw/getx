@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/widgets.dart';
-
 import '../../get_core/get_core.dart';
 
 import 'lifecycle.dart';

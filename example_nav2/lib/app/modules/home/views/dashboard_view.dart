@@ -1,7 +1,7 @@
-import 'package:example_nav2/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+
+import '../controllers/home_controller.dart';
 
 class DashboardView extends GetView<HomeController> {
   @override
