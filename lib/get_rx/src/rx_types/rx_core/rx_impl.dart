@@ -105,9 +105,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   /// Returns the current [value]
   T get value {
-    if (RxInterface.proxy != null) {
-      RxInterface.proxy!.addListener(subject);
-    }
+    RxInterface.proxy?.addListener(subject);
     return _value;
   }
 

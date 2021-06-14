@@ -78,9 +78,7 @@ class RxList<E> extends ListMixin<E>
   @override
   @protected
   List<E> get value {
-    if (RxInterface.proxy != null) {
-      RxInterface.proxy!.addListener(subject);
-    }
+    RxInterface.proxy?.addListener(subject);
     return _value;
   }
 
