@@ -80,3 +80,6 @@ example/macos/Flutter/ephemeral/Flutter-Generated.xcconfig
 example/macos/Flutter/ephemeral/
 
 example/macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Coverage files
+coverage/
