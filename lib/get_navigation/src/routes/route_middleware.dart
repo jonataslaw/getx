@@ -104,16 +104,16 @@ class MiddlewareRunner {
 
   final List<GetMiddleware>? _middlewares;
 
-  List<GetMiddleware>? _getMiddlewares() {
-    if (_middlewares != null) {
-      _middlewares!.sort((a, b) => a.priority!.compareTo(b.priority!));
-      return _middlewares;
-    }
-    return <GetMiddleware>[];
+  List<GetMiddleware> _getMiddlewares() {
+    final _m = _middlewares ?? <GetMiddleware>[];
+    return _m
+      ..sort(
+        (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0),
+      );
   }
 
   GetPage? runOnPageCalled(GetPage? page) {
-    _getMiddlewares()?.forEach((element) {
+    _getMiddlewares().forEach((element) {
       page = element.onPageCalled(page);
     });
     return page;
@@ -121,7 +121,7 @@ class MiddlewareRunner {
 
   RouteSettings? runRedirect(String? route) {
     RouteSettings? to;
-    _getMiddlewares()?.forEach((element) {
+    _getMiddlewares().forEach((element) {
       to = element.redirect(route);
     });
     if (to != null) {
@@ -131,28 +131,28 @@ class MiddlewareRunner {
   }
 
   List<Bindings>? runOnBindingsStart(List<Bindings>? bindings) {
-    _getMiddlewares()?.forEach((element) {
+    _getMiddlewares().forEach((element) {
       bindings = element.onBindingsStart(bindings);
     });
     return bindings;
   }
 
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
-    _getMiddlewares()?.forEach((element) {
+    _getMiddlewares().forEach((element) {
       page = element.onPageBuildStart(page);
     });
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares()?.forEach((element) {
+    _getMiddlewares().forEach((element) {
       page = element.onPageBuilt(page);
     });
     return page;
   }
 
   void runOnPageDispose() =>
-      _getMiddlewares()?.forEach((element) => element.onPageDispose());
+      _getMiddlewares().forEach((element) => element.onPageDispose());
 }
 
 class PageRedirect {
@@ -161,46 +161,38 @@ class PageRedirect {
   RouteSettings settings;
   bool isUnknown;
 
-  PageRedirect(this.settings, this.unknownRoute,
-      {this.isUnknown = false, this.route});
+  PageRedirect(
+    this.settings,
+    this.unknownRoute, {
+    this.isUnknown = false,
+    this.route,
+  });
 
   // redirect all pages that needes redirecting
   GetPageRoute<T> page<T>() {
     while (needRecheck()) {}
-    return isUnknown
-        ? GetPageRoute<T>(
-            page: unknownRoute!.page,
-            parameter: unknownRoute!.parameter,
-            settings: RouteSettings(
-                name: unknownRoute!.name, arguments: settings.arguments),
-            curve: unknownRoute!.curve,
-            opaque: unknownRoute!.opaque,
-            customTransition: unknownRoute!.customTransition,
-            binding: unknownRoute!.binding,
-            bindings: unknownRoute!.bindings,
-            transitionDuration: (unknownRoute!.transitionDuration ??
-                Get.defaultTransitionDuration),
-            transition: unknownRoute!.transition,
-            popGesture: unknownRoute!.popGesture,
-            fullscreenDialog: unknownRoute!.fullscreenDialog,
-            middlewares: unknownRoute!.middlewares,
-          )
-        : GetPageRoute<T>(
-            page: route!.page,
-            routeName: route!.name,
-            parameter: route!.parameter,
-            settings: settings,
-            curve: route!.curve,
-            opaque: route!.opaque,
-            customTransition: route!.customTransition,
-            binding: route!.binding,
-            bindings: route!.bindings,
-            transitionDuration:
-                (route!.transitionDuration ?? Get.defaultTransitionDuration),
-            transition: route!.transition,
-            popGesture: route!.popGesture,
-            fullscreenDialog: route!.fullscreenDialog,
-            middlewares: route!.middlewares);
+    final _r = (isUnknown ? unknownRoute : route)!;
+    return GetPageRoute<T>(
+      page: _r.page,
+      parameter: _r.parameter,
+      settings: isUnknown
+          ? RouteSettings(
+              name: _r.name,
+              arguments: settings.arguments,
+            )
+          : settings,
+      curve: _r.curve,
+      opaque: _r.opaque,
+      customTransition: _r.customTransition,
+      binding: _r.binding,
+      bindings: _r.bindings,
+      transitionDuration:
+          _r.transitionDuration ?? Get.defaultTransitionDuration,
+      transition: _r.transition,
+      popGesture: _r.popGesture,
+      fullscreenDialog: _r.fullscreenDialog,
+      middlewares: _r.middlewares,
+    );
   }
 
   /// check if redirect is needed

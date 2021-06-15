@@ -38,21 +38,25 @@ class ParseRouteTree {
     final treeBranch = cumulativePaths
         .map((e) => MapEntry(e, _findRoute(e)))
         .where((element) => element.value != null)
+        .map((e) => MapEntry(e.key, e.value!))
         .toList();
 
     final params = Map<String, String>.from(uri.queryParameters);
     if (treeBranch.isNotEmpty) {
       //route is found, do further parsing to get nested query params
       final lastRoute = treeBranch.last;
-      final parsedParams = _parseParams(name, lastRoute.value!.path);
+      final parsedParams = _parseParams(name, lastRoute.value.path);
       if (parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
       //copy parameters to all pages.
       final mappedTreeBranch = treeBranch
           .map(
-            (e) => e.value!.copy(
-              parameter: params,
+            (e) => e.value.copy(
+              parameter: {
+                if (e.value.parameter != null) ...e.value.parameter!,
+                ...params,
+              },
               name: e.key,
             ),
           )
@@ -65,7 +69,7 @@ class ParseRouteTree {
 
     //route not found
     return RouteDecoder(
-      treeBranch.map((e) => e.value!).toList(),
+      treeBranch.map((e) => e.value).toList(),
       params,
     );
   }
@@ -125,8 +129,7 @@ class ParseRouteTree {
         opaque: origin.opaque,
         parameter: origin.parameter,
         popGesture: origin.popGesture,
-
-        //  settings: origin.settings,
+        preventDuplicates: origin.preventDuplicates,
         transitionDuration: origin.transitionDuration,
         middlewares: middlewares,
       );
