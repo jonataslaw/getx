@@ -96,10 +96,7 @@ class GetInstance {
     @deprecated InstanceBuilderCallback<S>? builder,
   }) {
     _insert(
-        isSingleton: true,
-        name: tag,
-        permanent: permanent,
-        builder: builder ?? (() => dependency));
+        isSingleton: true, name: tag, permanent: permanent, builder: builder ?? (() => dependency));
     return find<S>(tag: tag);
   }
 
@@ -412,6 +409,16 @@ class GetInstance {
     }
 
     return true;
+  }
+
+  /// Delete all registered Class Instances and, closes any open
+  /// controllers [DisposableInterface], cleans up the memory
+  ///
+  /// - [force] Will delete the Instances even if marked as [permanent].
+  void deleteAll({bool force = false}) {
+    _singl.forEach((key, value) {
+      delete(key: key, force: force);
+    });
   }
 
   void reloadAll({bool force = false}) {
