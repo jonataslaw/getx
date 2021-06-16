@@ -96,7 +96,10 @@ class GetInstance {
     @deprecated InstanceBuilderCallback<S>? builder,
   }) {
     _insert(
-        isSingleton: true, name: tag, permanent: permanent, builder: builder ?? (() => dependency));
+        isSingleton: true,
+        name: tag,
+        permanent: permanent,
+        builder: builder ?? (() => dependency));
     return find<S>(tag: tag);
   }
 
