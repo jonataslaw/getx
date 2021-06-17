@@ -184,6 +184,16 @@ class SnackRoute<T> extends OverlayRoute<T> {
     );
   }
 
+  /// Just waits until the animationControllerStatus is completed and
+  /// removes the overlayEntry
+  Future<void> remove() async {
+    await Future.doWhile(() async {
+      await Future.delayed(Duration(milliseconds: 50));
+      return _controller!.status != AnimationStatus.completed;
+    });
+    _controller!.reverse();
+  }
+
   /// Called to create the animation that exposes the current progress of
   /// the transition controlled by the animation controller created by
   /// [createAnimationController()].

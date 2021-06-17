@@ -102,6 +102,14 @@ extension ExtensionSnackbar on GetInterface {
     return key.currentState?.push(SnackRoute<T>(snack: snackbar));
   }
 
+  /// Returns a snackbar with it's callback to be removed from stack
+  /// 
+  /// The return is a list `[VoidCallback, Future<T?>?]`
+  List<dynamic> showSnackBarWithRemoveCallback<T>(GetBar snackbar) {
+    var route = SnackRoute<T>(snack: snackbar);
+    return [route.remove, key.currentState?.push(route)];
+  }
+
   void snackbar<T>(
     String title,
     String message, {
@@ -449,8 +457,10 @@ extension ExtensionBottomSheet on GetInterface {
       modalBarrierColor: barrierColor,
       settings: settings,
       enableDrag: enableDrag,
-      enterBottomSheetDuration: enterBottomSheetDuration ?? const Duration(milliseconds: 250),
-      exitBottomSheetDuration: exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+      enterBottomSheetDuration:
+          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
+      exitBottomSheetDuration:
+          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
     ));
   }
 }
