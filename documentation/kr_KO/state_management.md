@@ -508,8 +508,6 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()`)
-
 GetBuilder 밖의 여러 곳에서 controller를 사용해야 하는 경우, 간단하게 Controller 클래스 안의 getter로 접근할 수 있습니다. (아니면 `Get.find<Controller>()`를 사용하세요)
 
 ```dart
