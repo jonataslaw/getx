@@ -882,7 +882,7 @@ print( user );
 
 이 위젯을 사랑합니다. 매우 간단하고 유용합니다!
 
-등록된 `Controller`인 `controller`의 gettr로 가져온 `const Stateless`위젯 입니다. 이게 전부입니다.
+등록된 `Controller`인 `controller`의 getter로 가져온 `const Stateless`위젯 입니다. 이게 전부입니다.
 
 ```dart
  class AwesomeController extends GetxController {
