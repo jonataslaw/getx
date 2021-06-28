@@ -414,6 +414,16 @@ class GetInstance {
     return true;
   }
 
+  /// Delete all registered Class Instances and, closes any open
+  /// controllers [DisposableInterface], cleans up the memory
+  ///
+  /// - [force] Will delete the Instances even if marked as [permanent].
+  void deleteAll({bool force = false}) {
+    _singl.forEach((key, value) {
+      delete(key: key, force: force);
+    });
+  }
+
   void reloadAll({bool force = false}) {
     _singl.forEach((key, value) {
       if (value.permanent && !force) {

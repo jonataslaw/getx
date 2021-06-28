@@ -109,6 +109,13 @@ extension Inst on GetInterface {
   Future<bool> delete<S>({String? tag, bool force = false}) async =>
       GetInstance().delete<S>(tag: tag, force: force);
 
+  /// Deletes all Instances, cleaning the memory and closes any open
+  /// controllers ([DisposableInterface]).
+  /// 
+  /// - [force] Will delete the Instances even if marked as [permanent].
+  Future<void> deleteAll({bool force = false}) async =>
+      GetInstance().deleteAll(force: force);
+
   void reloadAll({bool force = false}) => GetInstance().reloadAll(force: force);
 
   void reload<S>({String? tag, String? key, bool force = false}) =>
