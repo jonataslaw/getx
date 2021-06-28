@@ -509,7 +509,7 @@ The GetPage has now new property that takes a list of GetMiddleWare and run them
 
 ### Priority
 
-The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
 
 ```dart
 final middlewares = [
