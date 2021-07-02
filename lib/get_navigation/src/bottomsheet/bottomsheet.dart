@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../get_core/get_core.dart';
+import '../../../get_instance/src/get_instance.dart';
 
 class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   GetModalBottomSheetRoute({
@@ -50,6 +52,15 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   Color get barrierColor => modalBarrierColor ?? Colors.black54;
 
   AnimationController? _animationController;
+
+  @override
+  void dispose() {
+    if (Get.smartManagement != SmartManagement.onlyBuilder) {
+      WidgetsBinding.instance!.addPostFrameCallback(
+          (_) => GetInstance().removeDependencyByRoute(name));
+    }
+    super.dispose();
+  }
 
   @override
   AnimationController createAnimationController() {
