@@ -204,17 +204,16 @@ Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기
 
 첫째, Get.lazyPut의 `fenix`와 다른 메서드들의 `permanent`을 살펴보겠습니다.
 
-`permanent`와 `fenix` 사이의 근본적인 다른점은 인스턴스를 저장하는 방법입니다.
+`permanent`와 `fenix` 사이의 근본적인 차이점은 인스턴스를 저장하는 방법입니다.
 
 보강: 기본적으로 GetX는 사용하지 않을때 인스턴스를 삭제합니다.
-의미: 만약 화면 1이 컨트롤러 1을 가지고 있고 화면 2가 컨트롤러 2를 가졌을때 스택에서 첫번째 경로가 제거되면(`Get.off()`나 `Get.offNamed()`를 사용하는 경우) 컨트롤러 1은 사용하지 않아 지워질 것입니다.
+이것은 다음을 의미합니다: 만약 화면 1이 컨트롤러 1을 가지고 있고 화면 2가 컨트롤러 2를 가졌을때 스택에서 첫번째 경로가 제거되면(`Get.off()`나 `Get.offNamed()`를 사용했을 때처럼) 컨트롤러 1은 더이상 사용되지 않기 때문에 지워질 것입니다.
 
-하지만 `permanent:true`를 설정하면 컨트롤러가 이런 전환에서 손실되지 않을 것입니다. - 어플리케이션 실행되는 동안에 계속 유지하려고 하는 서비스에 매우 유용합니다.
+하지만 `permanent:true`를 설정하면 컨트롤러가 화면이 바뀌는동안 사라지지 않을 것입니다. 즉, 전체 어플리케이션이 실행되는 동안에 계속 유지하려고 하는 서비스에 매우 유용합니다.
 
-`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
-반면 `fenix`는 화면 전환 사이에 손실이 없어야 하는 서비스를 위해 있습니다. 이 서비스가 필요할 때 그것이 살아 있다고 기대할 것입니다. 그래서 기본적으로 사용하지 않는 controller/service/class를 폐기하지만 필요한 경우 새 인스턴스에서 흔적으로부터 다시 생성합니다.
+반면 `fenix`는 화면이 바뀌는동안 컨트롤러가 사라지는 것은 상관없지만, 컨트롤러가 필요한 시점에 살아있어야 하는 서비스를 위해 존재합니다. 그래서 기본적으로는 사용하지 않는 컨트롤러/서비스/클래스를 폐기하지만, 필요한 경우 새 인스턴스를 "남아있는 흔적으로부터 다시 생성"합니다.
 
-메서드간 차이점 진행:
+메서드간 차이점에 대해:
 
 - Get.put과 Get.putAsync는 동일한 생성 명령을 따르지만 두번째가 비동기 메서드를 사용하는 것이 차이점입니다: 두 메서드는 인스턴스를 생성하고 초기화 합니다. 이것은 `permanent: false`와 `isSingleton: true` 파라미터들과 내부 `insert` 메서드를 사용하여 메모리에 직접 추가됩니다.(여기의 isSingleton 파라미터의 목적은 `dependency`에 의한 종속성을 사용할 것인지 `FcBuilderFunc`에 의한 종속성을 사용할 것인지 알려주는 것입니다.) 이후에 `Get.find()`는 즉시 초기화한 메모리안의 인스턴스를 호출합니다.
 
@@ -234,13 +233,13 @@ Get의 2.10 버전에는 Bindings API를 완전히 구현했습니다.
 
 ### 사용 방법
 
-- class를 생성하고 Binding 포함합니다.
+- class를 생성하고 Binding을 implement 합니다.
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-IDE가 자동적으로 "종속적인" 메서드를 재정의할지 요청하며 램프를 클릭하기만 하면 됩니다. 그리고 메서드를 재정의하고 해당 경로에 사용할 모든 클래스들을 추가하면 됩니다:
+IDE가 자동적으로 "종속적인" 메서드를 오버라이딩할지 요청하며 램프를 클릭하기만 하면 됩니다. 그리고 메서드를 오버라이딩하고 해당 경로에 사용할 모든 클래스들을 추가하면 됩니다:
 
 ```dart
 class HomeBinding implements Bindings {
