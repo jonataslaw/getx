@@ -1054,6 +1054,19 @@ you can only use widgets and widget functions here''';
 
     return _key;
   }
+  
+   /// Casts the stored router delegate to a desired type
+  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
+      _routerDelegate as TDelegate?;
+
+  static RouterDelegate? _routerDelegate;
+
+  // ignore: use_setters_to_change_properties
+  void setDefaultDelegate(RouterDelegate? delegate) {
+    _routerDelegate = delegate;
+  }
+
+  GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
 
   /// give current arguments
   dynamic get arguments => routing.args;
