@@ -45,10 +45,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
 }
 
 class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
-  GetXState() {
-    _observer = RxNotifier();
-  }
-  RxInterface? _observer;
+  final _observer = RxNotifier();
   T? controller;
   bool? _isCreator = false;
   late StreamSubscription _subs;
@@ -56,15 +53,11 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void initState() {
     // var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-    var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+    final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
-        if (GetInstance().isPrepared<T>(tag: widget.tag)) {
-          _isCreator = true;
-        } else {
-          _isCreator = false;
-        }
+        _isCreator = GetInstance().isPrepared<T>(tag: widget.tag);
         controller = GetInstance().find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
@@ -80,7 +73,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    _subs = _observer!.listen((data) => setState(() {}), cancelOnError: false);
+    _subs = _observer.listen((data) => setState(() {}), cancelOnError: false);
     super.initState();
   }
 
@@ -107,30 +100,15 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
       }
     }
     _subs.cancel();
-    _observer!.close();
+    _observer.close();
     controller = null;
     _isCreator = null;
     super.dispose();
   }
 
-  Widget get notifyChildren {
-    final observer = RxInterface.proxy;
-    RxInterface.proxy = _observer;
-    final result = widget.builder(controller!);
-    if (!_observer!.canUpdate) {
-      throw """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
-    }
-    RxInterface.proxy = observer;
-    return result;
-  }
-
   @override
-  Widget build(BuildContext context) => notifyChildren;
+  Widget build(BuildContext context) => RxInterface.notifyChildren(
+        _observer,
+        () => widget.builder(controller!),
+      );
 }

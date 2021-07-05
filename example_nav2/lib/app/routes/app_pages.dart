@@ -1,7 +1,6 @@
-import 'package:example_nav2/app/modules/root/bindings/root_binding.dart';
-import 'package:example_nav2/app/modules/root/views/root_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/nav2/router_outlet.dart';
+
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
@@ -10,6 +9,8 @@ import '../modules/products/bindings/products_binding.dart';
 import '../modules/products/views/products_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/root/bindings/root_binding.dart';
+import '../modules/root/views/root_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 

@@ -20,17 +20,13 @@ abstract class ObxWidget extends StatefulWidget {
 }
 
 class _ObxState extends State<ObxWidget> {
-  RxInterface? _observer;
+  final _observer = RxNotifier();
   late StreamSubscription subs;
-
-  _ObxState() {
-    _observer = RxNotifier();
-  }
 
   @override
   void initState() {
-    subs = _observer!.listen(_updateTree, cancelOnError: false);
     super.initState();
+    subs = _observer.listen(_updateTree, cancelOnError: false);
   }
 
   void _updateTree(_) {
@@ -42,30 +38,13 @@ class _ObxState extends State<ObxWidget> {
   @override
   void dispose() {
     subs.cancel();
-    _observer!.close();
+    _observer.close();
     super.dispose();
   }
 
-  Widget get notifyChilds {
-    final observer = RxInterface.proxy;
-    RxInterface.proxy = _observer;
-    final result = widget.build();
-    if (!_observer!.canUpdate) {
-      throw """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
-    }
-    RxInterface.proxy = observer;
-    return result;
-  }
-
   @override
-  Widget build(BuildContext context) => notifyChilds;
+  Widget build(BuildContext context) =>
+      RxInterface.notifyChildren(_observer, widget.build);
 }
 
 /// The simplest reactive widget in GetX.
