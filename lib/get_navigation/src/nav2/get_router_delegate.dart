@@ -357,6 +357,7 @@ class GetNavigator extends Navigator {
         super(
           key: key ?? Get.nestedKey(name),
           onPopPage: onPopPage,
+          reportsRouteUpdateToEngine: true,
           pages: pages,
           observers: [
             GetObserver(),
