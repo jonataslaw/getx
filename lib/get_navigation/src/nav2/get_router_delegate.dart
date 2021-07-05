@@ -282,14 +282,14 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     refresh();
   }
 
-  GetPage _notFound() {
-    return notFoundRoute ??= GetPage(
-      name: '/404',
-      page: () => Scaffold(
-        body: Text('not found'),
-      ),
-    );
-  }
+  // GetPage _notFound() {
+  //   return notFoundRoute ??= GetPage(
+  //     name: '/404',
+  //     page: () => Scaffold(
+  //       body: Text('not found'),
+  //     ),
+  //   );
+  // }
 
   Future<bool> handlePopupRoutes({
     Object? result,

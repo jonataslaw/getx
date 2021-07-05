@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 import '../../get_core/src/get_interface.dart';
 import '../../route_manager.dart';
 import 'get_instance.dart';
@@ -111,7 +109,7 @@ extension Inst on GetInterface {
 
   /// Deletes all Instances, cleaning the memory and closes any open
   /// controllers ([DisposableInterface]).
-  /// 
+  ///
   /// - [force] Will delete the Instances even if marked as [permanent].
   Future<void> deleteAll({bool force = false}) async =>
       GetInstance().deleteAll(force: force);
@@ -130,10 +128,4 @@ extension Inst on GetInterface {
   /// [Get.lazyPut()], is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
-
-  /// Casts the stored router delegate to a desired type
-  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      routerDelegate as TDelegate?;
-
-  GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
 }
