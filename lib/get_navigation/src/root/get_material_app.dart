@@ -213,7 +213,7 @@ class GetMaterialApp extends StatelessWidget {
 
         initialBinding?.dependencies();
         Get.addPages(getPages);
-        Get.routerDelegate = routerDelegate;
+        Get.setDefaultDelegate(routerDelegate);
         Get.smartManagement = smartManagement;
         onInit?.call();
 
