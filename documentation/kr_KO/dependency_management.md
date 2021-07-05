@@ -209,7 +209,7 @@ Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기
 보강: 기본적으로 GetX는 사용하지 않을때 인스턴스를 삭제합니다.
 의미: 만약 화면 1이 컨트롤러 1을 가지고 있고 화면 2가 컨트롤러 2를 가졌을때 스택에서 첫번째 경로가 제거되면(`Get.off()`나 `Get.offNamed()`를 사용하는 경우) 컨트롤러 1은 사용하지 않아 지워질 것입니다.
 
-하지만 `permanent:true`를 설정하면 컨르롤러가 이런 전환에서 손실되지 않을 것입니다. - 어플리케이션 실행되는 동안에 계속 유지하려고 하는 서비스에 매우 유용합니다.
+하지만 `permanent:true`를 설정하면 컨트롤러가 이런 전환에서 손실되지 않을 것입니다. - 어플리케이션 실행되는 동안에 계속 유지하려고 하는 서비스에 매우 유용합니다.
 
 `fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
 반면 `fenix`는 화면 전환 사이에 손실이 없어야 하는 서비스를 위해 있습니다. 이 서비스가 필요할 때 그것이 살아 있다고 기대할 것입니다. 그래서 기본적으로 사용하지 않는 controller/service/class를 폐기하지만 필요한 경우 새 인스턴스에서 흔적으로부터 다시 생성합니다.
@@ -225,7 +225,7 @@ Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기
 ## 바인딩
 
 이 패키지의 가장 큰 특이한점 중 하나는 아마도 라우트, 상태 관리자, 종속성 관리자의 완전한 통합의 가능성 일 것입니다.
-스택에서 라우트가 삭제되면 모든 컨르롤러, 변수 및 관련된 인스턴스 오브젝트가 메모리에서 제거됩니다. 스트림이나 타이머를 사용중이면 자동적으로 종료되고 이것에 대한 어떤 걱정도 할 필요가 없습니다.
+스택에서 라우트가 삭제되면 모든 컨트롤러, 변수 및 관련된 인스턴스 오브젝트가 메모리에서 제거됩니다. 스트림이나 타이머를 사용중이면 자동적으로 종료되고 이것에 대한 어떤 걱정도 할 필요가 없습니다.
 Get의 2.10 버전에는 Bindings API를 완전히 구현했습니다.
 이제 init 메서드는 더 이상 사용할 필요가 없습니다. 원하지 않으며 컨트롤러 타입도 필요 없습니다. 컨트롤러와 서비스를 위한 적절한 위치에서 시작할 수 있습니다.
 바인딩 클래스는 상태 관리자와 종속성 관리자에 라우트를 "결합"하는 동시에 종속성 주입을 분리하는 클래스입니다.
