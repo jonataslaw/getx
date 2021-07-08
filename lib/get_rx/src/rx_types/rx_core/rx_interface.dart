@@ -25,6 +25,7 @@ abstract class RxInterface<T> {
     RxInterface.proxy = observer;
     final result = builder();
     if (!observer.canUpdate) {
+      RxInterface.proxy = _observer;
       throw """
       [Get] the improper use of a GetX has been detected. 
       You should only use GetX or Obx for the specific widget that will be updated.
