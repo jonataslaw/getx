@@ -5,5 +5,5 @@ Every PR must update the corresponding documentation in the `code`, and also the
 ## Pre-launch Checklist
 
 - [ ] I updated/added relevant documentation (doc comments with `///`).
-- [ ] I added new tests to check the change I am making or feature I am adding, or Hixie said the PR is test-exempt.
+- [ ] I added new tests to check the change I am making or feature I am adding, or @jonataslaw said the PR is test-exempt.
 - [ ] All existing and new tests are passing.
