@@ -350,6 +350,7 @@ class GetNavigator extends Navigator {
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     required List<Page> pages,
     List<NavigatorObserver>? observers,
+    bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
     String? name,
   })  : assert(key != null || name != null,
@@ -357,7 +358,7 @@ class GetNavigator extends Navigator {
         super(
           key: key ?? Get.nestedKey(name),
           onPopPage: onPopPage,
-          reportsRouteUpdateToEngine: true,
+          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [
             GetObserver(),
