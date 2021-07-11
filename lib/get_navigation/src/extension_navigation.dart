@@ -494,6 +494,7 @@ extension GetNavigation on GetInterface {
     Bindings? binding,
     bool preventDuplicates = true,
     bool? popGesture,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -504,6 +505,7 @@ extension GetNavigation on GetInterface {
             opaque: opaque ?? true,
             page: _resolve(page, 'to'),
             routeName: routeName,
+            gestureWidth: gestureWidth,
             settings: RouteSettings(
               //  name: forceRouteName ? '${a.runtimeType}' : '',
               arguments: arguments,
@@ -862,6 +864,7 @@ you can only use widgets and widget functions here''';
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -869,6 +872,7 @@ you can only use widgets and widget functions here''';
     }
     return global(id).currentState?.pushReplacement(GetPageRoute(
         opaque: opaque,
+        gestureWidth: gestureWidth,
         page: _resolve(page, 'off'),
         binding: binding,
         settings: RouteSettings(arguments: arguments),
@@ -923,6 +927,7 @@ you can only use widgets and widget functions here''';
     Transition? transition,
     Curve? curve,
     Duration? duration,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
@@ -932,6 +937,7 @@ you can only use widgets and widget functions here''';
           popGesture: popGesture ?? defaultPopGesture,
           page: _resolve(page, 'offAll'),
           binding: binding,
+          gestureWidth: gestureWidth,
           settings: RouteSettings(arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           routeName: routeName,
@@ -1054,8 +1060,8 @@ you can only use widgets and widget functions here''';
 
     return _key;
   }
-  
-   /// Casts the stored router delegate to a desired type
+
+  /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
       _routerDelegate as TDelegate?;
 

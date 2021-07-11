@@ -158,14 +158,14 @@ class MiddlewareRunner {
 class PageRedirect {
   GetPage? route;
   GetPage? unknownRoute;
-  RouteSettings settings;
+  RouteSettings? settings;
   bool isUnknown;
 
-  PageRedirect(
-    this.settings,
-    this.unknownRoute, {
-    this.isUnknown = false,
+  PageRedirect({
     this.route,
+    this.unknownRoute,
+    this.isUnknown = false,
+    this.settings,
   });
 
   // redirect all pages that needes redirecting
@@ -178,10 +178,35 @@ class PageRedirect {
       settings: isUnknown
           ? RouteSettings(
               name: _r.name,
-              arguments: settings.arguments,
+              arguments: settings!.arguments,
             )
           : settings,
       curve: _r.curve,
+      opaque: _r.opaque,
+      gestureWidth: _r.gestureWidth,
+      customTransition: _r.customTransition,
+      binding: _r.binding,
+      bindings: _r.bindings,
+      transitionDuration:
+          _r.transitionDuration ?? Get.defaultTransitionDuration,
+      transition: _r.transition,
+      popGesture: _r.popGesture,
+      fullscreenDialog: _r.fullscreenDialog,
+      middlewares: _r.middlewares,
+    );
+  }
+
+  // redirect all pages that needes redirecting
+  GetPageRoute<T> getPageToRoute<T>(GetPage rou, GetPage? unk) {
+    while (needRecheck()) {}
+    final _r = (isUnknown ? unk : rou)!;
+
+    return GetPageRoute<T>(
+      page: _r.page,
+      parameter: _r.parameter,
+      settings: _r,
+      curve: _r.curve,
+      gestureWidth: _r.gestureWidth,
       opaque: _r.opaque,
       customTransition: _r.customTransition,
       binding: _r.binding,
@@ -197,7 +222,10 @@ class PageRedirect {
 
   /// check if redirect is needed
   bool needRecheck() {
-    final match = Get.routeTree.matchRoute(settings.name!);
+    if (settings == null && route != null) {
+      settings = route;
+    }
+    final match = Get.routeTree.matchRoute(settings!.name!);
     Get.parameters = match.parameters;
 
     // No Match found
@@ -214,7 +242,7 @@ class PageRedirect {
     if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
       return false;
     }
-    final newSettings = runner.runRedirect(settings.name);
+    final newSettings = runner.runRedirect(settings!.name);
     if (newSettings == null) {
       return false;
     }

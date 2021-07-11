@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,6 +37,7 @@ class GetPage<T> extends Page<T> {
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
+  final double gestureWidth;
   final Bindings? binding;
   final List<Bindings> bindings;
   final CustomTransition? customTransition;
@@ -63,6 +65,7 @@ class GetPage<T> extends Page<T> {
     required this.name,
     required this.page,
     this.title,
+    this.gestureWidth = 20,
     // RouteSettings settings,
     this.maintainState = true,
     this.curve = Curves.linear,
@@ -109,7 +112,7 @@ class GetPage<T> extends Page<T> {
     return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
-  GetPage copy({
+  GetPage<T> copy({
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
@@ -130,6 +133,7 @@ class GetPage<T> extends Page<T> {
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
+    double? gestureWidth,
   }) {
     return GetPage(
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
@@ -151,14 +155,17 @@ class GetPage<T> extends Page<T> {
       children: children ?? this.children,
       unknownRoute: unknownRoute ?? this.unknownRoute,
       middlewares: middlewares ?? this.middlewares,
+      gestureWidth: gestureWidth ?? this.gestureWidth,
     );
   }
 
   @override
   Route<T> createRoute(BuildContext context) {
+    // return GetPageRoute<T>(settings: this, page: page);
     return PageRedirect(
-      this,
-      unknownRoute,
-    ).page<T>();
+      route: this,
+      settings: this,
+      unknownRoute: unknownRoute,
+    ).getPageToRoute<T>(this, unknownRoute);
   }
 }
