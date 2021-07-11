@@ -38,6 +38,12 @@ enum PreventDuplicateHandlingMode {
 
   /// Simply don't push the new route
   DoNothing,
+
+  /// Recommended - Moves the old route entry to the front
+  ///
+  /// With this mode, you guarantee there will be only one
+  /// route entry for each location
+  ReorderRoutes
 }
 
 class GetDelegate extends RouterDelegate<GetNavConfig>
@@ -60,8 +66,46 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     this.navigatorObservers,
     this.transitionDelegate,
     this.backButtonPopMode = PopMode.History,
-    this.preventDuplicateHandlingMode = PreventDuplicateHandlingMode.DoNothing,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
   });
+
+  GetNavConfig? runMiddleware(GetNavConfig config) {
+    final middlewares = config.currentTreeBranch.last.middlewares ?? [];
+    var iterator = config;
+    for (var item in middlewares) {
+      var redirectRes = item.redirectDelegate(iterator);
+      if (redirectRes == null) return null;
+      iterator = redirectRes;
+    }
+    return iterator;
+  }
+
+  void _unsafeHistoryAdd(GetNavConfig config) {
+    final res = runMiddleware(config);
+    if (res == null) return;
+    history.add(res);
+  }
+
+  void _unsafeHistoryRemove(GetNavConfig config) {
+    var index = history.indexOf(config);
+    if (index >= 0) _unsafeHistoryRemoveAt(index);
+  }
+
+  GetNavConfig? _unsafeHistoryRemoveAt(int index) {
+    if (index == history.length - 1) {
+      //removing WILL update the current route
+      final toCheck = history[history.length - 2];
+      final resMiddleware = runMiddleware(toCheck);
+      if (resMiddleware == null) return null;
+      history[history.length - 2] = resMiddleware;
+    }
+    return history.removeAt(index);
+  }
+
+  void _unsafeHistoryClear() {
+    history.clear();
+  }
 
   /// Adds a new history entry and waits for the result
   Future<T?> pushHistory<T>(
@@ -79,25 +123,32 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 
   void _removeHistoryEntry(GetNavConfig entry) {
-    history.remove(entry);
+    _unsafeHistoryRemove(entry);
     final lastCompleter = _resultCompleter.remove(entry);
     lastCompleter?.complete(entry);
   }
 
   void _pushHistory(GetNavConfig config) {
     if (config.currentPage!.preventDuplicates) {
-      if (history.any((element) => element.location == config.location)) {
+      final originalEntryIndex =
+          history.indexWhere((element) => element.location == config.location);
+      if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
             until(config.location!, popMode: PopMode.Page);
-            return;
+            break;
+          case PreventDuplicateHandlingMode.ReorderRoutes:
+            _unsafeHistoryRemoveAt(originalEntryIndex);
+            _unsafeHistoryAdd(config);
+            break;
           case PreventDuplicateHandlingMode.DoNothing:
           default:
-            return;
+            break;
         }
+        return;
       }
     }
-    history.add(config);
+    _unsafeHistoryAdd(config);
   }
 
   // GetPageRoute getPageRoute(RouteSettings? settings) {
@@ -110,9 +161,8 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return _doPopHistory();
   }
 
-  GetNavConfig _doPopHistory() {
-    final res = history.removeLast();
-    return res;
+  GetNavConfig? _doPopHistory() {
+    return _unsafeHistoryRemoveAt(history.length - 1);
   }
 
   GetNavConfig? _popPage() {
@@ -206,12 +256,18 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   List<GetPage> getVisualPages() {
     final currentHistory = currentConfiguration;
     if (currentHistory == null) return <GetPage>[];
-    return currentHistory.currentTreeBranch.where((r) {
-      final mware =
-          (r.middlewares ?? []).whereType<RouterOutletContainerMiddleWare>();
-      if (mware.length == 0) return true;
-      return r.name == mware.first.stayAt;
-    }).toList();
+
+    final res = currentHistory.currentTreeBranch
+        .where((r) => r.participatesInRootNavigator != null);
+    if (res.length == 0) {
+      //default behavoir, all routes participate in root navigator
+      return currentHistory.currentTreeBranch;
+    } else {
+      //user specified at least one participatesInRootNavigator
+      return res
+          .where((element) => element.participatesInRootNavigator == true)
+          .toList();
+    }
   }
 
   @override
@@ -234,7 +290,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   @override
   Future<void> setInitialRoutePath(GetNavConfig configuration) async {
-    history.clear();
+    _unsafeHistoryClear();
     _resultCompleter.clear();
     await pushHistory(configuration);
   }

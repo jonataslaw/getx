@@ -1,3 +1,4 @@
+import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,6 +36,37 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
+          if (AuthService.to.isLoggedInValue)
+            ListTile(
+              title: Text(
+                'Logout',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {
+                AuthService.to.logout();
+                Get.getDelegate()!.toNamed(Routes.LOGIN);
+                //to close the drawer
+
+                Navigator.of(context).pop();
+              },
+            ),
+          if (!AuthService.to.isLoggedInValue)
+            ListTile(
+              title: Text(
+                'Login',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              ),
+              onTap: () {
+                Get.getDelegate()!.toNamed(Routes.LOGIN);
+                //to close the drawer
+
+                Navigator.of(context).pop();
+              },
+            ),
         ],
       ),
     );

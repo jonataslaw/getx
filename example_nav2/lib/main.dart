@@ -1,3 +1,4 @@
+import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -9,6 +10,11 @@ void main() {
   runApp(
     GetMaterialApp.router(
       title: "Application",
+      initialBinding: BindingsBuilder(
+        () {
+          Get.put(AuthService());
+        },
+      ),
       getPages: AppPages.routes,
       routeInformationParser: GetInformationParser(
           // initialRoute: Routes.HOME,
@@ -16,7 +22,7 @@ void main() {
       routerDelegate: GetDelegate(
         backButtonPopMode: PopMode.History,
         preventDuplicateHandlingMode:
-            PreventDuplicateHandlingMode.PopUntilOriginalRoute,
+            PreventDuplicateHandlingMode.ReorderRoutes,
       ),
     ),
   );

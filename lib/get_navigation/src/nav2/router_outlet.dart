@@ -120,15 +120,6 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
         );
 }
 
-/// A marker outlet to identify which pages are visual
-/// (handled by the navigator) and which are logical
-/// (handled by the delegate)
-class RouterOutletContainerMiddleWare extends GetMiddleware {
-  final String stayAt;
-
-  RouterOutletContainerMiddleWare(this.stayAt);
-}
-
 extension PagesListExt on List<GetPage> {
   List<GetPage> pickAtRoute(String route) {
     return skipWhile((value) => value.name != route).toList();

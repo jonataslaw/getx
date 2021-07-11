@@ -34,6 +34,7 @@ class GetPage<T> extends Page<T> {
   final String? title;
   final Transition? transition;
   final Curve curve;
+  final bool? participatesInRootNavigator;
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
@@ -65,6 +66,7 @@ class GetPage<T> extends Page<T> {
     required this.name,
     required this.page,
     this.title,
+    this.participatesInRootNavigator,
     this.gestureWidth = 20,
     // RouteSettings settings,
     this.maintainState = true,
@@ -82,7 +84,7 @@ class GetPage<T> extends Page<T> {
     this.children,
     this.middlewares,
     this.unknownRoute,
-    this.preventDuplicates = false,
+    this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
         super(
           key: ValueKey(name),
@@ -134,8 +136,11 @@ class GetPage<T> extends Page<T> {
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
     double? gestureWidth,
+    bool? participatesInRootNavigator,
   }) {
     return GetPage(
+      participatesInRootNavigator:
+          participatesInRootNavigator ?? this.participatesInRootNavigator,
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
       name: name ?? this.name,
       page: page ?? this.page,

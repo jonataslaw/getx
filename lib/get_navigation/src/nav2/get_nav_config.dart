@@ -29,6 +29,16 @@ class GetNavConfig extends RouteInformation {
     );
   }
 
+  static GetNavConfig? fromRoute(String route) {
+    final res = Get.routeTree.matchRoute(route);
+    if (res.treeBranch.isEmpty) return null;
+    return GetNavConfig(
+      currentTreeBranch: res.treeBranch,
+      location: route,
+      state: null,
+    );
+  }
+
   @override
   String toString() => '''
 ======GetNavConfig=====\ncurrentTreeBranch: $currentTreeBranch\ncurrentPage: $currentPage\n======GetNavConfig=====''';

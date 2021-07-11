@@ -1,6 +1,5 @@
+import 'package:example_nav2/models/demo_product.dart';
 import 'package:get/get.dart';
-
-import '../../../models/demo_product.dart';
 
 class ProductsController extends GetxController {
   final products = <DemoProduct>[].obs;
