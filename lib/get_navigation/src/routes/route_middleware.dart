@@ -32,6 +32,25 @@ abstract class _RouteMiddleware {
   /// {@end-tool}
   RouteSettings? redirect(String route);
 
+  /// Similar to [redirect],
+  /// This function will be called when the router delegate changes the
+  /// current route.
+  ///
+  /// The default implmentation is to navigate to
+  /// the input route, with no redirection.
+  ///
+  /// if this returns null, the navigation is stopped,
+  /// and no new routes are pushed.
+  /// {@tool snippet}
+  /// ```dart
+  /// GetNavConfig? redirect(GetNavConfig route) {
+  ///   final authService = Get.find<AuthService>();
+  ///   return authService.authed.value ? null : RouteSettings(name: '/login');
+  /// }
+  /// ```
+  /// {@end-tool}
+  GetNavConfig? redirectDelegate(GetNavConfig route);
+
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
   /// {@tool snippet}
@@ -97,6 +116,9 @@ class GetMiddleware implements _RouteMiddleware {
 
   @override
   void onPageDispose() {}
+
+  @override
+  GetNavConfig? redirectDelegate(GetNavConfig route) => route;
 }
 
 class MiddlewareRunner {
@@ -204,6 +226,10 @@ class PageRedirect {
     return GetPageRoute<T>(
       page: _r.page,
       parameter: _r.parameter,
+      alignment: _r.alignment,
+      title: _r.title,
+      maintainState: _r.maintainState,
+      routeName: _r.name,
       settings: _r,
       curve: _r.curve,
       gestureWidth: _r.gestureWidth,
