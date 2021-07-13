@@ -46,7 +46,7 @@ enum PreventDuplicateHandlingMode {
   ReorderRoutes
 }
 
-class GetDelegate extends RouterDelegate<GetNavConfig>
+class GetDelegate<T> extends RouterDelegate<GetNavConfig>
     with ListenableMixin, ListNotifierMixin {
   final List<GetNavConfig> history = <GetNavConfig>[];
   final PopMode backButtonPopMode;

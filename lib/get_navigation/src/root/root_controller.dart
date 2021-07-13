@@ -4,7 +4,6 @@ import '../../../get_utils/get_utils.dart';
 import '../routes/custom_transition.dart';
 import '../routes/observers/route_observer.dart';
 import '../routes/transitions_type.dart';
-import 'parse_route.dart';
 
 class GetMaterialController extends GetxController {
   bool testMode = false;
@@ -27,8 +26,6 @@ class GetMaterialController extends GetxController {
   final routing = Routing();
 
   Map<String, String?> parameters = {};
-
-  late ParseRouteTree routeTree;
 
   CustomTransition? customTransition;
 

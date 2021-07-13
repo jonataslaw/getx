@@ -1,9 +1,8 @@
-import 'package:example_nav2/app/routes/app_pages.dart';
-import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
+import '../../../../services/auth_service.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -32,11 +31,9 @@ class LoginView extends GetView<LoginController> {
               ),
               onPressed: () {
                 AuthService.to.login();
-                final thenTo = Get.getDelegate()!
-                    .currentConfiguration!
-                    .currentPage!
-                    .parameter?['then'];
-                Get.getDelegate()!.toNamed(thenTo ?? Routes.HOME);
+                final thenTo = Get.rootDelegate.currentConfiguration!
+                    .currentPage!.parameter?['then'];
+                Get.rootDelegate.toNamed(thenTo ?? Routes.HOME);
               },
             ),
           ],

@@ -948,23 +948,6 @@ you can only use widgets and widget functions here''';
         predicate ?? (route) => false);
   }
 
-  void registerRoutes(List<GetPage> getPages) {
-    //TODO: only replace if null???
-    routeTree = ParseRouteTree(routes: <GetPage>[]);
-    routeTree.addRoutes(getPages);
-  }
-
-  void addPages(List<GetPage>? getPages) {
-    if (getPages != null) {
-      registerRoutes(getPages);
-    }
-  }
-
-  void addPage(GetPage getPage) {
-    //  routeTree = ParseRouteTree();
-    routeTree.addRoute(getPage);
-  }
-
   /// change default config of Get
   void config(
       {bool? enableLog,
@@ -1060,19 +1043,6 @@ you can only use widgets and widget functions here''';
 
     return _key;
   }
-
-  /// Casts the stored router delegate to a desired type
-  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      _routerDelegate as TDelegate?;
-
-  static RouterDelegate? _routerDelegate;
-
-  // ignore: use_setters_to_change_properties
-  void setDefaultDelegate(RouterDelegate? delegate) {
-    _routerDelegate = delegate;
-  }
-
-  GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
 
   /// give current arguments
   dynamic get arguments => routing.args;
@@ -1213,9 +1183,6 @@ you can only use widgets and widget functions here''';
   set parameters(Map<String, String?> newParameters) =>
       getxController.parameters = newParameters;
 
-  ParseRouteTree get routeTree => getxController.routeTree;
-  set routeTree(ParseRouteTree tree) => getxController.routeTree = tree;
-
   CustomTransition? get customTransition => getxController.customTransition;
   set customTransition(CustomTransition? newTransition) =>
       getxController.customTransition = newTransition;
@@ -1224,6 +1191,59 @@ you can only use widgets and widget functions here''';
   set testMode(bool isTest) => getxController.testMode = isTest;
 
   static GetMaterialController getxController = GetMaterialController();
+}
+
+extension NavTwoExt on GetInterface {
+  void addPages(List<GetPage> getPages) {
+    routeTree.addRoutes(getPages);
+  }
+
+  static late final _routeTree = ParseRouteTree(routes: []);
+
+  ParseRouteTree get routeTree => _routeTree;
+  void addPage(GetPage getPage) {
+    routeTree.addRoute(getPage);
+  }
+
+  /// Casts the stored router delegate to a desired type
+  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
+      _routerDelegate as TDelegate?;
+
+  static GetDelegate? _routerDelegate;
+
+  // // ignore: use_setters_to_change_properties
+  // void setDefaultDelegate(RouterDelegate? delegate) {
+  //   _routerDelegate = delegate;
+  // }
+
+  // GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
+
+  static GetInformationParser? _informationParser;
+
+  GetInformationParser createInformationParser({String initialRoute = '/'}) {
+    return _informationParser ??=
+        GetInformationParser(initialRoute: initialRoute);
+  }
+
+  // static GetDelegate? _delegate;
+
+  GetDelegate get rootDelegate => createDelegate();
+
+  GetDelegate createDelegate(
+      {GetPage<dynamic>? notFoundRoute,
+      List<NavigatorObserver>? navigatorObservers,
+      TransitionDelegate<dynamic>? transitionDelegate,
+      PopMode backButtonPopMode = PopMode.History,
+      PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+          PreventDuplicateHandlingMode.ReorderRoutes}) {
+    return _routerDelegate ??= GetDelegate(
+      notFoundRoute: notFoundRoute,
+      navigatorObservers: navigatorObservers,
+      transitionDelegate: transitionDelegate,
+      backButtonPopMode: backButtonPopMode,
+      preventDuplicateHandlingMode: preventDuplicateHandlingMode,
+    );
+  }
 }
 
 /// It replaces the Flutter Navigator, but needs no context.

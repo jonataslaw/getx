@@ -116,7 +116,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
             return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
           pickPages: pickPages,
-          delegate: Get.getDelegate(),
+          delegate: Get.rootDelegate,
         );
 }
 

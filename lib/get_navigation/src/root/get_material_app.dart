@@ -125,11 +125,11 @@ class GetMaterialApp extends StatelessWidget {
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
 
-  const GetMaterialApp.router({
+  GetMaterialApp.router({
     Key? key,
     this.routeInformationProvider,
-    required RouteInformationParser<Object> this.routeInformationParser,
-    required RouterDelegate<Object> this.routerDelegate,
+    RouteInformationParser<Object>? routeInformationParser,
+    RouterDelegate<Object>? routerDelegate,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -173,7 +173,12 @@ class GetMaterialApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
-  })  : navigatorObservers = null,
+  })  : routerDelegate = routerDelegate ?? Get.createDelegate(),
+        routeInformationParser = routeInformationParser ??
+            Get.createInformationParser(
+              initialRoute: getPages?.first.name ?? '/',
+            ),
+        navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,
@@ -219,8 +224,11 @@ class GetMaterialApp extends StatelessWidget {
         Get.customTransition = customTransition;
 
         initialBinding?.dependencies();
-        Get.addPages(getPages);
-        Get.setDefaultDelegate(routerDelegate);
+        if (getPages != null) {
+          Get.addPages(getPages!);
+        }
+
+        //Get.setDefaultDelegate(routerDelegate);
         Get.smartManagement = smartManagement;
         onInit?.call();
 
