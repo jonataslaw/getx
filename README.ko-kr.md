@@ -389,7 +389,7 @@ Get.changeTheme(ThemeData.light());
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-`.darkmode`가 활성활 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
+`.darkmode`가 활성화 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
 ## GetConnect
 GetConnect는 http나 websockets으로 프론트와 백엔드의 통신을 위한 쉬운 방법입니다.
