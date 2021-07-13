@@ -128,4 +128,12 @@ extension Inst on GetInterface {
   /// [Get.lazyPut()], is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
+
+  /// Replace a parent instance of a class in dependency management
+  /// with a [child] instance
+  void replace<P, C extends P>(C child, {String? tag, bool permanent = false}) {
+    delete<P>();
+    // ignore: unnecessary_cast
+    put(child as P, tag: tag, permanent: permanent);
+  }
 }

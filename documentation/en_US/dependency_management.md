@@ -6,12 +6,13 @@
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
   - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
+  - [Specifying an alternate instance](#specifying-an-alternate-instance)
   - [Differences between methods](#differences-between-methods)
   - [Bindings](#bindings)
-    - [How to use](#how-to-use)
+    - [Bindings class](#bindings-class)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [How to change](#How-to-change)
+      - [How to change](#how-to-change)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
@@ -200,6 +201,25 @@ To remove an instance of Get:
 
 ```dart
 Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
+```
+
+## Specifying an alternate instance
+
+A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` method. This can then be retrieved by using the original class.
+
+```dart
+class ParentClass {}
+
+class ChildClass extends ParentClass {
+  bool isChild = true;
+}
+
+Get.put(ParentClass());
+
+Get.replace<ParentClass, ChildClass>(ChildClass());
+
+final instance = Get.find<ParentClass>();
+print(instance is ChildClass); //true
 ```
 
 ## Differences between methods
