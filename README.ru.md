@@ -777,7 +777,7 @@ Future<void> main() async {
 /// (может, вам нужно загрузить конфигурацию Темы, ключи API, язык, определенный пользователем...
 /// Загружайте SettingService прежде чем запускать ApiService.
 /// Таким образом GetMaterialApp() принимает параметры напрямую, и ему не нужно будет перезагружаться
-void initServices() async {
+Future<void> initServices() async {
   print('запуск сервисов ...');
   /// Здесь вы инициализируете get_storage, hive, shared_pref,
   /// или что-либо другое асинхронное.
