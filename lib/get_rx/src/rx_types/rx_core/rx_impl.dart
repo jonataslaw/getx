@@ -82,9 +82,9 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object o) {
+    if (o is RxObjectMixin<T>) return value == o.value;
     // Todo, find a common implementation for the hashCode of different Types.
     if (o is T) return value == o;
-    if (o is RxObjectMixin<T>) return value == o.value;
     return false;
   }
 

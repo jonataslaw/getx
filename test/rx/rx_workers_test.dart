@@ -162,4 +162,9 @@ void main() {
     expect(reactiveString.endsWith("c"), true);
     expect(currentString, "abc");
   });
+
+  test('Rx List ==', () {
+    final list = RxList();
+    expect(list == list, true);
+  });
 }
