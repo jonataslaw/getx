@@ -272,7 +272,7 @@ And now, all you need to do is use Get.toNamed() to navigate your named routes, 
 
 ### Middleware
 
-If you want listen Get events to trigger actions, you can to use routingCallback to it
+If you want to listen Get events to trigger actions, you can to use routingCallback to it
 
 ```dart
 GetMaterialApp(
