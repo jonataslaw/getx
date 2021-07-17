@@ -128,24 +128,9 @@ class ParseRouteTree {
   /// Change the Path for a [GetPage]
   GetPage _addChild(
           GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
-      GetPage(
-        name: (parentPath + origin.name).replaceAll(r'//', '/'),
-        page: origin.page,
-        title: origin.title,
-        alignment: origin.alignment,
-        transition: origin.transition,
-        binding: origin.binding,
-        bindings: origin.bindings,
-        curve: origin.curve,
-        customTransition: origin.customTransition,
-        fullscreenDialog: origin.fullscreenDialog,
-        maintainState: origin.maintainState,
-        opaque: origin.opaque,
-        parameter: origin.parameter,
-        popGesture: origin.popGesture,
-        preventDuplicates: origin.preventDuplicates,
-        transitionDuration: origin.transitionDuration,
+      origin.copy(
         middlewares: middlewares,
+        name: (parentPath + origin.name).replaceAll(r'//', '/'),
       );
 
   GetPage? _findRoute(String name) {

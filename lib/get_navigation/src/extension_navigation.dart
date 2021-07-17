@@ -1016,7 +1016,12 @@ you can only use widgets and widget functions here''';
   }
 
   GlobalKey<NavigatorState>? nestedKey(dynamic key) {
-    keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    keys.putIfAbsent(
+      key,
+      () => GlobalKey<NavigatorState>(
+        debugLabel: 'Getx nested key: ${key.toString()}',
+      ),
+    );
     return keys[key];
   }
 
@@ -1207,9 +1212,7 @@ extension NavTwoExt on GetInterface {
 
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      _routerDelegate as TDelegate?;
-
-  static GetDelegate? _routerDelegate;
+      routerDelegate as TDelegate?;
 
   // // ignore: use_setters_to_change_properties
   // void setDefaultDelegate(RouterDelegate? delegate) {
@@ -1218,31 +1221,39 @@ extension NavTwoExt on GetInterface {
 
   // GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
 
-  static GetInformationParser? _informationParser;
-
   GetInformationParser createInformationParser({String initialRoute = '/'}) {
-    return _informationParser ??=
-        GetInformationParser(initialRoute: initialRoute);
+    if (routeInformationParser == null) {
+      return routeInformationParser = GetInformationParser(
+        initialRoute: initialRoute,
+      );
+    } else {
+      return routerDelegate as GetInformationParser;
+    }
   }
 
   // static GetDelegate? _delegate;
 
   GetDelegate get rootDelegate => createDelegate();
 
-  GetDelegate createDelegate(
-      {GetPage<dynamic>? notFoundRoute,
-      List<NavigatorObserver>? navigatorObservers,
-      TransitionDelegate<dynamic>? transitionDelegate,
-      PopMode backButtonPopMode = PopMode.History,
-      PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.ReorderRoutes}) {
-    return _routerDelegate ??= GetDelegate(
-      notFoundRoute: notFoundRoute,
-      navigatorObservers: navigatorObservers,
-      transitionDelegate: transitionDelegate,
-      backButtonPopMode: backButtonPopMode,
-      preventDuplicateHandlingMode: preventDuplicateHandlingMode,
-    );
+  GetDelegate createDelegate({
+    GetPage<dynamic>? notFoundRoute,
+    List<NavigatorObserver>? navigatorObservers,
+    TransitionDelegate<dynamic>? transitionDelegate,
+    PopMode backButtonPopMode = PopMode.History,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
+  }) {
+    if (routerDelegate == null) {
+      return routerDelegate = GetDelegate(
+        notFoundRoute: notFoundRoute,
+        navigatorObservers: navigatorObservers,
+        transitionDelegate: transitionDelegate,
+        backButtonPopMode: backButtonPopMode,
+        preventDuplicateHandlingMode: preventDuplicateHandlingMode,
+      );
+    } else {
+      return routerDelegate as GetDelegate;
+    }
   }
 }
 

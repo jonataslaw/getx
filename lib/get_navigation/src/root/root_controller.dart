@@ -29,7 +29,7 @@ class GetMaterialController extends GetxController {
 
   CustomTransition? customTransition;
 
-  GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
+  var key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
 
   Map<dynamic, GlobalKey<NavigatorState>> keys = {};
 

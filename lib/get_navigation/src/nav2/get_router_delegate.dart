@@ -46,7 +46,7 @@ enum PreventDuplicateHandlingMode {
   ReorderRoutes
 }
 
-class GetDelegate<T> extends RouterDelegate<GetNavConfig>
+class GetDelegate extends RouterDelegate<GetNavConfig>
     with ListenableMixin, ListNotifierMixin {
   final List<GetNavConfig> history = <GetNavConfig>[];
   final PopMode backButtonPopMode;
@@ -68,7 +68,9 @@ class GetDelegate<T> extends RouterDelegate<GetNavConfig>
     this.backButtonPopMode = PopMode.History,
     this.preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.ReorderRoutes,
-  });
+  }) {
+    Get.log('GetDelegate is created !');
+  }
 
   GetNavConfig? runMiddleware(GetNavConfig config) {
     final middlewares = config.currentTreeBranch.last.middlewares ?? [];
@@ -93,7 +95,7 @@ class GetDelegate<T> extends RouterDelegate<GetNavConfig>
   }
 
   GetNavConfig? _unsafeHistoryRemoveAt(int index) {
-    if (index == history.length - 1) {
+    if (index == history.length - 1 && history.length > 1) {
       //removing WILL update the current route
       final toCheck = history[history.length - 2];
       final resMiddleware = runMiddleware(toCheck);
@@ -290,8 +292,9 @@ class GetDelegate<T> extends RouterDelegate<GetNavConfig>
 
   @override
   Future<void> setInitialRoutePath(GetNavConfig configuration) async {
-    _unsafeHistoryClear();
-    _resultCompleter.clear();
+    //no need to clear history with Reorder route strategy
+    // _unsafeHistoryClear();
+    // _resultCompleter.clear();
     await pushHistory(configuration);
   }
 
@@ -316,6 +319,11 @@ class GetDelegate<T> extends RouterDelegate<GetNavConfig>
         state: null, //TODO: persist state?
       ),
     );
+  }
+
+  Future<T?> offNamed<T>(String fullRoute) async {
+    await popHistory();
+    return await toNamed(fullRoute);
   }
 
   /// Removes routes according to [PopMode]

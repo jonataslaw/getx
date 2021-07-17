@@ -163,11 +163,13 @@ class GetCupertinoApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
-  })  : routerDelegate = routerDelegate ?? Get.createDelegate(),
-        routeInformationParser = routeInformationParser ??
-            Get.createInformationParser(
-              initialRoute: getPages?.first.name ?? '/',
-            ),
+  })  : routerDelegate = routerDelegate ??= Get.createDelegate(
+          notFoundRoute: unknownRoute,
+        ),
+        routeInformationParser =
+            routeInformationParser ??= Get.createInformationParser(
+          initialRoute: getPages?.first.name ?? '/',
+        ),
         navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
@@ -176,7 +178,10 @@ class GetCupertinoApp extends StatelessWidget {
         onUnknownRoute = null,
         routes = null,
         initialRoute = null,
-        super(key: key);
+        super(key: key) {
+    Get.routerDelegate = routerDelegate;
+    Get.routeInformationParser = routeInformationParser;
+  }
 
   Route<dynamic> generator(RouteSettings settings) {
     return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();

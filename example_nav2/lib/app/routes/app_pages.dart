@@ -31,18 +31,21 @@ class AppPages {
       page: () => RootView(),
       binding: RootBinding(),
       participatesInRootNavigator: true,
+      preventDuplicates: true,
       children: [
         GetPage(
           middlewares: [
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
+          participatesInRootNavigator: false,
           name: _Paths.LOGIN,
           page: () => LoginView(),
           binding: LoginBinding(),
         ),
         GetPage(
-          participatesInRootNavigator: true,
+          participatesInRootNavigator: false,
+          preventDuplicates: true,
           name: _Paths.HOME,
           page: () => HomeView(),
           bindings: [

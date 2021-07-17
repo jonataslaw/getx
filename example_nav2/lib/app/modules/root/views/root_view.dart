@@ -18,7 +18,7 @@ class RootView extends GetView<RootController> {
             centerTitle: true,
           ),
           body: GetRouterOutlet(
-            name: '/',
+            name: 'rootView',
             emptyPage: (delegate) =>
                 Get.routeTree.matchRoute(Routes.HOME).route!,
             pickPages: (currentNavStack) {

@@ -33,7 +33,7 @@ class LoginView extends GetView<LoginController> {
                 AuthService.to.login();
                 final thenTo = Get.rootDelegate.currentConfiguration!
                     .currentPage!.parameter?['then'];
-                Get.rootDelegate.toNamed(thenTo ?? Routes.HOME);
+                Get.rootDelegate.offNamed(thenTo ?? Routes.HOME);
               },
             ),
           ],

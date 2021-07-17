@@ -25,17 +25,17 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     required Widget Function(
       BuildContext context,
       TDelegate,
-      GetPage? page,
+      List<GetPage>? page,
     )
         pageBuilder,
   }) : this.builder(
           builder: (context, rDelegate, currentConfig) {
-            final picked =
-                currentConfig == null ? <GetPage>[] : pickPages(currentConfig);
-            if (picked.length == 0) {
-              return pageBuilder(context, rDelegate, null);
+            var picked =
+                currentConfig == null ? null : pickPages(currentConfig);
+            if (picked?.length == 0) {
+              picked = null;
             }
-            return pageBuilder(context, rDelegate, picked.last);
+            return pageBuilder(context, rDelegate, picked);
           },
           delegate: delegate,
         );
@@ -101,15 +101,25 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
                 (emptyPage == null && emptyWidget != null),
             'Either use emptyPage or emptyWidget'),
         super(
-          pageBuilder: (context, rDelegate, page) {
-            var pageRes = page ?? emptyPage?.call(rDelegate);
-            if (pageRes != null) {
+          pageBuilder: (context, rDelegate, pages) {
+            final pageRes =
+                (pages ?? <GetPage<dynamic>?>[emptyPage?.call(rDelegate)])
+                    .whereType<GetPage<dynamic>>()
+                    .toList();
+
+            final badPages = pageRes.where(
+                (element) => element.participatesInRootNavigator == true);
+            if (badPages.length > 0) {
+              throw """Pages in a router outlet shouldn't participate in the root navigator
+              $badPages""";
+            }
+            if (pageRes.length > 0) {
               return GetNavigator(
                 onPopPage: onPopPage ??
                     (a, c) {
                       return true;
                     },
-                pages: [pageRes],
+                pages: pageRes,
                 name: name,
               );
             }
