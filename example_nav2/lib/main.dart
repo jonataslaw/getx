@@ -16,14 +16,14 @@ void main() {
         },
       ),
       getPages: AppPages.routes,
-      routeInformationParser: GetInformationParser(
-          // initialRoute: Routes.HOME,
-          ),
-      routerDelegate: GetDelegate(
-        backButtonPopMode: PopMode.History,
-        preventDuplicateHandlingMode:
-            PreventDuplicateHandlingMode.ReorderRoutes,
-      ),
+      // routeInformationParser: GetInformationParser(
+      //     // initialRoute: Routes.HOME,
+      //     ),
+      // routerDelegate: GetDelegate(
+      //   backButtonPopMode: PopMode.History,
+      //   preventDuplicateHandlingMode:
+      //       PreventDuplicateHandlingMode.ReorderRoutes,
+      // ),
     ),
   );
 }

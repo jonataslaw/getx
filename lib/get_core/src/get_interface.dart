@@ -8,6 +8,7 @@ import 'smart_management.dart';
 abstract class GetInterface {
   SmartManagement smartManagement = SmartManagement.full;
   RouterDelegate? routerDelegate;
+  RouteInformationParser? routeInformationParser;
   String? reference;
   bool isLogEnable = true;
   LogWriterCallback log = defaultLogWriterCallback;

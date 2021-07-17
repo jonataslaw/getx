@@ -10,9 +10,23 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: Colors.amber,
       body: Center(
-        child: Text(
-          'ProfileView is working',
-          style: TextStyle(fontSize: 20),
+        child: Column(
+          children: [
+            Text(
+              'ProfileView is working',
+              style: TextStyle(fontSize: 20),
+            ),
+            MaterialButton(
+              child: Text('Show a test dialog'),
+              onPressed: () {
+                //shows a dialog
+                Get.defaultDialog(
+                  title: 'Test Dialog !!',
+                  barrierDismissible: true,
+                );
+              },
+            )
+          ],
         ),
       ),
     );
