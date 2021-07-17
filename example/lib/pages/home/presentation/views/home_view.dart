@@ -80,6 +80,26 @@ class HomeView extends GetView<HomeController> {
                         color: Colors.black,
                       ),
                     ),
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.black),
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
+                      ),
+                      shape: StadiumBorder(),
+                    ),
+                    onPressed: () {
+                      Get.updateLocale(Locale('pt', 'BR'));
+                    },
+                    child: Text(
+                      'Update language to Portuguese',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
                   )
                 ],
               );

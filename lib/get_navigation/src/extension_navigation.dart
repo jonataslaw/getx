@@ -1227,7 +1227,7 @@ extension NavTwoExt on GetInterface {
         initialRoute: initialRoute,
       );
     } else {
-      return routerDelegate as GetInformationParser;
+      return routeInformationParser as GetInformationParser;
     }
   }
 
