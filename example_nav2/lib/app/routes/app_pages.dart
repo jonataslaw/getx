@@ -1,12 +1,10 @@
-import 'package:example_nav2/app/middleware/auth_middleware.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/nav2/router_outlet.dart';
 
-import 'package:example_nav2/app/modules/login/bindings/login_binding.dart';
-import 'package:example_nav2/app/modules/login/views/login_view.dart';
-
+import '../middleware/auth_middleware.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
 import '../modules/product_details/views/product_details_view.dart';
 import '../modules/products/bindings/products_binding.dart';

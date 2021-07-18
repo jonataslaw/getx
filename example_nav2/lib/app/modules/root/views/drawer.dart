@@ -1,7 +1,7 @@
-import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 
 class DrawerWidget extends StatelessWidget {

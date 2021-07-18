@@ -91,12 +91,12 @@ class ParseRouteTree {
 
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
-    if (route.children == null || route.children!.isEmpty) {
+    if (route.children.isEmpty) {
       return result;
     }
 
     final parentPath = route.name;
-    for (var page in route.children!) {
+    for (var page in route.children) {
       // Add Parent middlewares to children
       final parentMiddlewares = [
         if (page.middlewares != null) ...page.middlewares!,

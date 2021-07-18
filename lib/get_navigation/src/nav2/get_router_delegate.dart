@@ -73,7 +73,10 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 
   GetNavConfig? runMiddleware(GetNavConfig config) {
-    final middlewares = config.currentTreeBranch.last.middlewares ?? [];
+    final middlewares = config.currentTreeBranch.last.middlewares;
+    if (middlewares == null) {
+      return config;
+    }
     var iterator = config;
     for (var item in middlewares) {
       var redirectRes = item.redirectDelegate(iterator);
@@ -105,9 +108,9 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return history.removeAt(index);
   }
 
-  void _unsafeHistoryClear() {
-    history.clear();
-  }
+  // void _unsafeHistoryClear() {
+  //   history.clear();
+  // }
 
   /// Adds a new history entry and waits for the result
   Future<T?> pushHistory<T>(
@@ -260,7 +263,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     if (currentHistory == null) return <GetPage>[];
 
     final res = currentHistory.currentTreeBranch
-        .where((r) => r.participatesInRootNavigator != null);
+        .where((r) => r.participatesInRootNavigator);
     if (res.length == 0) {
       //default behavoir, all routes participate in root navigator
       return currentHistory.currentTreeBranch;
@@ -312,6 +315,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   Future<T?> toNamed<T>(String fullRoute) {
     final decoder = Get.routeTree.matchRoute(fullRoute);
+
     return pushHistory<T>(
       GetNavConfig(
         currentTreeBranch: decoder.treeBranch,
@@ -421,7 +425,14 @@ class GetNavigator extends Navigator {
             'GetNavigator should either have a key or a name set'),
         super(
           key: key ?? Get.nestedKey(name),
-          onPopPage: onPopPage,
+          onPopPage: onPopPage ??
+              (route, result) {
+                final didPop = route.didPop(result);
+                if (!didPop) {
+                  return false;
+                }
+                return true;
+              },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [

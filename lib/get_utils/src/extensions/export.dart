@@ -4,7 +4,7 @@ export 'duration_extensions.dart';
 export 'dynamic_extensions.dart';
 export 'event_loop_extensions.dart';
 export 'internacionalization.dart';
+export 'iterable_extensions.dart';
 export 'num_extensions.dart';
 export 'string_extensions.dart';
 export 'widget_extensions.dart';
-export 'iterable_extensions.dart';

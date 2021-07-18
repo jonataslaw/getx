@@ -1011,8 +1011,7 @@ you can only use widgets and widget functions here''';
   }
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    getxController.key = newKey;
-    return key;
+    return getxController.addKey(newKey);
   }
 
   GlobalKey<NavigatorState>? nestedKey(dynamic key) {

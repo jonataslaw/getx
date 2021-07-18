@@ -34,7 +34,7 @@ class GetPage<T> extends Page<T> {
   final String? title;
   final Transition? transition;
   final Curve curve;
-  final bool? participatesInRootNavigator;
+  final bool participatesInRootNavigator;
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
@@ -57,7 +57,7 @@ class GetPage<T> extends Page<T> {
   @override
   final String name;
 
-  final List<GetPage>? children;
+  final List<GetPage> children;
   final List<GetMiddleware>? middlewares;
   final PathDecoded path;
   final GetPage? unknownRoute;
@@ -66,7 +66,7 @@ class GetPage<T> extends Page<T> {
     required this.name,
     required this.page,
     this.title,
-    this.participatesInRootNavigator,
+    this.participatesInRootNavigator = true,
     this.gestureWidth = 20,
     // RouteSettings settings,
     this.maintainState = true,
@@ -81,7 +81,7 @@ class GetPage<T> extends Page<T> {
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.children,
+    this.children = const <GetPage>[],
     this.middlewares,
     this.unknownRoute,
     this.preventDuplicates = true,

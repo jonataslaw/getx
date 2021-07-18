@@ -1,10 +1,8 @@
-import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/nav2/get_router_delegate.dart';
 
 import 'app/routes/app_pages.dart';
+import 'services/auth_service.dart';
 
 void main() {
   runApp(

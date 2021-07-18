@@ -116,7 +116,11 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
             if (pageRes.length > 0) {
               return GetNavigator(
                 onPopPage: onPopPage ??
-                    (a, c) {
+                    (route, result) {
+                      final didPop = route.didPop(result);
+                      if (!didPop) {
+                        return false;
+                      }
                       return true;
                     },
                 pages: pageRes,
