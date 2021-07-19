@@ -36,13 +36,11 @@ class AppPages {
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
-          participatesInRootNavigator: false,
           name: _Paths.LOGIN,
           page: () => LoginView(),
           binding: LoginBinding(),
         ),
         GetPage(
-          participatesInRootNavigator: false,
           preventDuplicates: true,
           name: _Paths.HOME,
           page: () => HomeView(),
@@ -83,7 +81,6 @@ class AppPages {
           ],
         ),
         GetPage(
-          participatesInRootNavigator: true,
           name: _Paths.SETTINGS,
           page: () => SettingsView(),
           binding: SettingsBinding(),

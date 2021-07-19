@@ -94,7 +94,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     GetPage Function(GetDelegate delegate)? emptyPage,
     required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required String name,
+    String? name,
   })  : assert(
             (emptyPage == null && emptyWidget == null) ||
                 (emptyPage != null && emptyWidget == null) ||
