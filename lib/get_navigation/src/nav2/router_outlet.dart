@@ -106,13 +106,6 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
                 (pages ?? <GetPage<dynamic>?>[emptyPage?.call(rDelegate)])
                     .whereType<GetPage<dynamic>>()
                     .toList();
-
-            final badPages = pageRes.where(
-                (element) => element.participatesInRootNavigator == true);
-            if (badPages.length > 0) {
-              throw """Pages in a router outlet shouldn't participate in the root navigator
-              $badPages""";
-            }
             if (pageRes.length > 0) {
               return GetNavigator(
                 onPopPage: onPopPage ??

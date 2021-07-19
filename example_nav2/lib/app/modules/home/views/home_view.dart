@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
-import 'dashboard_view.dart';
+import '../../dashboard/views/dashboard_view.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -22,7 +22,9 @@ class HomeView extends GetView<HomeController> {
         return Scaffold(
           body: GetRouterOutlet(
             name: Routes.HOME,
-            emptyWidget: (delegate) => DashboardView(),
+            //It's preferable to use emptyPage instead of emptyWidget
+            emptyPage: (delegate) =>
+                Get.routeTree.matchRoute(Routes.DASHBOARD).route!,
             pickPages: (currentNavStack) {
               print('Home RouterOutlet: $currentNavStack');
 
@@ -37,7 +39,7 @@ class HomeView extends GetView<HomeController> {
             onTap: (value) {
               switch (value) {
                 case 0:
-                  delegate.until(Routes.HOME);
+                  delegate.toNamed(Routes.HOME);
                   break;
                 case 1:
                   delegate.toNamed(Routes.PROFILE);

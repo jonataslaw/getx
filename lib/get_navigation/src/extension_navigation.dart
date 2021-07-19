@@ -215,7 +215,7 @@ extension ExtensionDialog on GetInterface {
     bool barrierDismissible = true,
     Color? barrierColor,
     bool useSafeArea = true,
-    bool useRootNavigator = true,
+    GlobalKey<NavigatorState>? navigatorKey,
     Object? arguments,
     Duration? transitionDuration,
     Curve? transitionCurve,
@@ -250,7 +250,7 @@ extension ExtensionDialog on GetInterface {
           child: child,
         );
       },
-      useRootNavigator: useRootNavigator,
+      navigatorKey: navigatorKey,
       routeSettings:
           routeSettings ?? RouteSettings(arguments: arguments, name: name),
     );
@@ -264,20 +264,25 @@ extension ExtensionDialog on GetInterface {
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder? transitionBuilder,
-    bool useRootNavigator = true,
+    GlobalKey<NavigatorState>? navigatorKey,
     RouteSettings? routeSettings,
   }) {
     assert(!barrierDismissible || barrierLabel != null);
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push<T>(GetDialogRoute<T>(
-      pageBuilder: pageBuilder,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor,
-      transitionDuration: transitionDuration,
-      transitionBuilder: transitionBuilder,
-      settings: routeSettings,
-    ));
+    final nav = navigatorKey?.currentState ??
+        Navigator.of(overlayContext!,
+            rootNavigator:
+                true); //overlay context will always return the root navigator
+    return nav.push<T>(
+      GetDialogRoute<T>(
+        pageBuilder: pageBuilder,
+        barrierDismissible: barrierDismissible,
+        barrierLabel: barrierLabel,
+        barrierColor: barrierColor,
+        transitionDuration: transitionDuration,
+        transitionBuilder: transitionBuilder,
+        settings: routeSettings,
+      ),
+    );
   }
 
   /// Custom UI Dialog.
@@ -309,6 +314,9 @@ extension ExtensionDialog on GetInterface {
 
     // onWillPop Scope
     WillPopCallback? onWillPop,
+
+    // the navigator used to push the dialog
+    GlobalKey<NavigatorState>? navigatorKey,
   }) {
     var leanCancel = onCancel != null || textCancel != null;
     var leanConfirm = onConfirm != null || textConfirm != null;
@@ -394,19 +402,15 @@ extension ExtensionDialog on GetInterface {
       buttonPadding: EdgeInsets.zero,
     );
 
-    if (onWillPop != null) {
-      return dialog<T>(
-        WillPopScope(
-          onWillPop: onWillPop,
-          child: baseAlertDialog,
-        ),
-        barrierDismissible: barrierDismissible,
-      );
-    }
-
     return dialog<T>(
-      baseAlertDialog,
+      onWillPop != null
+          ? WillPopScope(
+              onWillPop: onWillPop,
+              child: baseAlertDialog,
+            )
+          : baseAlertDialog,
       barrierDismissible: barrierDismissible,
+      navigatorKey: navigatorKey,
     );
   }
 }
