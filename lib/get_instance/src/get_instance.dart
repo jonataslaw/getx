@@ -214,11 +214,37 @@ class GetInstance {
 
     for (final element in keysToRemove) {
       delete(key: element);
+      _routesKey.remove(element);
+    }
+
+    keysToRemove.clear();
+  }
+
+  void reloadDependencyByRoute(String routeName) {
+    final keysToRemove = <String>[];
+    _routesKey.forEach((key, value) {
+      if (value == routeName) {
+        keysToRemove.add(key);
+      }
+    });
+
+    /// Removes [Get.create()] instances registered in [routeName].
+    if (_routesByCreate.containsKey(routeName)) {
+      for (final onClose in _routesByCreate[routeName]!) {
+        // assure the [DisposableInterface] instance holding a reference
+        // to [onClose()] wasn't disposed.
+        onClose();
+      }
+      _routesByCreate[routeName]!.clear();
+      _routesByCreate.remove(routeName);
     }
 
     for (final element in keysToRemove) {
-      _routesKey.remove(element);
+      print('reload $element');
+      reload(key: element);
+      //_routesKey.remove(element);
     }
+
     keysToRemove.clear();
   }
 
