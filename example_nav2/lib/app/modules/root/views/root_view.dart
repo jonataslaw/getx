@@ -18,14 +18,7 @@ class RootView extends GetView<RootController> {
             centerTitle: true,
           ),
           body: GetRouterOutlet(
-            name: 'rootView',
-            emptyPage: (delegate) =>
-                Get.routeTree.matchRoute(Routes.HOME).route!,
-            pickPages: (currentNavStack) {
-              //show all routes here except the root view
-              print('Root RouterOutlet: $currentNavStack');
-              return currentNavStack.currentTreeBranch.skip(1).take(1).toList();
-            },
+            initialRoute: Routes.HOME,
           ),
         );
       },

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
-import '../../dashboard/views/dashboard_view.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -21,18 +20,11 @@ class HomeView extends GetView<HomeController> {
         }
         return Scaffold(
           body: GetRouterOutlet(
-            name: Routes.HOME,
+            initialRoute: Routes.DASHBOARD,
+            // name: Routes.HOME,
             //It's preferable to use emptyPage instead of emptyWidget
-            emptyPage: (delegate) =>
-                Get.routeTree.matchRoute(Routes.DASHBOARD).route!,
-            pickPages: (currentNavStack) {
-              print('Home RouterOutlet: $currentNavStack');
-
-              // will take any route after home
-              final res =
-                  currentNavStack.currentTreeBranch.pickAfterRoute(Routes.HOME);
-              return res;
-            },
+            // emptyPage: (delegate) =>
+            //     Get.routeTree.matchRoute(Routes.DASHBOARD).route!,
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,

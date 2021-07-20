@@ -280,7 +280,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     final pages = getVisualPages();
     final extraObservers = navigatorObservers;
     return GetNavigator(
-      name: 'root',
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
       pages: pages,
@@ -420,14 +419,15 @@ class GetNavigator extends Navigator {
     List<NavigatorObserver>? observers,
     bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
-    String? name,
+    //  String? name,
   }) : super(
           //keys should be optional
-          key: key != null
-              ? key
-              : name != null
-                  ? Get.nestedKey(name)
-                  : null,
+          key: key,
+          // key != null
+          //     ? key
+          //     : name != null
+          //         ? Get.nestedKey(name)
+          //         : null,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -439,7 +439,7 @@ class GetNavigator extends Navigator {
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [
-            GetObserver(),
+            // GetObserver(),
             if (observers != null) ...observers,
           ],
           transitionDelegate:
