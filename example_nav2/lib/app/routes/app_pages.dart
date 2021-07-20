@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 
+import 'package:example_nav2/app/modules/dashboard/bindings/dashboard_binding.dart';
+import 'package:example_nav2/app/modules/dashboard/views/dashboard_view.dart';
+
 import '../middleware/auth_middleware.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
@@ -36,13 +39,11 @@ class AppPages {
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
-          participatesInRootNavigator: false,
           name: _Paths.LOGIN,
           page: () => LoginView(),
           binding: LoginBinding(),
         ),
         GetPage(
-          participatesInRootNavigator: false,
           preventDuplicates: true,
           name: _Paths.HOME,
           page: () => HomeView(),
@@ -51,6 +52,11 @@ class AppPages {
           ],
           title: null,
           children: [
+            GetPage(
+              name: _Paths.DASHBOARD,
+              page: () => DashboardView(),
+              binding: DashboardBinding(),
+            ),
             GetPage(
               middlewares: [
                 //only enter this route when authed
@@ -83,7 +89,6 @@ class AppPages {
           ],
         ),
         GetPage(
-          participatesInRootNavigator: true,
           name: _Paths.SETTINGS,
           page: () => SettingsView(),
           binding: SettingsBinding(),

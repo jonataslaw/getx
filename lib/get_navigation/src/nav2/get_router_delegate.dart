@@ -263,7 +263,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     if (currentHistory == null) return <GetPage>[];
 
     final res = currentHistory.currentTreeBranch
-        .where((r) => r.participatesInRootNavigator);
+        .where((r) => r.participatesInRootNavigator != null);
     if (res.length == 0) {
       //default behavoir, all routes participate in root navigator
       return currentHistory.currentTreeBranch;
@@ -421,10 +421,13 @@ class GetNavigator extends Navigator {
     bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
     String? name,
-  })  : assert(key != null || name != null,
-            'GetNavigator should either have a key or a name set'),
-        super(
-          key: key ?? Get.nestedKey(name),
+  }) : super(
+          //keys should be optional
+          key: key != null
+              ? key
+              : name != null
+                  ? Get.nestedKey(name)
+                  : null,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);

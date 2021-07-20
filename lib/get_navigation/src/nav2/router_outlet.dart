@@ -94,7 +94,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     GetPage Function(GetDelegate delegate)? emptyPage,
     required List<GetPage> Function(GetNavConfig currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required String name,
+    String? name,
   })  : assert(
             (emptyPage == null && emptyWidget == null) ||
                 (emptyPage != null && emptyWidget == null) ||
@@ -106,13 +106,6 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
                 (pages ?? <GetPage<dynamic>?>[emptyPage?.call(rDelegate)])
                     .whereType<GetPage<dynamic>>()
                     .toList();
-
-            final badPages = pageRes.where(
-                (element) => element.participatesInRootNavigator == true);
-            if (badPages.length > 0) {
-              throw """Pages in a router outlet shouldn't participate in the root navigator
-              $badPages""";
-            }
             if (pageRes.length > 0) {
               return GetNavigator(
                 onPopPage: onPopPage ??

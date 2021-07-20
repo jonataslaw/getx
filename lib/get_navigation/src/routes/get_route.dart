@@ -34,7 +34,7 @@ class GetPage<T> extends Page<T> {
   final String? title;
   final Transition? transition;
   final Curve curve;
-  final bool participatesInRootNavigator;
+  final bool? participatesInRootNavigator;
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
@@ -66,7 +66,7 @@ class GetPage<T> extends Page<T> {
     required this.name,
     required this.page,
     this.title,
-    this.participatesInRootNavigator = true,
+    this.participatesInRootNavigator,
     this.gestureWidth = 20,
     // RouteSettings settings,
     this.maintainState = true,
