@@ -33,6 +33,7 @@ abstract class GetConnectInterface with GetLifeCycleBase {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
   });
+
   Future<Response<T>> post<T>(
     String url,
     dynamic body, {
@@ -95,6 +96,7 @@ class GetConnect extends GetConnectInterface {
     this.timeout = const Duration(seconds: 5),
     this.followRedirects = true,
     this.maxRedirects = 5,
+    this.sendUserAgent = false,
     this.maxAuthRetries = 1,
     this.allowAutoSignedCert = false,
     this.withCredentials = false,
@@ -104,6 +106,7 @@ class GetConnect extends GetConnectInterface {
 
   bool allowAutoSignedCert;
   String userAgent;
+  bool sendUserAgent;
   String? baseUrl;
   String defaultContentType = 'application/json; charset=utf-8';
   bool followRedirects;
@@ -122,6 +125,7 @@ class GetConnect extends GetConnectInterface {
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
         userAgent: userAgent,
+        sendUserAgent: sendUserAgent,
         timeout: timeout,
         followRedirects: followRedirects,
         maxRedirects: maxRedirects,

@@ -119,7 +119,7 @@ extension ContextExtensionss on BuildContext {
   /// and less than 1200 return [tablet] value.
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
-  T? responsiveValue<T>({
+  T responsiveValue<T>({
     T? mobile,
     T? tablet,
     T? desktop,
@@ -129,9 +129,14 @@ extension ContextExtensionss on BuildContext {
     if (GetPlatform.isDesktop) {
       deviceWidth = mediaQuerySize.width;
     }
-    if (deviceWidth >= 1200 && desktop != null) return desktop;
-    if (deviceWidth >= 600 && tablet != null) return tablet;
-    if (deviceWidth < 300 && watch != null) return watch;
-    return mobile;
+    if (deviceWidth >= 1200 && desktop != null) {
+      return desktop;
+    } else if (deviceWidth >= 600 && tablet != null) {
+      return tablet;
+    } else if (deviceWidth < 300 && watch != null) {
+      return watch;
+    } else {
+      return mobile!;
+    }
   }
 }

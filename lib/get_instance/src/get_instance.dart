@@ -240,7 +240,6 @@ class GetInstance {
     }
 
     for (final element in keysToRemove) {
-      print('reload $element');
       reload(key: element);
       //_routesKey.remove(element);
     }

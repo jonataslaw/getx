@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import '../../../get_rx/src/rx_types/rx_types.dart';
 
@@ -11,6 +12,12 @@ typedef WidgetCallback = Widget Function();
 /// - [ObxValue]
 abstract class ObxWidget extends StatefulWidget {
   const ObxWidget({Key? key}) : super(key: key);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(ObjectFlagProperty<Function>.has('builder', build));
+  }
 
   @override
   _ObxState createState() => _ObxState();

@@ -27,6 +27,8 @@ class GetHttpClient {
   int maxRedirects;
   int maxAuthRetries;
 
+  bool sendUserAgent;
+
   Decoder? defaultDecoder;
 
   Duration timeout;
@@ -42,6 +44,7 @@ class GetHttpClient {
     this.timeout = const Duration(seconds: 8),
     this.followRedirects = true,
     this.maxRedirects = 5,
+    this.sendUserAgent = false,
     this.maxAuthRetries = 1,
     bool allowAutoSignedCert = false,
     this.baseUrl,
@@ -98,7 +101,9 @@ class GetHttpClient {
     Stream<List<int>>? bodyStream;
     final headers = <String, String>{};
 
-    headers['user-agent'] = userAgent;
+    if (sendUserAgent) {
+      headers['user-agent'] = userAgent;
+    }
 
     if (body is FormData) {
       bodyBytes = await body.toBytes();

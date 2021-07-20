@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
@@ -39,6 +40,18 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
     this.init,
     // this.streamController
   });
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+        DiagnosticsProperty<T>('controller', init),
+      )
+      ..add(DiagnosticsProperty<String>('tag', tag))
+      ..add(
+          ObjectFlagProperty<GetXControllerBuilder<T>>.has('builder', builder));
+  }
 
   @override
   GetXState<T> createState() => GetXState<T>();
@@ -104,6 +117,12 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     controller = null;
     _isCreator = null;
     super.dispose();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<T>('controller', controller));
   }
 
   @override

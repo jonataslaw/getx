@@ -21,10 +21,6 @@ class HomeView extends GetView<HomeController> {
         return Scaffold(
           body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
-            // name: Routes.HOME,
-            //It's preferable to use emptyPage instead of emptyWidget
-            // emptyPage: (delegate) =>
-            //     Get.routeTree.matchRoute(Routes.DASHBOARD).route!,
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
