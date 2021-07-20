@@ -9,8 +9,8 @@ class RootView extends GetView<RootController> {
   @override
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
-      builder: (context, rDelegate, currentRoute) {
-        final title = currentRoute?.location;
+      builder: (context, delegate, current) {
+        final title = current?.location;
         return Scaffold(
           drawer: DrawerWidget(),
           appBar: AppBar(

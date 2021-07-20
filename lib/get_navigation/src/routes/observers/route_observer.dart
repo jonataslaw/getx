@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/instance_manager.dart';
+
 import '../../../../get_core/get_core.dart';
+import '../../../../instance_manager.dart';
 import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
 import '../../snackbar/snack_route.dart';
