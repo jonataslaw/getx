@@ -16,6 +16,15 @@ class HomeController extends SuperController<CasesModel> {
     append(() => homeRepository.getCases);
   }
 
+  Country getCountryById(String id) {
+    final index = int.tryParse(id);
+    if (index != null) {
+      return state!.countries[index];
+    }
+
+    return state!.countries.first;
+  }
+
   @override
   void onReady() {
     print('The build method is done. '

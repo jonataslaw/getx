@@ -196,7 +196,7 @@ class PageRedirect {
     final _r = (isUnknown ? unknownRoute : route)!;
     return GetPageRoute<T>(
       page: _r.page,
-      parameter: _r.parameter,
+      parameter: _r.parameters,
       settings: isUnknown
           ? RouteSettings(
               name: _r.name,
@@ -225,7 +225,7 @@ class PageRedirect {
 
     return GetPageRoute<T>(
       page: _r.page,
-      parameter: _r.parameter,
+      parameter: _r.parameters,
       alignment: _r.alignment,
       title: _r.title,
       maintainState: _r.maintainState,
@@ -277,10 +277,10 @@ class PageRedirect {
   }
 
   void addPageParameter(GetPage route) {
-    if (route.parameter == null) return;
+    if (route.parameters == null) return;
 
     final parameters = Get.parameters;
-    parameters.addEntries(route.parameter!.entries);
+    parameters.addEntries(route.parameters!.entries);
     Get.parameters = parameters;
   }
 }

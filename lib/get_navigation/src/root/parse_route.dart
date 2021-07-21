@@ -18,6 +18,14 @@ class RouteDecoder {
       treeBranch[index] = _route.copy(arguments: arguments);
     }
   }
+
+  void replaceParameters(Object? arguments) {
+    final _route = route;
+    if (_route != null) {
+      final index = treeBranch.indexOf(_route);
+      treeBranch[index] = _route.copy(parameters: parameters);
+    }
+  }
 }
 
 class ParseRouteTree {
@@ -62,8 +70,8 @@ class ParseRouteTree {
       final mappedTreeBranch = treeBranch
           .map(
             (e) => e.value.copy(
-              parameter: {
-                if (e.value.parameter != null) ...e.value.parameter!,
+              parameters: {
+                if (e.value.parameters != null) ...e.value.parameters!,
                 ...params,
               },
               name: e.key,

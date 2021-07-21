@@ -30,7 +30,7 @@ class PathDecoded {
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
   final bool? popGesture;
-  final Map<String, String>? parameter;
+  final Map<String, String>? parameters;
   final String? title;
   final Transition? transition;
   final Curve curve;
@@ -72,7 +72,7 @@ class GetPage<T> extends Page<T> {
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
-    this.parameter,
+    this.parameters,
     this.opaque = true,
     this.transitionDuration,
     this.popGesture,
@@ -119,7 +119,7 @@ class GetPage<T> extends Page<T> {
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
-    Map<String, String>? parameter,
+    Map<String, String>? parameters,
     String? title,
     Transition? transition,
     Curve? curve,
@@ -147,7 +147,7 @@ class GetPage<T> extends Page<T> {
       name: name ?? this.name,
       page: page ?? this.page,
       popGesture: popGesture ?? this.popGesture,
-      parameter: parameter ?? this.parameter,
+      parameters: parameters ?? this.parameters,
       title: title ?? this.title,
       transition: transition ?? this.transition,
       curve: curve ?? this.curve,

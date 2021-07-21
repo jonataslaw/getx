@@ -112,6 +112,10 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return currentConfiguration?.currentPage?.arguments as T;
   }
 
+  Map<String, String> get parameters {
+    return currentConfiguration?.currentPage?.parameters ?? {};
+  }
+
   // void _unsafeHistoryClear() {
   //   history.clear();
   // }
@@ -144,7 +148,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            until(config.location!, popMode: PopMode.Page);
+            backUntil(config.location!, popMode: PopMode.Page);
             break;
           case PreventDuplicateHandlingMode.ReorderRoutes:
             _unsafeHistoryRemoveAt(originalEntryIndex);
@@ -231,7 +235,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 
   bool _canPopHistory() {
-    return history.length > 1;
+    return history.length > 0;
   }
 
   Future<bool> canPopHistory() {
@@ -324,7 +328,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
 
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
-    Get.parameters = decoder.parameters;
     decoder.replaceArguments(arguments);
 
     return pushHistory<T>(
@@ -345,7 +348,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   /// Removes routes according to [PopMode]
   /// until it reaches the specifc [fullRoute],
   /// DOES NOT remove the [fullRoute]
-  void until(
+  void backUntil(
     String fullRoute, {
     PopMode popMode = PopMode.Page,
   }) {
