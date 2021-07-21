@@ -1,3 +1,7 @@
+## [4.2.3] 
+- Fix back button on navigator 2
+- Added parameters and arguments to Get.rootDelegate 
+
 ## [4.2.1] 
 - Remove [] from docs to try fix pub score
 
