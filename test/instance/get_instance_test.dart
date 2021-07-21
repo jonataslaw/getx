@@ -114,6 +114,19 @@ void main() {
     Get.reset();
   });
 
+  test('GetxService test', () async {
+    Get.lazyPut<PermanentService>(() => PermanentService());
+    var sv1 = Get.find<PermanentService>();
+    var sv2 = Get.find<PermanentService>();
+    expect(sv1, sv2);
+    expect(Get.isRegistered<PermanentService>(), true);
+    Get.delete<PermanentService>();
+    expect(Get.isRegistered<PermanentService>(), true);
+    Get.delete<PermanentService>(force: true);
+    expect(Get.isRegistered<PermanentService>(), false);
+    Get.reset();
+  });
+
   test('Get.lazyPut with abstract class test', () async {
     final api = Api();
     Get.lazyPut<Service>(() => api);
@@ -156,6 +169,8 @@ void main() {
     });
   });
 }
+
+class PermanentService extends GetxService {}
 
 class Controller extends DisposableController {
   int init = 0;
