@@ -1,6 +1,6 @@
 name: get
 description: Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
-version: 4.2.3
+version: 4.2.4
 homepage: https://github.com/jonataslaw/getx
 
 environment:
