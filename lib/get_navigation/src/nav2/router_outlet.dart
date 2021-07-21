@@ -21,11 +21,11 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
 
   RouterOutlet({
     TDelegate? delegate,
-    required List<GetPage> Function(T currentNavStack) pickPages,
+    required Iterable<GetPage> Function(T currentNavStack) pickPages,
     required Widget Function(
       BuildContext context,
       TDelegate,
-      List<GetPage>? page,
+      Iterable<GetPage>? page,
     )
         pageBuilder,
   }) : this.builder(
@@ -76,17 +76,38 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
 }
 
 class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
-  GetRouterOutlet({
+  GetRouterOutlet.fromRoute({
+    required String anchorRoute,
     required String initialRoute,
+    Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
+    GlobalKey<NavigatorState>? key,
+  }) : this(
+          pickPages: (config) {
+            var ret = config.currentTreeBranch.pickAfterRoute(anchorRoute);
+            if (filterPages != null) {
+              ret = filterPages(ret);
+            }
+            return ret;
+          },
+          emptyPage: (delegate) =>
+              Get.routeTree.matchRoute(initialRoute).route ??
+              delegate.notFoundRoute,
+          key: key,
+        );
+  GetRouterOutlet({
     Widget Function(GetDelegate delegate)? emptyWidget,
+    GetPage Function(GetDelegate delegate)? emptyPage,
+    required Iterable<GetPage> Function(GetNavConfig currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    // String? name,
+    GlobalKey<NavigatorState>? key,
   }) : super(
           pageBuilder: (context, rDelegate, pages) {
-            final route = Get.routeTree.matchRoute(initialRoute);
-            final pageRes = (pages ?? <GetPage<dynamic>?>[route.route])
-                .whereType<GetPage<dynamic>>()
-                .toList();
+            final pageRes = <GetPage?>[
+              ...?pages,
+              if (pages == null || pages.length == 0)
+                emptyPage?.call(rDelegate),
+            ].whereType<GetPage>();
+
             if (pageRes.length > 0) {
               return GetNavigator(
                 onPopPage: onPopPage ??
@@ -97,19 +118,13 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
                       }
                       return true;
                     },
-                pages: pageRes,
-                //name: name,
+                pages: pageRes.toList(),
+                key: key,
               );
             }
             return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
-          pickPages: (currentNavStack) {
-            final length = Uri.parse(initialRoute).pathSegments.length;
-            return currentNavStack.currentTreeBranch
-                .skip(length)
-                .take(length)
-                .toList();
-          },
+          pickPages: pickPages,
           delegate: Get.rootDelegate,
         );
 
@@ -127,12 +142,12 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
         );
 }
 
-// extension PagesListExt on List<GetPage> {
-//   List<GetPage> pickAtRoute(String route) {
-//     return skipWhile((value) => value.name != route).toList();
-//   }
+extension PagesListExt on List<GetPage> {
+  Iterable<GetPage> pickAtRoute(String route) {
+    return skipWhile((value) => value.name != route).toList();
+  }
 
-//   List<GetPage> pickAfterRoute(String route) {
-//     return skipWhile((value) => value.name != route).skip(1).toList();
-//   }
-// }
+  Iterable<GetPage> pickAfterRoute(String route) {
+    return skipWhile((value) => value.name != route).skip(1).toList();
+  }
+}

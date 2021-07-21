@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import '../../../get.dart';
 
 abstract class _RouteMiddleware {
@@ -49,7 +50,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  GetNavConfig? redirectDelegate(GetNavConfig route);
+  Future<GetNavConfig?> redirectDelegate(GetNavConfig route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -118,7 +119,8 @@ class GetMiddleware implements _RouteMiddleware {
   void onPageDispose() {}
 
   @override
-  GetNavConfig? redirectDelegate(GetNavConfig route) => route;
+  Future<GetNavConfig?> redirectDelegate(GetNavConfig route) =>
+      SynchronousFuture(route);
 }
 
 class MiddlewareRunner {

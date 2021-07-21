@@ -19,8 +19,10 @@ class HomeView extends GetView<HomeController> {
           currentIndex = 1;
         }
         return Scaffold(
-          body: GetRouterOutlet(
+          body: GetRouterOutlet.fromRoute(
             initialRoute: Routes.DASHBOARD,
+            anchorRoute: Routes.HOME,
+            key: Get.nestedKey(Routes.HOME),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
