@@ -184,7 +184,9 @@ class GetHttpClient {
     String? contentType,
   ) {
     headers['content-type'] = contentType ?? defaultContentType;
-    headers['user-agent'] = userAgent;
+    if (sendUserAgent) {
+      headers['user-agent'] = userAgent;
+    }
   }
 
   Future<Response<T>> _performRequest<T>(

@@ -33,8 +33,9 @@ class CountryView extends GetView<HomeController> {
                     final country = controller.state!.countries[index];
                     return ListTile(
                       onTap: () {
-                        Get.toNamed('/home/country/details',
-                            arguments: country);
+                        //Get.rootDelegate.toNamed('/home/country');
+                        Get.rootDelegate
+                            .offNamed('/home/country/details?id=$index');
                       },
                       trailing: CircleAvatar(
                         backgroundImage: NetworkImage(

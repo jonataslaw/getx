@@ -5,10 +5,27 @@ class RouteDecoder {
   final List<GetPage> treeBranch;
   GetPage? get route => treeBranch.isEmpty ? null : treeBranch.last;
   final Map<String, String> parameters;
+  final Object? arguments;
   const RouteDecoder(
     this.treeBranch,
     this.parameters,
+    this.arguments,
   );
+  void replaceArguments(Object? arguments) {
+    final _route = route;
+    if (_route != null) {
+      final index = treeBranch.indexOf(_route);
+      treeBranch[index] = _route.copy(arguments: arguments);
+    }
+  }
+
+  void replaceParameters(Object? arguments) {
+    final _route = route;
+    if (_route != null) {
+      final index = treeBranch.indexOf(_route);
+      treeBranch[index] = _route.copy(parameters: parameters);
+    }
+  }
 }
 
 class ParseRouteTree {
@@ -18,7 +35,7 @@ class ParseRouteTree {
 
   final List<GetPage> routes;
 
-  RouteDecoder matchRoute(String name) {
+  RouteDecoder matchRoute(String name, {Object? arguments}) {
     final uri = Uri.parse(name);
     // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
@@ -53,8 +70,8 @@ class ParseRouteTree {
       final mappedTreeBranch = treeBranch
           .map(
             (e) => e.value.copy(
-              parameter: {
-                if (e.value.parameter != null) ...e.value.parameter!,
+              parameters: {
+                if (e.value.parameters != null) ...e.value.parameters!,
                 ...params,
               },
               name: e.key,
@@ -64,6 +81,7 @@ class ParseRouteTree {
       return RouteDecoder(
         mappedTreeBranch,
         params,
+        arguments,
       );
     }
 
@@ -71,6 +89,7 @@ class ParseRouteTree {
     return RouteDecoder(
       treeBranch.map((e) => e.value).toList(),
       params,
+      arguments,
     );
   }
 

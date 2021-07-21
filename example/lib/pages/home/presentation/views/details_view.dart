@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/home_controller.dart';
 
-import '../../domain/entity/cases_model.dart';
-
-class DetailsView extends StatelessWidget {
+class DetailsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    final country = Get.arguments as Country;
+    final parameter = Get.rootDelegate.parameters;
+    final country = controller.getCountryById(parameter['id'] ?? '');
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(

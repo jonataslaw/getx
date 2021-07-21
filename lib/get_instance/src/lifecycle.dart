@@ -3,7 +3,7 @@ import '../../get_core/get_core.dart';
 /// Special callable class to keep the contract of a regular method, and avoid
 /// overrides if you extend the class that uses it, as Dart has no final
 /// methods.
-/// Used in [DisposableInterface] to avoid the danger of overriding onStart.
+/// Used in `DisposableInterface` to avoid the danger of overriding onStart.
 class InternalFinalCallback<T> {
   ValueUpdater<T>? _callback;
 

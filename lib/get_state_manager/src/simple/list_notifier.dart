@@ -132,7 +132,7 @@ mixin ListNotifierMixin on ListenableMixin {
   }
 
   /// To dispose an [id] from future updates(), this ids are registered
-  /// by [GetBuilder()] or similar, so is a way to unlink the state change with
+  /// by `GetBuilder()` or similar, so is a way to unlink the state change with
   /// the Widget from the Controller.
   void disposeId(Object id) {
     _updatersGroupIds!.remove(id);

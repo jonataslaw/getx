@@ -30,7 +30,7 @@ class PathDecoded {
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
   final bool? popGesture;
-  final Map<String, String>? parameter;
+  final Map<String, String>? parameters;
   final String? title;
   final Transition? transition;
   final Curve curve;
@@ -52,7 +52,7 @@ class GetPage<T> extends Page<T> {
   // RouteSettings get settings => this;
 
   @override
-  Object? get arguments => Get.arguments;
+  final Object? arguments;
 
   @override
   final String name;
@@ -72,7 +72,7 @@ class GetPage<T> extends Page<T> {
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
-    this.parameter,
+    this.parameters,
     this.opaque = true,
     this.transitionDuration,
     this.popGesture,
@@ -84,6 +84,7 @@ class GetPage<T> extends Page<T> {
     this.children = const <GetPage>[],
     this.middlewares,
     this.unknownRoute,
+    this.arguments,
     this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
         super(
@@ -118,7 +119,7 @@ class GetPage<T> extends Page<T> {
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
-    Map<String, String>? parameter,
+    Map<String, String>? parameters,
     String? title,
     Transition? transition,
     Curve? curve,
@@ -137,6 +138,7 @@ class GetPage<T> extends Page<T> {
     bool? preventDuplicates,
     double? gestureWidth,
     bool? participatesInRootNavigator,
+    Object? arguments,
   }) {
     return GetPage(
       participatesInRootNavigator:
@@ -145,7 +147,7 @@ class GetPage<T> extends Page<T> {
       name: name ?? this.name,
       page: page ?? this.page,
       popGesture: popGesture ?? this.popGesture,
-      parameter: parameter ?? this.parameter,
+      parameters: parameters ?? this.parameters,
       title: title ?? this.title,
       transition: transition ?? this.transition,
       curve: curve ?? this.curve,
@@ -161,6 +163,7 @@ class GetPage<T> extends Page<T> {
       unknownRoute: unknownRoute ?? this.unknownRoute,
       middlewares: middlewares ?? this.middlewares,
       gestureWidth: gestureWidth ?? this.gestureWidth,
+      arguments: arguments ?? this.arguments,
     );
   }
 

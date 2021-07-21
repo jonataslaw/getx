@@ -25,7 +25,7 @@ void main() {
                 GetPage(
                   name: '/pen',
                   page: () => Container(),
-                  parameter: testParams,
+                  parameters: testParams,
                 ),
                 GetPage(name: '/paper', page: () => Container()),
               ],
@@ -48,7 +48,7 @@ void main() {
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
-    final testRouteParam = match.route!.parameter!;
+    final testRouteParam = match.route!.parameters!;
     for (final tParam in testParams.entries) {
       expect(testRouteParam[tParam.key], tParam.value);
     }

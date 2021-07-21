@@ -113,6 +113,14 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return history.removeAt(index);
   }
 
+  T arguments<T>() {
+    return currentConfiguration?.currentPage?.arguments as T;
+  }
+
+  Map<String, String> get parameters {
+    return currentConfiguration?.currentPage?.parameters ?? {};
+  }
+
   // void _unsafeHistoryClear() {
   //   history.clear();
   // }
@@ -140,7 +148,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            await until(config.location!, popMode: PopMode.Page);
+            await backUntil(config.location!, popMode: PopMode.Page);
             break;
           case PreventDuplicateHandlingMode.ReorderRoutes:
             await _unsafeHistoryRemoveAt(originalEntryIndex);
@@ -227,7 +235,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 
   bool _canPopHistory() {
-    return history.length > 1;
+    return history.length > 0;
   }
 
   Future<bool> canPopHistory() {
@@ -265,7 +273,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
         .where((r) => r.participatesInRootNavigator != null);
     if (res.length == 0) {
       //default behavoir, all routes participate in root navigator
-      return currentHistory.currentTreeBranch;
+      return history.map((e) => e.currentPage!).toList();
     } else {
       //user specified at least one participatesInRootNavigator
       return res
@@ -312,32 +320,45 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<void> toNamed(String fullRoute) async {
-    final decoder = Get.routeTree.matchRoute(fullRoute);
+  Future<void> toNamed(
+    String page, {
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) async {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
 
-    return await pushHistory(
+    final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
+    decoder.replaceArguments(arguments);
+
+    await pushHistory(
       GetNavConfig(
         currentTreeBranch: decoder.treeBranch,
-        location: fullRoute,
+        location: page,
         state: null, //TODO: persist state?
       ),
     );
   }
 
-  Future<void> offNamed(String fullRoute) async {
+  Future<void> offNamed(
+    String page, {
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) async {
     await popHistory();
-    await toNamed(fullRoute);
+    await toNamed(page, arguments: arguments, parameters: parameters);
   }
 
   /// Removes routes according to [PopMode]
   /// until it reaches the specifc [fullRoute],
   /// DOES NOT remove the [fullRoute]
-  Future<void> until(
+  Future<void> backUntil(
     String fullRoute, {
     PopMode popMode = PopMode.Page,
   }) async {
     // remove history or page entries until you meet route
-
     var iterator = currentConfiguration;
     while (_canPop(popMode) &&
         iterator != null &&

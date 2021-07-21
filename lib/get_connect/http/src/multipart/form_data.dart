@@ -36,7 +36,7 @@ class FormData {
   /// The form fields to send for this request.
   final fields = <MapEntry<String, String>>[];
 
-  /// The [files] to send for this request
+  /// The files to send for this request
   final files = <MapEntry<String, MultipartFile>>[];
 
   /// Returns the header string for a field. The return value is guaranteed to

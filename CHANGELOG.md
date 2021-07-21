@@ -1,3 +1,10 @@
+## [4.2.3] 
+- Fix back button on navigator 2
+- Added parameters and arguments to Get.rootDelegate 
+
+## [4.2.1] 
+- Remove [] from docs to try fix pub score
+
 ## [4.2.0] - Big update
 
 This update fixes important bugs as well as integrates with Navigator 2. It also adds GetRouterOutlet, similar to angular RouterOutlet thanks to @ahmednfwela. Also, the documentation translation for Vietnamese (@khangahs) has been added, making the GetX documentation available for 11 different languages, which is just fantastic for any opensource project. GetX has achieved more than 5.4k likes from the pub, and more than 4k stars on github, has videos about it with 48k on youtube, and has communities in the 4 hemispheres of the earth, besides having a large list of contributors as you see bellow. We're all happy to facilitate development with dart and flutter, and that making programming hassle-free has been taken around the world.

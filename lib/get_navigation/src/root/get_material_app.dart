@@ -172,6 +172,7 @@ class GetMaterialApp extends StatelessWidget {
     this.transitionDuration,
     this.defaultGlobalState,
     this.getPages,
+    this.navigatorObservers,
     this.unknownRoute,
   })  : routerDelegate = routerDelegate ??= Get.createDelegate(
           notFoundRoute: unknownRoute,
@@ -180,7 +181,7 @@ class GetMaterialApp extends StatelessWidget {
             routeInformationParser ??= Get.createInformationParser(
           initialRoute: getPages?.first.name ?? '/',
         ),
-        navigatorObservers = null,
+        //navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,

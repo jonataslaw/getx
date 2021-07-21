@@ -196,7 +196,6 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
     if (oldRoute is GetPageRoute) {
-      print(oldRoute.reference);
       GetInstance().reloadDependencyByRoute(oldRoute.reference);
     }
 
@@ -223,7 +222,6 @@ class GetObserver extends NavigatorObserver {
     });
 
     if (route is GetPageRoute) {
-      print(route.reference);
       GetInstance().reloadDependencyByRoute(route.reference);
     }
     routing?.call(_routeSend);

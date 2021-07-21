@@ -270,7 +270,7 @@ class GetUtils {
   }
 
   /// Checks if all data have same value.
-  /// Example: 111111 -> true, wwwww -> true, [1,1,1,1] -> true
+  /// Example: 111111 -> true, wwwww -> true, 1,1,1,1 -> true
   static bool isOneAKind(dynamic value) {
     if ((value is String || value is List) && !isNullOrBlank(value)!) {
       final first = value[0];
