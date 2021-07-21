@@ -1,3 +1,6 @@
+## [4.2.4] 
+- Fix Get.offAll removing GetxServices from memory
+
 ## [4.2.3] 
 - Fix back button on navigator 2
 - Added parameters and arguments to Get.rootDelegate 

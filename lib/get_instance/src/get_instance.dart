@@ -473,6 +473,17 @@ class GetInstance {
       return;
     }
 
+    final i = builder.dependency;
+
+    if (i is GetxServiceMixin && !force) {
+      return;
+    }
+
+    if (i is GetLifeCycleBase) {
+      i.onDelete();
+      Get.log('"$newKey" onDelete() called');
+    }
+
     builder.dependency = null;
     builder.isInit = false;
     Get.log('Instance "$newKey" was restarted.');
