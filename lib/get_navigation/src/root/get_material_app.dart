@@ -292,6 +292,7 @@ class GetMaterialApp extends StatelessWidget {
               key: _.unikey,
               navigatorKey:
                   (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
+              scaffoldMessengerKey: scaffoldMessengerKey,
               home: home,
               routes: routes ?? const <String, WidgetBuilder>{},
               initialRoute: initialRoute,
