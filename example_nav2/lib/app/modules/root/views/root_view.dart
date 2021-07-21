@@ -17,7 +17,7 @@ class RootView extends GetView<RootController> {
             title: Text(title ?? ''),
             centerTitle: true,
           ),
-          body: GetRouterOutlet.fromRoute(
+          body: GetRouterOutlet(
             initialRoute: Routes.HOME,
             anchorRoute: '/',
             filterPages: (afterAnchor) {

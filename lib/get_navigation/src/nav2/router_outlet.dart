@@ -76,12 +76,12 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
 }
 
 class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
-  GetRouterOutlet.fromRoute({
+  GetRouterOutlet({
     required String anchorRoute,
     required String initialRoute,
     Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
     GlobalKey<NavigatorState>? key,
-  }) : this(
+  }) : this.pickPages(
           pickPages: (config) {
             var ret = config.currentTreeBranch.pickAfterRoute(anchorRoute);
             if (filterPages != null) {
@@ -94,7 +94,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
               delegate.notFoundRoute,
           key: key,
         );
-  GetRouterOutlet({
+  GetRouterOutlet.pickPages({
     Widget Function(GetDelegate delegate)? emptyWidget,
     GetPage Function(GetDelegate delegate)? emptyPage,
     required Iterable<GetPage> Function(GetNavConfig currentNavStack) pickPages,

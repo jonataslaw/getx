@@ -19,7 +19,7 @@ class HomeView extends GetView<HomeController> {
           currentIndex = 1;
         }
         return Scaffold(
-          body: GetRouterOutlet.fromRoute(
+          body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
             anchorRoute: Routes.HOME,
             key: Get.nestedKey(Routes.HOME),
