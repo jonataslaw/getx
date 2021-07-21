@@ -52,7 +52,7 @@ class GetPage<T> extends Page<T> {
   // RouteSettings get settings => this;
 
   @override
-  Object? get arguments => Get.arguments;
+  final Object? arguments;
 
   @override
   final String name;
@@ -84,6 +84,7 @@ class GetPage<T> extends Page<T> {
     this.children = const <GetPage>[],
     this.middlewares,
     this.unknownRoute,
+    this.arguments,
     this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
         super(
@@ -137,6 +138,7 @@ class GetPage<T> extends Page<T> {
     bool? preventDuplicates,
     double? gestureWidth,
     bool? participatesInRootNavigator,
+    Object? arguments,
   }) {
     return GetPage(
       participatesInRootNavigator:
@@ -161,6 +163,7 @@ class GetPage<T> extends Page<T> {
       unknownRoute: unknownRoute ?? this.unknownRoute,
       middlewares: middlewares ?? this.middlewares,
       gestureWidth: gestureWidth ?? this.gestureWidth,
+      arguments: arguments ?? this.arguments,
     );
   }
 

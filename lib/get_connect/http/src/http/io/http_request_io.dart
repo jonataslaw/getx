@@ -34,7 +34,6 @@ class HttpRequestImpl extends HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var stream = request.bodyBytes.asBroadcastStream();
-    //var stream = BodyBytesStream.fromBytes(requestBody ?? const []);
 
     try {
       var ioRequest = (await _httpClient!.openUrl(request.method, request.url))

@@ -314,7 +314,6 @@ class GetConnect extends GetConnectInterface {
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
-        // return GraphQLResponse<T>(body: res.body['data'] as T);
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
@@ -350,7 +349,6 @@ class GetConnect extends GetConnectInterface {
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
-        // return GraphQLResponse<T>(body: res.body['data'] as T);
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(

@@ -71,7 +71,7 @@ class HomeView extends GetView<HomeController> {
                       shape: StadiumBorder(),
                     ),
                     onPressed: () {
-                      Get.toNamed('/home/country');
+                      Get.rootDelegate.toNamed('/home/country');
                     },
                     child: Text(
                       'fetch_country'.tr,

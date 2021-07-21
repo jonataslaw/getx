@@ -8,7 +8,7 @@ import '../../domain/entity/cases_model.dart';
 class DetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final country = Get.arguments as Country;
+    final country = Get.rootDelegate.arguments<Country>();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(

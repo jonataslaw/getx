@@ -510,7 +510,7 @@ extension ExtensionBottomSheet on GetInterface {
 extension GetNavigation on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
-  /// Pushes a new [page] to the stack
+  /// Pushes a new `page` to the stack
   ///
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
@@ -590,7 +590,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamed()** shortcut.<br><br>
   ///
-  /// Pushes a new named [page] to the stack.
+  /// Pushes a new named `page` to the stack.
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
@@ -628,7 +628,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
   ///
-  /// Pop the current named [page] in the stack and push a new one in its place
+  /// Pop the current named `page` in the stack and push a new one in its place
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
@@ -684,7 +684,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push the given [page], and then pop several pages in the stack until
+  /// Push the given `page`, and then pop several pages in the stack until
   /// [predicate] returns true
   ///
   /// [id] is for when you are using nested navigation,
@@ -708,7 +708,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push the given named [page], and then pop several pages in the stack
+  /// Push the given named `page`, and then pop several pages in the stack
   /// until [predicate] returns true
   ///
   /// You can send any type of value to the other route in the [arguments].
@@ -745,7 +745,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
   ///
-  /// Pop the current named page and pushes a new [page] to the stack
+  /// Pop the current named page and pushes a new `page` to the stack
   /// in its place
   ///
   /// You can send any type of value to the other route in the [arguments].
@@ -784,7 +784,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push a named [page] and pop several pages in the stack
+  /// Push a named `page` and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
   /// It has the advantage of not needing context, so you can
@@ -879,7 +879,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>
   ///
-  /// Pop the current page and pushes a new [page] to the stack
+  /// Pop the current page and pushes a new `page` to the stack
   ///
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
@@ -936,7 +936,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushAndRemoveUntil()** shortcut .<br><br>
   ///
-  /// Push a [page] and pop several pages in the stack
+  /// Push a `page` and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
   /// It has the advantage of not needing context,

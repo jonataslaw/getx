@@ -82,13 +82,13 @@ class ResponsiveScreenSettings {
   /// When the width is greater als this value
   /// the display will be set as [ScreenType.Tablet]
   /// or when width greater als [watchChangePoint] and smaller als this value
-  /// the display will be [ScreenType.Mobile]
+  /// the display will be [ScreenType.Phone]
   final double tabletChangePoint;
 
   /// When the width is smaller als this value
   /// the display will be set as [ScreenType.Watch]
   /// or when width greater als this value and smaller als [tabletChangePoint]
-  /// the display will be [ScreenType.Mobile]
+  /// the display will be [ScreenType.Phone]
   final double watchChangePoint;
 
   const ResponsiveScreenSettings(
@@ -115,7 +115,7 @@ class ResponsiveScreen {
   /// Is [screenType] [ScreenType.Tablet]
   bool get isTablet => (screenType == ScreenType.Tablet);
 
-  /// Is [screenType] [ScreenType.Mobile]
+  /// Is [screenType] [ScreenType.Phone]
   bool get isPhone => (screenType == ScreenType.Phone);
 
   /// Is [screenType] [ScreenType.Watch]

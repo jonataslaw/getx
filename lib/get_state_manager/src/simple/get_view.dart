@@ -45,8 +45,8 @@ abstract class GetView<T> extends StatelessWidget {
 /// without having to call Get.find<AwesomeController>() yourself.
 /// Get save you controller on cache, so, you can to use Get.create() safely
 /// GetWidget is perfect to multiples instance of a same controller. Each
-/// GetWidget will have your own controller, and will be call events as [onInit]
-/// and [onClose] when the controller get in/get out on memory.
+/// GetWidget will have your own controller, and will be call events as `onInit`
+/// and `onClose` when the controller get in/get out on memory.
 abstract class GetWidget<S extends GetLifeCycleBase?> extends GetWidgetCache {
   const GetWidget({Key? key}) : super(key: key);
 
