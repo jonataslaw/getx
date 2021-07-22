@@ -1,7 +1,5 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**언어: [영어](README.md), [베트남어](README-vi.md), [인도네시아어](README.id-ID.md), [우르두어](README.ur-PK.md), [중국어](README.zh-cn.md), [브라질 포르투칼어](README.pt-br.md), [스페인어](README-es.md), [러시아어](README.ru.md), [폴란드어](README.pl.md), 한국어(이파일), [프랑스어](README-fr.md)**
-
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
@@ -15,6 +13,26 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
+
+
+<div align="center">
+
+**Languages:**
+
+  
+[![영어](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![베트남어](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
+[![인도네시아어](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![우르두어](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![중국어](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![포르투칼어](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![스페인어](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
+[![러시아어](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
+[![폴란드어](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
+[![한국어](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![프랑스어](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
+
+</div>
 
 - [Get에 대하여](#get에-대하여)
 - [설치](#설치)
@@ -53,6 +71,8 @@
       - [ObxValue](#obxvalue)
   - [유용한 팁](#유용한-팁)
       - [GetView](#getview)
+      - [GetResponsiveView](#getresponsiveview)
+        - [사용 방법](#사용-방법)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
 - [2.0의 주요 변경점](#20의-주요-변경점)
@@ -71,9 +91,11 @@
   - **성능:** GetX는 성능과 최소한의 리소스 소비에 중점을 둡니다. GetX는 Streams나 ChangeNotifier를 사용하지 않습니다.
   
   - **생산성:** GetX는 쉽고 친숙한 구문을 사용합니다. 원하시는 것보다 Getx에는 항상 더 쉬운 방법이 있습니다. 개발 시간을 아끼고 애플리케이션을 최대 성능으로 제공할 수 있습니다. 
+
   일반적으로 개발자는 메모리에서 컨트롤러들을 제거하는 데 관심을 가져야합니다. GetX에서는 리소스가 기본적으로 사용되지 않으면 메모리에서 제거되므로 필요하지 않습니다. 만약 메모리에 유지하려면 종속성에서 "permanent : true"를 명시적으로 선언해야합니다. 이렇게하면 시간을 절약 할 수있을뿐만 아니라 불필요한 메모리 종속성이 발생할 위험이 줄어 듭니다. 종속성은 기본적으로 lazy로 로드됩니다.
   
   - **조직화:** GetX는 화면, 프레젠테이션 로직, 비즈니스 로직, 종속성 주입 및 네비게이션을 완전히 분리 할 수 있습니다. 라우트간 전환을 하는데에 컨텍스트가 필요하지 않아 위젯 트리(시각객체)에 독립적입니다. inheritedWidget을 통해 컨트롤러/블록에 접근하는 데 컨텍스트가 필요하지 않아 시각화 계층에서 프레젠테이션 로직과 비즈니스 로직을 완전히 분리됩니다. 이 GetX는 자체 종속성 주입 기능을 사용하여 DI를 뷰에서 완전히 분리하기 때문에 다중 Provider를 통해 위젯 트리에서 컨트롤러/모델/블록으로 주입 할 필요가 없습니다.
+
   GetX를 사용하면 기본적으로 클린 코드를 가지게 되어 애플리케이션의 각 기능을 쉽게 찾을 수있습니다. 이것은 유지 보수를 용이하게 하며 모듈의 공유가 가능하고 Flutter에서는 생각할 수 없었던 것들도 전부 가능합니다.
   BLoC은 Flutter에서 코드를 구성하기 위한 시작점으로 비즈니스 로직과 시각객체를 분리합니다. Getx는 비즈니스 로직 뿐만 아니라 프레젠테이션 로직을 분리하는 자연스러운 진화입니다. 추가로 종속성 주입과 라우트 또한 분리되고 데이터 계층이 모두로부터 분리됩니다. Hello World를 구현하는 것보다 더 쉽게 모든 것이 어디 있는지 알수 있습니다.  
   Flutter SDK와 함께 GetX를 사용하면 가장 쉽고 실용적이며 확장 가능한 고성능 어플리케이션을 만들수 있습니다. 초보자에게는 쉬우며 전문가에게는 정확하고 완벽하게 동작하는 대규모 생태계가 함께합니다. 안전하고 안정적이며 업데이트되고 기본 Flutter SDK에 없는 광범위한 API 빌드를 제공합니다.
@@ -85,7 +107,8 @@
 
 **추가로 [Get CLI](https://github.com/jonataslaw/get_cli)를 프런트엔드와 서버 양쪽에서 사용하면 전체 개발 프로세스를 자동화 할 수 있습니다.**
 
-**추가로 생산성 향상을 위해 [VSCode 확장](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)과 [Android Studio/Intellij 확장](https://plugins.jetbrains.com/plugin/14975-getx-snippets)이 있습니다.**
+**추가로 생산성 향상을 위해 
+[VSCode 확장](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)과 [Android Studio/Intellij 확장](https://plugins.jetbrains.com/plugin/14975-getx-snippets)이 있습니다.**
 
 # 설치
 
@@ -114,7 +137,6 @@ void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
 - 주석: 이는 Flutter의 MaterialApp을 변경하지 않으며 GetMaterialApp 또한 수정 된 MaterialApp이 아니고, 기본 MaterialApp을 자식으로 갖는 사전 구성된 위젯 일뿐입니다. 수동으로 구성 할 수 있지만 반드시 필요한 것은 아닙니다. GetMaterialApp은 라우트를 생성하고 추가하며, 번역을 추가하고, 라우트 탐색에 필요한 모든 것을 추가합니다. 만약 상태 관리 또는 종속성 관리에만 Get을 사용하는 경우 GetMaterialApp을 사용할 필요가 없습니다. GetMaterialApp은 라우트, 스택바, 국제화, bottomSheets, 다이얼로그 및 컨텍스트 부재와 라우트에 연관된 상위 api들에 필요합니다.
-   
 - 주석²: 이 단계는 라우트 관리 (`Get.to ()`,`Get.back ()` 등)를 사용하려는 경우에만 필요합니다. 사용하지 않을 경우 1 단계를 수행 할 필요가 없습니다.
 
 - 2 단계:
@@ -339,6 +361,34 @@ class Messages extends Translations {
 Text('title'.tr);
 ```
 
+#### 단수와 복수의 번역 사용법
+
+```dart
+var products = [];
+Text('singularKey'.trPlural('pluralKey', products.length, Args));
+```
+
+#### 파라미터로 번역 사용하는 방법
+
+```dart
+import 'package:get/get.dart';
+
+
+Map<String, Map<String, String>> get keys => {
+    'en_US': {
+        'logged_in': 'logged in as @name with email @email',
+    },
+    'es_ES': {
+       'logged_in': 'iniciado sesión como @name con e-mail @email',
+    }
+};
+
+Text('logged_in'.trParams({
+  'name': 'Jhon',
+  'email': 'jhon@example.com'
+  }));
+```
+
 ### 지역화
 
 `GetMaterialApp`의 파라미터를 전달하여 지역과 번역어를 정의합니다.
@@ -392,9 +442,11 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 `.darkmode`가 활성화 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
 ## GetConnect
+
 GetConnect는 http나 websockets으로 프론트와 백엔드의 통신을 위한 쉬운 방법입니다.
 
 ### 기본 구성
+
 GetConnect를 간단하게 확장하고 Rest API나 websockets의 GET/POST/PUT/DELETE/SOCKET 메서드를 사용할 수 있습니다.
 
 ```dart
@@ -417,7 +469,9 @@ class UserProvider extends GetConnect {
   }
 }
 ```
+
 ### 커스텀 구성
+
 GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
 
 ```dart
@@ -427,7 +481,8 @@ class HomeProvider extends GetConnect {
     // 모든 요청은 jsonEncode로 CasesModel.fromJson()를 거칩니다.
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
+    // baseUrl = 'https://api.covid19api.com';
+    // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
     
     // 모든 요청의 헤더에 'apikey' 속성을 첨부합니다.
     httpClient.addRequestModifier((request) {
@@ -482,6 +537,7 @@ final middlewares = [
   GetMiddleware(priority: -8),
 ];
 ```
+
 이 Middleware는 다음 순서로 실행됩니다. **-8 => 2 => 4 => 5**
 
 ### Redirect
@@ -761,7 +817,8 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-[`ValueBuilder`](#valuebuilder)와 비슷하지만 Rx 인스턴스(마법같은 .obs를 기억하세요)를 전달하고 자동적으로 업데이트되는 반응형 버전입니다... 놀랍지 않습니까?
+[`ValueBuilder`](#valuebuilder)와 비슷하지만 Rx 인스턴스(마법같은 .obs를 기억하세요)를 전달하고 
+자동적으로 업데이트되는 반응형 버전입니다... 놀랍지 않습니까?
 
 ```dart
 ObxValue((data) => Switch(
@@ -877,6 +934,55 @@ user.update((value){
 
 print( user );
 ```
+## StateMixin
+
+`UI` 상태를 처리하는 또 다른 방법은 `StateMixin<T>` 를 사용하는 것입니다.
+이를 구현하려면 `with`를 사용하여 `StateMixin<T>`을 추가하고
+T 모델을 허용하는 컨트롤러에 연결합니다.
+
+``` dart
+class Controller extends GetController with StateMixin<User>{}
+```
+
+`change()` 메소드는 우리가 원할 때마다 State를 변경합니다.
+다음과 같이 데이터와 상태를 전달하면 됩니다:
+
+```dart
+change(data, status: RxStatus.success());
+```
+
+RxStatus는 다음 상태를 허용합니다:
+
+``` dart
+RxStatus.loading();
+RxStatus.success();
+RxStatus.empty();
+RxStatus.error('message');
+```
+
+UI에서 사용하는 방법:
+
+```dart
+class OtherClass extends GetView<Controller> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: controller.obx(
+        (state)=>Text(state.name),
+        
+        // 여기에 사용자 정의 로딩 표시기를 넣을 수 있지만
+        // 기본값은 Center(child:CircularProgressIndicator()) 입니다
+        onLoading: CustomLoadingIndicator(),
+        onEmpty: Text('No data found'),
+
+        // 여기에서도 자신의 오류 위젯을 설정할 수 있지만
+        // 기본값은 Center(child:Text(error)) 입니다
+        onError: (error)=>Text(error),
+      ),
+    );
+}
+```
 
 #### GetView
 
@@ -901,6 +1007,29 @@ print( user );
  }
 ```
 
+#### GetResponsiveView
+
+Extend this widget to build responsive view.
+this widget contains the `screen` property that have all
+information about the screen size and type.
+
+##### 사용 방법
+
+You have two options to build it.
+
+- with `builder` method you return the widget to build.
+- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
+  method will be built when the screen type matches the method
+  when the screen is [ScreenType.Tablet] the `tablet` method
+  will be exuded and so on.
+  **Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
+
+With `settings` property you can set the width limit for the screen types.
+
+![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
+Code to this screen
+[code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
+
 #### GetWidget
 
 대부분의 사람들이 이 위젯에대해 모르거나 사용법을 완전히 혼동합니다.
@@ -911,7 +1040,8 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
 만약 **GetX**의 기능 중 또 다른 "흔하지 않은" 기능을 사용하는 경우:`Get.create()`
 
-`Get.create(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다 새로운 `Controller`를 생성할 것 입니다.
+`Get.create(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다 
+새로운 `Controller`를 생성할 것 입니다.
 
 여기서 `GetWidget`이 빛나게 됩니다... 예를 들어 Todo 리스트를 유지하려고 사용할 때 입니다.
 위젯이 "재구성"될때 동일한 controller 인스턴스를 유지할 것입니다.
@@ -919,14 +1049,14 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 #### GetxService
 
 이 클래스틑 `GetxController`와 같이 동일한 생성주기(`onInit()`, `onReady()`, `onClose()`)를 공유합니다.
-하지만 이안에 "로직"은 없습니다. 단지 **GetX** 종속성 주입 시스템이 하위클래스를 메모리에서 삭제할 수 없음을 알립니다.
+하지만 이안에 "로직"은 없습니다. 단지 **GetX** 종속성 주입 시스템이 하위클래스를 메모리에서 
+**삭제할 수 없음**을 알립니다.
 
 그래서 `Get.find()`로 활성화하고 항상 접근하는 "서비스들"을 유지하는데 매우 유용합니다. :
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized()
   await initServices(); /// 서비스들 초기화를 기다림.
   runApp(SomeApp());
 }
@@ -964,7 +1094,8 @@ class SettingsService extends GetxService {
 ```
 
 `GetxService`를 실질적으로 지우는 한가지 방법은 앱의 "Hot Reboot"과 같은 `Get.reset()`뿐 입니다.
-따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 `GetxService`를 사용하세요.
+따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 
+`GetxService`를 사용하세요.
 
 # 2.0의 주요 변경점
 
@@ -1056,6 +1187,7 @@ _프로젝트에 기여하고 싶으신가요? 우리는 귀하를 우리의 협
 
 ## 기사 및 비디오
 
+- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
 - [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder.
@@ -1069,4 +1201,4 @@ _프로젝트에 기여하고 싶으신가요? 우리는 귀하를 우리의 협
 - [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
-
+- [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)
