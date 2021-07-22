@@ -10,7 +10,9 @@ class Mock {
   }
 }
 
-class DisposableController extends GetLifeCycle {}
+abstract class MyController extends GetLifeCycle {}
+
+class DisposableController extends MyController {}
 
 // ignore: one_member_abstracts
 abstract class Service {
@@ -157,42 +159,49 @@ void main() {
     });
   });
 
-  test('Get.replace test for replacing temporary parent instance with child',
-      () async {
-    Get.put(DisposableController());
-    Get.replace<DisposableController, Controller>(Controller());
-    final instance = Get.find<DisposableController>();
-    expect(instance is Controller, isTrue);
-    expect((instance as Controller).init, greaterThan(0));
-  });
+  group('Get.replace test for replacing parent instance that is', () {
+    test('temporary', () async {
+      Get.put(DisposableController());
+      Get.replace<DisposableController>(Controller());
+      final instance = Get.find<DisposableController>();
+      expect(instance is Controller, isTrue);
+      expect((instance as Controller).init, greaterThan(0));
+    });
 
-  test('Get.replace test for replacing permanent parent instance with child',
-      () async {
-    Get.put(DisposableController(), permanent: true);
-    Get.replace<DisposableController, Controller>(Controller());
-    final instance = Get.find<DisposableController>();
-    expect(instance is Controller, isTrue);
-    expect((instance as Controller).init, greaterThan(0));
-  });
+    test('permanent', () async {
+      Get.put(DisposableController(), permanent: true);
+      Get.replace<DisposableController>(Controller());
+      final instance = Get.find<DisposableController>();
+      expect(instance is Controller, isTrue);
+      expect((instance as Controller).init, greaterThan(0));
+    });
 
-  test('Get.replace test for replacing tagged temporary instance with child',
-      () async {
-    final tag = 'tag';
-    Get.put(DisposableController(), tag: tag);
-    Get.replace<DisposableController, Controller>(Controller(), tag: tag);
-    final instance = Get.find<DisposableController>(tag: tag);
-    expect(instance is Controller, isTrue);
-    expect((instance as Controller).init, greaterThan(0));
-  });
+    test('tagged temporary', () async {
+      final tag = 'tag';
+      Get.put(DisposableController(), tag: tag);
+      Get.replace<DisposableController>(Controller(), tag: tag);
+      final instance = Get.find<DisposableController>(tag: tag);
+      expect(instance is Controller, isTrue);
+      expect((instance as Controller).init, greaterThan(0));
+    });
 
-  test('Get.replace test for replacing tagged parent instance with child',
-      () async {
-    final tag = 'tag';
-    Get.put(DisposableController(), permanent: true, tag: tag);
-    Get.replace<DisposableController, Controller>(Controller(), tag: tag);
-    final instance = Get.find<DisposableController>(tag: tag);
-    expect(instance is Controller, isTrue);
-    expect((instance as Controller).init, greaterThan(0));
+    test('tagged permanent', () async {
+      final tag = 'tag';
+      Get.put(DisposableController(), permanent: true, tag: tag);
+      Get.replace<DisposableController>(Controller(), tag: tag);
+      final instance = Get.find<DisposableController>(tag: tag);
+      expect(instance is Controller, isTrue);
+      expect((instance as Controller).init, greaterThan(0));
+    });
+
+    test('a generic parent type', () async {
+      final tag = 'tag';
+      Get.put<MyController>(DisposableController(), permanent: true, tag: tag);
+      Get.replace<MyController>(Controller(), tag: tag);
+      final instance = Get.find<MyController>(tag: tag);
+      expect(instance is Controller, isTrue);
+      expect((instance as Controller).init, greaterThan(0));
+    });
   });
 }
 

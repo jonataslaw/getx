@@ -132,7 +132,7 @@ extension Inst on GetInterface {
   /// Replace a parent instance of a class in dependency management
   /// with a [child] instance
   /// - [tag] optional, if you use a [tag] to register the Instance.
-  void replace<P, C extends P>(C child, {String? tag}) {
+  void replace<P>(P child, {String? tag}) {
     final info = GetInstance().getInstanceInfo<P>(tag: tag);
     final permanent = (info.isPermanent ?? false);
     delete<P>(tag: tag, force: permanent);
