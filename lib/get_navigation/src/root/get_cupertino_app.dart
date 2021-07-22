@@ -118,12 +118,12 @@ class GetCupertinoApp extends StatelessWidget {
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
 
-  const GetCupertinoApp.router({
+  GetCupertinoApp.router({
     Key? key,
     this.theme,
     this.routeInformationProvider,
-    required RouteInformationParser<Object> this.routeInformationParser,
-    required RouterDelegate<Object> this.routerDelegate,
+    RouteInformationParser<Object>? routeInformationParser,
+    RouterDelegate<Object>? routerDelegate,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -163,7 +163,14 @@ class GetCupertinoApp extends StatelessWidget {
     this.defaultGlobalState,
     this.getPages,
     this.unknownRoute,
-  })  : navigatorObservers = null,
+  })  : routerDelegate = routerDelegate ??= Get.createDelegate(
+          notFoundRoute: unknownRoute,
+        ),
+        routeInformationParser =
+            routeInformationParser ??= Get.createInformationParser(
+          initialRoute: getPages?.first.name ?? '/',
+        ),
+        navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,
@@ -171,14 +178,23 @@ class GetCupertinoApp extends StatelessWidget {
         onUnknownRoute = null,
         routes = null,
         initialRoute = null,
-        super(key: key);
-
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings, unknownRoute).page();
+        super(key: key) {
+    Get.routerDelegate = routerDelegate;
+    Get.routeInformationParser = routeInformationParser;
   }
 
-  List<Route<dynamic>> initialRoutesGenerate(String name) =>
-      [PageRedirect(RouteSettings(name: name), unknownRoute).page()];
+  Route<dynamic> generator(RouteSettings settings) {
+    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
+  }
+
+  List<Route<dynamic>> initialRoutesGenerate(String name) {
+    return [
+      PageRedirect(
+        settings: RouteSettings(name: name),
+        unknownRoute: unknownRoute,
+      ).page()
+    ];
+  }
 
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
@@ -203,7 +219,10 @@ class GetCupertinoApp extends StatelessWidget {
         Get.customTransition = customTransition;
 
         initialBinding?.dependencies();
-        Get.addPages(getPages);
+        if (getPages != null) {
+          Get.addPages(getPages!);
+        }
+
         Get.smartManagement = smartManagement;
         onInit?.call();
 

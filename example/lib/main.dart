@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return GetMaterialApp.router(
       debugShowCheckedModeBanner: false,
       enableLog: true,
       logWriterCallback: Logger.write,
-      initialRoute: AppPages.INITIAL,
+      // initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       locale: TranslationService.locale,
       fallbackLocale: TranslationService.fallbackLocale,
@@ -28,33 +28,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Navigator 2 example, WIP
-// TODO: add all methods from NavigatorExtension to GetNav
+/// Nav 2 snippet
+// void main() {
+//   runApp(MyApp());
+// }
 
 // class MyApp extends StatelessWidget {
 //   MyApp({Key? key}) : super(key: key);
 
-//   final getNav = Get.put(
-//     GetNav(pages: [
-//       GetPage(name: '/first', page: () => First()),
-//       GetPage(name: '/second', page: () => Second()),
-//       GetPage(name: '/third', page: () => Third()),
-//     ]),
-//   );
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return GetMaterialApp.router(
+//       getPages: [
+//         GetPage(
+//             participatesInRootNavigator: true,
+//             name: '/first',
+//             page: () => First()),
+//         GetPage(
+//           name: '/second',
+//           page: () => Second(),
+//         ),
+//         GetPage(
+//           name: '/third',
+//           page: () => Third(),
+//         ),
+//       ],
 //       debugShowCheckedModeBanner: false,
-//       routeInformationParser: getNav.routeInformationParser,
-//       routerDelegate: getNav.routerDelegate,
 //     );
 //   }
 // }
 
 // class First extends StatelessWidget {
-//   final GetNav getNav = Get.find();
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -73,9 +77,7 @@ class MyApp extends StatelessWidget {
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
-//             onPressed: () {
-//               getNav.toNamed('/second?id=584305');
-//             },
+//             onPressed: () {},
 //             child: Text('next screen'),
 //           ),
 //         ),
@@ -85,7 +87,6 @@ class MyApp extends StatelessWidget {
 // }
 
 // class Second extends StatelessWidget {
-//   final GetNav getNav = Get.find();
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -97,9 +98,7 @@ class MyApp extends StatelessWidget {
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
-//             onPressed: () {
-//               getNav.toNamed('/third');
-//             },
+//             onPressed: () {},
 //             child: Text('next screen'),
 //           ),
 //         ),
@@ -109,7 +108,6 @@ class MyApp extends StatelessWidget {
 // }
 
 // class Third extends StatelessWidget {
-//   final GetNav getNav = Get.find();
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -122,9 +120,7 @@ class MyApp extends StatelessWidget {
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
-//             onPressed: () {
-//               getNav.offUntil('/first');
-//             },
+//             onPressed: () {},
 //             child: Text('go to first screen'),
 //           ),
 //         ),

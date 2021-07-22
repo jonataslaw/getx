@@ -31,19 +31,19 @@ class GetInstance {
   T call<T>() => find<T>();
 
   /// Holds references to every registered Instance when using
-  /// [Get.put()]
+  /// `Get.put()`
   static final Map<String, _InstanceBuilderFactory> _singl = {};
 
   /// Holds a reference to every registered callback when using
-  /// [Get.lazyPut()]
+  /// `Get.lazyPut()`
   // static final Map<String, _Lazy> _factory = {};
 
-  /// Holds a reference to [Get.reference] when the Instance was
+  /// Holds a reference to `Get.reference` when the Instance was
   /// created to manage the memory.
   static final Map<String, String?> _routesKey = {};
 
-  /// Stores the onClose() references of instances created with [Get.create()]
-  /// using the [Get.reference].
+  /// Stores the onClose() references of instances created with `Get.create()`
+  /// using the `Get.reference`.
   /// Experimental feature to keep the lifecycle and memory management with
   /// non-singleton instances.
   static final Map<String?, HashSet<Function>> _routesByCreate = {};
@@ -66,8 +66,8 @@ class GetInstance {
     );
   }
 
-  /// async version of [Get.put()].
-  /// Awaits for the resolution of the Future from [builder()] parameter and
+  /// async version of `Get.put()`.
+  /// Awaits for the resolution of the Future from `builder()` parameter and
   /// stores the Instance returned.
   Future<S> putAsync<S>(
     AsyncInstanceBuilderCallback<S> builder, {
@@ -77,16 +77,16 @@ class GetInstance {
     return put<S>(await builder(), tag: tag, permanent: permanent);
   }
 
-  /// Injects an instance <[S]> in memory to be globally accessible.
+  /// Injects an instance `<S>` in memory to be globally accessible.
   ///
-  /// No need to define the generic type <[S]> as it's inferred from
+  /// No need to define the generic type `<S>` as it's inferred from
   /// the [dependency]
   ///
   /// - [dependency] The Instance to be injected.
   /// - [tag] optionally, use a [tag] as an "id" to create multiple records of
   /// the same Type<[S]>
   /// - [permanent] keeps the Instance in memory, not following
-  /// [Get.smartManagement] rules.
+  /// `Get.smartManagement` rules.
   S put<S>(
     S dependency, {
     String? tag,
@@ -101,27 +101,27 @@ class GetInstance {
     return find<S>(tag: tag);
   }
 
-  /// Creates a new Instance<S> lazily from the [<S>builder()] callback.
+  /// Creates a new Instance<S> lazily from the `<S>builder()` callback.
   ///
-  /// The first time you call [Get.find()], the [builder()] callback will create
+  /// The first time you call `Get.find()`, the `builder()` callback will create
   /// the Instance and persisted as a Singleton (like you would
-  /// use [Get.put()]).
+  /// use `Get.put()`).
   ///
-  /// Using [Get.smartManagement] as [SmartManagement.keepFactory] has
-  /// the same outcome as using [fenix:true] :
-  /// The internal register of [builder()] will remain in memory to recreate
-  /// the Instance if the Instance has been removed with [Get.delete()].
-  /// Therefore, future calls to [Get.find()] will return the same Instance.
+  /// Using `Get.smartManagement` as [SmartManagement.keepFactory] has
+  /// the same outcome as using `fenix:true` :
+  /// The internal register of `builder()` will remain in memory to recreate
+  /// the Instance if the Instance has been removed with `Get.delete()`.
+  /// Therefore, future calls to `Get.find()` will return the same Instance.
   ///
   /// If you need to make use of GetxController's life-cycle
-  /// ([onInit(), onStart(), onClose()]) [fenix] is a great choice to mix with
-  /// [GetBuilder()] and [GetX()] widgets, and/or [GetMaterialApp] Navigation.
+  /// (`onInit(), onStart(), onClose()`) [fenix] is a great choice to mix with
+  /// `GetBuilder()` and `GetX()` widgets, and/or `GetMaterialApp` Navigation.
   ///
-  /// You could use [Get.lazyPut(fenix:true)] in your app's [main()] instead
-  /// of [Bindings()] for each [GetPage].
+  /// You could use `Get.lazyPut(fenix:true)` in your app's `main()` instead
+  /// of `Bindings()` for each `GetPage`.
   /// And the memory management will be similar.
   ///
-  /// Subsequent calls to [Get.lazyPut()] with the same parameters
+  /// Subsequent calls to `Get.lazyPut()` with the same parameters
   /// (<[S]> and optionally [tag] will **not** override the original).
   void lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
@@ -141,11 +141,11 @@ class GetInstance {
   /// Creates a new Class Instance [S] from the builder callback[S].
   /// Every time [find]<[S]>() is used, it calls the builder method to generate
   /// a new Instance [S].
-  /// It also registers each [instance.onClose()] with the current
-  /// Route [Get.reference] to keep the lifecycle active.
+  /// It also registers each `instance.onClose()` with the current
+  /// Route `Get.reference` to keep the lifecycle active.
   /// Is important to know that the instances created are only stored per Route.
   /// So, if you call `Get.delete<T>()` the "instance factory" used in this
-  /// method ([Get.create<T>()]) will be removed, but NOT the instances
+  /// method (`Get.create<T>()`) will be removed, but NOT the instances
   /// already created by it.
   ///
   /// Example:
@@ -167,7 +167,7 @@ class GetInstance {
     );
   }
 
-  /// Injects the Instance [S] builder into the [_singleton] HashMap.
+  /// Injects the Instance [S] builder into the `_singleton` HashMap.
   void _insert<S>({
     bool? isSingleton,
     String? name,
@@ -190,9 +190,9 @@ class GetInstance {
   }
 
   /// Clears from memory registered Instances associated with [routeName] when
-  /// using [Get.smartManagement] as [SmartManagement.full] or
+  /// using `Get.smartManagement` as [SmartManagement.full] or
   /// [SmartManagement.keepFactory]
-  /// Meant for internal usage of [GetPageRoute] and [GetDialogRoute]
+  /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
   void removeDependencyByRoute(String routeName) {
     final keysToRemove = <String>[];
     _routesKey.forEach((key, value) {
@@ -201,11 +201,11 @@ class GetInstance {
       }
     });
 
-    /// Removes [Get.create()] instances registered in [routeName].
+    /// Removes `Get.create()` instances registered in `routeName`.
     if (_routesByCreate.containsKey(routeName)) {
       for (final onClose in _routesByCreate[routeName]!) {
         // assure the [DisposableInterface] instance holding a reference
-        // to [onClose()] wasn't disposed.
+        // to onClose() wasn't disposed.
         onClose();
       }
       _routesByCreate[routeName]!.clear();
@@ -214,19 +214,44 @@ class GetInstance {
 
     for (final element in keysToRemove) {
       delete(key: element);
+      _routesKey.remove(element);
+    }
+
+    keysToRemove.clear();
+  }
+
+  void reloadDependencyByRoute(String routeName) {
+    final keysToRemove = <String>[];
+    _routesKey.forEach((key, value) {
+      if (value == routeName) {
+        keysToRemove.add(key);
+      }
+    });
+
+    /// Removes `Get.create()` instances registered in `routeName`.
+    if (_routesByCreate.containsKey(routeName)) {
+      for (final onClose in _routesByCreate[routeName]!) {
+        // assure the [DisposableInterface] instance holding a reference
+        // to onClose() wasn't disposed.
+        onClose();
+      }
+      _routesByCreate[routeName]!.clear();
+      _routesByCreate.remove(routeName);
     }
 
     for (final element in keysToRemove) {
-      _routesKey.remove(element);
+      reload(key: element);
+      //_routesKey.remove(element);
     }
+
     keysToRemove.clear();
   }
 
   /// Initializes the dependencies for a Class Instance [S] (or tag),
   /// If its a Controller, it starts the lifecycle process.
   /// Optionally associating the current Route to the lifetime of the instance,
-  /// if [Get.smartManagement] is marked as [SmartManagement.full] or
-  /// [Get.keepFactory]
+  /// if `Get.smartManagement` is marked as [SmartManagement.full] or
+  /// [SmartManagement.keepFactory]
   /// Only flags `isInit` if it's using `Get.create()`
   /// (not for Singletons access).
   /// Returns the instance if not initialized, required for Get.create() to
@@ -248,7 +273,7 @@ class GetInstance {
   }
 
   /// Links a Class instance [S] (or [tag]) to the current route.
-  /// Requires usage of [GetMaterialApp].
+  /// Requires usage of `GetMaterialApp`.
   void _registerRouteInstance<S>({String? tag}) {
     _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
   }
@@ -353,7 +378,7 @@ class GetInstance {
   }
 
   /// Delete registered Class Instance [S] (or [tag]) and, closes any open
-  /// controllers [DisposableInterface], cleans up the memory
+  /// controllers `DisposableInterface`, cleans up the memory
   ///
   /// /// Deletes the Instance<[S]>, cleaning the memory.
   //  ///
@@ -362,12 +387,12 @@ class GetInstance {
   //  ///   the Instance. **don't use** it unless you know what you are doing.
 
   /// Deletes the Instance<[S]>, cleaning the memory and closes any open
-  /// controllers ([DisposableInterface]).
+  /// controllers (`DisposableInterface`).
   ///
   /// - [tag] Optional "tag" used to register the Instance
   /// - [key] For internal usage, is the processed key used to register
   ///   the Instance. **don't use** it unless you know what you are doing.
-  /// - [force] Will delete an Instance even if marked as [permanent].
+  /// - [force] Will delete an Instance even if marked as `permanent`.
   bool delete<S>({String? tag, String? key, bool force = false}) {
     final newKey = key ?? _getKey(S, tag);
 
@@ -413,9 +438,9 @@ class GetInstance {
   }
 
   /// Delete all registered Class Instances and, closes any open
-  /// controllers [DisposableInterface], cleans up the memory
+  /// controllers `DisposableInterface`, cleans up the memory
   ///
-  /// - [force] Will delete the Instances even if marked as [permanent].
+  /// - [force] Will delete the Instances even if marked as `permanent`.
   void deleteAll({bool force = false}) {
     _singl.forEach((key, value) {
       delete(key: key, force: force);
@@ -448,6 +473,17 @@ class GetInstance {
       return;
     }
 
+    final i = builder.dependency;
+
+    if (i is GetxServiceMixin && !force) {
+      return;
+    }
+
+    if (i is GetLifeCycleBase) {
+      i.onDelete();
+      Get.log('"$newKey" onDelete() called');
+    }
+
     builder.dependency = null;
     builder.isInit = false;
     Get.log('Instance "$newKey" was restarted.');
@@ -457,7 +493,7 @@ class GetInstance {
   /// - [tag] is optional, if you used a [tag] to register the Instance.
   bool isRegistered<S>({String? tag}) => _singl.containsKey(_getKey(S, tag));
 
-  /// Checks if a lazy factory callback ([Get.lazyPut()] that returns an
+  /// Checks if a lazy factory callback `Get.lazyPut()` that returns an
   /// Instance<[S]> is registered in memory.
   /// - [tag] is optional, if you used a [tag] to register the lazy Instance.
   bool isPrepared<S>({String? tag}) {
@@ -481,7 +517,7 @@ typedef InjectorBuilderCallback<S> = S Function(GetInstance);
 
 typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
-/// Internal class to register instances with Get.[put]<[S]>().
+/// Internal class to register instances with `Get.put<S>()`.
 class _InstanceBuilderFactory<S> {
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
@@ -499,7 +535,7 @@ class _InstanceBuilderFactory<S> {
   InstanceBuilderCallback<S> builderFunc;
 
   /// Flag to persist the instance in memory,
-  /// without considering [Get.smartManagement]
+  /// without considering `Get.smartManagement`
   bool permanent = false;
 
   bool isInit = false;

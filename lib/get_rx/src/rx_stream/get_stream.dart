@@ -62,7 +62,7 @@ class GetStream<T> {
           item._onError?.call(error);
         }
 
-        if (item.cancelOnError!) {
+        if (item.cancelOnError ?? false) {
           //item.cancel?.call();
           itemsToRemove.add(item);
           item.pause();

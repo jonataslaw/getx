@@ -9,7 +9,7 @@ import 'list_notifier.dart';
 // ignore: prefer_mixin
 abstract class GetxController extends DisposableInterface
     with ListenableMixin, ListNotifierMixin {
-  /// Rebuilds [GetBuilder] each time you call [update()];
+  /// Rebuilds `GetBuilder` each time you call `update()`;
   /// Can take a List of [ids], that will only update the matching
   /// `GetBuilder( id: )`,
   /// [ids] can be reused among `GetBuilders` like group tags.

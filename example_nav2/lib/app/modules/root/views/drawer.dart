@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: Text('Home'),
             onTap: () {
-              Get.getDelegate()?.toNamed(Routes.HOME);
+              Get.rootDelegate.toNamed(Routes.HOME);
               //to close the drawer
 
               Navigator.of(context).pop();
@@ -29,12 +30,43 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: Text('Settings'),
             onTap: () {
-              Get.getDelegate()?.toNamed(Routes.SETTINGS);
+              Get.rootDelegate.toNamed(Routes.SETTINGS);
               //to close the drawer
 
               Navigator.of(context).pop();
             },
           ),
+          if (AuthService.to.isLoggedInValue)
+            ListTile(
+              title: Text(
+                'Logout',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () {
+                AuthService.to.logout();
+                Get.rootDelegate.toNamed(Routes.LOGIN);
+                //to close the drawer
+
+                Navigator.of(context).pop();
+              },
+            ),
+          if (!AuthService.to.isLoggedInValue)
+            ListTile(
+              title: Text(
+                'Login',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              ),
+              onTap: () {
+                Get.rootDelegate.toNamed(Routes.LOGIN);
+                //to close the drawer
+
+                Navigator.of(context).pop();
+              },
+            ),
         ],
       ),
     );

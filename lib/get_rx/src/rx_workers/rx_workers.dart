@@ -32,11 +32,11 @@ class Workers {
 ///
 /// Sample:
 /// Every time increment() is called, ever() will process the [condition]
-/// (can be a [bool] expression or a [bool Function()]), and only call
+/// (can be a [bool] expression or a `bool Function()`), and only call
 /// the callback when [condition] is true.
 /// In our case, only when count is bigger to 5. In order to "dispose"
 /// this Worker
-/// that will run forever, we made a [worker] variable. So, when the count value
+/// that will run forever, we made a `worker` variable. So, when the count value
 /// reaches 10, the worker gets disposed, and releases any memory resources.
 ///
 /// ```
@@ -78,7 +78,7 @@ Worker ever<T>(
 /// Similar to [ever], but takes a list of [listeners], the condition
 /// for the [callback] is common to all [listeners],
 /// and the [callback] is executed to each one of them. The [Worker] is
-/// common to all, so [worker.dispose()] will cancel all streams.
+/// common to all, so `worker.dispose()` will cancel all streams.
 Worker everAll(
   List<RxInterface> listeners,
   WorkerCallback callback, {
@@ -110,10 +110,10 @@ Worker everAll(
   return Worker(cancel, '[everAll]');
 }
 
-/// [once()] will execute only 1 time when [condition] is met and cancel
+/// `once()` will execute only 1 time when [condition] is met and cancel
 /// the subscription to the [listener] stream right after that.
 /// [condition] defines when [callback] is called, and
-/// can be a [bool] or a [bool Function()].
+/// can be a [bool] or a `bool Function()`.
 ///
 /// Sample:
 /// ```
@@ -158,7 +158,7 @@ Worker once<T>(
 }
 
 /// Ignore all changes in [listener] during [time] (1 sec by default) or until
-/// [condition] is met (can be a [bool] expression or a [bool Function()]),
+/// [condition] is met (can be a [bool] expression or a `bool Function()`),
 /// It brings the 1st "value" since the period of time, so
 /// if you click a counter button 3 times in 1 sec, it will show you "1"
 /// (after 1 sec of the first press)

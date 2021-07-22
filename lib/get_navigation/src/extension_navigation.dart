@@ -205,6 +205,52 @@ extension ExtensionSnackbar on GetInterface {
   }
 }
 
+extension OverlayExt on GetInterface {
+  Future<T> showOverlay<T>({
+    required Future<T> Function() asyncFunction,
+    Color opacityColor = Colors.black,
+    Widget? loadingWidget,
+    double opacity = .5,
+  }) async {
+    final navigatorState =
+        Navigator.of(Get.overlayContext!, rootNavigator: false);
+    final overlayState = navigatorState.overlay!;
+
+    final overlayEntryOpacity = OverlayEntry(builder: (context) {
+      return Opacity(
+          opacity: opacity,
+          child: Container(
+            color: opacityColor,
+          ));
+    });
+    final overlayEntryLoader = OverlayEntry(builder: (context) {
+      return loadingWidget ??
+          Center(
+              child: Container(
+            height: 90,
+            width: 90,
+            child: Text('Loading...'),
+          ));
+    });
+    overlayState.insert(overlayEntryOpacity);
+    overlayState.insert(overlayEntryLoader);
+
+    T data;
+
+    try {
+      data = await asyncFunction();
+    } on Exception catch (_) {
+      overlayEntryLoader.remove();
+      overlayEntryOpacity.remove();
+      rethrow;
+    }
+
+    overlayEntryLoader.remove();
+    overlayEntryOpacity.remove();
+    return data;
+  }
+}
+
 extension ExtensionDialog on GetInterface {
   /// Show a dialog.
   /// You can pass a [transitionDuration] and/or [transitionCurve],
@@ -215,7 +261,7 @@ extension ExtensionDialog on GetInterface {
     bool barrierDismissible = true,
     Color? barrierColor,
     bool useSafeArea = true,
-    bool useRootNavigator = true,
+    GlobalKey<NavigatorState>? navigatorKey,
     Object? arguments,
     Duration? transitionDuration,
     Curve? transitionCurve,
@@ -250,7 +296,7 @@ extension ExtensionDialog on GetInterface {
           child: child,
         );
       },
-      useRootNavigator: useRootNavigator,
+      navigatorKey: navigatorKey,
       routeSettings:
           routeSettings ?? RouteSettings(arguments: arguments, name: name),
     );
@@ -264,20 +310,25 @@ extension ExtensionDialog on GetInterface {
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder? transitionBuilder,
-    bool useRootNavigator = true,
+    GlobalKey<NavigatorState>? navigatorKey,
     RouteSettings? routeSettings,
   }) {
     assert(!barrierDismissible || barrierLabel != null);
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push<T>(GetDialogRoute<T>(
-      pageBuilder: pageBuilder,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor,
-      transitionDuration: transitionDuration,
-      transitionBuilder: transitionBuilder,
-      settings: routeSettings,
-    ));
+    final nav = navigatorKey?.currentState ??
+        Navigator.of(overlayContext!,
+            rootNavigator:
+                true); //overlay context will always return the root navigator
+    return nav.push<T>(
+      GetDialogRoute<T>(
+        pageBuilder: pageBuilder,
+        barrierDismissible: barrierDismissible,
+        barrierLabel: barrierLabel,
+        barrierColor: barrierColor,
+        transitionDuration: transitionDuration,
+        transitionBuilder: transitionBuilder,
+        settings: routeSettings,
+      ),
+    );
   }
 
   /// Custom UI Dialog.
@@ -309,6 +360,9 @@ extension ExtensionDialog on GetInterface {
 
     // onWillPop Scope
     WillPopCallback? onWillPop,
+
+    // the navigator used to push the dialog
+    GlobalKey<NavigatorState>? navigatorKey,
   }) {
     var leanCancel = onCancel != null || textCancel != null;
     var leanConfirm = onConfirm != null || textConfirm != null;
@@ -394,19 +448,15 @@ extension ExtensionDialog on GetInterface {
       buttonPadding: EdgeInsets.zero,
     );
 
-    if (onWillPop != null) {
-      return dialog<T>(
-        WillPopScope(
-          onWillPop: onWillPop,
-          child: baseAlertDialog,
-        ),
-        barrierDismissible: barrierDismissible,
-      );
-    }
-
     return dialog<T>(
-      baseAlertDialog,
+      onWillPop != null
+          ? WillPopScope(
+              onWillPop: onWillPop,
+              child: baseAlertDialog,
+            )
+          : baseAlertDialog,
       barrierDismissible: barrierDismissible,
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -460,7 +510,7 @@ extension ExtensionBottomSheet on GetInterface {
 extension GetNavigation on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
-  /// Pushes a new [page] to the stack
+  /// Pushes a new `page` to the stack
   ///
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
@@ -494,6 +544,7 @@ extension GetNavigation on GetInterface {
     Bindings? binding,
     bool preventDuplicates = true,
     bool? popGesture,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -504,6 +555,7 @@ extension GetNavigation on GetInterface {
             opaque: opaque ?? true,
             page: _resolve(page, 'to'),
             routeName: routeName,
+            gestureWidth: gestureWidth,
             settings: RouteSettings(
               //  name: forceRouteName ? '${a.runtimeType}' : '',
               arguments: arguments,
@@ -538,7 +590,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamed()** shortcut.<br><br>
   ///
-  /// Pushes a new named [page] to the stack.
+  /// Pushes a new named `page` to the stack.
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
@@ -576,7 +628,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushReplacementNamed()** shortcut.<br><br>
   ///
-  /// Pop the current named [page] in the stack and push a new one in its place
+  /// Pop the current named `page` in the stack and push a new one in its place
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
@@ -632,7 +684,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push the given [page], and then pop several pages in the stack until
+  /// Push the given `page`, and then pop several pages in the stack until
   /// [predicate] returns true
   ///
   /// [id] is for when you are using nested navigation,
@@ -656,7 +708,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push the given named [page], and then pop several pages in the stack
+  /// Push the given named `page`, and then pop several pages in the stack
   /// until [predicate] returns true
   ///
   /// You can send any type of value to the other route in the [arguments].
@@ -693,7 +745,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.popAndPushNamed()** shortcut.<br><br>
   ///
-  /// Pop the current named page and pushes a new [page] to the stack
+  /// Pop the current named page and pushes a new `page` to the stack
   /// in its place
   ///
   /// You can send any type of value to the other route in the [arguments].
@@ -732,7 +784,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushNamedAndRemoveUntil()** shortcut.<br><br>
   ///
-  /// Push a named [page] and pop several pages in the stack
+  /// Push a named `page` and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
   /// It has the advantage of not needing context, so you can
@@ -827,7 +879,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>
   ///
-  /// Pop the current page and pushes a new [page] to the stack
+  /// Pop the current page and pushes a new `page` to the stack
   ///
   /// It has the advantage of not needing context,
   /// so you can call from your business logic
@@ -862,6 +914,7 @@ you can only use widgets and widget functions here''';
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -869,6 +922,7 @@ you can only use widgets and widget functions here''';
     }
     return global(id).currentState?.pushReplacement(GetPageRoute(
         opaque: opaque,
+        gestureWidth: gestureWidth,
         page: _resolve(page, 'off'),
         binding: binding,
         settings: RouteSettings(arguments: arguments),
@@ -882,7 +936,7 @@ you can only use widgets and widget functions here''';
 
   /// **Navigation.pushAndRemoveUntil()** shortcut .<br><br>
   ///
-  /// Push a [page] and pop several pages in the stack
+  /// Push a `page` and pop several pages in the stack
   /// until [predicate] returns true. [predicate] is optional
   ///
   /// It has the advantage of not needing context,
@@ -923,6 +977,7 @@ you can only use widgets and widget functions here''';
     Transition? transition,
     Curve? curve,
     Duration? duration,
+    double gestureWidth = 20,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 
@@ -932,6 +987,7 @@ you can only use widgets and widget functions here''';
           popGesture: popGesture ?? defaultPopGesture,
           page: _resolve(page, 'offAll'),
           binding: binding,
+          gestureWidth: gestureWidth,
           settings: RouteSettings(arguments: arguments),
           fullscreenDialog: fullscreenDialog,
           routeName: routeName,
@@ -940,23 +996,6 @@ you can only use widgets and widget functions here''';
           transitionDuration: duration ?? defaultTransitionDuration,
         ),
         predicate ?? (route) => false);
-  }
-
-  void registerRoutes(List<GetPage> getPages) {
-    //TODO: only replace if null???
-    routeTree = ParseRouteTree(routes: <GetPage>[]);
-    routeTree.addRoutes(getPages);
-  }
-
-  void addPages(List<GetPage>? getPages) {
-    if (getPages != null) {
-      registerRoutes(getPages);
-    }
-  }
-
-  void addPage(GetPage getPage) {
-    //  routeTree = ParseRouteTree();
-    routeTree.addRoute(getPage);
   }
 
   /// change default config of Get
@@ -1022,12 +1061,16 @@ you can only use widgets and widget functions here''';
   }
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    getxController.key = newKey;
-    return key;
+    return getxController.addKey(newKey);
   }
 
   GlobalKey<NavigatorState>? nestedKey(dynamic key) {
-    keys.putIfAbsent(key, () => GlobalKey<NavigatorState>());
+    keys.putIfAbsent(
+      key,
+      () => GlobalKey<NavigatorState>(
+        debugLabel: 'Getx nested key: ${key.toString()}',
+      ),
+    );
     return keys[key];
   }
 
@@ -1054,19 +1097,6 @@ you can only use widgets and widget functions here''';
 
     return _key;
   }
-  
-   /// Casts the stored router delegate to a desired type
-  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      _routerDelegate as TDelegate?;
-
-  static RouterDelegate? _routerDelegate;
-
-  // ignore: use_setters_to_change_properties
-  void setDefaultDelegate(RouterDelegate? delegate) {
-    _routerDelegate = delegate;
-  }
-
-  GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
 
   /// give current arguments
   dynamic get arguments => routing.args;
@@ -1207,9 +1237,6 @@ you can only use widgets and widget functions here''';
   set parameters(Map<String, String?> newParameters) =>
       getxController.parameters = newParameters;
 
-  ParseRouteTree get routeTree => getxController.routeTree;
-  set routeTree(ParseRouteTree tree) => getxController.routeTree = tree;
-
   CustomTransition? get customTransition => getxController.customTransition;
   set customTransition(CustomTransition? newTransition) =>
       getxController.customTransition = newTransition;
@@ -1218,6 +1245,65 @@ you can only use widgets and widget functions here''';
   set testMode(bool isTest) => getxController.testMode = isTest;
 
   static GetMaterialController getxController = GetMaterialController();
+}
+
+extension NavTwoExt on GetInterface {
+  void addPages(List<GetPage> getPages) {
+    routeTree.addRoutes(getPages);
+  }
+
+  static late final _routeTree = ParseRouteTree(routes: []);
+
+  ParseRouteTree get routeTree => _routeTree;
+  void addPage(GetPage getPage) {
+    routeTree.addRoute(getPage);
+  }
+
+  /// Casts the stored router delegate to a desired type
+  TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
+      routerDelegate as TDelegate?;
+
+  // // ignore: use_setters_to_change_properties
+  // void setDefaultDelegate(RouterDelegate? delegate) {
+  //   _routerDelegate = delegate;
+  // }
+
+  // GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
+
+  GetInformationParser createInformationParser({String initialRoute = '/'}) {
+    if (routeInformationParser == null) {
+      return routeInformationParser = GetInformationParser(
+        initialRoute: initialRoute,
+      );
+    } else {
+      return routeInformationParser as GetInformationParser;
+    }
+  }
+
+  // static GetDelegate? _delegate;
+
+  GetDelegate get rootDelegate => createDelegate();
+
+  GetDelegate createDelegate({
+    GetPage<dynamic>? notFoundRoute,
+    List<NavigatorObserver>? navigatorObservers,
+    TransitionDelegate<dynamic>? transitionDelegate,
+    PopMode backButtonPopMode = PopMode.History,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
+  }) {
+    if (routerDelegate == null) {
+      return routerDelegate = GetDelegate(
+        notFoundRoute: notFoundRoute,
+        navigatorObservers: navigatorObservers,
+        transitionDelegate: transitionDelegate,
+        backButtonPopMode: backButtonPopMode,
+        preventDuplicateHandlingMode: preventDuplicateHandlingMode,
+      );
+    } else {
+      return routerDelegate as GetDelegate;
+    }
+  }
 }
 
 /// It replaces the Flutter Navigator, but needs no context.

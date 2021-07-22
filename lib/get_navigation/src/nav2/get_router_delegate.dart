@@ -38,6 +38,12 @@ enum PreventDuplicateHandlingMode {
 
   /// Simply don't push the new route
   DoNothing,
+
+  /// Recommended - Moves the old route entry to the front
+  ///
+  /// With this mode, you guarantee there will be only one
+  /// route entry for each location
+  ReorderRoutes
 }
 
 class GetDelegate extends RouterDelegate<GetNavConfig>
@@ -46,58 +52,116 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   final PopMode backButtonPopMode;
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
 
-  GetPage? notFoundRoute;
+  final GetPage notFoundRoute;
 
   final List<NavigatorObserver>? navigatorObservers;
   final TransitionDelegate<dynamic>? transitionDelegate;
-  final _resultCompleter = <GetNavConfig, Completer<Object?>>{};
 
   GlobalKey<NavigatorState> get navigatorKey =>
       GetNavigation.getxController.key;
 
   GetDelegate({
-    this.notFoundRoute,
+    GetPage? notFoundRoute,
     this.navigatorObservers,
     this.transitionDelegate,
     this.backButtonPopMode = PopMode.History,
-    this.preventDuplicateHandlingMode = PreventDuplicateHandlingMode.DoNothing,
-  });
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
+  }) : notFoundRoute = notFoundRoute ??
+            GetPage(
+              name: '/404',
+              page: () => Scaffold(
+                body: Text('Route not found'),
+              ),
+            ) {
+    Get.log('GetDelegate is created !');
+  }
+
+  Future<GetNavConfig?> runMiddleware(GetNavConfig config) async {
+    final middlewares = config.currentTreeBranch.last.middlewares;
+    if (middlewares == null) {
+      return config;
+    }
+    var iterator = config;
+    for (var item in middlewares) {
+      var redirectRes = await item.redirectDelegate(iterator);
+      if (redirectRes == null) return null;
+      iterator = redirectRes;
+    }
+    return iterator;
+  }
+
+  Future<void> _unsafeHistoryAdd(GetNavConfig config) async {
+    final res = await runMiddleware(config);
+    if (res == null) return;
+    history.add(res);
+  }
+
+  Future<void> _unsafeHistoryRemove(GetNavConfig config) async {
+    var index = history.indexOf(config);
+    if (index >= 0) await _unsafeHistoryRemoveAt(index);
+  }
+
+  Future<GetNavConfig?> _unsafeHistoryRemoveAt(int index) async {
+    if (index == history.length - 1 && history.length > 1) {
+      //removing WILL update the current route
+      final toCheck = history[history.length - 2];
+      final resMiddleware = await runMiddleware(toCheck);
+      if (resMiddleware == null) return null;
+      history[history.length - 2] = resMiddleware;
+    }
+    return history.removeAt(index);
+  }
+
+  T arguments<T>() {
+    return currentConfiguration?.currentPage?.arguments as T;
+  }
+
+  Map<String, String> get parameters {
+    return currentConfiguration?.currentPage?.parameters ?? {};
+  }
+
+  // void _unsafeHistoryClear() {
+  //   history.clear();
+  // }
 
   /// Adds a new history entry and waits for the result
-  Future<T?> pushHistory<T>(
+  Future<void> pushHistory(
     GetNavConfig config, {
     bool rebuildStack = true,
-  }) {
+  }) async {
     //this changes the currentConfiguration
-    final completer = Completer<T?>();
-    _resultCompleter[config] = completer;
-    _pushHistory(config);
+    await _pushHistory(config);
     if (rebuildStack) {
       refresh();
     }
-    return completer.future;
   }
 
-  void _removeHistoryEntry(GetNavConfig entry) {
-    history.remove(entry);
-    final lastCompleter = _resultCompleter.remove(entry);
-    lastCompleter?.complete(entry);
+  Future<void> _removeHistoryEntry(GetNavConfig entry) async {
+    await _unsafeHistoryRemove(entry);
   }
 
-  void _pushHistory(GetNavConfig config) {
+  Future<void> _pushHistory(GetNavConfig config) async {
     if (config.currentPage!.preventDuplicates) {
-      if (history.any((element) => element.location == config.location)) {
+      final originalEntryIndex =
+          history.indexWhere((element) => element.location == config.location);
+      if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            until(config.location!, popMode: PopMode.Page);
-            return;
+            await backUntil(config.location!, popMode: PopMode.Page);
+            break;
+          case PreventDuplicateHandlingMode.ReorderRoutes:
+            await _unsafeHistoryRemoveAt(originalEntryIndex);
+            await _unsafeHistoryAdd(config);
+            break;
           case PreventDuplicateHandlingMode.DoNothing:
           default:
-            return;
+            break;
         }
+        return;
       }
     }
-    history.add(config);
+    await _unsafeHistoryAdd(config);
   }
 
   // GetPageRoute getPageRoute(RouteSettings? settings) {
@@ -105,34 +169,33 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   //       .page();
   // }
 
-  GetNavConfig? _popHistory() {
+  Future<GetNavConfig?> _popHistory() async {
     if (!_canPopHistory()) return null;
-    return _doPopHistory();
+    return await _doPopHistory();
   }
 
-  GetNavConfig _doPopHistory() {
-    final res = history.removeLast();
-    return res;
+  Future<GetNavConfig?> _doPopHistory() async {
+    return await _unsafeHistoryRemoveAt(history.length - 1);
   }
 
-  GetNavConfig? _popPage() {
+  Future<GetNavConfig?> _popPage() async {
     if (!_canPopPage()) return null;
-    return _doPopPage();
+    return await _doPopPage();
   }
 
-  GetNavConfig? _pop(PopMode mode) {
+  Future<GetNavConfig?> _pop(PopMode mode) async {
     switch (mode) {
       case PopMode.History:
-        return _popHistory();
+        return await _popHistory();
       case PopMode.Page:
-        return _popPage();
+        return await _popPage();
       default:
         return null;
     }
   }
 
   // returns the popped page
-  GetNavConfig? _doPopPage() {
+  Future<GetNavConfig?> _doPopPage() async {
     final currentBranch = currentConfiguration?.currentTreeBranch;
     if (currentBranch != null && currentBranch.length > 1) {
       //remove last part only
@@ -147,13 +210,13 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
         final prevLocation = prevHistoryEntry.location;
         if (newLocation == prevLocation) {
           //pop the entire history entry
-          return _popHistory();
+          return await _popHistory();
         }
       }
 
       //create a new route with the remaining tree branch
-      final res = _popHistory();
-      _pushHistory(
+      final res = await _popHistory();
+      await _pushHistory(
         GetNavConfig(
           currentTreeBranch: remaining.toList(),
           location: remaining.last.name,
@@ -163,16 +226,16 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       return res;
     } else {
       //remove entire entry
-      return _popHistory();
+      return await _popHistory();
     }
   }
 
-  Future<GetNavConfig?> popHistory() {
-    return SynchronousFuture(_popHistory());
+  Future<GetNavConfig?> popHistory() async {
+    return await _popHistory();
   }
 
   bool _canPopHistory() {
-    return history.length > 1;
+    return history.length > 0;
   }
 
   Future<bool> canPopHistory() {
@@ -201,25 +264,30 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   /// gets the visual pages from the current history entry
   ///
-  /// visual pages must have the [RouterOutletContainerMiddleWare] middleware
-  /// with `stayAt` equal to the route name of the visual page
+  /// visual pages must have [participatesInRootNavigator] set to true
   List<GetPage> getVisualPages() {
     final currentHistory = currentConfiguration;
     if (currentHistory == null) return <GetPage>[];
-    return currentHistory.currentTreeBranch.where((r) {
-      final mware =
-          (r.middlewares ?? []).whereType<RouterOutletContainerMiddleWare>();
-      if (mware.length == 0) return true;
-      return r.name == mware.first.stayAt;
-    }).toList();
+
+    final res = currentHistory.currentTreeBranch
+        .where((r) => r.participatesInRootNavigator != null);
+    if (res.length == 0) {
+      //default behavoir, all routes participate in root navigator
+      return history.map((e) => e.currentPage!).toList();
+    } else {
+      //user specified at least one participatesInRootNavigator
+      return res
+          .where((element) => element.participatesInRootNavigator == true)
+          .toList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final pages = getVisualPages();
+    if (pages.length == 0) return SizedBox.shrink();
     final extraObservers = navigatorObservers;
     return GetNavigator(
-      name: 'root',
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
       pages: pages,
@@ -232,12 +300,13 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     );
   }
 
-  @override
-  Future<void> setInitialRoutePath(GetNavConfig configuration) async {
-    history.clear();
-    _resultCompleter.clear();
-    await pushHistory(configuration);
-  }
+  // @override
+  // Future<void> setInitialRoutePath(GetNavConfig configuration) async {
+  //   //no need to clear history with Reorder route strategy
+  //   // _unsafeHistoryClear();
+  //   // _resultCompleter.clear();
+  //   await pushHistory(configuration);
+  // }
 
   @override
   Future<void> setNewRoutePath(GetNavConfig configuration) async {
@@ -251,45 +320,55 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<T?> toNamed<T>(String fullRoute) {
-    final decoder = Get.routeTree.matchRoute(fullRoute);
-    return pushHistory<T>(
+  Future<void> toNamed(
+    String page, {
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) async {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
+    decoder.replaceArguments(arguments);
+
+    await pushHistory(
       GetNavConfig(
         currentTreeBranch: decoder.treeBranch,
-        location: fullRoute,
+        location: page,
         state: null, //TODO: persist state?
       ),
     );
   }
 
+  Future<void> offNamed(
+    String page, {
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) async {
+    await popHistory();
+    await toNamed(page, arguments: arguments, parameters: parameters);
+  }
+
   /// Removes routes according to [PopMode]
   /// until it reaches the specifc [fullRoute],
   /// DOES NOT remove the [fullRoute]
-  void until(
+  Future<void> backUntil(
     String fullRoute, {
     PopMode popMode = PopMode.Page,
-  }) {
+  }) async {
     // remove history or page entries until you meet route
-
     var iterator = currentConfiguration;
     while (_canPop(popMode) &&
         iterator != null &&
         iterator.location != fullRoute) {
-      _pop(popMode);
+      await _pop(popMode);
       // replace iterator
       iterator = currentConfiguration;
     }
     refresh();
   }
-
-  // GetPage _notFound() {
-  //   return notFoundRoute ??= GetPage(
-  //     name: '/404',
-  //     page: () => Scaffold(
-  //       body: Text('not found'),
-  //     ),
-  //   );
-  // }
 
   Future<bool> handlePopupRoutes({
     Object? result,
@@ -313,15 +392,13 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
-    final _popped = _pop(popMode);
+    final _popped = await _pop(popMode);
     refresh();
     if (_popped != null) {
       //emulate the old pop with result
-      final lastCompleter = _resultCompleter.remove(_popped);
-      lastCompleter?.complete(result);
-      return Future.value(true);
+      return true;
     }
-    return Future.value(false);
+    return false;
   }
 
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
@@ -350,17 +427,23 @@ class GetNavigator extends Navigator {
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     required List<Page> pages,
     List<NavigatorObserver>? observers,
+    bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
-    String? name,
-  })  : assert(key != null || name != null,
-            'GetNavigator should either have a key or a name set'),
-        super(
-          key: key ?? Get.nestedKey(name),
-          onPopPage: onPopPage,
-          reportsRouteUpdateToEngine: true,
+  }) : super(
+          //keys should be optional
+          key: key,
+          onPopPage: onPopPage ??
+              (route, result) {
+                final didPop = route.didPop(result);
+                if (!didPop) {
+                  return false;
+                }
+                return true;
+              },
+          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [
-            GetObserver(),
+            // GetObserver(),
             if (observers != null) ...observers,
           ],
           transitionDelegate:

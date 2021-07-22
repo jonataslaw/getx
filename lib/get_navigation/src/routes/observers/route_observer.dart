@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+
 import '../../../../get_core/get_core.dart';
+import '../../../../instance_manager.dart';
 import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
 import '../../snackbar/snack_route.dart';
@@ -193,6 +195,9 @@ class GetObserver extends NavigatorObserver {
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
+    if (oldRoute is GetPageRoute) {
+      GetInstance().reloadDependencyByRoute(oldRoute.reference);
+    }
 
     routing?.call(_routeSend);
   }
@@ -216,6 +221,9 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
+    if (route is GetPageRoute) {
+      GetInstance().reloadDependencyByRoute(route.reference);
+    }
     routing?.call(_routeSend);
   }
 }

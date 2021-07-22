@@ -4,7 +4,6 @@ import '../../../get_utils/get_utils.dart';
 import '../routes/custom_transition.dart';
 import '../routes/observers/route_observer.dart';
 import '../routes/transitions_type.dart';
-import 'parse_route.dart';
 
 class GetMaterialController extends GetxController {
   bool testMode = false;
@@ -28,11 +27,16 @@ class GetMaterialController extends GetxController {
 
   Map<String, String?> parameters = {};
 
-  late ParseRouteTree routeTree;
-
   CustomTransition? customTransition;
 
-  GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
+  var _key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
+
+  GlobalKey<NavigatorState> get key => _key;
+
+  GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
+    _key = newKey;
+    return key;
+  }
 
   Map<dynamic, GlobalKey<NavigatorState>> keys = {};
 

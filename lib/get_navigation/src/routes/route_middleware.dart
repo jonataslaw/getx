@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import '../../../get.dart';
 
 abstract class _RouteMiddleware {
@@ -31,6 +32,25 @@ abstract class _RouteMiddleware {
   /// ```
   /// {@end-tool}
   RouteSettings? redirect(String route);
+
+  /// Similar to [redirect],
+  /// This function will be called when the router delegate changes the
+  /// current route.
+  ///
+  /// The default implmentation is to navigate to
+  /// the input route, with no redirection.
+  ///
+  /// if this returns null, the navigation is stopped,
+  /// and no new routes are pushed.
+  /// {@tool snippet}
+  /// ```dart
+  /// GetNavConfig? redirect(GetNavConfig route) {
+  ///   final authService = Get.find<AuthService>();
+  ///   return authService.authed.value ? null : RouteSettings(name: '/login');
+  /// }
+  /// ```
+  /// {@end-tool}
+  Future<GetNavConfig?> redirectDelegate(GetNavConfig route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -97,6 +117,10 @@ class GetMiddleware implements _RouteMiddleware {
 
   @override
   void onPageDispose() {}
+
+  @override
+  Future<GetNavConfig?> redirectDelegate(GetNavConfig route) =>
+      SynchronousFuture(route);
 }
 
 class MiddlewareRunner {
@@ -158,14 +182,14 @@ class MiddlewareRunner {
 class PageRedirect {
   GetPage? route;
   GetPage? unknownRoute;
-  RouteSettings settings;
+  RouteSettings? settings;
   bool isUnknown;
 
-  PageRedirect(
-    this.settings,
-    this.unknownRoute, {
-    this.isUnknown = false,
+  PageRedirect({
     this.route,
+    this.unknownRoute,
+    this.isUnknown = false,
+    this.settings,
   });
 
   // redirect all pages that needes redirecting
@@ -174,14 +198,43 @@ class PageRedirect {
     final _r = (isUnknown ? unknownRoute : route)!;
     return GetPageRoute<T>(
       page: _r.page,
-      parameter: _r.parameter,
+      parameter: _r.parameters,
       settings: isUnknown
           ? RouteSettings(
               name: _r.name,
-              arguments: settings.arguments,
+              arguments: settings!.arguments,
             )
           : settings,
       curve: _r.curve,
+      opaque: _r.opaque,
+      gestureWidth: _r.gestureWidth,
+      customTransition: _r.customTransition,
+      binding: _r.binding,
+      bindings: _r.bindings,
+      transitionDuration:
+          _r.transitionDuration ?? Get.defaultTransitionDuration,
+      transition: _r.transition,
+      popGesture: _r.popGesture,
+      fullscreenDialog: _r.fullscreenDialog,
+      middlewares: _r.middlewares,
+    );
+  }
+
+  // redirect all pages that needes redirecting
+  GetPageRoute<T> getPageToRoute<T>(GetPage rou, GetPage? unk) {
+    while (needRecheck()) {}
+    final _r = (isUnknown ? unk : rou)!;
+
+    return GetPageRoute<T>(
+      page: _r.page,
+      parameter: _r.parameters,
+      alignment: _r.alignment,
+      title: _r.title,
+      maintainState: _r.maintainState,
+      routeName: _r.name,
+      settings: _r,
+      curve: _r.curve,
+      gestureWidth: _r.gestureWidth,
       opaque: _r.opaque,
       customTransition: _r.customTransition,
       binding: _r.binding,
@@ -197,7 +250,10 @@ class PageRedirect {
 
   /// check if redirect is needed
   bool needRecheck() {
-    final match = Get.routeTree.matchRoute(settings.name!);
+    if (settings == null && route != null) {
+      settings = route;
+    }
+    final match = Get.routeTree.matchRoute(settings!.name!);
     Get.parameters = match.parameters;
 
     // No Match found
@@ -214,7 +270,7 @@ class PageRedirect {
     if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
       return false;
     }
-    final newSettings = runner.runRedirect(settings.name);
+    final newSettings = runner.runRedirect(settings!.name);
     if (newSettings == null) {
       return false;
     }
@@ -223,10 +279,10 @@ class PageRedirect {
   }
 
   void addPageParameter(GetPage route) {
-    if (route.parameter == null) return;
+    if (route.parameters == null) return;
 
     final parameters = Get.parameters;
-    parameters.addEntries(route.parameter!.entries);
+    parameters.addEntries(route.parameters!.entries);
     Get.parameters = parameters;
   }
 }

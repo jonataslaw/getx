@@ -5,10 +5,27 @@ class RouteDecoder {
   final List<GetPage> treeBranch;
   GetPage? get route => treeBranch.isEmpty ? null : treeBranch.last;
   final Map<String, String> parameters;
+  final Object? arguments;
   const RouteDecoder(
     this.treeBranch,
     this.parameters,
+    this.arguments,
   );
+  void replaceArguments(Object? arguments) {
+    final _route = route;
+    if (_route != null) {
+      final index = treeBranch.indexOf(_route);
+      treeBranch[index] = _route.copy(arguments: arguments);
+    }
+  }
+
+  void replaceParameters(Object? arguments) {
+    final _route = route;
+    if (_route != null) {
+      final index = treeBranch.indexOf(_route);
+      treeBranch[index] = _route.copy(parameters: parameters);
+    }
+  }
 }
 
 class ParseRouteTree {
@@ -18,7 +35,7 @@ class ParseRouteTree {
 
   final List<GetPage> routes;
 
-  RouteDecoder matchRoute(String name) {
+  RouteDecoder matchRoute(String name, {Object? arguments}) {
     final uri = Uri.parse(name);
     // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
@@ -53,8 +70,8 @@ class ParseRouteTree {
       final mappedTreeBranch = treeBranch
           .map(
             (e) => e.value.copy(
-              parameter: {
-                if (e.value.parameter != null) ...e.value.parameter!,
+              parameters: {
+                if (e.value.parameters != null) ...e.value.parameters!,
                 ...params,
               },
               name: e.key,
@@ -64,6 +81,7 @@ class ParseRouteTree {
       return RouteDecoder(
         mappedTreeBranch,
         params,
+        arguments,
       );
     }
 
@@ -71,6 +89,7 @@ class ParseRouteTree {
     return RouteDecoder(
       treeBranch.map((e) => e.value).toList(),
       params,
+      arguments,
     );
   }
 
@@ -91,21 +110,35 @@ class ParseRouteTree {
 
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
-    if (route.children == null || route.children!.isEmpty) {
+    if (route.children.isEmpty) {
       return result;
     }
 
     final parentPath = route.name;
-    for (var page in route.children!) {
+    for (var page in route.children) {
       // Add Parent middlewares to children
-      final pageMiddlewares = page.middlewares ?? <GetMiddleware>[];
-      pageMiddlewares.addAll(route.middlewares ?? <GetMiddleware>[]);
-      result.add(_addChild(page, parentPath, pageMiddlewares));
+      final parentMiddlewares = [
+        if (page.middlewares != null) ...page.middlewares!,
+        if (route.middlewares != null) ...route.middlewares!
+      ];
+      result.add(
+        _addChild(
+          page,
+          parentPath,
+          parentMiddlewares,
+        ),
+      );
 
       final children = _flattenPage(page);
       for (var child in children) {
-        pageMiddlewares.addAll(child.middlewares ?? <GetMiddleware>[]);
-        result.add(_addChild(child, parentPath, pageMiddlewares));
+        result.add(_addChild(
+          child,
+          parentPath,
+          [
+            ...parentMiddlewares,
+            if (child.middlewares != null) ...child.middlewares!,
+          ],
+        ));
       }
     }
     return result;
@@ -114,24 +147,9 @@ class ParseRouteTree {
   /// Change the Path for a [GetPage]
   GetPage _addChild(
           GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
-      GetPage(
-        name: (parentPath + origin.name).replaceAll(r'//', '/'),
-        page: origin.page,
-        title: origin.title,
-        alignment: origin.alignment,
-        transition: origin.transition,
-        binding: origin.binding,
-        bindings: origin.bindings,
-        curve: origin.curve,
-        customTransition: origin.customTransition,
-        fullscreenDialog: origin.fullscreenDialog,
-        maintainState: origin.maintainState,
-        opaque: origin.opaque,
-        parameter: origin.parameter,
-        popGesture: origin.popGesture,
-        preventDuplicates: origin.preventDuplicates,
-        transitionDuration: origin.transitionDuration,
+      origin.copy(
         middlewares: middlewares,
+        name: (parentPath + origin.name).replaceAll(r'//', '/'),
       );
 
   GetPage? _findRoute(String name) {
