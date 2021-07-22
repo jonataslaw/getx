@@ -136,8 +136,7 @@ extension Inst on GetInterface {
     final info = GetInstance().getInstanceInfo<P>(tag: tag);
     final permanent = (info.isPermanent ?? false);
     delete<P>(tag: tag, force: permanent);
-    // ignore: unnecessary_cast
-    put(child as P, tag: tag, permanent: permanent);
+    put(child, tag: tag, permanent: permanent);
   }
 
   /// Replaces a parent instance with a new Instance<P> lazily from the
