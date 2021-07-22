@@ -1,3 +1,5 @@
+import 'package:example_nav2/app/modules/splash/controllers/splash_service.dart';
+import 'package:example_nav2/app/modules/splash/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,10 +12,23 @@ void main() {
       title: "Application",
       initialBinding: BindingsBuilder(
         () {
+          Get.put(SplashService());
           Get.put(AuthService());
         },
       ),
       getPages: AppPages.routes,
+      builder: (context, child) {
+        return FutureBuilder<void>(
+          key: ValueKey('initFuture'),
+          future: Get.find<SplashService>().init(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return child ?? SizedBox.shrink();
+            }
+            return SplashView();
+          },
+        );
+      },
       // routeInformationParser: GetInformationParser(
       //     // initialRoute: Routes.HOME,
       //     ),
