@@ -43,7 +43,6 @@ class AppPages {
           binding: LoginBinding(),
         ),
         GetPage(
-          participatesInRootNavigator: false,
           preventDuplicates: true,
           name: _Paths.HOME,
           page: () => HomeView(),

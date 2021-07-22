@@ -21,6 +21,8 @@ class HomeView extends GetView<HomeController> {
         return Scaffold(
           body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
+            // anchorRoute: Routes.HOME,
+            key: Get.nestedKey(Routes.HOME),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
