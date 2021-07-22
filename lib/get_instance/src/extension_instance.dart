@@ -128,4 +128,29 @@ extension Inst on GetInterface {
   /// `Get.lazyPut()`, is registered in memory.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
+
+  /// Replace a parent instance of a class in dependency management
+  /// with a [child] instance
+  /// - [tag] optional, if you use a [tag] to register the Instance.
+  void replace<P>(P child, {String? tag}) {
+    final info = GetInstance().getInstanceInfo<P>(tag: tag);
+    final permanent = (info.isPermanent ?? false);
+    delete<P>(tag: tag, force: permanent);
+    put(child, tag: tag, permanent: permanent);
+  }
+
+  /// Replaces a parent instance with a new Instance<P> lazily from the
+  /// [<P>builder()] callback.
+  /// - [tag] optional, if you use a [tag] to register the Instance.
+  /// - [fenix] optional
+  ///
+  ///  Note: if fenix is not provided it will be set to true if
+  /// the parent instance was permanent
+  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
+      {String? tag, bool? fenix}) {
+    final info = GetInstance().getInstanceInfo<P>(tag: tag);
+    final permanent = (info.isPermanent ?? false);
+    delete<P>(tag: tag, force: permanent);
+    lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
+  }
 }
