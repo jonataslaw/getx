@@ -1009,22 +1009,15 @@ class OtherClass extends GetView<Controller> {
 
 #### GetResponsiveView
 
-Extend this widget to build responsive view.
-this widget contains the `screen` property that have all
-information about the screen size and type.
+ResponsiveView 를 빌드하려면 이 위젯을 확장하세요. 이 위젯에는 화면 크기 및 유형에 대한 모든 정보가 있는 화면 속성이 포함되어 있습니다.
 
 ##### 사용 방법
 
-You have two options to build it.
-
-- with `builder` method you return the widget to build.
-- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
-  method will be built when the screen type matches the method
-  when the screen is [ScreenType.Tablet] the `tablet` method
-  will be exuded and so on.
-  **Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
-
-With `settings` property you can set the width limit for the screen types.
+그것을 빌드하기 위한 두가지 옵션이 있습니다.
+- `builder` method 를 사용하면 빌드 할 위젯을 반환합니다.
+- `desktop`, `tablet`, `phone`, `watch` method를 사용하면 특정 메소드는 screen type 이 일치할때 빌드됩니다. Screen type이 [ScreenType.Tablet] 일때, tablet method 가 스며나옵니다. 참고: 만약 이 method 를 사용할 경우, `alwaysUseBuilder` 프로퍼티를 `false` 로 설정해주세요.   
+ 
+`settings` 프로퍼티를 사용하면 screen types 를 위한 width limit 를 설정할 수 있습니다.
 
 ![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
 Code to this screen
