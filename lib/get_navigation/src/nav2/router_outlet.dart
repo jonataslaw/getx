@@ -83,8 +83,18 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     GlobalKey<NavigatorState>? key,
   }) : this.pickPages(
           pickPages: (config) {
-            var ret = config.currentTreeBranch
-                .pickAfterRoute(anchorRoute ?? initialRoute);
+            Iterable<GetPage<dynamic>> ret;
+            if (anchorRoute == null) {
+              //anchorRoute = initialRoute minus last segment
+              final parsedUri = Uri.parse(initialRoute);
+              final replacedUri = parsedUri.replace(
+                pathSegments: parsedUri.pathSegments.take(
+                  parsedUri.pathSegments.length - 1,
+                ),
+              );
+              anchorRoute = '/$replacedUri';
+            }
+            ret = config.currentTreeBranch.pickAfterRoute(anchorRoute!);
             if (filterPages != null) {
               ret = filterPages(ret);
             }
@@ -145,10 +155,12 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
 
 extension PagesListExt on List<GetPage> {
   Iterable<GetPage> pickAtRoute(String route) {
-    return skipWhile((value) => value.name != route).toList();
+    return skipWhile((value) {
+      return value.name != route;
+    });
   }
 
   Iterable<GetPage> pickAfterRoute(String route) {
-    return skipWhile((value) => value.name != route).skip(1).toList();
+    return pickAtRoute(route).skip(1);
   }
 }
