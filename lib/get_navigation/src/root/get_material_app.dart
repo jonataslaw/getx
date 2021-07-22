@@ -43,6 +43,7 @@ class GetMaterialApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.scrollBehavior,
     this.customTransition,
     this.translationsKeys,
     this.translations,
@@ -101,6 +102,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent>? shortcuts;
+  final ScrollBehavior? scrollBehavior;
   final ThemeData? highContrastTheme;
   final ThemeData? highContrastDarkTheme;
   final Map<Type, Action<Intent>>? actions;
@@ -152,6 +154,7 @@ class GetMaterialApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.scrollBehavior,
     this.actions,
     this.customTransition,
     this.translationsKeys,
@@ -283,6 +286,7 @@ class GetMaterialApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              scrollBehavior: scrollBehavior,
             )
           : MaterialApp(
               key: _.unikey,
@@ -332,6 +336,7 @@ class GetMaterialApp extends StatelessWidget {
               showSemanticsDebugger: showSemanticsDebugger,
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
+              scrollBehavior: scrollBehavior,
               //   actions: actions,
             ));
 }
