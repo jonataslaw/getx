@@ -1,3 +1,11 @@
+ ## [4.2.4] 
+- Added anchorRoute and filterPages to 
+ 
+ 
+ // anchorRoute: '/',
+            // filterPages:
+
+
 ## [4.2.4] 
 - Fix Get.offAll removing GetxServices from memory
 

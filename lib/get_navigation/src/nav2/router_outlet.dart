@@ -85,16 +85,14 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
           pickPages: (config) {
             Iterable<GetPage<dynamic>> ret;
             if (anchorRoute == null) {
-              //anchorRoute = initialRoute minus last segment
-              final parsedUri = Uri.parse(initialRoute);
-              final replacedUri = parsedUri.replace(
-                pathSegments: parsedUri.pathSegments.take(
-                  parsedUri.pathSegments.length - 1,
-                ),
-              );
-              anchorRoute = '/$replacedUri';
+              // jump the ancestor path
+              final length = Uri.parse(initialRoute).pathSegments.length;
+              return config.currentTreeBranch
+                  .skip(length)
+                  .take(length)
+                  .toList();
             }
-            ret = config.currentTreeBranch.pickAfterRoute(anchorRoute!);
+            ret = config.currentTreeBranch.pickAfterRoute(anchorRoute);
             if (filterPages != null) {
               ret = filterPages(ret);
             }
