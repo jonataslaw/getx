@@ -207,6 +207,18 @@ class GetMaterialApp extends StatelessWidget {
     ];
   }
 
+  Widget defaultBuilder(BuildContext context, Widget? child) {
+    return Directionality(
+      textDirection: textDirection ??
+          (rtlLanguages.contains(Get.locale?.languageCode)
+              ? TextDirection.rtl
+              : TextDirection.ltr),
+      child: builder == null
+          ? (child ?? SizedBox.shrink())
+          : builder!(context, child),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
       init: Get.rootController,
@@ -255,15 +267,7 @@ class GetMaterialApp extends StatelessWidget {
               backButtonDispatcher: backButtonDispatcher,
               routeInformationProvider: routeInformationProvider,
               key: _.unikey,
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: textDirection ??
-                      (rtlLanguages.contains(Get.locale?.languageCode)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr),
-                  child: builder == null ? child! : builder!(context, child),
-                );
-              },
+              builder: defaultBuilder,
               title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
@@ -304,15 +308,7 @@ class GetMaterialApp extends StatelessWidget {
                       GetObserver(routingCallback, Get.routing)
                     ]
                 ..addAll(navigatorObservers!)),
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: textDirection ??
-                      (rtlLanguages.contains(Get.locale?.languageCode)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr),
-                  child: builder == null ? child! : builder!(context, child),
-                );
-              },
+              builder: defaultBuilder,
               title: title,
               onGenerateTitle: onGenerateTitle,
               color: color,
