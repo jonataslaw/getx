@@ -13,6 +13,7 @@ class GetMaterialApp extends StatelessWidget {
   const GetMaterialApp({
     Key? key,
     this.navigatorKey,
+    this.scaffoldMessengerKey,
     this.home,
     Map<String, Widget Function(BuildContext)> this.routes =
         const <String, WidgetBuilder>{},
@@ -72,6 +73,7 @@ class GetMaterialApp extends StatelessWidget {
         super(key: key);
 
   final GlobalKey<NavigatorState>? navigatorKey;
+  final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
   final String? initialRoute;
@@ -130,6 +132,7 @@ class GetMaterialApp extends StatelessWidget {
   GetMaterialApp.router({
     Key? key,
     this.routeInformationProvider,
+    this.scaffoldMessengerKey,
     RouteInformationParser<Object>? routeInformationParser,
     RouterDelegate<Object>? routerDelegate,
     this.backButtonDispatcher,
@@ -267,6 +270,7 @@ class GetMaterialApp extends StatelessWidget {
           ? MaterialApp.router(
               routerDelegate: routerDelegate!,
               routeInformationParser: routeInformationParser!,
+              scaffoldMessengerKey: scaffoldMessengerKey,
               backButtonDispatcher: backButtonDispatcher,
               routeInformationProvider: routeInformationProvider,
               key: _.unikey,
@@ -296,6 +300,7 @@ class GetMaterialApp extends StatelessWidget {
               key: _.unikey,
               navigatorKey:
                   (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
+              scaffoldMessengerKey: scaffoldMessengerKey,
               home: home,
               routes: routes ?? const <String, WidgetBuilder>{},
               initialRoute: initialRoute,
