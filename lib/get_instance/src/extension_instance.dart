@@ -139,4 +139,19 @@ extension Inst on GetInterface {
     // ignore: unnecessary_cast
     put(child as P, tag: tag, permanent: permanent);
   }
+
+  /// Replaces a parent instance with a new Instance<P> lazily from the
+  /// [<P>builder()] callback.
+  /// - [tag] optional, if you use a [tag] to register the Instance.
+  /// - [fenix] optional
+  ///
+  ///  Note: if fenix is not provided it will be set to true if
+  /// the parent instance was permanent
+  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
+      {String? tag, bool? fenix}) {
+    final info = GetInstance().getInstanceInfo<P>(tag: tag);
+    final permanent = (info.isPermanent ?? false);
+    delete<P>(tag: tag, force: permanent);
+    lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
+  }
 }
