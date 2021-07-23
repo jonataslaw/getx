@@ -205,21 +205,31 @@ Get.delete<Controller>(); //usually you don't need to do this because GetX alrea
 
 ## Specifying an alternate instance
 
-A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` method. This can then be retrieved by using the original class.
+A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` or `lazyReplace` method. This can then be retrieved by using the original class.
 
 ```dart
-class ParentClass {}
+abstract class BaseClass {}
+class ParentClass extends BaseClass {}
 
 class ChildClass extends ParentClass {
   bool isChild = true;
 }
 
-Get.put(ParentClass());
 
-Get.replace<ParentClass, ChildClass>(ChildClass());
+Get.put<BaseClass>(ParentClass());
 
-final instance = Get.find<ParentClass>();
+Get.replace<BaseClass>(ChildClass());
+
+final instance = Get.find<BaseClass>();
 print(instance is ChildClass); //true
+
+
+class OtherClass extends BaseClass {}
+Get.lazyReplace<BaseClass>(() => OtherClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); // false
+print(instance is OtherClass); //true
 ```
 
 ## Differences between methods
