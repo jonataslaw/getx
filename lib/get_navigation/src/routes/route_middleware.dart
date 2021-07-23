@@ -145,12 +145,13 @@ class MiddlewareRunner {
 
   RouteSettings? runRedirect(String? route) {
     RouteSettings? to;
-    _getMiddlewares().forEach((element) {
+    for (final element in _getMiddlewares()) {
       to = element.redirect(route);
-    });
-    if (to != null) {
-      Get.log('Redirect to $to');
+      if (to != null) {
+        break;
+      }
     }
+    Get.log('Redirect to $to');
     return to;
   }
 
