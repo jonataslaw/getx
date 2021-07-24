@@ -220,8 +220,8 @@ class GetMaterialApp extends StatelessWidget {
               ? TextDirection.rtl
               : TextDirection.ltr),
       child: builder == null
-          ? (child ?? SizedBox.shrink())
-          : builder!(context, child),
+          ? (child ?? Material())
+          : builder!(context, child ?? Material()),
     );
   }
 

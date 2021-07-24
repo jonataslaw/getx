@@ -1,10 +1,9 @@
- ## [4.2.4] 
-- Added anchorRoute and filterPages to 
- 
- 
- // anchorRoute: '/',
-            // filterPages:
-
+ ## [4.2.5] 
+- Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
+- Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
+- Fix error when child on MaterialApp is null (@ahmednfwela)
+- Fix Korean docs (@rws08)
+- Fix error with onClose called before routeTransition on Get.offNamed
 
 ## [4.2.4] 
 - Fix Get.offAll removing GetxServices from memory

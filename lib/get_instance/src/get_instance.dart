@@ -240,7 +240,7 @@ class GetInstance {
     }
 
     for (final element in keysToRemove) {
-      reload(key: element);
+      reload(key: element, closeInstance: false);
       //_routesKey.remove(element);
     }
 
@@ -459,7 +459,11 @@ class GetInstance {
     });
   }
 
-  void reload<S>({String? tag, String? key, bool force = false}) {
+  void reload<S>(
+      {String? tag,
+      String? key,
+      bool force = false,
+      bool closeInstance = true}) {
     final newKey = key ?? _getKey(S, tag);
 
     final builder = _getDependency<S>(tag: tag, key: newKey);
@@ -479,7 +483,7 @@ class GetInstance {
       return;
     }
 
-    if (i is GetLifeCycleBase) {
+    if (i is GetLifeCycleBase && closeInstance) {
       i.onDelete();
       Get.log('"$newKey" onDelete() called');
     }
