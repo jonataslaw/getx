@@ -1,3 +1,10 @@
+  ## [4.3.0] 
+- Added GetResponsiveWidget (@ahmednfwela)
+- Added `Get.replace()` (@jwelmac)
+- Added Improve korean doc (@sejun2)
+- Fix multiple middlewares redirect (@liasica)
+- Added gestureWidth and showCupertinoParallax to GetPage to customize cupertino transitions
+
  ## [4.2.5] 
 - Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
 - Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
