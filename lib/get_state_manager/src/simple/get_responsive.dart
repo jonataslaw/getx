@@ -3,39 +3,11 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 import 'get_view.dart';
 
-abstract class _GetResponsive<T> extends GetView<T> {
-  final ResponsiveScreen screen;
-  _GetResponsive(ResponsiveScreenSettings settings, {Key? key})
-      : screen = ResponsiveScreen(settings),
-        super(key: key);
+mixin GetResponsiveMixin on Widget {
+  ResponsiveScreen get screen;
+  bool get alwaysUseBuilder;
 
-  Widget? builder();
-  Widget? phone();
-  Widget? tablet();
-  Widget? desktop();
-  Widget? watch();
-}
-
-/// Extend this widget to build responsive view.
-/// this widget contains the `screen` property that have all
-/// information about the screen size and type.
-/// You have two options to build it.
-/// 1- with `builder` method you return the widget to build.
-/// 2- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
-/// method will be built when the screen type matches the method
-/// when the screen is [ScreenType.Tablet] the `tablet` method
-/// will be exuded and so on.
-/// Note if you use this method please set the
-/// property `alwaysUseBuilder` to false
-/// With `settings` property you can set the width limit for the screen types.
-class GetResponsiveView<T> extends _GetResponsive<T> {
-  final bool alwaysUseBuilder = true;
-  GetResponsiveView(
-      {alwaysUseBuilder,
-      ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-      Key? key})
-      : super(settings, key: key);
-  @override
+  @protected
   Widget build(BuildContext context) {
     screen.context = context;
     Widget? widget;
@@ -58,20 +30,58 @@ class GetResponsiveView<T> extends _GetResponsive<T> {
     return watch() ?? phone() ?? tablet() ?? desktop() ?? builder()!;
   }
 
-  @override
   Widget? builder() => null;
 
-  @override
   Widget? desktop() => null;
 
-  @override
   Widget? phone() => null;
 
-  @override
   Widget? tablet() => null;
 
-  @override
   Widget? watch() => null;
+}
+
+/// Extend this widget to build responsive view.
+/// this widget contains the `screen` property that have all
+/// information about the screen size and type.
+/// You have two options to build it.
+/// 1- with `builder` method you return the widget to build.
+/// 2- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
+/// method will be built when the screen type matches the method
+/// when the screen is [ScreenType.Tablet] the `tablet` method
+/// will be exuded and so on.
+/// Note if you use this method please set the
+/// property `alwaysUseBuilder` to false
+/// With `settings` property you can set the width limit for the screen types.
+class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
+  @override
+  final bool alwaysUseBuilder;
+
+  @override
+  final ResponsiveScreen screen;
+
+  GetResponsiveView({
+    this.alwaysUseBuilder = false,
+    ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
+    Key? key,
+  })  : screen = ResponsiveScreen(settings),
+        super(key: key);
+}
+
+class GetResponsiveWidget<T extends GetLifeCycleBase?> extends GetWidget<T>
+    with GetResponsiveMixin {
+  @override
+  final bool alwaysUseBuilder;
+
+  @override
+  final ResponsiveScreen screen;
+
+  GetResponsiveWidget({
+    this.alwaysUseBuilder = false,
+    ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
+    Key? key,
+  })  : screen = ResponsiveScreen(settings),
+        super(key: key);
 }
 
 class ResponsiveScreenSettings {
