@@ -16,7 +16,7 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     this.transitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
     this.parameter,
-    this.gestureWidth = 20.0,
+    this.gestureWidth,
     this.curve,
     this.alignment,
     this.transition,
@@ -29,6 +29,7 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     this.routeName,
     this.page,
     this.title,
+    this.showCupertinoParallax = true,
     this.barrierLabel,
     this.maintainState = true,
     bool fullscreenDialog = false,
@@ -45,6 +46,9 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   final Bindings? binding;
   final Map<String, String>? parameter;
   final List<Bindings>? bindings;
+
+  @override
+  final bool showCupertinoParallax;
 
   @override
   final bool opaque;
@@ -109,5 +113,5 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   String get debugLabel => '${super.debugLabel}(${settings.name})';
 
   @override
-  final double gestureWidth;
+  final double Function(BuildContext context)? gestureWidth;
 }

@@ -544,7 +544,7 @@ extension GetNavigation on GetInterface {
     Bindings? binding,
     bool preventDuplicates = true,
     bool? popGesture,
-    double gestureWidth = 20,
+    double Function(BuildContext context)? gestureWidth,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -914,7 +914,7 @@ you can only use widgets and widget functions here''';
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
-    double gestureWidth = 20,
+    double Function(BuildContext context)? gestureWidth,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
     if (preventDuplicates && routeName == currentRoute) {
@@ -977,7 +977,7 @@ you can only use widgets and widget functions here''';
     Transition? transition,
     Curve? curve,
     Duration? duration,
-    double gestureWidth = 20,
+    double Function(BuildContext context)? gestureWidth,
   }) {
     var routeName = "/${page.runtimeType.toString()}";
 

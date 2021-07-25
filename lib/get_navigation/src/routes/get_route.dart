@@ -38,7 +38,7 @@ class GetPage<T> extends Page<T> {
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
-  final double gestureWidth;
+  final double Function(BuildContext context)? gestureWidth;
   final Bindings? binding;
   final List<Bindings> bindings;
   final CustomTransition? customTransition;
@@ -61,13 +61,14 @@ class GetPage<T> extends Page<T> {
   final List<GetMiddleware>? middlewares;
   final PathDecoded path;
   final GetPage? unknownRoute;
+  final bool showCupertinoParallax;
 
   GetPage({
     required this.name,
     required this.page,
     this.title,
     this.participatesInRootNavigator,
-    this.gestureWidth = 20,
+    this.gestureWidth,
     // RouteSettings settings,
     this.maintainState = true,
     this.curve = Curves.linear,
@@ -85,6 +86,7 @@ class GetPage<T> extends Page<T> {
     this.middlewares,
     this.unknownRoute,
     this.arguments,
+    this.showCupertinoParallax = true,
     this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
         super(
@@ -136,9 +138,10 @@ class GetPage<T> extends Page<T> {
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
-    double? gestureWidth,
+    final double Function(BuildContext context)? gestureWidth,
     bool? participatesInRootNavigator,
     Object? arguments,
+    bool? showCupertinoParallax,
   }) {
     return GetPage(
       participatesInRootNavigator:
@@ -164,6 +167,8 @@ class GetPage<T> extends Page<T> {
       middlewares: middlewares ?? this.middlewares,
       gestureWidth: gestureWidth ?? this.gestureWidth,
       arguments: arguments ?? this.arguments,
+      showCupertinoParallax:
+          showCupertinoParallax ?? this.showCupertinoParallax,
     );
   }
 
