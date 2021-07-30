@@ -235,7 +235,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   }
 
   bool _canPopHistory() {
-    return history.length > 0;
+    return history.length > 1;
   }
 
   Future<bool> canPopHistory() {
@@ -347,8 +347,8 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     dynamic arguments,
     Map<String, String>? parameters,
   }) async {
-    await popHistory();
     await toNamed(page, arguments: arguments, parameters: parameters);
+    await _unsafeHistoryRemoveAt(history.length - 2);
   }
 
   /// Removes routes according to [PopMode]

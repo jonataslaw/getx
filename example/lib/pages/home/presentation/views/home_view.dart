@@ -100,7 +100,7 @@ class HomeView extends GetView<HomeController> {
                         color: Colors.black,
                       ),
                     ),
-                  )
+                  ),
                 ],
               );
             },

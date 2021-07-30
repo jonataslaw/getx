@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../get_core/get_core.dart';
-import '../../../get_instance/src/get_instance.dart';
+import '../../../get.dart';
+import '../router_report.dart';
 
 class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   GetModalBottomSheetRoute({
@@ -20,8 +20,9 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     RouteSettings? settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
-  })  : name = "BOTTOMSHEET: ${builder.hashCode}",
-        super(settings: settings);
+  }) : super(settings: settings) {
+    RouterReportManager.reportCurrentRoute(this);
+  }
   final bool? isPersistent;
   final WidgetBuilder? builder;
   final ThemeData? theme;
@@ -33,7 +34,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color? modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
-  final String name;
+  // final String name;
   final Duration enterBottomSheetDuration;
   final Duration exitBottomSheetDuration;
   // remove safearea from top
@@ -55,10 +56,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance!.addPostFrameCallback(
-          (_) => GetInstance().removeDependencyByRoute(name));
-    }
+    RouterReportManager.reportRouteDispose(this);
     super.dispose();
   }
 

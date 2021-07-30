@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
+import '../router_report.dart';
 import 'custom_transition.dart';
 import 'get_transition_mixin.dart';
 import 'route_middleware.dart';
@@ -34,14 +35,15 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  })  : reference = "$routeName: ${settings?.hashCode ?? page.hashCode}",
-        super(settings: settings, fullscreenDialog: fullscreenDialog);
+  }) : super(settings: settings, fullscreenDialog: fullscreenDialog) {
+    RouterReportManager.reportCurrentRoute(this);
+  }
 
   @override
   final Duration transitionDuration;
   final GetPageBuilder? page;
   final String? routeName;
-  final String reference;
+  //final String reference;
   final CustomTransition? customTransition;
   final Bindings? binding;
   final Map<String, String>? parameter;
@@ -73,13 +75,7 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   @override
   void dispose() {
     super.dispose();
-    if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        if (Get.reference != reference) {
-          GetInstance().removeDependencyByRoute("$reference");
-        }
-      });
-    }
+    RouterReportManager.reportRouteDispose(this);
 
     // if (Get.smartManagement != SmartManagement.onlyBuilder) {
     //   GetInstance().removeDependencyByRoute("$reference");
@@ -91,7 +87,6 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
 
   @override
   Widget buildContent(BuildContext context) {
-    Get.reference = reference;
     final middlewareRunner = MiddlewareRunner(middlewares);
     final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
 

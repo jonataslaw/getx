@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:collection';
 
 import '../../get_core/get_core.dart';
-
+import '../../get_navigation/src/router_report.dart';
 import 'lifecycle.dart';
 
 class InstanceInfo {
@@ -37,20 +36,6 @@ class GetInstance {
   /// Holds a reference to every registered callback when using
   /// `Get.lazyPut()`
   // static final Map<String, _Lazy> _factory = {};
-
-  /// Holds a reference to `Get.reference` when the Instance was
-  /// created to manage the memory.
-  static final Map<String, String?> _routesKey = {};
-
-  /// Stores the onClose() references of instances created with `Get.create()`
-  /// using the `Get.reference`.
-  /// Experimental feature to keep the lifecycle and memory management with
-  /// non-singleton instances.
-  static final Map<String?, HashSet<Function>> _routesByCreate = {};
-
-  void printInstanceStack() {
-    Get.log(_routesKey.toString());
-  }
 
   void injector<S>(
     InjectorBuilderCallback<S> fn, {
@@ -189,64 +174,6 @@ class GetInstance {
     );
   }
 
-  /// Clears from memory registered Instances associated with [routeName] when
-  /// using `Get.smartManagement` as [SmartManagement.full] or
-  /// [SmartManagement.keepFactory]
-  /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
-  void removeDependencyByRoute(String routeName) {
-    final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
-
-    /// Removes `Get.create()` instances registered in `routeName`.
-    if (_routesByCreate.containsKey(routeName)) {
-      for (final onClose in _routesByCreate[routeName]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
-        onClose();
-      }
-      _routesByCreate[routeName]!.clear();
-      _routesByCreate.remove(routeName);
-    }
-
-    for (final element in keysToRemove) {
-      delete(key: element);
-      _routesKey.remove(element);
-    }
-
-    keysToRemove.clear();
-  }
-
-  void reloadDependencyByRoute(String routeName) {
-    final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
-
-    /// Removes `Get.create()` instances registered in `routeName`.
-    if (_routesByCreate.containsKey(routeName)) {
-      for (final onClose in _routesByCreate[routeName]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
-        onClose();
-      }
-      _routesByCreate[routeName]!.clear();
-      _routesByCreate.remove(routeName);
-    }
-
-    for (final element in keysToRemove) {
-      reload(key: element, closeInstance: false);
-      //_routesKey.remove(element);
-    }
-
-    keysToRemove.clear();
-  }
-
   /// Initializes the dependencies for a Class Instance [S] (or tag),
   /// If its a Controller, it starts the lifecycle process.
   /// Optionally associating the current Route to the lifetime of the instance,
@@ -265,17 +192,11 @@ class GetInstance {
       if (_singl[key]!.isSingleton!) {
         _singl[key]!.isInit = true;
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
-          _registerRouteInstance<S>(tag: name);
+          RouterReportManager.reportDependencyLinkedToRoute(_getKey(S, name));
         }
       }
     }
     return i;
-  }
-
-  /// Links a Class instance [S] (or [tag]) to the current route.
-  /// Requires usage of `GetMaterialApp`.
-  void _registerRouteInstance<S>({String? tag}) {
-    _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
   }
 
   InstanceInfo getInstanceInfo<S>({String? tag}) {
@@ -313,9 +234,7 @@ class GetInstance {
         Get.log('Instance "$S" with tag "$tag" has been initialized');
       }
       if (!_singl[key]!.isSingleton!) {
-        _routesByCreate[Get.reference] ??= HashSet<Function>();
-        // _routesByCreate[Get.reference]!.add(i.onDelete as Function);
-        _routesByCreate[Get.reference]!.add(i.onDelete);
+        RouterReportManager.appendRouteByCreate(i);
       }
     }
     return i;
@@ -370,10 +289,13 @@ class GetInstance {
   /// [clearFactory] clears the callbacks registered by [lazyPut]
   /// [clearRouteBindings] clears Instances associated with routes.
   ///
-  bool reset({bool clearFactory = true, bool clearRouteBindings = true}) {
+  bool reset(
+      {@deprecated bool clearFactory = true,
+      @deprecated bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
-    if (clearRouteBindings) _routesKey.clear();
-    _singl.clear();
+    deleteAll(force: true);
+    // if (clearRouteBindings) clearRouteKeys();
+    // _singl.clear();
     return true;
   }
 
