@@ -184,7 +184,7 @@ Cải thiện thời gian, giao mọi thứ đúng hạn mà không làm giảm 
 
 ## Quản lý State
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+Get có 2 cách quản lý trạng thái (state managers) khác nhau : quản lý trạng thái đơn giản (chúng ta gọi nó là GetBuilder) và quản lý trạng thái phản ứng (the reactive state manager) (GetX/Obx).
 
 ### Quản lý Reactive State
 
@@ -192,7 +192,7 @@ Lập trình phản ứng (reactive programming) có thể khiến nhiều ngư�
 
 - Bạn sẽ không cần tạo StreamControllers.
 - Bạn sẽ không cần tạo StreamBuilder cho mỗi biến.
-- Bạn sẽ không cần tạo một lớp cho mỗi trạng thái.
+- Bạn sẽ không cần tạo một lớp (class) cho mỗi trạng thái.
 - Bạn sẽ không cần tạo get cho một giá trị ban đầu.
 - Bạn sẽ không cần sử dụng trình tạo mã.
 
@@ -206,7 +206,7 @@ Hãy tưởng tượng rằng bạn có một biến tên và muốn rằng mỗ
 var name = 'Jonatas Borges';
 ```
 
-Để lắng nghe nó, bạn chỉ cần thêm ".obs" ở cuối:
+Để nó có thể được lắng nghe, bạn chỉ cần thêm ".obs" ở cuối:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
@@ -222,9 +222,9 @@ Thế thôi. Chỉ là _thế_ thôi người ơi~.
 
 ### Thêm thông tin về Quản lý state
 
-**Xem thông tin cụ thể tại dây [here](./documentation/en_US/state_management.md). Tại đó, bạn có thể tham khảo ví dụ và so sánh sự khác nhau giữa quản lý state cơ bản và quản lý state reactive**
+**Xem thông tin cụ thể tại [đây](./documentation/en_US/state_management.md). Tại đó, bạn có thể tham khảo ví dụ và so sánh sự khác nhau giữa quản lý state cơ bản và quản lý state reactive**
 
-Bạn sẽ hình dung sức mạnh của GetX.
+Bạn sẽ hình dung được sức mạnh của GetX.
 
 ## Quản lý route
 
