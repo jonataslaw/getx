@@ -245,7 +245,7 @@ Di chuyển tới màn hình mới:
 Get.to(NextScreen());
 ```
 
-Di chuyển tới màn hình mới theo tên. Xem thêm tại đây [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+Di chuyển tới màn hình mới theo tên. Xem thêm tại [đây](./documentation/en_US/route_management.md#navigation-with-named-routes)
 
 ```dart
 
@@ -274,7 +274,7 @@ Bạn có thấy nãy giờ chúng ta không sử dụng từ khóa "context"? �
 
 ### Thêm thông tin về quản lý route
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Get hoạt động được với named routes và cũng cung cấp cách điều khiển ở cấp thấp (lower-level control) cho routes của bạn! Tài liệu chi tiết tại [đây](./documentation/en_US/route_management.md)**
 
 ## Quản lý dependency
 
