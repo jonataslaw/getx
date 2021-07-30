@@ -57,8 +57,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   final List<NavigatorObserver>? navigatorObservers;
   final TransitionDelegate<dynamic>? transitionDelegate;
 
-  GlobalKey<NavigatorState> get navigatorKey =>
-      GetNavigation.getxController.key;
+  GlobalKey<NavigatorState> get navigatorKey => Get.key;
 
   GetDelegate({
     GetPage? notFoundRoute,

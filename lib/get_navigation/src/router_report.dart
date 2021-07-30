@@ -34,6 +34,7 @@ class RouterReportManager<T> {
 
   static void clearRouteKeys() {
     _routesKey.clear();
+    _routesByCreate.clear();
   }
 
   static void appendRouteByCreate(GetLifeCycleBase i) {

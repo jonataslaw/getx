@@ -1097,6 +1097,74 @@ The only way to actually delete a `GetxService`, is with `Get.reset()` which is 
 "Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
 
+
+### Tests
+
+You can test your controllers like any other class, including their lifecycles:
+
+```dart
+class Controller extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    //Change value to name2
+    name.value = 'name2';
+  }
+
+  @override
+  void onClose() {
+    name.value = '';
+    super.onClose();
+  }
+
+  final name = 'name1'.obs;
+
+  void changeName() => name.value = 'name3';
+}
+
+void main() {
+  test('''
+Test the state of the reactive variable "name" across all of its lifecycles''',
+      () {
+    /// You can test the controller without the lifecycle,
+    /// but it's not recommended unless you're not using
+    ///  GetX dependency injection
+    final controller = Controller();
+    expect(controller.name.value, 'name1');
+
+    /// If you are using it, you can test everything,
+    /// including the state of the application after each lifecycle.
+    Get.put(controller); // onInit was called
+    expect(controller.name.value, 'name2');
+
+    /// Test your functions
+    controller.changeName();
+    expect(controller.name.value, 'name3');
+
+    /// onClose was called
+    Get.delete<Controller>();
+
+    expect(controller.name.value, '');
+  });
+}
+```
+
+#### Tips
+
+##### Mockito or mocktail
+If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
+
+```dart
+class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
+```
+
+##### Using Get.reset()
+If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
+
+##### Get.testMode 
+if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
+
+
 # Breaking changes from 2.0
 
 1- Rx types:

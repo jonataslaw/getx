@@ -96,6 +96,10 @@ extension LocalesIntl on GetInterface {
     translations.addAll(tr);
   }
 
+  void clearTranslations() {
+    translations.clear();
+  }
+
   void appendTranslations(Map<String, Map<String, String>> tr) {
     tr.forEach((key, map) {
       if (translations.containsKey(key)) {

@@ -1014,17 +1014,17 @@ you can only use widgets and widget functions here''';
       Get.log = logWriterCallback;
     }
     if (defaultPopGesture != null) {
-      getxController.defaultPopGesture = defaultPopGesture;
+      _getxController.defaultPopGesture = defaultPopGesture;
     }
     if (defaultOpaqueRoute != null) {
-      getxController.defaultOpaqueRoute = defaultOpaqueRoute;
+      _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
     }
     if (defaultTransition != null) {
-      getxController.defaultTransition = defaultTransition;
+      _getxController.defaultTransition = defaultTransition;
     }
 
     if (defaultDurationTransition != null) {
-      getxController.defaultTransitionDuration = defaultDurationTransition;
+      _getxController.defaultTransitionDuration = defaultDurationTransition;
     }
   }
 
@@ -1050,18 +1050,18 @@ you can only use widgets and widget functions here''';
     engine!.performReassemble();
   }
 
-  void appUpdate() => getxController.update();
+  void appUpdate() => _getxController.update();
 
   void changeTheme(ThemeData theme) {
-    getxController.setTheme(theme);
+    _getxController.setTheme(theme);
   }
 
   void changeThemeMode(ThemeMode themeMode) {
-    getxController.setThemeMode(themeMode);
+    _getxController.setThemeMode(themeMode);
   }
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    return getxController.addKey(newKey);
+    return _getxController.addKey(newKey);
   }
 
   GlobalKey<NavigatorState>? nestedKey(dynamic key) {
@@ -1206,50 +1206,58 @@ you can only use widgets and widget functions here''';
   // /// give access to Immutable MediaQuery.of(context).size.width
   // double get width => MediaQuery.of(context).size.width;
 
-  GlobalKey<NavigatorState> get key => getxController.key;
+  GlobalKey<NavigatorState> get key => _getxController.key;
 
-  Map<dynamic, GlobalKey<NavigatorState>> get keys => getxController.keys;
+  Map<dynamic, GlobalKey<NavigatorState>> get keys => _getxController.keys;
 
-  GetMaterialController get rootController => getxController;
+  GetMaterialController get rootController => _getxController;
 
-  bool get defaultPopGesture => getxController.defaultPopGesture;
-  bool get defaultOpaqueRoute => getxController.defaultOpaqueRoute;
+  bool get defaultPopGesture => _getxController.defaultPopGesture;
+  bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
 
-  Transition? get defaultTransition => getxController.defaultTransition;
+  Transition? get defaultTransition => _getxController.defaultTransition;
 
   Duration get defaultTransitionDuration {
-    return getxController.defaultTransitionDuration;
+    return _getxController.defaultTransitionDuration;
   }
 
-  Curve get defaultTransitionCurve => getxController.defaultTransitionCurve;
+  Curve get defaultTransitionCurve => _getxController.defaultTransitionCurve;
 
   Curve get defaultDialogTransitionCurve {
-    return getxController.defaultDialogTransitionCurve;
+    return _getxController.defaultDialogTransitionCurve;
   }
 
   Duration get defaultDialogTransitionDuration {
-    return getxController.defaultDialogTransitionDuration;
+    return _getxController.defaultDialogTransitionDuration;
   }
 
-  Routing get routing => getxController.routing;
+  Routing get routing => _getxController.routing;
 
-  Map<String, String?> get parameters => getxController.parameters;
+  Map<String, String?> get parameters => _getxController.parameters;
   set parameters(Map<String, String?> newParameters) =>
-      getxController.parameters = newParameters;
+      _getxController.parameters = newParameters;
 
-  CustomTransition? get customTransition => getxController.customTransition;
+  CustomTransition? get customTransition => _getxController.customTransition;
   set customTransition(CustomTransition? newTransition) =>
-      getxController.customTransition = newTransition;
+      _getxController.customTransition = newTransition;
 
-  bool get testMode => getxController.testMode;
-  set testMode(bool isTest) => getxController.testMode = isTest;
+  bool get testMode => _getxController.testMode;
+  set testMode(bool isTest) => _getxController.testMode = isTest;
 
-  static GetMaterialController getxController = GetMaterialController();
+  void resetRootNavigator() {
+    _getxController = GetMaterialController();
+  }
+
+  static GetMaterialController _getxController = GetMaterialController();
 }
 
 extension NavTwoExt on GetInterface {
   void addPages(List<GetPage> getPages) {
     routeTree.addRoutes(getPages);
+  }
+
+  void clearRouteTree() {
+    _routeTree.routes.clear();
   }
 
   static late final _routeTree = ParseRouteTree(routes: []);

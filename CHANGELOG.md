@@ -1,3 +1,6 @@
+## [4.3.4] 
+- Improve docs
+
 ## [4.3.3] 
 - Fix Get.reset
 

@@ -95,14 +95,14 @@ extension Inst on GetInterface {
   /// - [clearFactory] clears the callbacks registered by `Get.lazyPut()`
   /// - [clearRouteBindings] clears Instances associated with Routes when using
   ///   [GetMaterialApp].
-  bool reset(
-          {@deprecated bool clearFactory = true,
-          @deprecated bool clearRouteBindings = true}) =>
-      GetInstance().reset(
-          // ignore: deprecated_member_use_from_same_package
-          clearFactory: clearFactory,
-          // ignore: deprecated_member_use_from_same_package
-          clearRouteBindings: clearRouteBindings);
+  // bool reset(
+  //         {@deprecated bool clearFactory = true,
+  //         @deprecated bool clearRouteBindings = true}) =>
+  //     GetInstance().reset(
+  //         // ignore: deprecated_member_use_from_same_package
+  //         clearFactory: clearFactory,
+  //         // ignore: deprecated_member_use_from_same_package
+  //         clearRouteBindings: clearRouteBindings);
 
   /// Deletes the `Instance<S>`, cleaning the memory and closes any open
   /// controllers (`DisposableInterface`).
