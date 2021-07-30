@@ -32,7 +32,7 @@ class RouterReportManager<T> {
     _routesKey.putIfAbsent(depedencyKey, () => _current);
   }
 
-  void clearRouteKeys() {
+  static void clearRouteKeys() {
     _routesKey.clear();
   }
 

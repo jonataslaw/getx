@@ -285,6 +285,7 @@ class GetInstance {
 
   /// Clears all registered instances (and/or tags).
   /// Even the persistent ones.
+  /// This should be used at the end or tearDown of unit tests.
   ///
   /// [clearFactory] clears the callbacks registered by [lazyPut]
   /// [clearRouteBindings] clears Instances associated with routes.
@@ -293,9 +294,10 @@ class GetInstance {
       {@deprecated bool clearFactory = true,
       @deprecated bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
-    deleteAll(force: true);
-    // if (clearRouteBindings) clearRouteKeys();
-    // _singl.clear();
+    // deleteAll(force: true);
+    if (clearRouteBindings) RouterReportManager.clearRouteKeys();
+    _singl.clear();
+
     return true;
   }
 
