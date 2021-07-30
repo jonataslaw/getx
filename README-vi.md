@@ -74,29 +74,29 @@
 
   - **NĂNG SUẤT:** GetX sử dụng một cú pháp dễ dàng và dễ thở. Bất kể bạn muốn làm gì, luôn có một cách dễ dàng hơn với GetX. Nó sẽ tiết kiệm hàng giờ phát triển và sẽ cung cấp hiệu suất tối đa mà ứng dụng của bạn có thể mang lại.
 
-    Nói chung, nhà phát triển nên quan tâm đến việc xóa controller ra khỏi memory. Với GetX, các tài nguyên sẽ
-    TỰ ĐỘNG xóa khỏi memory khi không dùng theo mặc định. Nếu bạn muốn giữ nó trong memory, bạn phải khai báo rõ ràng "permanent: true" trong phần dependency của mình. Từ đó, bạn sẽ tiết kiệm thời gian và ít phụ thuộc vào memory. Theo mặc định, tính năng tải dependency cũng lười biếng.
+    Nói chung, nhà phát triển nên quan tâm đến việc xóa những controller ra khỏi bộ nhớ. Với GetX, mặc định các tài nguyên sẽ
+    TỰ ĐỘNG xóa khỏi bộ nhớ khi không dùng nữa. Nếu bạn muốn giữ nó trong bộ nhớ, bạn phải khai báo rõ ràng "permanent: true" trong phần dependency của mình. Từ đó, bạn sẽ tiết kiệm thời gian và giảm rủi ro khi phụ thuộc vào bộ nhớ. Theo mặc định, tính năng tải dependency cũng lười biếng.
 
   - **TỔ CHỨC:**
-    GetX cho phép tách toàn bộ Chế độ xem, presentation logic, business logic, nạp dependencies và điều hướng. Bạn không "context" để điều hướng giữa các route, vì vậy bạn sẽ độc lập trong sơ đồ widget (trực quan hóa). Bạn không cần "context" để truy cập Controller / Blocs của mình thông qua một InheritedWidget, vì vậy bạn hoàn toàn tách rời presentation logic và business logic khỏi lớp trực quan của mình. Bạn không cần phải đưa các Controller / Models / Blocs vào sơ đồ widget của mình thông qua `MultiProvider`, vì GetX sử dụng tính năng nạp dependency của riêng nó, tách hoàn toàn DI khỏi chế độ xem của nó.
+    GetX cho phép tách toàn bộ View, presentation logic, business logic, nạp dependencies và điều hướng. Bạn không cần "context" để điều hướng giữa các route, vì vậy bạn sẽ độc lập trong sơ đồ widget (trực quan hóa). Bạn không cần "context" để truy cập Controller / Blocs của mình thông qua một InheritedWidget, vì vậy bạn hoàn toàn tách rời presentation logic và business logic ra khỏi lớp trực quan của mình. Bạn không cần phải đưa các Controller / Models / Blocs vào sơ đồ widget của mình thông qua `MultiProvider`, vì GetX sử dụng tính năng nạp dependency của riêng nó, tách hoàn toàn DI khỏi chế độ xem của nó.
 
     Với GetX, bạn biết nơi tìm từng tính năng ứng dụng của mình, với cơ chế clean code theo mặc định. Ngoài việc giúp bảo trì dễ dàng, GetX giúp việc chia sẻ các mô-đun trở thành khả thi trong Flutter.
-    BLoC là điểm khởi đầu để tổ chức code trong Flutter, nó tách biệt logic nghiệp vụ với trực quan. GetX nảy sinh từ điều này, không chỉ tách biệt presentation logic mà còn cả business logic. Nạp dependency bổ sung và route cũng được tách ra và lớp dữ liệu cũng biến mất. Bạn sẽ biết mọi thứ ở đâu và sẽ hình dung tất cả những điều này dễ hơn cả "Hello World".
-    GetX là cách dễ nhất, thiết thực và có thể mở rộng để xây dựng các ứng dụng hiệu suất cao với Flutter SDK. GetX chứa đựng một hệ sinh thái rộng lớn xung quanh nó hoạt động hoàn hảo cùng nhau, rất dễ dàng cho người mới bắt đầu và nó chính xác cho các chuyên gia. Nó an toàn, ổn định, cập nhật và cung cấp một loạt các API được tích hợp sẵn mà không có trong Flutter SDK mặc định.
+    BLoC là điểm khởi đầu để tổ chức code trong Flutter, nó tách biệt business logic ra khỏi lớp trực quan hóa (visualization). GetX nảy sinh từ điều này, không chỉ tách biệt presentation logic mà còn cả business logic. Nạp dependency bổ sung và route cũng được tách ra và lớp dữ liệu cũng biến mất. Bạn sẽ biết mọi thứ ở đâu và sẽ hình dung tất cả những điều này dễ hơn cả xây dựng chương trình "Hello World".
+    GetX là cách dễ nhất, thiết thực và có thể mở rộng để xây dựng các ứng dụng hiệu suất cao với Flutter SDK. GetX chứa đựng một hệ sinh thái rộng lớn xung quanh nó hoạt động hoàn hảo cùng nhau, rất dễ dàng cho người mới bắt đầu và nó chính xác cho các chuyên gia. Nó an toàn, ổn định, luôn cập nhật và cung cấp một loạt các API được tích hợp sẵn mà không có trong Flutter SDK mặc định.
 
-- GetX không cồng kềnh và có vô số tính năng cho phép bạn bắt đầu lập trình mà không cần lo lắng về bất cứ điều gì. Đặc biệt, nó cho phép mỗi tính năng này nằm trong các vùng chứa riêng biệt và chỉ được bắt đầu sau khi sử dụng. Nếu bạn chỉ sử dụng quản lý state thì sẽ chỉ có quản lý state được sử dụng. Nếu bạn chỉ sử dụng route, thì GetX không complie quản lý state.
+- GetX không cồng kềnh và có vô số tính năng cho phép bạn bắt đầu lập trình mà không cần lo lắng về bất cứ điều gì. Đặc biệt, nó cho phép mỗi tính năng này nằm trong các vùng chứa riêng biệt và chỉ được bắt đầu sau khi sử dụng. Nếu bạn chỉ sử dụng phần quản lý state của GetX thì sẽ chỉ có quản lý state được sử dụng. Nếu bạn chỉ sử dụng route, thì GetX không biên dịch phần quản lý state.
 
-- GetX có một hệ sinh thái khổng lồ, một cộng đồng lớn, một số lượng lớn cộng tác viên và sẽ được duy trì miễn là Flutter còn tồn tại. GetX có khả năng chạy đồng dạng trên Android, iOS, Web, Mac, Linux, Windows và trên máy chủ của bạn.
+- GetX có một hệ sinh thái khổng lồ, một cộng đồng lớn, một số lượng lớn cộng tác viên và sẽ được duy trì miễn là Flutter còn tồn tại. GetX có khả năng chạy cùng một mã (code) trên Android, iOS, Web, Mac, Linux, Windows và trên máy chủ của bạn.
   **Bạn hoàn toàn có thể sử dụng lại mã của mình trên frontend qua backend với [Get Server](https://github.com/jonataslaw/get_server)**.
 
 **Ngoài ra, toàn bộ quá trình phát triển có thể hoàn toàn tự động, cả trên máy chủ và frontend với [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
 **Ngoài ra, nhằm tăng thêm năng suất của bạn, chúng tôi hỗ trợ
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) và [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+[tiện ích trên VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) và [tiện ích cho Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Cài Đặt
 
-Thêm Get vào pubspec.yaml file:
+Thêm Get vào file pubspec.yaml:
 
 ```yaml
 dependencies:
@@ -120,12 +120,12 @@ Dự án "counter" được tạo theo mặc định trên dự án mới trên 
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Chú ý: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp CHỈ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
-- Chú ý²: Một lần nữa, bước này CHỈ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back () ', v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
+- Chú ý: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp chỉ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
+- Chú ý²: Một lần nữa, bước này chỉ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back ()`, v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
 
 - Bước 2:
-  Tạo lớp business logic của bạn và đặt tất cả các variables, function và controller bên trong nó.
-  Bạn có thể làm cho bất kỳ variables nào có thể quan sát được bằng cách sử dụng ".obs" đơn giản.
+  Tạo lớp business logic của bạn và đặt tất cả các biến (variables), hàm (function) và controller bên trong nó.
+  Bạn có thể làm cho bất kỳ biến nào có thể quan sát được đơn giản bằng cách sử dụng ".obs".
 
 ```dart
 class Controller extends GetxController{
