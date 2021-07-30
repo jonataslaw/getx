@@ -318,8 +318,8 @@ Text(controller.textFromApi);
 
 ### Dịch thuật
 
-Các bản dịch được lưu giữ như một bản đồ từ điển key-value đơn giản.
-Để thêm các bản dịch tùy chỉnh, hãy tạo một class và extends `Translation`.
+Các bản dịch được lưu giữ như một bản đồ từ điển (dictionary map) key-value đơn giản.
+Để thêm các bản dịch tùy chỉnh, hãy tạo một class và kế thừa (extend) từ `Translation`.
 
 ```dart
 import 'package:get/get.dart';
@@ -339,7 +339,7 @@ class Messages extends Translations {
 
 #### Sử dụng bản dịch thuật
 
-Chỉ cần append `.tr` vào key được chỉ định và nó sẽ được dịch, sử dụng giá trị hiện tại của` Get.locale` và `Get.fallbackLocale`.
+Chỉ cần thêm `.tr` vào key được chỉ định và nó sẽ được dịch, sử dụng giá trị hiện tại của` Get.locale` và `Get.fallbackLocale`.
 
 ```dart
 Text('title'.tr);
@@ -404,7 +404,7 @@ return GetMaterialApp(
 );
 ```
 
-## Đổi Theme
+## Đổi chủ đề (Theme)
 
 Vui lòng không sử dụng bất kỳ Widget con nào cấp cao hơn `GetMaterialApp` để cập nhật nó. Điều này có thể kích hoạt các key trùng lặp. Rất nhiều người đã quen với cách tiếp cận thời tiền sử là tạo tiện ích "ThemeProvider" chỉ để thay đổi chủ đề ứng dụng của bạn và điều này KHÔNG cần thiết với ** GetX ™ **.
 
@@ -431,7 +431,7 @@ GetConnect tạo giao thức tới http hoặc websockets
 
 ### Cấu hình mặc định
 
-Đơn giản hóa các lệnh GET/POST/PUT/DELETE/SOCKET khi giao tiếp Rest API hoặc websockets.
+Đơn giản, bạn có thể kế thừa (extend) từ GetConnect và sử dụng các phương thức GET/POST/PUT/DELETE/SOCKET khi giao tiếp với Rest API hoặc websockets.
 
 ```dart
 class UserProvider extends GetConnect {
@@ -454,7 +454,7 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Tùy chỉnh
+### Cấu hình tùy chỉnh
 
 GetConnect có khả năng tùy chỉnh cao Bạn có thể xác định Url chính như answers, modifiers như request, xác địng authenticator và thậm chí số lần thử mà nó sẽ cố gắng authenticate, ngoài việc cung cấp khả năng xác định bộ giải mã chuẩn sẽ chuyển đổi tất cả các request của bạn thành Model mà không cần bất kỳ cấu hình bổ sung nào.
 
