@@ -1,15 +1,19 @@
-  ## [4.3.1] 
+## [4.3.2] 
+- Fix nullable on internacionalization (@jmguillens)
+- Fix nullable on Rx.stream (@steven-spiel)
+
+## [4.3.1] 
 - Fix controller is not removed when keyboard is open.
 - Improved: Safe removal and insertion of controllers.
 
-  ## [4.3.0] 
+## [4.3.0] 
 - Added GetResponsiveWidget (@ahmednfwela)
 - Added `Get.replace()` (@jwelmac)
 - Added Improve korean doc (@sejun2)
 - Fix multiple middlewares redirect (@liasica)
 - Added gestureWidth and showCupertinoParallax to GetPage to customize cupertino transitions
 
- ## [4.2.5] 
+## [4.2.5] 
 - Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
 - Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
 - Fix error when child on MaterialApp is null (@ahmednfwela)
