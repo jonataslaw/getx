@@ -278,24 +278,24 @@ Bạn có thấy nãy giờ chúng ta không sử dụng từ khóa "context"? �
 
 ## Quản lý dependency
 
-Get hỗ trợ tính năng giúp bạn lấy class như Bloc hoặc Controller chỉ với 1 dòng, khỏi cần Provider context hay InheritedWidget:
+Get hỗ trợ tính năng giúp bạn lấy class như Bloc hoặc Controller chỉ với 1 dòng, không cần Provider context hay InheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Chí ú: Nếu bạn dùng cái này, nhớ đặt attention to thànhe bindings API, which will make it easier to connect your view to your controller.
+- Chú ý: Nếu bạn dùng Get's State Manager, hãy chú ý đến việc bindings API, có thể giúp dễ dàng kết nối view đến controller.
 
 Thay vì khởi tạo class của bạn trong class bạn đang sử dụng, bạn đang khởi tạo nó trong phiên bản Get, điều này sẽ làm cho nó có sẵn trên toàn bộ Ứng dụng của bạn.
 Vì vậy, bạn có thể sử dụng bộ điều khiển (hoặc Bloc) của mình một cách bình thường
 
-**Mẹo:** Nhận quản lý dependency được tách ra khỏi các phần khác của package, vì vậy, ví dụ: nếu ứng dụng của bạn đã sử dụng trình quản lý trạng thái (bất kỳ cái nào, không quan trọng), bạn không cần phải viết lại tất cả, bạn có thể sử dụng điều này nạp dependency vô lo
+**Mẹo:** quản lý dependency của Get được tách ra khỏi các phần khác của package, vì vậy, ví dụ: nếu ứng dụng của bạn đã sử dụng 1 trình quản lý trạng thái (bất kỳ cái nào, không quan trọng), bạn không cần phải viết lại tất cả, bạn có thể sử dụng nạp dependency của Get vô lo
 
 ```dart
 controller.fetchApi();
 ```
 
-Hãy tưởng tượng rằng bạn đã điều hướng qua nhiều route và bạn cần dữ liệu bị còn sót trong controller của mình, bạn sẽ cần một trình quản lý dependency kết hợp với Provider hoặc Get_it, đúng hơm? Với Get, sử dụng Get to "find" cho controller, bạn sẽ hoàn toàn độc lập:
+Hãy tưởng tượng rằng bạn đã điều hướng qua nhiều route và bạn cần dữ liệu bị còn sót trong controller của mình, bạn sẽ cần một trình quản lý dependency kết hợp với Provider hoặc Get_it, đúng không? Với Get, sử dụng Get để "find" cho controller, bạn sẽ hoàn toàn độc lập:
 
 ```dart
 Controller controller = Get.find();
@@ -310,7 +310,7 @@ Text(controller.textFromApi);
 
 ### Thêm thông tin về quản lý dependency
 
-**Xem thêm tại đây [here](./documentation/en_US/dependency_management.md)**
+**Xem thêm tại [đây](./documentation/en_US/dependency_management.md)**
 
 # Utils
 
