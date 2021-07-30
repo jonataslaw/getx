@@ -1,3 +1,7 @@
+  ## [4.3.1] 
+- Fix controller is not removed when keyboard is open.
+- Improved: Safe removal and insertion of controllers.
+
   ## [4.3.0] 
 - Added GetResponsiveWidget (@ahmednfwela)
 - Added `Get.replace()` (@jwelmac)
