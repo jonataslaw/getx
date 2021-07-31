@@ -16,7 +16,7 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Về Getx](#về-getx)
+- [Về GetX](#về-getx)
 - [Cài Đặt](#cài-đặt)
 - [Counter App với GetX](#counter-app-với-getx)
 - [Tam Trụ](#tam-trụ)
@@ -64,7 +64,7 @@
   - [Cách cống hiến](#cách-cống-hiến)
   - [Các bài báo và video](#các-bài-báo-và-video)
 
-# Về Getx
+# Về GetX
 
 - GetX hướng tới sự nhỏ gọn và giải pháp tối ưu cho Flutter với tốc độ ưu việt trong quản lý state, nạp dependency thông minh, và quản lý route nhanh chóng và thực tế.
 
@@ -964,7 +964,7 @@ class OtherClass extends GetView<Controller> {
 
 #### GetView
 
-Widget này là bảo bối của Getx, rất đơn giản, nhưng rất hữu ích!
+Widget này là bảo bối của GetX, rất đơn giản, nhưng rất hữu ích!
 
 Là một Widget `const Stateless` có getter` controller` cho một `Controller` đã đăng ký, chỉ vậy thôi người ơi~.
 
@@ -1129,7 +1129,7 @@ GetMaterialApp(
 3- Dễ dàng mà không phải lo lắng về hiệu suất. Hiệu suất của Flutter đã đáng kinh ngạc rồi, nhưng hãy tưởng tượng rằng bạn sử dụng trình quản lý state và trình định vị để phân phối các Blocs / stores / controllers / v.v. của bạn. Bạn sẽ phải gọi thủ công loại trừ sự phụ thuộc khi bạn không cần đến chúng. Nhưng bạn đã bao giờ nghĩ chỉ cần sử dụng bộ điều khiển của mình và khi nó không còn được ai sử dụng nữa, nó sẽ đơn giản được xóa khỏi bộ nhớ? Đó là những gì GetX làm. Với SmartManagement, mọi thứ không được sử dụng sẽ được xóa khỏi bộ nhớ và bạn không phải lo lắng về bất cứ điều gì ngoài lập trình. Bạn sẽ được đảm bảo rằng bạn đang sử dụng các nguồn tài nguyên cần thiết tối thiểu mà thậm chí không cần tạo ra một logic nào cho việc này.
 
 4- Tách khỏi thực tế. Bạn có thể đã nghe đến khái niệm "tách khung nhìn (view) khỏi business logic". Đây không phải là đặc thù của BLoC, MVC, MVVM và bất kỳ tiêu chuẩn nào khác trên thị trường đều có khái niệm này. Tuy nhiên, khái niệm này thường có thể được giảm thiểu trong Flutter do việc sử dụng ngữ cảnh (context).
-Nếu bạn cần ngữ cảnh để tìm một InheritedWidget, bạn cần nó trong dạng xem hoặc chuyển ngữ cảnh theo tham số. Tôi đặc biệt thấy giải pháp này rất chán đời; hơn nữa, để làm việc theo nhóm, chúng tôi sẽ luôn phụ thuộc vào business logic của View. Getx không chính thống với cách tiếp cận tiêu chuẩn và mặc dù nó không cấm hoàn toàn việc sử dụng StatefulWidgets, InitState, v.v., nhưng nó luôn có một cách tiếp cận tương tự có thể rõ ràng hơn. Controller có vòng đời và khi bạn cần thực hiện yêu cầu APIREST chẳng hạn, bạn độc lập với View. Bạn có thể sử dụng onInit để bắt đầu cuộc gọi http và khi dữ liệu đến, các biến sẽ được điền. Vì GetX hoạt động hoàn toàn reactive (đó là sự thực và hoạt động theo luồng), khi các mục được lấp đầy, tất cả tiện ích con sử dụng biến đó sẽ được cập nhật tự động trong View. Điều này cho phép những người có chuyên môn về UI chỉ làm việc với các widget và không phải gửi bất kỳ thứ gì đến logic nghiệp vụ ngoài các sự kiện của người dùng (như nhấp vào nút), trong khi những người làm việc với logic nghiệp vụ sẽ được tự do tạo và kiểm tra logic nghiệp vụ riêng.
+Nếu bạn cần ngữ cảnh để tìm một InheritedWidget, bạn cần nó trong dạng xem hoặc chuyển ngữ cảnh theo tham số. Tôi đặc biệt thấy giải pháp này rất chán đời; hơn nữa, để làm việc theo nhóm, chúng tôi sẽ luôn phụ thuộc vào business logic của View. GetX không chính thống với cách tiếp cận tiêu chuẩn và mặc dù nó không cấm hoàn toàn việc sử dụng StatefulWidgets, InitState, v.v., nhưng nó luôn có một cách tiếp cận tương tự có thể rõ ràng hơn. Controller có vòng đời và khi bạn cần thực hiện yêu cầu APIREST chẳng hạn, bạn độc lập với View. Bạn có thể sử dụng onInit để bắt đầu cuộc gọi http và khi dữ liệu đến, các biến sẽ được điền. Vì GetX hoạt động hoàn toàn reactive (đó là sự thực và hoạt động theo luồng), khi các mục được lấp đầy, tất cả tiện ích con sử dụng biến đó sẽ được cập nhật tự động trong View. Điều này cho phép những người có chuyên môn về UI chỉ làm việc với các widget và không phải gửi bất kỳ thứ gì đến logic nghiệp vụ ngoài các sự kiện của người dùng (như nhấp vào nút), trong khi những người làm việc với logic nghiệp vụ sẽ được tự do tạo và kiểm tra logic nghiệp vụ riêng.
 
 Thư viện này sẽ luôn được cập nhật và triển khai các tính năng mới. Hãy thoải mái đưa ra các bài PR và đóng góp cho chúng.
 
@@ -1157,7 +1157,7 @@ Mọi đóng góp đều được hoan nghênh!
 
 ## Các bài báo và video
 
-- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Hướng dẫn bởi [Pesa Coder](https://github.com/UsamaElgendy).
+- [Flutter GetX EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Hướng dẫn bởi [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Hướng dẫn bởi [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Quản lý route bởi Amateur Coder.
 - [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - Quản lý State video by Amateur Coder.
