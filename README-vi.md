@@ -37,7 +37,7 @@
   - [Đổi Theme](#đổi-theme)
   - [GetConnect](#getconnect)
     - [Cấu hình mặc định](#cấu-hình-mặc-định)
-    - [Tùy chỉnh](#tùy-chỉnh)
+    - [Cấu hình tùy chỉnh](#cấu-hình-tùy-chỉnh)
   - [GetPage Middleware](#getpage-middleware)
     - [Ưu tiên](#ưu-tiên)
     - [Chuyển hướng](#chuyển-hướng)
@@ -507,7 +507,7 @@ class HomeProvider extends GetConnect {
 
 GetPage hiện có thuộc tính mới lấy danh sách GetMiddleWare và chạy chúng theo thứ tự cụ thể.
 
-**Chí ú**: Khi GetPage có Middleware (phần trung gian), tất cả các children của trang này sẽ tự động có cùng middlewares.
+**Chú ý**: Khi GetPage có Middleware (phần trung gian), tất cả các children của trang này sẽ tự động có cùng middlewares.
 
 ### Ưu tiên
 
@@ -549,7 +549,7 @@ GetPage onPageCalled(GetPage page) {
 
 ### OnBindingsStart
 
-Function này sẽ khởi động trước khi Bindinds diễn ra và bạn có thể thay đổi Bindings cho trang này.
+Hàm này sẽ khởi động ngay trước khi Bindings diễn ra và bạn có thể thay đổi Bindings cho trang này.
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -563,7 +563,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 
 ### OnPageBuildStart
 
-Function này sẽ khởi động sau khi Bindings diễn ra. Ở đây, bạn có thể làm thứ gì đó sau khi bạn tạo Bindings và trước khi tạo trange widget.
+Hàm này sẽ khởi động ngay sau khi Bindings diễn ra. Ở đây, bạn có thể làm thứ gì đó sau khi bạn tạo Bindings và trước khi tạo trang widget.
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -574,7 +574,7 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 
 ### OnPageBuilt
 
-Function này sẽ khởi động ngay sau khi GetPage.page được gọi và sẽ cho bạn kết quả của function và lấy widget được hiển thị.
+Hàm này sẽ khởi động ngay sau khi GetPage.page được gọi và sẽ cho bạn kết quả của hàm và lấy widget được hiển thị.
 
 ### OnPageDispose
 
@@ -723,7 +723,7 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+Bạn cũng sẽ có thể dùng Middleware của riêng bạn trong `GetObserver`, điều này không ảnh hưởng những thứ khác.
 
 ```dart
 MaterialApp(
@@ -734,8 +734,8 @@ MaterialApp(
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+Bạn có thể tạo _Global Settings_ cho `Get`. Chỉ cần thêm `Get.config` vào code của bạn trước khi đẩy (push) bất cứ route nào.
+Hoặc làm nó trực tiếp trong `GetMaterialApp` của bạn.
 
 ```dart
 GetMaterialApp(
@@ -754,9 +754,8 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+Bạn có thể tự chọn chuyển hướng tất cả logging messages từ `Get`.
+Nếu bạn muốn sử dụng logging package ưa thích của riêng bạn, và muốn chụp lại những logs đó:
 
 ```dart
 GetMaterialApp(
@@ -775,7 +774,7 @@ void localLogWriter(String text, {bool isError = false}) {
 ### Local State Widgets
 
 Các Widget này cho phép bạn quản lý một giá trị duy nhất và giữ trạng thái tạm thời và cục bộ.
-Chúng tôi có các hướng đi cho Reactive và Simple.
+Chúng ta có các hướng đi cho Reactive và Simple.
 Ví dụ: bạn có thể sử dụng chúng để chuyển đổi văn bản tối nghĩa trong một `TextField`, có thể tạo một widget
 Expandable Panel tùy chỉnh hoặc có thể sửa đổi chỉ mục hiện tại trong `BottomNavigationBar` trong khi thay đổi nội dung
 bên trong một `Scaffold`.
@@ -799,7 +798,7 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Tương tự như [`ValueBuilder`] (# valuebuilder), nhưng đây là phiên bản Reactive, bạn kèm một lệnh Rx (nhớ cái .obs không?) và nó cập nhật tự động ... hay chưa?
+Tương tự như [`ValueBuilder`](#valuebuilder), nhưng đây là phiên bản Reactive, bạn kèm một lệnh Rx (nhớ cái .obs không?) và nó cập nhật tự động ... hay chưa?
 
 ```dart
 ObxValue((data) => Switch(
@@ -823,7 +822,7 @@ var message = 'Xin Chào'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Ngay cả khi `message` _prints_ giá trị String, Loại là ** RxString **!
+Ngay cả khi `message` _prints_ giá trị String, thì kiểu của nó lại là ** RxString **!
 
 Vì vậy, bạn không thể thực hiện `message.substring (0, 4) '. Bạn phải truy cập vào `value`thực bên trong _observable_: Cách được sử dụng nhiều nhất là`.value`, nhưng, bạn có biết rằng bạn cũng có thể sử dụng ...
 
@@ -917,20 +916,20 @@ print( user );
 ## StateMixin
 
 Một cách khác để xử lý trạng thái `UI` của bạn là sử dụng`StateMixin <T>`.
-Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` bộ điều khiển của bạn cho phép tích hợp kèm mô hình T.
+Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` vào bộ điều khiển (controller) của bạn cho phép tích hợp kèm mô hình T.
 
 ```dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-Phương thức `change ()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
+Phương thức `change()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
 Chỉ cần chuyển dữ liệu và trạng thái theo cách này:
 
 ```dart
 change(data, status: RxStatus.success());
 ```
 
-RxStatus allow these status:
+RxStatus cho phép những trang thái này:
 
 ```dart
 RxStatus.loading();
@@ -939,7 +938,7 @@ RxStatus.empty();
 RxStatus.error('message');
 ```
 
-To represent it in the UI, use:
+Để biểu hiện nó trên UI, sử dụng:
 
 ```dart
 class OtherClass extends GetView<Controller> {
@@ -989,7 +988,7 @@ Là một Widget `const Stateless` có getter` controller` cho một `Controller
 #### GetResponsiveView
 
 Mở rộng tiện ích này để xây dựng chế độ responsive.
-Ưidget này chứa thuộc tính `screen` có tất cả
+Widget này chứa thuộc tính `screen` có tất cả
 thông tin về kích thước và loại màn hình.
 
 ##### Hướng dẫn sử dụng trước khi dùng
@@ -998,9 +997,9 @@ Bạn có hai lựa chọn để xây dựng nó.
 
 - với phương thức `builder` bạn trả về tiện ích con để xây dựng.
 - với các phương thức `desktop`,` tablet`, `phone`,` watch`. cụ thể, các phương thức này sẽ tạo các loại màn hình khớp với ngữ cảnh khi màn hình là [ScreenType.Tablet] thì phương thức `tablet` sẽ được tạo ra và cứ như vậy.
-  **Chí ú:** Nếu bạn dùng cái này, nhớ đặt `alwaysUseBuilder` thành `false`
+  **Chú ý:** Nếu bạn dùng cái này, nhớ đặt `alwaysUseBuilder` thành `false`
 
-Với `settings` property bạn có thể đặt chiều dài tối thiểu cho các loại màn hình.
+Với thuộc tính `settings` bạn có thể đặt chiều dài tối thiểu cho các loại màn hình.
 
 ![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
 Code to this screen
@@ -1012,13 +1011,13 @@ Hầu hết mọi người không biết gì về Widget này, hoặc hoàn toà
 Trường hợp sử dụng rất hiếm, nhưng rất cụ thể: Nó `caches` một Bộ điều khiển.
 Bởi vì _cache_ không thể là một `const Stateless`.
 
-> So, when do you need to "cache" a Controller?
+> Vậy khi nào mình cần cache bộ điều khiển (controller)?
 
 Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.create()`.
 
 `Get.create(()=>Controller())` sẽ tạo một `Controller` với mỗi lần gọi `Get.find<Controller>()`,
 
-Đó là nơi mà `` GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
+Đó là nơi mà `GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
 
 #### GetxService
 
@@ -1066,7 +1065,7 @@ class SettingsService extends GetxService {
 
 ```
 
-Cách duy nhất để thực sự xóa một `GetxService`, là với`Get.reset ()`giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
+Cách duy nhất để thực sự xóa một `GetxService`, là với `Get.reset ()` giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
 
 # Thay đổi đột phá 2.0
 
