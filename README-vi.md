@@ -16,7 +16,7 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Về Getx](#về-getx)
+- [Về GetX](#về-getx)
 - [Cài Đặt](#cài-đặt)
 - [Counter App với GetX](#counter-app-với-getx)
 - [Tam Trụ](#tam-trụ)
@@ -37,7 +37,7 @@
   - [Đổi Theme](#đổi-theme)
   - [GetConnect](#getconnect)
     - [Cấu hình mặc định](#cấu-hình-mặc-định)
-    - [Tùy chỉnh](#tùy-chỉnh)
+    - [Cấu hình tùy chỉnh](#cấu-hình-tùy-chỉnh)
   - [GetPage Middleware](#getpage-middleware)
     - [Ưu tiên](#ưu-tiên)
     - [Chuyển hướng](#chuyển-hướng)
@@ -64,7 +64,7 @@
   - [Cách cống hiến](#cách-cống-hiến)
   - [Các bài báo và video](#các-bài-báo-và-video)
 
-# Về Getx
+# Về GetX
 
 - GetX hướng tới sự nhỏ gọn và giải pháp tối ưu cho Flutter với tốc độ ưu việt trong quản lý state, nạp dependency thông minh, và quản lý route nhanh chóng và thực tế.
 
@@ -74,29 +74,29 @@
 
   - **NĂNG SUẤT:** GetX sử dụng một cú pháp dễ dàng và dễ thở. Bất kể bạn muốn làm gì, luôn có một cách dễ dàng hơn với GetX. Nó sẽ tiết kiệm hàng giờ phát triển và sẽ cung cấp hiệu suất tối đa mà ứng dụng của bạn có thể mang lại.
 
-    Nói chung, nhà phát triển nên quan tâm đến việc xóa controller ra khỏi memory. Với GetX, các tài nguyên sẽ
-    TỰ ĐỘNG xóa khỏi memory khi không dùng theo mặc định. Nếu bạn muốn giữ nó trong memory, bạn phải khai báo rõ ràng "permanent: true" trong phần dependency của mình. Từ đó, bạn sẽ tiết kiệm thời gian và ít phụ thuộc vào memory. Theo mặc định, tính năng tải dependency cũng lười biếng.
+    Nói chung, nhà phát triển nên quan tâm đến việc xóa những controller ra khỏi bộ nhớ. Với GetX, mặc định các tài nguyên sẽ
+    TỰ ĐỘNG xóa khỏi bộ nhớ khi không dùng nữa. Nếu bạn muốn giữ nó trong bộ nhớ, bạn phải khai báo rõ ràng "permanent: true" trong phần dependency của mình. Từ đó, bạn sẽ tiết kiệm thời gian và giảm rủi ro khi phụ thuộc vào bộ nhớ. Theo mặc định, tính năng tải dependency cũng lười biếng.
 
   - **TỔ CHỨC:**
-    GetX cho phép tách toàn bộ Chế độ xem, presentation logic, business logic, nạp dependencies và điều hướng. Bạn không "context" để điều hướng giữa các route, vì vậy bạn sẽ độc lập trong sơ đồ widget (trực quan hóa). Bạn không cần "context" để truy cập Controller / Blocs của mình thông qua một InheritedWidget, vì vậy bạn hoàn toàn tách rời presentation logic và business logic khỏi lớp trực quan của mình. Bạn không cần phải đưa các Controller / Models / Blocs vào sơ đồ widget của mình thông qua `MultiProvider`, vì GetX sử dụng tính năng nạp dependency của riêng nó, tách hoàn toàn DI khỏi chế độ xem của nó.
+    GetX cho phép tách toàn bộ View, presentation logic, business logic, nạp dependencies và điều hướng. Bạn không cần "context" để điều hướng giữa các route, vì vậy bạn sẽ độc lập trong sơ đồ widget (trực quan hóa). Bạn không cần "context" để truy cập Controller / Blocs của mình thông qua một InheritedWidget, vì vậy bạn hoàn toàn tách rời presentation logic và business logic ra khỏi lớp trực quan của mình. Bạn không cần phải đưa các Controller / Models / Blocs vào sơ đồ widget của mình thông qua `MultiProvider`, vì GetX sử dụng tính năng nạp dependency của riêng nó, tách hoàn toàn DI khỏi chế độ xem của nó.
 
     Với GetX, bạn biết nơi tìm từng tính năng ứng dụng của mình, với cơ chế clean code theo mặc định. Ngoài việc giúp bảo trì dễ dàng, GetX giúp việc chia sẻ các mô-đun trở thành khả thi trong Flutter.
-    BLoC là điểm khởi đầu để tổ chức code trong Flutter, nó tách biệt logic nghiệp vụ với trực quan. GetX nảy sinh từ điều này, không chỉ tách biệt presentation logic mà còn cả business logic. Nạp dependency bổ sung và route cũng được tách ra và lớp dữ liệu cũng biến mất. Bạn sẽ biết mọi thứ ở đâu và sẽ hình dung tất cả những điều này dễ hơn cả "Hello World".
-    GetX là cách dễ nhất, thiết thực và có thể mở rộng để xây dựng các ứng dụng hiệu suất cao với Flutter SDK. GetX chứa đựng một hệ sinh thái rộng lớn xung quanh nó hoạt động hoàn hảo cùng nhau, rất dễ dàng cho người mới bắt đầu và nó chính xác cho các chuyên gia. Nó an toàn, ổn định, cập nhật và cung cấp một loạt các API được tích hợp sẵn mà không có trong Flutter SDK mặc định.
+    BLoC là điểm khởi đầu để tổ chức code trong Flutter, nó tách biệt business logic ra khỏi lớp trực quan hóa (visualization). GetX nảy sinh từ điều này, không chỉ tách biệt presentation logic mà còn cả business logic. Nạp dependency bổ sung và route cũng được tách ra và lớp dữ liệu cũng biến mất. Bạn sẽ biết mọi thứ ở đâu và sẽ hình dung tất cả những điều này dễ hơn cả xây dựng chương trình "Hello World".
+    GetX là cách dễ nhất, thiết thực và có thể mở rộng để xây dựng các ứng dụng hiệu suất cao với Flutter SDK. GetX chứa đựng một hệ sinh thái rộng lớn xung quanh nó hoạt động hoàn hảo cùng nhau, rất dễ dàng cho người mới bắt đầu và nó chính xác cho các chuyên gia. Nó an toàn, ổn định, luôn cập nhật và cung cấp một loạt các API được tích hợp sẵn mà không có trong Flutter SDK mặc định.
 
-- GetX không cồng kềnh và có vô số tính năng cho phép bạn bắt đầu lập trình mà không cần lo lắng về bất cứ điều gì. Đặc biệt, nó cho phép mỗi tính năng này nằm trong các vùng chứa riêng biệt và chỉ được bắt đầu sau khi sử dụng. Nếu bạn chỉ sử dụng quản lý state thì sẽ chỉ có quản lý state được sử dụng. Nếu bạn chỉ sử dụng route, thì GetX không complie quản lý state.
+- GetX không cồng kềnh và có vô số tính năng cho phép bạn bắt đầu lập trình mà không cần lo lắng về bất cứ điều gì. Đặc biệt, nó cho phép mỗi tính năng này nằm trong các vùng chứa riêng biệt và chỉ được bắt đầu sau khi sử dụng. Nếu bạn chỉ sử dụng phần quản lý state của GetX thì sẽ chỉ có quản lý state được sử dụng. Nếu bạn chỉ sử dụng route, thì GetX không biên dịch phần quản lý state.
 
-- GetX có một hệ sinh thái khổng lồ, một cộng đồng lớn, một số lượng lớn cộng tác viên và sẽ được duy trì miễn là Flutter còn tồn tại. GetX có khả năng chạy đồng dạng trên Android, iOS, Web, Mac, Linux, Windows và trên máy chủ của bạn.
+- GetX có một hệ sinh thái khổng lồ, một cộng đồng lớn, một số lượng lớn cộng tác viên và sẽ được duy trì miễn là Flutter còn tồn tại. GetX có khả năng chạy cùng một mã (code) trên Android, iOS, Web, Mac, Linux, Windows và trên máy chủ của bạn.
   **Bạn hoàn toàn có thể sử dụng lại mã của mình trên frontend qua backend với [Get Server](https://github.com/jonataslaw/get_server)**.
 
 **Ngoài ra, toàn bộ quá trình phát triển có thể hoàn toàn tự động, cả trên máy chủ và frontend với [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
 **Ngoài ra, nhằm tăng thêm năng suất của bạn, chúng tôi hỗ trợ
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) và [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+[tiện ích trên VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) và [tiện ích cho Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Cài Đặt
 
-Thêm Get vào pubspec.yaml file:
+Thêm Get vào file pubspec.yaml:
 
 ```yaml
 dependencies:
@@ -120,12 +120,12 @@ Dự án "counter" được tạo theo mặc định trên dự án mới trên 
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Chú ý: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp CHỈ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
-- Chú ý²: Một lần nữa, bước này CHỈ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back () ', v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
+- Chú ý: điều này không sửa đổi MaterialApp của Flutter, GetMaterialApp không phải là MaterialApp được sửa đổi, nó chỉ là một Widget được tạo trước với MaterialApp mặc định là child. Bạn có thể cấu hình điều này theo cách thủ công, nhưng nó chắc chắn là không cần thiết. GetMaterialApp sẽ tạo các route, đưa chúng vào, đưa bản dịch, đưa mọi thứ bạn cần để điều hướng route. Nếu bạn chỉ sử dụng Get để quản lý trạng thái hoặc quản lý phụ thuộc, thì không cần thiết phải sử dụng GetMaterialApp. Tóm lại, GetMaterialApp chỉ cần thiết cho các route, snacksbar, internationalization, bottomSheets, Dialog và các APIs cấp cao liên quan đến route và không có "context".
+- Chú ý²: Một lần nữa, bước này chỉ cần thiết nếu bạn sử dụng quản lý route (`Get.to ()`, `Get.back ()`, v.v.). Nếu bạn không sử dụng nó thì không cần thực hiện bước 1
 
 - Bước 2:
-  Tạo lớp business logic của bạn và đặt tất cả các variables, function và controller bên trong nó.
-  Bạn có thể làm cho bất kỳ variables nào có thể quan sát được bằng cách sử dụng ".obs" đơn giản.
+  Tạo lớp business logic của bạn và đặt tất cả các biến (variables), hàm (function) và controller bên trong nó.
+  Bạn có thể làm cho bất kỳ biến nào có thể quan sát được đơn giản bằng cách sử dụng ".obs".
 
 ```dart
 class Controller extends GetxController{
@@ -184,7 +184,7 @@ Cải thiện thời gian, giao mọi thứ đúng hạn mà không làm giảm 
 
 ## Quản lý State
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+Get có 2 cách quản lý trạng thái (state managers) khác nhau : quản lý trạng thái đơn giản (chúng ta gọi nó là GetBuilder) và quản lý trạng thái phản ứng (the reactive state manager) (GetX/Obx).
 
 ### Quản lý Reactive State
 
@@ -192,7 +192,7 @@ Lập trình phản ứng (reactive programming) có thể khiến nhiều ngư�
 
 - Bạn sẽ không cần tạo StreamControllers.
 - Bạn sẽ không cần tạo StreamBuilder cho mỗi biến.
-- Bạn sẽ không cần tạo một lớp cho mỗi trạng thái.
+- Bạn sẽ không cần tạo một lớp (class) cho mỗi trạng thái.
 - Bạn sẽ không cần tạo get cho một giá trị ban đầu.
 - Bạn sẽ không cần sử dụng trình tạo mã.
 
@@ -206,7 +206,7 @@ Hãy tưởng tượng rằng bạn có một biến tên và muốn rằng mỗ
 var name = 'Jonatas Borges';
 ```
 
-Để lắng nghe nó, bạn chỉ cần thêm ".obs" ở cuối:
+Để nó có thể được lắng nghe, bạn chỉ cần thêm ".obs" ở cuối:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
@@ -222,9 +222,9 @@ Thế thôi. Chỉ là _thế_ thôi người ơi~.
 
 ### Thêm thông tin về Quản lý state
 
-**Xem thông tin cụ thể tại dây [here](./documentation/en_US/state_management.md). Tại đó, bạn có thể tham khảo ví dụ và so sánh sự khác nhau giữa quản lý state cơ bản và quản lý state reactive**
+**Xem thông tin cụ thể tại [đây](./documentation/en_US/state_management.md). Tại đó, bạn có thể tham khảo ví dụ và so sánh sự khác nhau giữa quản lý state cơ bản và quản lý state reactive**
 
-Bạn sẽ hình dung sức mạnh của GetX.
+Bạn sẽ hình dung được sức mạnh của GetX.
 
 ## Quản lý route
 
@@ -245,7 +245,7 @@ Di chuyển tới màn hình mới:
 Get.to(NextScreen());
 ```
 
-Di chuyển tới màn hình mới theo tên. Xem thêm tại đây [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+Di chuyển tới màn hình mới theo tên. Xem thêm tại [đây](./documentation/en_US/route_management.md#navigation-with-named-routes)
 
 ```dart
 
@@ -274,28 +274,28 @@ Bạn có thấy nãy giờ chúng ta không sử dụng từ khóa "context"? �
 
 ### Thêm thông tin về quản lý route
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Get hoạt động được với named routes và cũng cung cấp cách điều khiển ở cấp thấp (lower-level control) cho routes của bạn! Tài liệu chi tiết tại [đây](./documentation/en_US/route_management.md)**
 
 ## Quản lý dependency
 
-Get hỗ trợ tính năng giúp bạn lấy class như Bloc hoặc Controller chỉ với 1 dòng, khỏi cần Provider context hay InheritedWidget:
+Get hỗ trợ tính năng giúp bạn lấy class như Bloc hoặc Controller chỉ với 1 dòng, không cần Provider context hay InheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Chí ú: Nếu bạn dùng cái này, nhớ đặt attention to thànhe bindings API, which will make it easier to connect your view to your controller.
+- Chú ý: Nếu bạn dùng Get's State Manager, hãy chú ý đến việc bindings API, có thể giúp dễ dàng kết nối view đến controller.
 
 Thay vì khởi tạo class của bạn trong class bạn đang sử dụng, bạn đang khởi tạo nó trong phiên bản Get, điều này sẽ làm cho nó có sẵn trên toàn bộ Ứng dụng của bạn.
 Vì vậy, bạn có thể sử dụng bộ điều khiển (hoặc Bloc) của mình một cách bình thường
 
-**Mẹo:** Nhận quản lý dependency được tách ra khỏi các phần khác của package, vì vậy, ví dụ: nếu ứng dụng của bạn đã sử dụng trình quản lý trạng thái (bất kỳ cái nào, không quan trọng), bạn không cần phải viết lại tất cả, bạn có thể sử dụng điều này nạp dependency vô lo
+**Mẹo:** quản lý dependency của Get được tách ra khỏi các phần khác của package, vì vậy, ví dụ: nếu ứng dụng của bạn đã sử dụng 1 trình quản lý trạng thái (bất kỳ cái nào, không quan trọng), bạn không cần phải viết lại tất cả, bạn có thể sử dụng nạp dependency của Get vô lo
 
 ```dart
 controller.fetchApi();
 ```
 
-Hãy tưởng tượng rằng bạn đã điều hướng qua nhiều route và bạn cần dữ liệu bị còn sót trong controller của mình, bạn sẽ cần một trình quản lý dependency kết hợp với Provider hoặc Get_it, đúng hơm? Với Get, sử dụng Get to "find" cho controller, bạn sẽ hoàn toàn độc lập:
+Hãy tưởng tượng rằng bạn đã điều hướng qua nhiều route và bạn cần dữ liệu bị còn sót trong controller của mình, bạn sẽ cần một trình quản lý dependency kết hợp với Provider hoặc Get_it, đúng không? Với Get, sử dụng Get để "find" cho controller, bạn sẽ hoàn toàn độc lập:
 
 ```dart
 Controller controller = Get.find();
@@ -310,7 +310,7 @@ Text(controller.textFromApi);
 
 ### Thêm thông tin về quản lý dependency
 
-**Xem thêm tại đây [here](./documentation/en_US/dependency_management.md)**
+**Xem thêm tại [đây](./documentation/en_US/dependency_management.md)**
 
 # Utils
 
@@ -318,8 +318,8 @@ Text(controller.textFromApi);
 
 ### Dịch thuật
 
-Các bản dịch được lưu giữ như một bản đồ từ điển key-value đơn giản.
-Để thêm các bản dịch tùy chỉnh, hãy tạo một class và extends `Translation`.
+Các bản dịch được lưu giữ như một bản đồ từ điển (dictionary map) key-value đơn giản.
+Để thêm các bản dịch tùy chỉnh, hãy tạo một class và kế thừa (extend) từ `Translation`.
 
 ```dart
 import 'package:get/get.dart';
@@ -339,7 +339,7 @@ class Messages extends Translations {
 
 #### Sử dụng bản dịch thuật
 
-Chỉ cần append `.tr` vào key được chỉ định và nó sẽ được dịch, sử dụng giá trị hiện tại của` Get.locale` và `Get.fallbackLocale`.
+Chỉ cần thêm `.tr` vào key được chỉ định và nó sẽ được dịch, sử dụng giá trị hiện tại của` Get.locale` và `Get.fallbackLocale`.
 
 ```dart
 Text('title'.tr);
@@ -404,7 +404,7 @@ return GetMaterialApp(
 );
 ```
 
-## Đổi Theme
+## Đổi chủ đề (Theme)
 
 Vui lòng không sử dụng bất kỳ Widget con nào cấp cao hơn `GetMaterialApp` để cập nhật nó. Điều này có thể kích hoạt các key trùng lặp. Rất nhiều người đã quen với cách tiếp cận thời tiền sử là tạo tiện ích "ThemeProvider" chỉ để thay đổi chủ đề ứng dụng của bạn và điều này KHÔNG cần thiết với ** GetX ™ **.
 
@@ -431,7 +431,7 @@ GetConnect tạo giao thức tới http hoặc websockets
 
 ### Cấu hình mặc định
 
-Đơn giản hóa các lệnh GET/POST/PUT/DELETE/SOCKET khi giao tiếp Rest API hoặc websockets.
+Đơn giản, bạn có thể kế thừa (extend) từ GetConnect và sử dụng các phương thức GET/POST/PUT/DELETE/SOCKET khi giao tiếp với Rest API hoặc websockets.
 
 ```dart
 class UserProvider extends GetConnect {
@@ -454,7 +454,7 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Tùy chỉnh
+### Cấu hình tùy chỉnh
 
 GetConnect có khả năng tùy chỉnh cao Bạn có thể xác định Url chính như answers, modifiers như request, xác địng authenticator và thậm chí số lần thử mà nó sẽ cố gắng authenticate, ngoài việc cung cấp khả năng xác định bộ giải mã chuẩn sẽ chuyển đổi tất cả các request của bạn thành Model mà không cần bất kỳ cấu hình bổ sung nào.
 
@@ -507,7 +507,7 @@ class HomeProvider extends GetConnect {
 
 GetPage hiện có thuộc tính mới lấy danh sách GetMiddleWare và chạy chúng theo thứ tự cụ thể.
 
-**Chí ú**: Khi GetPage có Middleware (phần trung gian), tất cả các children của trang này sẽ tự động có cùng middlewares.
+**Chú ý**: Khi GetPage có Middleware (phần trung gian), tất cả các children của trang này sẽ tự động có cùng middlewares.
 
 ### Ưu tiên
 
@@ -549,7 +549,7 @@ GetPage onPageCalled(GetPage page) {
 
 ### OnBindingsStart
 
-Function này sẽ khởi động trước khi Bindinds diễn ra và bạn có thể thay đổi Bindings cho trang này.
+Hàm này sẽ khởi động ngay trước khi Bindings diễn ra và bạn có thể thay đổi Bindings cho trang này.
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -563,7 +563,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 
 ### OnPageBuildStart
 
-Function này sẽ khởi động sau khi Bindings diễn ra. Ở đây, bạn có thể làm thứ gì đó sau khi bạn tạo Bindings và trước khi tạo trange widget.
+Hàm này sẽ khởi động ngay sau khi Bindings diễn ra. Ở đây, bạn có thể làm thứ gì đó sau khi bạn tạo Bindings và trước khi tạo trang widget.
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -574,7 +574,7 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 
 ### OnPageBuilt
 
-Function này sẽ khởi động ngay sau khi GetPage.page được gọi và sẽ cho bạn kết quả của function và lấy widget được hiển thị.
+Hàm này sẽ khởi động ngay sau khi GetPage.page được gọi và sẽ cho bạn kết quả của hàm và lấy widget được hiển thị.
 
 ### OnPageDispose
 
@@ -723,7 +723,7 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+Bạn cũng sẽ có thể dùng Middleware của riêng bạn trong `GetObserver`, điều này không ảnh hưởng những thứ khác.
 
 ```dart
 MaterialApp(
@@ -734,8 +734,8 @@ MaterialApp(
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+Bạn có thể tạo _Global Settings_ cho `Get`. Chỉ cần thêm `Get.config` vào code của bạn trước khi đẩy (push) bất cứ route nào.
+Hoặc làm nó trực tiếp trong `GetMaterialApp` của bạn.
 
 ```dart
 GetMaterialApp(
@@ -754,9 +754,8 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+Bạn có thể tự chọn chuyển hướng tất cả logging messages từ `Get`.
+Nếu bạn muốn sử dụng logging package ưa thích của riêng bạn, và muốn chụp lại những logs đó:
 
 ```dart
 GetMaterialApp(
@@ -775,7 +774,7 @@ void localLogWriter(String text, {bool isError = false}) {
 ### Local State Widgets
 
 Các Widget này cho phép bạn quản lý một giá trị duy nhất và giữ trạng thái tạm thời và cục bộ.
-Chúng tôi có các hướng đi cho Reactive và Simple.
+Chúng ta có các hướng đi cho Reactive và Simple.
 Ví dụ: bạn có thể sử dụng chúng để chuyển đổi văn bản tối nghĩa trong một `TextField`, có thể tạo một widget
 Expandable Panel tùy chỉnh hoặc có thể sửa đổi chỉ mục hiện tại trong `BottomNavigationBar` trong khi thay đổi nội dung
 bên trong một `Scaffold`.
@@ -799,7 +798,7 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Tương tự như [`ValueBuilder`] (# valuebuilder), nhưng đây là phiên bản Reactive, bạn kèm một lệnh Rx (nhớ cái .obs không?) và nó cập nhật tự động ... hay chưa?
+Tương tự như [`ValueBuilder`](#valuebuilder), nhưng đây là phiên bản Reactive, bạn kèm một lệnh Rx (nhớ cái .obs không?) và nó cập nhật tự động ... hay chưa?
 
 ```dart
 ObxValue((data) => Switch(
@@ -823,7 +822,7 @@ var message = 'Xin Chào'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Ngay cả khi `message` _prints_ giá trị String, Loại là ** RxString **!
+Ngay cả khi `message` _prints_ giá trị String, thì kiểu của nó lại là ** RxString **!
 
 Vì vậy, bạn không thể thực hiện `message.substring (0, 4) '. Bạn phải truy cập vào `value`thực bên trong _observable_: Cách được sử dụng nhiều nhất là`.value`, nhưng, bạn có biết rằng bạn cũng có thể sử dụng ...
 
@@ -917,20 +916,20 @@ print( user );
 ## StateMixin
 
 Một cách khác để xử lý trạng thái `UI` của bạn là sử dụng`StateMixin <T>`.
-Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` bộ điều khiển của bạn cho phép tích hợp kèm mô hình T.
+Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` vào bộ điều khiển (controller) của bạn cho phép tích hợp kèm mô hình T.
 
 ```dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-Phương thức `change ()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
+Phương thức `change()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
 Chỉ cần chuyển dữ liệu và trạng thái theo cách này:
 
 ```dart
 change(data, status: RxStatus.success());
 ```
 
-RxStatus allow these status:
+RxStatus cho phép những trang thái này:
 
 ```dart
 RxStatus.loading();
@@ -939,7 +938,7 @@ RxStatus.empty();
 RxStatus.error('message');
 ```
 
-To represent it in the UI, use:
+Để biểu hiện nó trên UI, sử dụng:
 
 ```dart
 class OtherClass extends GetView<Controller> {
@@ -965,7 +964,7 @@ class OtherClass extends GetView<Controller> {
 
 #### GetView
 
-Widget này là bảo bối của Getx, rất đơn giản, nhưng rất hữu ích!
+Widget này là bảo bối của GetX, rất đơn giản, nhưng rất hữu ích!
 
 Là một Widget `const Stateless` có getter` controller` cho một `Controller` đã đăng ký, chỉ vậy thôi người ơi~.
 
@@ -989,7 +988,7 @@ Là một Widget `const Stateless` có getter` controller` cho một `Controller
 #### GetResponsiveView
 
 Mở rộng tiện ích này để xây dựng chế độ responsive.
-Ưidget này chứa thuộc tính `screen` có tất cả
+Widget này chứa thuộc tính `screen` có tất cả
 thông tin về kích thước và loại màn hình.
 
 ##### Hướng dẫn sử dụng trước khi dùng
@@ -998,9 +997,9 @@ Bạn có hai lựa chọn để xây dựng nó.
 
 - với phương thức `builder` bạn trả về tiện ích con để xây dựng.
 - với các phương thức `desktop`,` tablet`, `phone`,` watch`. cụ thể, các phương thức này sẽ tạo các loại màn hình khớp với ngữ cảnh khi màn hình là [ScreenType.Tablet] thì phương thức `tablet` sẽ được tạo ra và cứ như vậy.
-  **Chí ú:** Nếu bạn dùng cái này, nhớ đặt `alwaysUseBuilder` thành `false`
+  **Chú ý:** Nếu bạn dùng cái này, nhớ đặt `alwaysUseBuilder` thành `false`
 
-Với `settings` property bạn có thể đặt chiều dài tối thiểu cho các loại màn hình.
+Với thuộc tính `settings` bạn có thể đặt chiều dài tối thiểu cho các loại màn hình.
 
 ![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
 Code to this screen
@@ -1012,13 +1011,13 @@ Hầu hết mọi người không biết gì về Widget này, hoặc hoàn toà
 Trường hợp sử dụng rất hiếm, nhưng rất cụ thể: Nó `caches` một Bộ điều khiển.
 Bởi vì _cache_ không thể là một `const Stateless`.
 
-> So, when do you need to "cache" a Controller?
+> Vậy khi nào mình cần cache bộ điều khiển (controller)?
 
 Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.create()`.
 
 `Get.create(()=>Controller())` sẽ tạo một `Controller` với mỗi lần gọi `Get.find<Controller>()`,
 
-Đó là nơi mà `` GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
+Đó là nơi mà `GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
 
 #### GetxService
 
@@ -1066,7 +1065,7 @@ class SettingsService extends GetxService {
 
 ```
 
-Cách duy nhất để thực sự xóa một `GetxService`, là với`Get.reset ()`giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
+Cách duy nhất để thực sự xóa một `GetxService`, là với `Get.reset ()` giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
 
 # Thay đổi đột phá 2.0
 
@@ -1130,7 +1129,7 @@ GetMaterialApp(
 3- Dễ dàng mà không phải lo lắng về hiệu suất. Hiệu suất của Flutter đã đáng kinh ngạc rồi, nhưng hãy tưởng tượng rằng bạn sử dụng trình quản lý state và trình định vị để phân phối các Blocs / stores / controllers / v.v. của bạn. Bạn sẽ phải gọi thủ công loại trừ sự phụ thuộc khi bạn không cần đến chúng. Nhưng bạn đã bao giờ nghĩ chỉ cần sử dụng bộ điều khiển của mình và khi nó không còn được ai sử dụng nữa, nó sẽ đơn giản được xóa khỏi bộ nhớ? Đó là những gì GetX làm. Với SmartManagement, mọi thứ không được sử dụng sẽ được xóa khỏi bộ nhớ và bạn không phải lo lắng về bất cứ điều gì ngoài lập trình. Bạn sẽ được đảm bảo rằng bạn đang sử dụng các nguồn tài nguyên cần thiết tối thiểu mà thậm chí không cần tạo ra một logic nào cho việc này.
 
 4- Tách khỏi thực tế. Bạn có thể đã nghe đến khái niệm "tách khung nhìn (view) khỏi business logic". Đây không phải là đặc thù của BLoC, MVC, MVVM và bất kỳ tiêu chuẩn nào khác trên thị trường đều có khái niệm này. Tuy nhiên, khái niệm này thường có thể được giảm thiểu trong Flutter do việc sử dụng ngữ cảnh (context).
-Nếu bạn cần ngữ cảnh để tìm một InheritedWidget, bạn cần nó trong dạng xem hoặc chuyển ngữ cảnh theo tham số. Tôi đặc biệt thấy giải pháp này rất chán đời; hơn nữa, để làm việc theo nhóm, chúng tôi sẽ luôn phụ thuộc vào business logic của View. Getx không chính thống với cách tiếp cận tiêu chuẩn và mặc dù nó không cấm hoàn toàn việc sử dụng StatefulWidgets, InitState, v.v., nhưng nó luôn có một cách tiếp cận tương tự có thể rõ ràng hơn. Controller có vòng đời và khi bạn cần thực hiện yêu cầu APIREST chẳng hạn, bạn độc lập với View. Bạn có thể sử dụng onInit để bắt đầu cuộc gọi http và khi dữ liệu đến, các biến sẽ được điền. Vì GetX hoạt động hoàn toàn reactive (đó là sự thực và hoạt động theo luồng), khi các mục được lấp đầy, tất cả tiện ích con sử dụng biến đó sẽ được cập nhật tự động trong View. Điều này cho phép những người có chuyên môn về UI chỉ làm việc với các widget và không phải gửi bất kỳ thứ gì đến logic nghiệp vụ ngoài các sự kiện của người dùng (như nhấp vào nút), trong khi những người làm việc với logic nghiệp vụ sẽ được tự do tạo và kiểm tra logic nghiệp vụ riêng.
+Nếu bạn cần ngữ cảnh để tìm một InheritedWidget, bạn cần nó trong dạng xem hoặc chuyển ngữ cảnh theo tham số. Tôi đặc biệt thấy giải pháp này rất chán đời; hơn nữa, để làm việc theo nhóm, chúng tôi sẽ luôn phụ thuộc vào business logic của View. GetX không chính thống với cách tiếp cận tiêu chuẩn và mặc dù nó không cấm hoàn toàn việc sử dụng StatefulWidgets, InitState, v.v., nhưng nó luôn có một cách tiếp cận tương tự có thể rõ ràng hơn. Controller có vòng đời và khi bạn cần thực hiện yêu cầu APIREST chẳng hạn, bạn độc lập với View. Bạn có thể sử dụng onInit để bắt đầu cuộc gọi http và khi dữ liệu đến, các biến sẽ được điền. Vì GetX hoạt động hoàn toàn reactive (đó là sự thực và hoạt động theo luồng), khi các mục được lấp đầy, tất cả tiện ích con sử dụng biến đó sẽ được cập nhật tự động trong View. Điều này cho phép những người có chuyên môn về UI chỉ làm việc với các widget và không phải gửi bất kỳ thứ gì đến logic nghiệp vụ ngoài các sự kiện của người dùng (như nhấp vào nút), trong khi những người làm việc với logic nghiệp vụ sẽ được tự do tạo và kiểm tra logic nghiệp vụ riêng.
 
 Thư viện này sẽ luôn được cập nhật và triển khai các tính năng mới. Hãy thoải mái đưa ra các bài PR và đóng góp cho chúng.
 
@@ -1158,7 +1157,7 @@ Mọi đóng góp đều được hoan nghênh!
 
 ## Các bài báo và video
 
-- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Hướng dẫn bởi [Pesa Coder](https://github.com/UsamaElgendy).
+- [Flutter GetX EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Hướng dẫn bởi [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Hướng dẫn bởi [Rod Brown](https://github.com/RodBr).
 - [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Quản lý route bởi Amateur Coder.
 - [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - Quản lý State video by Amateur Coder.
