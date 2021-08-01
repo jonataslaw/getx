@@ -299,14 +299,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     );
   }
 
-  // @override
-  // Future<void> setInitialRoutePath(GetNavConfig configuration) async {
-  //   //no need to clear history with Reorder route strategy
-  //   // _unsafeHistoryClear();
-  //   // _resultCompleter.clear();
-  //   await pushHistory(configuration);
-  // }
-
   @override
   Future<void> setNewRoutePath(GetNavConfig configuration) async {
     await pushHistory(configuration);

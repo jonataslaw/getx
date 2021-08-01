@@ -89,11 +89,15 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   Widget buildContent(BuildContext context) {
     final middlewareRunner = MiddlewareRunner(middlewares);
     final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
-
-    binding?.dependencies();
-    if (bindingsToBind != null) {
-      for (final binding in bindingsToBind) {
-        binding.dependencies();
+    final _bindingList = [
+      if (binding != null) binding!,
+      ...?bindingsToBind,
+    ];
+    for (var _b in _bindingList) {
+      if (_b is PageBindings) {
+        _b.dependencies(this);
+      } else {
+        _b.dependencies();
       }
     }
 

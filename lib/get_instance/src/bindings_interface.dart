@@ -1,3 +1,5 @@
+import '../../get_navigation/src/routes/default_route.dart';
+
 import 'get_instance.dart';
 
 /// [Bindings] should be extended or implemented.
@@ -8,6 +10,11 @@ import 'get_instance.dart';
 // ignore: one_member_abstracts
 abstract class Bindings {
   void dependencies();
+}
+
+abstract class PageBindings extends Bindings {
+  @override
+  void dependencies([GetPageRoute? page]);
 }
 
 /// Simplifies Bindings generation from a single callback.
