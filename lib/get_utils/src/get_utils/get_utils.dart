@@ -551,6 +551,44 @@ class GetUtils {
     return newString[0].toLowerCase() + newString.substring(1);
   }
 
+  /// credits to "ReCase" package.
+  static final RegExp _upperAlphaRegex = RegExp(r'[A-Z]');
+  static final _symbolSet = {' ', '.', '/', '_', '\\', '-'};
+  static List<String> _groupIntoWords(String text) {
+    var sb = StringBuffer();
+    var words = <String>[];
+    var isAllCaps = text.toUpperCase() == text;
+
+    for (var i = 0; i < text.length; i++) {
+      var char = text[i];
+      var nextChar = i + 1 == text.length ? null : text[i + 1];
+      if (_symbolSet.contains(char)) {
+        continue;
+      }
+      sb.write(char);
+      var isEndOfWord = nextChar == null ||
+          (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
+          _symbolSet.contains(nextChar);
+      if (isEndOfWord) {
+        words.add('$sb');
+        sb.clear();
+      }
+    }
+    return words;
+  }
+
+  /// snake_case
+  static String? snakeCase(String? text, {String separator = '_'}) {
+    if (isNullOrBlank(text)!) {
+      return null;
+    }
+    return _groupIntoWords(text!)
+        .map((word) => word.toLowerCase()).join(separator);
+  }
+
+  /// param-case
+  static String? paramCase(String? text) => snakeCase(text, separator: '-');
+
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
   /// If firstword only is true, then the example return is "12312"
