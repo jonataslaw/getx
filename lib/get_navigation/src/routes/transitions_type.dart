@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import 'default_route.dart';
+
 enum Transition {
   fade,
   fadeIn,
@@ -19,3 +21,4 @@ enum Transition {
 }
 
 typedef GetPageBuilder = Widget Function();
+typedef GetRouteAwarePageBuilder<T> = Widget Function([GetPageRoute<T>? route]);

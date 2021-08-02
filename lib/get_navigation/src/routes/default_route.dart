@@ -102,7 +102,13 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    return middlewareRunner.runOnPageBuilt(pageToBuild());
+    Widget p;
+    if (pageToBuild is GetRouteAwarePageBuilder) {
+      p = pageToBuild(this);
+    } else {
+      p = pageToBuild();
+    }
+    return middlewareRunner.runOnPageBuilt(p);
   }
 
   @override
