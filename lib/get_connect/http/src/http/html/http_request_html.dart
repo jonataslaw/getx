@@ -23,6 +23,9 @@ class HttpRequestImpl implements HttpRequestBase {
   ///on different sites. The default is false
   final bool withCredentials;
 
+  @override
+  Duration? timeout;
+
   /// Sends an HTTP request and asynchronously returns the response.
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
@@ -30,6 +33,7 @@ class HttpRequestImpl implements HttpRequestBase {
     html.HttpRequest xhr;
 
     xhr = html.HttpRequest()
+      ..timeout = timeout?.inMilliseconds
       ..open(request.method, '${request.url}', async: true); // check this
 
     _xhrs.add(xhr);

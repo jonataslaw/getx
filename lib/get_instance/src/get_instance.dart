@@ -384,7 +384,6 @@ class GetInstance {
     }
 
     if (builder.fenix) {
-      //TODO: Remove if is late remove
       builder.dependency = null;
       builder.isInit = false;
       return true;

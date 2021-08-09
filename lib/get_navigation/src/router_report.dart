@@ -46,10 +46,10 @@ class RouterReportManager<T> {
   static void reportRouteDispose(Route disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
-        ///TODO: Is necessary this comparator?
-        //if (_current != disposed) {
+        ///TODO: Check if it's necessary to compare _current != disposed
+        ///Adding it breaks the context Navigation logic,
+        ///as it resolves by Route name.
         _removeDependencyByRoute(disposed);
-        // }
       });
     }
   }
