@@ -319,7 +319,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<void> toNamed(
+  Future<T> toNamed<T>(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
@@ -332,13 +332,19 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
     decoder.replaceArguments(arguments);
 
-    await pushHistory(
+    final completer = Completer<T>();
+
+    _allCompleters[decoder.route!] = completer;
+
+    pushHistory(
       GetNavConfig(
         currentTreeBranch: decoder.treeBranch,
         location: page,
         state: null, //TODO: persist state?
       ),
     );
+
+    return completer.future;
   }
 
   Future<void> offNamed(
@@ -399,6 +405,8 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
     return false;
   }
+
+  final _allCompleters = <GetPage, Completer>{};
 
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);

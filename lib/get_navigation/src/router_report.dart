@@ -7,7 +7,7 @@ import '../../get.dart';
 class RouterReportManager<T> {
   /// Holds a reference to `Get.reference` when the Instance was
   /// created to manage the memory.
-  static final Map<String, Route?> _routesKey = {};
+  static final Map<Route?, String> _routesKey = {};
 
   /// Stores the onClose() references of instances created with `Get.create()`
   /// using the `Get.reference`.
@@ -29,7 +29,7 @@ class RouterReportManager<T> {
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of `GetMaterialApp`.
   static void reportDependencyLinkedToRoute(String depedencyKey) {
-    _routesKey.putIfAbsent(depedencyKey, () => _current);
+    _routesKey[_current] = depedencyKey;
   }
 
   static void clearRouteKeys() {
@@ -47,9 +47,9 @@ class RouterReportManager<T> {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         ///TODO: Is necessary this comparator?
-        if (_current != disposed) {
-          _removeDependencyByRoute(disposed);
-        }
+        //if (_current != disposed) {
+        _removeDependencyByRoute(disposed);
+        // }
       });
     }
   }
@@ -57,8 +57,8 @@ class RouterReportManager<T> {
   static void reportRouteWillDispose(Route disposed) {
     final keysToRemove = <String>[];
     _routesKey.forEach((key, value) {
-      if (value == disposed) {
-        keysToRemove.add(key);
+      if (key == disposed) {
+        keysToRemove.add(value);
       }
     });
 
@@ -74,7 +74,8 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().reload(key: element, closeInstance: false);
+      GetInstance().markAsDirty(key: element);
+
       //_routesKey.remove(element);
     }
 
@@ -88,8 +89,8 @@ class RouterReportManager<T> {
   static void _removeDependencyByRoute(Route routeName) {
     final keysToRemove = <String>[];
     _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
+      if (key == routeName) {
+        keysToRemove.add(value);
       }
     });
 
@@ -105,8 +106,10 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().delete(key: element);
-      _routesKey.remove(element);
+      final value = GetInstance().delete(key: element);
+      if (value) {
+        _routesKey.remove(element);
+      }
     }
 
     keysToRemove.clear();

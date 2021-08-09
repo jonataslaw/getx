@@ -181,8 +181,8 @@ class GetObserver extends NavigatorObserver {
     Get.log("REPLACE ROUTE $oldName");
     Get.log("NEW ROUTE $newName");
 
-    if (oldRoute != null) {
-      RouterReportManager.reportCurrentRoute(oldRoute);
+    if (newRoute != null) {
+      RouterReportManager.reportCurrentRoute(newRoute);
     }
 
     _routeSend?.update((value) {

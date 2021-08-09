@@ -36,8 +36,10 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     bool fullscreenDialog = false,
     this.middlewares,
   }) : super(settings: settings, fullscreenDialog: fullscreenDialog) {
-    RouterReportManager.reportCurrentRoute(this);
+    _bla = this;
   }
+
+  late Route _bla;
 
   @override
   final Duration transitionDuration;
@@ -73,8 +75,17 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   final bool maintainState;
 
   @override
+  void install() {
+    super.install();
+    RouterReportManager.reportCurrentRoute(this);
+  }
+
+  @override
   void dispose() {
     super.dispose();
+    if (_bla != this) {
+      throw 'DJHOSIDS';
+    }
     RouterReportManager.reportRouteDispose(this);
 
     // if (Get.smartManagement != SmartManagement.onlyBuilder) {
@@ -85,12 +96,17 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     middlewareRunner.runOnPageDispose();
   }
 
-  @override
-  Widget buildContent(BuildContext context) {
-    final middlewareRunner = MiddlewareRunner(middlewares);
-    final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
+  Widget? _child;
 
-    binding?.dependencies();
+  Widget _getChild() {
+    if (_child != null) return _child!;
+    final middlewareRunner = MiddlewareRunner(middlewares);
+
+    final localbindings = [
+      if (bindings != null) ...bindings!,
+      if (binding != null) ...[binding!]
+    ];
+    final bindingsToBind = middlewareRunner.runOnBindingsStart(localbindings);
     if (bindingsToBind != null) {
       for (final binding in bindingsToBind) {
         binding.dependencies();
@@ -98,7 +114,13 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    return middlewareRunner.runOnPageBuilt(pageToBuild());
+    _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    return _child!;
+  }
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return _getChild();
   }
 
   @override
