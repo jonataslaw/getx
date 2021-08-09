@@ -1,6 +1,7 @@
 ## [4.3.6] 
 - Fix error with autodispose of additional dependencies beyond GetxController
 - Added ability to add your own delegate to RouterOutlet (@steven-spiel)
+- Added listenAndPump to Rx to give Rx the same behavior as BehaviorSubject (@steven-spiel)
 
 ## [4.3.5] 
 - Fix GetConnect timeout (@jasonlaw)
