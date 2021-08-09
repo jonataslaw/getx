@@ -81,6 +81,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     required String initialRoute,
     Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
     GlobalKey<NavigatorState>? key,
+    GetDelegate? delegate,
   }) : this.pickPages(
           pickPages: (config) {
             Iterable<GetPage<dynamic>> ret;
@@ -102,6 +103,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
               Get.routeTree.matchRoute(initialRoute).route ??
               delegate.notFoundRoute,
           key: key,
+          delegate: delegate,
         );
   GetRouterOutlet.pickPages({
     Widget Function(GetDelegate delegate)? emptyWidget,
@@ -109,6 +111,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
     required Iterable<GetPage> Function(GetNavConfig currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     GlobalKey<NavigatorState>? key,
+    GetDelegate? delegate,
   }) : super(
           pageBuilder: (context, rDelegate, pages) {
             final pageRes = <GetPage?>[
@@ -134,7 +137,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
             return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
           pickPages: pickPages,
-          delegate: Get.rootDelegate,
+          delegate: delegate ?? Get.rootDelegate,
         );
 
   GetRouterOutlet.builder({
