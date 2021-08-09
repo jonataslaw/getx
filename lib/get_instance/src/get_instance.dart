@@ -316,8 +316,8 @@ class GetInstance {
   /// Even the persistent ones.
   /// This should be used at the end or tearDown of unit tests.
   ///
-  /// [clearFactory] clears the callbacks registered by [lazyPut]
-  /// [clearRouteBindings] clears Instances associated with routes.
+  /// `clearFactory` clears the callbacks registered by [lazyPut]
+  /// `clearRouteBindings` clears Instances associated with routes.
   ///
   bool resetInstance(
       {@deprecated bool clearFactory = true, bool clearRouteBindings = true}) {

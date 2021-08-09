@@ -1,3 +1,11 @@
+## [4.3.5] 
+- Fix GetConnect timeout (@jasonlaw)
+- Improve Vietnamese docs (@hp1909)
+- Refactor placeholder name route to unnamed routes (@roipeker).
+- Fix: Navigate to a page identical to Get.offNamed.
+- Fix: Wrong nameRoute after a route is removed
+- Added assert to prevent the user from starting a route name without slash.
+
 ## [4.3.4] 
 - Improve docs
 

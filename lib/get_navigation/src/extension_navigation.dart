@@ -1016,6 +1016,7 @@ you can only use widgets and widget functions here''';
   /// `() => MyHomeScreenView` becomes `/my-home-screen-view`.
   String _cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
+
     /// uncommonent for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {

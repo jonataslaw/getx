@@ -583,7 +583,8 @@ class GetUtils {
       return null;
     }
     return _groupIntoWords(text!)
-        .map((word) => word.toLowerCase()).join(separator);
+        .map((word) => word.toLowerCase())
+        .join(separator);
   }
 
   /// param-case
