@@ -90,7 +90,6 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, GetNavConfig> {
               final length = Uri.parse(initialRoute).pathSegments.length;
               return config.currentTreeBranch
                   .skip(length)
-                  .take(length)
                   .toList();
             }
             ret = config.currentTreeBranch.pickAfterRoute(anchorRoute);
