@@ -156,7 +156,7 @@ class GetObserver extends NavigatorObserver {
         value.current = _extractRouteName(previousRoute) ?? '';
       }
 
-      value.args = route.settings.arguments;
+      value.args = previousRoute.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
