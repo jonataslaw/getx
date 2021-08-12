@@ -803,10 +803,10 @@ of the body in a `Scaffold`.
 A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
 
 ```dart
-ValueBuilder<bool>(
+ValueBuilder<bool?>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
-    value: value,
+    value: value!,
     onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
   ),
   // if you need to call something outside the builder method.
