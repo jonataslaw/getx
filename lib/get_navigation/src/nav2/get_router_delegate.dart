@@ -334,26 +334,48 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
     final completer = Completer<T>();
 
-    _allCompleters[decoder.route!] = completer;
+    if (decoder.route != null) {
+      _allCompleters[decoder.route!] = completer;
+      await pushHistory(
+        GetNavConfig(
+          currentTreeBranch: decoder.treeBranch,
+          location: page,
+          state: null, //TODO: persist state?
+        ),
+      );
 
-    pushHistory(
-      GetNavConfig(
-        currentTreeBranch: decoder.treeBranch,
-        location: page,
-        state: null, //TODO: persist state?
-      ),
-    );
+      return completer.future;
+    } else {
+      ///TODO: IMPLEMENT ROUTE NOT FOUND
 
-    return completer.future;
+      return Future.value();
+    }
   }
 
-  Future<void> offNamed(
+  Future<T?>? offAndToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    dynamic result,
+    Map<String, String>? parameters,
+    PopMode popMode = PopMode.History,
+  }) async {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    await popRoute(result: result);
+    return toNamed(page, arguments: arguments, parameters: parameters);
+  }
+
+  Future<T> offNamed<T>(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
   }) async {
-    await toNamed(page, arguments: arguments, parameters: parameters);
-    await _unsafeHistoryRemoveAt(history.length - 2);
+    history.removeLast();
+    return toNamed<T>(page, arguments: arguments, parameters: parameters);
   }
 
   /// Removes routes according to [PopMode]
@@ -422,8 +444,12 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       if (config != null) {
         _removeHistoryEntry(config);
       }
+      if (_allCompleters.containsKey(settings)) {
+        _allCompleters[settings]?.complete(route.popped);
+      }
     }
     refresh();
+
     return true;
   }
 }

@@ -1,3 +1,7 @@
+## [4.3.7] 
+- Fix wrong currentRoute when a route is removed
+- Remove take that limits the router outlet depth (@steven-spiel)
+
 ## [4.3.6] 
 - Fix error with autodispose of additional dependencies beyond GetxController
 - Added ability to add your own delegate to RouterOutlet (@steven-spiel)

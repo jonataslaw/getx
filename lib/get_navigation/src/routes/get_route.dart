@@ -174,6 +174,8 @@ class GetPage<T> extends Page<T> {
     );
   }
 
+  late Future<T?> popped;
+
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
@@ -182,6 +184,8 @@ class GetPage<T> extends Page<T> {
       settings: this,
       unknownRoute: unknownRoute,
     ).getPageToRoute<T>(this, unknownRoute);
+
+    popped = _page.popped;
     return _page;
   }
 }
