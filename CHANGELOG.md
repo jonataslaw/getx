@@ -1,3 +1,6 @@
+## [4.3.8] 
+- Fix nav2 toNamed remove the route
+
 ## [4.3.7] 
 - Fix wrong currentRoute when a route is removed
 - Remove take that limits the router outlet depth (@steven-spiel)
