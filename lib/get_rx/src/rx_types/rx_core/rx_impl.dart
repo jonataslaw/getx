@@ -383,6 +383,6 @@ extension BoolExtension on bool {
 }
 
 extension RxT<T> on T {
-  /// Returns a `Rx` instace with [this] `T` as initial value.
+  /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
 }

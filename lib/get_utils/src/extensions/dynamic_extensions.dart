@@ -1,6 +1,6 @@
 import '../get_utils/get_utils.dart';
 
-extension GetDynamicUtils<T> on T {
+extension GetDynamicUtils on dynamic {
   @Deprecated('isNull is deprecated and cannot be used, use "==" operator')
   bool get isNull => GetUtils.isNull(this);
 
