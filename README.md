@@ -821,12 +821,14 @@ Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, yo
 updates automatically... isn't it awesome?
 
 ```dart
-ObxValue((data) => Switch(
+     ObxValue<RxBool>(
+      (data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
-    ),
-    false.obs,
-),
+        onChanged:
+            data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+      ),
+      false.obs,
+    );
 ```
 
 ## Useful tips
