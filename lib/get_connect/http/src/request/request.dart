@@ -75,7 +75,7 @@ class Request<T> {
     );
   }
 
-  Request copyWith({
+  Request<T> copyWith({
     Uri? url,
     String? method,
     Map<String, String>? headers,
@@ -97,17 +97,17 @@ class Request<T> {
       headers.addAll(this.headers);
     }
 
-    return Request._(
+    return Request<T>._(
       url: url ?? this.url,
       method: method ?? this.method,
       bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
       headers: headers == null ? this.headers : Map.from(headers),
       followRedirects: followRedirects,
       maxRedirects: maxRedirects,
-      contentLength: contentLength,
-      files: files,
+      contentLength: contentLength ?? this.contentLength,
+      files: files ?? this.files,
       persistentConnection: persistentConnection,
-      decoder: decoder,
+      decoder: decoder ?? this.decoder,
     );
   }
 }
