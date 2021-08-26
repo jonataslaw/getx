@@ -480,7 +480,7 @@ GetMaterialApp(
 	void localLogWriter(String text, {bool isError = false}) {
 	  // tutaj przekaż wiadomosci do ulubionej paczki
 	    // pamiętaj że nawet jeśli "enableLog: false" logi i tak będą wysłane w tym callbacku
-		  // Musisz sprawdzić konfiguracje flag  jeśli chcesz przez GetConfig.isLogEnable
+		  // Musisz sprawdzić konfiguracje flag  jeśli chcesz przez Get.isLogEnable
 		  }
 ```
 ## Video tłumaczące inne funkcjonalności GetX

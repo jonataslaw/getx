@@ -572,7 +572,7 @@ GetMaterialApp(
 void localLogWriter(String text, {bool isError = false}) {
   // передайте сообщение вашей любимой log-библиотеке
   // но учитывайте, что даже если enableLog: false, сообщения все равно будут передаваться сюда
-  // узнать значение этого флага можно с помощью GetConfig.isLogEnable
+  // узнать значение этого флага можно с помощью Get.isLogEnable
 }
 
 ```
