@@ -40,8 +40,7 @@ Pour accéder à un nouvel écran:
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
-Pour fermer les snackbars, dialogs, bottomsheets ou tout ce que vous fermez normalement avec Navigator.pop (context);
+Pour fermer les snackbars, dialogs, bottomsheets ou tout ce que vous fermez normalement avec Navigator.pop(context);
 
 ```dart
 Get.back();
