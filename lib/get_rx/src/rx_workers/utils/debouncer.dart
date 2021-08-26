@@ -1,6 +1,6 @@
 import 'dart:async';
 
-/// This "function" class is the implementation of [debouncer()] Worker.
+/// This "function" class is the implementation of `debouncer()` Worker.
 /// It calls the function passed after specified [delay] parameter.
 /// Example:
 /// ```

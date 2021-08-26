@@ -77,6 +77,8 @@ extension GetStringUtils on String {
 
   String? get camelCase => GetUtils.camelCase(this);
 
+  String? get paramCase => GetUtils.paramCase(this);
+
   String numericOnly({bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
 

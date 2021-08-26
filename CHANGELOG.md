@@ -1,3 +1,153 @@
+## [4.3.8] 
+- Fix nav2 toNamed remove the route
+
+## [4.3.7] 
+- Fix wrong currentRoute when a route is removed
+- Remove take that limits the router outlet depth (@steven-spiel)
+
+## [4.3.6] 
+- Fix error with autodispose of additional dependencies beyond GetxController
+- Added ability to add your own delegate to RouterOutlet (@steven-spiel)
+- Added listenAndPump to Rx to give Rx the same behavior as BehaviorSubject (@steven-spiel)
+
+## [4.3.5] 
+- Fix GetConnect timeout (@jasonlaw)
+- Improve Vietnamese docs (@hp1909)
+- Refactor placeholder name route to unnamed routes (@roipeker).
+- Fix: Navigate to a page identical to Get.offNamed.
+- Fix: Wrong nameRoute after a route is removed
+- Added assert to prevent the user from starting a route name without slash.
+
+## [4.3.4] 
+- Improve docs
+
+## [4.3.3] 
+- Fix Get.reset
+
+## [4.3.2] 
+- Fix nullable on internacionalization (@jmguillens)
+- Fix nullable on Rx.stream (@steven-spiel)
+
+## [4.3.1] 
+- Fix controller is not removed when keyboard is open.
+- Improved: Safe removal and insertion of controllers.
+
+## [4.3.0] 
+- Added GetResponsiveWidget (@ahmednfwela)
+- Added `Get.replace()` (@jwelmac)
+- Added Improve korean doc (@sejun2)
+- Fix multiple middlewares redirect (@liasica)
+- Added gestureWidth and showCupertinoParallax to GetPage to customize cupertino transitions
+
+## [4.2.5] 
+- Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
+- Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
+- Fix error when child on MaterialApp is null (@ahmednfwela)
+- Fix Korean docs (@rws08)
+- Fix error with onClose called before routeTransition on Get.offNamed
+
+## [4.2.4] 
+- Fix Get.offAll removing GetxServices from memory
+
+## [4.2.3] 
+- Fix back button on navigator 2
+- Added parameters and arguments to Get.rootDelegate 
+
+## [4.2.1] 
+- Remove [] from docs to try fix pub score
+
+## [4.2.0] - Big update
+
+This update fixes important bugs as well as integrates with Navigator 2. It also adds GetRouterOutlet, similar to angular RouterOutlet thanks to @ahmednfwela. Also, the documentation translation for Vietnamese (@khangahs) has been added, making the GetX documentation available for 11 different languages, which is just fantastic for any opensource project. GetX has achieved more than 5.4k likes from the pub, and more than 4k stars on github, has videos about it with 48k on youtube, and has communities in the 4 hemispheres of the earth, besides having a large list of contributors as you see bellow. We're all happy to facilitate development with dart and flutter, and that making programming hassle-free has been taken around the world.
+
+Changes in this version:
+
+- Fix: Navigating to the same page with Get.offNamed does not delete the controller from that page using Get.lazyPut.
+
+- Fix Readme GetMiddleware typos 
+by @nivisi
+
+- Fix url replace error
+by @KevinZhang19870314 
+
+- Changed response default encoding from latin1 to utf8 
+by @heftekharm
+
+- Add Duration in ExtensionBottomSheet
+by @chanonpingpong
+
+- Added compatibility with dart-lang/mockito
+by @lifez
+
+- Added extensions methods to convert value in percent value 
+by @kauemurakami
+
+- Set darkTheme equal theme when darkTheme is null 
+by @eduardoFlorence
+
+- Add padding to 'defaultDialog' 
+by @KevinZhang19870314
+
+- GraphQLResponse inherit Response info 
+by @jasonlaw
+
+- Fix Redundant concatenating base url 
+by @jasonlaw
+
+- Add content type and length into the headers when the content type is 'application/x-www-form-urlencoded'
+by @calvingit
+
+- Make withCredentials configurable 
+by @jasonlaw
+
+- Fix flutter 2.0 error
+by @yunchiri
+
+- Allow deleting all registered instances
+by @lemps
+
+- Refactor/rx interface notify children 
+@by kranfix
+
+- Fixed parameter parsing and middleware sorting 
+by @ahmednfwela
+
+- Improvements to router outlet 
+by @ahmednfwela
+
+- Minor improvements and bug fixes 
+by @ahmednfwela
+
+- Adding route guards and improving navigation 
+by @ahmednfwela
+
+- Fix RxInterface.proxy losing its previous value on exception
+by @WillowWisp
+
+- Added dispose() for bottomSheet.
+by @furkankurt 
+
+- Added Pull request template 
+by @unacorbatanegra
+
+- Fix and update documentation:
+@Farid566, 
+@galaxykhh, 
+@arslee07, 
+@GoStaRoff, 
+@BondarenkoArtur, 
+@denisrudnei,
+@Charly6596, 
+@nateshmbhat, 
+@hrithikrtiwari, 
+@Undeadlol1,
+@rws08,
+@inuyashaaa,
+@broccolism, 
+@aadarshadhakalg,
+@ZeroMinJeon
+
+
 ## [4.1.4] 
 - Adjust operator + and - to RxInt (@eduardoflorence)
 - Fix dark theme (@eduardoflorence)

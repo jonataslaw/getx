@@ -66,7 +66,7 @@ class Response<T> {
 
   /// The decoded body of this [Response]. You can access the
   /// body parameters as Map
-  /// Ex: body['title'];
+  /// Ex: `body['title'];`
   final T? body;
 }
 
@@ -91,7 +91,7 @@ Encoding _encodingForCharset(String? charset, [Encoding fallback = utf8]) {
   return Encoding.getByName(charset) ?? fallback;
 }
 
-/// Returns the [MediaType] object for the given headers's content-type.
+/// Returns the MediaType object for the given headers's content-type.
 ///
 /// Defaults to `application/octet-stream`.
 HeaderValue _contentTypeForHeaders(Map<String, String> headers) {

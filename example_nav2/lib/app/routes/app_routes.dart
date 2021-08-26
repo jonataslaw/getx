@@ -11,6 +11,10 @@ abstract class Routes {
 
   static const PRODUCTS = _Paths.HOME + _Paths.PRODUCTS;
   static String PRODUCT_DETAILS(String productId) => '$PRODUCTS/$productId';
+  static const LOGIN = _Paths.LOGIN;
+  static String LOGIN_THEN(String afterSuccessfulLogin) =>
+      '$LOGIN?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+  static const DASHBOARD = _Paths.HOME + _Paths.DASHBOARD;
 }
 
 abstract class _Paths {
@@ -19,4 +23,6 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const SETTINGS = '/settings';
   static const PRODUCT_DETAILS = '/:productId';
+  static const LOGIN = '/login';
+  static const DASHBOARD = '/dashboard';
 }

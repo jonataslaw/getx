@@ -7,7 +7,9 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
 
   GetInformationParser({
     this.initialRoute = '/',
-  });
+  }) {
+    Get.log('GetInformationParser is created !');
+  }
   @override
   SynchronousFuture<GetNavConfig> parseRouteInformation(
     RouteInformation routeInformation,

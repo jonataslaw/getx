@@ -29,10 +29,10 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
     subject.add(value);
   }
 
-  /// updates the value to [null] and adds it to the Stream.
+  /// updates the value to `null` and adds it to the Stream.
   /// Even with null-safety coming, is still an important feature to support, as
-  /// [call()] doesn't accept [null] values. For instance,
-  /// [InputDecoration.errorText] has to be null to not show the "error state".
+  /// `call()` doesn't accept `null` values. For instance,
+  /// `InputDecoration.errorText` has to be null to not show the "error state".
   ///
   /// Sample:
   /// ```
@@ -44,7 +44,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   // }
 
   /// Makes this Rx looks like a function so you can update a new
-  /// value using [rx(someOtherValue)]. Practical to assign the Rx directly
+  /// value using `rx(someOtherValue)`. Practical to assign the Rx directly
   /// to some Widget that has a signature ::onChange( value )
   ///
   /// Example:
@@ -109,12 +109,30 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
     return _value;
   }
 
-  Stream<T?> get stream => subject.stream;
+  Stream<T> get stream => subject.stream;
 
-  /// Binds an existing [Stream<T>] to this Rx<T> to keep the values in sync.
+  /// Returns a [StreamSubscription] similar to [listen], but with the
+  /// added benefit that it primes the stream with the current [value], rather
+  /// than waiting for the next [value]. This should not be called in [onInit]
+  /// or anywhere else during the build process.
+  StreamSubscription<T> listenAndPump(void Function(T event) onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+    final subscription = listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+
+    subject.add(value);
+
+    return subscription;
+  }
+
+  /// Binds an existing `Stream<T>` to this Rx<T> to keep the values in sync.
   /// You can bind multiple sources to update the value.
   /// Closing the subscription will happen automatically when the observer
-  /// Widget ([GetX] or [Obx]) gets unmounted from the Widget tree.
+  /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
     final listSubscriptions =
         _subscriptions[subject] ??= <StreamSubscription>[];
@@ -365,6 +383,6 @@ extension BoolExtension on bool {
 }
 
 extension RxT<T> on T {
-  /// Returns a `Rx` instace with [this] `T` as initial value.
+  /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
 }

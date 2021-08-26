@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -29,13 +30,15 @@ class PathDecoded {
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
   final bool? popGesture;
-  final Map<String, String>? parameter;
+  final Map<String, String>? parameters;
   final String? title;
   final Transition? transition;
   final Curve curve;
+  final bool? participatesInRootNavigator;
   final Alignment? alignment;
   final bool maintainState;
   final bool opaque;
+  final double Function(BuildContext context)? gestureWidth;
   final Bindings? binding;
   final List<Bindings> bindings;
   final CustomTransition? customTransition;
@@ -49,25 +52,28 @@ class GetPage<T> extends Page<T> {
   // RouteSettings get settings => this;
 
   @override
-  Object? get arguments => Get.arguments;
+  final Object? arguments;
 
   @override
   final String name;
 
-  final List<GetPage>? children;
+  final List<GetPage> children;
   final List<GetMiddleware>? middlewares;
   final PathDecoded path;
   final GetPage? unknownRoute;
+  final bool showCupertinoParallax;
 
   GetPage({
     required this.name,
     required this.page,
     this.title,
+    this.participatesInRootNavigator,
+    this.gestureWidth,
     // RouteSettings settings,
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
-    this.parameter,
+    this.parameters,
     this.opaque = true,
     this.transitionDuration,
     this.popGesture,
@@ -76,11 +82,15 @@ class GetPage<T> extends Page<T> {
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.children,
+    this.children = const <GetPage>[],
     this.middlewares,
     this.unknownRoute,
-    this.preventDuplicates = false,
+    this.arguments,
+    this.showCupertinoParallax = true,
+    this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
+        assert(name.startsWith('/'),
+            'It is necessary to start route name [$name] with a slash: /$name'),
         super(
           key: ValueKey(name),
           name: name,
@@ -109,11 +119,11 @@ class GetPage<T> extends Page<T> {
     return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
-  GetPage copy({
+  GetPage<T> copy({
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
-    Map<String, String>? parameter,
+    Map<String, String>? parameters,
     String? title,
     Transition? transition,
     Curve? curve,
@@ -130,13 +140,19 @@ class GetPage<T> extends Page<T> {
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
+    final double Function(BuildContext context)? gestureWidth,
+    bool? participatesInRootNavigator,
+    Object? arguments,
+    bool? showCupertinoParallax,
   }) {
     return GetPage(
+      participatesInRootNavigator:
+          participatesInRootNavigator ?? this.participatesInRootNavigator,
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
       name: name ?? this.name,
       page: page ?? this.page,
       popGesture: popGesture ?? this.popGesture,
-      parameter: parameter ?? this.parameter,
+      parameters: parameters ?? this.parameters,
       title: title ?? this.title,
       transition: transition ?? this.transition,
       curve: curve ?? this.curve,
@@ -151,14 +167,25 @@ class GetPage<T> extends Page<T> {
       children: children ?? this.children,
       unknownRoute: unknownRoute ?? this.unknownRoute,
       middlewares: middlewares ?? this.middlewares,
+      gestureWidth: gestureWidth ?? this.gestureWidth,
+      arguments: arguments ?? this.arguments,
+      showCupertinoParallax:
+          showCupertinoParallax ?? this.showCupertinoParallax,
     );
   }
 
+  late Future<T?> popped;
+
   @override
   Route<T> createRoute(BuildContext context) {
-    return PageRedirect(
-      this,
-      unknownRoute,
-    ).page<T>();
+    // return GetPageRoute<T>(settings: this, page: page);
+    final _page = PageRedirect(
+      route: this,
+      settings: this,
+      unknownRoute: unknownRoute,
+    ).getPageToRoute<T>(this, unknownRoute);
+
+    popped = _page.popped;
+    return _page;
   }
 }

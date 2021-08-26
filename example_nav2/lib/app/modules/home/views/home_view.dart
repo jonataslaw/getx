@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
-import 'dashboard_view.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -21,23 +20,16 @@ class HomeView extends GetView<HomeController> {
         }
         return Scaffold(
           body: GetRouterOutlet(
-            name: Routes.HOME,
-            emptyWidget: (delegate) => DashboardView(),
-            pickPages: (currentNavStack) {
-              print('Home RouterOutlet: $currentNavStack');
-
-              // will take any route after home
-              final res =
-                  currentNavStack.currentTreeBranch.pickAfterRoute(Routes.HOME);
-              return res;
-            },
+            initialRoute: Routes.DASHBOARD,
+            // anchorRoute: Routes.HOME,
+            key: Get.nestedKey(Routes.HOME),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (value) {
               switch (value) {
                 case 0:
-                  delegate.until(Routes.HOME);
+                  delegate.toNamed(Routes.HOME);
                   break;
                 case 1:
                   delegate.toNamed(Routes.PROFILE);

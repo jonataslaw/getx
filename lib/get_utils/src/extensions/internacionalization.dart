@@ -55,7 +55,7 @@ extension Trans on String {
     return i == 1 ? trArgs(args) : pluralKey!.trArgs(args);
   }
 
-  String? trParams([Map<String, String> params = const {}]) {
+  String trParams([Map<String, String> params = const {}]) {
     var trans = tr;
     if (params.isNotEmpty) {
       params.forEach((key, value) {
@@ -65,7 +65,7 @@ extension Trans on String {
     return trans;
   }
 
-  String? trPluralParams(
+  String trPluralParams(
       [String? pluralKey, int? i, Map<String, String> params = const {}]) {
     return i == 1 ? trParams(params) : pluralKey!.trParams(params);
   }
@@ -94,6 +94,10 @@ extension LocalesIntl on GetInterface {
 
   void addTranslations(Map<String, Map<String, String>> tr) {
     translations.addAll(tr);
+  }
+
+  void clearTranslations() {
+    translations.clear();
   }
 
   void appendTranslations(Map<String, Map<String, String>> tr) {

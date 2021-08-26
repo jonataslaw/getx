@@ -4,10 +4,10 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import 'list_notifier.dart';
 
-/// Complies with [GetStateUpdater]
+/// Complies with `GetStateUpdater`
 ///
-/// This mixin's function represents a [GetStateUpdater], and might be used
-/// by [GetBuilder()], [SimpleBuilder()] (or similar) to comply
+/// This mixin's function represents a `GetStateUpdater`, and might be used
+/// by `GetBuilder()`, `SimpleBuilder()` (or similar) to comply
 /// with [GetStateUpdate] signature. REPLACING the [StateSetter].
 /// Avoids the potential (but extremely unlikely) issue of having
 /// the Widget in a dispose() state, and abstracts the

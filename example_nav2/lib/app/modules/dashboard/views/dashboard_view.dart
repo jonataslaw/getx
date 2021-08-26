@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/home_controller.dart';
+import '../controllers/dashboard_controller.dart';
 
-class DashboardView extends GetView<HomeController> {
+
+class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,7 @@ class DashboardView extends GetView<HomeController> {
                 'DashboardView is working',
                 style: TextStyle(fontSize: 20),
               ),
-              Text('Time: ${controller.now.value.toString()}')
+              Text('Time: ${controller.now.value.toString()}'),
             ],
           ),
         ),

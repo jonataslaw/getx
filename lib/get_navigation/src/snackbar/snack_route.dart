@@ -186,7 +186,7 @@ class SnackRoute<T> extends OverlayRoute<T> {
 
   /// Called to create the animation that exposes the current progress of
   /// the transition controlled by the animation controller created by
-  /// [createAnimationController()].
+  /// `createAnimationController()`.
   Animation<Alignment> createAnimation() {
     assert(!_transitionCompleter.isCompleted,
         'Cannot reuse a $runtimeType after disposing it.');

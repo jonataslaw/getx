@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
+
 import '../../../../get_core/get_core.dart';
+import '../../../../instance_manager.dart';
 import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
+import '../../router_report.dart';
 import '../../snackbar/snack_route.dart';
 import '../default_route.dart';
 
@@ -45,11 +48,11 @@ String? _extractRouteName(Route? route) {
   }
 
   if (route is GetDialogRoute) {
-    return route.name;
+    return 'DIALOG ${route.hashCode}';
   }
 
   if (route is GetModalBottomSheetRoute) {
-    return route.name;
+    return 'BOTTOMSHEET ${route.hashCode}';
   }
 
   return null;
@@ -103,7 +106,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    Get.reference = newRoute.name;
+    RouterReportManager.reportCurrentRoute(route);
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
@@ -140,8 +143,10 @@ class GetObserver extends NavigatorObserver {
     } else if (currentRoute.isGetPageRoute) {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
+    if (previousRoute != null) {
+      RouterReportManager.reportCurrentRoute(previousRoute);
+    }
 
-    Get.reference = newRoute.name;
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
@@ -151,7 +156,7 @@ class GetObserver extends NavigatorObserver {
         value.current = _extractRouteName(previousRoute) ?? '';
       }
 
-      value.args = route.settings.arguments;
+      value.args = previousRoute?.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
@@ -176,7 +181,10 @@ class GetObserver extends NavigatorObserver {
     Get.log("REPLACE ROUTE $oldName");
     Get.log("NEW ROUTE $newName");
 
-    Get.reference = newName;
+    if (newRoute != null) {
+      RouterReportManager.reportCurrentRoute(newRoute);
+    }
+
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (newRoute is PageRoute) {
@@ -193,6 +201,9 @@ class GetObserver extends NavigatorObserver {
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
+    if (oldRoute is GetPageRoute) {
+      RouterReportManager.reportRouteWillDispose(oldRoute);
+    }
 
     routing?.call(_routeSend);
   }
@@ -216,6 +227,9 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
+    if (route is GetPageRoute) {
+      RouterReportManager.reportRouteWillDispose(route);
+    }
     routing?.call(_routeSend);
   }
 }
