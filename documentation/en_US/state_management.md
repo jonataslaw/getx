@@ -335,7 +335,7 @@ class User {
   var age;
 }
 
-// when instantianting:
+// when instantiating:
 final user = User(name: "Camila", age: 18).obs;
 ```
 
@@ -344,7 +344,7 @@ final user = User(name: "Camila", age: 18).obs;
 Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
 
 You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+Unfortunately primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with getters and setters for these.
 
 ``` dart
 // On the controller
@@ -389,9 +389,9 @@ You don't have to work with sets if you don't want to. you can use the "assign '
 The "assign" api will clear your list, and add a single object that you want to start there.
 The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
 
-### Why i have to use .value
+### Why I have to use .value
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is to precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
 
 You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
 
