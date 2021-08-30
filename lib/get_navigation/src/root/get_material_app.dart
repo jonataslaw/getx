@@ -29,6 +29,8 @@ class GetMaterialApp extends StatelessWidget {
     this.onGenerateTitle,
     this.color,
     this.theme,
+    this.textScaleFactorMin = 1.0,
+    this.textScaleFactorMax = 1.0,
     this.darkTheme,
     this.themeMode = ThemeMode.system,
     this.locale,
@@ -85,6 +87,8 @@ class GetMaterialApp extends StatelessWidget {
   final String title;
   final GenerateAppTitle? onGenerateTitle;
   final ThemeData? theme;
+  final double textScaleFactorMin;
+  final double textScaleFactorMax;
   final ThemeData? darkTheme;
   final ThemeMode themeMode;
   final CustomTransition? customTransition;
@@ -141,6 +145,8 @@ class GetMaterialApp extends StatelessWidget {
     this.onGenerateTitle,
     this.color,
     this.theme,
+    this.textScaleFactorMin = 1.0,
+    this.textScaleFactorMax = 1.0,
     this.darkTheme,
     this.highContrastTheme,
     this.highContrastDarkTheme,
@@ -214,14 +220,24 @@ class GetMaterialApp extends StatelessWidget {
   }
 
   Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
+    final mediaQueryData = MediaQuery.of(context);
+
+    final constrainedTextScaleFactor = mediaQueryData.textScaleFactor
+        .clamp(textScaleFactorMin, textScaleFactorMax);
+
+    return MediaQuery(
+      data: mediaQueryData.copyWith(
+        textScaleFactor: constrainedTextScaleFactor,
+      ),
+      child: Directionality(
+        textDirection: textDirection ??
+            (rtlLanguages.contains(Get.locale?.languageCode)
+                ? TextDirection.rtl
+                : TextDirection.ltr),
+        child: builder == null
+            ? (child ?? Material())
+            : builder!(context, child ?? Material()),
+      ),
     );
   }
 
