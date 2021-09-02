@@ -117,16 +117,14 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// or anywhere else during the build process.
   StreamSubscription<T> listenAndPump(void Function(T event) onData,
       {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    final subscription = listen(
+    onData(value);
+
+    return listen(
       onData,
       onError: onError,
       onDone: onDone,
       cancelOnError: cancelOnError,
     );
-
-    subject.add(value);
-
-    return subscription;
   }
 
   /// Binds an existing `Stream<T>` to this Rx<T> to keep the values in sync.
