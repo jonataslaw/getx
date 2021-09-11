@@ -298,6 +298,7 @@ class GetMaterialApp extends StatelessWidget {
               debugShowCheckedModeBanner: debugShowCheckedModeBanner,
               shortcuts: shortcuts,
               scrollBehavior: scrollBehavior,
+              restorationScopeId: restorationScopeId,
             )
           : MaterialApp(
               key: _.unikey,
