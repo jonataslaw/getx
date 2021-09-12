@@ -73,6 +73,18 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
+  void removeWhere(bool test(E element)) {
+    _value.removeWhere(test);
+    refresh();
+  }
+
+  @override
+  void retainWhere(bool test(E element)) {
+    _value.retainWhere(test);
+    refresh();
+  }
+
+  @override
   int get length => value.length;
 
   @override
