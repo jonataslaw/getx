@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 import 'get_main.dart';
 
-///Voidcallback from logs
+///VoidCallback from logs
 typedef LogWriterCallback = void Function(String text, {bool isError});
 
 /// default logger from GetX
