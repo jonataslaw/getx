@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'get_instance.dart';
 
 /// [Bindings] should be extended or implemented.
@@ -27,7 +29,7 @@ abstract class Bindings {
 /// ```
 class BindingsBuilder<T> extends Bindings {
   /// Register your dependencies in the [builder] callback.
-  final BindingBuilderCallback builder;
+  final VoidCallback builder;
 
   /// Shortcut to register 1 Controller with Get.put(),
   /// Prevents the issue of the fat arrow function with the constructor.
@@ -62,4 +64,4 @@ class BindingsBuilder<T> extends Bindings {
 // typedef Snack = Function();
 // typedef Modal = Function();
 // typedef Route = Function();
-typedef BindingBuilderCallback = void Function();
+// typedef BindingBuilderCallback = void Function();
