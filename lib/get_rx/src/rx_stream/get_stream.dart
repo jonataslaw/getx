@@ -150,7 +150,7 @@ class LightSubscription<T> extends StreamSubscription<T> {
     return Future.value();
   }
 
-  OnData<T>? _data;
+  ValueChanged<T>? _data;
 
   Function? _onError;
 
@@ -159,7 +159,7 @@ class LightSubscription<T> extends StreamSubscription<T> {
   bool _isPaused = false;
 
   @override
-  void onData(OnData<T>? handleData) => _data = handleData;
+  void onData(ValueChanged<T>? handleData) => _data = handleData;
 
   @override
   void onError(Function? handleError) => _onError = handleError;

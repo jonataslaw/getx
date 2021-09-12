@@ -9,7 +9,7 @@ class Node<T> {
 class MiniSubscription<T> {
   const MiniSubscription(
       this.data, this.onError, this.onDone, this.cancelOnError, this.listener);
-  final OnData<T> data;
+  final ValueChanged<T> data;
   final Function? onError;
   final VoidCallback? onDone;
   final bool cancelOnError;
