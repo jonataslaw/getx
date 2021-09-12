@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 // replacing StateSetter, return if the Widget is mounted for extra validation.
 // if it brings overhead the extra call,
-typedef GetStateUpdate = void Function();
+// typedef GetStateUpdate = void Function();
 
 class ListNotifier extends Listenable with ListenableMixin, ListNotifierMixin {}
 
@@ -16,10 +16,10 @@ mixin ListNotifierMixin on ListenableMixin {
   // int get notifierVersion => _version;
   // int get notifierMicrotask => _microtask;
 
-  List<GetStateUpdate?>? _updaters = <GetStateUpdate?>[];
+  List<VoidCallback?>? _updaters = <VoidCallback?>[];
 
-  HashMap<Object?, List<GetStateUpdate>>? _updatersGroupIds =
-      HashMap<Object?, List<GetStateUpdate>>();
+  HashMap<Object?, List<VoidCallback>>? _updatersGroupIds =
+      HashMap<Object?, List<VoidCallback>>();
 
   @protected
   void refresh() {
@@ -116,14 +116,14 @@ mixin ListNotifierMixin on ListenableMixin {
   }
 
   @override
-  VoidCallback addListener(GetStateUpdate listener) {
+  VoidCallback addListener(VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.add(listener);
     return () => _updaters!.remove(listener);
   }
 
-  VoidCallback addListenerId(Object? key, GetStateUpdate listener) {
-    _updatersGroupIds![key] ??= <GetStateUpdate>[];
+  VoidCallback addListenerId(Object? key, VoidCallback listener) {
+    _updatersGroupIds![key] ??= <VoidCallback>[];
     _updatersGroupIds![key]!.add(listener);
     return () => _updatersGroupIds![key]!.remove(listener);
   }
@@ -143,11 +143,11 @@ class TaskManager {
 
   static TaskManager get instance => _instance ??= TaskManager._();
 
-  GetStateUpdate? _setter;
+  VoidCallback? _setter;
 
   List<VoidCallback>? _remove;
 
-  void notify(List<GetStateUpdate?>? _updaters) {
+  void notify(List<VoidCallback?>? _updaters) {
     if (_setter != null) {
       if (!_updaters!.contains(_setter)) {
         _updaters.add(_setter);
@@ -158,7 +158,7 @@ class TaskManager {
 
   Widget exchange(
     List<VoidCallback> disposers,
-    GetStateUpdate setState,
+    VoidCallback setState,
     Widget Function(BuildContext) builder,
     BuildContext context,
   ) {
