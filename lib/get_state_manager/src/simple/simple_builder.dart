@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'get_state.dart';
 import 'list_notifier.dart';
 
-typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
+// typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
 typedef ValueBuilderBuilder<T> = Widget Function(
-    T snapshot, ValueBuilderUpdateCallback<T> updater);
+    T snapshot, ValueChanged<T> updater);
 
 /// Manages a local state like ObxValue, but uses a callback instead of
 /// a Rx value.
