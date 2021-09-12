@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
+
 import '../../../get_core/get_core.dart';
 import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
@@ -11,7 +13,7 @@ bool _conditional(dynamic condition) {
   return true;
 }
 
-typedef WorkerCallback<T> = Function(T callback);
+// typedef WorkerCallback<T> = Function(T callback);
 
 class Workers {
   Workers(this.workers);
@@ -58,7 +60,7 @@ class Workers {
 /// ```
 Worker ever<T>(
   RxInterface<T> listener,
-  WorkerCallback<T> callback, {
+  ValueChanged<T> callback, {
   dynamic condition = true,
   Function? onError,
   void Function()? onDone,
@@ -81,7 +83,7 @@ Worker ever<T>(
 /// common to all, so `worker.dispose()` will cancel all streams.
 Worker everAll(
   List<RxInterface> listeners,
-  WorkerCallback callback, {
+  ValueChanged callback, {
   dynamic condition = true,
   Function? onError,
   void Function()? onDone,
@@ -133,7 +135,7 @@ Worker everAll(
 ///```
 Worker once<T>(
   RxInterface<T> listener,
-  WorkerCallback<T> callback, {
+  ValueChanged<T> callback, {
   dynamic condition = true,
   Function? onError,
   void Function()? onDone,
@@ -176,7 +178,7 @@ Worker once<T>(
 /// ```
 Worker interval<T>(
   RxInterface<T> listener,
-  WorkerCallback<T> callback, {
+  ValueChanged<T> callback, {
   Duration time = const Duration(seconds: 1),
   dynamic condition = true,
   Function? onError,
@@ -220,7 +222,7 @@ Worker interval<T>(
 ///  ```
 Worker debounce<T>(
   RxInterface<T> listener,
-  WorkerCallback<T> callback, {
+  ValueChanged<T> callback, {
   Duration? time,
   Function? onError,
   void Function()? onDone,
