@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 class Close {
   final String? message;
   final int? reason;
@@ -12,8 +14,6 @@ class Close {
   }
 }
 
-typedef OpenSocket = void Function();
-
 typedef CloseSocket = void Function(Close);
 
 typedef MessageSocket = void Function(dynamic val);
@@ -24,7 +24,7 @@ class SocketNotifier {
   List<void Function(Close)>? _onCloses = <CloseSocket>[];
   List<void Function(Close)>? _onErrors = <CloseSocket>[];
 
-  late OpenSocket open;
+  late VoidCallback open;
 
   void addMessages(MessageSocket socket) {
     _onMessages!.add((socket));

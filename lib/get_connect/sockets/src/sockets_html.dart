@@ -69,7 +69,7 @@ class BaseWebSocket {
   }
 
   // ignore: use_setters_to_change_properties
-  void onOpen(OpenSocket fn) {
+  void onOpen(VoidCallback fn) {
     socketNotifier!.open = fn;
   }
 

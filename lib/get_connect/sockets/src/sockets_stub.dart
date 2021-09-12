@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import './socket_notifier.dart';
 
 class BaseWebSocket {
@@ -16,7 +18,7 @@ class BaseWebSocket {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void onOpen(OpenSocket fn) {
+  void onOpen(VoidCallback fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
