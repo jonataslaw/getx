@@ -2,9 +2,6 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-// This callback remove the listener on addListener function
-typedef Disposer = void Function();
-
 // replacing StateSetter, return if the Widget is mounted for extra validation.
 // if it brings overhead the extra call,
 typedef GetStateUpdate = void Function();
@@ -119,13 +116,13 @@ mixin ListNotifierMixin on ListenableMixin {
   }
 
   @override
-  Disposer addListener(GetStateUpdate listener) {
+  VoidCallback addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.add(listener);
     return () => _updaters!.remove(listener);
   }
 
-  Disposer addListenerId(Object? key, GetStateUpdate listener) {
+  VoidCallback addListenerId(Object? key, GetStateUpdate listener) {
     _updatersGroupIds![key] ??= <GetStateUpdate>[];
     _updatersGroupIds![key]!.add(listener);
     return () => _updatersGroupIds![key]!.remove(listener);

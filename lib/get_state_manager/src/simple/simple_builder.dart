@@ -86,7 +86,7 @@ class SimpleBuilder extends StatefulWidget {
 
 class _SimpleBuilderState extends State<SimpleBuilder>
     with GetStateUpdaterMixin {
-  final disposers = <Disposer>[];
+  final disposers = <VoidCallback>[];
 
   @override
   void dispose() {

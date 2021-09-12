@@ -154,7 +154,7 @@ class LightSubscription<T> extends StreamSubscription<T> {
 
   Function? _onError;
 
-  Callback? _onDone;
+  VoidCallback? _onDone;
 
   bool _isPaused = false;
 
@@ -165,7 +165,7 @@ class LightSubscription<T> extends StreamSubscription<T> {
   void onError(Function? handleError) => _onError = handleError;
 
   @override
-  void onDone(Callback? handleDone) => _onDone = handleDone;
+  void onDone(VoidCallback? handleDone) => _onDone = handleDone;
 
   @override
   void pause([Future<void>? resumeSignal]) {
