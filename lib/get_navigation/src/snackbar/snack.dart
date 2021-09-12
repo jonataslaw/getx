@@ -6,7 +6,6 @@ import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
-typedef OnTap = void Function(GetBar snack);
 
 class GetBar<T extends Object> extends StatefulWidget {
   GetBar({
@@ -96,7 +95,7 @@ class GetBar<T extends Object> extends StatefulWidget {
 
   /// A callback that registers the user's click anywhere.
   /// An alternative to [mainButton]
-  final OnTap? onTap;
+  final ValueChanged<GetBar>? onTap;
 
   /// How long until Snack will hide itself (be dismissed).
   /// To make it indefinite, leave it null.
