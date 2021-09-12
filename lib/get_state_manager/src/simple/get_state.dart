@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
-import 'list_notifier.dart';
 
 /// Complies with `GetStateUpdater`
 ///
