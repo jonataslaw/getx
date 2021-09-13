@@ -161,6 +161,7 @@ class RxStatus {
   final bool isSuccess;
   final bool isEmpty;
   final bool isLoadingMore;
+  final bool isErrorLoadingMore;
   final String? errorMessage;
 
   RxStatus._({
@@ -170,6 +171,7 @@ class RxStatus {
     this.isSuccess = false,
     this.errorMessage,
     this.isLoadingMore = false,
+    this.isErrorLoadingMore = false,
   });
 
   factory RxStatus.loading() {
@@ -186,6 +188,10 @@ class RxStatus {
 
   factory RxStatus.error([String? message]) {
     return RxStatus._(isError: true, errorMessage: message);
+  }
+
+  factory RxStatus.errorLoadingMore([String? message]) {
+    return RxStatus._(isErrorLoadingMore: true, errorMessage: message);
   }
 
   factory RxStatus.empty() {
