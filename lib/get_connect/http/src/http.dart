@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import '../src/certificates/certificates.dart';
 import '../src/exceptions/exceptions.dart';
 import '../src/multipart/form_data.dart';
 import '../src/request/request.dart';
 import '../src/response/response.dart';
-import '../src/status/http_status.dart';
 import 'http/interface/request_base.dart';
 import 'http/stub/http_request_stub.dart'
     if (dart.library.html) 'http/html/http_request_html.dart'

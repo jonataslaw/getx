@@ -42,12 +42,12 @@ class Response<T> {
   /// Human-readable context for [statusCode].
   final String? statusText;
 
-  /// [HttpStatus] from [Response]. `status.connectionError` is true
+  /// [HttpStatusHelper] from [Response]. `status.connectionError` is true
   /// when statusCode is null. `status.isUnauthorized` is true when
   /// statusCode is equal `401`. `status.isNotFound` is true when
   /// statusCode is equal `404`. `status.isServerError` is true when
   /// statusCode is between `500` and `599`.
-  HttpStatus get status => HttpStatus(statusCode);
+  HttpStatusHelper get status => HttpStatusHelper(statusCode);
 
   /// `hasError` is true when statusCode is not between 200 and 299.
   bool get hasError => status.hasError;
