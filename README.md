@@ -156,11 +156,11 @@ class Controller extends GetxController{
 ```dart
 class Home extends StatelessWidget {
 
+  // Instantiate your class using Get.put() to make it available for all "child" routes there.
+  final Controller c = Get.put(Controller());
+
   @override
   Widget build(context) {
-
-    // Instantiate your class using Get.put() to make it available for all "child" routes there.
-    final Controller c = Get.put(Controller());
 
     return Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
