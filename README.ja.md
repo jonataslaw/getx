@@ -237,7 +237,7 @@ Obx(() => Text("${controller.name}"));
 
 ### 状態管理についての詳細
 
-**状態管理のより詳細な説明を知りたい方は[こちら](./documentation/en_US/state_management.md)をご覧ください。より多くの例や、普通の状態管理とリアクティブな状態管理の違いについても説明されています。**
+**状態管理のより詳細な説明を知りたい方は[こちら](./documentation/ja_JP/state_management.md)をご覧ください。より多くの例や、普通の状態管理とリアクティブな状態管理の違いについても説明されています。**
 
 GetXパワーの良さをより理解していただけると思います。
 
@@ -260,7 +260,7 @@ GetMaterialApp( // MaterialApp の前に Get
 Get.to(NextScreen());
 ```
 
-名前付きRouteに画面遷移。名前付きRouteの詳細は[こちら](./documentation/en_US/route_management.md#navigation-with-named-routes)
+名前付きRouteに画面遷移。名前付きRouteの詳細は[こちら](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
 
 ```dart
 
@@ -273,23 +273,23 @@ SnackBar、Dialog、BottomSheetなど、Navigator.pop(context)で閉じられる
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens, etc.)
+次の画面に移動した後、前の画面に戻るオプションがない場合（スプラッシュスクリーンやログイン画面などで利用）
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+次の画面に進み、前のRouteをすべてキャンセルする場合（ショッピングカート、アンケート、テストなどで有効）
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't have to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+以上のことを行うのに、contextを使わなかったことに気付きましたか？これが、GetでRoute管理を行う最大のメリットのひとつです。これによりcontrollerクラスの中でも、これらのメソッドを安心して実行することができます。
 
-### More details about route management
+### Route管理についての詳細
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**Getは名前付きRouteでも動作し、Routeの下位レベルの制御も可能です。詳細なドキュメントは[こちら](./documentation/ja_JP/route_management.md)にあります。**
 
 ## Dependency management
 
@@ -325,7 +325,7 @@ Text(controller.textFromApi);
 
 ### More details about dependency management
 
-**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
+**See a more in-depth explanation of dependency management [here](./documentation/ja_JP/dependency_management.md)**
 
 # Utils
 
