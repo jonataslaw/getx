@@ -78,10 +78,10 @@
     - [GetxService](#getxservice)
 - [Breaking changes from 2.0](#breaking-changes-from-20)
 - [なぜGetXなのか](#なぜGetXなのか)
-- [Community](#community)
-  - [Community channels](#community-channels)
-  - [How to contribute](#how-to-contribute)
-  - [Articles and videos](#articles-and-videos)
+- [コミュニティ](#コミュニティ)
+  - [コミュニティチャンネル](#コミュニティチャンネル)
+  - [貢献方法](#貢献方法)
+  - [GetXに関する記事とビデオ](#GetXに関する記事とビデオ)
 
 # Getとは
 
@@ -137,8 +137,8 @@ Flutterで新規プロジェクトを作成する際に表示されるカウン�
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- 補足1: GetMaterialAppはFlutterのMaterialAppに手を加えたものではありません。MaterialAppをchildに持ち、諸々の追加設定をしてくれるWidgetに過ぎません。この設定は手動でも可能ですが、その必要はありません。GetMaterialAppは、Routeの作成・注入、言語翻訳の注入など、ナビゲーションに必要なものをすべて注入してくれます。Getを状態管理や依存性注入に限定して使用する場合は、GetMaterialAppを使用する必要はありません。GetMaterialAppは、Route、SnackBar、多言語対応、BottomSheet、Dialog、contextなしの高レベルAPIを利用する場合に必要です。
-- 補足2: このステップは、Route管理機能（`Get.to()`や`Get.back()`など）を使用しない場合は、必要ありません。
+- 注1: GetMaterialAppはFlutterのMaterialAppに手を加えたものではありません。MaterialAppをchildに持ち、諸々の追加設定をしてくれるWidgetに過ぎません。この設定は手動でも可能ですが、その必要はありません。GetMaterialAppは、Routeの作成・注入、言語翻訳の注入など、ナビゲーションに必要なものをすべて注入してくれます。Getを状態管理や依存性注入に限定して使用する場合は、GetMaterialAppを使用する必要はありません。GetMaterialAppは、Route、SnackBar、多言語対応、BottomSheet、Dialog、contextなしの高レベルAPIを利用する場合に必要です。
+- 注2: このステップは、Route管理機能（`Get.to()`や`Get.back()`など）を使用しない場合は、必要ありません。
 
 - ステップ2:
   ビジネスロジッククラスを作成し、そこに必要な変数、メソッド、コントローラをすべて配置します。
@@ -239,13 +239,13 @@ Obx(() => Text("${controller.name}"));
 
 **状態管理のより詳細な説明を知りたい方は[こちら](./documentation/ja_JP/state_management.md)をご覧ください。より多くの例や、普通の状態管理とリアクティブな状態管理の違いについても説明されています。**
 
-GetXパワーの良さをより理解していただけると思います。
+GetXパワーがもたらす利点をより理解していただけると思います。
 
 ## Route管理
 
-contextなしでRoute/SnackBar/Dialog/BottomSheetを使用する場合、GetXはあなたにとっても優れています、見てみてください。
+GetXはcontextなしでRoute/SnackBar/Dialog/BottomSheetを使用することができます。具体的に見ていきましょう。
 
-MaterialAppの前に「Get」を追加すると、GetMaterialAppになります。
+いつものMaterialAppの前に「Get」を付け足して、GetMaterialAppにしましょう。
 
 ```dart
 GetMaterialApp( // MaterialApp の前に Get
@@ -253,88 +253,85 @@ GetMaterialApp( // MaterialApp の前に Get
 )
 ```
 
-新しいRouteに画面遷移。
+新しいRouteに画面遷移するにはこの構文。
 
 ```dart
-
 Get.to(NextScreen());
 ```
 
-名前付きRouteに画面遷移。名前付きRouteの詳細は[こちら](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
+名前付きRouteに画面遷移するにはこの構文。名前付きRouteの詳細は[こちら](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
 
 ```dart
-
 Get.toNamed('/details');
 ```
 
-SnackBar、Dialog、BottomSheetなど、Navigator.pop(context)で閉じられるものはこれで閉じます。
+SnackBar、Dialog、BottomSheetなど、Navigator.pop(context)で閉じられるRouteはこれで閉じます。
 
 ```dart
 Get.back();
 ```
 
-次の画面に移動した後、前の画面に戻るオプションがない場合（スプラッシュスクリーンやログイン画面などで利用）
+次の画面に移動した後、前の画面に戻れないようにする場合（スプラッシュスクリーンやログイン画面など）はこちら。
 
 ```dart
 Get.off(NextScreen());
 ```
 
-次の画面に進み、前のRouteをすべてキャンセルする場合（ショッピングカート、アンケート、テストなどで有効）
+次の画面に進み、前のRouteをすべてキャンセルする場合（ショッピングカート、アンケート、テストなど）はこちら。
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-以上のことを行うのに、contextを使わなかったことに気付きましたか？これが、GetでRoute管理を行う最大のメリットのひとつです。これによりcontrollerクラスの中でも、これらのメソッドを安心して実行することができます。
+以上、contextを一度も使わなかったことに気付きましたか？これがGetでRoute管理を行う最大のメリットのひとつです。contextを使わないので、たとえばcontrollerクラスの中でも、これらのメソッドを実行することができます。
 
 ### Route管理についての詳細
 
 **Getは名前付きRouteでも動作し、Routeの下位レベルの制御も可能です。詳細なドキュメントは[こちら](./documentation/ja_JP/route_management.md)にあります。**
 
-## Dependency management
+## 依存性注入の管理
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Getにはシンプルで強力な依存性注入機能があります。わずか1行のコードで、Provider contextやinheritedWidgetも使わず、BLoCやControllerのようなクラスのインスタンスを取得することができます。
 
 ```dart
-Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+Controller controller = Get.put(Controller()); // controller = Controller() とする代わりに
 ```
 
-- Note: If you are using Get's State Manager, pay more attention to the bindings API, which will make it easier to connect your view to your controller.
+- 注: Getの状態管理機能を使用している場合は、Bindings APIにもご注目を。BindingsはViewとControllerを結びつけるのをより便利にしてくれます。
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
+一つのクラスの中でControllerクラスをインスタンス化するのではなく、Getインスタンスの中でインスタンス化することで、アプリ全体でControllerが利用できるようになります。
 
-**Tip:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**ヒント:** Getの依存性注入機能の部分は、パッケージ全体の中でも他の部分と切り離されているので、たとえば、あなたのアプリがすでに状態管理機能を一部で使用していたとしても、それらを書き直す必要はなく、この依存性注入機能をそのまま使用することができます。
 
 ```dart
 controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+色々なRouteを行き来した後に、あるControllerクラスのデータにアクセスする必要が生じたとしましょう。ProviderやGet_itなら再びそのクラスに依存性注入する必要がありますよね？Getの場合は違います。Getでは「find」と依頼するだけで、追加の依存性注入は必要ありません。
 
 ```dart
 Controller controller = Get.find();
-//Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
+//マジックみたいですね。Getは正しいcontrollerをきちんと探してきてくれますよ。100万のcontrollerのインスタンスがあっても、Getは必ず正しいcontrollerを探し当てます。
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+そして、findで取得したコントローラーのデータをこのように呼び出すことができます。
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-### More details about dependency management
+### 依存性注入の管理についての詳細
 
-**See a more in-depth explanation of dependency management [here](./documentation/ja_JP/dependency_management.md)**
+**依存性注入管理のより詳細な説明は[こちら](./documentation/ja_JP/dependency_management.md)をご覧ください。**
 
-# Utils
+# ユーティリティ
 
-## Internationalization
+## 多言語対応
 
-### Translations
+### 翻訳
 
-Translations are kept as a simple key-value dictionary map.
-To add custom translations, create a class and extend `Translations`.
+翻訳ファイルはシンプルなキーと値のMapとして保持されます。
+翻訳を追加するには、クラスを作成して `Translations` を継承します。
 
 ```dart
 import 'package:get/get.dart';
@@ -352,22 +349,22 @@ class Messages extends Translations {
 }
 ```
 
-#### Using translations
+#### 翻訳の利用
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+指定されたキーに `.tr` （translateのtr）を追加するだけで、`Get.locale` と `Get.fallbackLocale` の現在の値をに沿って適切な言語に翻訳されます。
 
 ```dart
 Text('title'.tr);
 ```
 
-#### Using translation with singular and plural
+#### 単数系と複数形に対応
 
 ```dart
 var products = [];
 Text('singularKey'.trPlural('pluralKey', products.length, Args));
 ```
 
-#### Using translation with parameters
+#### パラメーターに対応
 
 ```dart
 import 'package:get/get.dart';
@@ -388,30 +385,30 @@ Text('logged_in'.trParams({
   }));
 ```
 
-### Locales
+### ロケール
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+ロケールと翻訳を定義するため、`GetMaterialApp`にパラメータを渡します。
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // your translations
-    locale: Locale('en', 'US'), // translations will be displayed in that locale
-    fallbackLocale: Locale('en', 'UK'), // specify the fallback locale in case an invalid locale is selected.
+    translations: Messages(), // Translationsを継承したクラスのインスタンス
+    locale: Locale('en', 'US'), // このロケール設定に沿って翻訳が表示される
+    fallbackLocale: Locale('en', 'UK'), // 無効なロケールだったときのフォールバックを指定
 );
 ```
 
-#### Change locale
+#### ロケールの変更
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+ロケールを変更するには、`Get.updateLocale(locale)`を呼び出します。翻訳は新しいロケールに沿ってなされます。
 
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### System locale
+#### システムロケール
 
-To read the system locale, you could use `Get.deviceLocale`.
+システムのロケールを読み込むには、`Get.deviceLocale`を使用します。
 
 ```dart
 return GetMaterialApp(
@@ -419,42 +416,42 @@ return GetMaterialApp(
 );
 ```
 
-## Change Theme
+## Themeの変更
 
-Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
+`GetMaterialApp`より上位のWidgetを使ってThemeを変更しないでください。Keyの重複を引き起こす可能性があります。アプリのThemeを変更するためには「ThemeProvider」Widgetを作成するという前時代的なアプローチが採られることが多いですが、**GetX™**ではこのようなことは必要ありません。
 
-You can create your custom theme and simply add it within `Get.changeTheme` without any boilerplate for that:
+カスタムのThemeDataを作成したら、それを`Get.changeTheme`内に追加するだけです。
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-If you want to create something like a button that changes the Theme in `onTap`, you can combine two **GetX™** APIs for that:
+もし、`onTap`でThemeを変更するボタンを作りたいのであれば、以下の2つの**GetX™** APIを組み合わせることができます。
 
-- The api that checks if the dark `Theme` is being used.
-- And the `Theme` Change API, you can just put this within an `onPressed`:
+- Dark Theme が使われているかどうかをチェックするAPI
+- Theme を変えるAPI（ボタンの`onPressed`の中に設置できます）
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+Darkモードが有効であれば、_light theme_に切り替わり、Lightモードが有効なら、_dark theme_に切り替わります。
 
 ## GetConnect
 
-GetConnect is an easy way to communicate from your back to your front with http or websockets
+GetConnect は、http または websocket を使用してバックエンドとフロントエンド間の通信を行う機能です。
 
-### Default configuration
+### デフォルト設定
 
-You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
+GetConnectを拡張することで、GET/POST/PUT/DELETE/SOCKETメソッドを使用して、Rest APIやウェブソケットと通信することができます。
 
 ```dart
 class UserProvider extends GetConnect {
-  // Get request
+  // Get リクエスト
   Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
+  // Post リクエスト
   Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request with File
+  // File付き Post リクエスト
   Future<Response<CasesModel>> postCases(List<int> image) {
     final form = FormData({
       'file': MultipartFile(image, filename: 'avatar.png'),
@@ -469,29 +466,27 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Custom configuration
+### カスタム設定
 
-GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
+GetConnect は高度なカスタマイズが可能です。ベースUrlの定義はもちろん、リクエストヘッダーを足したり、レスポンスボディに変更を加えたり、認証情報を追加したり、認証回数の制限を設けたりすることができるほか、リクエストをModelに変換するデコーダを定義することもできます。
 
 ```dart
 class HomeProvider extends GetConnect {
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
+    // デフォルトデコーダーをセット
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
+    // baseUrlをセット
 
-    // It's will attach 'apikey' property on header from all requests
+    // リクエストヘッダーに 'apikey' プロパティを付け足しています。
     httpClient.addRequestModifier((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
 
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
+    // サーバーが"Brazil"を含むデータを送ってきてもユーザーに表示されることはありません。
+    // レスポンスがUIレイヤーに届けられる前にデータが取り除かれているからです。
     httpClient.addResponseModifier<CasesModel>((request, response) {
       CasesModel model = response.body;
       if (model.countries.contains('Brazil')) {
@@ -502,13 +497,13 @@ class HomeProvider extends GetConnect {
     httpClient.addAuthenticator((request) async {
       final response = await get("http://yourapi/token");
       final token = response.body['token'];
-      // Set the header
+      // ヘッダーをセット
       request.headers['Authorization'] = "$token";
       return request;
     });
 
-    //Autenticator will be called 3 times if HttpStatus is
-    //HttpStatus.unauthorized
+    // HttpStatus が HttpStatus.unauthorized である限り、
+    // 3回まで認証が試みられます。
     httpClient.maxAuthRetries = 3;
   }
   }
@@ -518,15 +513,15 @@ class HomeProvider extends GetConnect {
 }
 ```
 
-## GetPage Middleware
+## GetPageのミドルウェア
 
-The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
+GetPageに新しいプロパティが追加され、GetMiddleWareのListを設定することができるようになりました。GetMiddleWareは設定した任意の順序で実行されます。
 
-**Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
+**注**: GetPageにMiddlewareを設定すると、そのページの下にあるchildはすべて同じMiddlewareを自動的に持つことになります。
 
-### Priority
+### 実行順
 
-The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
+GetMiddlewareに設定したpriority(優先度)の若い順にミドルウェアが実行されます。
 
 ```dart
 final middlewares = [
@@ -537,11 +532,11 @@ final middlewares = [
 ];
 ```
 
-those middlewares will be run in this order **-8 => 2 => 4 => 5**
+この場合の実行順序は **-8 => 2 => 4 => 5**
 
-### Redirect
+### redirect
 
-This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+redirect関数は、Routeを呼び出してページが検索されると実行されます。リダイレクト先のRouteSettingsが戻り値となります。もしくはnullを与えれば、リダイレクトは行われません。
 
 ```dart
 RouteSettings redirect(String route) {
@@ -552,8 +547,8 @@ RouteSettings redirect(String route) {
 
 ### onPageCalled
 
-This function will be called when this Page is called before anything created
-you can use it to change something about the page or give it new page
+onPageCalled関数は、ページが呼び出された直後に実行されます。
+この関数を使ってページの内容を変更したり、新しいページを作成したりすることができます。
 
 ```dart
 GetPage onPageCalled(GetPage page) {
@@ -562,10 +557,10 @@ GetPage onPageCalled(GetPage page) {
 }
 ```
 
-### OnBindingsStart
+### onBindingsStart
 
-This function will be called right before the Bindings are initialize.
-Here you can change Bindings for this page.
+onBindingsStart関数は、Bindingsが初期化される直前に実行されます。
+たとえば、ページのBindingsを変更することもできます。
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -577,10 +572,9 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 }
 ```
 
-### OnPageBuildStart
+### onPageBuildStart
 
-This function will be called right after the Bindings are initialize.
-Here you can do something after that you created the bindings and before creating the page widget.
+onPageBuildStart関数は、Bindingsが初期化された直後、ページWidetが作成される前に実行されます。
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -589,51 +583,51 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 }
 ```
 
-### OnPageBuilt
+### onPageBuilt
 
-This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
+onPageBuilt関数は、GetPage.page(ページのビルダー)が呼び出された直後に実行され、表示されるWidgetを結果として受け取ることができます。
 
-### OnPageDispose
+### onPageDispose
 
-This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
+onPageDispose関数は、ページに関するすべてのオブジェクト（Controller、Viewなど）が破棄された直後に実行されます。
 
-## Other Advanced APIs
+## その他API
 
 ```dart
-// give the current args from currentScreen
+// 現在の画面に渡されているargs(引数)を取得
 Get.arguments
 
-// give name of previous route
+// 直前のRouteの名前("/" など)を取得
 Get.previousRoute
 
-// give the raw route to access for example, rawRoute.isFirst()
+// 現在のRouteオブジェクトを取得
 Get.rawRoute
 
-// give access to Routing API from GetObserver
+// GetObserverからRoutingを取得
 Get.routing
 
-// check if snackbar is open
+// SnackBarが開いているかチェック
 Get.isSnackbarOpen
 
-// check if dialog is open
+// Dialogが開いているかチェック
 Get.isDialogOpen
 
-// check if bottomsheet is open
+// BottomSheetが開いているかチェック
 Get.isBottomSheetOpen
 
-// remove one route.
+// Routeを削除
 Get.removeRoute()
 
-// back repeatedly until the predicate returns true.
+// 引数のRoutePredicateがtrueを返すまで画面を戻る
 Get.until()
 
-// go to next route and remove all the previous routes until the predicate returns true.
+// 引数で指定したRouteに進み、RoutePredicateがtrueを返すまで画面を戻る
 Get.offUntil()
 
-// go to next named route and remove all the previous routes until the predicate returns true.
+// 引数で指定した名前付きRouteに進み、RoutePredicateがtrueを返すまで画面を戻る
 Get.offNamedUntil()
 
-//Check in what platform the app is running
+// アプリがどのプラットフォームで実行されているかのチェック
 GetPlatform.isAndroid
 GetPlatform.isIOS
 GetPlatform.isMacOS
@@ -641,97 +635,96 @@ GetPlatform.isWindows
 GetPlatform.isLinux
 GetPlatform.isFuchsia
 
-//Check the device type
+// アプリがどのデバイスで実行されているかのチェック
 GetPlatform.isMobile
 GetPlatform.isDesktop
-//All platforms are supported independently in web!
-//You can tell if you are running inside a browser
-//on Windows, iOS, OSX, Android, etc.
+// プラットフォームとデバイスのチェックは独立
+// 同じOSでもウェブで実行されているのか、ネイティブで実行されているのか区別
 GetPlatform.isWeb
 
 
-// Equivalent to : MediaQuery.of(context).size.height,
-// but immutable.
+// MediaQuery.of(context).size.height と同じ
+// ただしimmutable
 Get.height
 Get.width
 
-// Gives the current context of the Navigator.
+// Navigatorの現在のcontextを取得
 Get.context
 
-// Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
-Get.contextOverlay
+// SnackBar/Dialog/BottomSheet などフォアグラウンドのcontextを取得
+Get.overlayContext
 
-// Note: the following methods are extensions on context. Since you
-// have access to context in any place of your UI, you can use it anywhere in the UI code
+// 注: 以降のメソッドはcontextの拡張メソッドです。
+// contextと同じくUIのどこからでもアクセスできます。
 
-// If you need a changeable height/width (like Desktop or browser windows that can be scaled) you will need to use context.
+// ウィンドウサイズの変更などに合わせて変わる height/width を取得
 context.width
 context.height
 
-// Gives you the power to define half the screen, a third of it and so on.
-// Useful for responsive applications.
-// param dividedBy (double) optional - default: 1
-// param reducedBy (double) optional - default: 0
+// 画面の半分のサイズ,1/3のサイズなどを取得
+// レスポンシブなデザインの場合に便利
+// オプションのパラメーター dividedBy で割る数を指定
+// オプションのパラメーター reducedBy でパーセンテージを指定
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.of(context).size
+/// MediaQuery.of(context).size とほぼ同じ
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// MediaQuery.of(context).padding とほぼ同じ
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// MediaQuery.of(context).viewPadding とほぼ同じ
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// MediaQuery.of(context).viewInsets とほぼ同じ
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// MediaQuery.of(context).orientation とほぼ同じ
 context.orientation()
 
-/// Check if device is on landscape mode
+/// デバイスがランドスケープ(横長)モードかどうかチェック
 context.isLandscape()
 
-/// Check if device is on portrait mode
+/// デバイスがポートレート(縦長)モードかどうかチェック
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// MediaQuery.of(context).devicePixelRatio とほぼ同じ
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// MediaQuery.of(context).textScaleFactor とほぼ同じ
 context.textScaleFactor()
 
-/// Get the shortestSide from screen
+/// 画面の短辺の長さを取得
 context.mediaQueryShortestSide()
 
-/// True if width be larger than 800
+/// 画面の横幅が800より大きい場合にtrueを返す
 context.showNavbar()
 
-/// True if the shortestSide is smaller than 600p
+/// 画面の短辺が600より小さい場合にtrueを返す
 context.isPhone()
 
-/// True if the shortestSide is largest than 600p
+/// 画面の短辺が600より小さい場合にtrueを返す
 context.isSmallTablet()
 
-/// True if the shortestSide is largest than 720p
+/// 画面の短辺が720より大きい場合にtrueを返す
 context.isLargeTablet()
 
-/// True if the current device is Tablet
+/// デバイスがタブレットの場合にtrueを返す
 context.isTablet()
 
-/// Returns a value<T> according to the screen size
-/// can give value for:
-/// watch: if the shortestSide is smaller than 300
-/// mobile: if the shortestSide is smaller than 600
-/// tablet: if the shortestSide is smaller than 1200
-/// desktop: if width is largest than 1200
+/// 画面サイズに合わせて value<T> を返す
+/// たとえば:
+/// 短辺が300より小さい → watchパラメーターの値を返す
+/// 短辺が600より小さい → mobileパラメーターの値を返す
+/// 短辺が1200より小さい → tabletパラメーターの値を返す
+/// 横幅が1200より大きい → desktopパラメーターの値を返す
 context.responsiveValue<T>()
 ```
 
-### Optional Global Settings and Manual configurations
+### オプションのグローバル設定と手動設定
 
-GetMaterialApp configures everything for you, but if you want to configure Get manually.
+GetMaterialApp はすべてあなたの代わりに設定してくれますが、手動で設定を施したい場合は MaterialApp の navigatorKey と navigatorObservers の値を指定してください。
 
 ```dart
 MaterialApp(
@@ -740,19 +733,18 @@ MaterialApp(
 );
 ```
 
-You will also be able to use your own Middleware within `GetObserver`, this will not influence anything.
+`GetObserver`内で独自のミドルウェアを使用することもできます。これは他に影響を及ぼすことはありません。
 
 ```dart
 MaterialApp(
   navigatorKey: Get.key,
   navigatorObservers: [
-    GetObserver(MiddleWare.observer) // Here
+    GetObserver(MiddleWare.observer) // ここ
   ],
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+`Get` クラスに_グローバル設定_を施すことができます。Routeをプッシュする前のコードに `Get.config` を追加するだけです。もしくは、`GetMaterialApp` 内で直接設定することもできます。
 
 ```dart
 GetMaterialApp(
@@ -771,9 +763,8 @@ Get.config(
 )
 ```
 
-You can optionally redirect all the logging messages from `Get`.
-If you want to use your own, favourite logging package,
-and want to capture the logs there:
+オプションで、すべてのログメッセージを `Get` からリダイレクトさせることができます。
+好きなロギングのパッケージを使ってログを取得したい場合はこのようにしてください。
 
 ```dart
 GetMaterialApp(
@@ -782,14 +773,14 @@ GetMaterialApp(
 );
 
 void localLogWriter(String text, {bool isError = false}) {
-  // pass the message to your favourite logging package here
-  // please note that even if enableLog: false log messages will be pushed in this callback
-  // you get check the flag if you want through GetConfig.isLogEnable
+  // ここでお好みのロギングパッケージにメッセージを渡してください
+  // enableLog: false にしても、ログメッセージはこのコールバックでプッシュされる点ご注意を
+  // ログが有効かどうかのチェックは Get.isLogEnable で可能
 }
 
 ```
 
-### Local State Widgets
+### ローカルステートWidget
 
 These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
 We have flavours for Reactive and Simple.
@@ -1219,40 +1210,40 @@ GetMaterialApp(
 
 # なぜGetXなのか
 
-1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
+1- Flutterのアップデートが重なると、せっかく作ったパッケージがうまく動かなくなることがあります。コンパイルエラーを起こしたり、その時点で解決方法がないエラーが発生したり。開発者はそのエラーがどこから来たのか把握するために問題の追跡をし、該当リポジトリにissueを提起し、問題が解決されるのを見届ける必要があります。Getは開発に必要な主要リソース（状態管理、依存オブジェクトの管理、Route管理）を一元化し、Pubspecにパッケージを1つ追加するだけでコーディングを開始することができます。Flutterのアップデート後に必要なことは、Getも併せてアップデートすることだけです。それですぐに作業を再開できます。またGetはパッケージ間の互換性の問題も解消します。互いに依存するパッケージAの最新バージョンとBの最新バージョンの間に互換性がない、ということが何度あったでしょうか。Getを使えばすべてが同じパッケージ内にあるため、互換性の心配はありません。
 
-2- Flutter is easy, Flutter is incredible, but Flutter still has some boilerplate that may be unwanted for most developers, such as `Navigator.of(context).push (context, builder [...]`. Get simplifies development. Instead of writing 8 lines of code to just call a route, you can just do it: `Get.to(Home())` and you're done, you'll go to the next page. Dynamic web urls are a really painful thing to do with Flutter currently, and that with GetX is stupidly simple. Managing states in Flutter, and managing dependencies is also something that generates a lot of discussion, as there are hundreds of patterns in the pub. But there is nothing as easy as adding a ".obs" at the end of your variable, and place your widget inside an Obx, and that's it, all updates to that variable will be automatically updated on the screen.
+2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文がまだ残っています。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(Home())`を実行すれば、次のページに行くことができるのです。またウェブURLを動的なものにするのは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクトの管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変簡単です。変数の最後に「.obs」を追加し、Obxクラスの中にWidgetを配置するだけで、その変数のすべての更新が自動的に画面に反映されます。
 
-3- Ease without worrying about performance. Flutter's performance is already amazing, but imagine that you use a state manager, and a locator to distribute your blocs/stores/controllers/ etc. classes. You will have to manually call the exclusion of that dependency when you don't need it. But have you ever thought of simply using your controller, and when it was no longer being used by anyone, it would simply be deleted from memory? That's what GetX does. With SmartManagement, everything that is not being used is deleted from memory, and you shouldn't have to worry about anything but programming. You will be assured that you are consuming the minimum necessary resources, without even having created a logic for this.
+3- パフォーマンスのことを気にせず開発できます。Flutterのパフォーマンスはそれだけで素晴らしいものですが、アプリ内で状態管理と併せて、BLoC/store/controllerなどのクラスを配布するサービスロケーターを使用することを想像してみてください。そのインスタンスが必要ないときはリソースを解放するメソッドを明示的に呼び出さなければなりません。しかし、使用されなくなったら単純に自動でメモリから削除してくれればいいのに、と考えたことはありませんか？それを実現してくれるのがGetXです。SmartManagement機能により未使用リソースはすべてメモリから削除されるので、本来のプログラミングに集中することができます。メモリ管理のためのロジックを作らなくても、常に必要最小限のリソースを使っていることが保証されるのです。
 
-4- Actual decoupling. You may have heard the concept "separate the view from the business logic". This is not a peculiarity of BLoC, MVC, MVVM, and any other standard on the market has this concept. However, this concept can often be mitigated in Flutter due to the use of context.
-If you need context to find an InheritedWidget, you need it in the view, or pass the context by parameter. I particularly find this solution very ugly, and to work in teams we will always have a dependence on View's business logic. Getx is unorthodox with the standard approach, and while it does not completely ban the use of StatefulWidgets, InitState, etc., it always has a similar approach that can be cleaner. Controllers have life cycles, and when you need to make an APIREST request for example, you don't depend on anything in the view. You can use onInit to initiate the http call, and when the data arrives, the variables will be populated. As GetX is fully reactive (really, and works under streams), once the items are filled, all widgets that use that variable will be automatically updated in the view. This allows people with UI expertise to work only with widgets, and not have to send anything to business logic other than user events (like clicking a button), while people working with business logic will be free to create and test the business logic separately.
+4- コードのデカップリング（分離）がしやすい。「Viewをビジネスロジックから分離する」というコンセプトを聞いたことがあるかもしれません。これはなにもBLoC、MVC、MVVMに限ったことではなく、どのアーキテクチャパターンにもこのコンセプトが底流にあると言っていいでしょう。しかし、Flutterではcontextの使用によりこのコンセプトが弱まってしまうことがあります。
+InheritedWidgetを参照するためにcontextが必要なとき、viewの中でそれを使用するか、パラメータとしてcontextを渡しますよね?私はこの方法は美しくないと感じます。特にチームで仕事をする場合において、常にView内のビジネスロジックに依存しなければならないなんて。GetXのアプローチは標準的なそれとは異質のもので、StatefulWidgetやinitStateなどの使用を禁止しているわけではありませんが、それよりもっとすっきり書ける類似のアプローチを備えています。controller自身にライフサイクルがあるため、たとえばREST APIのリクエストを行うときも、Viewの中の何かに依存するということがありません。controllerのライフサイクルの一つである onInit を使用してhttpを呼び出し、データが到着すると変数にセットされます。GetXはフルリアクティブなので（Streamが根底にあります）、インスタンス変数が値で埋まれば、その変数を使用するすべてのWidgetが自動的に更新されます。これにより、UIの専門家はWidgetの構築に注力することができ、ボタンクリックなどのユーザーイベント以外のものをビジネスロジックに渡す必要がなくなります。その一方で、ビジネスロジックを扱う人はビジネスロジックだけに集中して、個別テストを簡単に行うことができます。
 
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
+このGetXライブラリは今後も更新され続け、新しい機能を実装していきます。気軽にプルリクエストを出していただき、ライブラリの成長に貢献していただければ幸いです。
 
-# Community
+# コミュニティ
 
-## Community channels
+## コミュニティチャンネル
 
-GetX has a highly active and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
+GetXコミュニティは非常に活発で有益な情報であふれています。ご質問がある場合や、このフレームワークの使用に関して支援が必要な場合は、ぜひコミュニティチャンネルにご参加ください。このリポジトリは、issueの提起およびリクエスト専用ですが、気軽にコミュニティにご参加いただければ幸いです。
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
-## How to contribute
+## 貢献方法
 
-_Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better._
+_GetXプロジェクトに貢献してみませんか？あなたをコントリビューターの一人としてご紹介できるのを楽しみにしています。GetおよびFlutterをより良いものにするためのコントリビュート例をご紹介します。_
 
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
-- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
+- Readmeの多言語対応。
+- Readmeの追加ドキュメント執筆 (ドキュメントで触れられていない機能がまだまだたくさんあります)。
+- Getの使い方を紹介する記事やビデオの作成（Readmeに掲載させていただきます。将来的にWikiができればそこにも掲載予定）。
+- コードやテストのプルリクエスト。
+- 新機能の提案。
 
-Any contribution is welcome!
+どのような形の貢献であれ歓迎しますので、ぜひコミュニティにご参加ください!
 
-## Articles and videos
+## GetXに関する記事とビデオ
 
 - [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
