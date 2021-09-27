@@ -1,42 +1,41 @@
-# Dependency Management
-- [Dependency Management](#dependency-management)
-  - [Instancing methods](#instancing-methods)
+# 依存オブジェクト管理
+- [依存オブジェクト管理](#依存オブジェクト管理)
+  - [インスタンス化に使用するメソッド](#インスタンス化に使用するメソッド)
     - [Get.put()](#getput)
-    - [Get.lazyPut](#getlazyput)
-    - [Get.putAsync](#getputasync)
-    - [Get.create](#getcreate)
-  - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
-  - [Specifying an alternate instance](#specifying-an-alternate-instance)
-  - [Differences between methods](#differences-between-methods)
-  - [Bindings](#bindings)
-    - [Bindings class](#bindings-class)
+    - [Get.lazyPut()](#getlazyput)
+    - [Get.putAsync()](#getputasync)
+    - [Get.create()](#getcreate)
+  - [インスタンス化したクラスを使う](#インスタンス化したクラスを使う)
+  - [依存オブジェクトの置換](#依存オブジェクトの置換)
+  - [各メソッドの違い](#各メソッドの違い)
+  - [Bindings（Routeと依存オブジェクトの結束）](#Bindings（Routeと依存オブジェクトの結束）)
+    - [Bindingsクラス](#bindingsクラス)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [How to change](#how-to-change)
+      - [設定の変更方法](#設定の変更方法)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
-  - [Notes](#notes)
+    - [Bindingsの仕組み](#Bindingsの仕組み)
+  - [補足](#補足)
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Getにはシンプルで強力な依存オブジェクト管理機能があります。たった1行のコードで、Provider contextやinheritedWidgetを使うことなく、BlocもしくはControllerのインスタンスを取得することができます。
 
 ```dart
-Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
+Controller controller = Get.put(Controller()); // Controller controller = Controller() の代わりに
 ```
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or Bloc class) normally
+UIクラスの中でControllerクラスをインスタンス化する代わりに、Getインスタンスの中でインスタンス化することで、アプリ全体でControllerを利用できるようになります。
 
-- Note: If you are using Get's State Manager, pay more attention to the [Bindings](#bindings) api, which will make easier to connect your view to your controller.
-- Note²: Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to change that, you can use this dependency injection manager with no problems at all
+- 注: Getの状態管理機能を使用する場合は、[Bindings](#bindings)の使用も検討してください。Bindingsを使うことでビューにControllerを結合させることができます。
+- 注²: Getの依存オブジェクト管理機能は、パッケージの他の部分から独立しています。そのため、たとえばあなたのアプリが既に他の状態管理ライブラリを使用している場合（どんなものでも）、何の問題もなく2つを組み合わせることができます。
 
-## Instancing methods
-The methods and it's configurable parameters are:
+## インスタンス化に使用するメソッド
+Controllerを初期化するのに使用するメソッドとその設定パラメーターについてご説明します。
 
 ### Get.put()
 
-The most common way of inserting a dependency. Good for the controllers of your views for example.
+依存オブジェクトを注入するための最も基本のメソッド。たとえば、ビューで使用するControllerに使います。
 
 ```dart
 Get.put<SomeClass>(SomeClass());
@@ -44,46 +43,45 @@ Get.put<LoginController>(LoginController(), permanent: true);
 Get.put<ListItemController>(ListItemController, tag: "some unique string");
 ```
 
-This is all options you can set when using put:
+以下が put() を使用する際に設定できるパラメーターです。
 ```dart
 Get.put<S>(
-  // mandatory: the class that you want to get to save, like a controller or anything
-  // note: "S" means that it can be a class of any type
+  // 必須。インスタンスを保存しておきたいControllerなどを設定
+  // 注: "S" 型はジェネリクスで、どんな型でもOK
   S dependency
 
-  // optional: this is for when you want multiple classess that are of the same type
-  // since you normally get a class by using Get.find<Controller>(),
-  // you need to use tag to tell which instance you need
-  // must be unique string
+  // オプション。これは同じ型のControllerインスタンスが複数存在する場合に、
+  // タグIDにより識別したい場合に使用します。
+  // Get.find<Controller>(tag: ) でこのputで設定したインスタンスを探します。
+  // tag はユニークなStringである必要があります。
   String tag,
 
-  // optional: by default, get will dispose instances after they are not used anymore (example,
-  // the controller of a view that is closed), but you might need that the instance
-  // to be kept there throughout the entire app, like an instance of sharedPreferences or something
-  // so you use this
-  // defaults to false
+  // オプション。デフォルトでは使用されなくなったインスタンスは破棄されますが、
+  // （たとえばビューが閉じられた場合など） SharedPreferencesのインスタンスなど、
+  // アプリ全体を通して生かしておきたい場合があるかと思います。
+  // その場合はこれをtrueにしてください。デフォルトはfalseです。
   bool permanent = false,
 
-  // optional: allows you after using an abstract class in a test, replace it with another one and follow the test.
-  // defaults to false
+  // オプション。テストで抽象クラスを使用した後、別クラスに置換してテストを追うことができます。
+  // デフォルトはfalseです。
   bool overrideAbstract = false,
 
-  // optional: allows you to create the dependency using function instead of the dependency itself.
-  // this one is not commonly used
+  // オプション: 依存オブジェクトを関数を使って作ることができます。
+  // 使用頻度は低いと思います。
   InstanceBuilderCallback<S> builder,
 )
 ```
 
-### Get.lazyPut
-It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or if you want to instantiate several classes in just one place (like in a Bindings class) and you know you will not gonna use that class at that time.
+### Get.lazyPut()
+依存オブジェクトをすぐにロードする代わりに、lazy（遅延、消極的）ロードすることができます。実際に使用されるときに初めてインスタンス化されます。計算量の多いクラスや、Bindingsを使って複数のControllerをまとめてインスタンス化したいが、その時点ではすぐにそれらを使用しないことがわかっている場合などに非常に便利です。
 
 ```dart
-/// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
+/// この場合のApiMockは Get.find<ApiMock> を使用した時点でインスタンス化されます。
 Get.lazyPut<ApiMock>(() => ApiMock());
 
 Get.lazyPut<FirebaseAuth>(
   () {
-    // ... some logic if needed
+    // 必要ならここに何かのロジック
     return FirebaseAuth();
   },
   tag: Math.random().toString(),
@@ -93,27 +91,27 @@ Get.lazyPut<FirebaseAuth>(
 Get.lazyPut<Controller>( () => Controller() )
 ```
 
-This is all options you can set when using lazyPut:
+これが .lazyPut で設定できるパラメーターです。
 ```dart
 Get.lazyPut<S>(
-  // mandatory: a method that will be executed when your class is called for the first time
+  // 必須。クラスSが初めてfindの対象になったときに実行されるメソッド
   InstanceBuilderCallback builder,
-  
-  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
-  // must be unique
+
+  // オプション。Get.put()のtagと同様に同じクラスの異なるインスタンスが必要なときに使用
+  // ユニークな値を指定
   String tag,
 
-  // optional: It is similar to "permanent", the difference is that the instance is discarded when
-  // is not being used, but when it's use is needed again, Get will recreate the instance
-  // just the same as "SmartManagement.keepFactory" in the bindings api
-  // defaults to false
+  // オプション。"permanent" に似ていますが、使用されていないときはインスタンスが
+  // 破棄され、再び使用するときにGetがインスタンスを再び作成する点が異なります。
+  // Bindings APIの "SmartManagement.keepFactory " と同じです。
+  // デフォルトはfalse
   bool fenix = false
-  
+
 )
 ```
 
-### Get.putAsync
-If you want to register an asynchronous instance, you can use `Get.putAsync`:
+### Get.putAsync()
+SharedPreferencesなど、非同期のインスタンスを登録したいときに使います。
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -125,87 +123,85 @@ Get.putAsync<SharedPreferences>(() async {
 Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
-This is all options you can set when using putAsync:
+これが .putAsync で設定できるパラメーターです。
 ```dart
 Get.putAsync<S>(
 
-  // mandatory: an async method that will be executed to instantiate your class
+  // 必須。クラスをインスタンス化するための非同期メソッドを指定
   AsyncInstanceBuilderCallback<S> builder,
 
-  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
-  // must be unique
+  // オプション。Get.put() と同じです。同じクラスの異なるインスタンスを作りたいときに使用
+  // ユニークな値を指定
   String tag,
 
-  // optional: same as in Get.put(), used when you need to maintain that instance alive in the entire app
-  // defaults to false
+  // オプション。Get.put() と同じです。アプリ全体を通して生かしておきたい場合に使用
+  // デフォルトはfalse
   bool permanent = false
 )
 ```
 
-### Get.create
+### Get.create()
 
-This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
+これは使いどころに迷うかもしれません。他のものとの違いなど詳細な説明は「[各メソッドの違い](#各メソッドの違い)」のセクションをご一読ください。
 
 ```dart
 Get.Create<SomeClass>(() => SomeClass());
 Get.Create<LoginController>(() => LoginController());
 ```
 
-This is all options you can set when using create:
+これが .create で設定できるパラメーターです。
 
 ```dart
 Get.create<S>(
-  // required: a function that returns a class that will be "fabricated" every
-  // time `Get.find()` is called
-  // Example: Get.create<YourClass>(() => YourClass())
+  // 必須。Get.find() が呼ばれるたびにインスタンスがこの関数で新たに組み立てられる。
+  // 例: Get.create<YourClass>(() => YourClass())
   FcBuilderFunc<S> builder,
 
-  // optional: just like Get.put(), but it is used when you need multiple instances
-  // of a of a same class
-  // Useful in case you have a list that each item need it's own controller
-  // needs to be a unique string. Just change from tag to name
+  // オプション。Get.put() のtagと同様で、同じクラスによる
+  // 複数インスタンスを扱うときに使用します。
+  // リストのアイテムにそれぞれコントローラが必要な場合に便利です。
+  // 文字列はユニークである必要があります。
   String name,
 
-  // optional: just like int`Get.put()`, it is for when you need to keep the
-  // instance alive thoughout the entire app. The difference is in Get.create
-  // permanent is true by default
+  // オプション。Get.put() と同様アプリ全体でインスタンスを維持するときに使用。
+  // 唯一の違いは Get.create() のpermanentはデフォルトでtrueということだけです。
   bool permanent = true
 ```
 
-## Using instantiated methods/classes
+## インスタンス化したクラスを使う
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+いくつかのRouteを渡り歩いた後、以前のControllerに残してきたデータが必要になったとしたら、Provider や Get_it と組み合わせる必要がありますよね？Getの場合は違います。GetにControllerの「検索」を依頼するだけで追加の依存オブジェクトの注入は必要ありません。
 
 ```dart
 final controller = Get.find<Controller>();
-// OR
+// もしくは
 Controller controller = Get.find();
 
-// Yes, it looks like Magic, Get will find your controller, and will deliver it to you.
-// You can have 1 million controllers instantiated, Get will always give you the right controller.
+// マジックみたいですよね。でも実際にGetはControllerのインスタンスを探して届けてくれます。
+// 100万ものControllerをインスタンス化していても、Getは常に正しいControllerを探してくれます。
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+そしてそのControllerが以前取得したデータをあなたは復元することができます。
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-Since the returned value is a normal class, you can do anything you want:
+戻り値は通常のクラスなので、そのクラスで可能なことは何でもできます。
 ```dart
 int count = Get.find<SharedPreferences>().getInt('counter');
-print(count); // out: 12345
+print(count); // 出力: 12345
 ```
 
-To remove an instance of Get:
+インスタンスを明示的に削除したい場合はこのようにしてください。
 
 ```dart
-Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
+Get.delete<Controller>(); // 通常であれば、GetXは未使用Controllerを自動削除するので、この作業は必要ありません。
 ```
 
-## Specifying an alternate instance
+## 依存オブジェクトの置換
 
-A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` or `lazyReplace` method. This can then be retrieved by using the original class.
+注入されている依存オブジェクトは `replace` または `lazyReplace` メソッドを使って、子クラスなど関連クラスのインスタンスに置き換えることができます。これは元の抽象クラスを型指定することで取得することができます。
 
 ```dart
 abstract class BaseClass {}
@@ -234,44 +230,44 @@ print(instance is OtherClass); //true
 
 ## Differences between methods
 
-First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
+まずは Get.lazyPut の `fenix` プロパティと、他メソッドの `permanent` プロパティの違いについてご説明します。
 
-The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
+`permanent` と `fenix` の根本的な違いは、インスタンスをどのように保持したいかという点に尽きます。
 
-Reinforcing: by default, GetX deletes instances when they are not in use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost its use so it will be erased.
+しつこいようですが、GetXでは使われていないインスタンスは削除されるのがデフォルトの動作です。
+これはもし画面AがController A、画面BがController Bを持っている場合において、画面Bに遷移するときに画面Aをスタックから削除した場合（`Get.off()` や `Get.offNamed()` を使うなどして）、Controller Aは消えてなくなるということです。
 
-But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
+しかし Get.put() する際に `permanent:true` としていれば、Controller Aはこの画面削除により失われることはありません。これはアプリケーション全体を通してControllerを残しておきたい場合に大変便利です。
 
-`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
+一方の `fenix` は、画面削除に伴っていったんはControllerが消去されますが、再び使いたいと思ったときに復活させることができます。つまり基本的には未使用の Controller / サービス / その他クラス は消去されますが、必要なときは新しいインスタンスを「燃えカス」から作り直すことができるのです。
 
-Proceeding with the differences between methods:
+各メソッドを使用する際のプロセスの違いをご説明します。
 
-- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only purpose is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+- Get.put と Get.putAsync はインスタンスを作成して初期化するプロセスは同じですが、後者は非同期メソッドを使用するという違いがあります。この2つのメソッドは内部に保有するメソッド `insert` に `permanent: false` と `isSingleton: true` という引数を渡して、メモリに直接インスタンスを挿入します (この isSingleton が行っていることは、依存オブジェクトを `dependency` と `builder` プロパティのどちらから拝借するかを判断することだけです)。その後に `Get.find()` が呼ばれると、メモリ上にあるインスタンスを即座に初期化するというプロセスをたどります。
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
+- Get.create はその名の通り、依存オブジェクトを「クリエイト」します。Get.put() と同様に内部メソッドである `insert` を呼び出してインスタンス化します。違いは `permanent: true` で `isSingleton: false` である点です (依存オブジェクトを「クリエイト」しているため、シングルトンにはなりません。それが false になっている理由です)。また `permanent: true` となっているので、デフォルトでは画面の破棄などでインスタンスを失わないというメリットがあります。また `Get.find()` はすぐに呼ばれず、画面内で実際に使用されてから呼ばれます。これは `permanent` の特性を活かすための設計ですが、それゆえ `Get.create()` は共有しないけど破棄もされないインスタンスを作成する目的で作られたと言えます。たとえば、ListViewの中のボタンアイテムに使うControllerインスタンスのように、そのリスト内でしか使わないけどリストアイテムごとに固有のインスタンスが必要なケースなどが考えられます。そのため、Get.create は GetWidget との併用がマストです。
 
-- Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsible to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
+- Get.lazyPut は初期化をlazy（遅延、消極的）に行います。実行されるとインスタンスは作成されますが、すぐに使用できるように初期化はされず、待機状態になります。また他のメソッドと異なり `insert` メソッドは呼び出されません。その代わり、インスタンスはメモリの別の部分に挿入されます。この部分を「ファクトリー」と呼ぶことにしましょう。「ファクトリー」は、そのインスタンスが再生成できるかどうかを決める役割を持っています。これは後で使う予定のものを、現在進行形で使われているものと混ざらないようにするための工夫です。ここで `fenix` によるマジックが登場します。デフォルトの `fenix: false` のままにしており、かつ `SmartManagement` が `keepFactory` ではない場合において `Get.find` を使用すると、インスタンスは「ファクトリー」から共有メモリ領域に移動します。その直後にインスタンスは「ファクトリー」から削除されます。しかし `fenix: true` としていた場合、インスタンスは「ファクトリー」に残るため、共有メモリ領域から削除されても再び呼び出すことができるのです。
 
-## Bindings
+## Bindings（Routeと依存オブジェクトの結束）
 
-One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
-When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
-In version 2.10 Get completely implemented the Bindings API.
-Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
-The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
-This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
-In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
+このパッケージの一番の差別化要素は、Route管理 / 状態管理 / 依存オブジェクト管理 を統合したことにあると思っています。
+スタックからRouteが削除されれば、関係するController、変数、オブジェクトのインスタンスがすべてメモリから削除されます。たとえばStreamやTimerを使用している場合も同様ですので、開発者は何も心配する必要はありません。
+Getはバージョン2.10からBindings APIをフル実装しました。
+Bindingsを使用すれば init でControllerを起動する必要はありません。またControllerの型を指定する必要もありません。Controllerやサービスは各々適切な場所で起動することができるようになりました。
+Bindingsは依存オブジェクトの注入をビューから切り離すことができるクラスです。それに加え、状態と依存オブジェクトの管理機能をRouteに「結束（bind）」してくれます。
+これによりGetは、あるControllerが使用されたときにどの画面UIが表示されているかを知ることができます。つまり、そのControllerをどのタイミングでどう処分するかを判断することができるということです。
+さらにBindingsでは SmartManager の制御により、依存オブジェクトをどのタイミング（スタックからRouteを削除したときか、それに依存するWidgetを表示したときか、いずれでもないか）で整理するかを設定することができます。インテリジェントな依存オブジェクトの自動管理機能を持ちつつ、自分の好きなように設定できるのです。
 
-### Bindings class
+### Bindingsクラス
 
-- Create a class and implements Binding
+- Bindings機能を実装したクラスを作成することができます。
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
+"dependencies" メソッドをオーバーライドするようIDEに自動で指摘されます。表示をクリックしてメソッドを override し、そのRoute内で使用するすべてのクラスを挿入してください。
 
 ```dart
 class HomeBinding implements Bindings {
@@ -290,9 +286,9 @@ class DetailsBinding implements Bindings {
 }
 ```
 
-Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
+Bindingsを設定したら、このクラスが Route管理 / 依存オブジェクト管理 / 状態管理 を互いに接続する目的で使用されるものだということをRouteに知らせてあげます。
 
-- Using named routes:
+- 名前付きRouteを使う場合
 
 ```dart
 getPages: [
@@ -309,16 +305,16 @@ getPages: [
 ];
 ```
 
-- Using normal routes:
+- 通常のRouteを使う場合
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
 Get.to(DetailsView(), binding: DetailsBinding())
 ```
 
-There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+これでアプリケーションのメモリ管理を気にする必要がなくなります。Getがすべてやってくれます。
 
-The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+BindingsクラスはRouteの呼び出しと同時に呼び出されます。また、すべてに共通の依存オブジェクトを挿入するためには GetMaterialApp の initialBinding プロパティを使用してください。
 
 ```dart
 GetMaterialApp(
@@ -329,8 +325,7 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-The default way of creating a binding is by creating a class that implements Bindings.
-But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
+Bindingsを作成する一般的な方法は Bindings を実装したクラスを作成することですが、`BindingsBuilder` コールバックを使う方法もあります。
 
 Example:
 
@@ -354,25 +349,25 @@ getPages: [
 ];
 ```
 
-That way you can avoid to create one Binding class for each route making this even simpler.
+この方法ならRouteごとにBindingsクラスを作る必要はありません。
 
-Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
+どちらの方法でも効果は変わりませんのでお好みの方法を使ってください。
 
 ### SmartManagement
 
-GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
-This is what is called the `full` mode of dependency management.
-But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+エラーが発生してControllerを使用するWidgetが正しく破棄されなかった場合でも、Controllerが未使用になればGetXはデフォルトの動作通りそれをメモリから削除します。
+これがいわゆる依存オブジェクト管理機能の `full` モードと呼ばれるものです。
+しかしもしGetXによるオブジェクト破棄の方法をコントロールしたい場合は、`SmartManagement`クラスを使って設定してください。
 
-#### How to change
+#### 設定の変更方法
 
-If you want to change this config (which you usually don't need) this is the way:
+この設定は通常変更する必要はありませんが、変更されたい場合はこのようにしてください。
 
 ```dart
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilders //here
+      smartManagement: SmartManagement.onlyBuilders // ここで設定
       home: Home(),
     )
   )
@@ -381,30 +376,30 @@ void main () {
 
 #### SmartManagement.full
 
-It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
+これがデフォルトのモードです。使用されていない、かつ `permanent: true` が設定されていないオブジェクトを自動で破棄してくれます。特殊な事情がない限り、この設定は触らない方がいいでしょう。GetXを使って間がない場合は特に。
 
 #### SmartManagement.onlyBuilders
-With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
+`init:` もしくはBindings内で `Get.lazyPut()` により設定したビルダー製のオブジェクトだけを破棄するモードです。
 
-If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
+もしそれが `Get.put()` や `Get.putAsync()` などのアプローチで生成したオブジェクトだとしたら、SmartManagement は勝手にメモリから除外することはできません。
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
+それに対してデフォルトのモードでは `Get.put()` で生成したオブジェクトも破棄します。
 
 #### SmartManagement.keepFactory
 
-Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
+SmartManagement.full と同じように、オブジェクトが使用されていない状態になれば破棄します。ただし、前述の「ファクトリー」に存在するものだけは残します。つまりそのインスタンスが再び必要になった際は依存オブジェクトを再度生成するということです。
 
-### How bindings work under the hood
-Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
-This happens so fast that the analyzer will not even be able to register it.
-When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
-Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
-This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
-Use whichever is most convenient for you.
+### Bindingsの仕組み
+Bindingsは「一過性のファクトリー」のようなものを作成します。これはそのRouteに画面遷移した瞬間に作成され、そこから画面移動するアニメーションが発生した瞬間に破棄されます。
+この動作は非常に高速で行われるので、アナライザーでは捕捉できないほどです。
+再び元の画面に戻ると新しい「一過性のファクトリー」が呼び出されます。そのためこれは SmartManagement.keepFactory を使用するよりも多くの場合好ましいですが、Bindingsを作成したくない場合やすべての依存オブジェクトを同じBindingsに持っておきたい場合は SmartManagement.keepFactory を使うといいでしょう。
+ファクトリーのメモリ使用量は少なく、インスタンスを保持することはありません。その代わりにそのクラスのインスタンスを形作る関数を保持します。
+メモリコストは非常に低いのですが、最小リソースで最大パフォーマンスを得ることが目的のGetではデフォルトでファクトリーを削除します。
+どちらか都合に合う方ををお使いいただければと思います。
 
-## Notes
+## 補足
 
-- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+- 複数のBindingsを使う場合は SmartManagement.keepFactory は**使わない**でください。これは Bindings を使わないケースや、GetMaterialAppのinitialBindingに設定された単独のBindingと一緒に使うケースを想定されて作られました。
 
-- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
-However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.
+- Bindingsを使うことは必須ではありません。`Get.put()` と `Get.find()` だけでも全く問題ありません。
+ただし、サービスやその他抽象度の高いクラスをアプリに取り入れる場合はコード整理のために使うことをおすすめします。

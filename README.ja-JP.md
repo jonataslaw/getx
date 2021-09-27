@@ -17,21 +17,21 @@
 
 <div align="center">
 
-**Languages:**
+**言語**
 
 
-[![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
-[![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
-[![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
-[![Urdu](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
-[![Chinese](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
-[![Portuguese](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
-[![Spanish](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
-[![Russian](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
-[![Polish](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
-[![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
-[![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
-[![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README-ja.md)
+[![英語](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![ベトナム語](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
+[![インドネシア語](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![ウルドゥー語](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![中国語](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![ポルトガル語](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![スペイン語](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
+[![ロシア語](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
+[![ポーランド語](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
+[![韓国語](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![フランス語](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
+[![日本語](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README-ja.md)
 
 </div>
 
@@ -40,70 +40,75 @@
 - [GetXによるカウンターアプリ](#GetXによるカウンターアプリ)
 - [三本柱](#三本柱)
   - [状態管理](#状態管理)
-    - [Reactive State Manager](#reactive-state-manager)
-    - [More details about state management](#more-details-about-state-management)
-  - [Route management](#route-management)
-    - [More details about route management](#more-details-about-route-management)
-  - [Dependency management](#dependency-management)
-    - [More details about dependency management](#more-details-about-dependency-management)
-- [Utils](#utils)
-  - [Internationalization](#internationalization)
-    - [Translations](#translations)
-      - [Using translations](#using-translations)
-    - [Locales](#locales)
-      - [Change locale](#change-locale)
-      - [System locale](#system-locale)
-  - [Change Theme](#change-theme)
+    - [リアクティブな状態管理](#リアクティブな状態管理)
+    - [状態管理に関する詳細ドキュメント](#状態管理に関する詳細ドキュメント)
+  - [Route管理](#Route管理)
+    - [Route管理に関する詳細ドキュメント](#Route管理に関する詳細ドキュメント)
+  - [依存オブジェクト管理](#依存オブジェクト管理)
+    - [依存オブジェクト管理に関する詳細ドキュメント](#依存オブジェクト管理に関する詳細ドキュメント)
+- [ユーティリティ](#ユーティリティ)
+  - [多言語対応](#多言語対応)
+    - [翻訳ファイル](#翻訳ファイル)
+      - [翻訳ファイルの利用](#翻訳ファイルの利用)
+    - [ロケール](#ロケール)
+      - [ロケールの変更](#ロケールの変更)
+      - [システムのロケールを読み込む](#システムのロケールを読み込む)
+  - [Themeの変更](#Themeの変更)
   - [GetConnect](#getconnect)
-    - [Default configuration](#default-configuration)
-    - [Custom configuration](#custom-configuration)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Priority](#priority)
-    - [Redirect](#redirect)
+    - [デフォルト設定](#デフォルト設定)
+    - [カスタム設定](#カスタム設定)
+  - [GetPageにミドルウェアを設定](#GetPageにミドルウェアを設定)
+    - [実行優先度](#実行優先度)
+    - [redirect](#redirect)
     - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [Other Advanced APIs](#other-advanced-apis)
-    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-    - [Local State Widgets](#local-state-widgets)
+    - [onBindingsStart](#onbindingsstart)
+    - [onPageBuildStart](#onpagebuildstart)
+    - [onPageBuilt](#onpagebuilt)
+    - [onPageDispose](#onpagedispose)
+  - [その他API](#その他API)
+    - [オプションのグローバル設定と手動設定](#オプションのグローバル設定と手動設定)
+    - [ローカルステートWidget](#ローカルステートWidget)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
-  - [Useful tips](#useful-tips)
+  - [お役立ちTIPS](#お役立ちTIPS)
+    - [StateMixin](#statemixin)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
-      - [How to use it](#how-to-use-it)
+      - [使い方](#使い方])
     - [GetWidget](#getwidget)
     - [GetxService](#getxservice)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
+  - [テストの実行](#テストの実行)
+    - [mockitoやmocktailを使う場合](#mockitoやmocktailを使う場合)
+    - [Get.reset()](#Get.reset())
+    - [Get.testMode](#Get.testMode)
+- [バージョン2.0からの破壊的変更](#バージョン2.0からの破壊的変更)
 - [なぜGetXなのか](#なぜGetXなのか)
 - [コミュニティ](#コミュニティ)
   - [コミュニティチャンネル](#コミュニティチャンネル)
-  - [貢献方法](#貢献方法)
-  - [GetXに関する記事とビデオ](#GetXに関する記事とビデオ)
+  - [コントリビュート方法](#コントリビュート方法)
+  - [GetXに関する記事と動画](#GetXに関する記事と動画)
 
 # Getとは
 
-- GetXはFlutterのための超軽量でパワフルなソリューションです。高パフォーマンスな状態管理、インテリジェントな依存性注入、そしてRoute管理の三本柱を迅速かつ実用的な形で組み合わせています。
+- GetXはFlutterのための超軽量でパワフルなソリューションです。高パフォーマンスな状態管理機能、インテリジェントな依存オブジェクト管理機能、そしてRoute管理機能の三本柱を軽量かつ実用的な形で組み合わせています。
 
-- GetXは3つの基本原則を元に開発されています。 **【生産性、パフォーマンス、コードの分離性】** これらはライブラリ内のすべてのリソースに優先適用される項目です。
+- GetXは3つの基本原則を念頭に開発されています。 **【生産性、パフォーマンス、コードの分離性】** これらはライブラリ内のすべてのリソースに優先適用されている原則です。
 
-  - **パフォーマンス:** GetXは高いパフォーマンスと最小限のリソース消費を優先しています。GetXはStreamや ChangeNotifierを使用しません。
+  - **パフォーマンス:** GetXは高いパフォーマンスと最小限のリソース消費を目標にしています。GetXはでは Stream および ChangeNotifier を利用しなくて済みます。
 
-  - **生産性:** GetXはシンプルで使い心地のいい構文を採用しています。あなたの実現したい機能がどんなものであれ、GetXを使えばより簡単に実現できる方法が見つかるでしょう。開発にかかる時間を短縮し、あなたのアプリケーションのパフォーマンスを最大限引き出してくれます。
+  - **生産性:** GetXはシンプルで使い心地のいいシンタックスを採用しています。あなたの実現したい機能がどんなものであれ、GetXを使えばより簡単に実現できる方法が見つかるでしょう。開発にかかる時間を短縮し、あなたのアプリケーションのパフォーマンスを最大限引き出してくれます。
 
-    開発者はcontrollerなどのリソースをメモリから削除することに気を配るのが常です。しかしGetXでは、リソースが使用されていないときはメモリから削除されるのがデフォルト動作のため、この必要はありません。（逆にメモリに残しておきたい場合は、依存オブジェクトのパラメーターで「permanent: true」と明示的に宣言します）これにより時間が節約できますし、不要な依存オブジェクトがメモリ上に残るリスクも少なくなります。メモリへの読み込みについてもデフォルトは遅延読み込みであり、使用するときに初めてメモリ上に読み込まれます。
+    開発者はメモリリソースの管理に気を配るのが常です。しかしGetXでは、リソースが使用されていないときはメモリから削除されるのがデフォルト動作のため、過度に気にかける必要はありません。（逆にメモリに残しておきたい場合は、依存オブジェクトをインスタンス化するメソッドを使う際に「permanent: true」と宣言してください）これにより時間が節約できますし、不要な依存オブジェクトがメモリ上に残るリスクも少なくなります。メモリへの読み込みについてもデフォルトは遅延読み込みであり、使用するときに初めてメモリ上に読み込まれます。
 
-  - **コードの分離性:** GetXでは、View、プレゼンテーションロジック、ビジネスロジック、依存性注入、およびナビゲーション周りのコードを徹底して分離することができます。Route間のナビゲーションではcontextを必要としないため、Widgetツリーに依存することはありません。ロジックについてもInheritedWidget経由でcontroller/BLoCにアクセスするためのcontextは必要ありません。これによりプレゼンテーションロジックとビジネスロジックをUIレイヤーから完全に切り離すことができます。また、controller/model/BLoCのクラスを、`MultiProvider`を使ってWidgetツリーに注入する必要もありません。GetXでは独自の依存性注入機能を使用して、依存性注入とViewに関わるコードを完全に分離することができます。
+  - **コードの分離性:** GetXを使うと、ビュー、プレゼンテーションロジック、ビジネスロジック、依存オブジェクトの注入、およびナビゲーション周りのコードを書き分けやすくなります。Routeのナビゲーションにはcontextを必要としないため、Widgetツリーに依存することはありません。ロジックについてもInheritedWidget経由でController/BLoCにアクセスする際のcontextは必要ありません。プレゼンテーションロジックとビジネスロジックをUIクラスから完全に切り離すことができます。また、Controller/モデル/BLoCのクラスを、`MultiProvider`を使ってWidgetツリーに注入する必要もありません。GetXでは独自の依存オブジェクト注入機能を使用し、ビュークラスからビューとは無関係なコードをなくすことができるのです。
 
-    GetXを使うことでアプリケーションの各機能がどこに記載されているのかがわかりやすくなり、自然と見やすいコードになります。メンテナンスが容易になるだけでなく、それまでのFlutterでは考えられなかったモジュール共有が簡単に実現できるようになりました。
-    BLoCはその分野におけるFlutterの出発点でしたが、GetXはこれを正統進化させたもので、ビジネスロジックのみならずプレゼンテーションロジックも分離することができます。そのほか依存オブジェクトやRouteの注入も分離し、データレイヤーはこれらすべてから切り離されます。どこに何が配置されているのか構造がわかりやすくなり、Hello Worldを表示するよりも簡単に機能を利用できるようになるでしょう。
-    GetXはFlutter製の高性能アプリを作るために採用できる最も簡単で実用的、かつスケーラブルなソリューションです。強力なエコシステムも存在し、初心者にはわかりやすさ、プロフェッショナルには正確性を約束します。セキュアで安定的、かつFlutter/Dartの最新事情をいち早く反映し、Flutter SDKにはない幅広い種類のAPIを提供します。
+    GetXを使うことでアプリケーションの各機能がどこにあるのかがわかりやすくなり、自然と見やすいコードになります。メンテナンスが容易になるだけでなく、それまでのFlutterでは考えられなかったモジュール共有が簡単に実現できるようになりました。
+    BLoCはこの分野におけるFlutterの出発点と言えるものでしたが、GetXはこれを正統進化させており、ビジネスロジックのみならずプレゼンテーションロジックも分離することができます。そのほかデータレイヤーはもちろん、依存オブジェクトやRouteの注入に関するコードも。どこに何が配置されているのか全体の見通しがしやすくなり、Hello Worldを表示させるかのように簡単にアプリの機能を利用できるようになるでしょう。
+    Flutterアプリを作るならGetXは最も簡単で実用的、かつスケーラブルなソリューションです。強力なエコシステムも存在があるため、初心者にはわかりやすさ、プロには正確性を提供することができます。そしてFlutter SDKにはない幅広い種類のAPIを提供し、セキュアで安定的な環境を構築します。
 
-- GetXは肥大化したライブラリではありません。何も気にせずすぐにプログラミングを始められるよう多数の機能を標準で備えていますが、それぞれの機能は個別にコンテナに入っており、使用してはじめて起動します。状態管理機能しか利用していない場合はその機能だけがコンパイルされます。Route管理機能だけを利用している場合は、状態管理機能は何もコンパイルされません。
+- GetXは肥大化したライブラリではありません。何も気にせずすぐに開発を始められるよう多数の機能を標準で備えていますが、それぞれの機能は個別にコンテナに入っており、使用してはじめて起動します。状態管理機能しか利用していない場合はその機能だけがコンパイルされます。Route管理機能だけを利用していれば、状態管理機能がコンパイルされることはありません。
 
-- GetXには大きなエコシステム、コミュニティ、コラボレーターの存在があるため、Flutterが存在する限りメンテナンスされ続けます。GetXもFlutterと同様にAndroid、iOS、Web、Mac、Linux、Windows、そしてあなたのサーバー上で、一つのコードから実行することができます。
+- GetXには巨大なエコシステム、コミュニティ、コラボレーターの存在があるため、Flutterが存在する限りメンテナンスされ続けます。またGetXもFlutterと同様にAndroid、iOS、Web、Mac、Linux、Windows、そしてあなたのサーバー上で、単一のコードから実行することができます。
 
 **[Get Server](https://github.com/jonataslaw/get_server)を使うことで、フロントエンドで作成したコードをバックエンドで再利用することが可能です。**
 
@@ -137,7 +142,7 @@ Flutterで新規プロジェクトを作成する際に表示されるカウン�
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- 注1: GetMaterialAppはFlutterのMaterialAppに手を加えたものではありません。MaterialAppをchildに持ち、諸々の追加設定をしてくれるWidgetに過ぎません。この設定は手動でも可能ですが、その必要はありません。GetMaterialAppは、Routeの作成・注入、言語翻訳の注入など、ナビゲーションに必要なものをすべて注入してくれます。Getを状態管理や依存性注入に限定して使用する場合は、GetMaterialAppを使用する必要はありません。GetMaterialAppは、Route、SnackBar、多言語対応、BottomSheet、Dialog、contextなしの高レベルAPIを利用する場合に必要です。
+- 注1: GetMaterialAppはFlutterのMaterialAppに手を加えたものではありません。MaterialAppをchildに持ち、諸々の追加設定をしてくれるWidgetに過ぎません。この設定は手動でも可能ですが、その必要はありません。GetMaterialAppは、Routeの作成・注入、言語翻訳の注入など、ナビゲーションに必要なものをすべて注入してくれます。Getを状態管理や依存オブジェクト管理に限定して使用する場合は、GetMaterialAppを使用する必要はありません。GetMaterialAppは、Route、SnackBar、多言語対応、BottomSheet、Dialog、contextなしの高レベルAPIを利用する場合に必要です。
 - 注2: このステップは、Route管理機能（`Get.to()`や`Get.back()`など）を使用しない場合は、必要ありません。
 
 - ステップ2:
@@ -152,7 +157,7 @@ class Controller extends GetxController{
 ```
 
 - ステップ3:
-  Viewを作成します。StatelessWidgetを使用することでRAMが節約できます。GetではStatefulWidgetを使用する必要がなくなるかもしれません。
+  ビューを作成します。StatelessWidgetを使用することでRAMが節約できます。GetではStatefulWidgetを使用する必要がなくなるかもしれません。
 
 ```dart
 class Home extends StatelessWidget {
@@ -160,7 +165,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
 
-    // Get.put()を使ってクラスをインスタンス化することですべての「子」Routeで利用ができます。
+    // Get.put()を使ってクラスをインスタンス化することですべての子Routeで利用できるようになります。
     final Controller c = Get.put(Controller());
 
     return Scaffold(
@@ -201,16 +206,16 @@ Getはチームでの作業を想定して設計されていますが、個人�
 
 ## 状態管理
 
-Getには、シンプルな手法（GetBuilder）と、リアクティブな手法（GetX/Obx）の2種類の状態管理手法があります。
+Getの状態管理には、非リアクティブ（GetBuilder）と、リアクティブ（GetX/Obx）の2つのアプローチがあります。
 
 ### リアクティブな状態管理
 
 リアクティブプログラミングは複雑であると言われ、多くの人に敬遠されています。GetXは、リアクティブプログラミングをシンプルなものに変えます:
 
-- StreamControllerを作る必要がありません。
-- 変数の数だけStreamBuilderを準備する必要がありません。
-- 状態ごとにクラスを作成する必要がありません。
-- 最初の値に対してgetを作成する必要がありません。
+* StreamControllerを作る必要はありません。
+* 変数ごとにStreamBuilderをセットする必要はありません。
+* 状態ごとにクラスを作る必要はありません。
+* 初期値のためにgetを準備する必要はありません。
 - コードの自動生成をする必要がありません。
 
 GetにおけるリアクティブプログラミングはsetStateと同じように簡単です。
@@ -221,7 +226,7 @@ GetにおけるリアクティブプログラミングはsetStateと同じよう
 var name = 'Jonatas Borges';
 ```
 
-このnameを監視可能にするには, ".obs"を値の末尾に付けるだけです。
+このnameをObservable(監視可能)にするには, ".obs"を値の末尾に付けるだけです。
 
 ```dart
 var name = 'Jonatas Borges'.obs;
@@ -235,9 +240,9 @@ Obx(() => Text("${controller.name}"));
 
 以上です。こんなに簡単なんですよ。
 
-### 状態管理についての詳細
+### 状態管理に関する詳細ドキュメント
 
-**状態管理のより詳細な説明を知りたい方は[こちら](./documentation/ja_JP/state_management.md)をご覧ください。より多くの例や、普通の状態管理とリアクティブな状態管理の違いについても説明されています。**
+**状態管理に関するより詳細な説明を知りたい方は[こちらの日本語ドキュメント](./documentation/ja_JP/state_management.md)をご覧ください。多くの事例や、非リアクティブな状態管理とリアクティブな状態管理の違いについても説明されています。**
 
 GetXパワーがもたらす利点をより理解していただけると思います。
 
@@ -253,13 +258,13 @@ GetMaterialApp( // MaterialApp の前に Get
 )
 ```
 
-新しいRouteに画面遷移するにはこの構文。
+新しいRouteに画面遷移するにはこのシンタックス。
 
 ```dart
 Get.to(NextScreen());
 ```
 
-名前付きRouteに画面遷移するにはこの構文。名前付きRouteの詳細は[こちら](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
+名前付きRouteに画面遷移するにはこのシンタックス。名前付きRouteの詳細は[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
 
 ```dart
 Get.toNamed('/details');
@@ -285,29 +290,29 @@ Get.offAll(NextScreen());
 
 以上、contextを一度も使わなかったことに気付きましたか？これがGetでRoute管理を行う最大のメリットのひとつです。contextを使わないので、たとえばcontrollerクラスの中でも、これらのメソッドを実行することができます。
 
-### Route管理についての詳細
+### Route管理に関する詳細ドキュメント
 
-**Getは名前付きRouteでも動作し、Routeの下位レベルの制御も可能です。詳細なドキュメントは[こちら](./documentation/ja_JP/route_management.md)にあります。**
+**Getは名前付きRouteでも動作し、Routeの下位レベルの制御も可能です。詳細なドキュメントは[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md)にあります。**
 
-## 依存性注入の管理
+## 依存オブジェクト管理
 
-Getにはシンプルで強力な依存性注入機能があります。わずか1行のコードで、Provider contextやinheritedWidgetも使わず、BLoCやControllerのようなクラスのインスタンスを取得することができます。
+Getにはシンプルで強力な依存オブジェクト注入機能があります。わずか1行のコードで、Provider contextやinheritedWidgetも使わず、BLoCやControllerのようなクラスのインスタンスを取得することができます。
 
 ```dart
 Controller controller = Get.put(Controller()); // controller = Controller() とする代わりに
 ```
 
-- 注: Getの状態管理機能を使用している場合は、Bindings APIにもご注目を。BindingsはViewとControllerを結びつけるのをより便利にしてくれます。
+- 注: Getの状態管理機能を使用している場合は、Bindings APIにもご注目を。BindingsはビューとControllerを結びつけるのをより便利にしてくれます。
 
 一つのクラスの中でControllerクラスをインスタンス化するのではなく、Getインスタンスの中でインスタンス化することで、アプリ全体でControllerが利用できるようになります。
 
-**ヒント:** Getの依存性注入機能の部分は、パッケージ全体の中でも他の部分と切り離されているので、たとえば、あなたのアプリがすでに状態管理機能を一部で使用していたとしても、それらを書き直す必要はなく、この依存性注入機能をそのまま使用することができます。
+**ヒント:** Getの依存オブジェクト注入機能の部分は、パッケージ全体の中でも他の部分と切り離されているので、たとえば、あなたのアプリがすでに状態管理機能を一部で使用していたとしても、それらを書き直す必要はなく、この依存オブジェクト注入機能をそのまま使用することができます。
 
 ```dart
 controller.fetchApi();
 ```
 
-色々なRouteを行き来した後に、あるControllerクラスのデータにアクセスする必要が生じたとしましょう。ProviderやGet_itなら再びそのクラスに依存性注入する必要がありますよね？Getの場合は違います。Getでは「find」と依頼するだけで、追加の依存性注入は必要ありません。
+色々なRouteを行き来した後に、あるControllerクラスのデータにアクセスする必要が生じたとしましょう。ProviderやGet_itなら再びそのクラスに依存オブジェクトを注入する必要がありますよね？Getの場合は違います。Getでは「find」と依頼するだけで、追加の依存オブジェクトの注入は必要ありません。
 
 ```dart
 Controller controller = Get.find();
@@ -320,15 +325,15 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
-### 依存性注入の管理についての詳細
+### 依存オブジェクト管理に関する詳細ドキュメント
 
-**依存性注入管理のより詳細な説明は[こちら](./documentation/ja_JP/dependency_management.md)をご覧ください。**
+**依存オブジェクト管理に関するより詳細な説明は[こちらの日本語ドキュメント](./documentation/ja_JP/dependency_management.md)をご覧ください。**
 
 # ユーティリティ
 
 ## 多言語対応
 
-### 翻訳
+### 翻訳ファイル
 
 翻訳ファイルはシンプルなキーと値のMapとして保持されます。
 翻訳を追加するには、クラスを作成して `Translations` を継承します。
@@ -349,7 +354,7 @@ class Messages extends Translations {
 }
 ```
 
-#### 翻訳の利用
+#### 翻訳ファイルの利用
 
 指定されたキーに `.tr` （translateのtr）を追加するだけで、`Get.locale` と `Get.fallbackLocale` の現在の値をに沿って適切な言語に翻訳されます。
 
@@ -406,7 +411,7 @@ var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### システムロケール
+#### システムのロケールを読み込む
 
 システムのロケールを読み込むには、`Get.deviceLocale`を使用します。
 
@@ -513,13 +518,13 @@ class HomeProvider extends GetConnect {
 }
 ```
 
-## GetPageのミドルウェア
+## GetPageにミドルウェアを設定
 
 GetPageに新しいプロパティが追加され、GetMiddleWareのListを設定することができるようになりました。GetMiddleWareは設定した任意の順序で実行されます。
 
-**注**: GetPageにMiddlewareを設定すると、そのページの下にあるchildはすべて同じMiddlewareを自動的に持つことになります。
+**注**: GetPageにミドルウェアを設定すると、そのページの子ページはすべて同じミドルウェアを自動的に持つことになります。
 
-### 実行順
+### 実行優先度
 
 GetMiddlewareに設定したpriority(優先度)の若い順にミドルウェアが実行されます。
 
@@ -574,7 +579,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 
 ### onPageBuildStart
 
-onPageBuildStart関数は、Bindingsが初期化された直後、ページWidetが作成される前に実行されます。
+onPageBuildStart関数は、Bindingsが初期化された直後、ページWidgetが作成される前に実行されます。
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -589,7 +594,7 @@ onPageBuilt関数は、GetPage.page(ページのビルダー)が呼び出され�
 
 ### onPageDispose
 
-onPageDispose関数は、ページに関するすべてのオブジェクト（Controller、Viewなど）が破棄された直後に実行されます。
+onPageDispose関数は、ページに関するすべてのオブジェクト（Controller、ビューなど）が破棄された直後に実行されます。
 
 ## その他API
 
@@ -764,7 +769,7 @@ Get.config(
 ```
 
 オプションで、すべてのログメッセージを `Get` からリダイレクトさせることができます。
-好きなロギングのパッケージを使ってログを取得したい場合はこのようにしてください。
+お好みのロギングパッケージを使ってログを取得したい場合はこのようにしてください。
 
 ```dart
 GetMaterialApp(
@@ -782,24 +787,22 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ### ローカルステートWidget
 
-These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
-We have flavours for Reactive and Simple.
-For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
-Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
-of the body in a `Scaffold`.
+ローカルステートWidgetは、1つの変数の状態を一時的かつローカルに管理したい場合に便利です。
+シンプルなValueBuilderとリアクティブなObxValueの2種類があります。
+たとえば、`TextField` Widgetの obscureText プロパティを切り替えたり、折りたたみ可能なパネルをカスタムで作成したり、`BottomNavigation` の現在のインデックス値を変更して内容を変更したりといった用途に最適です。
 
 #### ValueBuilder
 
-A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
+setStateでお馴染みの `StatefulWidget` をシンプルにしたビルダーWidgetです。
 
 ```dart
 ValueBuilder<bool>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
     value: value,
-    onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
+    onChanged: updateFn, // ( newValue ) => updateFn( newValue ) も可
   ),
-  // if you need to call something outside the builder method.
+  // builderメソッドの外で何か実行する場合
   onUpdate: (value) => print("Value updated: $value"),
   onDispose: () => print("Widget unmounted"),
 ),
@@ -807,96 +810,97 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
-updates automatically... isn't it awesome?
+[`ValueBuilder`](#valuebuilder)に似ていますが、これはそのリアクティブバージョンです。Rxインスタンス(.obsを付けたときに戻る値です)を渡すと自動で更新されます。すごいでしょ？
 
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+        onChanged: data,
+        // Rxには_呼び出し可能な_関数が備わっているのでこれだけでOK
+        // (flag) => data.value = flag も可能
     ),
     false.obs,
 ),
 ```
 
-## Useful tips
+## お役立ちTIPS
 
-`.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
+`.obs`が付いた型(_Rx_型とも呼ばれる)には、さまざまな内部メソッドや演算子が用意されています。
 
-> Is very common to _believe_ that a property with `.obs` **IS** the actual value... but make no mistake!
-> We avoid the Type declaration of the variable, because Dart's compiler is smart enough, and the code
-> looks cleaner, but:
+> `.obs`が付いたプロパティが **実際の値** だと信じてしまいがちですが...間違えないように！
+> 我々がcontrollerにおける変数の型宣言を省略してvarとしているのはDartのコンパイラが賢い上に、
+> そのほうがコードがすっきる見えるからですが…
 
 ```dart
 var message = 'Hello world'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Even if `message` _prints_ the actual String value, the Type is **RxString**!
+`message`を _print_ することで実際の文字列が取り出されはしますが、型は **RxString** です！
 
-So, you can't do `message.substring( 0, 4 )`.
-You have to access the real `value` inside the _observable_:
-The most "used way" is `.value`, but, did you know that you can also use...
+そのため `message.substring( 0, 4 )` などといったことはできません。
+Stringのメソッドにアクセスするには _observable_ の中にある実際の値 `value` にアクセスします。
+アクセスには `.value`を使うのが通常ですが、他の方法もあるのでご紹介します。
 
 ```dart
 final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
+// 新しい値が現在のものと異なる場合のみ Stream が更新されます。
 name.value = 'Hey';
 
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
+// すべてのRxプロパティは「呼び出し可能」で、valueを返してくれます。
+// ただし `null` は受付不可。nullの場合はUIが更新されない。
 name('Hello');
 
-// is like a getter, prints 'Hello'.
+// これはgetterみたいなものです。'Hello' を返します。
 name() ;
 
-/// numbers:
+/// num型の場合
 
 final count = 0.obs;
 
-// You can use all non mutable operations from num primitives!
+// num型の非破壊的な演算子はすべて使えます。
 count + 1;
 
-// Watch out! this is only valid if `count` is not final, but var
+// 注意！ この場合は`count`がfinalなら有効ではないです。varなら有効。
 count += 1;
 
-// You can also compare against values:
+// 比較演算子も使用可能
 count > 2;
 
-/// booleans:
+/// bool型の場合
 
 final flag = false.obs;
 
-// switches the value between true/false
+// true/false を入れ替えることができます。
 flag.toggle();
 
 
-/// all types:
+/// すべての型
 
-// Sets the `value` to null.
+// `value` を null にセット。
 flag.nil();
 
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
+// toString(), toJson() などの操作はすべて `value` が対象になります。
+print( count ); // RxIntの `toString()` が呼び出されて数字がprintされる。
 
 final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
+// json配列に変換した値と、'RxList' がprintされます。
+// JsonはすべてのRx型でサポートされています！
 print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
+// RxMap、RxList、RxSetはそれぞれの元の型を拡張した特別なRx型です。
+// たとえばRxListは通常のListとして扱うことができる上にリアクティブです。
+abc.add(12); // 12をListにプッシュし、Streamを更新してくれます。
+abc[3]; // Listと同様にインデックス番号3の値を取得してくれます。
 
 
-// equality works with the Rx and the value, but hashCode is always taken from the value
+// 等価演算子はRx型と元の型でも動作しますが、.hashCode は常にvalueから取得します。
 final number = 12.obs;
-print( number == 12 ); // prints > true
+print( number == 12 ); // true
 
-/// Custom Rx Models:
+/// カスタムのRxモデル
 
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
+// toJson()やtoString()をモデルクラスに設定すれば、.obsからでもprintされるように実装可能。
 
 class User {
     String name, last;
@@ -909,39 +913,37 @@ class User {
 
 final user = User(name: 'John', last: 'Doe', age: 33).obs;
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
+// `user` 自体はリアクティブですが、その中のプロパティはリアクティブではありません。
+// そのため、このようにプロパティの値を変更してもWidgetは更新されません。
 user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
+// `Rx` には自ら変更を検知する手段がないからです。
+// そのため、カスタムクラスの場合はこのようにWidgetに変更を知らせる必要があります。
 user.refresh();
 
-// or we can use the `update()` method!
+// もしくは `update()` メソッドを使用してください。
 user.update((value){
   value.name='Roi';
 });
 
 print( user );
 ```
-## StateMixin
+#### StateMixin
 
-Another way to handle your `UI` state is use the `StateMixin<T>` .
-To implement it, use the `with` to add the `StateMixin<T>`
-to your controller which allows a T model.
+`UI`の状態を管理するもう一つの手法として、`StateMixin<T>`を利用する方法があります。
+controllerクラスに`with`を使って`StateMixin<T>`を追加することで実装可能です。
 
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-The `change()` method change the State whenever we want.
-Just pass the data and the status in this way:
+`change()`メソッドにより好きなタイミングで状態を変更することができます。
+このようにデータと状態を渡すだけです。
 
 ```dart
 change(data, status: RxStatus.success());
 ```
 
-RxStatus allow these status:
+RxStatus には以下のステータスが存在します。
 
 ``` dart
 RxStatus.loading();
@@ -950,7 +952,7 @@ RxStatus.empty();
 RxStatus.error('message');
 ```
 
-To represent it in the UI, use:
+ステータスごとにUIを設定するにはこのようにします。
 
 ```dart
 class OtherClass extends GetView<Controller> {
@@ -961,13 +963,13 @@ class OtherClass extends GetView<Controller> {
       body: controller.obx(
         (state)=>Text(state.name),
 
-        // here you can put your custom loading indicator, but
-        // by default would be Center(child:CircularProgressIndicator())
+        // ローディング中はカスタムのインジケーターの設定も可能ですが、
+        // デフォルトで Center(child:CircularProgressIndicator()) となります。
         onLoading: CustomLoadingIndicator(),
         onEmpty: Text('No data found'),
 
-        // here also you can set your own error widget, but by
-        // default will be an Center(child:Text(error))
+        // 同様にエラーWidgetはカスタム可能ですが、
+        // デフォルトは Center(child:Text(error)) です。
         onError: (error)=>Text(error),
       ),
     );
@@ -976,22 +978,22 @@ class OtherClass extends GetView<Controller> {
 
 #### GetView
 
-I love this Widget, is so simple, yet, so useful!
+このWidgetは私のお気に入りです。とてもシンプルで扱いやすいですよ！
 
-Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
+このWidgetを一言で表現すると、「controllerをgetterに持つ `const` な StatelessWidget」です。
 
 ```dart
  class AwesomeController extends GetController {
    final String title = 'My Awesome View';
  }
 
-  // ALWAYS remember to pass the `Type` you used to register your controller!
+  // controllerの `型` を渡すのを忘れずに！
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
      return Container(
        padding: EdgeInsets.all(20),
-       child: Text(controller.title), // just call `controller.something`
+       child: Text(controller.title), // `controller.なんとか` でアクセス
      );
    }
  }
@@ -999,66 +1001,60 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
 
 #### GetResponsiveView
 
-Extend this widget to build responsive view.
-this widget contains the `screen` property that have all
-information about the screen size and type.
+GetViewをレスポンシブデザインに対応させたい場合はこのWidgetを継承してください。
+画面サイズやデバイスタイプなどの情報を持つ `screen` プロパティを保持しています。
 
-##### How to use it
+##### 使い方
 
-You have two options to build it.
+Widgetをビルドする方法は2つあります。
 
-- with `builder` method you return the widget to build.
-- with methods `desktop`, `tablet`,`phone`, `watch`. the specific
-  method will be built when the screen type matches the method
-  when the screen is [ScreenType.Tablet] the `tablet` method
-  will be exuded and so on.
-  **Note:** If you use this method please set the property `alwaysUseBuilder` to `false`
+- `builder` メソッドを使う。
+- `desktop`, `tablet`, `phone`, `watch` メソッドを使う。
+  画面サイズ、デバイスタイプに応じたWidgetがビルドされます。
+  たとえば画面が [ScreenType.Tablet] なら `tablet` メソッドが実行されます。
+  **注:** `alwaysUseBuilder` プロパティをfalseにする必要があります。
 
-With `settings` property you can set the width limit for the screen types.
+`settings` プロパティでブレイクポイントを設定することもできます。
 
-![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
-Code to this screen
-[code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
+![例](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
+この画面のコード
+[コード](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
 #### GetWidget
 
-Most people have no idea about this Widget, or totally confuse the usage of it.
-The use case is very rare, but very specific: It `caches` a Controller.
-Because of the _cache_, can't be a `const Stateless`.
+このWidgetはあまり知られておらず、使用するケースは稀です。
+GetViewとの違いは、Controllerを`キャッシュ`してくれる点です。
+このキャッシュがあるため `const` にはできません。
 
-> So, when do you need to "cache" a Controller?
+> それでは一体いつControllerをキャッシュする必要があるのかって？
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
+それは **GetX** のこれまた使う機会の少ない `Get.create()` を使うときです。
 
-`Get.create(()=>Controller())` will generate a new `Controller` each time you call
-`Get.find<Controller>()`,
+`Get.create(()=>Controller())` は `Get.find<Controller>()` を実行するたびに
+新しいControllerインスタンスを生成します。
 
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+そこで `GetWidget` の出番です。たとえば、Todoアイテムのリスト内容を保持したいとき。
+Widgetが更新されてもアイテムはControllerのキャッシュを参照してくれます。
 
 #### GetxService
 
-This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
-**can not** be removed from memory.
+このクラスは `GetxController` に似ており、同様のライフサイクル（`onInit()`, `onReady()`, `onClose()`）を共有しますが、そこに「ロジック」はありません。**GetX**の依存オブジェクト注入システムに、このサブクラスがメモリから **削除できない** ということを知らせるだけです。
 
-So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
-`ApiService`, `StorageService`, `CacheService`.
+そのため `Get.find()` で `ApiService`, `StorageService`, `CacheService` のようなサービス系クラスにいつでもアクセスできるようにしておくと非常に便利です。
 
 ```dart
 Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
+  await initServices(); /// サービスクラスの初期化をawait
   runApp(SomeApp());
 }
 
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
+/// Flutterアプリ実行前にサービスクラスを初期化してフローをコントロールするのは賢いやり方です。
+/// たとえば GetMaterialAppを更新する必要がないようにUser別の
+/// Theme、apiKey、言語設定などをApiサービス実行前にロードしたり。
 void initServices() async {
   print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
+  /// get_storage, hive, shared_pref の初期化はここで行います。
+  /// あるいは moor の connection など非同期のメソッドならなんでも。
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
   print('All services started...');
@@ -1083,21 +1079,21 @@ class SettingsService extends GetxService {
 
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
-lifetime of your app, use `GetxService`.
+`GetxService` を破棄する唯一の方法は `Get.reset()` メソッドを使うことです。
+これはアプリにおける「ホットリブート」のようなものです。あるクラスのインスタンスを
+ライフサイクルの間ずっと残しておきたい場合は `GetxService` を使うというのを覚えておいてください。
 
 
-### Tests
+## テストの実行
 
-You can test your controllers like any other class, including their lifecycles:
+Controllerのライフサイクル含め、他のクラスと同様にテストを実行することができます。
 
 ```dart
 class Controller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //Change value to name2
+    // 値を name2 に変更
     name.value = 'name2';
   }
 
@@ -1116,22 +1112,20 @@ void main() {
   test('''
 Test the state of the reactive variable "name" across all of its lifecycles''',
       () {
-    /// You can test the controller without the lifecycle,
-    /// but it's not recommended unless you're not using
-    ///  GetX dependency injection
+    /// ライフサイクルごとのテストは必ずしも行う必要はありませんが、
+    /// GetXの依存オブジェクト注入機能を使用しているのであれば実行をおすすめします。
     final controller = Controller();
     expect(controller.name.value, 'name1');
 
-    /// If you are using it, you can test everything,
-    /// including the state of the application after each lifecycle.
-    Get.put(controller); // onInit was called
+    /// このようにライフサイクル経過ごとの状態をテスト可能です。
+    Get.put(controller); // onInit が実行される
     expect(controller.name.value, 'name2');
 
-    /// Test your functions
+    /// 関数もテストしましょう
     controller.changeName();
     expect(controller.name.value, 'name3');
 
-    /// onClose was called
+    /// onClose が実行される
     Get.delete<Controller>();
 
     expect(controller.name.value, '');
@@ -1139,27 +1133,25 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
-#### Tips
-
-##### Mockito or mocktail
-If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
+#### mockitoやmocktailを使う場合
+GetxController/GetxService をモックする場合 Mock をミックスインしてください。
 
 ```dart
 class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
 ```
 
-##### Using Get.reset()
-If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
+#### Get.reset()
+WidgetやGroupのテスト時に、テストの最後かtearDownの中で Get.reset() を実行することで設定をリセットすることができます。
 
-##### Get.testMode
-if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
+#### Get.testMode
+Controllerの中でナビゲーションを使用している場合は、`Get.testMode = true`をmainの開始で実行してください。
 
 
-# Breaking changes from 2.0
+# バージョン2.0からの破壊的変更
 
-1- Rx types:
+1- Rx型の名称
 
-| Before  | After      |
+| 変更前  | 変更後     |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
@@ -1168,10 +1160,10 @@ if you are using your navigation in your controllers, use `Get.testMode = true` 
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+RxControllerとGetBuilderが統合され、Controllerにどれを使うか覚えておく必要がなくなりました。GetxControllerを使うだけで、リアクティブと非リアクティブな状態管理の両方に対応できるようになりました。
 
-2- NamedRoutes
-Before:
+2- 名前付きRoute
+変更前:
 
 ```dart
 GetMaterialApp(
@@ -1181,7 +1173,7 @@ GetMaterialApp(
 )
 ```
 
-Now:
+変更後:
 
 ```dart
 GetMaterialApp(
@@ -1191,9 +1183,9 @@ GetMaterialApp(
 )
 ```
 
-Why this change?
-Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
-Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
+変更の効果:
+ページ表示にはパラメータやログイントークンを起点にする方法もありますが、以前のアプローチではこれができず、柔軟性に欠けていました。
+ページを関数から取得するよう変更したことで、このようなアプローチを可能にし、アプリ起動直後にRouteがメモリに割り当てられることもないため、RAMの消費量を大幅に削減することもできました。
 
 ```dart
 
@@ -1210,16 +1202,16 @@ GetMaterialApp(
 
 # なぜGetXなのか
 
-1- Flutterのアップデートが重なると、せっかく作ったパッケージがうまく動かなくなることがあります。コンパイルエラーを起こしたり、その時点で解決方法がないエラーが発生したり。開発者はそのエラーがどこから来たのか把握するために問題の追跡をし、該当リポジトリにissueを提起し、問題が解決されるのを見届ける必要があります。Getは開発に必要な主要リソース（状態管理、依存オブジェクトの管理、Route管理）を一元化し、Pubspecにパッケージを1つ追加するだけでコーディングを開始することができます。Flutterのアップデート後に必要なことは、Getも併せてアップデートすることだけです。それですぐに作業を再開できます。またGetはパッケージ間の互換性の問題も解消します。互いに依存するパッケージAの最新バージョンとBの最新バージョンの間に互換性がない、ということが何度あったでしょうか。Getを使えばすべてが同じパッケージ内にあるため、互換性の心配はありません。
+1- Flutterのアップデートが重なると、依存パッケージがうまく動かなくなることがあります。コンパイルエラーを起こしたり、その時点で解決方法がないようなエラーが発生したり。開発者はそのエラーを追跡し、該当リポジトリにissueを提起し、問題が解決されるのを待つ必要があります。Getは開発に必要な主要リソース（状態管理、依存オブジェクト管理、Route管理）を一元化し、Pubspecにパッケージを1つ追加するだけでコーディングを開始することができます。Flutterがアップデートしたときに必要なことは、Getも併せてアップデートすることだけです。それですぐに作業を再開できます。またGetはパッケージ間の互換性の問題も解消します。互いに依存するパッケージAの最新バージョンとBの最新バージョンの間に互換性がない、ということが何度あったでしょうか。Getを使えばすべてが同じパッケージ内にあるため、互換性の心配はありません。
 
-2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文がまだ残っています。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(Home())`を実行すれば、次のページに行くことができるのです。またウェブURLを動的なものにするのは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクトの管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変簡単です。変数の最後に「.obs」を追加し、Obxクラスの中にWidgetを配置するだけで、その変数のすべての更新が自動的に画面に反映されます。
+2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文が一部にあります。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(Home())`を実行すれば、次の画面に遷移することができるのです。またウェブURLを動的なものにすることは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクト管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変シンプルです。これは一例ですが、変数の最後に「.obs」を追加して「Obx()」の中にWidgetを配置するだけで、その変数の状態変化が自動でWidgetに反映されます。
 
-3- パフォーマンスのことを気にせず開発できます。Flutterのパフォーマンスはそれだけで素晴らしいものですが、アプリ内で状態管理と併せて、BLoC/store/controllerなどのクラスを配布するサービスロケーターを使用することを想像してみてください。そのインスタンスが必要ないときはリソースを解放するメソッドを明示的に呼び出さなければなりません。しかし、使用されなくなったら単純に自動でメモリから削除してくれればいいのに、と考えたことはありませんか？それを実現してくれるのがGetXです。SmartManagement機能により未使用リソースはすべてメモリから削除されるので、本来のプログラミングに集中することができます。メモリ管理のためのロジックを作らなくても、常に必要最小限のリソースを使っていることが保証されるのです。
+3- GetXではパフォーマンスのことをあまり気にせず開発ができます。Flutterのパフォーマンスはそれだけで素晴らしいものですが、状態管理と併せて BLoC / データストア / Controller などを届けるためのサービスロケーターを使用することを想像してみてください。そのインスタンスが必要ないときはリソースを解放するイベントを明示的に呼び出さなければなりません。そんなとき、使用されなくなったら自動でメモリから削除してくれればいいのに、と考えたことはありませんか？それを実現してくれるのがGetXです。SmartManagement機能により未使用のリソースはすべて自動でメモリから破棄されるので、本来の開発作業に集中することができます。メモリ管理のためのロジックを作らなくても、常に必要最小限のリソースを使っていることが保証されるのです。
 
-4- コードのデカップリング（分離）がしやすい。「Viewをビジネスロジックから分離する」というコンセプトを聞いたことがあるかもしれません。これはなにもBLoC、MVC、MVVMに限ったことではなく、どのアーキテクチャパターンにもこのコンセプトが底流にあると言っていいでしょう。しかし、Flutterではcontextの使用によりこのコンセプトが弱まってしまうことがあります。
-InheritedWidgetを参照するためにcontextが必要なとき、viewの中でそれを使用するか、パラメータとしてcontextを渡しますよね?私はこの方法は美しくないと感じます。特にチームで仕事をする場合において、常にView内のビジネスロジックに依存しなければならないなんて。GetXのアプローチは標準的なそれとは異質のもので、StatefulWidgetやinitStateなどの使用を禁止しているわけではありませんが、それよりもっとすっきり書ける類似のアプローチを備えています。controller自身にライフサイクルがあるため、たとえばREST APIのリクエストを行うときも、Viewの中の何かに依存するということがありません。controllerのライフサイクルの一つである onInit を使用してhttpを呼び出し、データが到着すると変数にセットされます。GetXはフルリアクティブなので（Streamが根底にあります）、インスタンス変数が値で埋まれば、その変数を使用するすべてのWidgetが自動的に更新されます。これにより、UIの専門家はWidgetの構築に注力することができ、ボタンクリックなどのユーザーイベント以外のものをビジネスロジックに渡す必要がなくなります。その一方で、ビジネスロジックを扱う人はビジネスロジックだけに集中して、個別テストを簡単に行うことができます。
+4- コードのデカップリング（分離）がしやすい。「ビューをビジネスロジックから分離する」というコンセプトを聞いたことがあるかもしれません。これはなにもBLoC、MVC、MVVMに限ったことではなく、どのアーキテクチャパターンもこのコンセプトが考え方の基本にあると言っていいでしょう。しかし、Flutterではcontextの使用によりこのコンセプトが薄まってしまいがちです。
+InheritedWidgetを参照するためにcontextが必要なとき、ビューの中でそれを使用するか、引数としてcontextを渡しますよね？私はこの方法は美しくないと感じます。常にビュー内のビジネスロジックに依存しなければならないのは、特にチームで仕事をする場面においては不便だと感じます。GetXによるアプローチでは、StatefulWidgetやinitStateなどの使用を禁止しているわけではありませんが、それらよりもずっとスッキリ書けるようになっています。Controller自体にライフサイクルがあるため、たとえばREST APIのリクエストを行うときも、ビューの中の何かに依存するということがありません。Controllerのライフサイクルの一つである onInit を使用してhttpを呼び出し、データが到着すると変数にセットされます。GetXはリアクティブな変数を扱うことができるので、インスタンス変数が変わりし次第、その変数に依存するWidgetがすべて自動更新されます。これによりUIの担当者はWidgetの見た目に注力することができ、ボタンクリックなどのユーザーイベント以外のものをビジネスロジックに渡す必要がなくなります。その一方でビジネスロジックの担当者はビジネスロジックだけに集中し、個別のテストを簡単に行うことができます。
 
-このGetXライブラリは今後も更新され続け、新しい機能を実装していきます。気軽にプルリクエストを出していただき、ライブラリの成長に貢献していただければ幸いです。
+GetXライブラリは今後も更新され続け、新しい機能を実装していきます。気軽にプルリクエストを出していただき、ライブラリの成長に貢献していただけるとうれしいです。
 
 # コミュニティ
 
@@ -1231,7 +1223,7 @@ GetXコミュニティは非常に活発で有益な情報であふれていま�
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
-## 貢献方法
+## コントリビュート方法
 
 _GetXプロジェクトに貢献してみませんか？あなたをコントリビューターの一人としてご紹介できるのを楽しみにしています。GetおよびFlutterをより良いものにするためのコントリビュート例をご紹介します。_
 
@@ -1241,9 +1233,9 @@ _GetXプロジェクトに貢献してみませんか？あなたをコントリ
 - コードやテストのプルリクエスト。
 - 新機能の提案。
 
-どのような形の貢献であれ歓迎しますので、ぜひコミュニティにご参加ください!
+どのような形の貢献であれ歓迎しますので、ぜひコミュニティにご参加ください！
 
-## GetXに関する記事とビデオ
+## GetXに関する記事と動画
 
 - [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
 - [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).

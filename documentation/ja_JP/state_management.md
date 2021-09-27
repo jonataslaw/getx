@@ -1,160 +1,160 @@
-* [State Management](#state-management)
-  + [Reactive State Manager](#reactive-state-manager)
-    - [Advantages](#advantages)
-    - [Maximum performance:](#maximum-performance)
-    - [Declaring a reactive variable](#declaring-a-reactive-variable)
-        - [Having a reactive state, is easy.](#having-a-reactive-state-is-easy)
-    - [Using the values in the view](#using-the-values-in-the-view)
-    - [Conditions to rebuild](#conditions-to-rebuild)
-    - [Where .obs can be used](#where-obs-can-be-used)
-    - [Note about Lists](#note-about-lists)
-    - [Why i have to use .value](#why-i-have-to-use-value)
+* [状態管理](#状態管理)
+  + [リアクティブな状態管理](#リアクティブな状態管理)
+    - [利点](#利点)
+    - [パフォーマンスの最大化](#パフォーマンスの最大化)
+    - [リアクティブな変数の宣言](#リアクティブな変数の宣言)
+        - [初期値の設定](#初期値の設定)
+    - [Observableの値をビュー内で使う](#Observableの値をビュー内で使う)
+    - [更新条件を設定](#更新条件を設定)
+    - [.obsの使いどころ](#.obsの使いどころ)
+    - [List(Rx)に関する補足](#List(Rx)に関する補足)
+    - [なぜ「.value」を使う必要があるのか](#なぜ「.value」を使う必要があるのか)
     - [Obx()](#obx)
-    - [Workers](#workers)
-  + [Simple State Manager](#simple-state-manager)
-    - [Advantages](#advantages-1)
-    - [Usage](#usage)
-    - [How it handles controllers](#how-it-handles-controllers)
-    - [You won't need StatefulWidgets anymore](#you-wont-need-statefulwidgets-anymore)
-    - [Why it exists](#why-it-exists)
-    - [Other ways of using it](#other-ways-of-using-it)
-    - [Unique IDs](#unique-ids)
-  + [Mixing the two state managers](#mixing-the-two-state-managers)
-  + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
+    - [Worker](#worker)
+  + [非リアクティブな状態管理](#非リアクティブな状態管理)
+    - [利点](#利点)
+    - [使用例](#使用例)
+    - [Controllerインスタンスの扱い](#Controllerインスタンスの扱い)
+    - [StatefulWidgetsはもういらない](#StatefulWidgetsはもういらない)
+    - [Getの目的](#Getの目的)
+    - [Controllerの様々な使用方法](#Controllerの様々な使用方法)
+    - [ユニークIDの設定](#ユニークIDの設定)
+  + [状態管理ソリューションを混在させる](#状態管理ソリューションを混在させる)
+  + [StateMixin](#StateMixin)
+  + [GetBuilder VS GetX VS Obx VS MixinBuilder](#GetBuilder-VS-GetX-VS-Obx-VS-MixinBuilder)
 
-# State Management
+# 状態管理
 
-GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
+GetXは他の状態管理ライブラリのように Stream や ChangeNotifier を使用する必要がありません。なぜか？私たちは応答時間とRAM消費量を改善するために GetValueとGetStream という低遅延のソリューションを開発しましたが、状態管理機能を含むGetXのリソースはすべてこれをベースに作られているためです。このソリューションはより低い運用コストと高いパフォーマンスを実現します。GetXを使えばAndroid、iOS、Web、Linux、macOS用のアプリケーションを作成するだけでなく、Flutter/GetXと同じシンタックスでサーバーアプリケーションを作ることができます。
 
-* _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
-* _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
+* _バカみたいにシンプル_: 他の状態管理アプローチの中には、複雑で多くのボイラープレートコードを書かなければいけないものもあります。この問題により少なくない人たちがFlutterを見限りましたが、今ようやく、バカみたいにシンプルなソリューションを手に入れることができました。GetXを使えば、非常にすっきりとした、記述量の少ないコードでより多くのことができるようになります。イベントごとにクラスを定義する必要もありません。
+* _コード生成にサヨナラ_: 開発時間の半分はアプリケーションロジックの作成に費やします。それにも関わらず、状態管理ライブラリの中には、ミニマルなコードを作るためにコード生成ツールに依存しているものがあります。変数を変更して build_runner を実行するのは非生産的ですし、flutter clean 後の待ち時間もコーヒーをたくさん飲まなければならないほど長くなることもあります。
 
-With GetX everything is reactive, and nothing depends on code generators, increasing your productivity in all aspects of your development.
+GetXはすべてがリアクティブであり、コード生成ツールに依存しないため、開発のあらゆる面において生産性が向上します。
 
-* _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
-* _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
+* _context依存にサヨナラ_: ビューとビジネスロジックを連携させるため、ビューのcontextをControllerに送る必要に迫られた。contextがないところで依存オブジェクトの注入をする必要があり、contextを方々のクラスや関数からなんとか渡した。これらの経験、誰もが通ってきた道かと思います。しかし、GetXではこのような経験をすることはありません。contextなしで、Controllerの中から別のControllerにアクセスすることができます。パラメーターを通じて無駄にcontextを送る必要はもうありません。
+* _細かいコントロール_: 多くの状態管理ソリューションは、ChangeNotifierをベースにしています。ChangeNotifierは、notifyListenerが呼ばれたときに、依存するすべてのWidgetに通知します。画面に40個のWidgetがあるとしましょう。それらがすべてChangeNotifierの変数に依存している場合、変数を1つでも更新すれば、すべてのWidgetが更新されます。
 
-With GetX, even nested widgets are respected. If you have Obx watching your ListView, and another watching a checkbox inside the ListView, when changing the CheckBox value, only it will be updated, when changing the List value, only the ListView will be updated.
+GetXを使えばネストされたWidgetさえも的確にビルドを処理することができます。ListViewを担当するObxと、ListViewの中のチェックボックスを担当するObxがあれば、チェックボックスの値を変更した場合はチェックボックスWidgetだけが更新され、Listの値を変更した場合はListViewだけが更新されます。
 
-* _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
+* _変数が本当に変わったときだけ更新する_: GetXはデータの流れをコントロールします。つまり、Textに紐づいたObservable(監視可能)変数の値 'Paola' を、同じ 'Paola' に変更してもWidgetは更新されません。これは、GetXがTextに'Paola'がすでに表示されていることをわかっているためです。
 
-Most (if not all) current state managers will rebuild on the screen.
+多くの状態管理ソリューションは、この場合更新を行います。
 
-## Reactive State Manager
+## リアクティブな状態管理
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+リアクティブプログラミングは複雑であると言われがちなためか、多くの人に敬遠されています。しかし、GetXはリアクティブプログラミングを非常にシンプルなものにしてくれます。
 
-* You won't need to create StreamControllers.
-* You won't need to create a StreamBuilder for each variable
-* You will not need to create a class for each state.
-* You will not need to create a get for an initial value.
+* StreamControllerを作る必要はありません。
+* 変数ごとにStreamBuilderをセットする必要はありません。
+* 状態ごとにクラスを作る必要はありません。
+* 初期値のためにgetを準備する必要はありません。
 
-Reactive programming with Get is as easy as using setState.
+Getによるリアクティブプログラミングは、setState並に簡単です。
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+たとえば name という変数があり、それを変更するたびに変数に依存するすべてのWidgetを自動更新したいとします。
 
-This is your count variable:
+これがその name 変数です。
 
 ``` dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+これをObservable(監視可能)にするには、値の末尾に ".obs" を付け足すだけです。
 
 ``` dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-That's all. It's *that* simple.
+これで終わりです。*こんなに* 簡単なんですよ。
 
-From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
+(以後、このリアクティブな ".obs" 変数、Observable(監視可能)を _Rx_ と呼ぶことがあります。)
 
-What did we do under the hood? We created a `Stream` of `String` s, assigned the initial value `"Jonatas Borges"` , we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+内部ではこのような処理を行っています: `String`の`Stream`を作成し、初期値`"Jonatas Borges"`を割り当て、`"Jonatas Borges"`に依存するすべてのWidgetに、あなたは今この変数の影響下にあるから、_Rx_の値が変更されたときには、あなたも同様に変更する必要がある旨を通知。
 
-This is the **magic of GetX**, thanks to Dart's capabilities.
+これがDartの機能のおかげで実現できた **GetX マジック** です。
 
-But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
+しかし皆さんご存知の通り、`Widget` は関数の中にいなければ自らを更新できません。静的クラスには「自動更新」の機能がないからです。
 
-You will need to create a `StreamBuilder` , subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+それなら、同じスコープ内で複数の変数に依存してWidgetをビルドする場合は、複数の `StreamBuilder` をネストして変数の変化を監視する必要がありますね。
 
-No, you don't need a `StreamBuilder` , but you are right about static classes.
+いいえ、**GetX** なら `StreamBuilder` すら不要です。
 
-Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
-With **GetX** you can also forget about this boilerplate code. 
+またWidgetを更新する際のボイラープレートコードについても、**GetX**では忘れてください。
 
-`StreamBuilder( … )` ? `initialValue: …` ? `builder: …` ? Nope, you just need to place this variable inside an `Obx()` Widget.
+`StreamBuilder( ... )` ? `initialValue: ...` ? `builder: ...` ? これらはすべて不要で、対象のWidgetを `Obx()` の中に入れるだけです。
 
 ``` dart
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>` . 
+_覚えること？_  それは `Obx(() =>` だけです。
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+そのWidgetをアロー関数を通じて `Obx()`（_Rx_のObserver(監視者)）に渡すだけです。
 
-`Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
+`Obx` は非常に賢く、`controller.name` の値が本当に変わったときにのみ、Widgetの更新をかけます。
 
-If `name` is `"John"` , and you change it to `"John"` ( `name.value = "John"` ), as it's the same `value` as before, nothing will change on the screen, and `Obx` , to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+`name` が `"John"` だとして、それを `"John"` ( `name.value = "John"` ) に変更しても、以前と同じ `value` のため画面上では何も変化しません。`Obx` はリソースを節約するために値を無視し、Widgetを更新しません。**すごいでしょ？**
 
-> So, what if I have 5 _Rx_ (observable) variables within an `Obx` ?
+> では、もしも `Obx` の中に_Rx_（Observable）変数が5つあったらどうでしょう？
 
-It will just update when **any** of them changes. 
+5つの**いずれかに**値の変化があればWidgetは更新されます。
 
-> And if I have 30 variables in a class, when I update one, will it update **all** the variables that are in that class?
+> また、1つのControllerクラスに30もの変数がある場合、1つの変数を更新したら変数に関わるWidgetが**すべて**更新されてしまうのでしょうか？
 
-Nope, just the **specific Widget** that uses that _Rx_ variable.
+いいえ、_Rx_ 変数を使う特定のWidgetだけが更新されます。
 
-So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
+言い換えるなら、**GetX**は _Rx_ 変数の値が変化したときだけ画面更新をしてくれるということです。
 
-``` 
+```dart
 
 final isOpen = false.obs;
 
-// NOTHING will happen... same value.
+// 同じ値なので何も起きません。
 void onButtonTap() => isOpen.value=false;
 ```
 
-### Advantages
+### 利点
 
-**GetX()** helps you when you need **granular** control over what's being updated.
+**GetX()**は何を更新して何をしないのか、の**細かい**コントロールが可能です。
 
-If you do not need `unique IDs` , because all your variables will be modified when you perform an action, then use `GetBuilder` , 
-because it's a Simple State Updater (in blocks, like `setState()` ), made in just a few lines of code.
-It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
+すべての更新するのでそのようなコントロールが不要な場合は、`GetBuilder` を検討してください。
+これはわずか数行のコードで作られた、状態更新のためのシンプルなビルダーです。（`setState()`のようにブロックで）
+CPUへの影響を最小限にするために作られており、単一の目的(_状態_ の再構築)を果たすため、可能な限りリソース消費を抑えました。
 
-If you need a **powerful** State Manager, you can't go wrong with **GetX**.
+**強力な** 状態管理のソリューションを求めているなら、**GetX**で間違いはありません。
 
-It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
+変数をそのまま扱うことはできませんが、内部では `Stream` としてデータが扱われています。
 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen to the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
+すべてが `Stream` なので、_RxDart_ を組み合わせることも可能ですし、
+"_Rx_ 変数" のイベントや状態を監視することも可能です。
 
-It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs` .
+GetXは _MobX_ より簡単で、コード自動生成や記述量を減らした_BLoC_ 型アプローチと言えるかもしれません。
+値の末尾に `.obs` を付けるだけで**なんでも** _"Observable(監視可能)"_ にできるのです。
 
-### Maximum performance:
+### パフォーマンスの最大化
 
-In addition to having a smart algorithm for minimal rebuilds, **GetX** uses comparators 
-to make sure the State has changed. 
+ビルドを最小限に抑えるための賢いアルゴリズムに加えて、
+**GetX**はコンパレーターを使用して状態が変更されたことを確認します。
 
-If you experience any errors in your app, and send a duplicate change of State, 
-**GetX** will ensure it will not crash.
+アプリでなにかしらのエラーが発生し、状態が変更された情報を
+二重に送信してしまったとしても**GetX**はクラッシュを防いでくれます。
 
-With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _ `computed` from MobX_. 
-When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
+**GetX**では値が変化したときにはじめて「状態」が変化するためです。
+これが **GetX** と _MobX の `computed`_ を使う際の主な違いです。
+2つの __Observable__ を組み合わせて一つが変化したとき、それを監視しているオブジェクトも変化します。
 
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()` ) will only rebuild if it implies a real change of State.
+これは `GetX()` (`Observer()`のようなもの) において2つの変数を組み合わせた場合においても、
+それが本当に状態の変化を意味するときだけWidgetの更新が行われるということでもあります。
 
-### Declaring a reactive variable
+### リアクティブな変数の宣言
 
-You have 3 ways to turn a variable into an "observable".
+変数を "Observable" にする方法は3つあります。
 
-1 - The first is using **`Rx{Type}`**.
+1 - **`Rx{Type}`** を使用する
 
 ``` dart
-// initial value is recommended, but not mandatory
+// 初期値を入れることを推奨しますが、必須ではありません
 final name = RxString('');
 final isLogged = RxBool(false);
 final count = RxInt(0);
@@ -163,7 +163,7 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 
-2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
+2 - **`Rx`** とジェネリクスによる型指定の組み合わせ
 
 ``` dart
 final name = Rx<String>('');
@@ -174,11 +174,11 @@ final number = Rx<Num>(0);
 final items = Rx<List<String>>([]);
 final myMap = Rx<Map<String, int>>({});
 
-// Custom classes - it can be any class, literally
+// 任意の型を指定可能 - どんなクラスでもOK
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value` :
+3 - 最も実用的で簡単な方法として、**`.obs`** を値に付ける
 
 ``` dart
 final name = ''.obs;
@@ -189,31 +189,31 @@ final number = 0.obs;
 final items = <String>[].obs;
 final myMap = <String, int>{}.obs;
 
-// Custom classes - it can be any class, literally
+// カスタムクラスのインスタンスにも付けられます
 final user = User().obs;
 ```
 
-##### Having a reactive state, is easy.
+##### 初期値の設定
 
-As we know, _Dart_ is now heading towards _null safety_.
-To be prepared, from now on, you should always start your _Rx_ variables with an **initial value**.
+ご存知の通り、_Dart_ は現在 _null safety_ へ移行しているところです。
+それに備えるために今後は _Rx_ 変数は常に**初期値**を設定してください。
 
-> Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
+> **GetX** で変数を _Observable_ にしつつ _初期値_ を設定するのはとても簡単です。
 
-You will literally add a " `.obs` " to the end of your variable, and **that’s it**, you’ve made it observable, 
-and its `.value` , well, will be the _initial value_).
+変数の末尾に `.obs` を付ける。**それだけ。**
+めでたく Observable とそのプロパティ `.value` (つまり _初期値_)ができました。
 
-### Using the values in the view
+### Observableの値をビュー内で使う
 
 ``` dart
-// controller file
+// Controllerクラス
 final count1 = 0.obs;
 final count2 = 0.obs;
 int get sum => count1.value + count2.value;
 ```
 
 ``` dart
-// view file
+// ビュークラス
 GetX<Controller>(
   builder: (controller) {
     print("count 1 rebuild");
@@ -234,37 +234,38 @@ GetX<Controller>(
 ),
 ```
 
-If we increment `count1.value++` , it will print:
+`count1.value++` を実行すると、以下の通りprintされます。
 
 * `count 1 rebuild`
 
 * `count 3 rebuild`
 
-because `count1` has a value of `1` , and `1 + 0 = 1` , changing the `sum` getter value.
+なぜなら `count1` の値が `1` に変わり、それに伴ってgetter `sum` の値にも `1 + 0 = 1` と変化が起こるからです。
 
-If we change `count2.value++` , it will print:
+今度は `count2.value++` を実行してみましょう。
 
 * `count 2 rebuild`
 
 * `count 3 rebuild`
 
-because `count2.value` changed, and the result of the `sum` is now `2` .
+もうおわかりですね。これは `count2.value` が変わり、その結果 `sum` が `2` になったからです。
 
-* NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
+* 注: デフォルト仕様では、`value` に変化がなかったとしても、それが最初のイベントであればWidgetを更新します。
 
- This behavior exists due to Boolean variables.
+ この仕様はbool変数の性質から来るものです。
 
-Imagine you did this:
+たとえばこの場合を想像してみてください。
 
 ``` dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever` .
+そして、isLogged(ユーザーがログインしたかどうか)の変化をトリガーにever関数内のコールバックfireRouteを呼び出したいとします。
 
 ``` dart
 @override
 onInit() async {
+  // everは引数1が変化するたびに引数2を実行するリスナー
   ever(isLogged, fireRoute);
   isLogged.value = await Preferences.hasToken();
 }
@@ -278,26 +279,26 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false` , there would be no change to `isLogged` , so `ever()` would never be called.
-To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value` .
+もし `hasToken` が `false` なら `isLogged` に変化はありません。すると `ever()` のコールバックは永遠に呼び出されないことになります。
+このような挙動を防ぐために _Observable_ への最初の更新は、それがたとえ同じ `.value` だったとしても
+常にイベントを引き起こすようにしています。
 
-You can remove this behavior if you want, using:
+ご参考までに、この仕様は以下の設定で解除することができます。
  `isLogged.firstRebuild = false;`
 
-### Conditions to rebuild
+### 更新条件を設定
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+Getにはさらに洗練された「状態」のコントロール方法があります。イベント(Listへのオブジェクト追加など)に対して条件を付けることが可能です。
 
 ``` dart
-// First parameter: condition, must return true or false.
-// Second parameter: the new value to apply if the condition is true.
+// 引数1: Listにオブジェクトを加える条件。trueかfalseを返すこと
+// 引数2: 条件がtrueの場合に加える新しいオブジェクト
 list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications :smile:
+最低限のコードで、コード生成ツールも使わず、とても簡単ですね :smile:
 
-Do you know Flutter's counter app? Your Controller class might look like this:
+カウンターアプリもこのようにシンプルに実現できます。
 
 ``` dart
 class CountController extends GetxController {
@@ -305,19 +306,19 @@ class CountController extends GetxController {
 }
 ```
 
-With a simple:
+Controllerを設定して、下記を実行するだけ。
 
 ``` dart
 controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+UIの数字が置き換わりましたね。このようにアプリのどこであっても更新をかけることができます。
 
-### Where .obs can be used
+### .obsの使いどころ
 
-You can transform anything on obs. Here are two ways of doing it:
+.obs を使うことでどんなものもObservableにすることができます。方法は2つ。
 
-* You can convert your class values to obs
+* クラスのインスタンス変数をobsに変換する
 
 ``` dart
 class RxUser {
@@ -326,7 +327,7 @@ class RxUser {
 }
 ```
 
-* or you can convert the entire class to be an observable
+* クラスのインスタンスを丸々obsに変換する
 
 ``` dart
 class User {
@@ -335,181 +336,181 @@ class User {
   var age;
 }
 
-// when instantianting:
+// インスタンス化の際
 final user = User(name: "Camila", age: 18).obs;
 ```
 
-### Note about Lists
+### List(Rx)に関する補足
 
-Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+List(Rx)はその中のオブジェクトと同様、監視可能(Observable)です。そのためオブジェクトを追加すると、List(Rx)に依存するWidgetは自動更新されます。
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+またList(Rx)をListとするために ".value" を使う必要はありません。DartのAPIがこれを可能にしてくれました。ただ、残念ながら他のStringやintのようなプリミティブ型は拡張ができないため、.value を使う必要があります。getterやsetterを活用するのであればあまり問題になりませんが。
 
 ``` dart
-// On the controller
+// Controllerクラス
 final String title = 'User Info:'.obs
 final list = List<User>().obs;
 
-// on the view
-Text(controller.title.value), // String need to have .value in front of it
+// ビュークラス
+Text(controller.title.value), // Stringの場合は .value が必要
 ListView.builder (
-  itemCount: controller.list.length // lists don't need it
+  itemCount: controller.list.length // Listの場合は不要
 )
 ```
 
-When you are making your own classes observable, there is a different way to update them:
+カスタムのクラスをObservableにした場合は、様々な方法で値を更新することができます。
 
 ``` dart
-// on the model file
-// we are going to make the entire class observable instead of each attribute
+// モデルクラス
+// 属性をobsにするやり方ではなく、クラス全体をobsにする方法を採ります
 class User() {
   User({this.name = '', this.age = 0});
   String name;
   int age;
 }
 
-// on the controller file
+// Controllerクラス
 final user = User().obs;
-// when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
+// user変数を更新するときはこのようなメソッドを作ります
+user.update( (user) { // このパラメーターは更新するオブジェクトそのもの
 user.name = 'Jonny';
 user.age = 18;
 });
-// an alternative way of update the user variable:
+// あるいは、この方法でも。変数名は呼び出し可能です。
 user(User(name: 'João', age: 35));
 
-// on view:
+// ビュークラス
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
-// you can also access the model values without the .value:
-user().name; // notice that is the user variable, not the class (variable has lowercase u)
+// .value を使わずにモデルのプロパティにアクセスすることも可能です
+user().name; // userがUserではないことに注目。user()でUserを受け取れます。
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+ListのsetAllやsetRangeメソッドの代わりに、"assign" "assignAll" APIを使っていただくことも可能です。
+"assign" APIはListの内容をクリアした後に、指定した単独のオブジェクトを追加してくれます。
+"assignAll" APIはそのIterable版です。
 
-### Why i have to use .value
+### なぜ「.value」を使う必要があるのか
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+ちょっとしたアノテーションとコード生成ツールを使って`String`や`int`で `.value` を使わなくて済むようにもすることはできますが、このライブラリの目的は「外部依存パッケージを減らす」ことです。私たちは、外部パッケージを必要としない、必須ツール（Route、依存オブジェクト、状態の管理）が揃った開発環境を軽量かつシンプルな方法で提供したいと考えています。
 
-You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
+まさに pubspecに3文字（get）とコロンを加えて、プログラミングを始めることができるのです。Route管理から状態管理まで、必要なソリューションが標準装備されています。GetXはシンプルさ、生産性、高いパフォーマンスを目指します。
 
-The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
+これほど多機能であるにも関わらず、このライブラリの総容量は他の多くの状態管理ライブラリよりも少ないです。その点をご理解いただけるとうれしいです。
 
-If you are bothered by `.value` , and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+`.value` が嫌でコード生成ツールを使いたいという方には、MobXは素晴らしいライブラリだと思いますし、Getと併用することもできます。逆に多くの外部パッケージに依存したくない方、パッケージ間の互換性を気にしたくない方、状態管理ツールや依存オブジェクトから状態更新エラーが出ているかどうかを気にせずプログラミングをしたい方、依存するControllerクラスのインスタンスがあるかどうかを都度都度心配したくない方にとってはGetはまさに最適です。
 
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
+MobXのコード生成や、BLoCのボイラープレートコードが気にならないのであれば、Route管理にだけでもGetをお使いいただけるとうれしいです。GetのSEMとRSMは必要に迫られて生まれたものです。私の会社で以前、90以上のControllerを持つプロジェクトがあり、それなりの性能のマシンでflutter cleanを行った後でさえ、コード生成ツールがタスクを完了するのに30分以上かかりました。もしあなたが大きなプロジェクトに関わっており、コード生成ツールが問題になっているのであれば、Getを検討してみてください。
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+もちろん、コード生成ツールをGetXに導入したい方が実際にツールを作成してプロジェクトに貢献した場合は、このReadMeに代替ソリューションとして掲載させていただきます。私はすべての開発者のニーズをかなえたいわけではありませんが、今はこの質問に対しては、「すでにMobXのように同様のことを実現してくれる良いソリューションがある」とだけ言わせてください。
 
 ### Obx()
 
-Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
-Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+GetX()の代わりにObx()を使用することもできます。ObxはWidgetを生成する匿名関数をパラメーターに持ちます。複数のControllerに対応することができますが、自身はControllerのインスタンスを持たず、型指定もできません。そのため別途Controllerのインスタンスを作るか、`Get.find<Controller>()` でインスタンスを探しておく必要があります。
 
-### Workers
+### Worker
 
-Workers will assist you, triggering specific callbacks when an event occurs.
+Worker はイベント発生に伴って指定したコールバックを呼び出すことができます。
 
 ``` dart
-/// Called every time `count1` changes.
+/// `count1` が更新されるたびに第2引数のコールバックが実行される
 ever(count1, (_) => print("$_ has been changed"));
 
-/// Called only first time the variable $_ is changed
+/// `count1` の最初の更新時のみ実行される
 once(count1, (_) => print("$_ was changed once"));
 
-/// Anti DDos - Called every time the user stops typing for 1 second, for example.
+/// DDoS攻撃対策に最適。たとえば、ユーザーが打鍵やクリックを止めて1秒後に実行など
 debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 
-/// Ignore all changes within 1 second.
+/// 1秒以内の連続更新はすべて無視して実行しない
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
 
-All workers (except `debounce` ) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool` .
-This `condition` defines when the `callback` function executes.
+すべてのWorker(`debounce` 以外) は `condition` パラメーターを持ちます。`condition` は `bool` でも `bool` を返すコールバックでも構いません。
+この `condition` が Worker のコールバックを実行するかどうかを決めています。
 
-All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
- 
+また Worker は `Worker` インスタンスを返します。これは `dispose()` などを通じて Worker を破棄するときに使用します。
+
 
 * **`ever`**
 
- is called every time the _Rx_ variable emits a new value.
+ は _Rx_ 変数が新しい値になるたびに呼ばれます。
 
 * **`everAll`**
 
- Much like `ever` , but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
+ `ever` とほぼ同じですが、_Rx_ 変数の `List` を受け取ります。いずれかの値が更新されれば、その更新後の値を受け取ってコールバックが実行されます。
 
 * **`once`**
 
-'once' is called only the first time the variable has been changed.
+変数が最初に更新されたときのみに呼ばれます。
 
 * **`debounce`**
 
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+'debounce' は検索機能などで導入するととても有益です。たとえば、ユーザーがタイピングを止めたときにのみAPIを呼び出したいときに使います。ユーザーが "Jonny" と入れたときに 5回も APIに問い合わせを行うのは避けたいですよね。Getなら "debounce" があるので大丈夫です。
 
 * **`interval`**
 
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+`interval` は debounce とは異なります。ユーザーが1秒間に1000回変数に変更を加えた場合、debounceが一定期間経過後（デフォルトは800ミリ秒）に最後の変更イベントだけ送信するのに対して、intervalは代わりに一定期間の間のユーザーによるアクションをすべて無視します。intervalは1秒ごとにイベントを送信しており、3秒に設定した場合は1分間に20個のイベントを送信します。これはユーザーがキーやマウスを連打することで何かしらの報酬を得られる場合に、その悪用を避けるために使用できます(ユーザーが何かをクリックしてコインを獲得できるとします。たとえ何秒かかったとしても300回クリックすれば300枚のコインを得ることができてしまいます。intervalを使用してインターバルを3秒に設定した場合は、何回クリックしようが1分間で得られるコインの上限は20枚になります)。一方のdebounceはアンチDDosや、検索のように変更を加えるたびにonChangeからAPI問い合わせが発生するような機能に適しています。ユーザーが入力し終わるのを待ってリクエストを送信するのです。debounceを前述のコイン獲得のケースで使用した場合、ユーザーはコインを1枚しか獲得できません。これは指定した期間、ユーザーが動作を「一時停止」したときにのみ実行されるからです。
 
-* NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+* 注: Workerを使用する場合は、Controllerなどを起動するときに次のいずれかの方法で登録する必要があります。onInit（推奨）内、クラスのコンストラクタ、またはStatefulWidgetのinitState内（この方法は推奨しませんが、副作用はないはずです）。
 
-## Simple State Manager
+## 非リアクティブな状態管理
 
-Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+GetはChangeNotifierを使わない軽量かつシンプルな状態管理機能を有しています。特にFlutterに慣れていない方のニーズを満たし、大規模なアプリケーションでも問題を起こすことがないと信じています。
 
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this.
+GetBuilderは複数の状態を扱う場面で使われることを想定して作られました。たとえばショッピングカートに30個の商品があるとします。そしてあなたが商品を一つ削除すると同時に、カートのリストが更新され、合計金額が更新され、アイテム数を示すバッジが更新されます。GetBuilderはこのようなユースケースに最適です。というのも、GetBuilderは状態をControllerで束ねてそのControllerに依存するすべてのWidgetを一度に更新させることができるからです。
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+それらとは独立したControllerが必要な場合は、GetBuilderのidプロパティに専用IDを割り当てるか、GetXを使ってください。ケースバイケースですが、そのような「独立した」Widetが多いほど GetX() のパフォーマンスが際立ち、複数の状態変化がありそれに伴うWidgetの更新が多いほど GetBuilder() のパフォーマンスが勝ることを覚えておいてください。
 
-### Advantages
+### 利点
 
-1. Update only the required widgets.
+1. 必要なWidgetのみ更新される。
 
-2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2. ChangeNotifierを使わず、メモリ使用量が少ない。
 
-3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. StatefulWidgetのことはもう忘れましょう。Getでは必要ありません。他の状態管理ライブラリではStatefulWidgetを使用することがあるでしょう。しかしAppBarやScaffoldなどクラス内のほとんどのWidgetがStatelessであるにも関わらず、StatefulなWidgetの状態だけを保持する代わりに、クラス全体の状態を保持しているのはなぜでしょうか？Getならクラス全体をStatelessにすることができます。更新が必要なコンポーネントは GetBuilder などで囲むことで「状態」が保持されます。
 
-4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. プロジェクトを整理しましょう！ControllerはUIの中にあってはいけません。TextEditControllerなどの類はすべてControllerクラスに配置してしまいましょう。
 
-5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5. Widgetのレンダリングが開始されると同時にイベントを実行してWidgetを更新させる必要がありますか？GetBuilderにはStatefulWidgetと同様の「initState」プロパティがあり、そこからControllerのイベントを直接呼び出すことができます。initStateを使用する必要はもうありません。
 
-6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. StreamやTimerのインスタンスを破棄したい場合はGetBuilderのdisposeプロパティを利用してください。Widgetが破棄されると同時にイベントを呼び出すことができます。
 
-7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. GetXとStreamController / StreamBuilderを組み合わせるなどしてStreamを普通に使っていただいても問題ありませんが、必要なときに限って使うことをおすすめします。Streamのメモリ消費は適度であり、リアクティブプログラミングは美しいですが、たとえば30ものStreamを同時に立ち上げることを考えてみてください。これはChangeNotifierを使うよりもよくないことのように思います。
 
-8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+8. 必要以上にRAMを使わずWidgetを更新します。GetはGetBuilderのクリエーターIDのみを保存し、必要に応じてGetBuilderを更新します。何千ものGetBuilderを作成したとしても、ID保存のためのメモリ消費量は非常に少ないです。GetBuilderを新規に作成するということは、実際にはクリエーターIDを持つ GetBuilder の状態を共有しているに過ぎないためです。GetBuilderごとに状態が新たに作成されるわけではないため、特に大規模なアプリケーションでは多くのRAMを節約できます。基本的にGetXで作成するアプリケーションは全体的にStatelessであり、いくつかのStatefulなWidget(GetBuilder内のWidget)は単一の状態を持っているため、一つを更新すればすべてが更新されます。
 
-9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
+9. Getはアプリ全体の流れをよく把握しており、Controllerをメモリから破棄するタイミングを正確に知っています。実際の破棄はGetがやってくれるため、開発者が心配する必要はありません。
 
-### Usage
+### 使用例
 
 ``` dart
-// Create controller class and extends GetxController
+// Controllerクラスを作成してGetxControllerを継承しましょう
 class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
-    update(); // use update() to update counter variable on UI when increment be called
+    update();
+    // increment 実行時にcounter変数に依存するUIを更新。
+    // GetBuilderを使うWidgetの場合はupdate()が必要。
   }
 }
-// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called
+// ビュー側のクラスでGetBuilderを使ってcounter変数を組み込む
 GetBuilder<Controller>(
-  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  init: Controller(), // 最初に使用するときのみ初期化
   builder: (_) => Text(
     '${_.counter}',
   ),
 )
-//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
+// Controllerの初期化は最初の1回だけ行ってください。同じControllerを再度 GetBuilder / GetX で使用する場合は初期化する必要はありません。コントローラは、それを「init」とマークしたウィジェットがデプロイされると同時に、自動的にメモリから削除されます。Getがすべて自動で行ってくれるので、何も心配することはありません。同じControllerを2つ立ち上げることがないよう、それだけご注意ください。
 ```
 
-**Done!**
+**最後に**
 
-* You have already learned how to manage states with Get.
+* 以上、Getを使った状態管理の手法をご説明させていただきました。
 
-* Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+* 注: もっと柔軟に管理する手法として、initプロパティを使わない方法もあります。Bindingsを継承したクラスを作成し、dependenciesメソッドをoverrideしてその中でGet.put()でControllerを注入してください(複数可)。このクラスとUI側のクラスを紐づけることでControllerをそのRoute内で使用できます。そしてそのControllerを初めて使用するとき、Getはdependencies内を見て初期化を実行してくれます。このlazy(遅延、消極的)ロードを維持しつつ、不要になったControllerは破棄し続けます。具体的な仕組みについてはpub.devの例をご参照ください。
 
-If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
+Routeを移動して以前使用したControllerのデータが必要になった場合は、再度GetBuilderを使用してください。initする必要はありません。
 
 ``` dart
 class OtherClass extends StatelessWidget {
@@ -526,16 +527,16 @@ class OtherClass extends StatelessWidget {
 
 ```
 
-If you need to use your controller in many other places, and outside of GetBuilder, just create a get in your controller and have it easily. (or use `Get.find<Controller>()` )
+GetBuilderの外でControllerを使用する場合は、Controller内にgetterを作成しておくと便利です。Controller.to で呼び出しましょう。(もしくは `Get.find<Controller>()` を使うのもありです)
 
 ``` dart
 class Controller extends GetxController {
 
-  /// You do not need that. I recommend using it just for ease of syntax.
-  /// with static method: Controller.to.increment();
-  /// with no static method: Get.find<Controller>().increment();
-  /// There is no difference in performance, nor any side effect of using either syntax. Only one does not need the type, and the other the IDE will autocomplete it.
-  static Controller get to => Get.find(); // add this line
+  /// 記述量を省くためにstaticメソッドにすることをおすすめします。
+  /// staticメソッド使う場合 → Controller.to.increment();
+  /// 使わない場合 → Get.find<Controller>().increment();
+  /// どちらを使ってもパフォーマンスに影響があったり副作用が出たりはしません。前者は型の指定が不要という違いがあるだけです
+  static Controller get to => Get.find(); // これを追加
 
   int counter = 0;
   void increment() {
@@ -545,35 +546,34 @@ class Controller extends GetxController {
 }
 ```
 
-And then you can access your controller directly, that way:
+これで以下のようにControllerに直接アクセスできます。
 
 ``` dart
 FloatingActionButton(
   onPressed: () {
     Controller.to.increment(),
-  } // This is incredibly simple!
+  } // とっても簡単ですね！
   child: Text("${Controller.to.counter}"),
 ),
 ```
 
-When you press FloatingActionButton, all widgets that are listening to the 'counter' variable will be updated automatically.
+FloatingActionButton を押すと counter変数 に依存するWidgetがすべて自動的に更新されます。
 
-### How it handles controllers
+### Controllerインスタンスの扱い
 
-Let's say we have this:
+次のような画面の流れがあるとします。
 
- `Class a => Class B (has controller X) => Class C (has controller X)`
+ `画面A => 画面B (Controller X を使用) => 画面C (Controller X を使用)`
 
-In class A the controller is not yet in memory, because you have not used it yet (Get is lazyLoad). In class B you used the controller, and it entered memory. In class C you used the same controller as in class B, Get will share the state of controller B with controller C, and the same controller is still in memory. If you close screen C and screen B, Get will automatically take controller X out of memory and free up resources, because Class a is not using the controller. If you navigate to B again, controller X will enter memory again, if instead of going to class C, you return to class A again, Get will take the controller out of memory in the same way. If class C didn't use the controller, and you took class B out of memory, no class would be using controller X and likewise it would be disposed of. The only exception that can mess with Get, is if you remove B from the route unexpectedly, and try to use the controller in C. In this case, the creator ID of the controller that was in B was deleted, and Get was programmed to remove it from memory every controller that has no creator ID. If you intend to do this, add the "autoRemove: false" flag to class B's GetBuilder and use adoptID = true; in class C's GetBuilder.
+画面Aの段階ではまだ未使用なので、Controllerはメモリにありません(Getは基本lazyロードなので)。画面Bに遷移すると、Controllerがメモリ内に保存されます。画面Cでは画面Bと同じControllerを使用しているため、GetはBとCでControllerの状態を共有し、同じControllerがメモリ内に引き続きいることになります。画面Cを閉じてさらに画面Bを閉じ、画面Aに戻ったとしましょう。そこではControllerが使われていないため、GetはControllerをメモリから出してリソースを解放します。そこで再度画面Bに遷移すると、Controllerは再度メモリに保存されます。そして今度は画面Cに行かずに画面Aに戻ります。Getは同様にControllerをメモリから破棄してくれます。また、仮に画面CがControllerを使っておらず画面Cにいたとして、画面BをRouteスタックから削除したとしましょう。するとControllerを使用している画面(クラス)はなくなりますので、同様にメモリから破棄されます。Getが正常動作しないと考えられる唯一の例外は、画面Cにいるときに画面Bを誤ってRouteスタックから削除してしまい、Controllerの使用を試みたときです。この場合は、画面Bで作成されたControllerのクリエーターIDが削除されてしまったことが原因です(GetはクリエーターIDのないControllerはメモリから破棄するようプログラムされています)。もし意図があってこの事例に対応したい場合は、画面BのGetBuilderに "autoRemove: false" フラグを追加した上で、CクラスのGetBuilderに "adoptID: true" を追加してください。
 
-### You won't need StatefulWidgets anymore
+### StatefulWidgetsはもういらない
 
-Using StatefulWidgets means storing the state of entire screens unnecessarily, even because if you need to minimally rebuild a widget, you will embed it in a Consumer/Observer/BlocProvider/GetBuilder/GetX/Obx, which will be another StatefulWidget.
-The StatefulWidget class is a class larger than StatelessWidget, which will allocate more RAM, and this may not make a significant difference between one or two classes, but it will most certainly do when you have 100 of them!
-Unless you need to use a mixin, like TickerProviderStateMixin, it will be totally unnecessary to use a StatefulWidget with Get.
+StatefulWidgetsを使用すると、画面全体の状態を不必要に保存することになります。ウィジェットを最小限に再構築する必要がある場合は、Consumer/Observer/BlocProvider/GetBuilder/GetX/Obxの中に埋め込むことになりますが、それは別のStatefulWidgetになります。
+StatefulWidgetはStatelessWidgetよりも多くのRAMが割り当てられます。これは1つや2つのStatefulWidgetでは大きな違いは産まないかもしれませんが、それが100もあった場合は確実に違いが出ます。
+TickerProviderStateMixinのようなMixinを使用する必要がない限り、GetでStatefulWidgetを使用する必要はありません。
 
-You can call all methods of a StatefulWidget directly from a GetBuilder.
-If you need to call initState() or dispose() method for example, you can call them directly;
+たとえばinitState()やdispose()メソッドなど、StatefulWidgetのメソッドをGetBuilderから直接呼び出すことも可能です。
 
 ``` dart
 GetBuilder<Controller>(
@@ -583,7 +583,7 @@ GetBuilder<Controller>(
 ),
 ```
 
-A much better approach than this is to use the onInit() and onClose() method directly from your controller.
+しかし、これよりもベターなアプローチはControllerの中で直接 onInit() や onClose() メソッドを呼び出すことです。
 
 ``` dart
 @override
@@ -593,24 +593,23 @@ void onInit() {
 }
 ```
 
-* NOTE: If you want to start a method at the moment the controller is called for the first time, you DON'T NEED to use constructors for this, in fact, using a performance-oriented package like Get, this borders on bad practice, because it deviates from the logic in which the controllers are created or allocated (if you create an instance of this controller, the constructor will be called immediately, you will be populating a controller before it is even used, you are allocating memory without it being in use, this definitely hurts the principles of this library). The onInit() methods; and onClose(); were created for this, they will be called when the Controller is created, or used for the first time, depending on whether you are using Get.lazyPut or not. If you want, for example, to make a call to your API to populate data, you can forget about the old-fashioned method of initState/dispose, just start your call to the api in onInit, and if you need to execute any command like closing streams, use the onClose() for that.
+* 注: コンストラクタを通じてControllerを立ち上げる必要はありません。このようなプラクティスは、パフォーマンス重視であるGetのControllerの作成や割り当ての原理、考え方から外れてしまいます（コンストラクタ経由でインスタンスを作成すれば、実際に使用される前の段階でControllerを生成し、メモリを割り当てることになります）。onInit() と onClose() メソッドはこのために作られたもので、Controllerのインスタンスが作成されたとき、または初めて使用されたときに呼び出されます（Get.lazyPutを使用しているか否か次第）。たとえば、データを取得するためにAPIを呼び出したい場合は initState/dispose の代わりに onInit() を使用し、Streamを閉じるなどのコマンドを実行する必要がある場合は onClose() を使用してください。
 
-### Why it exists
+### Getの目的
 
-The purpose of this package is precisely to give you a complete solution for navigation of routes, management of dependencies and states, using the least possible dependencies, with a high degree of decoupling. Get engages all high and low level Flutter APIs within itself, to ensure that you work with the least possible coupling. We centralize everything in a single package, to ensure that you don't have any kind of coupling in your project. That way, you can put only widgets in your view, and leave the part of your team that works with the business logic free, to work with the business logic without depending on any element of the View. This provides a much cleaner working environment, so that part of your team works only with widgets, without worrying about sending data to your controller, and part of your team works only with the business logic in its breadth, without depending on no element of the view.
+このパッケージの目的は、Routeのナビゲーション、依存オブジェクトと状態の管理のための完全なソリューションを、開発者が外部パッケージに極力依存せずに済むような形で提供し、高度なコード分離性（デカップリング）を実現することです。それを確実なものとするため、Getはあらゆる高レベルおよび低レベルのFlutter APIを取り込んでいます。これによりビューとロジックを切り分けることが容易になり、UIチームにはWidgetの構築に集中してもらい、ビジネスロジック担当チームにはロジックに集中してもらうことができます。Getを使うことでよりクリーンな作業環境を構築することができるのです。
 
-So to simplify this:
-You don't need to call methods in initState and send them by parameter to your controller, nor use your controller constructor for that, you have the onInit() method that is called at the right time for you to start your services.
-You do not need to call the device, you have the onClose() method that will be called at the exact moment when your controller is no longer needed and will be removed from memory. That way, leave views for widgets only, refrain from any kind of business logic from it.
+要するに、initState内でメソッドを呼び出してパラメーターを通じてControllerにデータを送信する必要も、そのためにControllerのコンストラクタを使用する必要もありません。Getには必要なタイミングでサービスを呼び出してくれう onInit() メソッドがあります。
+Controllerが不要になれば、onClose() メソッドがジャストなタイミングでメモリから破棄してくれます。これにより、ビューとビジネスロジックを分離することができるのです。
 
-Do not call a dispose method inside GetxController, it will not do anything, remember that the controller is not a Widget, you should not "dispose" it, and it will be automatically and intelligently removed from memory by Get. If you used any stream on it and want to close it, just insert it into the close method. Example:
+GetxController 内に dispose() メソッドがあっても何も起こらないので記述しないでください。ControllerはWidgetではないので「dispose」できません。たとえばController内でStreamを使用していてそれを閉じたい場合は、以下のように onClose() メソッドにコードを記述してください。
 
 ``` dart
 class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
 
-  /// close stream = onClose method, not dispose.
+  /// Streamを閉じる場合は dispose() ではなく onClose()
   @override
   void onClose() {
     user.close();
@@ -620,132 +619,131 @@ class Controller extends GetxController {
 }
 ```
 
-Controller life cycle:
+Controllerのライフサイクルについて。
 
-* onInit() where it is created.
-* onClose() where it is closed to make any changes in preparation for the delete method
-* deleted: you do not have access to this API because it is literally removing the controller from memory. It is literally deleted, without leaving any trace.
+* onInit() はControllerが作成されたタイミングで実行されます。
+* onClose() は onDelete() メソッドが実行される直前のタイミングで実行されます。
+* Controllerが削除されるとそのAPIにアクセスすることはできません。文字通りメモリからの削除だからです。削除のトレースログも残りません。
 
-### Other ways of using it
+### Controllerの様々な使用方法
 
-You can use Controller instance directly on GetBuilder value:
+ControllerインスタンスはGetBuilderのvalueを通じて使用することができます。
 
 ``` dart
 GetBuilder<Controller>(
   init: Controller(),
   builder: (value) => Text(
-    '${value.counter}', //here
+    '${value.counter}', // ここ
   ),
 ),
 ```
 
-You may also need an instance of your controller outside of your GetBuilder, and you can use these approaches to achieve this:
+GetBuilderの外でControllerインスタンスを使う場合は、このアプローチをおすすめします。
 
 ``` dart
 class Controller extends GetxController {
   static Controller get to => Get.find();
 [...]
 }
-// on you view:
-GetBuilder<Controller>(  
-  init: Controller(), // use it only first time on each controller
+// ビュー側で
+GetBuilder<Controller>(
+  init: Controller(), // 最初に使うときだけ必要
   builder: (_) => Text(
-    '${Controller.to.counter}', //here
+    '${Controller.to.counter}', // ここ
   )
 ),
 ```
 
-or
+もしくは
 
 ``` dart
 class Controller extends GetxController {
- // static Controller get to => Get.find(); // with no static get
+ // static get を省き、
 [...]
 }
-// on stateful/stateless class
-GetBuilder<Controller>(  
-  init: Controller(), // use it only first time on each controller
+// ビュー側で
+GetBuilder<Controller>(
+  init: Controller(), // 最初に使うときだけ必要
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // ここ
   ),
 ),
 ```
 
-* You can use "non-canonical" approaches to do this. If you are using some other dependency manager, like get_it, modular, etc., and just want to deliver the controller instance, you can do this:
+* get_it や modular など他の依存オブジェクト管理ライブラリを使用しているため、単にControllerのインスタンスを渡したいだけの場合は、このような「非正規」な方法もあります。
 
 ``` dart
 Controller controller = Controller();
 [...]
 GetBuilder<Controller>(
-  init: controller, //here
+  init: controller, // ここ
   builder: (_) => Text(
-    '${controller.counter}', // here
+    '${controller.counter}', // ここ
   ),
 ),
 
 ```
 
-### Unique IDs
+### ユニークIDの設定
 
-If you want to refine a widget's update control with GetBuilder, you can assign them unique IDs:
+GetBuilderを使ってWidgetの更新をコントロールしたい場合は、このようにユニークIDを振ってください。
 
 ``` dart
 GetBuilder<Controller>(
   id: 'text'
-  init: Controller(), // use it only first time on each controller
+  init: Controller(), // 最初に使うときだけ必要
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // ここ
   ),
 ),
 ```
 
-And update it this form:
+そして以下のようにWidgetを更新します。
 
 ``` dart
 update(['text']);
 ```
 
-You can also impose conditions for the update:
+さらに更新に条件を設けることができます。
 
 ``` dart
 update(['text'], counter < 10);
 ```
 
-GetX does this automatically and only reconstructs the widget that uses the exact variable that was changed, if you change a variable to the same as the previous one and that does not imply a change of state , GetX will not rebuild the widget to save memory and CPU cycles (3 is being displayed on the screen, and you change the variable to 3 again. In most state managers, this will cause a new rebuild, but with GetX the widget will only is rebuilt again, if in fact his state has changed).
+GetXはこの更新を自動で行ってくれます。指定したIDを持ち、その変数に依存するWidgetのみを更新します。また変数を前の値と同じ値に変更しても、それが状態の変化を意味しない場合はメモリとCPUサイクルを節約するためにWidgetを更新しません (画面に 3 が表示されているときに、変数を再び 3 に変更したとします。このような場合にWidgetを更新する状態管理ソリューションも存在しますが、GetXでは実際に状態が変更された場合にのみ更新されます）。
 
-## Mixing the two state managers
+## 状態管理ソリューションを混在させる
 
-Some people opened a feature request, as they wanted to use only one type of reactive variable, and the other mechanics, and needed to insert an Obx into a GetBuilder for this. Thinking about it MixinBuilder was created. It allows both reactive changes by changing ".obs" variables, and mechanical updates via update(). However, of the 4 widgets he is the one that consumes the most resources, since in addition to having a Subscription to receive change events from his children, he subscribes to the update method of his controller.
+MixinBuilderはObxとGetBuilderを併用したいというリクエストから発想して作られました。これは ".obs" 変数の変更によるリアクティブな更新と、update() メソッドによるメカニカルな更新の両方を混在可能にします。ただし、GetBuiler / GetX / Obx / MixinBuilder の4つの中で最もリソースを消費するWidgetです。というのも、Widgetからのイベントを検知するためのSubscriptionに加えて、Controller自身のupdateメソッドも購読する必要があるからです。
 
-Extending GetxController is important, as they have life cycles, and can "start" and "end" events in their onInit() and onClose() methods. You can use any class for this, but I strongly recommend you use the GetxController class to place your variables, whether they are observable or not.
+MixinBuilderに使用するControllerクラスには、変数を `.obs`（Observable）とするかどうかに関わらず、GetxControllerを継承したものを使用してください。GetxControllerにはライフサイクルがあり、onInit() および onClose() メソッドでイベントを「開始」したり「終了」したりすることができます。
 
 ## StateMixin
 
-Another way to handle your `UI` state is use the `StateMixin<T>` .
-To implement it, use the `with` to add the `StateMixin<T>`
-to your controller which allows a T model.
+`StateMixin<T>` を使うことでさらに `UI` の「状態」を便利に扱うことができます。
+`with` を使って `StateMixin<T>` をControllerにミックスインしてください。Tにはモデルのクラス名が入ります。
 
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-The `change()` method change the State whenever we want.
-Just pass the data and the status in this way:
+状態を変更するには `change()` メソッドを使ってください。
+パラメーターにはビューに渡すデータと「状態」をセットします。
 
 ```dart
 change(data, status: RxStatus.success());
 ```
 
-RxStatus allow these status:
+RxStatus の「状態」は以下の4つです。
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+RxStatus.loading(); // ロード中
+RxStatus.success(); // ロード成功
+RxStatus.empty(); // データが空
+RxStatus.error('message'); // エラー
 ```
 
-To represent it in the UI, use:
+それぞれの「状態」をUIで表すには以下のようにします。
 
 ```dart
 class OtherClass extends GetView<Controller> {
@@ -755,35 +753,35 @@ class OtherClass extends GetView<Controller> {
 
       body: controller.obx(
         (state)=>Text(state.name),
-        
-        // here you can put your custom loading indicator, but
-        // by default would be Center(child:CircularProgressIndicator())
+
+        // ここはカスタムのロードインジケーターでも可能ですが、
+        // デフォルトは Center(child:CircularProgressIndicator())
         onLoading: CustomLoadingIndicator(),
         onEmpty: Text('No data found'),
 
-        // here also you can set your own error widget, but by
-        // default will be an Center(child:Text(error))
+        // ここもカスタムのエラーWidgetでも構いませんが、
+        // デフォルトは Center(child:Text(error))
         onError: (error)=>Text(error),
       ),
     );
 }
 ```
 
-## GetBuilder vs GetX vs Obx vs MixinBuilder
+## GetBuilder VS GetX VS Obx VS MixinBuilder
 
-In a decade working with programming I was able to learn some valuable lessons.
+私は10年間プログラミングに携わってきて、いくつか貴重な教訓を得ることができました。
 
-My first contact with reactive programming was so "wow, this is incredible" and in fact reactive programming is incredible.
-However, it is not suitable for all situations. Often all you need is to change the state of 2 or 3 widgets at the same time, or an ephemeral change of state, in which case reactive programming is not bad, but it is not appropriate.
+リアクティブプログラミングに初めて触れたとき、「おお、これはすごい」と感嘆せずにはいられませんでしたし、実際にすごいものでした。
+しかし、リアクティブプログラミングはすべての状況に適しているわけではありません。多くの場合、必要なのは2,3のWidgetの状態を同時に更新すること、またはローカルでの一時的な状態の変更であり、これらの場合はリアクティブである必要はありません。
 
-Reactive programming has a higher RAM consumption that can be compensated for by the individual workflow, which will ensure that only one widget is rebuilt and when necessary, but creating a list with 80 objects, each with several streams is not a good one idea. Open the dart inspect and check how much a StreamBuilder consumes, and you'll understand what I'm trying to tell you.
+リアクティブプログラミングのRAM消費量の多さは、必要なときだけ、かつ1つのWidgetだけ同時に更新するようすることである程度補うことができます。ただ、たとえば80ものオブジェクトを持つリストがあったとして、それぞれが複数のStreamを持つのは得策ではありません。Dartのインスペクターを開いて、StreamBuilderがどれだけRAMを消費しているか見てみてください。私が伝えたいことを理解してもらえると思います。
 
-With that in mind, I created the simple state manager. It is simple, and that is exactly what you should demand from it: updating state in blocks in a simple way, and in the most economical way.
+そのことを念頭に私はシンプルな状態管理ソリューションを作りました。このシンプルさに期待することは、リソース面で経済的である点、Widget単位ではなくブロック単位で状態を更新できる点であるべきです。
 
-GetBuilder is very economical in RAM, and there is hardly a more economical approach than him (at least I can't imagine one, if it exists, please let us know).
+GetBuilderはRAM消費の面で最も経済的なソリューションだと信じています（もしあれば、ぜひ教えてください）。
 
-However, GetBuilder is still a mechanical state manager, you need to call update() just like you would need to call Provider's notifyListeners().
+しかし、GetBuilderは依然として update() により更新がかかるスタイルのメカニカルな状態管理ソリューションであり、notifyListeners() と呼び出し回数は変わりありません。
 
-There are other situations where reactive programming is really interesting, and not working with it is the same as reinventing the wheel. With that in mind, GetX was created to provide everything that is most modern and advanced in a state manager. It updates only what is necessary and when necessary, if you have an error and send 300 state changes simultaneously, GetX will filter and update the screen only if the state actually changes.
+一方で、ここでリアクティブプログラミングを使わないのは車輪の再発明なんじゃないかと思えるような状況もあります。この点を考慮して、GetX() は先進的な状態管理の手法を提供するために作られました。必要なものを必要なときだけ更新し、エラーが発生してユーザーが300ものイベントを同時に送信したとしても、GetX() は状態の変化をフィルタリングして画面を更新してくれます。
 
-GetX is still more economical than any other reactive state manager, but it consumes a little more RAM than GetBuilder. Thinking about it and aiming to maximize the consumption of resources that Obx was created. Unlike GetX and GetBuilder, you will not be able to initialize a controller inside an Obx, it is just a Widget with a StreamSubscription that receives change events from your children, that's all. It is more economical than GetX, but loses to GetBuilder, which was to be expected, since it is reactive, and GetBuilder has the most simplistic approach that exists, of storing a widget's hashcode and its StateSetter. With Obx you don't need to write your controller type, and you can hear the change from multiple different controllers, but it needs to be initialized before, either using the example approach at the beginning of this readme, or using the Bindings class.
+GetX() は他のリアクティブな状態管理ソリューションに比べて経済的であることに変わりはありませんが、GetBuilder() よりは少しだけ多くのRAMを消費します。その点を考慮し、リソース消費を最大限活かすことを目指して Obx() は開発されました。GetX() や GetBuilder() と異なり、Obx() の中でControllerを初期化することはできません。Obx() は、子Widgetからの更新イベントを受け取る Stream購読Widgetでしかありません。GetX() よりは経済的ですが、GetBuilder() には負けます。GetBuilder() はWidgetのハッシュ値と状態のsetterを保持しているだけなので、これはある意味当然です。Obx() はControllerの型を指定する必要がなく、複数の異なるコントローラからの変更を聞くことができます。ただし、Obx() の外かBindingsで事前にControllerを初期化しておく必要があります。

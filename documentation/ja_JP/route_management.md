@@ -1,76 +1,76 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
-    - [Send data to named Routes](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
-    - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
-    - [SnackBars](#snackbars)
-    - [Dialogs](#dialogs)
-    - [BottomSheets](#bottomsheets)
-  - [Nested Navigation](#nested-navigation)
+- [Route管理](#Route管理)
+  - [使い方](#使い方)
+  - [通常Routeによるナビゲーション](#通常Routeによるナビゲーション)
+  - [名前付きRouteによるナビゲーション](#名前付きRouteによるナビゲーション)
+    - [名前付きRouteにデータを送る](#名前付きRouteにデータを送る)
+    - [動的URLの生成](#動的URLの生成)
+    - [ミドルウェアの使用](#ミドルウェアの使用)
+  - [contextを使わないナビゲーション](#contextを使わないナビゲーション)
+    - [SnackBar](#snackbar)
+    - [Dialog](#dialog)
+    - [BottomSheet](#bottomsheet)
+  - [ネスト構造のナビゲーション](#ネスト構造のナビゲーション)
 
-# Route Management
+# Route管理
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+このドキュメントではGetXにおけるRoute管理のすべてをご説明します。
 
 ## How to use
 
-Add this to your pubspec.yaml file:
+次の3文字を pubspec.yaml ファイルに追加してください。
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+Route / SnackBar / Dialog / BottomSheet をcontextなしで、あるいは高レベルのGet APIを使用するには MaterialApp の前に「Get」を追加してください。それだけで GetMaterialApp の機能が使用できます。
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // 変更前: MaterialApp(
   home: MyHome(),
 )
 ```
 
-## Navigation without named routes
+## 名前付きRouteによる画面遷移
 
-To navigate to a new screen:
+次の画面に遷移するには Get.to を使ってください。
 
 ```dart
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+SnackBar / Dialog / BottomSheet など Navigator.pop(context) で閉じるものと同じものを閉じるには Get.back を使います。
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+次の画面に遷移しつつ、前の画面に戻れないようにするには Get.off を使います（スプラッシュスクリーンやログイン画面などで使用)。
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+次の画面に遷移して、それ以前のRouteはすべて破棄するには Get.offAll を使います（ショッピングカート、投票、テストなどで使用)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+次の画面に遷移して、戻ったらデータを受け取る方法はこちら。
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+次の画面では、このようにデータを前の画面に送る必要があります。
 
 ```dart
 Get.back(result: 'success');
 ```
 
-And use it:
+そして使いましょう。
 
 ex:
 
@@ -78,13 +78,12 @@ ex:
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+どのようなシンタックスがあるかもっと知りたいですか？
+いつもの Navigator ではなく navigator と入れてみてください。通常のNavigatorで使えるプロパティがcontextなしで使えるようになっているかと思います。
 
 ```dart
 
-// Default Flutter navigator
+// 通常のFlutterによるNavigator
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -94,7 +93,7 @@ Navigator.of(context).push(
   ),
 );
 
-// Get using Flutter syntax without needing context
+// GetではFlutterのシンタックスをcontextなしで使えます
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -103,35 +102,35 @@ navigator.push(
   ),
 );
 
-// Get syntax (It is much better, but you have the right to disagree)
+// Getのシンタックス（上記よりかなり短いですね）
 Get.to(HomePage());
 
 
 ```
 
-## Navigation with named routes
+## 名前付きRouteによる画面遷移
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- Getは名前付きRouteによる遷移もサポートしています。
 
-To navigate to nextScreen
+次の画面への遷移はこう。
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+Get.off の名前付きRoute版。
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+Get.offAll の名前付きRoute版。
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+Routeを定義するにはGetMaterialAppを使ってください。
 
 ```dart
 void main() {
@@ -144,7 +143,7 @@ void main() {
         GetPage(
           name: '/third',
           page: () => Third(),
-          transition: Transition.zoom  
+          transition: Transition.zoom
         ),
       ],
     )
@@ -152,7 +151,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+未定義Route（404エラー）に遷移させるには、GetMaterialAppで unknownRoute を設定してください。
 
 ```dart
 void main() {
@@ -169,39 +168,39 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### 名前付きRouteにデータを送る
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+次の画面に渡すデータは arguments で引数を設定します。Getでは引数にどんなものでも指定できます。StringでもMapでもListでも、クラスのインスタンスでも大丈夫です。
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+ビュー側のクラスやControllerで値を使うにはこうしてください。
 
 ```dart
 print(Get.arguments);
-//print out: Get is the best
+// Get is the best が表示される
 ```
 
-### Dynamic urls links
+### 動的URLの生成
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+Getはウェブのような高度な動的URLを提供します。ウェブ開発者はFlutterにこの機能が提供されることを待ち望んでいたことでしょう。この機能の提供を謳うパッケージは存在しますが、ウェブ上のURLとは全く異なるシンタックスが表示されているのを見たことがあるかもしれません。Getはこの点も解決します。
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+ビュー側のクラスやControllerで値を使う方法。
 
 ```dart
 print(Get.parameters['id']);
-// out: 354
+// 出力: 354
 print(Get.parameters['name']);
-// out: Enzo
+// 出力: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+この名前付きパラメーターはこのように簡単に受け取ることもできます。
 
 ```dart
 void main() {
@@ -217,7 +216,8 @@ void main() {
         name: '/profile/',
         page: () => MyProfile(),
       ),
-       //You can define a different page for routes with arguments, and another without arguments, but for that you must use the slash '/' on the route that will not receive arguments as above.
+       // 引数userを使う場合と使わない場合で別ページを定義することが可能です。
+       // ただ、そのためにはスラッシュ '/' をベースのRoute名の後に入れる必要があります。
        GetPage(
         name: '/profile/:user',
         page: () => UserProfile(),
@@ -225,7 +225,7 @@ void main() {
       GetPage(
         name: '/third',
         page: () => Third(),
-        transition: Transition.cupertino  
+        transition: Transition.cupertino
       ),
      ],
     )
@@ -233,46 +233,46 @@ void main() {
 }
 ```
 
-Send data on route name
+Route名を使ってデータを送る方法。
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+次の画面でデータを受け取る方法。
 
 ```dart
 print(Get.parameters['user']);
 // out: 34954
 ```
 
-or send multiple parameters like this
+複数のパラメーターを送信するにはこちら。
 
 ```dart
 Get.toNamed("/profile/34954?flag=true&country=italy");
 ```
-or
+もしくは
 ```dart
 var parameters = <String, String>{"flag": "true","country": "italy",};
 Get.toNamed("/profile/34954", parameters: parameters);
 ```
 
-On second screen take the data by parameters as usually
+次の画面でデータを受け取る方法。
 
 ```dart
 print(Get.parameters['user']);
 print(Get.parameters['flag']);
 print(Get.parameters['country']);
-// out: 34954 true italy
+// 出力: 34954 true italy
 ```
 
 
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+あとは Get.toNamed() を使い、名前付きRouteを指定するだけです（contextを使わないので BLoC や Controller から直接Routeを呼び出すことができます）。ウェブアプリとしてコンパイルされると、Routeが正しくURLに表示されます。
 
-### Middleware
+### ミドルウェアの使用
 
-If you want to listen Get events to trigger actions, you can to use routingCallback to it
+何かのアクションのトリガーとなるイベントを取得したい場合は、routingCallbackを使用してください。
 
 ```dart
 GetMaterialApp(
@@ -284,7 +284,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+GetMaterialAppを使用しない場合は、手動のAPIを使ってミドルウェアオブザーバーを設定してください。
 
 ```dart
 void main() {
@@ -294,21 +294,21 @@ void main() {
       initialRoute: "/",
       navigatorKey: Get.key,
       navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
+        GetObserver(MiddleWare.observer), // ここ
       ],
     ),
   );
 }
 ```
 
-Create a MiddleWare class
+ミドルウェアクラスを作成する
 
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen.
-    ///If you need to enter any of these 3 events directly here,
-    ///you must specify that the event is != Than you are trying to do.
+    /// Routeの他に SnackBar / Dialog / BottomSheet のイベントも監視することができます。
+    /// また、ここで直接この3つのいずれかを表示したい場合は、
+    /// イベント自身が「それではない」ことを事前にチェックする必要があります。
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
     } else if (routing.current =='/third'){
@@ -318,7 +318,7 @@ class MiddleWare {
 }
 ```
 
-Now, use Get on your code:
+それではGetをコードで使ってみましょう。
 
 ```dart
 class First extends StatelessWidget {
@@ -391,11 +391,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## contextを使わないナビゲーション
 
-### SnackBars
+### SnackBar
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+FlutterでシンプルなSnackBarを表示したいとき、Scaffoldのcontextか、GlobalKeyを取得する必要があります。
 
 ```dart
 final snackBar = SnackBar(
@@ -405,23 +405,22 @@ final snackBar = SnackBar(
     onPressed: (){}
   ),
 );
-// Find the Scaffold in the widget tree and use
-// it to show a SnackBar.
+// WidgetツリーでScaffoldを探し、それをSnackBar表示に使用します。
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Getならこうなります。
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+コードのどこにいようと、Get.snackbar を呼ぶだけでいいのです。カスタマイズも自由自在です。
 
 ```dart
 Get.snackbar(
-  "Hey i'm a Get SnackBar!", // title
-  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // message
+  "Hey i'm a Get SnackBar!", // タイトル
+  "It's unbelievable! I'm using SnackBar without context, without boilerplate, without Scaffold, it is something truly amazing!", // 本文
   icon: Icon(Icons.alarm),
   shouldIconPulse: true,
   onTap:(){},
@@ -431,7 +430,7 @@ Get.snackbar(
 );
 
 
-  ////////// ALL FEATURES //////////
+  ////////// すべてのプロパティ //////////
   //     Color colorText,
   //     Duration duration,
   //     SnackPosition snackPosition,
@@ -468,18 +467,17 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+従来の SnackBar がお好みの場合や、ゼロからカスタマイズしたい場合 (たとえば Get.snackbar ではタイトルと本文が必須項目となっています)は `Get.rawSnackbar();` を使ってください。SnackBarの元々のAPIを取得できます。
 
-### Dialogs
+### Dialog
 
-To open dialog:
+ダイアログを表示する方法。
 
 ```dart
 Get.dialog(YourDialogWidget());
 ```
 
-To open default dialog:
+デフォルトのダイアログを表示する方法。
 
 ```dart
 Get.defaultDialog(
@@ -488,15 +486,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+また showGeneralDialog の代わりに Get.generalDialog が使えます。
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+Overlayを使用するCupertino含むその他のFlutterのダイアログについては、contextの代わりに Get.overlayContext を使うことでコードのどこでもダイアログを表示することができます。
+Overlayを使わないWidgetについては、Get.context が使えます。
+これら2つのcontextはほとんどのケースでUIのcontextを代替することができるでしょう。ただし、ナビゲーションのcontextを使用せずInheritedWidgetが使われているケースは例外です。
 
-### BottomSheets
+### BottomSheet
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet は showModalBottomSheet に似ていますが、contextが不要です。
 
 ```dart
 Get.bottomSheet(
@@ -519,18 +517,18 @@ Get.bottomSheet(
 );
 ```
 
-## Nested Navigation
+## ネスト構造のナビゲーション
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+GetはFlutterのネスト構造のナビゲーションの扱いも簡単にしてくれます。
+contextを必要とせず、IDによりナビゲーションのスタックを見つけることができます。
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- 注: 並列のナビゲーションスタックを作成することは危険です。ネスト構造のNavigatorを使用しないか、使用を控えめにするのが理想です。必要なら使っていただいても問題ありませんが、複数のナビゲーションのスタックを保持することはRAM消費の面で好ましくないということは覚えておいてください。
 
-See how simple it is:
+こんなに簡単にできます。
 
 ```dart
 Navigator(
-  key: Get.nestedKey(1), // create a key by index
+  key: Get.nestedKey(1), // インデックス指定でkey作成
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -543,7 +541,7 @@ Navigator(
             child: TextButton(
               color: Colors.blue,
               onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
+                Get.toNamed('/second', id:1); // インデックス指定でネスト型Routeに遷移
               },
               child: Text("Go to second"),
             ),
