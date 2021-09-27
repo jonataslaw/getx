@@ -14,7 +14,7 @@
     - [SmartManagement](#smartmanagement)
       - [設定の変更方法](#設定の変更方法)
       - [SmartManagement.full](#smartmanagementfull)
-      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
+      - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
     - [Bindingsの仕組み](#Bindingsの仕組み)
   - [補足](#補足)
@@ -367,7 +367,7 @@ getPages: [
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilders // ここで設定
+      smartManagement: SmartManagement.onlyBuilder // ここで設定
       home: Home(),
     )
   )
@@ -378,7 +378,7 @@ void main () {
 
 これがデフォルトのモードです。使用されていない、かつ `permanent: true` が設定されていないオブジェクトを自動で破棄してくれます。特殊な事情がない限り、この設定は触らない方がいいでしょう。GetXを使って間がない場合は特に。
 
-#### SmartManagement.onlyBuilders
+#### SmartManagement.onlyBuilder
 `init:` もしくはBindings内で `Get.lazyPut()` により設定したビルダー製のオブジェクトだけを破棄するモードです。
 
 もしそれが `Get.put()` や `Get.putAsync()` などのアプローチで生成したオブジェクトだとしたら、SmartManagement は勝手にメモリから除外することはできません。
