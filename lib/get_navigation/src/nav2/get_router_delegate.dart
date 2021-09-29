@@ -455,16 +455,18 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 }
 
 class GetNavigator extends Navigator {
-  GetNavigator({
-    GlobalKey<NavigatorState>? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<Page> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-  }) : super(
+  GetNavigator(
+      {GlobalKey<NavigatorState>? key,
+      bool Function(Route<dynamic>, dynamic)? onPopPage,
+      required List<GetPage> pages,
+      List<NavigatorObserver>? observers,
+      bool reportsRouteUpdateToEngine = false,
+      TransitionDelegate? transitionDelegate,
+      String? initialRoute})
+      : super(
           //keys should be optional
           key: key,
+          initialRoute: initialRoute ?? '/',
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -473,6 +475,17 @@ class GetNavigator extends Navigator {
                 }
                 return true;
               },
+          onGenerateRoute: (RouteSettings settings) {
+            final selectedPageList =
+                pages.where((element) => element.name == settings.name);
+            if (selectedPageList.isNotEmpty) {
+              final selectedPage = selectedPageList.first;
+              return GetPageRoute(
+                page: selectedPage.page,
+                settings: settings,
+              );
+            }
+          },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [
