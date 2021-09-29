@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'log.dart';
@@ -9,6 +10,6 @@ abstract class GetInterface {
   SmartManagement smartManagement = SmartManagement.full;
   RouterDelegate? routerDelegate;
   RouteInformationParser? routeInformationParser;
-  bool isLogEnable = true;
+  bool isLogEnable = kDebugMode;
   LogWriterCallback log = defaultLogWriterCallback;
 }
