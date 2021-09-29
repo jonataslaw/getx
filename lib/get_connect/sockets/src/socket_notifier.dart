@@ -72,7 +72,7 @@ class SocketNotifier {
       if (_onEvents!.containsKey(event)) {
         _onEvents![event]!(data);
       }
-    } on Exception catch (_) {
+    } catch (_) {
       return;
     }
   }
