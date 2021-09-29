@@ -26,8 +26,8 @@ class GetPlatform {
   /// * returns true if the app is running on Fuchsia
   static bool get isFuchsia => GeneralPlatform.isFuchsia;
 
-  /// * returns true if the app is running on Mobier
-  /// * either android or ios or Fuchsia
+  /// * returns true if the app is running on Mobile
+  /// * either Android or IOS or Fuchsia
   static bool get isMobile =>
       GetPlatform.isIOS || GetPlatform.isAndroid || GetPlatform.isFuchsia;
 
