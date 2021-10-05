@@ -129,14 +129,21 @@ extension ContextExtensionss on BuildContext {
     if (GetPlatform.isDesktop) {
       deviceWidth = mediaQuerySize.width;
     }
-    if (deviceWidth >= 1200 && desktop != null) {
-      return desktop;
-    } else if (deviceWidth >= 600 && tablet != null) {
-      return tablet;
-    } else if (deviceWidth < 300 && watch != null) {
-      return watch;
-    } else {
-      return mobile!;
+    if (deviceWidth >= 1200) {
+      if (desktop != null) {
+        return desktop;
+      }
     }
+    if (deviceWidth >= 600) {
+      if (tablet != null) {
+        return tablet;
+      }
+    }
+    if (deviceWidth >= 300) {
+      if (mobile != null) {
+        return mobile;
+      }
+    }
+    return watch!;
   }
 }
