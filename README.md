@@ -31,6 +31,8 @@
 [![Polish](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
 [![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
 [![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
+[![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
+  
 
 </div>
 
