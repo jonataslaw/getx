@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:collection/collection.dart';
 import '../platform/platform.dart';
 
 extension ContextExtensionss on BuildContext {
@@ -120,30 +120,22 @@ extension ContextExtensionss on BuildContext {
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
   T responsiveValue<T>({
+    T? watch,
     T? mobile,
     T? tablet,
     T? desktop,
-    T? watch,
   }) {
     var deviceWidth = mediaQuerySize.shortestSide;
     if (GetPlatform.isDesktop) {
       deviceWidth = mediaQuerySize.width;
     }
-    if (deviceWidth >= 1200) {
-      if (desktop != null) {
-        return desktop;
-      }
-    }
-    if (deviceWidth >= 600) {
-      if (tablet != null) {
-        return tablet;
-      }
-    }
-    if (deviceWidth >= 300) {
-      if (mobile != null) {
-        return mobile;
-      }
-    }
-    return watch!;
+    //big screen width can display smaller sizes
+    final values = [
+      if (deviceWidth >= 1200) desktop, //desktop is allowed
+      if (deviceWidth >= 600) tablet, //tablet is allowed
+      if (deviceWidth >= 300) mobile, //mobile is allowed
+      watch, //watch is allowed
+    ];
+    return values.whereType<T>().first;
   }
 }
