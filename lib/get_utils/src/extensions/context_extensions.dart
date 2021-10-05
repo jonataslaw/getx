@@ -130,12 +130,18 @@ extension ContextExtensionss on BuildContext {
       deviceWidth = mediaQuerySize.width;
     }
     //big screen width can display smaller sizes
-    final values = [
+    final strictValues = [
       if (deviceWidth >= 1200) desktop, //desktop is allowed
       if (deviceWidth >= 600) tablet, //tablet is allowed
       if (deviceWidth >= 300) mobile, //mobile is allowed
       watch, //watch is allowed
-    ];
-    return values.whereType<T>().first;
+    ].whereType<T>();
+    final looseValues = [
+      watch,
+      mobile,
+      tablet,
+      desktop,
+    ].whereType<T>();
+    return strictValues.firstOrNull ?? looseValues.first;
   }
 }
