@@ -437,18 +437,18 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 }
 
 class GetNavigator extends Navigator {
-  GetNavigator(
-      {GlobalKey<NavigatorState>? key,
-      bool Function(Route<dynamic>, dynamic)? onPopPage,
-      required List<GetPage> pages,
-      List<NavigatorObserver>? observers,
-      bool reportsRouteUpdateToEngine = false,
-      TransitionDelegate? transitionDelegate,
-      String? initialRoute})
-      : super(
+  GetNavigator.onGenerateRoute({
+    GlobalKey<NavigatorState>? key,
+    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    required List<GetPage> pages,
+    List<NavigatorObserver>? observers,
+    bool reportsRouteUpdateToEngine = false,
+    TransitionDelegate? transitionDelegate,
+    String? initialRoute,
+  }) : super(
           //keys should be optional
           key: key,
-          initialRoute: initialRoute ?? '/',
+          initialRoute: initialRoute,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -472,7 +472,37 @@ class GetNavigator extends Navigator {
           pages: pages,
           observers: [
             // GetObserver(),
-            if (observers != null) ...observers,
+            ...?observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
+
+  GetNavigator({
+    GlobalKey<NavigatorState>? key,
+    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    required List<GetPage> pages,
+    List<NavigatorObserver>? observers,
+    bool reportsRouteUpdateToEngine = false,
+    TransitionDelegate? transitionDelegate,
+    String? initialRoute,
+  }) : super(
+          //keys should be optional
+          key: key,
+          initialRoute: initialRoute,
+          onPopPage: onPopPage ??
+              (route, result) {
+                final didPop = route.didPop(result);
+                if (!didPop) {
+                  return false;
+                }
+                return true;
+              },
+          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
+          pages: pages,
+          observers: [
+            // GetObserver(),
+            ...?observers,
           ],
           transitionDelegate:
               transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
