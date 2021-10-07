@@ -55,6 +55,7 @@
       - [Change locale](#change-locale)
       - [System locale](#system-locale)
   - [Change Theme](#change-theme)
+  - [Accessibility](#accessibility)
   - [GetConnect](#getconnect)
     - [Default configuration](#default-configuration)
     - [Custom configuration](#custom-configuration)
@@ -442,6 +443,17 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
+
+## Accessibility
+
+With these 2 options you can make sure that your app also supports custom font sizes if the user has enabled that in their device settings.
+
+```dart
+GetMaterialApp(
+  textScaleFactorMax: 1.0,
+  textScaleFactorMin: 1.0,
+),
+```
 
 ## GetConnect
 
