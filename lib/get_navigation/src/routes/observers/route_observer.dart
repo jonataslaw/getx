@@ -112,12 +112,15 @@ class GetObserver extends NavigatorObserver {
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';
       }
+      final previousRouteName = _extractRouteName(previousRoute);
+      if (previousRouteName != null) {
+        value.previous = previousRouteName;
+      }
 
       value.args = route.settings.arguments;
       value.route = route;
       value.isBack = false;
       value.removed = '';
-      value.previous = _extractRouteName(previousRoute) ?? '';
       value.isSnackbar = newRoute.isSnackbar ? true : value.isSnackbar ?? false;
       value.isBottomSheet =
           newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
@@ -154,13 +157,15 @@ class GetObserver extends NavigatorObserver {
       // Only PageRoute is allowed to change current value
       if (previousRoute is PageRoute) {
         value.current = _extractRouteName(previousRoute) ?? '';
+        value.previous = newRoute.name ?? '';
+      } else if (value.previous.isNotEmpty) {
+        value.current = value.previous;
       }
 
-      value.args = route.settings.arguments;
+      value.args = previousRoute?.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
-      value.previous = newRoute.name ?? '';
       value.isSnackbar = newRoute.isSnackbar;
       value.isBottomSheet = newRoute.isBottomSheet;
       value.isDialog = newRoute.isDialog;
@@ -181,8 +186,8 @@ class GetObserver extends NavigatorObserver {
     Get.log("REPLACE ROUTE $oldName");
     Get.log("NEW ROUTE $newName");
 
-    if (oldRoute != null) {
-      RouterReportManager.reportCurrentRoute(oldRoute);
+    if (newRoute != null) {
+      RouterReportManager.reportCurrentRoute(newRoute);
     }
 
     _routeSend?.update((value) {

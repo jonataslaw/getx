@@ -311,7 +311,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<void> toNamed(
+  Future<T> toNamed<T>(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
@@ -324,22 +324,50 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
     decoder.replaceArguments(arguments);
 
-    await pushHistory(
-      GetNavConfig(
-        currentTreeBranch: decoder.treeBranch,
-        location: page,
-        state: null, //TODO: persist state?
-      ),
-    );
+    final completer = Completer<T>();
+
+    if (decoder.route != null) {
+      _allCompleters[decoder.route!] = completer;
+      await pushHistory(
+        GetNavConfig(
+          currentTreeBranch: decoder.treeBranch,
+          location: page,
+          state: null, //TODO: persist state?
+        ),
+      );
+
+      return completer.future;
+    } else {
+      ///TODO: IMPLEMENT ROUTE NOT FOUND
+
+      return Future.value();
+    }
   }
 
-  Future<void> offNamed(
+  Future<T?>? offAndToNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    dynamic result,
+    Map<String, String>? parameters,
+    PopMode popMode = PopMode.History,
+  }) async {
+    if (parameters != null) {
+      final uri = Uri(path: page, queryParameters: parameters);
+      page = uri.toString();
+    }
+
+    await popRoute(result: result);
+    return toNamed(page, arguments: arguments, parameters: parameters);
+  }
+
+  Future<T> offNamed<T>(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
   }) async {
-    await toNamed(page, arguments: arguments, parameters: parameters);
-    await _unsafeHistoryRemoveAt(history.length - 2);
+    history.removeLast();
+    return toNamed<T>(page, arguments: arguments, parameters: parameters);
   }
 
   /// Removes routes according to [PopMode]
@@ -392,6 +420,8 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return false;
   }
 
+  final _allCompleters = <GetPage, Completer>{};
+
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);
     if (!didPop) {
@@ -406,23 +436,29 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
       if (config != null) {
         _removeHistoryEntry(config);
       }
+      if (_allCompleters.containsKey(settings)) {
+        _allCompleters[settings]?.complete(route.popped);
+      }
     }
     refresh();
+
     return true;
   }
 }
 
 class GetNavigator extends Navigator {
-  GetNavigator({
-    GlobalKey<NavigatorState>? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<Page> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-  }) : super(
+  GetNavigator(
+      {GlobalKey<NavigatorState>? key,
+      bool Function(Route<dynamic>, dynamic)? onPopPage,
+      required List<GetPage> pages,
+      List<NavigatorObserver>? observers,
+      bool reportsRouteUpdateToEngine = false,
+      TransitionDelegate? transitionDelegate,
+      String? initialRoute})
+      : super(
           //keys should be optional
           key: key,
+          initialRoute: initialRoute ?? '/',
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -431,6 +467,17 @@ class GetNavigator extends Navigator {
                 }
                 return true;
               },
+          onGenerateRoute: (RouteSettings settings) {
+            final selectedPageList =
+                pages.where((element) => element.name == settings.name);
+            if (selectedPageList.isNotEmpty) {
+              final selectedPage = selectedPageList.first;
+              return GetPageRoute(
+                page: selectedPage.page,
+                settings: settings,
+              );
+            }
+          },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           pages: pages,
           observers: [

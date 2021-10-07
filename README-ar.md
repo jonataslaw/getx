@@ -14,12 +14,10 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-
 <div align="center">
 
 **Languages:**
 
-  
 [![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
 [![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
 [![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
@@ -31,14 +29,14 @@
 [![Polish](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
 [![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
 [![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
-[![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
-  
+[![العربيه](https://img.shields.io/badge/Language-arabic-blueviolet?style=for-the-badge)](README-ar.md)
 
 </div>
+<div dir="rtl">
 
-- [About Get](#about-get)
-- [Installing](#installing)
-- [Counter App with GetX](#counter-app-with-getx)
+- [عن المكتبة](#عن-المكتبة)
+- [التركيب](#التركيب)
+- [بناء تطبيق العداد 🔢](#بناء-تطبيق-العداد-)
 - [The Three pillars](#the-three-pillars)
   - [State management](#state-management)
     - [Reactive State Manager](#reactive-state-manager)
@@ -51,6 +49,8 @@
   - [Internationalization](#internationalization)
     - [Translations](#translations)
       - [Using translations](#using-translations)
+      - [Using translation with singular and plural](#using-translation-with-singular-and-plural)
+      - [Using translation with parameters](#using-translation-with-parameters)
     - [Locales](#locales)
       - [Change locale](#change-locale)
       - [System locale](#system-locale)
@@ -72,11 +72,17 @@
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
   - [Useful tips](#useful-tips)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
-      - [How to use it](#how-to-use-it)
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
+  - [StateMixin](#statemixin)
+      - [GetView](#getview)
+      - [GetResponsiveView](#getresponsiveview)
+        - [How to use it](#how-to-use-it)
+      - [GetWidget](#getwidget)
+      - [GetxService](#getxservice)
+    - [Tests](#tests)
+      - [Tips](#tips)
+        - [Mockito or mocktail](#mockito-or-mocktail)
+        - [Using Get.reset()](#using-getreset)
+        - [Get.testMode](#gettestmode)
 - [Breaking changes from 2.0](#breaking-changes-from-20)
 - [Why Getx?](#why-getx)
 - [Community](#community)
@@ -84,66 +90,82 @@
   - [How to contribute](#how-to-contribute)
   - [Articles and videos](#articles-and-videos)
 
-# About Get
+# عن المكتبة
 
-- GetX is an extra-light and powerful solution for Flutter. It combines high-performance state management, intelligent dependency injection, and route management quickly and practically.
+- `GetX` مكتبه خفيفه وقوية لفلاتر , توفر المكتبه السرعه العاليه في التحكم في الحاله , نظام حقن `Ddependency injection` ذكي , والتحكم في التنقل بين الصفحات بسرعه وسهوله
 
-- GetX has 3 basic principles. This means that these are the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
+- `GetX`
+- تعتمد علي 3 نقاط اساسية . **الانتاجية والسرعه والتنظيم**
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
+  - **السرعه:** `GetX` تركز علي السرعه واقل استخدام للموارد,`GetX` لا تستخدم `Streams` او `ChangeNotifier`.
 
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with GetX. It will save hours of development and will provide the maximum performance your application can deliver.
+  - **الانتاجية:** `GetX` تستخدم طريقه سهله ومريحة في كتابة الكود , لا يهم ماذا تريد انت تبني , يوجد دائما طريقه اسهل لبناء باستخدام `GetX` , ستوفر ساعات من العمل وتوفر لك اعلي سرعه يمكن الوصل لها في تطبيقاتك عموما , يجب ان يهتم المطور بالتخلص من الموارد الغير مستخدمه من الذاكرة , مع `GetX` هذا غير ضروري لانه يتم التخلص من الموارد الغير مستخدمه من الذاكره تلقائيا, اذا اردت تركهم دائما في الذاكرة يمكنك ذلك لكن يجب عليك ان تستخدم `permanent: true` بالاضافه الي توفير الوقت تم تقليل امكانية ترك الموارد في الذاكره بدون التخلص منها , يتم حقن الموارد `lazy` افتراضيا
 
-    Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+  - **التنظيم:** `GetX` تسمح لك بفصل الـ `view` عن الـ `presentation logic` و `business logic` باكامل,
+    بالنسبة للحقن `dependency injection` و التنقل بين الشاشات لا تحتاج فيهم `context` للتنقل بين الصفحات , ولا تحتاك `context` للوصول للموارد عن طريق widget tree, لذلك يتم الفصل بالكامل بين `presentation logic` و `business logic` لا تحتاج لحقن ال `Controllers/Models/Blocs`
+    داخل شجره العناصر `Widget Tree` خلال `MultiProvider`s.
+    لان , `GetX` تستخدم نظام حقن خاص بها ويمكنك من فصل الـ `DI` عن الوجهات بالكامل .
 
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+- مع `Getx` تعرف ايه يكون الكود الخاص ب كل جزء في التطبيق , تساعدك في كتابة كود نظيف , بالاضافه الي سهوله التطوير مستقبلا , وهذا يمكنك من مشاركه الاجزاء `modules` امر صعب ليصبح سهل جدا .
+  `BLOC` كان نقطه البداية لهذا الامر وتظيم الكود بهذه الطريقه في فلاتر , عن طريق فصل كود البزنس عن الواجهات , `GetX` هي التطور لذلك الامر , وذلك عن طريق الاضافه الي ذلك فصل حقن الموارد وفصل التنقل بين الشاشات ايضا , وطبقه البيانات بالكامل ايضا , تعلم اين يكون كل شي في المشروع
 
-    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
+- `Getx` توفر لك السهوله في بناء المشروع والاستقرار كلما كبر حجم المشروع واقصي سرعه ممكن , توفر لك ايضا نظام كامل يعمل في تجانس تام , سهل للمبتدئين , ومنظم للخبراء , امن , مستقر , ومحدث باستمرار ويوفر لك موجموعه من الادوات لتسهل عليك
 
-- GetX is not bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
+- `GetX` ليست ضخمه , تمتلك المكتبة العديد من المميزات تجعلك تبدا في البرمجه بدون القلق عن اي شي كل ميزه منهم منقسمه عن الاخري ولا يبداو الا عندما تستخدمهم , اذا استخدمت جزء التحكم في الحاله فقط لن يتم استخدام جزء التنقل بين الشاشات في تطبيقك الا `Compiled` والعكس صحيح ! .
 
-- GetX has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. GetX too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
+-`Getx` لديها نظام شامل , ومجتمع كبير , وعداد كبير من المطورين , وسوف يتم تحديثها باستمرار , تعمل المكتبة علي كل الانظمه بنفس الكود دون تغيير `Android`, `iOS`, `Web`, `Mac`, `Linux`, `Windows` حتي علي الخادم يمكنك استخدام `Getx` لبناء تطبيقات الويب
+**[Get Server](https://github.com/jonataslaw/get_server)**.
 
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
+**بالاضافه الي ذلك يمكن محاكاه الامر اكثر في فلاتر والخادم عن طريق [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**وللمزيد من الانتاجية يمكنك استخدام اضافه للـ**
 
-# Installing
+- [فيجوال ستوديو كود](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)
+- [اندرويد استوديو و انتلج](https://plugins.jetbrains.com/plugin/14975-getx-snippets)
 
-Add Get to your pubspec.yaml file:
+# التركيب
+
+استخدم المكتبة في ملف `pubspec.yaml`
+
+<div dir="ltr" >
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+</div>
+استدعي المكتبة في الملفات الي ستستخدمها
+<div dir="ltr" >
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+</div>
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+# بناء تطبيق العداد 🔢
 
-- Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+تطبيق العداد الذي يتم انشاء مع كل مشروع جديد يتعدي ال 100 سطر (بالتعليقات) ولكي اريك مدي قوه `GetX`
+ساوضح لك كيفيه بناء التطبيق مع تغير قيمه العداد مع كل ضغطه زر والتقل بين الشاشات ومشاركه الحاله كل ذلك بطريقه منذمه وفصل تام لكود البزنس عن الواجهات فقط ب 26 سطر من ضمنهم التعليقات 🔥
+
+- الخطوه الاولي :
+  اكتب `Get` امام `MaterialApp` لتصبح `GetMaterialApp`
+
+<div dir="ltr" >
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step is only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+</div>
 
-- Step 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+- ملحوظه : هذا لا يعتبر تعديل علي `MaterialApp` لان , `GetMaterialApp` عباره عن عنصر معد مسبقا ويستخدم `MaterialApp` تحت الغطاء , يمكن تغير الاعدادات يدوين لكن هذا غير ضروري لان ``سيقوم بعمل المسارات و حقن العناصر والترجمه وكل شي تحتاجه ولكن اذا كنت تنوي لاستخدام المكتبة فقط للتحكم في الحاله`State managment`فهذه الخطوه غير ضرورية تكون هذه الخطوه ضرورية عندما تريد التنقل بين الشاشات او عرض`snackbars`والترجمه و اي شي يعتمد علي`context`وتقوم`getx` بتوفيره
+
+- الخطوه الثانية
+  قم بكتابة الكود داخل `class` وكتابة المتغيرات والدوال , يمكنك جعل المتغير قابلع لاعاده بناء الواجها عند تغير قيمته باستخدام ال `getter` `.obs` .
+
+<div dir="ltr" >
 
 ```dart
 class Controller extends GetxController{
@@ -152,8 +174,11 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+</div>
+
+- الخطوه الثالثه
+ابني الواجهه واستخدم `StatelessWidget` لتوفير الموارد , مع `Getx` يمكنك الاستغناء عن `StatefulWidget`.
+<div dir="ltr" >
 
 ```dart
 class Home extends StatelessWidget {
@@ -162,7 +187,7 @@ class Home extends StatelessWidget {
   Widget build(context) {
 
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
-    final Controller c = Get.put(Controller());
+    final  c = Get.put(Controller());
 
     return Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
@@ -187,6 +212,8 @@ class Other extends StatelessWidget {
   }
 }
 ```
+
+</div>
 
 Result:
 
@@ -936,13 +963,14 @@ user.update((value){
 
 print( user );
 ```
+
 ## StateMixin
 
 Another way to handle your `UI` state is use the `StateMixin<T>` .
 To implement it, use the `with` to add the `StateMixin<T>`
 to your controller which allows a T model.
 
-``` dart
+```dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
@@ -955,7 +983,7 @@ change(data, status: RxStatus.success());
 
 RxStatus allow these status:
 
-``` dart
+```dart
 RxStatus.loading();
 RxStatus.success();
 RxStatus.empty();
@@ -972,7 +1000,7 @@ class OtherClass extends GetView<Controller> {
 
       body: controller.obx(
         (state)=>Text(state.name),
-        
+
         // here you can put your custom loading indicator, but
         // by default would be Center(child:CircularProgressIndicator())
         onLoading: CustomLoadingIndicator(),
@@ -1099,7 +1127,6 @@ The only way to actually delete a `GetxService`, is with `Get.reset()` which is 
 "Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
 
-
 ### Tests
 
 You can test your controllers like any other class, including their lifecycles:
@@ -1154,6 +1181,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 #### Tips
 
 ##### Mockito or mocktail
+
 If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
 
 ```dart
@@ -1161,11 +1189,12 @@ class NotificationServiceMock extends GetxService with Mock implements Notificat
 ```
 
 ##### Using Get.reset()
+
 If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
 
-##### Get.testMode 
-if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
+##### Get.testMode
 
+if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
 
 # Breaking changes from 2.0
 
@@ -1272,3 +1301,5 @@ Any contribution is welcome!
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
 - [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)
+
+</div>

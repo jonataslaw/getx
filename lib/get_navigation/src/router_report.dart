@@ -7,7 +7,7 @@ import '../../get.dart';
 class RouterReportManager<T> {
   /// Holds a reference to `Get.reference` when the Instance was
   /// created to manage the memory.
-  static final Map<String, Route?> _routesKey = {};
+  static final Map<Route?, List<String>> _routesKey = {};
 
   /// Stores the onClose() references of instances created with `Get.create()`
   /// using the `Get.reference`.
@@ -29,7 +29,12 @@ class RouterReportManager<T> {
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of `GetMaterialApp`.
   static void reportDependencyLinkedToRoute(String depedencyKey) {
-    _routesKey.putIfAbsent(depedencyKey, () => _current);
+    if (_current == null) return;
+    if (_routesKey.containsKey(_current)) {
+      _routesKey[_current!]!.add(depedencyKey);
+    } else {
+      _routesKey[_current] = <String>[depedencyKey];
+    }
   }
 
   static void clearRouteKeys() {
@@ -46,9 +51,6 @@ class RouterReportManager<T> {
   static void reportRouteDispose(Route disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
-        ///TODO: Check if it's necessary to compare _current != disposed
-        ///Adding it breaks the context Navigation logic,
-        ///as it resolves by Route name.
         _removeDependencyByRoute(disposed);
       });
     }
@@ -56,11 +58,8 @@ class RouterReportManager<T> {
 
   static void reportRouteWillDispose(Route disposed) {
     final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == disposed) {
-        keysToRemove.add(key);
-      }
-    });
+
+    _routesKey[disposed]?.forEach(keysToRemove.add);
 
     /// Removes `Get.create()` instances registered in `routeName`.
     if (_routesByCreate.containsKey(disposed)) {
@@ -74,7 +73,8 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().reload(key: element, closeInstance: false);
+      GetInstance().markAsDirty(key: element);
+
       //_routesKey.remove(element);
     }
 
@@ -87,11 +87,8 @@ class RouterReportManager<T> {
   /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
   static void _removeDependencyByRoute(Route routeName) {
     final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
+
+    _routesKey[routeName]?.forEach(keysToRemove.add);
 
     /// Removes `Get.create()` instances registered in `routeName`.
     if (_routesByCreate.containsKey(routeName)) {
@@ -105,8 +102,10 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().delete(key: element);
-      _routesKey.remove(element);
+      final value = GetInstance().delete(key: element);
+      if (value) {
+        _routesKey[routeName]?.remove(element);
+      }
     }
 
     keysToRemove.clear();

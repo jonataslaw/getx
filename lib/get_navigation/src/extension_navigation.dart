@@ -1016,6 +1016,7 @@ you can only use widgets and widget functions here''';
   /// `() => MyHomeScreenView` becomes `/my-home-screen-view`.
   String _cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
+
     /// uncommonent for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
@@ -1054,9 +1055,9 @@ you can only use widgets and widget functions here''';
     }
   }
 
-  void updateLocale(Locale l) {
+  Future<void> updateLocale(Locale l) async {
     Get.locale = l;
-    forceAppUpdate();
+    await forceAppUpdate();
   }
 
   /// As a rule, Flutter knows which widget to update,
@@ -1072,8 +1073,8 @@ you can only use widgets and widget functions here''';
   /// reconstruct the application from the sketch, use this with caution.
   /// Your entire application will be rebuilt, and touch events will not
   /// work until the end of rendering.
-  void forceAppUpdate() {
-    engine!.performReassemble();
+  Future<void> forceAppUpdate() async {
+    await engine!.performReassemble();
   }
 
   void appUpdate() => _getxController.update();

@@ -1,3 +1,23 @@
+## [4.3.8] 
+- Fix nav2 toNamed remove the route
+
+## [4.3.7] 
+- Fix wrong currentRoute when a route is removed
+- Remove take that limits the router outlet depth (@steven-spiel)
+
+## [4.3.6] 
+- Fix error with autodispose of additional dependencies beyond GetxController
+- Added ability to add your own delegate to RouterOutlet (@steven-spiel)
+- Added listenAndPump to Rx to give Rx the same behavior as BehaviorSubject (@steven-spiel)
+
+## [4.3.5] 
+- Fix GetConnect timeout (@jasonlaw)
+- Improve Vietnamese docs (@hp1909)
+- Refactor placeholder name route to unnamed routes (@roipeker).
+- Fix: Navigate to a page identical to Get.offNamed.
+- Fix: Wrong nameRoute after a route is removed
+- Added assert to prevent the user from starting a route name without slash.
+
 ## [4.3.4] 
 - Improve docs
 

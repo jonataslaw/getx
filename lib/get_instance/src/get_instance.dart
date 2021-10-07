@@ -161,17 +161,30 @@ class GetInstance {
     bool fenix = false,
   }) {
     final key = _getKey(S, name);
-    _singl.putIfAbsent(
-      key,
-      () => _InstanceBuilderFactory<S>(
+
+    if (_singl.containsKey(key)) {
+      final dep = _singl[key];
+      if (dep != null && dep.isDirty) {
+        _singl[key] = _InstanceBuilderFactory<S>(
+          isSingleton,
+          builder,
+          permanent,
+          false,
+          fenix,
+          name,
+          lateRemove: dep as _InstanceBuilderFactory<S>,
+        );
+      }
+    } else {
+      _singl[key] = _InstanceBuilderFactory<S>(
         isSingleton,
         builder,
         permanent,
         false,
         fenix,
         name,
-      ),
-    );
+      );
+    }
   }
 
   /// Initializes the dependencies for a Class Instance [S] (or tag),
@@ -222,6 +235,16 @@ class GetInstance {
     }
   }
 
+  void markAsDirty<S>({String? tag, String? key}) {
+    final newKey = key ?? _getKey(S, tag);
+    if (_singl.containsKey(newKey)) {
+      final dep = _singl[newKey];
+      if (dep != null) {
+        dep.isDirty = true;
+      }
+    }
+  }
+
   /// Initializes the controller
   S _startController<S>({String? tag}) {
     final key = _getKey(S, tag);
@@ -258,7 +281,8 @@ class GetInstance {
   S find<S>({String? tag}) {
     final key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      if (_singl[key] == null) {
+      final dep = _singl[key];
+      if (dep == null) {
         if (tag == null) {
           throw 'Class "$S" is not registered';
         } else {
@@ -266,11 +290,16 @@ class GetInstance {
         }
       }
 
+      // if (dep.lateRemove != null) {
+      //   dep.isDirty = true;
+      //   if(dep.fenix)
+      // }
+
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
       /// to make it compatible with `Get.create()`.
       final i = _initDependencies<S>(name: tag);
-      return i ?? _singl[key]!.getDependency() as S;
+      return i ?? dep.getDependency() as S;
     } else {
       // ignore: lines_longer_than_80_chars
       throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
@@ -287,8 +316,8 @@ class GetInstance {
   /// Even the persistent ones.
   /// This should be used at the end or tearDown of unit tests.
   ///
-  /// [clearFactory] clears the callbacks registered by [lazyPut]
-  /// [clearRouteBindings] clears Instances associated with routes.
+  /// `clearFactory` clears the callbacks registered by [lazyPut]
+  /// `clearRouteBindings` clears Instances associated with routes.
   ///
   bool resetInstance(
       {@deprecated bool clearFactory = true, bool clearRouteBindings = true}) {
@@ -324,7 +353,16 @@ class GetInstance {
       return false;
     }
 
-    final builder = _singl[newKey]!;
+    final dep = _singl[newKey];
+
+    if (dep == null) return false;
+
+    final _InstanceBuilderFactory builder;
+    if (dep.isDirty) {
+      builder = dep.lateRemove ?? dep;
+    } else {
+      builder = dep;
+    }
 
     if (builder.permanent && !force) {
       Get.log(
@@ -348,16 +386,22 @@ class GetInstance {
     if (builder.fenix) {
       builder.dependency = null;
       builder.isInit = false;
+      return true;
     } else {
-      _singl.remove(newKey);
-      if (_singl.containsKey(newKey)) {
-        Get.log('Error removing object "$newKey"', isError: true);
-      } else {
+      if (dep.lateRemove != null) {
+        dep.lateRemove = null;
         Get.log('"$newKey" deleted from memory');
+        return false;
+      } else {
+        _singl.remove(newKey);
+        if (_singl.containsKey(newKey)) {
+          Get.log('Error removing object "$newKey"', isError: true);
+        } else {
+          Get.log('"$newKey" deleted from memory');
+        }
+        return true;
       }
     }
-
-    return true;
   }
 
   /// Delete all registered Class Instances and, closes any open
@@ -365,9 +409,10 @@ class GetInstance {
   ///
   /// - [force] Will delete the Instances even if marked as `permanent`.
   void deleteAll({bool force = false}) {
-    _singl.forEach((key, value) {
+    final keys = _singl.keys.toList();
+    for (final key in keys) {
       delete(key: key, force: force);
-    });
+    }
   }
 
   void reloadAll({bool force = false}) {
@@ -382,11 +427,11 @@ class GetInstance {
     });
   }
 
-  void reload<S>(
-      {String? tag,
-      String? key,
-      bool force = false,
-      bool closeInstance = true}) {
+  void reload<S>({
+    String? tag,
+    String? key,
+    bool force = false,
+  }) {
     final newKey = key ?? _getKey(S, tag);
 
     final builder = _getDependency<S>(tag: tag, key: newKey);
@@ -406,7 +451,7 @@ class GetInstance {
       return;
     }
 
-    if (i is GetLifeCycleBase && closeInstance) {
+    if (i is GetLifeCycleBase) {
       i.onDelete();
       Get.log('"$newKey" onDelete() called');
     }
@@ -467,6 +512,10 @@ class _InstanceBuilderFactory<S> {
 
   bool isInit = false;
 
+  _InstanceBuilderFactory<S>? lateRemove;
+
+  bool isDirty = false;
+
   String? tag;
 
   _InstanceBuilderFactory(
@@ -475,8 +524,9 @@ class _InstanceBuilderFactory<S> {
     this.permanent,
     this.isInit,
     this.fenix,
-    this.tag,
-  );
+    this.tag, {
+    this.lateRemove,
+  });
 
   void _showInitLog() {
     if (tag == null) {

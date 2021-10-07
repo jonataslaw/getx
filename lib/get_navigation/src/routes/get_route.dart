@@ -89,6 +89,8 @@ class GetPage<T> extends Page<T> {
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
   })  : path = _nameToRegex(name),
+        assert(name.startsWith('/'),
+            'It is necessary to start route name [$name] with a slash: /$name'),
         super(
           key: ValueKey(name),
           name: name,
@@ -172,13 +174,18 @@ class GetPage<T> extends Page<T> {
     );
   }
 
+  late Future<T?> popped;
+
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
-    return PageRedirect(
+    final _page = PageRedirect(
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
     ).getPageToRoute<T>(this, unknownRoute);
+
+    popped = _page.popped;
+    return _page;
   }
 }

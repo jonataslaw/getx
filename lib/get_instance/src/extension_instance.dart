@@ -92,8 +92,8 @@ extension Inst on GetInterface {
   /// Clears all registered instances (and/or tags).
   /// Even the persistent ones.
   ///
-  /// - [clearFactory] clears the callbacks registered by `Get.lazyPut()`
-  /// - [clearRouteBindings] clears Instances associated with Routes when using
+  /// - `clearFactory` clears the callbacks registered by `Get.lazyPut()`
+  /// - `clearRouteBindings` clears Instances associated with Routes when using
   ///   [GetMaterialApp].
   // bool reset(
   //         {@deprecated bool clearFactory = true,
@@ -145,7 +145,7 @@ extension Inst on GetInterface {
   }
 
   /// Replaces a parent instance with a new Instance<P> lazily from the
-  /// [<P>builder()] callback.
+  /// `<P>builder()` callback.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   /// - [fenix] optional
   ///

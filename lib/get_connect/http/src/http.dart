@@ -205,6 +205,7 @@ class GetHttpClient {
       if (authenticate) await _modifier.authenticator!(request);
       final newRequest = await _modifier.modifyRequest<T>(request);
 
+      _httpClient.timeout = timeout;
       var response = await _httpClient.send<T>(newRequest);
 
       final newResponse =

@@ -73,6 +73,18 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
+  void removeWhere(bool test(E element)) {
+    _value.removeWhere(test);
+    refresh();
+  }
+
+  @override
+  void retainWhere(bool test(E element)) {
+    _value.retainWhere(test);
+    refresh();
+  }
+
+  @override
   int get length => value.length;
 
   @override
@@ -127,7 +139,7 @@ extension ListExtension<E> on List<E> {
   //   if (item != null) addAll(item);
   // }
 
-  /// Add [item] to [List<E>] only if [condition] is true.
+  /// Add [item] to List<E> only if [condition] is true.
   void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) add(item);
