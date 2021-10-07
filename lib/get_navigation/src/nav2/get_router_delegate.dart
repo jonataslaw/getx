@@ -356,7 +356,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   /// DOES NOT remove the [fullRoute]
   Future<void> backUntil(
     String fullRoute, {
-    PopMode popMode = PopMode.Page,
+    PopMode popMode = PopMode.History,
   }) async {
     // remove history or page entries until you meet route
     var iterator = currentConfiguration;
@@ -387,7 +387,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   @override
   Future<bool> popRoute({
     Object? result,
-    PopMode popMode = PopMode.Page,
+    PopMode popMode = PopMode.History,
   }) async {
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
