@@ -311,7 +311,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<T> toNamed<T>(
+  Future<void> toNamed(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
@@ -324,10 +324,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
     decoder.replaceArguments(arguments);
 
-    final completer = Completer<T>();
-
     if (decoder.route != null) {
-      _allCompleters[decoder.route!] = completer;
       await pushHistory(
         GetNavConfig(
           currentTreeBranch: decoder.treeBranch,
@@ -335,8 +332,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
           state: null, //TODO: persist state?
         ),
       );
-
-      return completer.future;
     } else {
       ///TODO: IMPLEMENT ROUTE NOT FOUND
 
@@ -344,7 +339,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
   }
 
-  Future<T?>? offAndToNamed<T>(
+  Future<void>? offAndToNamed(
     String page, {
     dynamic arguments,
     int? id,
@@ -361,13 +356,13 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return toNamed(page, arguments: arguments, parameters: parameters);
   }
 
-  Future<T> offNamed<T>(
+  Future<void> offNamed(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
   }) async {
     history.removeLast();
-    return toNamed<T>(page, arguments: arguments, parameters: parameters);
+    return toNamed(page, arguments: arguments, parameters: parameters);
   }
 
   /// Removes routes according to [PopMode]
@@ -375,7 +370,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   /// DOES NOT remove the [fullRoute]
   Future<void> backUntil(
     String fullRoute, {
-    PopMode popMode = PopMode.Page,
+    PopMode popMode = PopMode.History,
   }) async {
     // remove history or page entries until you meet route
     var iterator = currentConfiguration;
@@ -406,7 +401,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   @override
   Future<bool> popRoute({
     Object? result,
-    PopMode popMode = PopMode.Page,
+    PopMode popMode = PopMode.History,
   }) async {
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
@@ -419,8 +414,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
     return false;
   }
-
-  final _allCompleters = <GetPage, Completer>{};
 
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);
@@ -435,9 +428,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
           );
       if (config != null) {
         _removeHistoryEntry(config);
-      }
-      if (_allCompleters.containsKey(settings)) {
-        _allCompleters[settings]?.complete(route.popped);
       }
     }
     refresh();
@@ -467,7 +457,7 @@ class GetNavigator extends Navigator {
                 }
                 return true;
               },
-          onGenerateRoute: (RouteSettings settings) {
+          onGenerateRoute: (settings) {
             final selectedPageList =
                 pages.where((element) => element.name == settings.name);
             if (selectedPageList.isNotEmpty) {
