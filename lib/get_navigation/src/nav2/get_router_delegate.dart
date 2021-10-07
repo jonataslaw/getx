@@ -401,12 +401,12 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   @override
   Future<bool> popRoute({
     Object? result,
-    PopMode popMode = PopMode.History,
+    PopMode? popMode,
   }) async {
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
-    final _popped = await _pop(popMode);
+    final _popped = await _pop(popMode ?? backButtonPopMode);
     refresh();
     if (_popped != null) {
       //emulate the old pop with result
