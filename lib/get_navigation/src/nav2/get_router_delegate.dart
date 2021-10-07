@@ -299,14 +299,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     );
   }
 
-  // @override
-  // Future<void> setInitialRoutePath(GetNavConfig configuration) async {
-  //   //no need to clear history with Reorder route strategy
-  //   // _unsafeHistoryClear();
-  //   // _resultCompleter.clear();
-  //   await pushHistory(configuration);
-  // }
-
   @override
   Future<void> setNewRoutePath(GetNavConfig configuration) async {
     await pushHistory(configuration);
@@ -319,7 +311,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return route;
   }
 
-  Future<T> toNamed<T>(
+  Future<void> toNamed(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
@@ -332,10 +324,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
     decoder.replaceArguments(arguments);
 
-    final completer = Completer<T>();
-
     if (decoder.route != null) {
-      _allCompleters[decoder.route!] = completer;
       await pushHistory(
         GetNavConfig(
           currentTreeBranch: decoder.treeBranch,
@@ -343,8 +332,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
           state: null, //TODO: persist state?
         ),
       );
-
-      return completer.future;
     } else {
       ///TODO: IMPLEMENT ROUTE NOT FOUND
 
@@ -352,7 +339,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
   }
 
-  Future<T?>? offAndToNamed<T>(
+  Future<void>? offAndToNamed(
     String page, {
     dynamic arguments,
     int? id,
@@ -369,13 +356,13 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return toNamed(page, arguments: arguments, parameters: parameters);
   }
 
-  Future<T> offNamed<T>(
+  Future<void> offNamed(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
   }) async {
     history.removeLast();
-    return toNamed<T>(page, arguments: arguments, parameters: parameters);
+    return toNamed(page, arguments: arguments, parameters: parameters);
   }
 
   /// Removes routes according to [PopMode]
@@ -428,8 +415,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return false;
   }
 
-  final _allCompleters = <GetPage, Completer>{};
-
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);
     if (!didPop) {
@@ -443,9 +428,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
           );
       if (config != null) {
         _removeHistoryEntry(config);
-      }
-      if (_allCompleters.containsKey(settings)) {
-        _allCompleters[settings]?.complete(route.popped);
       }
     }
     refresh();
@@ -475,7 +457,7 @@ class GetNavigator extends Navigator {
                 }
                 return true;
               },
-          onGenerateRoute: (RouteSettings settings) {
+          onGenerateRoute: (settings) {
             final selectedPageList =
                 pages.where((element) => element.name == settings.name);
             if (selectedPageList.isNotEmpty) {
