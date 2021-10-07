@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import '../../../get_core/get_core.dart';
-import '../../../get_instance/src/get_instance.dart';
+import '../router_report.dart';
 
 class GetDialogRoute<T> extends PopupRoute<T> {
   GetDialogRoute({
@@ -12,13 +11,14 @@ class GetDialogRoute<T> extends PopupRoute<T> {
     RouteTransitionsBuilder? transitionBuilder,
     RouteSettings? settings,
   })  : widget = pageBuilder,
-        name = "DIALOG: ${pageBuilder.hashCode}",
         _barrierDismissible = barrierDismissible,
         _barrierLabel = barrierLabel,
         _barrierColor = barrierColor,
         _transitionDuration = transitionDuration,
         _transitionBuilder = transitionBuilder,
-        super(settings: settings);
+        super(settings: settings) {
+    RouterReportManager.reportCurrentRoute(this);
+  }
 
   final RoutePageBuilder widget;
 
@@ -26,14 +26,9 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   bool get barrierDismissible => _barrierDismissible;
   final bool _barrierDismissible;
 
-  final String name;
-
   @override
   void dispose() {
-    if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance!.addPostFrameCallback(
-          (_) => GetInstance().removeDependencyByRoute(name));
-    }
+    RouterReportManager.reportRouteDispose(this);
     super.dispose();
   }
 

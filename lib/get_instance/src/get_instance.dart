@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:collection';
 
 import '../../get_core/get_core.dart';
-
+import '../../get_navigation/src/router_report.dart';
 import 'lifecycle.dart';
 
 class InstanceInfo {
@@ -37,20 +36,6 @@ class GetInstance {
   /// Holds a reference to every registered callback when using
   /// `Get.lazyPut()`
   // static final Map<String, _Lazy> _factory = {};
-
-  /// Holds a reference to `Get.reference` when the Instance was
-  /// created to manage the memory.
-  static final Map<String, String?> _routesKey = {};
-
-  /// Stores the onClose() references of instances created with `Get.create()`
-  /// using the `Get.reference`.
-  /// Experimental feature to keep the lifecycle and memory management with
-  /// non-singleton instances.
-  static final Map<String?, HashSet<Function>> _routesByCreate = {};
-
-  void printInstanceStack() {
-    Get.log(_routesKey.toString());
-  }
 
   void injector<S>(
     InjectorBuilderCallback<S> fn, {
@@ -176,75 +161,30 @@ class GetInstance {
     bool fenix = false,
   }) {
     final key = _getKey(S, name);
-    _singl.putIfAbsent(
-      key,
-      () => _InstanceBuilderFactory<S>(
+
+    if (_singl.containsKey(key)) {
+      final dep = _singl[key];
+      if (dep != null && dep.isDirty) {
+        _singl[key] = _InstanceBuilderFactory<S>(
+          isSingleton,
+          builder,
+          permanent,
+          false,
+          fenix,
+          name,
+          lateRemove: dep as _InstanceBuilderFactory<S>,
+        );
+      }
+    } else {
+      _singl[key] = _InstanceBuilderFactory<S>(
         isSingleton,
         builder,
         permanent,
         false,
         fenix,
         name,
-      ),
-    );
-  }
-
-  /// Clears from memory registered Instances associated with [routeName] when
-  /// using `Get.smartManagement` as [SmartManagement.full] or
-  /// [SmartManagement.keepFactory]
-  /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
-  void removeDependencyByRoute(String routeName) {
-    final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
-
-    /// Removes `Get.create()` instances registered in `routeName`.
-    if (_routesByCreate.containsKey(routeName)) {
-      for (final onClose in _routesByCreate[routeName]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
-        onClose();
-      }
-      _routesByCreate[routeName]!.clear();
-      _routesByCreate.remove(routeName);
+      );
     }
-
-    for (final element in keysToRemove) {
-      delete(key: element);
-      _routesKey.remove(element);
-    }
-
-    keysToRemove.clear();
-  }
-
-  void reloadDependencyByRoute(String routeName) {
-    final keysToRemove = <String>[];
-    _routesKey.forEach((key, value) {
-      if (value == routeName) {
-        keysToRemove.add(key);
-      }
-    });
-
-    /// Removes `Get.create()` instances registered in `routeName`.
-    if (_routesByCreate.containsKey(routeName)) {
-      for (final onClose in _routesByCreate[routeName]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
-        onClose();
-      }
-      _routesByCreate[routeName]!.clear();
-      _routesByCreate.remove(routeName);
-    }
-
-    for (final element in keysToRemove) {
-      reload(key: element);
-      //_routesKey.remove(element);
-    }
-
-    keysToRemove.clear();
   }
 
   /// Initializes the dependencies for a Class Instance [S] (or tag),
@@ -265,17 +205,11 @@ class GetInstance {
       if (_singl[key]!.isSingleton!) {
         _singl[key]!.isInit = true;
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
-          _registerRouteInstance<S>(tag: name);
+          RouterReportManager.reportDependencyLinkedToRoute(_getKey(S, name));
         }
       }
     }
     return i;
-  }
-
-  /// Links a Class instance [S] (or [tag]) to the current route.
-  /// Requires usage of `GetMaterialApp`.
-  void _registerRouteInstance<S>({String? tag}) {
-    _routesKey.putIfAbsent(_getKey(S, tag), () => Get.reference);
   }
 
   InstanceInfo getInstanceInfo<S>({String? tag}) {
@@ -301,6 +235,16 @@ class GetInstance {
     }
   }
 
+  void markAsDirty<S>({String? tag, String? key}) {
+    final newKey = key ?? _getKey(S, tag);
+    if (_singl.containsKey(newKey)) {
+      final dep = _singl[newKey];
+      if (dep != null) {
+        dep.isDirty = true;
+      }
+    }
+  }
+
   /// Initializes the controller
   S _startController<S>({String? tag}) {
     final key = _getKey(S, tag);
@@ -313,9 +257,7 @@ class GetInstance {
         Get.log('Instance "$S" with tag "$tag" has been initialized');
       }
       if (!_singl[key]!.isSingleton!) {
-        _routesByCreate[Get.reference] ??= HashSet<Function>();
-        // _routesByCreate[Get.reference]!.add(i.onDelete as Function);
-        _routesByCreate[Get.reference]!.add(i.onDelete);
+        RouterReportManager.appendRouteByCreate(i);
       }
     }
     return i;
@@ -339,7 +281,8 @@ class GetInstance {
   S find<S>({String? tag}) {
     final key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      if (_singl[key] == null) {
+      final dep = _singl[key];
+      if (dep == null) {
         if (tag == null) {
           throw 'Class "$S" is not registered';
         } else {
@@ -347,11 +290,16 @@ class GetInstance {
         }
       }
 
+      // if (dep.lateRemove != null) {
+      //   dep.isDirty = true;
+      //   if(dep.fenix)
+      // }
+
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
       /// to make it compatible with `Get.create()`.
       final i = _initDependencies<S>(name: tag);
-      return i ?? _singl[key]!.getDependency() as S;
+      return i ?? dep.getDependency() as S;
     } else {
       // ignore: lines_longer_than_80_chars
       throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
@@ -366,14 +314,18 @@ class GetInstance {
 
   /// Clears all registered instances (and/or tags).
   /// Even the persistent ones.
+  /// This should be used at the end or tearDown of unit tests.
   ///
-  /// [clearFactory] clears the callbacks registered by [lazyPut]
-  /// [clearRouteBindings] clears Instances associated with routes.
+  /// `clearFactory` clears the callbacks registered by [lazyPut]
+  /// `clearRouteBindings` clears Instances associated with routes.
   ///
-  bool reset({bool clearFactory = true, bool clearRouteBindings = true}) {
+  bool resetInstance(
+      {@deprecated bool clearFactory = true, bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
-    if (clearRouteBindings) _routesKey.clear();
+    // deleteAll(force: true);
+    if (clearRouteBindings) RouterReportManager.clearRouteKeys();
     _singl.clear();
+
     return true;
   }
 
@@ -401,7 +353,16 @@ class GetInstance {
       return false;
     }
 
-    final builder = _singl[newKey]!;
+    final dep = _singl[newKey];
+
+    if (dep == null) return false;
+
+    final _InstanceBuilderFactory builder;
+    if (dep.isDirty) {
+      builder = dep.lateRemove ?? dep;
+    } else {
+      builder = dep;
+    }
 
     if (builder.permanent && !force) {
       Get.log(
@@ -425,16 +386,22 @@ class GetInstance {
     if (builder.fenix) {
       builder.dependency = null;
       builder.isInit = false;
+      return true;
     } else {
-      _singl.remove(newKey);
-      if (_singl.containsKey(newKey)) {
-        Get.log('Error removing object "$newKey"', isError: true);
-      } else {
+      if (dep.lateRemove != null) {
+        dep.lateRemove = null;
         Get.log('"$newKey" deleted from memory');
+        return false;
+      } else {
+        _singl.remove(newKey);
+        if (_singl.containsKey(newKey)) {
+          Get.log('Error removing object "$newKey"', isError: true);
+        } else {
+          Get.log('"$newKey" deleted from memory');
+        }
+        return true;
       }
     }
-
-    return true;
   }
 
   /// Delete all registered Class Instances and, closes any open
@@ -442,9 +409,10 @@ class GetInstance {
   ///
   /// - [force] Will delete the Instances even if marked as `permanent`.
   void deleteAll({bool force = false}) {
-    _singl.forEach((key, value) {
+    final keys = _singl.keys.toList();
+    for (final key in keys) {
       delete(key: key, force: force);
-    });
+    }
   }
 
   void reloadAll({bool force = false}) {
@@ -459,7 +427,11 @@ class GetInstance {
     });
   }
 
-  void reload<S>({String? tag, String? key, bool force = false}) {
+  void reload<S>({
+    String? tag,
+    String? key,
+    bool force = false,
+  }) {
     final newKey = key ?? _getKey(S, tag);
 
     final builder = _getDependency<S>(tag: tag, key: newKey);
@@ -540,6 +512,10 @@ class _InstanceBuilderFactory<S> {
 
   bool isInit = false;
 
+  _InstanceBuilderFactory<S>? lateRemove;
+
+  bool isDirty = false;
+
   String? tag;
 
   _InstanceBuilderFactory(
@@ -548,8 +524,9 @@ class _InstanceBuilderFactory<S> {
     this.permanent,
     this.isInit,
     this.fenix,
-    this.tag,
-  );
+    this.tag, {
+    this.lateRemove,
+  });
 
   void _showInitLog() {
     if (tag == null) {

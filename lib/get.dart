@@ -3,6 +3,7 @@
 /// injection, and route management in a quick and practical way.
 library get;
 
+export 'get_common/get_reset.dart';
 export 'get_connect/connect.dart';
 export 'get_core/get_core.dart';
 export 'get_instance/get_instance.dart';

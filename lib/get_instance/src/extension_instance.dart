@@ -32,9 +32,9 @@ extension Inst on GetInterface {
     GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
-  void printInstanceStack() {
-    GetInstance().printInstanceStack();
-  }
+  // void printInstanceStack() {
+  //   GetInstance().printInstanceStack();
+  // }
 
   /// async version of `Get.put()`.
   /// Awaits for the resolution of the Future from `builder()`parameter and
@@ -92,12 +92,17 @@ extension Inst on GetInterface {
   /// Clears all registered instances (and/or tags).
   /// Even the persistent ones.
   ///
-  /// - [clearFactory] clears the callbacks registered by `Get.lazyPut()`
-  /// - [clearRouteBindings] clears Instances associated with Routes when using
+  /// - `clearFactory` clears the callbacks registered by `Get.lazyPut()`
+  /// - `clearRouteBindings` clears Instances associated with Routes when using
   ///   [GetMaterialApp].
-  bool reset({bool clearFactory = true, bool clearRouteBindings = true}) =>
-      GetInstance().reset(
-          clearFactory: clearFactory, clearRouteBindings: clearRouteBindings);
+  // bool reset(
+  //         {@deprecated bool clearFactory = true,
+  //         @deprecated bool clearRouteBindings = true}) =>
+  //     GetInstance().reset(
+  //         // ignore: deprecated_member_use_from_same_package
+  //         clearFactory: clearFactory,
+  //         // ignore: deprecated_member_use_from_same_package
+  //         clearRouteBindings: clearRouteBindings);
 
   /// Deletes the `Instance<S>`, cleaning the memory and closes any open
   /// controllers (`DisposableInterface`).
@@ -140,7 +145,7 @@ extension Inst on GetInterface {
   }
 
   /// Replaces a parent instance with a new Instance<P> lazily from the
-  /// [<P>builder()] callback.
+  /// `<P>builder()` callback.
   /// - [tag] optional, if you use a [tag] to register the Instance.
   /// - [fenix] optional
   ///

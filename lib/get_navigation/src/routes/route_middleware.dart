@@ -145,12 +145,13 @@ class MiddlewareRunner {
 
   RouteSettings? runRedirect(String? route) {
     RouteSettings? to;
-    _getMiddlewares().forEach((element) {
+    for (final element in _getMiddlewares()) {
       to = element.redirect(route);
-    });
-    if (to != null) {
-      Get.log('Redirect to $to');
+      if (to != null) {
+        break;
+      }
     }
+    Get.log('Redirect to $to');
     return to;
   }
 
@@ -207,6 +208,7 @@ class PageRedirect {
           : settings,
       curve: _r.curve,
       opaque: _r.opaque,
+      showCupertinoParallax: _r.showCupertinoParallax,
       gestureWidth: _r.gestureWidth,
       customTransition: _r.customTransition,
       binding: _r.binding,
@@ -234,6 +236,7 @@ class PageRedirect {
       routeName: _r.name,
       settings: _r,
       curve: _r.curve,
+      showCupertinoParallax: _r.showCupertinoParallax,
       gestureWidth: _r.gestureWidth,
       opaque: _r.opaque,
       customTransition: _r.customTransition,

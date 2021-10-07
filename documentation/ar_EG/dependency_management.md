@@ -14,7 +14,7 @@
     - [SmartManagement](#smartmanagement)
       - [How to change](#how-to-change)
       - [SmartManagement.full](#smartmanagementfull)
-      - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
+      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
     - [How bindings work under the hood](#how-bindings-work-under-the-hood)
   - [Notes](#notes)
@@ -372,7 +372,7 @@ If you want to change this config (which you usually don't need) this is the way
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilder //here
+      smartManagement: SmartManagement.onlyBuilders //here
       home: Home(),
     )
   )
@@ -383,12 +383,12 @@ void main () {
 
 It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
 
-#### SmartManagement.onlyBuilder
+#### SmartManagement.onlyBuilders
 With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
 
 If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilder.
+With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
 
 #### SmartManagement.keepFactory
 

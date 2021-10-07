@@ -162,4 +162,31 @@ void main() {
     expect(reactiveString.endsWith("c"), true);
     expect(currentString, "abc");
   });
+
+  test('Number of times "ever" is called in RxList', () async {
+    final list = [1, 2, 3].obs;
+    var count = 0;
+    ever<List<int>>(list, (value) {
+      count++;
+    });
+
+    list.add(4);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+
+    count = 0;
+    list.addAll([4, 5]);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+
+    count = 0;
+    list.removeWhere((element) => element == 2);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+
+    count = 0;
+    list.retainWhere((element) => element == 1);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+  });
 }

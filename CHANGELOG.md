@@ -1,10 +1,50 @@
- ## [4.2.4] 
-- Added anchorRoute and filterPages to 
- 
- 
- // anchorRoute: '/',
-            // filterPages:
+## [4.3.8] 
+- Fix nav2 toNamed remove the route
 
+## [4.3.7] 
+- Fix wrong currentRoute when a route is removed
+- Remove take that limits the router outlet depth (@steven-spiel)
+
+## [4.3.6] 
+- Fix error with autodispose of additional dependencies beyond GetxController
+- Added ability to add your own delegate to RouterOutlet (@steven-spiel)
+- Added listenAndPump to Rx to give Rx the same behavior as BehaviorSubject (@steven-spiel)
+
+## [4.3.5] 
+- Fix GetConnect timeout (@jasonlaw)
+- Improve Vietnamese docs (@hp1909)
+- Refactor placeholder name route to unnamed routes (@roipeker).
+- Fix: Navigate to a page identical to Get.offNamed.
+- Fix: Wrong nameRoute after a route is removed
+- Added assert to prevent the user from starting a route name without slash.
+
+## [4.3.4] 
+- Improve docs
+
+## [4.3.3] 
+- Fix Get.reset
+
+## [4.3.2] 
+- Fix nullable on internacionalization (@jmguillens)
+- Fix nullable on Rx.stream (@steven-spiel)
+
+## [4.3.1] 
+- Fix controller is not removed when keyboard is open.
+- Improved: Safe removal and insertion of controllers.
+
+## [4.3.0] 
+- Added GetResponsiveWidget (@ahmednfwela)
+- Added `Get.replace()` (@jwelmac)
+- Added Improve korean doc (@sejun2)
+- Fix multiple middlewares redirect (@liasica)
+- Added gestureWidth and showCupertinoParallax to GetPage to customize cupertino transitions
+
+## [4.2.5] 
+- Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
+- Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
+- Fix error when child on MaterialApp is null (@ahmednfwela)
+- Fix Korean docs (@rws08)
+- Fix error with onClose called before routeTransition on Get.offNamed
 
 ## [4.2.4] 
 - Fix Get.offAll removing GetxServices from memory

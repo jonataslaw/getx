@@ -52,7 +52,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.onReady,
     this.getPages,
     this.opaqueRoute,
-    this.enableLog,
+    this.enableLog = kDebugMode,
     this.logWriterCallback,
     this.popGesture,
     this.transitionDuration,
@@ -154,7 +154,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.onInit,
     this.onReady,
     this.onDispose,
-    this.enableLog,
+    this.enableLog = kDebugMode,
     this.logWriterCallback,
     this.popGesture,
     this.smartManagement = SmartManagement.full,
@@ -196,122 +196,121 @@ class GetCupertinoApp extends StatelessWidget {
     ];
   }
 
+  Widget defaultBuilder(BuildContext context, Widget? child) {
+    return Directionality(
+      textDirection: textDirection ??
+          (rtlLanguages.contains(Get.locale?.languageCode)
+              ? TextDirection.rtl
+              : TextDirection.ltr),
+      child: builder == null
+          ? (child ?? Material())
+          : builder!(context, child ?? Material()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
-      init: Get.rootController,
-      dispose: (d) {
-        onDispose?.call();
-      },
-      initState: (i) {
-        Get.engine!.addPostFrameCallback((timeStamp) {
-          onReady?.call();
-        });
-        if (locale != null) Get.locale = locale;
+        init: Get.rootController,
+        dispose: (d) {
+          onDispose?.call();
+        },
+        initState: (i) {
+          Get.engine!.addPostFrameCallback((timeStamp) {
+            onReady?.call();
+          });
+          if (locale != null) Get.locale = locale;
 
-        if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
+          if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
 
-        if (translations != null) {
-          Get.addTranslations(translations!.keys);
-        } else if (translationsKeys != null) {
-          Get.addTranslations(translationsKeys!);
-        }
+          if (translations != null) {
+            Get.addTranslations(translations!.keys);
+          } else if (translationsKeys != null) {
+            Get.addTranslations(translationsKeys!);
+          }
 
-        Get.customTransition = customTransition;
+          Get.customTransition = customTransition;
 
-        initialBinding?.dependencies();
-        if (getPages != null) {
-          Get.addPages(getPages!);
-        }
+          initialBinding?.dependencies();
+          if (getPages != null) {
+            Get.addPages(getPages!);
+          }
 
-        Get.smartManagement = smartManagement;
-        onInit?.call();
+          Get.smartManagement = smartManagement;
+          onInit?.call();
 
-        Get.config(
-          enableLog: enableLog ?? Get.isLogEnable,
-          logWriterCallback: logWriterCallback,
-          defaultTransition: defaultTransition ?? Get.defaultTransition,
-          defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
-          defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
-          defaultDurationTransition:
-              transitionDuration ?? Get.defaultTransitionDuration,
-        );
-      },
-      builder: (_) => routerDelegate != null
-          ? CupertinoApp.router(
-              routerDelegate: routerDelegate!,
-              routeInformationParser: routeInformationParser!,
-              backButtonDispatcher: backButtonDispatcher,
-              routeInformationProvider: routeInformationProvider,
-              key: _.unikey,
-              theme: theme,
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: textDirection ??
-                      (rtlLanguages.contains(Get.locale?.languageCode)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr),
-                  child: builder == null ? child! : builder!(context, child),
-                );
-              },
-              title: title,
-              onGenerateTitle: onGenerateTitle,
-              color: color,
-              locale: Get.locale ?? locale,
-              localizationsDelegates: localizationsDelegates,
-              localeListResolutionCallback: localeListResolutionCallback,
-              localeResolutionCallback: localeResolutionCallback,
-              supportedLocales: supportedLocales,
-              showPerformanceOverlay: showPerformanceOverlay,
-              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-              showSemanticsDebugger: showSemanticsDebugger,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-              shortcuts: shortcuts,
-            )
-          : CupertinoApp(
-              key: _.unikey,
-              theme: theme,
-              navigatorKey:
-                  (navigatorKey == null ? Get.key : Get.addKey(navigatorKey!)),
-              home: home,
-              routes: routes ?? const <String, WidgetBuilder>{},
-              initialRoute: initialRoute,
-              onGenerateRoute: (getPages != null ? generator : onGenerateRoute),
-              onGenerateInitialRoutes: (getPages == null || home != null)
-                  ? onGenerateInitialRoutes
-                  : initialRoutesGenerate,
-              onUnknownRoute: onUnknownRoute,
-              navigatorObservers: (navigatorObservers == null
-                  ? <NavigatorObserver>[
-                      GetObserver(routingCallback, Get.routing)
-                    ]
-                  : <NavigatorObserver>[
-                      GetObserver(routingCallback, Get.routing)
-                    ]
-                ..addAll(navigatorObservers!)),
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: textDirection ??
-                      (rtlLanguages.contains(Get.locale?.languageCode)
-                          ? TextDirection.rtl
-                          : TextDirection.ltr),
-                  child: builder == null ? child! : builder!(context, child),
-                );
-              },
-              title: title,
-              onGenerateTitle: onGenerateTitle,
-              color: color,
-              locale: Get.locale ?? locale,
-              localizationsDelegates: localizationsDelegates,
-              localeListResolutionCallback: localeListResolutionCallback,
-              localeResolutionCallback: localeResolutionCallback,
-              supportedLocales: supportedLocales,
-              showPerformanceOverlay: showPerformanceOverlay,
-              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-              showSemanticsDebugger: showSemanticsDebugger,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-              shortcuts: shortcuts,
-              //   actions: actions,
-            ));
+          Get.config(
+            enableLog: enableLog ?? Get.isLogEnable,
+            logWriterCallback: logWriterCallback,
+            defaultTransition: defaultTransition ?? Get.defaultTransition,
+            defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
+            defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
+            defaultDurationTransition:
+                transitionDuration ?? Get.defaultTransitionDuration,
+          );
+        },
+        builder: (_) => routerDelegate != null
+            ? CupertinoApp.router(
+                routerDelegate: routerDelegate!,
+                routeInformationParser: routeInformationParser!,
+                backButtonDispatcher: backButtonDispatcher,
+                routeInformationProvider: routeInformationProvider,
+                key: _.unikey,
+                theme: theme,
+                builder: defaultBuilder,
+                title: title,
+                onGenerateTitle: onGenerateTitle,
+                color: color,
+                locale: Get.locale ?? locale,
+                localizationsDelegates: localizationsDelegates,
+                localeListResolutionCallback: localeListResolutionCallback,
+                localeResolutionCallback: localeResolutionCallback,
+                supportedLocales: supportedLocales,
+                showPerformanceOverlay: showPerformanceOverlay,
+                checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+                checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+                showSemanticsDebugger: showSemanticsDebugger,
+                debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                shortcuts: shortcuts,
+              )
+            : CupertinoApp(
+                key: _.unikey,
+                theme: theme,
+                navigatorKey: (navigatorKey == null
+                    ? Get.key
+                    : Get.addKey(navigatorKey!)),
+                home: home,
+                routes: routes ?? const <String, WidgetBuilder>{},
+                initialRoute: initialRoute,
+                onGenerateRoute:
+                    (getPages != null ? generator : onGenerateRoute),
+                onGenerateInitialRoutes: (getPages == null || home != null)
+                    ? onGenerateInitialRoutes
+                    : initialRoutesGenerate,
+                onUnknownRoute: onUnknownRoute,
+                navigatorObservers: (navigatorObservers == null
+                    ? <NavigatorObserver>[
+                        GetObserver(routingCallback, Get.routing)
+                      ]
+                    : <NavigatorObserver>[
+                        GetObserver(routingCallback, Get.routing)
+                      ]
+                  ..addAll(navigatorObservers!)),
+                builder: defaultBuilder,
+                title: title,
+                onGenerateTitle: onGenerateTitle,
+                color: color,
+                locale: Get.locale ?? locale,
+                localizationsDelegates: localizationsDelegates,
+                localeListResolutionCallback: localeListResolutionCallback,
+                localeResolutionCallback: localeResolutionCallback,
+                supportedLocales: supportedLocales,
+                showPerformanceOverlay: showPerformanceOverlay,
+                checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+                checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+                showSemanticsDebugger: showSemanticsDebugger,
+                debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                shortcuts: shortcuts,
+                //   actions: actions,
+              ),
+      );
 }

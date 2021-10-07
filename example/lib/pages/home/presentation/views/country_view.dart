@@ -35,7 +35,7 @@ class CountryView extends GetView<HomeController> {
                       onTap: () {
                         //Get.rootDelegate.toNamed('/home/country');
                         Get.rootDelegate
-                            .offNamed('/home/country/details?id=$index');
+                            .toNamed('/home/country/details?id=$index');
                       },
                       trailing: CircleAvatar(
                         backgroundImage: NetworkImage(

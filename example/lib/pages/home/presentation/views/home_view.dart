@@ -70,8 +70,10 @@ class HomeView extends GetView<HomeController> {
                       ),
                       shape: StadiumBorder(),
                     ),
-                    onPressed: () {
-                      Get.rootDelegate.toNamed('/home/country');
+                    onPressed: () async {
+                      final data =
+                          await Get.rootDelegate.toNamed('/home/country');
+                      print('DATA: $data');
                     },
                     child: Text(
                       'fetch_country'.tr,
@@ -100,7 +102,7 @@ class HomeView extends GetView<HomeController> {
                         color: Colors.black,
                       ),
                     ),
-                  )
+                  ),
                 ],
               );
             },

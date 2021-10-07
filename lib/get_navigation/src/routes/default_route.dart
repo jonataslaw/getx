@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
+import '../router_report.dart';
 import 'custom_transition.dart';
 import 'get_transition_mixin.dart';
 import 'route_middleware.dart';
 import 'transitions_type.dart';
 
-class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
+mixin PageRouteReportMixin<T> on Route<T> {
+  @override
+  void install() {
+    super.install();
+    RouterReportManager.reportCurrentRoute(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    RouterReportManager.reportRouteDispose(this);
+  }
+}
+
+class GetPageRoute<T> extends PageRoute<T>
+    with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
   /// Creates a page route for use in an iOS designed app.
   ///
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
@@ -16,7 +32,7 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     this.transitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
     this.parameter,
-    this.gestureWidth = 20.0,
+    this.gestureWidth,
     this.curve,
     this.alignment,
     this.transition,
@@ -29,22 +45,25 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     this.routeName,
     this.page,
     this.title,
+    this.showCupertinoParallax = true,
     this.barrierLabel,
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  })  : reference = "$routeName: ${settings?.hashCode ?? page.hashCode}",
-        super(settings: settings, fullscreenDialog: fullscreenDialog);
+  }) : super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
   final Duration transitionDuration;
   final GetPageBuilder? page;
   final String? routeName;
-  final String reference;
+  //final String reference;
   final CustomTransition? customTransition;
   final Bindings? binding;
   final Map<String, String>? parameter;
   final List<Bindings>? bindings;
+
+  @override
+  final bool showCupertinoParallax;
 
   @override
   final bool opaque;
@@ -69,29 +88,21 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   @override
   void dispose() {
     super.dispose();
-    if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        if (Get.reference != reference) {
-          GetInstance().removeDependencyByRoute("$reference");
-        }
-      });
-    }
-
-    // if (Get.smartManagement != SmartManagement.onlyBuilder) {
-    //   GetInstance().removeDependencyByRoute("$reference");
-    // }
-
     final middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
   }
 
-  @override
-  Widget buildContent(BuildContext context) {
-    Get.reference = reference;
-    final middlewareRunner = MiddlewareRunner(middlewares);
-    final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
+  Widget? _child;
 
-    binding?.dependencies();
+  Widget _getChild() {
+    if (_child != null) return _child!;
+    final middlewareRunner = MiddlewareRunner(middlewares);
+
+    final localbindings = [
+      if (bindings != null) ...bindings!,
+      if (binding != null) ...[binding!]
+    ];
+    final bindingsToBind = middlewareRunner.runOnBindingsStart(localbindings);
     if (bindingsToBind != null) {
       for (final binding in bindingsToBind) {
         binding.dependencies();
@@ -99,7 +110,13 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
     }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    return middlewareRunner.runOnPageBuilt(pageToBuild());
+    _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    return _child!;
+  }
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return _getChild();
   }
 
   @override
@@ -109,5 +126,5 @@ class GetPageRoute<T> extends PageRoute<T> with GetPageRouteTransitionMixin<T> {
   String get debugLabel => '${super.debugLabel}(${settings.name})';
 
   @override
-  final double gestureWidth;
+  final double Function(BuildContext context)? gestureWidth;
 }
