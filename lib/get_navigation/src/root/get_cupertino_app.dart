@@ -43,6 +43,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.checkerboardOffscreenLayers = false,
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
+    this.useInheritedMediaQuery = false,
     this.shortcuts,
     this.smartManagement = SmartManagement.full,
     this.initialBinding,
@@ -93,6 +94,7 @@ class GetCupertinoApp extends StatelessWidget {
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
+  final bool useInheritedMediaQuery;
   final Map<LogicalKeySet, Intent>? shortcuts;
   final ThemeData? highContrastTheme;
   final ThemeData? highContrastDarkTheme;
@@ -141,6 +143,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.checkerboardOffscreenLayers = false,
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
+    this.useInheritedMediaQuery = false,
     this.shortcuts,
     this.actions,
     this.customTransition,
@@ -270,6 +273,7 @@ class GetCupertinoApp extends StatelessWidget {
                 checkerboardOffscreenLayers: checkerboardOffscreenLayers,
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 shortcuts: shortcuts,
               )
             : CupertinoApp(
@@ -309,6 +313,7 @@ class GetCupertinoApp extends StatelessWidget {
                 checkerboardOffscreenLayers: checkerboardOffscreenLayers,
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 shortcuts: shortcuts,
                 //   actions: actions,
               ),

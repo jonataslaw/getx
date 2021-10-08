@@ -43,6 +43,7 @@ class GetMaterialApp extends StatelessWidget {
     this.checkerboardOffscreenLayers = false,
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
+    this.useInheritedMediaQuery = false,
     this.shortcuts,
     this.scrollBehavior,
     this.customTransition,
@@ -103,6 +104,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
+  final bool useInheritedMediaQuery;
   final Map<LogicalKeySet, Intent>? shortcuts;
   final ScrollBehavior? scrollBehavior;
   final ThemeData? highContrastTheme;
@@ -156,6 +158,7 @@ class GetMaterialApp extends StatelessWidget {
     this.checkerboardOffscreenLayers = false,
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
+    this.useInheritedMediaQuery = false,
     this.shortcuts,
     this.scrollBehavior,
     this.actions,
@@ -293,6 +296,7 @@ class GetMaterialApp extends StatelessWidget {
                 checkerboardOffscreenLayers: checkerboardOffscreenLayers,
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
               )
@@ -338,6 +342,7 @@ class GetMaterialApp extends StatelessWidget {
                 checkerboardOffscreenLayers: checkerboardOffscreenLayers,
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
                 //   actions: actions,
