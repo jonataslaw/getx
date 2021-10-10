@@ -14,7 +14,7 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
   SynchronousFuture<GetNavConfig> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
-    print('GetInformationParser: route location: ${routeInformation.location}');
+    Get.log('GetInformationParser: route location: ${routeInformation.location}');
     var location = routeInformation.location;
     if (location == '/') {
       //check if there is a corresponding page
