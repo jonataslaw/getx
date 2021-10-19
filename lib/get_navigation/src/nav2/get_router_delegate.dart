@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../get.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
+import 'get_navigator.dart';
 
 /// Enables the user to customize the intended pop behavior
 ///
@@ -57,6 +58,9 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   final List<NavigatorObserver>? navigatorObservers;
   final TransitionDelegate<dynamic>? transitionDelegate;
 
+  final Iterable<GetPage> Function(GetNavConfig currentNavStack)?
+      pickPagesForRootNavigator;
+
   GlobalKey<NavigatorState> get navigatorKey => Get.key;
 
   GetDelegate({
@@ -66,6 +70,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     this.backButtonPopMode = PopMode.History,
     this.preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.ReorderRoutes,
+    this.pickPagesForRootNavigator,
   }) : notFoundRoute = notFoundRoute ??
             GetPage(
               name: '/404',
@@ -120,10 +125,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     return currentConfiguration?.currentPage?.parameters ?? {};
   }
 
-  // void _unsafeHistoryClear() {
-  //   history.clear();
-  // }
-
   /// Adds a new history entry and waits for the result
   Future<void> pushHistory(
     GetNavConfig config, {
@@ -162,11 +163,6 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     }
     await _unsafeHistoryAdd(config);
   }
-
-  // GetPageRoute getPageRoute(RouteSettings? settings) {
-  //   return PageRedirect(settings ?? RouteSettings(name: '/404'), _notFound())
-  //       .page();
-  // }
 
   Future<GetNavConfig?> _popHistory() async {
     if (!_canPopHistory()) return null;
@@ -263,36 +259,35 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   /// gets the visual pages from the current history entry
   ///
-  /// visual pages must have [participatesInRootNavigator] set to true
-  List<GetPage> getVisualPages() {
-    final currentHistory = currentConfiguration;
-    if (currentHistory == null) return <GetPage>[];
-
+  /// visual pages must have [GetPage.participatesInRootNavigator] set to true
+  Iterable<GetPage> getVisualPages(GetNavConfig currentHistory) {
     final res = currentHistory.currentTreeBranch
         .where((r) => r.participatesInRootNavigator != null);
     if (res.length == 0) {
       //default behavoir, all routes participate in root navigator
-      return history.map((e) => e.currentPage!).toList();
+      return history.map((e) => e.currentPage!);
     } else {
       //user specified at least one participatesInRootNavigator
       return res
-          .where((element) => element.participatesInRootNavigator == true)
-          .toList();
+          .where((element) => element.participatesInRootNavigator == true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final pages = getVisualPages();
+    final currentHistory = currentConfiguration;
+    final pages = currentHistory == null
+        ? <GetPage>[]
+        : pickPagesForRootNavigator?.call(currentHistory) ??
+            getVisualPages(currentHistory);
     if (pages.length == 0) return SizedBox.shrink();
-    final extraObservers = navigatorObservers;
     return GetNavigator(
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
-      pages: pages,
+      pages: pages.toList(),
       observers: [
         GetObserver(),
-        if (extraObservers != null) ...extraObservers,
+        ...?navigatorObservers,
       ],
       transitionDelegate:
           transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
@@ -333,35 +328,24 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
         ),
       );
     } else {
-      ///TODO: IMPLEMENT ROUTE NOT FOUND
-
-      return Future.value();
+      await pushHistory(
+        GetNavConfig(
+          currentTreeBranch: [notFoundRoute],
+          location: notFoundRoute.name,
+          state: null, //TODO: persist state?
+        ),
+      );
     }
   }
 
-  Future<void>? offAndToNamed(
-    String page, {
-    dynamic arguments,
-    int? id,
-    dynamic result,
-    Map<String, String>? parameters,
-    PopMode popMode = PopMode.History,
-  }) async {
-    if (parameters != null) {
-      final uri = Uri(path: page, queryParameters: parameters);
-      page = uri.toString();
-    }
-
-    await popRoute(result: result);
-    return toNamed(page, arguments: arguments, parameters: parameters);
-  }
-
+  //pops the previous route (if there is one) and goes to new route
   Future<void> offNamed(
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
+    PopMode popMode = PopMode.History,
   }) async {
-    history.removeLast();
+    await popRoute(popMode: popMode);
     return toNamed(page, arguments: arguments, parameters: parameters);
   }
 
@@ -434,77 +418,4 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
     return true;
   }
-}
-
-class GetNavigator extends Navigator {
-  GetNavigator.onGenerateRoute({
-    GlobalKey<NavigatorState>? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-  }) : super(
-          //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
-          onGenerateRoute: (settings) {
-            final selectedPageList =
-                pages.where((element) => element.name == settings.name);
-            if (selectedPageList.isNotEmpty) {
-              final selectedPage = selectedPageList.first;
-              return GetPageRoute(
-                page: selectedPage.page,
-                settings: settings,
-              );
-            }
-          },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          pages: pages,
-          observers: [
-            // GetObserver(),
-            ...?observers,
-          ],
-          transitionDelegate:
-              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-        );
-
-  GetNavigator({
-    GlobalKey<NavigatorState>? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-  }) : super(
-          //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          pages: pages,
-          observers: [
-            // GetObserver(),
-            ...?observers,
-          ],
-          transitionDelegate:
-              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-        );
 }
