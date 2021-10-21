@@ -943,7 +943,7 @@ To implement it, use the `with` to add the `StateMixin<T>`
 to your controller which allows a T model.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 The `change()` method change the State whenever we want.
@@ -993,7 +993,7 @@ I love this Widget, is so simple, yet, so useful!
 Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GextController {
    final String title = 'My Awesome View';
  }
 
