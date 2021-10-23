@@ -101,13 +101,31 @@ extension ContextExtensionss on BuildContext {
   bool get showNavbar => (width > 800);
 
   /// True if the width is smaller than 600p
-  bool get isPhone => (width < 600);
+  bool get isPhoneOrLess => width <= 600;
 
-  /// True if the width is largest than 600p
-  bool get isSmallTablet => (width >= 600);
+  /// True if the width is higher than 600p
+  bool get isPhoneOrWider => width >= 600;
 
-  /// True if the width is largest than 720p
-  bool get isLargeTablet => (width >= 720);
+  /// same as [isPhoneOrLess]
+  bool get isPhone => isPhoneOrLess;
+
+  /// True if the width is smaller than 600p
+  bool get isSmallTabletOrLess => width <= 600;
+
+  /// True if the width is higher than 600p
+  bool get isSmallTabletOrWider => width >= 600;
+
+  /// same as [isSmallTabletOrLess]
+  bool get isSmallTablet => isSmallTabletOrLess;
+
+  /// True if the width is smaller than 720p
+  bool get isLargeTabletOrLess => width <= 720;
+
+  /// True if the width is higher than 720p
+  bool get isLargeTabletOrWider => width >= 720;
+
+  /// same as [isLargeTabletOrLess]
+  bool get isLargeTablet => isLargeTabletOrLess;
 
   /// True if the current device is Tablet
   bool get isTablet => isSmallTablet;
