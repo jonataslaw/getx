@@ -130,6 +130,15 @@ extension ContextExtensionss on BuildContext {
   /// True if the current device is Tablet
   bool get isTablet => isSmallTablet;
 
+  /// True if the width is smaller than 1200p
+  bool get isDesktopOrLess => width <= 1200;
+
+  /// True if the width is higher than 1200p
+  bool get isDesktopOrWider => width >= 1200;
+
+  /// same as [isDesktopOrLess]
+  bool get isDesktop => isDesktopOrLess;
+
   /// Returns a specific value according to the screen size
   /// if the device width is higher than or equal to 1200 return
   /// [desktop] value. if the device width is higher than  or equal to 600
