@@ -1,7 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:collection/collection.dart';
-import '../platform/platform.dart';
 
 extension ContextExtensionss on BuildContext {
   /// The same of [MediaQuery.of(context).size]
@@ -101,17 +100,17 @@ extension ContextExtensionss on BuildContext {
   /// True if width be larger than 800
   bool get showNavbar => (width > 800);
 
-  /// True if the shortestSide is smaller than 600p
-  bool get isPhone => (mediaQueryShortestSide < 600);
+  /// True if the width is smaller than 600p
+  bool get isPhone => (width < 600);
 
-  /// True if the shortestSide is largest than 600p
-  bool get isSmallTablet => (mediaQueryShortestSide >= 600);
+  /// True if the width is largest than 600p
+  bool get isSmallTablet => (width >= 600);
 
-  /// True if the shortestSide is largest than 720p
-  bool get isLargeTablet => (mediaQueryShortestSide >= 720);
+  /// True if the width is largest than 720p
+  bool get isLargeTablet => (width >= 720);
 
   /// True if the current device is Tablet
-  bool get isTablet => isSmallTablet || isLargeTablet;
+  bool get isTablet => isSmallTablet;
 
   /// Returns a specific value according to the screen size
   /// if the device width is higher than or equal to 1200 return
@@ -125,10 +124,10 @@ extension ContextExtensionss on BuildContext {
     T? tablet,
     T? desktop,
   }) {
-    var deviceWidth = mediaQuerySize.shortestSide;
-    if (GetPlatform.isDesktop) {
-      deviceWidth = mediaQuerySize.width;
-    }
+    assert(
+        watch != null || mobile != null || tablet != null || desktop != null);
+
+    var deviceWidth = mediaQuerySize.width;
     //big screen width can display smaller sizes
     final strictValues = [
       if (deviceWidth >= 1200) desktop, //desktop is allowed
