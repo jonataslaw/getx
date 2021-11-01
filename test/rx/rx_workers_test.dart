@@ -125,7 +125,7 @@ void main() {
     reactiveInteger.trigger(3);
     // then repeat twice
     reactiveInteger.trigger(3);
-    reactiveInteger.trigger(3);
+    reactiveInteger.trigger(1);
 
     await Future.delayed(Duration(milliseconds: 100));
     expect(3, timesCalled);
