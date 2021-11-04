@@ -61,8 +61,8 @@ GetX tiene un gestor de estado que es extremadamente ligero y fácil de implemen
 ### Uso
 
 ```dart
-// Create controller class and extends GetXController
-class Controller extends GetXController {
+// Create controller class and extends GetxController
+class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
@@ -104,7 +104,7 @@ class OtherClass extends StatelessWidget {
 Si necesita usar su Controller en muchos otros lugares y fuera de GetBuilder, simplemente cree un get en su Controller y obténgalo fácilmente. (o use `Get.find <Controller>()`)
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
 
   /// You do not need that. I recommend using it just for ease of syntax.
   /// with static method: Controller.to.increment();
@@ -178,12 +178,12 @@ Entonces, para simplificar esto:
 
 No necesita llamar a métodos en initState y enviarlos por parámetro a su Controller, ni usar un constructor Controller. Para eso tiene el método onInit() que se llamará en el momento adecuado para que sus servicios sean iniciados. No necesita llamar a dispose(), dado que dispone del método onClose() que se llamará en el momento exacto en que su Controller ya no se necesita, y se eliminará de la memoria. De esa manera, deje las vistas solo para widgets, y abstenerse de incluír cualquier tipo de lógica de negocios.
 
-No llame a un método dispose() dentro de GetXController, no hará nada, recuerde que Controller no es un widget, no debe "eliminarlo" y GetX lo eliminará de forma automática e inteligente de la memoria. Si utilizó algún stream en él y desea cerrarlo, simplemente insértelo en el método de cierre.
+No llame a un método dispose() dentro de GetxController, no hará nada, recuerde que Controller no es un widget, no debe "eliminarlo" y GetX lo eliminará de forma automática e inteligente de la memoria. Si utilizó algún stream en él y desea cerrarlo, simplemente insértelo en el método de cierre.
 
 Ejemplo:
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
 
@@ -219,7 +219,7 @@ GetBuilder<Controller>(
 También puede necesitar una instancia de su Controller fuera de su GetBuilder, y puede usar estos enfoques para lograr esto:
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
   static Controller get to => Get.find();
 [...]
 }
@@ -235,7 +235,7 @@ GetBuilder<Controller>(
 o
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
  // static Controller get to => Get.find(); // with no static get
 [...]
 }
