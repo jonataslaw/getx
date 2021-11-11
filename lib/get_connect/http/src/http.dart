@@ -39,6 +39,8 @@ class GetHttpClient {
 
   final GetModifier _modifier;
 
+  String Function(Uri url)? findProxy;
+
   GetHttpClient({
     this.userAgent = 'getx-client',
     this.timeout = const Duration(seconds: 8),
@@ -50,10 +52,12 @@ class GetHttpClient {
     this.baseUrl,
     List<TrustedCertificate>? trustedCertificates,
     bool withCredentials = false,
+    String Function(Uri url)? findProxy,
   })  : _httpClient = HttpRequestImpl(
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
           withCredentials: withCredentials,
+          findProxy: findProxy,
         ),
         _modifier = GetModifier();
 
