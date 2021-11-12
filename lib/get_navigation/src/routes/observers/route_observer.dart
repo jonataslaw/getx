@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../get_core/get_core.dart';
 import '../../../../instance_manager.dart';
@@ -232,9 +232,10 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
-    if (route is GetPageRoute) {
+    if (route is GetPageRoute || route is MaterialPageRoute) {
       RouterReportManager.reportRouteWillDispose(route);
     }
+
     routing?.call(_routeSend);
   }
 }
