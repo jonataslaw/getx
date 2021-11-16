@@ -326,7 +326,7 @@ Text(controller.textFromApi);
 
 ### 종속성 관리에 대한 자세한 내용
 
-**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
+**종속성 관리에 대한 더 자세한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
 
 # 기능들
 
@@ -1099,7 +1099,7 @@ class Controller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //Change value to name2
+    //name2로 값 변경
     name.value = 'name2';
   }
 
