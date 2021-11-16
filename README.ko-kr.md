@@ -1090,6 +1090,73 @@ class SettingsService extends GetxService {
 따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 
 `GetxService`를 사용하세요.
 
+### 테스트
+
+당신은 당신의 컨트롤러들을 생성주기를 포함하여 다른 어떤 클래스처럼 테스트할 수 있습니다 : 
+
+```dart
+class Controller extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    //Change value to name2
+    name.value = 'name2';
+  }
+
+  @override
+  void onClose() {
+    name.value = '';
+    super.onClose();
+  }
+
+  final name = 'name1'.obs;
+
+  void changeName() => name.value = 'name3';
+}
+
+void main() {
+  test('''
+Test the state of the reactive variable "name" across all of its lifecycles''',
+      () {
+    /// 당신은 생성주기를 제외하고 컨트롤러를 테스트할 수 있습니다,
+    /// 그러나 당신이 사용하지 않는다면 추천되지 않습니다
+    ///  GetX 종속성 주입 
+    final controller = Controller();
+    expect(controller.name.value, 'name1');
+
+    /// 당신이 그것을 사용한다면, 당신은 모든 것을 테스트할 수 있습니다,
+    /// 각각의 생성주기 이후 어플리케이션의 상태를 포함하여.
+    Get.put(controller); // onInit was called
+    expect(controller.name.value, 'name2');
+
+    /// 당신의 함수를 테스트하세요
+    controller.changeName();
+    expect(controller.name.value, 'name3');
+
+    /// onClose 호출됨
+    Get.delete<Controller>();
+
+    expect(controller.name.value, '');
+  });
+}
+```
+
+#### 팁들
+
+##### Mockito 또는 mocktail
+당신이 당신의 GetxController/GetxService를 모킹하려고 한다면, 당신은 GetxController를 extend 하고, Mock과 mixin 하라, 그렇게 되면 
+
+```dart
+class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
+```
+
+##### Get.reset() 사용하기
+당신이 위젯 또는 테스트 그룹을 테스트하고 있다면, 당신의 테스트의 마지막 또는 해제 때 당신의 이전 테스트에서 모든 설정을 리셋하기 위해 Get.rest을 사용하십시오
+
+##### Get.testMode 
+당신이 당신의 컨트롤러에서 당신의 네비게이션을 사용하고 있다면, 당신의 메인의 시작에 `Get.testMode = true` 를 사용하십시오.
+
+
 # 2.0의 주요 변경점
 
 1- Rx 타입들:
