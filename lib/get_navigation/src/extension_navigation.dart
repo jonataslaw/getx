@@ -298,7 +298,7 @@ extension ExtensionSnackbar on GetInterface {
     OnTap? onTap,
     Duration duration = const Duration(seconds: 3),
     bool isDismissible = true,
-    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
+    DismissDirection? dismissDirection,
     bool showProgressIndicator = false,
     AnimationController? progressIndicatorController,
     Color? progressIndicatorBackgroundColor,
@@ -314,7 +314,7 @@ extension ExtensionSnackbar on GetInterface {
     Color? overlayColor,
     Form? userInputForm,
   }) async {
-    final getBar = GetBar(
+    final getBar = GetSnackBar(
       snackbarStatus: snackbarStatus,
       title: title,
       message: message,
@@ -361,11 +361,13 @@ extension ExtensionSnackbar on GetInterface {
     }
   }
 
-  Future<void> showSnackbar<T>(GetBar snackbar) {
-    return SnackbarController(snackbar).show();
+  SnackbarController showSnackbar(GetSnackBar snackbar) {
+    final controller = SnackbarController(snackbar);
+    controller.show();
+    return controller;
   }
 
-  void snackbar<T>(
+  SnackbarController snackbar(
     String title,
     String message, {
     Color? colorText,
@@ -392,7 +394,7 @@ extension ExtensionSnackbar on GetInterface {
     OnTap? onTap,
     bool? isDismissible,
     bool? showProgressIndicator,
-    SnackDismissDirection? dismissDirection,
+    DismissDirection? dismissDirection,
     AnimationController? progressIndicatorController,
     Color? progressIndicatorBackgroundColor,
     Animation<Color>? progressIndicatorValueColor,
@@ -405,8 +407,8 @@ extension ExtensionSnackbar on GetInterface {
     SnackbarStatusCallback? snackbarStatus,
     Color? overlayColor,
     Form? userInputForm,
-  }) async {
-    final getBar = GetBar(
+  }) {
+    final getSnackBar = GetSnackBar(
         snackbarStatus: snackbarStatus,
         titleText: titleText ??
             Text(
@@ -444,7 +446,7 @@ extension ExtensionSnackbar on GetInterface {
         mainButton: mainButton,
         onTap: onTap,
         isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+        dismissDirection: dismissDirection,
         showProgressIndicator: showProgressIndicator ?? false,
         progressIndicatorController: progressIndicatorController,
         progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
@@ -457,14 +459,17 @@ extension ExtensionSnackbar on GetInterface {
         overlayColor: overlayColor ?? Colors.transparent,
         userInputForm: userInputForm);
 
+    final controller = SnackbarController(getSnackBar);
+
     if (instantInit) {
-      showSnackbar<T>(getBar);
+      controller.show();
     } else {
       //routing.isSnackbar = true;
       SchedulerBinding.instance!.addPostFrameCallback((_) {
-        showSnackbar<T>(getBar);
+        controller.show();
       });
     }
+    return controller;
   }
 }
 

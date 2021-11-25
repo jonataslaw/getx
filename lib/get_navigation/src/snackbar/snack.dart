@@ -7,15 +7,17 @@ import 'package:flutter/scheduler.dart';
 import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
-typedef OnTap = void Function(GetBar snack);
+typedef OnTap = void Function(GetSnackBar snack);
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
-class GetBar<T extends Object> extends StatefulWidget {
+class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
 
   /// The title displayed to the user
   final String? title;
+
+  final DismissDirection? dismissDirection;
 
   /// The message displayed to the user.
   final String? message;
@@ -112,11 +114,6 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// [SnackPosition.BOTTOM] is the default.
   final SnackPosition snackPosition;
 
-  /// [SnackDismissDirection.VERTICAL] by default.
-  /// Can also be [SnackDismissDirection.HORIZONTAL] in which case both left
-  /// and right dismiss are allowed.
-  final SnackDismissDirection dismissDirection;
-
   /// Snack can be floating or be grounded to the edge of the screen.
   /// If grounded, I do not recommend using [margin] or [borderRadius].
   /// [SnackStyle.FLOATING] is the default
@@ -154,7 +151,7 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form? userInputForm;
 
-  const GetBar({
+  const GetSnackBar({
     Key? key,
     this.title,
     this.message,
@@ -176,7 +173,7 @@ class GetBar<T extends Object> extends StatefulWidget {
     this.onTap,
     this.duration,
     this.isDismissible = true,
-    this.dismissDirection = SnackDismissDirection.VERTICAL,
+    this.dismissDirection,
     this.showProgressIndicator = false,
     this.progressIndicatorController,
     this.progressIndicatorBackgroundColor,
@@ -194,13 +191,11 @@ class GetBar<T extends Object> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() {
-    return _GetBarState<T>();
-  }
+  State createState() => _GetSnackBarState();
 
   /// Show the snack. It's call [SnackbarStatus.OPENING] state
   /// followed by [SnackbarStatus.OPEN]
-  Future<void> show<T>() async {
+  SnackbarController show() {
     return Get.showSnackbar(this);
   }
 }
@@ -215,21 +210,14 @@ class GetBar<T extends Object> extends StatefulWidget {
 /// with the full snackbar dispose
 enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
 
-/// Indicates the direction in which it is possible to dismiss
-/// If vertical, dismiss up will be allowed if [SnackPosition.TOP]
-/// If vertical, dismiss down will be allowed if [SnackPosition.BOTTOM]
-enum SnackDismissDirection { HORIZONTAL, VERTICAL }
-
 /// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
 enum SnackPosition { TOP, BOTTOM }
 
 /// Indicates if snack will be attached to the edge of the screen or not
 enum SnackStyle { FLOATING, GROUNDED }
 
-class _GetBarState<K extends Object> extends State<GetBar>
+class _GetSnackBarState extends State<GetSnackBar>
     with TickerProviderStateMixin {
-  SnackbarStatus? currentStatus;
-
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
 
@@ -251,7 +239,7 @@ class _GetBarState<K extends Object> extends State<GetBar>
 
   late CurvedAnimation _progressAnimation;
 
-  GlobalKey backgroundBoxKey = GlobalKey();
+  final _backgroundBoxKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -339,8 +327,7 @@ Set either a message or messageText""");
   void _configureLeftBarFuture() {
     SchedulerBinding.instance!.addPostFrameCallback(
       (_) {
-        final keyContext = backgroundBoxKey.currentContext;
-
+        final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
           final box = keyContext.findRenderObject() as RenderBox;
           _boxHeightCompleter.complete(box.size);
@@ -386,7 +373,7 @@ Set either a message or messageText""");
 
   Widget _generateInputSnack() {
     return Container(
-      key: backgroundBoxKey,
+      key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
           ? BoxConstraints(maxWidth: widget.maxWidth!)
           : null,
@@ -413,7 +400,7 @@ Set either a message or messageText""");
 
   Widget _generateSnack() {
     return Container(
-      key: backgroundBoxKey,
+      key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
           ? BoxConstraints(maxWidth: widget.maxWidth!)
           : null,
