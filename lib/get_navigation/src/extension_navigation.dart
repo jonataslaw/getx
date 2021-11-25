@@ -11,243 +11,56 @@ import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
 import 'root/root_controller.dart';
 import 'routes/transitions_type.dart';
+import 'snackbar/snackbar_controller.dart';
 
-extension ExtensionSnackbar on GetInterface {
-  void rawSnackbar({
-    String? title,
-    String? message,
-    Widget? titleText,
-    Widget? messageText,
-    Widget? icon,
-    bool instantInit = true,
-    bool shouldIconPulse = true,
-    double? maxWidth,
-    EdgeInsets margin = const EdgeInsets.all(0.0),
-    EdgeInsets padding = const EdgeInsets.all(16),
-    double borderRadius = 0.0,
-    Color? borderColor,
-    double borderWidth = 1.0,
-    Color backgroundColor = const Color(0xFF303030),
-    Color? leftBarIndicatorColor,
-    List<BoxShadow>? boxShadows,
-    Gradient? backgroundGradient,
-    Widget? mainButton,
-    OnTap? onTap,
-    Duration duration = const Duration(seconds: 3),
-    bool isDismissible = true,
-    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
-    bool showProgressIndicator = false,
-    AnimationController? progressIndicatorController,
-    Color? progressIndicatorBackgroundColor,
-    Animation<Color>? progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.BOTTOM,
-    SnackStyle snackStyle = SnackStyle.FLOATING,
-    Curve forwardAnimationCurve = Curves.easeOutCirc,
-    Curve reverseAnimationCurve = Curves.easeOutCirc,
-    Duration animationDuration = const Duration(seconds: 1),
-    SnackbarStatusCallback? snackbarStatus,
-    double? barBlur = 0.0,
-    double overlayBlur = 0.0,
-    Color? overlayColor,
-    Form? userInputForm,
-  }) async {
-    final getBar = GetBar(
-      snackbarStatus: snackbarStatus,
-      title: title,
-      message: message,
-      titleText: titleText,
-      messageText: messageText,
-      snackPosition: snackPosition,
-      borderRadius: borderRadius,
-      margin: margin,
-      duration: duration,
-      barBlur: barBlur,
-      backgroundColor: backgroundColor,
-      icon: icon,
-      shouldIconPulse: shouldIconPulse,
-      maxWidth: maxWidth,
-      padding: padding,
-      borderColor: borderColor,
-      borderWidth: borderWidth,
-      leftBarIndicatorColor: leftBarIndicatorColor,
-      boxShadows: boxShadows,
-      backgroundGradient: backgroundGradient,
-      mainButton: mainButton,
-      onTap: onTap,
-      isDismissible: isDismissible,
-      dismissDirection: dismissDirection,
-      showProgressIndicator: showProgressIndicator,
-      progressIndicatorController: progressIndicatorController,
-      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-      progressIndicatorValueColor: progressIndicatorValueColor,
-      snackStyle: snackStyle,
-      forwardAnimationCurve: forwardAnimationCurve,
-      reverseAnimationCurve: reverseAnimationCurve,
-      animationDuration: animationDuration,
-      overlayBlur: overlayBlur,
-      overlayColor: overlayColor,
-      userInputForm: userInputForm,
-    );
+/// It replaces the Flutter Navigator, but needs no context.
+/// You can to use navigator.push(YourRoute()) rather
+/// Navigator.push(context, YourRoute());
+NavigatorState? get navigator => GetNavigation(Get).key.currentState;
 
-    if (instantInit) {
-      getBar.show();
-    } else {
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        getBar.show();
-      });
-    }
-  }
-
-  Future<T?>? showSnackbar<T>(GetBar snackbar) {
-    return key.currentState?.push(SnackRoute<T>(snack: snackbar));
-  }
-
-  void snackbar<T>(
-    String title,
-    String message, {
-    Color? colorText,
-    Duration? duration,
-
-    /// with instantInit = false you can put snackbar on initState
-    bool instantInit = true,
-    SnackPosition? snackPosition,
-    Widget? titleText,
-    Widget? messageText,
-    Widget? icon,
-    bool? shouldIconPulse,
-    double? maxWidth,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-    double? borderRadius,
-    Color? borderColor,
-    double? borderWidth,
+extension ExtensionBottomSheet on GetInterface {
+  Future<T?> bottomSheet<T>(
+    Widget bottomsheet, {
     Color? backgroundColor,
-    Color? leftBarIndicatorColor,
-    List<BoxShadow>? boxShadows,
-    Gradient? backgroundGradient,
-    TextButton? mainButton,
-    OnTap? onTap,
-    bool? isDismissible,
-    bool? showProgressIndicator,
-    SnackDismissDirection? dismissDirection,
-    AnimationController? progressIndicatorController,
-    Color? progressIndicatorBackgroundColor,
-    Animation<Color>? progressIndicatorValueColor,
-    SnackStyle? snackStyle,
-    Curve? forwardAnimationCurve,
-    Curve? reverseAnimationCurve,
-    Duration? animationDuration,
-    double? barBlur,
-    double? overlayBlur,
-    SnackbarStatusCallback? snackbarStatus,
-    Color? overlayColor,
-    Form? userInputForm,
-  }) async {
-    final getBar = GetBar(
-        snackbarStatus: snackbarStatus,
-        titleText: titleText ??
-            Text(
-              title,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-              ),
-            ),
-        messageText: messageText ??
-            Text(
-              message,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-              ),
-            ),
-        snackPosition: snackPosition ?? SnackPosition.TOP,
-        borderRadius: borderRadius ?? 15,
-        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
-        duration: duration ?? Duration(seconds: 3),
-        barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
-        icon: icon,
-        shouldIconPulse: shouldIconPulse ?? true,
-        maxWidth: maxWidth,
-        padding: padding ?? EdgeInsets.all(16),
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.FLOATING,
-        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? Duration(seconds: 1),
-        overlayBlur: overlayBlur ?? 0.0,
-        overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm);
+    double? elevation,
+    bool persistent = true,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color? barrierColor,
+    bool? ignoreSafeArea,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    RouteSettings? settings,
+    Duration? enterBottomSheetDuration,
+    Duration? exitBottomSheetDuration,
+  }) {
+    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
+        .push(GetModalBottomSheetRoute<T>(
+      builder: (_) => bottomsheet,
+      isPersistent: persistent,
+      // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
+      theme: Theme.of(key.currentContext!),
+      isScrollControlled: isScrollControlled,
 
-    if (instantInit) {
-      showSnackbar<T>(getBar);
-    } else {
-      routing.isSnackbar = true;
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        showSnackbar<T>(getBar);
-      });
-    }
-  }
-}
+      barrierLabel: MaterialLocalizations.of(key.currentContext!)
+          .modalBarrierDismissLabel,
 
-extension OverlayExt on GetInterface {
-  Future<T> showOverlay<T>({
-    required Future<T> Function() asyncFunction,
-    Color opacityColor = Colors.black,
-    Widget? loadingWidget,
-    double opacity = .5,
-  }) async {
-    final navigatorState =
-        Navigator.of(Get.overlayContext!, rootNavigator: false);
-    final overlayState = navigatorState.overlay!;
-
-    final overlayEntryOpacity = OverlayEntry(builder: (context) {
-      return Opacity(
-          opacity: opacity,
-          child: Container(
-            color: opacityColor,
-          ));
-    });
-    final overlayEntryLoader = OverlayEntry(builder: (context) {
-      return loadingWidget ??
-          Center(
-              child: Container(
-            height: 90,
-            width: 90,
-            child: Text('Loading...'),
-          ));
-    });
-    overlayState.insert(overlayEntryOpacity);
-    overlayState.insert(overlayEntryLoader);
-
-    T data;
-
-    try {
-      data = await asyncFunction();
-    } on Exception catch (_) {
-      overlayEntryLoader.remove();
-      overlayEntryOpacity.remove();
-      rethrow;
-    }
-
-    overlayEntryLoader.remove();
-    overlayEntryOpacity.remove();
-    return data;
+      backgroundColor: backgroundColor ?? Colors.transparent,
+      elevation: elevation,
+      shape: shape,
+      removeTop: ignoreSafeArea ?? true,
+      clipBehavior: clipBehavior,
+      isDismissible: isDismissible,
+      modalBarrierColor: barrierColor,
+      settings: settings,
+      enableDrag: enableDrag,
+      enterBottomSheetDuration:
+          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
+      exitBottomSheetDuration:
+          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+    ));
   }
 }
 
@@ -378,7 +191,7 @@ extension ExtensionDialog on GetInterface {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
                 side: BorderSide(
-                    color: buttonColor ?? theme.accentColor,
+                    color: buttonColor ?? theme.colorScheme.secondary,
                     width: 2,
                     style: BorderStyle.solid),
                 borderRadius: BorderRadius.circular(100)),
@@ -389,7 +202,8 @@ extension ExtensionDialog on GetInterface {
           },
           child: Text(
             textCancel ?? "Cancel",
-            style: TextStyle(color: cancelTextColor ?? theme.accentColor),
+            style: TextStyle(
+                color: cancelTextColor ?? theme.colorScheme.secondary),
           ),
         ));
       }
@@ -401,7 +215,7 @@ extension ExtensionDialog on GetInterface {
         actions.add(TextButton(
             style: TextButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              backgroundColor: buttonColor ?? theme.accentColor,
+              backgroundColor: buttonColor ?? theme.colorScheme.secondary,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
             ),
@@ -461,49 +275,196 @@ extension ExtensionDialog on GetInterface {
   }
 }
 
-extension ExtensionBottomSheet on GetInterface {
-  Future<T?> bottomSheet<T>(
-    Widget bottomsheet, {
-    Color? backgroundColor,
-    double? elevation,
-    bool persistent = true,
-    ShapeBorder? shape,
-    Clip? clipBehavior,
-    Color? barrierColor,
-    bool? ignoreSafeArea,
-    bool isScrollControlled = false,
-    bool useRootNavigator = false,
+extension ExtensionSnackbar on GetInterface {
+  void rawSnackbar({
+    String? title,
+    String? message,
+    Widget? titleText,
+    Widget? messageText,
+    Widget? icon,
+    bool instantInit = true,
+    bool shouldIconPulse = true,
+    double? maxWidth,
+    EdgeInsets margin = const EdgeInsets.all(0.0),
+    EdgeInsets padding = const EdgeInsets.all(16),
+    double borderRadius = 0.0,
+    Color? borderColor,
+    double borderWidth = 1.0,
+    Color backgroundColor = const Color(0xFF303030),
+    Color? leftBarIndicatorColor,
+    List<BoxShadow>? boxShadows,
+    Gradient? backgroundGradient,
+    Widget? mainButton,
+    OnTap? onTap,
+    Duration duration = const Duration(seconds: 3),
     bool isDismissible = true,
-    bool enableDrag = true,
-    RouteSettings? settings,
-    Duration? enterBottomSheetDuration,
-    Duration? exitBottomSheetDuration,
-  }) {
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push(GetModalBottomSheetRoute<T>(
-      builder: (_) => bottomsheet,
-      isPersistent: persistent,
-      // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
-      theme: Theme.of(key.currentContext!),
-      isScrollControlled: isScrollControlled,
-
-      barrierLabel: MaterialLocalizations.of(key.currentContext!)
-          .modalBarrierDismissLabel,
-
-      backgroundColor: backgroundColor ?? Colors.transparent,
-      elevation: elevation,
-      shape: shape,
-      removeTop: ignoreSafeArea ?? true,
-      clipBehavior: clipBehavior,
+    SnackDismissDirection dismissDirection = SnackDismissDirection.VERTICAL,
+    bool showProgressIndicator = false,
+    AnimationController? progressIndicatorController,
+    Color? progressIndicatorBackgroundColor,
+    Animation<Color>? progressIndicatorValueColor,
+    SnackPosition snackPosition = SnackPosition.BOTTOM,
+    SnackStyle snackStyle = SnackStyle.FLOATING,
+    Curve forwardAnimationCurve = Curves.easeOutCirc,
+    Curve reverseAnimationCurve = Curves.easeOutCirc,
+    Duration animationDuration = const Duration(seconds: 1),
+    SnackbarStatusCallback? snackbarStatus,
+    double? barBlur = 0.0,
+    double overlayBlur = 0.0,
+    Color? overlayColor,
+    Form? userInputForm,
+  }) async {
+    final getBar = GetBar(
+      snackbarStatus: snackbarStatus,
+      title: title,
+      message: message,
+      titleText: titleText,
+      messageText: messageText,
+      snackPosition: snackPosition,
+      borderRadius: borderRadius,
+      margin: margin,
+      duration: duration,
+      barBlur: barBlur,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      shouldIconPulse: shouldIconPulse,
+      maxWidth: maxWidth,
+      padding: padding,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      leftBarIndicatorColor: leftBarIndicatorColor,
+      boxShadows: boxShadows,
+      backgroundGradient: backgroundGradient,
+      mainButton: mainButton,
+      onTap: onTap,
       isDismissible: isDismissible,
-      modalBarrierColor: barrierColor,
-      settings: settings,
-      enableDrag: enableDrag,
-      enterBottomSheetDuration:
-          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
-      exitBottomSheetDuration:
-          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
-    ));
+      dismissDirection: dismissDirection,
+      showProgressIndicator: showProgressIndicator,
+      progressIndicatorController: progressIndicatorController,
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+      progressIndicatorValueColor: progressIndicatorValueColor,
+      snackStyle: snackStyle,
+      forwardAnimationCurve: forwardAnimationCurve,
+      reverseAnimationCurve: reverseAnimationCurve,
+      animationDuration: animationDuration,
+      overlayBlur: overlayBlur,
+      overlayColor: overlayColor,
+      userInputForm: userInputForm,
+    );
+
+    if (instantInit) {
+      getBar.show();
+    } else {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        getBar.show();
+      });
+    }
+  }
+
+  Future<void> showSnackbar<T>(GetBar snackbar) {
+    return SnackbarController(snackbar).show();
+  }
+
+  void snackbar<T>(
+    String title,
+    String message, {
+    Color? colorText,
+    Duration? duration,
+
+    /// with instantInit = false you can put snackbar on initState
+    bool instantInit = true,
+    SnackPosition? snackPosition,
+    Widget? titleText,
+    Widget? messageText,
+    Widget? icon,
+    bool? shouldIconPulse,
+    double? maxWidth,
+    EdgeInsets? margin,
+    EdgeInsets? padding,
+    double? borderRadius,
+    Color? borderColor,
+    double? borderWidth,
+    Color? backgroundColor,
+    Color? leftBarIndicatorColor,
+    List<BoxShadow>? boxShadows,
+    Gradient? backgroundGradient,
+    TextButton? mainButton,
+    OnTap? onTap,
+    bool? isDismissible,
+    bool? showProgressIndicator,
+    SnackDismissDirection? dismissDirection,
+    AnimationController? progressIndicatorController,
+    Color? progressIndicatorBackgroundColor,
+    Animation<Color>? progressIndicatorValueColor,
+    SnackStyle? snackStyle,
+    Curve? forwardAnimationCurve,
+    Curve? reverseAnimationCurve,
+    Duration? animationDuration,
+    double? barBlur,
+    double? overlayBlur,
+    SnackbarStatusCallback? snackbarStatus,
+    Color? overlayColor,
+    Form? userInputForm,
+  }) async {
+    final getBar = GetBar(
+        snackbarStatus: snackbarStatus,
+        titleText: titleText ??
+            Text(
+              title,
+              style: TextStyle(
+                color: colorText ?? iconColor ?? Colors.black,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
+            ),
+        messageText: messageText ??
+            Text(
+              message,
+              style: TextStyle(
+                color: colorText ?? iconColor ?? Colors.black,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
+              ),
+            ),
+        snackPosition: snackPosition ?? SnackPosition.TOP,
+        borderRadius: borderRadius ?? 15,
+        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        duration: duration ?? Duration(seconds: 3),
+        barBlur: barBlur ?? 7.0,
+        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        icon: icon,
+        shouldIconPulse: shouldIconPulse ?? true,
+        maxWidth: maxWidth,
+        padding: padding ?? EdgeInsets.all(16),
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        leftBarIndicatorColor: leftBarIndicatorColor,
+        boxShadows: boxShadows,
+        backgroundGradient: backgroundGradient,
+        mainButton: mainButton,
+        onTap: onTap,
+        isDismissible: isDismissible ?? true,
+        dismissDirection: dismissDirection ?? SnackDismissDirection.VERTICAL,
+        showProgressIndicator: showProgressIndicator ?? false,
+        progressIndicatorController: progressIndicatorController,
+        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+        progressIndicatorValueColor: progressIndicatorValueColor,
+        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+        animationDuration: animationDuration ?? Duration(seconds: 1),
+        overlayBlur: overlayBlur ?? 0.0,
+        overlayColor: overlayColor ?? Colors.transparent,
+        userInputForm: userInputForm);
+
+    if (instantInit) {
+      showSnackbar<T>(getBar);
+    } else {
+      //routing.isSnackbar = true;
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        showSnackbar<T>(getBar);
+      });
+    }
   }
 }
 
@@ -1134,8 +1095,9 @@ you can only use widgets and widget functions here''';
   /// give name from previous route
   String get previousRoute => routing.previous;
 
+  ///TODO: made snackbar 2.0 trackeables
   /// check if snackbar is open
-  bool? get isSnackbarOpen => routing.isSnackbar;
+  bool? get isSnackbarOpen => true; //routing.isSnackbar;
 
   /// check if dialog is open
   bool? get isDialogOpen => routing.isDialog;
@@ -1341,7 +1303,48 @@ extension NavTwoExt on GetInterface {
   }
 }
 
-/// It replaces the Flutter Navigator, but needs no context.
-/// You can to use navigator.push(YourRoute()) rather
-/// Navigator.push(context, YourRoute());
-NavigatorState? get navigator => GetNavigation(Get).key.currentState;
+extension OverlayExt on GetInterface {
+  Future<T> showOverlay<T>({
+    required Future<T> Function() asyncFunction,
+    Color opacityColor = Colors.black,
+    Widget? loadingWidget,
+    double opacity = .5,
+  }) async {
+    final navigatorState =
+        Navigator.of(Get.overlayContext!, rootNavigator: false);
+    final overlayState = navigatorState.overlay!;
+
+    final overlayEntryOpacity = OverlayEntry(builder: (context) {
+      return Opacity(
+          opacity: opacity,
+          child: Container(
+            color: opacityColor,
+          ));
+    });
+    final overlayEntryLoader = OverlayEntry(builder: (context) {
+      return loadingWidget ??
+          Center(
+              child: Container(
+            height: 90,
+            width: 90,
+            child: Text('Loading...'),
+          ));
+    });
+    overlayState.insert(overlayEntryOpacity);
+    overlayState.insert(overlayEntryLoader);
+
+    T data;
+
+    try {
+      data = await asyncFunction();
+    } on Exception catch (_) {
+      overlayEntryLoader.remove();
+      overlayEntryOpacity.remove();
+      rethrow;
+    }
+
+    overlayEntryLoader.remove();
+    overlayEntryOpacity.remove();
+    return data;
+  }
+}
