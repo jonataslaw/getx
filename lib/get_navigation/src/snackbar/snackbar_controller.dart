@@ -12,7 +12,7 @@ class SnackbarController {
   late Animation<double> _filterBlurAnimation;
   late Animation<Color?> _filterColorAnimation;
 
-  final GetSnackBar snack;
+  final GetSnackBar snackbar;
   final _transitionCompleter = Completer<SnackbarController>();
 
   late SnackbarStatusCallback? _snackbarStatus;
@@ -40,15 +40,19 @@ class SnackbarController {
 
   OverlayState? _overlayState;
 
-  SnackbarController(this.snack);
+  SnackbarController(this.snackbar);
 
   Future<SnackbarController> get future => _transitionCompleter.future;
 
+  /// Close the snackbar with animation
   Future<void> close() async {
     _removeEntry();
     await future;
   }
 
+  /// Adds GetSnackbar to a view queue.
+  /// Only one GetSnackbar will be displayed at a time, and this method returns
+  /// a future to when the snackbar disappears.
   Future<void> show() {
     return _snackBarQueue.addJob(this);
   }
@@ -61,7 +65,7 @@ class SnackbarController {
 
   // ignore: avoid_returning_this
   void _configureAlignment(SnackPosition snackPosition) {
-    switch (snack.snackPosition) {
+    switch (snackbar.snackPosition) {
       case SnackPosition.TOP:
         {
           _initialAlignment = const Alignment(-1.0, -2.0);
@@ -89,8 +93,8 @@ class SnackbarController {
     assert(!_transitionCompleter.isCompleted,
         'Cannot configure a snackbar after disposing it.');
     _controller = _createAnimationController();
-    _configureAlignment(snack.snackPosition);
-    _snackbarStatus = snack.snackbarStatus;
+    _configureAlignment(snackbar.snackPosition);
+    _snackbarStatus = snackbar.snackbarStatus;
     _filterBlurAnimation = _createBlurFilterAnimation();
     _filterColorAnimation = _createColorOverlayColor();
     _animation = _createAnimation();
@@ -100,11 +104,11 @@ class SnackbarController {
   }
 
   void _configureTimer() {
-    if (snack.duration != null) {
+    if (snackbar.duration != null) {
       if (_timer != null && _timer!.isActive) {
         _timer!.cancel();
       }
-      _timer = Timer(snack.duration!, _removeEntry);
+      _timer = Timer(snackbar.duration!, _removeEntry);
     } else {
       if (_timer != null) {
         _timer!.cancel();
@@ -121,8 +125,8 @@ class SnackbarController {
     return AlignmentTween(begin: _initialAlignment, end: _endAlignment).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: snack.forwardAnimationCurve,
-        reverseCurve: snack.reverseAnimationCurve,
+        curve: snackbar.forwardAnimationCurve,
+        reverseCurve: snackbar.reverseAnimationCurve,
       ),
     );
   }
@@ -133,16 +137,16 @@ class SnackbarController {
   AnimationController _createAnimationController() {
     assert(!_transitionCompleter.isCompleted,
         'Cannot create a animationController from a disposed snackbar');
-    assert(snack.animationDuration >= Duration.zero);
+    assert(snackbar.animationDuration >= Duration.zero);
     return AnimationController(
-      duration: snack.animationDuration,
+      duration: snackbar.animationDuration,
       debugLabel: '$runtimeType',
       vsync: navigator!,
     );
   }
 
   Animation<double> _createBlurFilterAnimation() {
-    return Tween(begin: 0.0, end: snack.overlayBlur).animate(
+    return Tween(begin: 0.0, end: snackbar.overlayBlur).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(
@@ -155,7 +159,8 @@ class SnackbarController {
   }
 
   Animation<Color?> _createColorOverlayColor() {
-    return ColorTween(begin: const Color(0x00000000), end: snack.overlayColor)
+    return ColorTween(
+            begin: const Color(0x00000000), end: snackbar.overlayColor)
         .animate(
       CurvedAnimation(
         parent: _controller,
@@ -170,11 +175,11 @@ class SnackbarController {
 
   Iterable<OverlayEntry> _createOverlayEntries(Widget child) {
     return <OverlayEntry>[
-      if (snack.overlayBlur > 0.0) ...[
+      if (snackbar.overlayBlur > 0.0) ...[
         OverlayEntry(
           builder: (context) => GestureDetector(
             onTap: () {
-              if (snack.isDismissible && !_onTappedDismiss) {
+              if (snackbar.isDismissible && !_onTappedDismiss) {
                 _onTappedDismiss = true;
                 Get.back();
               }
@@ -202,7 +207,7 @@ class SnackbarController {
         builder: (context) => Semantics(
           child: AlignTransition(
             alignment: _animation,
-            child: snack.isDismissible
+            child: snackbar.isDismissible
                 ? _getDismissibleSnack(child)
                 : _getSnackbarContainer(child),
           ),
@@ -219,14 +224,16 @@ class SnackbarController {
   Widget _getBodyWidget() {
     return Builder(builder: (_) {
       return GestureDetector(
-        child: snack,
-        onTap: snack.onTap != null ? () => snack.onTap?.call(snack) : null,
+        child: snackbar,
+        onTap: snackbar.onTap != null
+            ? () => snackbar.onTap?.call(snackbar)
+            : null,
       );
     });
   }
 
   DismissDirection _getDefaultDismissDirection() {
-    if (snack.snackPosition == SnackPosition.TOP) {
+    if (snackbar.snackPosition == SnackPosition.TOP) {
       return DismissDirection.up;
     }
     return DismissDirection.down;
@@ -234,7 +241,7 @@ class SnackbarController {
 
   Widget _getDismissibleSnack(Widget child) {
     return Dismissible(
-      direction: snack.dismissDirection ?? _getDefaultDismissDirection(),
+      direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
       resizeDuration: null,
       confirmDismiss: (_) {
         if (_currentStatus == SnackbarStatus.OPENING ||
@@ -253,7 +260,7 @@ class SnackbarController {
 
   Widget _getSnackbarContainer(Widget child) {
     return Container(
-      margin: snack.margin,
+      margin: snackbar.margin,
       child: child,
     );
   }
@@ -327,8 +334,8 @@ class SnackbarController {
     _snackBarQueue.cancelAllJobs();
   }
 
-  static void closeCurrentSnackbar() {
-    _snackBarQueue.closeCurrentJob();
+  static Future<void> closeCurrentSnackbar() async {
+    await _snackBarQueue.closeCurrentJob();
   }
 }
 
@@ -355,7 +362,7 @@ class _SnackBarQueue {
     _queue.cancelAllJobs();
   }
 
-  void closeCurrentJob() {
-    _currentSnackbar?.close();
+  Future<void> closeCurrentJob() async {
+    await _currentSnackbar?.close();
   }
 }

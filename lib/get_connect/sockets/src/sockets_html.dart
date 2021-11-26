@@ -4,14 +4,7 @@ import 'dart:convert';
 import 'dart:html';
 
 import '../../../get_core/get_core.dart';
-
 import 'socket_notifier.dart';
-
-enum ConnectionStatus {
-  connecting,
-  connected,
-  closed,
-}
 
 class BaseWebSocket {
   String url;
@@ -21,6 +14,8 @@ class BaseWebSocket {
   bool isDisposed = false;
   bool allowSelfSigned;
 
+  ConnectionStatus? connectionStatus;
+  Timer? _t;
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
@@ -30,9 +25,12 @@ class BaseWebSocket {
         ? url.replaceAll('https:', 'wss:')
         : url.replaceAll('http:', 'ws:');
   }
-  ConnectionStatus? connectionStatus;
-  Timer? _t;
 
+  void close([int? status, String? reason]) {
+    socket?.close(status, reason);
+  }
+
+  // ignore: use_setters_to_change_properties
   void connect() {
     try {
       connectionStatus = ConnectionStatus.connecting;
@@ -68,9 +66,18 @@ class BaseWebSocket {
     }
   }
 
-  // ignore: use_setters_to_change_properties
-  void onOpen(OpenSocket fn) {
-    socketNotifier!.open = fn;
+  void dispose() {
+    socketNotifier!.dispose();
+    socketNotifier = null;
+    isDisposed = true;
+  }
+
+  void emit(String event, dynamic data) {
+    send(jsonEncode({'type': event, 'data': data}));
+  }
+
+  void on(String event, MessageSocket message) {
+    socketNotifier!.addEvents(event, message);
   }
 
   void onClose(CloseSocket fn) {
@@ -85,12 +92,8 @@ class BaseWebSocket {
     socketNotifier!.addMessages(fn);
   }
 
-  void on(String event, MessageSocket message) {
-    socketNotifier!.addEvents(event, message);
-  }
-
-  void close([int? status, String? reason]) {
-    socket?.close(status, reason);
+  void onOpen(OpenSocket fn) {
+    socketNotifier!.open = fn;
   }
 
   void send(dynamic data) {
@@ -103,14 +106,10 @@ class BaseWebSocket {
       Get.log('WebSocket not connected, message $data not sent');
     }
   }
+}
 
-  void emit(String event, dynamic data) {
-    send(jsonEncode({'type': event, 'data': data}));
-  }
-
-  void dispose() {
-    socketNotifier!.dispose();
-    socketNotifier = null;
-    isDisposed = true;
-  }
+enum ConnectionStatus {
+  connecting,
+  connected,
+  closed,
 }

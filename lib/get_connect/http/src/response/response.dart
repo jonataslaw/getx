@@ -138,7 +138,11 @@ class HeaderValue {
     stringBuffer.write(_value);
     if (parameters != null && parameters!.isNotEmpty) {
       _parameters!.forEach((name, value) {
-        stringBuffer..write('; ')..write(name)..write('=')..write(value);
+        stringBuffer
+          ..write('; ')
+          ..write(name)
+          ..write('=')
+          ..write(value);
       });
     }
     return stringBuffer.toString();

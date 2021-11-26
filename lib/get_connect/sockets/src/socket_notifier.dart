@@ -1,5 +1,15 @@
 import 'dart:convert';
 
+/// Signature for [SocketNotifier.addCloses].
+typedef CloseSocket = void Function(Close);
+
+/// Signature for [SocketNotifier.addMessages].
+typedef MessageSocket = void Function(dynamic val);
+
+/// Signature for [SocketNotifier.open].
+typedef OpenSocket = void Function();
+
+/// Wrapper class to message and reason from SocketNotifier
 class Close {
   final String? message;
   final int? reason;
@@ -12,12 +22,8 @@ class Close {
   }
 }
 
-typedef OpenSocket = void Function();
-
-typedef CloseSocket = void Function(Close);
-
-typedef MessageSocket = void Function(dynamic val);
-
+/// This class manages the transmission of messages over websockets using
+/// GetConnect
 class SocketNotifier {
   List<void Function(dynamic)>? _onMessages = <MessageSocket>[];
   Map<String, void Function(dynamic)>? _onEvents = <String, MessageSocket>{};
@@ -26,22 +32,42 @@ class SocketNotifier {
 
   late OpenSocket open;
 
-  void addMessages(MessageSocket socket) {
-    _onMessages!.add((socket));
-  }
-
-  void addEvents(String event, MessageSocket socket) {
-    _onEvents![event] = socket;
-  }
-
+  /// subscribe to close events
   void addCloses(CloseSocket socket) {
     _onCloses!.add(socket);
   }
 
+  /// subscribe to error events
   void addErrors(CloseSocket socket) {
     _onErrors!.add((socket));
   }
 
+  /// subscribe to named events
+  void addEvents(String event, MessageSocket socket) {
+    _onEvents![event] = socket;
+  }
+
+  /// subscribe to message events
+  void addMessages(MessageSocket socket) {
+    _onMessages!.add((socket));
+  }
+
+  /// Dispose messages, events, closes and errors subscriptions
+  void dispose() {
+    _onMessages = null;
+    _onEvents = null;
+    _onCloses = null;
+    _onErrors = null;
+  }
+
+  /// Notify all subscriptions on [addCloses]
+  void notifyClose(Close err) {
+    for (var item in _onCloses!) {
+      item(err);
+    }
+  }
+
+  /// Notify all subscriptions on [addMessages]
   void notifyData(dynamic data) {
     for (var item in _onMessages!) {
       item(data);
@@ -51,12 +77,7 @@ class SocketNotifier {
     }
   }
 
-  void notifyClose(Close err) {
-    for (var item in _onCloses!) {
-      item(err);
-    }
-  }
-
+  /// Notify all subscriptions on [addErrors]
   void notifyError(Close err) {
     // rooms.removeWhere((key, value) => value.contains(_ws));
     for (var item in _onErrors!) {
@@ -72,15 +93,9 @@ class SocketNotifier {
       if (_onEvents!.containsKey(event)) {
         _onEvents![event]!(data);
       }
+      // ignore: avoid_catches_without_on_clauses
     } catch (_) {
       return;
     }
-  }
-
-  void dispose() {
-    _onMessages = null;
-    _onEvents = null;
-    _onCloses = null;
-    _onErrors = null;
   }
 }
