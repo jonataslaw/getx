@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../../get.dart';
 
 class GetInformationParser extends RouteInformationParser<GetNavConfig> {
@@ -14,7 +15,6 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
   SynchronousFuture<GetNavConfig> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
-    Get.log('GetInformationParser: route location: ${routeInformation.location}');
     var location = routeInformation.location;
     if (location == '/') {
       //check if there is a corresponding page
@@ -23,6 +23,8 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
         location = initialRoute;
       }
     }
+
+    Get.log('GetInformationParser: route location: $location');
 
     final matchResult = Get.routeTree.matchRoute(location ?? initialRoute);
 
