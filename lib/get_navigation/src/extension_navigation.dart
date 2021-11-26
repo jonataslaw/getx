@@ -792,11 +792,11 @@ you can only use widgets and widget functions here''';
 
   /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
   bool get isOverlaysOpen =>
-      (isSnackbarOpen! || isDialogOpen! || isBottomSheetOpen!);
+      (isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!);
 
   /// Returns true if there is no Snackbar, Dialog or BottomSheet open
   bool get isOverlaysClosed =>
-      (!isSnackbarOpen! && !isDialogOpen! && !isBottomSheetOpen!);
+      (!isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!);
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
@@ -817,8 +817,11 @@ you can only use widgets and widget functions here''';
     int? id,
   }) {
     if (closeOverlays && isOverlaysOpen) {
+      if (isSnackbarOpen) {
+        closeAllSnackbars();
+      }
       navigator?.popUntil((route) {
-        return (isOverlaysClosed);
+        return (!isDialogOpen! && !isBottomSheetOpen!);
       });
     }
     if (canPop) {
@@ -1100,9 +1103,17 @@ you can only use widgets and widget functions here''';
   /// give name from previous route
   String get previousRoute => routing.previous;
 
-  ///TODO: made snackbar 2.0 trackeables
   /// check if snackbar is open
-  bool? get isSnackbarOpen => true; //routing.isSnackbar;
+  bool get isSnackbarOpen =>
+      SnackbarController.isSnackbarBeingShown; //routing.isSnackbar;
+
+  void closeAllSnackbars() {
+    SnackbarController.cancelAllSnackbars();
+  }
+
+  void closeCurrentSnackbar() {
+    SnackbarController.closeCurrentSnackbar();
+  }
 
   /// check if dialog is open
   bool? get isDialogOpen => routing.isDialog;

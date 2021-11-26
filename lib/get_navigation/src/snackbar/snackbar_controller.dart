@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import '../../../get.dart';
 
 class SnackbarController {
-  static final _queue = GetQueue();
+  static final _snackBarQueue = _SnackBarQueue();
+  static bool get isSnackbarBeingShown => _snackBarQueue.isJobInProgress;
+
   late Animation<double> _filterBlurAnimation;
   late Animation<Color?> _filterColorAnimation;
 
@@ -15,9 +17,10 @@ class SnackbarController {
 
   late SnackbarStatusCallback? _snackbarStatus;
   late final Alignment? _initialAlignment;
-
   late final Alignment? _endAlignment;
+
   bool _wasDismissedBySwipe = false;
+
   bool _onTappedDismiss = false;
 
   Timer? _timer;
@@ -41,24 +44,22 @@ class SnackbarController {
 
   Future<SnackbarController> get future => _transitionCompleter.future;
 
-  bool get isSnackbarBeingShown => _currentStatus != SnackbarStatus.CLOSED;
-
   Future<void> close() async {
     _removeEntry();
     await future;
   }
 
   Future<void> show() {
-    return _queue.add(_show);
+    return _snackBarQueue.addJob(this);
   }
 
-  // ignore: avoid_returning_this
   void _cancelTimer() {
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
   }
 
+  // ignore: avoid_returning_this
   void _configureAlignment(SnackPosition snackPosition) {
     switch (snack.snackPosition) {
       case SnackPosition.TOP:
@@ -289,8 +290,6 @@ class SnackbarController {
     _removeEntry();
   }
 
-  void _registerSnackbar() {}
-
   void _removeEntry() {
     assert(
       !_transitionCompleter.isCompleted,
@@ -324,5 +323,39 @@ class SnackbarController {
     return future;
   }
 
-  void _unRegisterSnackbar() {}
+  static void cancelAllSnackbars() {
+    _snackBarQueue.cancelAllJobs();
+  }
+
+  static void closeCurrentSnackbar() {
+    _snackBarQueue.closeCurrentJob();
+  }
+}
+
+class _SnackBarQueue {
+  final _queue = GetQueue();
+
+  bool _isJobInProgress = false;
+
+  SnackbarController? _currentSnackbar;
+
+  bool get isJobInProgress => _isJobInProgress;
+
+  Future<void> addJob(SnackbarController job) async {
+    _isJobInProgress = true;
+    _currentSnackbar = job;
+    final data = await _queue.add(job._show);
+    _isJobInProgress = false;
+    _currentSnackbar = null;
+    return data;
+  }
+
+  void cancelAllJobs() {
+    _currentSnackbar?.close();
+    _queue.cancelAllJobs();
+  }
+
+  void closeCurrentJob() {
+    _currentSnackbar?.close();
+  }
 }
