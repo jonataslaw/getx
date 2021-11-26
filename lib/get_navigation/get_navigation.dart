@@ -17,4 +17,4 @@ export 'src/routes/observers/route_observer.dart';
 export 'src/routes/route_middleware.dart';
 export 'src/routes/transitions_type.dart';
 export 'src/snackbar/snack.dart';
-export 'src/snackbar/snack_route.dart';
+export 'src/snackbar/snackbar_controller.dart';

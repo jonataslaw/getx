@@ -10,6 +10,63 @@ import '../../get_navigation.dart';
 import 'root_controller.dart';
 
 class GetMaterialApp extends StatelessWidget {
+  final GlobalKey<NavigatorState>? navigatorKey;
+
+  final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
+  final Widget? home;
+  final Map<String, WidgetBuilder>? routes;
+  final String? initialRoute;
+  final RouteFactory? onGenerateRoute;
+  final InitialRouteListFactory? onGenerateInitialRoutes;
+  final RouteFactory? onUnknownRoute;
+  final List<NavigatorObserver>? navigatorObservers;
+  final TransitionBuilder? builder;
+  final String title;
+  final GenerateAppTitle? onGenerateTitle;
+  final ThemeData? theme;
+  final ThemeData? darkTheme;
+  final ThemeMode themeMode;
+  final CustomTransition? customTransition;
+  final Color? color;
+  final Map<String, Map<String, String>>? translationsKeys;
+  final Translations? translations;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final Locale? fallbackLocale;
+  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  final LocaleListResolutionCallback? localeListResolutionCallback;
+  final LocaleResolutionCallback? localeResolutionCallback;
+  final Iterable<Locale> supportedLocales;
+  final bool showPerformanceOverlay;
+  final bool checkerboardRasterCacheImages;
+  final bool checkerboardOffscreenLayers;
+  final bool showSemanticsDebugger;
+  final bool debugShowCheckedModeBanner;
+  final Map<LogicalKeySet, Intent>? shortcuts;
+  final ScrollBehavior? scrollBehavior;
+  final ThemeData? highContrastTheme;
+  final ThemeData? highContrastDarkTheme;
+  final Map<Type, Action<Intent>>? actions;
+  final bool debugShowMaterialGrid;
+  final ValueChanged<Routing?>? routingCallback;
+  final Transition? defaultTransition;
+  final bool? opaqueRoute;
+  final VoidCallback? onInit;
+  final VoidCallback? onReady;
+  final VoidCallback? onDispose;
+  final bool? enableLog;
+  final LogWriterCallback? logWriterCallback;
+  final bool? popGesture;
+  final SmartManagement smartManagement;
+  final Bindings? initialBinding;
+  final Duration? transitionDuration;
+  final bool? defaultGlobalState;
+  final List<GetPage>? getPages;
+  final GetPage? unknownRoute;
+  final RouteInformationProvider? routeInformationProvider;
+  final RouteInformationParser<Object>? routeInformationParser;
+  final RouterDelegate<Object>? routerDelegate;
+  final BackButtonDispatcher? backButtonDispatcher;
   const GetMaterialApp({
     Key? key,
     this.navigatorKey,
@@ -71,63 +128,6 @@ class GetMaterialApp extends StatelessWidget {
         routerDelegate = null,
         backButtonDispatcher = null,
         super(key: key);
-
-  final GlobalKey<NavigatorState>? navigatorKey;
-  final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
-  final Widget? home;
-  final Map<String, WidgetBuilder>? routes;
-  final String? initialRoute;
-  final RouteFactory? onGenerateRoute;
-  final InitialRouteListFactory? onGenerateInitialRoutes;
-  final RouteFactory? onUnknownRoute;
-  final List<NavigatorObserver>? navigatorObservers;
-  final TransitionBuilder? builder;
-  final String title;
-  final GenerateAppTitle? onGenerateTitle;
-  final ThemeData? theme;
-  final ThemeData? darkTheme;
-  final ThemeMode themeMode;
-  final CustomTransition? customTransition;
-  final Color? color;
-  final Map<String, Map<String, String>>? translationsKeys;
-  final Translations? translations;
-  final TextDirection? textDirection;
-  final Locale? locale;
-  final Locale? fallbackLocale;
-  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
-  final LocaleListResolutionCallback? localeListResolutionCallback;
-  final LocaleResolutionCallback? localeResolutionCallback;
-  final Iterable<Locale> supportedLocales;
-  final bool showPerformanceOverlay;
-  final bool checkerboardRasterCacheImages;
-  final bool checkerboardOffscreenLayers;
-  final bool showSemanticsDebugger;
-  final bool debugShowCheckedModeBanner;
-  final Map<LogicalKeySet, Intent>? shortcuts;
-  final ScrollBehavior? scrollBehavior;
-  final ThemeData? highContrastTheme;
-  final ThemeData? highContrastDarkTheme;
-  final Map<Type, Action<Intent>>? actions;
-  final bool debugShowMaterialGrid;
-  final ValueChanged<Routing?>? routingCallback;
-  final Transition? defaultTransition;
-  final bool? opaqueRoute;
-  final VoidCallback? onInit;
-  final VoidCallback? onReady;
-  final VoidCallback? onDispose;
-  final bool? enableLog;
-  final LogWriterCallback? logWriterCallback;
-  final bool? popGesture;
-  final SmartManagement smartManagement;
-  final Bindings? initialBinding;
-  final Duration? transitionDuration;
-  final bool? defaultGlobalState;
-  final List<GetPage>? getPages;
-  final GetPage? unknownRoute;
-  final RouteInformationProvider? routeInformationProvider;
-  final RouteInformationParser<Object>? routeInformationParser;
-  final RouterDelegate<Object>? routerDelegate;
-  final BackButtonDispatcher? backButtonDispatcher;
 
   GetMaterialApp.router({
     Key? key,
@@ -200,31 +200,6 @@ class GetMaterialApp extends StatelessWidget {
     Get.routeInformationParser = routeInformationParser;
   }
 
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
-
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    return [
-      PageRedirect(
-        settings: RouteSettings(name: name),
-        unknownRoute: unknownRoute,
-      ).page()
-    ];
-  }
-
-  Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
         init: Get.rootController,
@@ -270,7 +245,6 @@ class GetMaterialApp extends StatelessWidget {
             ? MaterialApp.router(
                 routerDelegate: routerDelegate!,
                 routeInformationParser: routeInformationParser!,
-                scaffoldMessengerKey: scaffoldMessengerKey,
                 backButtonDispatcher: backButtonDispatcher,
                 routeInformationProvider: routeInformationProvider,
                 key: _.unikey,
@@ -283,6 +257,8 @@ class GetMaterialApp extends StatelessWidget {
                     _.darkTheme ?? darkTheme ?? theme ?? ThemeData.fallback(),
                 themeMode: _.themeMode ?? themeMode,
                 locale: Get.locale ?? locale,
+                scaffoldMessengerKey:
+                    scaffoldMessengerKey ?? _.scaffoldMessengerKey,
                 localizationsDelegates: localizationsDelegates,
                 localeListResolutionCallback: localeListResolutionCallback,
                 localeResolutionCallback: localeResolutionCallback,
@@ -301,7 +277,8 @@ class GetMaterialApp extends StatelessWidget {
                 navigatorKey: (navigatorKey == null
                     ? Get.key
                     : Get.addKey(navigatorKey!)),
-                scaffoldMessengerKey: scaffoldMessengerKey,
+                scaffoldMessengerKey:
+                    scaffoldMessengerKey ?? _.scaffoldMessengerKey,
                 home: home,
                 routes: routes ?? const <String, WidgetBuilder>{},
                 initialRoute: initialRoute,
@@ -343,4 +320,29 @@ class GetMaterialApp extends StatelessWidget {
                 //   actions: actions,
               ),
       );
+
+  Widget defaultBuilder(BuildContext context, Widget? child) {
+    return Directionality(
+      textDirection: textDirection ??
+          (rtlLanguages.contains(Get.locale?.languageCode)
+              ? TextDirection.rtl
+              : TextDirection.ltr),
+      child: builder == null
+          ? (child ?? Material())
+          : builder!(context, child ?? Material()),
+    );
+  }
+
+  Route<dynamic> generator(RouteSettings settings) {
+    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
+  }
+
+  List<Route<dynamic>> initialRoutesGenerate(String name) {
+    return [
+      PageRedirect(
+        settings: RouteSettings(name: name),
+        unknownRoute: unknownRoute,
+      ).page()
+    ];
+  }
 }

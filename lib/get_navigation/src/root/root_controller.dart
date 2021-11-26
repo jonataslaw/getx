@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../routes/custom_transition.dart';
@@ -11,6 +12,8 @@ class GetMaterialController extends GetxController {
   ThemeData? theme;
   ThemeData? darkTheme;
   ThemeMode? themeMode;
+
+  final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
@@ -31,6 +34,8 @@ class GetMaterialController extends GetxController {
 
   var _key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
 
+  Map<dynamic, GlobalKey<NavigatorState>> keys = {};
+
   GlobalKey<NavigatorState> get key => _key;
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
@@ -38,7 +43,10 @@ class GetMaterialController extends GetxController {
     return key;
   }
 
-  Map<dynamic, GlobalKey<NavigatorState>> keys = {};
+  void restartApp() {
+    unikey = UniqueKey();
+    update();
+  }
 
   void setTheme(ThemeData value) {
     if (darkTheme == null) {
@@ -55,11 +63,6 @@ class GetMaterialController extends GetxController {
 
   void setThemeMode(ThemeMode value) {
     themeMode = value;
-    update();
-  }
-
-  void restartApp() {
-    unikey = UniqueKey();
     update();
   }
 }

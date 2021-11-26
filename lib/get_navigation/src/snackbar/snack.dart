@@ -1,59 +1,23 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
+typedef OnTap = void Function(GetSnackBar snack);
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
-typedef OnTap = void Function(GetBar snack);
 
-class GetBar<T extends Object> extends StatefulWidget {
-  GetBar({
-    Key? key,
-    this.title,
-    this.message,
-    this.titleText,
-    this.messageText,
-    this.icon,
-    this.shouldIconPulse = true,
-    this.maxWidth,
-    this.margin = const EdgeInsets.all(0.0),
-    this.padding = const EdgeInsets.all(16),
-    this.borderRadius = 0.0,
-    this.borderColor,
-    this.borderWidth = 1.0,
-    this.backgroundColor = const Color(0xFF303030),
-    this.leftBarIndicatorColor,
-    this.boxShadows,
-    this.backgroundGradient,
-    this.mainButton,
-    this.onTap,
-    this.duration,
-    this.isDismissible = true,
-    this.dismissDirection = SnackDismissDirection.VERTICAL,
-    this.showProgressIndicator = false,
-    this.progressIndicatorController,
-    this.progressIndicatorBackgroundColor,
-    this.progressIndicatorValueColor,
-    this.snackPosition = SnackPosition.BOTTOM,
-    this.snackStyle = SnackStyle.FLOATING,
-    this.forwardAnimationCurve = Curves.easeOutCirc,
-    this.reverseAnimationCurve = Curves.easeOutCirc,
-    this.animationDuration = const Duration(seconds: 1),
-    this.barBlur = 0.0,
-    this.overlayBlur = 0.0,
-    this.overlayColor = Colors.transparent,
-    this.userInputForm,
-    SnackbarStatusCallback? snackbarStatus,
-  })  : snackbarStatus = (snackbarStatus ?? (status) {}),
-        super(key: key);
-
+class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
-  final SnackbarStatusCallback snackbarStatus;
+  final SnackbarStatusCallback? snackbarStatus;
 
   /// The title displayed to the user
   final String? title;
+
+  final DismissDirection? dismissDirection;
 
   /// The message displayed to the user.
   final String? message;
@@ -150,11 +114,6 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// [SnackPosition.BOTTOM] is the default.
   final SnackPosition snackPosition;
 
-  /// [SnackDismissDirection.VERTICAL] by default.
-  /// Can also be [SnackDismissDirection.HORIZONTAL] in which case both left
-  /// and right dismiss are allowed.
-  final SnackDismissDirection dismissDirection;
-
   /// Snack can be floating or be grounded to the edge of the screen.
   /// If grounded, I do not recommend using [margin] or [borderRadius].
   /// [SnackStyle.FLOATING] is the default
@@ -192,22 +151,73 @@ class GetBar<T extends Object> extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form? userInputForm;
 
-  /// Show the snack. It's call [SnackbarStatus.OPENING] state
-  /// followed by [SnackbarStatus.OPEN]
-  Future<T?>? show<T>() async {
-    return Get.showSnackbar(this);
-  }
+  const GetSnackBar({
+    Key? key,
+    this.title,
+    this.message,
+    this.titleText,
+    this.messageText,
+    this.icon,
+    this.shouldIconPulse = true,
+    this.maxWidth,
+    this.margin = const EdgeInsets.all(0.0),
+    this.padding = const EdgeInsets.all(16),
+    this.borderRadius = 0.0,
+    this.borderColor,
+    this.borderWidth = 1.0,
+    this.backgroundColor = const Color(0xFF303030),
+    this.leftBarIndicatorColor,
+    this.boxShadows,
+    this.backgroundGradient,
+    this.mainButton,
+    this.onTap,
+    this.duration,
+    this.isDismissible = true,
+    this.dismissDirection,
+    this.showProgressIndicator = false,
+    this.progressIndicatorController,
+    this.progressIndicatorBackgroundColor,
+    this.progressIndicatorValueColor,
+    this.snackPosition = SnackPosition.BOTTOM,
+    this.snackStyle = SnackStyle.FLOATING,
+    this.forwardAnimationCurve = Curves.easeOutCirc,
+    this.reverseAnimationCurve = Curves.easeOutCirc,
+    this.animationDuration = const Duration(seconds: 1),
+    this.barBlur = 0.0,
+    this.overlayBlur = 0.0,
+    this.overlayColor = Colors.transparent,
+    this.userInputForm,
+    this.snackbarStatus,
+  }) : super(key: key);
 
   @override
-  State createState() {
-    return _GetBarState<T>();
+  State createState() => _GetSnackBarState();
+
+  /// Show the snack. It's call [SnackbarStatus.OPENING] state
+  /// followed by [SnackbarStatus.OPEN]
+  SnackbarController show() {
+    return Get.showSnackbar(this);
   }
 }
 
-class _GetBarState<K extends Object> extends State<GetBar>
-    with TickerProviderStateMixin {
-  SnackbarStatus? currentStatus;
+/// Indicates Status of snackbar
+/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
+/// has closed,
+/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
+/// with the full
+/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
+/// and ends
+/// with the full snackbar dispose
+enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
 
+/// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
+enum SnackPosition { TOP, BOTTOM }
+
+/// Indicates if snack will be attached to the edge of the screen or not
+enum SnackStyle { FLOATING, GROUNDED }
+
+class _GetSnackBarState extends State<GetSnackBar>
+    with TickerProviderStateMixin {
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
 
@@ -222,6 +232,49 @@ class _GetBarState<K extends Object> extends State<GetBar>
 
   FocusScopeNode? _focusNode;
   late FocusAttachment _focusAttachment;
+
+  final Completer<Size> _boxHeightCompleter = Completer<Size>();
+
+  late VoidCallback _progressListener;
+
+  late CurvedAnimation _progressAnimation;
+
+  final _backgroundBoxKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      heightFactor: 1.0,
+      child: Material(
+        color: widget.snackStyle == SnackStyle.FLOATING
+            ? Colors.transparent
+            : widget.backgroundColor,
+        child: SafeArea(
+          minimum: widget.snackPosition == SnackPosition.BOTTOM
+              ? EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom)
+              : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          bottom: widget.snackPosition == SnackPosition.BOTTOM,
+          top: widget.snackPosition == SnackPosition.TOP,
+          left: false,
+          right: false,
+          child: _getSnack(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _fadeController?.dispose();
+
+    widget.progressIndicatorController?.removeListener(_progressListener);
+    widget.progressIndicatorController?.dispose();
+
+    _focusAttachment.detach();
+    _focusNode!.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -250,31 +303,50 @@ Set either a message or messageText""");
     _focusAttachment = _focusNode!.attach(context);
   }
 
-  @override
-  void dispose() {
-    _fadeController?.dispose();
-
-    widget.progressIndicatorController?.removeListener(_progressListener);
-    widget.progressIndicatorController?.dispose();
-
-    _focusAttachment.detach();
-    _focusNode!.dispose();
-    super.dispose();
+  Widget _buildLeftBarIndicator() {
+    if (widget.leftBarIndicatorColor != null) {
+      return FutureBuilder<Size>(
+        future: _boxHeightCompleter.future,
+        builder: (buildContext, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              color: widget.leftBarIndicatorColor,
+              width: 5.0,
+              height: snapshot.data!.height,
+            );
+          } else {
+            return _emptyWidget;
+          }
+        },
+      );
+    } else {
+      return _emptyWidget;
+    }
   }
-
-  final Completer<Size> _boxHeightCompleter = Completer<Size>();
 
   void _configureLeftBarFuture() {
     SchedulerBinding.instance!.addPostFrameCallback(
       (_) {
-        final keyContext = backgroundBoxKey.currentContext;
-
+        final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
           final box = keyContext.findRenderObject() as RenderBox;
           _boxHeightCompleter.complete(box.size);
         }
       },
     );
+  }
+
+  void _configureProgressIndicatorAnimation() {
+    if (widget.showProgressIndicator &&
+        widget.progressIndicatorController != null) {
+      _progressListener = () {
+        setState(() {});
+      };
+      widget.progressIndicatorController!.addListener(_progressListener);
+
+      _progressAnimation = CurvedAnimation(
+          curve: Curves.linear, parent: widget.progressIndicatorController!);
+    }
   }
 
   void _configurePulseAnimation() {
@@ -299,95 +371,9 @@ Set either a message or messageText""");
     _fadeController!.forward();
   }
 
-  late VoidCallback _progressListener;
-
-  void _configureProgressIndicatorAnimation() {
-    if (widget.showProgressIndicator &&
-        widget.progressIndicatorController != null) {
-      _progressListener = () {
-        setState(() {});
-      };
-      widget.progressIndicatorController!.addListener(_progressListener);
-
-      _progressAnimation = CurvedAnimation(
-          curve: Curves.linear, parent: widget.progressIndicatorController!);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      heightFactor: 1.0,
-      child: Material(
-        color: widget.snackStyle == SnackStyle.FLOATING
-            ? Colors.transparent
-            : widget.backgroundColor,
-        child: SafeArea(
-          minimum: widget.snackPosition == SnackPosition.BOTTOM
-              ? EdgeInsets.only(
-                  // bottom: (GetUtils.isGreaterThan(
-                  //         MediaQuery.of(context).viewInsets.bottom,
-                  //         MediaQuery.of(context).padding.bottom)
-                  //     ? MediaQuery.of(context).viewInsets.bottom
-                  //     : MediaQuery.of(context).padding.bottom))
-                  bottom: MediaQuery.of(context).viewInsets.bottom)
-              : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          bottom: widget.snackPosition == SnackPosition.BOTTOM,
-          top: widget.snackPosition == SnackPosition.TOP,
-          left: false,
-          right: false,
-          child: _getSnack(),
-        ),
-      ),
-    );
-  }
-
-  Widget _getSnack() {
-    Widget snack;
-
-    if (widget.userInputForm != null) {
-      snack = _generateInputSnack();
-    } else {
-      snack = _generateSnack();
-    }
-
-    return Stack(
-      children: [
-        FutureBuilder<Size>(
-          future: _boxHeightCompleter.future,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (widget.barBlur == 0) {
-                return _emptyWidget;
-              }
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: widget.barBlur!, sigmaY: widget.barBlur!),
-                  child: Container(
-                    height: snapshot.data!.height,
-                    width: snapshot.data!.width,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(widget.borderRadius),
-                    ),
-                  ),
-                ),
-              );
-            } else {
-              return _emptyWidget;
-            }
-          },
-        ),
-        snack,
-      ],
-    );
-  }
-
   Widget _generateInputSnack() {
     return Container(
-      key: backgroundBoxKey,
+      key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
           ? BoxConstraints(maxWidth: widget.maxWidth!)
           : null,
@@ -412,12 +398,9 @@ Set either a message or messageText""");
     );
   }
 
-  late CurvedAnimation _progressAnimation;
-  GlobalKey backgroundBoxKey = GlobalKey();
-
   Widget _generateSnack() {
     return Container(
-      key: backgroundBoxKey,
+      key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
           ? BoxConstraints(maxWidth: widget.maxWidth!)
           : null,
@@ -611,25 +594,11 @@ Set either a message or messageText""");
     }
   }
 
-  Widget _buildLeftBarIndicator() {
-    if (widget.leftBarIndicatorColor != null) {
-      return FutureBuilder<Size>(
-        future: _boxHeightCompleter.future,
-        builder: (buildContext, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              color: widget.leftBarIndicatorColor,
-              width: 5.0,
-              height: snapshot.data!.height,
-            );
-          } else {
-            return _emptyWidget;
-          }
-        },
-      );
-    } else {
-      return _emptyWidget;
-    }
+  Text _getDefaultNotificationText() {
+    return Text(
+      widget.message ?? "",
+      style: TextStyle(fontSize: 14.0, color: Colors.white),
+    );
   }
 
   Widget? _getIcon() {
@@ -645,6 +614,53 @@ Set either a message or messageText""");
     }
   }
 
+  Widget? _getMainActionButton() {
+    return widget.mainButton;
+  }
+
+  Widget _getSnack() {
+    Widget snack;
+
+    if (widget.userInputForm != null) {
+      snack = _generateInputSnack();
+    } else {
+      snack = _generateSnack();
+    }
+
+    return Stack(
+      children: [
+        FutureBuilder<Size>(
+          future: _boxHeightCompleter.future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (widget.barBlur == 0) {
+                return _emptyWidget;
+              }
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                      sigmaX: widget.barBlur!, sigmaY: widget.barBlur!),
+                  child: Container(
+                    height: snapshot.data!.height,
+                    width: snapshot.data!.width,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return _emptyWidget;
+            }
+          },
+        ),
+        snack,
+      ],
+    );
+  }
+
   Widget _getTitleText() {
     return widget.titleText ??
         Text(
@@ -653,36 +669,4 @@ Set either a message or messageText""");
               fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
         );
   }
-
-  Text _getDefaultNotificationText() {
-    return Text(
-      widget.message ?? "",
-      style: TextStyle(fontSize: 14.0, color: Colors.white),
-    );
-  }
-
-  Widget? _getMainActionButton() {
-    return widget.mainButton;
-  }
 }
-
-/// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
-enum SnackPosition { TOP, BOTTOM }
-
-/// Indicates if snack will be attached to the edge of the screen or not
-enum SnackStyle { FLOATING, GROUNDED }
-
-/// Indicates the direction in which it is possible to dismiss
-/// If vertical, dismiss up will be allowed if [SnackPosition.TOP]
-/// If vertical, dismiss down will be allowed if [SnackPosition.BOTTOM]
-enum SnackDismissDirection { HORIZONTAL, VERTICAL }
-
-/// Indicates Status of snackbar
-/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
-/// has closed,
-/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
-/// with the full
-/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
-/// and ends
-/// with the full snackbar dispose
-enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
