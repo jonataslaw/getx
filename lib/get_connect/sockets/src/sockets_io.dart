@@ -4,30 +4,28 @@ import 'dart:io';
 import 'dart:math';
 
 import '../../../get_core/get_core.dart';
-
 import 'socket_notifier.dart';
-
-enum ConnectionStatus {
-  connecting,
-  connected,
-  closed,
-}
 
 class BaseWebSocket {
   String url;
   WebSocket? socket;
   SocketNotifier? socketNotifier = SocketNotifier();
   bool isDisposed = false;
+  Duration ping;
+  bool allowSelfSigned;
+  ConnectionStatus? connectionStatus;
+
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
     this.allowSelfSigned = true,
   });
-  Duration ping;
-  bool allowSelfSigned;
 
-  ConnectionStatus? connectionStatus;
+  void close([int? status, String? reason]) {
+    socket?.close(status, reason);
+  }
 
+  // ignore: use_setters_to_change_properties
   Future connect() async {
     if (isDisposed) {
       socketNotifier = SocketNotifier();
@@ -60,9 +58,18 @@ class BaseWebSocket {
     }
   }
 
-  // ignore: use_setters_to_change_properties
-  void onOpen(OpenSocket fn) {
-    socketNotifier!.open = fn;
+  void dispose() {
+    socketNotifier!.dispose();
+    socketNotifier = null;
+    isDisposed = true;
+  }
+
+  void emit(String event, dynamic data) {
+    send(jsonEncode({'type': event, 'data': data}));
+  }
+
+  void on(String event, MessageSocket message) {
+    socketNotifier!.addEvents(event, message);
   }
 
   void onClose(CloseSocket fn) {
@@ -77,12 +84,8 @@ class BaseWebSocket {
     socketNotifier!.addMessages(fn);
   }
 
-  void on(String event, MessageSocket message) {
-    socketNotifier!.addEvents(event, message);
-  }
-
-  void close([int? status, String? reason]) {
-    socket?.close(status, reason);
+  void onOpen(OpenSocket fn) {
+    socketNotifier!.open = fn;
   }
 
   void send(dynamic data) async {
@@ -93,16 +96,6 @@ class BaseWebSocket {
     if (socket != null) {
       socket!.add(data);
     }
-  }
-
-  void dispose() {
-    socketNotifier!.dispose();
-    socketNotifier = null;
-    isDisposed = true;
-  }
-
-  void emit(String event, dynamic data) {
-    send(jsonEncode({'type': event, 'data': data}));
   }
 
   Future<WebSocket> _connectForSelfSignedCert(String url) async {
@@ -135,4 +128,10 @@ class BaseWebSocket {
       rethrow;
     }
   }
+}
+
+enum ConnectionStatus {
+  connecting,
+  connected,
+  closed,
 }

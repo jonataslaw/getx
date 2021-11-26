@@ -9,24 +9,6 @@ import '../../get_navigation.dart';
 import 'custom_transition.dart';
 import 'transitions_type.dart';
 
-@immutable
-class PathDecoded {
-  const PathDecoded(this.regex, this.keys);
-  final RegExp regex;
-  final List<String?> keys;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is PathDecoded &&
-        other.regex == regex; // && listEquals(other.keys, keys);
-  }
-
-  @override
-  int get hashCode => regex.hashCode;
-}
-
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
   final bool? popGesture;
@@ -98,27 +80,6 @@ class GetPage<T> extends Page<T> {
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
-  static PathDecoded _nameToRegex(String path) {
-    var keys = <String?>[];
-
-    String _replace(Match pattern) {
-      var buffer = StringBuffer('(?:');
-
-      if (pattern[1] != null) buffer.write('\.');
-      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
-      if (pattern[3] != null) buffer.write('?');
-
-      keys.add(pattern[2]);
-      return "$buffer";
-    }
-
-    var stringPath = '$path/?'
-        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
-        .replaceAll('//', '/');
-
-    return PathDecoded(RegExp('^$stringPath\$'), keys);
-  }
-
   GetPage<T> copy({
     String? name,
     GetPageBuilder? page,
@@ -174,8 +135,6 @@ class GetPage<T> extends Page<T> {
     );
   }
 
-  late Future<T?> popped;
-
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
@@ -185,7 +144,45 @@ class GetPage<T> extends Page<T> {
       unknownRoute: unknownRoute,
     ).getPageToRoute<T>(this, unknownRoute);
 
-    popped = _page.popped;
     return _page;
+  }
+
+  static PathDecoded _nameToRegex(String path) {
+    var keys = <String?>[];
+
+    String _replace(Match pattern) {
+      var buffer = StringBuffer('(?:');
+
+      if (pattern[1] != null) buffer.write('\.');
+      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      if (pattern[3] != null) buffer.write('?');
+
+      keys.add(pattern[2]);
+      return "$buffer";
+    }
+
+    var stringPath = '$path/?'
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
+        .replaceAll('//', '/');
+
+    return PathDecoded(RegExp('^$stringPath\$'), keys);
+  }
+}
+
+@immutable
+class PathDecoded {
+  final RegExp regex;
+  final List<String?> keys;
+  const PathDecoded(this.regex, this.keys);
+
+  @override
+  int get hashCode => regex.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PathDecoded &&
+        other.regex == regex; // && listEquals(other.keys, keys);
   }
 }

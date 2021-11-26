@@ -816,7 +816,16 @@ you can only use widgets and widget functions here''';
     bool canPop = true,
     int? id,
   }) {
+    //TODO: This code brings compatibility of the new snackbar with GetX 4,
+    // remove this code in version 5
+    if (isSnackbarOpen && !closeOverlays) {
+      closeCurrentSnackbar();
+      return;
+    }
+
     if (closeOverlays && isOverlaysOpen) {
+      //TODO: This code brings compatibility of the new snackbar with GetX 4,
+      // remove this code in version 5
       if (isSnackbarOpen) {
         closeAllSnackbars();
       }
@@ -1111,8 +1120,8 @@ you can only use widgets and widget functions here''';
     SnackbarController.cancelAllSnackbars();
   }
 
-  void closeCurrentSnackbar() {
-    SnackbarController.closeCurrentSnackbar();
+  Future<void> closeCurrentSnackbar() async {
+    await SnackbarController.closeCurrentSnackbar();
   }
 
   /// check if dialog is open
