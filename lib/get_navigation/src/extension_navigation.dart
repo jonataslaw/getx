@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -276,7 +277,7 @@ extension ExtensionDialog on GetInterface {
 }
 
 extension ExtensionSnackbar on GetInterface {
-  void rawSnackbar({
+  SnackbarController rawSnackbar({
     String? title,
     String? message,
     Widget? titleText,
@@ -296,7 +297,7 @@ extension ExtensionSnackbar on GetInterface {
     Gradient? backgroundGradient,
     Widget? mainButton,
     OnTap? onTap,
-    Duration duration = const Duration(seconds: 3),
+    Duration? duration = const Duration(seconds: 3),
     bool isDismissible = true,
     DismissDirection? dismissDirection,
     bool showProgressIndicator = false,
@@ -309,12 +310,12 @@ extension ExtensionSnackbar on GetInterface {
     Curve reverseAnimationCurve = Curves.easeOutCirc,
     Duration animationDuration = const Duration(seconds: 1),
     SnackbarStatusCallback? snackbarStatus,
-    double? barBlur = 0.0,
+    double barBlur = 0.0,
     double overlayBlur = 0.0,
     Color? overlayColor,
     Form? userInputForm,
-  }) async {
-    final getBar = GetSnackBar(
+  }) {
+    final getSnackBar = GetSnackBar(
       snackbarStatus: snackbarStatus,
       title: title,
       message: message,
@@ -352,13 +353,16 @@ extension ExtensionSnackbar on GetInterface {
       userInputForm: userInputForm,
     );
 
+    final controller = SnackbarController(getSnackBar);
+
     if (instantInit) {
-      getBar.show();
+      controller.show();
     } else {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
-        getBar.show();
+        controller.show();
       });
     }
+    return controller;
   }
 
   SnackbarController showSnackbar(GetSnackBar snackbar) {
@@ -371,7 +375,7 @@ extension ExtensionSnackbar on GetInterface {
     String title,
     String message, {
     Color? colorText,
-    Duration? duration,
+    Duration? duration = const Duration(seconds: 3),
 
     /// with instantInit = false you can put snackbar on initState
     bool instantInit = true,
@@ -431,7 +435,7 @@ extension ExtensionSnackbar on GetInterface {
         snackPosition: snackPosition ?? SnackPosition.TOP,
         borderRadius: borderRadius ?? 15,
         margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
-        duration: duration ?? Duration(seconds: 3),
+        duration: duration,
         barBlur: barBlur ?? 7.0,
         backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
         icon: icon,
@@ -517,6 +521,7 @@ extension GetNavigation on GetInterface {
     routeName ??= "/${page.runtimeType}";
     routeName = _cleanRouteName(routeName);
     if (preventDuplicates && routeName == currentRoute) {
+      CupertinoPageRoute ds;
       return null;
     }
     return global(id).currentState?.push<T>(

@@ -145,7 +145,7 @@ class GetSnackBar extends StatefulWidget {
   /// Default is 0.0. If different than 0.0, blurs only Snack's background.
   /// To take effect, make sure your [backgroundColor] has some opacity.
   /// The greater the value, the greater the blur.
-  final double? barBlur;
+  final double barBlur;
 
   /// Default is 0.0. If different than 0.0, creates a blurred
   /// overlay that prevents the user from interacting with the screen.
@@ -201,7 +201,7 @@ class GetSnackBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() => _GetSnackBarState();
+  State createState() => GetSnackBarState();
 
   /// Show the snack. It's call [SnackbarStatus.OPENING] state
   /// followed by [SnackbarStatus.OPEN]
@@ -210,30 +210,7 @@ class GetSnackBar extends StatefulWidget {
   }
 }
 
-enum RowStyle {
-  icon,
-  action,
-  all,
-  none,
-}
-
-/// Indicates Status of snackbar
-/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
-/// has closed,
-/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
-/// with the full
-/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
-/// and ends
-/// with the full snackbar dispose
-enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
-
-/// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
-enum SnackPosition { TOP, BOTTOM }
-
-/// Indicates if snack will be attached to the edge of the screen or not
-enum SnackStyle { FLOATING, GROUNDED }
-
-class _GetSnackBarState extends State<GetSnackBar>
+class GetSnackBarState extends State<GetSnackBar>
     with TickerProviderStateMixin {
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
@@ -306,7 +283,7 @@ class _GetSnackBarState extends State<GetSnackBar>
                       borderRadius: BorderRadius.circular(widget.borderRadius),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(
-                            sigmaX: widget.barBlur!, sigmaY: widget.barBlur!),
+                            sigmaX: widget.barBlur, sigmaY: widget.barBlur),
                         child: Container(
                           height: snapshot.data!.height,
                           width: snapshot.data!.width,
@@ -579,3 +556,26 @@ You need to either use message[String], or messageText[Widget] or define a userI
 
   void _updateProgress() => setState(() {});
 }
+
+enum RowStyle {
+  icon,
+  action,
+  all,
+  none,
+}
+
+/// Indicates Status of snackbar
+/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
+/// has closed,
+/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
+/// with the full
+/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
+/// and ends
+/// with the full snackbar dispose
+enum SnackbarStatus { OPEN, CLOSED, OPENING, CLOSING }
+
+/// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
+enum SnackPosition { TOP, BOTTOM }
+
+/// Indicates if snack will be attached to the edge of the screen or not
+enum SnackStyle { FLOATING, GROUNDED }

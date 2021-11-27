@@ -8,12 +8,13 @@ import '../../../get.dart';
 class SnackbarController {
   static final _snackBarQueue = _SnackBarQueue();
   static bool get isSnackbarBeingShown => _snackBarQueue._isJobInProgress;
+  final key = GlobalKey<GetSnackBarState>();
 
   late Animation<double> _filterBlurAnimation;
   late Animation<Color?> _filterColorAnimation;
 
   final GetSnackBar snackbar;
-  final _transitionCompleter = Completer<SnackbarController>();
+  final _transitionCompleter = Completer();
 
   late SnackbarStatusCallback? _snackbarStatus;
   late final Alignment? _initialAlignment;
@@ -42,10 +43,14 @@ class SnackbarController {
 
   SnackbarController(this.snackbar);
 
-  Future<SnackbarController> get future => _transitionCompleter.future;
+  Future<void> get future => _transitionCompleter.future;
 
   /// Close the snackbar with animation
-  Future<void> close() async {
+  Future<void> close({bool withAnimations = true}) async {
+    if (!withAnimations) {
+      _removeOverlay();
+      return;
+    }
     _removeEntry();
     await future;
   }
@@ -141,7 +146,7 @@ class SnackbarController {
     return AnimationController(
       duration: snackbar.animationDuration,
       debugLabel: '$runtimeType',
-      vsync: navigator!,
+      vsync: _overlayState!,
     );
   }
 
@@ -181,7 +186,7 @@ class SnackbarController {
             onTap: () {
               if (snackbar.isDismissible && !_onTappedDismiss) {
                 _onTappedDismiss = true;
-                Get.back();
+                close();
               }
             },
             child: AnimatedBuilder(
@@ -252,7 +257,8 @@ class SnackbarController {
       },
       key: const Key('dismissible'),
       onDismissed: (_) {
-        _onDismiss();
+        _wasDismissedBySwipe = true;
+        _removeEntry();
       },
       child: _getSnackbarContainer(child),
     );
@@ -291,12 +297,6 @@ class SnackbarController {
     }
   }
 
-  void _onDismiss() {
-    _cancelTimer();
-    _wasDismissedBySwipe = true;
-    _removeEntry();
-  }
-
   void _removeEntry() {
     assert(
       !_transitionCompleter.isCompleted,
@@ -307,7 +307,6 @@ class SnackbarController {
 
     if (_wasDismissedBySwipe) {
       Timer(const Duration(milliseconds: 200), _controller.reset);
-
       _wasDismissedBySwipe = false;
     } else {
       _controller.reverse();
@@ -323,7 +322,7 @@ class SnackbarController {
         'Cannot remove overlay from a disposed snackbar');
     _controller.dispose();
     _overlayEntries.clear();
-    _transitionCompleter.complete(this);
+    _transitionCompleter.complete();
   }
 
   Future<void> _show() {
@@ -365,6 +364,7 @@ class _SnackBarQueue {
   }
 
   Future<void> _closeCurrentJob() async {
-    await _currentSnackbar?.close();
+    if (_currentSnackbar == null) return;
+    await _currentSnackbar!.close();
   }
 }
