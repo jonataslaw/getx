@@ -7,7 +7,7 @@ import 'routes/app_pages.dart';
 import 'shared/logger/logger_utils.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
