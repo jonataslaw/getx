@@ -8,6 +8,7 @@ import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
 typedef OnTap = void Function(GetSnackBar snack);
+
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
 class GetSnackBar extends StatefulWidget {
@@ -17,6 +18,11 @@ class GetSnackBar extends StatefulWidget {
   /// The title displayed to the user
   final String? title;
 
+  /// The direction in which the SnackBar can be dismissed.
+  ///
+  /// Cannot be null, defaults to [DismissDirection.down] when
+  /// [snackPosition] == [SnackPosition.BOTTOM] and [DismissDirection.up]
+  /// when [snackPosition] == [SnackPosition.TOP]
   final DismissDirection? dismissDirection;
 
   /// The message displayed to the user.
@@ -44,7 +50,8 @@ class GetSnackBar extends StatefulWidget {
   /// Check (this example)[https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/shadows.dart]
   final List<BoxShadow>? boxShadows;
 
-  /// Makes [backgroundColor] be ignored.
+  /// Give to GetSnackbar a gradient background.
+  /// It Makes [backgroundColor] be ignored.
   final Gradient? backgroundGradient;
 
   /// You can use any widget here, but I recommend [Icon] or [Image] as
@@ -55,7 +62,10 @@ class GetSnackBar extends StatefulWidget {
   /// An option to animate the icon (if present). Defaults to true.
   final bool shouldIconPulse;
 
-  /// A [TextButton] widget if you need an action from the user.
+  /// (optional) An action that the user can take based on the snack bar.
+  ///
+  /// For example, the snack bar might let the user undo the operation that
+  /// prompted the snackbar.
   final Widget? mainButton;
 
   /// A callback that registers the user's click anywhere.
@@ -200,6 +210,13 @@ class GetSnackBar extends StatefulWidget {
   }
 }
 
+enum RowStyle {
+  icon,
+  action,
+  all,
+  none,
+}
+
 /// Indicates Status of snackbar
 /// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
 /// has closed,
@@ -235,11 +252,29 @@ class _GetSnackBarState extends State<GetSnackBar>
 
   final Completer<Size> _boxHeightCompleter = Completer<Size>();
 
-  late VoidCallback _progressListener;
-
   late CurvedAnimation _progressAnimation;
 
   final _backgroundBoxKey = GlobalKey();
+
+  double get buttonPadding {
+    if (widget.padding.right - 12 < 0) {
+      return 4;
+    } else {
+      return widget.padding.right - 12;
+    }
+  }
+
+  RowStyle get _rowStyle {
+    if (widget.mainButton != null && widget.icon == null) {
+      return RowStyle.action;
+    } else if (widget.mainButton == null && widget.icon != null) {
+      return RowStyle.icon;
+    } else if (widget.mainButton != null && widget.icon != null) {
+      return RowStyle.all;
+    } else {
+      return RowStyle.none;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +293,42 @@ class _GetSnackBarState extends State<GetSnackBar>
           top: widget.snackPosition == SnackPosition.TOP,
           left: false,
           right: false,
-          child: _getSnack(),
+          child: Stack(
+            children: [
+              FutureBuilder<Size>(
+                future: _boxHeightCompleter.future,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (widget.barBlur == 0) {
+                      return _emptyWidget;
+                    }
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                            sigmaX: widget.barBlur!, sigmaY: widget.barBlur!),
+                        child: Container(
+                          height: snapshot.data!.height,
+                          width: snapshot.data!.width,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius:
+                                BorderRadius.circular(widget.borderRadius),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return _emptyWidget;
+                  }
+                },
+              ),
+              if (widget.userInputForm != null)
+                _containerWithForm()
+              else
+                _containerWithoutForm()
+            ],
+          ),
         ),
       ),
     );
@@ -267,8 +337,7 @@ class _GetSnackBarState extends State<GetSnackBar>
   @override
   void dispose() {
     _fadeController?.dispose();
-
-    widget.progressIndicatorController?.removeListener(_progressListener);
+    widget.progressIndicatorController?.removeListener(_updateProgress);
     widget.progressIndicatorController?.dispose();
 
     _focusAttachment.detach();
@@ -284,9 +353,8 @@ class _GetSnackBarState extends State<GetSnackBar>
         widget.userInputForm != null ||
             ((widget.message != null && widget.message!.isNotEmpty) ||
                 widget.messageText != null),
-        """
-A message is mandatory if you are not using userInputForm. 
-Set either a message or messageText""");
+        '''
+You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar''');
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
@@ -339,10 +407,7 @@ Set either a message or messageText""");
   void _configureProgressIndicatorAnimation() {
     if (widget.showProgressIndicator &&
         widget.progressIndicatorController != null) {
-      _progressListener = () {
-        setState(() {});
-      };
-      widget.progressIndicatorController!.addListener(_progressListener);
+      widget.progressIndicatorController!.addListener(_updateProgress);
 
       _progressAnimation = CurvedAnimation(
           curve: Curves.linear, parent: widget.progressIndicatorController!);
@@ -371,7 +436,7 @@ Set either a message or messageText""");
     _fadeController!.forward();
   }
 
-  Widget _generateInputSnack() {
+  Widget _containerWithForm() {
     return Container(
       key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
@@ -383,7 +448,10 @@ Set either a message or messageText""");
         boxShadow: widget.boxShadows,
         borderRadius: BorderRadius.circular(widget.borderRadius),
         border: widget.borderColor != null
-            ? Border.all(color: widget.borderColor!, width: widget.borderWidth!)
+            ? Border.all(
+                color: widget.borderColor!,
+                width: widget.borderWidth!,
+              )
             : null,
       ),
       child: Padding(
@@ -398,7 +466,14 @@ Set either a message or messageText""");
     );
   }
 
-  Widget _generateSnack() {
+  Widget _containerWithoutForm() {
+    final iconPadding = widget.padding.left > 16.0 ? widget.padding.left : 0.0;
+    final left = _rowStyle == RowStyle.icon || _rowStyle == RowStyle.all
+        ? 4.0
+        : widget.padding.left;
+    final right = _rowStyle == RowStyle.action || _rowStyle == RowStyle.all
+        ? 8.0
+        : widget.padding.right;
     return Container(
       key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
@@ -427,177 +502,65 @@ Set either a message or messageText""");
               : _emptyWidget,
           Row(
             mainAxisSize: MainAxisSize.max,
-            children: _getAppropriateRowLayout(),
+            children: [
+              _buildLeftBarIndicator(),
+              if (_rowStyle == RowStyle.icon)
+                ConstrainedBox(
+                  constraints:
+                      BoxConstraints.tightFor(width: 42.0 + iconPadding),
+                  child: _getIcon(),
+                ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    if (_isTitlePresent)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: widget.padding.top,
+                          left: left,
+                          right: right,
+                        ),
+                        child: widget.titleText ??
+                            Text(
+                              widget.title ?? "",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                      )
+                    else
+                      _emptyWidget,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: _messageTopMargin,
+                        left: left,
+                        right: right,
+                        bottom: widget.padding.bottom,
+                      ),
+                      child: widget.messageText ??
+                          Text(
+                            widget.message ?? "",
+                            style:
+                                TextStyle(fontSize: 14.0, color: Colors.white),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_rowStyle == RowStyle.action)
+                Padding(
+                  padding: EdgeInsets.only(right: buttonPadding),
+                  child: widget.mainButton,
+                ),
+            ],
           ),
         ],
       ),
-    );
-  }
-
-  List<Widget> _getAppropriateRowLayout() {
-    double buttonRightPadding;
-    var iconPadding = 0.0;
-    if (widget.padding.right - 12 < 0) {
-      buttonRightPadding = 4;
-    } else {
-      buttonRightPadding = widget.padding.right - 12;
-    }
-
-    if (widget.padding.left > 16.0) {
-      iconPadding = widget.padding.left;
-    }
-
-    if (widget.icon == null && widget.mainButton == null) {
-      return [
-        _buildLeftBarIndicator(),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              (_isTitlePresent)
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                        top: widget.padding.top,
-                        left: widget.padding.left,
-                        right: widget.padding.right,
-                      ),
-                      child: _getTitleText(),
-                    )
-                  : _emptyWidget,
-              Padding(
-                padding: EdgeInsets.only(
-                  top: _messageTopMargin,
-                  left: widget.padding.left,
-                  right: widget.padding.right,
-                  bottom: widget.padding.bottom,
-                ),
-                child: widget.messageText ?? _getDefaultNotificationText(),
-              ),
-            ],
-          ),
-        ),
-      ];
-    } else if (widget.icon != null && widget.mainButton == null) {
-      return <Widget>[
-        _buildLeftBarIndicator(),
-        ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: 42.0 + iconPadding),
-          child: _getIcon(),
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              (_isTitlePresent)
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                        top: widget.padding.top,
-                        left: 4.0,
-                        right: widget.padding.left,
-                      ),
-                      child: _getTitleText(),
-                    )
-                  : _emptyWidget,
-              Padding(
-                padding: EdgeInsets.only(
-                  top: _messageTopMargin,
-                  left: 4.0,
-                  right: widget.padding.right,
-                  bottom: widget.padding.bottom,
-                ),
-                child: widget.messageText ?? _getDefaultNotificationText(),
-              ),
-            ],
-          ),
-        ),
-      ];
-    } else if (widget.icon == null && widget.mainButton != null) {
-      return <Widget>[
-        _buildLeftBarIndicator(),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              (_isTitlePresent)
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                        top: widget.padding.top,
-                        left: widget.padding.left,
-                        right: widget.padding.right,
-                      ),
-                      child: _getTitleText(),
-                    )
-                  : _emptyWidget,
-              Padding(
-                padding: EdgeInsets.only(
-                  top: _messageTopMargin,
-                  left: widget.padding.left,
-                  right: 8.0,
-                  bottom: widget.padding.bottom,
-                ),
-                child: widget.messageText ?? _getDefaultNotificationText(),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: buttonRightPadding),
-          child: _getMainActionButton(),
-        ),
-      ];
-    } else {
-      return <Widget>[
-        _buildLeftBarIndicator(),
-        ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: 42.0 + iconPadding),
-          child: _getIcon(),
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              (_isTitlePresent)
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                        top: widget.padding.top,
-                        left: 4.0,
-                        right: 8.0,
-                      ),
-                      child: _getTitleText(),
-                    )
-                  : _emptyWidget,
-              Padding(
-                padding: EdgeInsets.only(
-                  top: _messageTopMargin,
-                  left: 4.0,
-                  right: 8.0,
-                  bottom: widget.padding.bottom,
-                ),
-                child: widget.messageText ?? _getDefaultNotificationText(),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: buttonRightPadding),
-          child: _getMainActionButton(),
-        ),
-      ];
-    }
-  }
-
-  Text _getDefaultNotificationText() {
-    return Text(
-      widget.message ?? "",
-      style: TextStyle(fontSize: 14.0, color: Colors.white),
     );
   }
 
@@ -614,59 +577,5 @@ Set either a message or messageText""");
     }
   }
 
-  Widget? _getMainActionButton() {
-    return widget.mainButton;
-  }
-
-  Widget _getSnack() {
-    Widget snack;
-
-    if (widget.userInputForm != null) {
-      snack = _generateInputSnack();
-    } else {
-      snack = _generateSnack();
-    }
-
-    return Stack(
-      children: [
-        FutureBuilder<Size>(
-          future: _boxHeightCompleter.future,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (widget.barBlur == 0) {
-                return _emptyWidget;
-              }
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: widget.barBlur!, sigmaY: widget.barBlur!),
-                  child: Container(
-                    height: snapshot.data!.height,
-                    width: snapshot.data!.width,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(widget.borderRadius),
-                    ),
-                  ),
-                ),
-              );
-            } else {
-              return _emptyWidget;
-            }
-          },
-        ),
-        snack,
-      ],
-    );
-  }
-
-  Widget _getTitleText() {
-    return widget.titleText ??
-        Text(
-          widget.title ?? "",
-          style: TextStyle(
-              fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
-        );
-  }
+  void _updateProgress() => setState(() {});
 }

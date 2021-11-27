@@ -7,7 +7,7 @@ import '../../../get.dart';
 
 class SnackbarController {
   static final _snackBarQueue = _SnackBarQueue();
-  static bool get isSnackbarBeingShown => _snackBarQueue.isJobInProgress;
+  static bool get isSnackbarBeingShown => _snackBarQueue._isJobInProgress;
 
   late Animation<double> _filterBlurAnimation;
   late Animation<Color?> _filterColorAnimation;
@@ -54,7 +54,7 @@ class SnackbarController {
   /// Only one GetSnackbar will be displayed at a time, and this method returns
   /// a future to when the snackbar disappears.
   Future<void> show() {
-    return _snackBarQueue.addJob(this);
+    return _snackBarQueue._addJob(this);
   }
 
   void _cancelTimer() {
@@ -319,7 +319,8 @@ class SnackbarController {
       element.remove();
     }
 
-    assert(!_transitionCompleter.isCompleted, 'Cannot remove overlay twice.');
+    assert(!_transitionCompleter.isCompleted,
+        'Cannot remove overlay from a disposed snackbar');
     _controller.dispose();
     _overlayEntries.clear();
     _transitionCompleter.complete(this);
@@ -331,38 +332,39 @@ class SnackbarController {
   }
 
   static void cancelAllSnackbars() {
-    _snackBarQueue.cancelAllJobs();
+    _snackBarQueue._cancelAllJobs();
   }
 
   static Future<void> closeCurrentSnackbar() async {
-    await _snackBarQueue.closeCurrentJob();
+    await _snackBarQueue._closeCurrentJob();
   }
 }
 
 class _SnackBarQueue {
   final _queue = GetQueue();
+  final _snackbarList = <SnackbarController>[];
 
-  bool _isJobInProgress = false;
+  SnackbarController? get _currentSnackbar {
+    if (_snackbarList.isEmpty) return null;
+    return _snackbarList.first;
+  }
 
-  SnackbarController? _currentSnackbar;
+  bool get _isJobInProgress => _snackbarList.isNotEmpty;
 
-  bool get isJobInProgress => _isJobInProgress;
-
-  Future<void> addJob(SnackbarController job) async {
-    _isJobInProgress = true;
-    _currentSnackbar = job;
+  Future<void> _addJob(SnackbarController job) async {
+    _snackbarList.add(job);
     final data = await _queue.add(job._show);
-    _isJobInProgress = false;
-    _currentSnackbar = null;
+    _snackbarList.remove(job);
     return data;
   }
 
-  void cancelAllJobs() {
-    _currentSnackbar?.close();
+  Future<void> _cancelAllJobs() async {
+    await _currentSnackbar?.close();
     _queue.cancelAllJobs();
+    _snackbarList.clear();
   }
 
-  Future<void> closeCurrentJob() async {
+  Future<void> _closeCurrentJob() async {
     await _currentSnackbar?.close();
   }
 }
