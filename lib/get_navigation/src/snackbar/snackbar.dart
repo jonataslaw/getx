@@ -11,6 +11,85 @@ typedef OnTap = void Function(GetSnackBar snack);
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
+@Deprecated('use GetSnackBar')
+class GetBar extends GetSnackBar {
+  GetBar({
+    Key? key,
+    String? title,
+    String? message,
+    Widget? titleText,
+    Widget? messageText,
+    Widget? icon,
+    bool shouldIconPulse = true,
+    double? maxWidth,
+    EdgeInsets margin = const EdgeInsets.all(0.0),
+    EdgeInsets padding = const EdgeInsets.all(16),
+    double borderRadius = 0.0,
+    Color? borderColor,
+    double borderWidth = 1.0,
+    Color backgroundColor = const Color(0xFF303030),
+    Color? leftBarIndicatorColor,
+    List<BoxShadow>? boxShadows,
+    Gradient? backgroundGradient,
+    Widget? mainButton,
+    OnTap? onTap,
+    Duration? duration,
+    bool isDismissible = true,
+    DismissDirection? dismissDirection,
+    bool showProgressIndicator = false,
+    AnimationController? progressIndicatorController,
+    Color? progressIndicatorBackgroundColor,
+    Animation<Color>? progressIndicatorValueColor,
+    SnackPosition snackPosition = SnackPosition.BOTTOM,
+    SnackStyle snackStyle = SnackStyle.FLOATING,
+    Curve forwardAnimationCurve = Curves.easeOutCirc,
+    Curve reverseAnimationCurve = Curves.easeOutCirc,
+    Duration animationDuration = const Duration(seconds: 1),
+    double barBlur = 0.0,
+    double overlayBlur = 0.0,
+    Color overlayColor = Colors.transparent,
+    Form? userInputForm,
+    SnackbarStatusCallback? snackbarStatus,
+  }) : super(
+          key: key,
+          title: title,
+          message: message,
+          titleText: titleText,
+          messageText: messageText,
+          icon: icon,
+          shouldIconPulse: shouldIconPulse,
+          maxWidth: maxWidth,
+          margin: margin,
+          padding: padding,
+          borderRadius: borderRadius,
+          borderColor: borderColor,
+          borderWidth: borderWidth,
+          backgroundColor: backgroundColor,
+          leftBarIndicatorColor: leftBarIndicatorColor,
+          boxShadows: boxShadows,
+          backgroundGradient: backgroundGradient,
+          mainButton: mainButton,
+          onTap: onTap,
+          duration: duration,
+          isDismissible: isDismissible,
+          dismissDirection: dismissDirection,
+          showProgressIndicator: showProgressIndicator,
+          progressIndicatorController: progressIndicatorController,
+          progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+          progressIndicatorValueColor: progressIndicatorValueColor,
+          snackPosition: snackPosition,
+          snackStyle: snackStyle,
+          forwardAnimationCurve: forwardAnimationCurve,
+          reverseAnimationCurve: reverseAnimationCurve,
+          animationDuration: animationDuration,
+          barBlur: barBlur,
+          overlayBlur: overlayBlur,
+          overlayColor: overlayColor,
+          userInputForm: userInputForm,
+          snackbarStatus: snackbarStatus,
+        );
+}
+
 class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
@@ -20,7 +99,7 @@ class GetSnackBar extends StatefulWidget {
 
   /// The direction in which the SnackBar can be dismissed.
   ///
-  /// Cannot be null, defaults to [DismissDirection.down] when
+  /// Default is [DismissDirection.down] when
   /// [snackPosition] == [SnackPosition.BOTTOM] and [DismissDirection.up]
   /// when [snackPosition] == [SnackPosition.TOP]
   final DismissDirection? dismissDirection;
