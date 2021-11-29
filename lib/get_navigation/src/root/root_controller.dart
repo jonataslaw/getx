@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../get.dart';
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../routes/custom_transition.dart';
 import '../routes/observers/route_observer.dart';
 import '../routes/transitions_type.dart';
 
-class GetMaterialController extends GetxController {
+class GetMaterialController extends SuperController {
   bool testMode = false;
   Key? unikey;
   ThemeData? theme;
@@ -42,6 +43,28 @@ class GetMaterialController extends GetxController {
     _key = newKey;
     return key;
   }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    Get.asap(() {
+      final locale = Get.deviceLocale;
+      if (locale != null) {
+        Get.updateLocale(locale);
+      }
+    });
+  }
+
+  @override
+  void onDetached() {}
+
+  @override
+  void onInactive() {}
+
+  @override
+  void onPaused() {}
+
+  @override
+  void onResumed() {}
 
   void restartApp() {
     unikey = UniqueKey();
