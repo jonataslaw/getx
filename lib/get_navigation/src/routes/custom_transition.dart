@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 
 // ignore: one_member_abstracts
 abstract class CustomTransition {
-  Widget buildTransition(
+  Widget buildTransition<T>(
+    PageRoute<T> route,
     BuildContext context,
     Curve? curve,
     Alignment? alignment,

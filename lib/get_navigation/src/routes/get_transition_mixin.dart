@@ -222,12 +222,13 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             ? CurvedAnimation(parent: animation, curve: finalCurve)
             : animation,
         secondaryRouteAnimation: secondaryAnimation,
-        child: child,
         linearTransition: linearTransition,
+        child: child,
       );
     } else {
       if (route.customTransition != null) {
         return route.customTransition!.buildTransition(
+          route,
           context,
           finalCurve,
           route.alignment,
@@ -464,8 +465,14 @@ Cannot read the previousTitle for a route that has not yet been installed''',
 
         default:
           if (Get.customTransition != null) {
-            return Get.customTransition!.buildTransition(context, route.curve,
-                route.alignment, animation, secondaryAnimation, child);
+            return Get.customTransition!.buildTransition(
+                route,
+                context,
+                route.curve,
+                route.alignment,
+                animation,
+                secondaryAnimation,
+                child);
           }
 
           return PageTransitionsTheme().buildTransitions(
