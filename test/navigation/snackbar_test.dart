@@ -15,6 +15,7 @@ void main() {
               'title',
               "message",
               duration: Duration(seconds: 1),
+              mainButton: TextButton(onPressed: () {}, child: Text('button')),
               isDismissible: false,
             );
           },
@@ -114,6 +115,9 @@ void main() {
                   onTap: () {
                     getBar = GetSnackBar(
                       message: 'bar1',
+                      icon: Icon(Icons.alarm),
+                      mainButton:
+                          TextButton(onPressed: () {}, child: Text('button')),
                       duration: const Duration(seconds: 2),
                       isDismissible: true,
                       dismissDirection: dismissDirection,

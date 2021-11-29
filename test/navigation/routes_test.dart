@@ -39,7 +39,8 @@ void main() {
     await gesture.up();
     await tester.pump();
     expect(
-      // The 'route' route has been dragged to the right, halfway across the screen
+      // The 'route' route has been dragged to the right, halfway across
+      // the screen
       tester.getTopLeft(find.ancestor(
           of: find.text('route'),
           matching: find.byType(CupertinoPageScaffold))),

@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -521,7 +520,6 @@ extension GetNavigation on GetInterface {
     routeName ??= "/${page.runtimeType}";
     routeName = _cleanRouteName(routeName);
     if (preventDuplicates && routeName == currentRoute) {
-      CupertinoPageRoute ds;
       return null;
     }
     return global(id).currentState?.push<T>(
