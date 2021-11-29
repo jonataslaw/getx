@@ -1,3 +1,6 @@
+## [4.5.1] - Big Update
+Fix Snackbar when it have action and icon the same time
+
 ## [4.5.0] - Big Update
 To have a context-free, page-agnostic snackbar, we used OverlayRoute to display a partial route.
 However this had several problems:

@@ -560,7 +560,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
             mainAxisSize: MainAxisSize.max,
             children: [
               _buildLeftBarIndicator(),
-              if (_rowStyle == RowStyle.icon)
+              if (_rowStyle == RowStyle.icon || _rowStyle == RowStyle.all)
                 ConstrainedBox(
                   constraints:
                       BoxConstraints.tightFor(width: 42.0 + iconPadding),
@@ -608,7 +608,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
                   ],
                 ),
               ),
-              if (_rowStyle == RowStyle.action)
+              if (_rowStyle == RowStyle.action || _rowStyle == RowStyle.all)
                 Padding(
                   padding: EdgeInsets.only(right: buttonPadding),
                   child: widget.mainButton,

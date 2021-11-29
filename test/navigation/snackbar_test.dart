@@ -115,9 +115,6 @@ void main() {
                   onTap: () {
                     getBar = GetSnackBar(
                       message: 'bar1',
-                      icon: Icon(Icons.alarm),
-                      mainButton:
-                          TextButton(onPressed: () {}, child: Text('button')),
                       duration: const Duration(seconds: 2),
                       isDismissible: true,
                       dismissDirection: dismissDirection,
@@ -211,5 +208,39 @@ void main() {
     expect(counter, 1);
     await tester.pump(const Duration(milliseconds: 3000));
     await getBarController.close(withAnimations: false);
+  });
+
+  testWidgets("Get test actions and icon", (tester) async {
+    final icon = Icon(Icons.alarm);
+    final action = TextButton(onPressed: () {}, child: Text('button'));
+
+    late final GetSnackBar getBar;
+
+    await tester.pumpWidget(GetMaterialApp(home: Scaffold()));
+
+    expect(Get.isSnackbarOpen, false);
+    expect(find.text('bar1'), findsNothing);
+
+    getBar = GetSnackBar(
+      message: 'bar1',
+      icon: icon,
+      mainButton: action,
+      leftBarIndicatorColor: Colors.yellow,
+      showProgressIndicator: true,
+      // maxWidth: 100,
+      borderColor: Colors.red,
+      duration: const Duration(seconds: 1),
+      isDismissible: false,
+    );
+    Get.showSnackbar(getBar);
+
+    expect(Get.isSnackbarOpen, true);
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byWidget(getBar), findsOneWidget);
+    expect(find.byWidget(icon), findsOneWidget);
+    expect(find.byWidget(action), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(Get.isSnackbarOpen, false);
   });
 }
