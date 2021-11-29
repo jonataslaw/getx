@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// add Padding Property to widget
@@ -53,4 +54,12 @@ extension WidgetMarginX on Widget {
 /// Allows you to insert widgets inside a CustomScrollView
 extension WidgetSliverBoxX on Widget {
   Widget get sliverBox => SliverToBoxAdapter(child: this);
+}
+
+// Provide elevation to the widget
+extension WidgetElevationX on Widget {
+  Material elevation(double elevation) => Material(
+        elevation: elevation,
+        child: this,
+      );
 }
