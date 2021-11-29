@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -194,8 +195,9 @@ class SnackbarController {
               builder: (context, child) {
                 return BackdropFilter(
                   filter: ImageFilter.blur(
-                      sigmaX: _filterBlurAnimation.value,
-                      sigmaY: _filterBlurAnimation.value),
+                    sigmaX: max(0.001, _filterBlurAnimation.value),
+                    sigmaY: max(0.001, _filterBlurAnimation.value),
+                  ),
                   child: Container(
                     constraints: const BoxConstraints.expand(),
                     color: _filterColorAnimation.value,
