@@ -84,6 +84,7 @@ class BaseWebSocket {
     socketNotifier!.addMessages(fn);
   }
 
+  // ignore: use_setters_to_change_properties
   void onOpen(OpenSocket fn) {
     socketNotifier!.open = fn;
   }

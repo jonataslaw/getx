@@ -480,7 +480,6 @@ void main() {
 
     expect(find.byType(FirstScreen), findsOneWidget);
   });
-
 }
 
 class FirstScreen extends StatelessWidget {
