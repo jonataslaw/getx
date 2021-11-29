@@ -75,14 +75,14 @@ mixin ScrollMixin on GetLifeCycleBase {
 abstract class RxController extends DisposableInterface {}
 
 abstract class SuperController<T> extends FullLifeCycleController
-    with FullLifeCycle, StateMixin<T> {}
+    with FullLifeCycleMixin, StateMixin<T> {}
 
 abstract class FullLifeCycleController extends GetxController
     with
         // ignore: prefer_mixin
         WidgetsBindingObserver {}
 
-mixin FullLifeCycle on FullLifeCycleController {
+mixin FullLifeCycleMixin on FullLifeCycleController {
   @mustCallSuper
   @override
   void onInit() {
