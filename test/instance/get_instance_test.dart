@@ -40,12 +40,16 @@ void main() {
   });
 
   test('Get start and delete called just one time', () async {
-    Get..put(Controller())..put(Controller());
+    Get
+      ..put(Controller())
+      ..put(Controller());
 
     final controller = Get.find<Controller>();
     expect(controller.init, 1);
 
-    Get..delete<Controller>()..delete<Controller>();
+    Get
+      ..delete<Controller>()
+      ..delete<Controller>();
     expect(controller.close, 1);
     Get.reset();
   });

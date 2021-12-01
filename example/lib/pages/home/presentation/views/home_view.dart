@@ -21,6 +21,12 @@ class HomeView extends GetView<HomeController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Get.snackbar('title', 'message');
+            },
+          ),
           title: Text('covid'.tr),
           backgroundColor: Colors.white10,
           elevation: 0,
