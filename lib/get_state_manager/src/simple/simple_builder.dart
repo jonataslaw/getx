@@ -40,7 +40,7 @@ class ValueBuilder<T> extends StatefulWidget {
   _ValueBuilderState<T> createState() => _ValueBuilderState<T>(initialValue);
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
+class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   T value;
   _ValueBuilderState(this.value);
 
