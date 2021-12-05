@@ -103,7 +103,7 @@ mixin GetSingleTickerProviderStateMixin on GetxController
 ///    first_controller.addListener(() =>
 ///        print("Animation Controller value: ${first_controller.value}"));
 ///    second_controller.addListener(() =>
-///        print("Animation Controller value: ${first_controller.value}"));
+///        print("Animation Controller value: ${second_controller.value}"));
 ///  }
 ///  ...
 /// ```
