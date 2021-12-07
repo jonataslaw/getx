@@ -51,7 +51,7 @@ GetPage(
                     children: [
                         GetPage(
                             name: '/:reviewId' //displays a single review
-                            page: () => ProductReviewDetails(),
+                            page: () => ProductReviewDetailsView(),
                         )
                     ]
                 ),
@@ -100,7 +100,7 @@ GetPage(
         ),
         GetPage(    
             name: '/products/654132/reviews/9876',
-            page: () => ProductReviewDetails(),
+            page: () => ProductReviewDetailsView(),
             parameters: {
                 'productId': '654132',
                 'reviewId': '9876'
