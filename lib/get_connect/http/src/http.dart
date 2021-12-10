@@ -195,7 +195,6 @@ class GetHttpClient {
     int requestNumber = 1,
     Map<String, String>? headers,
   }) async {
-    try {
       var request = await handler();
 
       headers?.forEach((key, value) {
@@ -206,6 +205,7 @@ class GetHttpClient {
       final newRequest = await _modifier.modifyRequest<T>(request);
 
       _httpClient.timeout = timeout;
+    try {
       var response = await _httpClient.send<T>(newRequest);
 
       final newResponse =
@@ -242,7 +242,7 @@ class GetHttpClient {
         throw GetHttpException(err.toString());
       } else {
         return Response<T>(
-          request: null,
+          request: newRequest,
           headers: null,
           statusCode: null,
           body: null,
