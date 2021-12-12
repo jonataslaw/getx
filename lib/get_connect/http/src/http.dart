@@ -268,6 +268,8 @@ class GetHttpClient {
       headers: headers,
       decoder: decoder ?? (defaultDecoder as Decoder<T>?),
       contentLength: 0,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
     ));
   }
 
