@@ -69,13 +69,13 @@ extension Trans on String {
     final translationsWithNoCountry = Get.translations
         .map((key, value) => MapEntry(key.split("_").first, value));
     final containsKey =
-        translationsWithNoCountry.containsKey(Get.locale!.languageCode);
+        translationsWithNoCountry.containsKey(Get.locale!.languageCode.split("_").first);
 
     if (!containsKey) {
       return null;
     }
 
-    return translationsWithNoCountry[Get.locale!.languageCode];
+    return translationsWithNoCountry[Get.locale!.languageCode.split("_").first];
   }
 
   String get tr {
