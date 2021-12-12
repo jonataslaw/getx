@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
@@ -9,64 +10,8 @@ import '../../get_navigation.dart';
 import 'root_controller.dart';
 
 class GetCupertinoApp extends StatelessWidget {
-  const GetCupertinoApp({
-    Key? key,
-    this.theme,
-    this.navigatorKey,
-    this.home,
-    Map<String, Widget Function(BuildContext)> this.routes =
-        const <String, WidgetBuilder>{},
-    this.initialRoute,
-    this.onGenerateRoute,
-    this.onGenerateInitialRoutes,
-    this.onUnknownRoute,
-    List<NavigatorObserver> this.navigatorObservers =
-        const <NavigatorObserver>[],
-    this.builder,
-    this.translationsKeys,
-    this.translations,
-    this.textDirection,
-    this.title = '',
-    this.onGenerateTitle,
-    this.color,
-    this.customTransition,
-    this.onInit,
-    this.onDispose,
-    this.locale,
-    this.fallbackLocale,
-    this.localizationsDelegates,
-    this.localeListResolutionCallback,
-    this.localeResolutionCallback,
-    this.supportedLocales = const <Locale>[Locale('en', 'US')],
-    this.showPerformanceOverlay = false,
-    this.checkerboardRasterCacheImages = false,
-    this.checkerboardOffscreenLayers = false,
-    this.showSemanticsDebugger = false,
-    this.debugShowCheckedModeBanner = true,
-    this.shortcuts,
-    this.smartManagement = SmartManagement.full,
-    this.initialBinding,
-    this.unknownRoute,
-    this.routingCallback,
-    this.defaultTransition,
-    this.onReady,
-    this.getPages,
-    this.opaqueRoute,
-    this.enableLog = kDebugMode,
-    this.logWriterCallback,
-    this.popGesture,
-    this.transitionDuration,
-    this.defaultGlobalState,
-    this.highContrastTheme,
-    this.highContrastDarkTheme,
-    this.actions,
-  })  : routeInformationProvider = null,
-        routeInformationParser = null,
-        routerDelegate = null,
-        backButtonDispatcher = null,
-        super(key: key);
-
   final GlobalKey<NavigatorState>? navigatorKey;
+
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
   final String? initialRoute;
@@ -117,6 +62,64 @@ class GetCupertinoApp extends StatelessWidget {
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
+  final bool useInheritedMediaQuery;
+  const GetCupertinoApp({
+    Key? key,
+    this.theme,
+    this.navigatorKey,
+    this.home,
+    Map<String, Widget Function(BuildContext)> this.routes =
+        const <String, WidgetBuilder>{},
+    this.initialRoute,
+    this.onGenerateRoute,
+    this.onGenerateInitialRoutes,
+    this.onUnknownRoute,
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
+    this.builder,
+    this.translationsKeys,
+    this.translations,
+    this.textDirection,
+    this.title = '',
+    this.onGenerateTitle,
+    this.color,
+    this.customTransition,
+    this.onInit,
+    this.onDispose,
+    this.locale,
+    this.fallbackLocale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale('en', 'US')],
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowCheckedModeBanner = true,
+    this.shortcuts,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.useInheritedMediaQuery = false,
+    this.unknownRoute,
+    this.routingCallback,
+    this.defaultTransition,
+    this.onReady,
+    this.getPages,
+    this.opaqueRoute,
+    this.enableLog = kDebugMode,
+    this.logWriterCallback,
+    this.popGesture,
+    this.transitionDuration,
+    this.defaultGlobalState,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.actions,
+  })  : routeInformationProvider = null,
+        routeInformationParser = null,
+        routerDelegate = null,
+        backButtonDispatcher = null,
+        super(key: key);
 
   GetCupertinoApp.router({
     Key? key,
@@ -128,6 +131,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.builder,
     this.title = '',
     this.onGenerateTitle,
+    this.useInheritedMediaQuery = false,
     this.color,
     this.highContrastTheme,
     this.highContrastDarkTheme,
@@ -181,31 +185,6 @@ class GetCupertinoApp extends StatelessWidget {
         super(key: key) {
     Get.routerDelegate = routerDelegate;
     Get.routeInformationParser = routeInformationParser;
-  }
-
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
-
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    return [
-      PageRedirect(
-        settings: RouteSettings(name: name),
-        unknownRoute: unknownRoute,
-      ).page()
-    ];
-  }
-
-  Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
-    );
   }
 
   @override
@@ -271,6 +250,7 @@ class GetCupertinoApp extends StatelessWidget {
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
+                useInheritedMediaQuery: useInheritedMediaQuery,
               )
             : CupertinoApp(
                 key: _.unikey,
@@ -310,7 +290,33 @@ class GetCupertinoApp extends StatelessWidget {
                 showSemanticsDebugger: showSemanticsDebugger,
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 //   actions: actions,
               ),
       );
+
+  Widget defaultBuilder(BuildContext context, Widget? child) {
+    return Directionality(
+      textDirection: textDirection ??
+          (rtlLanguages.contains(Get.locale?.languageCode)
+              ? TextDirection.rtl
+              : TextDirection.ltr),
+      child: builder == null
+          ? (child ?? Material())
+          : builder!(context, child ?? Material()),
+    );
+  }
+
+  Route<dynamic> generator(RouteSettings settings) {
+    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
+  }
+
+  List<Route<dynamic>> initialRoutesGenerate(String name) {
+    return [
+      PageRedirect(
+        settings: RouteSettings(name: name),
+        unknownRoute: unknownRoute,
+      ).page()
+    ];
+  }
 }
