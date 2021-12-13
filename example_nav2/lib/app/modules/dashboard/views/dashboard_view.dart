@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../controllers/dashboard_controller.dart';
 
-
 class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {

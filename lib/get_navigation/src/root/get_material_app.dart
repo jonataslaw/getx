@@ -10,69 +10,8 @@ import '../../get_navigation.dart';
 import 'root_controller.dart';
 
 class GetMaterialApp extends StatelessWidget {
-  const GetMaterialApp({
-    Key? key,
-    this.navigatorKey,
-    this.scaffoldMessengerKey,
-    this.home,
-    Map<String, Widget Function(BuildContext)> this.routes =
-        const <String, WidgetBuilder>{},
-    this.initialRoute,
-    this.onGenerateRoute,
-    this.onGenerateInitialRoutes,
-    this.onUnknownRoute,
-    List<NavigatorObserver> this.navigatorObservers =
-        const <NavigatorObserver>[],
-    this.builder,
-    this.textDirection,
-    this.title = '',
-    this.onGenerateTitle,
-    this.color,
-    this.theme,
-    this.darkTheme,
-    this.themeMode = ThemeMode.system,
-    this.locale,
-    this.fallbackLocale,
-    this.localizationsDelegates,
-    this.localeListResolutionCallback,
-    this.localeResolutionCallback,
-    this.supportedLocales = const <Locale>[Locale('en', 'US')],
-    this.debugShowMaterialGrid = false,
-    this.showPerformanceOverlay = false,
-    this.checkerboardRasterCacheImages = false,
-    this.checkerboardOffscreenLayers = false,
-    this.showSemanticsDebugger = false,
-    this.debugShowCheckedModeBanner = true,
-    this.shortcuts,
-    this.scrollBehavior,
-    this.customTransition,
-    this.translationsKeys,
-    this.translations,
-    this.onInit,
-    this.onReady,
-    this.onDispose,
-    this.routingCallback,
-    this.defaultTransition,
-    this.getPages,
-    this.opaqueRoute,
-    this.enableLog = kDebugMode,
-    this.logWriterCallback,
-    this.popGesture,
-    this.transitionDuration,
-    this.defaultGlobalState,
-    this.smartManagement = SmartManagement.full,
-    this.initialBinding,
-    this.unknownRoute,
-    this.highContrastTheme,
-    this.highContrastDarkTheme,
-    this.actions,
-  })  : routeInformationProvider = null,
-        routeInformationParser = null,
-        routerDelegate = null,
-        backButtonDispatcher = null,
-        super(key: key);
-
   final GlobalKey<NavigatorState>? navigatorKey;
+
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
@@ -128,6 +67,69 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
+  final bool useInheritedMediaQuery;
+  const GetMaterialApp({
+    Key? key,
+    this.navigatorKey,
+    this.scaffoldMessengerKey,
+    this.home,
+    Map<String, Widget Function(BuildContext)> this.routes =
+        const <String, WidgetBuilder>{},
+    this.initialRoute,
+    this.onGenerateRoute,
+    this.onGenerateInitialRoutes,
+    this.onUnknownRoute,
+    this.useInheritedMediaQuery = false,
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
+    this.builder,
+    this.textDirection,
+    this.title = '',
+    this.onGenerateTitle,
+    this.color,
+    this.theme,
+    this.darkTheme,
+    this.themeMode = ThemeMode.system,
+    this.locale,
+    this.fallbackLocale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale('en', 'US')],
+    this.debugShowMaterialGrid = false,
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowCheckedModeBanner = true,
+    this.shortcuts,
+    this.scrollBehavior,
+    this.customTransition,
+    this.translationsKeys,
+    this.translations,
+    this.onInit,
+    this.onReady,
+    this.onDispose,
+    this.routingCallback,
+    this.defaultTransition,
+    this.getPages,
+    this.opaqueRoute,
+    this.enableLog = kDebugMode,
+    this.logWriterCallback,
+    this.popGesture,
+    this.transitionDuration,
+    this.defaultGlobalState,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.unknownRoute,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.actions,
+  })  : routeInformationProvider = null,
+        routeInformationParser = null,
+        routerDelegate = null,
+        backButtonDispatcher = null,
+        super(key: key);
 
   GetMaterialApp.router({
     Key? key,
@@ -142,6 +144,7 @@ class GetMaterialApp extends StatelessWidget {
     this.color,
     this.theme,
     this.darkTheme,
+    this.useInheritedMediaQuery = false,
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.themeMode = ThemeMode.system,
@@ -200,31 +203,6 @@ class GetMaterialApp extends StatelessWidget {
     Get.routeInformationParser = routeInformationParser;
   }
 
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
-
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    return [
-      PageRedirect(
-        settings: RouteSettings(name: name),
-        unknownRoute: unknownRoute,
-      ).page()
-    ];
-  }
-
-  Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
         init: Get.rootController,
@@ -270,7 +248,6 @@ class GetMaterialApp extends StatelessWidget {
             ? MaterialApp.router(
                 routerDelegate: routerDelegate!,
                 routeInformationParser: routeInformationParser!,
-                scaffoldMessengerKey: scaffoldMessengerKey,
                 backButtonDispatcher: backButtonDispatcher,
                 routeInformationProvider: routeInformationProvider,
                 key: _.unikey,
@@ -283,6 +260,8 @@ class GetMaterialApp extends StatelessWidget {
                     _.darkTheme ?? darkTheme ?? theme ?? ThemeData.fallback(),
                 themeMode: _.themeMode ?? themeMode,
                 locale: Get.locale ?? locale,
+                scaffoldMessengerKey:
+                    scaffoldMessengerKey ?? _.scaffoldMessengerKey,
                 localizationsDelegates: localizationsDelegates,
                 localeListResolutionCallback: localeListResolutionCallback,
                 localeResolutionCallback: localeResolutionCallback,
@@ -295,13 +274,15 @@ class GetMaterialApp extends StatelessWidget {
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
+                useInheritedMediaQuery: useInheritedMediaQuery,
               )
             : MaterialApp(
                 key: _.unikey,
                 navigatorKey: (navigatorKey == null
                     ? Get.key
                     : Get.addKey(navigatorKey!)),
-                scaffoldMessengerKey: scaffoldMessengerKey,
+                scaffoldMessengerKey:
+                    scaffoldMessengerKey ?? _.scaffoldMessengerKey,
                 home: home,
                 routes: routes ?? const <String, WidgetBuilder>{},
                 initialRoute: initialRoute,
@@ -340,7 +321,33 @@ class GetMaterialApp extends StatelessWidget {
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 //   actions: actions,
               ),
       );
+
+  Widget defaultBuilder(BuildContext context, Widget? child) {
+    return Directionality(
+      textDirection: textDirection ??
+          (rtlLanguages.contains(Get.locale?.languageCode)
+              ? TextDirection.rtl
+              : TextDirection.ltr),
+      child: builder == null
+          ? (child ?? Material())
+          : builder!(context, child ?? Material()),
+    );
+  }
+
+  Route<dynamic> generator(RouteSettings settings) {
+    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
+  }
+
+  List<Route<dynamic>> initialRoutesGenerate(String name) {
+    return [
+      PageRedirect(
+        settings: RouteSettings(name: name),
+        unknownRoute: unknownRoute,
+      ).page()
+    ];
+  }
 }

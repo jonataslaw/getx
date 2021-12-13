@@ -115,6 +115,7 @@ class GetConnect extends GetConnectInterface {
   Decoder? defaultDecoder;
   Duration timeout;
   List<TrustedCertificate>? trustedCertificates;
+  String Function(Uri url)? findProxy;
   GetHttpClient? _httpClient;
   List<GetSocket>? _sockets;
   bool withCredentials;
@@ -134,6 +135,7 @@ class GetConnect extends GetConnectInterface {
         baseUrl: baseUrl,
         trustedCertificates: trustedCertificates,
         withCredentials: withCredentials,
+        findProxy: findProxy
       );
 
   @override

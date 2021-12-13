@@ -39,6 +39,8 @@ class GetHttpClient {
 
   final GetModifier _modifier;
 
+  String Function(Uri url)? findProxy;
+
   GetHttpClient({
     this.userAgent = 'getx-client',
     this.timeout = const Duration(seconds: 8),
@@ -50,10 +52,12 @@ class GetHttpClient {
     this.baseUrl,
     List<TrustedCertificate>? trustedCertificates,
     bool withCredentials = false,
+    String Function(Uri url)? findProxy,
   })  : _httpClient = HttpRequestImpl(
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
           withCredentials: withCredentials,
+          findProxy: findProxy,
         ),
         _modifier = GetModifier();
 
@@ -195,7 +199,6 @@ class GetHttpClient {
     int requestNumber = 1,
     Map<String, String>? headers,
   }) async {
-    try {
       var request = await handler();
 
       headers?.forEach((key, value) {
@@ -206,6 +209,7 @@ class GetHttpClient {
       final newRequest = await _modifier.modifyRequest<T>(request);
 
       _httpClient.timeout = timeout;
+    try {
       var response = await _httpClient.send<T>(newRequest);
 
       final newResponse =
@@ -242,7 +246,7 @@ class GetHttpClient {
         throw GetHttpException(err.toString());
       } else {
         return Response<T>(
-          request: null,
+          request: newRequest,
           headers: null,
           statusCode: null,
           body: null,
@@ -268,6 +272,8 @@ class GetHttpClient {
       headers: headers,
       decoder: decoder ?? (defaultDecoder as Decoder<T>?),
       contentLength: 0,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
     ));
   }
 
