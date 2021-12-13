@@ -17,6 +17,7 @@ class HttpRequestImpl extends HttpRequestBase {
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
     bool withCredentials = false,
+    String Function(Uri url)? findProxy,
   }) {
     _httpClient = io.HttpClient();
     if (trustedCertificates != null) {
@@ -29,6 +30,7 @@ class HttpRequestImpl extends HttpRequestBase {
 
     _httpClient = io.HttpClient(context: _securityContext);
     _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
+    _httpClient!.findProxy = findProxy;
   }
 
   @override

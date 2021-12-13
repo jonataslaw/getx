@@ -619,6 +619,22 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                       onStartPopGesture: () => _startPopGesture<T>(route),
                       child: child)
                   : child);
+          
+        case Transition.ciruclarReveal:
+          return CircularRevealTransition().buildTransitions(
+              context,
+              route.curve,
+              route.alignment,
+              animation,
+              secondaryAnimation,
+              route.popGesture ?? Get.defaultPopGesture
+                  ? CupertinoBackGestureDetector<T>(
+                  gestureWidth: route.gestureWidth?.call(context) ??
+                      _kBackGestureWidth,
+                  enabledCallback: () => _isPopGestureEnabled<T>(route),
+                  onStartPopGesture: () => _startPopGesture<T>(route),
+                  child: child)
+                  : child);
 
         default:
           if (Get.customTransition != null) {
