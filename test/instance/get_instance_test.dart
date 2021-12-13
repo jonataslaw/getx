@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
@@ -146,8 +148,8 @@ void main() {
     Get.create<Service>(() => Api());
     final ct1 = Get.find<Service>();
     final ct2 = Get.find<Service>();
-    expect(ct1 is Service, true);
-    expect(ct2 is Service, true);
+    // expect(ct1 is Service, true);
+    // expect(ct2 is Service, true);
     expect(ct1 == ct2, false);
     Get.reset();
   });

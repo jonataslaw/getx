@@ -199,16 +199,16 @@ class GetHttpClient {
     int requestNumber = 1,
     Map<String, String>? headers,
   }) async {
-      var request = await handler();
+    var request = await handler();
 
-      headers?.forEach((key, value) {
-        request.headers[key] = value;
-      });
+    headers?.forEach((key, value) {
+      request.headers[key] = value;
+    });
 
-      if (authenticate) await _modifier.authenticator!(request);
-      final newRequest = await _modifier.modifyRequest<T>(request);
+    if (authenticate) await _modifier.authenticator!(request);
+    final newRequest = await _modifier.modifyRequest<T>(request);
 
-      _httpClient.timeout = timeout;
+    _httpClient.timeout = timeout;
     try {
       var response = await _httpClient.send<T>(newRequest);
 

@@ -125,18 +125,17 @@ class GetConnect extends GetConnectInterface {
 
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
-        userAgent: userAgent,
-        sendUserAgent: sendUserAgent,
-        timeout: timeout,
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        maxAuthRetries: maxAuthRetries,
-        allowAutoSignedCert: allowAutoSignedCert,
-        baseUrl: baseUrl,
-        trustedCertificates: trustedCertificates,
-        withCredentials: withCredentials,
-        findProxy: findProxy
-      );
+      userAgent: userAgent,
+      sendUserAgent: sendUserAgent,
+      timeout: timeout,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      maxAuthRetries: maxAuthRetries,
+      allowAutoSignedCert: allowAutoSignedCert,
+      baseUrl: baseUrl,
+      trustedCertificates: trustedCertificates,
+      withCredentials: withCredentials,
+      findProxy: findProxy);
 
   @override
   Future<Response<T>> get<T>(
