@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'circular_reveal_clipper.dart';
+
 class LeftToRightFadeTransition {
   Widget buildTransitions(
       BuildContext context,
@@ -185,7 +187,6 @@ class SizeTransitions {
   }
 }
 
-
 class CircularRevealTransition {
   Widget buildTransitions(
       BuildContext context,
@@ -197,7 +198,7 @@ class CircularRevealTransition {
     return ClipPath(
       clipper: CircularRevealClipper(
         fraction: animation.value,
-        centerAlignment:  Alignment.center,
+        centerAlignment: Alignment.center,
         centerOffset: Offset.zero,
         minRadius: 0,
         maxRadius: 800,
@@ -206,4 +207,3 @@ class CircularRevealTransition {
     );
   }
 }
-

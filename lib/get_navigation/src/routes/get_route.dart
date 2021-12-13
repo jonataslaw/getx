@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../../get_core/src/get_main.dart';
 import '../../../get_instance/get_instance.dart';
 import '../../get_navigation.dart';
-import 'custom_transition.dart';
-import 'transitions_type.dart';
 
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;

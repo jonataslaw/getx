@@ -114,6 +114,23 @@ void main() {
     expect(1, timesCalled);
   });
 
+  test('Rx different value will call the listener when `trigger`', () async {
+    var reactiveInteger = RxInt(0);
+    var timesCalled = 0;
+    reactiveInteger.listen((newInt) {
+      timesCalled++;
+    });
+
+    // we call 3
+    reactiveInteger.trigger(1);
+    // then repeat twice
+    reactiveInteger.trigger(2);
+    reactiveInteger.trigger(3);
+
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(3, timesCalled);
+  });
+
   test('Rx same value will call the listener when `trigger`', () async {
     var reactiveInteger = RxInt(2);
     var timesCalled = 0;
@@ -125,10 +142,11 @@ void main() {
     reactiveInteger.trigger(3);
     // then repeat twice
     reactiveInteger.trigger(3);
+    reactiveInteger.trigger(3);
     reactiveInteger.trigger(1);
 
     await Future.delayed(Duration(milliseconds: 100));
-    expect(3, timesCalled);
+    expect(4, timesCalled);
   });
 
   test('Rx String with non null values', () async {

@@ -5,7 +5,6 @@ import '../../../../instance_manager.dart';
 import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
 import '../../router_report.dart';
-import '../default_route.dart';
 
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
