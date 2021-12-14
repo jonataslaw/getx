@@ -1,90 +1,89 @@
-- [Route Management](#route-management)
-  - [How to use](#how-to-use)
-  - [Navigation without named routes](#navigation-without-named-routes)
-  - [Navigation with named routes](#navigation-with-named-routes)
-    - [Send data to named Routes](#send-data-to-named-routes)
-    - [Dynamic urls links](#dynamic-urls-links)
+- [Rota Yönetimi (Route Management)](#route-management)
+  - [Nasıl kullanılır?](#how-to-use)
+  - [Adlandırılmış rotalar olmadan navigasyon](#navigation-without-named-routes)
+  - [Adlandırılmış rotalarla navigasyon](#adlandırılmış-rotalarla-navigasyon)
+    - [Verileri adlandırılmış Rotalara gönder](#send-data-to-named-routes)
+    - [Dinamik URL bağlantıları](#dynamic-urls-links)
     - [Middleware](#middleware)
-  - [Navigation without context](#navigation-without-context)
+  - [Bağlamsız(Context) Navigasyon](#navigation-without-context)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [Nested Navigation](#nested-navigation)
+  - [İç İçe Navigasyon (Nested Navigation)](#nested-navigation)
 
-# Route Management
+# Rota Yönetimi (Route Management)
 
-This is the complete explanation of all there is to Getx when the matter is route management.
+Konu rota yönetimi olduğunda Getx için gereken her şeyin tam açıklaması budur.
 
-## How to use
+## Nasıl kullanılır?
 
-Add this to your pubspec.yaml file:
+Bunu pubspec.yaml dosyanıza ekleyin:
 
 ```yaml
 dependencies:
   get:
 ```
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, or use the high-level Get APIs, you need to simply add "Get" before your MaterialApp, turning it into GetMaterialApp and enjoy!
+Context olmadan routes/snackbars/dialogs/bottomsheets kullanacaksanız veya üst düzey Get API'lerini kullanacaksanız, `MaterialApp`'ınızdan önce `Get` eklemeniz, `GetMaterialApp`'a dönüştürmeniz ve keyfini çıkarmanız yeterlidir!
 
 ```dart
-GetMaterialApp( // Before: MaterialApp(
+GetMaterialApp( // Öncesi: MaterialApp(
   home: MyHome(),
 )
 ```
 
-## Navigation without named routes
+## Adlandırılmış rotalar olmadan navigasyon
 
-To navigate to a new screen:
+Yeni bir ekrana gitmek için:
 
 ```dart
 Get.to(NextScreen());
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+Snackbar'ları, Dialog'ları, Bottomsheet'leri veya normalde kapatacağınız herhangi bir şeyi kapatmak için `Navigator.pop(context);`
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
+Bir sonraki ekrana gittikten sonra önceki ekrana geri dönme seçeneğinin olmaması için (SplashScreens, Login ekranlarında vb. kullanım için)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+Bir sonraki ekrana gittikten sonra önceki tüm rotaları iptal etmek için (Alışveriş sepetlerinde, Anketlerde ve Testlerde kullanışlıdır)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-To navigate to the next route, and receive or update data as soon as you return from it:
+Bir sonraki rotaya gitmek ve geri döner dönmez verileri almak veya güncellemek için:
 
 ```dart
 var data = await Get.to(Payment());
 ```
 
-on other screen, send a data for previous route:
+diğer ekrandan önceki rota için bir veri gönderin:
 
 ```dart
 Get.back(result: 'success');
 ```
 
-And use it:
+Ve kullanın:
 
-ex:
+Örn:
 
 ```dart
 if(data == 'success') madeAnything();
 ```
 
-Don't you want to learn our syntax?
-Just change the Navigator (uppercase) to navigator (lowercase), and you will have all the functions of the standard navigation, without having to use context
-Example:
+Sözdizimimizi öğrenmek istemiyor musun? Navigator'ı (büyük harf) navigator (küçük harf) olarak değiştirin ve bağlam(context) kullanmak zorunda kalmadan standart navigasyonun tüm işlevlerine sahip olacaksınız.
+Örnek:
 
 ```dart
 
-// Default Flutter navigator
+// Varsayılan Flutter Navigator
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -94,7 +93,7 @@ Navigator.of(context).push(
   ),
 );
 
-// Get using Flutter syntax without needing context
+// Bağlama(context) ihtiyaç duymadan Flutter sözdizimini(syntax) kullanın
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -109,29 +108,29 @@ Get.to(HomePage());
 
 ```
 
-## Navigation with named routes
+### Adlandırılmış Rotalarla Navigasyon
 
-- If you prefer to navigate by namedRoutes, Get also supports this.
+- NamedRoutes ile gezinmeyi tercih ederseniz, Get de bunu destekler.
 
-To navigate to nextScreen
+nextScreen'e gitmek için
 
 ```dart
 Get.toNamed("/NextScreen");
 ```
 
-To navigate and remove the previous screen from the tree.
+Ağaçta ve önceki ekranda gezinmek için.
 
 ```dart
 Get.offNamed("/NextScreen");
 ```
 
-To navigate and remove all previous screens from the tree.
+Ağaçta gezinmek ve önceki tüm ekranları kaldırmak için
 
 ```dart
 Get.offAllNamed("/NextScreen");
 ```
 
-To define routes, use GetMaterialApp:
+Rotaları tanımlamak için `GetMaterialApp`'i kullanın:
 
 ```dart
 void main() {
@@ -152,7 +151,7 @@ void main() {
 }
 ```
 
-To handle navigation to non-defined routes (404 error), you can define an unknownRoute page in GetMaterialApp.
+Tanımsız rotalara navigasyonu yönetmek için (404 hatası), `GetMaterialApp`'de bir `unknownRoute` sayfası tanımlayabilirsiniz.
 
 ```dart
 void main() {
@@ -169,30 +168,31 @@ void main() {
 }
 ```
 
-### Send data to named Routes
+### Verileri adlandırılmış Rotalara gönder
 
-Just send what you want for arguments. Get accepts anything here, whether it is a String, a Map, a List, or even a class instance.
+
+Sadece argümanlar için istediğinizi gönderin. Get, burada bir String, Map, List veya hatta bir Class örneği olsun, her şeyi kabul eder.
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
 ```
 
-on your class or controller:
+sınıfınızda(class) veya denetleyicinizde(controller):
 
 ```dart
 print(Get.arguments);
 //print out: Get is the best
 ```
 
-### Dynamic urls links
+### Dinamik URL bağlantıları
 
-Get offer advanced dynamic urls just like on the Web. Web developers have probably already wanted this feature on Flutter, and most likely have seen a package promise this feature and deliver a totally different syntax than a URL would have on web, but Get also solves that.
+Web'deki gibi gelişmiş dinamik url'ler sunun. Web geliştiricileri muhtemelen bu özelliği Flutter'da istemişlerdir ve büyük olasılıkla bir paketin bu özelliği vaat ettiğini ve bir URL'nin web'de bulunacağından tamamen farklı bir sözdizimi sunduğunu görmüşlerdir, ancak Get bunu da çözmektedir.
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-on your controller/bloc/stateful/stateless class:
+controller/bloc/stateful/stateless Sınıfınıza:
 
 ```dart
 print(Get.parameters['id']);
@@ -201,7 +201,7 @@ print(Get.parameters['name']);
 // out: Enzo
 ```
 
-You can also receive NamedParameters with Get easily:
+Ayrıca Get ile Adlandırılmış Parametreleri kolayca alabilirsiniz:
 
 ```dart
 void main() {
@@ -217,7 +217,7 @@ void main() {
         name: '/profile/',
         page: () => MyProfile(),
       ),
-       //You can define a different page for routes with arguments, and another without arguments, but for that you must use the slash '/' on the route that will not receive arguments as above.
+       //Argümanlı rotalar için farklı bir sayfa ve argümansız başka bir sayfa tanımlayabilirsiniz, ancak bunun için yukarıdaki gibi argüman almayacak olan rotada '/' eğik çizgisini kullanmanız gerekir.
        GetPage(
         name: '/profile/:user',
         page: () => UserProfile(),
@@ -233,31 +233,31 @@ void main() {
 }
 ```
 
-Send data on route name
+Rota adına veri gönder
 
 ```dart
 Get.toNamed("/profile/34954");
 ```
 
-On second screen take the data by parameter
+İkinci ekranda verileri parametreye göre alın
 
 ```dart
 print(Get.parameters['user']);
 // out: 34954
 ```
 
-or send multiple parameters like this
+veya bunun gibi birden çok parametre gönderin
 
 ```dart
 Get.toNamed("/profile/34954?flag=true&country=italy");
 ```
-or
+veya
 ```dart
 var parameters = <String, String>{"flag": "true","country": "italy",};
 Get.toNamed("/profile/34954", parameters: parameters);
 ```
 
-On second screen take the data by parameters as usually
+İkinci ekranda, verileri genellikle olduğu gibi parametrelere göre alın
 
 ```dart
 print(Get.parameters['user']);
@@ -268,11 +268,11 @@ print(Get.parameters['country']);
 
 
 
-And now, all you need to do is use Get.toNamed() to navigate your named routes, without any context (you can call your routes directly from your BLoC or Controller class), and when your app is compiled to the web, your routes will appear in the url <3
+Ve şimdi tek yapmanız gereken, herhangi bir bağlam(context) olmaksızın adlandırılmış rotalarınızda gezinmek için Get.toNamed()'i kullanmaktır (rotalarınızı doğrudan BLoC veya Controller sınıfınızdan çağırabilirsiniz) ve uygulamanız web'de derlendiğinde, rotalar url'de görünecek <3
 
 ### Middleware
 
-If you want to listen Get events to trigger actions, you can to use routingCallback to it
+Eylemleri tetiklemek için olayları almak dinlemek istiyorsanız routingCallback'i kullanabilirsiniz.
 
 ```dart
 GetMaterialApp(
@@ -284,7 +284,7 @@ GetMaterialApp(
 )
 ```
 
-If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+GetMaterialApp kullanmıyorsanız, Middleware gözlemcisini(observer) eklemek için manuel API'yi kullanabilirsiniz.
 
 ```dart
 void main() {
@@ -294,21 +294,21 @@ void main() {
       initialRoute: "/",
       navigatorKey: Get.key,
       navigatorObservers: [
-        GetObserver(MiddleWare.observer), // HERE !!!
+        GetObserver(MiddleWare.observer), // Burası !!!
       ],
     ),
   );
 }
 ```
 
-Create a MiddleWare class
+Bir MiddleWare sınıfı oluşturun
 
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    /// You can listen in addition to the routes, the snackbars, dialogs and bottomsheets on each screen.
-    ///If you need to enter any of these 3 events directly here,
-    ///you must specify that the event is != Than you are trying to do.
+    /// Her ekranda rotalar, snackbarlar, diyaloglar ve bottomsheetleri ek olarak dinleyebilirsiniz.
+    ///Bu 3 olaydan herhangi birini doğrudan buraya girmeniz gerekiyorsa,
+    ///Yapmaya çalıştığınızdan daha fazla olayın olduğunu != kullanarak belirtmelisiniz.
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
     } else if (routing.current =='/third'){
@@ -318,7 +318,7 @@ class MiddleWare {
 }
 ```
 
-Now, use Get on your code:
+Şimdi, Get on kodunu kullanın:
 
 ```dart
 class First extends StatelessWidget {
@@ -391,11 +391,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Navigation without context
+## Bağlamsız(Context) Navigasyon
 
 ### SnackBars
 
-To have a simple SnackBar with Flutter, you must get the context of Scaffold, or you must use a GlobalKey attached to your Scaffold
+Flutter ile basit bir SnackBar'a sahip olmak için Scaffold bağlamını(context) almalısınız veya Scaffold'unuza bağlı bir GlobalKey kullanmalısınız.
 
 ```dart
 final snackBar = SnackBar(
@@ -405,18 +405,18 @@ final snackBar = SnackBar(
     onPressed: (){}
   ),
 );
-// Find the Scaffold in the widget tree and use
-// it to show a SnackBar.
+// Widget ağacında Scaffold'u bulun ve kullanın
+// bir SnackBar göstermek için.
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-With Get:
+Get ile:
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-With Get, all you have to do is call your Get.snackbar from anywhere in your code or customize it however you want!
+Get ile, Yapmanız gereken tek şey kodunuzun herhangi bir yerinden Get.snackbar'ınızı aramak veya onu istediğiniz gibi özelleştirmek!
 
 ```dart
 Get.snackbar(
@@ -468,18 +468,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-If you prefer the traditional snackbar, or want to customize it from scratch, including adding just one line (Get.snackbar makes use of a mandatory title and message), you can use
-`Get.rawSnackbar();` which provides the RAW API on which Get.snackbar was built.
+Geleneksel snackbar'ı tercih ediyorsanız veya yalnızca bir satır eklemek de dahil olmak üzere sıfırdan özelleştirmek istiyorsanız (Get.snackbar zorunlu bir başlık ve mesaj kullanır), 
+Get.snackbar'ın üzerine inşa edildiği RAW API'sini sağlayan `Get.rawSnackbar();` kullanabilirsiniz. 
 
 ### Dialogs
 
-To open dialog:
+Dialog'u açmak için:
 
 ```dart
 Get.dialog(YourDialogWidget());
 ```
 
-To open default dialog:
+Varsayılan dialog açmak için:
 
 ```dart
 Get.defaultDialog(
@@ -488,15 +488,15 @@ Get.defaultDialog(
 );
 ```
 
-You can also use Get.generalDialog instead of showGeneralDialog.
+showGeneralDialog yerine Get.generalDialog'u da kullanabilirsiniz.
 
-For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.
-For widgets that don't use Overlay, you can use Get.context.
-These two contexts will work in 99% of cases to replace the context of your UI, except for cases where inheritedWidget is used without a navigation context.
+Cupertinos dahil olmak üzere tüm diğer Flutter Dialog widget'ları için bağlam(context) yerine Get.overlayContext'i kullanabilir ve kodunuzun herhangi bir yerinde açabilirsiniz.
+Overlay kullanmayan widget'lar için Get.context'i kullanabilirsiniz.
+Bu iki bağlam(context), inheritedWidget'ın bir gezinme bağlamı(context) olmadan kullanıldığı durumlar dışında, kullanıcı arayüzünüzün bağlamını(context) değiştirmek için vakaların %99'unda çalışacaktır.
 
 ### BottomSheets
 
-Get.bottomSheet is like showModalBottomSheet, but don't need of context.
+Get.bottomSheet, showModalBottomSheet gibidir, ancak bağlama(context) ihtiyaç duymaz.
 
 ```dart
 Get.bottomSheet(
@@ -519,18 +519,18 @@ Get.bottomSheet(
 );
 ```
 
-## Nested Navigation
+## İç İçe Navigasyon (Nested Navigation)
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
+Flutter'ın iç içe gezinmesini daha da kolaylaştırın.
+İçeriğe ihtiyacınız yoktur ve navigasyon yığınınızı kimliğe(ID) göre bulacaksınız.
 
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
+- NOT: Paralel gezinme yığınları oluşturmak tehlikeli olabilir. İdeal olan, NestedNavigators'ı kullanmamak veya idareli kullanmaktır. Projeniz gerektiriyorsa, devam edin, ancak bellekte birden çok gezinme yığınını tutmanın RAM tüketimi için iyi bir fikir olmayabileceğini unutmayın.
 
-See how simple it is:
+Bakın ne kadar basit:
 
 ```dart
 Navigator(
-  key: Get.nestedKey(1), // create a key by index
+  key: Get.nestedKey(1), // index göre anahtar oluşturma
   initialRoute: '/',
   onGenerateRoute: (settings) {
     if (settings.name == '/') {
@@ -543,7 +543,7 @@ Navigator(
             child: TextButton(
               color: Colors.blue,
               onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
+                Get.toNamed('/second', id:1); // indexe göre iç içe geçmiş rotanıza göre gezinin
               },
               child: Text("Go to second"),
             ),
