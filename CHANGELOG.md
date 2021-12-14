@@ -1,3 +1,6 @@
+## [4.6.1]
+Fix GetConnect on Flutter web
+
 ## [4.6.0]
 Add useInheritedMediaQuery to GetMaterialApp and GetCupertinoApp (@davidhole)
 Add Circular reveal Transition (@parmarravi)

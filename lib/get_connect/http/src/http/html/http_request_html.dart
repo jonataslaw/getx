@@ -14,6 +14,7 @@ class HttpRequestImpl implements HttpRequestBase {
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
     this.withCredentials = false,
+    String Function(Uri url)? findProxy,
   });
 
   /// The currently active XHRs.
