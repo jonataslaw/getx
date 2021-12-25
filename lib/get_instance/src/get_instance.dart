@@ -165,7 +165,9 @@ class GetInstance {
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
       final _dep = _singl[key];
-      if (_dep != null && _dep.isDirty) {
+      if (_dep == null || !_dep.isDirty) {
+        return;
+      } else {
         dep = _dep as _InstanceBuilderFactory<S>;
       }
     }
