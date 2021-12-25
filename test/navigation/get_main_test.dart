@@ -336,7 +336,10 @@ void main() {
 
   testWidgets("Get.back navigates back", (tester) async {
     await tester.pumpWidget(
-      Wrapper(child: FirstScreen()),
+      Wrapper(
+        child: FirstScreen(),
+        defaultTransition: Transition.circularReveal,
+      ),
     );
 
     Get.to(SecondScreen());

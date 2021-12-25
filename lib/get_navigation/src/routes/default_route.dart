@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
-import 'custom_transition.dart';
 import 'get_transition_mixin.dart';
-import 'route_middleware.dart';
-import 'transitions_type.dart';
 
 mixin PageRouteReportMixin<T> on Route<T> {
   @override

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +6,6 @@ import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
-import 'root_controller.dart';
 
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -67,6 +65,7 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
+  final bool useInheritedMediaQuery;
   const GetMaterialApp({
     Key? key,
     this.navigatorKey,
@@ -78,6 +77,7 @@ class GetMaterialApp extends StatelessWidget {
     this.onGenerateRoute,
     this.onGenerateInitialRoutes,
     this.onUnknownRoute,
+    this.useInheritedMediaQuery = false,
     List<NavigatorObserver> this.navigatorObservers =
         const <NavigatorObserver>[],
     this.builder,
@@ -142,6 +142,7 @@ class GetMaterialApp extends StatelessWidget {
     this.color,
     this.theme,
     this.darkTheme,
+    this.useInheritedMediaQuery = false,
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.themeMode = ThemeMode.system,
@@ -271,6 +272,7 @@ class GetMaterialApp extends StatelessWidget {
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
+                useInheritedMediaQuery: useInheritedMediaQuery,
               )
             : MaterialApp(
                 key: _.unikey,
@@ -317,6 +319,7 @@ class GetMaterialApp extends StatelessWidget {
                 debugShowCheckedModeBanner: debugShowCheckedModeBanner,
                 shortcuts: shortcuts,
                 scrollBehavior: scrollBehavior,
+                useInheritedMediaQuery: useInheritedMediaQuery,
                 //   actions: actions,
               ),
       );

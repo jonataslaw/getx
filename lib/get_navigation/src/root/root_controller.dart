@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
-import '../../../get_state_manager/get_state_manager.dart';
-import '../../../get_utils/get_utils.dart';
-import '../routes/custom_transition.dart';
-import '../routes/observers/route_observer.dart';
-import '../routes/transitions_type.dart';
 
 class GetMaterialController extends SuperController {
   bool testMode = false;

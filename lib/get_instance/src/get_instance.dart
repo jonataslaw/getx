@@ -232,7 +232,7 @@ class GetInstance {
     final newKey = key ?? _getKey(S, tag);
     if (_singl.containsKey(newKey)) {
       final dep = _singl[newKey];
-      if (dep != null) {
+      if (dep != null && !dep.permanent) {
         dep.isDirty = true;
       }
     }
