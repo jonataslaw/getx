@@ -37,9 +37,11 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   bool add(E value) {
-    final val = _value.add(value);
-    refresh();
-    return val;
+    final hasAdded = _value.add(value);
+    if (hasAdded) {
+      refresh();
+    }
+    return hasAdded;
   }
 
   @override
