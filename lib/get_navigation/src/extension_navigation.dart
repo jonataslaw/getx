@@ -9,9 +9,6 @@ import '../../get_utils/get_utils.dart';
 import '../get_navigation.dart';
 import 'dialog/dialog_route.dart';
 import 'root/parse_route.dart';
-import 'root/root_controller.dart';
-import 'routes/transitions_type.dart';
-import 'snackbar/snackbar_controller.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather

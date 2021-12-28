@@ -1,4 +1,3 @@
-import '../../get_core/src/get_interface.dart';
 import '../../route_manager.dart';
 import 'get_instance.dart';
 

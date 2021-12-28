@@ -67,6 +67,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   }
 
   bool firstRebuild = true;
+  bool sentToStream = false;
 
   /// Same as `toString()` but using a getter.
   String get string => value.toString();
@@ -96,10 +97,11 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Widget, only if it's different from the previous value.
   set value(T val) {
     if (subject.isClosed) return;
+    sentToStream = false;
     if (_value == val && !firstRebuild) return;
     firstRebuild = false;
     _value = val;
-
+    sentToStream = true;
     subject.add(_value);
   }
 
@@ -254,7 +256,7 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
     value = v;
     // If it's not the first rebuild, the listeners have been called already
     // So we won't call them again.
-    if (!firstRebuild) {
+    if (!firstRebuild && !sentToStream) {
       subject.add(v);
     }
   }

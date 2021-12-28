@@ -68,14 +68,14 @@ extension Trans on String {
   Map<String, String>? get _getSimilarLanguageTranslation {
     final translationsWithNoCountry = Get.translations
         .map((key, value) => MapEntry(key.split("_").first, value));
-    final containsKey =
-        translationsWithNoCountry.containsKey(Get.locale!.languageCode);
+    final containsKey = translationsWithNoCountry
+        .containsKey(Get.locale!.languageCode.split("_").first);
 
     if (!containsKey) {
       return null;
     }
 
-    return translationsWithNoCountry[Get.locale!.languageCode];
+    return translationsWithNoCountry[Get.locale!.languageCode.split("_").first];
   }
 
   String get tr {

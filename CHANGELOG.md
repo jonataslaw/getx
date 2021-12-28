@@ -1,8 +1,24 @@
-## [4.5.1] - Big Update
+## [4.6.1]
+Fix GetConnect on Flutter web
+
+## [4.6.0]
+Add useInheritedMediaQuery to GetMaterialApp and GetCupertinoApp (@davidhole)
+Add Circular reveal Transition (@parmarravi)
+Add request to failed response (@heftekharm)
+Fix internationalization with only country code (@codercengiz)
+Add GetTickerProviderStateMixin when multiple AnimationController objects are used (@NatsuOnFire)
+Add the followRedirects and maxRedirects fields to the Request object (@wei53881)
+Fix to rx.trigger fires twice (@gslender)
+Add proxy setting support to GetConnect (@jtans)
+Fix markAsDirty used on permanent controllers (@zenalex)
+Update Korean readme (@dumbokim)
+
+
+## [4.5.1]
 Fix Snackbar when it have action and icon the same time
 
 ## [4.5.0] - Big Update
-To have a context-free, page-agnostic snackbar, we used OverlayRoute to display a partial route.
+To have a page-agnostic snackbar, we used OverlayRoute to display a partial route.
 However this had several problems:
 
 1: There was no possibility to close the page without closing the snackbar
