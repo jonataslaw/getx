@@ -111,3 +111,36 @@ GetPage(
 
 # GetPage
 - the building blocks for navigation in GetX
+- it's basically a part of a route that can be displayed
+- These are the main properties that you will usually use in Nav2
+  1. name
+     - represents the page name, this MUST start with a slash (`/`)
+     - it can also contain regex matchers, which will populate the `parameters` property ([as demonstrated in the example above](#getnavconfig))
+     - you can also combine multiple parts in one page, for example, you can have a `UserDetails` page without having a `Users` page, which will look like this:
+        ```dart
+        GetPage(
+            name: '/users/:userId',
+            page: () => UserDetails(),
+            //other props
+        )
+        ```
+  2. page
+     - a function that returns the view to be displayed when building the page
+  3. participatesInRootNavigator
+     - will be explained further in [GetDelegate](#getdelegate)
+  4. children (already explained above in [Re-think in terms of routes](#re-think-in-terms-of-routes))
+  5. middlewares
+     - List of `GetMiddleware`s that notify you on route changes, will be explained further in [GetMiddleware](#getmiddleware-changes)
+  6. parameters
+     - a key-value map of parameters that you either
+       - provide manually
+       - get from regex matchers (see example above in [GetNavConfig](#getnavconfig))
+- you can read the original [GetPage docs](route_management.md) as well
+
+# GetDelegate
+
+# GetInformationParser
+
+# GetMiddleware
+
+# GetRouterOutlet
