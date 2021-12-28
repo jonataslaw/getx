@@ -7,7 +7,7 @@ import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
 mixin StateMixin<T> on ListNotifierMixin {
-  T? _value;
+  late T _value;
   RxStatus? _status;
 
   bool _isNullOrEmpty(dynamic val) {
@@ -32,23 +32,23 @@ mixin StateMixin<T> on ListNotifierMixin {
     return _status ??= _status = RxStatus.loading();
   }
 
-  T? get state => value;
+  T get state => value;
 
   @protected
-  T? get value {
+  T get value {
     notifyChildrens();
     return _value;
   }
 
   @protected
-  set value(T? newValue) {
+  set value(T newValue) {
     if (_value == newValue) return;
     _value = newValue;
     refresh();
   }
 
   @protected
-  void change(T? newState, {RxStatus? status}) {
+  void change(T newState, {RxStatus? status}) {
     var _canUpdate = false;
     if (status != null) {
       _status = status;
@@ -82,13 +82,13 @@ class Value<T> extends ListNotifier
   }
 
   @override
-  T? get value {
+  T get value {
     notifyChildrens();
     return _value;
   }
 
   @override
-  set value(T? newValue) {
+  set value(T newValue) {
     if (_value == newValue) return;
     _value = newValue;
     refresh();
@@ -119,9 +119,7 @@ extension ReactiveT<T> on T {
 typedef Condition = bool Function();
 
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
-  GetNotifier(T initial) : super(initial) {
-    $configureLifeCycle();
-  }
+  GetNotifier(T initial) : super(initial);
 
   @override
   @mustCallSuper
@@ -194,3 +192,44 @@ class RxStatus {
 }
 
 typedef NotifierBuilder<T> = Widget Function(T state);
+
+abstract class GState<T> {
+  const GState();
+  factory GState.loading() => GLoading();
+  factory GState.error(String message) => GError(message);
+  factory GState.empty() => GEmpty();
+  factory GState.success(T data) => GSuccess(data);
+}
+
+class GLoading<T> extends GState<T> {}
+
+class GSuccess<T> extends GState<T> {
+  final T data;
+
+  GSuccess(this.data);
+}
+
+class GError<T, S> extends GState<T> {
+  final S? error;
+  GError([this.error]);
+}
+
+class GEmpty<T> extends GState<T> {}
+
+extension StatusDataExt<T> on GState<T> {
+  bool get isLoading => this is GLoading;
+  bool get isSuccess => this is GSuccess;
+  bool get isError => this is GError;
+  bool get isEmpty => this is GEmpty;
+  String get errorMessage {
+    final isError = this is GError;
+    if (isError) {
+      final err = this as GError;
+      if (err.error != null && err.error is String) {
+        return err.error as String;
+      }
+    }
+
+    return '';
+  }
+}

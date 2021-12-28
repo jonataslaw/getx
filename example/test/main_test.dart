@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -81,8 +82,8 @@ void main() {
     }
 
     if (controller.status.isSuccess) {
-      expect(controller.state!.global.totalDeaths, 100);
-      expect(controller.state!.global.totalConfirmed, 200);
+      expect(controller.state.global.totalDeaths, 100);
+      expect(controller.state.global.totalConfirmed, 200);
     }
   });
 

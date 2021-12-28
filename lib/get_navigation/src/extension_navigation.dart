@@ -511,6 +511,7 @@ extension GetNavigation on GetInterface {
     Bindings? binding,
     bool preventDuplicates = true,
     bool? popGesture,
+    bool showCupertinoParallax = true,
     double Function(BuildContext context)? gestureWidth,
   }) {
     // var routeName = "/${page.runtimeType}";
@@ -525,6 +526,7 @@ extension GetNavigation on GetInterface {
             page: _resolvePage(page, 'to'),
             routeName: routeName,
             gestureWidth: gestureWidth,
+            showCupertinoParallax: showCupertinoParallax,
             settings: RouteSettings(
               name: routeName,
               arguments: arguments,

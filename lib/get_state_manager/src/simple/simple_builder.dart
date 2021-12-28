@@ -1,6 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/widgets.dart';
-import 'get_state.dart';
+
 import 'list_notifier.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -74,35 +75,39 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
   }
 }
 
+class ObxElement = StatelessElement with ObserverComponent;
+
 // It's a experimental feature
-class SimpleBuilder extends StatefulWidget {
-  final Widget Function(BuildContext) builder;
+class SimpleBuilder extends ObxStatelessWidget {
+  final WidgetBuilder builder;
 
   const SimpleBuilder({Key? key, required this.builder}) : super(key: key);
 
   @override
-  _SimpleBuilderState createState() => _SimpleBuilderState();
+  Widget build(BuildContext context) => builder(context);
 }
 
-class _SimpleBuilderState extends State<SimpleBuilder>
-    with GetStateUpdaterMixin {
+/// A StatelessWidget than can listen reactive changes.
+abstract class ObxStatelessWidget extends StatelessWidget {
+  /// Initializes [key] for subclasses.
+  const ObxStatelessWidget({Key? key}) : super(key: key);
+  @override
+  StatelessElement createElement() => ObxElement(this);
+}
+
+/// a Component that can track changes in a reactive variable
+mixin ObserverComponent on ComponentElement {
   final disposers = <Disposer>[];
 
   @override
-  void dispose() {
-    super.dispose();
+  Widget build() =>
+      TaskManager.instance.exchange(disposers, markNeedsBuild, super.build);
+
+  @override
+  void unmount() {
+    super.unmount();
     for (final disposer in disposers) {
       disposer();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TaskManager.instance.exchange(
-      disposers,
-      getUpdate,
-      widget.builder,
-      context,
-    );
   }
 }
