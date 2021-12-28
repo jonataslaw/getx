@@ -110,11 +110,12 @@ class BaseWebSocket {
         return true;
       };
 
-      var request = await client.getUrl(Uri.parse(url));
-      request.headers.add('Connection', 'Upgrade');
-      request.headers.add('Upgrade', 'websocket');
-      request.headers.add('Sec-WebSocket-Version', '13');
-      request.headers.add('Sec-WebSocket-Key', key.toLowerCase());
+      var request = await client.getUrl(Uri.parse(url))
+        ..headers.add('Connection', 'Upgrade')
+        ..headers.add('Upgrade', 'websocket')
+        ..headers.add('Cache-Control', 'no-cache')
+        ..headers.add('Sec-WebSocket-Version', '13')
+        ..headers.add('Sec-WebSocket-Key', key.toLowerCase());
 
       var response = await request.close();
       // ignore: close_sinks

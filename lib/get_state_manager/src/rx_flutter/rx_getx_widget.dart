@@ -14,9 +14,6 @@ typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
 class GetX<T extends DisposableInterface> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
   final bool global;
-
-  // final Stream Function(T) stream;
-  // final StreamController Function(T) streamController;
   final bool autoRemove;
   final bool assignId;
   final void Function(GetXState<T> state)? initState,

@@ -4,7 +4,7 @@ class RxMap<K, V> extends MapMixin<K, V>
     with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
     implements RxInterface<Map<K, V>> {
   RxMap([Map<K, V> initial = const {}]) {
-    _value = Map.from(initial);
+    subject = GetStream.fromValue(Map.from(initial));
   }
 
   factory RxMap.from(Map<K, V> other) {
@@ -32,14 +32,14 @@ class RxMap<K, V> extends MapMixin<K, V>
   }
 
   @override
-  void operator []=(K key, V value) {
-    _value[key] = value;
+  void operator []=(K key, V val) {
+    value[key] = val;
     refresh();
   }
 
   @override
   void clear() {
-    _value.clear();
+    value.clear();
     refresh();
   }
 
@@ -48,7 +48,7 @@ class RxMap<K, V> extends MapMixin<K, V>
 
   @override
   V? remove(Object? key) {
-    final val = _value.remove(key);
+    final val = value.remove(key);
     refresh();
     return val;
   }
@@ -56,8 +56,9 @@ class RxMap<K, V> extends MapMixin<K, V>
   @override
   @protected
   Map<K, V> get value {
-    RxInterface.proxy?.addListener(subject);
-    return _value;
+    return subject.value;
+    // RxInterface.proxy?.addListener(subject);
+    // return _value;
   }
 }
 
@@ -82,7 +83,7 @@ extension MapExtension<K, V> on Map<K, V> {
     if (this is RxMap) {
       final map = (this as RxMap);
       // map._value;
-      map._value.clear();
+      map.value.clear();
       this[key] = val;
     } else {
       clear();
@@ -92,12 +93,12 @@ extension MapExtension<K, V> on Map<K, V> {
 
   void assignAll(Map<K, V> val) {
     if (val is RxMap && this is RxMap) {
-      if ((val as RxMap)._value == (this as RxMap)._value) return;
+      if ((val as RxMap).value == (this as RxMap).value) return;
     }
     if (this is RxMap) {
       final map = (this as RxMap);
-      if (map._value == val) return;
-      map._value = val;
+      if (map.value == val) return;
+      map.value = val;
       map.refresh();
     } else {
       if (this == val) return;

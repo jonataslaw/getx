@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../router_report.dart';
 
 class GetDialogRoute<T> extends PopupRoute<T> {
@@ -17,7 +18,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
         _transitionDuration = transitionDuration,
         _transitionBuilder = transitionBuilder,
         super(settings: settings) {
-    RouterReportManager.reportCurrentRoute(this);
+    RouterReportManager.instance.reportCurrentRoute(this);
   }
 
   final RoutePageBuilder widget;
@@ -28,7 +29,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    RouterReportManager.reportRouteDispose(this);
+    RouterReportManager.instance.reportRouteDispose(this);
     super.dispose();
   }
 

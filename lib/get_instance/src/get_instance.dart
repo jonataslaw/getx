@@ -205,7 +205,8 @@ class GetInstance {
       if (_singl[key]!.isSingleton!) {
         _singl[key]!.isInit = true;
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
-          RouterReportManager.reportDependencyLinkedToRoute(_getKey(S, name));
+          RouterReportManager.instance
+              .reportDependencyLinkedToRoute(_getKey(S, name));
         }
       }
     }
@@ -257,7 +258,7 @@ class GetInstance {
         Get.log('Instance "$S" with tag "$tag" has been initialized');
       }
       if (!_singl[key]!.isSingleton!) {
-        RouterReportManager.appendRouteByCreate(i);
+        RouterReportManager.instance.appendRouteByCreate(i);
       }
     }
     return i;
@@ -323,7 +324,7 @@ class GetInstance {
       {@deprecated bool clearFactory = true, bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
     // deleteAll(force: true);
-    if (clearRouteBindings) RouterReportManager.clearRouteKeys();
+    if (clearRouteBindings) RouterReportManager.instance.clearRouteKeys();
     _singl.clear();
 
     return true;

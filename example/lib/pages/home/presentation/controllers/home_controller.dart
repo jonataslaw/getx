@@ -19,10 +19,10 @@ class HomeController extends SuperController<CasesModel> {
   Country getCountryById(String id) {
     final index = int.tryParse(id);
     if (index != null) {
-      return state!.countries[index];
+      return state.countries[index];
     }
 
-    return state!.countries.first;
+    return state.countries.first;
   }
 
   @override

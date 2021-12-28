@@ -14,6 +14,22 @@ class GetStream<T> {
   FutureOr<void> Function()? onCancel;
 
   GetStream({this.onListen, this.onPause, this.onResume, this.onCancel});
+
+  factory GetStream.fromValue(T value,
+      {Function()? onListen,
+      Function()? onPause,
+      Function()? onResume,
+      FutureOr<void> Function()? onCancel}) {
+    final valuedStream = GetStream<T>(
+        onListen: onListen,
+        onPause: onPause,
+        onResume: onResume,
+        onCancel: onCancel)
+      .._value = value;
+
+    return valuedStream;
+  }
+
   List<LightSubscription<T>>? _onData = <LightSubscription<T>>[];
 
   bool? _isBusy = false;
@@ -87,9 +103,12 @@ class GetStream<T> {
     _isBusy = false;
   }
 
-  T? _value;
+  late T _value;
 
-  T? get value => _value;
+  T get value {
+    RxInterface.proxy?.addListener(this);
+    return _value;
+  }
 
   void add(T event) {
     assert(!isClosed, 'You cannot add event to closed Stream');
@@ -109,7 +128,7 @@ class GetStream<T> {
     _notifyDone();
     _onData = null;
     _isBusy = null;
-    _value = null;
+    //  _value = null;
   }
 
   LightSubscription<T> listen(void Function(T event) onData,
