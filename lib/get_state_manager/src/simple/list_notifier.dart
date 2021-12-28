@@ -159,15 +159,11 @@ class TaskManager {
     }
   }
 
-  Widget exchange(
-    List<VoidCallback> disposers,
-    GetStateUpdate setState,
-    Widget Function(BuildContext) builder,
-    BuildContext context,
-  ) {
+  T exchange<T>(List<VoidCallback> disposers, GetStateUpdate setState,
+      T Function() builder) {
     _remove = disposers;
     _setter = setState;
-    final result = builder(context);
+    final result = builder();
     _remove = null;
     _setter = null;
     return result;

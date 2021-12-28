@@ -1,57 +1,31 @@
 import 'package:flutter/material.dart';
+
 import '../../../get_instance/src/get_instance.dart';
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
-import 'list_notifier.dart';
-
-/// Complies with `GetStateUpdater`
-///
-/// This mixin's function represents a `GetStateUpdater`, and might be used
-/// by `GetBuilder()`, `SimpleBuilder()` (or similar) to comply
-/// with [GetStateUpdate] signature. REPLACING the [StateSetter].
-/// Avoids the potential (but extremely unlikely) issue of having
-/// the Widget in a dispose() state, and abstracts the
-/// API from the ugly fn((){}).
-mixin GetStateUpdaterMixin<T extends StatefulWidget> on State<T> {
-  // To avoid the creation of an anonym function to be GC later.
-  // ignore: prefer_function_declarations_over_variables
-
-  /// Experimental method to replace setState((){});
-  /// Used with GetStateUpdate.
-  void getUpdate() {
-    if (mounted) setState(() {});
-  }
-}
 
 typedef GetControllerBuilder<T extends DisposableInterface> = Widget Function(
     T controller);
 
-// class _InheritedGetxController<T extends GetxController>
-//     extends InheritedWidget {
-//   final T model;
-//   final int version;
+extension WatchExt on BuildContext {
+  T listen<T extends GetxController>() {
+    return Scope.of(this, rebuild: true);
+  }
+}
 
-//   _InheritedGetxController({
-//     Key key,
-//     @required Widget child,
-//     @required this.model,
-//   })  : version = model.notifierVersion,
-//         super(key: key, child: child);
+extension ReadExt on BuildContext {
+  T find<T extends GetxController>() {
+    return Scope.of(this);
+  }
+}
 
-//   @override
-//   bool updateShouldNotify(_InheritedGetxController<T> oldWidget) =>
-//       (oldWidget.version != version);
-// }
-
-// extension WatchEtx on GetxController {
-//   T watch<T extends GetxController>() {
-//     final instance = Get.find<T>();
-//     _GetBuilderState._currentState.watch(instance.update);
-//     return instance;
+// extension FilterExt on BuildContext {
+//   T filter<T extends GetxController>(Object Function(T value)? filter) {
+//     return Scope.of(this, filter: filter, rebuild: true);
 //   }
 // }
 
-class GetBuilder<T extends GetxController> extends StatefulWidget {
+class GetBuilder<T extends GetxController> extends StatelessWidget {
   final GetControllerBuilder<T> builder;
   final bool global;
   final Object? id;
@@ -59,10 +33,10 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
   final bool autoRemove;
   final bool assignId;
   final Object Function(T value)? filter;
-  final void Function(GetBuilderState<T> state)? initState,
+  final void Function(ScopeElement<T> state)? initState,
       dispose,
       didChangeDependencies;
-  final void Function(GetBuilder oldWidget, GetBuilderState<T> state)?
+  final void Function(Scope<T> oldWidget, ScopeElement<T> state)?
       didUpdateWidget;
   final T? init;
 
@@ -82,40 +56,127 @@ class GetBuilder<T extends GetxController> extends StatefulWidget {
     this.didUpdateWidget,
   }) : super(key: key);
 
-  // static T of<T extends GetxController>(
-  //   BuildContext context, {
-  //   bool rebuild = false,
-  // }) {
-  //   var widget = rebuild
-  //       ? context
-  //       .dependOnInheritedWidgetOfExactType<_InheritedGetxController<T>>()
-  //       : context
-  //           .getElementForInheritedWidgetOfExactType<
-  //               _InheritedGetxController<T>>()
-  //           ?.widget;
-
-  //   if (widget == null) {
-  //     throw 'Error: Could not find the correct dependency.';
-  //   } else {
-  //     return (widget as _InheritedGetxController<T>).model;
-  //   }
-  // }
-
   @override
-  GetBuilderState<T> createState() => GetBuilderState<T>();
+  Widget build(BuildContext context) {
+    return Scope<T>(
+      init: init,
+      global: global,
+      autoRemove: autoRemove,
+      assignId: assignId,
+      initState: initState,
+      filter: filter,
+      tag: tag,
+      dispose: dispose,
+      id: id,
+      didChangeDependencies: didChangeDependencies,
+      didUpdateWidget: didUpdateWidget,
+      child: Builder(builder: (context) {
+        final controller = Scope.of<T>(context, rebuild: true);
+        return builder(controller);
+      }),
+    );
+    // return widget.builder(controller!);
+  }
 }
 
-class GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
-    with GetStateUpdaterMixin {
+class Scope<T extends GetxController> extends InheritedWidget {
+  /// Create an inherited widget that updates its dependents when [controller]
+  /// sends notifications.
+  ///
+  /// The [child] argument is required
+  const Scope({
+    Key? key,
+    required Widget child,
+    this.init,
+    this.global = true,
+    this.autoRemove = true,
+    this.assignId = false,
+    this.initState,
+    this.filter,
+    this.tag,
+    this.dispose,
+    this.id,
+    this.didChangeDependencies,
+    this.didUpdateWidget,
+  }) : super(key: key, child: child);
+
+  /// The [Listenable] object to which to listen.
+  ///
+  /// Whenever this object sends change notifications, the dependents of this
+  /// widget are triggered.
+  ///
+  /// By default, whenever the [controller] is changed (including when changing to
+  /// or from null), if the old controller is not equal to the new controller (as
+  /// determined by the `==` operator), notifications are sent. This behavior
+  /// can be overridden by overriding [updateShouldNotify].
+  ///
+  /// While the [controller] is null, no notifications are sent, since the null
+  /// object cannot itself send notifications.
+  final T? init;
+
+  final bool global;
+  final Object? id;
+  final String? tag;
+  final bool autoRemove;
+  final bool assignId;
+  final Object Function(T value)? filter;
+  final void Function(ScopeElement<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(Scope<T> oldWidget, ScopeElement<T> state)?
+      didUpdateWidget;
+
+  static T of<T extends GetxController>(
+    BuildContext context, {
+    bool rebuild = false,
+    // Object Function(T value)? filter,
+  }) {
+    final inheritedElement = context
+        .getElementForInheritedWidgetOfExactType<Scope<T>>() as ScopeElement<T>;
+
+    if (rebuild) {
+      // var newFilter = filter?.call(inheritedElement.controller!);
+      // if (newFilter != null) {
+      //   context.dependOnInheritedElement(inheritedElement, aspect: newFilter);
+      // } else {
+      context.dependOnInheritedElement(inheritedElement);
+      // }
+    }
+
+    var widget = inheritedElement.controller;
+
+    if (widget == null) {
+      throw 'Error: Could not find the correct dependency.';
+    } else {
+      return widget;
+    }
+  }
+
+  @override
+  bool updateShouldNotify(Scope<T> oldWidget) {
+    return oldWidget.id != id ||
+        oldWidget.global != global ||
+        oldWidget.autoRemove != autoRemove ||
+        oldWidget.assignId != assignId;
+  }
+
+  @override
+  InheritedElement createElement() => ScopeElement<T>(this);
+}
+
+/// The ScopeElement is responsible for injecting dependencies into the widget
+/// tree so that they can be observed
+class ScopeElement<T extends GetxController> extends InheritedElement {
+  ScopeElement(Scope<T> widget) : super(widget) {
+    initState();
+  }
+
   T? controller;
   bool? _isCreator = false;
   VoidCallback? _remove;
   Object? _filter;
 
-  @override
   void initState() {
-    // _GetBuilderState._currentState = this;
-    super.initState();
     widget.initState?.call(this);
 
     var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
@@ -169,9 +230,7 @@ class GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
     }
   }
 
-  @override
   void dispose() {
-    super.dispose();
     widget.dispose?.call(this);
     if (_isCreator! || widget.assignId) {
       if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
@@ -188,39 +247,49 @@ class GetBuilderState<T extends GetxController> extends State<GetBuilder<T>>
   }
 
   @override
+  Scope<T> get widget => super.widget as Scope<T>;
+
+  var _dirty = false;
+
+  @override
+  void update(Scope<T> newWidget) {
+    final oldNotifier = widget.id;
+    final newNotifier = newWidget.id;
+    if (oldNotifier != newNotifier) {
+      _subscribeToController();
+    }
+    widget.didUpdateWidget?.call(widget, this);
+    super.update(newWidget);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     widget.didChangeDependencies?.call(this);
   }
 
   @override
-  void didUpdateWidget(GetBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget as GetBuilder<T>);
-    // to avoid conflicts when modifying a "grouped" id list.
-    if (oldWidget.id != widget.id) {
-      _subscribeToController();
+  Widget build() {
+    if (_dirty) {
+      notifyClients(widget);
     }
-    widget.didUpdateWidget?.call(oldWidget, this);
+    return super.build();
+  }
+
+  void getUpdate() {
+    _dirty = true;
+    markNeedsBuild();
   }
 
   @override
-  Widget build(BuildContext context) {
-    // return _InheritedGetxController<T>(
-    //   model: controller,
-    //   child: widget.builder(controller),
-    // );
-    return widget.builder(controller!);
+  void notifyClients(Scope<T> oldWidget) {
+    super.notifyClients(oldWidget);
+    _dirty = false;
+  }
+
+  @override
+  void unmount() {
+    dispose();
+    super.unmount();
   }
 }
-
-// extension FindExt on BuildContext {
-//   T find<T extends GetxController>() {
-//     return GetBuilder.of<T>(this, rebuild: false);
-//   }
-// }
-
-// extension ObserverEtx on BuildContext {
-//   T obs<T extends GetxController>() {
-//     return GetBuilder.of<T>(this, rebuild: true);
-//   }
-// }

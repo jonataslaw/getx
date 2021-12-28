@@ -5,7 +5,7 @@ part of rx_types;
 /// of those `Widgets` and Rx values.
 
 mixin RxObjectMixin<T> on NotifyManager<T> {
-  late T _value;
+  //late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
   /// useful when you make use of Rx for custom Types to referesh your UI.
@@ -91,24 +91,25 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => _value.hashCode;
+  int get hashCode => value.hashCode;
 
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   set value(T val) {
     if (subject.isClosed) return;
     sentToStream = false;
-    if (_value == val && !firstRebuild) return;
+    if (value == val && !firstRebuild) return;
     firstRebuild = false;
-    _value = val;
+    // _value = val;
     sentToStream = true;
-    subject.add(_value);
+    subject.add(val);
   }
 
   /// Returns the current [value]
   T get value {
-    RxInterface.proxy?.addListener(subject);
-    return _value;
+    return subject.value;
+    //RxInterface.proxy?.addListener(subject);
+    // return _value;
   }
 
   Stream<T> get stream => subject.stream;
@@ -192,7 +193,7 @@ mixin NotifyManager<T> {
 /// Base Rx class that manages all the stream logic for any Type.
 abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   _RxImpl(T initial) {
-    _value = initial;
+    subject = GetStream.fromValue(initial);
   }
 
   void addError(Object error, [StackTrace? stackTrace]) {
@@ -222,8 +223,8 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   /// print( person );
   /// ```
   void update(void fn(T? val)) {
-    fn(_value);
-    subject.add(_value);
+    fn(value);
+    subject.add(value);
   }
 
   /// Following certain practices on Rx data, we might want to react to certain
@@ -295,7 +296,7 @@ extension RxBoolExt on Rx<bool> {
   ///  not really a dart thing since we have '..' operator
   // ignore: avoid_returning_this
   Rx<bool> toggle() {
-    subject.add(_value = !_value);
+    subject.add(!value);
     return this;
   }
 }
@@ -327,8 +328,8 @@ extension RxnBoolExt on Rx<bool?> {
   ///  not really a dart thing since we have '..' operator
   // ignore: avoid_returning_this
   Rx<bool?>? toggle() {
-    if (_value != null) {
-      subject.add(_value = !_value!);
+    if (value != null) {
+      subject.add(!value!);
       return this;
     }
   }

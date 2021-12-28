@@ -4,7 +4,7 @@ class RxSet<E> extends SetMixin<E>
     with NotifyManager<Set<E>>, RxObjectMixin<Set<E>>
     implements RxInterface<Set<E>> {
   RxSet([Set<E> initial = const {}]) {
-    _value = Set.from(initial);
+    subject = GetStream.fromValue(Set.from(initial));
   }
 
   /// Special override to push() element(s) in a reactive way
@@ -23,21 +23,22 @@ class RxSet<E> extends SetMixin<E>
   @override
   @protected
   Set<E> get value {
-    RxInterface.proxy?.addListener(subject);
-    return _value;
+    return subject.value;
+    // RxInterface.proxy?.addListener(subject);
+    // return _value;
   }
 
   @override
   @protected
   set value(Set<E> val) {
-    if (_value == val) return;
-    _value = val;
+    if (value == val) return;
+    value = val;
     refresh();
   }
 
   @override
   bool add(E value) {
-    final hasAdded = _value.add(value);
+    final hasAdded = value.add(value);
     if (hasAdded) {
       refresh();
     }
@@ -62,7 +63,7 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   bool remove(Object? item) {
-    var hasRemoved = _value.remove(item);
+    var hasRemoved = value.remove(item);
     if (hasRemoved) {
       refresh();
     }
@@ -76,31 +77,31 @@ class RxSet<E> extends SetMixin<E>
 
   @override
   void addAll(Iterable<E> item) {
-    _value.addAll(item);
+    value.addAll(item);
     refresh();
   }
 
   @override
   void clear() {
-    _value.clear();
+    value.clear();
     refresh();
   }
 
   @override
   void removeAll(Iterable<Object?> elements) {
-    _value.removeAll(elements);
+    value.removeAll(elements);
     refresh();
   }
 
   @override
   void retainAll(Iterable<Object?> elements) {
-    _value.retainAll(elements);
+    value.retainAll(elements);
     refresh();
   }
 
   @override
   void retainWhere(bool Function(E) E) {
-    _value.retainWhere(E);
+    value.retainWhere(E);
     refresh();
   }
 }
