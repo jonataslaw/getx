@@ -8,18 +8,20 @@ mixin PageRouteReportMixin<T> on Route<T> {
   @override
   void install() {
     super.install();
-    RouterReportManager.reportCurrentRoute(this);
+    RouterReportManager.instance.reportCurrentRoute(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    RouterReportManager.reportRouteDispose(this);
+    RouterReportManager.instance.reportRouteDispose(this);
   }
 }
 
-class GetPageRoute<T> extends PageRoute<T>
-    with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
+class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
+    with
+        GetPageRouteTransitionMixin<T>,
+        PageRouteReportMixin {
   /// Creates a page route for use in an iOS designed app.
   ///
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
@@ -47,7 +49,11 @@ class GetPageRoute<T> extends PageRoute<T>
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  }) : super(settings: settings, fullscreenDialog: fullscreenDialog);
+  }) : super(
+          settings: settings,
+          fullscreenDialog: fullscreenDialog,
+          // builder: (context) => Container(),
+        );
 
   @override
   final Duration transitionDuration;

@@ -322,7 +322,6 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
     // Don't perform outgoing animation if the next route is a
     // fullscreen dialog.
-
     return (nextRoute is GetPageRouteTransitionMixin &&
             !nextRoute.fullscreenDialog &&
             nextRoute.showCupertinoParallax) ||

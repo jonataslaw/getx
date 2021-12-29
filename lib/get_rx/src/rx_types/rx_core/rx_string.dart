@@ -1,7 +1,7 @@
 part of rx_types;
 
 extension RxStringExt on Rx<String> {
-  String operator +(String val) => _value + val;
+  String operator +(String val) => value + val;
 
   int compareTo(String other) {
     return value.compareTo(other);
@@ -125,7 +125,7 @@ extension RxStringExt on Rx<String> {
 }
 
 extension RxnStringExt on Rx<String?> {
-  String operator +(String val) => (_value ?? '') + val;
+  String operator +(String val) => (value ?? '') + val;
 
   int? compareTo(String other) {
     return value?.compareTo(other);

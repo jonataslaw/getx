@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../get.dart';
 import '../router_report.dart';
 
@@ -21,7 +22,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
   }) : super(settings: settings) {
-    RouterReportManager.reportCurrentRoute(this);
+    RouterReportManager.instance.reportCurrentRoute(this);
   }
   final bool? isPersistent;
   final WidgetBuilder? builder;
@@ -56,7 +57,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    RouterReportManager.reportRouteDispose(this);
+    RouterReportManager.instance.reportRouteDispose(this);
     super.dispose();
   }
 

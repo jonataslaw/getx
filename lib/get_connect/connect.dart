@@ -100,9 +100,7 @@ class GetConnect extends GetConnectInterface {
     this.maxAuthRetries = 1,
     this.allowAutoSignedCert = false,
     this.withCredentials = false,
-  }) {
-    $configureLifeCycle();
-  }
+  });
 
   bool allowAutoSignedCert;
   String userAgent;

@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../../get_rx/src/rx_types/rx_types.dart';
 
 typedef WidgetCallback = Widget Function();
@@ -53,6 +55,15 @@ class _ObxState extends State<ObxWidget> {
   Widget build(BuildContext context) =>
       RxInterface.notifyChildren(_observer, widget.build);
 }
+
+
+
+
+
+
+
+
+
 
 /// The simplest reactive widget in GetX.
 ///
