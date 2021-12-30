@@ -9,10 +9,10 @@ typedef Disposer = void Function();
 // if it brings overhead the extra call,
 typedef GetStateUpdate = void Function();
 
-class ListNotifier extends Listenable with ListenableMixin, ListNotifierMixin {}
+class ListNotifier extends Listenable with ListNotifierMixin {}
 
-mixin ListenableMixin implements Listenable {}
-mixin ListNotifierMixin on ListenableMixin {
+//mixin ListenableMixin implements Listenable {}
+mixin ListNotifierMixin on Listenable {
   // int _version = 0;
   // int _microtask = 0;
 

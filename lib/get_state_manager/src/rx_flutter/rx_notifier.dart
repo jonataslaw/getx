@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
@@ -118,15 +117,8 @@ extension ReactiveT<T> on T {
 
 typedef Condition = bool Function();
 
-abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
+abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(T initial) : super(initial);
-
-  @override
-  @mustCallSuper
-  void onInit() {
-    super.onInit();
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
-  }
 }
 
 extension StateExt<T> on StateMixin<T> {

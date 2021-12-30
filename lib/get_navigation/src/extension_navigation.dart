@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
@@ -508,7 +509,7 @@ extension GetNavigation on GetInterface {
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
-    Bindings? binding,
+    Binding? binding,
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -894,7 +895,7 @@ you can only use widgets and widget functions here''';
     int? id,
     String? routeName,
     dynamic arguments,
-    Bindings? binding,
+    Binding? binding,
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
@@ -960,7 +961,7 @@ you can only use widgets and widget functions here''';
     int? id,
     String? routeName,
     dynamic arguments,
-    Bindings? binding,
+    Binding? binding,
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,

@@ -6,8 +6,9 @@ import 'get_instance.dart';
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Bindings {
-  void dependencies();
+@Deprecated('Use Binding instead')
+abstract class Bindings<T> {
+  T dependencies();
 }
 
 /// Simplifies Bindings generation from a single callback.

@@ -56,15 +56,6 @@ class _ObxState extends State<ObxWidget> {
       RxInterface.notifyChildren(_observer, widget.build);
 }
 
-
-
-
-
-
-
-
-
-
 /// The simplest reactive widget in GetX.
 ///
 /// Just pass your Rx variable in the root scope of the callback to have it

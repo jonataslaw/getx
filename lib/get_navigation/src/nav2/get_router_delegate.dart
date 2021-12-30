@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../get.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 
-class GetDelegate extends RouterDelegate<GetNavConfig>
-    with ListenableMixin, ListNotifierMixin {
+class GetDelegate extends RouterDelegate<GetNavConfig> with ListNotifierMixin {
   final List<GetNavConfig> history = <GetNavConfig>[];
   final PopMode backButtonPopMode;
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;

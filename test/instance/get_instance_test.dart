@@ -12,7 +12,7 @@ class Mock {
   }
 }
 
-abstract class MyController extends GetLifeCycle {}
+abstract class MyController with GetLifeCycleMixin {}
 
 class DisposableController extends MyController {}
 

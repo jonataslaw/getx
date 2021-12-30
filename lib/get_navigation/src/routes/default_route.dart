@@ -40,7 +40,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     this.barrierDismissible = false,
     this.barrierColor,
     this.binding,
-    this.bindings,
+    this.binds,
     this.routeName,
     this.page,
     this.title,
@@ -61,9 +61,9 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final Bindings? binding;
+  final Binding? binding;
   final Map<String, String>? parameter;
-  final List<Bindings>? bindings;
+  final List<Bind>? binds;
 
   @override
   final bool showCupertinoParallax;
@@ -102,18 +102,21 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     final middlewareRunner = MiddlewareRunner(middlewares);
 
     final localbindings = [
-      if (bindings != null) ...bindings!,
-      if (binding != null) ...[binding!]
+      if (binds != null) ...binds!,
+      if (binding != null) ...binding!.dependencies(),
     ];
     final bindingsToBind = middlewareRunner.runOnBindingsStart(localbindings);
-    if (bindingsToBind != null) {
-      for (final binding in bindingsToBind) {
-        binding.dependencies();
-      }
-    }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
+      _child = Binds(
+        child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+        binds: bindingsToBind,
+      );
+    } else {
+      _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    }
+
     return _child!;
   }
 
