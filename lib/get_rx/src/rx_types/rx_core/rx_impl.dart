@@ -177,6 +177,15 @@ mixin NotifyManager<T> {
         cancelOnError: cancelOnError ?? false,
       );
 
+  /// Cancel the subscriptions.
+  void cancelAllSubscriptions() {
+    _subscriptions[subject]
+      ?..forEach((subscription) {
+        subscription.cancel();
+      })
+      ..clear();
+  }
+  
   /// Closes the subscriptions for this Rx, releasing the resources.
   void close() {
     _subscriptions.forEach((getStream, _subscriptions) {
