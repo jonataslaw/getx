@@ -10,12 +10,14 @@ import 'package:flutter/scheduler.dart';
 ///   }
 /// }
 /// ```
-mixin GetLifeCycleBase {
+mixin GetLifeCycleMixin {
   /// Called immediately after the widget is allocated in memory.
   /// You might use this to initialize something for the controller.
   @protected
   @mustCallSuper
-  void onInit() {}
+  void onInit() {
+    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+  }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
   /// navigation events, like snackbar, dialogs, or a new route, or
@@ -41,6 +43,7 @@ mixin GetLifeCycleBase {
   /// lifetime cycle of the subclass.
   // @protected
   @mustCallSuper
+  @nonVirtual
   void onStart() {
     // _checkIfAlreadyConfigured();
     if (_initialized) return;
@@ -55,6 +58,7 @@ mixin GetLifeCycleBase {
 
   // Called when the controller is removed from memory.
   @mustCallSuper
+  @nonVirtual
   void onDelete() {
     if (_isClosed) return;
     _isClosed = true;
@@ -68,14 +72,6 @@ mixin GetLifeCycleBase {
 // that inherits GetLifeCycle.""";
 //     }
 //   }
-}
-
-abstract class GetLifeCycle with GetLifeCycleBase {
-  @override
-  void onInit() {
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
-    super.onInit();
-  }
 }
 
 /// Allow track difference between GetxServices and GetxControllers

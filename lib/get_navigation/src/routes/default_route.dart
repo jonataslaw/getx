@@ -40,7 +40,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     this.barrierDismissible = false,
     this.barrierColor,
     this.binding,
-    this.bindings,
+    this.binds,
     this.routeName,
     this.page,
     this.title,
@@ -61,9 +61,9 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final Bindings? binding;
+  final BindingsInterface? binding;
   final Map<String, String>? parameter;
-  final List<Bindings>? bindings;
+  final List<Bind>? binds;
 
   @override
   final bool showCupertinoParallax;
@@ -100,27 +100,42 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   Widget _getChild() {
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
-    final bindingsToBind = middlewareRunner.runOnBindingsStart(bindings);
-    final _bindingList = [
-      if (binding != null) binding!,
-      ...?bindingsToBind,
+
+    final localbinds = [
+      if (binds != null) ...binds!,
     ];
-    for (var _b in _bindingList) {
-      if (_b is PageBindings) {
-        _b.dependencies(this);
-      } else {
-        _b.dependencies();
+
+    final localbindings = [
+      if (binding != null) ...<BindingsInterface>[binding!],
+    ];
+
+    final bindingsToBind = middlewareRunner
+        .runOnBindingsStart(binding != null ? localbindings : localbinds);
+
+    /// Retrocompatibility workaround, remove this when Bindings api
+    /// have been removed
+    if (bindingsToBind != null &&
+        bindingsToBind is! List<Bind> &&
+        bindingsToBind is List<BindingsInterface>) {
+      for (final binding in bindingsToBind) {
+        binding.dependencies();
       }
     }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    Widget p;
-    if (pageToBuild is GetRouteAwarePageBuilder) {
-      p = pageToBuild(this);
+
+    if (bindingsToBind != null &&
+        bindingsToBind.isNotEmpty &&
+        bindingsToBind is List<Bind>) {
+      _child = Binds(
+        child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+        binds: bindingsToBind,
+      );
     } else {
-      p = pageToBuild();
+      _child = middlewareRunner.runOnPageBuilt(pageToBuild());
     }
-    return middlewareRunner.runOnPageBuilt(p);
+
+    return _child!;
   }
 
   @override

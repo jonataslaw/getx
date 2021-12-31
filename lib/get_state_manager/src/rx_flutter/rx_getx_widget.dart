@@ -5,13 +5,13 @@ import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
+import '../../../get_instance/src/lifecycle.dart';
 import '../../../get_rx/src/rx_types/rx_types.dart';
-import '../../get_state_manager.dart';
 
-typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
+typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
-class GetX<T extends DisposableInterface> extends StatefulWidget {
+class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
   final bool global;
   final bool autoRemove;
@@ -54,7 +54,7 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   GetXState<T> createState() => GetXState<T>();
 }
 
-class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
+class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   final _observer = RxNotifier();
   T? controller;
   bool? _isCreator = false;

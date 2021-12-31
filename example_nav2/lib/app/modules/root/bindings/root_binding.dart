@@ -2,11 +2,13 @@ import 'package:get/get.dart';
 
 import '../controllers/root_controller.dart';
 
-class RootBinding extends Bindings {
+class RootBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<RootController>(
-      () => RootController(),
-    );
+  List<Bind> dependencies() {
+    return [
+      Bind.lazyPut<RootController>(
+        () => RootController(),
+      )
+    ];
   }
 }
