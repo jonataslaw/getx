@@ -2,10 +2,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
+import '../../get_state_manager/src/simple/get_state.dart';
 import '../../get_utils/get_utils.dart';
 import '../get_navigation.dart';
 import 'dialog/dialog_route.dart';

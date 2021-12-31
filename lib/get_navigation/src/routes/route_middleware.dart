@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
 import '../../../get.dart';
 
 abstract class _RouteMiddleware {
@@ -77,7 +78,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  List<Bind>? onBindingsStart(List<Bind> bindings);
+  List<R>? onBindingsStart<R>(List<R> bindings);
 
   /// This function will be called right after the [Bindings] are initialize.
   GetPageBuilder? onPageBuildStart(GetPageBuilder page);
@@ -107,7 +108,7 @@ class GetMiddleware implements _RouteMiddleware {
   GetPage? onPageCalled(GetPage? page) => page;
 
   @override
-  List<Bind>? onBindingsStart(List<Bind>? bindings) => bindings;
+  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
 
   @override
   GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
@@ -155,7 +156,7 @@ class MiddlewareRunner {
     return to;
   }
 
-  List<Bind>? runOnBindingsStart(List<Bind>? bindings) {
+  List<R>? runOnBindingsStart<R>(List<R>? bindings) {
     _getMiddlewares().forEach((element) {
       bindings = element.onBindingsStart(bindings);
     });

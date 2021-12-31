@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get_core/src/get_main.dart';
+import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
 
@@ -17,7 +18,7 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  final Binding? binding;
+  final BindingsInterface? binding;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
@@ -87,7 +88,7 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    Binding? binding,
+    BindingsInterface? binding,
     List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,

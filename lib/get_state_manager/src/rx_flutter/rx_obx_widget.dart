@@ -35,7 +35,7 @@ class _ObxState extends State<ObxWidget> {
   @override
   void initState() {
     super.initState();
-    subs = _observer.listen(_updateTree, cancelOnError: false);
+    subs = _observer.subject.stream.listen(_updateTree, cancelOnError: false);
   }
 
   void _updateTree(_) {

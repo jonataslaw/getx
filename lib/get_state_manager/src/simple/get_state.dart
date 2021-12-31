@@ -361,20 +361,8 @@ class BindWrapper<T> extends InheritedWidget {
     this.didUpdateWidget,
   }) : super(key: key, child: child);
 
-  /// The [Listenable] object to which to listen.
-  ///
-  /// Whenever this object sends change notifications, the dependents of this
-  /// widget are triggered.
-  ///
-  /// By default, whenever the [controller] is changed (including when changing to
-  /// or from null), if the old controller is not equal to the new controller (as
-  /// determined by the `==` operator), notifications are sent. This behavior
-  /// can be overridden by overriding [updateShouldNotify].
-  ///
-  /// While the [controller] is null, no notifications are sent, since the null
-  /// object cannot itself send notifications.
-  final InitBuilder<T>? init;
 
+  final InitBuilder<T>? init;
   final bool global;
   final Object? id;
   final String? tag;
@@ -411,7 +399,6 @@ class BindElement<T> extends InheritedElement {
   T? _controller;
 
   T get controller {
-    print('get controller $T');
     if (_controller == null) {
       _controller = _controllerBuilder?.call();
       _subscribeToController();
@@ -583,6 +570,7 @@ class BindError<T> extends Error {
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Binding {
+abstract class Binding extends BindingsInterface<List<Bind>> {
+  @override
   List<Bind> dependencies();
 }

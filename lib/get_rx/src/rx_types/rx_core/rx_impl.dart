@@ -292,12 +292,9 @@ extension RxBoolExt on Rx<bool> {
 
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
-  /// FIXME: why return this? fluent interface is not
-  ///  not really a dart thing since we have '..' operator
-  // ignore: avoid_returning_this
-  Rx<bool> toggle() {
+  void toggle() {
     subject.add(!value);
-    return this;
+    // return this;
   }
 }
 
@@ -324,13 +321,10 @@ extension RxnBoolExt on Rx<bool?> {
 
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
-  /// FIXME: why return this? fluent interface is not
-  ///  not really a dart thing since we have '..' operator
-  // ignore: avoid_returning_this
-  Rx<bool?>? toggle() {
+  void toggle() {
     if (value != null) {
       subject.add(!value!);
-      return this;
+      // return this;
     }
   }
 }

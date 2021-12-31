@@ -61,7 +61,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final Binding? binding;
+  final BindingsInterface? binding;
   final Map<String, String>? parameter;
   final List<Bind>? binds;
 
@@ -101,14 +101,32 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localbindings = [
+    final localbinds = [
       if (binds != null) ...binds!,
-      if (binding != null) ...binding!.dependencies(),
     ];
-    final bindingsToBind = middlewareRunner.runOnBindingsStart(localbindings);
+
+    final localbindings = [
+      if (binding != null) ...<BindingsInterface>[binding!],
+    ];
+
+    final bindingsToBind = middlewareRunner
+        .runOnBindingsStart(binding != null ? localbindings : localbinds);
+
+    /// Retrocompatibility workaround, remove this when Bindings api 
+    /// have been removed
+    if (bindingsToBind != null &&
+        bindingsToBind is! List<Bind> &&
+        bindingsToBind is List<BindingsInterface>) {
+      for (final binding in bindingsToBind) {
+        binding.dependencies();
+      }
+    }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
+
+    if (bindingsToBind != null &&
+        bindingsToBind.isNotEmpty &&
+        bindingsToBind is List<Bind>) {
       _child = Binds(
         child: middlewareRunner.runOnPageBuilt(pageToBuild()),
         binds: bindingsToBind,
