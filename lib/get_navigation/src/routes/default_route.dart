@@ -40,7 +40,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     this.barrierDismissible = false,
     this.barrierColor,
     this.binding,
-    this.bindings,
+    this.binds,
     this.routeName,
     this.page,
     this.title,
@@ -61,9 +61,9 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final Bindings? binding;
+  final BindingsInterface? binding;
   final Map<String, String>? parameter;
-  final List<Bindings>? bindings;
+  final List<Bind>? binds;
 
   @override
   final bool showCupertinoParallax;
@@ -101,19 +101,40 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localbindings = [
-      if (bindings != null) ...bindings!,
-      if (binding != null) ...[binding!]
+    final localbinds = [
+      if (binds != null) ...binds!,
     ];
-    final bindingsToBind = middlewareRunner.runOnBindingsStart(localbindings);
-    if (bindingsToBind != null) {
+
+    final localbindings = [
+      if (binding != null) ...<BindingsInterface>[binding!],
+    ];
+
+    final bindingsToBind = middlewareRunner
+        .runOnBindingsStart(binding != null ? localbindings : localbinds);
+
+    /// Retrocompatibility workaround, remove this when Bindings api 
+    /// have been removed
+    if (bindingsToBind != null &&
+        bindingsToBind is! List<Bind> &&
+        bindingsToBind is List<BindingsInterface>) {
       for (final binding in bindingsToBind) {
         binding.dependencies();
       }
     }
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
-    _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+
+    if (bindingsToBind != null &&
+        bindingsToBind.isNotEmpty &&
+        bindingsToBind is List<Bind>) {
+      _child = Binds(
+        child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+        binds: bindingsToBind,
+      );
+    } else {
+      _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    }
+
     return _child!;
   }
 

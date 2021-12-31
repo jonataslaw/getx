@@ -67,7 +67,7 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
         super(key: key);
 }
 
-class GetResponsiveWidget<T extends GetLifeCycleBase?> extends GetWidget<T>
+class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
   @override
   final bool alwaysUseBuilder;

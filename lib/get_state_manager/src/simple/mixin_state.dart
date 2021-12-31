@@ -8,10 +8,10 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
   final bool global;
   final String? id;
   final bool autoRemove;
-  final void Function(ScopeElement<T> state)? initState,
+  final void Function(BindElement<T> state)? initState,
       dispose,
       didChangeDependencies;
-  final void Function(Scope<T> oldWidget, ScopeElement<T> state)?
+  final void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
 

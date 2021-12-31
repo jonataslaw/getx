@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
 import '../../../get.dart';
 
 abstract class _RouteMiddleware {
@@ -77,7 +78,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  List<Bindings>? onBindingsStart(List<Bindings> bindings);
+  List<R>? onBindingsStart<R>(List<R> bindings);
 
   /// This function will be called right after the [Bindings] are initialize.
   GetPageBuilder? onPageBuildStart(GetPageBuilder page);
@@ -107,7 +108,7 @@ class GetMiddleware implements _RouteMiddleware {
   GetPage? onPageCalled(GetPage? page) => page;
 
   @override
-  List<Bindings>? onBindingsStart(List<Bindings>? bindings) => bindings;
+  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
 
   @override
   GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
@@ -155,7 +156,7 @@ class MiddlewareRunner {
     return to;
   }
 
-  List<Bindings>? runOnBindingsStart(List<Bindings>? bindings) {
+  List<R>? runOnBindingsStart<R>(List<R>? bindings) {
     _getMiddlewares().forEach((element) {
       bindings = element.onBindingsStart(bindings);
     });
@@ -212,7 +213,7 @@ class PageRedirect {
       gestureWidth: _r.gestureWidth,
       customTransition: _r.customTransition,
       binding: _r.binding,
-      bindings: _r.bindings,
+      binds: _r.binds,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
       transition: _r.transition,
@@ -241,7 +242,7 @@ class PageRedirect {
       opaque: _r.opaque,
       customTransition: _r.customTransition,
       binding: _r.binding,
-      bindings: _r.bindings,
+      binds: _r.binds,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
       transition: _r.transition,

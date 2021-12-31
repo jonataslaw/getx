@@ -46,9 +46,7 @@ class AppPages {
           preventDuplicates: true,
           name: _Paths.HOME,
           page: () => HomeView(),
-          bindings: [
-            HomeBinding(),
-          ],
+          binding: HomeBinding(),
           title: null,
           children: [
             GetPage(

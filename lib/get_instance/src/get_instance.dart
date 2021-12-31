@@ -250,7 +250,7 @@ class GetInstance {
   S _startController<S>({String? tag}) {
     final key = _getKey(S, tag);
     final i = _singl[key]!.getDependency() as S;
-    if (i is GetLifeCycleBase) {
+    if (i is GetLifeCycleMixin) {
       i.onStart();
       if (tag == null) {
         Get.log('Instance "$S" has been initialized');
@@ -379,7 +379,7 @@ class GetInstance {
       return false;
     }
 
-    if (i is GetLifeCycleBase) {
+    if (i is GetLifeCycleMixin) {
       i.onDelete();
       Get.log('"$newKey" onDelete() called');
     }
@@ -452,7 +452,7 @@ class GetInstance {
       return;
     }
 
-    if (i is GetLifeCycleBase) {
+    if (i is GetLifeCycleMixin) {
       i.onDelete();
       Get.log('"$newKey" onDelete() called');
     }

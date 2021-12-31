@@ -1,92 +1,93 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get_navigation/src/router_report.dart';
-// import 'package:get/instance_manager.dart';
+import 'package:flutter/material.dart';
 
-// class Dependencies {
-//   void lazyPut<S>(InstanceBuilderCallback<S> builder,
-//       {String? tag, bool fenix = false}) {
-//     GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
-//   }
+import '../../../instance_manager.dart';
+import '../router_report.dart';
 
-//   S call<S>() {
-//     return find<S>();
-//   }
+class Dependencies {
+  void lazyPut<S>(InstanceBuilderCallback<S> builder,
+      {String? tag, bool fenix = false}) {
+    GetInstance().lazyPut<S>(builder, tag: tag, fenix: fenix);
+  }
 
-//   Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
-//           {String? tag, bool permanent = false}) async =>
-//       GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
+  S call<S>() {
+    return find<S>();
+  }
 
-//   void create<S>(InstanceBuilderCallback<S> builder,
-//           {String? tag, bool permanent = true}) =>
-//       GetInstance().create<S>(builder, tag: tag, permanent: permanent);
+  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
+          {String? tag, bool permanent = false}) async =>
+      GetInstance().putAsync<S>(builder, tag: tag, permanent: permanent);
 
-//   S find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
+  void create<S>(InstanceBuilderCallback<S> builder,
+          {String? tag, bool permanent = true}) =>
+      GetInstance().create<S>(builder, tag: tag, permanent: permanent);
 
-//   S put<S>(S dependency,
-//           {String? tag,
-//           bool permanent = false,
-//           InstanceBuilderCallback<S>? builder}) =>
-//       GetInstance().put<S>(dependency, tag: tag, permanent: permanent);
+  S find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
 
-//   Future<bool> delete<S>({String? tag, bool force = false}) async =>
-//       GetInstance().delete<S>(tag: tag, force: force);
+  S put<S>(S dependency,
+          {String? tag,
+          bool permanent = false,
+          InstanceBuilderCallback<S>? builder}) =>
+      GetInstance().put<S>(dependency, tag: tag, permanent: permanent);
 
-//   Future<void> deleteAll({bool force = false}) async =>
-//       GetInstance().deleteAll(force: force);
+  Future<bool> delete<S>({String? tag, bool force = false}) async =>
+      GetInstance().delete<S>(tag: tag, force: force);
 
-//   void reloadAll({bool force = false}) => GetInstance().reloadAll(force: force);
+  Future<void> deleteAll({bool force = false}) async =>
+      GetInstance().deleteAll(force: force);
 
-//   void reload<S>({String? tag, String? key, bool force = false}) =>
-//       GetInstance().reload<S>(tag: tag, key: key, force: force);
+  void reloadAll({bool force = false}) => GetInstance().reloadAll(force: force);
 
-//   bool isRegistered<S>({String? tag}) =>
-//       GetInstance().isRegistered<S>(tag: tag);
+  void reload<S>({String? tag, String? key, bool force = false}) =>
+      GetInstance().reload<S>(tag: tag, key: key, force: force);
 
-//   bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
+  bool isRegistered<S>({String? tag}) =>
+      GetInstance().isRegistered<S>(tag: tag);
 
-//   void replace<P>(P child, {String? tag}) {
-//     final info = GetInstance().getInstanceInfo<P>(tag: tag);
-//     final permanent = (info.isPermanent ?? false);
-//     delete<P>(tag: tag, force: permanent);
-//     put(child, tag: tag, permanent: permanent);
-//   }
+  bool isPrepared<S>({String? tag}) => GetInstance().isPrepared<S>(tag: tag);
 
-//   void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-//       {String? tag, bool? fenix}) {
-//     final info = GetInstance().getInstanceInfo<P>(tag: tag);
-//     final permanent = (info.isPermanent ?? false);
-//     delete<P>(tag: tag, force: permanent);
-//     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
-//   }
-// }
+  void replace<P>(P child, {String? tag}) {
+    final info = GetInstance().getInstanceInfo<P>(tag: tag);
+    final permanent = (info.isPermanent ?? false);
+    delete<P>(tag: tag, force: permanent);
+    put(child, tag: tag, permanent: permanent);
+  }
 
-// abstract class Module extends StatefulWidget {
-//   Module({Key? key}) : super(key: key);
+  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
+      {String? tag, bool? fenix}) {
+    final info = GetInstance().getInstanceInfo<P>(tag: tag);
+    final permanent = (info.isPermanent ?? false);
+    delete<P>(tag: tag, force: permanent);
+    lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
+  }
+}
 
-//   Widget view(BuildContext context);
+abstract class Module extends StatefulWidget {
+  Module({Key? key}) : super(key: key);
 
-//   void dependencies(Dependencies i);
+  Widget view(BuildContext context);
 
-//   @override
-//   _ModuleState createState() => _ModuleState();
-// }
+  void dependencies(Dependencies i);
 
-// class _ModuleState extends State<Module> {
-//   @override
-//   void initState() {
-//     RouterReportManager.instance.reportCurrentRoute(this);
-//     widget.dependencies(Dependencies());
-//     super.initState();
-//   }
+  @override
+  _ModuleState createState() => _ModuleState();
+}
 
-//   @override
-//   void dispose() {
-//     RouterReportManager.instance.reportRouteDispose(this);
-//     super.dispose();
-//   }
+class _ModuleState extends State<Module> {
+  @override
+  void initState() {
+    RouterReportManager.instance.reportCurrentRoute(this);
+    widget.dependencies(Dependencies());
+    super.initState();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return widget.view(context);
-//   }
-// }
+  @override
+  void dispose() {
+    RouterReportManager.instance.reportRouteDispose(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.view(context);
+  }
+}

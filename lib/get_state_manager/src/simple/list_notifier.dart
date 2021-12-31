@@ -9,16 +9,9 @@ typedef Disposer = void Function();
 // if it brings overhead the extra call,
 typedef GetStateUpdate = void Function();
 
-class ListNotifier extends Listenable with ListenableMixin, ListNotifierMixin {}
+class ListNotifier extends Listenable with ListNotifierMixin {}
 
-mixin ListenableMixin implements Listenable {}
-mixin ListNotifierMixin on ListenableMixin {
-  // int _version = 0;
-  // int _microtask = 0;
-
-  // int get notifierVersion => _version;
-  // int get notifierMicrotask => _microtask;
-
+mixin ListNotifierMixin on Listenable {
   List<GetStateUpdate?>? _updaters = <GetStateUpdate?>[];
 
   HashMap<Object?, List<GetStateUpdate>>? _updatersGroupIds =
@@ -28,16 +21,7 @@ mixin ListNotifierMixin on ListenableMixin {
   void refresh() {
     assert(_debugAssertNotDisposed());
 
-    /// This debounce the call to update.
-    /// It prevent errors and duplicates builds
-    // if (_microtask == _version) {
-    //   _microtask++;
-    //   scheduleMicrotask(() {
-    //     _version++;
-    //     _microtask = _version;
     _notifyUpdate();
-    // });
-    // }
   }
 
   void _notifyUpdate() {
@@ -58,17 +42,7 @@ mixin ListNotifierMixin on ListenableMixin {
   @protected
   void refreshGroup(Object id) {
     assert(_debugAssertNotDisposed());
-
-    // /// This debounce the call to update.
-    // /// It prevent errors and duplicates builds
-    // if (_microtask == _version) {
-    //   _microtask++;
-    //   scheduleMicrotask(() {
-    //     _version++;
-    //     _microtask = _version;
     _notifyIdUpdate(id);
-    // });
-    // }
   }
 
   bool _debugAssertNotDisposed() {
@@ -147,7 +121,6 @@ class TaskManager {
   static TaskManager get instance => _instance ??= TaskManager._();
 
   GetStateUpdate? _setter;
-
   List<VoidCallback>? _remove;
 
   void notify(List<GetStateUpdate?>? _updaters) {

@@ -1,14 +1,13 @@
 // ignore: prefer_mixin
 import 'package:flutter/widgets.dart';
-import '../../../instance_manager.dart';
 
-import '../rx_flutter/rx_disposable.dart';
+import '../../../instance_manager.dart';
 import '../rx_flutter/rx_notifier.dart';
 import 'list_notifier.dart';
 
 // ignore: prefer_mixin
-abstract class GetxController extends DisposableInterface
-    with ListenableMixin, ListNotifierMixin {
+abstract class GetxController extends Listenable
+    with GetLifeCycleMixin, ListNotifierMixin {
   /// Rebuilds `GetBuilder` each time you call `update()`;
   /// Can take a List of [ids], that will only update the matching
   /// `GetBuilder( id: )`,
@@ -28,7 +27,7 @@ abstract class GetxController extends DisposableInterface
   }
 }
 
-mixin ScrollMixin on GetLifeCycleBase {
+mixin ScrollMixin on GetLifeCycleMixin {
   final ScrollController scroll = ScrollController();
 
   @override
@@ -72,7 +71,7 @@ mixin ScrollMixin on GetLifeCycleBase {
   }
 }
 
-abstract class RxController extends DisposableInterface {}
+abstract class RxController with GetLifeCycleMixin {}
 
 abstract class SuperController<T> extends FullLifeCycleController
     with FullLifeCycleMixin, StateMixin<T> {}
