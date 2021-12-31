@@ -5,7 +5,7 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-mixin StateMixin<T> on ListNotifierMixin {
+mixin StateMixin<T> on ListNotifier {
   late T _value;
   RxStatus? _status;
 
@@ -27,7 +27,7 @@ mixin StateMixin<T> on ListNotifierMixin {
   }
 
   RxStatus get status {
-    notifyChildrens();
+    reportRead();
     return _status ??= _status = RxStatus.loading();
   }
 
@@ -35,7 +35,7 @@ mixin StateMixin<T> on ListNotifierMixin {
 
   @protected
   T get value {
-    notifyChildrens();
+    reportRead();
     return _value;
   }
 
@@ -82,7 +82,7 @@ class Value<T> extends ListNotifier
 
   @override
   T get value {
-    notifyChildrens();
+    reportRead();
     return _value;
   }
 

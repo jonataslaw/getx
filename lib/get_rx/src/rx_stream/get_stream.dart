@@ -106,7 +106,7 @@ class GetStream<T> {
   late T _value;
 
   T get value {
-    RxInterface.proxy?.addListener(this);
+    // RxInterface.proxy?.addListener(this);
     return _value;
   }
 
