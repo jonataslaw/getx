@@ -192,7 +192,7 @@ extension ExtensionDialog on GetInterface {
                     color: buttonColor ?? theme.colorScheme.secondary,
                     width: 2,
                     style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(100)),
+                borderRadius: BorderRadius.circular(radius)),
           ),
           onPressed: () {
             onCancel?.call();
@@ -215,7 +215,7 @@ extension ExtensionDialog on GetInterface {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               backgroundColor: buttonColor ?? theme.colorScheme.secondary,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100)),
+                  borderRadius: BorderRadius.circular(radius)),
             ),
             child: Text(
               textConfirm ?? "Ok",
