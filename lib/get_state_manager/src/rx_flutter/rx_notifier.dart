@@ -7,7 +7,7 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-extension _NullOrEmpty on Object {
+extension _Empty on Object {
   bool _isEmpty() {
     final val = this;
     // if (val == null) return true;
@@ -25,20 +25,30 @@ extension _NullOrEmpty on Object {
 
 mixin StateMixin<T> on ListNotifier {
   late T _value;
-  GetState? _status;
+  GetState<T>? _status;
 
-  void _fillEmptyStatus() {
+  void _fillInitialStatus() {
     _status = (value == null || value!._isEmpty())
-        ? GetState.loading()
-        : GetState.success(_status);
+        ? GetState<T>.loading()
+        : GetState<T>.success(_value);
   }
 
-  GetState get status {
+  GetState<T> get status {
     reportRead();
     return _status ??= _status = GetState.loading();
   }
 
   T get state => value;
+
+  set status(GetState<T> newStatus) {
+    if (newStatus == status) return;
+    _status = newStatus;
+    if (newStatus is SuccessState<T>) {
+      _value = newStatus.data!;
+      return;
+    }
+    refresh();
+  }
 
   @protected
   T get value {
@@ -53,33 +63,17 @@ mixin StateMixin<T> on ListNotifier {
     refresh();
   }
 
-  @protected
-  void change(T newState, {GetState? status}) {
-    var _canUpdate = false;
-    if (status != null) {
-      _status = status;
-      _canUpdate = true;
-    }
-    if (newState != _value) {
-      _value = newState;
-      _canUpdate = true;
-    }
-    if (_canUpdate) {
-      refresh();
-    }
-  }
-
-  void listenFuture(Future<T> Function() body(),
+  void futurize(Future<T> Function() body(),
       {String? errorMessage, bool useEmpty = true}) {
     final compute = body();
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        change(newValue, status: GetState.loading());
+        status = GetState<T>.loading();
       } else {
-        change(newValue, status: GetState.success(newValue));
+        status = GetState<T>.success(newValue);
       }
     }, onError: (err) {
-      change(state, status: GetState.error(errorMessage ?? err.toString()));
+      status = GetState.error(errorMessage ?? err.toString());
     });
   }
 }
@@ -160,7 +154,7 @@ class Value<T> extends ListNotifier
     implements ValueListenable<T?> {
   Value(T val) {
     _value = val;
-    _fillEmptyStatus();
+    _fillInitialStatus();
   }
 
   @override
@@ -226,41 +220,49 @@ typedef NotifierBuilder<T> = Widget Function(T state);
 
 abstract class GetState<T> {
   const GetState();
-  factory GetState.loading() => GLoading();
-  factory GetState.error(String message) => GError(message);
-  factory GetState.empty() => GEmpty();
-  factory GetState.success(T data) => GSuccess(data);
+  factory GetState.loading() => LoadingState();
+  factory GetState.error(String message) => ErrorState(message);
+  factory GetState.empty() => EmptyState();
+  factory GetState.success(T data) => SuccessState(data);
 }
 
-class GLoading<T> extends GetState<T> {}
+class LoadingState<T> extends GetState<T> {}
 
-class GSuccess<T> extends GetState<T> {
+class SuccessState<T> extends GetState<T> {
   final T data;
 
-  GSuccess(this.data);
+  SuccessState(this.data);
 }
 
-class GError<T, S> extends GetState<T> {
+class ErrorState<T, S> extends GetState<T> {
   final S? error;
-  GError([this.error]);
+  ErrorState([this.error]);
 }
 
-class GEmpty<T> extends GetState<T> {}
+class EmptyState<T> extends GetState<T> {}
 
 extension StatusDataExt<T> on GetState<T> {
-  bool get isLoading => this is GLoading;
-  bool get isSuccess => this is GSuccess;
-  bool get isError => this is GError;
-  bool get isEmpty => this is GEmpty;
+  bool get isLoading => this is LoadingState;
+  bool get isSuccess => this is SuccessState;
+  bool get isError => this is ErrorState;
+  bool get isEmpty => this is EmptyState;
   String get errorMessage {
-    final isError = this is GError;
+    final isError = this is ErrorState;
     if (isError) {
-      final err = this as GError;
+      final err = this as ErrorState;
       if (err.error != null && err.error is String) {
         return err.error as String;
       }
     }
 
     return '';
+  }
+
+  T? get data {
+    if (this is SuccessState<T>) {
+      final success = this as SuccessState<T>;
+      return success.data;
+    }
+    return null;
   }
 }
