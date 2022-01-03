@@ -44,12 +44,12 @@ mixin ListNotifierSingleMixin on Listenable {
 
   @protected
   void reportRead() {
-    TaskManager.instance.notify(this);
+    NotifierManager.instance.notify(this);
   }
 
   @protected
   void reportAdd(VoidCallback disposer) {
-    TaskManager.instance.reportAdd(disposer);
+    NotifierManager.instance.reportAdd(disposer);
   }
 
   void _notifyUpdate() {
@@ -96,7 +96,7 @@ mixin ListNotifierGroupMixin on Listenable {
   @protected
   void notifyGroupChildrens(Object id) {
     assert(_debugAssertNotDisposed());
-    TaskManager.instance.notify(_updatersGroupIds![id]!);
+    NotifierManager.instance.notify(_updatersGroupIds![id]!);
   }
 
   bool containsId(Object id) {
@@ -148,12 +148,12 @@ mixin ListNotifierGroupMixin on Listenable {
   }
 }
 
-class TaskManager {
-  TaskManager._();
+class NotifierManager {
+  NotifierManager._();
 
-  static TaskManager? _instance;
+  static NotifierManager? _instance;
 
-  static TaskManager get instance => _instance ??= TaskManager._();
+  static NotifierManager get instance => _instance ??= NotifierManager._();
 
   GetStateUpdate? _setter;
   List<VoidCallback>? _remove;
@@ -176,9 +176,7 @@ class TaskManager {
       T Function() builder) {
     _remove = disposers;
     _setter = setState;
-
     final result = builder();
-    print(disposers.isEmpty);
     if (disposers.isEmpty) {
       throw ObxError();
     }

@@ -101,7 +101,7 @@ mixin ObserverComponent on ComponentElement {
 
   @override
   Widget build() =>
-      TaskManager.instance.exchange(disposers, markNeedsBuild, super.build);
+      NotifierManager.instance.exchange(disposers, markNeedsBuild, super.build);
 
   @override
   void unmount() {
