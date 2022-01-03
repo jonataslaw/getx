@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -5,37 +7,52 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-mixin StateMixin<T> on ListNotifierMixin {
-  late T _value;
-  RxStatus? _status;
-
-  bool _isNullOrEmpty(dynamic val) {
-    if (val == null) return true;
+extension _Empty on Object {
+  bool _isEmpty() {
+    final val = this;
+    // if (val == null) return true;
     var result = false;
     if (val is Iterable) {
       result = val.isEmpty;
     } else if (val is String) {
-      result = val.isEmpty;
+      result = val.trim().isEmpty;
     } else if (val is Map) {
       result = val.isEmpty;
     }
     return result;
   }
+}
 
-  void _fillEmptyStatus() {
-    _status = _isNullOrEmpty(_value) ? RxStatus.loading() : RxStatus.success();
+mixin StateMixin<T> on ListNotifier {
+  late T _value;
+  GetState<T>? _status;
+
+  void _fillInitialStatus() {
+    _status = (value == null || value!._isEmpty())
+        ? GetState<T>.loading()
+        : GetState<T>.success(_value);
   }
 
-  RxStatus get status {
-    notifyChildrens();
-    return _status ??= _status = RxStatus.loading();
+  GetState<T> get status {
+    reportRead();
+    return _status ??= _status = GetState.loading();
   }
 
   T get state => value;
 
+  set status(GetState<T> newStatus) {
+    if (newStatus == status) return;
+    _status = newStatus;
+    if (newStatus is SuccessState<T>) {
+      _value = newStatus.data!;
+      return;
+    }
+    refresh();
+  }
+
   @protected
   T get value {
-    notifyChildrens();
+    reportRead();
     return _value;
   }
 
@@ -46,30 +63,90 @@ mixin StateMixin<T> on ListNotifierMixin {
     refresh();
   }
 
-  @protected
-  void change(T newState, {RxStatus? status}) {
-    var _canUpdate = false;
-    if (status != null) {
-      _status = status;
-      _canUpdate = true;
-    }
-    if (newState != _value) {
-      _value = newState;
-      _canUpdate = true;
-    }
-    if (_canUpdate) {
-      refresh();
-    }
-  }
-
-  void append(Future<T> Function() body(), {String? errorMessage}) {
+  void futurize(Future<T> Function() body(),
+      {String? errorMessage, bool useEmpty = true}) {
     final compute = body();
     compute().then((newValue) {
-      change(newValue, status: RxStatus.success());
+      if ((newValue == null || newValue._isEmpty()) && useEmpty) {
+        status = GetState<T>.loading();
+      } else {
+        status = GetState<T>.success(newValue);
+      }
     }, onError: (err) {
-      change(state, status: RxStatus.error(errorMessage ?? err.toString()));
+      status = GetState.error(errorMessage ?? err.toString());
     });
   }
+}
+
+class GetListenable<T> extends ListNotifierSingle
+    implements ValueListenable<T> {
+  GetListenable(T val) : _value = val;
+
+  StreamController<T>? _controller;
+
+  StreamController<T> get subject {
+    if (_controller == null) {
+      _controller = StreamController<T>.broadcast();
+      addListener(_streamListener);
+    }
+    return _controller!;
+  }
+
+  void _streamListener() {
+    _controller?.add(_value);
+  }
+
+  @mustCallSuper
+  void close() {
+    removeListener(_streamListener);
+    _controller?.close();
+    dispose();
+  }
+
+  Stream<T> get stream {
+    return subject.stream;
+  }
+
+  T _value;
+
+  @override
+  T get value {
+    reportRead();
+    return _value;
+  }
+
+  void _notify() {
+    refresh();
+  }
+
+  set value(T newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+    _notify();
+  }
+
+  T? call([T? v]) {
+    if (v != null) {
+      value = v;
+    }
+    return value;
+  }
+
+  StreamSubscription<T> listen(
+    void Function(T)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      stream.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError ?? false,
+      );
+
+  @override
+  String toString() => value.toString();
 }
 
 class Value<T> extends ListNotifier
@@ -77,12 +154,12 @@ class Value<T> extends ListNotifier
     implements ValueListenable<T?> {
   Value(T val) {
     _value = val;
-    _fillEmptyStatus();
+    _fillInitialStatus();
   }
 
   @override
   T get value {
-    notifyChildrens();
+    reportRead();
     return _value;
   }
 
@@ -111,12 +188,6 @@ class Value<T> extends ListNotifier
   dynamic toJson() => (value as dynamic)?.toJson();
 }
 
-extension ReactiveT<T> on T {
-  Value<T> get reactive => Value<T>(this);
-}
-
-typedef Condition = bool Function();
-
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(T initial) : super(initial);
 }
@@ -128,7 +199,7 @@ extension StateExt<T> on StateMixin<T> {
     Widget? onLoading,
     Widget? onEmpty,
   }) {
-    return SimpleBuilder(builder: (_) {
+    return Observer(builder: (_) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
@@ -145,83 +216,53 @@ extension StateExt<T> on StateMixin<T> {
   }
 }
 
-class RxStatus {
-  final bool isLoading;
-  final bool isError;
-  final bool isSuccess;
-  final bool isEmpty;
-  final bool isLoadingMore;
-  final String? errorMessage;
-
-  RxStatus._({
-    this.isEmpty = false,
-    this.isLoading = false,
-    this.isError = false,
-    this.isSuccess = false,
-    this.errorMessage,
-    this.isLoadingMore = false,
-  });
-
-  factory RxStatus.loading() {
-    return RxStatus._(isLoading: true);
-  }
-
-  factory RxStatus.loadingMore() {
-    return RxStatus._(isSuccess: true, isLoadingMore: true);
-  }
-
-  factory RxStatus.success() {
-    return RxStatus._(isSuccess: true);
-  }
-
-  factory RxStatus.error([String? message]) {
-    return RxStatus._(isError: true, errorMessage: message);
-  }
-
-  factory RxStatus.empty() {
-    return RxStatus._(isEmpty: true);
-  }
-}
-
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GState<T> {
-  const GState();
-  factory GState.loading() => GLoading();
-  factory GState.error(String message) => GError(message);
-  factory GState.empty() => GEmpty();
-  factory GState.success(T data) => GSuccess(data);
+abstract class GetState<T> {
+  const GetState();
+  factory GetState.loading() => LoadingState();
+  factory GetState.error(String message) => ErrorState(message);
+  factory GetState.empty() => EmptyState();
+  factory GetState.success(T data) => SuccessState(data);
 }
 
-class GLoading<T> extends GState<T> {}
+class LoadingState<T> extends GetState<T> {}
 
-class GSuccess<T> extends GState<T> {
+class SuccessState<T> extends GetState<T> {
   final T data;
 
-  GSuccess(this.data);
+  SuccessState(this.data);
 }
 
-class GError<T, S> extends GState<T> {
+class ErrorState<T, S> extends GetState<T> {
   final S? error;
-  GError([this.error]);
+  ErrorState([this.error]);
 }
 
-class GEmpty<T> extends GState<T> {}
+class EmptyState<T> extends GetState<T> {}
 
-extension StatusDataExt<T> on GState<T> {
-  bool get isLoading => this is GLoading;
-  bool get isSuccess => this is GSuccess;
-  bool get isError => this is GError;
-  bool get isEmpty => this is GEmpty;
+extension StatusDataExt<T> on GetState<T> {
+  bool get isLoading => this is LoadingState;
+  bool get isSuccess => this is SuccessState;
+  bool get isError => this is ErrorState;
+  bool get isEmpty => this is EmptyState;
   String get errorMessage {
-    final isError = this is GError;
+    final isError = this is ErrorState;
     if (isError) {
-      final err = this as GError;
+      final err = this as ErrorState;
       if (err.error != null && err.error is String) {
         return err.error as String;
       }
     }
 
     return '';
+  }
+
+  T? get data {
+    if (this is SuccessState<T>) {
+      final success = this as SuccessState<T>;
+      return success.data;
+    }
+    return null;
   }
 }

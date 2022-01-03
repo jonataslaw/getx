@@ -1,11 +1,8 @@
 part of rx_types;
 
-class RxSet<E> extends SetMixin<E>
-    with NotifyManager<Set<E>>, RxObjectMixin<Set<E>>
-    implements RxInterface<Set<E>> {
-  RxSet([Set<E> initial = const {}]) {
-    subject = GetStream.fromValue(Set.from(initial));
-  }
+class RxSet<E> extends GetListenable<Set<E>>
+    with SetMixin<E>, RxObjectMixin<Set<E>> {
+  RxSet([Set<E> initial = const {}]) : super(initial);
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
@@ -20,13 +17,13 @@ class RxSet<E> extends SetMixin<E>
     refresh();
   }
 
-  @override
-  @protected
-  Set<E> get value {
-    return subject.value;
-    // RxInterface.proxy?.addListener(subject);
-    // return _value;
-  }
+  // @override
+  // @protected
+  // Set<E> get value {
+  //   return subject.value;
+  //   // RxInterface.proxy?.addListener(subject);
+  //   // return _value;
+  // }
 
   @override
   @protected

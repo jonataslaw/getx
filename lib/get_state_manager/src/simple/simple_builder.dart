@@ -78,10 +78,10 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
 class ObxElement = StatelessElement with ObserverComponent;
 
 // It's a experimental feature
-class SimpleBuilder extends ObxStatelessWidget {
+class Observer extends ObxStatelessWidget {
   final WidgetBuilder builder;
 
-  const SimpleBuilder({Key? key, required this.builder}) : super(key: key);
+  const Observer({Key? key, required this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => builder(context);

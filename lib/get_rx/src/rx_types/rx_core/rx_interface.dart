@@ -5,12 +5,10 @@ part of rx_types;
 /// This interface is the contract that _RxImpl]<T> uses in all it's
 /// subclass.
 abstract class RxInterface<T> {
-  static RxInterface? proxy;
-
-  bool get canUpdate;
+  //bool get canUpdate;
 
   /// Adds a listener to stream
-  void addListener(GetStream<T> rxGetx);
+  void addListener(VoidCallback listener);
 
   /// Close the Rx Variable
   void close();
@@ -20,13 +18,24 @@ abstract class RxInterface<T> {
       {Function? onError, void Function()? onDone, bool? cancelOnError});
 
   /// Avoids an unsafe usage of the `proxy`
-  static T notifyChildren<T>(RxNotifier observer, ValueGetter<T> builder) {
-    final _observer = RxInterface.proxy;
-    RxInterface.proxy = observer;
-    final result = builder();
-    if (!observer.canUpdate) {
-      RxInterface.proxy = _observer;
-      throw """
+  // static T notifyChildren<T>(RxNotifier observer, ValueGetter<T> builder) {
+  //   final _observer = RxInterface.proxy;
+  //   RxInterface.proxy = observer;
+  //   final result = builder();
+  //   if (!observer.canUpdate) {
+  //     RxInterface.proxy = _observer;
+  //     throw ObxError();
+  //   }
+  //   RxInterface.proxy = _observer;
+  //   return result;
+  // }
+}
+
+class ObxError {
+  const ObxError();
+  @override
+  String toString() {
+    return """
       [Get] the improper use of a GetX has been detected. 
       You should only use GetX or Obx for the specific widget that will be updated.
       If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
@@ -34,8 +43,5 @@ abstract class RxInterface<T> {
       (example: GetX => HeavyWidget => variableObservable).
       If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
       """;
-    }
-    RxInterface.proxy = _observer;
-    return result;
   }
 }

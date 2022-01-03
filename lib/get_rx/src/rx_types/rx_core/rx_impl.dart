@@ -4,7 +4,7 @@ part of rx_types;
 /// reactivity
 /// of those `Widgets` and Rx values.
 
-mixin RxObjectMixin<T> on NotifyManager<T> {
+mixin RxObjectMixin<T> on GetListenable<T> {
   //late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
@@ -25,9 +25,9 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// person.refresh();
   /// print( person );
   /// ```
-  void refresh() {
-    subject.add(value);
-  }
+  // void refresh() {
+  //   subject.add(value);
+  // }
 
   /// updates the value to `null` and adds it to the Stream.
   /// Even with null-safety coming, is still an important feature to support, as
@@ -59,6 +59,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   ///   onChanged: myText,
   /// ),
   ///```
+  @override
   T call([T? v]) {
     if (v != null) {
       value = v;
@@ -95,24 +96,17 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
+  @override
   set value(T val) {
-    if (subject.isClosed) return;
+    if (isDisposed) return;
     sentToStream = false;
     if (value == val && !firstRebuild) return;
     firstRebuild = false;
     // _value = val;
     sentToStream = true;
-    subject.add(val);
+    //TODO: Check this
+    super.value = val;
   }
-
-  /// Returns the current [value]
-  T get value {
-    return subject.value;
-    //RxInterface.proxy?.addListener(subject);
-    // return _value;
-  }
-
-  Stream<T> get stream => subject.stream;
 
   /// Returns a [StreamSubscription] similar to [listen], but with the
   /// added benefit that it primes the stream with the current [value], rather
@@ -127,6 +121,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
       cancelOnError: cancelOnError,
     );
 
+    //TODO: Change to refresh????
     subject.add(value);
 
     return subscription;
@@ -137,64 +132,64 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Closing the subscription will happen automatically when the observer
   /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    final listSubscriptions =
-        _subscriptions[subject] ??= <StreamSubscription>[];
-    listSubscriptions.add(stream.listen((va) => value = va));
+    // final listSubscriptions =
+    //     _subscriptions[subject] ??= <StreamSubscription>[];
+
+    final sub = stream.listen((va) => value = va);
+    reportAdd(sub.cancel);
   }
 }
 
-class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
+//class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
 
-mixin NotifyManager<T> {
-  GetStream<T> subject = GetStream<T>();
-  final _subscriptions = <GetStream, List<StreamSubscription>>{};
+// mixin NotifyManager<T> {
+//   GetStream<T> subject = GetStream<T>();
+//   final _subscriptions = <GetStream, List<StreamSubscription>>{};
 
-  bool get canUpdate => _subscriptions.isNotEmpty;
+//   bool get canUpdate => _subscriptions.isNotEmpty;
 
-  /// This is an internal method.
-  /// Subscribe to changes on the inner stream.
-  void addListener(GetStream<T> rxGetx) {
-    if (!_subscriptions.containsKey(rxGetx)) {
-      final subs = rxGetx.listen((data) {
-        if (!subject.isClosed) subject.add(data);
-      });
-      final listSubscriptions =
-          _subscriptions[rxGetx] ??= <StreamSubscription>[];
-      listSubscriptions.add(subs);
-    }
-  }
+//   /// This is an internal method.
+//   /// Subscribe to changes on the inner stream.
+//   void addListener(GetStream<T> rxGetx) {
+//     if (!_subscriptions.containsKey(rxGetx)) {
+//       final subs = rxGetx.listen((data) {
+//         if (!subject.isClosed) subject.add(data);
+//       });
+//       final listSubscriptions =
+//           _subscriptions[rxGetx] ??= <StreamSubscription>[];
+//       listSubscriptions.add(subs);
+//     }
+//   }
 
-  StreamSubscription<T> listen(
-    void Function(T) onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) =>
-      subject.listen(
-        onData,
-        onError: onError,
-        onDone: onDone,
-        cancelOnError: cancelOnError ?? false,
-      );
+//   StreamSubscription<T> listen(
+//     void Function(T) onData, {
+//     Function? onError,
+//     void Function()? onDone,
+//     bool? cancelOnError,
+//   }) =>
+//       subject.listen(
+//         onData,
+//         onError: onError,
+//         onDone: onDone,
+//         cancelOnError: cancelOnError ?? false,
+//       );
 
-  /// Closes the subscriptions for this Rx, releasing the resources.
-  void close() {
-    _subscriptions.forEach((getStream, _subscriptions) {
-      for (final subscription in _subscriptions) {
-        subscription.cancel();
-      }
-    });
+//   /// Closes the subscriptions for this Rx, releasing the resources.
+//   void close() {
+//     _subscriptions.forEach((getStream, _subscriptions) {
+//       for (final subscription in _subscriptions) {
+//         subscription.cancel();
+//       }
+//     });
 
-    _subscriptions.clear();
-    subject.close();
-  }
-}
+//     _subscriptions.clear();
+//     subject.close();
+//   }
+// }
 
 /// Base Rx class that manages all the stream logic for any Type.
-abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
-  _RxImpl(T initial) {
-    subject = GetStream.fromValue(initial);
-  }
+abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
+  _RxImpl(T initial) : super(initial);
 
   void addError(Object error, [StackTrace? stackTrace]) {
     subject.addError(error, stackTrace);
