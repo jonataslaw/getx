@@ -72,6 +72,8 @@ mixin ScrollMixin on GetLifeCycleMixin {
 
 abstract class RxController with GetLifeCycleMixin {}
 
+abstract class StateController<T> extends GetxController with StateMixin<T> {}
+
 abstract class SuperController<T> extends FullLifeCycleController
     with FullLifeCycleMixin, StateMixin<T> {}
 

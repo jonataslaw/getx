@@ -1,53 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'app/routes/app_pages.dart';
+import 'services/auth_service.dart';
+
 void main() {
   runApp(
-    GetMaterialApp(
-      home: Home(),
+    GetMaterialApp.router(
+      title: "Application",
+      initialBinding: BindingsBuilder(
+        () {
+          Get.put(AuthService());
+        },
+      ),
+      getPages: AppPages.routes,
+      // routeInformationParser: GetInformationParser(
+      //     // initialRoute: Routes.HOME,
+      //     ),
+      // routerDelegate: GetDelegate(
+      //   backButtonPopMode: PopMode.History,
+      //   preventDuplicateHandlingMode:
+      //       PreventDuplicateHandlingMode.ReorderRoutes,
+      // ),
     ),
   );
-}
-
-class Controller extends GetxController {
-  final count = 0.reactive;
-  void increment() {
-    count.value++;
-    update();
-  }
-}
-
-class Home extends ObxStatelessWidget {
-  const Home({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(Controller());
-    return Scaffold(
-      appBar: AppBar(title: Text("counter")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Observer(builder: (context) {
-              print('builder');
-              return Text(
-                '${controller.count.value}',
-                style: TextStyle(fontSize: 30),
-              );
-            }),
-            // ElevatedButton(
-            //   child: Text('Next Route'),
-            //   onPressed: () {
-            //     Get.to(() => Second());
-            //   },
-            // ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: controller.increment,
-      ),
-    );
-  }
 }

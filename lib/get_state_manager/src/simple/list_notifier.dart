@@ -176,7 +176,9 @@ class TaskManager {
       T Function() builder) {
     _remove = disposers;
     _setter = setState;
+
     final result = builder();
+    print(disposers.isEmpty);
     if (disposers.isEmpty) {
       throw ObxError();
     }

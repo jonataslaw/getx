@@ -8,13 +8,14 @@ import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
 extension _NullOrEmpty on Object {
-  bool _isNullOrEmpty(dynamic val) {
-    if (val == null) return true;
+  bool _isEmpty() {
+    final val = this;
+    // if (val == null) return true;
     var result = false;
     if (val is Iterable) {
       result = val.isEmpty;
     } else if (val is String) {
-      result = val.isEmpty;
+      result = val.trim().isEmpty;
     } else if (val is Map) {
       result = val.isEmpty;
     }
@@ -24,15 +25,17 @@ extension _NullOrEmpty on Object {
 
 mixin StateMixin<T> on ListNotifier {
   late T _value;
-  RxStatus? _status;
+  GetState? _status;
 
   void _fillEmptyStatus() {
-    _status = _isNullOrEmpty(_value) ? RxStatus.loading() : RxStatus.success();
+    _status = (value == null || value!._isEmpty())
+        ? GetState.loading()
+        : GetState.success(_status);
   }
 
-  RxStatus get status {
+  GetState get status {
     reportRead();
-    return _status ??= _status = RxStatus.loading();
+    return _status ??= _status = GetState.loading();
   }
 
   T get state => value;
@@ -51,7 +54,7 @@ mixin StateMixin<T> on ListNotifier {
   }
 
   @protected
-  void change(T newState, {RxStatus? status}) {
+  void change(T newState, {GetState? status}) {
     var _canUpdate = false;
     if (status != null) {
       _status = status;
@@ -66,12 +69,17 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
-  void append(Future<T> Function() body(), {String? errorMessage}) {
+  void listenFuture(Future<T> Function() body(),
+      {String? errorMessage, bool useEmpty = true}) {
     final compute = body();
     compute().then((newValue) {
-      change(newValue, status: RxStatus.success());
+      if ((newValue == null || newValue._isEmpty()) && useEmpty) {
+        change(newValue, status: GetState.loading());
+      } else {
+        change(newValue, status: GetState.success(newValue));
+      }
     }, onError: (err) {
-      change(state, status: RxStatus.error(errorMessage ?? err.toString()));
+      change(state, status: GetState.error(errorMessage ?? err.toString()));
     });
   }
 }
@@ -186,10 +194,6 @@ class Value<T> extends ListNotifier
   dynamic toJson() => (value as dynamic)?.toJson();
 }
 
-extension ReactiveT<T> on T {
-  Value<T> get reactive => Value<T>(this);
-}
-
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(T initial) : super(initial);
 }
@@ -218,70 +222,32 @@ extension StateExt<T> on StateMixin<T> {
   }
 }
 
-class RxStatus {
-  final bool isLoading;
-  final bool isError;
-  final bool isSuccess;
-  final bool isEmpty;
-  final bool isLoadingMore;
-  final String? errorMessage;
-
-  RxStatus._({
-    this.isEmpty = false,
-    this.isLoading = false,
-    this.isError = false,
-    this.isSuccess = false,
-    this.errorMessage,
-    this.isLoadingMore = false,
-  });
-
-  factory RxStatus.loading() {
-    return RxStatus._(isLoading: true);
-  }
-
-  factory RxStatus.loadingMore() {
-    return RxStatus._(isSuccess: true, isLoadingMore: true);
-  }
-
-  factory RxStatus.success() {
-    return RxStatus._(isSuccess: true);
-  }
-
-  factory RxStatus.error([String? message]) {
-    return RxStatus._(isError: true, errorMessage: message);
-  }
-
-  factory RxStatus.empty() {
-    return RxStatus._(isEmpty: true);
-  }
-}
-
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GState<T> {
-  const GState();
-  factory GState.loading() => GLoading();
-  factory GState.error(String message) => GError(message);
-  factory GState.empty() => GEmpty();
-  factory GState.success(T data) => GSuccess(data);
+abstract class GetState<T> {
+  const GetState();
+  factory GetState.loading() => GLoading();
+  factory GetState.error(String message) => GError(message);
+  factory GetState.empty() => GEmpty();
+  factory GetState.success(T data) => GSuccess(data);
 }
 
-class GLoading<T> extends GState<T> {}
+class GLoading<T> extends GetState<T> {}
 
-class GSuccess<T> extends GState<T> {
+class GSuccess<T> extends GetState<T> {
   final T data;
 
   GSuccess(this.data);
 }
 
-class GError<T, S> extends GState<T> {
+class GError<T, S> extends GetState<T> {
   final S? error;
   GError([this.error]);
 }
 
-class GEmpty<T> extends GState<T> {}
+class GEmpty<T> extends GetState<T> {}
 
-extension StatusDataExt<T> on GState<T> {
+extension StatusDataExt<T> on GetState<T> {
   bool get isLoading => this is GLoading;
   bool get isSuccess => this is GSuccess;
   bool get isError => this is GError;

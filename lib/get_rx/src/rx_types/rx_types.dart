@@ -4,10 +4,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_notifier.dart';
-import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 
-import '../rx_stream/rx_stream.dart';
+import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
 import '../rx_typedefs/rx_typedefs.dart';
 
 part 'rx_core/rx_impl.dart';
