@@ -5,12 +5,9 @@ import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../../get_instance/src/lifecycle.dart';
 import '../simple/list_notifier.dart';
-import '../simple/simple_builder.dart';
 
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
-
-class StatefulObserverComponent = StatefulElement with ObserverComponent;
 
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
@@ -128,7 +125,7 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   final disposers = <Disposer>[];
 
   @override
-  Widget build(BuildContext context) => TaskManager.instance
+  Widget build(BuildContext context) => NotifierManager.instance
       .exchange(disposers, _update, () => widget.builder(controller!));
 
   @override

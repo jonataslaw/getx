@@ -225,5 +225,5 @@
 // typedef RemoveSubscription<T> = FutureOr<bool?> Function(
 //     LightSubscription<T> subs);
 
-// typedef AddSubscription<T> = 
+// typedef AddSubscription<T> =
 //FutureOr<void> Function(LightSubscription<T> subs);
