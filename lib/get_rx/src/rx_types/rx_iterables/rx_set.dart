@@ -34,8 +34,8 @@ class RxSet<E> extends GetListenable<Set<E>>
   }
 
   @override
-  bool add(E value) {
-    final hasAdded = value.add(value);
+  bool add(E val) {
+    final hasAdded = value.add(val);
     if (hasAdded) {
       refresh();
     }

@@ -361,7 +361,6 @@ class BindWrapper<T> extends InheritedWidget {
     this.didUpdateWidget,
   }) : super(key: key, child: child);
 
-
   final InitBuilder<T>? init;
   final bool global;
   final Object? id;

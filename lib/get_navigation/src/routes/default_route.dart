@@ -112,7 +112,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     final bindingsToBind = middlewareRunner
         .runOnBindingsStart(binding != null ? localbindings : localbinds);
 
-    /// Retrocompatibility workaround, remove this when Bindings api 
+    /// Retrocompatibility workaround, remove this when Bindings api
     /// have been removed
     if (bindingsToBind != null &&
         bindingsToBind is! List<Bind> &&
