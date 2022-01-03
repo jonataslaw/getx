@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -5,10 +7,7 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
-mixin StateMixin<T> on ListNotifier {
-  late T _value;
-  RxStatus? _status;
-
+extension _NullOrEmpty on Object {
   bool _isNullOrEmpty(dynamic val) {
     if (val == null) return true;
     var result = false;
@@ -21,6 +20,11 @@ mixin StateMixin<T> on ListNotifier {
     }
     return result;
   }
+}
+
+mixin StateMixin<T> on ListNotifier {
+  late T _value;
+  RxStatus? _status;
 
   void _fillEmptyStatus() {
     _status = _isNullOrEmpty(_value) ? RxStatus.loading() : RxStatus.success();
@@ -72,6 +76,77 @@ mixin StateMixin<T> on ListNotifier {
   }
 }
 
+class GetListenable<T> extends ListNotifierSingle
+    implements ValueListenable<T> {
+  GetListenable(T val) : _value = val;
+
+  StreamController<T>? _controller;
+
+  StreamController<T> get subject {
+    if (_controller == null) {
+      _controller = StreamController<T>.broadcast();
+      addListener(_streamListener);
+    }
+    return _controller!;
+  }
+
+  void _streamListener() {
+    _controller?.add(_value);
+  }
+
+  @mustCallSuper
+  void close() {
+    removeListener(_streamListener);
+    _controller?.close();
+    dispose();
+  }
+
+  Stream<T> get stream {
+    return subject.stream;
+  }
+
+  T _value;
+
+  @override
+  T get value {
+    reportRead();
+    return _value;
+  }
+
+  void _notify() {
+    refresh();
+  }
+
+  set value(T newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+    _notify();
+  }
+
+  T? call([T? v]) {
+    if (v != null) {
+      value = v;
+    }
+    return value;
+  }
+
+  StreamSubscription<T> listen(
+    void Function(T)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) =>
+      stream.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError ?? false,
+      );
+
+  @override
+  String toString() => value.toString();
+}
+
 class Value<T> extends ListNotifier
     with StateMixin<T>
     implements ValueListenable<T?> {
@@ -115,8 +190,6 @@ extension ReactiveT<T> on T {
   Value<T> get reactive => Value<T>(this);
 }
 
-typedef Condition = bool Function();
-
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(T initial) : super(initial);
 }
@@ -128,7 +201,7 @@ extension StateExt<T> on StateMixin<T> {
     Widget? onLoading,
     Widget? onEmpty,
   }) {
-    return SimpleBuilder(builder: (_) {
+    return Observer(builder: (_) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {

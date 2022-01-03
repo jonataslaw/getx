@@ -1,15 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
 import '../../../get_instance/src/lifecycle.dart';
-import '../../../get_rx/src/rx_types/rx_types.dart';
+import '../simple/list_notifier.dart';
+import '../simple/simple_builder.dart';
 
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
+
+class StatefulObserverComponent = StatefulElement with ObserverComponent;
 
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
@@ -39,6 +40,9 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   });
 
   @override
+  StatefulElement createElement() => StatefulElement(this);
+
+  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
@@ -55,10 +59,8 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
 }
 
 class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
-  final _observer = RxNotifier();
   T? controller;
   bool? _isCreator = false;
-  late StreamSubscription _subs;
 
   @override
   void initState() {
@@ -83,7 +85,7 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    _subs = _observer.listen((data) => setState(() {}), cancelOnError: false);
+
     super.initState();
   }
 
@@ -109,22 +111,29 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
-    _subs.cancel();
-    _observer.close();
+
+    for (final disposer in disposers) {
+      disposer();
+    }
+
     controller = null;
     _isCreator = null;
     super.dispose();
   }
+
+  void _update() {
+    setState(() {});
+  }
+
+  final disposers = <Disposer>[];
+
+  @override
+  Widget build(BuildContext context) => TaskManager.instance
+      .exchange(disposers, _update, () => widget.builder(controller!));
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<T>('controller', controller));
   }
-
-  @override
-  Widget build(BuildContext context) => RxInterface.notifyChildren(
-        _observer,
-        () => widget.builder(controller!),
-      );
 }

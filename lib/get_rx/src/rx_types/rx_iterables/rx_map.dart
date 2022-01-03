@@ -1,11 +1,8 @@
 part of rx_types;
 
-class RxMap<K, V> extends MapMixin<K, V>
-    with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
-    implements RxInterface<Map<K, V>> {
-  RxMap([Map<K, V> initial = const {}]) {
-    subject = GetStream.fromValue(Map.from(initial));
-  }
+class RxMap<K, V> extends GetListenable<Map<K, V>>
+    with MapMixin<K, V>, RxObjectMixin<Map<K, V>> {
+  RxMap([Map<K, V> initial = const {}]) : super(initial);
 
   factory RxMap.from(Map<K, V> other) {
     return RxMap(Map.from(other));
@@ -53,13 +50,13 @@ class RxMap<K, V> extends MapMixin<K, V>
     return val;
   }
 
-  @override
-  @protected
-  Map<K, V> get value {
-    return subject.value;
-    // RxInterface.proxy?.addListener(subject);
-    // return _value;
-  }
+  // @override
+  // @protected
+  // Map<K, V> get value {
+  //   return subject.value;
+  //   // RxInterface.proxy?.addListener(subject);
+  //   // return _value;
+  // }
 }
 
 extension MapExtension<K, V> on Map<K, V> {

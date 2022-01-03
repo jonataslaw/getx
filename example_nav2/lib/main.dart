@@ -28,7 +28,7 @@ class Home extends ObxStatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SimpleBuilder(builder: (context) {
+            Observer(builder: (context) {
               print('builder');
               return Text(
                 '${controller.count.value}',

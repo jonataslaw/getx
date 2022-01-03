@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/state_manager.dart';
@@ -73,28 +74,28 @@ Future<int> stream() {
   return c.future;
 }
 
-Future<int> getStream() {
-  final c = Completer<int>();
+// Future<int> getStream() {
+//   final c = Completer<int>();
 
-  final value = GetStream<int>();
-  final timer = Stopwatch();
-  timer.start();
+//   final value = GetStream<int>();
+//   final timer = Stopwatch();
+//   timer.start();
 
-  value.listen((v) {
-    if (times == v) {
-      timer.stop();
-      print(
-          """$v listeners notified | [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
-      c.complete(timer.elapsedMicroseconds);
-    }
-  });
+//   value.listen((v) {
+//     if (times == v) {
+//       timer.stop();
+//       print(
+//           """$v listeners notified | [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
+//       c.complete(timer.elapsedMicroseconds);
+//     }
+//   });
 
-  for (var i = 0; i < times + 1; i++) {
-    value.add(i);
-  }
+//   for (var i = 0; i < times + 1; i++) {
+//     value.add(i);
+//   }
 
-  return c.future;
-}
+//   return c.future;
+// }
 
 Future<int> miniStream() {
   final c = Completer<int>();
@@ -157,7 +158,7 @@ GetValue is ${calculePercentage(dart, getx).round()}% faster than Default ValueN
     print('============================================');
     print('DART STREAM X GET_STREAM X GET_MINI_STREAM TEST');
     print('-----------');
-    var getx = await getStream();
+   // var getx = await getStream();
     var mini = await miniStream();
     var dart = await stream();
     print('-----------');
@@ -167,16 +168,16 @@ GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Strea
 
     times = 30000;
     dart = await stream();
-    getx = await getStream();
+   // getx = await getStream();
     mini = await miniStream();
 
     times = 60000;
     dart = await stream();
-    getx = await getStream();
+  // getx = await getStream();
     mini = await miniStream();
     print('-----------');
     print('dart_stream delay $dart ms to made $times requests');
-    print('getx_stream delay $getx ms to made $times requests');
+   // print('getx_stream delay $getx ms to made $times requests');
     print('getx_mini_stream delay $mini ms to made $times requests');
     print('-----------');
     print('''
