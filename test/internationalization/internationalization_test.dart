@@ -31,5 +31,13 @@ void main() {
     expect('covid'.tr, 'Corona Virus');
     expect('total_confirmed'.tr, 'Total Confirmed');
     expect('total_deaths'.tr, 'Total Deaths');
+
+    Get.updateLocale(Locale('pt', 'PT'));
+
+    await tester.pumpAndSettle();
+
+    expect('covid'.tr, 'Corona Vírus only lang');
+    expect('total_confirmed'.tr, 'Total confirmado only lang');
+    expect('total_deaths'.tr, 'Total de mortes');
   });
 }
