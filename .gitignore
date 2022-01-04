@@ -83,3 +83,4 @@ example/macos/Flutter/GeneratedPluginRegistrant.swift
 
 # Coverage files
 coverage/
+example_nav2/lib/auth/secrets.dart
