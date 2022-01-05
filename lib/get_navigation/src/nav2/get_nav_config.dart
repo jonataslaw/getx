@@ -56,5 +56,5 @@ class GetNavConfig extends RouteInformation {
 
   @override
   String toString() => '''
-======GetNavConfig=====\ncurrentTreeBranch: $currentTreeBranch\ncurrentPage: $currentPage\n======GetNavConfig=====''';
+======GetNavConfig=====\nlocation: $location\ncurrentTreeBranch: $currentTreeBranch\n======GetNavConfig=====''';
 }

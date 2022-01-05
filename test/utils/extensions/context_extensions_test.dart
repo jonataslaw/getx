@@ -34,16 +34,19 @@ void main() {
     expect(isLandscape, context.isLandscape);
     var mediaQueryShortestSide = mediaQuerySize.shortestSide;
     expect(mediaQueryShortestSide, context.mediaQueryShortestSide);
-    var isLargeTablet = (mediaQueryShortestSide >= 720);
-    expect(isLargeTablet, context.isLargeTablet);
-    var isPhone = (mediaQueryShortestSide < 600);
-    expect(isPhone, context.isPhone);
+    var width = mediaQuerySize.width;
+    expect(width, context.width);
+
+    var isLargeTabletOrWider = (width >= 720);
+    expect(isLargeTabletOrWider, context.isLargeTabletOrWider);
+    var isPhoneOrLess = (width < 600);
+    expect(isPhoneOrLess, context.isPhoneOrLess);
     var isPortrait = orientation == Orientation.portrait;
     expect(isPortrait, context.isPortrait);
-    var isSmallTablet = (mediaQueryShortestSide >= 600);
-    expect(isSmallTablet, context.isSmallTablet);
-    var isTablet = isSmallTablet || isLargeTablet;
-    expect(isTablet, context.isTablet);
+    var isSmallTabletOrWider = (width >= 600);
+    expect(isSmallTabletOrWider, context.isSmallTabletOrWider);
+    var isTablet = isSmallTabletOrWider || isLargeTabletOrWider;
+    expect(isTablet, context.isSmallTabletOrWider);
     var mediaQueryPadding = mediaQuery.padding;
     expect(mediaQueryPadding, context.mediaQueryPadding);
     var mediaQueryViewInsets = mediaQuery.viewInsets;
@@ -55,8 +58,7 @@ void main() {
     expect(widthTransformer, context.widthTransformer());
     var ratio = heightTransformer / widthTransformer;
     expect(ratio, context.ratio());
-    var width = mediaQuerySize.width;
-    expect(width, context.width);
+
     var showNavbar = (width > 800);
     expect(showNavbar, context.showNavbar);
     var textScaleFactor = mediaQuery.textScaleFactor;

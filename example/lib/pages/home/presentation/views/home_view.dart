@@ -75,9 +75,7 @@ class HomeView extends GetView<HomeController> {
                       shape: StadiumBorder(),
                     ),
                     onPressed: () async {
-                      final data =
-                          await Get.rootDelegate.toNamed('/home/country');
-                      print('DATA: $data');
+                      await Get.rootDelegate.toNamed('/home/country');
                     },
                     child: Text(
                       'fetch_country'.tr,
