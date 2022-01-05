@@ -85,13 +85,31 @@ class HomeView extends GetView<HomeController> {
                       color: Colors.black,
                     ),
                   ),
-                ),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    textStyle: TextStyle(color: Colors.black),
-                    side: BorderSide(
-                      color: Colors.deepPurple,
-                      width: 3,
+                  Text(
+                    '${state.global.totalDeaths}',
+                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.black),
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
+                      ),
+                      shape: StadiumBorder(),
+                    ),
+                    onPressed: () async {
+                      await Get.rootDelegate.toNamed('/home/country');
+                    },
+                    child: Text(
+                      'fetch_country'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                     shape: StadiumBorder(),
                   ),

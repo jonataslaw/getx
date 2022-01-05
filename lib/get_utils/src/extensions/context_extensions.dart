@@ -1,6 +1,5 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
-import '../platform/platform.dart';
 
 extension ContextExtensionss on BuildContext {
   /// The same of [MediaQuery.of(context).size]
@@ -100,17 +99,44 @@ extension ContextExtensionss on BuildContext {
   /// True if width be larger than 800
   bool get showNavbar => (width > 800);
 
-  /// True if the shortestSide is smaller than 600p
-  bool get isPhone => (mediaQueryShortestSide < 600);
+  /// True if the width is smaller than 600p
+  bool get isPhoneOrLess => width <= 600;
 
-  /// True if the shortestSide is largest than 600p
-  bool get isSmallTablet => (mediaQueryShortestSide >= 600);
+  /// True if the width is higher than 600p
+  bool get isPhoneOrWider => width >= 600;
 
-  /// True if the shortestSide is largest than 720p
-  bool get isLargeTablet => (mediaQueryShortestSide >= 720);
+  /// same as [isPhoneOrLess]
+  bool get isPhone => isPhoneOrLess;
+
+  /// True if the width is smaller than 600p
+  bool get isSmallTabletOrLess => width <= 600;
+
+  /// True if the width is higher than 600p
+  bool get isSmallTabletOrWider => width >= 600;
+
+  /// same as [isSmallTabletOrLess]
+  bool get isSmallTablet => isSmallTabletOrLess;
+
+  /// True if the width is smaller than 720p
+  bool get isLargeTabletOrLess => width <= 720;
+
+  /// True if the width is higher than 720p
+  bool get isLargeTabletOrWider => width >= 720;
+
+  /// same as [isLargeTabletOrLess]
+  bool get isLargeTablet => isLargeTabletOrLess;
 
   /// True if the current device is Tablet
-  bool get isTablet => isSmallTablet || isLargeTablet;
+  bool get isTablet => isSmallTablet;
+
+  /// True if the width is smaller than 1200p
+  bool get isDesktopOrLess => width <= 1200;
+
+  /// True if the width is higher than 1200p
+  bool get isDesktopOrWider => width >= 1200;
+
+  /// same as [isDesktopOrLess]
+  bool get isDesktop => isDesktopOrLess;
 
   /// Returns a specific value according to the screen size
   /// if the device width is higher than or equal to 1200 return
@@ -119,23 +145,28 @@ extension ContextExtensionss on BuildContext {
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
   T responsiveValue<T>({
+    T? watch,
     T? mobile,
     T? tablet,
     T? desktop,
-    T? watch,
   }) {
-    var deviceWidth = mediaQuerySize.shortestSide;
-    if (GetPlatform.isDesktop) {
-      deviceWidth = mediaQuerySize.width;
-    }
-    if (deviceWidth >= 1200 && desktop != null) {
-      return desktop;
-    } else if (deviceWidth >= 600 && tablet != null) {
-      return tablet;
-    } else if (deviceWidth < 300 && watch != null) {
-      return watch;
-    } else {
-      return mobile!;
-    }
+    assert(
+        watch != null || mobile != null || tablet != null || desktop != null);
+
+    var deviceWidth = mediaQuerySize.width;
+    //big screen width can display smaller sizes
+    final strictValues = [
+      if (deviceWidth >= 1200) desktop, //desktop is allowed
+      if (deviceWidth >= 600) tablet, //tablet is allowed
+      if (deviceWidth >= 300) mobile, //mobile is allowed
+      watch, //watch is allowed
+    ].whereType<T>();
+    final looseValues = [
+      watch,
+      mobile,
+      tablet,
+      desktop,
+    ].whereType<T>();
+    return strictValues.firstOrNull ?? looseValues.first;
   }
 }

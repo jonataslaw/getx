@@ -162,29 +162,24 @@ class GetInstance {
   }) {
     final key = _getKey(S, name);
 
+    _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final dep = _singl[key];
-      if (dep != null && dep.isDirty) {
-        _singl[key] = _InstanceBuilderFactory<S>(
-          isSingleton,
-          builder,
-          permanent,
-          false,
-          fenix,
-          name,
-          lateRemove: dep as _InstanceBuilderFactory<S>,
-        );
+      final _dep = _singl[key];
+      if (_dep == null || !_dep.isDirty) {
+        return;
+      } else {
+        dep = _dep as _InstanceBuilderFactory<S>;
       }
-    } else {
-      _singl[key] = _InstanceBuilderFactory<S>(
-        isSingleton,
-        builder,
-        permanent,
-        false,
-        fenix,
-        name,
-      );
     }
+    _singl[key] = _InstanceBuilderFactory<S>(
+      isSingleton: isSingleton,
+      builderFunc: builder,
+      permanent: permanent,
+      isInit: false,
+      fenix: fenix,
+      tag: name,
+      lateRemove: dep,
+    );
   }
 
   /// Initializes the dependencies for a Class Instance [S] (or tag),
@@ -519,14 +514,14 @@ class _InstanceBuilderFactory<S> {
 
   String? tag;
 
-  _InstanceBuilderFactory(
-    this.isSingleton,
-    this.builderFunc,
-    this.permanent,
-    this.isInit,
-    this.fenix,
-    this.tag, {
-    this.lateRemove,
+  _InstanceBuilderFactory({
+    required this.isSingleton,
+    required this.builderFunc,
+    required this.permanent,
+    required this.isInit,
+    required this.fenix,
+    required this.tag,
+    required this.lateRemove,
   });
 
   void _showInitLog() {

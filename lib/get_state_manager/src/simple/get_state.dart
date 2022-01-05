@@ -569,7 +569,4 @@ class BindError<T> extends Error {
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Binding extends BindingsInterface<List<Bind>> {
-  @override
-  List<Bind> dependencies();
-}
+abstract class Binding extends BindingsInterface<Iterable<Bind>> {}

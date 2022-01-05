@@ -4,6 +4,7 @@ export 'src/bottomsheet/bottomsheet.dart';
 export 'src/extension_navigation.dart';
 export 'src/nav2/get_information_parser.dart';
 export 'src/nav2/get_nav_config.dart';
+export 'src/nav2/get_navigator.dart';
 export 'src/nav2/get_router_delegate.dart';
 export 'src/nav2/router_outlet.dart';
 export 'src/root/get_cupertino_app.dart';

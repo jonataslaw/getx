@@ -24,36 +24,32 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
-  final T? initialValue;
+  final T initialValue;
   final ValueBuilderBuilder<T> builder;
   final void Function()? onDispose;
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
     Key? key,
-    this.initialValue,
+    required this.initialValue,
     this.onDispose,
     this.onUpdate,
     required this.builder,
   }) : super(key: key);
 
   @override
-  _ValueBuilderState<T> createState() => _ValueBuilderState<T>();
+  _ValueBuilderState<T> createState() => _ValueBuilderState<T>(initialValue);
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
-  T? value;
+class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
+  T value;
+  _ValueBuilderState(this.value);
 
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-  }
 
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
 
-  void updater(T? newValue) {
+  void updater(T newValue) {
     if (widget.onUpdate != null) {
       widget.onUpdate!(newValue);
     }
@@ -71,7 +67,6 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
     } else if (value is StreamController) {
       (value as StreamController?)?.close();
     }
-    value = null;
   }
 }
 
