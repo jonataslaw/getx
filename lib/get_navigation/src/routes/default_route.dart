@@ -4,6 +4,21 @@ import '../../../get.dart';
 import '../router_report.dart';
 import 'get_transition_mixin.dart';
 
+
+mixin RouteReportMixin<T extends StatefulWidget> on State<T> {
+  @override
+  void initState() {
+    super.initState();
+    RouterReportManager.instance.reportCurrentRoute(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    RouterReportManager.instance.reportRouteDispose(this);
+  }
+}
+
 mixin PageRouteReportMixin<T> on Route<T> {
   @override
   void install() {
