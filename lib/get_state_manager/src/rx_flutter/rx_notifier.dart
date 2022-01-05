@@ -28,7 +28,7 @@ mixin StateMixin<T> on ListNotifier {
   GetState<T>? _status;
 
   void _fillInitialStatus() {
-    _status = (value == null || value!._isEmpty())
+    _status = (state == null || state!._isEmpty())
         ? GetState<T>.loading()
         : GetState<T>.success(_value);
   }
@@ -38,26 +38,25 @@ mixin StateMixin<T> on ListNotifier {
     return _status ??= _status = GetState.loading();
   }
 
-  T get state => value;
+//  T get state => value;
 
   set status(GetState<T> newStatus) {
     if (newStatus == status) return;
     _status = newStatus;
     if (newStatus is SuccessState<T>) {
       _value = newStatus.data!;
-      return;
     }
     refresh();
   }
 
   @protected
-  T get value {
+  T get state {
     reportRead();
     return _value;
   }
 
   @protected
-  set value(T newValue) {
+  set state(T newValue) {
     if (_value == newValue) return;
     _value = newValue;
     refresh();
@@ -211,7 +210,7 @@ extension StateExt<T> on StateMixin<T> {
             ? onEmpty
             : SizedBox.shrink(); // Also can be widget(null); but is risky
       }
-      return widget(value);
+      return widget(state);
     });
   }
 }
@@ -221,7 +220,7 @@ typedef NotifierBuilder<T> = Widget Function(T state);
 abstract class GetState<T> {
   const GetState();
   factory GetState.loading() => LoadingState();
-  factory GetState.error(String message) => ErrorState(message);
+  factory GetState.error(Object message) => ErrorState(message);
   factory GetState.empty() => EmptyState();
   factory GetState.success(T data) => SuccessState(data);
 }

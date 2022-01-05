@@ -32,30 +32,57 @@ class HomeView extends GetView<HomeController> {
         ),
         body: Center(
           child: controller.obx(
-            (state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 100,
+            (state) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 100,
+                ),
+                Text(
+                  'total_confirmed'.tr,
+                  style: TextStyle(
+                    fontSize: 30,
                   ),
-                  Text(
-                    'total_confirmed'.tr,
-                    style: TextStyle(
-                      fontSize: 30,
+                ),
+                Text(
+                  '${state!.global.totalConfirmed}',
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'total_deaths'.tr,
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+                Text(
+                  '${state.global.totalDeaths}',
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.black),
+                    side: BorderSide(
+                      color: Colors.deepPurple,
+                      width: 3,
                     ),
+                    shape: StadiumBorder(),
                   ),
-                  Text(
-                    '${state!.global.totalConfirmed}',
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'total_deaths'.tr,
+                  onPressed: () async {
+                    final data =
+                        await Get.rootDelegate.toNamed('/home/country');
+                    print('DATA: $data');
+                  },
+                  child: Text(
+                    'fetch_country'.tr,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -84,30 +111,21 @@ class HomeView extends GetView<HomeController> {
                         color: Colors.black,
                       ),
                     ),
+                    shape: StadiumBorder(),
                   ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.black),
-                      side: BorderSide(
-                        color: Colors.deepPurple,
-                        width: 3,
-                      ),
-                      shape: StadiumBorder(),
-                    ),
-                    onPressed: () {
-                      Get.updateLocale(Locale('pt', 'BR'));
-                    },
-                    child: Text(
-                      'Update language to Portuguese',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                  onPressed: () {
+                    Get.updateLocale(Locale('pt', 'BR'));
+                  },
+                  child: Text(
+                    'Update language to Portuguese',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
-                ],
-              );
-            },
+                ),
+              ],
+            ),
           ),
         ),
       ),
