@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
+import 'list_notifier.dart';
 
 typedef InitBuilder<T> = T Function();
 
@@ -37,7 +38,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
   final void Function(BindElement<T> state)? initState,
       dispose,
       didChangeDependencies;
-  final void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
 
@@ -59,7 +60,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BindWrapper(
+    return Binder(
       init: init == null ? null : () => init!,
       global: global,
       autoRemove: autoRemove,
@@ -108,7 +109,7 @@ abstract class Bind<T> extends StatelessWidget {
   final void Function(BindElement<T> state)? initState,
       dispose,
       didChangeDependencies;
-  final void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
   final Widget? child;
@@ -193,8 +194,7 @@ abstract class Bind<T> extends StatelessWidget {
     void Function(BindElement<T> state)? initState,
     void Function(BindElement<T> state)? dispose,
     void Function(BindElement<T> state)? didChangeDependencies,
-    void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
-        didUpdateWidget,
+    void Function(Binder<T> oldWidget, BindElement<T> state)? didUpdateWidget,
   }) =>
       _FactoryBind<T>(
         // key: key,
@@ -218,7 +218,7 @@ abstract class Bind<T> extends StatelessWidget {
     // Object Function(T value)? filter,
   }) {
     final inheritedElement =
-        context.getElementForInheritedWidgetOfExactType<BindWrapper<T>>()
+        context.getElementForInheritedWidgetOfExactType<Binder<T>>()
             as BindElement<T>?;
 
     if (inheritedElement == null) {
@@ -265,7 +265,7 @@ class _FactoryBind<T> extends Bind<T> {
       dispose,
       didChangeDependencies;
   @override
-  final void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
   @override
@@ -307,7 +307,7 @@ class _FactoryBind<T> extends Bind<T> {
 
   @override
   Widget build(BuildContext context) {
-    return BindWrapper<T>(
+    return Binder<T>(
       init: init,
       global: global,
       autoRemove: autoRemove,
@@ -340,12 +340,12 @@ class Binds extends StatelessWidget {
       binds.reversed.fold(child, (acc, e) => e._copyWithChild(acc));
 }
 
-class BindWrapper<T> extends InheritedWidget {
+class Binder<T> extends InheritedWidget {
   /// Create an inherited widget that updates its dependents when [controller]
   /// sends notifications.
   ///
   /// The [child] argument is required
-  const BindWrapper({
+  const Binder({
     Key? key,
     required Widget child,
     this.init,
@@ -371,11 +371,11 @@ class BindWrapper<T> extends InheritedWidget {
   final void Function(BindElement<T> state)? initState,
       dispose,
       didChangeDependencies;
-  final void Function(BindWrapper<T> oldWidget, BindElement<T> state)?
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
   @override
-  bool updateShouldNotify(BindWrapper<T> oldWidget) {
+  bool updateShouldNotify(Binder<T> oldWidget) {
     return oldWidget.id != id ||
         oldWidget.global != global ||
         oldWidget.autoRemove != autoRemove ||
@@ -389,9 +389,11 @@ class BindWrapper<T> extends InheritedWidget {
 /// The BindElement is responsible for injecting dependencies into the widget
 /// tree so that they can be observed
 class BindElement<T> extends InheritedElement {
-  BindElement(BindWrapper<T> widget) : super(widget) {
+  BindElement(Binder<T> widget) : super(widget) {
     initState();
   }
+
+  final disposers = <Disposer>[];
 
   InitBuilder<T>? _controllerBuilder;
 
@@ -486,6 +488,12 @@ class BindElement<T> extends InheritedElement {
       }
     }
 
+    for (final disposer in disposers) {
+      disposer();
+    }
+
+    disposers.clear();
+
     _remove?.call();
     _controller = null;
     _isCreator = null;
@@ -497,12 +505,12 @@ class BindElement<T> extends InheritedElement {
   }
 
   @override
-  BindWrapper<T> get widget => super.widget as BindWrapper<T>;
+  Binder<T> get widget => super.widget as Binder<T>;
 
   var _dirty = false;
 
   @override
-  void update(BindWrapper<T> newWidget) {
+  void update(Binder<T> newWidget) {
     final oldNotifier = widget.id;
     final newNotifier = newWidget.id;
     if (oldNotifier != newNotifier && _wasStarted) {
@@ -523,7 +531,11 @@ class BindElement<T> extends InheritedElement {
     if (_dirty) {
       notifyClients(widget);
     }
+    // return Notifier.instance.notifyAppend(
+    //   NotifyData(
+    //       disposers: disposers, updater: getUpdate, throwException: false),
     return super.build();
+    //);
   }
 
   void getUpdate() {
@@ -532,7 +544,7 @@ class BindElement<T> extends InheritedElement {
   }
 
   @override
-  void notifyClients(BindWrapper<T> oldWidget) {
+  void notifyClients(Binder<T> oldWidget) {
     super.notifyClients(oldWidget);
     _dirty = false;
   }
