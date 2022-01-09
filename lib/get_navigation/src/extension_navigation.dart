@@ -45,7 +45,7 @@ extension ExtensionBottomSheet on GetInterface {
       barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
 
-      backgroundColor: backgroundColor ?? Colors.transparent,
+      backgroundColor: backgroundColor,
       elevation: elevation,
       shape: shape,
       removeTop: ignoreSafeArea ?? true,
