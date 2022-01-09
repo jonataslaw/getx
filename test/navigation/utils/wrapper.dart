@@ -6,6 +6,7 @@ class Wrapper extends StatelessWidget {
   final List<GetPage>? namedRoutes;
   final String? initialRoute;
   final Transition? defaultTransition;
+  final ThemeData? theme;
 
   const Wrapper({
     Key? key,
@@ -13,6 +14,7 @@ class Wrapper extends StatelessWidget {
     this.namedRoutes,
     this.initialRoute,
     this.defaultTransition,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class Wrapper extends StatelessWidget {
       translations: WrapperTranslations(),
       locale: WrapperTranslations.locale,
       getPages: namedRoutes,
+      theme: theme,
       home: Scaffold(
         body: child,
       ),

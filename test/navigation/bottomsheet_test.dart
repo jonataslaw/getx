@@ -71,4 +71,32 @@ void main() {
   //     );
   //   },
   // );
+
+  testWidgets("Get.bottomSheet background color theme test", (tester) async {
+    await tester.pumpWidget(
+      Wrapper(
+        child: Container(),
+        theme: ThemeData(
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.red),
+        ),
+      ),
+    );
+
+    Get.bottomSheet(Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.music_note),
+          title: Text('Music'),
+          onTap: () {},
+        ),
+      ],
+    ));
+
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.widget<BottomSheet>(find.byType(BottomSheet)).backgroundColor,
+      Colors.red,
+    );
+  });
 }
