@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-extension ContextExtensionss on BuildContext {
+extension ContextExt on BuildContext {
   /// The same of [MediaQuery.of(context).size]
   Size get mediaQuerySize => MediaQuery.of(this).size;
 
@@ -105,8 +105,8 @@ extension ContextExtensionss on BuildContext {
   /// True if the width is higher than 600p
   bool get isPhoneOrWider => width >= 600;
 
-  /// same as [isPhoneOrLess]
-  bool get isPhone => isPhoneOrLess;
+  /// True if the shortestSide is smaller than 600p
+  bool get isPhone => (mediaQueryShortestSide < 600);
 
   /// True if the width is smaller than 600p
   bool get isSmallTabletOrLess => width <= 600;
@@ -114,8 +114,11 @@ extension ContextExtensionss on BuildContext {
   /// True if the width is higher than 600p
   bool get isSmallTabletOrWider => width >= 600;
 
-  /// same as [isSmallTabletOrLess]
-  bool get isSmallTablet => isSmallTabletOrLess;
+  /// True if the shortestSide is largest than 600p
+  bool get isSmallTablet => (mediaQueryShortestSide >= 600);
+
+  /// True if the shortestSide is largest than 720p
+  bool get isLargeTablet => (mediaQueryShortestSide >= 720);
 
   /// True if the width is smaller than 720p
   bool get isLargeTabletOrLess => width <= 720;
@@ -123,11 +126,8 @@ extension ContextExtensionss on BuildContext {
   /// True if the width is higher than 720p
   bool get isLargeTabletOrWider => width >= 720;
 
-  /// same as [isLargeTabletOrLess]
-  bool get isLargeTablet => isLargeTabletOrLess;
-
   /// True if the current device is Tablet
-  bool get isTablet => isSmallTablet;
+  bool get isTablet => isSmallTablet || isLargeTablet;
 
   /// True if the width is smaller than 1200p
   bool get isDesktopOrLess => width <= 1200;

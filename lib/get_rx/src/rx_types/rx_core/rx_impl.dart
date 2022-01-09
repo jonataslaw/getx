@@ -102,9 +102,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     sentToStream = false;
     if (value == val && !firstRebuild) return;
     firstRebuild = false;
-    // _value = val;
     sentToStream = true;
-    //TODO: Check this
     super.value = val;
   }
 
@@ -121,7 +119,6 @@ mixin RxObjectMixin<T> on GetListenable<T> {
       cancelOnError: cancelOnError,
     );
 
-    //TODO: Change to refresh????
     subject.add(value);
 
     return subscription;
@@ -139,53 +136,6 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     reportAdd(sub.cancel);
   }
 }
-
-//class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
-
-// mixin NotifyManager<T> {
-//   GetStream<T> subject = GetStream<T>();
-//   final _subscriptions = <GetStream, List<StreamSubscription>>{};
-
-//   bool get canUpdate => _subscriptions.isNotEmpty;
-
-//   /// This is an internal method.
-//   /// Subscribe to changes on the inner stream.
-//   void addListener(GetStream<T> rxGetx) {
-//     if (!_subscriptions.containsKey(rxGetx)) {
-//       final subs = rxGetx.listen((data) {
-//         if (!subject.isClosed) subject.add(data);
-//       });
-//       final listSubscriptions =
-//           _subscriptions[rxGetx] ??= <StreamSubscription>[];
-//       listSubscriptions.add(subs);
-//     }
-//   }
-
-//   StreamSubscription<T> listen(
-//     void Function(T) onData, {
-//     Function? onError,
-//     void Function()? onDone,
-//     bool? cancelOnError,
-//   }) =>
-//       subject.listen(
-//         onData,
-//         onError: onError,
-//         onDone: onDone,
-//         cancelOnError: cancelOnError ?? false,
-//       );
-
-//   /// Closes the subscriptions for this Rx, releasing the resources.
-//   void close() {
-//     _subscriptions.forEach((getStream, _subscriptions) {
-//       for (final subscription in _subscriptions) {
-//         subscription.cancel();
-//       }
-//     });
-
-//     _subscriptions.clear();
-//     subject.close();
-//   }
-// }
 
 /// Base Rx class that manages all the stream logic for any Type.
 abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {

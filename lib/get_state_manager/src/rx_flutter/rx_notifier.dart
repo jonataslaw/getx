@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
@@ -78,8 +79,7 @@ mixin StateMixin<T> on ListNotifier {
   }
 }
 
-class GetListenable<T> extends ListNotifierSingle
-    implements ValueListenable<T> {
+class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
 
   StreamController<T>? _controller;
@@ -96,6 +96,7 @@ class GetListenable<T> extends ListNotifierSingle
     _controller?.add(_value);
   }
 
+  @override
   @mustCallSuper
   void close() {
     removeListener(_streamListener);
@@ -132,6 +133,7 @@ class GetListenable<T> extends ListNotifierSingle
     return value;
   }
 
+  @override
   StreamSubscription<T> listen(
     void Function(T)? onData, {
     Function? onError,
@@ -188,6 +190,8 @@ class Value<T> extends ListNotifier
   dynamic toJson() => (value as dynamic)?.toJson();
 }
 
+/// GetNotifier has a native status and state implementation, with the
+/// Get Lifecycle
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(T initial) : super(initial);
 }
@@ -198,6 +202,7 @@ extension StateExt<T> on StateMixin<T> {
     Widget Function(String? error)? onError,
     Widget? onLoading,
     Widget? onEmpty,
+    WidgetBuilder? onCustom,
   }) {
     return Observer(builder: (_) {
       if (status.isLoading) {
@@ -210,6 +215,11 @@ extension StateExt<T> on StateMixin<T> {
         return onEmpty != null
             ? onEmpty
             : SizedBox.shrink(); // Also can be widget(null); but is risky
+      } else if (status.isSuccess) {
+        return widget(value);
+      } else if (status.isCustom) {
+        return onCustom?.call(_) ??
+            SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
     });
@@ -246,6 +256,7 @@ extension StatusDataExt<T> on GetState<T> {
   bool get isSuccess => this is SuccessState;
   bool get isError => this is ErrorState;
   bool get isEmpty => this is EmptyState;
+  bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
   String get errorMessage {
     final isError = this is ErrorState;
     if (isError) {

@@ -2,33 +2,15 @@ part of rx_types;
 
 /// This class is the foundation for all reactive (Rx) classes that makes Get
 /// so powerful.
-/// This interface is the contract that _RxImpl]<T> uses in all it's
+/// This interface is the contract that [_RxImpl]<T> uses in all it's
 /// subclass.
-abstract class RxInterface<T> {
-  //bool get canUpdate;
-
-  /// Adds a listener to stream
-  void addListener(VoidCallback listener);
-
+abstract class RxInterface<T> implements ValueListenable<T> {
   /// Close the Rx Variable
   void close();
 
   /// Calls `callback` with current value, when the value changes.
   StreamSubscription<T> listen(void Function(T event) onData,
       {Function? onError, void Function()? onDone, bool? cancelOnError});
-
-  /// Avoids an unsafe usage of the `proxy`
-  // static T notifyChildren<T>(RxNotifier observer, ValueGetter<T> builder) {
-  //   final _observer = RxInterface.proxy;
-  //   RxInterface.proxy = observer;
-  //   final result = builder();
-  //   if (!observer.canUpdate) {
-  //     RxInterface.proxy = _observer;
-  //     throw ObxError();
-  //   }
-  //   RxInterface.proxy = _observer;
-  //   return result;
-  // }
 }
 
 class ObxError {

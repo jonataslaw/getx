@@ -45,7 +45,6 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   T value;
   _ValueBuilderState(this.value);
 
-
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
 
@@ -92,17 +91,27 @@ abstract class ObxStatelessWidget extends StatelessWidget {
 
 /// a Component that can track changes in a reactive variable
 mixin ObserverComponent on ComponentElement {
-  final disposers = <Disposer>[];
+  List<Disposer>? disposers = <Disposer>[];
+
+  void getUpdate() {
+    if (disposers != null) {
+      markNeedsBuild();
+    }
+  }
 
   @override
-  Widget build() =>
-      NotifierManager.instance.exchange(disposers, markNeedsBuild, super.build);
+  Widget build() {
+    return Notifier.instance.append(
+        NotifyData(disposers: disposers!, updater: getUpdate), super.build);
+  }
 
   @override
   void unmount() {
     super.unmount();
-    for (final disposer in disposers) {
+    for (final disposer in disposers!) {
       disposer();
     }
+    disposers!.clear();
+    disposers = null;
   }
 }

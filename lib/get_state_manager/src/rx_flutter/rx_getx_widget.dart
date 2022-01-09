@@ -113,20 +113,25 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
       disposer();
     }
 
+    disposers.clear();
+
     controller = null;
     _isCreator = null;
     super.dispose();
   }
 
   void _update() {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   final disposers = <Disposer>[];
 
   @override
-  Widget build(BuildContext context) => NotifierManager.instance
-      .exchange(disposers, _update, () => widget.builder(controller!));
+  Widget build(BuildContext context) => Notifier.instance.append(
+      NotifyData(disposers: disposers, updater: _update),
+      () => widget.builder(controller!));
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

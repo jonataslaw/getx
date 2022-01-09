@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../get.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
-import 'get_navigator.dart';
 
 /// Enables the user to customize the intended pop behavior
 ///
