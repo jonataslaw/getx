@@ -38,7 +38,7 @@ class ProfileView extends GetView<ProfileController> {
               },
             ),
             MaterialButton(
-              child: Text("${controller.myNameAndLevel}"),
+              child: Text("${controller.myNameAndLevel.string}"),
               onPressed: () {
                 //shows a dialog
 
