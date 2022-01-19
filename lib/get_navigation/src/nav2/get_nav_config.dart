@@ -46,9 +46,9 @@ class GetNavConfig extends RouteInformation {
 
   static GetNavConfig? fromRoute(String route) {
     final res = Get.routeTree.matchRoute(route);
-    if (res.treeBranch.isEmpty) return null;
+    if (res.currentTreeBranch.isEmpty) return null;
     return GetNavConfig(
-      currentTreeBranch: res.treeBranch,
+      currentTreeBranch: res.currentTreeBranch,
       location: route,
       state: null,
     );

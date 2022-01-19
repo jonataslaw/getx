@@ -2,16 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../get.dart';
+import '../../../../get_state_manager/src/simple/get_state.dart';
 import '../../../../get_state_manager/src/simple/list_notifier.dart';
+import '../../../../get_utils/src/platform/platform.dart';
+import '../../../../route_manager.dart';
+import '../../root/parse_route.dart';
 import '../url_strategy/url_strategy.dart';
 
-class GetNavigation extends RouterDelegate<PageSettings>
+class GetNavigation extends RouterDelegate<RouteDecoder>
     with
         ListNotifierSingleMixin,
-        PopNavigatorRouterDelegateMixin<PageSettings>,
+        PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
-  final _activePages = <GetPage>[];
+  final _activePages = <RouteDecoder>[];
   final GetPage _unknownPage;
   final List<NavigatorObserver>? navigatorObservers;
   final String? restorationScopeId;
@@ -21,7 +24,7 @@ class GetNavigation extends RouterDelegate<PageSettings>
   static late final GetNavigation instance;
 
   @override
-  Future<void> setInitialRoutePath(PageSettings configuration) async {
+  Future<void> setInitialRoutePath(RouteDecoder configuration) async {
     setNewRoutePath(configuration);
   }
 
@@ -50,7 +53,7 @@ class GetNavigation extends RouterDelegate<PageSettings>
   }
 
   @protected
-  GetPage<T>? _getPage<T>(PageSettings arguments) {
+  RouteDecoder? _getRouteDecoder<T>(PageSettings arguments) {
     var page = arguments.uri.path;
     final parameters = arguments.params;
     if (parameters.isNotEmpty) {
@@ -59,23 +62,32 @@ class GetNavigation extends RouterDelegate<PageSettings>
     }
 
     final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
-    decoder.replaceArguments(arguments);
+    final route = decoder.route;
+    if (route == null) return null;
+    return _configureRouterDecoder(decoder, arguments);
+    // decoder.replaceArguments(arguments);
     //decoder.replaceParameters(arguments)
 
-    return decoder.route as GetPage<T>?;
+    // return decoder;
   }
 
   @protected
-  GetPage<T> _buildSettings<T>(GetPage<T> page, PageSettings arguments) {
-    return page.copy(
-        completer: _activePages.isEmpty ? null : Completer(),
-        arguments: arguments);
+  RouteDecoder _configureRouterDecoder<T>(
+      RouteDecoder decoder, PageSettings arguments) {
+    // final decoder = Get.routeTree.matchRoute(page.name, arguments: arguments);
+
+    decoder.route = decoder.route?.copy(
+      completer: _activePages.isEmpty ? null : Completer(),
+      arguments: arguments,
+      parameters: arguments.params,
+    );
+    return decoder;
   }
 
-  Future<T?> _push<T>(PageSettings arguments, GetPage<T> page) async {
-    final activePage = _buildSettings<T>(page, arguments);
-    final onStackPage = _activePages
-        .firstWhereOrNull((element) => element.key == activePage.key);
+  Future<T?> _push<T>(RouteDecoder activePage) async {
+    // final activePage = _configureRouterDecoder<T>(page, arguments);
+    final onStackPage = _activePages.firstWhereOrNull(
+        (element) => element.route?.key == activePage.route?.key);
 
     /// There are no duplicate routes in the stack
     if (onStackPage == null) {
@@ -86,19 +98,33 @@ class GetNavigation extends RouterDelegate<PageSettings>
       _activePages.add(onStackPage);
     }
     refresh();
-    return activePage.completer?.future;
+    return activePage.route?.completer?.future as Future<T?>?;
   }
 
   Future<T?> _replace<T>(PageSettings arguments, GetPage<T> page) async {
     final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
-    final activePage = _buildSettings<T>(page, arguments);
-    Get.addPage(activePage);
+    Get.addPage(page);
+
+    final route = _getRouteDecoder(arguments);
+
+    final activePage = _configureRouterDecoder<T>(route!, arguments);
+
     _activePages[index] = activePage;
 
     refresh();
-    final result = await activePage.completer?.future;
-    Get.removePage(activePage);
+    final result = await activePage.route?.completer?.future as Future<T?>;
+    Get.removePage(page);
 
+    return result;
+  }
+
+  Future<T?> _replaceNamed<T>(RouteDecoder activePage) async {
+    final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
+    // final activePage = _configureRouterDecoder<T>(page, arguments);
+    _activePages[index] = activePage;
+
+    refresh();
+    final result = await activePage.route?.completer?.future as Future<T?>;
     return result;
   }
 
@@ -120,16 +146,16 @@ class GetNavigation extends RouterDelegate<PageSettings>
 
   @protected
   void _popWithResult<T>([T? result]) {
-    final completer = _activePages.removeLast().completer;
+    final completer = _activePages.removeLast().route?.completer;
     if (completer?.isCompleted == false) completer!.complete(result);
   }
 
   @override
   Future<T?> toNamed<T>(String page, [Object? data]) async {
     final arguments = _buildPageSettings(page, data);
-    final route = _getPage<T>(arguments);
+    final route = _getRouteDecoder<T>(arguments);
     if (route != null) {
-      return _push<T>(arguments, route);
+      return _push<T>(route);
     }
     throw 'Route $page not registered';
   }
@@ -152,7 +178,7 @@ class GetNavigation extends RouterDelegate<PageSettings>
     double Function(BuildContext context)? gestureWidth,
   }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
-    final route = GetPage<T>(
+    final getPage = GetPage<T>(
       name: routeName,
       opaque: opaque ?? true,
       page: page,
@@ -165,10 +191,11 @@ class GetNavigation extends RouterDelegate<PageSettings>
       binding: binding,
       transitionDuration: duration ?? Get.defaultTransitionDuration,
     );
-    Get.addPage(route);
+    Get.addPage(getPage);
     final args = _buildPageSettings(routeName, arguments);
-    final result = await _push<T>(args, route);
-    Get.removePage(route);
+    final route = _getRouteDecoder<T>(args);
+    final result = await _push<T>(route!);
+    Get.removePage(getPage);
     return result;
   }
 
@@ -244,11 +271,11 @@ class GetNavigation extends RouterDelegate<PageSettings>
 
     final newPredicate = predicate ?? (route) => false;
 
-    while (_activePages.length > 1 && !newPredicate(_activePages.last)) {
+    while (_activePages.length > 1 && !newPredicate(_activePages.last.route!)) {
       _popWithResult();
     }
 
-    return _push(args, route);
+    return _replace(args, route);
   }
 
   @override
@@ -260,26 +287,25 @@ class GetNavigation extends RouterDelegate<PageSettings>
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = _getPage<T>(args);
+    final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
     //  final newPredicate = predicate ?? (route) => false;
 
     while (_activePages.length > 1) {
       _activePages.removeLast();
-      removeLastHistory(null);
     }
 
-    return _replace(args, route);
+    return _replaceNamed(route);
   }
 
   @override
   Future<T?> offNamed<T>(String page, [Object? data]) async {
     final arguments = _buildPageSettings(page, data);
-    final route = _getPage<T>(arguments);
+    final route = _getRouteDecoder<T>(arguments);
     if (route == null) return null;
     _popWithResult();
-    return _push<T>(arguments, route);
+    return _push<T>(route);
   }
 
   @override
@@ -290,15 +316,15 @@ class GetNavigation extends RouterDelegate<PageSettings>
   ]) async {
     final arguments = _buildPageSettings(page, data);
 
-    final route = _getPage<T>(arguments);
+    final route = _getRouteDecoder<T>(arguments);
 
     if (route == null) return null;
 
-    while (_activePages.isNotEmpty && !predicate(_activePages.last)) {
+    while (_activePages.isNotEmpty && !predicate(_activePages.last.route!)) {
       _popWithResult();
     }
 
-    return _push<T>(arguments, route);
+    return _push<T>(route);
   }
 
   @override
@@ -312,7 +338,7 @@ class GetNavigation extends RouterDelegate<PageSettings>
     assert(() {
       if (!canBack) {
         final last = _activePages.last;
-        final name = last.name;
+        final name = last.route?.name;
         throw 'The page $name cannot be popped';
       }
       return true;
@@ -323,15 +349,15 @@ class GetNavigation extends RouterDelegate<PageSettings>
   Future<R?> backAndtoNamed<T, R>(String page,
       {T? result, Object? data}) async {
     final arguments = _buildPageSettings(page, data);
-    final route = _getPage<R>(arguments);
+    final route = _getRouteDecoder<R>(arguments);
     if (route == null) return null;
     _popWithResult<T>(result);
-    return _push<R>(arguments, route);
+    return _push<R>(route);
   }
 
   @override
   void backUntil(bool Function(GetPage) predicate) {
-    while (canBack && !predicate(_activePages.last)) {
+    while (canBack && !predicate(_activePages.last.route!)) {
       _popWithResult();
     }
 
@@ -341,10 +367,11 @@ class GetNavigation extends RouterDelegate<PageSettings>
   @override
   void goToUnknownPage([bool clearPages = false]) {
     if (clearPages) _activePages.clear();
-    final page =
-        _buildSettings(_unknownPage, _buildPageSettings(_unknownPage.name));
-    _activePages.add(page);
-    refresh();
+
+    final pageSettings = _buildPageSettings(_unknownPage.name);
+    final routeDecoder = _getRouteDecoder(pageSettings);
+
+    _push(routeDecoder!);
   }
 
   @override
@@ -364,28 +391,28 @@ class GetNavigation extends RouterDelegate<PageSettings>
       key: navigatorKey,
       restorationScopeId: restorationScopeId,
       observers: navigatorObservers,
-      pages: List.unmodifiable(_activePages),
+      pages: _activePages.map((decoder) => decoder.route!).toList(),
       onPopPage: _onPopPage,
     );
   }
 
   @override
-  Future<void> setNewRoutePath(PageSettings configuration) async {
+  Future<void> setNewRoutePath(RouteDecoder configuration) async {
     // if (_activePages.isEmpty) return;
-    final page = _getPage(configuration);
+    final page = configuration.route;
     if (page == null) {
       goToUnknownPage();
       return;
     } else {
-      _push(configuration, page);
+      _push(configuration);
     }
   }
 
   @override
-  PageSettings? get currentConfiguration {
+  RouteDecoder? get currentConfiguration {
     if (_activePages.isEmpty) {
       return null;
     }
-    return _activePages.last.arguments as PageSettings;
+    return _activePages.last;
   }
 }

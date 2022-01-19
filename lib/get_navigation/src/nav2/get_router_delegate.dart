@@ -308,7 +308,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
 
   Future<void> toNamed(
     String page, {
-    dynamic arguments,
+    PageSettings? arguments,
     Map<String, String>? parameters,
   }) async {
     if (parameters != null) {
@@ -322,7 +322,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
     if (decoder.route != null) {
       await pushHistory(
         GetNavConfig(
-          currentTreeBranch: decoder.treeBranch,
+          currentTreeBranch: decoder.currentTreeBranch,
           location: page,
           state: null, //TODO: persist state?
         ),
@@ -341,7 +341,7 @@ class GetDelegate extends RouterDelegate<GetNavConfig>
   //pops the previous route (if there is one) and goes to new route
   Future<void> offNamed(
     String page, {
-    dynamic arguments,
+    PageSettings? arguments,
     Map<String, String>? parameters,
     PopMode popMode = PopMode.History,
   }) async {

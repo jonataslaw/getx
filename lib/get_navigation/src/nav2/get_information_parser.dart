@@ -30,7 +30,7 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
 
     return SynchronousFuture(
       GetNavConfig(
-        currentTreeBranch: matchResult.treeBranch,
+        currentTreeBranch: matchResult.currentTreeBranch,
         location: location,
         state: routeInformation.state,
       ),

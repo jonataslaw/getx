@@ -98,7 +98,7 @@ class GetPage<T> extends Page<T> {
     Duration? transitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
-    List<GetPage>? children,
+    List<GetPage<T>>? children,
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
