@@ -58,13 +58,16 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
     this.binds,
     this.routeName,
     this.page,
-    this.title,
+    String? title,
+    StringFunction? titleBuilder,
     this.showCupertinoParallax = true,
     this.barrierLabel,
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  }) : super(
+  })  : _titleInstance = title,
+        _titleBuilder = titleBuilder,
+        super(
           settings: settings,
           fullscreenDialog: fullscreenDialog,
           // builder: (context) => Container(),
@@ -112,7 +115,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
 
   Widget? _child;
 
-  Widget _getChild() {
+  Widget _getChild(BuildContext context) {
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
 
@@ -155,11 +158,14 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
 
   @override
   Widget buildContent(BuildContext context) {
-    return _getChild();
+    return _getChild(context);
   }
 
+  final StringFunction? _titleBuilder;
+  final String? _titleInstance;
+
   @override
-  final String? title;
+  String? get title => _titleInstance ?? _titleBuilder?.call();
 
   @override
   String get debugLabel => '${super.debugLabel}(${settings.name})';

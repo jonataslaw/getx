@@ -214,6 +214,7 @@ class PageRedirect {
       customTransition: _r.customTransition,
       binding: _r.binding,
       binds: _r.binds,
+      title: _r.effectiveTitle,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
       transition: _r.transition,
@@ -232,7 +233,7 @@ class PageRedirect {
       page: _r.page,
       parameter: _r.parameters,
       alignment: _r.alignment,
-      title: _r.title,
+      title: _r.effectiveTitle,
       maintainState: _r.maintainState,
       routeName: _r.name,
       settings: _r,

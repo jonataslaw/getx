@@ -11,10 +11,19 @@ class RootView extends GetView<RootController> {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
         final title = current?.location;
+        var effectiveTitle = current?.currentPage?.effectiveTitle;
+        if (effectiveTitle != null) {
+          effectiveTitle = '(GetPage.effectiveTitle: $effectiveTitle)';
+        } else {
+          effectiveTitle = '';
+        }
+
         return Scaffold(
           drawer: DrawerWidget(),
           appBar: AppBar(
-            title: Text(title ?? ''),
+            title: Text(
+              '$title $effectiveTitle',
+            ),
             centerTitle: true,
           ),
           body: GetRouterOutlet(

@@ -6,11 +6,14 @@ import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
 
+typedef StringFunction = String? Function();
+
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
   final bool? popGesture;
   final Map<String, String>? parameters;
   final String? title;
+  final StringFunction? titleBuilder;
   final Transition? transition;
   final Curve curve;
   final bool? participatesInRootNavigator;
@@ -42,10 +45,13 @@ class GetPage<T> extends Page<T> {
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
 
+  String? get effectiveTitle => title ?? titleBuilder?.call();
+
   GetPage({
     required this.name,
     required this.page,
     this.title,
+    this.titleBuilder,
     this.participatesInRootNavigator,
     this.gestureWidth,
     // RouteSettings settings,
@@ -102,8 +108,10 @@ class GetPage<T> extends Page<T> {
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,
+    StringFunction? titleBuilder,
   }) {
     return GetPage(
+      titleBuilder: titleBuilder ?? this.titleBuilder,
       participatesInRootNavigator:
           participatesInRootNavigator ?? this.participatesInRootNavigator,
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
