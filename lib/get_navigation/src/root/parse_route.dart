@@ -1,8 +1,8 @@
 import '../../get_navigation.dart';
 
-class RouteDecoder {
-  final List<GetPage> treeBranch;
-  GetPage? get route => treeBranch.isEmpty ? null : treeBranch.last;
+class RouteDecoder<T> {
+  final List<GetPage<T>> treeBranch;
+  GetPage<T>? get route => treeBranch.isEmpty ? null : treeBranch.last;
   final Map<String, String> parameters;
   final Object? arguments;
   const RouteDecoder(
@@ -95,6 +95,19 @@ class ParseRouteTree {
   void addRoutes(List<GetPage> getPages) {
     for (final route in getPages) {
       addRoute(route);
+    }
+  }
+
+  void removeRoutes(List<GetPage> getPages) {
+    for (final route in getPages) {
+      removeRoute(route);
+    }
+  }
+
+  void removeRoute(GetPage route) {
+    routes.remove(route);
+    for (var page in _flattenPage(route)) {
+      removeRoute(page);
     }
   }
 

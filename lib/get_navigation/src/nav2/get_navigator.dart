@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../routes/default_route.dart';
 import '../routes/get_route.dart';
 
@@ -11,6 +12,7 @@ class GetNavigator extends Navigator {
     bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
     String? initialRoute,
+    String? restorationScopeId,
   }) : super(
           //keys should be optional
           key: key,
@@ -35,6 +37,7 @@ class GetNavigator extends Navigator {
             }
           },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
+          restorationScopeId: restorationScopeId,
           pages: pages,
           observers: [
             // GetObserver(),
@@ -52,6 +55,7 @@ class GetNavigator extends Navigator {
     bool reportsRouteUpdateToEngine = false,
     TransitionDelegate? transitionDelegate,
     String? initialRoute,
+    String? restorationScopeId,
   }) : super(
           //keys should be optional
           key: key,
@@ -65,6 +69,7 @@ class GetNavigator extends Navigator {
                 return true;
               },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
+          restorationScopeId: restorationScopeId,
           pages: pages,
           observers: [
             // GetObserver(),

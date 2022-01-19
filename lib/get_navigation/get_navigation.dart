@@ -7,6 +7,7 @@ export 'src/nav2/get_nav_config.dart';
 export 'src/nav2/get_navigator.dart';
 export 'src/nav2/get_router_delegate.dart';
 export 'src/nav2/router_outlet.dart';
+export 'src/nav3/get_navigation/index.dart';
 export 'src/root/get_cupertino_app.dart';
 export 'src/root/get_material_app.dart';
 export 'src/root/internacionalization.dart';

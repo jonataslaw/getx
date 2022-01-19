@@ -32,10 +32,11 @@ class CountryView extends GetView<HomeController> {
                   itemBuilder: (context, index) {
                     final country = controller.state.countries[index];
                     return ListTile(
-                      onTap: () {
+                      onTap: () async {
                         //Get.rootDelegate.toNamed('/home/country');
-                        Get.rootDelegate
+                        final data = await GetNavigation.instance
                             .toNamed('/home/country/details?id=$index');
+                        print(data);
                       },
                       trailing: CircleAvatar(
                         backgroundImage: NetworkImage(

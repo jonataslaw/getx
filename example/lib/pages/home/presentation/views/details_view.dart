@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../controllers/home_controller.dart';
 
 class DetailsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    final parameter = Get.rootDelegate.parameters;
+    final args = ModalRoute.of(context)!.settings.arguments as PageSettings;
+    final parameter = args.params; //Get.rootDelegate.parameters;
     final country = controller.getCountryById(parameter['id'] ?? '');
     return Container(
       decoration: BoxDecoration(
@@ -76,6 +78,11 @@ class DetailsView extends GetView<HomeController> {
                   '${country.totalRecovered}',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
+                TextButton(
+                    onPressed: () {
+                      GetNavigation.instance.back('djsoidjsoidj');
+                    },
+                    child: Text('back'))
               ],
             )),
           ),

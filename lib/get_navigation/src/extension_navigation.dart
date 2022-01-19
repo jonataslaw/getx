@@ -14,7 +14,7 @@ import 'root/parse_route.dart';
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
 /// Navigator.push(context, YourRoute());
-NavigatorState? get navigator => GetNavigation(Get).key.currentState;
+NavigatorState? get navigator => GetNavigationExt(Get).key.currentState;
 
 extension ExtensionBottomSheet on GetInterface {
   Future<T?> bottomSheet<T>(
@@ -474,7 +474,7 @@ extension ExtensionSnackbar on GetInterface {
   }
 }
 
-extension GetNavigation on GetInterface {
+extension GetNavigationExt on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
   /// Pushes a new `page` to the stack
@@ -1280,8 +1280,13 @@ extension NavTwoExt on GetInterface {
   static late final _routeTree = ParseRouteTree(routes: []);
 
   ParseRouteTree get routeTree => _routeTree;
+
   void addPage(GetPage getPage) {
     routeTree.addRoute(getPage);
+  }
+
+  void removePage(GetPage getPage) {
+    routeTree.removeRoute(getPage);
   }
 
   /// Casts the stored router delegate to a desired type

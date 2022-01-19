@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +26,7 @@ class GetPage<T> extends Page<T> {
   final Duration? transitionDuration;
   final bool fullscreenDialog;
   final bool preventDuplicates;
+  final Completer<T?>? completer;
   // @override
   // final LocalKey? key;
 
@@ -67,6 +70,7 @@ class GetPage<T> extends Page<T> {
     this.arguments,
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
+    this.completer,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
@@ -102,6 +106,7 @@ class GetPage<T> extends Page<T> {
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,
+    Completer<T?>? completer,
   }) {
     return GetPage(
       participatesInRootNavigator:
@@ -129,6 +134,7 @@ class GetPage<T> extends Page<T> {
       arguments: arguments ?? this.arguments,
       showCupertinoParallax:
           showCupertinoParallax ?? this.showCupertinoParallax,
+      completer: completer ?? this.completer,
     );
   }
 
@@ -163,6 +169,17 @@ class GetPage<T> extends Page<T> {
         .replaceAll('//', '/');
 
     return PathDecoded(RegExp('^$stringPath\$'), keys);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is GetPage<T> && other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 

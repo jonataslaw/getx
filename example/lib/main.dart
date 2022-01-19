@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 
 import 'lang/translation_service.dart';
 import 'routes/app_pages.dart';
@@ -9,12 +9,27 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final routerDelegate = GetNavigation.instance = GetNavigation(
+    pages: AppPages.routes,
+    navigatorObservers: [GetObserver()],
+  );
+
+  final routeInformationParser =
+      NewGetInformationParser(initialRoute: AppPages.INITIAL);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
+      routeInformationParser: routeInformationParser,
+      routerDelegate: routerDelegate,
+      // title: 'Router Management Example',
       debugShowCheckedModeBanner: false,
       enableLog: true,
       logWriterCallback: Logger.write,
@@ -26,6 +41,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 
 /// Nav 2 snippet
 // void main() {

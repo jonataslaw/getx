@@ -73,8 +73,11 @@ mixin StateMixin<T> on ListNotifier {
       } else {
         status = GetState<T>.success(newValue);
       }
+
+      refresh();
     }, onError: (err) {
       status = GetState.error(errorMessage ?? err.toString());
+      refresh();
     });
   }
 }
