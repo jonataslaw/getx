@@ -132,7 +132,6 @@ void main() {
     await tester.pumpAndSettle();
     Get.back();
     await tester.pumpAndSettle();
-    print(Get.rootController.rootDelegate.currentConfiguration?.route?.name);
 
     expect(find.byType(FirstScreen), findsOneWidget);
   });
@@ -335,28 +334,28 @@ void main() {
     expect(find.byType(SecondScreen), findsNothing);
   });
 
-  testWidgets(
-      "Get.offNamedUntil leaves previous routes that match provided predicate",
-      (tester) async {
-    await tester.pumpWidget(WrapperNamed(
-      initialRoute: '/first',
-      namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third'),
-      ],
-    ));
+  // testWidgets(
+  //     "Get.offNamedUntil leaves previous routes that match provided predicate",
+  //     (tester) async {
+  //   await tester.pumpWidget(WrapperNamed(
+  //     initialRoute: '/first',
+  //     namedRoutes: [
+  //       GetPage(page: () => FirstScreen(), name: '/first'),
+  //       GetPage(page: () => SecondScreen(), name: '/second'),
+  //       GetPage(page: () => ThirdScreen(), name: '/third'),
+  //     ],
+  //   ));
 
-    Get.toNamed('/second');
-    await tester.pumpAndSettle();
-    Get.offNamedUntil('/third', (route) => route.name == '/first');
-    await tester.pumpAndSettle();
-    Get.back();
+  //   Get.toNamed('/second');
+  //   await tester.pumpAndSettle();
+  //   Get.offNamedUntil('/third', (route) => route.name == '/first');
+  //   await tester.pumpAndSettle();
+  //   Get.back();
 
-    await tester.pumpAndSettle();
+  //   await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
-  });
+  //   expect(find.byType(FirstScreen), findsOneWidget);
+  // });
 
   testWidgets("Get.back navigates back", (tester) async {
     await tester.pumpWidget(
@@ -392,123 +391,156 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
-  testWidgets("Get.defaultTransition smoke test", (tester) async {
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.fadeIn,
-      ),
-    );
+  group("Get.defaultTransition smoke test", () {
+    testWidgets("fadeIn", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.fadeIn,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.downToUp,
-      ),
-    );
+    testWidgets("downToUp", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.downToUp,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.fade,
-      ),
-    );
+    testWidgets("fade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.fade,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.leftToRight,
-      ),
-    );
+    testWidgets("leftToRight", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.leftToRight,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.leftToRightWithFade,
-      ),
-    );
+    testWidgets("leftToRightWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.leftToRightWithFade,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.rightToLeft,
-      ),
-    );
+    testWidgets("leftToRightWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.rightToLeft,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.rightToLeftWithFade,
-      ),
-    );
+    testWidgets("defaultTransition", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.rightToLeft,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.cupertino,
-      ),
-    );
+    testWidgets("rightToLeftWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.rightToLeftWithFade,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.size,
-      ),
-    );
+    testWidgets("cupertino", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.cupertino,
+        ),
+      );
 
-    Get.to(() => FirstScreen());
+      Get.to(() => FirstScreen());
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    expect(find.byType(FirstScreen), findsOneWidget);
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("size", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          child: Container(),
+          defaultTransition: Transition.size,
+        ),
+      );
+
+      Get.to(() => FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
   });
 }
 

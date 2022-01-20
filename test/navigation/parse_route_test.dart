@@ -145,15 +145,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      print(Get.rootController.rootDelegate.pageSettings?.params);
-
       expect(Get.parameters['id'], '1234');
 
       Get.toNamed('/third?name=jonny&job=dev');
 
       await tester.pumpAndSettle();
-
-      print(Get.parameters);
 
       expect(Get.parameters['name'], 'jonny');
       expect(Get.parameters['job'], 'dev');
