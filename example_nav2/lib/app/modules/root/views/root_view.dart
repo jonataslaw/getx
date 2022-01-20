@@ -10,11 +10,11 @@ class RootView extends GetView<RootController> {
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
-        final title = current?.location;
+        final title = context.location;
         return Scaffold(
           drawer: DrawerWidget(),
           appBar: AppBar(
-            title: Text(title ?? ''),
+            title: Text(title),
             centerTitle: true,
           ),
           body: GetRouterOutlet(

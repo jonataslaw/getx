@@ -10,13 +10,13 @@ typedef GetControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
 extension WatchExt on BuildContext {
-  T listen<T extends GetxController>() {
+  T listen<T>() {
     return Bind.of(this, rebuild: true);
   }
 }
 
 extension ReadExt on BuildContext {
-  T get<T extends GetxController>() {
+  T get<T>() {
     return Bind.of(this);
   }
 }
@@ -212,7 +212,7 @@ abstract class Bind<T> extends StatelessWidget {
         child: child,
       );
 
-  static T of<T extends GetxController>(
+  static T of<T>(
     BuildContext context, {
     bool rebuild = false,
     // Object Function(T value)? filter,

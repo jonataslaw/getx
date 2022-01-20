@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../route_manager.dart';
+
 extension PageArgExt on BuildContext {
   RouteSettings? get settings {
     return ModalRoute.of(this)!.settings;
@@ -43,6 +45,10 @@ extension PageArgExt on BuildContext {
 
   RouterDelegate get delegate {
     return router.routerDelegate;
+  }
+
+  GetDelegate get navigation {
+    return router.routerDelegate as GetDelegate;
   }
 }
 

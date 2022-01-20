@@ -4,8 +4,12 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    print('REBUILD HOME');
+    // print(Get.parameters);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -76,7 +80,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     onPressed: () async {
                       //await Navigation  Get.rootDelegate.toNamed('/home/country');
-                      GetNavigation.instance.toNamed('/home/country');
+                      Get.toNamed('/countrdhia');
                     },
                     child: Text(
                       'fetch_country'.tr,

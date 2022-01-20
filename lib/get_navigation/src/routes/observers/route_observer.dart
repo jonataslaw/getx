@@ -216,7 +216,6 @@ class Routing {
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
   final bool isGetPageRoute;
-  //final bool isSnackbar;
   final bool isBottomSheet;
   final bool isDialog;
   final String? name;
@@ -224,7 +223,6 @@ class _RouteData {
   _RouteData({
     required this.name,
     required this.isGetPageRoute,
-    // required this.isSnackbar,
     required this.isBottomSheet,
     required this.isDialog,
   });
@@ -233,7 +231,6 @@ class _RouteData {
     return _RouteData(
       name: _extractRouteName(route),
       isGetPageRoute: route is GetPageRoute,
-      // isSnackbar: route is SnackRoute,
       isDialog: route is GetDialogRoute,
       isBottomSheet: route is GetModalBottomSheetRoute,
     );

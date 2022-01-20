@@ -7,6 +7,64 @@ import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 
+// extension GetMaterialExt on MaterialApp{
+//   MaterialApp get(){
+//         final app = MaterialApp.router(
+//      key: key,
+//     routeInformationProvider:routeInformationProvider,
+//    scaffoldMessengerKey:scaffoldMessengerKey,
+//     // RouteInformationParser<Object>? routeInformationParser,
+//     // RouterDelegate<Object>? routerDelegate,
+//     backButtonDispatcher:backButtonDispatcher,
+//    builder:builder,
+//    title:title,
+//     onGenerateTitle:onGenerateTitle,
+//    color:color,
+//     theme:theme,
+//    darkTheme:darkTheme,
+//    useInheritedMediaQuery:useInheritedMediaQuery,
+//    highContrastTheme:highContrastTheme,
+//    highContrastDarkTheme:highContrastDarkTheme,
+//     themeMode :themeMode,
+//     locale:locale,
+//     localizationsDelegates:localizationsDelegates,
+//    localeListResolutionCallback: localeListResolutionCallback,
+//    localeResolutionCallback: localeResolutionCallback,
+//    supportedLocales: supportedLocales,
+//     debugShowMaterialGrid :debugShowMaterialGrid,
+//     showPerformanceOverlay :showPerformanceOverlay,
+//     checkerboardRasterCacheImages :checkerboardRasterCacheImages,
+//     checkerboardOffscreenLayers :checkerboardOffscreenLayers,
+//     showSemanticsDebugger :showSemanticsDebugger,
+//     debugShowCheckedModeBanner :debugShowCheckedModeBanner,
+//     shortcuts: shortcuts,
+//     scrollBehavior:scrollBehavior,
+//     actions:actions,
+//     customTransition:customTransition,
+//     translationsKeys:translationsKeys,
+//     translations:translations,
+//    textDirection:textDirection,
+//     fallbackLocale:fallbackLocale,
+//     routingCallback:routingCallback,
+//     defaultTransition:defaultTransition,
+//     opaqueRoute:opaqueRoute,
+//     onInit:onInit,
+//     onReady:onReady,
+//     onDispose:onDispose,
+//    enableLog:enableLog,
+//     logWriterCallback:logWriterCallback,
+//     popGesture:popGesture,
+//    smartManagement:smartManagement
+//     initialBinding:initialBinding,
+//     transitionDuration:transitionDuration,
+//     defaultGlobalState:defaultGlobalState,
+//     getPages:getPages,
+//    navigatorObservers: navigatorObservers,
+//     unknownRoute:unknownRoute,
+//     );
+//   }
+// }
+
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
 
@@ -66,7 +124,7 @@ class GetMaterialApp extends StatelessWidget {
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
   final bool useInheritedMediaQuery;
-  const GetMaterialApp({
+  GetMaterialApp({
     Key? key,
     this.navigatorKey,
     this.scaffoldMessengerKey,
@@ -123,11 +181,36 @@ class GetMaterialApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
-  })  : routeInformationProvider = null,
-        routeInformationParser = null,
-        routerDelegate = null,
+  })  : routerDelegate = Get.createDelegate(
+          pages: getPages ??
+              [
+                GetPage(
+                  name: _cleanRouteName("/${home.runtimeType}"),
+                  page: () => home!,
+                ),
+              ],
+          notFoundRoute: unknownRoute,
+          navigatorKey: navigatorKey,
+        ),
+        routeInformationParser = Get.createInformationParser(
+          initialRoute: initialRoute ??
+              getPages?.first.name ??
+              _cleanRouteName("/${home.runtimeType}"),
+        ),
+        routeInformationProvider = null,
         backButtonDispatcher = null,
         super(key: key);
+
+  static String _cleanRouteName(String name) {
+    name = name.replaceAll('() => ', '');
+
+    /// uncommonent for URL styling.
+    // name = name.paramCase!;
+    if (!name.startsWith('/')) {
+      name = '/$name';
+    }
+    return Uri.tryParse(name)?.toString() ?? name;
+  }
 
   GetMaterialApp.router({
     Key? key,
@@ -182,13 +265,13 @@ class GetMaterialApp extends StatelessWidget {
     this.navigatorObservers,
     this.unknownRoute,
   })  : routerDelegate = routerDelegate ??= Get.createDelegate(
+          pages: getPages ?? [],
           notFoundRoute: unknownRoute,
         ),
         routeInformationParser =
             routeInformationParser ??= Get.createInformationParser(
           initialRoute: getPages?.first.name ?? '/',
         ),
-        //navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,

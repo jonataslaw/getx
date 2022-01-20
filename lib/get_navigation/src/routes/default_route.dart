@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
-import 'get_transition_mixin.dart';
 
 @optionalTypeArgs
 mixin RouteReportMixin<T extends StatefulWidget> on State<T> {
@@ -33,10 +32,8 @@ mixin PageRouteReportMixin<T> on Route<T> {
   }
 }
 
-class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
-    with
-        GetPageRouteTransitionMixin<T>,
-        PageRouteReportMixin {
+class GetPageRoute<T> extends MaterialPageRoute<T>
+    with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
   /// Creates a page route for use in an iOS designed app.
   ///
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
@@ -67,7 +64,7 @@ class GetPageRoute<T> extends PageRoute<T> //MaterialPageRoute<T>
   }) : super(
           settings: settings,
           fullscreenDialog: fullscreenDialog,
-          // builder: (context) => Container(),
+          builder: (context) => Container(),
         );
 
   @override

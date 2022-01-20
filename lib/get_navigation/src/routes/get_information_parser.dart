@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../../get.dart';
-import '../../root/parse_route.dart';
+import '../../../get.dart';
+import 'parse_route.dart';
 
-class NewGetInformationParser extends RouteInformationParser<RouteDecoder> {
+class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   final String initialRoute;
 
-  NewGetInformationParser({
+  GetInformationParser({
     required this.initialRoute,
   }) {
     Get.log('GetInformationParser is created !');
@@ -29,19 +29,7 @@ class NewGetInformationParser extends RouteInformationParser<RouteDecoder> {
 
     final routeName = location ?? initialRoute;
 
-    return SynchronousFuture(_locationToRouteDecoder(routeName));
-  }
-
-  RouteDecoder _locationToRouteDecoder(String location) {
-    var uri = Uri.parse(location);
-    final args = PageSettings(uri);
-    final decoder = Get.routeTree.matchRoute(location, arguments: args);
-    decoder.route = decoder.route?.copy(
-      completer: null,
-      arguments: args,
-      parameters: args.params,
-    );
-    return decoder;
+    return SynchronousFuture(RouteDecoder.fromRoute(routeName));
   }
 
   @override

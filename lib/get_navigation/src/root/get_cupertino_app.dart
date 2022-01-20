@@ -62,7 +62,7 @@ class GetCupertinoApp extends StatelessWidget {
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
-  const GetCupertinoApp({
+  GetCupertinoApp({
     Key? key,
     this.theme,
     this.navigatorKey,
@@ -114,11 +114,36 @@ class GetCupertinoApp extends StatelessWidget {
     this.highContrastTheme,
     this.highContrastDarkTheme,
     this.actions,
-  })  : routeInformationProvider = null,
-        routeInformationParser = null,
-        routerDelegate = null,
+  })  : routerDelegate = Get.createDelegate(
+          pages: getPages ??
+              [
+                GetPage(
+                  name: _cleanRouteName("/${home.runtimeType}"),
+                  page: () => home!,
+                ),
+              ],
+          notFoundRoute: unknownRoute,
+          navigatorKey: navigatorKey,
+        ),
+        routeInformationParser = Get.createInformationParser(
+          initialRoute: initialRoute ??
+              getPages?.first.name ??
+              _cleanRouteName("/${home.runtimeType}"),
+        ),
+        routeInformationProvider = null,
         backButtonDispatcher = null,
         super(key: key);
+
+  static String _cleanRouteName(String name) {
+    name = name.replaceAll('() => ', '');
+
+    /// uncommonent for URL styling.
+    // name = name.paramCase!;
+    if (!name.startsWith('/')) {
+      name = '/$name';
+    }
+    return Uri.tryParse(name)?.toString() ?? name;
+  }
 
   GetCupertinoApp.router({
     Key? key,
@@ -167,6 +192,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.getPages,
     this.unknownRoute,
   })  : routerDelegate = routerDelegate ??= Get.createDelegate(
+          pages: getPages ?? [],
           notFoundRoute: unknownRoute,
         ),
         routeInformationParser =

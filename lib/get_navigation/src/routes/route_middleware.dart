@@ -51,7 +51,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  Future<GetNavConfig?> redirectDelegate(GetNavConfig route);
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -120,7 +120,7 @@ class GetMiddleware implements _RouteMiddleware {
   void onPageDispose() {}
 
   @override
-  Future<GetNavConfig?> redirectDelegate(GetNavConfig route) =>
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) =>
       SynchronousFuture(route);
 }
 
@@ -285,8 +285,8 @@ class PageRedirect {
   void addPageParameter(GetPage route) {
     if (route.parameters == null) return;
 
-    final parameters = Get.parameters;
+    final parameters = Map<String, String?>.from(Get.parameters);
     parameters.addEntries(route.parameters!.entries);
-    Get.parameters = parameters;
+    // Get.parameters = parameters;
   }
 }

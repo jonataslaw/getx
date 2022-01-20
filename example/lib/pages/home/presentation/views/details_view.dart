@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 
 class DetailsView extends GetView<HomeController> {
+  const DetailsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as PageSettings;
@@ -80,7 +81,7 @@ class DetailsView extends GetView<HomeController> {
                 ),
                 TextButton(
                     onPressed: () {
-                      GetNavigation.instance.back('djsoidjsoidj');
+                      Get.back(result: 'djsoidjsoidj');
                     },
                     child: Text('back'))
               ],

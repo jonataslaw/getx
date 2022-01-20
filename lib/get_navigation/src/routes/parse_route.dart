@@ -1,4 +1,5 @@
-import '../../get_navigation.dart';
+import '../../../route_manager.dart';
+import 'page_settings.dart';
 
 class RouteDecoder {
   const RouteDecoder(
@@ -7,6 +8,18 @@ class RouteDecoder {
   );
   final List<GetPage> currentTreeBranch;
   final PageSettings? arguments;
+
+  factory RouteDecoder.fromRoute(String location) {
+    var uri = Uri.parse(location);
+    final args = PageSettings(uri);
+    final decoder = Get.routeTree.matchRoute(location, arguments: args);
+    decoder.route = decoder.route?.copy(
+      completer: null,
+      arguments: args,
+      parameters: args.params,
+    );
+    return decoder;
+  }
 
   GetPage? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
@@ -204,7 +217,7 @@ class ParseRouteTree {
   }
 }
 
-extension FirstWhereExt<T> on List<T> {
+extension FirstWhereOrNullExt<T> on List<T> {
   /// The first element satisfying [test], or `null` if there are none.
   T? firstWhereOrNull(bool Function(T element) test) {
     for (var element in this) {

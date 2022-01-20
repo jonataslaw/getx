@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../../get_state_manager/src/simple/get_state.dart';
-import '../../routes/get_route.dart';
-import '../../routes/transitions_type.dart';
+import '../../../get_state_manager/src/simple/get_state.dart';
+import '../routes/get_route.dart';
+import '../routes/transitions_type.dart';
 
 mixin IGetNavigation {
   Future<T?> to<T>(
@@ -56,31 +56,54 @@ mixin IGetNavigation {
     double Function(BuildContext context)? gestureWidth,
   });
 
-  Future<T?> toNamed<T>(String page, [Object? data]);
+  Future<T?> toNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+  });
 
-  Future<T?> offNamed<T>(String page, [Object? data]);
+  Future<T?> offNamed<T>(
+    String page, {
+    dynamic arguments,
+    int? id,
+    Map<String, String>? parameters,
+  });
 
   Future<T?>? offAllNamed<T>(
     String newRouteName, {
+    // bool Function(GetPage route)? predicate,
+    dynamic arguments,
+    int? id,
+    Map<String, String>? parameters,
+  });
+
+  Future<T?>? offNamedUntil<T>(
+    String page, {
     bool Function(GetPage route)? predicate,
     dynamic arguments,
     int? id,
     Map<String, String>? parameters,
   });
 
-  Future<T?> toAndOffUntil<T>(
+  Future<T?> toNamedAndOffUntil<T>(
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
   ]);
 
+  Future<T?> offUntil<T>(
+    Widget Function() page,
+    bool Function(GetPage) predicate, [
+    Object? arguments,
+  ]);
+
   void back<T>([T? result]);
 
-  Future<R?> backAndtoNamed<T, R>(String page, {T? result, Object? data});
+  Future<R?> backAndtoNamed<T, R>(String page, {T? result, Object? arguments});
 
   void backUntil(bool Function(GetPage) predicate);
 
   void goToUnknownPage([bool clearPages = true]);
-
-  bool get canBack;
 }

@@ -45,6 +45,8 @@ class GetPage<T> extends Page<T> {
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
 
+  final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
+
   GetPage({
     required this.name,
     required this.page,
@@ -70,6 +72,8 @@ class GetPage<T> extends Page<T> {
     this.arguments,
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
     this.completer,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),

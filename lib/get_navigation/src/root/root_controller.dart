@@ -28,14 +28,14 @@ class GetMaterialController extends SuperController {
 
   CustomTransition? customTransition;
 
-  var _key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
+  Map<dynamic, GetDelegate> keys = {};
 
-  Map<dynamic, GlobalKey<NavigatorState>> keys = {};
+  GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
-  GlobalKey<NavigatorState> get key => _key;
+  GetDelegate get rootDelegate => Get.createDelegate();
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    _key = newKey;
+    rootDelegate.navigatorKey = newKey;
     return key;
   }
 
