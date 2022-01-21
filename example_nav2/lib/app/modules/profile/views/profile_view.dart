@@ -14,15 +14,16 @@ class ProfileView extends GetView<ProfileController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-          MaterialButton(
-            child: Text(
-              'search champion where yo gradesat !!',
-              style: TextStyle(color: Colors.green, fontSize: 20),
+            MaterialButton(
+              child: Text(
+                'search champion where yo gradesat !!',
+                style: TextStyle(color: Colors.green, fontSize: 20),
+              ),
+              onPressed: () {
+                controller.searchChampion();
+              },
             ),
-            onPressed: () {
-              controller.searchChampion();
-            },
-          ),
+            Obx(() => Text("${controller.updateText}")),
             Hero(
               tag: 'heroLogo',
               child: const FlutterLogo(),
@@ -38,7 +39,7 @@ class ProfileView extends GetView<ProfileController> {
               },
             ),
             MaterialButton(
-              child: Text("${controller.myNameAndLevel.string}"),
+              child: Obx(() => Text("${controller.myNameAndLevel}")),
               onPressed: () {
                 //shows a dialog
 
@@ -49,15 +50,13 @@ class ProfileView extends GetView<ProfileController> {
                 );
               },
             ),
-
             SfCartesianChart(
-              // Initialize category axis
+                // Initialize category axis
                 primaryXAxis: CategoryAxis(),
-
                 series: <LineSeries<SalesData, String>>[
                   LineSeries<SalesData, String>(
-                    // Bind data source
-                      dataSource:  <SalesData>[
+                      // Bind data source
+                      dataSource: <SalesData>[
                         SalesData('Jan', 35),
                         SalesData('Feb', 28),
                         SalesData('Mar', 34),
@@ -65,11 +64,8 @@ class ProfileView extends GetView<ProfileController> {
                         SalesData('May', 40)
                       ],
                       xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales
-                  )
-                ]
-            )
-
+                      yValueMapper: (SalesData sales, _) => sales.sales)
+                ])
           ],
         ),
       ),
