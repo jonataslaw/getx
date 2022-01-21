@@ -9,8 +9,7 @@ class DetailsView extends GetView<HomeController> {
   const DetailsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as PageSettings;
-    final parameter = args.params; //Get.rootDelegate.parameters;
+    final parameter = context.params; //Get.parameters;
     final country = controller.getCountryById(parameter['id'] ?? '');
     return Container(
       decoration: BoxDecoration(

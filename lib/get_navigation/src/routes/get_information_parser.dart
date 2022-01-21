@@ -35,7 +35,7 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   @override
   RouteInformation restoreRouteInformation(RouteDecoder config) {
     return RouteInformation(
-      location: config.arguments?.name,
+      location: config.pageSettings?.name,
       state: null,
     );
   }

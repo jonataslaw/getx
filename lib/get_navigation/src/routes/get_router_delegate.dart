@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../get_state_manager/src/simple/get_state.dart';
+import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
@@ -107,7 +107,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     var iterator = config;
     for (var item in middlewares) {
-      var redirectRes = await item.redirectDelegate(iterator);
+      var redirectRes = await item.redirect(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
     }
@@ -141,15 +141,15 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   T arguments<T>() {
-    return currentConfiguration?.arguments?.arguments as T;
+    return currentConfiguration?.pageSettings?.arguments as T;
   }
 
   Map<String, String> get parameters {
-    return currentConfiguration?.arguments?.params ?? {};
+    return currentConfiguration?.pageSettings?.params ?? {};
   }
 
   PageSettings? get pageSettings {
-    return currentConfiguration?.arguments;
+    return currentConfiguration?.pageSettings;
   }
 
   Future<T?> _removeHistoryEntry<T>(RouteDecoder entry, T result) async {
@@ -159,11 +159,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<void> _pushHistory(RouteDecoder config) async {
     if (config.route!.preventDuplicates) {
       final originalEntryIndex = _activePages.indexWhere(
-          (element) => element.arguments?.name == config.arguments?.name);
+          (element) => element.pageSettings?.name == config.pageSettings?.name);
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            popModeUntil(config.arguments!.name, popMode: PopMode.Page);
+            popModeUntil(config.pageSettings!.name, popMode: PopMode.Page);
             break;
           case PreventDuplicateHandlingMode.ReorderRoutes:
             await _unsafeHistoryRemoveAt(originalEntryIndex, null);
@@ -207,7 +207,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       if (prevHistoryEntry != null) {
         //if so, pop the entire _activePages entry
         final newLocation = remaining.last.name;
-        final prevLocation = prevHistoryEntry.arguments?.name;
+        final prevLocation = prevHistoryEntry.pageSettings?.name;
         if (newLocation == prevLocation) {
           //pop the entire _activePages entry
           return await _popHistory(result);
@@ -301,10 +301,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
       pages: pages.toList(),
-      observers: [
-        GetObserver(),
-        ...?navigatorObservers,
-      ],
+      observers: navigatorObservers,
       transitionDelegate:
           transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
     );
@@ -353,7 +350,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       String? routeName,
       bool fullscreenDialog = false,
       dynamic arguments,
-      Binding? binding,
+      List<BindingsInterface>? bindings,
       bool preventDuplicates = true,
       bool? popGesture,
       bool showCupertinoParallax = true,
@@ -376,7 +373,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       transition: transition ?? Get.defaultTransition,
       curve: curve ?? Get.defaultTransitionCurve,
       fullscreenDialog: fullscreenDialog,
-      binding: binding,
+      bindings: bindings,
       transitionDuration: duration ?? Get.defaultTransitionDuration,
       preventDuplicateHandlingMode: preventDuplicateHandlingMode,
     );
@@ -404,7 +401,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -421,7 +418,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       transition: transition ?? Get.defaultTransition,
       curve: curve ?? Get.defaultTransitionCurve,
       fullscreenDialog: fullscreenDialog,
-      binding: binding,
+      bindings: bindings,
       transitionDuration: duration ?? Get.defaultTransitionDuration,
     );
 
@@ -438,7 +435,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     int? id,
     String? routeName,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,
@@ -457,7 +454,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       transition: transition ?? Get.defaultTransition,
       curve: curve ?? Get.defaultTransitionCurve,
       fullscreenDialog: fullscreenDialog,
-      binding: binding,
+      bindings: bindings,
       transitionDuration: duration ?? Get.defaultTransitionDuration,
     );
 
@@ -607,7 +604,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     var iterator = currentConfiguration;
     while (_canPop(popMode) &&
         iterator != null &&
-        iterator.arguments?.name != fullRoute) {
+        iterator.pageSettings?.name != fullRoute) {
       await _pop(popMode, null);
       // replace iterator
       iterator = currentConfiguration;

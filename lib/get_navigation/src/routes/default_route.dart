@@ -32,7 +32,7 @@ mixin PageRouteReportMixin<T> on Route<T> {
   }
 }
 
-class GetPageRoute<T> extends MaterialPageRoute<T>
+class GetPageRoute<T> extends PageRoute<T>
     with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
   /// Creates a page route for use in an iOS designed app.
   ///
@@ -51,7 +51,7 @@ class GetPageRoute<T> extends MaterialPageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    this.binding,
+    this.bindings,
     this.binds,
     this.routeName,
     this.page,
@@ -64,7 +64,7 @@ class GetPageRoute<T> extends MaterialPageRoute<T>
   }) : super(
           settings: settings,
           fullscreenDialog: fullscreenDialog,
-          builder: (context) => Container(),
+          // builder: (context) => Container(),
         );
 
   @override
@@ -73,7 +73,7 @@ class GetPageRoute<T> extends MaterialPageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final BindingsInterface? binding;
+  final List<BindingsInterface>? bindings;
   final Map<String, String>? parameter;
   final List<Bind>? binds;
 
@@ -118,11 +118,11 @@ class GetPageRoute<T> extends MaterialPageRoute<T>
     ];
 
     final localbindings = [
-      if (binding != null) ...<BindingsInterface>[binding!],
+      if (bindings != null) ...bindings!,
     ];
 
     final bindingsToBind = middlewareRunner
-        .runOnBindingsStart(binding != null ? localbindings : localbinds);
+        .runOnBindingsStart(bindings != null ? localbindings : localbinds);
 
     /// Retrocompatibility workaround, remove this when Bindings api
     /// have been removed

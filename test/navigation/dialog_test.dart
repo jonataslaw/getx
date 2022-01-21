@@ -51,7 +51,7 @@ void main() {
     Get.back();
     await tester.pumpAndSettle();
 
-    // expect(find.byType(YourDialogWidget), findsNothing);
+    expect(find.byType(YourDialogWidget), findsNothing);
     // expect(Get.isDialogOpen, false);
     // await tester.pumpAndSettle();
   });

@@ -5,7 +5,6 @@ import 'package:flutter/scheduler.dart';
 
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
-import '../../get_state_manager/src/simple/get_state.dart';
 import '../../get_utils/get_utils.dart';
 import '../get_navigation.dart';
 import 'dialog/dialog_route.dart';
@@ -512,7 +511,7 @@ extension GetNavigationExt on GetInterface {
       String? routeName,
       bool fullscreenDialog = false,
       dynamic arguments,
-      Binding? binding,
+      List<BindingsInterface>? bindings,
       bool preventDuplicates = true,
       bool? popGesture,
       bool showCupertinoParallax = true,
@@ -530,7 +529,7 @@ extension GetNavigationExt on GetInterface {
       routeName: routeName,
       fullscreenDialog: fullscreenDialog,
       arguments: arguments,
-      binding: binding,
+      bindings: bindings,
       preventDuplicates: preventDuplicates,
       popGesture: popGesture,
       showCupertinoParallax: showCupertinoParallax,
@@ -802,6 +801,13 @@ extension GetNavigationExt on GetInterface {
     bool canPop = true,
     int? id,
   }) {
+    //TODO: remove this when change own api to Dialog and BottomSheets
+    //to declarative way
+    if (isDialogOpen! || isBottomSheetOpen!) {
+      searchDelegate(id).navigatorKey.currentState?.pop();
+      return;
+    }
+
     //TODO: This code brings compatibility of the new snackbar with GetX 4,
     // remove this code in version 5
     if (isSnackbarOpen && !closeOverlays) {
@@ -816,8 +822,10 @@ extension GetNavigationExt on GetInterface {
         closeAllSnackbars();
       }
 
-      searchDelegate(id)
-          .backUntil((route) => (!isDialogOpen! && !isBottomSheetOpen!));
+      while ((isDialogOpen! && isBottomSheetOpen!)) {
+        searchDelegate(id).navigatorKey.currentState?.pop();
+      }
+
       // navigator?.popUntil((route) {
       //   return;
       // });
@@ -881,7 +889,7 @@ extension GetNavigationExt on GetInterface {
     int? id,
     String? routeName,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
@@ -901,7 +909,7 @@ extension GetNavigationExt on GetInterface {
       id: id,
       routeName: routeName,
       arguments: arguments,
-      binding: binding,
+      bindings: bindings,
       fullscreenDialog: fullscreenDialog,
       preventDuplicates: preventDuplicates,
       duration: duration,
@@ -960,7 +968,7 @@ extension GetNavigationExt on GetInterface {
     int? id,
     String? routeName,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,
@@ -977,7 +985,7 @@ extension GetNavigationExt on GetInterface {
       id: id,
       //  routeName routeName,
       arguments: arguments,
-      binding: binding,
+      bindings: bindings,
       fullscreenDialog: fullscreenDialog,
       transition: transition,
       curve: curve,
@@ -1083,7 +1091,6 @@ extension GetNavigationExt on GetInterface {
     GetDelegate _key;
     if (k == null) {
       _key = Get.rootController.rootDelegate;
-      print(_key.navigatorKey);
     } else {
       if (!keys.containsKey(k)) {
         throw 'Route id ($k) not found';
@@ -1105,7 +1112,8 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// give current arguments
-  dynamic get arguments => routing.args;
+  //dynamic get arguments => routing.args;
+  dynamic get arguments => _getxController.rootDelegate.arguments();
 
   /// give name from current route
   String get currentRoute => routing.current;

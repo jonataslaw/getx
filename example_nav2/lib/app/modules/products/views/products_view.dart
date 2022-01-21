@@ -31,8 +31,7 @@ class ProductsView extends GetView<ProductsController> {
                     final item = controller.products[index];
                     return ListTile(
                       onTap: () {
-                        Get
-                            .toNamed(Routes.PRODUCT_DETAILS(item.id));
+                        Get.toNamed(Routes.PRODUCT_DETAILS(item.id));
                       },
                       title: Text(item.name),
                       subtitle: Text(item.id),

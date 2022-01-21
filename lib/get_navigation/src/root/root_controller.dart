@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../get.dart';
 
-class GetMaterialController extends SuperController {
+class GetMaterialController extends FullLifeCycleController {
+  static GetMaterialController get to => Get.find();
+  
   bool testMode = false;
   Key? unikey;
   ThemeData? theme;
@@ -48,18 +50,6 @@ class GetMaterialController extends SuperController {
       }
     });
   }
-
-  @override
-  void onDetached() {}
-
-  @override
-  void onInactive() {}
-
-  @override
-  void onPaused() {}
-
-  @override
-  void onResumed() {}
 
   void restartApp() {
     unikey = UniqueKey();

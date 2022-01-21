@@ -154,16 +154,18 @@ extension ListExtension<E> on List<E> {
     //   (this as RxList)._value;
     // }
 
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    // if (this is RxList) {
-    //   (this as RxList)._value;
-    // }
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
+    //clear();
     addAll(items);
   }
 }

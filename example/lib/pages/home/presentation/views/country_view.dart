@@ -9,8 +9,6 @@ class CountryView extends GetView<HomeController> {
   const CountryView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print('BUILD CONTRY');
-    print(context.params);
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(

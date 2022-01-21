@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../get_core/src/get_main.dart';
 import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
@@ -20,7 +19,8 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  final BindingsInterface? binding;
+  //final BindingsInterface? binding;
+  final List<BindingsInterface>? bindings;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
@@ -61,7 +61,7 @@ class GetPage<T> extends Page<T> {
     this.opaque = true,
     this.transitionDuration,
     this.popGesture,
-    this.binding,
+    this.bindings = const [],
     this.binds = const [],
     this.transition,
     this.customTransition,
@@ -81,7 +81,7 @@ class GetPage<T> extends Page<T> {
         super(
           key: ValueKey(name),
           name: name,
-          arguments: Get.arguments,
+          // arguments: Get.arguments,
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
@@ -96,7 +96,8 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    BindingsInterface? binding,
+    List<BindingsInterface>? bindings,
+    // BindingsInterface? binding,
     List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
@@ -126,7 +127,7 @@ class GetPage<T> extends Page<T> {
       alignment: alignment ?? this.alignment,
       maintainState: maintainState ?? this.maintainState,
       opaque: opaque ?? this.opaque,
-      binding: binding ?? this.binding,
+      bindings: bindings ?? this.bindings,
       binds: binds ?? this.binds,
       customTransition: customTransition ?? this.customTransition,
       transitionDuration: transitionDuration ?? this.transitionDuration,

@@ -137,7 +137,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
           pickPages: pickPages,
-          delegate: delegate ?? Get.rootController.rootDelegate,
+          delegate: delegate ?? GetMaterialController.to.rootDelegate,
         );
 
   GetRouterOutlet.builder({

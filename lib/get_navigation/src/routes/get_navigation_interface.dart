@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../get_state_manager/src/simple/get_state.dart';
+import '../../../get_instance/src/bindings_interface.dart';
 import '../routes/get_route.dart';
 import '../routes/transitions_type.dart';
 
@@ -15,7 +15,7 @@ mixin IGetNavigation {
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -32,7 +32,7 @@ mixin IGetNavigation {
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -47,7 +47,7 @@ mixin IGetNavigation {
     int? id,
     String? routeName,
     dynamic arguments,
-    Binding? binding,
+    List<BindingsInterface>? bindings,
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,

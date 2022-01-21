@@ -1,5 +1,3 @@
 void removeHash() {}
 
-void removeLastHistory(String? url){
-
-}
+void removeLastHistory(String? url) {}

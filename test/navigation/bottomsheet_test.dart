@@ -48,9 +48,13 @@ void main() {
       ),
     ));
 
+    await tester.pumpAndSettle();
+
     expect(Get.isBottomSheetOpen, true);
 
     Get.back();
+    await tester.pumpAndSettle();
+
     expect(Get.isBottomSheetOpen, false);
 
     // expect(() => Get.bottomSheet(Container(), isScrollControlled: null),

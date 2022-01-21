@@ -98,7 +98,7 @@ class GetObserver extends NavigatorObserver {
     }
 
     RouterReportManager.instance.reportCurrentRoute(route);
-    _routeSend?.update((value) {
+    _routeSend!.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';

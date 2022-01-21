@@ -1,13 +1,12 @@
 import '../../../route_manager.dart';
-import 'page_settings.dart';
 
 class RouteDecoder {
   const RouteDecoder(
     this.currentTreeBranch,
-    this.arguments,
+    this.pageSettings,
   );
   final List<GetPage> currentTreeBranch;
-  final PageSettings? arguments;
+  final PageSettings? pageSettings;
 
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
@@ -38,7 +37,20 @@ class RouteDecoder {
 
   List<GetPage>? get currentChildrens => route?.children;
 
-  Map<String, String> get parameters => arguments?.params ?? {};
+  Map<String, String> get parameters => pageSettings?.params ?? {};
+
+  dynamic get args {
+    return pageSettings?.arguments;
+  }
+
+  T? arguments<T>() {
+    final args = pageSettings?.arguments;
+    if (args is T) {
+      return pageSettings?.arguments as T;
+    } else {
+      return null;
+    }
+  }
 
   void replaceArguments(Object? arguments) {
     final _route = route;

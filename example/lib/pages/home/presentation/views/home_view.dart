@@ -8,8 +8,6 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    print('REBUILD HOME');
-    // print(Get.parameters);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -80,7 +78,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     onPressed: () async {
                       //await Navigation  Get.rootDelegate.toNamed('/home/country');
-                      Get.toNamed('/countrdhia');
+                      Get.toNamed('/home/country');
                     },
                     child: Text(
                       'fetch_country'.tr,

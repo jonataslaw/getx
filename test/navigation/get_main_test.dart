@@ -47,7 +47,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(Get.rootController.rootDelegate.currentConfiguration?.route?.name,
+    expect(
+        GetMaterialController.to.rootDelegate.currentConfiguration?.route?.name,
         '/404');
   });
 
@@ -124,7 +125,7 @@ void main() {
       ],
     ));
 
-    await tester.pump();
+    // await tester.pump();
 
     Get.toNamed('/second');
     await tester.pumpAndSettle();
@@ -134,6 +135,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+    await tester.pumpAndSettle();
   });
 
   testWidgets("Get.offAll navigates to provided route", (tester) async {
@@ -243,6 +245,8 @@ void main() {
     ));
 
     Get.offAndToNamed('/second');
+
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -254,6 +258,8 @@ void main() {
     await tester.pumpWidget(Wrapper(child: Container()));
 
     Get.to(() => FirstScreen());
+
+    await tester.pumpAndSettle();
 
     Get.offUntil(() => ThirdScreen(), (route) => route.name == '/FirstScreen');
 
@@ -268,9 +274,11 @@ void main() {
     await tester.pumpWidget(Wrapper(child: Container()));
 
     Get.to(() => FirstScreen());
+    await tester.pumpAndSettle();
     Get.to(() => SecondScreen());
-    Get.rootController.rootDelegate
-        .offUntil(() => ThirdScreen(), (route) => route.name == '/FirstScreen');
+    await tester.pumpAndSettle();
+    Get.offUntil(() => ThirdScreen(), (route) => route.name == '/FirstScreen');
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -360,10 +368,15 @@ void main() {
   testWidgets("Get.back navigates back", (tester) async {
     await tester.pumpWidget(
       Wrapper(
-        child: FirstScreen(),
+        child: Container(),
         defaultTransition: Transition.circularReveal,
       ),
     );
+
+    // await tester.pump();
+
+    Get.to(() => FirstScreen());
+    await tester.pumpAndSettle();
 
     Get.to(() => SecondScreen());
     await tester.pumpAndSettle();
@@ -377,8 +390,17 @@ void main() {
   testWidgets(
       "Get.back with closeOverlays pops both snackbar and current route",
       (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(
+      Wrapper(
+        child: Container(),
+        defaultTransition: Transition.circularReveal,
+      ),
+    );
 
+    // await tester.pump();
+
+    Get.to(() => FirstScreen());
+    await tester.pumpAndSettle();
     Get.to(() => SecondScreen());
     await tester.pumpAndSettle();
     Get.snackbar('title', "message");
@@ -388,6 +410,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(Get.isSnackbarOpen, false);
+
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 

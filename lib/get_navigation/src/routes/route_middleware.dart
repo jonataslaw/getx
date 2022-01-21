@@ -20,21 +20,6 @@ abstract class _RouteMiddleware {
   /// {@end-tool}
   int? priority;
 
-  /// This function will be called when the page of
-  /// the called route is being searched for.
-  /// It take RouteSettings as a result an redirect to the new settings or
-  /// give it null and there will be no redirecting.
-  /// {@tool snippet}
-  /// ```dart
-  /// GetPage redirect(String route) {
-  ///   final authService = Get.find<AuthService>();
-  ///   return authService.authed.value ? null : RouteSettings(name: '/login');
-  /// }
-  /// ```
-  /// {@end-tool}
-  RouteSettings? redirect(String route);
-
-  /// Similar to [redirect],
   /// This function will be called when the router delegate changes the
   /// current route.
   ///
@@ -45,13 +30,13 @@ abstract class _RouteMiddleware {
   /// and no new routes are pushed.
   /// {@tool snippet}
   /// ```dart
-  /// GetNavConfig? redirect(GetNavConfig route) {
+  /// RouteDecoder? redirect(RouteDecoder route) {
   ///   final authService = Get.find<AuthService>();
-  ///   return authService.authed.value ? null : RouteSettings(name: '/login');
+  ///   return authService.authed.value ? null : RouteDecoder.fromRoute('/login');
   /// }
   /// ```
   /// {@end-tool}
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route);
+  Future<RouteDecoder?> redirect(RouteDecoder route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -101,8 +86,8 @@ class GetMiddleware implements _RouteMiddleware {
 
   GetMiddleware({this.priority});
 
-  @override
-  RouteSettings? redirect(String? route) => null;
+  // @override
+  // RouteSettings? redirect(String? route) => null;
 
   @override
   GetPage? onPageCalled(GetPage? page) => page;
@@ -120,7 +105,7 @@ class GetMiddleware implements _RouteMiddleware {
   void onPageDispose() {}
 
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) =>
+  Future<RouteDecoder?> redirect(RouteDecoder route) =>
       SynchronousFuture(route);
 }
 
@@ -144,17 +129,17 @@ class MiddlewareRunner {
     return page;
   }
 
-  RouteSettings? runRedirect(String? route) {
-    RouteSettings? to;
-    for (final element in _getMiddlewares()) {
-      to = element.redirect(route);
-      if (to != null) {
-        break;
-      }
-    }
-    Get.log('Redirect to $to');
-    return to;
-  }
+  // RouteSettings? runRedirect(String? route) {
+  //   RouteSettings? to;
+  //   for (final element in _getMiddlewares()) {
+  //     to = element.redirect(route);
+  //     if (to != null) {
+  //       break;
+  //     }
+  //   }
+  //   Get.log('Redirect to $to');
+  //   return to;
+  // }
 
   List<R>? runOnBindingsStart<R>(List<R>? bindings) {
     _getMiddlewares().forEach((element) {
@@ -212,7 +197,7 @@ class PageRedirect {
       showCupertinoParallax: _r.showCupertinoParallax,
       gestureWidth: _r.gestureWidth,
       customTransition: _r.customTransition,
-      binding: _r.binding,
+      bindings: _r.bindings,
       binds: _r.binds,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
@@ -235,13 +220,13 @@ class PageRedirect {
       title: _r.title,
       maintainState: _r.maintainState,
       routeName: _r.name,
-      settings: _r,
+      settings: settings,
       curve: _r.curve,
       showCupertinoParallax: _r.showCupertinoParallax,
       gestureWidth: _r.gestureWidth,
       opaque: _r.opaque,
       customTransition: _r.customTransition,
-      binding: _r.binding,
+      bindings: _r.bindings,
       binds: _r.binds,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
@@ -274,11 +259,11 @@ class PageRedirect {
     if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
       return false;
     }
-    final newSettings = runner.runRedirect(settings!.name);
-    if (newSettings == null) {
-      return false;
-    }
-    settings = newSettings;
+   // final newSettings = runner.runRedirect(settings!.name);
+    // if (newSettings == null) {
+    //   return false;
+    // }
+    // settings = newSettings;
     return true;
   }
 

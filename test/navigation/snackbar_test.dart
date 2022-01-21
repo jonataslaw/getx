@@ -104,6 +104,7 @@ void main() {
     expect(find.text('title'), findsNothing);
     expect(find.text('titleTwo'), findsOneWidget);
     Get.closeAllSnackbars();
+    await tester.pumpAndSettle();
   });
 
   testWidgets("test snackbar dismissible", (tester) async {
