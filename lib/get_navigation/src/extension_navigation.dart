@@ -76,7 +76,7 @@ extension ExtensionDialog on GetInterface {
     Curve? transitionCurve,
     String? name,
     RouteSettings? routeSettings,
-    dynamic id,
+    String? id,
   }) {
     assert(debugCheckHasMaterialLocalizations(context!));
 
@@ -123,7 +123,7 @@ extension ExtensionDialog on GetInterface {
       RouteTransitionsBuilder? transitionBuilder,
       GlobalKey<NavigatorState>? navigatorKey,
       RouteSettings? routeSettings,
-      dynamic id}) {
+      String? id}) {
     assert(!barrierDismissible || barrierLabel != null);
     final key = navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
     final nav = key?.currentState ??
@@ -149,7 +149,7 @@ extension ExtensionDialog on GetInterface {
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
-    dynamic id,
+    String? id,
     EdgeInsetsGeometry? contentPadding,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
@@ -580,9 +580,9 @@ extension GetNavigationExt on GetInterface {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) {
-    if (preventDuplicates && page == currentRoute) {
-      return null;
-    }
+    // if (preventDuplicates && page == currentRoute) {
+    //   return null;
+    // }
 
     if (parameters != null) {
       final uri = Uri(path: page, queryParameters: parameters);
@@ -1076,12 +1076,16 @@ extension GetNavigationExt on GetInterface {
     return _getxController.addKey(newKey);
   }
 
-  GetDelegate? nestedKey(dynamic key) {
+  GetDelegate? nestedKey(String? key) {
+    if (key == null) {
+      throw 'You need to define a ID';
+    }
     keys.putIfAbsent(
       key,
       () => GetDelegate(
+        showHashOnUrl: true,
         //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: [],
+        pages: RouteDecoder.fromRoute(key).currentChildrens ?? [],
       ),
     );
     return keys[key];

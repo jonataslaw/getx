@@ -263,8 +263,11 @@ class GetMaterialApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             navigatorObservers: (navigatorObservers == null
                 ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
-                : <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
-              ..addAll(navigatorObservers!)));
+                : <NavigatorObserver>[
+                    GetObserver(routingCallback, Get.routing),
+                    ...navigatorObservers!
+                  ]));
+
         final routeInformationParser = Get.createInformationParser(
           initialRoute: initialRoute ??
               getPages?.first.name ??

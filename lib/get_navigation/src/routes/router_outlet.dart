@@ -75,6 +75,8 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
 }
 
 class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
+
+  
   GetRouterOutlet({
     String? anchorRoute,
     required String initialRoute,
@@ -99,7 +101,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             }
             return ret;
           },
-          emptyPage: (delegate) =>
+          emptyPage: (delegate) => 
               Get.routeTree.matchRoute(initialRoute).route ??
               delegate.notFoundRoute,
           key: Get.nestedKey(anchorRoute)?.navigatorKey,
@@ -137,7 +139,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
           },
           pickPages: pickPages,
-          delegate: delegate ?? GetMaterialController.to.rootDelegate,
+          delegate: delegate ?? Get.rootController.rootDelegate,
         );
 
   GetRouterOutlet.builder({

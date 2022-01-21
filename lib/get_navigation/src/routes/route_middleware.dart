@@ -220,7 +220,7 @@ class PageRedirect {
       title: _r.title,
       maintainState: _r.maintainState,
       routeName: _r.name,
-      settings: settings,
+      settings: _r,
       curve: _r.curve,
       showCupertinoParallax: _r.showCupertinoParallax,
       gestureWidth: _r.gestureWidth,
@@ -259,7 +259,7 @@ class PageRedirect {
     if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
       return false;
     }
-   // final newSettings = runner.runRedirect(settings!.name);
+    // final newSettings = runner.runRedirect(settings!.name);
     // if (newSettings == null) {
     //   return false;
     // }
