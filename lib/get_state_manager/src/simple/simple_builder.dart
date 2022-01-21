@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import 'list_notifier.dart';
@@ -95,8 +96,26 @@ mixin ObserverComponent on ComponentElement {
 
   void getUpdate() {
     if (disposers != null) {
+      _safeRebuild();
+    }
+  }
+
+  Future<bool> _safeRebuild() async {
+    if (dirty) return false;
+    if (SchedulerBinding.instance == null) {
+      markNeedsBuild();
+    } else {
+      // refresh was called during the building
+      if (SchedulerBinding.instance!.schedulerPhase != SchedulerPhase.idle) {
+        // Await for the end of build
+        await SchedulerBinding.instance!.endOfFrame;
+        if (dirty) return false;
+      }
+
       markNeedsBuild();
     }
+
+    return true;
   }
 
   @override

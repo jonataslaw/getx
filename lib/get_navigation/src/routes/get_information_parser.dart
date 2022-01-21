@@ -2,17 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get.dart';
+import 'parse_route.dart';
 
-class GetInformationParser extends RouteInformationParser<GetNavConfig> {
+class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   final String initialRoute;
 
   GetInformationParser({
-    this.initialRoute = '/',
+    required this.initialRoute,
   }) {
     Get.log('GetInformationParser is created !');
   }
   @override
-  SynchronousFuture<GetNavConfig> parseRouteInformation(
+  SynchronousFuture<RouteDecoder> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
     var location = routeInformation.location;
@@ -26,22 +27,16 @@ class GetInformationParser extends RouteInformationParser<GetNavConfig> {
 
     Get.log('GetInformationParser: route location: $location');
 
-    final matchResult = Get.routeTree.matchRoute(location ?? initialRoute);
+    final routeName = location ?? initialRoute;
 
-    return SynchronousFuture(
-      GetNavConfig(
-        currentTreeBranch: matchResult.treeBranch,
-        location: location,
-        state: routeInformation.state,
-      ),
-    );
+    return SynchronousFuture(RouteDecoder.fromRoute(routeName));
   }
 
   @override
-  RouteInformation restoreRouteInformation(GetNavConfig config) {
+  RouteInformation restoreRouteInformation(RouteDecoder config) {
     return RouteInformation(
-      location: config.location,
-      state: config.state,
+      location: config.pageSettings?.name,
+      state: null,
     );
   }
 }

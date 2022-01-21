@@ -26,25 +26,25 @@ extension _Empty on Object {
 
 mixin StateMixin<T> on ListNotifier {
   late T _value;
-  GetState<T>? _status;
+  GetStatus<T>? _status;
 
   void _fillInitialStatus() {
     _status = (value == null || value!._isEmpty())
-        ? GetState<T>.loading()
-        : GetState<T>.success(_value);
+        ? GetStatus<T>.loading()
+        : GetStatus<T>.success(_value);
   }
 
-  GetState<T> get status {
+  GetStatus<T> get status {
     reportRead();
-    return _status ??= _status = GetState.loading();
+    return _status ??= _status = GetStatus.loading();
   }
 
   T get state => value;
 
-  set status(GetState<T> newStatus) {
+  set status(GetStatus<T> newStatus) {
     if (newStatus == status) return;
     _status = newStatus;
-    if (newStatus is SuccessState<T>) {
+    if (newStatus is SuccessStatus<T>) {
       _value = newStatus.data!;
       return;
     }
@@ -69,12 +69,15 @@ mixin StateMixin<T> on ListNotifier {
     final compute = body();
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        status = GetState<T>.loading();
+        status = GetStatus<T>.loading();
       } else {
-        status = GetState<T>.success(newValue);
+        status = GetStatus<T>.success(newValue);
       }
+
+      refresh();
     }, onError: (err) {
-      status = GetState.error(errorMessage ?? err.toString());
+      status = GetStatus.error(errorMessage ?? err.toString());
+      refresh();
     });
   }
 }
@@ -88,6 +91,8 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     if (_controller == null) {
       _controller = StreamController<T>.broadcast();
       addListener(_streamListener);
+
+      ///TODO: report to controller dispose
     }
     return _controller!;
   }
@@ -228,39 +233,39 @@ extension StateExt<T> on StateMixin<T> {
 
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GetState<T> {
-  const GetState();
-  factory GetState.loading() => LoadingState();
-  factory GetState.error(String message) => ErrorState(message);
-  factory GetState.empty() => EmptyState();
-  factory GetState.success(T data) => SuccessState(data);
+abstract class GetStatus<T> {
+  const GetStatus();
+  factory GetStatus.loading() => LoadingStatus();
+  factory GetStatus.error(String message) => ErrorStatus(message);
+  factory GetStatus.empty() => EmptyStatus();
+  factory GetStatus.success(T data) => SuccessStatus(data);
 }
 
-class LoadingState<T> extends GetState<T> {}
+class LoadingStatus<T> extends GetStatus<T> {}
 
-class SuccessState<T> extends GetState<T> {
+class SuccessStatus<T> extends GetStatus<T> {
   final T data;
 
-  SuccessState(this.data);
+  SuccessStatus(this.data);
 }
 
-class ErrorState<T, S> extends GetState<T> {
+class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
-  ErrorState([this.error]);
+  ErrorStatus([this.error]);
 }
 
-class EmptyState<T> extends GetState<T> {}
+class EmptyStatus<T> extends GetStatus<T> {}
 
-extension StatusDataExt<T> on GetState<T> {
-  bool get isLoading => this is LoadingState;
-  bool get isSuccess => this is SuccessState;
-  bool get isError => this is ErrorState;
-  bool get isEmpty => this is EmptyState;
+extension StatusDataExt<T> on GetStatus<T> {
+  bool get isLoading => this is LoadingStatus;
+  bool get isSuccess => this is SuccessStatus;
+  bool get isError => this is ErrorStatus;
+  bool get isEmpty => this is EmptyStatus;
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
   String get errorMessage {
-    final isError = this is ErrorState;
+    final isError = this is ErrorStatus;
     if (isError) {
-      final err = this as ErrorState;
+      final err = this as ErrorStatus;
       if (err.error != null && err.error is String) {
         return err.error as String;
       }
@@ -270,8 +275,8 @@ extension StatusDataExt<T> on GetState<T> {
   }
 
   T? get data {
-    if (this is SuccessState<T>) {
-      final success = this as SuccessState<T>;
+    if (this is SuccessStatus<T>) {
+      final success = this as SuccessStatus<T>;
       return success.data;
     }
     return null;

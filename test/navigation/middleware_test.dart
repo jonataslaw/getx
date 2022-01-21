@@ -5,8 +5,15 @@ import 'package:get/get.dart';
 import 'get_main_test.dart';
 
 class RedirectMiddleware extends GetMiddleware {
+  // @override
+  // RouteSettings redirect(String? route) {
+  //   return RouteSettings(name: '/second');
+  // }
+
   @override
-  RouteSettings redirect(String? route) => RouteSettings(name: '/second');
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    return RouteDecoder.fromRoute('/second');
+  }
 }
 
 void main() {
@@ -16,10 +23,9 @@ void main() {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => Container()),
-          GetPage(
-              name: '/first',
-              page: () => FirstScreen(),
-              middlewares: [RedirectMiddleware()]),
+          GetPage(name: '/first', page: () => FirstScreen(), middlewares: [
+            RedirectMiddleware(),
+          ]),
           GetPage(name: '/second', page: () => SecondScreen()),
           GetPage(name: '/third', page: () => ThirdScreen()),
         ],
@@ -29,7 +35,7 @@ void main() {
     Get.toNamed('/first');
 
     await tester.pumpAndSettle();
-    print(Get.routing.current);
+    print(Get.rootController.rootDelegate.currentConfiguration?.route?.name);
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 }

@@ -7,6 +7,8 @@ import '../../navigation/utils/wrapper.dart';
 void main() {
   testWidgets("Get.defaultDialog smoke test", (tester) async {
     await tester.pumpWidget(Wrapper(child: Container()));
+    await tester.pump();
+
     final BuildContext context = tester.element(find.byType(Container));
 
     var mediaQuery = MediaQuery.of(context);

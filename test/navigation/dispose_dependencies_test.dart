@@ -13,7 +13,7 @@ void main() {
     expect(Get.isRegistered<Controller2>(), false);
     expect(Get.isRegistered<Controller>(), false);
 
-    Get.to(First());
+    Get.to(() => First());
 
     await tester.pumpAndSettle();
 
@@ -21,7 +21,7 @@ void main() {
 
     expect(Get.isRegistered<Controller>(), true);
 
-    Get.to(Second());
+    Get.to(() => Second());
 
     await tester.pumpAndSettle();
 

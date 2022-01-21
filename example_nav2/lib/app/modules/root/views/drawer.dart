@@ -21,7 +21,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: Text('Home'),
             onTap: () {
-              Get.rootDelegate.toNamed(Routes.HOME);
+              Get.toNamed(Routes.HOME);
               //to close the drawer
 
               Navigator.of(context).pop();
@@ -30,7 +30,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: Text('Settings'),
             onTap: () {
-              Get.rootDelegate.toNamed(Routes.SETTINGS);
+              Get.toNamed(Routes.SETTINGS);
               //to close the drawer
 
               Navigator.of(context).pop();
@@ -46,7 +46,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               onTap: () {
                 AuthService.to.logout();
-                Get.rootDelegate.toNamed(Routes.LOGIN);
+                Get.toNamed(Routes.LOGIN);
                 //to close the drawer
 
                 Navigator.of(context).pop();
@@ -61,7 +61,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Get.rootDelegate.toNamed(Routes.LOGIN);
+                Get.toNamed(Routes.LOGIN);
                 //to close the drawer
 
                 Navigator.of(context).pop();

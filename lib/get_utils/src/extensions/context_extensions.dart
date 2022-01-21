@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 extension ContextExt on BuildContext {
@@ -168,5 +167,14 @@ extension ContextExt on BuildContext {
       desktop,
     ].whereType<T>();
     return strictValues.firstOrNull ?? looseValues.first;
+  }
+}
+
+extension IterableExt<T> on Iterable<T> {
+  /// The first element, or `null` if the iterable is empty.
+  T? get firstOrNull {
+    var iterator = this.iterator;
+    if (iterator.moveNext()) return iterator.current;
+    return null;
   }
 }

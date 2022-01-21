@@ -14,9 +14,12 @@ void main() {
           child: Center(
             child: CupertinoButton(
               onPressed: () {
-                Get.to(() => CupertinoPageScaffold(
-                      child: Center(child: Text('route')),
-                    ));
+                Get.to(
+                    () => CupertinoPageScaffold(
+                          child: Center(child: Text('route')),
+                        ),
+                    preventDuplicateHandlingMode:
+                        PreventDuplicateHandlingMode.Recreate);
               },
               child: const Text('push'),
             ),
@@ -24,6 +27,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     // Check the basic iOS back-swipe dismiss transition. Dragging the pushed
     // route halfway across the screen will trigger the iOS dismiss animation
@@ -52,7 +57,7 @@ void main() {
               of: find.text('push'),
               matching: find.byType(CupertinoPageScaffold)))
           .dx,
-      0,
+      moreOrLessEquals(-(400 / 3), epsilon: 1),
     );
     await tester.pumpAndSettle();
     expect(find.text('push'), findsOneWidget);
@@ -98,23 +103,6 @@ void main() {
               matching: find.byType(CupertinoPageScaffold)))
           .dx,
       moreOrLessEquals(798, epsilon: 1),
-    );
-
-    // Use the navigator to push a route instead of tapping the 'push' button.
-    // The topmost route (the one that's animating away), ignores input while
-    // the pop is underway because route.navigator.userGestureInProgress.
-    Get.to(() => const CupertinoPageScaffold(
-          child: Center(child: Text('route')),
-        ));
-
-    await tester.pumpAndSettle();
-    expect(find.text('route'), findsOneWidget);
-    expect(find.text('push'), findsNothing);
-    expect(
-      tester
-          .state<NavigatorState>(find.byType(Navigator))
-          .userGestureInProgress,
-      false,
     );
   });
 }

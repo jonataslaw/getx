@@ -21,7 +21,7 @@ class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
 /// This mixin add to Listenable the addListener, removerListener and
 /// containsListener implementation
 mixin ListNotifierSingleMixin on Listenable {
-  List<GetStateUpdate?>? _updaters = <GetStateUpdate?>[];
+  List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
 
   @override
   Disposer addListener(GetStateUpdate listener) {
@@ -57,8 +57,9 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    for (var element in _updaters!) {
-      element!();
+    final list = _updaters?.toList() ?? [];
+    for (var element in list) {
+      element();
     }
   }
 

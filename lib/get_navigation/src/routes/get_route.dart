@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../get_core/src/get_main.dart';
 import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
@@ -18,12 +19,14 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  final BindingsInterface? binding;
+  //final BindingsInterface? binding;
+  final List<BindingsInterface>? bindings;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
   final bool fullscreenDialog;
   final bool preventDuplicates;
+  final Completer<T?>? completer;
   // @override
   // final LocalKey? key;
 
@@ -42,6 +45,8 @@ class GetPage<T> extends Page<T> {
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
 
+  final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
+
   GetPage({
     required this.name,
     required this.page,
@@ -56,7 +61,7 @@ class GetPage<T> extends Page<T> {
     this.opaque = true,
     this.transitionDuration,
     this.popGesture,
-    this.binding,
+    this.bindings = const [],
     this.binds = const [],
     this.transition,
     this.customTransition,
@@ -67,13 +72,16 @@ class GetPage<T> extends Page<T> {
     this.arguments,
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
+    this.completer,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
         super(
           key: ValueKey(name),
           name: name,
-          arguments: Get.arguments,
+          // arguments: Get.arguments,
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
@@ -88,13 +96,14 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    BindingsInterface? binding,
+    List<BindingsInterface>? bindings,
+    // BindingsInterface? binding,
     List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
-    List<GetPage>? children,
+    List<GetPage<T>>? children,
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
@@ -102,6 +111,7 @@ class GetPage<T> extends Page<T> {
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,
+    Completer<T?>? completer,
   }) {
     return GetPage(
       participatesInRootNavigator:
@@ -117,7 +127,7 @@ class GetPage<T> extends Page<T> {
       alignment: alignment ?? this.alignment,
       maintainState: maintainState ?? this.maintainState,
       opaque: opaque ?? this.opaque,
-      binding: binding ?? this.binding,
+      bindings: bindings ?? this.bindings,
       binds: binds ?? this.binds,
       customTransition: customTransition ?? this.customTransition,
       transitionDuration: transitionDuration ?? this.transitionDuration,
@@ -129,6 +139,7 @@ class GetPage<T> extends Page<T> {
       arguments: arguments ?? this.arguments,
       showCupertinoParallax:
           showCupertinoParallax ?? this.showCupertinoParallax,
+      completer: completer ?? this.completer,
     );
   }
 
@@ -163,6 +174,17 @@ class GetPage<T> extends Page<T> {
         .replaceAll('//', '/');
 
     return PathDecoded(RegExp('^$stringPath\$'), keys);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is GetPage<T> && other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
