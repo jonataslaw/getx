@@ -11,12 +11,12 @@ class EnsureAuthMiddleware extends GetMiddleware {
     // await Future.delayed(Duration(milliseconds: 500));
 
     if (!AuthService.to.isLoggedInValue) {
-      final path = route.args.name as String;
+      final path = route.pageSettings?.name as String;
       final newRoute = Routes.LOGIN_THEN(path);
 
       return RouteDecoder.fromRoute(newRoute);
     }
-    return await super.redirect(route);
+    return super.redirect(route);
   }
 }
 
@@ -30,6 +30,6 @@ class EnsureNotAuthedMiddleware extends GetMiddleware {
       //OR redirect user to another screen
       //return RouteDecoder.fromRoute(Routes.PROFILE);
     }
-    return await super.redirect(route);
+    return super.redirect(route);
   }
 }

@@ -57,8 +57,7 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    final list = _updaters?.toList() ?? [];
-    for (var element in list) {
+    for (var element in _updaters!) {
       element();
     }
   }
