@@ -34,25 +34,20 @@ class ProfileController extends OurController {
 
   void searchMatchList() async {
     updateText.value = "Searching match histories";
-    final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false, forceAPI: true);
+    final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
 
-    final that = <String>[];
     tempMatchOverviews.forEach((element) {
       matchOverviews.add(element as String);
     });
 
-    that.sort();
-
-    print(that);
-
-    // print("Finished getting ${matchOverviews.length} matches");
-    // if (matchOverviews.length > 0) {
-    //   matchOverviewsToSearch.addAll(matchOverviews);
-    //   final matchIdToSearch = matchOverviewsToSearch.first;
-    //   matchOverviewsToSearch.remove(matchIdToSearch);
-    //   matches.clear();
-    //   //startSearchingMatches(matchIdToSearch as String);
-    // }
+    print("Finished getting ${matchOverviews.length} matches");
+    if (matchOverviews.length > 0) {
+      matchOverviewsToSearch.addAll(matchOverviews);
+      final matchIdToSearch = matchOverviewsToSearch.first;
+      matchOverviewsToSearch.remove(matchIdToSearch);
+      matches.clear();
+      startSearchingMatches(matchIdToSearch as String);
+    }
   }
 
   void startSearchingMatches(String matchId) async {
@@ -75,7 +70,6 @@ class ProfileController extends OurController {
       checkError(leagueResponse);
     }
   }
-
 
   void _findWhoIAm() {
     map1.clear();
