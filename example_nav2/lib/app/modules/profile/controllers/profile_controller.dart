@@ -1,9 +1,9 @@
-import 'dart:collection';
 
 import 'package:dart_lol/LeagueStuff/match.dart';
-import 'package:dart_lol/LeagueStuff/participant.dart';
 import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 import '../../../../services/globals.dart';
 import '../../our_controller.dart';
 
@@ -11,8 +11,9 @@ class ProfileController extends OurController {
   final myNameAndLevel = "3".obs;
   final updateText = "Updating hasnt started yet".obs;
   late Summoner summoner = Summoner();
-  List<dynamic> matchOverviews = [];
-  List<dynamic> matchOverviewsToSearch = [];
+  Map<String, int> map1 = {};
+  List<String> matchOverviews = <String>[];
+  List<String> matchOverviewsToSearch = <String>[];
   Set<Match> matches = {};
 
   @override
@@ -33,15 +34,25 @@ class ProfileController extends OurController {
 
   void searchMatchList() async {
     updateText.value = "Searching match histories";
-    matchOverviews =
-        await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
-    print("Finished getting ${matchOverviews.length} matches");
-    if (matchOverviews.length > 0) {
-      matchOverviewsToSearch.addAll(matchOverviews);
-      final matchIdToSearch = matchOverviewsToSearch.first;
-      matchOverviewsToSearch.remove(matchIdToSearch);
-      startSearchingMatches(matchIdToSearch as String);
-    }
+    final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false, forceAPI: true);
+
+    final that = <String>[];
+    tempMatchOverviews.forEach((element) {
+      matchOverviews.add(element as String);
+    });
+
+    that.sort();
+
+    print(that);
+
+    // print("Finished getting ${matchOverviews.length} matches");
+    // if (matchOverviews.length > 0) {
+    //   matchOverviewsToSearch.addAll(matchOverviews);
+    //   final matchIdToSearch = matchOverviewsToSearch.first;
+    //   matchOverviewsToSearch.remove(matchIdToSearch);
+    //   matches.clear();
+    //   //startSearchingMatches(matchIdToSearch as String);
+    // }
   }
 
   void startSearchingMatches(String matchId) async {
@@ -65,8 +76,9 @@ class ProfileController extends OurController {
     }
   }
 
-  Map<String, int> map1 = {};
+
   void _findWhoIAm() {
+    map1.clear();
     matches.forEach((element) {
       element.info?.participants?.forEach((p) {
         if (map1.containsKey(p.summonerName)) {
@@ -88,5 +100,20 @@ class ProfileController extends OurController {
       });
 
     print(sortedEntries);
+
+    _findMyMostRecentGame();
+  }
+
+  void _findMyMostRecentGame() {
+    final l = matches.toList();
+    l.sort((a,b) => a.info?.gameCreation??0.compareTo(b.info?.gameCreation??0) as int);
+    final now = DateTime.now();
+
+    for (var element in l) {
+      final ts = element.info?.gameCreation??0 * 1000;
+      final difference = now.difference(DateTime.fromMillisecondsSinceEpoch(ts));
+      final that = now.subtract(difference);
+      print(timeago.format(that) + " ${element.info?.gameCreation} for ${element.metadata?.matchId}");
+    }
   }
 }
