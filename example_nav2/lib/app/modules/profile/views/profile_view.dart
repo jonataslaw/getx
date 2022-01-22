@@ -14,6 +14,7 @@ class ProfileView extends GetView<ProfileController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Image.network('https://picsum.photos/250?image=9'),
             MaterialButton(
               child: Text(
                 'search champion where yo gradesat !!',

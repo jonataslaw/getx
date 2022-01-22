@@ -1,6 +1,9 @@
 
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/LeagueStuff/summoner.dart';
+import 'package:dart_lol/ddragon_api.dart';
+import 'package:dart_lol/ddragon_storage.dart';
+import 'package:dart_lol/helper/UrlHelper.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -42,11 +45,31 @@ class ProfileController extends OurController {
 
     print("Finished getting ${matchOverviews.length} matches");
     if (matchOverviews.length > 0) {
-      matchOverviewsToSearch.addAll(matchOverviews);
+      matchOverviewsToSearch.addAll(matchOverviews.take(25));
       final matchIdToSearch = matchOverviewsToSearch.first;
       matchOverviewsToSearch.remove(matchIdToSearch);
       matches.clear();
-      startSearchingMatches(matchIdToSearch as String);
+      //startSearchingMatches(matchIdToSearch as String);
+
+      final that = await UrlHelper().getRiotGamesAPIVersion();
+      print("The version is: ${that}");
+
+      final whoKnows = DDragonStorage().getRiotGamesAPIVersion();
+      final lastUpdated = DDragonStorage().getVersionsLastUpdated();
+      print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
+      print(whoKnows);
+
+      //final champions = await DDragonAPI().getChampionsFromApi();
+      //print(champions.toJson());
+
+      final championsDB = await DDragonStorage().getChampionsFromDb();
+      print(championsDB.version);
+
+      final aatrox = championsDB.data?.entries.firstWhere((element) => element.value.name == "Aatrox");
+      print("${aatrox?.value.name}");
+
+      final aatroxImage = await UrlHelper().buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
+      print(aatroxImage);
     }
   }
 
