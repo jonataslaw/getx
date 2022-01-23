@@ -12,6 +12,11 @@ dependencies:
     path: ../
   flutter:
     sdk: flutter
+  syncfusion_flutter_charts: ^19.3.59
+  dart_lol:
+    path: ../../dart_lol
+  timeago: ^3.1.0
+  # dart_lol: ^0.2.0
 
 dev_dependencies:
   flutter_test:
