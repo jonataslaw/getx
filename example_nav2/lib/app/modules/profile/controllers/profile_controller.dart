@@ -31,7 +31,7 @@ class ProfileController extends OurController {
   }
 
   void loadMatchItemsFromSomewhere() {
-    matchItems.add(MatchItem(imageUrl: "https://picsum.photos/250?image=9", kda: "133.7", timeAgo: "6 hours ago"));
+    matchItems.add(MatchItem(imageUrl: "https://ddragon.leagueoflegends.com/cdn/12.2.1/img/champion/Aatrox.png", kda: "133.7", timeAgo: "6 hours ago"));
   }
 
   void searchChampion() async {

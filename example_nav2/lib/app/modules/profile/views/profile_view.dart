@@ -80,7 +80,9 @@ class ProfileView extends GetView<ProfileController> {
                                 Get.rootDelegate.toNamed(Routes.SETTINGS);
                               },
                               title: Text(item.kda),
+                              tileColor: Colors.red,
                               subtitle: Text(item.timeAgo),
+                              leading: Image.network(item.imageUrl),
                             );
                           }),
                       onRefresh: () async {
