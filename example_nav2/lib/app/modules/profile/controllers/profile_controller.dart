@@ -55,22 +55,15 @@ class ProfileController extends OurController {
 
     print("Finished getting ${matchOverviews.length} matches");
     if (matchOverviews.length > 0) {
-      matchOverviewsToSearch.addAll(matchOverviews.take(25));
+      matchOverviewsToSearch.addAll(matchOverviews.take(10));
       final matchIdToSearch = matchOverviewsToSearch.first;
       matchOverviewsToSearch.remove(matchIdToSearch);
       matches.clear();
-      //startSearchingMatches(matchIdToSearch as String);
 
-      final that = await UrlHelper().getRiotGamesAPIVersion();
-      print("The version is: ${that}");
-
-      final whoKnows = DDragonStorage().getRiotGamesAPIVersion();
+      final whoKnows = await DDragonStorage().getRiotGamesAPIVersion();
       final lastUpdated = DDragonStorage().getVersionsLastUpdated();
       print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
       print(whoKnows);
-
-      //final champions = await DDragonAPI().getChampionsFromApi();
-      //print(champions.toJson());
 
       final championsDB = await DDragonStorage().getChampionsFromDb();
       print(championsDB.version);
@@ -81,6 +74,10 @@ class ProfileController extends OurController {
       final aatroxImage = await UrlHelper().buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
       imageUrl = aatroxImage;
       print(aatroxImage);
+
+      startSearchingMatches(matchIdToSearch as String);
+    }else {
+      print("we dont have enough matches");
     }
   }
 
@@ -127,9 +124,14 @@ class ProfileController extends OurController {
         return diff;
       });
 
+
     print(sortedEntries);
 
     _findMyMostRecentGame();
+  }
+
+  void _addMatchesToList() {
+
   }
 
   void _findMyMostRecentGame() {
