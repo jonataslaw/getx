@@ -4,6 +4,7 @@ import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:dart_lol/ddragon_api.dart';
 import 'package:dart_lol/ddragon_storage.dart';
 import 'package:dart_lol/helper/UrlHelper.dart';
+import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -20,9 +21,17 @@ class ProfileController extends OurController {
   List<String> matchOverviewsToSearch = <String>[];
   Set<Match> matches = {};
 
+  final matchItems = <MatchItem>[].obs;
+
   @override
   Future<void> onReady() async {
     super.onReady();
+
+    loadMatchItemsFromSomewhere();
+  }
+
+  void loadMatchItemsFromSomewhere() {
+    matchItems.add(MatchItem(imageUrl: "https://picsum.photos/250?image=9", kda: "133.7", timeAgo: "6 hours ago"));
   }
 
   void searchChampion() async {
