@@ -12,6 +12,7 @@ import '../../our_controller.dart';
 
 class ProfileController extends OurController {
   final myNameAndLevel = "3".obs;
+  String imageUrl = "";
   final updateText = "Updating hasnt started yet".obs;
   late Summoner summoner = Summoner();
   Map<String, int> map1 = {};
@@ -69,6 +70,7 @@ class ProfileController extends OurController {
       print("${aatrox?.value.name}");
 
       final aatroxImage = await UrlHelper().buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
+      imageUrl = aatroxImage;
       print(aatroxImage);
     }
   }
