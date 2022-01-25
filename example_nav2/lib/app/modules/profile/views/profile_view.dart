@@ -68,26 +68,21 @@ class ProfileView extends GetView<ProfileController> {
                         xValueMapper: (SalesData sales, _) => sales.year,
                         yValueMapper: (SalesData sales, _) => sales.sales)
                   ]),
-                  Obx(
-                      () => RefreshIndicator(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: controller.matchItems.length,
-                          itemBuilder: (context, index) {
-                            final item = controller.matchItems[index];
-                            return ListTile(
-                              onTap: () {
-                                Get.rootDelegate.toNamed(Routes.SETTINGS);
-                              },
-                              title: Text(item.kda),
-                              tileColor: Colors.red,
-                              subtitle: Text(item.timeAgo),
-                              leading: Image.network(item.imageUrl),
-                            );
-                          }),
-                      onRefresh: () async {
-                        controller.matchItems.clear();
-                        controller.loadMatchItemsFromSomewhere();
+                  Obx(() => ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: controller.matchItems.length,
+                      itemBuilder: (context, index) {
+                        final item = controller.matchItems[index];
+                        return ListTile(
+                          onTap: () {
+                            Get.rootDelegate.toNamed(Routes.SETTINGS);
+                          },
+                          title: Text(item.kda),
+                          tileColor: Colors.red,
+                          subtitle: Text(item.timeAgo),
+                          leading: Image.network(item.imageUrl),
+                        );
                       })
               )
             ],

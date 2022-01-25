@@ -1,4 +1,5 @@
 
+import 'package:dart_lol/LeagueStuff/champions.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:dart_lol/ddragon_api.dart';
@@ -23,15 +24,13 @@ class ProfileController extends OurController {
 
   final matchItems = <MatchItem>[].obs;
 
+  late Champions championsDB;
+
   @override
   Future<void> onReady() async {
     super.onReady();
 
-    loadMatchItemsFromSomewhere();
-  }
-
-  void loadMatchItemsFromSomewhere() {
-    matchItems.add(MatchItem(imageUrl: "https://ddragon.leagueoflegends.com/cdn/12.2.1/img/champion/Aatrox.png", kda: "133.7", timeAgo: "6 hours ago"));
+    findWhoIAm();
   }
 
   void searchChampion() async {
@@ -60,18 +59,18 @@ class ProfileController extends OurController {
       matchOverviewsToSearch.remove(matchIdToSearch);
       matches.clear();
 
-      final whoKnows = await DDragonStorage().getRiotGamesAPIVersion();
-      final lastUpdated = DDragonStorage().getVersionsLastUpdated();
+      final whoKnows = await dDragonStorage.getVersionFromDb();
+      final lastUpdated = dDragonStorage.getVersionsLastUpdated();
       print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
       print(whoKnows);
 
-      final championsDB = await DDragonStorage().getChampionsFromDb();
+      championsDB = await dDragonStorage.getChampionsFromDb();
       print(championsDB.version);
 
       final aatrox = championsDB.data?.entries.firstWhere((element) => element.value.name == "Aatrox");
       print("${aatrox?.value.name}");
 
-      final aatroxImage = await UrlHelper().buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
+      final aatroxImage = await urlHelper.buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
       imageUrl = aatroxImage;
       print(aatroxImage);
 
@@ -95,17 +94,17 @@ class ProfileController extends OurController {
         myNameAndLevel.value = "Done, there are ${matches.length} matches";
         Get.snackbar("Finished Searching all matches",
             "There should be ${matches.length}");
-        _findWhoIAm();
+        findWhoIAm();
       }
     } else {
       checkError(leagueResponse);
     }
   }
 
-  void _findWhoIAm() {
+  void findWhoIAm() {
     map1.clear();
     matches.forEach((element) {
-      element.info?.participants?.forEach((p) {
+      element.info?.participants?.forEach((p) async {
         if (map1.containsKey(p.summonerName)) {
           map1.update(p.summonerName ?? "", (value) => value + 1);
         } else {
@@ -113,6 +112,21 @@ class ProfileController extends OurController {
         }
         if (p.puuid == summoner.puuid) {
           print("We had ${p.kills} kills");
+          final mChampionId = p.championId;
+          final mChamion = championsDB.data?.entries.firstWhere((element) => element.value.key == "${mChampionId}");
+
+          print("I played ${mChamion?.value.name}");
+          var kills = p.kills??0;
+          var deaths = p.deaths??1;
+          if(deaths == 0) {
+            deaths = 1;
+          }
+          final assists = p.assists??0;
+          final kda = (kills + assists) / deaths;
+          final timeAgo = timeago.format(DateTime.fromMillisecondsSinceEpoch(element.info?.gameCreation??DateTime.now().millisecondsSinceEpoch));
+
+          final image = await urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
+          matchItems.add(MatchItem(imageUrl: image, kda: "$kda KDA", timeAgo: "$timeAgo"));
         }
       });
     });
