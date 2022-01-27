@@ -45,4 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-example_nav2/lib/auth/secrets.dart
+lib/auth/secrets.dart
