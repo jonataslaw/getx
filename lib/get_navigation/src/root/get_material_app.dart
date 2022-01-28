@@ -215,7 +215,7 @@ class GetMaterialApp extends StatelessWidget {
       initState: (i) {
         // Get.routerDelegate = routerDelegate;
         // Get.routeInformationParser = routeInformationParser;
-        Get.engine!.addPostFrameCallback((timeStamp) {
+        Get.engine.addPostFrameCallback((timeStamp) {
           onReady?.call();
         });
         if (locale != null) Get.locale = locale;
