@@ -103,3 +103,39 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
     return widget!.build(context);
   }
 }
+
+
+/// GetSelfManagedView is used for rare cases where you would want to
+/// instanciate a controller everytime a widget is added to the widget tree
+/// and remove the controller when the widget is removed from the widget tree
+/// 
+/// it was used in cases where a bottom navigation is needed every page of 
+/// the bottom navigation can now be have their own instanciated and 
+/// destroyed controller as they are swiched between them
+abstract class GetSelfManagedView<T> extends StatefulWidget {
+  /// controller builder
+  /// ``
+  ///      ExtendedGetSelfManagedView({Key: key}) : 
+  ///         super(key: this.key, controller: () => SampleGetXController());
+  /// ``
+  final T Function() controller;
+  const GetSelfManagedView({Key? key, required this.controller})
+      : super(key: key);
+}
+
+abstract class GetSelfManagedViewState<
+    StFulWidget extends GetSelfManagedView<T>, T> extends State<StFulWidget> {
+  T get controller => Get.find<T>();
+
+  @override
+  void initState() {
+    Get.put<T>(widget.controller());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<T>();
+    super.dispose();
+  }
+}
