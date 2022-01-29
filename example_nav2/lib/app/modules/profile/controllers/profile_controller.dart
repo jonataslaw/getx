@@ -38,7 +38,10 @@ class ProfileController extends OurController {
     var summonerResponse = await league.getSummonerInfo('Where YoGradesAt');
     if (summonerResponse.summoner.runtimeType == Summoner) {
       summoner = summonerResponse.summoner as Summoner;
-      searchMatchList();
+      //searchMatchList();
+
+      final allMatches = await league.getAllMatches(summoner.puuid??"");
+      print("We have ${allMatches.length}");
     } else {
       checkError(summonerResponse);
     }
@@ -46,7 +49,8 @@ class ProfileController extends OurController {
 
   void searchMatchList() async {
     updateText.value = "Searching match histories";
-    final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
+    //final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
+    final tempMatchOverviews = await league.getMatches("${summoner.puuid}");
 
     tempMatchOverviews.forEach((element) {
       matchOverviews.add(element as String);
@@ -54,7 +58,7 @@ class ProfileController extends OurController {
 
     print("Finished getting ${matchOverviews.length} matches");
     if (matchOverviews.length > 0) {
-      matchOverviewsToSearch.addAll(matchOverviews.take(10));
+      matchOverviewsToSearch.addAll(matchOverviews);
       final matchIdToSearch = matchOverviewsToSearch.first;
       matchOverviewsToSearch.remove(matchIdToSearch);
       matches.clear();
@@ -122,7 +126,7 @@ class ProfileController extends OurController {
             deaths = 1;
           }
           final assists = p.assists??0;
-          final kda = (kills + assists) / deaths;
+          final kda = ((kills + assists) / deaths).toStringAsFixed(2);
           final timeAgo = timeago.format(DateTime.fromMillisecondsSinceEpoch(element.info?.gameCreation??DateTime.now().millisecondsSinceEpoch));
 
           final image = await urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
@@ -138,14 +142,9 @@ class ProfileController extends OurController {
         return diff;
       });
 
-
     print(sortedEntries);
 
     _findMyMostRecentGame();
-  }
-
-  void _addMatchesToList() {
-
   }
 
   void _findMyMostRecentGame() {
