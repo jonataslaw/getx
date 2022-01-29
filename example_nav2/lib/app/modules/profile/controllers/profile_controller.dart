@@ -23,6 +23,7 @@ class ProfileController extends OurController {
   Set<Match> matches = {};
 
   final matchItems = <MatchItem>[].obs;
+  var userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
 
   late Champions championsDB;
 
@@ -38,10 +39,12 @@ class ProfileController extends OurController {
     var summonerResponse = await league.getSummonerInfo('Where YoGradesAt');
     if (summonerResponse.summoner.runtimeType == Summoner) {
       summoner = summonerResponse.summoner as Summoner;
-      //searchMatchList();
+      searchMatchList();
 
-      final allMatches = await league.getAllMatches(summoner.puuid??"");
-      print("We have ${allMatches.length}");
+      // final allMatches = await league.getAllMatches(summoner.puuid??"");
+      // print("We have ${allMatches.length}");
+
+      userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
     } else {
       checkError(summonerResponse);
     }

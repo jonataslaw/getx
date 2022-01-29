@@ -10,12 +10,13 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber,
-      body: SingleChildScrollView(
+      body:
+      SingleChildScrollView(
         child:
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network('https://picsum.photos/250?image=9'),
+              Image.network(controller.userProfileImage),
               MaterialButton(
                 child: Text(
                   'search champion where yo gradesat !!',
