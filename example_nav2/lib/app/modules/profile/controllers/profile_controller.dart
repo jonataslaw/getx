@@ -2,9 +2,7 @@
 import 'package:dart_lol/LeagueStuff/champions.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/LeagueStuff/summoner.dart';
-import 'package:dart_lol/ddragon_api.dart';
-import 'package:dart_lol/ddragon_storage.dart';
-import 'package:dart_lol/helper/UrlHelper.dart';
+import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -23,7 +21,7 @@ class ProfileController extends OurController {
   Set<Match> matches = {};
 
   final matchItems = <MatchItem>[].obs;
-  var userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
+  var userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg";
 
   late Champions championsDB;
 
@@ -34,12 +32,17 @@ class ProfileController extends OurController {
     findWhoIAm();
   }
 
-  void searchChampion() async {
+  void searchSummoner() async {
     updateText.value = "Searching for champion Where YoGradesAt";
     var summonerResponse = await league.getSummonerInfo('Where YoGradesAt');
+    print("after getting summoner response");
+    print(summonerResponse);
     if (summonerResponse.summoner.runtimeType == Summoner) {
       summoner = summonerResponse.summoner as Summoner;
-      searchMatchList();
+      //searchMatchList();
+
+      final that = await MatchesHelper().returnChampionFromId(3);
+      print(that?.name);
 
       // final allMatches = await league.getAllMatches(summoner.puuid??"");
       // print("We have ${allMatches.length}");
@@ -53,9 +56,9 @@ class ProfileController extends OurController {
   void searchMatchList() async {
     updateText.value = "Searching match histories";
     //final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
-    final tempMatchOverviews = await league.getMatches("${summoner.puuid}");
+    final tempMatchOverviews = await league.getMatches("${summoner.puuid}", start: 0, count: 100);
 
-    tempMatchOverviews.forEach((element) {
+    tempMatchOverviews.matchOverviews?.forEach((element) {
       matchOverviews.add(element as String);
     });
 

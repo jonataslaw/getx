@@ -23,7 +23,7 @@ class ProfileView extends GetView<ProfileController> {
                   style: TextStyle(color: Colors.green, fontSize: 20),
                 ),
                 onPressed: () {
-                  controller.searchChampion();
+                  controller.searchSummoner();
                 },
               ),
               Obx(() => Text("${controller.updateText}")),

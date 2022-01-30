@@ -1,6 +1,6 @@
 import 'package:dart_lol/LeagueStuff/responses/league_response.dart';
 import 'package:dart_lol/ddragon_storage.dart';
-import 'package:dart_lol/helper/UrlHelper.dart';
+import 'package:dart_lol/helper/url_helper.dart';
 import 'package:get/get.dart';
 
 import '../../services/globals.dart';
