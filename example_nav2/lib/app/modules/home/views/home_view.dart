@@ -8,7 +8,9 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
-      builder: (context, delegate, currentRoute) {
+      routerDelegate: Get.nestedKey(Routes.HOME),
+      builder: (context) {
+        final delegate = context.navigation;
         //This router outlet handles the appbar and the bottom navigation bar
         final currentLocation = context.location;
         var currentIndex = 0;
@@ -22,6 +24,7 @@ class HomeView extends GetView<HomeController> {
           body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
             anchorRoute: Routes.HOME,
+            //delegate: Get.nestedKey(Routes.HOME),
             // key: Get.nestedKey(Routes.HOME),
           ),
           bottomNavigationBar: BottomNavigationBar(

@@ -8,8 +8,9 @@ import 'drawer.dart';
 class RootView extends GetView<RootController> {
   @override
   Widget build(BuildContext context) {
-    return GetRouterOutlet.builder(
-      builder: (context, delegate, current) {
+    return RouterOutlet.builder(
+      delegate: Get.nestedKey(null),
+      builder: (context) {
         final title = context.location;
         return Scaffold(
           drawer: DrawerWidget(),
@@ -17,12 +18,15 @@ class RootView extends GetView<RootController> {
             title: Text(title),
             centerTitle: true,
           ),
+          //body: HomeView(),
+
           body: GetRouterOutlet(
             initialRoute: Routes.HOME,
+            delegate: Get.nestedKey(null),
             anchorRoute: '/',
-            // filterPages: (afterAnchor) {
-            //   return afterAnchor.take(1);
-            // },
+            filterPages: (afterAnchor) {
+              return afterAnchor.take(1);
+            },
           ),
         );
       },

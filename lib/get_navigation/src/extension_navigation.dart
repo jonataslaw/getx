@@ -576,7 +576,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? toNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    dynamic id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) {
@@ -1078,7 +1078,7 @@ extension GetNavigationExt on GetInterface {
 
   GetDelegate? nestedKey(String? key) {
     if (key == null) {
-      throw 'You need to define a ID';
+      return routerDelegate as GetDelegate;
     }
     keys.putIfAbsent(
       key,
@@ -1091,7 +1091,7 @@ extension GetNavigationExt on GetInterface {
     return keys[key];
   }
 
-  GetDelegate searchDelegate(int? k) {
+  GetDelegate searchDelegate(dynamic k) {
     GetDelegate _key;
     if (k == null) {
       _key = Get.rootController.rootDelegate;

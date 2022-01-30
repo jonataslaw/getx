@@ -107,7 +107,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     var iterator = config;
     for (var item in middlewares) {
-      var redirectRes = await item.redirect(iterator);
+      var redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
     }
@@ -312,7 +312,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     if (clearPages) _activePages.clear();
 
     final pageSettings = _buildPageSettings(notFoundRoute.name);
-    final routeDecoder = await _getRouteDecoder(pageSettings);
+    final routeDecoder = _getRouteDecoder(pageSettings);
 
     _push(routeDecoder!);
   }
@@ -327,12 +327,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?> toNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    dynamic id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = await _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(args);
     if (route != null) {
       return _push<T>(route);
     } else {
@@ -380,7 +380,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     Get.addPage(getPage);
     final args = _buildPageSettings(routeName, arguments);
-    final route = await _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(args);
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
@@ -478,7 +478,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = await _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
     while (_activePages.length > 1) {
@@ -497,7 +497,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = await _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
     final newPredicate = predicate ?? (route) => false;
@@ -517,7 +517,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = await _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
     _popWithResult();
     return _push<T>(route);
@@ -531,7 +531,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   ]) async {
     final arguments = _buildPageSettings(page, data);
 
-    final route = await _getRouteDecoder<T>(arguments);
+    final route = _getRouteDecoder<T>(arguments);
 
     if (route == null) return null;
 
@@ -586,7 +586,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<R?> backAndtoNamed<T, R>(String page,
       {T? result, Object? arguments}) async {
     final args = _buildPageSettings(page, arguments);
-    final route = await _getRouteDecoder<R>(args);
+    final route = _getRouteDecoder<R>(args);
     if (route == null) return null;
     _popWithResult<T>(result);
     return _push<R>(route);
@@ -625,7 +625,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
     Get.addPage(page);
 
-    final activePage = await _getRouteDecoder(arguments);
+    final activePage = _getRouteDecoder(arguments);
 
     // final activePage = _configureRouterDecoder<T>(route!, arguments);
 
@@ -670,7 +670,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @protected
-  Future<RouteDecoder?> _getRouteDecoder<T>(PageSettings arguments) async {
+  RouteDecoder? _getRouteDecoder<T>(PageSettings arguments) {
     var page = arguments.uri.path;
     final parameters = arguments.params;
     if (parameters.isNotEmpty) {
@@ -682,10 +682,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final route = decoder.route;
     if (route == null) return null;
 
-    final configure = _configureRouterDecoder(decoder, arguments);
-
-    final router = await runMiddleware(configure);
-    return router;
+    return _configureRouterDecoder(decoder, arguments);
   }
 
   @protected
@@ -709,10 +706,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return decoder;
   }
 
-  Future<T?> _push<T>(RouteDecoder res,
+  Future<T?> _push<T>(RouteDecoder decoder,
       {bool rebuildStack = true,
       PreventDuplicateHandlingMode preventDuplicateHandlingMode =
           PreventDuplicateHandlingMode.ReorderRoutes}) async {
+    var mid = await runMiddleware(decoder);
+    final res = mid ?? decoder;
+    // if (res == null) res = decoder;
+
     final onStackPage = _activePages
         .firstWhereOrNull((element) => element.route?.key == res.route?.key);
 
@@ -744,7 +745,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       refresh();
     }
 
-    return res.route?.completer?.future as Future<T?>?;
+    return decoder.route?.completer?.future as Future<T?>?;
   }
 
   @override
