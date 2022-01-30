@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
+
 import '../../../route_manager.dart';
 
+@immutable
 class RouteDecoder {
   const RouteDecoder(
     this.currentTreeBranch,
@@ -59,6 +62,18 @@ class RouteDecoder {
       currentTreeBranch[index] = _route.copy(arguments: arguments);
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RouteDecoder &&
+        listEquals(other.currentTreeBranch, currentTreeBranch) &&
+        other.pageSettings == pageSettings;
+  }
+
+  @override
+  int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
 }
 
 class ParseRouteTree {

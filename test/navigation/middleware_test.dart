@@ -11,7 +11,7 @@ class RedirectMiddleware extends GetMiddleware {
   // }
 
   @override
-  Future<RouteDecoder?> redirect(RouteDecoder route) async {
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
     return RouteDecoder.fromRoute('/second');
   }
 }
@@ -23,8 +23,8 @@ class RedirectMiddlewareNull extends GetMiddleware {
   // }
 
   @override
-  Future<RouteDecoder?> redirect(RouteDecoder route) async {
-    return route;
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    return null;
   }
 }
 
@@ -66,7 +66,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    // await tester.pump();
 
     Get.toNamed('/first');
 
