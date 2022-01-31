@@ -1059,7 +1059,7 @@ extension GetNavigationExt on GetInterface {
   /// Your entire application will be rebuilt, and touch events will not
   /// work until the end of rendering.
   Future<void> forceAppUpdate() async {
-    await engine!.performReassemble();
+    await engine.performReassemble();
   }
 
   void appUpdate() => _getxController.update();
@@ -1173,12 +1173,9 @@ extension GetNavigationExt on GetInterface {
     return _theme;
   }
 
-  ///The current [WidgetsBinding]
-  WidgetsBinding? get engine {
-    if (WidgetsBinding.instance == null) {
-      WidgetsFlutterBinding();
-    }
-    return WidgetsBinding.instance;
+  /// The current null safe [WidgetsBinding]
+  WidgetsBinding get engine {
+    return WidgetsFlutterBinding.ensureInitialized();
   }
 
   /// The window to which this binding is bound.
