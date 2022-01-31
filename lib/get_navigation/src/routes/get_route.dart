@@ -20,7 +20,7 @@ class GetPage<T> extends Page<T> {
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
   //final BindingsInterface? binding;
-  final List<BindingsInterface>? bindings;
+  final List<BindingsInterface> bindings;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
@@ -75,17 +75,19 @@ class GetPage<T> extends Page<T> {
     this.preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.ReorderRoutes,
     this.completer,
+    LocalKey? key,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
         super(
-          key: ValueKey(name),
+          key: key ?? ValueKey(name),
           name: name,
           // arguments: Get.arguments,
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
   GetPage<T> copy({
+    LocalKey? key,
     String? name,
     GetPageBuilder? page,
     bool? popGesture,
@@ -114,6 +116,7 @@ class GetPage<T> extends Page<T> {
     Completer<T?>? completer,
   }) {
     return GetPage(
+      key: key ?? this.key,
       participatesInRootNavigator:
           participatesInRootNavigator ?? this.participatesInRootNavigator,
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,

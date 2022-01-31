@@ -80,7 +80,8 @@ abstract class RxController with GetLifeCycleMixin {}
 /// A recommended way to use Getx with Future fetching
 abstract class StateController<T> extends GetxController with StateMixin<T> {}
 
-/// A controller with super lifecycles (including native lifecycles) and StateMixins
+/// A controller with super lifecycles (including native lifecycles)
+/// and StateMixins
 abstract class SuperController<T> extends FullLifeCycleController
     with FullLifeCycleMixin, StateMixin<T> {}
 

@@ -51,7 +51,7 @@ class GetPageRoute<T> extends PageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    this.bindings,
+    this.bindings = const [],
     this.binds,
     this.routeName,
     this.page,
@@ -73,7 +73,7 @@ class GetPageRoute<T> extends PageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final List<BindingsInterface>? bindings;
+  final List<BindingsInterface> bindings;
   final Map<String, String>? parameter;
   final List<Bind>? binds;
 
@@ -113,41 +113,33 @@ class GetPageRoute<T> extends PageRoute<T>
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localbinds = [
-      if (binds != null) ...binds!,
-    ];
-
-    final localbindings = [
-      if (bindings != null) ...bindings!,
-    ];
+    final localbinds = [if (binds != null) ...binds!];
 
     final bindingsToBind = middlewareRunner
-        .runOnBindingsStart(bindings != null ? localbindings : localbinds);
-
-    /// Retrocompatibility workaround, remove this when Bindings api
-    /// have been removed
-    if (bindingsToBind != null &&
-        bindingsToBind is! List<Bind> &&
-        bindingsToBind is List<BindingsInterface>) {
-      for (final binding in bindingsToBind) {
-        binding.dependencies();
-      }
-    }
+        .runOnBindingsStart(bindings.isNotEmpty ? bindings : localbinds);
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
 
-    if (bindingsToBind != null &&
-        bindingsToBind.isNotEmpty &&
-        bindingsToBind is List<Bind>) {
-      _child = Binds(
-        child: middlewareRunner.runOnPageBuilt(pageToBuild()),
-        binds: bindingsToBind,
-      );
-    } else {
-      _child = middlewareRunner.runOnPageBuilt(pageToBuild());
+    if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
+      if (bindingsToBind is List<BindingsInterface>) {
+        for (final item in bindingsToBind) {
+          final dep = item.dependencies();
+          if (dep is List<Bind>) {
+            _child = Binds(
+              child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+              binds: dep,
+            );
+          }
+        }
+      } else if (bindingsToBind is List<Bind>) {
+        _child = Binds(
+          child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+          binds: bindingsToBind,
+        );
+      }
     }
 
-    return _child!;
+    return _child ??= middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
   @override

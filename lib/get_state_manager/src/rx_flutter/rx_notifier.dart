@@ -64,6 +64,22 @@ mixin StateMixin<T> on ListNotifier {
     refresh();
   }
 
+  @protected
+  void change(T newState, {GetStatus<T>? status}) {
+    var _canUpdate = false;
+    if (status != null) {
+      _status = status;
+      _canUpdate = true;
+    }
+    if (newState != _value) {
+      _value = newState;
+      _canUpdate = true;
+    }
+    if (_canUpdate) {
+      refresh();
+    }
+  }
+
   void futurize(Future<T> Function() body(),
       {String? errorMessage, bool useEmpty = true}) {
     final compute = body();
@@ -89,8 +105,9 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller = StreamController<T>.broadcast();
-      addListener(_streamListener);
+      _controller =
+          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller?.add(_value);
 
       ///TODO: report to controller dispose
     }
