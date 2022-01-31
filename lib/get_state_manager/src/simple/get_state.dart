@@ -114,7 +114,7 @@ abstract class Bind<T> extends StatelessWidget {
 
   final Widget? child;
 
-  static Bind put<S extends GetxController>(S dependency,
+  static Bind put<S>(S dependency,
       {String? tag,
       bool permanent = false,
       InstanceBuilderCallback<S>? builder}) {
@@ -137,10 +137,8 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind create<S extends GetxController>(
-      InstanceBuilderCallback<S> builder,
-      {String? tag,
-      bool permanent = true}) {
+  static Bind create<S>(InstanceBuilderCallback<S> builder,
+      {String? tag, bool permanent = true}) {
     Get.create<S>(builder, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
       tag: tag,
@@ -581,4 +579,4 @@ class BindError<T> extends Error {
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Binding extends BindingsInterface<Iterable<Bind>> {}
+abstract class Binding extends BindingsInterface<List<Bind>> {}

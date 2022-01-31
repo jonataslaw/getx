@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get.dart';
-import 'parse_route.dart';
 
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   final String initialRoute;

@@ -11,7 +11,7 @@ export 'get_transition_mixin.dart';
 export 'modules.dart';
 export 'observers/route_observer.dart';
 export 'page_settings.dart';
-export 'parse_route.dart';
+export 'parse_route.dart' hide FirstWhereOrNullExt;
 export 'route_middleware.dart';
 export 'route_report.dart';
 export 'router_outlet.dart';

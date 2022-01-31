@@ -79,7 +79,8 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   }
 }
 
-// class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
+// class _RouterOutletState<TDelegate extends RouterDelegate<T>,
+//T extends Object>
 //     extends State<RouterOutlet<TDelegate, T>> {
 //   TDelegate get delegate => context.delegate as TDelegate;
 //   @override

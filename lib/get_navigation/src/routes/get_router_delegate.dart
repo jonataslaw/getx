@@ -7,6 +7,7 @@ import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
+import 'parse_route.dart';
 
 /// Enables the user to customize the intended pop behavior
 ///
@@ -350,7 +351,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       String? routeName,
       bool fullscreenDialog = false,
       dynamic arguments,
-      List<BindingsInterface>? bindings,
+      List<BindingsInterface> bindings = const [],
       bool preventDuplicates = true,
       bool? popGesture,
       bool showCupertinoParallax = true,
@@ -401,7 +402,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
-    List<BindingsInterface>? bindings,
+    List<BindingsInterface> bindings = const [],
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -435,7 +436,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     int? id,
     String? routeName,
     dynamic arguments,
-    List<BindingsInterface>? bindings,
+    List<BindingsInterface> bindings = const [],
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,
@@ -701,6 +702,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       completer: _activePages.isEmpty ? null : Completer(),
       arguments: arguments,
       parameters: parameters,
+      key: ValueKey(arguments.name),
     );
 
     return decoder;

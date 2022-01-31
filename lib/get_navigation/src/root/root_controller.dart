@@ -4,7 +4,7 @@ import '../../../get.dart';
 
 class GetMaterialController extends FullLifeCycleController {
   static GetMaterialController get to => Get.find();
-  
+
   bool testMode = false;
   Key? unikey;
   ThemeData? theme;

@@ -85,7 +85,8 @@ Future<int> stream() {
 //     if (times == v) {
 //       timer.stop();
 //       print(
-//           """$v listeners notified | [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
+// """$v listeners notified |
+// [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
 //       c.complete(timer.elapsedMicroseconds);
 //     }
 //   });
