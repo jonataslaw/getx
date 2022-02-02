@@ -16,7 +16,7 @@ class ProfileView extends GetView<ProfileController> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network(controller.userProfileImage),
+              Obx(() => Image.network("${controller.userProfileImage}")),
               MaterialButton(
                 child: Text(
                   'search champion where yo gradesat !!',
@@ -44,8 +44,6 @@ class ProfileView extends GetView<ProfileController> {
               MaterialButton(
                 child: Obx(() => Text("${controller.myNameAndLevel}")),
                 onPressed: () {
-                  //shows a dialog
-
                   Get.defaultDialog(
                     title: 'Test Dialog In Home Outlet !!',
                     barrierDismissible: true,
@@ -59,13 +57,10 @@ class ProfileView extends GetView<ProfileController> {
                   series: <LineSeries<SalesData, String>>[
                     LineSeries<SalesData, String>(
                       // Bind data source
-                        dataSource: <SalesData>[
-                          SalesData('Jan', 35),
-                          SalesData('Feb', 28),
-                          SalesData('Mar', 34),
-                          SalesData('Apr', 32),
-                          SalesData('May', 40)
-                        ],
+                        dataSource: controller.salesData,
+                        onRendererCreated: (ChartSeriesController ct) {
+                          controller.chartSeriesController = ct;
+                        },
                         xValueMapper: (SalesData sales, _) => sales.year,
                         yValueMapper: (SalesData sales, _) => sales.sales)
                   ]),

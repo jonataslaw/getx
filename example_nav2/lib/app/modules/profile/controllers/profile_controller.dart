@@ -3,33 +3,48 @@ import 'package:dart_lol/LeagueStuff/champions.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
+import 'package:example_nav2/app/modules/profile/views/profile_view.dart';
 import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../services/globals.dart';
 import '../../our_controller.dart';
 
 class ProfileController extends OurController {
-  final myNameAndLevel = "3".obs;
-  String imageUrl = "";
+  ///User update stuff
   final updateText = "Updating hasnt started yet".obs;
+  final myNameAndLevel = "3".obs;
+  /// Summoner stuff
+  RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   late Summoner summoner = Summoner();
   Map<String, int> map1 = {};
   List<String> matchOverviews = <String>[];
   List<String> matchOverviewsToSearch = <String>[];
   Set<Match> matches = {};
-
   final matchItems = <MatchItem>[].obs;
-  var userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg";
-
+  /// Database stuff
   late Champions championsDB;
+
+  /// Chart stuff
+  ChartSeriesController? chartSeriesController;
+
+  var salesData = <SalesData>[
+    SalesData('Jan', 35),
+    SalesData('Feb', 28),
+    SalesData('Mar', 34),
+    SalesData('Apr', 32),
+    SalesData('May', 40)
+  ].obs;
 
   @override
   Future<void> onReady() async {
     super.onReady();
 
     findWhoIAm();
+
+
   }
 
   void searchSummoner() async {
@@ -47,7 +62,15 @@ class ProfileController extends OurController {
       // final allMatches = await league.getAllMatches(summoner.puuid??"");
       // print("We have ${allMatches.length}");
 
-      userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
+      userProfileImage.value = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
+
+
+      salesData.add(SalesData('June', 90));
+
+      //chartSeriesController?.animate();
+      chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
+
+
     } else {
       checkError(summonerResponse);
     }
@@ -81,7 +104,6 @@ class ProfileController extends OurController {
       print("${aatrox?.value.name}");
 
       final aatroxImage = await urlHelper.buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
-      imageUrl = aatroxImage;
       print(aatroxImage);
 
       startSearchingMatches(matchIdToSearch as String);
