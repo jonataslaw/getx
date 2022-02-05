@@ -169,6 +169,8 @@ class ProfileController extends OurController {
       });
       count++;
     });
+    kdaDamageData.removeAt(0);
+
     //print(map1);
     final sortedEntries = map1.entries.toList()
       ..sort((e1, e2) {

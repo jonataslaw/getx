@@ -70,14 +70,16 @@ Column returnColumnLineGraph(ProfileController controller) {
   return Column(children: <Widget>[
     Container(
         child: Obx(() => SfCartesianChart(
-          primaryXAxis: CategoryAxis(),
+          primaryXAxis: CategoryAxis(
+            labelRotation: 45
+          ),
           axes: <ChartAxis>[
             NumericAxis(
                 numberFormat: NumberFormat.compact(),
                 majorGridLines: const MajorGridLines(width: 0),
                 opposedPosition: true,
                 name: 'yAxis1',
-                interval: 100,
+                interval: 500,
                 minimum: 0,
                 maximum: controller.maxDamageToChampions.toDouble())
           ],
