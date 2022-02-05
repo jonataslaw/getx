@@ -1,6 +1,6 @@
 
 import 'package:dart_lol/LeagueStuff/champions.dart';
-import 'package:dart_lol/LeagueStuff/match.dart';
+
 import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/app/modules/profile/views/profile_view.dart';
@@ -18,11 +18,8 @@ class ProfileController extends OurController {
   final myNameAndLevel = "3".obs;
   /// Summoner stuff
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
-  late Summoner summoner = Summoner();
   Map<String, int> map1 = {};
-  List<String> matchOverviews = <String>[];
-  List<String> matchOverviewsToSearch = <String>[];
-  Set<Match> matches = {};
+
   final matchItems = <MatchItem>[].obs;
   /// Database stuff
   late Champions championsDB;
@@ -30,86 +27,61 @@ class ProfileController extends OurController {
   /// Chart stuff
   ChartSeriesController? chartSeriesController;
 
+  // var salesData = <SalesData>[
+  //   SalesData('Jan', 35),
+  //   SalesData('Feb', 28),
+  //   SalesData('Mar', 34),
+  //   SalesData('Apr', 32),
+  //   SalesData('May', 40)
+  // ].obs;
+
   var salesData = <SalesData>[
-    SalesData('Jan', 35),
-    SalesData('Feb', 28),
-    SalesData('Mar', 34),
-    SalesData('Apr', 32),
-    SalesData('May', 40)
+    SalesData('May', 30)
   ].obs;
 
   @override
   Future<void> onReady() async {
     super.onReady();
-
-    findWhoIAm();
-
-
   }
 
   void searchSummoner() async {
     updateText.value = "Searching for champion Where YoGradesAt";
-    var summonerResponse = await league.getSummonerInfo('Where YoGradesAt');
-    print("after getting summoner response");
-    print(summonerResponse);
-    if (summonerResponse.summoner.runtimeType == Summoner) {
-      summoner = summonerResponse.summoner as Summoner;
-      //searchMatchList();
+    await getSummoner(true, 'Where YoGradesAt');
+    userProfileImage.value = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
 
-      final that = await MatchesHelper().returnChampionFromId(3);
-      print(that?.name);
+    //salesData.add(SalesData('May', 30));
+    //chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
+    //chartSeriesController?.updateDataSource(updatedDataIndex: 0);
+    salesData.add(SalesData('June', 90));
+    chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
 
-      // final allMatches = await league.getAllMatches(summoner.puuid??"");
-      // print("We have ${allMatches.length}");
-
-      userProfileImage.value = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Fizz_1.jpg";
-
-
-      salesData.add(SalesData('June', 90));
-
-      //chartSeriesController?.animate();
-      chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
-
-
-    } else {
-      checkError(summonerResponse);
-    }
+    searchMatchHistories();
   }
 
-  void searchMatchList() async {
+  void searchMatchHistories() async {
     updateText.value = "Searching match histories";
-    //final tempMatchOverviews = await league.getMatchesFromDb("${summoner.puuid}", allMatches: false);
-    final tempMatchOverviews = await league.getMatches("${summoner.puuid}", start: 0, count: 100);
+    await getMatchHistories(true, "${summoner?.puuid}", allMatches: false, fallbackAPI: true, start: 0, count: 25);
+    print("Finished getting ${matchOverviews?.length} matches");
 
-    tempMatchOverviews.matchOverviews?.forEach((element) {
-      matchOverviews.add(element as String);
-    });
+    matchOverviewsToSearch?.addAll(matchOverviews?.take(25)??<String>[]);
+    final matchIdToSearch = matchOverviewsToSearch?.first;
+    matchOverviewsToSearch?.remove(matchIdToSearch);
 
-    print("Finished getting ${matchOverviews.length} matches");
-    if (matchOverviews.length > 0) {
-      matchOverviewsToSearch.addAll(matchOverviews);
-      final matchIdToSearch = matchOverviewsToSearch.first;
-      matchOverviewsToSearch.remove(matchIdToSearch);
-      matches.clear();
+    final whoKnows = await dDragonStorage.getVersionFromDb();
+    final lastUpdated = dDragonStorage.getVersionsLastUpdated();
+    print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
+    print(whoKnows);
 
-      final whoKnows = await dDragonStorage.getVersionFromDb();
-      final lastUpdated = dDragonStorage.getVersionsLastUpdated();
-      print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
-      print(whoKnows);
+    championsDB = await dDragonStorage.getChampionsFromDb();
+    print(championsDB.version);
 
-      championsDB = await dDragonStorage.getChampionsFromDb();
-      print(championsDB.version);
+    final aatrox = championsDB.data?.entries.firstWhere((element) => element.value.name == "Aatrox");
+    print("${aatrox?.value.name}");
 
-      final aatrox = championsDB.data?.entries.firstWhere((element) => element.value.name == "Aatrox");
-      print("${aatrox?.value.name}");
+    final aatroxImage = await urlHelper.buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
+    print(aatroxImage);
 
-      final aatroxImage = await urlHelper.buildChampionImage(aatrox?.value.image?.full??"Aatrox.png");
-      print(aatroxImage);
-
-      startSearchingMatches(matchIdToSearch as String);
-    }else {
-      print("we dont have enough matches");
-    }
+    startSearchingMatches(matchIdToSearch as String);
   }
 
   void startSearchingMatches(String matchId) async {
@@ -117,15 +89,16 @@ class ProfileController extends OurController {
     var leagueResponse = await league.getMatch(matchId, fallbackAPI: true);
     if (leagueResponse.match != null) {
       matches.add(leagueResponse.match!);
-      if (matchOverviewsToSearch.isNotEmpty) {
-        final matchIdToSearch = matchOverviewsToSearch.removeLast();
-        print("There are ${matchOverviewsToSearch.length} left to search");
+      if (matchOverviewsToSearch?.isNotEmpty == true) {
+        final matchIdToSearch = matchOverviewsToSearch?.removeLast();
+        print("There are ${matchOverviewsToSearch?.length} left to search");
         startSearchingMatches(matchIdToSearch as String);
       } else {
         print("We've reached the end of the list");
         myNameAndLevel.value = "Done, there are ${matches.length} matches";
         Get.snackbar("Finished Searching all matches",
             "There should be ${matches.length}");
+        updateText.value = "Finished searching ${matches.length} matches";
         findWhoIAm();
       }
     } else {
@@ -142,7 +115,7 @@ class ProfileController extends OurController {
         } else {
           map1.putIfAbsent(p.summonerName ?? "", () => 1);
         }
-        if (p.puuid == summoner.puuid) {
+        if (p.puuid == summoner?.puuid) {
           print("We had ${p.kills} kills");
           final mChampionId = p.championId;
           final mChamion = championsDB.data?.entries.firstWhere((element) => element.value.key == "${mChampionId}");

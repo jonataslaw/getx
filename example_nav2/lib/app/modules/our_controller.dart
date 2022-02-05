@@ -1,4 +1,6 @@
 import 'package:dart_lol/LeagueStuff/responses/league_response.dart';
+import 'package:dart_lol/LeagueStuff/summoner.dart';
+import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/ddragon_storage.dart';
 import 'package:dart_lol/helper/url_helper.dart';
 import 'package:get/get.dart';
@@ -6,17 +8,59 @@ import 'package:get/get.dart';
 import '../../services/globals.dart';
 
 class OurController extends GetxController {
-
+  /// Storage
   DDragonStorage dDragonStorage = league.dDragonStorage;
   UrlHelper urlHelper = league.urlHelper;
+
+  /// League Stuff
+  Summoner? summoner = Summoner();
+  List<String>? matchOverviews = <String>[];
+  List<String>? matchOverviewsToSearch = <String>[];
+  Set<Match> matches = {};
 
   @override
   void onReady() {
     super.onReady();
   }
 
-  void checkError(LeagueResponse leagueResponse) {
-    print("Checking error with default dialog");
-    Get.defaultDialog(title: "${leagueResponse.responseCode}");
+  Future<Summoner?> getSummoner(bool fromAPI, String summonerName) async{
+    if(fromAPI) {
+      final leagueResponse = await league.getSummonerFromAPI(summonerName);
+      if(leagueResponse.summoner == null) {
+        checkError(leagueResponse);
+      } else {
+        summoner = leagueResponse.summoner;
+        return leagueResponse.summoner;
+      }
+    }else {
+      final leagueResponse = await league.getSummonerFromDb(summonerName, false);
+      if(leagueResponse?.summoner == null) {
+        checkError(leagueResponse);
+      } else {
+        summoner = leagueResponse?.summoner;
+        return leagueResponse?.summoner;
+      }
+    }
+  }
+
+  Future<List<String>?> getMatchHistories(bool fromAPI, String puuid, {int start = 0, int count = 100, bool allMatches = true, bool fallbackAPI = false}) async {
+    if(fromAPI) {
+      final leagueResponse = await league.getMatchesFromAPI(puuid, start: start, count: count);
+      matchOverviews = leagueResponse.matchOverviews;
+      return matchOverviews;
+    }else {
+      final leagueResponse = await league.getMatchesFromDb(puuid, start: start, count: count, allMatches: allMatches, fallBackAPI: fallbackAPI);
+      matchOverviews = leagueResponse.matchOverviews;
+      return matchOverviews;
+    }
+  }
+
+  Future<LeagueResponse?> getMatch(String matchId) async {
+    return await league.getMatch(matchId);
+  }
+
+  void checkError(LeagueResponse? leagueResponse) {
+    print("error here");
+    Get.defaultDialog(title: "Error from Riot API", middleText: "${leagueResponse?.responseCode}");
   }
 }

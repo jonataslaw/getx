@@ -1,13 +1,10 @@
-
-
-
 import 'package:dart_lol/LeagueStuff/champions.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/ddragon_storage.dart';
 import 'package:example_nav2/models/matches_seen_champion.dart';
 import 'package:example_nav2/services/globals.dart';
 
-class MatchesHelper {
+class LeagueHelper {
 
   DDragonStorage dDragonStorage = league.dDragonStorage;
 
