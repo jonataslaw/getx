@@ -3,11 +3,15 @@ import 'package:dart_lol/LeagueStuff/summoner.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/ddragon_storage.dart';
 import 'package:dart_lol/helper/url_helper.dart';
+import 'package:example_nav2/helpers/number_formatter.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../services/globals.dart';
 
 class OurController extends GetxController {
+  /// Service Init
+  var myNyumberFormatter = GetIt.instance<MyNumberFormatter>();
   /// Storage
   DDragonStorage dDragonStorage = league.dDragonStorage;
   UrlHelper urlHelper = league.urlHelper;

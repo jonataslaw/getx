@@ -149,11 +149,11 @@ class ProfileController extends OurController {
 
           final image = await urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
           /// Add data to graph and listview
-          NumberFormat numberFormat = NumberFormat("#,##0", "en_US");
+
           matchItems.add(MatchItem(
               imageUrl: image,
               championName: "${mChamion?.value.name}",
-              damageDealtToChampions: numberFormat.format(damageToChampions),
+              damageDealtToChampions: myNyumberFormatter.returnThousandsWithComma(damageToChampions),
               gameDuration: element.info?.gameDuration??0,
               kda: "$kda KDA",
               timeAgo: "$timeAgo"));
