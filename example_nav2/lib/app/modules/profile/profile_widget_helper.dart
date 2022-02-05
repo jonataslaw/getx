@@ -132,6 +132,24 @@ SfCartesianChart returnColumnChart(ProfileController controller) {
   );
 }
 
+SfCartesianChart returnColumnChartMostPlayedWithFriend(ProfileController controller) {
+  return SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      series: <CartesianSeries>[
+        ColumnSeries<KDAData, String>(
+            dataSource: controller.friendsData,
+            onRendererCreated: (ChartSeriesController ct) {
+              controller.friendsColumnController = ct;
+            },
+            xValueMapper: (KDAData data, _) => data.champion,
+            yValueMapper: (KDAData data, _) => data.kda,
+            // Duration of series animation
+            animationDuration: 1000
+        )
+      ]
+  );
+}
+
 
 ListView returnListView(ProfileController controller) {
   return ListView.builder(

@@ -20,7 +20,7 @@ class ProfileController extends OurController {
   final myNameAndLevel = "3".obs;
   /// Summoner stuff
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
-  Map<String, int> map1 = {};
+  Map<String, int> mapOfMostPlayedWithFriends = {};
 
   final matchItems = <MatchItem>[].obs;
   /// Database stuff
@@ -30,6 +30,7 @@ class ProfileController extends OurController {
   ChartSeriesController? chartSeriesController;
   ChartSeriesController? kdaColumnController;
   ChartSeriesController? damageLineController;
+  ChartSeriesController? friendsColumnController;
   Labeler labeler = Labeler();
 
   // final List<ChartData> chartData = <ChartData>[
@@ -47,6 +48,10 @@ class ProfileController extends OurController {
 
   var kdaData = <KDAData>[
     KDAData('Filler', 0.0)
+  ].obs;
+
+  var friendsData = <KDAData>[
+    KDAData("Imaginatis", 0.0),
   ].obs;
 
   @override
@@ -118,14 +123,16 @@ class ProfileController extends OurController {
 
   var maxDamageToChampions = 0.obs;
   void findWhoIAm() {
-    map1.clear();
+    mapOfMostPlayedWithFriends.clear();
     var count = 0;
     matches.forEach((element) {
       element.info?.participants?.forEach((p) async {
-        if (map1.containsKey(p.summonerName)) {
-          map1.update(p.summonerName ?? "", (value) => value + 1);
+        if (mapOfMostPlayedWithFriends.containsKey(p.summonerName)) {
+          mapOfMostPlayedWithFriends.update(p.summonerName ?? "", (value) => value + 1);
         } else {
-          map1.putIfAbsent(p.summonerName ?? "", () => 1);
+          if(p.summonerName != summoner?.name) {
+            mapOfMostPlayedWithFriends.putIfAbsent(p.summonerName ?? "", () => 1);
+          }
         }
         if (p.puuid == summoner?.puuid) {
           print("We had ${p.kills} kills");
@@ -172,14 +179,21 @@ class ProfileController extends OurController {
     kdaDamageData.removeAt(0);
 
     //print(map1);
-    final sortedEntries = map1.entries.toList()
+    final sortedEntries = mapOfMostPlayedWithFriends.entries.toList()
       ..sort((e1, e2) {
         var diff = e2.value.compareTo(e1.value);
         if (diff == 0) diff = e2.key.compareTo(e1.key);
         return diff;
       });
 
+    final that = sortedEntries.take(5);
     print(sortedEntries);
+    that.forEach((element) {
+      print("adding ${element.key} (${element.value})");
+      friendsData.add(KDAData(element.key, element.value.toDouble()));
+      friendsColumnController?.updateDataSource(addedDataIndex: friendsData.length - 1);
+    });
+    friendsData.removeAt(0);
 
     _findMyMostRecentGame();
   }

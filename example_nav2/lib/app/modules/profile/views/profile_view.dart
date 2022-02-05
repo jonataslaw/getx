@@ -55,6 +55,21 @@ class ProfileView extends GetView<ProfileController> {
                 },
               ),
               returnColumnLineGraph(controller),
+              const Divider(
+                height: 20,
+                thickness: 2,
+                indent: 20,
+                endIndent: 0,
+                color: Colors.blue,
+              ),
+              returnColumnChartMostPlayedWithFriend(controller),
+              const Divider(
+                height: 20,
+                thickness: 2,
+                indent: 20,
+                endIndent: 0,
+                color: Colors.blue,
+              ),
               Obx(() => returnListView(controller))
             ],
           ),
