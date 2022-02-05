@@ -1,3 +1,4 @@
+import 'package:example_nav2/app/modules/profile/profile_widget_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -16,7 +17,9 @@ class ProfileView extends GetView<ProfileController> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Obx(() => Image.network("${controller.userProfileImage}")),
+              Obx(() => Image.network("${controller.userProfileImage}",
+                height: MediaQuery.of(context).size.height * 0.65,
+                width: MediaQuery.of(context).size.width,)),
               MaterialButton(
                 child: Text(
                   'search champion where yo gradesat !!',
@@ -51,36 +54,8 @@ class ProfileView extends GetView<ProfileController> {
                   );
                 },
               ),
-              SfCartesianChart(
-                // Initialize category axis
-                  primaryXAxis: CategoryAxis(),
-                  series: <LineSeries<SalesData, String>>[
-                    LineSeries<SalesData, String>(
-                      // Bind data source
-                        dataSource: controller.salesData,
-                        onRendererCreated: (ChartSeriesController ct) {
-                          controller.chartSeriesController = ct;
-                        },
-                        xValueMapper: (SalesData sales, _) => sales.year,
-                        yValueMapper: (SalesData sales, _) => sales.sales)
-                  ]),
-                  Obx(() => ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: controller.matchItems.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.matchItems[index];
-                        return ListTile(
-                          onTap: () {
-                            Get.rootDelegate.toNamed(Routes.SETTINGS);
-                          },
-                          title: Text(item.kda),
-                          tileColor: Colors.red,
-                          subtitle: Text(item.timeAgo),
-                          leading: Image.network(item.imageUrl),
-                        );
-                      })
-              )
+              returnColumnLineGraph(controller),
+              Obx(() => returnListView(controller))
             ],
           ),
       ),
@@ -88,8 +63,8 @@ class ProfileView extends GetView<ProfileController> {
   }
 }
 
-class SalesData {
-  SalesData(this.year, this.sales);
-  final String year;
-  final double sales;
+class KDAData {
+  KDAData(this.champion, this.kda);
+  final String champion;
+  final double kda;
 }

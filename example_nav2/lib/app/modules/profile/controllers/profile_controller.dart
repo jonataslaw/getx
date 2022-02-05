@@ -8,9 +8,11 @@ import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import "package:intl/intl.dart";
 
 import '../../../../services/globals.dart';
 import '../../our_controller.dart';
+import '../profile_widget_helper.dart';
 
 class ProfileController extends OurController {
   ///User update stuff
@@ -26,17 +28,25 @@ class ProfileController extends OurController {
 
   /// Chart stuff
   ChartSeriesController? chartSeriesController;
+  ChartSeriesController? kdaColumnController;
+  ChartSeriesController? damageLineController;
+  Labeler labeler = Labeler();
 
-  // var salesData = <SalesData>[
-  //   SalesData('Jan', 35),
-  //   SalesData('Feb', 28),
-  //   SalesData('Mar', 34),
-  //   SalesData('Apr', 32),
-  //   SalesData('May', 40)
+  // final List<ChartData> chartData = <ChartData>[
+  //   ChartData(x: 'Jan', yValue1: 45, yValue2: 1000),
+  //   ChartData(x: 'Feb', yValue1: 100, yValue2: 3000),
+  //   ChartData(x: 'March', yValue1: 25, yValue2: 1000),
+  //   ChartData(x: 'April', yValue1: 100, yValue2: 7000),
+  //   ChartData(x: 'May', yValue1: 85, yValue2: 5000),
+  //   ChartData(x: 'June', yValue1: 140, yValue2: 7000)
   // ].obs;
 
-  var salesData = <SalesData>[
-    SalesData('May', 30)
+  final List<ChartData> kdaDamageData = <ChartData>[
+    ChartData(x: 'Jan', yValue1: 0, yValue2: 0),
+  ].obs;
+
+  var kdaData = <KDAData>[
+    KDAData('Filler', 0.0)
   ].obs;
 
   @override
@@ -52,8 +62,8 @@ class ProfileController extends OurController {
     //salesData.add(SalesData('May', 30));
     //chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
     //chartSeriesController?.updateDataSource(updatedDataIndex: 0);
-    salesData.add(SalesData('June', 90));
-    chartSeriesController?.updateDataSource(addedDataIndex: salesData.length - 1);
+    // kdaData.add(KDAData('June', 90));
+    // chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
     searchMatchHistories();
   }
@@ -106,8 +116,10 @@ class ProfileController extends OurController {
     }
   }
 
+  var maxDamageToChampions = 0.obs;
   void findWhoIAm() {
     map1.clear();
+    var count = 0;
     matches.forEach((element) {
       element.info?.participants?.forEach((p) async {
         if (map1.containsKey(p.summonerName)) {
@@ -130,10 +142,32 @@ class ProfileController extends OurController {
           final kda = ((kills + assists) / deaths).toStringAsFixed(2);
           final timeAgo = timeago.format(DateTime.fromMillisecondsSinceEpoch(element.info?.gameCreation??DateTime.now().millisecondsSinceEpoch));
 
+          final damageToChampions = p.totalDamageDealtToChampions??0;
+          if(damageToChampions > maxDamageToChampions.value) {
+            maxDamageToChampions.value = damageToChampions;
+          }
+
           final image = await urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
-          matchItems.add(MatchItem(imageUrl: image, kda: "$kda KDA", timeAgo: "$timeAgo"));
+          /// Add data to graph and listview
+          NumberFormat numberFormat = NumberFormat("#,##0", "en_US");
+          matchItems.add(MatchItem(
+              imageUrl: image,
+              championName: "${mChamion?.value.name}",
+              damageDealtToChampions: numberFormat.format(damageToChampions),
+              gameDuration: element.info?.gameDuration??0,
+              kda: "$kda KDA",
+              timeAgo: "$timeAgo"));
+
+          kdaData.add(KDAData("${mChamion?.value.name}", double.parse(kda)));
+          chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
+
+          final that = labeler.call("${mChamion?.value.name}", count);
+          kdaDamageData.add(ChartData(x: '$that', yValue1: double.parse(kda), yValue2: damageToChampions.toDouble()));
+          kdaColumnController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
+          damageLineController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
         }
       });
+      count++;
     });
     //print(map1);
     final sortedEntries = map1.entries.toList()
@@ -159,5 +193,16 @@ class ProfileController extends OurController {
       final that = now.subtract(difference);
       print(timeago.format(that) + " ${element.info?.gameCreation} for ${element.metadata?.matchId}");
     }
+  }
+}
+
+
+class Labeler {
+  final existingLabels = <String>[];
+
+  String call(String championName, int index) {
+    int existingCount = existingLabels.where((element) => element == championName).length;
+    existingLabels.add(championName);
+    return ' ' * existingCount + championName + ' ' * existingCount;
   }
 }
