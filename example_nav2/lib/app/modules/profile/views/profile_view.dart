@@ -70,6 +70,14 @@ class ProfileView extends GetView<ProfileController> {
                 endIndent: 0,
                 color: Colors.blue,
               ),
+              returnColumnChartMostPlayedChampions(controller),
+              const Divider(
+                height: 20,
+                thickness: 2,
+                indent: 20,
+                endIndent: 0,
+                color: Colors.blue,
+              ),
               Obx(() => returnListView(controller))
             ],
           ),

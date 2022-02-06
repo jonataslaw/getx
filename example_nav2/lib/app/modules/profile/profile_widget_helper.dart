@@ -132,6 +132,24 @@ SfCartesianChart returnColumnChart(ProfileController controller) {
   );
 }
 
+SfCartesianChart returnColumnChartMostPlayedChampions(ProfileController controller) {
+  return SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      series: <CartesianSeries>[
+        ColumnSeries<KDAData, String>(
+            dataSource: controller.mostPlayedChampionsData,
+            onRendererCreated: (ChartSeriesController ct) {
+              controller.mostPlayedChampionsColumnController = ct;
+            },
+            xValueMapper: (KDAData data, _) => data.champion,
+            yValueMapper: (KDAData data, _) => data.kda,
+            // Duration of series animation
+            animationDuration: 1000
+        )
+      ]
+  );
+}
+
 SfCartesianChart returnColumnChartMostPlayedWithFriend(ProfileController controller) {
   return SfCartesianChart(
       primaryXAxis: CategoryAxis(),

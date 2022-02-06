@@ -21,6 +21,7 @@ class ProfileController extends OurController {
   /// Summoner stuff
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   Map<String, int> mapOfMostPlayedWithFriends = {};
+  Map<String, int> mapOfMostPlayedChampions = {};
 
   final matchItems = <MatchItem>[].obs;
   /// Database stuff
@@ -31,6 +32,7 @@ class ProfileController extends OurController {
   ChartSeriesController? kdaColumnController;
   ChartSeriesController? damageLineController;
   ChartSeriesController? friendsColumnController;
+  ChartSeriesController? mostPlayedChampionsColumnController;
   Labeler labeler = Labeler();
 
   // final List<ChartData> chartData = <ChartData>[
@@ -54,6 +56,10 @@ class ProfileController extends OurController {
     KDAData("Imaginatis", 0.0),
   ].obs;
 
+  var mostPlayedChampionsData = <KDAData>[
+    KDAData("MF", 0.0),
+  ].obs;
+
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -75,10 +81,10 @@ class ProfileController extends OurController {
 
   void searchMatchHistories() async {
     updateText.value = "Searching match histories";
-    await getMatchHistories(true, "${summoner?.puuid}", allMatches: false, fallbackAPI: true, start: 0, count: 25);
+    await getMatchHistories(true, "${summoner?.puuid}", allMatches: false, fallbackAPI: true, start: 0, count: 100);
     print("Finished getting ${matchOverviews?.length} matches");
 
-    matchOverviewsToSearch?.addAll(matchOverviews?.take(25)??<String>[]);
+    matchOverviewsToSearch?.addAll(matchOverviews?.take(50)??<String>[]);
     final matchIdToSearch = matchOverviewsToSearch?.first;
     matchOverviewsToSearch?.remove(matchIdToSearch);
 
@@ -135,6 +141,13 @@ class ProfileController extends OurController {
           }
         }
         if (p.puuid == summoner?.puuid) {
+          /// Most played champions
+          if (mapOfMostPlayedChampions.containsKey(p.championName)) {
+            mapOfMostPlayedChampions.update(p.championName ?? "", (value) => value + 1);
+          } else {
+            mapOfMostPlayedChampions.putIfAbsent(p.championName ?? "", () => 1);
+          }
+
           print("We had ${p.kills} kills");
           final mChampionId = p.championId;
           final mChamion = championsDB.data?.entries.firstWhere((element) => element.value.key == "${mChampionId}");
@@ -178,22 +191,36 @@ class ProfileController extends OurController {
     });
     kdaDamageData.removeAt(0);
 
-    //print(map1);
-    final sortedEntries = mapOfMostPlayedWithFriends.entries.toList()
+    /// Find my most played with friends
+    final sortedFriendsList = mapOfMostPlayedWithFriends.entries.toList()
       ..sort((e1, e2) {
         var diff = e2.value.compareTo(e1.value);
         if (diff == 0) diff = e2.key.compareTo(e1.key);
         return diff;
       });
 
-    final that = sortedEntries.take(5);
-    print(sortedEntries);
-    that.forEach((element) {
-      print("adding ${element.key} (${element.value})");
+    final topFiveFriends = sortedFriendsList.take(5);
+    print(sortedFriendsList);
+    topFiveFriends.forEach((element) {
       friendsData.add(KDAData(element.key, element.value.toDouble()));
       friendsColumnController?.updateDataSource(addedDataIndex: friendsData.length - 1);
     });
     friendsData.removeAt(0);
+
+    /// Find my most played chamions
+    final sortedChampions = mapOfMostPlayedChampions.entries.toList()
+      ..sort((e1, e2) {
+        var diff = e2.value.compareTo(e1.value);
+        if (diff == 0) diff = e2.key.compareTo(e1.key);
+        return diff;
+      });
+
+    final topFiveChampions = sortedChampions.take(5);
+    topFiveChampions.forEach((element) {
+      mostPlayedChampionsData.add(KDAData(element.key, element.value.toDouble()));
+      mostPlayedChampionsColumnController?.updateDataSource(addedDataIndex: mostPlayedChampionsData.length - 1);
+    });
+    mostPlayedChampionsData.removeAt(0);
 
     _findMyMostRecentGame();
   }
