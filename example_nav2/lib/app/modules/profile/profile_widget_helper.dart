@@ -138,6 +138,10 @@ SfCartesianChart returnColumnChartMostPlayedChampions(ProfileController controll
       series: <CartesianSeries>[
         ColumnSeries<KDAData, String>(
             dataSource: controller.mostPlayedChampionsData,
+            dataLabelSettings: DataLabelSettings(isVisible: true),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)),
             onRendererCreated: (ChartSeriesController ct) {
               controller.mostPlayedChampionsColumnController = ct;
             },
@@ -156,6 +160,11 @@ SfCartesianChart returnColumnChartMostPlayedWithFriend(ProfileController control
       series: <CartesianSeries>[
         ColumnSeries<KDAData, String>(
             dataSource: controller.friendsData,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)),
+            enableTooltip: true,
+            dataLabelSettings: DataLabelSettings(isVisible: true),
             onRendererCreated: (ChartSeriesController ct) {
               controller.friendsColumnController = ct;
             },
