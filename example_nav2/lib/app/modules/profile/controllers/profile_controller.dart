@@ -76,7 +76,10 @@ class ProfileController extends OurController {
     // kdaData.add(KDAData('June', 90));
     // chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
-    searchMatchHistories();
+    final that = await league.getChallengerLeagueFromAPI();
+    print(that?[0]?.summonerName);
+
+    //searchMatchHistories();
   }
 
   void searchMatchHistories() async {
