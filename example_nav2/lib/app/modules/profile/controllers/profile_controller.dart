@@ -80,6 +80,9 @@ class ProfileController extends OurController {
     final that = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
     print(that?[0]?.summonerName);
 
+    final whoKnows = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
+    print(whoKnows);
+
     //searchMatchHistories();
   }
 
