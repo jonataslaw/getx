@@ -2,6 +2,7 @@
 import 'package:dart_lol/LeagueStuff/champions.dart';
 
 import 'package:dart_lol/LeagueStuff/summoner.dart';
+import 'package:dart_lol/dart_lol_api.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/app/modules/profile/views/profile_view.dart';
 import 'package:example_nav2/models/match_item.dart';
@@ -76,7 +77,7 @@ class ProfileController extends OurController {
     // kdaData.add(KDAData('June', 90));
     // chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
-    final that = await league.getChallengerLeagueFromAPI();
+    final that = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
     print(that?[0]?.summonerName);
 
     //searchMatchHistories();
