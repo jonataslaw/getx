@@ -25,6 +25,7 @@ class OurController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    print("id");
   }
 
   Future<Summoner?> getSummoner(bool fromAPI, String summonerName) async{

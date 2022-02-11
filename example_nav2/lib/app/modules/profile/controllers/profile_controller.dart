@@ -35,16 +35,7 @@ class ProfileController extends OurController {
   ChartSeriesController? friendsColumnController;
   ChartSeriesController? mostPlayedChampionsColumnController;
   Labeler labeler = Labeler();
-
-  // final List<ChartData> chartData = <ChartData>[
-  //   ChartData(x: 'Jan', yValue1: 45, yValue2: 1000),
-  //   ChartData(x: 'Feb', yValue1: 100, yValue2: 3000),
-  //   ChartData(x: 'March', yValue1: 25, yValue2: 1000),
-  //   ChartData(x: 'April', yValue1: 100, yValue2: 7000),
-  //   ChartData(x: 'May', yValue1: 85, yValue2: 5000),
-  //   ChartData(x: 'June', yValue1: 140, yValue2: 7000)
-  // ].obs;
-
+  
   final List<ChartData> kdaDamageData = <ChartData>[
     ChartData(x: 'Jan', yValue1: 0, yValue2: 0),
   ].obs;
