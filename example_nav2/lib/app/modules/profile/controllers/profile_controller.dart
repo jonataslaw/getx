@@ -237,7 +237,6 @@ class ProfileController extends OurController {
   }
 }
 
-
 class Labeler {
   final existingLabels = <String>[];
 

@@ -9,11 +9,31 @@ import '../../our_controller.dart';
 class DashboardController extends GetxController {
 
   final now = DateTime.now().obs;
+  RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   final challengerPlayers = <LeagueEntryDto>[].obs;
+
+
+  var queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
+  List <String> queuesItems = [
+    '${QueuesHelper.getValue(Queue.RANKED_SOLO_5X5)}',
+    '${QueuesHelper.getValue(Queue.RANKED_FLEX_SR)}',
+  ];
+
+  var tiersDropdownValue = TiersHelper.getValue(Tier.CHALLENGER).obs;
+  List <String> tiersItems = [
+    '${TiersHelper.getValue(Tier.CHALLENGER)}',
+    '${TiersHelper.getValue(Tier.GRANDMASTER)}',
+    '${TiersHelper.getValue(Tier.MASTER)}',
+    '${TiersHelper.getValue(Tier.DIAMOND)}',
+    '${TiersHelper.getValue(Tier.PLATINUM)}',
+    '${TiersHelper.getValue(Tier.GOLD)}',
+    '${TiersHelper.getValue(Tier.SILVER)}',
+    '${TiersHelper.getValue(Tier.BRONZE)}',
+    '${TiersHelper.getValue(Tier.IRON)}',
+  ];
 
   @override
   Future<void> onReady() async {
-    print('finished');
     getSomething();
     super.onReady();
   }
@@ -21,6 +41,7 @@ class DashboardController extends GetxController {
   Future<void> getSomething() async {
     final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
     print(rankedChallengerPlayers?[0]?.summonerName);
+
     final that = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
     challengerPlayers.addAll(that);
   }
