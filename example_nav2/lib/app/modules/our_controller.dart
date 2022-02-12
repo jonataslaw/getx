@@ -28,7 +28,7 @@ class OurController extends GetxController {
     print("id");
   }
 
-  Future<Summoner?> getSummoner(bool fromAPI, String summonerName) async{
+  Future<Summoner?> getSummoner(bool fromAPI, String summonerName, {bool fallbackAPI: true}) async {
     if(fromAPI) {
       final leagueResponse = await league.getSummonerFromAPI(summonerName);
       if(leagueResponse.summoner == null) {
@@ -38,7 +38,7 @@ class OurController extends GetxController {
         return leagueResponse.summoner;
       }
     }else {
-      final leagueResponse = await league.getSummonerFromDb(summonerName, false);
+      final leagueResponse = await league.getSummonerFromDb(summonerName, fallbackAPI);
       if(leagueResponse?.summoner == null) {
         checkError(leagueResponse);
       } else {

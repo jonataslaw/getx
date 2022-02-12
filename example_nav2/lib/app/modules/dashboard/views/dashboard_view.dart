@@ -14,11 +14,49 @@ class DashboardView extends GetView<DashboardController> {
           Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                buildRankedSelectionTool(controller),
+                Container(
+                  margin: EdgeInsets.fromLTRB(12.0, 0, 20.0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      buildRankedSelectionTool(controller),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: const Image(
+                              height: 100.0,
+                              width: 100.0,
+                              image: AssetImage('assets/fizz.jpeg')),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(60.0, 0, 20.0, 0),
+                  child: Row(
+                    children: [
+                      Expanded(child: TextFormField(
+                        onChanged: (text) {
+                          controller.rankedPlayerFilterText.value = text;
+                        },
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Enter your summoner name',
+                        ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20.0),
                   height: 200.0,
-                  child: returnHorizontalChallengerListView(controller))
+                  child: returnHorizontalChallengerListView(controller)),
+
                 ]
           )
         ))

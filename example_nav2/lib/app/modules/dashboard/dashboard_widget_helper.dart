@@ -1,5 +1,6 @@
 
 import 'package:dart_lol/dart_lol_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -19,13 +20,27 @@ SizedBox returnHorizontalChallengerListView(DashboardController controller) {
           //find most played champion
           //find color of that champion
           //find opposite color for the text color
-          return _buildTiersDropdown(color: Colors.orange, controller: controller, index: index);
+          return _buildChampionHorizontalList(color: Colors.orange, controller: controller, index: index);
         },
       ),
   );
 }
 
-Widget _buildTiersDropdown({required Color color, required DashboardController controller, required int index}) {
+Widget _buildChampionHorizontalList({required Color color, required DashboardController controller, required int index}) {
+  print("$index");
+
+  ///get summoner
+  ///get matches
+  ///get last 5 matches
+  // final rankedPlayer = controller.challengerPlayers[index];
+  // final s = await controller.getSummoner(false, rankedPlayer.summonerName??"");
+  // final matchHistories = await controller.getMatchHistories(false, s?.puuid??"");
+  // final myMathces = [];
+  // matchHistories?.take(5).forEach((element) {
+  //   final m = controller.getMatch(element);
+  //   myMathces.add(m);
+  // });
+
   return Container(
       margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
   Column(
@@ -42,16 +57,44 @@ Widget _buildTiersDropdown({required Color color, required DashboardController c
 
 Widget buildRankedSelectionTool(DashboardController controller) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
     children: [
+      /// Tiers
+      Container(
+        margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+        child: DropdownButton<String>(
+          value: controller.tiersDropdownValue.value,
+          icon: Icon(Icons.arrow_drop_down),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: Colors.red, fontSize: 18),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (String? data) {
+            print(data);
+            controller.tiersDropdownValue.value = data??TiersHelper.getValue(Tier.CHALLENGER);
+          },
+          items: controller.tiersItems.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ),
+
       ///Queues
-      DropdownButton<String>(
+      Container(
+      margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+      child: DropdownButton<String>(
         value: controller.queuesDropdownValue.value,
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
         style: TextStyle(color: Colors.red, fontSize: 18),
         underline: Container(
-          margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
           height: 2,
           color: Colors.deepPurpleAccent,
         ),
@@ -65,10 +108,12 @@ Widget buildRankedSelectionTool(DashboardController controller) {
             child: Text(value),
           );
         }).toList(),
-      ),
-      /// Tiers
-      DropdownButton<String>(
-        value: controller.tiersDropdownValue.value,
+      )),
+      ///Division
+      Container(
+      margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+      child: DropdownButton<String>(
+        value: controller.divisionsDropdownValue.value,
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
@@ -79,17 +124,17 @@ Widget buildRankedSelectionTool(DashboardController controller) {
         ),
         onChanged: (String? data) {
           print(data);
-          controller.tiersDropdownValue.value = data??TiersHelper.getValue(Tier.CHALLENGER);
+          controller.divisionsDropdownValue.value = data??DivisionsHelper.getValue(Division.I);
         },
-        items: controller.tiersItems.map<DropdownMenuItem<String>>((String value) {
+        items: controller.divisionsItems.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
           );
         }).toList(),
-      ),
+      )),
 
-      ///
+
     ],
   );
 }

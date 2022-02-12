@@ -6,20 +6,21 @@ import 'package:get/get.dart';
 import '../../../../services/globals.dart';
 import '../../our_controller.dart';
 
-class DashboardController extends GetxController {
+class DashboardController extends OurController {
 
   final now = DateTime.now().obs;
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   final challengerPlayers = <LeagueEntryDto>[].obs;
 
+  var rankedPlayerFilterText = "nadaa".obs;
 
-  var queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
+  RxString queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
   List <String> queuesItems = [
     '${QueuesHelper.getValue(Queue.RANKED_SOLO_5X5)}',
     '${QueuesHelper.getValue(Queue.RANKED_FLEX_SR)}',
   ];
 
-  var tiersDropdownValue = TiersHelper.getValue(Tier.CHALLENGER).obs;
+  RxString tiersDropdownValue = TiersHelper.getValue(Tier.CHALLENGER).obs;
   List <String> tiersItems = [
     '${TiersHelper.getValue(Tier.CHALLENGER)}',
     '${TiersHelper.getValue(Tier.GRANDMASTER)}',
@@ -30,6 +31,14 @@ class DashboardController extends GetxController {
     '${TiersHelper.getValue(Tier.SILVER)}',
     '${TiersHelper.getValue(Tier.BRONZE)}',
     '${TiersHelper.getValue(Tier.IRON)}',
+  ];
+
+  RxString divisionsDropdownValue = DivisionsHelper.getValue(Division.I).obs;
+  List <String> divisionsItems = [
+    '${DivisionsHelper.getValue(Division.I)}',
+    '${DivisionsHelper.getValue(Division.II)}',
+    '${DivisionsHelper.getValue(Division.III)}',
+    '${DivisionsHelper.getValue(Division.IV)}',
   ];
 
   @override
