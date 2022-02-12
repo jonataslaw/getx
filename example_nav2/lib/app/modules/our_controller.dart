@@ -49,6 +49,7 @@ class OurController extends GetxController {
   }
 
   Future<List<String>?> getMatchHistories(bool fromAPI, String puuid, {int start = 0, int count = 100, bool allMatches = true, bool fallbackAPI = false}) async {
+    print("getting match history for ${puuid}");
     if(fromAPI) {
       final leagueResponse = await league.getMatchesFromAPI(puuid, start: start, count: count);
       matchOverviews = leagueResponse.matchOverviews;

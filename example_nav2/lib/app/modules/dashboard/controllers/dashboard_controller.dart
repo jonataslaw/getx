@@ -1,6 +1,8 @@
 
 import 'package:dart_lol/LeagueStuff/league_entry_dto.dart';
+import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
+import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/globals.dart';
@@ -53,5 +55,22 @@ class DashboardController extends OurController {
 
     final that = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
     challengerPlayers.addAll(that);
+  }
+
+  Future<Map<String, int>> getMatchesForWidget(int index) async {
+    print("getting match stuff for this user ${challengerPlayers[index].summonerName}");
+    final rankedPlayer = challengerPlayers[index];
+    final s = await getSummoner(false, rankedPlayer.summonerName??"");
+    challengerPlayers[index].puuid = s?.puuid??"";
+    final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
+    print("match histories size: ${matchHistories?.length}");
+    final myMathces = <Match>[];
+    matchHistories?.take(5).forEach((element) async {
+      print("getting match $element");
+      final m = await getMatch(element);
+      myMathces.add(m?.match??Match());
+    });
+    print("We have ${myMathces.length} matches");
+    return await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMathces);
   }
 }

@@ -27,6 +27,22 @@ class LeagueHelper {
     return returnList;
   }
 
+  Future<Map<String, int>> findMostPlayedChampions(String puuid, List<Match> list) async {
+    var mapOfMostPlayedChampions = <String, int>{};
+    list.forEach((m) {
+      m.info?.participants?.forEach((p) async {
+        if(p.puuid == puuid) {
+          if (mapOfMostPlayedChampions.containsKey(p.championName)) {
+            mapOfMostPlayedChampions.update(p.championName ?? "", (value) => value + 1);
+          } else {
+            mapOfMostPlayedChampions.putIfAbsent(p.championName ?? "", () => 1);
+          }
+        }
+      });
+    });
+    return mapOfMostPlayedChampions;
+  }
+
   Future<Datum?> returnChampionFromId(int championId) async {
     final championsDb = await dDragonStorage.getChampionsFromDb();
     return championsDb.data?.entries.firstWhere((element) => element.value.key == "${championId}").value;
