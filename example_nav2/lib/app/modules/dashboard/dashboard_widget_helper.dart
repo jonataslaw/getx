@@ -156,6 +156,19 @@ Widget buildRankedSelectionTool(DashboardController controller) {
         }).toList(),
       )),
 
+      Container(
+       child: SizedBox.fromSize(
+         size: Size.fromRadius(20),
+         child: FittedBox(
+           child: IconButton(
+             onPressed: () {
+               controller.pressedSearchButton();
+             },
+             icon: Icon(Icons.search_sharp),
+           ),
+         ),
+       ),
+      )
 
     ],
   );

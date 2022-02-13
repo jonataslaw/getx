@@ -17,6 +17,8 @@ class DashboardController extends OurController {
 
   var rankedPlayerFilterText = "nadaa".obs;
 
+  var showRankedSearchFilter = false.obs;
+
   RxString queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
   List <String> queuesItems = [
     '${QueuesHelper.getValue(Queue.RANKED_SOLO_5X5)}',
@@ -42,6 +44,13 @@ class DashboardController extends OurController {
     '${DivisionsHelper.getValue(Division.II)}',
     '${DivisionsHelper.getValue(Division.III)}',
     '${DivisionsHelper.getValue(Division.IV)}',
+  ];
+
+  RxString sortByDropdownValue = SortByHelper.getValue(SortBy.LP).obs;
+  List <String> sortByItems = [
+    '${SortByHelper.getValue(SortBy.LP)}',
+    '${SortByHelper.getValue(SortBy.WINS)}',
+    '${SortByHelper.getValue(SortBy.LOSSES)}',
   ];
 
   @override
@@ -78,5 +87,9 @@ class DashboardController extends OurController {
   void filterChallengerPlayers(String text) {
     challengerPlayersFiltered.clear();
     challengerPlayersFiltered.addAll(challengerPlayers.where((p0) => p0.summonerName?.contains(text)==true).toList());
+  }
+
+  void pressedSearchButton() {
+    showRankedSearchFilter.value = !showRankedSearchFilter.value;
   }
 }
