@@ -13,6 +13,7 @@ class DashboardController extends OurController {
   final now = DateTime.now().obs;
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   final challengerPlayers = <LeagueEntryDto>[].obs;
+  final challengerPlayersFiltered = <LeagueEntryDto>[].obs;
 
   var rankedPlayerFilterText = "nadaa".obs;
 
@@ -45,23 +46,23 @@ class DashboardController extends OurController {
 
   @override
   Future<void> onReady() async {
-    getSomething();
+    getChallengerPlayers();
     super.onReady();
   }
 
-  Future<void> getSomething() async {
+  Future<void> getChallengerPlayers() async {
     final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
     print(rankedChallengerPlayers?[0]?.summonerName);
 
     final that = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
     challengerPlayers.addAll(that);
+    challengerPlayersFiltered.addAll(that);
   }
 
-  Future<Map<String, int>> getMatchesForWidget(int index) async {
+  Future<Map<String, int>> getMatchesForRankedSummoner(int index) async {
     print("getting match stuff for this user ${challengerPlayers[index].summonerName}");
     final rankedPlayer = challengerPlayers[index];
     final s = await getSummoner(false, rankedPlayer.summonerName??"");
-    challengerPlayers[index].puuid = s?.puuid??"";
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
     print("match histories size: ${matchHistories?.length}");
     final myMathces = <Match>[];
@@ -72,5 +73,10 @@ class DashboardController extends OurController {
     });
     print("We have ${myMathces.length} matches");
     return await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMathces);
+  }
+
+  void filterChallengerPlayers(String text) {
+    challengerPlayersFiltered.clear();
+    challengerPlayersFiltered.addAll(challengerPlayers.where((p0) => p0.summonerName?.contains(text)==true).toList());
   }
 }

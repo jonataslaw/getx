@@ -17,7 +17,7 @@ SizedBox returnHorizontalChallengerListView(DashboardController controller) {
     child:
       ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: controller.challengerPlayers.length,
+        itemCount: controller.challengerPlayersFiltered.length,
         itemBuilder: (context, index) {
           //find most played champion
           //find color of that champion
@@ -32,7 +32,7 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
   print("$index");
   
   return FutureBuilder<Map<String, int>>(
-      future: controller.getMatchesForWidget(index),
+      future: controller.getMatchesForRankedSummoner(index),
       builder: (BuildContext context, AsyncSnapshot<Map<String, int>> list) {
         print("Length is: ${list.data?.length}");
         return Container(
@@ -40,10 +40,11 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
         Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("${controller.challengerPlayers[index].summonerName}"),
-              Text("${controller.challengerPlayers[index].leaguePoints} LP"),
+              Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
+              Text("${controller.challengerPlayersFiltered[index].summonerName}"),
+              Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
               Image.network("${controller.userProfileImage}"),
-              Text("${controller.challengerPlayers[index].wins}-${controller.challengerPlayers[index].losses}")
+              Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
             ]
         ));
 
@@ -82,13 +83,13 @@ Widget buildRankedSelectionTool(DashboardController controller) {
     children: [
       /// Tiers
       Container(
-        margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+        margin: EdgeInsets.fromLTRB(4.0, 0, 0, 0),
         child: DropdownButton<String>(
           value: controller.tiersDropdownValue.value,
           icon: Icon(Icons.arrow_drop_down),
           iconSize: 24,
           elevation: 16,
-          style: TextStyle(color: Colors.red, fontSize: 18),
+          style: TextStyle(color: Colors.red, fontSize: 14),
           underline: Container(
             height: 2,
             color: Colors.deepPurpleAccent,
@@ -108,13 +109,13 @@ Widget buildRankedSelectionTool(DashboardController controller) {
 
       ///Queues
       Container(
-      margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+      margin: EdgeInsets.fromLTRB(4.0, 0, 0, 0),
       child: DropdownButton<String>(
         value: controller.queuesDropdownValue.value,
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.red, fontSize: 18),
+        style: TextStyle(color: Colors.red, fontSize: 14),
         underline: Container(
           height: 2,
           color: Colors.deepPurpleAccent,
@@ -132,13 +133,13 @@ Widget buildRankedSelectionTool(DashboardController controller) {
       )),
       ///Division
       Container(
-      margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+      margin: EdgeInsets.fromLTRB(4.0, 0, 0, 0),
       child: DropdownButton<String>(
         value: controller.divisionsDropdownValue.value,
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.red, fontSize: 18),
+        style: TextStyle(color: Colors.red, fontSize: 14),
         underline: Container(
           height: 2,
           color: Colors.deepPurpleAccent,
