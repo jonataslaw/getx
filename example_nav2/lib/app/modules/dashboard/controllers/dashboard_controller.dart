@@ -51,6 +51,7 @@ class DashboardController extends OurController {
     '${SortByHelper.getValue(SortBy.LP)}',
     '${SortByHelper.getValue(SortBy.WINS)}',
     '${SortByHelper.getValue(SortBy.LOSSES)}',
+    '${SortByHelper.getValue(SortBy.NAME)}',
   ];
 
   @override
@@ -91,5 +92,36 @@ class DashboardController extends OurController {
 
   void pressedSearchButton() {
     showRankedSearchFilter.value = !showRankedSearchFilter.value;
+  }
+
+  void sortRankedPlayers() {
+    print("Sorting by: ${sortByDropdownValue.value}");
+    if(sortByDropdownValue.value == SortByHelper.getValue(SortBy.LP)) {
+      challengerPlayersFiltered..sort((a, b) {
+        var diff = b.leaguePoints?.compareTo(a.leaguePoints??0);
+        if (diff == 0) diff = a.leaguePoints?.compareTo(b.leaguePoints??0);
+        return diff??0;
+      });
+    } else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.WINS)) {
+      challengerPlayersFiltered..sort((a, b) {
+        var diff = b.wins?.compareTo(a.wins??0);
+        if (diff == 0) diff = a.wins?.compareTo(b.wins??0);
+        return diff??0;
+      });
+    }else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.LOSSES)) {
+      challengerPlayersFiltered..sort((a, b) {
+          var diff = b.losses?.compareTo(a.losses??0);
+          if (diff == 0) diff = a.losses?.compareTo(b.losses??0);
+          return diff??0;
+        });
+    }else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.NAME)){
+      challengerPlayersFiltered..sort((a, b) => a.summonerName?.toLowerCase().compareTo(b.summonerName??"".toLowerCase())??0);
+    }else {
+      challengerPlayersFiltered..sort((a, b) {
+        var diff = b.leaguePoints?.compareTo(a.leaguePoints??0);
+        if (diff == 0) diff = a.leaguePoints?.compareTo(b.leaguePoints??0);
+        return diff??0;
+      });
+    }
   }
 }

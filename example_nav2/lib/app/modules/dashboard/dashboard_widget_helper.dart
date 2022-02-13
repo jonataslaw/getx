@@ -5,7 +5,6 @@ import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../routes/app_pages.dart';
@@ -74,6 +73,56 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
   //     Text("${controller.challengerPlayers[index].wins}-${controller.challengerPlayers[index].losses}")
   //   ]
   // ));
+}
+
+Widget buildSearchRankedPlayersFilter(DashboardController controller) {
+  return Container(
+    margin: EdgeInsets.fromLTRB(4.0, 0, 0.0, 0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Visibility(visible: controller.showRankedSearchFilter.value,
+          child: Expanded(child: TextFormField(
+            onChanged: (text) {
+              controller.filterChallengerPlayers(text);
+            },
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Filter by summoner name',
+            ),
+          ),),
+        ),
+        buildSortByDropdown(controller),
+      ],
+    ),
+  );
+}
+
+Widget buildSortByDropdown(DashboardController controller) {
+  return Container(
+      margin: EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+      child: DropdownButton<String>(
+        value: controller.sortByDropdownValue.value,
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.red, fontSize: 14),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String? data) {
+          print(data);
+          controller.sortByDropdownValue.value = data??SortByHelper.getValue(SortBy.LP);
+          controller.sortRankedPlayers();
+        },
+        items: controller.sortByItems.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ));
 }
 
 
@@ -155,7 +204,7 @@ Widget buildRankedSelectionTool(DashboardController controller) {
           );
         }).toList(),
       )),
-
+      /// Show/Hide icon
       Container(
        child: SizedBox.fromSize(
          size: Size.fromRadius(20),
@@ -169,7 +218,6 @@ Widget buildRankedSelectionTool(DashboardController controller) {
          ),
        ),
       )
-
     ],
   );
 }
