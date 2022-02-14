@@ -59,8 +59,6 @@ class DashboardController extends OurController {
   Future<void> onReady() async {
     getChallengerPlayers();
 
-
-
     // final s = await getSummoner(false, "Where YoGradesAt", fallbackAPI: true);
     // final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
     //
@@ -84,21 +82,6 @@ class DashboardController extends OurController {
     super.onReady();
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Future<void> getChallengerPlayers() async {
     final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
     print(rankedChallengerPlayers?[0]?.summonerName);
@@ -113,21 +96,22 @@ class DashboardController extends OurController {
     final rankedPlayer = challengerPlayers[index];
     final s = await getSummoner(false, rankedPlayer.summonerName??"");
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
-    final myMathces = <Match>[];
+    final myMatches = <Match>[];
     final fiveMathces = <String>[];
     matchHistories?.take(5).forEach(fiveMathces.add);
 
     await Future.forEach(fiveMathces, (String element) async {
       final m = await getMatch(element);
       print("got match ${m?.match?.info?.gameId}");
-      myMathces.add(m?.match??Match());
+      myMatches.add(m?.match??Match());
     });
 
     print("Finished getting matches for ${s?.name}");
-    final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMathces);
+    final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
     print("Champion: ${champ}");
-    final url = await UrlHelper().buildChampionImage("$champ.png");
+
+    final url = league.urlHelper.buildChampionImage("$champ.png");
     print("Returning url: ${url}");
     return url;
   }

@@ -1,11 +1,13 @@
 
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
+import 'package:dart_lol/helper/url_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../routes/app_pages.dart';
 import 'controllers/dashboard_controller.dart';
@@ -28,24 +30,32 @@ SizedBox returnHorizontalChallengerListView(DashboardController controller) {
 }
 
 Widget _buildChampionHorizontalList({required Color color, required DashboardController controller, required int index}) {
-  print("$index");
-  
   return FutureBuilder<String>(
       future: controller.getMatchesForRankedSummoner(index),
       builder: (context, imageUrl) {
-        print("URL IS: ${imageUrl.data}");
-        return Container(
-            margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
-        Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
-              Text("${controller.challengerPlayersFiltered[index].summonerName}"),
-              Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-              Image.network("${imageUrl.data}"),
-              Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
-            ]
-        ));
+        if(imageUrl.connectionState == ConnectionState.done) {
+          print("URL IS: ${imageUrl.data}");
+          var urlHelper = GetIt.instance<UrlHelper>();
+          var tempImage = urlHelper.buildChampionImage("LeeSin.png");
+          if(imageUrl.hasData) {
+            tempImage = imageUrl.requireData;
+          }
+          return Container(
+              margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
+                Text("${controller.challengerPlayersFiltered[index].summonerName}"),
+                Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
+                Image.network("$tempImage"),
+                Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
+              ]
+          ));
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       });
 
   ///get summoner
