@@ -30,10 +30,10 @@ SizedBox returnHorizontalChallengerListView(DashboardController controller) {
 Widget _buildChampionHorizontalList({required Color color, required DashboardController controller, required int index}) {
   print("$index");
   
-  return FutureBuilder<Map<String, int>>(
+  return FutureBuilder<String>(
       future: controller.getMatchesForRankedSummoner(index),
-      builder: (BuildContext context, AsyncSnapshot<Map<String, int>> list) {
-        print("Length is: ${list.data?.length}");
+      builder: (context, imageUrl) {
+        print("URL IS: ${imageUrl.data}");
         return Container(
             margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
         Column(
@@ -42,12 +42,10 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
               Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
               Text("${controller.challengerPlayersFiltered[index].summonerName}"),
               Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-              Image.network("${controller.userProfileImage}"),
+              Image.network("${imageUrl.data}"),
               Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
             ]
         ));
-
-
       });
 
   ///get summoner

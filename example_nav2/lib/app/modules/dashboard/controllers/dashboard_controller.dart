@@ -2,6 +2,7 @@
 import 'package:dart_lol/LeagueStuff/league_entry_dto.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
+import 'package:dart_lol/helper/url_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:get/get.dart';
 
@@ -51,14 +52,52 @@ class DashboardController extends OurController {
     '${SortByHelper.getValue(SortBy.LP)}',
     '${SortByHelper.getValue(SortBy.WINS)}',
     '${SortByHelper.getValue(SortBy.LOSSES)}',
-    '${SortByHelper.getValue(SortBy.NAME)}',
+    '${SortByHelper.getValue(SortBy.NAME)}'
   ];
 
   @override
   Future<void> onReady() async {
     getChallengerPlayers();
+
+
+
+    // final s = await getSummoner(false, "Where YoGradesAt", fallbackAPI: true);
+    // final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
+    //
+    // var list = <Match>[];
+    // final ten = histories?.take(10);
+    //
+    // await Future.forEach(ten!, (String element) async {
+    //   final m = await getMatch(element);
+    //   print("got match ${m?.match?.info?.gameId}");
+    //   list.add(m?.match??Match());
+    //   Future.delayed(Duration(milliseconds: 500));
+    // });
+    //
+    // print("should have ${list.length} matches");
+    //
+    // final that = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", list);
+    //
+    // print("champion played: ${that.entries.first.key}");
+    //
+
     super.onReady();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Future<void> getChallengerPlayers() async {
     final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
@@ -69,20 +108,28 @@ class DashboardController extends OurController {
     challengerPlayersFiltered.addAll(that);
   }
 
-  Future<Map<String, int>> getMatchesForRankedSummoner(int index) async {
+  Future<String> getMatchesForRankedSummoner(int index) async {
     print("getting match stuff for this user ${challengerPlayers[index].summonerName}");
     final rankedPlayer = challengerPlayers[index];
     final s = await getSummoner(false, rankedPlayer.summonerName??"");
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
-    print("match histories size: ${matchHistories?.length}");
     final myMathces = <Match>[];
-    matchHistories?.take(5).forEach((element) async {
-      print("getting match $element");
+    final fiveMathces = <String>[];
+    matchHistories?.take(5).forEach(fiveMathces.add);
+
+    await Future.forEach(fiveMathces, (String element) async {
       final m = await getMatch(element);
+      print("got match ${m?.match?.info?.gameId}");
       myMathces.add(m?.match??Match());
     });
-    print("We have ${myMathces.length} matches");
-    return await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMathces);
+
+    print("Finished getting matches for ${s?.name}");
+    final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMathces);
+    final champ = champs.entries.first.key;
+    print("Champion: ${champ}");
+    final url = await UrlHelper().buildChampionImage("$champ.png");
+    print("Returning url: ${url}");
+    return url;
   }
 
   void filterChallengerPlayers(String text) {
