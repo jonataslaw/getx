@@ -519,7 +519,7 @@ extension GetNavigationExt on GetInterface {
       bool rebuildStack = true,
       PreventDuplicateHandlingMode preventDuplicateHandlingMode =
           PreventDuplicateHandlingMode.ReorderRoutes}) {
-    searchDelegate(id).to(
+    return searchDelegate(id).to(
       page,
       opaque: opaque,
       transition: transition,
