@@ -1,0 +1,9 @@
+include: package:lints/recommended.yaml
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+linter:
+  rules:
+    - avoid_print: false
+    - constant_identifier_names: false

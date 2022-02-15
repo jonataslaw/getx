@@ -94,8 +94,10 @@ class DashboardController extends OurController {
   Future<String> getMatchesForRankedSummoner(int index) async {
     print("getting match stuff for this user ${challengerPlayers[index].summonerName}");
     final rankedPlayer = challengerPlayers[index];
-    final s = await getSummoner(false, rankedPlayer.summonerName??"");
+    final s = await getSummoner(true, rankedPlayer.summonerName??"");
+    print("got summoner");
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
+    print("got match histories");
     final myMatches = <Match>[];
     final fiveMathces = <String>[];
     matchHistories?.take(5).forEach(fiveMathces.add);

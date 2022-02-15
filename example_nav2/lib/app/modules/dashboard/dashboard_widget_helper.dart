@@ -12,33 +12,67 @@ import 'package:get_it/get_it.dart';
 import '../../routes/app_pages.dart';
 import 'controllers/dashboard_controller.dart';
 
-SizedBox returnHorizontalChallengerListView(DashboardController controller) {
-  return SizedBox(
-    height: 120,
-    child:
-      ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.challengerPlayersFiltered.length,
-        itemBuilder: (context, index) {
-          //find most played champion
-          //find color of that champion
-          //find opposite color for the text color
-          return _buildChampionHorizontalList(color: Colors.orange, controller: controller, index: index);
-        },
-      ),
+Widget returnHorizontalChallengerListView(DashboardController controller) {
+  // return SizedBox(
+  //   height: 120,
+  //   child:
+  //     ListView.builder(
+  //       physics: ClampingScrollPhysics(),
+  //       shrinkWrap: true,
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: controller.challengerPlayersFiltered.length,
+  //       itemBuilder: (context, index) {
+  //         //find most played champion
+  //         //find color of that champion
+  //         //find opposite color for the text color
+  //         return _buildChampionHorizontalList(color: Colors.orange, controller: controller, index: index);
+  //       },
+  //     ),
+  // );
+  return ListView.builder(
+    physics: ClampingScrollPhysics(),
+    shrinkWrap: true,
+    scrollDirection: Axis.horizontal,
+    itemCount: controller.challengerPlayersFiltered.length,
+    itemBuilder: (context, index) {
+      //find most played champion
+      //find color of that champion
+      //find opposite color for the text color
+      return _buildChampionHorizontalList(color: Colors.orange, controller: controller, index: index);
+    },
   );
 }
 
 Widget _buildChampionHorizontalList({required Color color, required DashboardController controller, required int index}) {
+  var urlHelper = GetIt.instance<UrlHelper>();
   return FutureBuilder<String>(
       future: controller.getMatchesForRankedSummoner(index),
-      builder: (context, imageUrl) {
-        if(imageUrl.connectionState == ConnectionState.done) {
-          print("URL IS: ${imageUrl.data}");
-          var urlHelper = GetIt.instance<UrlHelper>();
+      initialData: urlHelper.buildChampionImage("LeeSin.png"),
+      builder: (
+          BuildContext context,
+          AsyncSnapshot<String> snapshot,) {
+        if(snapshot.connectionState == ConnectionState.waiting) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              Visibility(
+                visible: snapshot.hasData,
+                child: Text(
+                  snapshot.data??"",
+                  style: const TextStyle(color: Colors.black, fontSize: 24),
+                ),
+              )
+            ],
+          );
+        }
+        if(snapshot.connectionState == ConnectionState.done) {
+          print("URL IS: ${snapshot.data}");
+
           var tempImage = urlHelper.buildChampionImage("LeeSin.png");
-          if(imageUrl.hasData) {
-            tempImage = imageUrl.requireData;
+          if(snapshot.hasData) {
+            tempImage = snapshot.requireData;
           }
           return Container(
               margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
@@ -52,11 +86,11 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
                 Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
               ]
           ));
+        }else {
+          return Text('State: ${snapshot.connectionState}');
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      });
+      },
+  );
 
   ///get summoner
   ///get matches
