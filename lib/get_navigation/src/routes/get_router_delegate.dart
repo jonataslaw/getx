@@ -111,6 +111,16 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       var redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
+      // Stop the iteration over the middleware if we changed page
+      // and that redirectRes is not the same as the current config.
+      if (redirectRes != null && config != redirectRes) {
+        break;
+      };
+    }
+    // If the target is not the same as the source, we need
+    // to run the middlewares for the new route.
+    if (iterator != config) {
+      return await runMiddleware(iterator);
     }
     return iterator;
   }
