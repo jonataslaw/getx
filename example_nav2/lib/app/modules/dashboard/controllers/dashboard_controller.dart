@@ -4,6 +4,7 @@ import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
+import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/globals.dart';
@@ -16,68 +17,69 @@ class DashboardController extends OurController {
   final challengerPlayers = <LeagueEntryDto>[].obs;
   final challengerPlayersFiltered = <LeagueEntryDto>[].obs;
 
+
   var rankedPlayerFilterText = "nadaa".obs;
 
   var showRankedSearchFilter = false.obs;
 
   RxString queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
   List <String> queuesItems = [
-    '${QueuesHelper.getValue(Queue.RANKED_SOLO_5X5)}',
-    '${QueuesHelper.getValue(Queue.RANKED_FLEX_SR)}',
+    (QueuesHelper.getValue(Queue.RANKED_SOLO_5X5)),
+    (QueuesHelper.getValue(Queue.RANKED_FLEX_SR)),
   ];
 
   RxString tiersDropdownValue = TiersHelper.getValue(Tier.CHALLENGER).obs;
   List <String> tiersItems = [
-    '${TiersHelper.getValue(Tier.CHALLENGER)}',
-    '${TiersHelper.getValue(Tier.GRANDMASTER)}',
-    '${TiersHelper.getValue(Tier.MASTER)}',
-    '${TiersHelper.getValue(Tier.DIAMOND)}',
-    '${TiersHelper.getValue(Tier.PLATINUM)}',
-    '${TiersHelper.getValue(Tier.GOLD)}',
-    '${TiersHelper.getValue(Tier.SILVER)}',
-    '${TiersHelper.getValue(Tier.BRONZE)}',
-    '${TiersHelper.getValue(Tier.IRON)}',
+    (TiersHelper.getValue(Tier.CHALLENGER)),
+    (TiersHelper.getValue(Tier.GRANDMASTER)),
+    (TiersHelper.getValue(Tier.MASTER)),
+    (TiersHelper.getValue(Tier.DIAMOND)),
+    (TiersHelper.getValue(Tier.PLATINUM)),
+    (TiersHelper.getValue(Tier.GOLD)),
+    (TiersHelper.getValue(Tier.SILVER)),
+    (TiersHelper.getValue(Tier.BRONZE)),
+    (TiersHelper.getValue(Tier.IRON)),
   ];
 
   RxString divisionsDropdownValue = DivisionsHelper.getValue(Division.I).obs;
   List <String> divisionsItems = [
-    '${DivisionsHelper.getValue(Division.I)}',
-    '${DivisionsHelper.getValue(Division.II)}',
-    '${DivisionsHelper.getValue(Division.III)}',
-    '${DivisionsHelper.getValue(Division.IV)}',
+    (DivisionsHelper.getValue(Division.I)),
+    (DivisionsHelper.getValue(Division.II)),
+    (DivisionsHelper.getValue(Division.III)),
+    (DivisionsHelper.getValue(Division.IV)),
   ];
 
   RxString sortByDropdownValue = SortByHelper.getValue(SortBy.LP).obs;
   List <String> sortByItems = [
-    '${SortByHelper.getValue(SortBy.LP)}',
-    '${SortByHelper.getValue(SortBy.WINS)}',
-    '${SortByHelper.getValue(SortBy.LOSSES)}',
-    '${SortByHelper.getValue(SortBy.NAME)}'
+    (SortByHelper.getValue(SortBy.LP)),
+    (SortByHelper.getValue(SortBy.WINS)),
+    (SortByHelper.getValue(SortBy.LOSSES)),
+    (SortByHelper.getValue(SortBy.NAME))
   ];
 
   @override
   Future<void> onReady() async {
-    getChallengerPlayers();
+    //getChallengerPlayers();
 
-    // final s = await getSummoner(false, "Where YoGradesAt", fallbackAPI: true);
-    // final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
-    //
-    // var list = <Match>[];
-    // final ten = histories?.take(10);
-    //
-    // await Future.forEach(ten!, (String element) async {
-    //   final m = await getMatch(element);
-    //   print("got match ${m?.match?.info?.gameId}");
-    //   list.add(m?.match??Match());
-    //   Future.delayed(Duration(milliseconds: 500));
-    // });
-    //
-    // print("should have ${list.length} matches");
-    //
-    // final that = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", list);
-    //
-    // print("champion played: ${that.entries.first.key}");
-    //
+    final s = await getSummoner(false, "Where YoGradesAt", fallbackAPI: false);
+    final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
+
+    var list = <Match>[];
+    final ten = histories?.take(10);
+
+    await Future.forEach(ten!, (String element) async {
+      final m = await getMatch(element);
+      print("got match ${m?.match?.info?.gameId}");
+      list.add(m?.match??Match());
+      Future.delayed(Duration(milliseconds: 500));
+    });
+
+    print("should have ${list.length} matches");
+
+    final that = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", list);
+
+    print("champion played: ${that.entries.first.key}");
+
 
     super.onReady();
   }
@@ -91,30 +93,44 @@ class DashboardController extends OurController {
     challengerPlayersFiltered.addAll(that);
   }
 
+  void getMostPlayedChampions() {
+    final matchItems = <MatchItem?>[];
+    for (var element in matches) {
+      element.info?.participants?.forEach((p) {
+        final mI = matchItems.singleWhere((it) => it?.championName == p.championName, orElse: () => null);
+        if (mI != null) {
+          if(p.win == true) {
+            mI.wins = mI.wins??0 + 1;
+          }else {
+            mI.losses = mI.losses??0 + 1;
+          }
+        } else {
+          matchItems.add(MatchItem(championName: p.championName??"Lee Sin", wins: p.win == true ? 1 : 0, losses: p.win == false ? 1 : 0));
+        }
+      });
+    }
+
+    print("We have ${matches.length} matches and ${matchItems.length} champions");
+  }
+
   Future<String> getMatchesForRankedSummoner(int index) async {
-    print("getting match stuff for this user ${challengerPlayers[index].summonerName}");
     final rankedPlayer = challengerPlayers[index];
     final s = await getSummoner(true, rankedPlayer.summonerName??"");
-    print("got summoner");
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
-    print("got match histories");
     final myMatches = <Match>[];
-    final fiveMathces = <String>[];
-    matchHistories?.take(5).forEach(fiveMathces.add);
+    final fiveMatches = <String>[];
+    matchHistories?.take(5).forEach(fiveMatches.add);
 
-    await Future.forEach(fiveMathces, (String element) async {
+    await Future.forEach(fiveMatches, (String element) async {
       final m = await getMatch(element);
-      print("got match ${m?.match?.info?.gameId}");
       myMatches.add(m?.match??Match());
+      matches.add(m?.match??Match());
     });
-
-    print("Finished getting matches for ${s?.name}");
+    ///add all these matches to our main list of matches so we can calculate other stuff
+    getMostPlayedChampions();
     final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
-    print("Champion: ${champ}");
-
     final url = league.urlHelper.buildChampionImage("$champ.png");
-    print("Returning url: ${url}");
     return url;
   }
 
@@ -130,27 +146,27 @@ class DashboardController extends OurController {
   void sortRankedPlayers() {
     print("Sorting by: ${sortByDropdownValue.value}");
     if(sortByDropdownValue.value == SortByHelper.getValue(SortBy.LP)) {
-      challengerPlayersFiltered..sort((a, b) {
+      challengerPlayersFiltered.sort((a, b) {
         var diff = b.leaguePoints?.compareTo(a.leaguePoints??0);
         if (diff == 0) diff = a.leaguePoints?.compareTo(b.leaguePoints??0);
         return diff??0;
       });
     } else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.WINS)) {
-      challengerPlayersFiltered..sort((a, b) {
+      challengerPlayersFiltered.sort((a, b) {
         var diff = b.wins?.compareTo(a.wins??0);
         if (diff == 0) diff = a.wins?.compareTo(b.wins??0);
         return diff??0;
       });
     }else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.LOSSES)) {
-      challengerPlayersFiltered..sort((a, b) {
+      challengerPlayersFiltered.sort((a, b) {
           var diff = b.losses?.compareTo(a.losses??0);
           if (diff == 0) diff = a.losses?.compareTo(b.losses??0);
           return diff??0;
         });
     }else if (sortByDropdownValue.value == SortByHelper.getValue(SortBy.NAME)){
-      challengerPlayersFiltered..sort((a, b) => a.summonerName?.toLowerCase().compareTo(b.summonerName??"".toLowerCase())??0);
+      challengerPlayersFiltered.sort((a, b) => a.summonerName?.toLowerCase().compareTo(b.summonerName??"".toLowerCase())??0);
     }else {
-      challengerPlayersFiltered..sort((a, b) {
+      challengerPlayersFiltered.sort((a, b) {
         var diff = b.leaguePoints?.compareTo(a.leaguePoints??0);
         if (diff == 0) diff = a.leaguePoints?.compareTo(b.leaguePoints??0);
         return diff??0;

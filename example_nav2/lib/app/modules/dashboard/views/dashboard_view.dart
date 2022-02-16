@@ -28,7 +28,24 @@ class DashboardView extends GetView<DashboardController> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20.0),
                   height: 200.0,
-                  child: returnHorizontalChallengerListView(controller)),
+                  child: returnHorizontalChallengerListView(controller)
+                ),
+
+                ///Most played champions
+                Text("Most played champions"),
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5.0),
+                    height: 200.0,
+                    child: returnMostPlayedChampions(controller),
+                ),
+
+
+
+                ///highest winrate champions
+                Text("Highest winrate champions"),
+
+
+
                 ]
           )
         ))

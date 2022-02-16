@@ -7,7 +7,7 @@ import '../auth/secrets.dart';
 
 bool isLoggedIn = false;
 
-final league = LeagueDB(apiToken: '$myRiotAPIKey', server: "NA1");
+final league = LeagueDB(apiToken: myRiotAPIKey, server: "NA1");
 
 // This is our global ServiceLocator
 GetIt getIt = GetIt.instance;

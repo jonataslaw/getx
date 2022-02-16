@@ -129,7 +129,7 @@ class ProfileController extends OurController {
   void findWhoIAm() {
     mapOfMostPlayedWithFriends.clear();
     var count = 0;
-    matches.forEach((element) {
+    for (var element in matches) {
       element.info?.participants?.forEach((p) async {
         if (mapOfMostPlayedWithFriends.containsKey(p.summonerName)) {
           mapOfMostPlayedWithFriends.update(p.summonerName ?? "", (value) => value + 1);
@@ -165,7 +165,7 @@ class ProfileController extends OurController {
             maxDamageToChampions.value = damageToChampions;
           }
 
-          final image = await urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
+          final image = urlHelper.buildChampionImage(mChamion?.value.image?.full??"Aatrox.png");
           /// Add data to graph and listview
 
           matchItems.add(MatchItem(
@@ -180,13 +180,13 @@ class ProfileController extends OurController {
           chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
           final that = labeler.call("${mChamion?.value.name}", count);
-          kdaDamageData.add(ChartData(x: '$that', yValue1: double.parse(kda), yValue2: damageToChampions.toDouble()));
+          kdaDamageData.add(ChartData(x: that, yValue1: double.parse(kda), yValue2: damageToChampions.toDouble()));
           kdaColumnController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
           damageLineController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
         }
       });
       count++;
-    });
+    }
     kdaDamageData.removeAt(0);
 
     /// Find my most played with friends
@@ -199,10 +199,10 @@ class ProfileController extends OurController {
 
     final topFiveFriends = sortedFriendsList.take(5);
     print(sortedFriendsList);
-    topFiveFriends.forEach((element) {
+    for (var element in topFiveFriends) {
       friendsData.add(KDAData(element.key, element.value.toDouble()));
       friendsColumnController?.updateDataSource(addedDataIndex: friendsData.length - 1);
-    });
+    }
     friendsData.removeAt(0);
 
     /// Find my most played chamions
@@ -214,10 +214,10 @@ class ProfileController extends OurController {
       });
 
     final topFiveChampions = sortedChampions.take(5);
-    topFiveChampions.forEach((element) {
+    for (var element in topFiveChampions) {
       mostPlayedChampionsData.add(KDAData(element.key, element.value.toDouble()));
       mostPlayedChampionsColumnController?.updateDataSource(addedDataIndex: mostPlayedChampionsData.length - 1);
-    });
+    }
     mostPlayedChampionsData.removeAt(0);
 
     _findMyMostRecentGame();
