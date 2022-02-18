@@ -59,7 +59,7 @@ class DashboardController extends OurController {
 
   @override
   Future<void> onReady() async {
-    await Future.delayed(const Duration(seconds: 2), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       getChallengerPlayers();
     });
 
@@ -81,12 +81,8 @@ class DashboardController extends OurController {
     //     print("champion played: ${that.entries.first.key}");
     //   }
     // });
-
-
     super.onReady();
   }
-
-
 
   Future<void> getSummonerFromDb() async {
     final s = await getSummoner(false, "Doublelift", fallbackAPI: false);
@@ -97,8 +93,8 @@ class DashboardController extends OurController {
   }
 
   Future<void> getChallengerPlayers() async {
-    final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
-    print(rankedChallengerPlayers?[0]?.summonerName);
+    // final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
+    // print(rankedChallengerPlayers?[0]?.summonerName);
 
     final that = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
     challengerPlayers.addAll(that);

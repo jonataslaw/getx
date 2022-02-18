@@ -20,7 +20,7 @@ class ProfileController extends OurController {
   final updateText = "Updating hasnt started yet".obs;
   final myNameAndLevel = "3".obs;
   final friendsText = "Most played with friends".obs;
-  final mostPlayedChampionsText = "Most played champions".obs;
+  final mostPlayedChampionsText = "Most played chamoions".obs;
   /// Summoner stuff
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   Map<String, int> mapOfMostPlayedWithFriends = {};
@@ -51,7 +51,7 @@ class ProfileController extends OurController {
   ].obs;
 
   var mostPlayedChampionsData = <KDAData>[
-
+    KDAData("MF", 0.0)
   ].obs;
 
   @override
