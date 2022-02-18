@@ -13,7 +13,7 @@ class OurController extends GetxController {
   /// Service Init
   var myNyumberFormatter = GetIt.instance<MyNumberFormatter>();
   /// Storage
-  DDragonStorage dDragonStorage = league.dDragonStorage;
+  DDragonStorage dDragonStorage = league.urlHelper.dDragonStorage;
   UrlHelper urlHelper = league.urlHelper;
 
   /// League Stuff
@@ -28,7 +28,7 @@ class OurController extends GetxController {
     print("id");
   }
 
-  Future<Summoner?> getSummoner(bool fromAPI, String summonerName, {bool fallbackAPI: true}) async {
+  Future<Summoner?> getSummoner(bool fromAPI, String summonerName, {bool fallbackAPI = true}) async {
     if(fromAPI) {
       final leagueResponse = await league.getSummonerFromAPI(summonerName);
       if(leagueResponse.summoner == null) {
@@ -38,6 +38,7 @@ class OurController extends GetxController {
         return leagueResponse.summoner;
       }
     }else {
+      print("Getting summoner from db");
       final leagueResponse = await league.getSummonerFromDb(summonerName, fallbackAPI);
       if(leagueResponse?.summoner == null) {
         checkError(leagueResponse);

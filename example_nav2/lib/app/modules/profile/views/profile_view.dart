@@ -18,7 +18,7 @@ class ProfileView extends GetView<ProfileController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Obx(() => Image.network("${controller.userProfileImage}",
-                height: MediaQuery.of(context).size.height * 0.65,
+                height: MediaQuery.of(context).size.height * 0.35,
                 width: MediaQuery.of(context).size.width,)),
               MaterialButton(
                 child: Text(
@@ -62,7 +62,7 @@ class ProfileView extends GetView<ProfileController> {
                 endIndent: 0,
                 color: Colors.blue,
               ),
-              returnColumnChartMostPlayedWithFriend(controller),
+              Obx(() => returnColumnChartMostPlayedWithFriend(controller)),
               const Divider(
                 height: 20,
                 thickness: 2,
@@ -70,7 +70,7 @@ class ProfileView extends GetView<ProfileController> {
                 endIndent: 0,
                 color: Colors.blue,
               ),
-              returnColumnChartMostPlayedChampions(controller),
+              Obx(() => returnColumnChartMostPlayedChampions(controller)),
               const Divider(
                 height: 20,
                 thickness: 2,

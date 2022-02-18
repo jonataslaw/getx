@@ -59,29 +59,41 @@ class DashboardController extends OurController {
 
   @override
   Future<void> onReady() async {
-    //getChallengerPlayers();
-
-    final s = await getSummoner(false, "Where YoGradesAt", fallbackAPI: false);
-    final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
-
-    var list = <Match>[];
-    final ten = histories?.take(10);
-
-    await Future.forEach(ten!, (String element) async {
-      final m = await getMatch(element);
-      print("got match ${m?.match?.info?.gameId}");
-      list.add(m?.match??Match());
-      Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(seconds: 2), () async {
+      getChallengerPlayers();
     });
 
-    print("should have ${list.length} matches");
-
-    final that = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", list);
-
-    print("champion played: ${that.entries.first.key}");
+    // await Future.delayed(const Duration(seconds: 2), () async {
+    //   final s = await getSummoner(false, "Doublelift", fallbackAPI: true);
+    //   print(s);
+    //   if (s != null) {
+    //     final histories = await getMatchHistories(false, s.puuid??"", fallbackAPI: true);
+    //     var list = <Match>[];
+    //     final ten = histories?.take(10);
+    //     await Future.forEach(ten!, (String element) async {
+    //       final m = await getMatch(element);
+    //       print("got match ${m?.match?.info?.gameId}");
+    //       list.add(m?.match??Match());
+    //       Future.delayed(Duration(milliseconds: 500));
+    //     });
+    //     print("should have ${list.length} matches");
+    //     final that = await LeagueHelper().findMostPlayedChampions(s.puuid??"", list);
+    //     print("champion played: ${that.entries.first.key}");
+    //   }
+    // });
 
 
     super.onReady();
+  }
+
+
+
+  Future<void> getSummonerFromDb() async {
+    final s = await getSummoner(false, "Doublelift", fallbackAPI: false);
+    print(s?.name);
+
+    final histories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: false);
+    print("${histories?.length}");
   }
 
   Future<void> getChallengerPlayers() async {
@@ -93,8 +105,8 @@ class DashboardController extends OurController {
     challengerPlayersFiltered.addAll(that);
   }
 
+  final matchItems = <MatchItem?>{};
   void getMostPlayedChampions() {
-    final matchItems = <MatchItem?>[];
     for (var element in matches) {
       element.info?.participants?.forEach((p) {
         final mI = matchItems.singleWhere((it) => it?.championName == p.championName, orElse: () => null);
@@ -111,11 +123,16 @@ class DashboardController extends OurController {
     }
 
     print("We have ${matches.length} matches and ${matchItems.length} champions");
+    for (var element in matchItems) {
+      if(element?.wins?.compareTo(1) == 1) {
+        print("played ${element?.championName} with ${element?.wins}-${element?.losses}");
+      }
+    }
   }
 
   Future<String> getMatchesForRankedSummoner(int index) async {
     final rankedPlayer = challengerPlayers[index];
-    final s = await getSummoner(true, rankedPlayer.summonerName??"");
+    final s = await getSummoner(false, rankedPlayer.summonerName??"", fallbackAPI: true);
     final matchHistories = await getMatchHistories(false, s?.puuid??"", fallbackAPI: true);
     final myMatches = <Match>[];
     final fiveMatches = <String>[];
@@ -130,6 +147,7 @@ class DashboardController extends OurController {
     getMostPlayedChampions();
     final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
+    print("most played champ: $champ");
     final url = league.urlHelper.buildChampionImage("$champ.png");
     return url;
   }

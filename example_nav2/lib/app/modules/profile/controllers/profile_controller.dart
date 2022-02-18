@@ -19,6 +19,8 @@ class ProfileController extends OurController {
   ///User update stuff
   final updateText = "Updating hasnt started yet".obs;
   final myNameAndLevel = "3".obs;
+  final friendsText = "Most played with friends".obs;
+  final mostPlayedChampionsText = "Most played champions".obs;
   /// Summoner stuff
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   Map<String, int> mapOfMostPlayedWithFriends = {};
@@ -45,11 +47,11 @@ class ProfileController extends OurController {
   ].obs;
 
   var friendsData = <KDAData>[
-    KDAData("Imaginatis", 0.0),
+    KDAData("Imaginatis", 0.0)
   ].obs;
 
   var mostPlayedChampionsData = <KDAData>[
-    KDAData("MF", 0.0),
+
   ].obs;
 
   @override
@@ -68,13 +70,13 @@ class ProfileController extends OurController {
     // kdaData.add(KDAData('June', 90));
     // chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
-    final that = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
-    print(that?[0]?.summonerName);
+    // final that = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
+    // print(that?[0]?.summonerName);
+    //
+    // final whoKnows = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
+    // print(whoKnows);
 
-    final whoKnows = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
-    print(whoKnows);
-
-    //searchMatchHistories();
+    searchMatchHistories();
   }
 
   void searchMatchHistories() async {
@@ -87,7 +89,7 @@ class ProfileController extends OurController {
     matchOverviewsToSearch?.remove(matchIdToSearch);
 
     final whoKnows = await dDragonStorage.getVersionFromDb();
-    final lastUpdated = dDragonStorage.getVersionsLastUpdated();
+    final lastUpdated = await dDragonStorage.getVersionsLastUpdated();
     print("It was last updated ${timeago.format(DateTime.fromMillisecondsSinceEpoch(lastUpdated))}");
     print(whoKnows);
 
@@ -110,10 +112,8 @@ class ProfileController extends OurController {
       matches.add(leagueResponse.match!);
       if (matchOverviewsToSearch?.isNotEmpty == true) {
         final matchIdToSearch = matchOverviewsToSearch?.removeLast();
-        print("There are ${matchOverviewsToSearch?.length} left to search");
         startSearchingMatches(matchIdToSearch as String);
       } else {
-        print("We've reached the end of the list");
         myNameAndLevel.value = "Done, there are ${matches.length} matches";
         Get.snackbar("Finished Searching all matches",
             "There should be ${matches.length}");
@@ -146,7 +146,6 @@ class ProfileController extends OurController {
             mapOfMostPlayedChampions.putIfAbsent(p.championName ?? "", () => 1);
           }
 
-          print("We had ${p.kills} kills");
           final mChampionId = p.championId;
           final mChamion = championsDB.data?.entries.firstWhere((element) => element.value.key == "${mChampionId}");
 
@@ -179,8 +178,8 @@ class ProfileController extends OurController {
           kdaData.add(KDAData("${mChamion?.value.name}", double.parse(kda)));
           chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
 
-          final that = labeler.call("${mChamion?.value.name}", count);
-          kdaDamageData.add(ChartData(x: that, yValue1: double.parse(kda), yValue2: damageToChampions.toDouble()));
+          final championLabel = labeler.call("${mChamion?.value.name}", count);
+          kdaDamageData.add(ChartData(x: championLabel, yValue1: double.parse(kda), yValue2: damageToChampions.toDouble()));
           kdaColumnController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
           damageLineController?.updateDataSource(addedDataIndex: kdaDamageData.length - 1);
         }
@@ -204,6 +203,10 @@ class ProfileController extends OurController {
       friendsColumnController?.updateDataSource(addedDataIndex: friendsData.length - 1);
     }
     friendsData.removeAt(0);
+    friendsColumnController?.updateDataSource(
+      updatedDataIndexes: <int>[friendsData.length - 1],
+      removedDataIndexes: <int>[friendsData.length - 1],
+    );
 
     /// Find my most played chamions
     final sortedChampions = mapOfMostPlayedChampions.entries.toList()

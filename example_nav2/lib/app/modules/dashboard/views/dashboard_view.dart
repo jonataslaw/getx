@@ -43,7 +43,19 @@ class DashboardView extends GetView<DashboardController> {
 
                 ///highest winrate champions
                 Text("Highest winrate champions"),
-
+                Container(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(20),
+                    child: FittedBox(
+                      child: IconButton(
+                        onPressed: () {
+                          controller.getSummonerFromDb();
+                        },
+                        icon: Icon(Icons.search_sharp),
+                      ),
+                    ),
+                  ),
+                )
 
 
                 ]

@@ -6,7 +6,7 @@ import 'package:example_nav2/services/globals.dart';
 
 class LeagueHelper {
 
-  DDragonStorage dDragonStorage = league.dDragonStorage;
+  DDragonStorage dDragonStorage = league.urlHelper.dDragonStorage;
 
   List<MatchesSeenChampion> findMostSeenChampion(List<Match> matches) {
     final returnList = <MatchesSeenChampion>[];

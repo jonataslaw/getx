@@ -85,6 +85,8 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
           var tempImage = urlHelper.buildChampionImage("LeeSin.png");
           if(snapshot.hasData) {
             tempImage = snapshot.requireData;
+          }else {
+            print("we have no data, using Lee Sin as default");
           }
           return IntrinsicHeight(
             child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), color: color, child:

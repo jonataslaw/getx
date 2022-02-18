@@ -70,6 +70,7 @@ Column returnColumnLineGraph(ProfileController controller) {
   return Column(children: <Widget>[
     Container(
         child: Obx(() => SfCartesianChart(
+          title: ChartTitle(text: "KDA and Damage Dealt"),
           primaryXAxis: CategoryAxis(
             labelRotation: 45
           ),
@@ -90,6 +91,7 @@ Column returnColumnLineGraph(ProfileController controller) {
                 onRendererCreated: (ChartSeriesController ct) {
                   controller.kdaColumnController = ct;
                 },
+                dataLabelSettings: DataLabelSettings(isVisible: true),
                 xValueMapper: (ChartData sales, _) => sales.x,
                 yValueMapper: (ChartData sales, _) => sales.yValue1,
                 name: 'KDA'),
@@ -100,6 +102,7 @@ Column returnColumnLineGraph(ProfileController controller) {
                 onRendererCreated: (ChartSeriesController ct) {
                   controller.damageLineController = ct;
                 },
+                dataLabelSettings: DataLabelSettings(isVisible: true),
                 xValueMapper: (ChartData sales, _) => sales.x,
                 yValueMapper: (ChartData sales, _) => sales.yValue2,
                 yAxisName: 'yAxis1',
@@ -135,6 +138,7 @@ SfCartesianChart returnColumnChart(ProfileController controller) {
 SfCartesianChart returnColumnChartMostPlayedChampions(ProfileController controller) {
   return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
+      title: ChartTitle(text: "${controller.mostPlayedChampionsText}"),
       series: <CartesianSeries>[
         ColumnSeries<KDAData, String>(
             dataSource: controller.mostPlayedChampionsData,
@@ -157,6 +161,7 @@ SfCartesianChart returnColumnChartMostPlayedChampions(ProfileController controll
 SfCartesianChart returnColumnChartMostPlayedWithFriend(ProfileController controller) {
   return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
+      title: ChartTitle(text: "${controller.friendsText}"),
       series: <CartesianSeries>[
         ColumnSeries<KDAData, String>(
             dataSource: controller.friendsData,
