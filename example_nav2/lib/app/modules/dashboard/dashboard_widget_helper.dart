@@ -17,15 +17,17 @@ Widget returnMostPlayedChampions(DashboardController controller) {
     scrollDirection: Axis.horizontal,
     itemCount: controller.matchItems.length,
     itemBuilder: (context, index) {
-      var urlHelper = GetIt.instance<UrlHelper>();
-      return IntrinsicHeight(
-        child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("${controller.matchItems[index].championName}"),
-              Image.network("${controller.matchItems[index].imageUrl}"),
-              Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
-            ])
+      return FittedBox(
+        fit: BoxFit.fill,
+        child: IntrinsicHeight(
+          child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(controller.matchItems[index].championName),
+                Image.network("${controller.matchItems[index].imageUrl}"),
+                Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
+              ])
+          ),
         ),
       );
     },
@@ -78,18 +80,22 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
           }else {
             print("we have no data, using Lee Sin as default");
           }
-          return IntrinsicHeight(
-            child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), color: color, child:
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
-                  Text("${controller.challengerPlayersFiltered[index].summonerName}"),
-                  Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-                  Image.network(tempImage),
-                  Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
-                ]
-            )),
+          return
+            IntrinsicHeight(
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), color: color, child:
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
+                    Text("${controller.challengerPlayersFiltered[index].summonerName}"),
+                    Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
+                    Image.network(tempImage),
+                    Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
+                  ]
+              )),
+            ),
           );
         }else {
           return Column(
