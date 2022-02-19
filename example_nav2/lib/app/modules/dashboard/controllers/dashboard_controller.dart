@@ -19,6 +19,7 @@ class DashboardController extends OurController {
   final challengerPlayers = <LeagueEntryDto>[].obs;
   final challengerPlayersFiltered = <LeagueEntryDto>[].obs;
   var rankedPlayerFilterText = "nadaa".obs;
+  var currentPlayersAndNumberGames = "Challenger players with 50 games".obs;
   var showRankedSearchFilter = false.obs;
 
   RxString queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;

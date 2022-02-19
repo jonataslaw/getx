@@ -25,6 +25,8 @@ class DashboardView extends GetView<DashboardController> {
                   ),
                 ),
                 Obx(() => buildSearchRankedPlayersFilter(controller)),
+
+                Obx(() => Text("${controller.tiersDropdownValue.value} players and ${controller.matchItems.length} games")),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5.0),
                   height: 150.0,
