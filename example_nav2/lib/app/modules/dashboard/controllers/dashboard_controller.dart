@@ -93,9 +93,9 @@ class DashboardController extends OurController {
   }
 
   Future<void> getChallengerPlayers() async {
-    // final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
+    //final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
 
-    final that = league.storage.getRankedPlayers(TiersHelper.getValue(Tier.CHALLENGER),DivisionsHelper.getValue(Division.I));
+    final that = await league.getRankedQueueFromDb(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I), fallbackAPI: true);
     challengerPlayers.addAll(that);
     challengerPlayersFiltered.addAll(that);
   }
@@ -153,9 +153,11 @@ class DashboardController extends OurController {
     matchHistories?.take(5).forEach(fiveMatches.add);
 
     await Future.forEach(fiveMatches, (String element) async {
-      final m = await getMatch(element);
-      myMatches.add(m?.match??Match());
-      matches.add(m?.match??Match());
+      await Future.delayed(const Duration(milliseconds: 500), () async {
+        final m = await getMatch(element);
+        myMatches.add(m?.match??Match());
+        matches.add(m?.match??Match());
+      });
     });
     final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
