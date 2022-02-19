@@ -115,7 +115,8 @@ class DashboardController extends OurController {
           } else {
             matchItems[i].losses += 1;
           }
-          matchItems[i].damageDealtToChampions += p.totalDamageDealtToChampions??0;
+          //matchItems[i].damageDealtToChampions += p.totalDamageDealtToChampions??0;
+          matchItems[i].damageDealtToChampions = "20";
 
           mapOfMostPlayedChampions.update(p.championName ?? "", (value) => value + 1);
         } else {

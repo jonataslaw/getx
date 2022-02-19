@@ -171,10 +171,10 @@ class ProfileController extends OurController {
           matchItems.add(MatchItem(
               imageUrl: image,
               championName: "${mChamion?.value.name}",
-              damageDealtToChampions: damageToChampions,
+              damageDealtToChampions: myNyumberFormatter.returnThousandsWithComma(damageToChampions),
               gameDuration: element.info?.gameDuration??0,
-              kda: int.parse(kda),
-              timeAgo: int.parse(timeAgo)));
+              kda: "$kda KDA",
+              timeAgo: timeAgo));
 
           kdaData.add(KDAData("${mChamion?.value.name}", double.parse(kda)));
           chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);
