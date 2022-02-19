@@ -34,6 +34,31 @@ Widget returnMostPlayedChampions(DashboardController controller) {
   );
 }
 
+Widget returnHighestWinRateChampions(DashboardController controller) {
+  return ListView.builder(
+    physics: ClampingScrollPhysics(),
+    shrinkWrap: true,
+    scrollDirection: Axis.horizontal,
+    itemCount: controller.highestWinRate.length,
+    itemBuilder: (context, index) {
+      return FittedBox(
+        fit: BoxFit.fill,
+        child: IntrinsicHeight(
+          child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(controller.highestWinRate[index].championName),
+                Image.network("${controller.highestWinRate[index].imageUrl}"),
+
+                Text("${controller.highestWinRate[index].wins}-${controller.highestWinRate[index].losses}")
+              ])
+          ),
+        ),
+      );
+    },
+  );
+}
+
 Widget returnHorizontalRankedPlayers(DashboardController controller) {
   return ListView.builder(
     physics: ClampingScrollPhysics(),

@@ -5,6 +5,7 @@ import 'package:dart_lol/LeagueStuff/league_entry_dto.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
+import 'package:example_nav2/app/helpers/list_helper.dart';
 import 'package:example_nav2/app/helpers/map_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/models/match_item.dart';
@@ -99,7 +100,9 @@ class DashboardController extends OurController {
   }
 
   final matchItems = <MatchItem>[].obs;
+  final highestWinRate = <MatchItem>[].obs;
   void getMostPlayedChampions(List<Match> myMatches) {
+
     var mapOfMostPlayedChampions = <String, int>{};
     for (var m in myMatches) {
       m.info?.participants?.forEach((p) async {
@@ -123,6 +126,17 @@ class DashboardController extends OurController {
     matchItems.sort((a, b) {
       var bTotalGames = b.wins + b.losses;
       var aTotalGames = a.wins + a.losses;
+      int? diff = bTotalGames.compareTo(aTotalGames);
+      if (diff == 0) diff = aTotalGames.compareTo(bTotalGames);
+      return diff;
+    });
+
+    //final filtered = highestWinRate.toSet().toList();
+    highestWinRate.addAll(matchItems.where((p0) => p0.wins + p0.losses > 1).toList());
+    highestWinRate.unique((x) => x.championName);
+    highestWinRate.sort((a, b) {
+      var bTotalGames = b.wins / (b.wins + b.losses);
+      var aTotalGames = a.wins / (a.wins + a.losses);
       int? diff = bTotalGames.compareTo(aTotalGames);
       if (diff == 0) diff = aTotalGames.compareTo(bTotalGames);
       return diff;

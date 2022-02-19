@@ -27,7 +27,7 @@ class DashboardView extends GetView<DashboardController> {
                 Obx(() => buildSearchRankedPlayersFilter(controller)),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5.0),
-                  height: 100.0,
+                  height: 150.0,
                   child: Obx(() => returnHorizontalRankedPlayers(controller))
                 ),
 
@@ -35,14 +35,17 @@ class DashboardView extends GetView<DashboardController> {
                 Text("Most played champions"),
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
-                    height: 100.0,
+                    height: 125.0,
                     child: Obx(() => returnMostPlayedChampions(controller)),
                 ),
 
-
-
                 ///highest winrate champions
                 Text("Highest winrate champions"),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5.0),
+                  height: 125.0,
+                  child: Obx(() => returnHighestWinRateChampions(controller)),
+                ),
                 Container(
                   child: SizedBox.fromSize(
                     size: Size.fromRadius(20),
