@@ -1,21 +1,21 @@
 class MatchItem {
   final String championName;
-  final String? imageUrl;
-  final String? damageDealtToChampions;
-  final int? gameDuration;
-  final String? kda;
-  final String? timeAgo;
-  int? wins;
-  int? losses;
+  String? imageUrl;
+  int damageDealtToChampions;
+  int gameDuration;
+  int kda;
+  int timeAgo;
+  int wins;
+  int losses;
 
   MatchItem({
     required this.championName,
     this.imageUrl,
-    this.damageDealtToChampions,
-    this.gameDuration,
-    this.kda,
-    this.timeAgo,
-    this.wins,
-    this.losses
+    this.damageDealtToChampions = 0,
+    this.gameDuration = 0,
+    this.kda = 0,
+    this.timeAgo = 0,
+    this.wins = 0,
+    this.losses = 0
   });
 }

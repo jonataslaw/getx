@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:dart_lol/LeagueStuff/champions.dart';
 
 import 'package:dart_lol/LeagueStuff/summoner.dart';
@@ -170,10 +172,10 @@ class ProfileController extends OurController {
           matchItems.add(MatchItem(
               imageUrl: image,
               championName: "${mChamion?.value.name}",
-              damageDealtToChampions: myNyumberFormatter.returnThousandsWithComma(damageToChampions),
+              damageDealtToChampions: damageToChampions,
               gameDuration: element.info?.gameDuration??0,
-              kda: "$kda KDA",
-              timeAgo: "$timeAgo"));
+              kda: int.parse(kda),
+              timeAgo: int.parse(timeAgo)));
 
           kdaData.add(KDAData("${mChamion?.value.name}", double.parse(kda)));
           chartSeriesController?.updateDataSource(addedDataIndex: kdaData.length - 1);

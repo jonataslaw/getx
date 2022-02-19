@@ -196,7 +196,7 @@ ListView returnListView(ProfileController controller) {
           },
           title: Text("${item.kda} and ${item.damageDealtToChampions} damage"),
           tileColor: Colors.red,
-          subtitle: Text("${item.timeAgo} as ${item.championName} for ${(item.gameDuration??1/60).toStringAsFixed(0)} minutes"),
+          subtitle: Text("${item.timeAgo} as ${item.championName} for ${(item.gameDuration/60).toStringAsFixed(0)} minutes"),
           leading: Image.network(item.imageUrl??""),
         );
       });

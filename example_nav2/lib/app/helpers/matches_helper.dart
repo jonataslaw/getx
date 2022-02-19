@@ -29,7 +29,6 @@ class LeagueHelper {
 
   Future<Map<String, int>> findMostPlayedChampions(String puuid, List<Match> list) async {
     var mapOfMostPlayedChampions = <String, int>{};
-    print("There are ${list.length} matches");
     for (var m in list) {
       m.info?.participants?.forEach((p) async {
         if(p.puuid == puuid) {

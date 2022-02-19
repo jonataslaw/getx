@@ -15,7 +15,6 @@ class OurController extends GetxController {
   /// Storage
   DDragonStorage dDragonStorage = league.urlHelper.dDragonStorage;
   UrlHelper urlHelper = league.urlHelper;
-
   /// League Stuff
   Summoner? summoner = Summoner();
   List<String>? matchOverviews = <String>[];
@@ -25,7 +24,6 @@ class OurController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    print("id");
   }
 
   Future<Summoner?> getSummoner(bool fromAPI, String summonerName, {bool fallbackAPI = true}) async {
@@ -38,7 +36,6 @@ class OurController extends GetxController {
         return leagueResponse.summoner;
       }
     }else {
-      print("Getting summoner from db");
       final leagueResponse = await league.getSummonerFromDb(summonerName, fallbackAPI);
       if(leagueResponse?.summoner == null) {
         checkError(leagueResponse);
@@ -50,7 +47,6 @@ class OurController extends GetxController {
   }
 
   Future<List<String>?> getMatchHistories(bool fromAPI, String puuid, {int start = 0, int count = 100, bool allMatches = true, bool fallbackAPI = false}) async {
-    print("getting match history for ${puuid}");
     if(fromAPI) {
       final leagueResponse = await league.getMatchesFromAPI(puuid, start: start, count: count);
       matchOverviews = leagueResponse.matchOverviews;

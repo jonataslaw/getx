@@ -2,10 +2,8 @@
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
-import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,32 +15,24 @@ Widget returnMostPlayedChampions(DashboardController controller) {
     physics: ClampingScrollPhysics(),
     shrinkWrap: true,
     scrollDirection: Axis.horizontal,
-    itemCount: controller.challengerPlayersFiltered.length,
+    itemCount: controller.matchItems.length,
     itemBuilder: (context, index) {
-      //find most played champion
-      //find color of that champion
-      //find opposite color for the text color
       var urlHelper = GetIt.instance<UrlHelper>();
-
       return IntrinsicHeight(
-        child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), child:
-        Column(
+        child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
-              Text("${controller.challengerPlayersFiltered[index].summonerName}"),
-              Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-              Image.network(urlHelper.buildChampionImage("LeeSin.png")),
-              Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
-            ]
-        )
+              Text("${controller.matchItems[index].championName}"),
+              Image.network("${controller.matchItems[index].imageUrl}"),
+              Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
+            ])
         ),
       );
     },
   );
 }
 
-Widget returnHorizontalChallengerListView(DashboardController controller) {
+Widget returnHorizontalRankedPlayers(DashboardController controller) {
   return ListView.builder(
     physics: ClampingScrollPhysics(),
     shrinkWrap: true,
@@ -89,20 +79,34 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
             print("we have no data, using Lee Sin as default");
           }
           return IntrinsicHeight(
-            child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), color: color, child:
+            child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), color: color, child:
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
                   Text("${controller.challengerPlayersFiltered[index].summonerName}"),
                   Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-                  Image.network("$tempImage"),
+                  Image.network(tempImage),
                   Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
                 ]
             )),
           );
         }else {
-          return Text('State: ${snapshot.connectionState}');
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Awaiting result...'),
+              )
+            ],
+          );
         }
       },
   );

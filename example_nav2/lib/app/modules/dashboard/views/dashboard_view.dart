@@ -10,7 +10,7 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body:
-        Obx(() => SingleChildScrollView(
+        SingleChildScrollView(
           child:
           Column(
               mainAxisSize: MainAxisSize.min,
@@ -20,15 +20,15 @@ class DashboardView extends GetView<DashboardController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      buildRankedSelectionTool(controller),
+                      Obx(() => buildRankedSelectionTool(controller),)
                     ],
                   ),
                 ),
-                buildSearchRankedPlayersFilter(controller),
+                Obx(() => buildSearchRankedPlayersFilter(controller)),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20.0),
                   height: 200.0,
-                  child: returnHorizontalChallengerListView(controller)
+                  child: Obx(() => returnHorizontalRankedPlayers(controller))
                 ),
 
                 ///Most played champions
@@ -36,7 +36,7 @@ class DashboardView extends GetView<DashboardController> {
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     height: 200.0,
-                    child: returnMostPlayedChampions(controller),
+                    child: Obx(() => returnMostPlayedChampions(controller)),
                 ),
 
 
@@ -60,7 +60,7 @@ class DashboardView extends GetView<DashboardController> {
 
                 ]
           )
-        ))
+        )
     );
   }
 }

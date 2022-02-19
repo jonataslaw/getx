@@ -1,8 +1,11 @@
 
+import 'dart:collection';
+
 import 'package:dart_lol/LeagueStuff/league_entry_dto.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
+import 'package:example_nav2/app/helpers/map_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
@@ -11,15 +14,10 @@ import '../../../../services/globals.dart';
 import '../../our_controller.dart';
 
 class DashboardController extends OurController {
-
-  final now = DateTime.now().obs;
   RxString userProfileImage = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ezreal_1.jpg".obs;
   final challengerPlayers = <LeagueEntryDto>[].obs;
   final challengerPlayersFiltered = <LeagueEntryDto>[].obs;
-
-
   var rankedPlayerFilterText = "nadaa".obs;
-
   var showRankedSearchFilter = false.obs;
 
   RxString queuesDropdownValue = QueuesHelper.getValue(Queue.RANKED_SOLO_5X5).obs;
@@ -94,36 +92,41 @@ class DashboardController extends OurController {
 
   Future<void> getChallengerPlayers() async {
     // final rankedChallengerPlayers = await league.getRankedQueueFromAPI(QueuesHelper.getValue(Queue.RANKED_SOLO_5X5), TiersHelper.getValue(Tier.CHALLENGER), DivisionsHelper.getValue(Division.I));
-    // print(rankedChallengerPlayers?[0]?.summonerName);
 
-    final that = league.storage.getChallengerPlayers(DivisionsHelper.getValue(Division.I));
+    final that = league.storage.getRankedPlayers(TiersHelper.getValue(Tier.CHALLENGER),DivisionsHelper.getValue(Division.I));
     challengerPlayers.addAll(that);
     challengerPlayersFiltered.addAll(that);
   }
 
-  final matchItems = <MatchItem?>{};
-  void getMostPlayedChampions() {
-    for (var element in matches) {
-      element.info?.participants?.forEach((p) {
-        final mI = matchItems.singleWhere((it) => it?.championName == p.championName, orElse: () => null);
-        if (mI != null) {
+  final matchItems = <MatchItem>[].obs;
+  void getMostPlayedChampions(List<Match> myMatches) {
+    var mapOfMostPlayedChampions = <String, int>{};
+    for (var m in myMatches) {
+      m.info?.participants?.forEach((p) async {
+        if (mapOfMostPlayedChampions.containsKey(p.championName)) {
+
+          final i = matchItems.indexWhere((element) => element.championName == p.championName);
           if(p.win == true) {
-            mI.wins = mI.wins??0 + 1;
-          }else {
-            mI.losses = mI.losses??0 + 1;
+            matchItems[i].wins += 1;
+          } else {
+            matchItems[i].losses += 1;
           }
+          matchItems[i].damageDealtToChampions += p.totalDamageDealtToChampions??0;
+
+          mapOfMostPlayedChampions.update(p.championName ?? "", (value) => value + 1);
         } else {
-          matchItems.add(MatchItem(championName: p.championName??"Lee Sin", wins: p.win == true ? 1 : 0, losses: p.win == false ? 1 : 0));
+          matchItems.add(MatchItem(championName: "${p.championName}", wins: p.win == true ? 1 : 0, losses: p.win == false ? 1 : 0, imageUrl: urlHelper.buildChampionImage("${p.championName}.png")),);
+          mapOfMostPlayedChampions.putIfAbsent(p.championName ?? "", () => 1);
         }
       });
     }
-
-    print("We have ${matches.length} matches and ${matchItems.length} champions");
-    for (var element in matchItems) {
-      if(element?.wins?.compareTo(1) == 1) {
-        print("played ${element?.championName} with ${element?.wins}-${element?.losses}");
-      }
-    }
+    matchItems.sort((a, b) {
+      var bTotalGames = b.wins + b.losses;
+      var aTotalGames = a.wins + a.losses;
+      int? diff = bTotalGames.compareTo(aTotalGames);
+      if (diff == 0) diff = aTotalGames.compareTo(bTotalGames);
+      return diff;
+    });
   }
 
   Future<String> getMatchesForRankedSummoner(int index) async {
@@ -139,12 +142,11 @@ class DashboardController extends OurController {
       myMatches.add(m?.match??Match());
       matches.add(m?.match??Match());
     });
-    ///add all these matches to our main list of matches so we can calculate other stuff
-    getMostPlayedChampions();
     final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
-    print("most played champ: $champ");
     final url = league.urlHelper.buildChampionImage("$champ.png");
+    ///add all these matches to our main list of matches so we can calculate other stuff
+    getMostPlayedChampions(myMatches);
     return url;
   }
 
@@ -158,7 +160,6 @@ class DashboardController extends OurController {
   }
 
   void sortRankedPlayers() {
-    print("Sorting by: ${sortByDropdownValue.value}");
     if(sortByDropdownValue.value == SortByHelper.getValue(SortBy.LP)) {
       challengerPlayersFiltered.sort((a, b) {
         var diff = b.leaguePoints?.compareTo(a.leaguePoints??0);
