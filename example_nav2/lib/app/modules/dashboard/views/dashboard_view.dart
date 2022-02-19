@@ -1,4 +1,5 @@
 import 'package:dart_lol/dart_lol_api.dart';
+import 'package:example_nav2/app/modules/dashboard/dashboard_text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,15 +27,15 @@ class DashboardView extends GetView<DashboardController> {
                 ),
                 Obx(() => buildSearchRankedPlayersFilter(controller)),
 
-                Obx(() => Text("${controller.tiersDropdownValue.value} players and ${controller.matchItems.length} games")),
-                Container(
+                Obx(() => returnTitleText("${controller.tiersDropdownValue.value} players and ${controller.matches.length} games")),
+            Container(
                   margin: const EdgeInsets.symmetric(vertical: 5.0),
                   height: 150.0,
                   child: Obx(() => returnHorizontalRankedPlayers(controller))
                 ),
 
                 ///Most played champions
-                Text("Most played champions"),
+                returnTitleText("Most Played"),
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     height: 125.0,
@@ -42,7 +43,7 @@ class DashboardView extends GetView<DashboardController> {
                 ),
 
                 ///highest winrate champions
-                Text("Highest winrate champions"),
+                returnTitleText("Highest win rate"),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5.0),
                   height: 125.0,

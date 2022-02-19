@@ -19,7 +19,7 @@ class OurController extends GetxController {
   Summoner? summoner = Summoner();
   List<String>? matchOverviews = <String>[];
   List<String>? matchOverviewsToSearch = <String>[];
-  Set<Match> matches = {};
+  Set<Match> matches = <Match>{}.obs;
 
   @override
   void onReady() {

@@ -10,6 +10,24 @@ import 'package:get_it/get_it.dart';
 import '../../routes/app_pages.dart';
 import 'controllers/dashboard_controller.dart';
 
+Widget returnLoadingIndicator() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(
+        width: 60,
+        height: 60,
+        child: CircularProgressIndicator(),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: Text('Awaiting result...'),
+      )
+    ],
+  );
+}
+
 Widget returnMostPlayedChampions(DashboardController controller) {
   return ListView.builder(
     physics: ClampingScrollPhysics(),
@@ -17,19 +35,23 @@ Widget returnMostPlayedChampions(DashboardController controller) {
     scrollDirection: Axis.horizontal,
     itemCount: controller.matchItems.length,
     itemBuilder: (context, index) {
-      return FittedBox(
-        fit: BoxFit.fill,
-        child: IntrinsicHeight(
-          child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(controller.matchItems[index].championName),
-                Image.network("${controller.matchItems[index].imageUrl}"),
-                Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
-              ])
+      if (controller.matchItems.isEmpty){
+        return returnLoadingIndicator();
+      }else {
+        return FittedBox(
+          fit: BoxFit.fill,
+          child: IntrinsicHeight(
+            child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(controller.matchItems[index].championName),
+                  Image.network("${controller.matchItems[index].imageUrl}"),
+                  Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
+                ])
+            ),
           ),
-        ),
-      );
+        );
+      }
     },
   );
 }
@@ -123,48 +145,10 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
             ),
           );
         }else {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ],
-          );
+          return returnLoadingIndicator();
         }
       },
   );
-
-  ///get summoner
-  ///get matches
-  ///get last 5 matches
-  // final rankedPlayer = controller.challengerPlayers[index];
-  // final s = await controller.getSummoner(false, rankedPlayer.summonerName??"");
-  // final matchHistories = await controller.getMatchHistories(false, s?.puuid??"");
-  // final myMathces = [];
-  // matchHistories?.take(5).forEach((element) {
-  //   final m = controller.getMatch(element);
-  //   myMathces.add(m);
-  // });
-
-  // return Container(
-  //     margin: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0), height: 100, width: 200, color: color, child:
-  // Column(
-  //   mainAxisAlignment: MainAxisAlignment.center,
-  //   children: [
-  //     Text("${controller.challengerPlayers[index].summonerName}"),
-  //     Text("${controller.challengerPlayers[index].leaguePoints} LP"),
-  //     Image.network("${controller.userProfileImage}"),
-  //     Text("${controller.challengerPlayers[index].wins}-${controller.challengerPlayers[index].losses}")
-  //   ]
-  // ));
 }
 
 Widget buildSearchRankedPlayersFilter(DashboardController controller) {
