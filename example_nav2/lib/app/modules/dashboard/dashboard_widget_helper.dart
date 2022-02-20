@@ -6,24 +6,6 @@ import 'package:palette_generator/palette_generator.dart';
 import 'controllers/dashboard_controller.dart';
 import 'dashboard_text_helper.dart';
 
-Widget returnLoadingIndicator() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      SizedBox(
-        width: 60,
-        height: 60,
-        child: CircularProgressIndicator(),
-      ),
-      Padding(
-        padding: EdgeInsets.only(top: 16),
-        child: Text('Awaiting result...'),
-      )
-    ],
-  );
-}
-
 Widget returnMostPlayedChampions(DashboardController controller) {
   return ListView.builder(
     physics: ClampingScrollPhysics(),
@@ -101,21 +83,7 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
           BuildContext context,
           AsyncSnapshot<String> snapshot,) {
         if(snapshot.connectionState == ConnectionState.waiting) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ],
-          );
+          return returnLoadingIndicator();
         }else if (snapshot.connectionState == ConnectionState.done) {
           var tempImage = urlHelper.buildChampionImage("LeeSin.png");
           if(snapshot.hasData) {
@@ -314,4 +282,22 @@ Widget returnElevatedBoxRoundedCorners(Widget widget, Color backgroundColor) {
         borderRadius: BorderRadius.all(
         Radius.circular(12.0),),),
         margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child: widget))));
+}
+
+Widget returnLoadingIndicator() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(
+        width: 60,
+        height: 60,
+        child: CircularProgressIndicator(),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: Text('Awaiting result...'),
+      )
+    ],
+  );
 }
