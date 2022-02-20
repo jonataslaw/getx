@@ -1,10 +1,9 @@
-
-import 'dart:collection';
-
+import 'package:palette_generator/palette_generator.dart';
 import 'package:dart_lol/LeagueStuff/league_entry_dto.dart';
 import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:example_nav2/app/helpers/list_helper.dart';
 import 'package:example_nav2/app/helpers/map_helper.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
@@ -205,5 +204,11 @@ class DashboardController extends OurController {
         return diff??0;
       });
     }
+  }
+
+  //https://ddragon.leagueoflegends.com/cdn/12.4.1/img/champion/Aatrox.png
+  Future<PaletteGenerator> updatePaletteGenerator(String image) async {
+    final paletteGenerator = await PaletteGenerator.fromImageProvider(Image.network(image).image,);
+    return paletteGenerator;
   }
 }

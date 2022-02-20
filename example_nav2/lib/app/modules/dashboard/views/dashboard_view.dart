@@ -2,6 +2,7 @@ import 'package:dart_lol/dart_lol_api.dart';
 import 'package:example_nav2/app/modules/dashboard/dashboard_text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../controllers/dashboard_controller.dart';
 import '../dashboard_widget_helper.dart';

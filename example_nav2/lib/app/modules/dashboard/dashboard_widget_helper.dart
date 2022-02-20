@@ -1,14 +1,10 @@
-
-import 'package:dart_lol/LeagueStuff/match.dart';
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../routes/app_pages.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'controllers/dashboard_controller.dart';
+import 'dashboard_text_helper.dart';
 
 Widget returnLoadingIndicator() {
   return Column(
@@ -45,7 +41,7 @@ Widget returnMostPlayedChampions(DashboardController controller) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(controller.matchItems[index].championName),
-                  Image.network("${controller.matchItems[index].imageUrl}"),
+                  Image.network("${controller.matchItems[index].imageUrl}", height: 30,),
                   Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
                 ])
             ),
@@ -128,22 +124,29 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
             print("we have no data, using Lee Sin as default");
           }
           return
-            IntrinsicHeight(
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), color: color, child:
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}"),
-                    Text("${controller.challengerPlayersFiltered[index].summonerName}"),
-                    Text("${controller.challengerPlayersFiltered[index].leaguePoints} LP"),
-                    Image.network(tempImage),
-                    Text("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}")
-                  ]
-              )),
-            ),
-          );
+            FutureBuilder<PaletteGenerator>(
+                future: controller.updatePaletteGenerator(tempImage), // async work
+                builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting: return Center(child:CircularProgressIndicator());
+                    default:
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final lightVibrant = snapshot.data?.lightVibrantColor?.color??Colors.blue;
+                        final darkVibrant = snapshot.data?.darkVibrantColor?.color??Colors.blue;
+                        return returnElevatedBoxRoundedCorners(Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              returnItemDetailText("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}", lightVibrant),
+                              returnItemDetailText("${controller.challengerPlayersFiltered[index].summonerName}", lightVibrant),
+                              returnItemDetailText("${controller.challengerPlayersFiltered[index].leaguePoints} LP", lightVibrant),
+                              Image.network(tempImage),
+                              returnItemDetailText("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}", lightVibrant),
+                            ]
+                        ), darkVibrant);
+                      }}});
+
         }else {
           return returnLoadingIndicator();
         }
@@ -200,7 +203,6 @@ Widget buildSortByDropdown(DashboardController controller) {
         }).toList(),
       ));
 }
-
 
 Widget buildRankedSelectionTool(DashboardController controller) {
   return Row(
@@ -296,4 +298,20 @@ Widget buildRankedSelectionTool(DashboardController controller) {
       )
     ],
   );
+}
+
+Widget returnElevatedBoxRoundedCorners(Widget widget, Color backgroundColor) {
+  return IntrinsicHeight(
+      child: FittedBox(
+      fit: BoxFit.fitHeight,
+      child: Card(
+        elevation: 8,
+        color: backgroundColor,
+        shadowColor: Colors.blue,
+        child: Container(
+        decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.all(
+        Radius.circular(12.0),),),
+        margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child: widget))));
 }
