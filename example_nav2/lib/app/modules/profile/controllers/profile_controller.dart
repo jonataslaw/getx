@@ -1,17 +1,10 @@
-
-
 import 'package:dart_lol/LeagueStuff/champions.dart';
-
-import 'package:dart_lol/LeagueStuff/summoner.dart';
-import 'package:dart_lol/dart_lol_api.dart';
 import 'package:example_nav2/app/helpers/matches_helper.dart';
 import 'package:example_nav2/app/modules/profile/views/profile_view.dart';
 import 'package:example_nav2/models/match_item.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import "package:intl/intl.dart";
-
 import '../../../../services/globals.dart';
 import '../../our_controller.dart';
 import '../profile_widget_helper.dart';
