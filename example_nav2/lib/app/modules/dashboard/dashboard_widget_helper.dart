@@ -16,19 +16,18 @@ Widget returnMostPlayedChampions(DashboardController controller) {
       if (controller.matchItems.isEmpty){
         return returnLoadingIndicator();
       }else {
-        return FittedBox(
-          fit: BoxFit.fill,
-          child: IntrinsicHeight(
-            child: Container(margin: EdgeInsets.fromLTRB(12.0, 0, 0.0, 0), child:Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(controller.matchItems[index].championName),
-                  Image.network("${controller.matchItems[index].imageUrl}", height: 30,),
-                  Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
-                ])
-            ),
-          ),
-        );
+        return returnElevatedBoxRoundedCorners(Container(margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(controller.matchItems[index].championName),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage:Image.network("${controller.matchItems[index].imageUrl}", height: 30,).image,
+              ),
+              //Image.network("${controller.matchItems[index].imageUrl}", height: 30,),
+              Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
+            ])
+        ), Colors.blue);
       }
     },
   );
