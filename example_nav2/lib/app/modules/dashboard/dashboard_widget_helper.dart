@@ -1,5 +1,8 @@
 import 'package:dart_lol/dart_lol_api.dart';
 import 'package:dart_lol/helper/url_helper.dart';
+import 'package:example_nav2/app/helpers/colors_helper.dart';
+import 'package:example_nav2/app/helpers/elevated_box_helper.dart';
+import 'package:example_nav2/app/helpers/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -16,18 +19,32 @@ Widget returnMostPlayedChampions(DashboardController controller) {
       if (controller.matchItems.isEmpty){
         return returnLoadingIndicator();
       }else {
-        return returnElevatedBoxRoundedCorners(Container(margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(controller.matchItems[index].championName),
-              CircleAvatar(
-                radius: 50,
-                backgroundImage:Image.network("${controller.matchItems[index].imageUrl}", height: 30,).image,
-              ),
-              //Image.network("${controller.matchItems[index].imageUrl}", height: 30,),
-              Text("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}")
-            ])
-        ), Colors.blue);
+        final tempImage = controller.matchItems[index].imageUrl??"";
+
+        return
+          FutureBuilder<PaletteGenerator>(
+              future: controller.updatePaletteGenerator(tempImage), // async work
+              builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting: return Center(child:CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final darkVibrant = snapshot.data?.darkVibrantColor?.color??Colors.black;
+                      var lightVibrant = returnComplimentaryColor(darkVibrant, snapshot.data?.lightVibrantColor?.color??Colors.black);
+                      return returnElevatedBoxRoundedCorners(Container(margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            returnItemDetailText(controller.matchItems[index].championName, lightVibrant),
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundImage: returnImageWithErrorHandling("${controller.matchItems[index].imageUrl}", height: 30).image,
+                            ),
+                            returnItemDetailText("${controller.matchItems[index].wins}-${controller.matchItems[index].losses}", lightVibrant),
+                          ])
+                      ), darkVibrant);
+                    }}});
       }
     },
   );
@@ -47,8 +64,7 @@ Widget returnHighestWinRateChampions(DashboardController controller) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(controller.highestWinRate[index].championName),
-                Image.network("${controller.highestWinRate[index].imageUrl}"),
-
+                returnImageWithErrorHandling("${controller.highestWinRate[index].imageUrl}"),
                 Text("${controller.highestWinRate[index].wins}-${controller.highestWinRate[index].losses}")
               ])
           ),
@@ -100,15 +116,15 @@ Widget _buildChampionHorizontalList({required Color color, required DashboardCon
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        final lightVibrant = snapshot.data?.lightVibrantColor?.color??Colors.blue;
                         final darkVibrant = snapshot.data?.darkVibrantColor?.color??Colors.blue;
+                        final lightVibrant = returnComplimentaryColor(darkVibrant, snapshot.data?.lightVibrantColor?.color??Colors.black);
                         return returnElevatedBoxRoundedCorners(Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               returnItemDetailText("#${controller.challengerPlayers.indexOf(controller.challengerPlayersFiltered[index])+1}", lightVibrant),
                               returnItemDetailText("${controller.challengerPlayersFiltered[index].summonerName}", lightVibrant),
                               returnItemDetailText("${controller.challengerPlayersFiltered[index].leaguePoints} LP", lightVibrant),
-                              Image.network(tempImage),
+                              returnImageWithErrorHandling(tempImage),
                               returnItemDetailText("${controller.challengerPlayersFiltered[index].wins}-${controller.challengerPlayersFiltered[index].losses}", lightVibrant),
                             ]
                         ), darkVibrant);
@@ -265,22 +281,6 @@ Widget buildRankedSelectionTool(DashboardController controller) {
       )
     ],
   );
-}
-
-Widget returnElevatedBoxRoundedCorners(Widget widget, Color backgroundColor) {
-  return IntrinsicHeight(
-      child: FittedBox(
-      fit: BoxFit.fitHeight,
-      child: Card(
-        elevation: 8,
-        color: backgroundColor,
-        shadowColor: Colors.blue,
-        child: Container(
-        decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.all(
-        Radius.circular(12.0),),),
-        margin: EdgeInsets.fromLTRB(0.0, 0, 0.0, 0), child: widget))));
 }
 
 Widget returnLoadingIndicator() {
