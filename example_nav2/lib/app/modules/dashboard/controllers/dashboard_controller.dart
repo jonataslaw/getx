@@ -159,6 +159,10 @@ class DashboardController extends OurController {
         matches.add(m?.match??Match());
       });
     });
+
+    final that = matches.toSet().toList();
+    print("We should have ${that.length} matches vs ${matches.length}");
+
     final champs = await LeagueHelper().findMostPlayedChampions(s?.puuid??"", myMatches);
     final champ = champs.entries.first.key;
     final url = league.urlHelper.buildChampionImage("$champ.png");
