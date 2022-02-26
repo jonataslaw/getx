@@ -129,7 +129,7 @@ abstract class Bind<T> extends StatelessWidget {
   static Bind lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
-    bool fenix = false,
+    bool fenix = true,
   }) {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);
     return _FactoryBind<S>(

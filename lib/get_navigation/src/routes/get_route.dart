@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';
@@ -184,6 +185,10 @@ class GetPage<T> extends Page<T> {
     if (identical(this, other)) return true;
     return other is GetPage<T> && other.key == key;
   }
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, 'Page')}("$name", $key, $arguments)';
 
   @override
   int get hashCode {

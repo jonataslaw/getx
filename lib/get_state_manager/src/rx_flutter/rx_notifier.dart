@@ -25,13 +25,13 @@ extension _Empty on Object {
 }
 
 mixin StateMixin<T> on ListNotifier {
-  late T _value;
+  T? _value;
   GetStatus<T>? _status;
 
   void _fillInitialStatus() {
-    _status = (value == null || value!._isEmpty())
+    _status = (_value == null || _value!._isEmpty())
         ? GetStatus<T>.loading()
-        : GetStatus<T>.success(_value);
+        : GetStatus<T>.success(_value!);
   }
 
   GetStatus<T> get status {
@@ -53,7 +53,7 @@ mixin StateMixin<T> on ListNotifier {
   @protected
   T get value {
     reportRead();
-    return _value;
+    return _value as T;
   }
 
   @protected
@@ -64,19 +64,22 @@ mixin StateMixin<T> on ListNotifier {
   }
 
   @protected
-  void change(T newState, {GetStatus<T>? status}) {
-    var _canUpdate = false;
-    if (status != null) {
-      _status = status;
-      _canUpdate = true;
+  void change(GetStatus<T> status) {
+    if (status != this.status) {
+      this.status = status;
     }
-    if (newState != _value) {
-      _value = newState;
-      _canUpdate = true;
-    }
-    if (_canUpdate) {
-      refresh();
-    }
+    // var _canUpdate = false;
+    // if (status != null) {
+    //   _status = status;
+    //   _canUpdate = true;
+    // }
+    // if (newState != _value) {
+    //   _value = newState;
+    //   _canUpdate = true;
+    // }
+    // if (_canUpdate) {
+    //   refresh();
+    // }
   }
 
   void futurize(Future<T> Function() body(),
@@ -183,7 +186,7 @@ class Value<T> extends ListNotifier
   @override
   T get value {
     reportRead();
-    return _value;
+    return _value as T;
   }
 
   @override

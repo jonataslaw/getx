@@ -5,6 +5,7 @@ import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
@@ -24,6 +25,7 @@ class HomeView extends GetView<HomeController> {
           body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
             anchorRoute: Routes.HOME,
+
             //delegate: Get.nestedKey(Routes.HOME),
             // key: Get.nestedKey(Routes.HOME),
           ),

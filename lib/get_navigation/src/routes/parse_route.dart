@@ -103,7 +103,9 @@ class ParseRouteTree {
     final treeBranch = cumulativePaths
         .map((e) => MapEntry(e, _findRoute(e)))
         .where((element) => element.value != null)
-        .map((e) => MapEntry(e.key, e.value!))
+
+        ///Prevent page be disposed
+        .map((e) => MapEntry(e.key, e.value!.copy(key: ValueKey(e.key))))
         .toList();
 
     final params = Map<String, String>.from(uri.queryParameters);
@@ -210,11 +212,13 @@ class ParseRouteTree {
 
   /// Change the Path for a [GetPage]
   GetPage _addChild(
-          GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
-      origin.copy(
-        middlewares: middlewares,
-        name: (parentPath + origin.name).replaceAll(r'//', '/'),
-      );
+      GetPage origin, String parentPath, List<GetMiddleware> middlewares) {
+    return origin.copy(
+      middlewares: middlewares,
+      name: (parentPath + origin.name).replaceAll(r'//', '/'),
+      // key:
+    );
+  }
 
   GetPage? _findRoute(String name) {
     final value = routes.firstWhereOrNull(

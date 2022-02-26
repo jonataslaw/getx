@@ -25,6 +25,9 @@ class RootView extends GetView<RootController> {
             delegate: Get.nestedKey(null),
             anchorRoute: '/',
             filterPages: (afterAnchor) {
+              // print(afterAnchor);
+              // print('dddddddddddddddddd');
+              // print(afterAnchor.take(1));
               return afterAnchor.take(1);
             },
           ),
