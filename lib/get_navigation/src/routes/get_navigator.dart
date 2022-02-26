@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../routes/default_route.dart';
-import '../routes/get_route.dart';
+import '../../../get.dart';
 
 class GetNavigator extends Navigator {
   GetNavigator.onGenerateRoute({
@@ -72,7 +71,8 @@ class GetNavigator extends Navigator {
           restorationScopeId: restorationScopeId,
           pages: pages,
           observers: [
-            // GetObserver(),
+            // GetObserver(null, Get.routing),
+            HeroController(),
             ...?observers,
           ],
           transitionDelegate:

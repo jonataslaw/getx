@@ -7,50 +7,6 @@ import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
-import 'parse_route.dart';
-
-/// Enables the user to customize the intended pop behavior
-///
-/// Goes to either the previous _activePages entry or the previous page entry
-///
-/// e.g. if the user navigates to these pages
-/// 1) /home
-/// 2) /home/products/1234
-///
-/// when popping on [History] mode, it will emulate a browser back button.
-///
-/// so the new _activePages stack will be:
-/// 1) /home
-///
-/// when popping on [Page] mode, it will only remove the last part of the route
-/// so the new _activePages stack will be:
-/// 1) /home
-/// 2) /home/products
-///
-/// another pop will change the _activePages stack to:
-/// 1) /home
-enum PopMode {
-  History,
-  Page,
-}
-
-/// Enables the user to customize the behavior when pushing multiple routes that
-/// shouldn't be duplicates
-enum PreventDuplicateHandlingMode {
-  /// Removes the _activePages entries until it reaches the old route
-  PopUntilOriginalRoute,
-
-  /// Simply don't push the new route
-  DoNothing,
-
-  /// Recommended - Moves the old route entry to the front
-  ///
-  /// With this mode, you guarantee there will be only one
-  /// route entry for each location
-  ReorderRoutes,
-
-  Recreate,
-}
 
 class GetDelegate extends RouterDelegate<RouteDecoder>
     with
@@ -68,6 +24,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   final Iterable<GetPage> Function(RouteDecoder currentNavStack)?
       pickPagesForRootNavigator;
+
+  List<RouteDecoder> get activePages => _activePages;
 
   // GlobalKey<NavigatorState> get navigatorKey => Get.key;
 
@@ -124,6 +82,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?> _unsafeHistoryRemove<T>(RouteDecoder config, T result) async {
     var index = _activePages.indexOf(config);
     if (index >= 0) return _unsafeHistoryRemoveAt(index, result);
+    return null;
   }
 
   Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
@@ -295,13 +254,17 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final currentHistory = currentConfiguration;
     final pages = currentHistory == null
         ? <GetPage>[]
-        : pickPagesForRootNavigator?.call(currentHistory) ??
-            getVisualPages(currentHistory);
-    if (pages.length == 0) return SizedBox.shrink();
+        : pickPagesForRootNavigator?.call(currentHistory).toList() ??
+            getVisualPages(currentHistory).toList();
+    if (pages.length == 0) {
+      return ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      );
+    }
     return GetNavigator(
       key: navigatorKey,
       onPopPage: _onPopVisualRoute,
-      pages: pages.toList(),
+      pages: pages,
       observers: navigatorObservers,
       transitionDelegate:
           transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
@@ -339,30 +302,33 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     } else {
       goToUnknownPage();
     }
+    return null;
   }
 
   @override
-  Future<T?> to<T>(Widget Function() page,
-      {bool? opaque,
-      Transition? transition,
-      Curve? curve,
-      Duration? duration,
-      int? id,
-      String? routeName,
-      bool fullscreenDialog = false,
-      dynamic arguments,
-      List<BindingsInterface> bindings = const [],
-      bool preventDuplicates = true,
-      bool? popGesture,
-      bool showCupertinoParallax = true,
-      double Function(BuildContext context)? gestureWidth,
-      bool rebuildStack = true,
-      PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.ReorderRoutes}) async {
+  Future<T?> to<T>(
+    Widget Function() page, {
+    bool? opaque,
+    Transition? transition,
+    Curve? curve,
+    Duration? duration,
+    int? id,
+    String? routeName,
+    bool fullscreenDialog = false,
+    dynamic arguments,
+    List<BindingsInterface> bindings = const [],
+    bool preventDuplicates = true,
+    bool? popGesture,
+    bool showCupertinoParallax = true,
+    double Function(BuildContext context)? gestureWidth,
+    bool rebuildStack = true,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.ReorderRoutes,
+  }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
-    if (preventDuplicateHandlingMode == PreventDuplicateHandlingMode.Recreate) {
-      routeName = routeName + page.hashCode.toString();
-    }
+    // if (preventDuplicateHandlingMode == PreventDuplicateHandlingMode.Recreate) {
+    //   routeName = routeName + page.hashCode.toString();
+    // }
 
     final getPage = GetPage<T>(
       name: routeName,
@@ -385,7 +351,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
-      preventDuplicateHandlingMode: preventDuplicateHandlingMode,
     );
     Get.removePage(getPage);
     return result;
@@ -708,13 +673,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return decoder;
   }
 
-  Future<T?> _push<T>(RouteDecoder decoder,
-      {bool rebuildStack = true,
-      PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.ReorderRoutes}) async {
+  Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
     var mid = await runMiddleware(decoder);
     final res = mid ?? decoder;
     // if (res == null) res = decoder;
+
+    final preventDuplicateHandlingMode =
+        res.route?.preventDuplicateHandlingMode ??
+            PreventDuplicateHandlingMode.ReorderRoutes;
 
     final onStackPage = _activePages
         .firstWhereOrNull((element) => element.route?.key == res.route?.key);
@@ -815,7 +781,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       }
     }
     refresh();
-
+    //return !route.navigator!.userGestureInProgress;
     return true;
   }
 }
