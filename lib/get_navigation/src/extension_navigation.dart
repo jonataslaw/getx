@@ -145,7 +145,7 @@ extension ExtensionDialog on GetInterface {
 
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
-    String? title,
+   String? title = "Alert",
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
