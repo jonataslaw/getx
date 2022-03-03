@@ -304,8 +304,8 @@ extension ExtensionSnackbar on GetInterface {
     AnimationController? progressIndicatorController,
     Color? progressIndicatorBackgroundColor,
     Animation<Color>? progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.BOTTOM,
-    SnackStyle snackStyle = SnackStyle.FLOATING,
+    SnackPosition snackPosition = SnackPosition.bottom,
+    SnackStyle snackStyle = SnackStyle.floating,
     Curve forwardAnimationCurve = Curves.easeOutCirc,
     Curve reverseAnimationCurve = Curves.easeOutCirc,
     Duration animationDuration = const Duration(seconds: 1),
@@ -432,7 +432,7 @@ extension ExtensionSnackbar on GetInterface {
                 fontSize: 14,
               ),
             ),
-        snackPosition: snackPosition ?? SnackPosition.TOP,
+        snackPosition: snackPosition ?? SnackPosition.top,
         borderRadius: borderRadius ?? 15,
         margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
@@ -455,7 +455,7 @@ extension ExtensionSnackbar on GetInterface {
         progressIndicatorController: progressIndicatorController,
         progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
         progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        snackStyle: snackStyle ?? SnackStyle.floating,
         forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
         reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
         animationDuration: animationDuration ?? Duration(seconds: 1),
@@ -498,7 +498,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -518,7 +518,7 @@ extension GetNavigationExt on GetInterface {
       double Function(BuildContext context)? gestureWidth,
       bool rebuildStack = true,
       PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.ReorderRoutes}) {
+          PreventDuplicateHandlingMode.reorderRoutes}) {
     return searchDelegate(id).to(
       page,
       opaque: opaque,
@@ -876,7 +876,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -956,7 +956,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -1077,18 +1077,7 @@ extension GetNavigationExt on GetInterface {
   }
 
   GetDelegate? nestedKey(String? key) {
-    if (key == null) {
-      return routerDelegate as GetDelegate;
-    }
-    keys.putIfAbsent(
-      key,
-      () => GetDelegate(
-        showHashOnUrl: true,
-        //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildrens ?? [],
-      ),
-    );
-    return keys[key];
+    return _getxController.nestedKey(key);
   }
 
   GetDelegate searchDelegate(dynamic k) {
@@ -1262,88 +1251,50 @@ extension GetNavigationExt on GetInterface {
   set parameters(Map<String, String?> newParameters) =>
       _getxController.parameters = newParameters;
 
-  CustomTransition? get customTransition => _getxController.customTransition;
-  set customTransition(CustomTransition? newTransition) =>
-      _getxController.customTransition = newTransition;
+
 
   bool get testMode => _getxController.testMode;
   set testMode(bool isTest) => _getxController.testMode = isTest;
 
-  void resetRootNavigator() {
-    _getxController = GetMaterialController();
-  }
-
-  static GetMaterialController _getxController = GetMaterialController();
-}
-
-extension NavTwoExt on GetInterface {
-  void addPages(List<GetPage> getPages) {
-    routeTree.addRoutes(getPages);
-  }
-
-  void clearRouteTree() {
-    _routeTree.routes.clear();
-  }
-
-  static late final _routeTree = ParseRouteTree(routes: []);
-
-  ParseRouteTree get routeTree => _routeTree;
-
-  void addPage(GetPage getPage) {
-    routeTree.addRoute(getPage);
-  }
-
-  void removePage(GetPage getPage) {
-    routeTree.removeRoute(getPage);
-  }
-
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      routerDelegate as TDelegate?;
+      _getxController.routerDelegate as TDelegate?;
 
-  // // ignore: use_setters_to_change_properties
-  // void setDefaultDelegate(RouterDelegate? delegate) {
-  //   _routerDelegate = delegate;
+  // void resetRootNavigator() {
+  //   _getxController = GetMaterialController();
   // }
 
-  // GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
+  // RouterDelegate? get routerDelegate => _getxController.routerDelegate;
+  // RouteInformationParser? get routeInformationParser =>
+  //     _getxController.routeInformationParser;
 
-  GetInformationParser createInformationParser({String initialRoute = '/'}) {
-    if (routeInformationParser == null) {
-      return routeInformationParser = GetInformationParser(
-        initialRoute: initialRoute,
-      );
-    } else {
-      return routeInformationParser as GetInformationParser;
-    }
-  }
+  GetMaterialController get _getxController => GetMaterialController.to;
 
-  // static GetDelegate? _delegate;
+  // void addPages(List<GetPage> getPages) {
+  //   routeTree.addRoutes(getPages);
+  // }
 
-  GetDelegate createDelegate({
-    GetPage<dynamic>? notFoundRoute,
-    List<GetPage> pages = const [],
-    List<NavigatorObserver>? navigatorObservers,
-    TransitionDelegate<dynamic>? transitionDelegate,
-    PopMode backButtonPopMode = PopMode.History,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
-    GlobalKey<NavigatorState>? navigatorKey,
-  }) {
-    if (routerDelegate == null) {
-      return routerDelegate = GetDelegate(
-        notFoundRoute: notFoundRoute,
-        navigatorObservers: navigatorObservers,
-        transitionDelegate: transitionDelegate,
-        backButtonPopMode: backButtonPopMode,
-        preventDuplicateHandlingMode: preventDuplicateHandlingMode,
-        pages: pages,
-        navigatorKey: navigatorKey,
-      );
-    } else {
-      return routerDelegate as GetDelegate;
-    }
-  }
+  // void clearRouteTree() {
+  //   routeTree.routes.clear();
+  // }
+
+  // ParseRouteTree get routeTree {
+  //   final delegate = _getxController.routerDelegate;
+  //   if (delegate is GetDelegate) {
+  //     return delegate.routeTree;
+  //   } else {
+  //     //TODO: Urgent: Refactor this
+  //     return ParseRouteTree(routes: []);
+  //   }
+  // }
+
+  // void addPage(GetPage getPage) {
+  //   routeTree.addRoute(getPage);
+  // }
+
+  // void removePage(GetPage getPage) {
+  //   routeTree.removeRoute(getPage);
+  // }
 }
 
 extension OverlayExt on GetInterface {

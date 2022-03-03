@@ -29,8 +29,8 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
   }
 
   @override
-  void operator []=(K key, V val) {
-    value[key] = val;
+  void operator []=(K key, V value) {
+    this.value[key] = value;
     refresh();
   }
 

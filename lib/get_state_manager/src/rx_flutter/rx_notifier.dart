@@ -82,7 +82,7 @@ mixin StateMixin<T> on ListNotifier {
     // }
   }
 
-  void futurize(Future<T> Function() body(),
+  void futurize(Future<T> Function() Function() body,
       {String? errorMessage, bool useEmpty = true}) {
     final compute = body();
     compute().then((newValue) {
@@ -203,9 +203,9 @@ class Value<T> extends ListNotifier
     return value;
   }
 
-  void update(void fn(T? value)) {
-    fn(value);
-    refresh();
+  void update(T Function(T? value) fn) {
+    value = fn(value);
+    // refresh();
   }
 
   @override
@@ -236,9 +236,8 @@ extension StateExt<T> on StateMixin<T> {
             ? onError(status.errorMessage)
             : Center(child: Text('A error occurred: ${status.errorMessage}'));
       } else if (status.isEmpty) {
-        return onEmpty != null
-            ? onEmpty
-            : SizedBox.shrink(); // Also can be widget(null); but is risky
+        return onEmpty ??
+            SizedBox.shrink(); // Also can be widget(null); but is risky
       } else if (status.isSuccess) {
         return widget(value);
       } else if (status.isCustom) {

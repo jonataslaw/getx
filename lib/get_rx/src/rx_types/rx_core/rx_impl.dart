@@ -145,7 +145,7 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
     subject.addError(error, stackTrace);
   }
 
-  Stream<R> map<R>(R mapper(T? data)) => stream.map(mapper);
+  Stream<R> map<R>(R Function(T? data) mapper) => stream.map(mapper);
 
   /// Uses a callback to update [value] internally, similar to [refresh],
   /// but provides the current value as the argument.
@@ -167,9 +167,9 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// });
   /// print( person );
   /// ```
-  void update(void fn(T? val)) {
-    fn(value);
-    subject.add(value);
+  void update(T Function(T? val) fn) {
+    value = fn(value);
+    // subject.add(value);
   }
 
   /// Following certain practices on Rx data, we might want to react to certain
@@ -248,18 +248,21 @@ extension RxnBoolExt on Rx<bool?> {
 
   bool? get isFalse {
     if (value != null) return !isTrue!;
+    return null;
   }
 
   bool? operator &(bool other) {
     if (value != null) {
       return other && value!;
     }
+    return null;
   }
 
   bool? operator |(bool other) {
     if (value != null) {
       return other || value!;
     }
+    return null;
   }
 
   bool? operator ^(bool other) => !other == value;

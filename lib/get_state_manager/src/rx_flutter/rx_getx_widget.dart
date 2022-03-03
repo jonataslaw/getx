@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
-import '../../../get_instance/src/get_instance.dart';
+import '../../../get_instance/src/extension_instance.dart';
 import '../../../get_instance/src/lifecycle.dart';
 import '../simple/list_notifier.dart';
 
@@ -61,17 +61,17 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
 
   @override
   void initState() {
-    // var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-    final isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+    // var isPrepared = Get.isPrepared<T>(tag: widget.tag);
+    final isRegistered = Get.isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
-        _isCreator = GetInstance().isPrepared<T>(tag: widget.tag);
-        controller = GetInstance().find<T>(tag: widget.tag);
+        _isCreator = Get.isPrepared<T>(tag: widget.tag);
+        controller = Get.find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
         _isCreator = true;
-        GetInstance().put<T>(controller!, tag: widget.tag);
+        Get.put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
@@ -104,8 +104,8 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   void dispose() {
     if (widget.dispose != null) widget.dispose!(this);
     if (_isCreator! || widget.assignId) {
-      if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
-        GetInstance().delete<T>(tag: widget.tag);
+      if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
+        Get.delete<T>(tag: widget.tag);
       }
     }
 

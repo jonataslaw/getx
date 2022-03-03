@@ -72,13 +72,13 @@ class SnackbarController {
   // ignore: avoid_returning_this
   void _configureAlignment(SnackPosition snackPosition) {
     switch (snackbar.snackPosition) {
-      case SnackPosition.TOP:
+      case SnackPosition.top:
         {
           _initialAlignment = const Alignment(-1.0, -2.0);
           _endAlignment = const Alignment(-1.0, -1.0);
           break;
         }
-      case SnackPosition.BOTTOM:
+      case SnackPosition.bottom:
         {
           _initialAlignment = const Alignment(-1.0, 2.0);
           _endAlignment = const Alignment(-1.0, 1.0);
@@ -248,7 +248,7 @@ class SnackbarController {
   }
 
   DismissDirection _getDefaultDismissDirection() {
-    if (snackbar.snackPosition == SnackPosition.TOP) {
+    if (snackbar.snackPosition == SnackPosition.top) {
       return DismissDirection.up;
     }
     return DismissDirection.down;
@@ -259,8 +259,8 @@ class SnackbarController {
       direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
       resizeDuration: null,
       confirmDismiss: (_) {
-        if (_currentStatus == SnackbarStatus.OPENING ||
-            _currentStatus == SnackbarStatus.CLOSING) {
+        if (_currentStatus == SnackbarStatus.opening ||
+            _currentStatus == SnackbarStatus.closing) {
           return Future.value(false);
         }
         return Future.value(true);
@@ -284,23 +284,23 @@ class SnackbarController {
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
-        _currentStatus = SnackbarStatus.OPEN;
+        _currentStatus = SnackbarStatus.open;
         _snackbarStatus?.call(_currentStatus);
         if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
 
         break;
       case AnimationStatus.forward:
-        _currentStatus = SnackbarStatus.OPENING;
+        _currentStatus = SnackbarStatus.opening;
         _snackbarStatus?.call(_currentStatus);
         break;
       case AnimationStatus.reverse:
-        _currentStatus = SnackbarStatus.CLOSING;
+        _currentStatus = SnackbarStatus.closing;
         _snackbarStatus?.call(_currentStatus);
         if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
         break;
       case AnimationStatus.dismissed:
         assert(!_overlayEntries.first.opaque);
-        _currentStatus = SnackbarStatus.CLOSED;
+        _currentStatus = SnackbarStatus.closed;
         _snackbarStatus?.call(_currentStatus);
         _removeOverlay();
         break;

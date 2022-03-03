@@ -187,8 +187,7 @@ class GetBackGestureController<T> {
       // We want to cap the animation time, but we want to use a linear curve
       // to determine it.
       final droppedPageForwardAnimationTime = min(
-        lerpDouble(
-                _kMaxMidSwipePageForwardAnimationTime, 0, controller.value)!
+        lerpDouble(_kMaxMidSwipePageForwardAnimationTime, 0, controller.value)!
             .floor(),
         _kMaxPageBackAnimationTime,
       );
@@ -286,7 +285,10 @@ Cannot read the previousTitle for a route that has not yet been installed''',
 
   @override
   // A relatively rigorous eyeball estimation.
-  Duration get transitionDuration => const Duration(milliseconds: 400);
+  Duration get transitionDuration;
+
+  @override
+  Duration get reverseTransitionDuration;
 
   /// Builds the primary contents of the route.
   @protected
@@ -360,6 +362,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     Widget child, {
     bool limitedSwipe = false,
     double initialOffset = 0,
+    Transition? transition,
   }) {
     // Check if the route has an animation that's currently participating
     // in a back swipe gesture.
@@ -408,7 +411,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
       final iosAnimation = animation;
       animation = CurvedAnimation(parent: animation, curve: finalCurve);
 
-      switch (route.transition ?? Get.defaultTransition) {
+      switch (transition ?? Get.defaultTransition) {
         case Transition.leftToRight:
           return SlideLeftTransition().buildTransitions(
               context,
@@ -714,8 +717,10 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         default:
-          if (Get.customTransition != null) {
-            return Get.customTransition!.buildTransition(context, route.curve,
+          final customTransition =
+              context.get<GetMaterialController>().customTransition;
+          if (customTransition != null) {
+            return customTransition.buildTransition(context, route.curve,
                 route.alignment, animation, secondaryAnimation, child);
           }
 

@@ -23,7 +23,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
@@ -38,13 +38,13 @@ class AppPages {
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
-          name: _Paths.LOGIN,
+          name: _Paths.login,
           page: () => LoginView(),
           bindings: [LoginBinding()],
         ),
         GetPage(
           preventDuplicates: true,
-          name: _Paths.HOME,
+          name: _Paths.home,
           page: () => const HomeView(),
           bindings: [
             HomeBinding(),
@@ -52,7 +52,7 @@ class AppPages {
           title: null,
           children: [
             GetPage(
-              name: _Paths.DASHBOARD,
+              name: _Paths.dashboard,
               page: () => DashboardView(),
               bindings: [
                 DashboardBinding(),
@@ -63,14 +63,14 @@ class AppPages {
                 //only enter this route when authed
                 EnsureAuthMiddleware(),
               ],
-              name: _Paths.PROFILE,
+              name: _Paths.profile,
               page: () => ProfileView(),
               title: 'Profile',
               transition: Transition.size,
               bindings: [ProfileBinding()],
             ),
             GetPage(
-              name: _Paths.PRODUCTS,
+              name: _Paths.products,
               page: () => const ProductsView(),
               title: 'Products',
               transition: Transition.zoom,
@@ -78,7 +78,7 @@ class AppPages {
               bindings: [ProductsBinding()],
               children: [
                 GetPage(
-                  name: _Paths.PRODUCT_DETAILS,
+                  name: _Paths.productDetails,
                   page: () => ProductDetailsView(),
                   bindings: [ProductDetailsBinding()],
                   middlewares: [
@@ -91,7 +91,7 @@ class AppPages {
           ],
         ),
         GetPage(
-          name: _Paths.SETTINGS,
+          name: _Paths.settings,
           page: () => SettingsView(),
           bindings: [
             SettingsBinding(),

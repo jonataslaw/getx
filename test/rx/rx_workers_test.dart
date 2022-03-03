@@ -151,7 +151,7 @@ void main() {
 
   test('Rx String with non null values', () async {
     final reactiveString = Rx<String>("abc");
-    var currentString;
+    String? currentString;
     reactiveString.listen((newString) {
       currentString = newString;
     });
@@ -167,7 +167,7 @@ void main() {
 
   test('Rx String with null values', () async {
     var reactiveString = Rx<String?>(null);
-    var currentString;
+    String? currentString;
 
     reactiveString.listen((newString) {
       currentString = newString;

@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../get.dart';
 
@@ -51,7 +52,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route);
+  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -65,8 +66,8 @@ abstract class _RouteMiddleware {
   /// {@end-tool}
   GetPage? onPageCalled(GetPage page);
 
-  /// This function will be called right before the [Bindings] are initialize.
-  /// Here you can change [Bindings] for this page
+  /// This function will be called right before the [BindingsInterface] are initialize.
+  /// Here you can change [BindingsInterface] for this page
   /// {@tool snippet}
   /// ```dart
   /// List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -80,7 +81,7 @@ abstract class _RouteMiddleware {
   /// {@end-tool}
   List<R>? onBindingsStart<R>(List<R> bindings);
 
-  /// This function will be called right after the [Bindings] are initialize.
+  /// This function will be called right after the [BindingsInterface] are initialize.
   GetPageBuilder? onPageBuildStart(GetPageBuilder page);
 
   /// This function will be called right after the
@@ -120,8 +121,7 @@ class GetMiddleware implements _RouteMiddleware {
   void onPageDispose() {}
 
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) =>
-      SynchronousFuture(route);
+  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route) => (route);
 }
 
 class MiddlewareRunner {
@@ -195,37 +195,9 @@ class PageRedirect {
   });
 
   // redirect all pages that needes redirecting
-  GetPageRoute<T> page<T>() {
-    while (needRecheck()) {}
-    final _r = (isUnknown ? unknownRoute : route)!;
-    return GetPageRoute<T>(
-      page: _r.page,
-      parameter: _r.parameters,
-      settings: isUnknown
-          ? RouteSettings(
-              name: _r.name,
-              arguments: settings!.arguments,
-            )
-          : settings,
-      curve: _r.curve,
-      opaque: _r.opaque,
-      showCupertinoParallax: _r.showCupertinoParallax,
-      gestureWidth: _r.gestureWidth,
-      customTransition: _r.customTransition,
-      bindings: _r.bindings,
-      binds: _r.binds,
-      transitionDuration:
-          _r.transitionDuration ?? Get.defaultTransitionDuration,
-      transition: _r.transition,
-      popGesture: _r.popGesture,
-      fullscreenDialog: _r.fullscreenDialog,
-      middlewares: _r.middlewares,
-    );
-  }
-
-  // redirect all pages that needes redirecting
-  GetPageRoute<T> getPageToRoute<T>(GetPage rou, GetPage? unk) {
-    while (needRecheck()) {}
+  GetPageRoute<T> getPageToRoute<T>(
+      GetPage rou, GetPage? unk, BuildContext context) {
+    while (needRecheck(context)) {}
     final _r = (isUnknown ? unk : rou)!;
 
     return GetPageRoute<T>(
@@ -242,9 +214,14 @@ class PageRedirect {
       opaque: _r.opaque,
       customTransition: _r.customTransition,
       bindings: _r.bindings,
+      binding: _r.binding,
       binds: _r.binds,
       transitionDuration:
           _r.transitionDuration ?? Get.defaultTransitionDuration,
+      reverseTransitionDuration:
+          _r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
+      // performIncomeAnimation: _r.performIncomeAnimation,
+      // performOutGoingAnimation: _r.performOutGoingAnimation,
       transition: _r.transition,
       popGesture: _r.popGesture,
       fullscreenDialog: _r.fullscreenDialog,
@@ -253,11 +230,11 @@ class PageRedirect {
   }
 
   /// check if redirect is needed
-  bool needRecheck() {
+  bool needRecheck(BuildContext context) {
     if (settings == null && route != null) {
       settings = route;
     }
-    final match = Get.routeTree.matchRoute(settings!.name!);
+    final match = context.navigation.matchRoute(settings!.name!);
     Get.parameters = match.parameters;
 
     // No Match found

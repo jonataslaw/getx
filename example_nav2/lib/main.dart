@@ -9,14 +9,12 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "Application",
-      initialBinding: BindingsBuilder(
-        () {
-          Get.put(SplashService());
-          Get.put(AuthService());
-        },
-      ),
+      binds: [
+        Bind.put(SplashService()),
+        Bind.put(AuthService()),
+      ],
       getPages: AppPages.routes,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       // builder: (context, child) {
       //   return FutureBuilder<void>(
       //     key: ValueKey('initFuture'),
