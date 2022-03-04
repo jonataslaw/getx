@@ -106,9 +106,11 @@ mixin ObserverComponent on ComponentElement {
       markNeedsBuild();
     } else {
       // refresh was called during the building
-      if (SchedulerBinding.instance!.schedulerPhase != SchedulerPhase.idle) {
+      // * Remove null operand  '!' here
+      if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.idle) {
         // Await for the end of build
-        await SchedulerBinding.instance!.endOfFrame;
+        // * Remove null operand  '!' here
+        await SchedulerBinding.instance.endOfFrame;
         if (dirty) return false;
       }
 
