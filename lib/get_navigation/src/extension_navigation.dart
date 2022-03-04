@@ -359,7 +359,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        // * Remove null operand  '!' here
+        // * Remove null operand  '!' here.
         controller.show();
       });
     }
@@ -470,7 +470,8 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      SchedulerBinding.instance.addPostFrameCallback((_) { // * Remove null operand  '!' here 
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        // * Remove null operand  '!' here
         controller.show();
       });
     }
