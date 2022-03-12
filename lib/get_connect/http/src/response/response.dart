@@ -1,12 +1,15 @@
 import 'dart:collection';
 import 'dart:convert';
+
 import '../exceptions/exceptions.dart';
 import '../request/request.dart';
 import '../status/http_status.dart';
 
 class GraphQLResponse<T> extends Response<T> {
   final List<GraphQLError>? graphQLErrors;
+
   GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
+
   GraphQLResponse.fromResponse(Response res)
       : graphQLErrors = null,
         super(
@@ -29,6 +32,26 @@ class Response<T> {
     this.headers = const {},
     this.body,
   });
+
+  Response<T> copyWith({
+    Request? request,
+    int? statusCode,
+    Stream<List<int>>? bodyBytes,
+    String? bodyString,
+    String? statusText,
+    Map<String, String>? headers,
+    T? body,
+  }) {
+    return Response<T>(
+      request: request ?? this.request,
+      statusCode: statusCode ?? this.statusCode,
+      bodyBytes: bodyBytes ?? this.bodyBytes,
+      bodyString: bodyString ?? this.bodyString,
+      statusText: statusText ?? this.statusText,
+      headers: headers ?? this.headers,
+      body: body ?? this.body,
+    );
+  }
 
   /// The Http [Request] linked with this [Response].
   final Request? request;
