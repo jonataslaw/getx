@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 import '../../get_core/get_core.dart';
 import '../../get_navigation/src/router_report.dart';
 import 'lifecycle.dart';
@@ -492,6 +494,10 @@ extension Inst on GetInterface {
 }
 
 typedef InstanceBuilderCallback<S> = S Function();
+
+typedef InstanceCreateBuilderCallback<S> = S Function(BuildContext _);
+
+// typedef InstanceBuilderCallback<S> = S Function();
 
 // typedef InjectorBuilderCallback<S> = S Function(Inst);
 

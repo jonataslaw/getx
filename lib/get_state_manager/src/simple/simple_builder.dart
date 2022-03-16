@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import 'list_notifier.dart';
@@ -70,7 +69,7 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   }
 }
 
-class ObxElement = StatelessElement with ObserverComponent;
+class ObxElement = StatelessElement with StatelessObserverComponent;
 
 // It's a experimental feature
 class Observer extends ObxStatelessWidget {
@@ -91,31 +90,13 @@ abstract class ObxStatelessWidget extends StatelessWidget {
 }
 
 /// a Component that can track changes in a reactive variable
-mixin ObserverComponent on ComponentElement {
+mixin StatelessObserverComponent on StatelessElement {
   List<Disposer>? disposers = <Disposer>[];
 
   void getUpdate() {
-    if (disposers != null) {
-      _safeRebuild();
-    }
-  }
-
-  Future<bool> _safeRebuild() async {
-    if (dirty) return false;
-    if (SchedulerBinding.instance == null) {
-      markNeedsBuild();
-    } else {
-      // refresh was called during the building
-      if (SchedulerBinding.instance!.schedulerPhase != SchedulerPhase.idle) {
-        // Await for the end of build
-        await SchedulerBinding.instance!.endOfFrame;
-        if (dirty) return false;
-      }
-
+    if (disposers != null && !dirty) {
       markNeedsBuild();
     }
-
-    return true;
   }
 
   @override

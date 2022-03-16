@@ -91,7 +91,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
         widget!.controller.onDelete();
         Get.log('"${widget!.controller.runtimeType}" onClose() called');
         Get.log('"${widget!.controller.runtimeType}" deleted from memory');
-        GetWidget._cache[widget!] = null;
+        // GetWidget._cache[widget!] = null;
       });
     }
     info = null;

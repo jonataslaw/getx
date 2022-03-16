@@ -1,5 +1,7 @@
 // ignore_for_file: overridden_fields
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../instance_manager.dart';
@@ -149,10 +151,10 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind create<S>(InstanceBuilderCallback<S> builder,
+  static Bind create<S>(InstanceCreateBuilderCallback<S> builder,
       {String? tag, bool permanent = true}) {
-    Get.create<S>(builder, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
+      create: builder,
       tag: tag,
     );
   }
@@ -192,6 +194,7 @@ abstract class Bind<T> extends StatelessWidget {
   factory Bind.builder({
     Widget? child,
     InitBuilder<T>? init,
+    InstanceCreateBuilderCallback<T>? create,
     bool global = true,
     bool autoRemove = true,
     bool assignId = false,
@@ -206,6 +209,7 @@ abstract class Bind<T> extends StatelessWidget {
       _FactoryBind<T>(
         // key: key,
         init: init,
+        create: create,
         global: global,
         autoRemove: autoRemove,
         assignId: assignId,
@@ -254,6 +258,8 @@ class _FactoryBind<T> extends Bind<T> {
   @override
   final InitBuilder<T>? init;
 
+  final InstanceCreateBuilderCallback<T>? create;
+
   @override
   final bool global;
   @override
@@ -282,6 +288,7 @@ class _FactoryBind<T> extends Bind<T> {
     Key? key,
     this.child,
     this.init,
+    this.create,
     this.global = true,
     this.autoRemove = true,
     this.assignId = false,
@@ -298,6 +305,7 @@ class _FactoryBind<T> extends Bind<T> {
   Bind<T> _copyWithChild(Widget child) {
     return Bind<T>.builder(
       init: init,
+      create: create,
       global: global,
       autoRemove: autoRemove,
       assignId: assignId,
@@ -315,7 +323,7 @@ class _FactoryBind<T> extends Bind<T> {
   @override
   Widget build(BuildContext context) {
     return Binder<T>(
-      init: init,
+      create: create,
       global: global,
       autoRemove: autoRemove,
       assignId: assignId,
@@ -367,9 +375,11 @@ class Binder<T> extends InheritedWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
+    this.create,
   }) : super(key: key, child: child);
 
   final InitBuilder<T>? init;
+  final InstanceCreateBuilderCallback? create;
   final bool global;
   final Object? id;
   final String? tag;
@@ -442,7 +452,7 @@ class BindElement<T> extends InheritedElement {
 
         _controllerBuilder = () => Get.find<T>(tag: widget.tag);
       } else {
-        _controllerBuilder = widget.init;
+        _controllerBuilder = widget.create?.call(this) ?? widget.init;
         _isCreator = true;
         if (widget.lazy) {
           Get.lazyPut<T>(_controllerBuilder!, tag: widget.tag);
@@ -451,7 +461,7 @@ class BindElement<T> extends InheritedElement {
         }
       }
     } else {
-      _controllerBuilder = widget.init;
+      _controllerBuilder = widget.create?.call(this) ?? widget.init;
       _isCreator = true;
       _needStart = true;
     }
@@ -482,6 +492,10 @@ class BindElement<T> extends InheritedElement {
       _remove?.call();
       localController.addListener(filter);
       _remove = () => localController.removeListener(filter);
+    } else if (localController is StreamController) {
+      _remove?.call();
+      final stream = localController.stream.listen((_) => filter());
+      _remove = () => stream.cancel();
     }
   }
 
