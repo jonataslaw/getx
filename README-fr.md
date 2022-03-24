@@ -470,7 +470,7 @@ class HomeProvider extends GetConnect {
     // Il définit baseUrl pour Http et websockets si utilisé sans instance [httpClient]
 
     // Cela attachera la propriété 'apikey' sur l'en-tête ('header') de toutes les 'request's
-    httpClient.addRequestModifier((request) {
+    httpClient.addRequestModifier<Object?>((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
