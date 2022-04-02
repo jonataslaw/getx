@@ -385,7 +385,11 @@ class GetInstance {
       return true;
     } else {
       if (dep.lateRemove != null) {
-        dep.lateRemove = null;
+        var lastDep = dep;
+        while(lastDep.lateRemove?.lateRemove != null) {
+          lastDep = lastDep.lateRemove!;
+        }
+        lastDep.lateRemove = null;
         Get.log('"$newKey" deleted from memory');
         return false;
       } else {
