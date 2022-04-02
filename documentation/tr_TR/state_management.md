@@ -1,4 +1,4 @@
-* [State Management](#state-management)
+* [State Management(Durum Yönetimi)](#state-management)
   + [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
     - [Maximum performance:](#maximum-performance)
@@ -22,50 +22,50 @@
   + [Mixing the two state managers](#mixing-the-two-state-managers)
   + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management
+# State Management (Durum Yönetimi)
 
-GetX does not use Streams or ChangeNotifier like other state managers. Why? In addition to building applications for android, iOS, web, linux, macos and linux, with GetX you can build server applications with the same syntax as Flutter/GetX. In order to improve response time and reduce RAM consumption, we created GetValue and GetStream, which are low latency solutions that deliver a lot of performance, at a low operating cost. We use this base to build all of our resources, including state management.
+GetX, diğer State Management'ler (Durum Yöneticileri) gibi Streams veya ChangeNotifier kullanmaz. Niye? GetX ile android, iOS, web, linux, macos ve linux için uygulamalar oluşturmaya ek olarak, Flutter/GetX ile aynı syntax(sözdizimine) sahip server(sunucu) uygulamaları oluşturabilirsiniz. Yanıt süresini iyileştirmek ve RAM tüketimini azaltmak için düşük işletim maliyetiyle çok fazla performans sunan düşük gecikmeli çözümler olan GetValue ve GetStream'i oluşturduk. State Management (Durum Yönetimi) de dahil olmak üzere tüm kaynaklarımızı oluşturmak için bu temeli kullanıyoruz.
 
-* _Complexity_: Some state managers are complex and have a lot of boilerplate. With GetX you don't have to define a class for each event, the code is highly clean and clear, and you do a lot more by writing less. Many people have given up on Flutter because of this topic, and they now finally have a stupidly simple solution for managing states.
-* _No code generators_: You spend half your development time writing your application logic. Some state managers rely on code generators to have minimally readable code. Changing a variable and having to run build_runner can be unproductive, and often the waiting time after a flutter clean will be long, and you will have to drink a lot of coffee.
+* _Complexity_ (Karmaşıklık):  Bazı state management'ler karmaşıktır ve çok fazla ortak özelliği vardır. GetX ile her olay için bir sınıf tanımlamanız gerekmez, kod son derece temiz ve nettir ve daha az yazarak çok daha fazlasını yaparsınız. Pek çok insan bu konu yüzünden Flutter'dan vazgeçti ve şimdi nihayet durumları yönetmek için basit bir çözüme sahipler.
+* _No code generators_ (Kod Oluşturucu Yok): Geliştirme zamanınızın yarısını uygulama mantığınızı yazmaya harcarsınız. Bazı state management'ler, minimum düzeyde okunabilir koda sahip olmak için kod oluşturuculara güvenir. Bir değişkeni değiştirmek ve build_runner'ı çalıştırmak verimsiz olabilir ve genellikle flutter clean'den sonraki bekleme süresi uzun olur ve çok fazla kahve içmeniz gerekir.
 
-With GetX everything is reactive, and nothing depends on code generators, increasing your productivity in all aspects of your development.
+GetX ile her şey reaktiftir ve hiçbir şey kod oluşturuculara bağlı değildir, bu da geliştirmenizin tüm yönlerinde üretkenliğinizi artırır.
 
-* _It does not depend on context_: You probably already needed to send the context of your view to a controller, making the View's coupling with your business logic high. You have probably had to use a dependency for a place that has no context, and had to pass the context through various classes and functions. This just doesn't exist with GetX. You have access to your controllers from within your controllers without any context. You don't need to send the context by parameter for literally nothing.
-* _Granular control_: most state managers are based on ChangeNotifier. ChangeNotifier will notify all widgets that depend on it when notifyListeners is called. If you have 40 widgets on one screen, which have a variable of your ChangeNotifier class, when you update one, all of them will be rebuilt.
+* _It does not depend on context(Context'e bağlı değil)_: Muhtemelen görünümünüzün context'ini (bağlam) bir denetleyiciye göndermeniz gerekiyordu, bu da görünümün iş mantığınızla bağlantısını yüksek hale getirdi. Muhtemelen context'i (bağlamı) olmayan bir yer için bir bağımlılık kullanmak zorunda kaldınız ve context'i(bağlamı) çeşitli sınıflar ve fonksiyonlardan geçirmek zorunda kaldınız.Bu sadece GetX ile mevcut değil. Controller'larınıza (Denetleyicilerinize) , controller'larınızın(denetleyicilerinizin) içinden herhangi bir context (bağlam) olmadan erişebilirsiniz. Kelimenin tam anlamıyla hiçbir şey için context'i(bağlamı) parametreye göre göndermeniz gerekmez.
+* _Granular control(Parçacıklı Kontrol)_: Çoğu state management(durum yöneticisi) ChangeNotifier'ı temel alır. ChangeNotifier, notifyListeners çağrıldığında kendisine bağlı olan tüm widget'ları bilgilendirecektir. Bir ekranda ChangeNotifier sınıfınızın bir değişkenine sahip 40 widget'ınız varsa, birini güncellediğinizde hepsi yeniden oluşturulacaktır.
 
-With GetX, even nested widgets are respected. If you have Obx watching your ListView, and another watching a checkbox inside the ListView, when changing the CheckBox value, only it will be updated, when changing the List value, only the ListView will be updated.
+GetX ile iç içe geçmiş widget'lara bile saygı duyulur. Obx listview'inizi izliyorsa ve diğeri ListView içinde bir onay kutusu izliyorsa, CheckBox değerini değiştirirken yalnızca o onay kutusu güncellenir, Liste değerini değiştirirken yalnızca ListView güncellenir.
 
-* _It only reconstructs if its variable REALLY changes_: GetX has flow control, that means if you display a Text with 'Paola', if you change the observable variable to 'Paola' again, the widget will not be reconstructed. That's because GetX knows that 'Paola' is already being displayed in Text, and will not do unnecessary reconstructions.
+* _It only reconstructs if its variable REALLY changes (Değişken değişirse GERÇEKTEN yeniden yapılandırır)_: GetX akış kontrolüne sahiptir, yani 'Paola' ile bir text(metin) görüntülerseniz, (observable)gözlemlenebilir değişkeni tekrar 'Paola' olarak değiştirirseniz, widget yeniden yapılandırılmayacaktır. Çünkü GetX, 'Paola'nın' zaten text'de(metinde) görüntülendiğini ve gereksiz rekonstrüksiyonlar yapmayacağını biliyor.
 
-Most (if not all) current state managers will rebuild on the screen.
+Mevcut state management'lerin(durum yöneticilerin) çoğu (hepsi değilse de) ekranda yeniden oluşturulur.
 
 ## Reactive State Manager
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+Reaktif programlama birçok insanı yabancılaştırabilir çünkü karmaşık olduğu söylenir. GetX reaktif programlamayı oldukça basit bir şeye dönüştürür:
 
-* You won't need to create StreamControllers.
-* You won't need to create a StreamBuilder for each variable
-* You will not need to create a class for each state.
-* You will not need to create a get for an initial value.
+* Stream Controller oluşturmanıza gerek yoktur.
+* Her değişken için bir StreamBuilder oluşturmanız gerekmez.
+* Her state(durum) için bir sınıf oluşturmanız gerekmeyecektir.
+* Bir initial value(başlangıç değeri) için bir get oluşturmanız gerekmeyecektir.
 
-Reactive programming with Get is as easy as using setState.
+Get ile reaktif programlama, Setstate'i kullanmak kadar kolaydır.
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+Bir ad değişkeniniz olduğunu ve her değiştirdiğinizde onu kullanan tüm widget'ların otomatik olarak değiştirilmesini istediğinizi düşünelim.
 
-This is your count variable:
+Bu sizin count(sayım) değişkeninizdir:
 
 ``` dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+Observable hale getirmek için, sonuna ".obs" eklemeniz gerekir:
 
 ``` dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-That's all. It's *that* simple.
+Hepsi bu. *Bu kadar basit* bir şey.
 
 From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
 
