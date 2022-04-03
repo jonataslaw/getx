@@ -67,44 +67,45 @@ var name = 'Jonatas Borges'.obs;
 
 Hepsi bu. *Bu kadar basit* bir şey.
 
-From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
+Şu andan itibaren, bu reaktif-".obs"(ervables) değişkenlerine _Rx_ adını verebiliriz.
 
-What did we do under the hood? We created a `Stream` of `String` s, assigned the initial value `"Jonatas Borges"` , we notified all widgets that use `"Jonatas Borges"` that they now "belong" to this variable, and when the _Rx_ value changes, they will have to change as well. 
+Kaputun altında ne yaptık? `String` lerin bir `Stream` oluşturduk, `"Jonatas Borges"` initial value'sunu(başlangıç değerini) atadık, `"Jonatas Borges"` kullanan tüm widget'lara artık bu değişkene "ait olduklarını" bildirdik ve _Rx_ değeri değiştiğinde de değişmeleri gerekecek. 
 
-This is the **magic of GetX**, thanks to Dart's capabilities.
+Bu, Dart'ın yetenekleri sayesinde **GetX'in büyüsüdür**.
 
-But, as we know, a `Widget` can only be changed if it is inside a function, because static classes do not have the power to "auto-change". 
+Ancak, bildiğimiz gibi, bir `Widget` yalnızca bir işlevin içindeyse değiştirilebilir, çünkü statik sınıflar "otomatik değiştirme" gücüne sahip değildir.
 
-You will need to create a `StreamBuilder` , subscribe to this variable to listen for changes, and create a "cascade" of nested `StreamBuilder` if you want to change several variables in the same scope, right?
+Bir `StreamBuilder` oluşturmanız, değişiklikleri dinlemek için bu değişkene abone olmanız ve aynı kapsamdaki birkaç değişkeni değiştirmek istiyorsanız, iç içe geçmiş `StreamBuilder` bir "kaskad" oluşturmanız gerekir, değil mi?
 
-No, you don't need a `StreamBuilder` , but you are right about static classes.
+Hayır, bir `StreamBuilder`a ihtiyacınız yok, ancak statik sınıflar konusunda haklısınız.
 
-Well, in the view, we usually have a lot of boilerplate when we want to change a specific Widget, that's the Flutter way. 
-With **GetX** you can also forget about this boilerplate code. 
+Pekala, görünüşe göre, belirli bir Widget'ı değiştirmek istediğimizde genellikle çok fazla ortak bilgimiz olur, bu Flutter yoludur.
+**GetX** ile bu ortak kod kodunu da unutabilirsiniz.
 
-`StreamBuilder( … )` ? `initialValue: …` ? `builder: …` ? Nope, you just need to place this variable inside an `Obx()` Widget.
+`StreamBuilder( … )` ? `initialValue: …` ? `builder: …` ? Hayır, bu değişkeni bir `Obx()` Widget'ına yerleştirmeniz yeterlidir.
 
 ``` dart
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>` . 
+_Ezberlemek için neye ihtiyacın var?_Sadece `Obx(() =>` . 
 
 You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+Bu Widget'ı bir ok işlevinden bir 'Obx()' (_Rx_'in "Observable") içine geçiriyorsunuz.
 
-`Obx` is pretty smart, and will only change if the value of `controller.name` changes. 
+`Obx` oldukça akıllıdır ve yalnızca `controller.name`nin değeri değiştiğinde değişecektir.
 
-If `name` is `"John"` , and you change it to `"John"` ( `name.value = "John"` ), as it's the same `value` as before, nothing will change on the screen, and `Obx` , to save resources, will simply ignore the new value and not rebuild the Widget. **Isn't that amazing?**
+`name`, `"John"` ise ve onu `"John"` ( `name.value = "John"` ) olarak değiştirirseniz, öncekiyle aynı `değer` olduğundan, ekranda hiçbir şey değişmeyecektir, ve 'Obx' , kaynakları kurtarmak için yeni değeri yok sayar ve Widget'ı yeniden oluşturmaz. **Harika değil mi?**
 
-> So, what if I have 5 _Rx_ (observable) variables within an `Obx` ?
+> Peki ya bir `Obx` içinde 5 _Rx_ (observable) değişkenim varsa?
 
-It will just update when **any** of them changes. 
+Yalnızca **herhangi biri** değiştiğinde güncellenecektir.
 
-> And if I have 30 variables in a class, when I update one, will it update **all** the variables that are in that class?
+> Ve bir sınıfta 30 değişkenim varsa, birini güncellediğimde, o sınıftaki değişkenlerin **tümünü** günceller mi?
 
-Nope, just the **specific Widget** that uses that _Rx_ variable.
+Hayır, sadece bu _Rx_ değişkenini kullanan **belirli Widget**.
 
-So, **GetX** only updates the screen, when the _Rx_ variable changes it's value.
+Bu nedenle, **GetX** yalnızca _Rx_ değişkeni değerini değiştirdiğinde ekranı günceller.
 
 ``` 
 
@@ -114,47 +115,49 @@ final isOpen = false.obs;
 void onButtonTap() => isOpen.value=false;
 ```
 
-### Advantages
+### Advantages(Avantajlar)
 
-**GetX()** helps you when you need **granular** control over what's being updated.
+**GetX()**, güncellenenler üzerinde **ayrıntılı** kontrole ihtiyacınız olduğunda size yardımcı olur.
+ 
+Bir eylem gerçekleştirdiğinizde tüm değişkenleriniz değiştirileceğinden `unique IDs(benzersiz kimliklere)` ihtiyacınız yoksa, `GetBuilder`ı kullanın,
+çünkü Simple State Updater(Basit Durum Güncelleyicisi)'dir (`setState ()` gibi bloklar halinde), sadece birkaç kod satırında yapılır.
+En az CPU etkisine sahip olmak ve sadece tek bir amacı (_State_ rebuild) yerine getirmek ve mümkün olan en az kaynağı harcamak için basitleştirildi.
 
-If you do not need `unique IDs` , because all your variables will be modified when you perform an action, then use `GetBuilder` , 
-because it's a Simple State Updater (in blocks, like `setState()` ), made in just a few lines of code.
-It was made simple, to have the least CPU impact, and just to fulfill a single purpose (a _State_ rebuild) and spend the minimum resources possible.
+**Güçlü** bir State Management (Durum Yöneticisi)'e ihtiyacınız varsa, **GetX** ile yanlış yapmış olamazsınız.
 
-If you need a **powerful** State Manager, you can't go wrong with **GetX**.
+Değişkenlerle çalışmaz, ancak __flows__, içindeki her şey başlık altındaki `Streams`dır.
 
-It doesn't work with variables, but __flows__, everything in it are `Streams` under the hood. 
 
-You can use _rxDart_ in conjunction with it, because everything are `Streams`, 
-you can listen to the `event` of each "_Rx_ variable", 
-because everything in it are `Streams`. 
+_rxDart_ ile birlikte kullanabilirsiniz, çünkü her şey `Streams`,
+her "_Rx_variable"ın 'event(olayını)' dinleyebilirsiniz,
+çünkü içindeki her şey `Streams`'dir.
 
-It is literally a _BLoC_ approach, easier than _MobX_, and without code generators or decorations.
-You can turn **anything** into an _"Observable"_ with just a `.obs` .
+Kelimenin tam anlamıyla bir _BLoC_ yaklaşımıdır, _MobX_'den daha kolaydır ve kod oluşturucuları veya süslemeleri yoktur.
+**Herhangi bir şeyi** yalnızca bir `.obs` ile _"Observable"_ hale getirebilirsiniz.
 
-### Maximum performance:
+### Maksimum Performans:
 
-In addition to having a smart algorithm for minimal rebuilds, **GetX** uses comparators 
-to make sure the State has changed. 
+State Management (Durum Yöneticisinin)'in değiştiğinden emin olmak için akıllı bir algoritmaya sahip olmanın yanı sıra **GetX** comparators kullanır.
 
-If you experience any errors in your app, and send a duplicate change of State, 
-**GetX** will ensure it will not crash.
+Uygulamanızda herhangi bir hatayla karşılaşırsanız ve yinelenen bir State(durum) değişikliği gönderirseniz,
+**GetX** çökmemesini sağlayacaktır.
 
-With **GetX** the State only changes if the `value` change. 
-That's the main difference between **GetX**, and using _ `computed` from MobX_. 
-When joining two __observables__, and one changes; the listener of that _observable_ will change as well.
+**GetX** ile State(Durum) yalnızca `value(değer)` değişirse değişir.
+Bu, **GetX** ile mobx_'den _ `computed` kullanımı arasındaki temel farktır.
+İki defa __observable__ 'da bir değişiklik yapıldığında; o _observable_ dinleyicisi de değişecektir.
+
 
 With **GetX**, if you join two variables, `GetX()` (similar to `Observer()` ) will only rebuild if it implies a real change of State.
+**GetX** ile, iki değişkeni birleştirirseniz, `GetX()` (`Observer()`a benzer) yalnızca gerçek bir State(Durum) değişikliği gerektiriyorsa yeniden oluşturacaktır.
 
-### Declaring a reactive variable
+### Reaktif bir değişken bildirmek
 
-You have 3 ways to turn a variable into an "observable".
+Bir değişkeni "observable" hale getirmenin 3 yolu vardır.
 
-1 - The first is using **`Rx{Type}`**.
+1 - Birincisi **`Rx{Type}`** kullanmak.
 
 ``` dart
-// initial value is recommended, but not mandatory
+// initial value önerilir, zorunlu değildir.
 final name = RxString('');
 final isLogged = RxBool(false);
 final count = RxInt(0);
@@ -163,7 +166,7 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 
-2 - The second is to use **`Rx`** and use Darts Generics, `Rx<Type>`
+2 - İkincisi, **`Rx`** kullanmak ve Darts Generics, `Rx<Type>` kullanmaktır.
 
 ``` dart
 final name = Rx<String>('');
@@ -174,11 +177,11 @@ final number = Rx<Num>(0);
 final items = Rx<List<String>>([]);
 final myMap = Rx<Map<String, int>>({});
 
-// Custom classes - it can be any class, literally
+// Custom classes - herhangi bir sınıf olabilir
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value` :
+3 - Üçüncü, daha pratik, daha kolay ve tercih edilen yaklaşım,`value`'ya bir **`.obs`** ekleyin:
 
 ``` dart
 final name = ''.obs;
@@ -189,31 +192,31 @@ final number = 0.obs;
 final items = <String>[].obs;
 final myMap = <String, int>{}.obs;
 
-// Custom classes - it can be any class, literally
+// Custom classes - herhangi bir sınıf olabilir
 final user = User().obs;
 ```
 
-##### Having a reactive state, is easy.
+##### Reaktif bir duruma sahip olmak kolaydır.
 
-As we know, _Dart_ is now heading towards _null safety_.
-To be prepared, from now on, you should always start your _Rx_ variables with an **initial value**.
+Bildiğimiz gibi, _Dart_ şimdi _null safety_ doğru gidiyor.
+Şu andan itibaren hazırlıklı olmak için, _Rx_ değişkenlerinizi her zaman bir **initial value** ile başlatmalısınız.
 
-> Transforming a variable into an _observable_ + _initial value_ with **GetX** is the simplest, and most practical approach.
+> Bir değişkeni **GetX** ile _observable_ + _initial value_ değerine dönüştürmek en basit ve pratik yaklaşımdır.
 
-You will literally add a " `.obs` " to the end of your variable, and **that’s it**, you’ve made it observable, 
-and its `.value` , well, will be the _initial value_).
+Kelimenin tam anlamıyla bir değişkeninizin sonuna bir " `.obs` " ekleyeceksiniz, ve **bu kadar**, şimdi onu gözlemlenebilir hale getirdiniz,
+ve onun `.value(değer)`'i,  _initial value_ olacaktır).
 
-### Using the values in the view
+### Görünümdeki değerleri kullanma
 
 ``` dart
-// controller file
+// controller dosyası
 final count1 = 0.obs;
 final count2 = 0.obs;
 int get sum => count1.value + count2.value;
 ```
 
 ``` dart
-// view file
+// view dosyası
 GetX<Controller>(
   builder: (controller) {
     print("count 1 rebuild");
@@ -234,33 +237,33 @@ GetX<Controller>(
 ),
 ```
 
-If we increment `count1.value++` , it will print:
+`count1.value++` değerini artırırsak, şunu yazdırır:
 
 * `count 1 rebuild`
 
 * `count 3 rebuild`
 
-because `count1` has a value of `1` , and `1 + 0 = 1` , changing the `sum` getter value.
+`count1`,  `1` değerine sahip olduğundan ve `1 + 0 = 1` olduğundan, `toplam` değeri değiştirilir.
 
-If we change `count2.value++` , it will print:
+`count2.value++` değerini değiştirirsek, şunu yazdırır:
 
 * `count 2 rebuild`
 
 * `count 3 rebuild`
 
-because `count2.value` changed, and the result of the `sum` is now `2` .
+çünkü `count2.value`  değişti ve `sum`un sonucu şimdi `2` oldu.
 
-* NOTE: By default, the very first event will rebuild the widget, even if it is the same `value`.
+* NOT: Varsayılan olarak, ilk etkinlik aynı `value` olsa bile widget'ı yeniden oluşturacaktır.
 
- This behavior exists due to Boolean variables.
+Bu durum boolean değişkenlerinde de mevcuttur.
 
-Imagine you did this:
+Bunu yaptığınızı hayal edin:
 
 ``` dart
 var isLogged = false.obs;
 ```
 
-And then, you checked if a user is "logged in" to trigger an event in `ever` .
+Ardından, bir kullanıcının `ever` içinde bir olayı tetiklemek için `isLogged` olup olmadığını kontrol ettiniz.
 
 ``` dart
 @override
@@ -278,26 +281,27 @@ fireRoute(logged) {
 }
 ```
 
-if `hasToken` was `false` , there would be no change to `isLogged` , so `ever()` would never be called.
-To avoid this type of behavior, the first change to an _observable_ will always trigger an event, 
-even if it contains the same `.value` .
 
-You can remove this behavior if you want, using:
+`hasToken` `false` olsaydı, `isLogged`da herhangi bir değişiklik olmazdı, bu nedenle `ever()` asla çağrılmazdı.
+Bu tür davranışlardan kaçınmak için, bir _observable_ öğesindeki ilk değişiklik her zaman bir olayı tetikleyecektir,
+aynı `.value` değerini içerse bile.
+
+İsterseniz bu davranışı kullanarak kaldırabilirsiniz:
  `isLogged.firstRebuild = false;`
 
-### Conditions to rebuild
+### Yeniden oluşturulacak koşullar
 
-In addition, Get provides refined state control. You can condition an event (such as adding an object to a list), on a certain condition.
+Ek olarak, Get gelişmiş durum kontrolü sağlar. Bir olayı (listeye nesne ekleme gibi) belirli bir koşulda koşullandırabilirsiniz.
 
 ``` dart
-// First parameter: condition, must return true or false.
-// Second parameter: the new value to apply if the condition is true.
+// İlk parametre: koşul, true veya false döndürmelidir.
+// İkinci parametre: koşul doğruysa yeni değer uygulanacaktır.
 list.addIf(item < limit, item);
 ```
 
-Without decorations, without a code generator, without complications :smile:
+Süslemesiz, kod oluşturucusuz, komplikasyonsuz :smile:
 
-Do you know Flutter's counter app? Your Controller class might look like this:
+Flutter'ın sayaç uygulamasını biliyor musunuz? Controller sınıfınız şöyle görünebilir:
 
 ``` dart
 class CountController extends GetxController {
@@ -305,19 +309,19 @@ class CountController extends GetxController {
 }
 ```
 
-With a simple:
+Basit bir şekilde:
 
 ``` dart
 controller.count.value++
 ```
 
-You could update the counter variable in your UI, regardless of where it is stored.
+Kullanıcı arabiriminizdeki sayaç değişkenini nerede depolandığına bakılmaksızın güncelleştirebilirsiniz.
 
-### Where .obs can be used
+### Nerede .obs kullanılabilir
 
-You can transform anything on obs. Here are two ways of doing it:
+Obs üzerindeki her şeyi dönüştürebilirsiniz. İşte bunu yapmanın iki yolu:
 
-* You can convert your class values to obs
+* Sınıf değerlerinizi obs'ye dönüştürebilirsiniz
 
 ``` dart
 class RxUser {
@@ -326,7 +330,7 @@ class RxUser {
 }
 ```
 
-* or you can convert the entire class to be an observable
+* veya tüm sınıfı observable hale getirebilirsiniz.
 
 ``` dart
 class User {
@@ -335,16 +339,16 @@ class User {
   var age;
 }
 
-// when instantianting:
+// örnek verirken:
 final user = User(name: "Camila", age: 18).obs;
 ```
 
-### Note about Lists
+### Listeler hakkında not
 
-Lists are completely observable as are the objects within it. That way, if you add a value to a list, it will automatically rebuild the widgets that use it.
+Listeler, içindeki nesneler gibi tamamen gözlemlenebilir. Bu şekilde, bir listeye bir değer eklerseniz, onu kullanan widget'ları otomatik olarak yeniden oluşturur.
 
-You also don't need to use ".value" with lists, the amazing dart api allowed us to remove that.
-Unfortunaly primitive types like String and int cannot be extended, making the use of .value mandatory, but that won't be a problem if you work with gets and setters for these.
+Ayrıca listelerde ".value" kullanmanıza gerek yok, harika dart api'ları bunu kaldırmamıza izin verdi.
+Ne yazık ki, String ve int gibi ilkel türler genişletilemez, bu da kullanımını sağlar.Değer zorunludur, ancak bunlar için get ve setter'larla çalışıyorsanız bu bir sorun olmayacaktır.
 
 ``` dart
 // On the controller
@@ -352,148 +356,151 @@ final String title = 'User Info:'.obs
 final list = List<User>().obs;
 
 // on the view
-Text(controller.title.value), // String need to have .value in front of it
+Text(controller.title.value), // .value olması gerekir
 ListView.builder (
-  itemCount: controller.list.length // lists don't need it
+  itemCount: controller.list.length // listelerin buna ihtiyacı yok
 )
 ```
 
-When you are making your own classes observable, there is a different way to update them:
+Kendi sınıflarınızı observable hale getirirken, bunları güncellemenin farklı bir yolu vardır:
 
 ``` dart
-// on the model file
-// we are going to make the entire class observable instead of each attribute
+// model dosyasında
+// her bir öznitelik yerine tüm sınıfı observable hale getireceğiz
 class User() {
   User({this.name = '', this.age = 0});
   String name;
   int age;
 }
 
-// on the controller file
+// Controller dosyası
 final user = User().obs;
-// when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
+// User değişkenini güncellemeniz gerektiğinde:
+user.update( (user) { // bu parametre, güncellemek istediğiniz sınıfın kendisidir.
 user.name = 'Jonny';
 user.age = 18;
 });
-// an alternative way of update the user variable:
+// user değişkenini güncellemenin alternatif bir yolu:
 user(User(name: 'João', age: 35));
 
 // on view:
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
-// you can also access the model values without the .value:
-user().name; // notice that is the user variable, not the class (variable has lowercase u)
+// model değerlerine .value olmadan da erişebilirsiniz:
+user().name; 
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+İstemiyorsanız setlerle çalışmak zorunda değilsiniz. "assign" ve "assignAll" api'sini kullanabilirsiniz.
+"assign" api'si listenizi temizler ve oradan başlatmak istediğiniz tek bir nesneyi ekler.
+"assignAll" api, mevcut listeyi temizleyecek ve ona enjekte ettiğiniz yinelenebilir nesneleri ekleyecektir.
 
-### Why i have to use .value
+### Neden .value kullanmak zorundayım?
 
-We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
+Basit bir decoration ve code generator ile `String` ve `int` için 'value' kullanma zorunluluğunu kaldırabiliriz, ancak bu kütüphanenin amacı kesinlikle dış bağımlılıklardan kaçınmaktır. Temelleri (route, dependencies ve state management) içeren, harici bir pakete ihtiyaç duymadan basit, hafif ve performanslı bir şekilde programlamaya hazır bir ortam sunmak istiyoruz.
 
-You can literally add 3 letters to your pubspec (get) and a colon and start programming. All solutions included by default, from route management to state management, aim at ease, productivity and performance.
+Pubspec'inize (get) tam anlamıyla 3 harf ve iki nokta üst üste ekleyebilir ve programlamaya başlayabilirsiniz. Rota yönetiminden durum yönetimine kadar varsayılan olarak dahil edilen tüm çözümler kolaylık, üretkenlik ve performansı hedefler.
 
-The total weight of this library is less than that of a single state manager, even though it is a complete solution, and that is what you must understand.
+Bu kitaplığın toplam ağırlığı, eksiksiz bir çözüm olmasına rağmen tek bir state manager'den daha azdır.
 
-If you are bothered by `.value` , and like a code generator, MobX is a great alternative, and you can use it in conjunction with Get. For those who want to add a single dependency in pubspec and start programming without worrying about the version of a package being incompatible with another, or if the error of a state update is coming from the state manager or dependency, or still, do not want to worrying about the availability of controllers, whether literally "just programming", get is just perfect.
+
+Eğer `.value` dan rahatsızsanız MobX harika bir alternatiftir ve Get ile birlikte kullanabilirsiniz.
 
 If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
-Obviously, if someone wants to contribute to the project and create a code generator, or something similar, I will link in this readme as an alternative, my need is not the need for all devs, but for now I say, there are good solutions that already do that, like MobX.
+MobX code generator ile bir sorununuz yoksa veya BLoC ilgili bir sorununuz yoksa Get ile route'u kullanabilirsiniz. Get SEM ve RSM ile doğdu, şirketimin 90'dan fazla controller'a sahip bir projesi var.Büyük bir projeniz varsa, oldukça iyi bir makinede bir Flutter Clean'den sonra görevlerini tamamlaması 30 dakikadan fazla sürdü. 5, 10, 15 controller, herhangi bir state manager size yardımcı olacaktır. Büyük bir projeniz varsa ve code generator sizin için bir sorunsa, bu çözüm size verildi.
+
+Açıkçası, birisi projeye katkıda bulunmak ve bir code generator veya benzeri bir şey oluşturmak istiyorsa, bunu readme'de alternatif olarak bağlantı ekleyeceğim, şimdilik diyorum ki, bunu zaten yapan iyi çözümler var, MobX gibi.
 
 ### Obx()
 
-Typing in Get using Bindings is unnecessary. you can use the Obx widget instead of GetX which only receives the anonymous function that creates a widget.
-Obviously, if you don't use a type, you will need to have an instance of your controller to use the variables, or use `Get.find<Controller>()` .value or Controller.to.value to retrieve the value.
+Bindings kullanarak Get yazmak gereksizdir. Yalnızca bir pencere öğesi oluşturan anonim işlevi alan GetX yerine Obx pencere aracını kullanabilirsiniz.
+Açıkçası, bir tür kullanmıyorsanız, değişkenleri kullanmak için denetleyicinizin bir örneğine sahip olmanız veya değeri almak için `Get.find<Controller>()` .value veya Controller.to.value öğesini kullanmanız gerekir. .
 
-### Workers
+### Çalışanlar
 
-Workers will assist you, triggering specific callbacks when an event occurs.
+Bir olay meydana geldiğinde belirli geri aramaları tetikleyerek size yardımcı olacaktır.
 
 ``` dart
-/// Called every time `count1` changes.
+/// 'Count1' her değiştiğinde çağrılır.
 ever(count1, (_) => print("$_ has been changed"));
 
-/// Called only first time the variable $_ is changed
+/// $_ değişkeni yalnızca ilk kez değiştirildiğinde çağrılır.
 once(count1, (_) => print("$_ was changed once"));
 
-/// Anti DDos - Called every time the user stops typing for 1 second, for example.
+/// Anti DDoS - Örneğin, kullanıcı 1 saniye boyunca yazmayı her durdurduğunda çağrılır.
 debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 
-/// Ignore all changes within 1 second.
+/// 1 saniye içinde tüm değişiklikleri yok sayın.
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
 
-All workers (except `debounce` ) have a `condition` named parameter, which can be a `bool` or a callback that returns a `bool` .
-This `condition` defines when the `callback` function executes.
+Tüm çalışanlar (`debounce` dışında), "bool" veya "bool" döndüren bir callback olabilen bir "Koşul" adlı parametreye sahiptir.
+Bu "koşul", "callback" işlevinin ne zaman yürütüleceğini tanımlar.
 
-All workers returns a `Worker` instance, that you can use to cancel ( via `dispose()` ) the worker.
+Tüm çalışanlar, çalışanı iptal etmek için ( `dispose()` aracılığıyla) kullanabileceğiniz bir 'Worker' örneği döndürür.
  
 
 * **`ever`**
 
- is called every time the _Rx_ variable emits a new value.
+_Rx_ değişkeni her yeni bir değer yaydığında çağrılır.
 
 * **`everAll`**
 
- Much like `ever` , but it takes a `List` of _Rx_ values Called every time its variable is changed. That's it.
+`ever` gibi, ancak değişkeni her değiştirildiğinde çağrılan _Rx_ değerlerinin bir `List`'ini alır. Bu kadar.
 
 * **`once`**
 
-'once' is called only the first time the variable has been changed.
+'once', yalnızca değişken ilk değiştirildiğinde çağrılır.
 
 * **`debounce`**
 
-'debounce' is very useful in search functions, where you only want the API to be called when the user finishes typing. If the user types "Jonny", you will have 5 searches in the APIs, by the letter J, o, n, n, and y. With Get this does not happen, because you will have a "debounce" Worker that will only be triggered at the end of typing.
+'debounce', yalnızca kullanıcı yazmayı bitirdiğinde API'nin çağrılmasını istediğiniz arama işlevlerinde çok kullanışlıdır. Kullanıcı "Jonny" yazarsa, apı'lerde J, o, n, n ve y harfleriyle 5 aramanız olur. Get ile bu olmaz, çünkü yalnızca yazmanın sonunda tetiklenecek bir "debounce" çalışanınız olur.
 
 * **`interval`**
 
-'interval' is different from the debouce. debouce if the user makes 1000 changes to a variable within 1 second, he will send only the last one after the stipulated timer (the default is 800 milliseconds). Interval will instead ignore all user actions for the stipulated period. If you send events for 1 minute, 1000 per second, debounce will only send you the last one, when the user stops strafing events. interval will deliver events every second, and if set to 3 seconds, it will deliver 20 events that minute. This is recommended to avoid abuse, in functions where the user can quickly click on something and get some advantage (imagine that the user can earn coins by clicking on something, if he clicked 300 times in the same minute, he would have 300 coins, using interval, you you can set a time frame for 3 seconds, and even then clicking 300 or a thousand times, the maximum he would get in 1 minute would be 20 coins, clicking 300 or 1 million times). The debounce is suitable for anti-DDos, for functions like search where each change to onChange would cause a query to your api. Debounce will wait for the user to stop typing the name, to make the request. If it were used in the coin scenario mentioned above, the user would only win 1 coin, because it is only executed, when the user "pauses" for the established time.
+'interval' debouce'dan farklıdır. debouce kullanıcı 1 saniye içinde bir değişkene 1000 değişiklik yaparsa, öngörülen zamanlayıcıdan sonra yalnızca sonuncusunu gönderir (varsayılan değer 800 milisaniyedir). Interval bunun yerine, öngörülen süre boyunca tüm kullanıcı eylemlerini yoksayar. Olayları saniyede 1000 olmak üzere 1 dakika boyunca gönderirseniz, debounce yalnızca kullanıcı olayları engellemeyi bıraktığında size sonuncusunu gönderir. aralık, her saniye olayları teslim eder ve 3 saniyeye ayarlanırsa, o dakika 20 olay teslim eder. Bu, kullanıcının bir şeye hızlı bir şekilde tıklayabileceği ve bir avantaj elde edebileceği işlevlerde kötüye kullanımı önlemek için önerilir (kullanıcının bir şeye tıklayarak para kazanabileceğini düşünün, aynı dakikada 300 kez tıklarsa, 300 jetona sahip olur, aralığı kullanarak, bir zaman dilimi ayarlayabilirsiniz 3 saniye boyunca ve hatta 300 veya bin kez tıklandığında, 1 dakika içinde alacağı maksimum 20 jeton, 300 veya 1 milyon kez tıklanır). Debounce, anti-DDoS için, Onchange'deki her değişikliğin apı'nizde bir sorguya neden olacağı arama gibi işlevler için uygundur. Debounce, kullanıcının isteği yapmak için adı yazmayı bırakmasını bekleyecektir. Yukarıda belirtilen jeton senaryosunda kullanılmış olsaydı, kullanıcı yalnızca belirlenen süre boyunca "durakladığında" çalıştırıldığı için kullanıcı yalnızca 1 jeton kazanırdı.
 
-* NOTE: Workers should always be used when starting a Controller or Class, so it should always be on onInit (recommended), Class constructor, or the initState of a StatefulWidget (this practice is not recommended in most cases, but it shouldn't have any side effects).
+* NOT: Çalışanlar her zaman bir Controller veya Class başlatırken kullanılmalıdır, bu nedenle her zaman onInit (önerilen), Class oluşturucu veya statefulwidget'in initState üzerinde olmalıdır (bu uygulama çoğu durumda önerilmez, ancak herhangi bir yan etkisi olmamalıdır).
 
-## Simple State Manager
+## Simple State Manager (Basit Durum Yöneticisi)
 
-Get has a state manager that is extremely light and easy, which does not use ChangeNotifier, will meet the need especially for those new to Flutter, and will not cause problems for large applications.
+Get'in son derece hafif ve kolay, ChangeNotifier kullanmayan, özellikle Flutter'a yeni başlayanların ihtiyacını karşılayacak ve büyük uygulamalar için sorun yaratmayacak bir state manager'i var.
 
-GetBuilder is aimed precisely at multiple state control. Imagine that you added 30 products to a cart, you click delete one, at the same time that the list is updated, the price is updated and the badge in the shopping cart is updated to a smaller number. This type of approach makes GetBuilder killer, because it groups states and changes them all at once without any "computational logic" for that. GetBuilder was created with this type of situation in mind, since for ephemeral change of state, you can use setState and you would not need a state manager for this.
+GetBuilder tam olarak çoklu state controller'a yöneliktir. Bir sepete 30 ürün eklediğinizi, birini sil'i tıklattığınızı, aynı zamanda listenin güncellendiğini, fiyatın güncellendiğini ve alışveriş sepetindeki rozetin daha küçük bir sayıya güncellendiğini düşünün. Bunu GetBuilder yapar, çünkü durumları gruplandırır ve bunun için herhangi bir "hesaplama mantığı" olmadan hepsini bir kerede değiştirir. GetBuilder, bu tür bir durum göz önünde bulundurularak oluşturuldu, çünkü geçici durum değişikliği için Setstate'i kullanabilirsiniz ve bunun için bir state manager'e ihtiyacınız olmaz.
 
-That way, if you want an individual controller, you can assign IDs for that, or use GetX. This is up to you, remembering that the more "individual" widgets you have, the more the performance of GetX will stand out, while the performance of GetBuilder should be superior, when there is multiple change of state.
+Bu şekilde, tek bir controller'a ihtiyacınız varsa, bunun için ID'ler atayabilir veya getx'i kullanabilirsiniz. Bu size kalmış, sahip olduğunuz daha fazla "individual" widget'ın, getx'in performansının o kadar fazla öne çıkacağını, Getbuilder'ın performansının ise birden fazla durum değişikliği olduğunda üstün olması gerektiğini unutmayın.
 
-### Advantages
+### Avantajlar
 
-1. Update only the required widgets.
+1. Yalnızca gerekli widget'ları günceller.
 
-2. Does not use changeNotifier, it is the state manager that uses less memory (close to 0mb).
+2. ChangeNotifier kullanmaz, daha az bellek kullanan (0mb'ye yakın) durum yöneticisidir.
 
-3. Forget StatefulWidget! With Get you will never need it. With the other state managers, you will probably have to use a StatefulWidget to get the instance of your Provider, BLoC, MobX Controller, etc. But have you ever stopped to think that your appBar, your scaffold, and most of the widgets that are in your class are stateless? So why save the state of an entire class, if you can only save the state of the Widget that is stateful? Get solves that, too. Create a Stateless class, make everything stateless. If you need to update a single component, wrap it with GetBuilder, and its state will be maintained.
+3. StatefulWidget'ı unutun! Get ile buna asla ihtiyacınız olmayacak. Diğer state manager'lar ile (BLoC, MobX Controller vb.) muhtemelen bir StatefulWidget kullanmanız gerekecek. Stateless Widget mı? Öyleyse, yalnızca state bilgisi olan Widget'ın durumunu kaydedebiliyorsanız, neden tüm sınıfın durumunu kurtarın? Get bunu da çözer. Stateless bir sınıf oluşturun, her şeyi Stateless yapın. Tek bir bileşeni güncellemeniz gerekiyorsa, onu GetBuilder ile sarın.
 
-4. Organize your project for real! Controllers must not be in your UI, place your TextEditController, or any controller you use within your Controller class.
+4. Projenizi gerçek anlamda düzenleyin! Denetleyiciler UI'nizde bulunmamalı, TextEditController'ınızı veya kullandığınız herhangi bir denetleyiciyi Controller sınıfınıza yerleştirmemelidir.
 
-5. Do you need to trigger an event to update a widget as soon as it is rendered? GetBuilder has the property "initState", just like StatefulWidget, and you can call events from your controller, directly from it, no more events being placed in your initState.
+5.Bir widget'ı oluşturulduğu anda güncellemek için bir olayı tetiklemeniz mi gerekiyor? GetBuilder, StatefulWidget gibi "initState" özelliğine sahiptir ve initState'inize daha fazla event yerleştirilmeden, doğrudan denetleyicinizden event'leri çağırabilirsiniz.
 
-6. Do you need to trigger an action like closing streams, timers and etc? GetBuilder also has the dispose property, where you can call events as soon as that widget is destroyed.
+6. Stream, timer vb. kapatmak gibi bir eylemi tetiklemeniz gerekiyor mu? Get Builder ayrıca, widget yok edilir edilmez olayları çağırabileceğiniz dispose özelliğine de sahiptir.
 
-7. Use streams only if necessary. You can use your StreamControllers inside your controller normally, and use StreamBuilder also normally, but remember, a stream reasonably consumes memory, reactive programming is beautiful, but you shouldn't abuse it. 30 streams open simultaneously can be worse than changeNotifier (and changeNotifier is very bad).
+7. Stream'leri yalnızca gerektiğinde kullanın. Stream Controller controller içinde normal olarak kullanabilir ve Streambuilder'ı da normal olarak kullanabilirsiniz, ancak unutmayın, bir stream makul bir şekilde bellek tüketir, reaktif programlama güzeldir, ancak kötüye kullanmamalısınız. aynı anda açılan 30 stream, Changenotifier'den daha kötü olabilir (ve changeNotifier çok kötüdür).
 
-8. Update widgets without spending ram for that. Get stores only the GetBuilder creator ID, and updates that GetBuilder when necessary. The memory consumption of the get ID storage in memory is very low even for thousands of GetBuilders. When you create a new GetBuilder, you are actually sharing the state of GetBuilder that has a creator ID. A new state is not created for each GetBuilder, which saves A LOT OF ram for large applications. Basically your application will be entirely Stateless, and the few Widgets that will be Stateful (within GetBuilder) will have a single state, and therefore updating one will update them all. The state is just one.
+8. Ram harcamadan widget'ları güncelleyin. Get yalnızca Get Builderlder içerik oluşturucu kimliğini ve gerektiğinde GetBuilder güncelleştirmelerini depolar. Bellekte get ID depolama bellek tüketimi bile GetBuilders binlerce çok düşüktür. Yeni bir GetBuilder oluşturduğunuzda, aslında bir içerik oluşturucu kimliği olan GetBuilder durumunu paylaşıyorsunuz demektir. Her GetBuilder için büyük uygulamalar için çok fazla ram tasarrufu sağlayan yeni bir durum oluşturulmaz. Temel olarak uygulamanız tamamen Stateless olacak ve State Bilgisi olan birkaç Widget (GetBuilder içinde) tek bir duruma sahip olacak ve bu nedenle birini güncellemek hepsini güncelleyecektir. State sadece bir tanesidir.
 
-9. Get is omniscient and in most cases it knows exactly the time to take a controller out of memory. You should not worry about when to dispose of a controller, Get knows the best time to do this.
+9. Get her şeyi bilir ve çoğu durumda bir denetleyiciyi bellekten çıkarma zamanını tam olarak bilir. Bir denetleyiciyi ne zaman elden çıkaracağınız konusunda endişelenmemelisiniz, Bunu yapmak için en iyi zamanı öğrenin.
 
 ### Usage
 
 ``` dart
-// Create controller class and extends GetxController
+// Controller sınıfı oluşturun ve GetxController'ı extends edin
 class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
-    update(); // use update() to update counter variable on UI when increment be called
+    update(); // artış çağrıldığında kullanıcı arayüzünde sayaç değişkenini güncellemek için update() işlevini kullanın
   }
 }
-// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called
+// Stateless/Stateful sınıfınızda, artış çağrıldığında Metni güncellemek için Get Builder'ı kullanın
 GetBuilder<Controller>(
   init: Controller(), // INIT IT ONLY THE FIRST TIME
   builder: (_) => Text(
