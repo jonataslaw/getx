@@ -1,4 +1,4 @@
-* [State Management(Durum Yönetimi)](#state-management)
+* [State Management (Durum Yönetimi)](#state-management-(durum-yönetimi))
   + [Reactive State Manager (Reaktif Durum Yöneticisi)](#reactive-state-manager)
     - [Advantages(Avantajlar)](#advantages)
     - [Maksimum Performans:](#maximum-performance)
