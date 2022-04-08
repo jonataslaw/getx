@@ -208,10 +208,17 @@ class GetUtils {
   static bool isURL(String s) => hasMatch(s,
       r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
 
-  /// Checks if string is email.
-  static bool isEmail(String s) => hasMatch(s,
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  /// Removes all the white spaces from the string
+  static String removeAllWhiteSpaces(String s) => s.trimLeft();
 
+  /// Checks if string is email.
+  static bool isEmail(String s) {
+    /// removes all the white spaces from the given email if user or the auto
+    /// correct enterd the empthy spaces
+    final sWithOutWhiteSpces = removeAllWhiteSpaces(s);
+    return hasMatch(sWithOutWhiteSpces,
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  } 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) {
     if (s.length > 16 || s.length < 9) return false;
