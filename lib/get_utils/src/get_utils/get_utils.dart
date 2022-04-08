@@ -1,4 +1,3 @@
-import '../../../get_connect/http/src/utils/utils.dart';
 import '../../../get_core/get_core.dart';
 
 /// Returns whether a dynamic value PROBABLY
@@ -209,18 +208,9 @@ class GetUtils {
   static bool isURL(String s) => hasMatch(s,
       r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
 
-  /// Removes all the white spaces from back of the string
-  static String trimFromLeft(String s) => s.trimLeft();
-
   /// Checks if string is email.
-  static bool isEmail(String s) {
-    /// If user or the auto complete has enterd the space at the 
-    /// end of the email then the fallowing function will remove it and then 
-    /// validate the *email*
-    final sWithOutWhiteSpacesAtEnd = trimFromLeft(s);
-    return hasMatch(sWithOutWhiteSpacesAtEnd,
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-  }
+  static bool isEmail(String s) => hasMatch(s,
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) {
