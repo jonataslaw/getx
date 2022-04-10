@@ -51,7 +51,7 @@
   - [Dependency Management (Bağımlılık Yönetimi)](#dependency-management)
     - [Dependency Management Hakkında Daha Fazla Bilgi](#more-details-about-dependency-management)
 - [Utils](#utils)
-  - [Internationalization (Uluslararasılaşma)](#internationalization)
+  - [Internationalization (Uluslararasılaştırma)](#internationalization)
     - [Translations (Çeviriler)](#translations)
       - [Translations Kullanımı](#using-translations)
     - [Locales (Yerel Ayarlar)](#locales)
