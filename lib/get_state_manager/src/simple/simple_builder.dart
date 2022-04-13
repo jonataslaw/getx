@@ -23,14 +23,14 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
-  final T? initialValue;
+  final T initialValue;
   final ValueBuilderBuilder<T> builder;
   final void Function()? onDispose;
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
     Key? key,
-    this.initialValue,
+    required this.initialValue,
     this.onDispose,
     this.onUpdate,
     required this.builder,
@@ -40,8 +40,8 @@ class ValueBuilder<T> extends StatefulWidget {
   _ValueBuilderState<T> createState() => _ValueBuilderState<T>();
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T?>> {
-  T? value;
+class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
+  T value;
 
   @override
   void initState() {
