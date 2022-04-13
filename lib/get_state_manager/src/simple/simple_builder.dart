@@ -52,10 +52,9 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
 
-  void updater(T? newValue) {
-    if (widget.onUpdate != null) {
-      widget.onUpdate!(newValue);
-    }
+  void updater(T newValue) {
+    widget.onUpdate?.call(newValue);
+    
     setState(() {
       value = newValue;
     });
