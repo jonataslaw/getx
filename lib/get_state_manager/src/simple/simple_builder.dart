@@ -41,7 +41,7 @@ class ValueBuilder<T> extends StatefulWidget {
 }
 
 class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  T value;
+  late T value;
 
   @override
   void initState() {
@@ -69,7 +69,6 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
     } else if (value is StreamController) {
       (value as StreamController?)?.close();
     }
-    value = null;
   }
 }
 
