@@ -102,7 +102,7 @@ navigator.push(
   ),
 );
 
-// Get syntax (It is much better, but you have the right to disagree)
+// Get syntax (Bu kullanım çok daha iyidir. Tabiki siz karşı çıkma hakkına sahipsiniz.)
 Get.to(HomePage());
 
 
