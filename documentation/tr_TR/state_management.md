@@ -1,5 +1,5 @@
-* [State Management(Durum Yönetimi)](#State-Management-(durum-yönetimi))
-  + [Reactive State Manager(Reaktif Durum Yöneticisi)](#Reactive-state-manager(Reaktif-durum-yöneticisi))
+* [State Management(Durum Yönetimi)](#state-management(durum-yönetimi))
+  + [Reactive State Manager(Reaktif Durum Yöneticisi)](#reactive-state-manager(reaktif-durum-yöneticisi))
     - [Advantages(Avantajlar)](#advantages(avantajlar))
     - [Maksimum Performans:](#maksimum-performans)
     - [Reaktif bir değişken bildirmek](#reaktif-bir-değişken-bildirmek)
@@ -22,7 +22,7 @@
   + [İki state managers ile Mixing](#İki-state-managers-ile-mixing)
   + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management (Durum Yönetimi)
+# State Management(Durum Yönetimi)
 
 GetX, diğer State Management'ler (Durum Yöneticileri) gibi Streams veya ChangeNotifier kullanmaz. Niye? GetX ile android, iOS, web, linux, macos ve linux için uygulamalar oluşturmaya ek olarak, Flutter/GetX ile aynı syntax(sözdizimine) sahip server(sunucu) uygulamaları oluşturabilirsiniz. Yanıt süresini iyileştirmek ve RAM tüketimini azaltmak için düşük işletim maliyetiyle çok fazla performans sunan düşük gecikmeli çözümler olan GetValue ve GetStream'i oluşturduk. State Management (Durum Yönetimi) de dahil olmak üzere tüm kaynaklarımızı oluşturmak için bu temeli kullanıyoruz.
 
