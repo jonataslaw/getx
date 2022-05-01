@@ -1,23 +1,23 @@
 # Dependency Management
 - [Dependency Management](#dependency-management)
-  - [Instancing methods](#instancing-methods)
+  - [Örnek Metodlar](#instancing-methods)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
-  - [Specifying an alternate instance](#specifying-an-alternate-instance)
-  - [Differences between methods](#differences-between-methods)
+  - [Metodların/Sınıfların örneklerinin kullanılması](#using-instantiated-methodsclasses)
+  - [Alternatif bir instance tanımlama](#specifying-an-alternate-instance)
+  - [Metodlar arasındaki farklılıklar](#differences-between-methods)
   - [Bindings](#bindings)
     - [Bindings class](#bindings-class)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [How to change](#how-to-change)
+      - [Nasıl değiştirilir?](#how-to-change)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [How bindings work under the hood](#how-bindings-work-under-the-hood)
-  - [Notes](#notes)
+    - [Nasıl bindings yapılır?](#how-bindings-work-under-the-hood)
+  - [Notlar](#notes)
 
 Get, yalnızca 1 satır kodla, Provider context'i olmadan, inheritedWidget olmadan Bloc veya Controller ile aynı sınıfı almanızı sağlayan basit ve güçlü bir dependency manager'a (bağımlılık yöneticisine) sahiptir:
 
@@ -31,7 +31,7 @@ Böylece denetleyicinizi (veya Bloc sınıfını) normal şekilde kullanabilirsi
 - Not: Get's State Manager kullanıyorsanız, view'e controller'ı bağlamayı kolaylaştıracak olan [Bindings](#bindings) API'sine daha fazla dikkat edin.
 - Not²: Get dependency management (bağımlılık yönetimi) paketin diğer bölümlerinden ayrılmıştır, bu nedenle örneğin uygulamanız zaten bir state manager (durum yöneticisi) kullanıyorsa (herhangi biri, önemli değil), bunu değiştirmeniz gerekmez,  dependency injection (bağımlılık enjeksiyonunu) kullanabilirsiniz.
 
-## Instancing methods
+## Örnek metodlar
 Metodlar ve configurable parameters (yapılandırılabilir parametreleri) şunlardır:
 
 ### Get.put()
@@ -173,7 +173,7 @@ Get.create<S>(
   bool permanent = true
 ```
 
-## Using instantiated methods/classes
+## Metodların/Sınıfların örneklerinin kullanılması
 
 Çok sayıda rotada gezindiğinizi ve kontrol cihazınızda geride bırakılan bir veriye ihtiyacınız olduğunu hayal edin, Sağlayıcı veya Get_it ile birleştirilmiş bir durum yöneticisine ihtiyacınız olacak, değil mi? Get ile değil. Denetleyiciniz için "find" seçeneğini sormanız yeterlidir, herhangi bir ek bağımlılığa ihtiyacınız yoktur:
 
@@ -204,7 +204,7 @@ Get örneğini kaldırmak için:
 Get.delete<Controller>(); //genellikle bunu yapmanız gerekmez çünkü GetX kullanılmayan controller'ları(denetleyicileri) zaten siler
 ```
 
-## Specifying an alternate instance
+## Alternatif bir instance tanımlama
 
 Şu anda eklenen bir örnek, `replace` veya `lazyReplace` yöntemi kullanılarak benzer veya genişletilmiş bir sınıf örneğiyle değiştirilebilir. Bu daha sonra özgün sınıf kullanılarak alınabilir.
 
@@ -233,7 +233,7 @@ print(instance is ChildClass); // false
 print(instance is OtherClass); //true
 ```
 
-## Differences between methods
+## Metodlar arasındaki farklılıklar 
 
 İlk olarak Get.lazyPut'un `fenix`i ve diğer yöntemlerin `permanent`'larından bahsedelim.
 
@@ -366,7 +366,7 @@ GetX, bir hata oluşsa ve onu kullanan bir pencere öğesi düzgün şekilde at�
 Bu, `full` dependency management(bağımlılık yönetimi) modu olarak adlandırılan şeydir.
 Ancak GetX'in sınıfların imhasını kontrol etme şeklini değiştirmek istiyorsanız, farklı davranışlar ayarlayabileceğiniz `SmartManagement` sınıfınız var.
 
-#### How to change
+#### Nasıl değiştirilir?
 
 Bu yapılandırmayı (genellikle ihtiyacınız olmayan) şekilde değiştirmek istiyorsanız:
 
@@ -396,7 +396,7 @@ Varsayılan davranışla, SmartManagement.onlyBuilder'ın aksine "Get.put" ile �
 
 SmartManagement.full gibi, artık kullanılmadığında bağımlılıklarını kaldıracaktır. Ancak, factory'leri koruyacak, yani bu örneğe tekrar ihtiyacınız olursa dependency(bağımlılığı) yeniden yaratacaktır.
 
-### How bindings work under the hood
+### Nasıl bindings yapılır?
 Bindings, başka bir ekrana gitmek için tıkladığınız anda oluşturulan geçici factory'ler oluşturur ve ekran değişirken animasyon gerçekleşir gerçekleşmez yok edilir.
 Bu o kadar hızlı gerçekleşir ki analyzer onu kaydedemez bile.
 Bu ekrana tekrar gittiğinizde, yeni bir geçici factory çağrılır, bu nedenle SmartManagement.keepFactory kullanmak yerine bu tercih edilir, ancak Bindings oluşturmak istemiyorsanız veya tüm bağımlılıklarınızı aynı Binding üzerinde tutmak istiyorsanız, mutlaka size yardımcı olacaktır.
@@ -404,7 +404,7 @@ Factory'ler çok az bellek kaplarlar, örnekleri tutmazlar, ancak istediğiniz s
 Bunun bellekte maliyeti çok düşüktür, ancak bu kitaplığın amacı, minimum kaynakları kullanarak mümkün olan maksimum performansı elde etmek olduğundan, Get factory bile varsayılan olarak kaldırır.
 Hangisi sizin için daha uygunsa onu kullanın.
 
-## Notes
+## Notlar
 
 - Birden çok Bindings kullanıyorsanız SmartManagement.keepFactory KULLANMAYIN. Bindings olmadan veya GetMaterialApp'in initialBinding'inde bağlantılı tek bir Binding ile kullanılmak üzere tasarlanmıştır.
 
