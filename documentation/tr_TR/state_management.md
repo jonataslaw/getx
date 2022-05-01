@@ -16,7 +16,7 @@
     - [Kullanımı](#kullanımı)
     - [Controller'lar nasıl çalışır](#controller'lar-nasıl-çalışır)
     - [Artık StatefulWidget'lara ihtiyacınız olmayacak](#artık-statefulwidget'lara-ihtiyacınız-olmayacak)
-    - [Neden var](#neden-vart)
+    - [Neden var](#neden-var)
     - [Kullanmanın diğer yolları](#kullanmanın-diğer-yolları)
     - [Unique IDs(Benzersiz Kimlikler)](#unique-ids(benzersiz-kimlikler))
   + [İki state managers ile Mixing](#İki-state-managers-ile-mixing)
@@ -90,8 +90,7 @@ Obx (() => Text (controller.name));
 
 _Ezberlemek için neye ihtiyacın var?_Sadece `Obx(() =>` .
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_).
-Bu Widget'ı bir ok işlevinden bir 'Obx()' (_Rx_'in "Observable") içine geçiriyorsunuz.
+Bu Widget'ı bir ok işlevinden bir `Obx()` (_Rx_'in "Observable") içine geçiriyorsunuz.
 
 `Obx` oldukça akıllıdır ve yalnızca `controller.name`nin değeri değiştiğinde değişecektir.
 
@@ -147,7 +146,6 @@ Bu, **GetX** ile mobx_'den _ `computed` kullanımı arasındaki temel farktır.
 İki defa __observable__ 'da bir değişiklik yapıldığında; o _observable_ dinleyicisi de değişecektir.
 
 
-With **GetX**, if you join two variables, `GetX()` (similar to `Observer()` ) will only rebuild if it implies a real change of State.
 **GetX** ile, iki değişkeni birleştirirseniz, `GetX()` (`Observer()`a benzer) yalnızca gerçek bir State(Durum) değişikliği gerektiriyorsa yeniden oluşturacaktır.
 
 ### Reaktif bir değişken bildirmek
@@ -404,7 +402,6 @@ Bu kitaplığın toplam ağırlığı, eksiksiz bir çözüm olmasına rağmen t
 
 Eğer `.value` dan rahatsızsanız MobX harika bir alternatiftir ve Get ile birlikte kullanabilirsiniz.
 
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
 MobX code generator ile bir sorununuz yoksa veya BLoC ilgili bir sorununuz yoksa Get ile route'u kullanabilirsiniz. Get SEM ve RSM ile doğdu, şirketimin 90'dan fazla controller'a sahip bir projesi var.Büyük bir projeniz varsa, oldukça iyi bir makinede bir Flutter Clean'den sonra görevlerini tamamlaması 30 dakikadan fazla sürdü. 5, 10, 15 controller, herhangi bir state manager size yardımcı olacaktır. Büyük bir projeniz varsa ve code generator sizin için bir sorunsa, bu çözüm size verildi.
 
@@ -507,7 +504,8 @@ GetBuilder<Controller>(
     '${_.counter}',
   ),
 )
-//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
+
+//Initialize yalnızca ilk kez başlatın. Aynı controller için ReBuilder'ı ikinci kez kullanıyorsanız, tekrar kullanmayın. Controller'ınız, onu 'init' olarak işaretleyen pencere öğesi yerleştirildiği anda bellekten otomatik olarak kaldırılacaktır. Bunun için endişelenmenize gerek yok, Get bunu otomatik olarak yapacak, sadece aynı contrroller'ın iki kez başlatmadığınızdan emin olun.
 ```
 
 **Tamamlandı!**
