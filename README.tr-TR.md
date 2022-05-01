@@ -34,60 +34,59 @@
 [![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
 [![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
 [![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
-[![Japanese](https://img.shields.io/badge/Language-Turkish-blueviolet?style=for-the-badge)](README.tr-TR.md)
-  
+[![Turkish](https://img.shields.io/badge/Language-Turkish-blueviolet?style=for-the-badge)](README.tr-TR.md)
 
 </div>
 
-- [Get Hakkında](#about-get)
-- [Kurulum](#installing)
-- [GetX ile Sayaç Uygulaması](#counter-app-with-getx)
-- [Üç Temel Kavram](#the-three-pillars)
-  - [State Management (Durum Yönetimi)](#state-management)
-    - [Reactive State Manager (Reaktif Durum Yönetimi)](#reactive-state-manager)
-    - [State Management Hakkında Daha Fazla Bilgi](#more-details-about-state-management)
-  - [Route Management (Rota Yönetimi)](#route-management)
-    - [Route Management Hakkında Daha Fazla Bilgi](#more-details-about-route-management)
-  - [Dependency Management (Bağımlılık Yönetimi)](#dependency-management)
-    - [Dependency Management Hakkında Daha Fazla Bilgi](#more-details-about-dependency-management)
+- [Get Hakkında](#get-hakkında)
+- [Kurulum](#kurulum)
+- [GetX ile Sayaç Uygulaması](#getx-ile-sayaç-uygulaması)
+- [Üç Temel Kavram](#üç-temel-kavram)
+  - [State Management (Durum Yönetimi)](#state-management-durum-yönetimi)
+    - [Reactive State Manager (Reaktif Durum Yönetimi)](#reactive-state-manager-reaktif-durum-yönetimi)
+    - [State Management Hakkında Daha Fazla Bilgi](#state-management-hakkında-daha-fazla-bilgi)
+  - [Route Management (Rota Yönetimi)](#route-management-rota-yönetimi)
+    - [Route Management Hakkında Daha Fazla Bilgi](#route-management-hakkında-daha-fazla-bilgi)
+  - [Dependency Management (Bağımlılık Yönetimi)](#dependency-management-bağımlılık-yönetimi)
+    - [Dependency Management Hakkında Daha Fazla Bilgi](#dependency-management-hakkında-daha-fazla-bilgi)
 - [Utils](#utils)
-  - [Internationalization (Uluslararasılaştırma)](#internationalization)
-    - [Translations (Çeviriler)](#translations)
-      - [Translations Kullanımı](#using-translations)
-    - [Locales (Yerel Ayarlar)](#locales)
-      - [Locale Değiştirme](#change-locale)
-      - [System locale (Yerel Sistem Ayarları)](#system-locale)
-  - [Tema Değiştirme](#change-theme)
+  - [Internationalization (Uluslararasılaştırma)](#internationalization-uluslararasılaştırma)
+    - [Translations (Çeviriler)](#translations-çeviriler)
+      - [Translations Kullanımı](#translations-kullanımı)
+    - [Locales (Yerel Ayarlar)](#locales-yerel-ayarlar)
+      - [Locale Değiştirme](#locale-değiştirme)
+      - [System locale (Yerel Sistem Ayarları)](#system-locale-yerel-sistem-ayarları)
+  - [Tema Değiştirme](#tema-değiştirme)
   - [GetConnect](#getconnect)
-    - [Varsayılan Ayarlar](#default-configuration)
-    - [Özel Ayarlarlamalar](#custom-configuration)
+    - [Varsayılan Ayarlar](#varsayılan-ayarlar)
+    - [Özel Ayarlarlamalar](#özel-ayarlamalar)
   - [GetPage Middleware](#getpage-middleware)
-    - [Priority (Öncelik)](#priority)
-    - [Redirect (Yönlendirme)](#redirect)
+    - [Priority (Öncelik)](#priority-öncelik)
+    - [Redirect (Yönlendirme)](#redirect-yönlendirme)
     - [onPageCalled](#onpagecalled)
     - [OnBindingsStart](#onbindingsstart)
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [Advanced APIs (Gelişmiş API'ler)](#other-advanced-apis)
-    - [Opsiyonel Genel Ayarlar ve Manuel Ayarlamalar](#optional-global-settings-and-manual-configurations)
-    - [Local State Widgets (Yerel Durum Widgetları)](#local-state-widgets)
+  - [Advanced APIs (Gelişmiş API'ler)](#advanced-apis-gelişmiş-apiler)
+    - [Opsiyonel Genel Ayarlar ve Manuel Ayarlamalar](#opsiyonel-genel-ayarlar-ve-manuel-ayarlamalar)
+    - [Local State Widgets (Yerel Durum Widgetları)](#local-state-widgets-yerel-durum-widgetları)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
-  - [Faydalı İpuçları](#useful-tips)
+  - [Faydalı İpuçları](#faydalı-ipuçları)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
-      - [Nasıl Kullanılır?](#how-to-use-it)
+      - [Nasıl Kullanılır?](#nasıl-kullanılır)
     - [GetWidget](#getwidget)
     - [GetxService](#getxservice)
-- [2.0 İle Gelen Büyük Değişiklikler](#breaking-changes-from-20)
-- [Neden Getx?](#why-getx)
-- [Topluluk](#community)
-  - [Topluluk Kanalları](#community-channels)
-  - [Nasıl katkıda bulunulur?](#how-to-contribute)
-  - [Makaleler ve videolar](#articles-and-videos)
+- [2.0 İle Gelen Büyük Değişiklikler](#20-ile-gelen-büyük-değişiklikler)
+- [Neden Getx?](#neden-getx)
+- [Topluluk](#topluluk)
+  - [Topluluk Kanalları](#topluluk-kanalları)
+  - [Nasıl katkıda bulunulur?](#nasıl-katkıda-bulunulur)
+  - [Makaleler ve Videolar](#makaleler-ve-videolar)
 
-# About Get
+# Get Hakkında
 
 - GetX, Flutter için oldukça basit ve güçlü bir çözüm yoludur. Yüksek performanslı state managment (durum yönetimi), yetenekli dependency injection (bağımlılık enjeksiyonu) ve route management'ı (rota yönetimi) hızlı ve pratik şekilde bir araya getirir.
 
@@ -130,7 +129,7 @@ Get’i kullanılacak sayfaya import ediyoruz:
 import 'package:get/get.dart';
 ```
 
-# GetX İle Sayaç Uygulaması
+# GetX ile Sayaç Uygulaması
 
 “Sayaç” projesi yeni bir Flutter projesi oluştururken varsayılan olarak gelir. Yorum satırları ile birlikte toplam 100 satır içerir. Get’in gücünü göstermek gerekirse, size bir “sayaç” uygulamasının her bir tıklamada durumunu değiştirip, sayfalar arasında hareket edip ve bunu yaparken state'leri (durumları) aktarıp aynı zamanda organize bir yol izleyerek business logic'i view'dan ayıracağız ve bu YORUM SATIRLARI DAHİL SADECE 26 SATIR İÇERECEK.
 
@@ -406,7 +405,7 @@ return GetMaterialApp(
 );
 ```
 
-#### Locale değiştirmek
+#### Locale değiştirme
 
 `Get.updateLocale(locale)` çağrılarak locale güncellenebilir. Çeviriler otomatik olarak yeni locale dilinde olacaktır.
 
@@ -832,7 +831,7 @@ ObxValue((data) => Switch(
 ),
 ```
 
-## Faydalı İpuçları
+## Faydalı Ipuçları
 
 `.obs` yapıları olan gözlemlenebilirler ( _Rx_ tipleri olarak da bilinirler) oldukça çeşitli internal metodlara ve operatörlere sahiptirler.
 
@@ -1156,7 +1155,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
-#### Tips
+#### Ipuçları
 
 ##### Mockito or mocktail
 Eğer GetxController/GetxService'inizi mock yapmaya ihtiyacınız varsa GetxController'dan extend etmeniz ve Mock ile mixin'lemelisiniz.
@@ -1172,7 +1171,7 @@ Eğer widget'ları ya da widget grupllarını test etmek istiyorsanız, testiniz
 Eğer controller'larınızın içinden navigation kullanmak istiyorsanız. Main'den önce  `Get.testMode = true` şeklinde kullanın.
 
 
-# 2.0 İle Gelen Büyük Değişiklikler
+# 2.0 Ile Gelen Büyük Değişiklikler
 
 1- Rx Types :
 

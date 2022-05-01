@@ -90,7 +90,7 @@ Obx (() => Text (controller.name));
 
 _Ezberlemek için neye ihtiyacın var?_Sadece `Obx(() =>` . 
 
-You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
+
 Bu Widget'ı bir ok işlevinden bir 'Obx()' (_Rx_'in "Observable") içine geçiriyorsunuz.
 
 `Obx` oldukça akıllıdır ve yalnızca `controller.name`nin değeri değiştiğinde değişecektir.
@@ -111,7 +111,7 @@ Bu nedenle, **GetX** yalnızca _Rx_ değişkeni değerini değiştirdiğinde ekr
 
 final isOpen = false.obs;
 
-// NOTHING will happen... same value.
+// Hiçbir şey olmadı. Işte aynı değer.
 void onButtonTap() => isOpen.value=false;
 ```
 
@@ -351,11 +351,11 @@ Ayrıca listelerde ".value" kullanmanıza gerek yok, harika dart api'ları bunu 
 Ne yazık ki, String ve int gibi ilkel türler genişletilemez, bu da kullanımını sağlar.Değer zorunludur, ancak bunlar için get ve setter'larla çalışıyorsanız bu bir sorun olmayacaktır.
 
 ``` dart
-// On the controller
+// controller içinde
 final String title = 'User Info:'.obs
 final list = List<User>().obs;
 
-// on the view
+// view içinde
 Text(controller.title.value), // .value olması gerekir
 ListView.builder (
   itemCount: controller.list.length // listelerin buna ihtiyacı yok
@@ -383,7 +383,7 @@ user.age = 18;
 // user değişkenini güncellemenin alternatif bir yolu:
 user(User(name: 'João', age: 35));
 
-// on view:
+// view içinde:
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 // model değerlerine .value olmadan da erişebilirsiniz:
 user().name; 
@@ -403,8 +403,6 @@ Bu kitaplığın toplam ağırlığı, eksiksiz bir çözüm olmasına rağmen t
 
 
 Eğer `.value` dan rahatsızsanız MobX harika bir alternatiftir ve Get ile birlikte kullanabilirsiniz.
-
-If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
 MobX code generator ile bir sorununuz yoksa veya BLoC ilgili bir sorununuz yoksa Get ile route'u kullanabilirsiniz. Get SEM ve RSM ile doğdu, şirketimin 90'dan fazla controller'a sahip bir projesi var.Büyük bir projeniz varsa, oldukça iyi bir makinede bir Flutter Clean'den sonra görevlerini tamamlaması 30 dakikadan fazla sürdü. 5, 10, 15 controller, herhangi bir state manager size yardımcı olacaktır. Büyük bir projeniz varsa ve code generator sizin için bir sorunsa, bu çözüm size verildi.
 
@@ -502,12 +500,12 @@ class Controller extends GetxController {
 }
 // Stateless/Stateful sınıfınızda, artış çağrıldığında Metni güncellemek için Get Builder'ı kullanın
 GetBuilder<Controller>(
-  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  init: Controller(), // SADECE ILK SEFERINDE "INIT" YAPIN
   builder: (_) => Text(
     '${_.counter}',
   ),
 )
-//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
+//Controller'ı sadece ilk seferinde "initialize" edin. Aynı controller için ikinci defa ReBuilder kullandıysanız, bunu bir daha yapmayın. Controller, widget içinde "init" işlemi gerçekleştikten sonra otomatik olarak hafızadan kaldırılacaktır. Bunun için endişelenmenize gerek yoktur, Get bunu otomatik olarak yapacaktır. Sadece aynı controller'ı birden fazla kez başlatmadığınıza emin olun yeter. 
 ```
 
 **Tamamlandı!**
@@ -669,7 +667,7 @@ class Controller extends GetxController {
  // static Controller get to => Get.find(); // static olmadan
 [...]
 }
-// on stateful/stateless class
+// stateful/stateless class içinde
 GetBuilder<Controller>(  
   init: Controller(), // Her controller'ı bir kez kullanın
   builder: (_) => Text(
@@ -728,10 +726,6 @@ GetxController'ı extends etmek önemlidir, çünkü yaşam döngüleri vardır 
 
 ## StateMixin
 
-Another way to handle your `UI` state is use the `StateMixin<T>` .
-To implement it, use the `with` to add the `StateMixin<T>`
-to your controller which allows a T model.
-
 `UI` state'ini ele almanın başka bir yolu da `StateMixin<T>` kullanmaktır.
 Bunu uygulamak için, `StateMixin<T>` ile `with`i kullanın.
 bir controller'a T modelinizi ekleyin.
@@ -739,9 +733,6 @@ bir controller'a T modelinizi ekleyin.
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
 ```
-
-The `change()` method change the State whenever we want.
-Just pass the data and the status in this way:
 
 `change()` yöntemi istediğimiz zaman State'i değiştirir.
 Sadece verileri ve state'i bu şekilde iletin:
