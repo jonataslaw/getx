@@ -3,23 +3,23 @@
     - [Advantages(Avantajlar)](#advantages(avantajlar))
     - [Maksimum Performans:](#maksimum-performans)
     - [Reaktif bir değişken bildirmek](#reaktif-bir-değişken-bildirmek)
-        - [Reaktif bir state'e(duruma) sahip olmak kolaydır.](#reaktif-bir-state'e-(duruma)-sahip-olmak-kolaydır)
-    - [Görünümdeki değerleri kullanmak](#using-the-values-in-the-view)
-    - [Yeniden oluşturulacak koşullar](#conditions-to-rebuild)
-    - [Nerede .obs kullanılabilir](#where-obs-can-be-used)
-    - [Listeler hakkında not](#note-about-lists)
-    - [Neden .value kullanmak zorundayım?](#why-i-have-to-use-value)
+        - [Reaktif bir state'e(duruma) sahip olmak kolaydır.](#reaktif-bir-state'e(duruma)-sahip-olmak-kolaydır)
+    - [Görünümdeki değerleri kullanmak](#görünümdeki-değerleri-kullanmak)
+    - [Yeniden oluşturulacak koşullar](#yeniden-oluşturulacak-koşullar)
+    - [Nerede .obs kullanılabilir](#nerede-.obs-kullanılabilir)
+    - [Listeler hakkında not](#listeler-hakkında-not)
+    - [Neden .value kullanmak zorundayım?](#neden-.value-kullanmak-zorundayım?)
     - [Obx()](#obx)
     - [Çalışanlar](#Çalışanlar)
-  + [Simple State Manager (Basit Durum Yöneticisi)](#simple-state-manager)
-    - [Avantajlar](#advantages-1)
-    - [Kullanımı](#usage)
-    - [Controller'lar nasıl çalışır](#how-it-handles-controllers)
-    - [Artık StatefulWidget'lara ihtiyacınız olmayacak](#you-wont-need-statefulwidgets-anymore)
-    - [Neden var](#why-it-exists)
-    - [Kullanmanın diğer yolları](#other-ways-of-using-it)
-    - [Unique IDs (Benzersiz Kimlikler)](#unique-ids)
-  + [İki state managers ile Mixing](#mixing-the-two-state-managers)
+  + [Simple State Manager(Basit Durum Yöneticisi)](#simple-state-manager(basit-durum-yöneticisi))
+    - [Avantajlar](#avantajlar)
+    - [Kullanımı](#kullanımı)
+    - [Controller'lar nasıl çalışır](#controller'lar-nasıl-çalışır)
+    - [Artık StatefulWidget'lara ihtiyacınız olmayacak](#artık-statefulwidget'lara-ihtiyacınız-olmayacak)
+    - [Neden var](#neden-vart)
+    - [Kullanmanın diğer yolları](#kullanmanın-diğer-yolları)
+    - [Unique IDs(Benzersiz Kimlikler)](#unique-ids(benzersiz-kimlikler))
+  + [İki state managers ile Mixing](#İki-state-managers-ile-mixing)
   + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
 # State Management (Durum Yönetimi)
@@ -69,7 +69,7 @@ Hepsi bu. *Bu kadar basit* bir şey.
 
 Şu andan itibaren, bu reaktif-".obs"(ervables) değişkenlerine _Rx_ adını verebiliriz.
 
-Başlık altında ne yaptık? `String` lerin bir `Stream` oluşturduk, `"Jonatas Borges"` initial value'sunu(başlangıç değerini) atadık, `"Jonatas Borges"` kullanan tüm widget'lara artık bu değişkene "ait olduklarını" bildirdik ve _Rx_ değeri değiştiğinde de değişmeleri gerekecek. 
+Başlık altında ne yaptık? `String` lerin bir `Stream` oluşturduk, `"Jonatas Borges"` initial value'sunu(başlangıç değerini) atadık, `"Jonatas Borges"` kullanan tüm widget'lara artık bu değişkene "ait olduklarını" bildirdik ve _Rx_ değeri değiştiğinde de değişmeleri gerekecek.
 
 Bu, Dart'ın yetenekleri sayesinde **GetX'in büyüsüdür**.
 
@@ -88,9 +88,9 @@ Pekala, görünüşe göre, belirli bir Widget'ı değiştirmek istediğimizde g
 Obx (() => Text (controller.name));
 ```
 
-_Ezberlemek için neye ihtiyacın var?_Sadece `Obx(() =>` . 
+_Ezberlemek için neye ihtiyacın var?_Sadece `Obx(() =>` .
 
-
+You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_).
 Bu Widget'ı bir ok işlevinden bir 'Obx()' (_Rx_'in "Observable") içine geçiriyorsunuz.
 
 `Obx` oldukça akıllıdır ve yalnızca `controller.name`nin değeri değiştiğinde değişecektir.
@@ -107,18 +107,18 @@ Hayır, sadece bu _Rx_ değişkenini kullanan **belirli Widget**.
 
 Bu nedenle, **GetX** yalnızca _Rx_ değişkeni değerini değiştirdiğinde ekranı günceller.
 
-``` 
+```
 
 final isOpen = false.obs;
 
-// Hiçbir şey olmadı. Işte aynı değer.
+// NOTHING will happen... same value.
 void onButtonTap() => isOpen.value=false;
 ```
 
 ### Advantages(Avantajlar)
 
 **GetX()**, güncellenen değişkenler üzerinde **ayrıntılı** kontrole ihtiyacınız olduğunda size yardımcı olur.
- 
+
 Bir eylem gerçekleştirdiğinizde tüm değişkenleriniz değiştirileceğinden `unique IDs(benzersiz kimliklere)` ihtiyacınız yoksa, `GetBuilder`ı kullanın,
 çünkü Simple State Updater(Basit Durum Güncelleyicisi)'dir (`setState ()` gibi bloklar halinde), sadece birkaç kod satırında yapılır.
 En az CPU etkisine sahip olmak ve sadece tek bir amacı (_State_ rebuild) yerine getirmek ve mümkün olan en az kaynağı harcamak için basitleştirildi.
@@ -196,15 +196,15 @@ final myMap = <String, int>{}.obs;
 final user = User().obs;
 ```
 
-##### Reaktif bir duruma sahip olmak kolaydır.
+##### Reaktif bir state'e(duruma) sahip olmak kolaydır.
 
 Bildiğimiz gibi, _Dart_ şimdi _null safety_ doğru gidiyor.
 Şu andan itibaren hazırlıklı olmak için, _Rx_ değişkenlerinizi her zaman bir **initial value** ile başlatmalısınız.
 
 > Bir değişkeni **GetX** ile _observable_ + _initial value_ değerine dönüştürmek en basit ve pratik yaklaşımdır.
 
-Kelimenin tam anlamıyla bir değişkeninizin sonuna bir " `.obs` " ekleyeceksiniz, ve **bu kadar**, şimdi onu gözlemlenebilir hale getirdiniz,
-ve onun `.value(değer)`'i,  _initial value_ olacaktır).
+Kelimenin tam anlamıyla bir değişkeninizin sonuna bir " `.obs` " ekleyeceksiniz, ve **bu kadar**. Şimdi onu gözlemlenebilir hale getirdiniz,
+ve onun `.value(değer)`'i,  _initial value_ olacaktır.
 
 ### Görünümdeki değerleri kullanmak
 
@@ -339,7 +339,7 @@ class User {
   var age;
 }
 
-// örnek verirken:
+// örnek:
 final user = User(name: "Camila", age: 18).obs;
 ```
 
@@ -348,14 +348,14 @@ final user = User(name: "Camila", age: 18).obs;
 Listeler, içindeki nesneler gibi tamamen gözlemlenebilir. Bu şekilde, bir listeye bir değer eklerseniz, onu kullanan widget'ları otomatik olarak yeniden oluşturur.
 
 Ayrıca listelerde ".value" kullanmanıza gerek yok, harika dart api'ları bunu kaldırmamıza izin verdi.
-Ne yazık ki, String ve int gibi ilkel türler genişletilemez, bu da kullanımını sağlar.Değer zorunludur, ancak bunlar için get ve setter'larla çalışıyorsanız bu bir sorun olmayacaktır.
+Ne yazık ki, String ve int gibi ilkel türler genişletilemez, bu da kullanımını sağlar. Değer zorunludur, ancak bunlar için get ve setter'larla çalışıyorsanız bu bir sorun olmayacaktır.
 
 ``` dart
-// controller içinde
+// On the controller
 final String title = 'User Info:'.obs
 final list = List<User>().obs;
 
-// view içinde
+// on the view
 Text(controller.title.value), // .value olması gerekir
 ListView.builder (
   itemCount: controller.list.length // listelerin buna ihtiyacı yok
@@ -383,10 +383,10 @@ user.age = 18;
 // user değişkenini güncellemenin alternatif bir yolu:
 user(User(name: 'João', age: 35));
 
-// view içinde:
+// on view:
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 // model değerlerine .value olmadan da erişebilirsiniz:
-user().name; 
+user().name;
 ```
 
 İstemiyorsanız setlerle çalışmak zorunda değilsiniz. "assign" ve "assignAll" api'sini kullanabilirsiniz.
@@ -403,6 +403,8 @@ Bu kitaplığın toplam ağırlığı, eksiksiz bir çözüm olmasına rağmen t
 
 
 Eğer `.value` dan rahatsızsanız MobX harika bir alternatiftir ve Get ile birlikte kullanabilirsiniz.
+
+If you have no problem with the MobX code generator, or have no problem with the BLoC boilerplate, you can simply use Get for routes, and forget that it has state manager. Get SEM and RSM were born out of necessity, my company had a project with more than 90 controllers, and the code generator simply took more than 30 minutes to complete its tasks after a Flutter Clean on a reasonably good machine, if your project it has 5, 10, 15 controllers, any state manager will supply you well. If you have an absurdly large project, and code generator is a problem for you, you have been awarded this solution.
 
 MobX code generator ile bir sorununuz yoksa veya BLoC ilgili bir sorununuz yoksa Get ile route'u kullanabilirsiniz. Get SEM ve RSM ile doğdu, şirketimin 90'dan fazla controller'a sahip bir projesi var.Büyük bir projeniz varsa, oldukça iyi bir makinede bir Flutter Clean'den sonra görevlerini tamamlaması 30 dakikadan fazla sürdü. 5, 10, 15 controller, herhangi bir state manager size yardımcı olacaktır. Büyük bir projeniz varsa ve code generator sizin için bir sorunsa, bu çözüm size verildi.
 
@@ -435,7 +437,7 @@ Tüm çalışanlar (`debounce` dışında), "bool" veya "bool" döndüren bir ca
 Bu "koşul", "callback" işlevinin ne zaman yürütüleceğini tanımlar.
 
 Tüm çalışanlar, çalışanı iptal etmek için ( `dispose()` aracılığıyla) kullanabileceğiniz bir 'Worker' örneği döndürür.
- 
+
 
 * **`ever`**
 
@@ -459,7 +461,7 @@ _Rx_ değişkeni her yeni bir değer yaydığında çağrılır.
 
 * NOT: Çalışanlar her zaman bir Controller veya Class başlatırken kullanılmalıdır, bu nedenle her zaman onInit (önerilen), Class oluşturucu veya statefulwidget'in initState üzerinde olmalıdır (bu uygulama çoğu durumda önerilmez, ancak herhangi bir yan etkisi olmamalıdır).
 
-## Simple State Manager (Basit Durum Yöneticisi)
+## Simple State Manager(Basit Durum Yöneticisi)
 
 Get'in son derece hafif ve kolay, ChangeNotifier kullanmayan, özellikle Flutter'a yeni başlayanların ihtiyacını karşılayacak ve büyük uygulamalar için sorun yaratmayacak bir state manager'i var.
 
@@ -500,12 +502,12 @@ class Controller extends GetxController {
 }
 // Stateless/Stateful sınıfınızda, artış çağrıldığında Metni güncellemek için Get Builder'ı kullanın
 GetBuilder<Controller>(
-  init: Controller(), // SADECE ILK SEFERINDE "INIT" YAPIN
+  init: Controller(), // INIT IT ONLY THE FIRST TIME
   builder: (_) => Text(
     '${_.counter}',
   ),
 )
-//Controller'ı sadece ilk seferinde "initialize" edin. Aynı controller için ikinci defa ReBuilder kullandıysanız, bunu bir daha yapmayın. Controller, widget içinde "init" işlemi gerçekleştikten sonra otomatik olarak hafızadan kaldırılacaktır. Bunun için endişelenmenize gerek yoktur, Get bunu otomatik olarak yapacaktır. Sadece aynı controller'ı birden fazla kez başlatmadığınıza emin olun yeter. 
+//Initialize your controller only the first time. The second time you are using ReBuilder for the same controller, do not use it again. Your controller will be automatically removed from memory as soon as the widget that marked it as 'init' is deployed. You don't have to worry about that, Get will do it automatically, just make sure you don't start the same controller twice.
 ```
 
 **Tamamlandı!**
@@ -652,7 +654,7 @@ class Controller extends GetxController {
 [...]
 }
 // görünümde:
-GetBuilder<Controller>(  
+GetBuilder<Controller>(
   init: Controller(), // Her controller'ı bir kez kullanın
   builder: (_) => Text(
     '${Controller.to.counter}', //burada
@@ -667,8 +669,8 @@ class Controller extends GetxController {
  // static Controller get to => Get.find(); // static olmadan
 [...]
 }
-// stateful/stateless class içinde
-GetBuilder<Controller>(  
+// on stateful/stateless class
+GetBuilder<Controller>(
   init: Controller(), // Her controller'ı bir kez kullanın
   builder: (_) => Text(
     '${Get.find<Controller>().counter}', //burada
@@ -690,7 +692,7 @@ GetBuilder<Controller>(
 
 ```
 
-### Unique IDs (Benzersiz Kimlikler)
+### Unique IDs(Benzersiz Kimlikler)
 
 Bir widget'ın controller'ını güncellemek istiyorsanız GetBuilder onlara benzersiz kimlikler atayabilirsiniz:
 
@@ -733,6 +735,7 @@ bir controller'a T modelinizi ekleyin.
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
 ```
+
 
 `change()` yöntemi istediğimiz zaman State'i değiştirir.
 Sadece verileri ve state'i bu şekilde iletin:
