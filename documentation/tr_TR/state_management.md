@@ -1,16 +1,16 @@
-* [State Management (Durum Yönetimi)](#state-management-(durum-yönetimi))
-  + [Reactive State Manager (Reaktif Durum Yöneticisi)](#reactive-state-manager)
-    - [Advantages(Avantajlar)](#advantages)
-    - [Maksimum Performans:](#maximum-performance)
-    - [Reaktif bir değişken bildirmek](#declaring-a-reactive-variable)
-        - [Reaktif bir duruma sahip olmak kolaydır.](#having-a-reactive-state-is-easy)
+* [State Management(Durum Yönetimi)](#State-Management-(durum-yönetimi))
+  + [Reactive State Manager(Reaktif Durum Yöneticisi)](#Reactive-state-manager(Reaktif-durum-yöneticisi))
+    - [Advantages(Avantajlar)](#advantages(avantajlar))
+    - [Maksimum Performans:](#maksimum-performans)
+    - [Reaktif bir değişken bildirmek](#reaktif-bir-değişken-bildirmek)
+        - [Reaktif bir state'e(duruma) sahip olmak kolaydır.](#reaktif-bir-state'e-(duruma)-sahip-olmak-kolaydır)
     - [Görünümdeki değerleri kullanmak](#using-the-values-in-the-view)
     - [Yeniden oluşturulacak koşullar](#conditions-to-rebuild)
     - [Nerede .obs kullanılabilir](#where-obs-can-be-used)
     - [Listeler hakkında not](#note-about-lists)
     - [Neden .value kullanmak zorundayım?](#why-i-have-to-use-value)
     - [Obx()](#obx)
-    - [Çalışanlar](#workers)
+    - [Çalışanlar](#Çalışanlar)
   + [Simple State Manager (Basit Durum Yöneticisi)](#simple-state-manager)
     - [Avantajlar](#advantages-1)
     - [Kullanımı](#usage)
@@ -40,7 +40,7 @@ GetX ile iç içe geçmiş widget'lara bile saygı duyulur. Obx listview'inizi i
 
 Mevcut state management'lerin(durum yöneticilerin) çoğu (hepsi değilse de) ekranda yeniden oluşturulur.
 
-## Reactive State Manager (Reaktif Durum Yöneticisi)
+## Reactive State Manager(Reaktif Durum Yöneticisi)
 
 Reaktif programlama birçok insanı yabancılaştırabilir çünkü karmaşık olduğu söylenir. GetX reaktif programlamayı oldukça basit bir şeye dönüştürür:
 
@@ -69,7 +69,7 @@ Hepsi bu. *Bu kadar basit* bir şey.
 
 Şu andan itibaren, bu reaktif-".obs"(ervables) değişkenlerine _Rx_ adını verebiliriz.
 
-Kaputun altında ne yaptık? `String` lerin bir `Stream` oluşturduk, `"Jonatas Borges"` initial value'sunu(başlangıç değerini) atadık, `"Jonatas Borges"` kullanan tüm widget'lara artık bu değişkene "ait olduklarını" bildirdik ve _Rx_ değeri değiştiğinde de değişmeleri gerekecek. 
+Başlık altında ne yaptık? `String` lerin bir `Stream` oluşturduk, `"Jonatas Borges"` initial value'sunu(başlangıç değerini) atadık, `"Jonatas Borges"` kullanan tüm widget'lara artık bu değişkene "ait olduklarını" bildirdik ve _Rx_ değeri değiştiğinde de değişmeleri gerekecek. 
 
 Bu, Dart'ın yetenekleri sayesinde **GetX'in büyüsüdür**.
 
@@ -117,7 +117,7 @@ void onButtonTap() => isOpen.value=false;
 
 ### Advantages(Avantajlar)
 
-**GetX()**, güncellenenler üzerinde **ayrıntılı** kontrole ihtiyacınız olduğunda size yardımcı olur.
+**GetX()**, güncellenen değişkenler üzerinde **ayrıntılı** kontrole ihtiyacınız olduğunda size yardımcı olur.
  
 Bir eylem gerçekleştirdiğinizde tüm değişkenleriniz değiştirileceğinden `unique IDs(benzersiz kimliklere)` ihtiyacınız yoksa, `GetBuilder`ı kullanın,
 çünkü Simple State Updater(Basit Durum Güncelleyicisi)'dir (`setState ()` gibi bloklar halinde), sadece birkaç kod satırında yapılır.
