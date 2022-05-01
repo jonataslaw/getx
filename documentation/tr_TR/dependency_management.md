@@ -292,7 +292,6 @@ class DetailsBinding implements Bindings {
 }
 ```
 
-Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
 Şimdi sadece rotanızı, route manager(rota yöneticisi), dependencies(bağımlılıklar) ve states(durumlar) arasında bağlantı kurmak için bu binding'i kullanacağınızı bildirmeniz gerekiyor.
 
 - Adlandırılmış yolları kullanma:
