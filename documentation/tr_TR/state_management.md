@@ -1,28 +1,28 @@
-* [State Management(Durum Yönetimi)](#state-management(durum-yönetimi))
-  + [Reactive State Manager(Reaktif Durum Yöneticisi)](#reactive-state-manager(reaktif-durum-yöneticisi))
-    - [Advantages(Avantajlar)](#advantages(avantajlar))
+* [State Management](#state-management)
+  + [Reactive State Manager](#reactive-state-manager)
+    - [Avantajlar](#avantajlar)
     - [Maksimum Performans:](#maksimum-performans)
     - [Reaktif bir değişken bildirmek](#reaktif-bir-değişken-bildirmek)
-        - [Reaktif bir state'e(duruma) sahip olmak kolaydır.](#reaktif-bir-state'e(duruma)-sahip-olmak-kolaydır)
+        - [Reaktif bir state'e sahip olmak kolaydır.](#reaktif-bir-state'e-sahip-olmak-kolaydır)
     - [Görünümdeki değerleri kullanmak](#görünümdeki-değerleri-kullanmak)
     - [Yeniden oluşturulacak koşullar](#yeniden-oluşturulacak-koşullar)
-    - [Nerede .obs kullanılabilir](#nerede-.obs-kullanılabilir)
+    - [Nerede .obs kullanılabilir](#nerede-obs-kullanılabilir)
     - [Listeler hakkında not](#listeler-hakkında-not)
-    - [Neden .value kullanmak zorundayım?](#neden-.value-kullanmak-zorundayım?)
+    - [Neden .value kullanmak zorundayım?](#neden-value-kullanmak-zorundayım?)
     - [Obx()](#obx)
     - [Çalışanlar](#Çalışanlar)
-  + [Simple State Manager(Basit Durum Yöneticisi)](#simple-state-manager(basit-durum-yöneticisi))
-    - [Avantajlar](#avantajlar)
+  + [Simple State Manager](#simple-state-manager)
+    - [Avantajlar](#avantajlar-1)
     - [Kullanımı](#kullanımı)
     - [Controller'lar nasıl çalışır](#controller'lar-nasıl-çalışır)
     - [Artık StatefulWidget'lara ihtiyacınız olmayacak](#artık-statefulwidget'lara-ihtiyacınız-olmayacak)
     - [Neden var](#neden-var)
     - [Kullanmanın diğer yolları](#kullanmanın-diğer-yolları)
-    - [Unique IDs(Benzersiz Kimlikler)](#unique-ids(benzersiz-kimlikler))
+    - [Unique IDs-Benzersiz Kimlikler](#unique-ids-benzersiz-kimlikler)
   + [İki state managers ile Mixing](#İki-state-managers-ile-mixing)
   + [GetBuilder vs GetX vs Obx vs MixinBuilder](#getbuilder-vs-getx-vs-obx-vs-mixinbuilder)
 
-# State Management(Durum Yönetimi)
+# State Management
 
 GetX, diğer State Management'ler (Durum Yöneticileri) gibi Streams veya ChangeNotifier kullanmaz. Niye? GetX ile android, iOS, web, linux, macos ve linux için uygulamalar oluşturmaya ek olarak, Flutter/GetX ile aynı syntax(sözdizimine) sahip server(sunucu) uygulamaları oluşturabilirsiniz. Yanıt süresini iyileştirmek ve RAM tüketimini azaltmak için düşük işletim maliyetiyle çok fazla performans sunan düşük gecikmeli çözümler olan GetValue ve GetStream'i oluşturduk. State Management (Durum Yönetimi) de dahil olmak üzere tüm kaynaklarımızı oluşturmak için bu temeli kullanıyoruz.
 
@@ -40,7 +40,7 @@ GetX ile iç içe geçmiş widget'lara bile saygı duyulur. Obx listview'inizi i
 
 Mevcut state management'lerin(durum yöneticilerin) çoğu (hepsi değilse de) ekranda yeniden oluşturulur.
 
-## Reactive State Manager(Reaktif Durum Yöneticisi)
+## Reactive State Manager
 
 Reaktif programlama birçok insanı yabancılaştırabilir çünkü karmaşık olduğu söylenir. GetX reaktif programlamayı oldukça basit bir şeye dönüştürür:
 
@@ -114,7 +114,7 @@ final isOpen = false.obs;
 void onButtonTap() => isOpen.value=false;
 ```
 
-### Advantages(Avantajlar)
+### Avantajlar
 
 **GetX()**, güncellenen değişkenler üzerinde **ayrıntılı** kontrole ihtiyacınız olduğunda size yardımcı olur.
 
@@ -194,7 +194,7 @@ final myMap = <String, int>{}.obs;
 final user = User().obs;
 ```
 
-##### Reaktif bir state'e(duruma) sahip olmak kolaydır.
+##### Reaktif bir state'e sahip olmak kolaydır.
 
 Bildiğimiz gibi, _Dart_ şimdi _null safety_ doğru gidiyor.
 Şu andan itibaren hazırlıklı olmak için, _Rx_ değişkenlerinizi her zaman bir **initial value** ile başlatmalısınız.
@@ -690,7 +690,7 @@ GetBuilder<Controller>(
 
 ```
 
-### Unique IDs(Benzersiz Kimlikler)
+### Unique IDs-Benzersiz Kimlikler
 
 Bir widget'ın controller'ını güncellemek istiyorsanız GetBuilder onlara benzersiz kimlikler atayabilirsiniz:
 

@@ -1,23 +1,23 @@
 # Dependency Management
 - [Dependency Management](#dependency-management)
-  - [Örnek Metodlar](#instancing-methods)
+  - [Örnek Metodlar](#örnek-metodlar)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
-  - [Metodların/Sınıfların örneklerinin kullanılması](#using-instantiated-methodsclasses)
-  - [Alternatif bir instance tanımlama](#specifying-an-alternate-instance)
-  - [Metodlar arasındaki farklılıklar](#differences-between-methods)
+  - [Metodların/Sınıfların örneklerinin kullanılması](#metodların/sınıfların-örneklerinin-kullanılması)
+  - [Alternatif bir instance tanımlama](#alternatif-bir-instance-tanımlama)
+  - [Metodlar arasındaki farklılıklar](#metodlar-arasındaki-farklılıklar)
   - [Bindings](#bindings)
     - [Bindings class](#bindings-class)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [Nasıl değiştirilir?](#how-to-change)
+      - [Nasıl değiştirilir?](#nasıl-değiştirilir)
       - [SmartManagement.full](#smartmanagementfull)
       - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
-    - [Nasıl bindings yapılır?](#how-bindings-work-under-the-hood)
-  - [Notlar](#notes)
+    - [Nasıl bindings yapılır?](#nasıl-bindings-yapılır)
+  - [Notlar](#notlar)
 
 Get, yalnızca 1 satır kodla, Provider context'i olmadan, inheritedWidget olmadan Bloc veya Controller ile aynı sınıfı almanızı sağlayan basit ve güçlü bir dependency manager'a (bağımlılık yöneticisine) sahiptir:
 
@@ -175,7 +175,7 @@ Get.create<S>(
 
 ## Metodların/Sınıfların örneklerinin kullanılması
 
-Çok sayıda rotada gezindiğinizi ve kontrol cihazınızda geride bırakılan bir veriye ihtiyacınız olduğunu hayal edin, Sağlayıcı veya Get_it ile birleştirilmiş bir durum yöneticisine ihtiyacınız olacak, değil mi? Get ile değil. Denetleyiciniz için "find" seçeneğini sormanız yeterlidir, herhangi bir ek bağımlılığa ihtiyacınız yoktur:
+Çok sayıda rotada gezindiğinizi ve kontrol cihazınızda geride bırakılan bir veriye ihtiyacınız olduğunu hayal edin, Sağlayıcı veya Get_it ile birleştirilmiş bir durum yöneticisine ihtiyacınız olacak, değil mi? Get ile değil. Controller için "find" seçeneğini sormanız yeterlidir, herhangi bir ek bağımlılığa ihtiyacınız yoktur:
 
 ```dart
 final controller = Get.find<Controller>();
@@ -240,7 +240,7 @@ print(instance is OtherClass); //true
 `permanent` ve `fenix` arasındaki temel fark, örneklerinizi nasıl depolamak istediğinizdir.
 
 Güçlendirme: Varsayılan olarak GetX, kullanımda değilken örnekleri siler.
-Bunun anlamı: Ekran 1'de controller 1 varsa ve ekran 2'de controller 2 varsa ve ilk rotayı stackten kaldırırsanız (`Get.off()` veya `Get.offNamed()` kullanıyorsanız) denetleyici 1 kaybolur kullanımı silinecektir.
+Bunun anlamı: Ekran 1'de controller 1 varsa ve ekran 2'de controller 2 varsa ve ilk rotayı stackten kaldırırsanız (`Get.off()` veya `Get.offNamed()` kullanıyorsanız) controller(denetleyici) 1 kaybolur kullanımı silinecektir.
 
 Ancak `permanent:true` kullanmayı tercih etmek istiyorsanız, bu geçişte controller kaybolmaz - bu, tüm uygulama boyunca canlı tutmak istediğiniz hizmetler için çok yararlıdır.
 
@@ -408,5 +408,5 @@ Hangisi sizin için daha uygunsa onu kullanın.
 
 - Birden çok Bindings kullanıyorsanız SmartManagement.keepFactory KULLANMAYIN. Bindings olmadan veya GetMaterialApp'in initialBinding'inde bağlantılı tek bir Binding ile kullanılmak üzere tasarlanmıştır.
 
-- Bindings kullanmak tamamen isteğe bağlıdır, isterseniz belirli bir denetleyiciyi kullanan sınıflarda `Get.put()` ve `Get.find()` kullanabilirsiniz.
+- Bindings kullanmak tamamen isteğe bağlıdır, isterseniz belirli bir controller(denetleyiciyi) kullanan sınıflarda `Get.put()` ve `Get.find()` kullanabilirsiniz.
 Ancak, Services veya başka bir abstract class ile çalışıyorsanız, daha iyi bir organizasyon için Bindings'i kullanmanızı öneririm.

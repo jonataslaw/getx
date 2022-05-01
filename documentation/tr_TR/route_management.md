@@ -1,17 +1,17 @@
 - [Rota Yönetimi (Route Management)](#route-management)
-  - [Nasıl kullanılır?](#how-to-use)
-  - [Adlandırılmış rotalar olmadan navigasyon](#navigation-without-named-routes)
+  - [Nasıl kullanılır?](#nasıl-kullanılır)
+  - [Adlandırılmış rotalar olmadan navigasyon](#adlandırılmış-rotalar-olmadan-navigasyon)
   - [Adlandırılmış rotalarla navigasyon](#adlandırılmış-rotalarla-navigasyon)
-    - [Verileri adlandırılmış Rotalara gönder](#send-data-to-named-routes)
-    - [Dinamik URL bağlantıları](#dynamic-urls-links)
+    - [Verileri adlandırılmış rotalara gönder](#verileri-adlandırılmış-rotalara-gönder)
+    - [Dinamik URL bağlantıları](#dinamik-url-bağlantıları)
     - [Middleware](#middleware)
-  - [Bağlamsız(Context) Navigasyon](#navigation-without-context)
+  - [Context olmadan Navigasyon](#context-olmadan-navigasyon)
     - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
     - [BottomSheets](#bottomsheets)
-  - [İç İçe Navigasyon (Nested Navigation)](#nested-navigation)
+  - [Nested Navigasyon](#nested-navigasyon)
 
-# Rota Yönetimi (Route Management)
+# Route Management
 
 Konu rota yönetimi olduğunda Getx için gereken her şeyin tam açıklaması budur.
 
@@ -391,7 +391,7 @@ class Third extends StatelessWidget {
 }
 ```
 
-## Bağlamsız(Context) Navigasyon
+## Context olmadan Navigasyon
 
 ### SnackBars
 
@@ -519,7 +519,7 @@ Get.bottomSheet(
 );
 ```
 
-## İç İçe Navigasyon (Nested Navigation)
+## Nested Navigasyon
 
 Flutter'ın iç içe gezinmesini daha da kolaylaştırın.
 İçeriğe ihtiyacınız yoktur ve navigasyon yığınınızı kimliğe(ID) göre bulacaksınız.
