@@ -19,24 +19,24 @@
     - [How bindings work under the hood](#how-bindings-work-under-the-hood)
   - [Notes](#notes)
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Get, yalnızca 1 satır kodla, Provider context'i olmadan, inheritedWidget olmadan Bloc veya Controller ile aynı sınıfı almanızı sağlayan basit ve güçlü bir dependency manager'a (bağımlılık yöneticisine) sahiptir:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or Bloc class) normally
+Sınıfınızı kullandığınız sınıf içinde somutlaştırmak yerine, onu uygulamanız genelinde kullanılabilir hale getirecek olan Get örneğinde somutlaştırıyorsunuz.
+Böylece denetleyicinizi (veya Bloc sınıfını) normal şekilde kullanabilirsiniz.
 
-- Note: If you are using Get's State Manager, pay more attention to the [Bindings](#bindings) api, which will make easier to connect your view to your controller.
-- Note²: Get dependency management is decloupled from other parts of the package, so if for example your app is already using a state manager (any one, it doesn't matter), you don't need to change that, you can use this dependency injection manager with no problems at all
+- Not: Get's State Manager kullanıyorsanız, view'e controller'ı bağlamayı kolaylaştıracak olan [Bindings](#bindings) API'sine daha fazla dikkat edin.
+- Not²: Get dependency management (bağımlılık yönetimi) paketin diğer bölümlerinden ayrılmıştır, bu nedenle örneğin uygulamanız zaten bir state manager (durum yöneticisi) kullanıyorsa (herhangi biri, önemli değil), bunu değiştirmeniz gerekmez,  dependency injection (bağımlılık enjeksiyonunu) kullanabilirsiniz.
 
 ## Instancing methods
-The methods and it's configurable parameters are:
+Metodlar ve configurable parameters (yapılandırılabilir parametreleri) şunlardır:
 
 ### Get.put()
 
-The most common way of inserting a dependency. Good for the controllers of your views for example.
+Dependency (bağımlılık) eklemenin en yaygın yolu. Örneğin;
 
 ```dart
 Get.put<SomeClass>(SomeClass());
@@ -44,46 +44,47 @@ Get.put<LoginController>(LoginController(), permanent: true);
 Get.put<ListItemController>(ListItemController, tag: "some unique string");
 ```
 
-This is all options you can set when using put:
+Put kullanırken ayarlayabileceğiniz tüm seçenekler şunlardır:
 ```dart
 Get.put<S>(
-  // mandatory: the class that you want to get to save, like a controller or anything
-  // note: "S" means that it can be a class of any type
+  // Zorunlu: Controller veya herhangi bir şey gibi kaydetmek istediğiniz sınıf
+  // not: "S", herhangi bir türde bir sınıf olabileceği anlamına gelir
   S dependency
 
-  // optional: this is for when you want multiple classess that are of the same type
-  // since you normally get a class by using Get.find<Controller>(),
-  // you need to use tag to tell which instance you need
-  // must be unique string
+  // isteğe bağlı: bu, aynı türden birden çok sınıf içindir
+  // normalde Get.find<Controller>() kullanarak bir sınıf aldığınız için,
+  // hangi örneğe ihtiyacınız olduğunu söylemek için "tag" kullanmanız gerekir
+  // benzersiz dize olmalıdır
   String tag,
 
-  // optional: by default, get will dispose instances after they are not used anymore (example,
-  // the controller of a view that is closed), but you might need that the instance
-  // to be kept there throughout the entire app, like an instance of sharedPreferences or something
-  // so you use this
-  // defaults to false
+  // isteğe bağlı: varsayılan olarak, get artık kullanılmadıktan sonra örnekleri elden çıkarır (örneğin,
+  // gizli bir view'in controller'ı), ancak instance'a ihtiyacınız olabilir
+  // tüm uygulama boyunca orada tutulacak, Shared Preferences örneği veya başka bir şey gibi
+  // yani bunu kullanıyorsun
+  // varsayılan olarak false
   bool permanent = false,
 
-  // optional: allows you after using an abstract class in a test, replace it with another one and follow the test.
-  // defaults to false
+  // isteğe bağlı: bir testte abstract(soyut) bir sınıf kullandıktan sonra, onu başka bir sınıfla değiştirmenize ve testi takip etmenize olanak tanır.
+  // varsayılan olarak false
   bool overrideAbstract = false,
 
   // optional: allows you to create the dependency using function instead of the dependency itself.
-  // this one is not commonly used
+  //isteğe bağlı: dependency'nin(bağımlılığın) kendisi yerine fonksiyonu kullanarak dependency(bağımlılık) oluşturmanıza olanak tanır.
+  //bu yaygın olarak kullanılmaz
   InstanceBuilderCallback<S> builder,
 )
 ```
 
 ### Get.lazyPut
-It is possible to lazyLoad a dependency so that it will be instantiated only when is used. Very useful for computational expensive classes or if you want to instantiate several classes in just one place (like in a Bindings class) and you know you will not gonna use that class at that time.
+Bir bağımlılığı lazyLoad ile yalnızca kullanıldığında somutlaştırılacak şekilde yüklemek mümkündür. Hesaplamalı expensive sınıflar için veya birkaç sınıfı tek bir yerde başlatmak istiyorsanız (Bindings sınıfında olduğu gibi) çok kullanışlıdır ve o zaman o sınıfı kullanmayacağınızı bilirsiniz.
 
 ```dart
-/// ApiMock will only be called when someone uses Get.find<ApiMock> for the first time
+/// ApiMock yalnızca Get.find<ApiMock>'u ilk kez kullandığında çağrılacak
 Get.lazyPut<ApiMock>(() => ApiMock());
 
 Get.lazyPut<FirebaseAuth>(
   () {
-    // ... some logic if needed
+    // ... gerekirse biraz mantık
     return FirebaseAuth();
   },
   tag: Math.random().toString(),
@@ -93,27 +94,27 @@ Get.lazyPut<FirebaseAuth>(
 Get.lazyPut<Controller>( () => Controller() )
 ```
 
-This is all options you can set when using lazyPut:
+lazyPut'u kullanırken ayarlayabileceğiniz tüm seçenekler şunlardır:
 ```dart
 Get.lazyPut<S>(
-  // mandatory: a method that will be executed when your class is called for the first time
+  // zorunlu: sınıfınız ilk kez çağrıldığında yürütülecek bir yöntem
   InstanceBuilderCallback builder,
   
-  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
-  // must be unique
+  // isteğe bağlı: Get.put() ile aynı, aynı sınıfın birden çok farklı örneğini istediğinizde kullanılır
+  // unique olmalı
   String tag,
 
-  // optional: It is similar to "permanent", the difference is that the instance is discarded when
-  // is not being used, but when it's use is needed again, Get will recreate the instance
-  // just the same as "SmartManagement.keepFactory" in the bindings api
-  // defaults to false
+  // isteğe bağlı: "Kalıcı" ile benzerdir, aradaki fark, instance şu durumlarda atılmasıdır.
+  // kullanılmıyor, ancak tekrar kullanılması gerektiğinde Get, instance yeniden oluşturacak
+  //bindings api'sindeki "SmartManagement.keepFactory" ile aynı
+  // varsayılan olarak false
   bool fenix = false
   
 )
 ```
 
 ### Get.putAsync
-If you want to register an asynchronous instance, you can use `Get.putAsync`:
+Eşzamansız bir instance kaydetmek istiyorsanız, `Get.putAsync` kullanabilirsiniz:
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -125,87 +126,87 @@ Get.putAsync<SharedPreferences>(() async {
 Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
-This is all options you can set when using putAsync:
+putAsync kullanırken ayarlayabileceğiniz tüm seçenekler şunlardır:
 ```dart
 Get.putAsync<S>(
 
-  // mandatory: an async method that will be executed to instantiate your class
+  // zorunlu: sınıfınızın instance'ını oluşturmak için yürütülecek bir asenkron metod
   AsyncInstanceBuilderCallback<S> builder,
 
-  // optional: same as Get.put(), it is used for when you want multiple different instance of a same class
-  // must be unique
+  //isteğe bağlı: Get.put() ile aynı, aynı sınıfın birden çok farklı örneğini istediğinizde kullanılır
+  // unique olmalı
   String tag,
 
-  // optional: same as in Get.put(), used when you need to maintain that instance alive in the entire app
-  // defaults to false
+  // isteğe bağlı: Get.put() ile aynı, bu instance tüm uygulamada canlı tutmanız gerektiğinde kullanılır
+  // varsayılan olarak false
   bool permanent = false
 )
 ```
 
 ### Get.create
 
-This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
+Bu zor. Bunun ne olduğuna ve diğeri arasındaki farklara ilişkin ayrıntılı bir açıklama, [Differences between methods:](#differences-between-methods) bölümünde bulunabilir.
 
 ```dart
 Get.Create<SomeClass>(() => SomeClass());
 Get.Create<LoginController>(() => LoginController());
 ```
 
-This is all options you can set when using create:
+Oluştururken ayarlayabileceğiniz tüm seçenekler şunlardır:
 
 ```dart
 Get.create<S>(
-  // required: a function that returns a class that will be "fabricated" every
-  // time `Get.find()` is called
-  // Example: Get.create<YourClass>(() => YourClass())
+  // gerekli: her seferinde "fabrikasyon" olacak bir sınıf döndüren bir işlev
+  // `Get.find()` çağrılır
+  // Örnek: Get.create<YourClass>(() => YourClass())
   FcBuilderFunc<S> builder,
 
-  // optional: just like Get.put(), but it is used when you need multiple instances
-  // of a of a same class
-  // Useful in case you have a list that each item need it's own controller
-  // needs to be a unique string. Just change from tag to name
+  // isteğe bağlı: tıpkı Get.put() gibi, ancak birden çok örneğe ihtiyacınız olduğunda kullanılır
+  // aynı sınıftan bir
+  // Her öğenin kendi denetleyicisine ihtiyaç duyduğu bir listeniz varsa kullanışlıdır
+  // benzersiz bir dize olması gerekir.
   String name,
 
-  // optional: just like int`Get.put()`, it is for when you need to keep the
-  // instance alive thoughout the entire app. The difference is in Get.create
-  // permanent is true by default
+  // isteğe bağlı: tıpkı int`Get.put()` gibi,
+  // tüm uygulama boyunca canlı örnek. Fark Get.create'de
+  // kalıcı, varsayılan olarak doğrudur
   bool permanent = true
 ```
 
 ## Using instantiated methods/classes
 
-Imagine that you have navigated through numerous routes, and you need a data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+Çok sayıda rotada gezindiğinizi ve kontrol cihazınızda geride bırakılan bir veriye ihtiyacınız olduğunu hayal edin, Sağlayıcı veya Get_it ile birleştirilmiş bir durum yöneticisine ihtiyacınız olacak, değil mi? Get ile değil. Denetleyiciniz için "find" seçeneğini sormanız yeterlidir, herhangi bir ek bağımlılığa ihtiyacınız yoktur:
 
 ```dart
 final controller = Get.find<Controller>();
-// OR
+// veya
 Controller controller = Get.find();
 
-// Yes, it looks like Magic, Get will find your controller, and will deliver it to you.
-// You can have 1 million controllers instantiated, Get will always give you the right controller.
+// Evet, sihir gibi görünüyor, Controller'ı(Denetleyicinizi) bulacak ve size teslim edecek.
+// Instance edilmiş 1 milyon controller'a sahip olabilirsiniz, Get size her zaman doğru controller'ı verecektir.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+Ve sonra orada elde edilen controller ile verilerinizi kurtarabileceksiniz:
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-Since the returned value is a normal class, you can do anything you want:
+Döndürülen değer normal bir sınıf olduğundan, istediğiniz her şeyi yapabilirsiniz:
 ```dart
 int count = Get.find<SharedPreferences>().getInt('counter');
 print(count); // out: 12345
 ```
 
-To remove an instance of Get:
+Get örneğini kaldırmak için:
 
 ```dart
-Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
+Get.delete<Controller>(); //genellikle bunu yapmanız gerekmez çünkü GetX kullanılmayan controller'ları(denetleyicileri) zaten siler
 ```
 
 ## Specifying an alternate instance
 
-A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` or `lazyReplace` method. This can then be retrieved by using the original class.
+Şu anda eklenen bir örnek, `replace` veya `lazyReplace` yöntemi kullanılarak benzer veya genişletilmiş bir sınıf örneğiyle değiştirilebilir. Bu daha sonra özgün sınıf kullanılarak alınabilir.
 
 ```dart
 abstract class BaseClass {}
@@ -234,44 +235,45 @@ print(instance is OtherClass); //true
 
 ## Differences between methods
 
-First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
+İlk olarak Get.lazyPut'un `fenix`i ve diğer yöntemlerin `permanent`'larından bahsedelim.
 
-The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
+`permanent` ve `fenix` arasındaki temel fark, örneklerinizi nasıl depolamak istediğinizdir.
 
-Reinforcing: by default, GetX deletes instances when they are not in use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost its use so it will be erased.
+Güçlendirme: Varsayılan olarak GetX, kullanımda değilken örnekleri siler.
+Bunun anlamı: Ekran 1'de controller 1 varsa ve ekran 2'de controller 2 varsa ve ilk rotayı stackten kaldırırsanız (`Get.off()` veya `Get.offNamed()` kullanıyorsanız) denetleyici 1 kaybolur kullanımı silinecektir.
 
-But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
+Ancak `permanent:true` kullanmayı tercih etmek istiyorsanız, bu geçişte controller kaybolmaz - bu, tüm uygulama boyunca canlı tutmak istediğiniz hizmetler için çok yararlıdır.
 
-`fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need it, it will "recreate from the ashes" a new instance.
+`fenix`ise ekran değişiklikleri arasında kaybetme endişesi duymadığınız ancak o hizmete ihtiyaç duyduğunuzda canlı olmasını beklediğiniz hizmetler içindir. Temel olarak, kullanılmayan controller/service/class elden çıkaracak, ancak ihtiyacınız olduğunda yeni bir örneği "küllerden yeniden yaratacaktır".
 
-Proceeding with the differences between methods:
+Metodlar arasındaki farklarla devam edelim:
 
-- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only purpose is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+- Get.put ve Get.putAsync, ikincisinin eşzamansız bir yöntem kullanması farkıyla aynı oluşturma sırasını takip eder: bu iki yöntem, örneği oluşturur ve başlatır. Bu, `permanent: false` ve `isSingleton: true` parametreleriyle `insert` dahili yöntemi kullanılarak doğrudan belleğe eklenir (bu isSingleton parametresinin tek amacı, "bağımlılık" bağımlılığını kullanıp kullanmayacağını söylemektir. veya `FcBuilderFunc` bağımlılığını kullanacaksa). Bundan sonra, bellekteki örnekleri hemen başlatan `Get.find()` çağrılır.
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
 
-- Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsible to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
+- Get.create: Adından da anlaşılacağı gibi, dependency'i (bağımlılığı) "create(oluşturacak)"! `Get.put()`a benzer şekilde, örneklemeye `insert` dahili yöntemini de çağırır. Ancak `permanent` doğru oldu ve`isSingleton` yanlış oldu (bağımlılığımızı "creating", bunun tek bir örnek olmasının bir yolu yok, bu yüzden yanlış). Ve `permanent: true` olduğu için, varsayılan olarak ekranlar arasında kaybetmeme avantajına sahibiz! Ayrıca `Get.find()` hemen çağrılmaz, çağrılacak ekranda kullanılmayı bekler. `permanent` parametresini kullanmak için bu şekilde yaratılmıştır, o zamandan beri, fark edilmeye değer `Get.create()`, örneğin bir bu liste için benzersiz bir örnek istiyorsanız - bu nedenle Get.create GetWidget ile birlikte kullanılmalıdır.
+
+- Get.lazyPut: Adından da anlaşılacağı gibi tembel bir işlemdir. Örnek yaratılır, ancak hemen kullanılmak üzere çağrılmaz, çağrılmayı bekler. Diğer yöntemlerin aksine burada `insert` denilmez. Bunun yerine, instance hafızanın başka bir bölümüne, örneğin yeniden oluşturulup oluşturulamayacağını söylemekle sorumlu bir kısma eklenir, buna "factory" diyelim. Daha sonra kullanılmak üzere bir şey yaratmak istersek, şu anda kullanılanlarla karıştırılmayacak. Ve işte burada `fenix` sihirleri devreye giriyor: `fenix: false` bırakmayı seçerseniz ve `smartManagement`ınız `keepFactory` değilse, o zaman `Get.find` kullanılırken örnek bellekteki yeri değiştirecektir. "factory"den ortak örnek bellek alanına. Bundan hemen sonra, varsayılan olarak "factory"den kaldırılır. Şimdi, `fenix: true` seçeneğini seçerseniz, örnek bu özel bölümde var olmaya devam eder, hatta gelecekte tekrar çağrılmak üzere ortak alana gider.
 
 ## Bindings
 
-One of the great differentials of this package, perhaps, is the possibility of full integration of the routes, state manager and dependency manager.
-When a route is removed from the Stack, all controllers, variables, and instances of objects related to it are removed from memory. If you are using streams or timers, they will be closed automatically, and you don't have to worry about any of that.
-In version 2.10 Get completely implemented the Bindings API.
-Now you no longer need to use the init method. You don't even have to type your controllers if you don't want to. You can start your controllers and services in the appropriate place for that.
-The Binding class is a class that will decouple dependency injection, while "binding" routes to the state manager and dependency manager.
-This allows Get to know which screen is being displayed when a particular controller is used and to know where and how to dispose of it.
-In addition, the Binding class will allow you to have SmartManager configuration control. You can configure the dependencies to be arranged when removing a route from the stack, or when the widget that used it is laid out, or neither. You will have intelligent dependency management working for you, but even so, you can configure it as you wish.
+Bu paketin en büyük farklılıklarından biri, belki de route'ların, state manager'in(durum yöneticisinin) ve dependency manager(bağımlılık yöneticisinin) tam entegrasyonu olasılığıdır.
+Stackten bir rota kaldırıldığında, onunla ilgili tüm controller'lar, değişkenler ve nesne örnekleri bellekten kaldırılır. Streams(Akışlar) veya timers(zamanlayıcılar) kullanıyorsanız, bunlar otomatik olarak kapatılır ve bunların hiçbiri için endişelenmenize gerek yoktur.
+2.10 sürümünde Bindings API'sini tamamen uygulayın.
+Artık init metodunu kullanmanıza gerek yok. İstemiyorsanız controller yazmanız bile gerekmez. Bunun için uygun yerde controller ve servislerinizi başlatabilirsiniz.
+Binding sınıfı, state manager(durum yöneticisine) ve dependency manager(bağımlılık yöneticisine) giden rotaları "binding" ederken, dependency injection(bağımlılık enjeksiyonunu) ayıracak bir sınıftır.
+Bu, belirli bir controller(denetleyici) kullanıldığında hangi ekranın görüntülenmekte olduğunu ve bunun nerede ve nasıl imha edileceğini bilmenizi sağlar.
+Ayrıca Binding sınıfı, SmartManager yapılandırma kontrolüne sahip olmanızı sağlar. Stackten bir rota kaldırılırken veya onu kullanan pencere öğesi düzenlendiğinde veya hiçbirini yapmadığında düzenlenecek bağımlılıkları yapılandırabilirsiniz. Sizin için çalışan intelligent dependency management(akıllı bağımlılık yönetimine) sahip olacaksınız, ancak buna rağmen istediğiniz gibi yapılandırabilirsiniz.
 
 ### Bindings class
 
-- Create a class and implements Binding
+- Bir sınıf oluşturun ve Binding'i uygulayın
 
 ```dart
 class HomeBinding implements Bindings {}
 ```
 
-Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
+IDE'niz otomatik olarak sizden "dependencies(bağımlılıklar)" metodunu geçersiz kılmanızı isteyecektir ve sadece lambaya tıklamanız, metodu geçersiz kılmanız ve o rotada kullanacağınız tüm sınıfları eklemeniz yeterlidir:
 
 ```dart
 class HomeBinding implements Bindings {
@@ -291,8 +293,9 @@ class DetailsBinding implements Bindings {
 ```
 
 Now you just need to inform your route, that you will use that binding to make the connection between route manager, dependencies and states.
+Şimdi sadece rotanızı, route manager(rota yöneticisi), dependencies(bağımlılıklar) ve states(durumlar) arasında bağlantı kurmak için bu binding'i kullanacağınızı bildirmeniz gerekiyor.
 
-- Using named routes:
+- Adlandırılmış yolları kullanma:
 
 ```dart
 getPages: [
@@ -309,16 +312,16 @@ getPages: [
 ];
 ```
 
-- Using normal routes:
+- Normal yolları kullanma:
 
 ```dart
 Get.to(Home(), binding: HomeBinding());
 Get.to(DetailsView(), binding: DetailsBinding())
 ```
 
-There, you don't have to worry about memory management of your application anymore, Get will do it for you.
+Orada, artık uygulamanızın bellek yönetimi konusunda endişelenmenize gerek yok, Get bunu sizin için yapacak.
 
-The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+Bir rota çağrıldığında Binding sınıfı çağrılır, oluşturulacak tüm bağımlılıkları eklemek için GetMaterialApp'ınızda bir "initialBinding" oluşturabilirsiniz.
 
 ```dart
 GetMaterialApp(
@@ -329,10 +332,10 @@ GetMaterialApp(
 
 ### BindingsBuilder
 
-The default way of creating a binding is by creating a class that implements Bindings.
-But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
+Binding oluşturmanın varsayılan yolu, Binding'leri uygulayan bir sınıf oluşturmaktır.
+Ancak alternatif olarak, istediğiniz her şeyi somutlaştırmak için bir işlevi kullanabilmeniz için `BindingsBuilder` callback kullanabilirsiniz.
 
-Example:
+Örnek:
 
 ```dart
 getPages: [
@@ -354,25 +357,25 @@ getPages: [
 ];
 ```
 
-That way you can avoid to create one Binding class for each route making this even simpler.
+Bu şekilde, her rota için bir Binding sınıfı oluşturmaktan kaçınarak bunu daha da basitleştirebilirsiniz.
 
-Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
+Her iki şekilde de gayet iyi çalışıyor ve zevkinize en uygun olanı kullanmanızı istiyoruz.
 
 ### SmartManagement
 
-GetX by default disposes unused controllers from memory, even if a failure occurs and a widget that uses it is not properly disposed.
-This is what is called the `full` mode of dependency management.
-But if you want to change the way GetX controls the disposal of classes, you have `SmartManagement` class that you can set different behaviors.
+GetX, bir hata oluşsa ve onu kullanan bir pencere öğesi düzgün şekilde atılmamış olsa bile, varsayılan olarak kullanılmayan controller(denetleyicileri) bellekten atar.
+Bu, `full` dependency management(bağımlılık yönetimi) modu olarak adlandırılan şeydir.
+Ancak GetX'in sınıfların imhasını kontrol etme şeklini değiştirmek istiyorsanız, farklı davranışlar ayarlayabileceğiniz `SmartManagement` sınıfınız var.
 
 #### How to change
 
-If you want to change this config (which you usually don't need) this is the way:
+Bu yapılandırmayı (genellikle ihtiyacınız olmayan) şekilde değiştirmek istiyorsanız:
 
 ```dart
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilder //here
+      smartManagement: SmartManagement.onlyBuilder //burada
       home: Home(),
     )
   )
@@ -381,30 +384,30 @@ void main () {
 
 #### SmartManagement.full
 
-It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
+Varsayılan olanıdır. Kullanılmayan ve kalıcı olarak ayarlanmamış sınıfları dispose edin. Çoğu durumda, bu yapılandırmayı el değmeden tutmak isteyeceksiniz. Eğer Get için yeniyseniz, bunu değiştirmeyin.
 
 #### SmartManagement.onlyBuilder
-With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
+Bu seçenekle, yalnızca `init:` ile başlatılan veya `Get.lazyPut()` ile bir Binding'e yüklenen controller(denetleyiciler) dispose edilecektir.
 
-If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
+`Get.put()` veya `Get.putAsync()` veya başka bir yaklaşım kullanırsanız, SmartManagement bu bağımlılığı dışlamak için izinlere sahip olmayacaktır.
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilder.
+Varsayılan davranışla, SmartManagement.onlyBuilder'ın aksine "Get.put" ile örneklenen widget'lar bile kaldırılacaktır.
 
 #### SmartManagement.keepFactory
 
-Just like SmartManagement.full, it will remove it's dependencies when it's not being used anymore. However, it will keep their factory, which means it will recreate the dependency if you need that instance again.
+SmartManagement.full gibi, artık kullanılmadığında bağımlılıklarını kaldıracaktır. Ancak, factory'leri koruyacak, yani bu örneğe tekrar ihtiyacınız olursa dependency(bağımlılığı) yeniden yaratacaktır.
 
 ### How bindings work under the hood
-Bindings creates transitory factories, which are created the moment you click to go to another screen, and will be destroyed as soon as the screen-changing animation happens.
-This happens so fast that the analyzer will not even be able to register it.
-When you navigate to this screen again, a new temporary factory will be called, so this is preferable to using SmartManagement.keepFactory, but if you don't want to create Bindings, or want to keep all your dependencies on the same Binding, it will certainly help you.
-Factories take up little memory, they don't hold instances, but a function with the "shape" of that class you want.
-This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
-Use whichever is most convenient for you.
+Bindings, başka bir ekrana gitmek için tıkladığınız anda oluşturulan geçici factory'ler oluşturur ve ekran değişirken animasyon gerçekleşir gerçekleşmez yok edilir.
+Bu o kadar hızlı gerçekleşir ki analyzer onu kaydedemez bile.
+Bu ekrana tekrar gittiğinizde, yeni bir geçici factory çağrılır, bu nedenle SmartManagement.keepFactory kullanmak yerine bu tercih edilir, ancak Bindings oluşturmak istemiyorsanız veya tüm bağımlılıklarınızı aynı Binding üzerinde tutmak istiyorsanız, mutlaka size yardımcı olacaktır.
+Factory'ler çok az bellek kaplarlar, örnekleri tutmazlar, ancak istediğiniz sınıfın "shape" olan bir fonksiyona sahiptirler.
+Bunun bellekte maliyeti çok düşüktür, ancak bu kitaplığın amacı, minimum kaynakları kullanarak mümkün olan maksimum performansı elde etmek olduğundan, Get factory bile varsayılan olarak kaldırır.
+Hangisi sizin için daha uygunsa onu kullanın.
 
 ## Notes
 
-- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+- Birden çok Bindings kullanıyorsanız SmartManagement.keepFactory KULLANMAYIN. Bindings olmadan veya GetMaterialApp'in initialBinding'inde bağlantılı tek bir Binding ile kullanılmak üzere tasarlanmıştır.
 
-- Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
-However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.
+- Bindings kullanmak tamamen isteğe bağlıdır, isterseniz belirli bir denetleyiciyi kullanan sınıflarda `Get.put()` ve `Get.find()` kullanabilirsiniz.
+Ancak, Services veya başka bir abstract class ile çalışıyorsanız, daha iyi bir organizasyon için Bindings'i kullanmanızı öneririm.
