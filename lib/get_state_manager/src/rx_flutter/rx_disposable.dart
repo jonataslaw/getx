@@ -17,7 +17,7 @@ abstract class DisposableInterface extends GetLifeCycle {
   @mustCallSuper
   void onInit() {
     super.onInit();
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+    SchedulerBinding.instance.addPostFrameCallback((_) => onReady());
   }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
