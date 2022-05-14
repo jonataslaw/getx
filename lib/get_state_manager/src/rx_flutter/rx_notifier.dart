@@ -127,7 +127,7 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleBase {
   @mustCallSuper
   void onInit() {
     super.onInit();
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+    SchedulerBinding.instance.addPostFrameCallback((_) => onReady());
   }
 }
 
