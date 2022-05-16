@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../get_core/src/typedefs.dart';
 import 'list_notifier.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -102,13 +103,14 @@ mixin ObserverComponent on ComponentElement {
 
   Future<bool> _safeRebuild() async {
     if (dirty) return false;
-    if (SchedulerBinding.instance == null) {
+    if (ambiguate(SchedulerBinding.instance) == null) {
       markNeedsBuild();
     } else {
       // refresh was called during the building
-      if (SchedulerBinding.instance!.schedulerPhase != SchedulerPhase.idle) {
+      if (ambiguate(SchedulerBinding.instance)!.schedulerPhase 
+      != SchedulerPhase.idle) {
         // Await for the end of build
-        await SchedulerBinding.instance!.endOfFrame;
+        await ambiguate(SchedulerBinding.instance)!.endOfFrame;
         if (dirty) return false;
       }
 

@@ -248,18 +248,21 @@ extension RxnBoolExt on Rx<bool?> {
 
   bool? get isFalse {
     if (value != null) return !isTrue!;
+    return null;
   }
 
   bool? operator &(bool other) {
     if (value != null) {
       return other && value!;
     }
+    return null;
   }
 
   bool? operator |(bool other) {
     if (value != null) {
       return other || value!;
     }
+    return null;
   }
 
   bool? operator ^(bool other) => !other == value;
