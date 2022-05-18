@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../get.dart';
+
 /// The [GetLifeCycle]
 ///
 /// ```dart
@@ -16,7 +18,8 @@ mixin GetLifeCycleMixin {
   @protected
   @mustCallSuper
   void onInit() {
-    SchedulerBinding.instance?.addPostFrameCallback((_) => onReady());
+    ambiguate(SchedulerBinding.instance)
+        ?.addPostFrameCallback((_) => onReady());
   }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
