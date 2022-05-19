@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   final controller = Get.put(Controller());
   testWidgets("GetxController smoke test", (tester) async {
     await tester.pumpWidget(
