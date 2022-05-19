@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
@@ -29,6 +30,7 @@ class Api implements Service {
 }
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
   test('Get.putAsync test', () async {
     await Get.putAsync<String>(Mock.test);
     expect('test', Get.find<String>());
