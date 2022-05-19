@@ -17,7 +17,7 @@ class DetailsView extends GetView<HomeController> {
           fit: BoxFit.cover,
           colorFilter: ColorFilter.linearToSrgbGamma(),
           image: NetworkImage(
-              "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
+              "https://flagpedia.net/data/flags/normal/${country?.countryCode.toLowerCase()}.png"),
         ),
       ),
       child: BackdropFilter(
@@ -36,7 +36,7 @@ class DetailsView extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${country.country}',
+                  '${country?.country}',
                   style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -49,7 +49,7 @@ class DetailsView extends GetView<HomeController> {
                   ),
                 ),
                 Text(
-                  '${country.totalConfirmed}',
+                  '${country?.totalConfirmed}',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -62,7 +62,7 @@ class DetailsView extends GetView<HomeController> {
                   ),
                 ),
                 Text(
-                  '${country.totalDeaths}',
+                  '${country?.totalDeaths}',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -75,7 +75,7 @@ class DetailsView extends GetView<HomeController> {
                   ),
                 ),
                 Text(
-                  '${country.totalRecovered}',
+                  '${country?.totalRecovered}',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
                 TextButton(

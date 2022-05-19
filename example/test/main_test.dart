@@ -84,7 +84,7 @@ void main() {
     controller = Get.find<HomeController>();
       await Future.delayed(const Duration(milliseconds: 100));
     expect(controller.status.isError, true);
-   // expect(controller.state, null);
+    expect(controller.state, null);
   });
 
   /// Tests with GetTests
