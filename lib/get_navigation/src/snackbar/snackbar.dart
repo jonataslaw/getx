@@ -449,7 +449,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
   }
 
   void _configureLeftBarFuture() {
-    SchedulerBinding.instance!.addPostFrameCallback(
+    ambiguate(SchedulerBinding.instance)!.addPostFrameCallback(
       (_) {
         final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
