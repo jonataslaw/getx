@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../data/home_api_provider.dart';
 
+import '../data/home_api_provider.dart';
 import '../data/home_repository.dart';
 import '../domain/adapters/repository_adapter.dart';
 import '../presentation/controllers/home_controller.dart';

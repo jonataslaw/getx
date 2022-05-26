@@ -1,22 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/get_instance.dart';
-import '../../../get_rx/src/rx_types/rx_types.dart';
-import '../../get_state_manager.dart';
+import '../../../get_instance/src/lifecycle.dart';
+import '../simple/list_notifier.dart';
 
-typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
+typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
-class GetX<T extends DisposableInterface> extends StatefulWidget {
+class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
   final bool global;
-
-  // final Stream Function(T) stream;
-  // final StreamController Function(T) streamController;
   final bool autoRemove;
   final bool assignId;
   final void Function(GetXState<T> state)? initState,
@@ -42,6 +37,9 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   });
 
   @override
+  StatefulElement createElement() => StatefulElement(this);
+
+  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
@@ -57,11 +55,9 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   GetXState<T> createState() => GetXState<T>();
 }
 
-class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
-  final _observer = RxNotifier();
+class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   T? controller;
   bool? _isCreator = false;
-  late StreamSubscription _subs;
 
   @override
   void initState() {
@@ -86,7 +82,7 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    _subs = _observer.listen((data) => setState(() {}), cancelOnError: false);
+
     super.initState();
   }
 
@@ -112,22 +108,34 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
         GetInstance().delete<T>(tag: widget.tag);
       }
     }
-    _subs.cancel();
-    _observer.close();
+
+    for (final disposer in disposers) {
+      disposer();
+    }
+
+    disposers.clear();
+
     controller = null;
     _isCreator = null;
     super.dispose();
   }
+
+  void _update() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  final disposers = <Disposer>[];
+
+  @override
+  Widget build(BuildContext context) => Notifier.instance.append(
+      NotifyData(disposers: disposers, updater: _update),
+      () => widget.builder(controller!));
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<T>('controller', controller));
   }
-
-  @override
-  Widget build(BuildContext context) => RxInterface.notifyChildren(
-        _observer,
-        () => widget.builder(controller!),
-      );
 }

@@ -40,6 +40,7 @@ class GetObserver extends NavigatorObserver {
     super.didPop(route, previousRoute);
     final currentRoute = _RouteData.ofRoute(route);
     final newRoute = _RouteData.ofRoute(previousRoute);
+
     // if (currentRoute.isSnackbar) {
     //   // Get.log("CLOSE SNACKBAR ${currentRoute.name}");
     //   Get.log("CLOSE SNACKBAR");
@@ -51,7 +52,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
     if (previousRoute != null) {
-      RouterReportManager.reportCurrentRoute(previousRoute);
+      RouterReportManager.instance.reportCurrentRoute(previousRoute);
     }
 
     // Here we use a 'inverse didPush set', meaning that we use
@@ -91,7 +92,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    RouterReportManager.reportCurrentRoute(route);
+    RouterReportManager.instance.reportCurrentRoute(route);
     _routeSend?.update((value) {
       value.current = newRoute.name ?? '';
       value.previous = previous.name ?? '';
@@ -125,7 +126,7 @@ class GetObserver extends NavigatorObserver {
     });
 
     if (route is GetPageRoute) {
-      RouterReportManager.reportRouteWillDispose(route);
+      RouterReportManager.instance.reportRouteWillDispose(route);
     }
     routing?.call(_routeSend);
   }
@@ -140,7 +141,7 @@ class GetObserver extends NavigatorObserver {
     Get.log("NEW ROUTE ${newCRoute.name}");
 
     if (newRoute != null) {
-      RouterReportManager.reportCurrentRoute(newRoute);
+      RouterReportManager.instance.reportCurrentRoute(newRoute);
     }
 
     _routeSend?.update((value) {
@@ -156,7 +157,7 @@ class GetObserver extends NavigatorObserver {
       value.isDialog =newCRoute.isDialog;
     });
     if (oldRoute is GetPageRoute) {
-      RouterReportManager.reportRouteWillDispose(oldRoute);
+      RouterReportManager.instance.reportRouteWillDispose(oldRoute);
     }
 
     routing?.call(_routeSend);
@@ -194,7 +195,6 @@ class Routing {
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
   final bool isGetPageRoute;
-  //final bool isSnackbar;
   final bool isBottomSheet;
   final bool isDialog;
   final String? name;
@@ -202,7 +202,6 @@ class _RouteData {
   _RouteData({
     required this.name,
     required this.isGetPageRoute,
-    // required this.isSnackbar,
     required this.isBottomSheet,
     required this.isDialog,
   });
@@ -211,7 +210,6 @@ class _RouteData {
     return _RouteData(
       name: _extractRouteName(route),
       isGetPageRoute: route is GetPageRoute,
-      // isSnackbar: route is SnackRoute,
       isDialog: route is GetDialogRoute,
       isBottomSheet: route is GetModalBottomSheetRoute,
     );

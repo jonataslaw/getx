@@ -1,4 +1,10 @@
+// ignore: one_member_abstracts
 import 'get_instance.dart';
+
+// ignore: one_member_abstracts
+abstract class BindingsInterface<T> {
+  T dependencies();
+}
 
 /// [Bindings] should be extended or implemented.
 /// When using `GetMaterialApp`, all `GetPage`s and navigation
@@ -6,7 +12,9 @@ import 'get_instance.dart';
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Bindings {
+@Deprecated('Use Binding instead')
+abstract class Bindings extends BindingsInterface<void> {
+  @override
   void dependencies();
 }
 
@@ -58,8 +66,4 @@ class BindingsBuilder<T> extends Bindings {
   }
 }
 
-// abstract class INavigation {}
-// typedef Snack = Function();
-// typedef Modal = Function();
-// typedef Route = Function();
 typedef BindingBuilderCallback = void Function();

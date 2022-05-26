@@ -29,7 +29,7 @@ class AppPages {
     GetPage(
       name: '/',
       page: () => RootView(),
-      binding: RootBinding(),
+      bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
       children: [
@@ -40,12 +40,12 @@ class AppPages {
           ],
           name: _Paths.LOGIN,
           page: () => LoginView(),
-          binding: LoginBinding(),
+          bindings: [LoginBinding()],
         ),
         GetPage(
           preventDuplicates: true,
           name: _Paths.HOME,
-          page: () => HomeView(),
+          page: () => const HomeView(),
           bindings: [
             HomeBinding(),
           ],
@@ -54,7 +54,9 @@ class AppPages {
             GetPage(
               name: _Paths.DASHBOARD,
               page: () => DashboardView(),
-              binding: DashboardBinding(),
+              bindings: [
+                DashboardBinding(),
+              ],
             ),
             GetPage(
               middlewares: [
@@ -65,19 +67,20 @@ class AppPages {
               page: () => ProfileView(),
               title: 'Profile',
               transition: Transition.size,
-              binding: ProfileBinding(),
+              bindings: [ProfileBinding()],
             ),
             GetPage(
               name: _Paths.PRODUCTS,
-              page: () => ProductsView(),
+              page: () => const ProductsView(),
               title: 'Products',
               transition: Transition.zoom,
-              binding: ProductsBinding(),
+              participatesInRootNavigator: false,
+              bindings: [ProductsBinding()],
               children: [
                 GetPage(
                   name: _Paths.PRODUCT_DETAILS,
                   page: () => ProductDetailsView(),
-                  binding: ProductDetailsBinding(),
+                  bindings: [ProductDetailsBinding()],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
@@ -90,7 +93,9 @@ class AppPages {
         GetPage(
           name: _Paths.SETTINGS,
           page: () => SettingsView(),
-          binding: SettingsBinding(),
+          bindings: [
+            SettingsBinding(),
+          ],
         ),
       ],
     ),

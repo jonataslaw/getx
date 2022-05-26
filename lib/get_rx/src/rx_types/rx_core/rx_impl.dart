@@ -4,8 +4,8 @@ part of rx_types;
 /// reactivity
 /// of those `Widgets` and Rx values.
 
-mixin RxObjectMixin<T> on NotifyManager<T> {
-  late T _value;
+mixin RxObjectMixin<T> on GetListenable<T> {
+  //late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
   /// useful when you make use of Rx for custom Types to referesh your UI.
@@ -25,9 +25,9 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// person.refresh();
   /// print( person );
   /// ```
-  void refresh() {
-    subject.add(value);
-  }
+  // void refresh() {
+  //   subject.add(value);
+  // }
 
   /// updates the value to `null` and adds it to the Stream.
   /// Even with null-safety coming, is still an important feature to support, as
@@ -59,6 +59,7 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   ///   onChanged: myText,
   /// ),
   ///```
+  @override
   T call([T? v]) {
     if (v != null) {
       value = v;
@@ -91,27 +92,19 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => _value.hashCode;
+  int get hashCode => value.hashCode;
 
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
+  @override
   set value(T val) {
-    if (subject.isClosed) return;
+    if (isDisposed) return;
     sentToStream = false;
-    if (_value == val && !firstRebuild) return;
+    if (value == val && !firstRebuild) return;
     firstRebuild = false;
-    _value = val;
     sentToStream = true;
-    subject.add(_value);
+    super.value = val;
   }
-
-  /// Returns the current [value]
-  T get value {
-    RxInterface.proxy?.addListener(subject);
-    return _value;
-  }
-
-  Stream<T> get stream => subject.stream;
 
   /// Returns a [StreamSubscription] similar to [listen], but with the
   /// added benefit that it primes the stream with the current [value], rather
@@ -136,64 +129,17 @@ mixin RxObjectMixin<T> on NotifyManager<T> {
   /// Closing the subscription will happen automatically when the observer
   /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    final listSubscriptions =
-        _subscriptions[subject] ??= <StreamSubscription>[];
-    listSubscriptions.add(stream.listen((va) => value = va));
-  }
-}
+    // final listSubscriptions =
+    //     _subscriptions[subject] ??= <StreamSubscription>[];
 
-class RxNotifier<T> = RxInterface<T> with NotifyManager<T>;
-
-mixin NotifyManager<T> {
-  GetStream<T> subject = GetStream<T>();
-  final _subscriptions = <GetStream, List<StreamSubscription>>{};
-
-  bool get canUpdate => _subscriptions.isNotEmpty;
-
-  /// This is an internal method.
-  /// Subscribe to changes on the inner stream.
-  void addListener(GetStream<T> rxGetx) {
-    if (!_subscriptions.containsKey(rxGetx)) {
-      final subs = rxGetx.listen((data) {
-        if (!subject.isClosed) subject.add(data);
-      });
-      final listSubscriptions =
-          _subscriptions[rxGetx] ??= <StreamSubscription>[];
-      listSubscriptions.add(subs);
-    }
-  }
-
-  StreamSubscription<T> listen(
-    void Function(T) onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) =>
-      subject.listen(
-        onData,
-        onError: onError,
-        onDone: onDone,
-        cancelOnError: cancelOnError ?? false,
-      );
-
-  /// Closes the subscriptions for this Rx, releasing the resources.
-  void close() {
-    _subscriptions.forEach((getStream, _subscriptions) {
-      for (final subscription in _subscriptions) {
-        subscription.cancel();
-      }
-    });
-
-    _subscriptions.clear();
-    subject.close();
+    final sub = stream.listen((va) => value = va);
+    reportAdd(sub.cancel);
   }
 }
 
 /// Base Rx class that manages all the stream logic for any Type.
-abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
-  _RxImpl(T initial) {
-    _value = initial;
-  }
+abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
+  _RxImpl(T initial) : super(initial);
 
   void addError(Object error, [StackTrace? stackTrace]) {
     subject.addError(error, stackTrace);
@@ -222,8 +168,8 @@ abstract class _RxImpl<T> extends RxNotifier<T> with RxObjectMixin<T> {
   /// print( person );
   /// ```
   void update(void fn(T? val)) {
-    fn(_value);
-    subject.add(_value);
+    fn(value);
+    subject.add(value);
   }
 
   /// Following certain practices on Rx data, we might want to react to certain
@@ -291,12 +237,9 @@ extension RxBoolExt on Rx<bool> {
 
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
-  /// FIXME: why return this? fluent interface is not
-  ///  not really a dart thing since we have '..' operator
-  // ignore: avoid_returning_this
-  Rx<bool> toggle() {
-    subject.add(_value = !_value);
-    return this;
+  void toggle() {
+    subject.add(!value);
+    // return this;
   }
 }
 
@@ -305,31 +248,31 @@ extension RxnBoolExt on Rx<bool?> {
 
   bool? get isFalse {
     if (value != null) return !isTrue!;
+    return null;
   }
 
   bool? operator &(bool other) {
     if (value != null) {
       return other && value!;
     }
+    return null;
   }
 
   bool? operator |(bool other) {
     if (value != null) {
       return other || value!;
     }
+    return null;
   }
 
   bool? operator ^(bool other) => !other == value;
 
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
-  /// FIXME: why return this? fluent interface is not
-  ///  not really a dart thing since we have '..' operator
-  // ignore: avoid_returning_this
-  Rx<bool?>? toggle() {
-    if (_value != null) {
-      subject.add(_value = !_value!);
-      return this;
+  void toggle() {
+    if (value != null) {
+      subject.add(!value!);
+      // return this;
     }
   }
 }

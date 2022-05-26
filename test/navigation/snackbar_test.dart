@@ -23,6 +23,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     expect(Get.isSnackbarOpen, false);
     await tester.tap(find.text('Open Snackbar'));
 
@@ -57,8 +59,12 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     expect(Get.isSnackbarOpen, false);
-    await tester.tap(find.text('Open Snackbar'));
+    await tester.tap(
+      find.text('Open Snackbar'),
+    );
 
     expect(Get.isSnackbarOpen, true);
     await tester.pump(const Duration(seconds: 1));
@@ -85,6 +91,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     expect(Get.isSnackbarOpen, false);
     await tester.tap(find.text('Open Snackbar'));
     expect(Get.isSnackbarOpen, true);
@@ -96,6 +104,7 @@ void main() {
     expect(find.text('title'), findsNothing);
     expect(find.text('titleTwo'), findsOneWidget);
     Get.closeAllSnackbars();
+    await tester.pumpAndSettle();
   });
 
   testWidgets("test snackbar dismissible", (tester) async {
@@ -133,6 +142,8 @@ void main() {
         ),
       ),
     ));
+
+    await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
     expect(find.text('bar1'), findsNothing);
@@ -217,6 +228,8 @@ void main() {
     late final GetSnackBar getBar;
 
     await tester.pumpWidget(GetMaterialApp(home: Scaffold()));
+
+    await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
     expect(find.text('bar1'), findsNothing);

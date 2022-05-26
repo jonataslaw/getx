@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../domain/entity/cases_model.dart';
 
 // ignore: one_member_abstracts
@@ -12,6 +13,7 @@ class HomeProvider extends GetConnect implements IHomeProvider {
     httpClient.defaultDecoder =
         (val) => CasesModel.fromJson(val as Map<String, dynamic>);
     httpClient.baseUrl = 'https://api.covid19api.com';
+    super.onInit();
   }
 
   @override

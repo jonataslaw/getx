@@ -37,6 +37,17 @@ _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西�
       - [改变语言](#改变语言)
       - [系统语言](#系统语言)
   - [改变主题](#改变主题)
+  - [GetConnect](#getconnect)
+    - [默认配置](#默认配置)
+    - [自定义配置](#自定义配置)
+  - [GetPage 中间件](#getpage-中间件)
+    - [优先级](#优先级)
+    - [Redirect](#redirect)
+    - [onPageCalled](#onpagecalled)
+    - [OnBindingsStart](#onbindingsstart)
+    - [OnPageBuildStart](#onpagebuildstart)
+    - [OnPageBuilt](#onpagebuilt)
+    - [OnPageDispose](#onpagedispose)
   - [其他高级API](#其他高级api)
     - [可选的全局设置和手动配置](#可选的全局设置和手动配置)
     - [局部状态组件](#局部状态组件)
@@ -393,6 +404,163 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
 当`.darkmode`被激活时，它将切换到light主题，当light主题被激活时，它将切换到dark主题。
+
+## GetConnect
+
+GetConnect可以便捷的通过http或websockets进行前后台通信。
+
+### 默认配置
+
+你能轻松的通过extend GetConnect就能使用GET/POST/PUT/DELETE/SOCKET方法与你的Rest API或websockets通信。
+
+```dart
+class UserProvider extends GetConnect {
+  // Get request
+  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  // Post request
+  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  // Post request with File
+  Future<Response<CasesModel>> postCases(List<int> image) {
+    final form = FormData({
+      'file': MultipartFile(image, filename: 'avatar.png'),
+      'otherFile': MultipartFile(image, filename: 'cover.png'),
+    });
+    return post('http://youapi/users/upload', form);
+  }
+
+  GetSocket userMessages() {
+    return socket('https://yourapi/users/socket');
+  }
+}
+```
+
+### 自定义配置
+
+GetConnect具有多种自定义配置。你可以配置base Url，配置响应，配置请求，添加权限验证，甚至是尝试认证的次数，除此之外，还可以定义一个标准的解码器，该解码器将把您的所有请求转换为您的模型，而不需要任何额外的配置。
+
+```dart
+class HomeProvider extends GetConnect {
+  @override
+  void onInit() {
+    // All request will pass to jsonEncode so CasesModel.fromJson()
+    httpClient.defaultDecoder = CasesModel.fromJson;
+    httpClient.baseUrl = 'https://api.covid19api.com';
+    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
+    // Http and websockets if used with no [httpClient] instance
+
+    // It's will attach 'apikey' property on header from all requests
+    httpClient.addRequestModifier((request) {
+      request.headers['apikey'] = '12345678';
+      return request;
+    });
+
+    // Even if the server sends data from the country "Brazil",
+    // it will never be displayed to users, because you remove
+    // that data from the response, even before the response is delivered
+    httpClient.addResponseModifier<CasesModel>((request, response) {
+      CasesModel model = response.body;
+      if (model.countries.contains('Brazil')) {
+        model.countries.remove('Brazilll');
+      }
+    });
+
+    httpClient.addAuthenticator((request) async {
+      final response = await get("http://yourapi/token");
+      final token = response.body['token'];
+      // Set the header
+      request.headers['Authorization'] = "$token";
+      return request;
+    });
+
+    //Autenticator will be called 3 times if HttpStatus is
+    //HttpStatus.unauthorized
+    httpClient.maxAuthRetries = 3;
+  }
+  }
+
+  @override
+  Future<Response<CasesModel>> getCases(String path) => get(path);
+}
+```
+
+## GetPage 中间件
+
+GetPage现在有个新的参数可以把列表中的Get中间件按指定顺序执行。
+
+**注意**: 当GetPage有中间件时，所有的子page会自动有相同的中间件。
+
+### 优先级
+
+设置中间件的优先级定义Get中间件的执行顺序。
+
+```dart
+final middlewares = [
+  GetMiddleware(priority: 2),
+  GetMiddleware(priority: 5),
+  GetMiddleware(priority: 4),
+  GetMiddleware(priority: -8),
+];
+```
+
+这些中间件会按这个顺序执行 **-8 => 2 => 4 => 5**
+
+### Redirect
+
+当被调用路由的页面被搜索时，这个函数将被调用。它将RouteSettings作为重定向的结果。或者给它null，就没有重定向了。
+
+```dart
+RouteSettings redirect(String route) {
+  final authService = Get.find<AuthService>();
+  return authService.authed.value ? null : RouteSettings(name: '/login')
+}
+```
+
+### onPageCalled
+
+在调用页面时，创建任何东西之前，这个函数会先被调用。
+您可以使用它来更改页面的某些内容或给它一个新页面。
+
+```dart
+GetPage onPageCalled(GetPage page) {
+  final authService = Get.find<AuthService>();
+  return page.copyWith(title: 'Welcome ${authService.UserName}');
+}
+```
+
+### OnBindingsStart
+
+这个函数将在绑定初始化之前被调用。
+在这里，您可以更改此页面的绑定。
+
+```dart
+List<Bindings> onBindingsStart(List<Bindings> bindings) {
+  final authService = Get.find<AuthService>();
+  if (authService.isAdmin) {
+    bindings.add(AdminBinding());
+  }
+  return bindings;
+}
+```
+
+### OnPageBuildStart
+
+这个函数将在绑定初始化之后被调用。
+在这里，您可以在创建绑定之后和创建页面widget之前执行一些操作。
+
+```dart
+GetPageBuilder onPageBuildStart(GetPageBuilder page) {
+  print('bindings are ready');
+  return page;
+}
+```
+
+### OnPageBuilt
+
+这个函数将在GetPage.page调用后被调用，并给出函数的结果，并获取将要显示的widget。
+
+### OnPageDispose
+
+这个函数将在处理完页面的所有相关对象(Controllers, views, ...)之后被调用。
 
 ## 其他高级API
 

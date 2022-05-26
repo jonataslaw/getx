@@ -1,14 +1,12 @@
 // ignore: prefer_mixin
 import 'package:flutter/widgets.dart';
-import '../../../instance_manager.dart';
 
-import '../rx_flutter/rx_disposable.dart';
+import '../../../instance_manager.dart';
 import '../rx_flutter/rx_notifier.dart';
 import 'list_notifier.dart';
 
 // ignore: prefer_mixin
-abstract class GetxController extends DisposableInterface
-    with ListenableMixin, ListNotifierMixin {
+abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
   /// Rebuilds `GetBuilder` each time you call `update()`;
   /// Can take a List of [ids], that will only update the matching
   /// `GetBuilder( id: )`,
@@ -28,7 +26,9 @@ abstract class GetxController extends DisposableInterface
   }
 }
 
-mixin ScrollMixin on GetLifeCycleBase {
+/// this mixin allow to fetch data when the scroll is at the bottom or on the
+/// top
+mixin ScrollMixin on GetLifeCycleMixin {
   final ScrollController scroll = ScrollController();
 
   @override
@@ -61,8 +61,10 @@ mixin ScrollMixin on GetLifeCycleBase {
     }
   }
 
+  /// this method is called when the scroll is at the bottom
   Future<void> onEndScroll();
 
+  /// this method is called when the scroll is at the top
   Future<void> onTopScroll();
 
   @override
@@ -72,11 +74,18 @@ mixin ScrollMixin on GetLifeCycleBase {
   }
 }
 
-abstract class RxController extends DisposableInterface {}
+/// A clean controller to be used with only Rx variables
+abstract class RxController with GetLifeCycleMixin {}
 
+/// A recommended way to use Getx with Future fetching
+abstract class StateController<T> extends GetxController with StateMixin<T> {}
+
+/// A controller with super lifecycles (including native lifecycles)
+/// and StateMixins
 abstract class SuperController<T> extends FullLifeCycleController
     with FullLifeCycleMixin, StateMixin<T> {}
 
+/// A controller with super lifecycles (including native lifecycles)
 abstract class FullLifeCycleController extends GetxController
     with
         // ignore: prefer_mixin
@@ -87,13 +96,13 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   @override
   void onInit() {
     super.onInit();
-    WidgetsBinding.instance!.addObserver(this);
+    ambiguate(WidgetsBinding.instance)!.addObserver(this);
   }
 
   @mustCallSuper
   @override
   void onClose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    ambiguate(WidgetsBinding.instance)!.removeObserver(this);
     super.onClose();
   }
 
@@ -116,8 +125,8 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     }
   }
 
-  void onResumed();
-  void onPaused();
-  void onInactive();
-  void onDetached();
+  void onResumed() {}
+  void onPaused() {}
+  void onInactive() {}
+  void onDetached() {}
 }

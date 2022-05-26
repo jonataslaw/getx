@@ -2,11 +2,13 @@ import 'package:get/get.dart';
 
 import '../controllers/dashboard_controller.dart';
 
-class DashboardBinding extends Bindings {
+class DashboardBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DashboardController>(
-      () => DashboardController(),
-    );
+  List<Bind> dependencies() {
+    return [
+      Bind.lazyPut<DashboardController>(
+        () => DashboardController(),
+      )
+    ];
   }
 }

@@ -97,7 +97,7 @@ void main() {
     controller.close();
   });
 
-  test('Rx same value will not call the same listener when `call`', () async {
+  test('Rx same value will not call the same listener when call', () async {
     var reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
@@ -114,7 +114,7 @@ void main() {
     expect(1, timesCalled);
   });
 
-  test('Rx different value will call the listener when `trigger`', () async {
+  test('Rx different value will call the listener when trigger', () async {
     var reactiveInteger = RxInt(0);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
@@ -131,7 +131,7 @@ void main() {
     expect(3, timesCalled);
   });
 
-  test('Rx same value will call the listener when `trigger`', () async {
+  test('Rx same value will call the listener when trigger', () async {
     var reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
