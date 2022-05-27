@@ -167,7 +167,7 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// });
   /// print( person );
   /// ```
-  void update(void fn(T? val)) {
+  void update(void fn(T val)) {
     fn(value);
     subject.add(value);
   }
