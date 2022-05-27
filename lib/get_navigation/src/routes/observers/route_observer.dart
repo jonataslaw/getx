@@ -5,7 +5,6 @@ import '../../../../instance_manager.dart';
 import '../../../get_navigation.dart';
 import '../../dialog/dialog_route.dart';
 import '../../router_report.dart';
-import '../default_route.dart';
 
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
@@ -53,7 +52,7 @@ class GetObserver extends NavigatorObserver {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
     if (previousRoute != null) {
-      RouterReportManager.reportCurrentRoute(previousRoute);
+      RouterReportManager.instance.reportCurrentRoute(previousRoute);
     }
 
     // Here we use a 'inverse didPush set', meaning that we use
@@ -98,8 +97,8 @@ class GetObserver extends NavigatorObserver {
       Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    RouterReportManager.reportCurrentRoute(route);
-    _routeSend?.update((value) {
+    RouterReportManager.instance.reportCurrentRoute(route);
+    _routeSend!.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';
@@ -143,7 +142,7 @@ class GetObserver extends NavigatorObserver {
     });
 
     if (route is GetPageRoute) {
-      RouterReportManager.reportRouteWillDispose(route);
+      RouterReportManager.instance.reportRouteWillDispose(route);
     }
     routing?.call(_routeSend);
   }
@@ -159,7 +158,7 @@ class GetObserver extends NavigatorObserver {
     Get.log("NEW ROUTE $newName");
 
     if (newRoute != null) {
-      RouterReportManager.reportCurrentRoute(newRoute);
+      RouterReportManager.instance.reportCurrentRoute(newRoute);
     }
 
     _routeSend?.update((value) {
@@ -179,7 +178,7 @@ class GetObserver extends NavigatorObserver {
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
     if (oldRoute is GetPageRoute) {
-      RouterReportManager.reportRouteWillDispose(oldRoute);
+      RouterReportManager.instance.reportRouteWillDispose(oldRoute);
     }
 
     routing?.call(_routeSend);
@@ -217,7 +216,6 @@ class Routing {
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
   final bool isGetPageRoute;
-  //final bool isSnackbar;
   final bool isBottomSheet;
   final bool isDialog;
   final String? name;
@@ -225,7 +223,6 @@ class _RouteData {
   _RouteData({
     required this.name,
     required this.isGetPageRoute,
-    // required this.isSnackbar,
     required this.isBottomSheet,
     required this.isDialog,
   });
@@ -234,7 +231,6 @@ class _RouteData {
     return _RouteData(
       name: _extractRouteName(route),
       isGetPageRoute: route is GetPageRoute,
-      // isSnackbar: route is SnackRoute,
       isDialog: route is GetDialogRoute,
       isBottomSheet: route is GetModalBottomSheetRoute,
     );

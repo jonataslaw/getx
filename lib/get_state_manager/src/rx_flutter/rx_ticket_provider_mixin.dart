@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../../get_instance/src/lifecycle.dart';
 import '../../get_state_manager.dart';
 
 /// Used like `SingleTickerProviderMixin` but only with Get Controllers.
@@ -113,7 +114,8 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
   @override
   Ticker createTicker(TickerCallback onTick) {
     _tickers ??= <_WidgetTicker>{};
-    final result = _WidgetTicker(onTick, this, debugLabel: kDebugMode ? 'created by ${describeIdentity(this)}' : null);
+    final result = _WidgetTicker(onTick, this,
+        debugLabel: kDebugMode ? 'created by ${describeIdentity(this)}' : null);
     _tickers!.add(result);
     return result;
   }
@@ -143,13 +145,13 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
               ErrorSummary('$this was disposed with an active Ticker.'),
               ErrorDescription(
                 '$runtimeType created a Ticker via its GetTickerProviderStateMixin, but at the time '
-                    'dispose() was called on the mixin, that Ticker was still active. All Tickers must '
-                    'be disposed before calling super.dispose().',
+                'dispose() was called on the mixin, that Ticker was still active. All Tickers must '
+                'be disposed before calling super.dispose().',
               ),
               ErrorHint(
                 'Tickers used by AnimationControllers '
-                    'should be disposed by calling dispose() on the AnimationController itself. '
-                    'Otherwise, the ticker will leak.',
+                'should be disposed by calling dispose() on the AnimationController itself. '
+                'Otherwise, the ticker will leak.',
               ),
               ticker.describeForError('The offending ticker was'),
             ]);
@@ -160,11 +162,11 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
     }());
     super.onClose();
   }
-
 }
 
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(TickerCallback onTick, this._creator, { String? debugLabel }) : super(onTick, debugLabel: debugLabel);
+  _WidgetTicker(TickerCallback onTick, this._creator, {String? debugLabel})
+      : super(onTick, debugLabel: debugLabel);
 
   final GetTickerProviderStateMixin _creator;
 
@@ -195,7 +197,7 @@ class _WidgetTicker extends Ticker {
 ///  }
 ///  ...
 /// ```
-mixin SingleGetTickerProviderMixin on DisposableInterface
+mixin SingleGetTickerProviderMixin on GetLifeCycleMixin
     implements TickerProvider {
   @override
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);

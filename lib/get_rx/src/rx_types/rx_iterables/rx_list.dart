@@ -1,12 +1,9 @@
 part of rx_types;
 
 /// Create a list similar to `List<T>`
-class RxList<E> extends ListMixin<E>
-    with NotifyManager<List<E>>, RxObjectMixin<List<E>>
-    implements RxInterface<List<E>> {
-  RxList([List<E> initial = const []]) {
-    _value = List.from(initial);
-  }
+class RxList<E> extends GetListenable<List<E>>
+    with ListMixin<E>, RxObjectMixin<List<E>> {
+  RxList([List<E> initial = const []]) : super(initial);
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));
@@ -42,7 +39,7 @@ class RxList<E> extends ListMixin<E>
 
   @override
   void operator []=(int index, E val) {
-    _value[index] = val;
+    value[index] = val;
     refresh();
   }
 
@@ -62,47 +59,47 @@ class RxList<E> extends ListMixin<E>
 
   @override
   void add(E item) {
-    _value.add(item);
+    value.add(item);
     refresh();
   }
 
   @override
   void addAll(Iterable<E> item) {
-    _value.addAll(item);
+    value.addAll(item);
     refresh();
   }
 
   @override
   void removeWhere(bool test(E element)) {
-    _value.removeWhere(test);
+    value.removeWhere(test);
     refresh();
   }
 
   @override
   void retainWhere(bool test(E element)) {
-    _value.retainWhere(test);
+    value.retainWhere(test);
     refresh();
   }
 
   @override
   int get length => value.length;
 
-  @override
-  @protected
-  List<E> get value {
-    RxInterface.proxy?.addListener(subject);
-    return _value;
-  }
+  // @override
+  // @protected
+  // List<E> get value {
+  //   RxInterface.proxy?.addListener(subject);
+  //   return subject.value;
+  // }
 
   @override
   set length(int newLength) {
-    _value.length = newLength;
+    value.length = newLength;
     refresh();
   }
 
   @override
   void insertAll(int index, Iterable<E> iterable) {
-    _value.insertAll(index, iterable);
+    value.insertAll(index, iterable);
     refresh();
   }
 
@@ -121,7 +118,7 @@ class RxList<E> extends ListMixin<E>
 
   @override
   void sort([int compare(E a, E b)?]) {
-    _value.sort(compare);
+    value.sort(compare);
     refresh();
   }
 }
@@ -157,16 +154,18 @@ extension ListExtension<E> on List<E> {
     //   (this as RxList)._value;
     // }
 
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    // if (this is RxList) {
-    //   (this as RxList)._value;
-    // }
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
+    //clear();
     addAll(items);
   }
 }

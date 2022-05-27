@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../get_state_manager.dart';
+
+import '../rx_flutter/rx_obx_widget.dart';
+import 'get_controllers.dart';
 import 'get_state.dart';
 
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
@@ -8,8 +10,11 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
   final bool global;
   final String? id;
   final bool autoRemove;
-  final void Function(State state)? initState, dispose, didChangeDependencies;
-  final void Function(GetBuilder oldWidget, State state)? didUpdateWidget;
+  final void Function(BindElement<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
+      didUpdateWidget;
   final T? init;
 
   const MixinBuilder({

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../../get_core/get_core.dart';
+import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
 import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
 
@@ -57,7 +58,7 @@ class Workers {
 /// }
 /// ```
 Worker ever<T>(
-  RxInterface<T> listener,
+  GetListenable<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
   Function? onError,
@@ -132,7 +133,7 @@ Worker everAll(
 /// }
 ///```
 Worker once<T>(
-  RxInterface<T> listener,
+  GetListenable<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
   Function? onError,
@@ -175,7 +176,7 @@ Worker once<T>(
 /// );
 /// ```
 Worker interval<T>(
-  RxInterface<T> listener,
+  GetListenable<T> listener,
   WorkerCallback<T> callback, {
   Duration time = const Duration(seconds: 1),
   dynamic condition = true,
@@ -219,7 +220,7 @@ Worker interval<T>(
 ///  }
 ///  ```
 Worker debounce<T>(
-  RxInterface<T> listener,
+  GetListenable<T> listener,
   WorkerCallback<T> callback, {
   Duration? time,
   Function? onError,

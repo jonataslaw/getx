@@ -5,24 +5,29 @@ import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
-      builder: (context, delegate, currentRoute) {
+      routerDelegate: Get.nestedKey(Routes.HOME),
+      builder: (context) {
+        final delegate = context.navigation;
         //This router outlet handles the appbar and the bottom navigation bar
-        final currentLocation = currentRoute?.location;
+        final currentLocation = context.location;
         var currentIndex = 0;
-        if (currentLocation?.startsWith(Routes.PRODUCTS) == true) {
+        if (currentLocation.startsWith(Routes.PRODUCTS) == true) {
           currentIndex = 2;
         }
-        if (currentLocation?.startsWith(Routes.PROFILE) == true) {
+        if (currentLocation.startsWith(Routes.PROFILE) == true) {
           currentIndex = 1;
         }
         return Scaffold(
           body: GetRouterOutlet(
             initialRoute: Routes.DASHBOARD,
-            // anchorRoute: Routes.HOME,
-            key: Get.nestedKey(Routes.HOME),
+            anchorRoute: Routes.HOME,
+
+            //delegate: Get.nestedKey(Routes.HOME),
+            // key: Get.nestedKey(Routes.HOME),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,

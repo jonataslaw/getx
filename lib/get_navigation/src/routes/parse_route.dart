@@ -1,31 +1,79 @@
-import '../../get_navigation.dart';
-import '../routes/get_route.dart';
+import 'package:flutter/foundation.dart';
 
+import '../../../route_manager.dart';
+
+@immutable
 class RouteDecoder {
-  final List<GetPage> treeBranch;
-  GetPage? get route => treeBranch.isEmpty ? null : treeBranch.last;
-  final Map<String, String> parameters;
-  final Object? arguments;
   const RouteDecoder(
-    this.treeBranch,
-    this.parameters,
-    this.arguments,
+    this.currentTreeBranch,
+    this.pageSettings,
   );
+  final List<GetPage> currentTreeBranch;
+  final PageSettings? pageSettings;
+
+  factory RouteDecoder.fromRoute(String location) {
+    var uri = Uri.parse(location);
+    final args = PageSettings(uri);
+    final decoder = Get.routeTree.matchRoute(location, arguments: args);
+    decoder.route = decoder.route?.copy(
+      completer: null,
+      arguments: args,
+      parameters: args.params,
+    );
+    return decoder;
+  }
+
+  GetPage? get route =>
+      currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
+
+  GetPage routeOrUnknown(GetPage onUnknow) =>
+      currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
+
+  set route(GetPage? getPage) {
+    if (getPage == null) return;
+    if (currentTreeBranch.isEmpty) {
+      currentTreeBranch.add(getPage);
+    } else {
+      currentTreeBranch[currentTreeBranch.length - 1] = getPage;
+    }
+  }
+
+  List<GetPage>? get currentChildrens => route?.children;
+
+  Map<String, String> get parameters => pageSettings?.params ?? {};
+
+  dynamic get args {
+    return pageSettings?.arguments;
+  }
+
+  T? arguments<T>() {
+    final args = pageSettings?.arguments;
+    if (args is T) {
+      return pageSettings?.arguments as T;
+    } else {
+      return null;
+    }
+  }
+
   void replaceArguments(Object? arguments) {
     final _route = route;
     if (_route != null) {
-      final index = treeBranch.indexOf(_route);
-      treeBranch[index] = _route.copy(arguments: arguments);
+      final index = currentTreeBranch.indexOf(_route);
+      currentTreeBranch[index] = _route.copy(arguments: arguments);
     }
   }
 
-  void replaceParameters(Object? arguments) {
-    final _route = route;
-    if (_route != null) {
-      final index = treeBranch.indexOf(_route);
-      treeBranch[index] = _route.copy(parameters: parameters);
-    }
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RouteDecoder &&
+        listEquals(other.currentTreeBranch, currentTreeBranch) &&
+        other.pageSettings == pageSettings;
   }
+
+  @override
+  int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
 }
 
 class ParseRouteTree {
@@ -35,7 +83,7 @@ class ParseRouteTree {
 
   final List<GetPage> routes;
 
-  RouteDecoder matchRoute(String name, {Object? arguments}) {
+  RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
     // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
@@ -55,7 +103,9 @@ class ParseRouteTree {
     final treeBranch = cumulativePaths
         .map((e) => MapEntry(e, _findRoute(e)))
         .where((element) => element.value != null)
-        .map((e) => MapEntry(e.key, e.value!))
+
+        ///Prevent page be disposed
+        .map((e) => MapEntry(e.key, e.value!.copy(key: ValueKey(e.key))))
         .toList();
 
     final params = Map<String, String>.from(uri.queryParameters);
@@ -78,28 +128,44 @@ class ParseRouteTree {
             ),
           )
           .toList();
+      arguments?.params.clear();
+      arguments?.params.addAll(params);
       return RouteDecoder(
         mappedTreeBranch,
-        params,
         arguments,
       );
     }
 
+    arguments?.params.clear();
+    arguments?.params.addAll(params);
+
     //route not found
     return RouteDecoder(
       treeBranch.map((e) => e.value).toList(),
-      params,
       arguments,
     );
   }
 
-  void addRoutes(List<GetPage> getPages) {
+  void addRoutes<T>(List<GetPage<T>> getPages) {
     for (final route in getPages) {
       addRoute(route);
     }
   }
 
-  void addRoute(GetPage route) {
+  void removeRoutes<T>(List<GetPage<T>> getPages) {
+    for (final route in getPages) {
+      removeRoute(route);
+    }
+  }
+
+  void removeRoute<T>(GetPage<T> route) {
+    routes.remove(route);
+    for (var page in _flattenPage(route)) {
+      removeRoute(page);
+    }
+  }
+
+  void addRoute<T>(GetPage<T> route) {
     routes.add(route);
 
     // Add Page children.
@@ -146,16 +212,20 @@ class ParseRouteTree {
 
   /// Change the Path for a [GetPage]
   GetPage _addChild(
-          GetPage origin, String parentPath, List<GetMiddleware> middlewares) =>
-      origin.copy(
-        middlewares: middlewares,
-        name: (parentPath + origin.name).replaceAll(r'//', '/'),
-      );
+      GetPage origin, String parentPath, List<GetMiddleware> middlewares) {
+    return origin.copy(
+      middlewares: middlewares,
+      name: (parentPath + origin.name).replaceAll(r'//', '/'),
+      // key:
+    );
+  }
 
   GetPage? _findRoute(String name) {
-    return routes.firstWhereOrNull(
+    final value = routes.firstWhereOrNull(
       (route) => route.path.regex.hasMatch(name),
     );
+
+    return value;
   }
 
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
@@ -178,7 +248,7 @@ class ParseRouteTree {
   }
 }
 
-extension FirstWhereExt<T> on List<T> {
+extension FirstWhereOrNullExt<T> on List<T> {
   /// The first element satisfying [test], or `null` if there are none.
   T? firstWhereOrNull(bool Function(T element) test) {
     for (var element in this) {

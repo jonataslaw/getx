@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../get.dart';
-import 'get_view.dart';
 
 mixin GetResponsiveMixin on Widget {
   ResponsiveScreen get screen;
@@ -68,7 +67,7 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
         super(key: key);
 }
 
-class GetResponsiveWidget<T extends GetLifeCycleBase?> extends GetWidget<T>
+class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
   @override
   final bool alwaysUseBuilder;

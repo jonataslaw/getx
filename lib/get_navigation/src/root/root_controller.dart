@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
-import '../../../get_state_manager/get_state_manager.dart';
-import '../../../get_utils/get_utils.dart';
-import '../routes/custom_transition.dart';
-import '../routes/observers/route_observer.dart';
-import '../routes/transitions_type.dart';
 
-class GetMaterialController extends SuperController {
+class GetMaterialController extends FullLifeCycleController {
+  static GetMaterialController get to => Get.find();
+
   bool testMode = false;
   Key? unikey;
   ThemeData? theme;
@@ -33,14 +30,14 @@ class GetMaterialController extends SuperController {
 
   CustomTransition? customTransition;
 
-  var _key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
+  Map<dynamic, GetDelegate> keys = {};
 
-  Map<dynamic, GlobalKey<NavigatorState>> keys = {};
+  GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
-  GlobalKey<NavigatorState> get key => _key;
+  GetDelegate get rootDelegate => Get.createDelegate();
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    _key = newKey;
+    rootDelegate.navigatorKey = newKey;
     return key;
   }
 
@@ -53,18 +50,6 @@ class GetMaterialController extends SuperController {
       }
     });
   }
-
-  @override
-  void onDetached() {}
-
-  @override
-  void onInactive() {}
-
-  @override
-  void onPaused() {}
-
-  @override
-  void onResumed() {}
 
   void restartApp() {
     unikey = UniqueKey();

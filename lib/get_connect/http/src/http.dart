@@ -28,6 +28,7 @@ class GetHttpClient {
   int maxAuthRetries;
 
   bool sendUserAgent;
+  bool sendContentLength;
 
   Decoder? defaultDecoder;
 
@@ -47,6 +48,7 @@ class GetHttpClient {
     this.followRedirects = true,
     this.maxRedirects = 5,
     this.sendUserAgent = false,
+    this.sendContentLength = true,
     this.maxAuthRetries = 1,
     bool allowAutoSignedCert = false,
     this.baseUrl,
@@ -111,7 +113,7 @@ class GetHttpClient {
 
     if (body is FormData) {
       bodyBytes = await body.toBytes();
-      headers['content-length'] = bodyBytes.length.toString();
+      _setContentLenght(headers, bodyBytes.length);
       headers['content-type'] =
           'multipart/form-data; boundary=${body.boundary}';
     } else if (contentType != null &&
@@ -124,21 +126,21 @@ class GetHttpClient {
       });
       var formData = parts.join('&');
       bodyBytes = utf8.encode(formData);
-      headers['content-length'] = bodyBytes.length.toString();
+      _setContentLenght(headers, bodyBytes.length);
       headers['content-type'] = contentType;
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
-
       bodyBytes = utf8.encode(jsonString);
-      headers['content-length'] = bodyBytes.length.toString();
+      _setContentLenght(headers, bodyBytes.length);
       headers['content-type'] = contentType ?? defaultContentType;
     } else if (body is String) {
       bodyBytes = utf8.encode(body);
-      headers['content-length'] = bodyBytes.length.toString();
+      _setContentLenght(headers, bodyBytes.length);
+
       headers['content-type'] = contentType ?? defaultContentType;
     } else if (body == null) {
+      _setContentLenght(headers, 0);
       headers['content-type'] = contentType ?? defaultContentType;
-      headers['content-length'] = '0';
     } else {
       if (!errorSafety) {
         throw UnexpectedFormat('body cannot be ${body.runtimeType}');
@@ -160,6 +162,12 @@ class GetHttpClient {
       maxRedirects: maxRedirects,
       decoder: decoder,
     );
+  }
+
+  void _setContentLenght(Map<String, String> headers, int contentLength) {
+    if (sendContentLength) {
+      headers['content-length'] = '$contentLength';
+    }
   }
 
   Stream<List<int>> _trackProgress(
@@ -199,16 +207,16 @@ class GetHttpClient {
     int requestNumber = 1,
     Map<String, String>? headers,
   }) async {
-      var request = await handler();
+    var request = await handler();
 
-      headers?.forEach((key, value) {
-        request.headers[key] = value;
-      });
+    headers?.forEach((key, value) {
+      request.headers[key] = value;
+    });
 
-      if (authenticate) await _modifier.authenticator!(request);
-      final newRequest = await _modifier.modifyRequest<T>(request);
+    if (authenticate) await _modifier.authenticator!(request);
+    final newRequest = await _modifier.modifyRequest<T>(request);
 
-      _httpClient.timeout = timeout;
+    _httpClient.timeout = timeout;
     try {
       var response = await _httpClient.send<T>(newRequest);
 

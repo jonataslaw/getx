@@ -23,9 +23,11 @@ class Wrapper extends StatelessWidget {
       translations: WrapperTranslations(),
       locale: WrapperTranslations.locale,
       getPages: namedRoutes,
-      home: Scaffold(
-        body: child,
-      ),
+      home: namedRoutes == null
+          ? Scaffold(
+              body: child,
+            )
+          : null,
     );
   }
 }
