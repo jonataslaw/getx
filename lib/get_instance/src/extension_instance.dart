@@ -68,6 +68,15 @@ extension Inst on GetInterface {
   /// each time you call `Get.find()`.
   S find<S>({String? tag}) => GetInstance().find<S>(tag: tag);
 
+  /// return getx controller if registered else it return null.
+  S? canFind<S>({String? tag}) {
+    try {
+      return find<S>(tag: tag);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /// Injects an `Instance<S>` in memory.
   ///
   /// No need to define the generic type `<[S]>` as it's inferred
