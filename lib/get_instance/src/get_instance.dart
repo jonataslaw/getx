@@ -33,6 +33,8 @@ class GetInstance {
   /// `Get.put()`
   static final Map<String, _InstanceBuilderFactory> _singl = {};
 
+  static Map<String, _InstanceBuilderFactory> get registeredInstances => _singl;
+
   /// Holds a reference to every registered callback when using
   /// `Get.lazyPut()`
   // static final Map<String, _Lazy> _factory = {};
