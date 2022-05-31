@@ -68,6 +68,48 @@ void main() {
     expect(find.text("single 0"), findsOneWidget);
   });
 
+  testWidgets("GetBuilder should close non-global controller on dispose",
+          (test) async {
+
+    final controller = ControllerNonGlobal();
+
+    await test.pumpWidget(
+      MaterialApp(
+        home: GetBuilder<ControllerNonGlobal>(
+            init: controller,
+            global: false,
+            builder: (controller) {
+              return Builder(builder: (context) {
+                return TextButton(
+                  child: Text('non-local'),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (c) =>
+                        Text('new screen')));
+                  },
+                );
+              });
+            }),
+      ),
+    );
+
+    await test.pump();
+
+    expect(find.text("non-local"), findsOneWidget);
+
+    expect(controller.isClosed, false,
+        reason: "controller should note be closed");
+
+    await test.tap(find.text('non-local'));
+
+    await test.pumpAndSettle();
+
+    expect(find.text("new screen"), findsOneWidget);
+
+    expect(controller.isClosed, true,
+        reason: "controller should be closed "
+            "after GetBuilder is removed from tree");
+  });
+
   // testWidgets(
   //   "MixinBuilder with build null",
   //   (test) async {

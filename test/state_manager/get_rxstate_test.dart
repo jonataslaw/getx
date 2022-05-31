@@ -71,6 +71,53 @@ void main() {
     expect(find.text("lazy 0"), findsOneWidget);
     expect(find.text("single 0"), findsOneWidget);
   });
+
+  testWidgets("GetX should close non-global controller on dispose",
+          (test) async {
+
+        final controller = ControllerNonGlobal();
+
+        await test.pumpWidget(
+          MaterialApp(
+            home: GetX<ControllerNonGlobal>(
+                init: controller,
+                global: false,
+                builder: (controller) {
+                  return Column(
+                    children: [
+                      Text(controller.nonGlobal.value.toString(),),
+                      Builder(builder: (context) {
+                        return TextButton(
+                          child: Text('non-local'),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (c) =>
+                                Text('new screen')));
+                          },
+                        );
+                      }),
+                    ],
+                  );
+                }),
+          ),
+        );
+
+        await test.pump();
+
+        expect(find.text("non-local"), findsOneWidget);
+
+        expect(controller.isClosed, false,
+            reason: "controller should note be closed");
+
+        await test.tap(find.text('non-local'));
+
+        await test.pumpAndSettle();
+
+        expect(find.text("new screen"), findsOneWidget);
+
+        expect(controller.isClosed, true,
+            reason: "controller should be closed "
+                "after GetX is removed from tree");
+      });
 }
 
 class Controller2 extends GetxController {
