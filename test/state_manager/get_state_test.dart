@@ -81,10 +81,10 @@ void main() {
             builder: (controller) {
               return Builder(builder: (context) {
                 return TextButton(
-                  child: Text('non-local'),
+                  child: Text('go-to-new-screen'),
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (c) =>
-                        Text('new screen')));
+                        Text('new-screen')));
                   },
                 );
               });
@@ -94,20 +94,20 @@ void main() {
 
     await test.pump();
 
-    expect(find.text("non-local"), findsOneWidget);
+    expect(find.text("go-to-new-screen"), findsOneWidget);
 
     expect(controller.isClosed, false,
-        reason: "controller should note be closed");
+        reason: "controller should not be closed here");
 
-    await test.tap(find.text('non-local'));
+    await test.tap(find.text('go-to-new-screen'));
 
     await test.pumpAndSettle();
 
-    expect(find.text("new screen"), findsOneWidget);
+    expect(find.text("new-screen"), findsOneWidget);
 
     expect(controller.isClosed, true,
         reason: "controller should be closed "
-            "after GetBuilder is removed from tree");
+            "after GetBuilder is removed from widget tree");
   });
 
   // testWidgets(
