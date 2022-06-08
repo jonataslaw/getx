@@ -741,7 +741,7 @@ GetMaterialApp(
 void localLogWriter(String text, {bool isError = false}) {
   // oper message ke logging package favorit anda disini
   // harap dicatat bahwa meskipun enableLog: false, pesan log akan di-push dalam callback ini,
-  // anda dapat memeriksa flag-nya jika anda mau melalui GetConfig.isLogEnable
+  // anda dapat memeriksa flag-nya jika anda mau melalui Get.isLogEnable
 }
 
 ```

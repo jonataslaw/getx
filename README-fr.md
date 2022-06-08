@@ -769,7 +769,7 @@ GetMaterialApp(
 void localLogWriter(String text, {bool isError = false}) {
   // transmettez le message à votre package de journalisation préféré ici
   // veuillez noter que même si enableLog: false, les messages du journal seront poussés dans ce 'callback'
-  // vérifiez le 'flag' si vous le souhaitez via GetConfig.isLogEnable
+  // vérifiez le 'flag' si vous le souhaitez via Get.isLogEnable
 }
 
 ```

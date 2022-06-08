@@ -45,8 +45,8 @@ extension Inst on GetInterface {
   /// Creates a new Class Instance [S] from the builder callback[S].
   /// Every time `find<S>()` is used, it calls the builder method to generate
   /// a new Instance [S].
-  /// It also registers each `instance.onClose()` with the current
-  /// Route `GetConfig.currentRoute` to keep the lifecycle active.
+  /// It also registers each [instance.onClose()] with the current
+  /// Route [Get.currentRoute] to keep the lifecycle active.
   /// Is important to know that the instances created are only stored per Route.
   /// So, if you call `Get.delete<T>()` the "instance factory" used in this
   /// method (`Get.create<T>()`) will be removed, but NOT the instances
