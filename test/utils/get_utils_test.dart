@@ -113,4 +113,12 @@ void main() {
       expect(GetUtils.isLengthLessOrEqual("a", 0), false);
     });
   });
+  
+  test('camelCase test', (){
+    final testString = 'Holly Molly';
+
+    expect(GetUtils.lowerCamelCase(testString), equals('hollyMolly'));
+    expect(GetUtils.upperCamelCase(testString), equals('HollyMolly'));
+    expect(GetUtils.camelCase(testString), equals('hollyMolly'));
+  });
 }
