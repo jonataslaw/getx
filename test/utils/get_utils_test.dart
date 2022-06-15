@@ -112,5 +112,23 @@ void main() {
       expect(GetUtils.isLengthLessOrEqual("a", 2), true);
       expect(GetUtils.isLengthLessOrEqual("a", 0), false);
     });
+
+    test('isAudio should validate [mp3, wma, amr, ogg, m4a, wav]', (){
+      final mp3filePath = '/abc/test/location/filename.mp3';
+      final wmafilePath = '/abc/test/location/filename.wma';
+      final amrfilePath = '/abc/test/location/filename.amr';
+      final oggfilePath = '/abc/test/location/filename.ogg';
+      final m4afilePath = '/abc/test/location/filename.m4a';
+      final wavfilePath = '/abc/test/location/filename.wav';
+      final mp4filePath = '/abc/test/location/filename.mp4';
+
+      expect(GetUtils.isAudio(mp3filePath), true);
+      expect(GetUtils.isAudio(wmafilePath), true);
+      expect(GetUtils.isAudio(amrfilePath), true);
+      expect(GetUtils.isAudio(oggfilePath), true);
+      expect(GetUtils.isAudio(m4afilePath), true);
+      expect(GetUtils.isAudio(wavfilePath), true);
+      expect(GetUtils.isAudio(mp4filePath), false);
+    });
   });
 }
