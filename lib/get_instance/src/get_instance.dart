@@ -354,7 +354,7 @@ class GetInstance {
     if (dep == null) return false;
 
     final _InstanceBuilderFactory builder;
-    if (dep.isDirty) {
+    if (dep.lateRemove != null) {
       builder = dep.lateRemove ?? dep;
     } else {
       builder = dep;
