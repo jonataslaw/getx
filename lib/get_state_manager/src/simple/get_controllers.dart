@@ -96,13 +96,13 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   @override
   void onInit() {
     super.onInit();
-    WidgetsBinding.instance!.addObserver(this);
+    ambiguate(WidgetsBinding.instance)!.addObserver(this);
   }
 
   @mustCallSuper
   @override
   void onClose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    ambiguate(WidgetsBinding.instance)!.removeObserver(this);
     super.onClose();
   }
 

@@ -34,6 +34,7 @@ class GetNavigator extends Navigator {
                 settings: settings,
               );
             }
+            return null;
           },
           reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
           restorationScopeId: restorationScopeId,
