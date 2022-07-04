@@ -7,3 +7,15 @@ extension IterableExtensions<T> on Iterable<T> {
     }
   }
 }
+
+extension FineSome<T> on Iterable<T> {
+  bool some(bool Function(T item) checkItem) {
+    for (var item in this) {
+      var check = checkItem.call(item);
+      if (check == true) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
