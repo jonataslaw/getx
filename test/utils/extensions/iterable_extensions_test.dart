@@ -11,6 +11,7 @@ void main() {
     var resultFalse = ages.some((age) => age == 21);
     expect(resultFalse, false);
   });
+
   test('Test some method for double list', () {
     var ages = [3.5, 10.11, 18.56, 20.0, 88.89];
 
