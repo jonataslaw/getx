@@ -13,6 +13,8 @@ class Request<T> {
   final Uri url;
 
   final Decoder<T>? decoder;
+  
+  final ResponseInterceptor<T>? responseInterceptor;
 
   /// The Http Method from this [Request]
   /// ex: `GET`,`POST`,`PUT`,`DELETE`
@@ -44,6 +46,7 @@ class Request<T> {
     required this.files,
     required this.persistentConnection,
     required this.decoder,
+    this.responseInterceptor,
   });
 
   factory Request({
@@ -57,6 +60,7 @@ class Request<T> {
     FormData? files,
     bool persistentConnection = true,
     Decoder<T>? decoder,
+    ResponseInterceptor<T>? responseInterceptor,
   }) {
     if (followRedirects) {
       assert(maxRedirects > 0);
@@ -72,6 +76,7 @@ class Request<T> {
       files: files,
       persistentConnection: persistentConnection,
       decoder: decoder,
+      responseInterceptor: responseInterceptor
     );
   }
 
