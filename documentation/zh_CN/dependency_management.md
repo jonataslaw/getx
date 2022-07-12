@@ -6,6 +6,7 @@
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
   - [使用实例化方法/类](#使用实例化方法类)
+  - [指定替换实例](#指定替换实例)
   - [方法之间的差异](#方法之间的差异)
   - [Bindings](#bindings)
     - [Bindings类](#bindings类)
@@ -13,7 +14,7 @@
     - [智能管理](#智能管理)
       - [如何改变](#如何改变)
       - [SmartManagement.full](#smartmanagementfull)
-      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
+      - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
     - [Bindings的工作原理](#bindings的工作原理)
   - [注释](#注释)
@@ -200,6 +201,36 @@ print(count); // out: 12345
 Get.delete<Controller>(); //通常你不需要这样做，因为GetX已经删除了未使用的控制器。
 ```
 
+## 指定替换实例
+
+当前插入的实例可以使用`replace`或`lazyReplace`方法替换为相似或继承的的类的实例。然后可以使用父类来寻找它。
+
+```dart
+abstract class BaseClass {}
+class ParentClass extends BaseClass {}
+
+class ChildClass extends ParentClass {
+  bool isChild = true;
+}
+
+
+Get.put<BaseClass>(ParentClass());
+
+Get.replace<BaseClass>(ChildClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); //true
+
+
+
+class OtherClass extends BaseClass {}
+Get.lazyReplace<BaseClass>(() => OtherClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); // false
+print(instance is OtherClass); //true
+```
+
 ## 方法之间的差异
 
 首先，让我们来看看Get.lazyPut的 "fenix "和其他方法的 "permanent"。
@@ -349,12 +380,12 @@ void main () {
 
 这是默认的。销毁那些没有被使用的、没有被设置为永久的类。在大多数情况下，你会希望保持这个配置不受影响。如果你是第一次使用GetX，那么不要改变这个配置。
 
-#### SmartManagement.onlyBuilders
+#### SmartManagement.onlyBuilder
 使用该选项，只有在`init:`中启动的控制器或用`Get.lazyPut()`加载到Binding中的控制器才会被销毁。
 
 如果你使用`Get.put()`或`Get.putAsync()`或任何其他方法，SmartManagement将没有权限移除这个依赖。
 
-在默认行为下，即使是用 "Get.put "实例化的widget也会被移除，这与SmartManagement.onlyBuilders不同。
+在默认行为下，即使是用 "Get.put "实例化的widget也会被移除，这与SmartManagement.onlyBuilder不同。
 
 #### SmartManagement.keepFactory
 
