@@ -52,14 +52,14 @@ extension GetDateTimeExtensions on DateTime {
   }
 
   /// convert DateTime to Unix Timestamp
-  int get unixTimeStamp => Timestamp.fromDate(this).seconds;
+  int get unixTimeStamp => GetTimestamp.fromDate(this).seconds;
 
 // DateTime fromUnixTimeStamp(int timestamp) {
 //   return Timestamp.fromSecondsSinceEpoch(timestamp).toDate();
 // }
 }
 
-///[Timestamp] borrowed from firestore cloud store
+///[GetTimestamp] borrowed from firestore cloud store
 const int _kThousand = 1000;
 const int _kMillion = 1000000;
 const int _kBillion = 1000000000;
@@ -81,39 +81,39 @@ void _check(bool expr, String name, int value) {
 ///
 /// For more information, see [the reference timestamp definition](https://github.com/google/protobuf/blob/master/src/google/protobuf/timestamp.proto)
 @immutable
-class Timestamp implements Comparable<Timestamp> {
-  /// Creates a [Timestamp]
-  Timestamp(this._seconds, this._nanoseconds) {
+class GetTimestamp implements Comparable<GetTimestamp> {
+  /// Creates a [GetTimestamp]
+  GetTimestamp(this._seconds, this._nanoseconds) {
     _validateRange(_seconds, _nanoseconds);
   }
 
-  /// Create a [Timestamp] fromSecondsSinceEpoch
-  factory Timestamp.fromSecondsSinceEpoch(int seconds) {
-    return Timestamp.fromMillisecondsSinceEpoch(seconds * 1000);
+  /// Create a [GetTimestamp] fromSecondsSinceEpoch
+  factory GetTimestamp.fromSecondsSinceEpoch(int seconds) {
+    return GetTimestamp.fromMillisecondsSinceEpoch(seconds * 1000);
   }
 
-  /// Create a [Timestamp] fromMillisecondsSinceEpoch
-  factory Timestamp.fromMillisecondsSinceEpoch(int milliseconds) {
+  /// Create a [GetTimestamp] fromMillisecondsSinceEpoch
+  factory GetTimestamp.fromMillisecondsSinceEpoch(int milliseconds) {
     var seconds = (milliseconds / _kThousand).floor();
     final nanoseconds = (milliseconds - seconds * _kThousand) * _kMillion;
-    return Timestamp(seconds, nanoseconds);
+    return GetTimestamp(seconds, nanoseconds);
   }
 
-  /// Create a [Timestamp] fromMicrosecondsSinceEpoch
-  factory Timestamp.fromMicrosecondsSinceEpoch(int microseconds) {
+  /// Create a [GetTimestamp] fromMicrosecondsSinceEpoch
+  factory GetTimestamp.fromMicrosecondsSinceEpoch(int microseconds) {
     final seconds = microseconds ~/ _kMillion;
     final nanoseconds = (microseconds - seconds * _kMillion) * _kThousand;
-    return Timestamp(seconds, nanoseconds);
+    return GetTimestamp(seconds, nanoseconds);
   }
 
-  /// Create a [Timestamp] from [DateTime] instance
-  factory Timestamp.fromDate(DateTime date) {
-    return Timestamp.fromMicrosecondsSinceEpoch(date.microsecondsSinceEpoch);
+  /// Create a [GetTimestamp] from [DateTime] instance
+  factory GetTimestamp.fromDate(DateTime date) {
+    return GetTimestamp.fromMicrosecondsSinceEpoch(date.microsecondsSinceEpoch);
   }
 
-  /// Create a [Timestamp] from [DateTime].now()
-  factory Timestamp.now() {
-    return Timestamp.fromMicrosecondsSinceEpoch(
+  /// Create a [GetTimestamp] from [DateTime].now()
+  factory GetTimestamp.now() {
+    return GetTimestamp.fromMicrosecondsSinceEpoch(
       DateTime.now().microsecondsSinceEpoch,
     );
   }
@@ -138,7 +138,7 @@ class Timestamp implements Comparable<Timestamp> {
   int get microsecondsSinceEpoch =>
       seconds * _kMillion + nanoseconds ~/ _kThousand;
 
-  /// Converts [Timestamp] to [DateTime]
+  /// Converts [GetTimestamp] to [DateTime]
   DateTime toDate() {
     return DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch);
   }
@@ -148,12 +148,12 @@ class Timestamp implements Comparable<Timestamp> {
 
   @override
   bool operator ==(Object other) =>
-      other is Timestamp &&
+      other is GetTimestamp &&
       other.seconds == seconds &&
       other.nanoseconds == nanoseconds;
 
   @override
-  int compareTo(Timestamp other) {
+  int compareTo(GetTimestamp other) {
     if (seconds == other.seconds) {
       return nanoseconds.compareTo(other.nanoseconds);
     }
