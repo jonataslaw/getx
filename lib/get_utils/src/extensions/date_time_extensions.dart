@@ -46,9 +46,9 @@ extension GetDateTimeExtensions on DateTime {
   /// convert DateTime to Unix Timestamp
   int get unixTimeStamp => Timestamp.fromDate(this).seconds;
 
-  DateTime fromUnixTimeStamp(int timestamp) {
-    return Timestamp.fromSecondsSinceEpoch(timestamp).toDate();
-  }
+// DateTime fromUnixTimeStamp(int timestamp) {
+//   return Timestamp.fromSecondsSinceEpoch(timestamp).toDate();
+// }
 }
 
 ///[Timestamp] borrowed from firestore cloud store
