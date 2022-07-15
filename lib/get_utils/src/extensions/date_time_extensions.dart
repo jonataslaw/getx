@@ -10,6 +10,14 @@ extension GetDateTimeExtensions on DateTime {
   /// return time of day is before or after noon.
   DayPeriod get period => TimeOfDay.fromDateTime(this).period;
 
+  /// return year is Leap Year
+  bool get isLeapYear {
+    // Leap years started from 1582.
+    return (year % 4 == 0) &&
+        (year % 100 != 0 || year % 400 == 0) &&
+        (year >= 1582);
+  }
+
   DateTime copyWith({
     int? year,
     int? month,
@@ -20,7 +28,7 @@ extension GetDateTimeExtensions on DateTime {
     int? millisecond,
     int? microsecond,
   }) {
-    return isUtc
+    return isUtc == true
         ? DateTime.utc(
             year ?? this.year,
             month ?? this.month,
