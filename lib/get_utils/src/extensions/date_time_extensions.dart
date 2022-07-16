@@ -78,6 +78,14 @@ extension GetDateTimeExtensions on DateTime {
         .difference(DateTime(now.year, now.month, now.day))
         .inDays;
   }
+
+  DateTime get previousWeek {
+    return subtract(Duration(days: 7));
+  }
+
+  DateTime get nextWeek {
+    return add(Duration(days: 7));
+  }
 }
 
 ///[GetTimestamp] borrowed from firestore cloud store
