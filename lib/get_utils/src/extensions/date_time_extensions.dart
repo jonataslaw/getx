@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+extension GetDateTimeExtensionsOnInt on int {
+  DateTime get fromUnixTimeStamp {
+    return GetTimestamp.fromSecondsSinceEpoch(this).toDate();
+  }
+}
+
 extension GetDateTimeExtensions on DateTime {
   /// Add Duration to DateTime
   DateTime operator +(Duration duration) => add(duration);

@@ -3,18 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 // import 'package:get_demo/routes/app_pages.dart';
 // import 'package:get_test/get_test.dart';
 import 'package:matcher/matcher.dart' as m;
-
 
 import '../lib/pages/home/domain/adapters/repository_adapter.dart';
 import '../lib/pages/home/domain/entity/cases_model.dart';
 import '../lib/pages/home/presentation/controllers/home_controller.dart';
 
-
 class MockRepositorySuccess implements IHomeRepository {
-
   @override
   Future<CasesModel> getCases() async {
     return CasesModel(
@@ -49,6 +47,14 @@ void main() {
     Get.lazyPut<HomeController>(
       () => HomeController(homeRepository: Get.find()),
     );
+  });
+
+  test("get time", () {
+    var now = DateTime(2022, 07, 18) + 1.days;
+    print(now.weekday);
+    print(now.unixTimeStamp);
+    print(now.unixTimeStamp.fromUnixTimeStamp == now);
+    expect(true, true);
   });
 
   test('Test Controller', () async {
