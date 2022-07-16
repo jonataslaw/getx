@@ -28,4 +28,23 @@ void main() {
     expect((day - 2.days).wasYesterday, true);
     expect(day.willTomorrow, true);
   });
+
+  test('weekDayName test', () {
+    var now = DateTime(2022, 07, 16);
+    print(now.weekDayName);
+    print(now.weekday);
+    expect(now.weekDayName == 'Sat', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Sun', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Mon', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Tue', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Wed', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Thu', true);
+    now = now + 1.days;
+    expect(now.weekDayName == 'Fri', true);
+  });
 }

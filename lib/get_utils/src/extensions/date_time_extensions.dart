@@ -86,6 +86,19 @@ extension GetDateTimeExtensions on DateTime {
   DateTime get nextWeek {
     return add(Duration(days: 7));
   }
+
+  String get weekDayName {
+    var _dayNameMap = <int, String>{
+      1: 'Mon',
+      2: 'Tue',
+      3: 'Wed',
+      4: 'Thu',
+      5: 'Fri',
+      6: 'Sat',
+      7: 'Sun',
+    };
+    return _dayNameMap[weekday]!;
+  }
 }
 
 ///[GetTimestamp] borrowed from firestore cloud store
