@@ -60,9 +60,24 @@ extension GetDateTimeExtensions on DateTime {
   /// convert DateTime to Unix Timestamp
   int get unixTimeStamp => GetTimestamp.fromDate(this).seconds;
 
-// DateTime fromUnixTimeStamp(int timestamp) {
-//   return Timestamp.fromSecondsSinceEpoch(timestamp).toDate();
-// }
+  bool get isToday {
+    return _dateDiffInDayFromNow(this) == 0;
+  }
+
+  bool get willTomorrow {
+    return _dateDiffInDayFromNow(this) == 1;
+  }
+
+  bool get wasYesterday {
+    return _dateDiffInDayFromNow(this) == -1;
+  }
+
+  int _dateDiffInDayFromNow(DateTime d) {
+    var now = DateTime.now();
+    return DateTime(d.year, d.month, d.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
+  }
 }
 
 ///[GetTimestamp] borrowed from firestore cloud store

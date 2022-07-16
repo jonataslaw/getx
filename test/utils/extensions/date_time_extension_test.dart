@@ -17,4 +17,15 @@ void main() {
     expect(now.weekday == 2, true);
     expect(now.unixTimeStamp.fromUnixTimeStamp == now, true);
   });
+  test('isToday, wasYesterDay,willTomorrow', () {
+    var now = DateTime.now();
+    var day = now + 1.days;
+
+    // print((day - 1.days).isToday);
+    // print((day).willTomorrow);
+    // print((day - 2.days).wasYesterday);
+    expect((day - 1.days).isToday, true);
+    expect((day - 2.days).wasYesterday, true);
+    expect(day.willTomorrow, true);
+  });
 }
