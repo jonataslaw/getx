@@ -88,7 +88,7 @@ With **GetX** you can also forget about this boilerplate code.
 Obx (() => Text (controller.name));
 ```
 
-_What do you need to memorize?_  Only `Obx(() =>` . 
+_What do you need to memorize?_  Only `Obx(() => )` . 
 
 You are just passing that Widget through an arrow-function into an `Obx()` (the "Observer" of the _Rx_). 
 
