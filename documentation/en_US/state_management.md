@@ -385,9 +385,9 @@ Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"))
 user().name; // notice that is the user variable, not the class (variable has lowercase u)
 ```
 
-You don't have to work with sets if you don't want to. you can use the "assign 'and" assignAll "api.
-The "assign" api will clear your list, and add a single object that you want to start there.
-The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
+You don't have to work with sets if you don't want to. you can use `assign` or `assignAll` api.
+The `assign` api will clear your list, and add a single object that you want to start there.
+The `assignAll` api will clear the existing list, and add any iterable objects that you inject into it.
 
 ### Why i have to use .value
 
