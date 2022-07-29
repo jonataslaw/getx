@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import '../../../get.dart';
 import 'default_transitions.dart';
-import 'transitions_type.dart';
 
 const double _kBackGestureWidth = 20.0;
 const int _kMaxDroppedSwipePageForwardAnimationTime =
@@ -619,8 +618,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                       onStartPopGesture: () => _startPopGesture<T>(route),
                       child: child)
                   : child);
-          
-        case Transition.ciruclarReveal:
+
+        case Transition.circularReveal:
           return CircularRevealTransition().buildTransitions(
               context,
               route.curve,
@@ -629,11 +628,11 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               route.popGesture ?? Get.defaultPopGesture
                   ? CupertinoBackGestureDetector<T>(
-                  gestureWidth: route.gestureWidth?.call(context) ??
-                      _kBackGestureWidth,
-                  enabledCallback: () => _isPopGestureEnabled<T>(route),
-                  onStartPopGesture: () => _startPopGesture<T>(route),
-                  child: child)
+                      gestureWidth: route.gestureWidth?.call(context) ??
+                          _kBackGestureWidth,
+                      enabledCallback: () => _isPopGestureEnabled<T>(route),
+                      onStartPopGesture: () => _startPopGesture<T>(route),
+                      child: child)
                   : child);
 
         default:

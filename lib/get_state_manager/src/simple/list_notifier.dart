@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/widgets.dart';
 
 // This callback remove the listener on addListener function
