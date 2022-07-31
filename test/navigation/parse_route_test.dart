@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 void main() {
   test('Parse Page with children', () {
-    // final testParams = {'hi': 'value'};
+    final testParams = {'hi': 'value'};
     final pageTree = GetPage(
       name: '/city',
       page: () => Container(),
@@ -40,7 +40,7 @@ void main() {
                   name: '/pen',
                   transition: Transition.cupertino,
                   page: () => Container(),
-                  //  parameters: testParams,
+                  parameters: testParams,
                 ),
                 GetPage(
                   name: '/paper',
@@ -58,63 +58,20 @@ void main() {
         ),
       ],
     );
-    final routes = <GetPage>[];
-    final tree = ParseRouteTree();
 
-    routes.addRoute(pageTree);
+    final tree = ParseRouteTree(routes: <GetPage>[]);
+
+    tree.addRoute(pageTree);
 
     // tree.addRoute(pageTree);
     final searchRoute = '/city/work/office/pen';
-    final match = tree.matchRoute(routes, searchRoute);
+    final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
-    final testRouteParam = match.parameters;
-    print(testRouteParam);
-    // for (final tParam in testParams.entries) {
-    //   expect(testRouteParam[tParam.key], tParam.value);
-    // }
-  });
-
-  test('Parse ', () {
-    final testParams = {'hi': 'value'};
-    final pageTree = GetPage(
-      name: '/city',
-      parameters: testParams,
-      page: () => Container(),
-    );
-    final routes = <GetPage>[];
-    final tree = ParseRouteTree();
-
-    routes.addRoute(pageTree);
-
-    // tree.addRoute(pageTree);
-    final searchRoute = '/city?abc=1234';
-
-    final hasMatch = RouteParser.hasMatch(
-        pushedRoute: searchRoute, routeName: pageTree.name);
-    expect(hasMatch, true);
-
-    final parsed =
-        RouteParser.parse(pushedRoute: searchRoute, routeName: pageTree.name);
-
-    final match = tree.matchRoute(routes, searchRoute);
-    expect(match, isNotNull);
-    expect(parsed.newRouteUri.toString(), searchRoute);
-    final testRouteParam = match.route?.parameters;
-
+    final testRouteParam = match.route!.parameters!;
     for (final tParam in testParams.entries) {
-      expect(testRouteParam![tParam.key], tParam.value);
+      expect(testRouteParam[tParam.key], tParam.value);
     }
-
-    final hasMatch2 = RouteParser.hasMatch(
-        pushedRoute: '/home/123/ana', routeName: '/home/:id/:name');
-    print(hasMatch2);
-    expect(hasMatch2, true);
-
-    final parsed2 = RouteParser.parse(
-        pushedRoute: '/home/123/ana/profile',
-        routeName: '/home/:id/:name/profile');
-    print(parsed2.parameters);
   });
 
   test('Parse Page without children', () {
@@ -157,14 +114,14 @@ void main() {
           transition: Transition.rightToLeft),
     ];
 
-    final tree = ParseRouteTree();
+    final tree = ParseRouteTree(routes: pageTree);
 
     // for (var p in pageTree) {
     //   tree.addRoute(p);
     // }
 
     final searchRoute = '/city/work/office/pen';
-    final match = tree.matchRoute(pageTree, searchRoute);
+    final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
   });
@@ -181,8 +138,6 @@ void main() {
           GetPage(page: () => Container(), name: '/last/:id/:name/profile')
         ],
       ));
-
-      print(Get.parameters);
 
       expect(Get.parameters['name'], 'juan');
 

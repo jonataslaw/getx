@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  final controller = Get.put(Controller());
   testWidgets("GetxController smoke test", (tester) async {
+    final controller = Get.put(Controller());
     await tester.pumpWidget(
       MaterialApp(
         home: Column(

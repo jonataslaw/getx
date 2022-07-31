@@ -47,27 +47,6 @@ extension Inst on GetInterface {
   //   );
   // }
 
-  /// async version of `Get.put()`.
-  /// Awaits for the resolution of the Future from `builder()` parameter and
-  /// stores the Instance returned.
-  Future<S> putAsync<S>(
-    AsyncInstanceBuilderCallback<S> builder, {
-    String? tag,
-    bool permanent = false,
-  }) async {
-    return put<S>(await builder(), tag: tag, permanent: permanent);
-  }
-
-  /// Injects an instance `<S>` in memory to be globally accessible.
-  ///
-  /// No need to define the generic type `<S>` as it's inferred from
-  /// the [dependency]
-  ///
-  /// - [dependency] The Instance to be injected.
-  /// - [tag] optionally, use a [tag] as an "id" to create multiple records of
-  /// the same Type<[S]>
-  /// - [permanent] keeps the Instance in memory, not following
-  /// `Get.smartManagement` rules.
   S put<S>(
     S dependency, {
     String? tag,

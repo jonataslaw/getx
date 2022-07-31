@@ -234,9 +234,8 @@ class PageRedirect {
     if (settings == null && route != null) {
       settings = route;
     }
-    final match = context.navigation
-        .matchRoute((settings!.arguments as PageSettings).name);
-    Get.parameters = match!.parameters;
+    final match = context.navigation.matchRoute(settings!.name!);
+    Get.parameters = match.parameters;
 
     // No Match found
     if (match.route == null) {

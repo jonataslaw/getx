@@ -45,7 +45,7 @@ class GetPage<T> extends Page<T> {
 
   final List<GetPage> children;
   final List<GetMiddleware>? middlewares;
-  // final PathDecoded path;
+  final PathDecoded path;
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
 
@@ -82,7 +82,7 @@ class GetPage<T> extends Page<T> {
         PreventDuplicateHandlingMode.reorderRoutes,
     this.completer,
     LocalKey? key,
-  })  : // path = _nameToRegex(name),
+  })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
         super(
@@ -168,26 +168,26 @@ class GetPage<T> extends Page<T> {
     return _page;
   }
 
-  // static PathDecoded _nameToRegex(String path) {
-  //   var keys = <String?>[];
+  static PathDecoded _nameToRegex(String path) {
+    var keys = <String?>[];
 
-  //   String _replace(Match pattern) {
-  //     var buffer = StringBuffer('(?:');
+    String _replace(Match pattern) {
+      var buffer = StringBuffer('(?:');
 
-  //     if (pattern[1] != null) buffer.write('.');
-  //     buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
-  //     if (pattern[3] != null) buffer.write('?');
+      if (pattern[1] != null) buffer.write('.');
+      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      if (pattern[3] != null) buffer.write('?');
 
-  //     keys.add(pattern[2]);
-  //     return "$buffer";
-  //   }
+      keys.add(pattern[2]);
+      return "$buffer";
+    }
 
-  //   var stringPath = '$path/?'
-  //       .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
-  //       .replaceAll('//', '/');
+    var stringPath = '$path/?'
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
+        .replaceAll('//', '/');
 
-  //   return PathDecoded(RegExp('^$stringPath\$'), keys);
-  // }
+    return PathDecoded(RegExp('^$stringPath\$'), keys);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -205,20 +205,20 @@ class GetPage<T> extends Page<T> {
   }
 }
 
-// @immutable
-// class PathDecoded {
-//   final RegExp regex;
-//   final List<String?> keys;
-//   const PathDecoded(this.regex, this.keys);
+@immutable
+class PathDecoded {
+  final RegExp regex;
+  final List<String?> keys;
+  const PathDecoded(this.regex, this.keys);
 
-//   @override
-//   int get hashCode => regex.hashCode;
+  @override
+  int get hashCode => regex.hashCode;
 
-//   @override
-//   bool operator ==(Object other) {
-//     if (identical(this, other)) return true;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-//     return other is PathDecoded &&
-//         other.regex == regex; // && listEquals(other.keys, keys);
-//   }
-// }
+    return other is PathDecoded &&
+        other.regex == regex; // && listEquals(other.keys, keys);
+  }
+}

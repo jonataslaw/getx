@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 
 import '../../../route_manager.dart';
@@ -18,11 +16,10 @@ class RouteDecoder {
     final args = PageSettings(uri);
     final decoder = (Get.rootController.routerDelegate as GetDelegate)
         .matchRoute(location, arguments: args);
-
-    decoder!.route = decoder.route?.copy(
+    decoder.route = decoder.route?.copy(
       completer: null,
       arguments: args,
-      parameters: decoder.parameters,
+      parameters: args.params,
     );
     return decoder;
   }
@@ -81,62 +78,96 @@ class RouteDecoder {
 }
 
 class ParseRouteTree {
-  RouteDecoder matchRoute(List<GetPage> routes, String name,
-      {PageSettings? arguments}) {
-    final args = arguments ?? PageSettings(Uri.parse(name));
-    final treeBranch = routes
-        .where((e) => RouteParser.hasMatch(
-            pushedRoute: name, routeName: e.name, withChildren: true))
-        .map((e) {
-      final parameters =
-          RouteParser.parse(pushedRoute: name, routeName: e.name).parameters;
-      final routeParams = e.parameters;
-      if (routeParams != null) {
-        parameters.addAll(routeParams);
-      }
-      if (args.params.isNotEmpty) {
-        parameters.addAll(args.params);
-      }
+  ParseRouteTree({
+    required this.routes,
+  });
 
-      args.params.clear();
-      args.params.addAll(parameters);
+  final List<GetPage> routes;
 
-      return e.copy(
-        settings: args,
-        parameters: parameters,
+  RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
+    final uri = Uri.parse(name);
+    // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
+    final split = uri.path.split('/').where((element) => element.isNotEmpty);
+    var curPath = '/';
+    final cumulativePaths = <String>[
+      '/',
+    ];
+    for (var item in split) {
+      if (curPath.endsWith('/')) {
+        curPath += item;
+      } else {
+        curPath += '/$item';
+      }
+      cumulativePaths.add(curPath);
+    }
+
+    final treeBranch = cumulativePaths
+        .map((e) => MapEntry(e, _findRoute(e)))
+        .where((element) => element.value != null)
+
+        ///Prevent page be disposed
+        .map((e) => MapEntry(e.key, e.value!.copy(key: ValueKey(e.key))))
+        .toList();
+
+    final params = Map<String, String>.from(uri.queryParameters);
+    if (treeBranch.isNotEmpty) {
+      //route is found, do further parsing to get nested query params
+      final lastRoute = treeBranch.last;
+      final parsedParams = _parseParams(name, lastRoute.value.path);
+      if (parsedParams.isNotEmpty) {
+        params.addAll(parsedParams);
+      }
+      //copy parameters to all pages.
+      final mappedTreeBranch = treeBranch
+          .map(
+            (e) => e.value.copy(
+              parameters: {
+                if (e.value.parameters != null) ...e.value.parameters!,
+                ...params,
+              },
+              name: e.key,
+            ),
+          )
+          .toList();
+      arguments?.params.clear();
+      arguments?.params.addAll(params);
+      return RouteDecoder(
+        mappedTreeBranch,
+        arguments,
       );
-    }).toList();
+    }
+
+    arguments?.params.clear();
+    arguments?.params.addAll(params);
 
     //route not found
     return RouteDecoder(
-      treeBranch,
+      treeBranch.map((e) => e.value).toList(),
       arguments,
     );
   }
-}
 
-extension FirstWhereOrNullExt<T> on List<GetPage<T>> {
-  void addRoutes(List<GetPage<T>> getPages) {
+  void addRoutes<T>(List<GetPage<T>> getPages) {
     for (final route in getPages) {
       addRoute(route);
     }
   }
 
-  void removeRoutes(List<GetPage<T>> getPages) {
+  void removeRoutes<T>(List<GetPage<T>> getPages) {
     for (final route in getPages) {
       removeRoute(route);
     }
   }
 
-  void removeRoute(GetPage<T> route) {
-    remove(route);
+  void removeRoute<T>(GetPage<T> route) {
+    routes.remove(route);
     for (var page in _flattenPage(route)) {
       removeRoute(page);
     }
   }
 
-  void addRoute(GetPage<T> route) {
-    add(route);
+  void addRoute<T>(GetPage<T> route) {
+    routes.add(route);
 
     // Add Page children.
     for (var page in _flattenPage(route)) {
@@ -144,15 +175,14 @@ extension FirstWhereOrNullExt<T> on List<GetPage<T>> {
     }
   }
 
-  List<GetPage<T>> _flattenPage(GetPage<T> route) {
-    final result = <GetPage<T>>[];
+  List<GetPage> _flattenPage(GetPage route) {
+    final result = <GetPage>[];
     if (route.children.isEmpty) {
       return result;
     }
 
-    var parentPathOld = route.name;
+    final parentPath = route.name;
     for (var page in route.children) {
-      final parentPath2 = (parentPathOld + page.name).replaceAll(r'//', '/');
       // Add Parent middlewares to children
       final parentMiddlewares = [
         if (page.middlewares != null) ...page.middlewares!,
@@ -160,48 +190,66 @@ extension FirstWhereOrNullExt<T> on List<GetPage<T>> {
       ];
       result.add(
         _addChild(
-          page as GetPage<T>,
-          parentPath2,
+          page,
+          parentPath,
           parentMiddlewares,
         ),
       );
 
       final children = _flattenPage(page);
-      // for (var child in children) {
-      //   final parentPath = (parentPath2 + page.name).replaceAll(r'//', '/');
-      //   result.add(_addChild(
-      //     child,
-      //     parentPath,
-      //     [
-      //       ...parentMiddlewares,
-      //       if (child.middlewares != null) ...child.middlewares!,
-      //     ],
-      //   ));
-      // }
+      for (var child in children) {
+        result.add(_addChild(
+          child,
+          parentPath,
+          [
+            ...parentMiddlewares,
+            if (child.middlewares != null) ...child.middlewares!,
+          ],
+        ));
+      }
     }
     return result;
   }
 
   /// Change the Path for a [GetPage]
-  GetPage<T> _addChild(
-      GetPage<T> origin, String parentPath, List<GetMiddleware> middlewares) {
+  GetPage _addChild(
+      GetPage origin, String parentPath, List<GetMiddleware> middlewares) {
     return origin.copy(
       middlewares: middlewares,
-      name: parentPath,
-      key: ValueKey(parentPath),
+      name: (parentPath + origin.name).replaceAll(r'//', '/'),
+      // key:
     );
   }
 
-  // GetPage<T>? _findRoute(String name) {
-  //   final value = firstWhereOrNull(
-  //     (route) => route.path.regex.hasMatch(name),
-  //   );
+  GetPage? _findRoute(String name) {
+    final value = routes.firstWhereOrNull(
+      (route) => route.path.regex.hasMatch(name),
+    );
 
-  //   return value;
-  // }
+    return value;
+  }
+
+  Map<String, String> _parseParams(String path, PathDecoded routePath) {
+    final params = <String, String>{};
+    var idx = path.indexOf('?');
+    if (idx > -1) {
+      path = path.substring(0, idx);
+      final uri = Uri.tryParse(path);
+      if (uri != null) {
+        params.addAll(uri.queryParameters);
+      }
+    }
+    var paramsMatch = routePath.regex.firstMatch(path);
+
+    for (var i = 0; i < routePath.keys.length; i++) {
+      var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      params[routePath.keys[i]!] = param;
+    }
+    return params;
+  }
 }
 
-extension FirstWhereExt<T> on List<T> {
+extension FirstWhereOrNullExt<T> on List<T> {
   /// The first element satisfying [test], or `null` if there are none.
   T? firstWhereOrNull(bool Function(T element) test) {
     for (var element in this) {
@@ -209,97 +257,4 @@ extension FirstWhereExt<T> on List<T> {
     }
     return null;
   }
-}
-
-class RouteParser {
-  static RouteParser parse({required String pushedRoute, required routeName}) {
-    final data = RouteParser(pushedRoute: pushedRoute, routeName: routeName);
-
-    final minLength =
-        min(data.originalPathSegments.length, data.newPathSegments.length);
-
-    for (var i = 0; i < minLength; i++) {
-      final originalPathSegment = data.originalPathSegments[i];
-      final newPathSegment = Uri.parse(data.newPathSegments[i]);
-
-      if (originalPathSegment.startsWith(':')) {
-        final key = originalPathSegment.replaceFirst(':', '');
-        data.parameters[key] = newPathSegment.toString();
-        data.matchingSegments.add(newPathSegment);
-        continue;
-      }
-
-      if (newPathSegment.path == originalPathSegment) {
-        data.matchingSegments.add(newPathSegment);
-        data.parameters.addAll(data.newRouteUri.queryParameters);
-
-        continue;
-      } else {
-        break;
-      }
-    }
-
-    return data;
-  }
-
-  static bool hasMatch({
-    required String pushedRoute,
-    required routeName,
-    bool withChildren = false,
-  }) {
-    final data = RouteParser(pushedRoute: pushedRoute, routeName: routeName);
-    final matches = <bool>[];
-
-    final minLength =
-        min(data.originalPathSegments.length, data.newPathSegments.length);
-
-    if ((!withChildren &&
-            data.newPathSegments.length > data.originalPathSegments.length) ||
-        data.newPathSegments.length < data.originalPathSegments.length) {
-      matches.add(false);
-    }
-
-    for (var i = 0; i < minLength; i++) {
-      final originalPathSegment = data.originalPathSegments[i];
-      final newPathSegment = Uri.parse(data.newPathSegments[i]);
-
-      if (originalPathSegment.startsWith(':')) {
-        matches.add(true);
-        continue;
-      }
-
-      if (newPathSegment.path == originalPathSegment) {
-        matches.add(true);
-        continue;
-      } else {
-        matches.add(false);
-        break;
-      }
-    }
-
-    return matches.every((element) => element);
-  }
-
-  RouteParser({required String routeName, required String pushedRoute})
-      : _cleanRouteName = '/' +
-            routeName
-                .replaceAll(RegExp(r'^\s+|\s+$'), '')
-                .replaceAll(RegExp(r'^\/+|\/+$'), ''),
-        newRouteUri = Uri.parse(pushedRoute) {
-    originalRouteUri = Uri(path: _cleanRouteName);
-  }
-  late final Uri originalRouteUri;
-
-  final Uri newRouteUri;
-  final Map<String, String> parameters = <String, String>{};
-  final List<Uri> matchingSegments = <Uri>[];
-  final String _cleanRouteName;
-
-  List<String> get newPathSegments => newRouteUri.pathSegments;
-  List<String> get originalPathSegments => originalRouteUri.pathSegments;
-  String get matchingPath => '/' + matchingSegments.join('/');
-
-  @override
-  String toString() =>
-      'RouteParser(originalRouteUri: $originalRouteUri, newRouteUri: $newRouteUri, _cleanRouteName: $_cleanRouteName)';
 }

@@ -13,10 +13,6 @@ class Dependencies {
     return find<S>();
   }
 
-  Future<S> putAsync<S>(AsyncInstanceBuilderCallback<S> builder,
-          {String? tag, bool permanent = false}) async =>
-      Get.putAsync<S>(builder, tag: tag, permanent: permanent);
-
   void create<S>(InstanceBuilderCallback<S> builder,
           {String? tag, bool permanent = true}) =>
       Get.create<S>(builder, tag: tag, permanent: permanent);

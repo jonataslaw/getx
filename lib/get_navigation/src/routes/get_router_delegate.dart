@@ -26,31 +26,28 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   List<RouteDecoder> get activePages => _activePages;
 
-  final _routeTree = ParseRouteTree();
+  final _routeTree = ParseRouteTree(routes: []);
 
-  final List<GetPage> _routes = [];
-
-  List<GetPage> get registeredRoutes => _routes;
+  List<GetPage> get registeredRoutes => _routeTree.routes;
 
   void addPages(List<GetPage> getPages) {
-    _routes.addRoutes(getPages);
+    _routeTree.addRoutes(getPages);
   }
 
   void clearRouteTree() {
-    _routes.clear();
+    _routeTree.routes.clear();
   }
 
   void addPage(GetPage getPage) {
-    _routes.addRoute(getPage);
+    _routeTree.addRoute(getPage);
   }
 
   void removePage(GetPage getPage) {
-    _routes.removeRoute(getPage);
+    _routeTree.removeRoute(getPage);
   }
 
-  RouteDecoder? matchRoute(String name, {PageSettings? arguments}) {
-    final settings = _buildPageSettings(name, arguments);
-    return _getRouteDecoder(settings);
+  RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
+    return _routeTree.matchRoute(name, arguments: arguments);
   }
 
   // GlobalKey<NavigatorState> get navigatorKey => Get.key;
@@ -141,9 +138,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Map<String, String> get parameters {
-    return currentConfiguration?.route?.parameters ??
-        // currentConfiguration?.pageSettings?.params ??
-        {};
+    return currentConfiguration?.pageSettings?.params ?? {};
   }
 
   PageSettings? get pageSettings {
@@ -365,7 +360,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
     // if (preventDuplicateHandlingMode ==
-    // PreventDuplicateHandlingMode.Recreate) {
+    //PreventDuplicateHandlingMode.Recreate) {
     //   routeName = routeName + page.hashCode.toString();
     // }
 
@@ -384,14 +379,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       preventDuplicateHandlingMode: preventDuplicateHandlingMode,
     );
 
-    _routes.addRoute(getPage);
+    _routeTree.addRoute(getPage);
     final args = _buildPageSettings(routeName, arguments);
     final route = _getRouteDecoder<T>(args);
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
     );
-    _routes.removeRoute(getPage);
+    _routeTree.removeRoute(getPage);
     return result;
   }
 
@@ -628,7 +623,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   Future<T?> _replace<T>(PageSettings arguments, GetPage<T> page) async {
     final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
-    _routes.addRoute(page);
+    _routeTree.addRoute(page);
 
     final activePage = _getRouteDecoder(arguments);
 
@@ -638,7 +633,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     notifyListeners();
     final result = await activePage.route?.completer?.future as Future<T?>?;
-    _routes.removeRoute(page);
+    _routeTree.removeRoute(page);
 
     return result;
   }
@@ -683,8 +678,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       page = uri.toString();
     }
 
-    final decoder =
-        _routeTree.matchRoute(registeredRoutes, page, arguments: arguments);
+    final decoder = _routeTree.matchRoute(page, arguments: arguments);
     final route = decoder.route;
     if (route == null) return null;
 
@@ -707,7 +701,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       completer: _activePages.isEmpty ? null : Completer(),
       arguments: arguments,
       parameters: parameters,
-      //  key: ValueKey(arguments.name),
+      key: ValueKey(arguments.name),
     );
 
     return decoder;
