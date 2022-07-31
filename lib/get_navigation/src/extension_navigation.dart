@@ -358,7 +358,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
+      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -469,7 +469,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
+      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -544,8 +544,10 @@ extension GetNavigationExt on GetInterface {
 //       return page;
 //     } else if (page is Widget) {
 //       Get.log(
-//           '''WARNING, consider using: "Get.$method(() => Page())" instead of "Get.$method(Page())".
-// Using a widget function instead of a widget fully guarantees that the widget and its controllers will be removed from memory when they are no longer used.
+//           '''WARNING, consider using: "Get.$method(() => Page())" 
+//instead of "Get.$method(Page())".
+// Using a widget function instead of a widget fully guarantees that the widget 
+//and its controllers will be removed from memory when they are no longer used.
 //       ''');
 //       return () => page;
 //     } else if (page is String) {

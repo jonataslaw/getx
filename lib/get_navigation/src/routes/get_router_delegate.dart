@@ -365,7 +365,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
     // if (preventDuplicateHandlingMode ==
-    //PreventDuplicateHandlingMode.Recreate) {
+    // PreventDuplicateHandlingMode.Recreate) {
     //   routeName = routeName + page.hashCode.toString();
     // }
 
