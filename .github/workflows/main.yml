@@ -18,12 +18,12 @@ jobs:
     steps:
       # The branch or tag ref that triggered the workflow will be checked out.
       # https://github.com/actions/checkout
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       # Setup a flutter environment.
       # https://github.com/marketplace/actions/flutter-action
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "2.8.0"
+          flutter-version: "3.8.0"
           channel: "stable"
       - run: flutter pub get
       #- run: flutter analyze
