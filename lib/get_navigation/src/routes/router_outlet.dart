@@ -29,7 +29,7 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
             final rDelegate = context.delegate as TDelegate;
             var picked =
                 currentConfig == null ? null : pickPages(currentConfig);
-            if (picked?.length == 0) {
+            if (picked?.isEmpty ?? true) {
               picked = null;
             }
             return pageBuilder(context, rDelegate, picked);
@@ -68,7 +68,8 @@ class _RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   @override
   void dispose() {
     super.dispose();
-    Get.routerDelegate?.removeListener(_listener);
+    disposer?.call();
+    // Get.routerDelegate?.removeListener(_listener);
     //_backButtonDispatcher.forget(_backButtonDispatcher)
   }
 
@@ -146,7 +147,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             return ret;
           },
           emptyPage: (delegate) =>
-              Get.routeTree.matchRoute(initialRoute).route ??
+              delegate.matchRoute(initialRoute)?.route ??
               delegate.notFoundRoute,
           key: Get.nestedKey(anchorRoute)?.navigatorKey,
           delegate: delegate,
@@ -162,11 +163,10 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
           pageBuilder: (context, rDelegate, pages) {
             final pageRes = <GetPage?>[
               ...?pages,
-              if (pages == null || pages.length == 0)
-                emptyPage?.call(rDelegate),
+              if (pages == null || pages.isEmpty) emptyPage?.call(rDelegate),
             ].whereType<GetPage>();
 
-            if (pageRes.length > 0) {
+            if (pageRes.isNotEmpty) {
               return GetNavigator(
                 onPopPage: onPopPage ??
                     (route, result) {

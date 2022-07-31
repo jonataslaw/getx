@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,9 @@ class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
 /// containsListener implementation
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
+
+  int _version = 0;
+  int _microtaskVersion = 0;
 
   @override
   Disposer addListener(GetStateUpdate listener) {
@@ -57,8 +61,15 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    for (var element in _updaters!) {
-      element();
+    if (_microtaskVersion == _version) {
+      _microtaskVersion++;
+      scheduleMicrotask(() {
+        _version++;
+        _microtaskVersion = _version;
+        for (var element in _updaters!) {
+          element();
+        }
+      });
     }
   }
 

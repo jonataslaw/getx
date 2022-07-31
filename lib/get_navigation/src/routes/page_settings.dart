@@ -55,14 +55,11 @@ extension PageArgExt on BuildContext {
 class PageSettings extends RouteSettings {
   PageSettings(
     this.uri, [
-    this.arguments,
-  ]);
+    Object? arguments,
+  ]) : super(arguments: arguments);
 
   @override
   String get name => '$uri';
-
-  @override
-  late final Object? arguments;
 
   final Uri uri;
 

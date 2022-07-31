@@ -41,15 +41,22 @@ class MockRepositoryFailure implements IHomeRepository {
   }
 }
 
+class MockBinding extends Binding {
+  @override
+  List<Bind> dependencies() {
+    return [
+      Bind.lazyPut<IHomeRepository>(() => MockRepositorySuccess()),
+      Bind.lazyPut<HomeController>(
+        () => HomeController(homeRepository: Get.find()),
+      )
+    ];
+  }
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => HttpOverrides.global = null);
-  final binding = BindingsBuilder(() {
-    Get.lazyPut<IHomeRepository>(() => MockRepositorySuccess());
-    Get.lazyPut<HomeController>(
-      () => HomeController(homeRepository: Get.find()),
-    );
-  });
+  final binding = MockBinding();
 
   test('Test Controller', () async {
     /// Controller can't be on memory
@@ -57,7 +64,7 @@ void main() {
         throwsA(m.TypeMatcher<String>()));
 
     /// binding will put the controller on memory
-    binding.builder();
+    binding.dependencies();
 
     /// recover your controller
     final controller = Get.find<HomeController>();

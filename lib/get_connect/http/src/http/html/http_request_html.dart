@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:html';
 
 import '../../certificates/certificates.dart';
 import '../../exceptions/exceptions.dart';
@@ -18,7 +18,7 @@ class HttpRequestImpl implements HttpRequestBase {
   });
 
   /// The currently active XHRs.
-  final _xhrs = <html.HttpRequest>{};
+  final _xhrs = <HttpRequest>{};
 
   ///This option requires that you submit credentials for requests
   ///on different sites. The default is false
@@ -31,9 +31,9 @@ class HttpRequestImpl implements HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var bytes = await request.bodyBytes.toBytes();
-    html.HttpRequest xhr;
+    HttpRequest xhr;
 
-    xhr = html.HttpRequest()
+    xhr = HttpRequest()
       ..timeout = timeout?.inMilliseconds
       ..open(request.method, '${request.url}', async: true); // check this
 
@@ -46,8 +46,8 @@ class HttpRequestImpl implements HttpRequestBase {
 
     var completer = Completer<Response<T>>();
     xhr.onLoad.first.then((_) {
-      var blob = xhr.response as html.Blob? ?? html.Blob([]);
-      var reader = html.FileReader();
+      var blob = xhr.response as Blob? ?? Blob([]);
+      var reader = FileReader();
 
       reader.onLoad.first.then((_) async {
         var bodyBytes = BodyBytesStream.fromBytes(reader.result as List<int>);

@@ -101,11 +101,10 @@ Worker everAll(
     evers.add(sub);
   }
 
-  Future<void> cancel() {
+  Future<void> cancel() async {
     for (var i in evers) {
       i.cancel();
     }
-    return Future.value(() {});
   }
 
   return Worker(cancel, '[everAll]');

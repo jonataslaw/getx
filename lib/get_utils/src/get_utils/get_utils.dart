@@ -68,7 +68,7 @@ class GetUtils {
   /// "value":value==null?null:value; someVar.nil will force the null type
   /// if the var is null or undefined.
   /// `nil` taken from ObjC just to have a shorter sintax.
-  static dynamic nil(dynamic s) => s == null ? null : s;
+  static dynamic nil(dynamic s) => s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
   static bool? isNullOrBlank(dynamic value) {
@@ -331,13 +331,6 @@ class GetUtils {
     return length >= maxLength;
   }
 
-  /// Checks if length of data is LOWER than maxLength.
-  ///
-  /// This method is deprecated, use [isLengthLessThan] instead
-  @deprecated
-  static bool isLengthLowerThan(dynamic value, int maxLength) =>
-      isLengthLessThan(value, maxLength);
-
   /// Checks if length of data is LESS than maxLength.
   static bool isLengthLessThan(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
@@ -347,13 +340,6 @@ class GetUtils {
 
     return length < maxLength;
   }
-
-  /// Checks if length of data is LOWER OR EQUAL to maxLength.
-  ///
-  /// This method is deprecated, use [isLengthLessOrEqual] instead
-  @deprecated
-  static bool isLengthLowerOrEqual(dynamic value, int maxLength) =>
-      isLengthLessOrEqual(value, maxLength);
 
   /// Checks if length of data is LESS OR EQUAL to maxLength.
   static bool isLengthLessOrEqual(dynamic value, int maxLength) {

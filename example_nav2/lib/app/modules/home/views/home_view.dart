@@ -9,22 +9,22 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
-      routerDelegate: Get.nestedKey(Routes.HOME),
+      routerDelegate: Get.nestedKey(Routes.home),
       builder: (context) {
         final delegate = context.navigation;
         //This router outlet handles the appbar and the bottom navigation bar
         final currentLocation = context.location;
         var currentIndex = 0;
-        if (currentLocation.startsWith(Routes.PRODUCTS) == true) {
+        if (currentLocation.startsWith(Routes.products) == true) {
           currentIndex = 2;
         }
-        if (currentLocation.startsWith(Routes.PROFILE) == true) {
+        if (currentLocation.startsWith(Routes.products) == true) {
           currentIndex = 1;
         }
         return Scaffold(
           body: GetRouterOutlet(
-            initialRoute: Routes.DASHBOARD,
-            anchorRoute: Routes.HOME,
+            initialRoute: Routes.dashboard,
+            anchorRoute: Routes.home,
 
             //delegate: Get.nestedKey(Routes.HOME),
             // key: Get.nestedKey(Routes.HOME),
@@ -34,13 +34,13 @@ class HomeView extends GetView<HomeController> {
             onTap: (value) {
               switch (value) {
                 case 0:
-                  delegate.toNamed(Routes.HOME);
+                  delegate.toNamed(Routes.home);
                   break;
                 case 1:
-                  delegate.toNamed(Routes.PROFILE);
+                  delegate.toNamed(Routes.profile);
                   break;
                 case 2:
-                  delegate.toNamed(Routes.PRODUCTS);
+                  delegate.toNamed(Routes.products);
                   break;
                 default:
               }

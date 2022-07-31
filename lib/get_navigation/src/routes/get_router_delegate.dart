@@ -4,13 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';
-import '../../../get_state_manager/src/simple/list_notifier.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
 
 class GetDelegate extends RouterDelegate<RouteDecoder>
     with
-        ListNotifierSingleMixin,
+        ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
   final List<RouteDecoder> _activePages = <RouteDecoder>[];
@@ -27,6 +26,33 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   List<RouteDecoder> get activePages => _activePages;
 
+  final _routeTree = ParseRouteTree();
+
+  final List<GetPage> _routes = [];
+
+  List<GetPage> get registeredRoutes => _routes;
+
+  void addPages(List<GetPage> getPages) {
+    _routes.addRoutes(getPages);
+  }
+
+  void clearRouteTree() {
+    _routes.clear();
+  }
+
+  void addPage(GetPage getPage) {
+    _routes.addRoute(getPage);
+  }
+
+  void removePage(GetPage getPage) {
+    _routes.removeRoute(getPage);
+  }
+
+  RouteDecoder? matchRoute(String name, {PageSettings? arguments}) {
+    final settings = _buildPageSettings(name, arguments);
+    return _getRouteDecoder(settings);
+  }
+
   // GlobalKey<NavigatorState> get navigatorKey => Get.key;
 
   @override
@@ -38,9 +64,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     GetPage? notFoundRoute,
     this.navigatorObservers,
     this.transitionDelegate,
-    this.backButtonPopMode = PopMode.History,
+    this.backButtonPopMode = PopMode.history,
     this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
+        PreventDuplicateHandlingMode.reorderRoutes,
     this.pickPagesForRootNavigator,
     this.restorationScopeId,
     bool showHashOnUrl = false,
@@ -54,8 +80,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
           ),
         ) {
     if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
-    Get.addPages(pages);
-    Get.addPage(notFoundRoute);
+    addPages(pages);
+    addPage(notFoundRoute);
     Get.log('GetDelegate is created !');
   }
 
@@ -69,6 +95,16 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       var redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
+      // Stop the iteration over the middleware if we changed page
+      // and that redirectRes is not the same as the current config.
+      if (config != redirectRes) {
+        break;
+      }
+    }
+    // If the target is not the same as the source, we need
+    // to run the middlewares for the new route.
+    if (iterator != config) {
+      return await runMiddleware(iterator);
     }
     return iterator;
   }
@@ -105,7 +141,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Map<String, String> get parameters {
-    return currentConfiguration?.pageSettings?.params ?? {};
+    return currentConfiguration?.route?.parameters ??
+        // currentConfiguration?.pageSettings?.params ??
+        {};
   }
 
   PageSettings? get pageSettings {
@@ -122,14 +160,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
           (element) => element.pageSettings?.name == config.pageSettings?.name);
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
-          case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
-            popModeUntil(config.pageSettings!.name, popMode: PopMode.Page);
+          case PreventDuplicateHandlingMode.popUntilOriginalRoute:
+            popModeUntil(config.pageSettings!.name, popMode: PopMode.page);
             break;
-          case PreventDuplicateHandlingMode.ReorderRoutes:
+          case PreventDuplicateHandlingMode.reorderRoutes:
             await _unsafeHistoryRemoveAt(originalEntryIndex, null);
             await _unsafeHistoryAdd(config);
             break;
-          case PreventDuplicateHandlingMode.DoNothing:
+          case PreventDuplicateHandlingMode.doNothing:
           default:
             break;
         }
@@ -192,9 +230,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   Future<T?> _pop<T>(PopMode mode, T result) async {
     switch (mode) {
-      case PopMode.History:
+      case PopMode.history:
         return await _popHistory<T>(result);
-      case PopMode.Page:
+      case PopMode.page:
         return await _popPage<T>(result);
       default:
         return null;
@@ -225,9 +263,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   bool _canPop(mode) {
     switch (mode) {
-      case PopMode.History:
+      case PopMode.history:
         return _canPopHistory();
-      case PopMode.Page:
+      case PopMode.page:
       default:
         return _canPopPage();
     }
@@ -239,7 +277,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Iterable<GetPage> getVisualPages(RouteDecoder? currentHistory) {
     final res = currentHistory!.currentTreeBranch
         .where((r) => r.participatesInRootNavigator != null);
-    if (res.length == 0) {
+    if (res.isEmpty) {
       //default behavoir, all routes participate in root navigator
       return _activePages.map((e) => e.route!);
     } else {
@@ -256,7 +294,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         ? <GetPage>[]
         : pickPagesForRootNavigator?.call(currentHistory).toList() ??
             getVisualPages(currentHistory).toList();
-    if (pages.length == 0) {
+    if (pages.isEmpty) {
       return ColoredBox(
         color: Theme.of(context).scaffoldBackgroundColor,
       );
@@ -323,7 +361,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     double Function(BuildContext context)? gestureWidth,
     bool rebuildStack = true,
     PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
+        PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
     // if (preventDuplicateHandlingMode ==
@@ -346,14 +384,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       preventDuplicateHandlingMode: preventDuplicateHandlingMode,
     );
 
-    Get.addPage(getPage);
+    _routes.addRoute(getPage);
     final args = _buildPageSettings(routeName, arguments);
     final route = _getRouteDecoder<T>(args);
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
     );
-    Get.removePage(getPage);
+    _routes.removeRoute(getPage);
     return result;
   }
 
@@ -438,13 +476,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?>? offAllNamed<T>(
-    String page, {
+    String newRouteName, {
     // bool Function(GetPage route)? predicate,
     dynamic arguments,
     int? id,
     Map<String, String>? parameters,
   }) async {
-    final args = _buildPageSettings(page, arguments);
+    final args = _buildPageSettings(newRouteName, arguments);
     final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
@@ -531,7 +569,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   void back<T>([T? result]) {
     _checkIfCanBack();
     _popWithResult<T>(result);
-    refresh();
+    notifyListeners();
   }
 
   bool get canBack {
@@ -565,7 +603,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   Future<void> popModeUntil(
     String fullRoute, {
-    PopMode popMode = PopMode.History,
+    PopMode popMode = PopMode.history,
   }) async {
     // remove history or page entries until you meet route
     var iterator = currentConfiguration;
@@ -576,7 +614,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       // replace iterator
       iterator = currentConfiguration;
     }
-    refresh();
+    notifyListeners();
   }
 
   @override
@@ -585,12 +623,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       _popWithResult();
     }
 
-    refresh();
+    notifyListeners();
   }
 
   Future<T?> _replace<T>(PageSettings arguments, GetPage<T> page) async {
     final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
-    Get.addPage(page);
+    _routes.addRoute(page);
 
     final activePage = _getRouteDecoder(arguments);
 
@@ -598,9 +636,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     _activePages[index] = activePage!;
 
-    refresh();
+    notifyListeners();
     final result = await activePage.route?.completer?.future as Future<T?>?;
-    Get.removePage(page);
+    _routes.removeRoute(page);
 
     return result;
   }
@@ -610,7 +648,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     // final activePage = _configureRouterDecoder<T>(page, arguments);
     _activePages[index] = activePage;
 
-    refresh();
+    notifyListeners();
     final result = await activePage.route?.completer?.future as Future<T?>?;
     return result;
   }
@@ -645,7 +683,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       page = uri.toString();
     }
 
-    final decoder = Get.routeTree.matchRoute(page, arguments: arguments);
+    final decoder =
+        _routeTree.matchRoute(registeredRoutes, page, arguments: arguments);
     final route = decoder.route;
     if (route == null) return null;
 
@@ -668,7 +707,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       completer: _activePages.isEmpty ? null : Completer(),
       arguments: arguments,
       parameters: parameters,
-      key: ValueKey(arguments.name),
+      //  key: ValueKey(arguments.name),
     );
 
     return decoder;
@@ -681,7 +720,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     final preventDuplicateHandlingMode =
         res.route?.preventDuplicateHandlingMode ??
-            PreventDuplicateHandlingMode.ReorderRoutes;
+            PreventDuplicateHandlingMode.reorderRoutes;
 
     final onStackPage = _activePages
         .firstWhereOrNull((element) => element.route?.key == res.route?.key);
@@ -692,18 +731,18 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     } else {
       /// There are duplicate routes, reorder
       switch (preventDuplicateHandlingMode) {
-        case PreventDuplicateHandlingMode.DoNothing:
+        case PreventDuplicateHandlingMode.doNothing:
           break;
-        case PreventDuplicateHandlingMode.ReorderRoutes:
+        case PreventDuplicateHandlingMode.reorderRoutes:
           _activePages.remove(onStackPage);
           _activePages.add(res);
           break;
-        case PreventDuplicateHandlingMode.PopUntilOriginalRoute:
+        case PreventDuplicateHandlingMode.popUntilOriginalRoute:
           while (_activePages.last == onStackPage) {
             _popWithResult();
           }
           break;
-        case PreventDuplicateHandlingMode.Recreate:
+        case PreventDuplicateHandlingMode.recreate:
           _activePages.remove(onStackPage);
           _activePages.add(res);
           break;
@@ -711,7 +750,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       }
     }
     if (rebuildStack) {
-      refresh();
+      notifyListeners();
     }
 
     return decoder.route?.completer?.future as Future<T?>?;
@@ -758,7 +797,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
     final _popped = await _pop(popMode ?? backButtonPopMode, result);
-    refresh();
+    notifyListeners();
     if (_popped != null) {
       //emulate the old pop with result
       return true;
@@ -781,7 +820,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         _removeHistoryEntry(config, result);
       }
     }
-    refresh();
+    notifyListeners();
     //return !route.navigator!.userGestureInProgress;
     return true;
   }

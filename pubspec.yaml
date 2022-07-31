@@ -1,10 +1,10 @@
 name: get
 description: Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
-version: 5.0.0-beta.30
+version: 5.0.0-beta.51
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.16.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -15,6 +15,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  lints: ^1.0.1
  
 
 # For information on the generic Dart part of this file, see the

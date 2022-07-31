@@ -10,7 +10,7 @@ typedef ResponseModifier<T> = FutureOr Function(
 
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
-class GetModifier<T> {
+class GetModifier<S> {
   final _requestModifiers = <RequestModifier>[];
   final _responseModifiers = <ResponseModifier>[];
   RequestModifier? authenticator;

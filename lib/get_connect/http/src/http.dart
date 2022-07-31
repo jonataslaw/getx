@@ -8,9 +8,7 @@ import '../src/request/request.dart';
 import '../src/response/response.dart';
 import '../src/status/http_status.dart';
 import 'http/interface/request_base.dart';
-import 'http/stub/http_request_stub.dart'
-    if (dart.library.html) 'http/html/http_request_html.dart'
-    if (dart.library.io) 'http/io/http_request_io.dart';
+import 'http/request/http_request.dart';
 import 'interceptors/get_modifiers.dart';
 
 typedef Decoder<T> = T Function(dynamic data);
@@ -55,7 +53,7 @@ class GetHttpClient {
     List<TrustedCertificate>? trustedCertificates,
     bool withCredentials = false,
     String Function(Uri url)? findProxy,
-  })  : _httpClient = HttpRequestImpl(
+  })  : _httpClient = createHttp(
           allowAutoSignedCert: allowAutoSignedCert,
           trustedCertificates: trustedCertificates,
           withCredentials: withCredentials,

@@ -117,7 +117,7 @@ void main() {
     expect(ct1.count, 1);
     ct1 = Get.find<Controller>();
     expect(ct1.count, 1);
-    GetInstance().reload<Controller>();
+    Get.reload<Controller>();
     ct1 = Get.find<Controller>();
     expect(ct1.count, 0);
     Get.reset();
@@ -165,7 +165,7 @@ void main() {
 
     test('Get.delete test with disposable controller', () async {
       // Get.put(DisposableController());
-      expect(await Get.delete<DisposableController>(), true);
+      expect(Get.delete<DisposableController>(), true);
       expect(() => Get.find<DisposableController>(),
           throwsA(m.TypeMatcher<String>()));
     });

@@ -7,7 +7,7 @@ class ProductDetailsBinding extends Binding {
   List<Bind> dependencies() {
     return [
       Bind.create<ProductDetailsController>(
-        () => ProductDetailsController(
+        (_) => ProductDetailsController(
           Get.parameters['productId'] ?? '',
         ),
       )
