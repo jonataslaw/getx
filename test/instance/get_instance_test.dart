@@ -29,12 +29,7 @@ class Api implements Service {
 }
 
 void main() {
-  test('Get.putAsync test', () async {
-    await Get.putAsync<String>(Mock.test);
-    expect('test', Get.find<String>());
-    Get.reset();
-  });
-
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('Get.put test', () async {
     final instance = Get.put<Controller>(Controller());
     expect(instance, Get.find<Controller>());

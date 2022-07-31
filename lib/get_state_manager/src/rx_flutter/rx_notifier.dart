@@ -68,18 +68,6 @@ mixin StateMixin<T> on ListNotifier {
     if (status != this.status) {
       this.status = status;
     }
-    // var _canUpdate = false;
-    // if (status != null) {
-    //   _status = status;
-    //   _canUpdate = true;
-    // }
-    // if (newState != _value) {
-    //   _value = newState;
-    //   _canUpdate = true;
-    // }
-    // if (_canUpdate) {
-    //   refresh();
-    // }
   }
 
   void futurize(Future<T> Function() Function() body,

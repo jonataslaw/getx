@@ -19,7 +19,8 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
     if (location == '/') {
       //check if there is a corresponding page
       //if not, relocate to initialRoute
-      if (!(Get.rootController.routerDelegate as GetDelegate).registeredRoutes
+      if (!(Get.rootController.routerDelegate as GetDelegate)
+          .registeredRoutes
           .any((element) => element.name == '/')) {
         location = initialRoute;
       }

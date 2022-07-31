@@ -7,14 +7,11 @@ import 'package:get/get.dart';
 // import 'package:get_test/get_test.dart';
 import 'package:matcher/matcher.dart' as m;
 
-
 import '../lib/pages/home/domain/adapters/repository_adapter.dart';
 import '../lib/pages/home/domain/entity/cases_model.dart';
 import '../lib/pages/home/presentation/controllers/home_controller.dart';
 
-
 class MockRepositorySuccess implements IHomeRepository {
-
   @override
   Future<CasesModel> getCases() async {
     return CasesModel(
