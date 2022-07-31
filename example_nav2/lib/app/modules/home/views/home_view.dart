@@ -18,7 +18,7 @@ class HomeView extends GetView<HomeController> {
         if (currentLocation.startsWith(Routes.products) == true) {
           currentIndex = 2;
         }
-        if (currentLocation.startsWith(Routes.profile) == true) {
+        if (currentLocation.startsWith(Routes.products) == true) {
           currentIndex = 1;
         }
         return Scaffold(

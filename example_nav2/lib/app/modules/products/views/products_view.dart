@@ -15,11 +15,10 @@ class ProductsView extends GetView<ProductsController> {
       ),
       body: Column(
         children: [
-          // Hero(
-          //   tag: 'heroLogo',
-          //   child:
-          const FlutterLogo(),
-          // ),
+          Hero(
+            tag: 'heroLogo',
+            child: const FlutterLogo(),
+          ),
           Expanded(
             child: Obx(
               () => RefreshIndicator(
