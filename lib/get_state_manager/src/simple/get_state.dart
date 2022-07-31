@@ -452,7 +452,8 @@ class BindElement<T> extends InheritedElement {
 
         _controllerBuilder = () => Get.find<T>(tag: widget.tag);
       } else {
-        _controllerBuilder = widget.create?.call(this) ?? widget.init;
+        _controllerBuilder =
+            () => (widget.create?.call(this) ?? widget.init?.call());
         _isCreator = true;
         if (widget.lazy) {
           Get.lazyPut<T>(_controllerBuilder!, tag: widget.tag);

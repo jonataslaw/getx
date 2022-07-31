@@ -59,25 +59,25 @@ void main() {
   test('interval', () async {
     final count = 0.obs;
     int? result = -1;
-    interval(count, (dynamic _) {
-      // print(_);
-      result = _ as int?;
+    interval<int>(count, (v) {
+      print(v);
+      result = v;
     }, time: Duration(milliseconds: 100));
 
     count.value++;
     await Future.delayed(Duration.zero);
     await Future.delayed(Duration(milliseconds: 100));
-    expect(1, result);
+    expect(result, 1);
     count.value++;
     count.value++;
     count.value++;
     await Future.delayed(Duration.zero);
     await Future.delayed(Duration(milliseconds: 100));
-    expect(2, result);
+    expect(result, 2);
     count.value++;
     await Future.delayed(Duration.zero);
     await Future.delayed(Duration(milliseconds: 100));
-    expect(5, result);
+    expect(result, 5);
   });
 
   test('bindStream test', () async {
@@ -128,6 +128,7 @@ void main() {
     reactiveInteger.trigger(3);
 
     await Future.delayed(Duration(milliseconds: 100));
+    print(timesCalled);
     expect(3, timesCalled);
   });
 
