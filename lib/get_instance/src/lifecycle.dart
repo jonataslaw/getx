@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../get.dart';
 
@@ -18,7 +17,8 @@ mixin GetLifeCycleMixin {
   @protected
   @mustCallSuper
   void onInit() {
-    ambiguate(SchedulerBinding.instance)
+   
+    ambiguate(Engine.instance)
         ?.addPostFrameCallback((_) => onReady());
   }
 

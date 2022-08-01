@@ -61,7 +61,7 @@ class RouterReportManager<T> {
 
   void reportRouteDispose(T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         _removeDependencyByRoute(disposed);
       });
     }

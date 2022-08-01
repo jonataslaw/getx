@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
@@ -449,7 +448,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
   }
 
   void _configureLeftBarFuture() {
-    ambiguate(SchedulerBinding.instance)!.addPostFrameCallback(
+    ambiguate(Engine.instance)!.addPostFrameCallback(
       (_) {
         final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {

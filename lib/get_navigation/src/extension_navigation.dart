@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
@@ -358,7 +357,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -469,7 +468,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -1170,14 +1169,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// The window to which this binding is bound.
-  ui.SingletonFlutterWindow get window => ui.window;
+  ui.SingletonFlutterWindow get window => engine.window;
 
-  Locale? get deviceLocale => ui.window.locale;
+  Locale? get deviceLocale => engine.window.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => ui.window.devicePixelRatio;
+  double get pixelRatio => engine.window.devicePixelRatio;
 
-  Size get size => ui.window.physicalSize / pixelRatio;
+  Size get size => engine.window.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1187,14 +1186,14 @@ extension GetNavigationExt on GetInterface {
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => ui.window.padding.top;
+  double get statusBarHeight => engine.window.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => ui.window.padding.bottom;
+  double get bottomBarHeight => engine.window.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => ui.window.textScaleFactor;
+  double get textScaleFactor => engine.window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme.textTheme;
@@ -1260,41 +1259,8 @@ extension GetNavigationExt on GetInterface {
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
       _getxController.routerDelegate as TDelegate?;
 
-  // void resetRootNavigator() {
-  //   _getxController = GetMaterialController();
-  // }
-
-  // RouterDelegate? get routerDelegate => _getxController.routerDelegate;
-  // RouteInformationParser? get routeInformationParser =>
-  //     _getxController.routeInformationParser;
 
   GetMaterialController get _getxController => GetMaterialController.to;
-
-  // void addPages(List<GetPage> getPages) {
-  //   routeTree.addRoutes(getPages);
-  // }
-
-  // void clearRouteTree() {
-  //   routeTree.routes.clear();
-  // }
-
-  // ParseRouteTree get routeTree {
-  //   final delegate = _getxController.routerDelegate;
-  //   if (delegate is GetDelegate) {
-  //     return delegate.routeTree;
-  //   } else {
-  //     //TODO: Urgent: Refactor this
-  //     return ParseRouteTree(routes: []);
-  //   }
-  // }
-
-  // void addPage(GetPage getPage) {
-  //   routeTree.addRoute(getPage);
-  // }
-
-  // void removePage(GetPage getPage) {
-  //   routeTree.removeRoute(getPage);
-  // }
 }
 
 extension OverlayExt on GetInterface {
