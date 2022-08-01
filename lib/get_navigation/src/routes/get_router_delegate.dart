@@ -560,13 +560,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _activePages.remove(RouteDecoder.fromRoute(name));
   }
 
-  @override
-  void back<T>([T? result]) {
-    _checkIfCanBack();
-    _popWithResult<T>(result);
-    notifyListeners();
-  }
-
+ 
   bool get canBack {
     return _activePages.length > 1;
   }
@@ -799,21 +793,30 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return false;
   }
 
+  @override
+  void back<T>([T? result]) {
+    _checkIfCanBack();
+    _popWithResult<T>(result);
+    notifyListeners();
+  }
+
+
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);
     if (!didPop) {
       return false;
     }
-    final settings = route.settings;
-    if (settings is GetPage) {
-      final config = _activePages.cast<RouteDecoder?>().firstWhere(
-            (element) => element?.route == settings,
-            orElse: () => null,
-          );
-      if (config != null) {
-        _removeHistoryEntry(config, result);
-      }
-    }
+    _popWithResult(result);
+    // final settings = route.settings;
+    // if (settings is GetPage) {
+    //   final config = _activePages.cast<RouteDecoder?>().firstWhere(
+    //         (element) => element?.route == settings,
+    //         orElse: () => null,
+    //       );
+    //   if (config != null) {
+    //     _removeHistoryEntry(config, result);
+    //   }
+    // }
     notifyListeners();
     //return !route.navigator!.userGestureInProgress;
     return true;
