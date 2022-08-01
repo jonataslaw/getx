@@ -74,6 +74,7 @@ mixin StateMixin<T> on ListNotifier {
   void futurize(Future<T> Function()  body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
+    _value ??= initialData;
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.loading();
