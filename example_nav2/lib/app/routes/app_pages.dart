@@ -73,12 +73,15 @@ class AppPages {
               name: _Paths.products,
               page: () => const ProductsView(),
               title: 'Products',
-              transition: Transition.zoom,
+              transition: Transition.cupertino,
+              showCupertinoParallax: true,
               participatesInRootNavigator: false,
               bindings: [ProductsBinding()],
               children: [
                 GetPage(
                   name: _Paths.productDetails,
+                    transition: Transition.cupertino,
+                         showCupertinoParallax: true,
                   page: () => ProductDetailsView(),
                   bindings: [ProductDetailsBinding()],
                   middlewares: [

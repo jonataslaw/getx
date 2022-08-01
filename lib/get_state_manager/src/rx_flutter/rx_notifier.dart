@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 
 import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../../instance_manager.dart';
@@ -70,9 +71,10 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
-  void futurize(Future<T> Function() Function() body,
-      {String? errorMessage, bool useEmpty = true}) {
-    final compute = body();
+  void futurize(Future<T> Function()  body,
+      {T? initialData, String? errorMessage, bool useEmpty = true}) {
+    final compute = body;
+    _value ??= initialData;
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.loading();
@@ -87,6 +89,10 @@ mixin StateMixin<T> on ListNotifier {
     });
   }
 }
+
+typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
+
+typedef VoidCallback = void Function();
 
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
@@ -239,28 +245,45 @@ extension StateExt<T> on StateMixin<T> {
 
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GetStatus<T> {
+abstract class GetStatus<T> with Equality {
   const GetStatus();
   factory GetStatus.loading() => LoadingStatus();
   factory GetStatus.error(String message) => ErrorStatus(message);
   factory GetStatus.empty() => EmptyStatus();
   factory GetStatus.success(T data) => SuccessStatus(data);
+  factory GetStatus.custom() => CustomStatus();
 }
 
-class LoadingStatus<T> extends GetStatus<T> {}
+class CustomStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
+
+class LoadingStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
 
 class SuccessStatus<T> extends GetStatus<T> {
   final T data;
+  const SuccessStatus(this.data);
 
-  SuccessStatus(this.data);
+  @override
+  List get props => [data];
 }
 
 class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
-  ErrorStatus([this.error]);
+  const ErrorStatus([this.error]);
+
+  @override
+  List get props => [error];
 }
 
-class EmptyStatus<T> extends GetStatus<T> {}
+class EmptyStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
 
 extension StatusDataExt<T> on GetStatus<T> {
   bool get isLoading => this is LoadingStatus;
