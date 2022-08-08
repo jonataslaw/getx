@@ -156,6 +156,7 @@ abstract class Bind<T> extends StatelessWidget {
     return _FactoryBind<S>(
       create: builder,
       tag: tag,
+      global: false,
     );
   }
 
@@ -462,7 +463,9 @@ class BindElement<T> extends InheritedElement {
         }
       }
     } else {
-      _controllerBuilder = widget.create?.call(this) ?? widget.init;
+      _controllerBuilder =
+          (widget.create != null ? () => widget.create!.call(this) : null) ??
+              widget.init;
       _isCreator = true;
       _needStart = true;
     }
