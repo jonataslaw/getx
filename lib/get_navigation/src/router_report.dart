@@ -15,7 +15,16 @@ class RouterReportManager<T> {
   /// non-singleton instances.
   final Map<T?, HashSet<Function>> _routesByCreate = {};
 
-  static late final RouterReportManager instance = RouterReportManager();
+  static RouterReportManager? _instance;
+
+  RouterReportManager._();
+
+  static RouterReportManager get instance =>
+      _instance ??= RouterReportManager._();
+
+  static void dispose() {
+    _instance = null;
+  }
 
   void printInstanceStack() {
     Get.log(_routesKey.toString());
@@ -52,7 +61,7 @@ class RouterReportManager<T> {
 
   void reportRouteDispose(T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         _removeDependencyByRoute(disposed);
       });
     }
@@ -75,7 +84,7 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().markAsDirty(key: element);
+      Get.markAsDirty(key: element);
 
       //_routesKey.remove(element);
     }
@@ -104,7 +113,7 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      final value = GetInstance().delete(key: element);
+      final value = Get.delete(key: element);
       if (value) {
         _routesKey[routeName]?.remove(element);
       }

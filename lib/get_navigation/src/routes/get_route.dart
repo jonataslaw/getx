@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -20,11 +22,12 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  //final BindingsInterface? binding;
+  final BindingsInterface? binding;
   final List<BindingsInterface> bindings;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
+  final Duration? reverseTransitionDuration;
   final bool fullscreenDialog;
   final bool preventDuplicates;
   final Completer<T?>? completer;
@@ -61,7 +64,9 @@ class GetPage<T> extends Page<T> {
     this.parameters,
     this.opaque = true,
     this.transitionDuration,
+    this.reverseTransitionDuration,
     this.popGesture,
+    this.binding,
     this.bindings = const [],
     this.binds = const [],
     this.transition,
@@ -74,7 +79,7 @@ class GetPage<T> extends Page<T> {
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
     this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
+        PreventDuplicateHandlingMode.reorderRoutes,
     this.completer,
     LocalKey? key,
   })  : path = _nameToRegex(name),
@@ -100,10 +105,11 @@ class GetPage<T> extends Page<T> {
     bool? maintainState,
     bool? opaque,
     List<BindingsInterface>? bindings,
-    // BindingsInterface? binding,
+    BindingsInterface? binding,
     List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
+    Duration? reverseTransitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
     List<GetPage<T>>? children,
@@ -133,8 +139,11 @@ class GetPage<T> extends Page<T> {
       opaque: opaque ?? this.opaque,
       bindings: bindings ?? this.bindings,
       binds: binds ?? this.binds,
+      binding: binding ?? this.binding,
       customTransition: customTransition ?? this.customTransition,
       transitionDuration: transitionDuration ?? this.transitionDuration,
+      reverseTransitionDuration:
+          reverseTransitionDuration ?? this.reverseTransitionDuration,
       fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
       children: children ?? this.children,
       unknownRoute: unknownRoute ?? this.unknownRoute,
@@ -154,7 +163,7 @@ class GetPage<T> extends Page<T> {
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
-    ).getPageToRoute<T>(this, unknownRoute);
+    ).getPageToRoute<T>(this, unknownRoute, context);
 
     return _page;
   }
@@ -165,7 +174,7 @@ class GetPage<T> extends Page<T> {
     String _replace(Match pattern) {
       var buffer = StringBuffer('(?:');
 
-      if (pattern[1] != null) buffer.write('\.');
+      if (pattern[1] != null) buffer.write('.');
       buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
       if (pattern[3] != null) buffer.write('?');
 

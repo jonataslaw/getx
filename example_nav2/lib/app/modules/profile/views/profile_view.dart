@@ -39,7 +39,7 @@ class ProfileView extends GetView<ProfileController> {
                 Get.defaultDialog(
                   title: 'Test Dialog In Home Outlet !!',
                   barrierDismissible: true,
-                  id: Routes.HOME,
+                  id: Routes.home,
                   // navigatorKey: Get.nestedKey(Routes.HOME),
                 );
               },

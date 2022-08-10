@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../get_core/get_core.dart';
 import '../../get_instance/src/bindings_interface.dart';
@@ -304,8 +303,8 @@ extension ExtensionSnackbar on GetInterface {
     AnimationController? progressIndicatorController,
     Color? progressIndicatorBackgroundColor,
     Animation<Color>? progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.BOTTOM,
-    SnackStyle snackStyle = SnackStyle.FLOATING,
+    SnackPosition snackPosition = SnackPosition.bottom,
+    SnackStyle snackStyle = SnackStyle.floating,
     Curve forwardAnimationCurve = Curves.easeOutCirc,
     Curve reverseAnimationCurve = Curves.easeOutCirc,
     Duration animationDuration = const Duration(seconds: 1),
@@ -358,7 +357,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -432,7 +431,7 @@ extension ExtensionSnackbar on GetInterface {
                 fontSize: 14,
               ),
             ),
-        snackPosition: snackPosition ?? SnackPosition.TOP,
+        snackPosition: snackPosition ?? SnackPosition.top,
         borderRadius: borderRadius ?? 15,
         margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
@@ -455,7 +454,7 @@ extension ExtensionSnackbar on GetInterface {
         progressIndicatorController: progressIndicatorController,
         progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
         progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.FLOATING,
+        snackStyle: snackStyle ?? SnackStyle.floating,
         forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
         reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
         animationDuration: animationDuration ?? Duration(seconds: 1),
@@ -469,7 +468,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((_) {
+      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -498,7 +497,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -518,7 +517,7 @@ extension GetNavigationExt on GetInterface {
       double Function(BuildContext context)? gestureWidth,
       bool rebuildStack = true,
       PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.ReorderRoutes}) {
+          PreventDuplicateHandlingMode.reorderRoutes}) {
     return searchDelegate(id).to(
       page,
       opaque: opaque,
@@ -544,9 +543,9 @@ extension GetNavigationExt on GetInterface {
 //       return page;
 //     } else if (page is Widget) {
 //       Get.log(
-//           '''WARNING, consider using: "Get.$method(() => Page())" 
+//           '''WARNING, consider using: "Get.$method(() => Page())"
 //instead of "Get.$method(Page())".
-// Using a widget function instead of a widget fully guarantees that the widget 
+// Using a widget function instead of a widget fully guarantees that the widget
 //and its controllers will be removed from memory when they are no longer used.
 //       ''');
 //       return () => page;
@@ -878,7 +877,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -958,7 +957,7 @@ extension GetNavigationExt on GetInterface {
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
   ///
-  /// If you're using the [Bindings] api, you must define it here
+  /// If you're using the [BindingsInterface] api, you must define it here
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
@@ -1079,18 +1078,7 @@ extension GetNavigationExt on GetInterface {
   }
 
   GetDelegate? nestedKey(String? key) {
-    if (key == null) {
-      return routerDelegate as GetDelegate;
-    }
-    keys.putIfAbsent(
-      key,
-      () => GetDelegate(
-        showHashOnUrl: true,
-        //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildrens ?? [],
-      ),
-    );
-    return keys[key];
+    return _getxController.nestedKey(key);
   }
 
   GetDelegate searchDelegate(dynamic k) {
@@ -1181,14 +1169,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// The window to which this binding is bound.
-  ui.SingletonFlutterWindow get window => ui.window;
+  ui.SingletonFlutterWindow get window => engine.window;
 
-  Locale? get deviceLocale => ui.window.locale;
+  Locale? get deviceLocale => engine.window.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => ui.window.devicePixelRatio;
+  double get pixelRatio => engine.window.devicePixelRatio;
 
-  Size get size => ui.window.physicalSize / pixelRatio;
+  Size get size => engine.window.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1198,14 +1186,14 @@ extension GetNavigationExt on GetInterface {
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => ui.window.padding.top;
+  double get statusBarHeight => engine.window.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => ui.window.padding.bottom;
+  double get bottomBarHeight => engine.window.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => ui.window.textScaleFactor;
+  double get textScaleFactor => engine.window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme.textTheme;
@@ -1264,88 +1252,15 @@ extension GetNavigationExt on GetInterface {
   set parameters(Map<String, String?> newParameters) =>
       _getxController.parameters = newParameters;
 
-  CustomTransition? get customTransition => _getxController.customTransition;
-  set customTransition(CustomTransition? newTransition) =>
-      _getxController.customTransition = newTransition;
-
   bool get testMode => _getxController.testMode;
   set testMode(bool isTest) => _getxController.testMode = isTest;
 
-  void resetRootNavigator() {
-    _getxController = GetMaterialController();
-  }
-
-  static GetMaterialController _getxController = GetMaterialController();
-}
-
-extension NavTwoExt on GetInterface {
-  void addPages(List<GetPage> getPages) {
-    routeTree.addRoutes(getPages);
-  }
-
-  void clearRouteTree() {
-    _routeTree.routes.clear();
-  }
-
-  static late final _routeTree = ParseRouteTree(routes: []);
-
-  ParseRouteTree get routeTree => _routeTree;
-
-  void addPage(GetPage getPage) {
-    routeTree.addRoute(getPage);
-  }
-
-  void removePage(GetPage getPage) {
-    routeTree.removeRoute(getPage);
-  }
-
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
-      routerDelegate as TDelegate?;
+      _getxController.routerDelegate as TDelegate?;
 
-  // // ignore: use_setters_to_change_properties
-  // void setDefaultDelegate(RouterDelegate? delegate) {
-  //   _routerDelegate = delegate;
-  // }
 
-  // GetDelegate? getDelegate() => delegate<GetDelegate, GetNavConfig>();
-
-  GetInformationParser createInformationParser({String initialRoute = '/'}) {
-    if (routeInformationParser == null) {
-      return routeInformationParser = GetInformationParser(
-        initialRoute: initialRoute,
-      );
-    } else {
-      return routeInformationParser as GetInformationParser;
-    }
-  }
-
-  // static GetDelegate? _delegate;
-
-  GetDelegate createDelegate({
-    GetPage<dynamic>? notFoundRoute,
-    List<GetPage> pages = const [],
-    List<NavigatorObserver>? navigatorObservers,
-    TransitionDelegate<dynamic>? transitionDelegate,
-    PopMode backButtonPopMode = PopMode.History,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
-    GlobalKey<NavigatorState>? navigatorKey,
-  }) {
-    if (routerDelegate == null) {
-      return routerDelegate = GetDelegate(
-        notFoundRoute: notFoundRoute,
-        navigatorObservers: navigatorObservers,
-        transitionDelegate: transitionDelegate,
-        backButtonPopMode: backButtonPopMode,
-        preventDuplicateHandlingMode: preventDuplicateHandlingMode,
-        pages: pages,
-        navigatorKey: navigatorKey,
-      );
-    } else {
-      return routerDelegate as GetDelegate;
-    }
-  }
+  GetMaterialController get _getxController => GetMaterialController.to;
 }
 
 extension OverlayExt on GetInterface {

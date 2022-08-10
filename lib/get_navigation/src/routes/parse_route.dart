@@ -14,7 +14,8 @@ class RouteDecoder {
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
     final args = PageSettings(uri);
-    final decoder = Get.routeTree.matchRoute(location, arguments: args);
+    final decoder = (Get.rootController.routerDelegate as GetDelegate)
+        .matchRoute(location, arguments: args);
     decoder.route = decoder.route?.copy(
       completer: null,
       arguments: args,
@@ -93,7 +94,7 @@ class ParseRouteTree {
     ];
     for (var item in split) {
       if (curPath.endsWith('/')) {
-        curPath += '$item';
+        curPath += item;
       } else {
         curPath += '/$item';
       }

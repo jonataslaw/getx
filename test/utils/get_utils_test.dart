@@ -10,10 +10,8 @@ class EmptyClass {}
 void main() {
   dynamic _id(dynamic e) => e;
 
-  Null _test;
-
   test('null isNullOrBlank should be true for null', () {
-    expect(GetUtils.isNullOrBlank(_test), true);
+    expect(GetUtils.isNullOrBlank(null), true);
   });
 
   test('isNullOrBlank should be false for unsupported types', () {

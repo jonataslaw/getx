@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import '../get_utils/get_utils.dart';
 
 extension GetNumUtils on num {
@@ -23,7 +24,7 @@ extension GetNumUtils on num {
   ///   print('currently running callback 1.2sec');
   /// }
   ///```
-  Future delay([FutureOr callback()?]) async => Future.delayed(
+  Future delay([FutureOr Function()? callback]) async => Future.delayed(
         Duration(milliseconds: (this * 1000).round()),
         callback,
       );

@@ -192,11 +192,11 @@ class GetCupertinoApp extends StatelessWidget {
         init: Get.rootController,
         dispose: (d) {
           onDispose?.call();
-          Get.clearRouteTree();
-          Get.clearTranslations();
-          Get.resetRootNavigator();
-          Get.routerDelegate = null;
-          Get.routeInformationParser = null;
+          // Get.clearRouteTree();
+          //  Get.clearTranslations();
+          // Get.resetRootNavigator();
+          // Get.routerDelegate = null;
+          // Get.routeInformationParser = null;
         },
         initState: (i) {
           Get.engine.addPostFrameCallback((timeStamp) {
@@ -212,19 +212,19 @@ class GetCupertinoApp extends StatelessWidget {
             Get.addTranslations(translationsKeys!);
           }
 
-          Get.customTransition = customTransition;
+          //  Get.customTransition = customTransition;
 
           initialBinding?.dependencies();
-          if (getPages != null) {
-            Get.addPages(getPages!);
-          } else {
-            Get.addPage(
-              GetPage(
-                name: _cleanRouteName("/${home.runtimeType}"),
-                page: () => home!,
-              ),
-            );
-          }
+          // if (getPages != null) {
+          //   Get.addPages(getPages!);
+          // } else {
+          //   Get.addPage(
+          //     GetPage(
+          //       name: _cleanRouteName("/${home.runtimeType}"),
+          //       page: () => home!,
+          //     ),
+          //   );
+          // }
 
           Get.smartManagement = smartManagement;
           onInit?.call();
@@ -240,7 +240,7 @@ class GetCupertinoApp extends StatelessWidget {
           );
         },
         builder: (_) {
-          final routerDelegate = Get.createDelegate(
+          final routerDelegate = _.createDelegate(
               pages: getPages ?? [],
               notFoundRoute: unknownRoute,
               navigatorKey: navigatorKey,
@@ -252,7 +252,7 @@ class GetCupertinoApp extends StatelessWidget {
                       GetObserver(routingCallback, Get.routing)
                     ]
                 ..addAll(navigatorObservers!)));
-          final routeInformationParser = Get.createInformationParser(
+          final routeInformationParser = _.createInformationParser(
             initialRoute: initialRoute ??
                 getPages?.first.name ??
                 _cleanRouteName("/${home.runtimeType}"),
@@ -297,16 +297,16 @@ class GetCupertinoApp extends StatelessWidget {
     );
   }
 
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
+  // Route<dynamic> generator(RouteSettings settings) {
+  //   return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
+  // }
 
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    return [
-      PageRedirect(
-        settings: RouteSettings(name: name),
-        unknownRoute: unknownRoute,
-      ).page()
-    ];
-  }
+  // List<Route<dynamic>> initialRoutesGenerate(String name) {
+  //   return [
+  //     PageRedirect(
+  //       settings: RouteSettings(name: name),
+  //       unknownRoute: unknownRoute,
+  //     ).page()
+  //   ];
+  // }
 }

@@ -25,26 +25,26 @@ import '../routes/transitions_type.dart';
 /// another pop will change the _activePages stack to:
 /// 1) /home
 enum PopMode {
-  History,
-  Page,
+  history,
+  page,
 }
 
 /// Enables the user to customize the behavior when pushing multiple routes that
 /// shouldn't be duplicates
 enum PreventDuplicateHandlingMode {
   /// Removes the _activePages entries until it reaches the old route
-  PopUntilOriginalRoute,
+  popUntilOriginalRoute,
 
   /// Simply don't push the new route
-  DoNothing,
+  doNothing,
 
   /// Recommended - Moves the old route entry to the front
   ///
   /// With this mode, you guarantee there will be only one
   /// route entry for each location
-  ReorderRoutes,
+  reorderRoutes,
 
-  Recreate,
+  recreate,
 }
 
 mixin IGetNavigation {
@@ -67,7 +67,7 @@ mixin IGetNavigation {
 
   Future<void> popModeUntil(
     String fullRoute, {
-    PopMode popMode = PopMode.History,
+    PopMode popMode = PopMode.history,
   });
 
   Future<T?> off<T>(
@@ -146,6 +146,8 @@ mixin IGetNavigation {
     bool Function(GetPage) predicate, [
     Object? arguments,
   ]);
+
+  void removeRoute<T>(String name);
 
   void back<T>([T? result]);
 

@@ -12,7 +12,7 @@ class HomeController extends StateController<CasesModel> {
   void onInit() {
     super.onInit();
     //Loading, Success, Error handle with 1 line of code
-    futurize(() => homeRepository.getCases);
+    futurize(homeRepository.getCases);
   }
 
   Country getCountryById(String id) {

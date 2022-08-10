@@ -15,7 +15,7 @@ class AppPages {
     GetPage(
       name: Routes.HOME,
       page: () => HomeView(),
-      bindings: [HomeBinding()],
+      binding: HomeBinding(),
       children: [
         GetPage(
           name: Routes.COUNTRY,

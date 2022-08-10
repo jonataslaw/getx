@@ -119,16 +119,16 @@ class ResponsiveScreen {
   double get width => context.width;
 
   /// Is [screenType] [ScreenType.Desktop]
-  bool get isDesktop => (screenType == ScreenType.Desktop);
+  bool get isDesktop => (screenType == ScreenType.desktop);
 
   /// Is [screenType] [ScreenType.Tablet]
-  bool get isTablet => (screenType == ScreenType.Tablet);
+  bool get isTablet => (screenType == ScreenType.tablet);
 
   /// Is [screenType] [ScreenType.Phone]
-  bool get isPhone => (screenType == ScreenType.Phone);
+  bool get isPhone => (screenType == ScreenType.phone);
 
   /// Is [screenType] [ScreenType.Watch]
-  bool get isWatch => (screenType == ScreenType.Watch);
+  bool get isWatch => (screenType == ScreenType.watch);
 
   double get _getdeviceWidth {
     if (_isPaltformDesktop) {
@@ -139,10 +139,10 @@ class ResponsiveScreen {
 
   ScreenType get screenType {
     final deviceWidth = _getdeviceWidth;
-    if (deviceWidth >= settings.desktopChangePoint) return ScreenType.Desktop;
-    if (deviceWidth >= settings.tabletChangePoint) return ScreenType.Tablet;
-    if (deviceWidth < settings.watchChangePoint) return ScreenType.Watch;
-    return ScreenType.Phone;
+    if (deviceWidth >= settings.desktopChangePoint) return ScreenType.desktop;
+    if (deviceWidth >= settings.tabletChangePoint) return ScreenType.tablet;
+    if (deviceWidth < settings.watchChangePoint) return ScreenType.watch;
+    return ScreenType.phone;
   }
 
   /// Return widget according to screen type
@@ -165,8 +165,8 @@ class ResponsiveScreen {
 }
 
 enum ScreenType {
-  Watch,
-  Phone,
-  Tablet,
-  Desktop,
+  watch,
+  phone,
+  tablet,
+  desktop,
 }

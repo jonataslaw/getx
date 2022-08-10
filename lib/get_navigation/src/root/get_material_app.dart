@@ -6,10 +6,10 @@ import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
+import '../router_report.dart';
 
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
-
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
@@ -56,7 +56,7 @@ class GetMaterialApp extends StatelessWidget {
   final LogWriterCallback? logWriterCallback;
   final bool? popGesture;
   final SmartManagement smartManagement;
-  final BindingsInterface? initialBinding;
+  final List<Bind> binds;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
   final List<GetPage>? getPages;
@@ -66,7 +66,8 @@ class GetMaterialApp extends StatelessWidget {
   final RouterDelegate<Object>? routerDelegate;
   final BackButtonDispatcher? backButtonDispatcher;
   final bool useInheritedMediaQuery;
-  GetMaterialApp({
+
+  const GetMaterialApp({
     Key? key,
     this.navigatorKey,
     this.scaffoldMessengerKey,
@@ -118,7 +119,7 @@ class GetMaterialApp extends StatelessWidget {
     this.transitionDuration,
     this.defaultGlobalState,
     this.smartManagement = SmartManagement.full,
-    this.initialBinding,
+    this.binds = const [],
     this.unknownRoute,
     this.highContrastTheme,
     this.highContrastDarkTheme,
@@ -128,17 +129,6 @@ class GetMaterialApp extends StatelessWidget {
         routeInformationParser = null,
         routerDelegate = null,
         super(key: key);
-
-  static String _cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncommonent for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
-  }
 
   GetMaterialApp.router({
     Key? key,
@@ -186,7 +176,7 @@ class GetMaterialApp extends StatelessWidget {
     this.logWriterCallback,
     this.popGesture,
     this.smartManagement = SmartManagement.full,
-    this.initialBinding,
+    this.binds = const [],
     this.transitionDuration,
     this.defaultGlobalState,
     this.getPages,
@@ -202,92 +192,80 @@ class GetMaterialApp extends StatelessWidget {
         super(key: key);
 
   @override
-  Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
-      init: Get.rootController,
-      dispose: (d) {
-        onDispose?.call();
-        Get.clearRouteTree();
-        Get.clearTranslations();
-        Get.resetRootNavigator();
-        Get.routerDelegate = null;
-        Get.routeInformationParser = null;
-      },
-      initState: (i) {
-        // Get.routerDelegate = routerDelegate;
-        // Get.routeInformationParser = routeInformationParser;
-        Get.engine.addPostFrameCallback((timeStamp) {
-          onReady?.call();
-        });
-        if (locale != null) Get.locale = locale;
-
-        if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
-
-        if (translations != null) {
-          Get.addTranslations(translations!.keys);
-        } else if (translationsKeys != null) {
-          Get.addTranslations(translationsKeys!);
-        }
-
-        Get.customTransition = customTransition;
-
-        initialBinding?.dependencies();
-        if (getPages != null) {
-          Get.addPages(getPages!);
-        } else {
-          Get.addPage(
-            GetPage(
-              name: _cleanRouteName("/${home.runtimeType}"),
-              page: () => home!,
+  Widget build(BuildContext context) {
+    return Binds(
+      binds: [
+        Bind.lazyPut<GetMaterialController>(
+          () => GetMaterialController(
+            ConfigData(
+              backButtonDispatcher: backButtonDispatcher,
+              binds: binds,
+              customTransition: customTransition,
+              defaultGlobalState: defaultGlobalState,
+              defaultTransition: defaultTransition,
+              enableLog: enableLog,
+              fallbackLocale: fallbackLocale,
+              getPages: getPages,
+              home: home,
+              initialRoute: initialRoute,
+              locale: locale,
+              logWriterCallback: logWriterCallback,
+              navigatorKey: navigatorKey,
+              navigatorObservers: navigatorObservers,
+              onDispose: onDispose,
+              onInit: onInit,
+              onReady: onReady,
+              opaqueRoute: opaqueRoute,
+              popGesture: popGesture,
+              routeInformationParser: routeInformationParser,
+              routeInformationProvider: routeInformationProvider,
+              routerDelegate: routerDelegate,
+              routingCallback: routingCallback,
+              scaffoldMessengerKey: scaffoldMessengerKey,
+              smartManagement: smartManagement,
+              transitionDuration: transitionDuration,
+              translations: translations,
+              translationsKeys: translationsKeys,
+              unknownRoute: unknownRoute,
             ),
-          );
-        }
-
-        //Get.setDefaultDelegate(routerDelegate);
-        Get.smartManagement = smartManagement;
-        onInit?.call();
-
-        Get.config(
-          enableLog: enableLog ?? Get.isLogEnable,
-          logWriterCallback: logWriterCallback,
-          defaultTransition: defaultTransition ?? Get.defaultTransition,
-          defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
-          defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
-          defaultDurationTransition:
-              transitionDuration ?? Get.defaultTransitionDuration,
-        );
-      },
-      builder: (_) {
-        final routerDelegate = Get.createDelegate(
-            pages: getPages ?? [],
-            notFoundRoute: unknownRoute,
-            navigatorKey: navigatorKey,
-            navigatorObservers: (navigatorObservers == null
-                ? <NavigatorObserver>[GetObserver(routingCallback, Get.routing)]
-                : <NavigatorObserver>[
-                    GetObserver(routingCallback, Get.routing),
-                    ...navigatorObservers!
-                  ]));
-
-        final routeInformationParser = Get.createInformationParser(
-          initialRoute: initialRoute ??
-              getPages?.first.name ??
-              _cleanRouteName("/${home.runtimeType}"),
-        );
+          ),
+          onClose: () {
+            Get.clearTranslations();
+            RouterReportManager.dispose();
+            Get.resetInstance(clearRouteBindings: true);
+          },
+        ),
+        ...binds,
+      ],
+      child: Builder(builder: (context) {
+        final controller = context.listen<GetMaterialController>();
         return MaterialApp.router(
-          routerDelegate: routerDelegate,
-          routeInformationParser: routeInformationParser,
+          routerDelegate: controller.routerDelegate,
+          routeInformationParser: controller.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
-          key: _.unikey,
-          builder: defaultBuilder,
+          key: controller.unikey,
+          builder: (context, child) => Directionality(
+            textDirection: textDirection ??
+                (rtlLanguages.contains(Get.locale?.languageCode)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr),
+            child: builder == null
+                ? (child ?? Material())
+                : builder!(context, child ?? Material()),
+          ),
           title: title,
           onGenerateTitle: onGenerateTitle,
           color: color,
-          theme: _.theme ?? theme ?? ThemeData.fallback(),
-          darkTheme: _.darkTheme ?? darkTheme ?? theme ?? ThemeData.fallback(),
-          themeMode: _.themeMode ?? themeMode,
+          theme: controller.theme ?? theme ?? ThemeData.fallback(),
+          darkTheme: controller.darkTheme ??
+              darkTheme ??
+              theme ??
+              ThemeData.fallback(),
+          themeMode: controller.themeMode ?? themeMode,
           locale: Get.locale ?? locale,
-          scaffoldMessengerKey: scaffoldMessengerKey ?? _.scaffoldMessengerKey,
+          scaffoldMessengerKey:
+              scaffoldMessengerKey ?? controller.scaffoldMessengerKey,
           localizationsDelegates: localizationsDelegates,
           localeListResolutionCallback: localeListResolutionCallback,
           localeResolutionCallback: localeResolutionCallback,
@@ -302,30 +280,7 @@ class GetMaterialApp extends StatelessWidget {
           scrollBehavior: scrollBehavior,
           useInheritedMediaQuery: useInheritedMediaQuery,
         );
-      });
-
-  Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
+      }),
     );
   }
-
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
-
-  // List<Route<dynamic>> initialRoutesGenerate(String name) {
-  //   return [
-  //     PageRedirect(
-  //       settings: RouteSettings(name: name),
-  //       unknownRoute: unknownRoute,
-  //     ).page()
-  //   ];
-  // }
 }

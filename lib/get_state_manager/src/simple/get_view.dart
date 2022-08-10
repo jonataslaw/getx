@@ -35,7 +35,7 @@ abstract class GetView<T> extends StatelessWidget {
 
   final String? tag = null;
 
-  T get controller => GetInstance().find<T>(tag: tag)!;
+  T get controller => Get.find<T>(tag: tag)!;
 
   @override
   Widget build(BuildContext context);
@@ -72,7 +72,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   InstanceInfo? info;
   @override
   void onInit() {
-    info = GetInstance().getInstanceInfo<S>(tag: widget!.tag);
+    info = Get.getInstanceInfo<S>(tag: widget!.tag);
 
     _isCreator = info!.isPrepared && info!.isCreate;
 
@@ -91,7 +91,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
         widget!.controller.onDelete();
         Get.log('"${widget!.controller.runtimeType}" onClose() called');
         Get.log('"${widget!.controller.runtimeType}" deleted from memory');
-        GetWidget._cache[widget!] = null;
+        // GetWidget._cache[widget!] = null;
       });
     }
     info = null;

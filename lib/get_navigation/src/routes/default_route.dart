@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
@@ -41,6 +41,7 @@ class GetPageRoute<T> extends PageRoute<T>
   GetPageRoute({
     RouteSettings? settings,
     this.transitionDuration = const Duration(milliseconds: 300),
+    this.reverseTransitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
     this.parameter,
     this.gestureWidth,
@@ -51,7 +52,8 @@ class GetPageRoute<T> extends PageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    this.bindings = const [],
+    BindingsInterface? binding,
+    List<BindingsInterface> bindings = const [],
     this.binds,
     this.routeName,
     this.page,
@@ -61,14 +63,17 @@ class GetPageRoute<T> extends PageRoute<T>
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.middlewares,
-  }) : super(
+  })  : bindings = (binding == null) ? bindings : [...bindings, binding],
+        super(
           settings: settings,
           fullscreenDialog: fullscreenDialog,
-          // builder: (context) => Container(),
         );
 
   @override
   final Duration transitionDuration;
+  @override
+  final Duration reverseTransitionDuration;
+
   final GetPageBuilder? page;
   final String? routeName;
   //final String reference;
