@@ -159,13 +159,13 @@ class GetPage<T> extends Page<T> {
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
-    final _page = PageRedirect(
+    final page = PageRedirect(
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
     ).getPageToRoute<T>(this, unknownRoute, context);
 
-    return _page;
+    return page;
   }
 
   static PathDecoded _nameToRegex(String path) {

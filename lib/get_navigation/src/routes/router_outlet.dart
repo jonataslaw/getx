@@ -9,12 +9,14 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
 
   //keys
   RouterOutlet.builder({
+    Key? key,
     TDelegate? delegate,
     required this.builder,
   })  : routerDelegate = delegate ?? Get.delegate<TDelegate, T>()!,
-        super();
+        super(key: key);
 
   RouterOutlet({
+    Key? key,
     TDelegate? delegate,
     required Iterable<GetPage> Function(T currentNavStack) pickPages,
     required Widget Function(
@@ -24,6 +26,7 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     )
         pageBuilder,
   }) : this.builder(
+          key: key,
           builder: (context) {
             final currentConfig = context.delegate.currentConfiguration as T?;
             final rDelegate = context.delegate as TDelegate;
@@ -37,6 +40,7 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
           delegate: delegate,
         );
   @override
+  // ignore: library_private_types_in_public_api
   _RouterOutletState<TDelegate, T> createState() =>
       _RouterOutletState<TDelegate, T>();
 }
@@ -152,6 +156,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
           delegate: delegate,
         );
   GetRouterOutlet.pickPages({
+    Key? widgetKey,
     Widget Function(GetDelegate delegate)? emptyWidget,
     GetPage Function(GetDelegate delegate)? emptyPage,
     required Iterable<GetPage> Function(RouteDecoder currentNavStack) pickPages,
@@ -159,6 +164,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     GlobalKey<NavigatorState>? key,
     GetDelegate? delegate,
   }) : super(
+          key: widgetKey,
           pageBuilder: (context, rDelegate, pages) {
             final pageRes = <GetPage?>[
               ...?pages,
@@ -179,19 +185,21 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                 key: key,
               );
             }
-            return (emptyWidget?.call(rDelegate) ?? SizedBox.shrink());
+            return (emptyWidget?.call(rDelegate) ?? const SizedBox.shrink());
           },
           pickPages: pickPages,
           delegate: delegate ?? Get.rootController.rootDelegate,
         );
 
   GetRouterOutlet.builder({
+    Key? key,
     required Widget Function(
       BuildContext context,
     )
         builder,
     GetDelegate? routerDelegate,
   }) : super.builder(
+          key: key,
           builder: builder,
           delegate: routerDelegate,
         );

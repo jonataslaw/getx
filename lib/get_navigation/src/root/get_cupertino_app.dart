@@ -62,7 +62,7 @@ class GetCupertinoApp extends StatelessWidget {
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
-  GetCupertinoApp({
+  const GetCupertinoApp({
     Key? key,
     this.theme,
     this.navigatorKey,
@@ -131,7 +131,7 @@ class GetCupertinoApp extends StatelessWidget {
     return Uri.tryParse(name)?.toString() ?? name;
   }
 
-  GetCupertinoApp.router({
+  const GetCupertinoApp.router({
     Key? key,
     this.theme,
     this.routeInformationProvider,
@@ -292,8 +292,8 @@ class GetCupertinoApp extends StatelessWidget {
               ? TextDirection.rtl
               : TextDirection.ltr),
       child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
+          ? (child ?? const Material())
+          : builder!(context, child ?? const Material()),
     );
   }
 

@@ -46,7 +46,7 @@ class HomeView extends GetView<HomeController> {
                 default:
               }
             },
-            items: [
+            items: const [
               // _Paths.HOME + [Empty]
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),

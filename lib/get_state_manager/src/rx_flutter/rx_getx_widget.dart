@@ -22,6 +22,7 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final String? tag;
 
   const GetX({
+    Key? key,
     this.tag,
     required this.builder,
     this.global = true,
@@ -34,7 +35,7 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
     this.didUpdateWidget,
     this.init,
     // this.streamController
-  });
+  }) : super(key: key);
 
   @override
   StatefulElement createElement() => StatefulElement(this);

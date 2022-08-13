@@ -80,8 +80,8 @@ class AppPages {
               children: [
                 GetPage(
                   name: _Paths.productDetails,
-                    transition: Transition.cupertino,
-                         showCupertinoParallax: true,
+                  transition: Transition.cupertino,
+                  showCupertinoParallax: true,
                   page: () => ProductDetailsView(),
                   bindings: [ProductDetailsBinding()],
                   middlewares: [

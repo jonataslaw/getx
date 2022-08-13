@@ -57,14 +57,14 @@ class Dependencies {
 }
 
 abstract class Module extends StatefulWidget {
-  Module({Key? key}) : super(key: key);
+  const Module({Key? key}) : super(key: key);
 
   Widget view(BuildContext context);
 
   void dependencies(Dependencies i);
 
   @override
-  _ModuleState createState() => _ModuleState();
+  State<Module> createState() => _ModuleState();
 }
 
 class _ModuleState extends State<Module> {

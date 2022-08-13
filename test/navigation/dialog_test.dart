@@ -28,7 +28,7 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
 
     await tester.pumpAndSettle();
 
@@ -42,7 +42,7 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsOneWidget);

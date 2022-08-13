@@ -27,8 +27,8 @@ class RouteDecoder {
   GetPage? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
 
-  GetPage routeOrUnknown(GetPage onUnknow) =>
-      currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
+  GetPage routeOrUnknown(GetPage onUnknown) =>
+      currentTreeBranch.isEmpty ? onUnknown : currentTreeBranch.last;
 
   set route(GetPage? getPage) {
     if (getPage == null) return;
@@ -57,10 +57,10 @@ class RouteDecoder {
   }
 
   void replaceArguments(Object? arguments) {
-    final _route = route;
-    if (_route != null) {
-      final index = currentTreeBranch.indexOf(_route);
-      currentTreeBranch[index] = _route.copy(arguments: arguments);
+    final checkedRoute = route;
+    if (checkedRoute != null) {
+      final index = currentTreeBranch.indexOf(checkedRoute);
+      currentTreeBranch[index] = checkedRoute.copy(arguments: arguments);
     }
   }
 

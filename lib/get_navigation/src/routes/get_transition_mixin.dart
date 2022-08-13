@@ -379,8 +379,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             ? CurvedAnimation(parent: animation, curve: finalCurve)
             : animation,
         secondaryRouteAnimation: secondaryAnimation,
-        child: child,
         linearTransition: linearTransition,
+        child: child,
       );
     } else {
       if (route.customTransition != null) {
@@ -635,7 +635,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.fade:
-          return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+          return const FadeUpwardsPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
@@ -655,7 +655,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.topLevel:
-          return ZoomPageTransitionsBuilder().buildTransitions(
+          return const ZoomPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
@@ -675,7 +675,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.native:
-          return PageTransitionsTheme().buildTransitions(
+          return const PageTransitionsTheme().buildTransitions(
               route,
               context,
               iosAnimation,
@@ -723,7 +723,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                 route.alignment, animation, secondaryAnimation, child);
           }
 
-          return PageTransitionsTheme().buildTransitions(
+          return const PageTransitionsTheme().buildTransitions(
               route,
               context,
               iosAnimation,

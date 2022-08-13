@@ -126,8 +126,8 @@ void main() {
     print('============================================');
     print('PERCENTAGE TEST');
 
-    final referenceValue = 200;
-    final requestedValue = 100;
+    const referenceValue = 200;
+    const requestedValue = 100;
 
     print('''
 referenceValue is ${calculePercentage(referenceValue, requestedValue)}% more than requestedValue''');

@@ -144,7 +144,7 @@ class GetMaterialController extends FullLifeCycleController {
     defaultOpaqueRoute = config.opaqueRoute ?? true;
     defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
     defaultTransitionDuration =
-        config.transitionDuration ?? Duration(milliseconds: 300);
+        config.transitionDuration ?? const Duration(milliseconds: 300);
 
     // defaultTransitionCurve = Curves.easeOutQuad;
     // defaultDialogTransitionCurve = Curves.easeOutQuad;
@@ -173,10 +173,10 @@ class GetMaterialController extends FullLifeCycleController {
   bool defaultPopGesture = GetPlatform.isIOS;
   bool defaultOpaqueRoute = true;
   Transition? defaultTransition;
-  Duration defaultTransitionDuration = Duration(milliseconds: 300);
+  Duration defaultTransitionDuration = const Duration(milliseconds: 300);
   Curve defaultTransitionCurve = Curves.easeOutQuad;
   Curve defaultDialogTransitionCurve = Curves.easeOutQuad;
-  Duration defaultDialogTransitionDuration = Duration(milliseconds: 300);
+  Duration defaultDialogTransitionDuration = const Duration(milliseconds: 300);
 
   final routing = Routing();
 

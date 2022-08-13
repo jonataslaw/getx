@@ -35,11 +35,14 @@ void main() {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => Container()),
-          GetPage(name: '/first', page: () => FirstScreen(), middlewares: [
-            RedirectMiddleware(),
-          ]),
-          GetPage(name: '/second', page: () => SecondScreen()),
-          GetPage(name: '/third', page: () => ThirdScreen()),
+          GetPage(
+              name: '/first',
+              page: () => const FirstScreen(),
+              middlewares: [
+                RedirectMiddleware(),
+              ]),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+          GetPage(name: '/third', page: () => const ThirdScreen()),
         ],
       ),
     );
@@ -57,11 +60,14 @@ void main() {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => Container()),
-          GetPage(name: '/first', page: () => FirstScreen(), middlewares: [
-            RedirectMiddlewareNull(),
-          ]),
-          GetPage(name: '/second', page: () => SecondScreen()),
-          GetPage(name: '/third', page: () => ThirdScreen()),
+          GetPage(
+              name: '/first',
+              page: () => const FirstScreen(),
+              middlewares: [
+                RedirectMiddlewareNull(),
+              ]),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+          GetPage(name: '/third', page: () => const ThirdScreen()),
         ],
       ),
     );

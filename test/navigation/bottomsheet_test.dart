@@ -12,16 +12,14 @@ void main() {
 
     await tester.pump();
 
-    Get.bottomSheet(Container(
-      child: Wrap(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.music_note),
-            title: Text('Music'),
-            onTap: () {},
-          ),
-        ],
-      ),
+    Get.bottomSheet(Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.music_note),
+          title: const Text('Music'),
+          onTap: () {},
+        ),
+      ],
     ));
 
     await tester.pumpAndSettle();
@@ -36,16 +34,14 @@ void main() {
 
     await tester.pump();
 
-    Get.bottomSheet(Container(
-      child: Wrap(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.music_note),
-            title: Text('Music'),
-            onTap: () {},
-          ),
-        ],
-      ),
+    Get.bottomSheet(Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.music_note),
+          title: const Text('Music'),
+          onTap: () {},
+        ),
+      ],
     ));
 
     await tester.pumpAndSettle();

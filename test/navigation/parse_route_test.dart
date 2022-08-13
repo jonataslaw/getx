@@ -64,7 +64,7 @@ void main() {
     tree.addRoute(pageTree);
 
     // tree.addRoute(pageTree);
-    final searchRoute = '/city/work/office/pen';
+    const searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
@@ -120,7 +120,7 @@ void main() {
     //   tree.addRoute(p);
     // }
 
-    final searchRoute = '/city/work/office/pen';
+    const searchRoute = '/city/work/office/pen';
     final match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);

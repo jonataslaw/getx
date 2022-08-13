@@ -138,11 +138,11 @@ extension Inst on GetInterface {
 
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final _dep = _singl[key];
-      if (_dep == null || !_dep.isDirty) {
+      var dep = _singl[key];
+      if (dep == null || !dep.isDirty) {
         return;
       } else {
-        dep = _dep as _InstanceBuilderFactory<S>;
+        dep = dep as _InstanceBuilderFactory<S>;
       }
     }
     _singl[key] = _InstanceBuilderFactory<S>(

@@ -25,9 +25,9 @@ class FormData {
   static const int _maxBoundaryLength = 70;
 
   static String _getBoundary() {
-    final _random = Random();
+    final random = Random();
     var list = List<int>.generate(_maxBoundaryLength - GET_BOUNDARY.length,
-        (_) => boundaryCharacters[_random.nextInt(boundaryCharacters.length)],
+        (_) => boundaryCharacters[random.nextInt(boundaryCharacters.length)],
         growable: false);
     return '$GET_BOUNDARY${String.fromCharCodes(list)}';
   }

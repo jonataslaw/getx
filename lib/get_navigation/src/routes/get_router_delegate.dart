@@ -72,7 +72,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
         notFoundRoute = notFoundRoute ??= GetPage(
           name: '/404',
-          page: () => Scaffold(
+          page: () => const Scaffold(
             body: Center(child: Text('Route not found')),
           ),
         ) {
@@ -145,6 +145,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return currentConfiguration?.pageSettings;
   }
 
+  // ignore: unused_element
   Future<T?> _removeHistoryEntry<T>(RouteDecoder entry, T result) async {
     return _unsafeHistoryRemove<T>(entry, result);
   }
@@ -560,7 +561,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _activePages.remove(RouteDecoder.fromRoute(name));
   }
 
- 
   bool get canBack {
     return _activePages.length > 1;
   }
@@ -784,9 +784,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
-    final _popped = await _pop(popMode ?? backButtonPopMode, result);
+    final popped = await _pop(popMode ?? backButtonPopMode, result);
     notifyListeners();
-    if (_popped != null) {
+    if (popped != null) {
       //emulate the old pop with result
       return true;
     }
@@ -799,7 +799,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _popWithResult<T>(result);
     notifyListeners();
   }
-
 
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);

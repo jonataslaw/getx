@@ -476,7 +476,7 @@ class BindElement<T> extends InheritedElement {
   /// setState "link" from the Controller.
   void _subscribeToController() {
     if (widget.filter != null) {
-      _filter = widget.filter!(_controller!);
+      _filter = widget.filter!(_controller as T);
     }
     final filter = _filter != null ? _filterUpdate : getUpdate;
     final localController = _controller;
@@ -504,7 +504,7 @@ class BindElement<T> extends InheritedElement {
   }
 
   void _filterUpdate() {
-    var newFilter = widget.filter!(_controller!);
+    var newFilter = widget.filter!(_controller as T);
     if (newFilter != _filter) {
       _filter = newFilter;
       getUpdate();
