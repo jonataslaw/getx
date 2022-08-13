@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
+import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
 // import 'package:get_demo/routes/app_pages.dart';
 // import 'package:get_test/get_test.dart';
 import 'package:matcher/matcher.dart' as m;
-
-import '../lib/pages/home/domain/adapters/repository_adapter.dart';
-import '../lib/pages/home/domain/entity/cases_model.dart';
-import '../lib/pages/home/presentation/controllers/home_controller.dart';
 
 class MockRepositorySuccess implements IHomeRepository {
   @override
@@ -58,7 +57,7 @@ void main() {
   test('Test Controller', () async {
     /// Controller can't be on memory
     expect(() => Get.find<HomeController>(tag: 'success'),
-        throwsA(m.TypeMatcher<String>()));
+        throwsA(const m.TypeMatcher<String>()));
 
     /// binding will put the controller on memory
     binding.dependencies();
@@ -73,7 +72,7 @@ void main() {
     expect(controller.status.isLoading, true);
 
     /// await time request
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     /// test if status is success
     expect(controller.status.isSuccess, true);
@@ -87,7 +86,7 @@ void main() {
   });
 
   /// Tests with GetTests
-  /// TEMPORARILY REMOVED from the null-safetym branch as
+  /// TEMPORARILY REMOVED from the null-safety branch as
   /// get_test is not yet null safety.
   /* getTest(
     "test description",
