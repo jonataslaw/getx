@@ -247,11 +247,11 @@ typedef NotifierBuilder<T> = Widget Function(T state);
 
 abstract class GetStatus<T> with Equality {
   const GetStatus();
-  factory GetStatus.loading() => LoadingStatus();
-  factory GetStatus.error(String message) => ErrorStatus(message);
-  factory GetStatus.empty() => EmptyStatus();
-  factory GetStatus.success(T data) => SuccessStatus(data);
-  factory GetStatus.custom() => CustomStatus();
+  factory GetStatus.loading() => LoadingStatus<T>();
+  factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
+  factory GetStatus.empty() => EmptyStatus<T>();
+  factory GetStatus.success(T data) => SuccessStatus<T>(data);
+  factory GetStatus.custom() => CustomStatus<T>();
 }
 
 class CustomStatus<T> extends GetStatus<T> {
