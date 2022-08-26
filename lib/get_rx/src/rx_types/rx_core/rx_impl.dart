@@ -238,7 +238,7 @@ extension RxBoolExt on Rx<bool> {
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
   void toggle() {
-    subject.add(!value);
+    call(!value);
     // return this;
   }
 }
@@ -271,7 +271,7 @@ extension RxnBoolExt on Rx<bool?> {
   /// A shortcut for `flag.value = !flag.value;`
   void toggle() {
     if (value != null) {
-      subject.add(!value!);
+      call(!value!);
       // return this;
     }
   }
