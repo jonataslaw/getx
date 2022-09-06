@@ -200,6 +200,35 @@ Get의 인스턴스에서 삭제합니다:
 Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기 때문에 수행할 필요가 없습니다
 ```
 
+## 대체 인스턴스 지정
+
+현재 추가된 인스턴스는 `replace` 또는 `lazyReplace` 메소드를 사용하여 유사하거나 확장된 클래스 인스턴스로 교체할 수 있습니다. 이후 원본 클래스를 사용하여 찾을 수 있습니다.
+```dart
+abstract class BaseClass {}
+class ParentClass extends BaseClass {}
+
+class ChildClass extends ParentClass {
+  bool isChild = true;
+}
+
+
+Get.put<BaseClass>(ParentClass());
+
+Get.replace<BaseClass>(ChildClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); //true
+
+
+class OtherClass extends BaseClass {}
+Get.lazyReplace<BaseClass>(() => OtherClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); // false
+print(instance is OtherClass); //true
+```
+
+
 ## 메서드간의 차이점
 
 첫째, Get.lazyPut의 `fenix`와 다른 메서드들의 `permanent`을 살펴보겠습니다.
