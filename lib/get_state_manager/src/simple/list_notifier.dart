@@ -178,7 +178,7 @@ class Notifier {
     if (data.disposers.isEmpty && data.throwException) {
       throw ObxError();
     }
-    _notifyData = data;
+    _notifyData = null;
     return result;
   }
 }
