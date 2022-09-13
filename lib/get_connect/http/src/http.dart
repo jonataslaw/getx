@@ -342,6 +342,19 @@ class GetHttpClient {
       responseInterceptor: _responseInterceptor(responseInterceptor),
     );
   }
+  Future<Response<T>> send<T>(Request<T> request) async {
+    try {
+      var response = await _performRequest<T>(() => Future.value(request));
+      return response;
+    } on Exception catch (e) {
+      if (!errorSafety) {
+        throw GetHttpException(e.toString());
+      }
+      return Future.value(Response<T>(
+        statusText: 'Can not connect to server. Reason: $e',
+      ));
+    }
+  }
 
   Future<Response<T>> patch<T>(
     String url, {
