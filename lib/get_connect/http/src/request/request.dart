@@ -92,6 +92,7 @@ class Request<T> {
     bool? persistentConnection,
     Decoder<T>? decoder,
     bool appendHeader = true,
+    ResponseInterceptor<T>? responseInterceptor,
   }) {
     // If appendHeader is set to true, we will merge origin headers with that
     if (appendHeader && headers != null) {
@@ -109,6 +110,7 @@ class Request<T> {
       files: files ?? this.files,
       persistentConnection: persistentConnection ?? this.persistentConnection,
       decoder: decoder ?? this.decoder,
+      responseInterceptor: responseInterceptor ?? this.responseInterceptor
     );
   }
 }
