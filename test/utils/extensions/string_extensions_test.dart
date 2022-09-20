@@ -16,6 +16,42 @@ void main() {
       expect(text.isNum, false);
     });
 
+    test('var.capitalizeAllWordsFirstLetter()', () {
+      final List<String> sentences = [
+        "getx",
+        "this is an example sentence",
+        "this is an example sentence with a number 5",
+        "this is an example sentence with a number 5 and a special character #",
+        "this is an example sentence with a number 5 and a special character # and b letter C",
+        "    emm, lemme        think !",
+        "Bro, $letters is a good word",
+        "THIS IS A SENTENCE WITH ALL CAPITAL LETTERS",
+        ""
+      ];
+      expect(text.capitalizeAllWordsFirstLetter(), "Oi");
+      expect(digit.capitalizeAllWordsFirstLetter(), "5");
+      expect(specialCaracters.capitalizeAllWordsFirstLetter(), "#\$!%@");
+      expect(alphaNumeric.capitalizeAllWordsFirstLetter(), "123asd");
+      expect(numbers.capitalizeAllWordsFirstLetter(), "123");
+      expect(letters.capitalizeAllWordsFirstLetter(), "Foo");
+      expect(sentences[0].capitalizeAllWordsFirstLetter(), "Getx");
+      expect(sentences[1].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence");
+      expect(sentences[2].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5");
+      expect(sentences[3].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5 And A Special Character #");
+      expect(sentences[4].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5 And A Special Character # And B Letter C");
+      expect(
+          sentences[5].capitalizeAllWordsFirstLetter(), "Emm, Lemme Think !");
+      expect(sentences[6].capitalizeAllWordsFirstLetter(),
+          "Bro, Foo Is A Good Word");
+      expect(sentences[7].capitalizeAllWordsFirstLetter(),
+          "This Is A Sentence With All Capital Letters");
+      expect(sentences[8].capitalizeAllWordsFirstLetter(), "");
+    });
+
     test('var.isNumericOnly', () {
       expect(numbers.isNumericOnly, true);
       expect(letters.isNumericOnly, false);
