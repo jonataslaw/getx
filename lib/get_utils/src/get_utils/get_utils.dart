@@ -595,10 +595,9 @@ class GetUtils {
     return numericOnlyStr;
   }
 
-  /// capitalize the first letter of each word in a string
-  /// Example: your name => Your Name
-  /// Example 2 : this is an example text=> This Is An Example Text
-  // "emm, lemme        think !",
+  /// Capitalize only the first letter of each word in a string
+  /// Example: getx will make it easy  => Getx Will Make It Easy
+  /// Example 2 : this is an example text => This Is An Example Text
   static String capitalizeAllWordsFirstLetter(String s) {
     String lowerCasedString = s.toLowerCase();
     String stringWithoutExtraSpaces = lowerCasedString.trim();
