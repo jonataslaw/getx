@@ -498,7 +498,6 @@ class HomeProvider extends GetConnect {
     //HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
-  }
 
   @override
   Future<Response<CasesModel>> getCases(String path) => get(path);
