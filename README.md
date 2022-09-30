@@ -1,7 +1,7 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
-[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/get/score)
+[![popularity](https://img.shields.io/badge/Popularity-100%25-blue)](https://pub.dev/packages/get/score)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
 [![pub points](https://img.shields.io/badge/Pub%20Points-140-blue)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
