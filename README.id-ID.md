@@ -52,8 +52,6 @@
     - [Detail lebih lanjut mengenai dependency management](#detail-lebih-lanjut-mengenai-dependency-management)
 - [Utilitas](#utilitas)
   - [Internasionalisasi](#internasionalisasi)
-    - [Translasi](#translasi)
-      - [Menggunakan Translasi](#menggunakan-translasi)
     - [Terjemahan](#terjemahan)
       - [Menggunakan Terjemahan](#menggunakan-terjemahan)
     - [Lokalisasi](#lokalisasi)
@@ -86,7 +84,6 @@
 - [Perubahan yang merusak dari 2.0](#perubahan-yang-merusak-dari-20)
 - [Mengapa Getx?](#mengapa-getx)
 - [Komunitas](#komunitas)
-  - [Channel Komunitas](#kanal-komunitas)
   - [Kanal Komunitas](#kanal-komunitas)
   - [Cara berkontribusi](#cara-berkontribusi)
   - [Artikel dan Video](#artikel-dan-video)
@@ -148,7 +145,6 @@ Proyek "counter" yang dibuat secara default ketika membuat proyek Flutter memili
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Catatan: ini tidak mengubah MaterialApp bawaan Flutter, GetMaterialApp bukan sebuah MaterialApp yang dimodifikasi, itu hanyalah sebuah Widget yang telah dikonfigurasi sebelumnya, yang mana memiliki default MaterialApp sebagai child. Anda bisa mengkonfigurasinya secara manual, namun hal itu benar-benar tidak diperlukan. GetMaterialApp akan membuat route, menginjeksinya, menginjeksi translasi/terjemahan, dan semua yang anda butuhkan untuk navigasi route. Jika anda hanya menggunakan Get untuk manajemen state atau manajemen dependensi, tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk route, snackbar, internasionalisasi/terjemahan, bottomSheet, dialog, dan high-level API yang berhubungan dengan route dan ketiadaan konteks.
 - Catatan: ini tidak mengubah MaterialApp bawaan Flutter, GetMaterialApp bukan sebuah MaterialApp yang dimodifikasi, itu hanyalah sebuah Widget yang telah dikonfigurasi sebelumnya, yang mana memiliki default MaterialApp sebagai child. Anda bisa mengkonfigurasinya secara manual, namun hal itu benar-benar tidak diperlukan. GetMaterialApp akan membuat route, menginjeksinya, menginjeksi terjemahan, dan semua yang anda butuhkan untuk navigasi route. Jika anda hanya menggunakan Get untuk manajemen state atau manajemen dependensi, tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk route, snackbar, internasionalisasi/terjemahan, bottomSheet, dialog, dan high-level API yang berhubungan dengan route dan ketiadaan konteks.
 
 - Catatan²: Langkah ini hanya diperlukan jika anda akan menggunakan manajemen route (`Get.to()`, `Get.back()` dan seterusnya). Jika anda tidak menggunakannya, langkah 1 tidak diperlukan.
@@ -346,11 +342,8 @@ Text(controller.textFromApi);
 
 ## Internasionalisasi
 
-### Translasi
 ### Terjemahan
 
-Translasi disimpan sebagai key-value map sederhana.
-Untuk menambahkan translasi kustom, buat sebuah kelas dan extend `Translations`.
 Terjemahan disimpan sebagai key-value map sederhana.
 Untuk menambahkan terjemahan kustom, buat sebuah kelas dan extend `Translations`.
 
@@ -370,7 +363,6 @@ class Messages extends Translations {
 }
 ```
 
-#### Menggunakan Translasi
 #### Menggunakan Terjemahan
 
 Cukup tambahkan `.tr` setelah key yang disebutkan dan value nya akan diterjemahkan, menggunakan value awal dari `Get.locale` dan `Get.fallbackLocale`.
@@ -381,13 +373,10 @@ Text('title'.tr);
 
 ### Lokalisasi
 
-Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokal dan translasi.
 Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokal dan terjemahan.
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // gunakan translasi yang anda buat
-    locale: Locale('id', 'ID'), // translasi akan ditampilkan di lokal ini
     translations: Messages(), // gunakan terjemahan yang anda buat
     locale: Locale('id', 'ID'), // terjemahan akan ditampilkan di lokal ini
     fallbackLocale: Locale('en', 'US'), // berikan lokal penumpu untuk berjaga-jaga jika lokal yang tidak valid dipilih
@@ -396,7 +385,6 @@ return GetMaterialApp(
 
 #### Mengubah Lokal
 
-Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, translasi akan menggunakan lokal baru.
 Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, terjemahan akan menggunakan lokal baru.
 
 ```dart
@@ -1116,7 +1104,6 @@ Library ini akan terus diperbarui dan mengimplementasikan fitur baru. Jangan rag
 
 # Komunitas
 
-## Channel Komunitas
 ## Kanal Komunitas
 
 GetX memiliki komunitas yang sangat aktif dan membantu. Jika anda memiliki pertanyaan, atau membutuhkan bantuan mengenai penggunaan framework ini, bergabunglah dengan kanal komunitas kami, pertanyaan anda akan dijawab lebih cepat, dan akan menjadi tempat yang paling cocok. Repositori ini eksklusif untuk pembukaan isu dan permintaan resource, tapi jangan ragu untuk menjadi bagian dari Komunitas GetX.
