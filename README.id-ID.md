@@ -54,6 +54,8 @@
   - [Internasionalisasi](#internasionalisasi)
     - [Translasi](#translasi)
       - [Menggunakan Translasi](#menggunakan-translasi)
+    - [Terjemahan](#terjemahan)
+      - [Menggunakan Terjemahan](#menggunakan-terjemahan)
     - [Lokalisasi](#lokalisasi)
       - [Mengubah Lokal](#mengubah-lokal)
       - [Lokal Sistem](#lokal-sistem)
@@ -81,9 +83,11 @@
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
 - [Breaking change dari 2.0](#breaking-change-dari-20)
+- [Perubahan yang merusak dari 2.0](#perubahan-yang-merusak-dari-20)
 - [Mengapa Getx?](#mengapa-getx)
 - [Komunitas](#komunitas)
   - [Channel Komunitas](#kanal-komunitas)
+  - [Kanal Komunitas](#kanal-komunitas)
   - [Cara berkontribusi](#cara-berkontribusi)
   - [Artikel dan Video](#artikel-dan-video)
 
@@ -92,22 +96,27 @@
 - GetX adalah solusi ekstra-ringan dan powerful untuk Flutter. Ini mengkombinasikan state management dengan performa tinggi, injeksi dependensi yang cerdas, dan route management secara singkat dan praktis.
 
 - GetX memiliki 3 prinsip dasar, yang menjadi prioritas untuk semua resource yang ada di dalamnya: **PRODUKTIFITAS, PERFORMA DAN ORGANISASI**
+- GetX memiliki 3 prinsip dasar, yang menjadi prioritas untuk semua resource yang ada di dalamnya: **PRODUKTIVITAS, PERFORMA DAN KETERATURAN**
 
   - **PERFORMA:** GetX fokus pada performa dan konsumsi resource minimum. GetX tidak menggunakan Stream atau ChangeNotifier.
 
   - **PRODUKTIFITAS:** GetX menggunakan sintaks yang mudah dan nyaman. Tidak peduli apa yang akan anda lakukan, akan selalu ada cara yang lebih mudah dengan GetX. Ini akan menghemat waktu development, dan meng-ekstrak performa maksimum pada aplikasi anda.
+  - **PRODUKTIVITAS:** GetX menggunakan sintaks yang mudah dan nyaman. Tidak peduli apa yang akan anda lakukan, akan selalu ada cara yang lebih mudah dengan GetX. Ini akan menghemat waktu development, dan meng-ekstrak performa maksimum pada aplikasi anda.
   Umumnya, developer akan selalu berhubungan dengan penghapusan controller dari memori. Dengan GetX, ini tidak diperlukan, karena resource akan dihapus dari memori secara default ketika tidak digunakan. Jika anda ingin menyimpannnya kedalam memori, anda harus secara eksplisit mendeklarasikan "permanent: true" pada dependensi anda. Dengan begitu, selain menghemat waktu, anda juga mengurangi resiko memiliki dependensi yang tidak diperlukan dalam memori. Pemuatan dependensi juga bersifat "lazy" secara default.
 
   - **ORGANISASI:** GetX memungkinkan pemisahan View, Presentation Logic, Business Logic, Dependency Injection, dan Navigasi.
+  - **KETERATURAN:** GetX memungkinkan pemisahan View, Presentation Logic, Business Logic, Dependency Injection, dan Navigasi.
   Anda tidak perlu konteks untuk berpindah antar halaman. Jadi, anda tidak lagi bergantung pada widget tree (visualisasi) untuk hal ini. Anda tidak perlu konteks untuk mengakses controller/bloc melalui InheritedWidget. Dengan ini, anda benar benar memisahkan presentation logic dan business logic dari lapisan visual. Anda tidak perlu menginjeksi kelas Controller/Model/Bloc kedalam widget tree melalui multiprovider, untuk hal ini GetX menggunakan fitur dependency injection nya sendiri, memisahkan DI dari View secara total.
   Dengan GetX, anda tahu dimana harus mencari setiap fitur dalam aplikasi anda, memiliki kode yang bersih secara default. Ini selain untuk memfasilitasi maintenance, membuat pembagian modul, sesuatu yang hingga saat itu di Flutter tidak terpikirkan, sesuatu yang sangat mungkin.
   BLoC adalah permulaan awal dalam meng-organisir kode di Flutter, ini memisahkan business logic dari visualisasi. GetX adalah evolusi natural dari ini, tidak hanya memisahkan business logic, tapi juga presentation logic. Injeksi dependensi dan route juga dipisahkan sebagai bonus, dan lapisan data benar-benar terpisah secara menyeluruh. Anda tahu dimana semuanya berada, dan segalanya dengan cara yang lebih mudah daripada membuat sebuah hello world.
+  BLoC adalah permulaan awal dalam mengatur kode di Flutter, ini memisahkan business logic dari visualisasi. GetX adalah evolusi natural dari ini, tidak hanya memisahkan business logic, tapi juga presentation logic. Injeksi dependensi dan route juga dipisahkan sebagai bonus, dan lapisan data benar-benar terpisah secara menyeluruh. Anda tahu dimana semuanya berada, dan segalanya dengan cara yang lebih mudah daripada membuat sebuah hello world.
   GetX adalah cara termudah, praktis, dan scalable untuk membangun aplikasi dengan performa tinggi menggunakan Flutter SDK, dengan ekosistem besar di sekelilingnya yang bekerjasama secara sempurna, mudah dipahami untuk pemula, dan akurat untuk ahli. Aman, stabil, up-to-date, dan menawarkan banyak cakupan build-in API yang tidak tersedia di dalam default Flutter SDK.
 
 - GetX tidak "bloated". Dirinya memiliki banyak fitur yang memungkinkan anda memulai programming tanpa mengkhawatirkan apapun, namun setiap fiturnya terletak didalam kontainer terpisah, dan hanya dimulai setelah digunakan. Jika anda hanya menggunakan State Management, hanya State Management yang akan di-compile. Jika anda hanya menggunakan routes, state management tidak akan di-compile.
 
 - GetX memiliki ekosistem yang besar, komunitas yang juga besar, banyak kolaborator, dan akan di maintenance selama Flutter ada. GetX juga mampu berjalan dengan kode yang sama di Android, iOS, Web, Mac, Linux, Windows, dan server anda.
 **Juga memungkinkan untuk me-reuse kode yang dibuat di frontend ke backend dengan [Get Server](https://github.com/jonataslaw/get_server)**.
+**Juga memungkinkan untuk menggunakan kembali (reuse) kode yang dibuat di frontend ke backend dengan [Get Server](https://github.com/jonataslaw/get_server)**.
 
 **Selain itu, seluruh proses development bisa di automasi secara menyeluruh, untuk keduanya (server dan frontend) menggunakan [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
@@ -140,6 +149,7 @@ void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
 - Catatan: ini tidak mengubah MaterialApp bawaan Flutter, GetMaterialApp bukan sebuah MaterialApp yang dimodifikasi, itu hanyalah sebuah Widget yang telah dikonfigurasi sebelumnya, yang mana memiliki default MaterialApp sebagai child. Anda bisa mengkonfigurasinya secara manual, namun hal itu benar-benar tidak diperlukan. GetMaterialApp akan membuat route, menginjeksinya, menginjeksi translasi/terjemahan, dan semua yang anda butuhkan untuk navigasi route. Jika anda hanya menggunakan Get untuk manajemen state atau manajemen dependensi, tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk route, snackbar, internasionalisasi/terjemahan, bottomSheet, dialog, dan high-level API yang berhubungan dengan route dan ketiadaan konteks.
+- Catatan: ini tidak mengubah MaterialApp bawaan Flutter, GetMaterialApp bukan sebuah MaterialApp yang dimodifikasi, itu hanyalah sebuah Widget yang telah dikonfigurasi sebelumnya, yang mana memiliki default MaterialApp sebagai child. Anda bisa mengkonfigurasinya secara manual, namun hal itu benar-benar tidak diperlukan. GetMaterialApp akan membuat route, menginjeksinya, menginjeksi terjemahan, dan semua yang anda butuhkan untuk navigasi route. Jika anda hanya menggunakan Get untuk manajemen state atau manajemen dependensi, tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk route, snackbar, internasionalisasi/terjemahan, bottomSheet, dialog, dan high-level API yang berhubungan dengan route dan ketiadaan konteks.
 
 - Catatan²: Langkah ini hanya diperlukan jika anda akan menggunakan manajemen route (`Get.to()`, `Get.back()` dan seterusnya). Jika anda tidak menggunakannya, langkah 1 tidak diperlukan.
 
@@ -337,9 +347,12 @@ Text(controller.textFromApi);
 ## Internasionalisasi
 
 ### Translasi
+### Terjemahan
 
 Translasi disimpan sebagai key-value map sederhana.
 Untuk menambahkan translasi kustom, buat sebuah kelas dan extend `Translations`.
+Terjemahan disimpan sebagai key-value map sederhana.
+Untuk menambahkan terjemahan kustom, buat sebuah kelas dan extend `Translations`.
 
 ```dart
 import 'package:get/get.dart';
@@ -358,6 +371,7 @@ class Messages extends Translations {
 ```
 
 #### Menggunakan Translasi
+#### Menggunakan Terjemahan
 
 Cukup tambahkan `.tr` setelah key yang disebutkan dan value nya akan diterjemahkan, menggunakan value awal dari `Get.locale` dan `Get.fallbackLocale`.
 
@@ -368,11 +382,14 @@ Text('title'.tr);
 ### Lokalisasi
 
 Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokal dan translasi.
+Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokal dan terjemahan.
 
 ```dart
 return GetMaterialApp(
     translations: Messages(), // gunakan translasi yang anda buat
     locale: Locale('id', 'ID'), // translasi akan ditampilkan di lokal ini
+    translations: Messages(), // gunakan terjemahan yang anda buat
+    locale: Locale('id', 'ID'), // terjemahan akan ditampilkan di lokal ini
     fallbackLocale: Locale('en', 'US'), // berikan lokal penumpu untuk berjaga-jaga jika lokal yang tidak valid dipilih
 );
 ```
@@ -380,6 +397,7 @@ return GetMaterialApp(
 #### Mengubah Lokal
 
 Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, translasi akan menggunakan lokal baru.
+Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, terjemahan akan menggunakan lokal baru.
 
 ```dart
 var locale = Locale('en', 'US');
@@ -1030,6 +1048,7 @@ Satu-satunya cara untuk benar benar menghapus sebuah `GetxService`, adalah denga
 masa hidup aplikasi anda, gunakan `GetxService`.
 
 # Breaking change dari 2.0
+# Perubahan yang merusak dari 2.0
 
 1- Tipe Rx:
 
@@ -1098,6 +1117,7 @@ Library ini akan terus diperbarui dan mengimplementasikan fitur baru. Jangan rag
 # Komunitas
 
 ## Channel Komunitas
+## Kanal Komunitas
 
 GetX memiliki komunitas yang sangat aktif dan membantu. Jika anda memiliki pertanyaan, atau membutuhkan bantuan mengenai penggunaan framework ini, bergabunglah dengan kanal komunitas kami, pertanyaan anda akan dijawab lebih cepat, dan akan menjadi tempat yang paling cocok. Repositori ini eksklusif untuk pembukaan isu dan permintaan resource, tapi jangan ragu untuk menjadi bagian dari Komunitas GetX.
 
