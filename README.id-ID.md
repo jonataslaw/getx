@@ -19,7 +19,7 @@
 
 <div align="center">
 
-**Languages:**
+**Tersedia Dalam Bahasa:**
 
   
 [![Inggris](https://img.shields.io/badge/Bahasa-Inggris-blueviolet?style=for-the-badge)](README.md)
