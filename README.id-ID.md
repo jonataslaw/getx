@@ -1,7 +1,5 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Bahasa: Indonesia (file ini), [Inggris](README.md), [Vietnam](README-vi.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
-
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
 [![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
@@ -17,6 +15,29 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
+
+
+<div align="center">
+
+**Languages:**
+
+  
+[![Inggris](https://img.shields.io/badge/Bahasa-Inggris-blueviolet?style=for-the-badge)](README.md)
+[![Vietnam](https://img.shields.io/badge/Bahasa-Vietnam-blueviolet?style=for-the-badge)](README-vi.md)
+[![Indonesia](https://img.shields.io/badge/Bahasa-Indonesia-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![Urdu](https://img.shields.io/badge/Bahasa-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![Cina/Mandarin](https://img.shields.io/badge/Bahasa-Cina/Mandarin-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![Portugis](https://img.shields.io/badge/Bahasa-Portugis%20%28Brazil%29-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![Spanyol](https://img.shields.io/badge/Bahasa-Spanyol-blueviolet?style=for-the-badge)](README-es.md)
+[![Rusia](https://img.shields.io/badge/Bahasa-Rusia-blueviolet?style=for-the-badge)](README.ru.md)
+[![Polandia](https://img.shields.io/badge/Bahasa-Polandia-blueviolet?style=for-the-badge)](README.pl.md)
+[![Korea](https://img.shields.io/badge/Bahasa-Korea-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![Perancis](https://img.shields.io/badge/Bahasa-Perancis-blueviolet?style=for-the-badge)](README-fr.md)
+[![Jepang](https://img.shields.io/badge/Bahasa-Jepang-blueviolet?style=for-the-badge)](README.ja-JP.md)
+[![Turki](https://img.shields.io/badge/Bahasa-Turki-blueviolet?style=for-the-badge)](README.tr-TR.md)
+  
+
+</div>
 
 - [Tentang Get](#tentang-get)
 - [Instalasi](#instalasi)
