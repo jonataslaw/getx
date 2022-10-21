@@ -213,6 +213,7 @@ void main() {
         'http://appliance.example.com/bee/badge',
         'http://www.example.org/berry.aspx',
         'http://example.org/',
+        'http://birds.example/',
       ];
 
       for (final url in urls) {
