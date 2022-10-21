@@ -123,6 +123,134 @@ class RxList<E> extends GetListenable<List<E>>
   }
 }
 
+/// Create a list similar to `List<T>?`
+class RxnList<E> extends GetListenable<List<E>?>
+    with ListMixin<E>, RxObjectMixin<List<E>?> {
+  RxnList([List<E>? initial]) : super(initial);
+
+  factory RxnList.filled(int length, E fill, {bool growable = false}) {
+    return RxnList(List.filled(length, fill, growable: growable));
+  }
+
+  factory RxnList.empty({bool growable = false}) {
+    return RxnList(List.empty(growable: growable));
+  }
+
+  /// Creates a list containing all [elements].
+  factory RxnList.from(Iterable elements, {bool growable = true}) {
+    return RxnList(List.from(elements, growable: growable));
+  }
+
+  /// Creates a list from [elements].
+  factory RxnList.of(Iterable<E> elements, {bool growable = true}) {
+    return RxnList(List.of(elements, growable: growable));
+  }
+
+  /// Generates a list of values.
+  factory RxnList.generate(int length, E Function(int index) generator,
+      {bool growable = true}) {
+    return RxnList(List.generate(length, generator, growable: growable));
+  }
+
+  /// Creates an unmodifiable list containing all [elements].
+  factory RxnList.unmodifiable(Iterable elements) {
+    return RxnList(List.unmodifiable(elements));
+  }
+
+  @override
+  Iterator<E> get iterator => value!.iterator;
+
+  @override
+  void operator []=(int index, E val) {
+    value[index] = val;
+    refresh();
+  }
+
+  /// Special override to push() element(s) in a reactive way
+  /// inside the List,
+  @override
+  RxnList<E> operator +(Iterable<E> val) {
+    addAll(val);
+    refresh();
+    return this;
+  }
+
+  @override
+  E operator [](int index) {
+    return value![index];
+  }
+
+  @override
+  void add(E element) {
+    value!.add(element);
+    refresh();
+  }
+
+  @override
+  void addAll(Iterable<E> iterable) {
+    value!.addAll(iterable);
+    refresh();
+  }
+
+  @override
+  void removeWhere(bool Function(E element) test) {
+    if (value != null) {
+      value!.removeWhere(test);
+    }
+    refresh();
+  }
+
+  @override
+  void retainWhere(bool Function(E element) test) {
+    if (value != null) {
+      value!.retainWhere(test);
+    }
+    refresh();
+  }
+
+  @override
+  int get length => value?.length ?? 0;
+
+  // @override
+  // @protected
+  // List<E> get value {
+  //   RxInterface.proxy?.addListener(subject);
+  //   return subject.value;
+  // }
+
+  @override
+  set length(int newLength) {
+    value?.length = newLength;
+    refresh();
+  }
+
+  @override
+  void insertAll(int index, Iterable<E> iterable) {
+    value ??= [];
+    value!.insertAll(index, iterable);
+    refresh();
+  }
+
+  @override
+  Iterable<E> get reversed => value!.reversed;
+
+  @override
+  Iterable<E> where(bool Function(E) test) {
+    return value!.where(test);
+  }
+
+  @override
+  Iterable<T> whereType<T>() {
+    return value!.whereType<T>();
+  }
+
+  @override
+  void sort([int Function(E a, E b)? compare]) {
+    value!.sort(compare);
+    refresh();
+  }
+}
+
 extension ListExtension<E> on List<E> {
   RxList<E> get obs => RxList<E>(this);
 
