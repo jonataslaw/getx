@@ -164,7 +164,7 @@ extension ExtensionDialog on GetInterface {
     Color? backgroundColor,
     bool barrierDismissible = true,
     Color? buttonColor,
-    String middleText = "Dialog made in 3 lines of code",
+    String middleText = "\n",
     TextStyle? middleTextStyle,
     double radius = 20.0,
     //   ThemeData themeData,
