@@ -38,6 +38,7 @@ class GetCupertinoApp extends StatelessWidget {
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent>? shortcuts;
+  final ScrollBehavior? scrollBehavior;
   final ThemeData? highContrastTheme;
   final ThemeData? highContrastDarkTheme;
   final Map<Type, Action<Intent>>? actions;
@@ -97,6 +98,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.scrollBehavior,
     this.smartManagement = SmartManagement.full,
     this.initialBinding,
     this.useInheritedMediaQuery = false,
@@ -156,6 +158,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.scrollBehavior,
     this.actions,
     this.customTransition,
     this.translationsKeys,
@@ -280,6 +283,7 @@ class GetCupertinoApp extends StatelessWidget {
             showSemanticsDebugger: showSemanticsDebugger,
             debugShowCheckedModeBanner: debugShowCheckedModeBanner,
             shortcuts: shortcuts,
+            scrollBehavior: scrollBehavior,
             useInheritedMediaQuery: useInheritedMediaQuery,
           );
         },
