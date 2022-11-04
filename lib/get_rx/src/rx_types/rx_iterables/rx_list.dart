@@ -115,7 +115,7 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   set value(List<E> val) {
-    super.value = val;
+    value = val;
     refresh();
   }
 
