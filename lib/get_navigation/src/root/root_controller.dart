@@ -104,20 +104,13 @@ class GetMaterialController extends FullLifeCycleController {
           notFoundRoute: config.unknownRoute,
           navigatorKey: config.navigatorKey,
           navigatorObservers: (config.navigatorObservers == null
-              ? <NavigatorObserver>[
-                  GetObserver(config.routingCallback, Get.routing)
-                ]
-              : <NavigatorObserver>[
-                  GetObserver(config.routingCallback, routing),
-                  ...config.navigatorObservers!
-                ]),
+              ? <NavigatorObserver>[GetObserver(config.routingCallback, Get.routing)]
+              : <NavigatorObserver>[GetObserver(config.routingCallback, routing), ...config.navigatorObservers!]),
         );
 
     routeInformationParser = config.routeInformationParser ??
         createInformationParser(
-          initialRoute: config.initialRoute ??
-              config.getPages?.first.name ??
-              cleanRouteName("/${config.home.runtimeType}"),
+          initialRoute: config.initialRoute ?? config.getPages?.first.name ?? cleanRouteName("/${config.home.runtimeType}"),
         );
 
     if (config.locale != null) Get.locale = config.locale;
@@ -140,15 +133,31 @@ class GetMaterialController extends FullLifeCycleController {
 
     Get.isLogEnable = config.enableLog ?? kDebugMode;
     Get.log = config.logWriterCallback ?? defaultLogWriterCallback;
-    defaultTransition = config.defaultTransition;
+    defaultTransition = config.defaultTransition ?? getThemeTransition();
     defaultOpaqueRoute = config.opaqueRoute ?? true;
     defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
-    defaultTransitionDuration =
-        config.transitionDuration ?? Duration(milliseconds: 300);
+    defaultTransitionDuration = config.transitionDuration ?? Duration(milliseconds: 300);
 
     // defaultTransitionCurve = Curves.easeOutQuad;
     // defaultDialogTransitionCurve = Curves.easeOutQuad;
     // defaultDialogTransitionDuration = Duration(milliseconds: 300);
+  }
+
+  getThemeTransition() {
+    final platform = Get.theme.platform;
+    final matchingTransition = Get.theme.pageTransitionsTheme.builders[platform];
+    switch (matchingTransition) {
+      case CupertinoPageTransitionsBuilder():
+        return Transition.cupertino;
+      case ZoomPageTransitionsBuilder():
+        return Transition.zoom;
+      case FadeUpwardsPageTransitionsBuilder():
+        return Transition.fade;
+      case OpenUpwardsPageTransitionsBuilder():
+        return Transition.native;
+      default:
+        return null;
+    }
   }
 
   String cleanRouteName(String name) {
@@ -256,8 +265,7 @@ class GetMaterialController extends FullLifeCycleController {
     List<NavigatorObserver>? navigatorObservers,
     TransitionDelegate<dynamic>? transitionDelegate,
     PopMode backButtonPopMode = PopMode.history,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.reorderRoutes,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode = PreventDuplicateHandlingMode.reorderRoutes,
     GlobalKey<NavigatorState>? navigatorKey,
   }) {
     return GetDelegate(
