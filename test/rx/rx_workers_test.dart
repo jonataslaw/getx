@@ -199,6 +199,11 @@ void main() {
     expect(count, 1);
 
     count = 0;
+    list.remove(2);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+
+    count = 0;
     list.removeWhere((element) => element == 2);
     await Future.delayed(Duration.zero);
     expect(count, 1);
