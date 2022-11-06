@@ -130,7 +130,6 @@ class GetMaterialController extends FullLifeCycleController {
 
     customTransition = config.customTransition;
 
-    //Get.setDefaultDelegate(routerDelegate);
     Get.smartManagement = config.smartManagement;
     config.onInit?.call();
 
@@ -141,13 +140,9 @@ class GetMaterialController extends FullLifeCycleController {
     defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
     defaultTransitionDuration =
         config.transitionDuration ?? Duration(milliseconds: 300);
-
-    // defaultTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionDuration = Duration(milliseconds: 300);
   }
 
-  getThemeTransition() {
+  Transition? getThemeTransition() {
     final platform = Get.theme.platform;
     final matchingTransition =
         Get.theme.pageTransitionsTheme.builders[platform];
@@ -261,8 +256,6 @@ class GetMaterialController extends FullLifeCycleController {
       initialRoute: initialRoute,
     );
   }
-
-  // static GetDelegate? _delegate;
 
   GetDelegate createDelegate({
     GetPage<dynamic>? notFoundRoute,

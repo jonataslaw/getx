@@ -10,10 +10,8 @@ abstract class IHomeProvider {
 class HomeProvider extends GetConnect implements IHomeProvider {
   @override
   void onInit() {
-    httpClient.defaultDecoder = (val) {
-      print(val);
-      return CasesModel.fromJson(val as Map<String, dynamic>);
-    };
+    httpClient.defaultDecoder =
+        (val) => CasesModel.fromJson(val as Map<String, dynamic>);
     httpClient.baseUrl = 'https://api.covid19api.com';
     super.onInit();
   }

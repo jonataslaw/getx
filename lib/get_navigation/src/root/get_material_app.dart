@@ -8,14 +8,6 @@ import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import '../router_report.dart';
 
-
-
-
-
-
-
-
-
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
