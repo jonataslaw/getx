@@ -47,8 +47,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(
-        GetMaterialController.to.rootDelegate.currentConfiguration?.route?.name,
+    expect(Get.rootController.rootDelegate.currentConfiguration?.route?.name,
         '/404');
   });
 

@@ -2,10 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../get_core/get_core.dart';
-import '../../get_instance/src/bindings_interface.dart';
-import '../../get_utils/get_utils.dart';
-import '../get_navigation.dart';
+import '../../get.dart';
 import 'dialog/dialog_route.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
@@ -1259,8 +1256,8 @@ extension GetNavigationExt on GetInterface {
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
       _getxController.routerDelegate as TDelegate?;
 
-
-  GetMaterialController get _getxController => GetMaterialController.to;
+  static final GetMaterialController _getxController =
+      Get.find<GetMaterialController>();
 }
 
 extension OverlayExt on GetInterface {

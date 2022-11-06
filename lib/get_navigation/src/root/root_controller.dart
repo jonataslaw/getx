@@ -70,10 +70,6 @@ class ConfigData {
 class GetMaterialController extends FullLifeCycleController {
   GetMaterialController(this.config);
 
-  static GetMaterialController get to {
-    return Get.find();
-  }
-
   late final RouterDelegate<Object> routerDelegate;
   late final RouteInformationParser<Object> routeInformationParser;
   final ConfigData config;
@@ -91,7 +87,7 @@ class GetMaterialController extends FullLifeCycleController {
     if (config.getPages == null && config.home == null) {
       throw 'You need add pages or home';
     }
-
+    print('route delefate from onInit');
     routerDelegate = config.routerDelegate ??
         createDelegate(
           pages: config.getPages ??
@@ -104,13 +100,20 @@ class GetMaterialController extends FullLifeCycleController {
           notFoundRoute: config.unknownRoute,
           navigatorKey: config.navigatorKey,
           navigatorObservers: (config.navigatorObservers == null
-              ? <NavigatorObserver>[GetObserver(config.routingCallback, Get.routing)]
-              : <NavigatorObserver>[GetObserver(config.routingCallback, routing), ...config.navigatorObservers!]),
+              ? <NavigatorObserver>[
+                  GetObserver(config.routingCallback, Get.routing)
+                ]
+              : <NavigatorObserver>[
+                  GetObserver(config.routingCallback, routing),
+                  ...config.navigatorObservers!
+                ]),
         );
 
     routeInformationParser = config.routeInformationParser ??
         createInformationParser(
-          initialRoute: config.initialRoute ?? config.getPages?.first.name ?? cleanRouteName("/${config.home.runtimeType}"),
+          initialRoute: config.initialRoute ??
+              config.getPages?.first.name ??
+              cleanRouteName("/${config.home.runtimeType}"),
         );
 
     if (config.locale != null) Get.locale = config.locale;
@@ -127,7 +130,6 @@ class GetMaterialController extends FullLifeCycleController {
 
     customTransition = config.customTransition;
 
-    //Get.setDefaultDelegate(routerDelegate);
     Get.smartManagement = config.smartManagement;
     config.onInit?.call();
 
@@ -136,16 +138,14 @@ class GetMaterialController extends FullLifeCycleController {
     defaultTransition = config.defaultTransition ?? getThemeTransition();
     defaultOpaqueRoute = config.opaqueRoute ?? true;
     defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
-    defaultTransitionDuration = config.transitionDuration ?? Duration(milliseconds: 300);
-
-    // defaultTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionDuration = Duration(milliseconds: 300);
+    defaultTransitionDuration =
+        config.transitionDuration ?? Duration(milliseconds: 300);
   }
 
-  getThemeTransition() {
+  Transition? getThemeTransition() {
     final platform = Get.theme.platform;
-    final matchingTransition = Get.theme.pageTransitionsTheme.builders[platform];
+    final matchingTransition =
+        Get.theme.pageTransitionsTheme.builders[platform];
     switch (matchingTransition) {
       case CupertinoPageTransitionsBuilder():
         return Transition.cupertino;
@@ -257,15 +257,14 @@ class GetMaterialController extends FullLifeCycleController {
     );
   }
 
-  // static GetDelegate? _delegate;
-
   GetDelegate createDelegate({
     GetPage<dynamic>? notFoundRoute,
     List<GetPage> pages = const [],
     List<NavigatorObserver>? navigatorObservers,
     TransitionDelegate<dynamic>? transitionDelegate,
     PopMode backButtonPopMode = PopMode.history,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode = PreventDuplicateHandlingMode.reorderRoutes,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
     GlobalKey<NavigatorState>? navigatorKey,
   }) {
     return GetDelegate(
