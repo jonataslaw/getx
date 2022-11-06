@@ -9,6 +9,8 @@ void main() {
   runApp(MyApp());
 }
 
+class Controller extends GetxController {}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
