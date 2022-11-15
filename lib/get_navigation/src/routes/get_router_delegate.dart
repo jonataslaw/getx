@@ -784,12 +784,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     //Returning false will cause the entire app to be popped.
     final wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
-    final _popped = await _pop(popMode ?? backButtonPopMode, result);
-    notifyListeners();
-    if (_popped != null) {
-      //emulate the old pop with result
+
+    if (_canPop(popMode ?? backButtonPopMode)) {
+      await _pop(popMode ?? backButtonPopMode, result); 
+      notifyListeners();
       return true;
     }
+
     return false;
   }
 
