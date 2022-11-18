@@ -14,6 +14,8 @@ class Request<T> {
 
   final Decoder<T>? decoder;
 
+  final ResponseInterceptor<T>? responseInterceptor;
+
   /// The Http Method from this [Request]
   /// ex: `GET`,`POST`,`PUT`,`DELETE`
   final String method;
@@ -44,6 +46,7 @@ class Request<T> {
     required this.files,
     required this.persistentConnection,
     required this.decoder,
+    this.responseInterceptor,
   });
 
   factory Request({
@@ -57,22 +60,23 @@ class Request<T> {
     FormData? files,
     bool persistentConnection = true,
     Decoder<T>? decoder,
+    ResponseInterceptor<T>? responseInterceptor,
   }) {
     if (followRedirects) {
       assert(maxRedirects > 0);
     }
     return Request._(
-      url: url,
-      method: method,
-      bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
-      headers: Map.from(headers),
-      followRedirects: followRedirects,
-      maxRedirects: maxRedirects,
-      contentLength: contentLength,
-      files: files,
-      persistentConnection: persistentConnection,
-      decoder: decoder,
-    );
+        url: url,
+        method: method,
+        bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
+        headers: Map.from(headers),
+        followRedirects: followRedirects,
+        maxRedirects: maxRedirects,
+        contentLength: contentLength,
+        files: files,
+        persistentConnection: persistentConnection,
+        decoder: decoder,
+        responseInterceptor: responseInterceptor);
   }
 
   Request<T> copyWith({
@@ -87,6 +91,7 @@ class Request<T> {
     bool? persistentConnection,
     Decoder<T>? decoder,
     bool appendHeader = true,
+    ResponseInterceptor<T>? responseInterceptor,
   }) {
     // If appendHeader is set to true, we will merge origin headers with that
     if (appendHeader && headers != null) {
@@ -94,23 +99,22 @@ class Request<T> {
     }
 
     return Request<T>._(
-      url: url ?? this.url,
-      method: method ?? this.method,
-      bodyBytes: bodyBytes ?? this.bodyBytes,
-      headers: headers == null ? this.headers : Map.from(headers),
-      followRedirects: followRedirects ?? this.followRedirects,
-      maxRedirects: maxRedirects ?? this.maxRedirects,
-      contentLength: contentLength ?? this.contentLength,
-      files: files ?? this.files,
-      persistentConnection: persistentConnection ?? this.persistentConnection,
-      decoder: decoder ?? this.decoder,
-    );
+        url: url ?? this.url,
+        method: method ?? this.method,
+        bodyBytes: bodyBytes ?? this.bodyBytes,
+        headers: headers == null ? this.headers : Map.from(headers),
+        followRedirects: followRedirects ?? this.followRedirects,
+        maxRedirects: maxRedirects ?? this.maxRedirects,
+        contentLength: contentLength ?? this.contentLength,
+        files: files ?? this.files,
+        persistentConnection: persistentConnection ?? this.persistentConnection,
+        decoder: decoder ?? this.decoder,
+        responseInterceptor: responseInterceptor ?? this.responseInterceptor);
   }
 }
 
 extension BodyBytesStream on Stream<List<int>> {
-  static Stream<List<int>> fromBytes(List<int> bytes) =>
-      Stream.fromIterable([bytes]);
+  static Stream<List<int>> fromBytes(List<int> bytes) => Stream.value(bytes);
 
   Future<Uint8List> toBytes() {
     var completer = Completer<Uint8List>();

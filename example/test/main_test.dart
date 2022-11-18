@@ -25,7 +25,6 @@ class MockRepositorySuccess implements IHomeRepository {
           totalRecovered: 0),
       countries: [],
       date: DateTime.now(),
-      id: '',
       message: '',
     );
   }

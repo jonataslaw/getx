@@ -723,7 +723,10 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                 route.alignment, animation, secondaryAnimation, child);
           }
 
-          return PageTransitionsTheme().buildTransitions(
+          PageTransitionsTheme pageTransitionsTheme =
+              Theme.of(context).pageTransitionsTheme;
+
+          return pageTransitionsTheme.buildTransitions(
               route,
               context,
               iosAnimation,

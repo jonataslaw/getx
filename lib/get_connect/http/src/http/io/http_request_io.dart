@@ -8,6 +8,7 @@ import '../../response/response.dart';
 import '../interface/request_base.dart';
 import '../utils/body_decoder.dart';
 
+
 /// A `dart:io` implementation of `HttpRequestBase`.
 class HttpRequestImpl extends HttpRequestBase {
   io.HttpClient? _httpClient;
@@ -57,6 +58,10 @@ class HttpRequestImpl extends HttpRequestBase {
       });
 
       final bodyBytes = (response);
+      
+      final interceptionResponse = await request.responseInterceptor?.call(request, T, response);
+      if(interceptionResponse != null) return interceptionResponse;
+        
       final stringBody = await bodyBytesToString(bodyBytes, headers);
 
       final body = bodyDecoded<T>(
