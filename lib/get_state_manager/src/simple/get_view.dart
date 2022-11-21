@@ -81,6 +81,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
     }
 
     GetWidget._cache[widget!] = _controller;
+
     super.onInit();
   }
 

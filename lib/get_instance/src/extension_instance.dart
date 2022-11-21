@@ -20,6 +20,11 @@ class InstanceInfo {
     required this.isPrepared,
     required this.isInit,
   });
+
+  @override
+  String toString() {
+    return 'InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)';
+  }
 }
 
 extension Inst on GetInterface {

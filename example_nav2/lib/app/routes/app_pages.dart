@@ -76,14 +76,14 @@ class AppPages {
               transition: Transition.cupertino,
               showCupertinoParallax: true,
               participatesInRootNavigator: false,
-              bindings: [ProductsBinding()],
+              bindings: [ProductsBinding(), ProductDetailsBinding()],
               children: [
                 GetPage(
                   name: _Paths.productDetails,
-                    transition: Transition.cupertino,
-                         showCupertinoParallax: true,
+                  transition: Transition.cupertino,
+                  showCupertinoParallax: true,
                   page: () => ProductDetailsView(),
-                  bindings: [ProductDetailsBinding()],
+                  bindings: [],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
