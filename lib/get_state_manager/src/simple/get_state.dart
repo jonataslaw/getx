@@ -463,6 +463,12 @@ class BindElement<T> extends InheritedElement {
         }
       }
     } else {
+      if (widget.create != null) {
+        _controllerBuilder = () => widget.create!.call(this);
+        Get.create<T>(_controllerBuilder!, tag: widget.tag, permanent: false);
+      } else {
+        _controllerBuilder = widget.init;
+      }
       _controllerBuilder =
           (widget.create != null ? () => widget.create!.call(this) : null) ??
               widget.init;

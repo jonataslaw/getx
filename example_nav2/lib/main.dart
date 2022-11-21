@@ -1,15 +1,20 @@
+import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'app/modules/splash/controllers/splash_service.dart';
 import 'app/routes/app_pages.dart';
-import 'services/auth_service.dart';
+
+class Controller {}
 
 void main() {
   runApp(
     GetMaterialApp(
       title: "Application",
       binds: [
+        Bind.create<Controller>(
+          (_) => Controller(),
+        ),
         Bind.put(SplashService()),
         Bind.put(AuthService()),
       ],

@@ -74,13 +74,20 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   void onInit() {
     info = Get.getInstanceInfo<S>(tag: widget!.tag);
 
+    print('info: $info');
+
     _isCreator = info!.isPrepared && info!.isCreate;
 
     if (info!.isRegistered) {
       _controller = Get.find<S>(tag: widget!.tag);
     }
 
+    print('controller: $_controller');
+    print('widget: $widget');
+
     GetWidget._cache[widget!] = _controller;
+    print('cache: ${GetWidget._cache}');
+
     super.onInit();
   }
 
