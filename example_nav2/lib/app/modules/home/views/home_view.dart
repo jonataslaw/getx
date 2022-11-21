@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../main.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
@@ -9,8 +8,6 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final value = Get.find<Controller>();
-    print(value);
     return GetRouterOutlet.builder(
       routerDelegate: Get.nestedKey(Routes.home),
       builder: (context) {
