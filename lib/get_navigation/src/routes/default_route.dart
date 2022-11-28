@@ -110,6 +110,7 @@ class GetPageRoute<T> extends PageRoute<T>
     super.dispose();
     final middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
+    _child = null;
   }
 
   Widget? _child;
