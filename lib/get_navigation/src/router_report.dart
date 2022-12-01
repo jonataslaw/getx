@@ -119,6 +119,10 @@ class RouterReportManager<T> {
       }
     }
 
+    if (_routesKey[routeName]?.isEmpty ?? false) {
+      _routesKey.remove(routeName);
+    }
+
     keysToRemove.clear();
   }
 }
