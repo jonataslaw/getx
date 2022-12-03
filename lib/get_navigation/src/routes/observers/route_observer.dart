@@ -62,7 +62,7 @@ class GetObserver extends NavigatorObserver {
       // Only PageRoute is allowed to change current value
       if (previousRoute is PageRoute) {
         value.current = _extractRouteName(previousRoute) ?? '';
-        value.previous = newRoute.name ?? '';
+        value.previous = currentRoute.name ?? '';
       } else if (value.previous.isNotEmpty) {
         value.current = value.previous;
       }
