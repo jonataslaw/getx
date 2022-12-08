@@ -60,6 +60,7 @@ class GetCupertinoApp extends StatelessWidget {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
@@ -124,6 +125,7 @@ class GetCupertinoApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
+        routerConfig = null,
         super(key: key);
 
   static String _cleanRouteName(String name) {
@@ -143,6 +145,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.routeInformationProvider,
     this.routeInformationParser,
     this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -248,6 +251,7 @@ class GetCupertinoApp extends StatelessWidget {
           routeInformationParser: controller.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
+          routerConfig: routerConfig,
           key: controller.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
