@@ -124,4 +124,8 @@ extension GetStringUtils on String {
     final path = startsWith('/') ? this : '/$this';
     return GetUtils.createPath(path, segments);
   }
+
+  /// capitalize only first letter in String words to upper case
+  String capitalizeAllWordsFirstLetter() =>
+      GetUtils.capitalizeAllWordsFirstLetter(this);
 }

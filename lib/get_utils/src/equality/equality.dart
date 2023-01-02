@@ -8,7 +8,8 @@ mixin Equality {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        const DeepCollectionEquality().equals(props, other.props);
+        runtimeType == other.runtimeType &&
+            const DeepCollectionEquality().equals(props, other.props);
   }
 
   @override

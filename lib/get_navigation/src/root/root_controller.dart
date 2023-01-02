@@ -70,10 +70,6 @@ class ConfigData {
 class GetMaterialController extends FullLifeCycleController {
   GetMaterialController(this.config);
 
-  static GetMaterialController get to {
-    return Get.find();
-  }
-
   late final RouterDelegate<Object> routerDelegate;
   late final RouteInformationParser<Object> routeInformationParser;
   final ConfigData config;
@@ -91,7 +87,7 @@ class GetMaterialController extends FullLifeCycleController {
     if (config.getPages == null && config.home == null) {
       throw 'You need add pages or home';
     }
-
+    print('route delefate from onInit');
     routerDelegate = config.routerDelegate ??
         createDelegate(
           pages: config.getPages ??
@@ -134,21 +130,34 @@ class GetMaterialController extends FullLifeCycleController {
 
     customTransition = config.customTransition;
 
-    //Get.setDefaultDelegate(routerDelegate);
     Get.smartManagement = config.smartManagement;
     config.onInit?.call();
 
     Get.isLogEnable = config.enableLog ?? kDebugMode;
     Get.log = config.logWriterCallback ?? defaultLogWriterCallback;
-    defaultTransition = config.defaultTransition;
+    defaultTransition = config.defaultTransition ?? getThemeTransition();
     defaultOpaqueRoute = config.opaqueRoute ?? true;
     defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
     defaultTransitionDuration =
         config.transitionDuration ?? Duration(milliseconds: 300);
+  }
 
-    // defaultTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionCurve = Curves.easeOutQuad;
-    // defaultDialogTransitionDuration = Duration(milliseconds: 300);
+  Transition? getThemeTransition() {
+    final platform = Get.theme.platform;
+    final matchingTransition =
+        Get.theme.pageTransitionsTheme.builders[platform];
+    switch (matchingTransition) {
+      case CupertinoPageTransitionsBuilder():
+        return Transition.cupertino;
+      case ZoomPageTransitionsBuilder():
+        return Transition.zoom;
+      case FadeUpwardsPageTransitionsBuilder():
+        return Transition.fade;
+      case OpenUpwardsPageTransitionsBuilder():
+        return Transition.native;
+      default:
+        return null;
+    }
   }
 
   String cleanRouteName(String name) {
@@ -247,8 +256,6 @@ class GetMaterialController extends FullLifeCycleController {
       initialRoute: initialRoute,
     );
   }
-
-  // static GetDelegate? _delegate;
 
   GetDelegate createDelegate({
     GetPage<dynamic>? notFoundRoute,

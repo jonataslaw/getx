@@ -206,7 +206,7 @@ class GetUtils {
 
   /// Checks if string is URL.
   static bool isURL(String s) => hasMatch(s,
-      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,7}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
 
   /// Checks if string is email.
   static bool isEmail(String s) => hasMatch(s,
@@ -593,6 +593,44 @@ class GetUtils {
     }
 
     return numericOnlyStr;
+  }
+
+  /// Capitalize only the first letter of each word in a string
+  /// Example: getx will make it easy  => Getx Will Make It Easy
+  /// Example 2 : this is an example text => This Is An Example Text
+  static String capitalizeAllWordsFirstLetter(String s) {
+    String lowerCasedString = s.toLowerCase();
+    String stringWithoutExtraSpaces = lowerCasedString.trim();
+
+    if (stringWithoutExtraSpaces.isEmpty) {
+      return "";
+    }
+    if (stringWithoutExtraSpaces.length == 1) {
+      return stringWithoutExtraSpaces.toUpperCase();
+    }
+
+    List<String> stringWordsList = stringWithoutExtraSpaces.split(" ");
+    List<String> capitalizedWordsFirstLetter = stringWordsList
+        .map(
+          (word) {
+            if (word.trim().isEmpty) return "";
+            return word.trim();
+          },
+        )
+        .where(
+          (word) => word != "",
+        )
+        .map(
+          (word) {
+            if (word.startsWith(RegExp(r'[\n\t\r]'))) {
+              return word;
+            }
+            return word[0].toUpperCase() + word.substring(1).toLowerCase();
+          },
+        )
+        .toList();
+    String finalResult = capitalizedWordsFirstLetter.join(" ");
+    return finalResult;
   }
 
   static bool hasMatch(String? value, String pattern) {

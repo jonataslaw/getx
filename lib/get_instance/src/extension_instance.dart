@@ -20,6 +20,11 @@ class InstanceInfo {
     required this.isPrepared,
     required this.isInit,
   });
+
+  @override
+  String toString() {
+    return 'InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)';
+  }
 }
 
 extension Inst on GetInterface {
@@ -170,9 +175,13 @@ extension Inst on GetInterface {
     final isInit = _singl[key]!.isInit;
     S? i;
     if (!isInit) {
-      i = _startController<S>(tag: name);
-      if (_singl[key]!.isSingleton!) {
+      final isSingleton = _singl[key]?.isSingleton ?? false;
+      if (isSingleton) {
         _singl[key]!.isInit = true;
+      }
+      i = _startController<S>(tag: name);
+
+      if (isSingleton) {
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
           RouterReportManager.instance
               .reportDependencyLinkedToRoute(_getKey(S, name));

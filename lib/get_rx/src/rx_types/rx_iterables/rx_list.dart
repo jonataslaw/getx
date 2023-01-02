@@ -70,6 +70,13 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   @override
+  bool remove(Object? element) {
+    final removed = value.remove(element);
+    refresh();
+    return removed;
+  }
+
+  @override
   void removeWhere(bool Function(E element) test) {
     value.removeWhere(test);
     refresh();
@@ -105,6 +112,12 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   Iterable<E> get reversed => value.reversed;
+
+  @override
+  set value(List<E> val) {
+    value = val;
+    refresh();
+  }
 
   @override
   Iterable<E> where(bool Function(E) test) {
