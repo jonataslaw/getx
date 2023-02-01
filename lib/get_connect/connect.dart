@@ -12,7 +12,7 @@ export 'http/src/multipart/multipart_file.dart';
 export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
-abstract class GetConnectInterface with GetLifeCycleBase {
+abstract class GetConnectInterface with GetLifeCycleMixin {
   List<GetSocket>? sockets;
   GetHttpClient get httpClient;
 
@@ -33,6 +33,7 @@ abstract class GetConnectInterface with GetLifeCycleBase {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
   });
+
   Future<Response<T>> post<T>(
     String url,
     dynamic body, {
@@ -95,14 +96,15 @@ class GetConnect extends GetConnectInterface {
     this.timeout = const Duration(seconds: 5),
     this.followRedirects = true,
     this.maxRedirects = 5,
+    this.sendUserAgent = false,
     this.maxAuthRetries = 1,
     this.allowAutoSignedCert = false,
-  }) {
-    $configureLifeCycle();
-  }
+    this.withCredentials = false,
+  });
 
   bool allowAutoSignedCert;
   String userAgent;
+  bool sendUserAgent;
   String? baseUrl;
   String defaultContentType = 'application/json; charset=utf-8';
   bool followRedirects;
@@ -111,23 +113,27 @@ class GetConnect extends GetConnectInterface {
   Decoder? defaultDecoder;
   Duration timeout;
   List<TrustedCertificate>? trustedCertificates;
+  String Function(Uri url)? findProxy;
   GetHttpClient? _httpClient;
   List<GetSocket>? _sockets;
+  bool withCredentials;
 
   @override
   List<GetSocket> get sockets => _sockets ??= <GetSocket>[];
 
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
-        userAgent: userAgent,
-        timeout: timeout,
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        maxAuthRetries: maxAuthRetries,
-        allowAutoSignedCert: allowAutoSignedCert,
-        baseUrl: baseUrl,
-        trustedCertificates: trustedCertificates,
-      );
+      userAgent: userAgent,
+      sendUserAgent: sendUserAgent,
+      timeout: timeout,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      maxAuthRetries: maxAuthRetries,
+      allowAutoSignedCert: allowAutoSignedCert,
+      baseUrl: baseUrl,
+      trustedCertificates: trustedCertificates,
+      withCredentials: withCredentials,
+      findProxy: findProxy);
 
   @override
   Future<Response<T>> get<T>(
@@ -300,14 +306,13 @@ class GetConnect extends GetConnectInterface {
   }) async {
     try {
       final res = await post(
-        _concatUrl(url),
+        url,
         {'query': query, 'variables': variables},
         headers: headers,
       );
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
-        // return GraphQLResponse<T>(body: res.body['data'] as T);
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
@@ -316,7 +321,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T?);
+      return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
@@ -336,14 +341,13 @@ class GetConnect extends GetConnectInterface {
   }) async {
     try {
       final res = await post(
-        _concatUrl(url),
+        url,
         {'query': mutation, 'variables': variables},
         headers: headers,
       );
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
-        // return GraphQLResponse<T>(body: res.body['data'] as T);
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
@@ -352,7 +356,7 @@ class GetConnect extends GetConnectInterface {
                     ))
                 .toList());
       }
-      return GraphQLResponse<T>(body: res.body['data'] as T?);
+      return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(

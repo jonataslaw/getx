@@ -1,9 +1,9 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Languages: English (this file), [Indonesian](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md), [French](README-fr.md).**
-
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
-[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
+[![popularity](https://img.shields.io/pub/popularity/get?logo=dart)](https://pub.dev/packages/get/score)
+[![likes](https://img.shields.io/pub/likes/get?logo=dart)](https://pub.dev/packages/get/score)
+[![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -15,6 +15,29 @@
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
+
+
+<div align="center">
+
+**Languages:**
+
+  
+[![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
+[![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![Urdu](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![Chinese](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![Portuguese](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![Spanish](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
+[![Russian](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
+[![Polish](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
+[![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
+[![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
+[![Hindi](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
+  
+  
+</div>
 
 - [About Get](#about-get)
 - [Installing](#installing)
@@ -119,7 +142,7 @@ void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
 - Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step in only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- Note²: This step is only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
 
 - Step 2:
   Create your business logic class and place all variables, methods and controllers inside it.
@@ -494,7 +517,6 @@ class HomeProvider extends GetConnect {
     //HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
-  }
 
   @override
   Future<Response<CasesModel>> getCases(String path) => get(path);
@@ -509,7 +531,7 @@ The GetPage has now new property that takes a list of GetMiddleWare and run them
 
 ### Priority
 
-The Order of the Middlewares to run can pe set by the priority in the GetMiddleware.
+The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
 
 ```dart
 final middlewares = [
@@ -527,7 +549,7 @@ those middlewares will be run in this order **-8 => 2 => 4 => 5**
 This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }
@@ -1078,6 +1100,74 @@ class SettingsService extends GetxService {
 The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
 "Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
+
+
+### Tests
+
+You can test your controllers like any other class, including their lifecycles:
+
+```dart
+class Controller extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    //Change value to name2
+    name.value = 'name2';
+  }
+
+  @override
+  void onClose() {
+    name.value = '';
+    super.onClose();
+  }
+
+  final name = 'name1'.obs;
+
+  void changeName() => name.value = 'name3';
+}
+
+void main() {
+  test('''
+Test the state of the reactive variable "name" across all of its lifecycles''',
+      () {
+    /// You can test the controller without the lifecycle,
+    /// but it's not recommended unless you're not using
+    ///  GetX dependency injection
+    final controller = Controller();
+    expect(controller.name.value, 'name1');
+
+    /// If you are using it, you can test everything,
+    /// including the state of the application after each lifecycle.
+    Get.put(controller); // onInit was called
+    expect(controller.name.value, 'name2');
+
+    /// Test your functions
+    controller.changeName();
+    expect(controller.name.value, 'name3');
+
+    /// onClose was called
+    Get.delete<Controller>();
+
+    expect(controller.name.value, '');
+  });
+}
+```
+
+#### Tips
+
+##### Mockito or mocktail
+If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
+
+```dart
+class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
+```
+
+##### Using Get.reset()
+If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
+
+##### Get.testMode 
+if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
+
 
 # Breaking changes from 2.0
 

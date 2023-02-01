@@ -1,12 +1,9 @@
 part of rx_types;
 
 /// Create a list similar to `List<T>`
-class RxList<E> extends ListMixin<E>
-    with NotifyManager<List<E>>, RxObjectMixin<List<E>>
-    implements RxInterface<List<E>> {
-  RxList([List<E> initial = const []]) {
-    _value = List.from(initial);
-  }
+class RxList<E> extends GetListenable<List<E>>
+    with ListMixin<E>, RxObjectMixin<List<E>> {
+  RxList([List<E> initial = const []]) : super(initial);
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));
@@ -27,7 +24,7 @@ class RxList<E> extends ListMixin<E>
   }
 
   /// Generates a list of values.
-  factory RxList.generate(int length, E generator(int index),
+  factory RxList.generate(int length, E Function(int index) generator,
       {bool growable = true}) {
     return RxList(List.generate(length, generator, growable: growable));
   }
@@ -42,7 +39,7 @@ class RxList<E> extends ListMixin<E>
 
   @override
   void operator []=(int index, E val) {
-    _value[index] = val;
+    value[index] = val;
     refresh();
   }
 
@@ -61,43 +58,66 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  void add(E item) {
-    _value.add(item);
+  void add(E element) {
+    value.add(element);
     refresh();
   }
 
   @override
-  void addAll(Iterable<E> item) {
-    _value.addAll(item);
+  void addAll(Iterable<E> iterable) {
+    value.addAll(iterable);
+    refresh();
+  }
+
+  @override
+  bool remove(Object? element) {
+    final removed = value.remove(element);
+    refresh();
+    return removed;
+  }
+
+  @override
+  void removeWhere(bool Function(E element) test) {
+    value.removeWhere(test);
+    refresh();
+  }
+
+  @override
+  void retainWhere(bool Function(E element) test) {
+    value.retainWhere(test);
     refresh();
   }
 
   @override
   int get length => value.length;
 
-  @override
-  @protected
-  List<E> get value {
-    if (RxInterface.proxy != null) {
-      RxInterface.proxy!.addListener(subject);
-    }
-    return _value;
-  }
+  // @override
+  // @protected
+  // List<E> get value {
+  //   RxInterface.proxy?.addListener(subject);
+  //   return subject.value;
+  // }
 
   @override
   set length(int newLength) {
-    _value.length = newLength;
+    value.length = newLength;
     refresh();
   }
 
   @override
   void insertAll(int index, Iterable<E> iterable) {
-    _value.insertAll(index, iterable);
+    value.insertAll(index, iterable);
     refresh();
   }
 
   @override
   Iterable<E> get reversed => value.reversed;
+
+  @override
+  set value(List<E> val) {
+    value = val;
+    refresh();
+  }
 
   @override
   Iterable<E> where(bool Function(E) test) {
@@ -110,8 +130,8 @@ class RxList<E> extends ListMixin<E>
   }
 
   @override
-  void sort([int compare(E a, E b)?]) {
-    _value.sort(compare);
+  void sort([int Function(E a, E b)? compare]) {
+    value.sort(compare);
     refresh();
   }
 }
@@ -129,7 +149,7 @@ extension ListExtension<E> on List<E> {
   //   if (item != null) addAll(item);
   // }
 
-  /// Add [item] to [List<E>] only if [condition] is true.
+  /// Add [item] to List<E> only if [condition] is true.
   void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) add(item);
@@ -147,16 +167,18 @@ extension ListExtension<E> on List<E> {
     //   (this as RxList)._value;
     // }
 
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    // if (this is RxList) {
-    //   (this as RxList)._value;
-    // }
-    clear();
+    if (this is RxList) {
+      (this as RxList).value.clear();
+    }
+    //clear();
     addAll(items);
   }
 }

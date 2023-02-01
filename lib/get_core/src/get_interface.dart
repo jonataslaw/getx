@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'log.dart';
 import 'smart_management.dart';
 
@@ -5,7 +7,6 @@ import 'smart_management.dart';
 /// class through extensions
 abstract class GetInterface {
   SmartManagement smartManagement = SmartManagement.full;
-  String? reference;
-  bool isLogEnable = true;
+  bool isLogEnable = kDebugMode;
   LogWriterCallback log = defaultLogWriterCallback;
 }

@@ -5,7 +5,7 @@
 /// not being used and were not set to be permanent. In the majority
 /// of the cases you will want to keep this config untouched.
 /// If you new to GetX then don't change this.
-/// [SmartManagement.onlyBuilders] only controllers started in init:
+/// [SmartManagement.onlyBuilder] only controllers started in init:
 /// or loaded into a Binding with Get.lazyPut() will be disposed. If you use
 /// Get.put() or Get.putAsync() or any other approach, SmartManagement
 /// will not have permissions to exclude this dependency. With the default

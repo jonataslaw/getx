@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../get.dart';
+import '../router_report.dart';
+
 class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   GetModalBottomSheetRoute({
     this.builder,
@@ -18,8 +21,9 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     RouteSettings? settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
-  })  : name = "BOTTOMSHEET: ${builder.hashCode}",
-        super(settings: settings);
+  }) : super(settings: settings) {
+    RouterReportManager.instance.reportCurrentRoute(this);
+  }
   final bool? isPersistent;
   final WidgetBuilder? builder;
   final ThemeData? theme;
@@ -31,7 +35,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color? modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
-  final String name;
+  // final String name;
   final Duration enterBottomSheetDuration;
   final Duration exitBottomSheetDuration;
   // remove safearea from top
@@ -50,6 +54,12 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   Color get barrierColor => modalBarrierColor ?? Colors.black54;
 
   AnimationController? _animationController;
+
+  @override
+  void dispose() {
+    RouterReportManager.instance.reportRouteDispose(this);
+    super.dispose();
+  }
 
   @override
   AnimationController createAnimationController() {

@@ -114,8 +114,8 @@ class Controller extends GetController {
 
   /// Você não precisa disso. Eu recomendo usar isso apenas
   /// porque a sintaxe é mais fácil.
-  /// com o método estático: Controller.to.counter();
-  /// sem o método estático: Get.find<Controller>();
+  /// com o método estático: Controller.to.increment();
+  /// sem o método estático: Get.find<Controller>().increment();
   /// Não há diferença em performance, nem efeito colateral por usar esse sintaxe. Só uma não precisa da tipage, e a outra forma a IDE vai autocompletar.
   static Controller get to => Get.find(); // adicione esta linha
 

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:html' as html;
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
 
 import '../../certificates/certificates.dart';
 import '../../exceptions/exceptions.dart';
@@ -13,22 +14,28 @@ class HttpRequestImpl implements HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
+    this.withCredentials = false,
+    String Function(Uri url)? findProxy,
   });
 
   /// The currently active XHRs.
-  final _xhrs = <html.HttpRequest>{};
+  final _xhrs = <HttpRequest>{};
 
   ///This option requires that you submit credentials for requests
   ///on different sites. The default is false
-  bool withCredentials = false;
+  final bool withCredentials;
+
+  @override
+  Duration? timeout;
 
   /// Sends an HTTP request and asynchronously returns the response.
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var bytes = await request.bodyBytes.toBytes();
-    html.HttpRequest xhr;
+    HttpRequest xhr;
 
-    xhr = html.HttpRequest()
+    xhr = HttpRequest()
+      ..timeout = timeout?.inMilliseconds
       ..open(request.method, '${request.url}', async: true); // check this
 
     _xhrs.add(xhr);
@@ -40,8 +47,8 @@ class HttpRequestImpl implements HttpRequestBase {
 
     var completer = Completer<Response<T>>();
     xhr.onLoad.first.then((_) {
-      var blob = xhr.response as html.Blob? ?? html.Blob([]);
-      var reader = html.FileReader();
+      var blob = xhr.response as Blob? ?? Blob([]);
+      var reader = FileReader();
 
       reader.onLoad.first.then((_) async {
         var bodyBytes = BodyBytesStream.fromBytes(reader.result as List<int>);

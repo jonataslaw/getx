@@ -1,8 +1,11 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_Языки: Русский (этот файл), [индонезийский](README.id-ID.md), [урду](README.ur-PK.md), [Английский](README.md), [Китайский](README.zh-cn.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md), [Польский](README.pl.md), [Kорейский](README.ko-kr.md), [French](README-fr.md)._
+_Языки: Русский (этот файл), [вьетнамский](README-vi.md), [индонезийский](README.id-ID.md), [урду](README.ur-PK.md), [Английский](README.md), [Китайский](README.zh-cn.md), [Бразильский Португальский](README.pt-br.md), [Испанский](README-es.md), [Польский](README.pl.md), [Kорейский](README.ko-kr.md), [French](README-fr.md)._
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
+[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
+[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
+[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -400,7 +403,7 @@ Get.rawRoute
 // получить доступ к Rounting API из GetObserver
 Get.routing
 
-// проверить, открыт ли снэкбар
+// проверить, открыт ли снекбар
 Get.isSnackbarOpen
 
 // открыт ли диалог
@@ -443,10 +446,10 @@ GetPlatform.isWeb
 Get.height
 Get.width
 
-// Текущий котекст навигации
+// Текущий контекст навигации
 Get.context
 
-// Получить контекст показанного снэкбара/диалога/bottomsheets в любом месте вызова.
+// Получить контекст показанного снекбара/диалога/bottomsheets в любом месте вызова.
 Get.contextOverlay
 
 // Внимание: методы ниже являются расширениями класса BuildContext.

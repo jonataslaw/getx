@@ -1,7 +1,7 @@
 part of rx_types;
 
 extension RxStringExt on Rx<String> {
-  String operator +(String val) => _value + val;
+  String operator +(String val) => value + val;
 
   int compareTo(String other) {
     return value.compareTo(other);
@@ -125,7 +125,7 @@ extension RxStringExt on Rx<String> {
 }
 
 extension RxnStringExt on Rx<String?> {
-  String operator +(String val) => (_value ?? '') + val;
+  String operator +(String val) => (value ?? '') + val;
 
   int? compareTo(String other) {
     return value?.compareTo(other);
@@ -270,7 +270,7 @@ class RxString extends Rx<String> implements Comparable<String>, Pattern {
 
 /// Rx class for `String` Type.
 class RxnString extends Rx<String?> implements Comparable<String>, Pattern {
-  RxnString(String? initial) : super(initial);
+  RxnString([String? initial]) : super(initial);
 
   @override
   Iterable<Match> allMatches(String string, [int start = 0]) {

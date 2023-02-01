@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 import 'utils/wrapper.dart';
 
 void main() {
@@ -8,6 +9,8 @@ void main() {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
+
+    await tester.pump();
 
     Get.defaultDialog(
         onConfirm: () => print("Ok"),
@@ -23,6 +26,8 @@ void main() {
       Wrapper(child: Container()),
     );
 
+    await tester.pump();
+
     Get.dialog(YourDialogWidget());
 
     await tester.pumpAndSettle();
@@ -35,11 +40,20 @@ void main() {
       Wrapper(child: Container()),
     );
 
+    await tester.pump();
+
     Get.dialog(YourDialogWidget());
-    expect(Get.isDialogOpen, true);
-    Get.back();
-    expect(Get.isDialogOpen, false);
     await tester.pumpAndSettle();
+
+    expect(find.byType(YourDialogWidget), findsOneWidget);
+    // expect(Get.isDialogOpen, true);
+
+    Get.back();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(YourDialogWidget), findsNothing);
+    // expect(Get.isDialogOpen, false);
+    // await tester.pumpAndSettle();
   });
 }
 

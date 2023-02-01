@@ -68,7 +68,7 @@ class GetUtils {
   /// "value":value==null?null:value; someVar.nil will force the null type
   /// if the var is null or undefined.
   /// `nil` taken from ObjC just to have a shorter sintax.
-  static dynamic nil(dynamic s) => s == null ? null : s;
+  static dynamic nil(dynamic s) => s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
   static bool? isNullOrBlank(dynamic value) {
@@ -206,7 +206,7 @@ class GetUtils {
 
   /// Checks if string is URL.
   static bool isURL(String s) => hasMatch(s,
-      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,7}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
 
   /// Checks if string is email.
   static bool isEmail(String s) => hasMatch(s,
@@ -270,7 +270,7 @@ class GetUtils {
   }
 
   /// Checks if all data have same value.
-  /// Example: 111111 -> true, wwwww -> true, [1,1,1,1] -> true
+  /// Example: 111111 -> true, wwwww -> true, 1,1,1,1 -> true
   static bool isOneAKind(dynamic value) {
     if ((value is String || value is List) && !isNullOrBlank(value)!) {
       final first = value[0];
@@ -331,13 +331,6 @@ class GetUtils {
     return length >= maxLength;
   }
 
-  /// Checks if length of data is LOWER than maxLength.
-  ///
-  /// This method is deprecated, use [isLengthLessThan] instead
-  @deprecated
-  static bool isLengthLowerThan(dynamic value, int maxLength) =>
-      isLengthLessThan(value, maxLength);
-
   /// Checks if length of data is LESS than maxLength.
   static bool isLengthLessThan(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
@@ -347,13 +340,6 @@ class GetUtils {
 
     return length < maxLength;
   }
-
-  /// Checks if length of data is LOWER OR EQUAL to maxLength.
-  ///
-  /// This method is deprecated, use [isLengthLessOrEqual] instead
-  @deprecated
-  static bool isLengthLowerOrEqual(dynamic value, int maxLength) =>
-      isLengthLessOrEqual(value, maxLength);
 
   /// Checks if length of data is LESS OR EQUAL to maxLength.
   static bool isLengthLessOrEqual(dynamic value, int maxLength) {
@@ -551,6 +537,45 @@ class GetUtils {
     return newString[0].toLowerCase() + newString.substring(1);
   }
 
+  /// credits to "ReCase" package.
+  static final RegExp _upperAlphaRegex = RegExp(r'[A-Z]');
+  static final _symbolSet = {' ', '.', '/', '_', '\\', '-'};
+  static List<String> _groupIntoWords(String text) {
+    var sb = StringBuffer();
+    var words = <String>[];
+    var isAllCaps = text.toUpperCase() == text;
+
+    for (var i = 0; i < text.length; i++) {
+      var char = text[i];
+      var nextChar = i + 1 == text.length ? null : text[i + 1];
+      if (_symbolSet.contains(char)) {
+        continue;
+      }
+      sb.write(char);
+      var isEndOfWord = nextChar == null ||
+          (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
+          _symbolSet.contains(nextChar);
+      if (isEndOfWord) {
+        words.add('$sb');
+        sb.clear();
+      }
+    }
+    return words;
+  }
+
+  /// snake_case
+  static String? snakeCase(String? text, {String separator = '_'}) {
+    if (isNullOrBlank(text)!) {
+      return null;
+    }
+    return _groupIntoWords(text!)
+        .map((word) => word.toLowerCase())
+        .join(separator);
+  }
+
+  /// param-case
+  static String? paramCase(String? text) => snakeCase(text, separator: '-');
+
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
   /// If firstword only is true, then the example return is "12312"
@@ -568,6 +593,44 @@ class GetUtils {
     }
 
     return numericOnlyStr;
+  }
+
+  /// Capitalize only the first letter of each word in a string
+  /// Example: getx will make it easy  => Getx Will Make It Easy
+  /// Example 2 : this is an example text => This Is An Example Text
+  static String capitalizeAllWordsFirstLetter(String s) {
+    String lowerCasedString = s.toLowerCase();
+    String stringWithoutExtraSpaces = lowerCasedString.trim();
+
+    if (stringWithoutExtraSpaces.isEmpty) {
+      return "";
+    }
+    if (stringWithoutExtraSpaces.length == 1) {
+      return stringWithoutExtraSpaces.toUpperCase();
+    }
+
+    List<String> stringWordsList = stringWithoutExtraSpaces.split(" ");
+    List<String> capitalizedWordsFirstLetter = stringWordsList
+        .map(
+          (word) {
+            if (word.trim().isEmpty) return "";
+            return word.trim();
+          },
+        )
+        .where(
+          (word) => word != "",
+        )
+        .map(
+          (word) {
+            if (word.startsWith(RegExp(r'[\n\t\r]'))) {
+              return word;
+            }
+            return word[0].toUpperCase() + word.substring(1).toLowerCase();
+          },
+        )
+        .toList();
+    String finalResult = capitalizedWordsFirstLetter.join(" ");
+    return finalResult;
   }
 
   static bool hasMatch(String? value, String pattern) {

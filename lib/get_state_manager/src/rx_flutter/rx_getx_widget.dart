@@ -1,25 +1,23 @@
-import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../get_core/get_core.dart';
-import '../../../get_instance/src/get_instance.dart';
-import '../../../get_rx/src/rx_types/rx_types.dart';
-import '../../get_state_manager.dart';
+import '../../../get_instance/src/extension_instance.dart';
+import '../../../get_instance/src/lifecycle.dart';
+import '../simple/list_notifier.dart';
 
-typedef GetXControllerBuilder<T extends DisposableInterface> = Widget Function(
+typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
-class GetX<T extends DisposableInterface> extends StatefulWidget {
+class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final GetXControllerBuilder<T> builder;
   final bool global;
-
-  // final Stream Function(T) stream;
-  // final StreamController Function(T) streamController;
   final bool autoRemove;
   final bool assignId;
-  final void Function(State state)? initState, dispose, didChangeDependencies;
-  final void Function(GetX oldWidget, State state)? didUpdateWidget;
+  final void Function(GetXState<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(GetX oldWidget, GetXState<T> state)? didUpdateWidget;
   final T? init;
   final String? tag;
 
@@ -39,46 +37,52 @@ class GetX<T extends DisposableInterface> extends StatefulWidget {
   });
 
   @override
+  StatefulElement createElement() => StatefulElement(this);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+        DiagnosticsProperty<T>('controller', init),
+      )
+      ..add(DiagnosticsProperty<String>('tag', tag))
+      ..add(
+          ObjectFlagProperty<GetXControllerBuilder<T>>.has('builder', builder));
+  }
+
+  @override
   GetXState<T> createState() => GetXState<T>();
 }
 
-class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
-  GetXState() {
-    _observer = RxNotifier();
-  }
-  RxInterface? _observer;
+class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   T? controller;
-  bool? isCreator = false;
-  late StreamSubscription subs;
+  bool? _isCreator = false;
 
   @override
   void initState() {
-    // var isPrepared = GetInstance().isPrepared<T>(tag: widget.tag);
-    var isRegistered = GetInstance().isRegistered<T>(tag: widget.tag);
+    // var isPrepared = Get.isPrepared<T>(tag: widget.tag);
+    final isRegistered = Get.isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
-        if (GetInstance().isPrepared<T>(tag: widget.tag)) {
-          isCreator = true;
-        } else {
-          isCreator = false;
-        }
-        controller = GetInstance().find<T>(tag: widget.tag);
+        _isCreator = Get.isPrepared<T>(tag: widget.tag);
+        controller = Get.find<T>(tag: widget.tag);
       } else {
         controller = widget.init;
-        isCreator = true;
-        GetInstance().put<T>(controller!, tag: widget.tag);
+        _isCreator = true;
+        Get.put<T>(controller!, tag: widget.tag);
       }
     } else {
       controller = widget.init;
-      isCreator = true;
+      _isCreator = true;
       controller?.onStart();
     }
     widget.initState?.call(this);
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
-    subs = _observer!.listen((data) => setState(() {}));
+
     super.initState();
   }
 
@@ -99,36 +103,39 @@ class GetXState<T extends DisposableInterface> extends State<GetX<T>> {
   @override
   void dispose() {
     if (widget.dispose != null) widget.dispose!(this);
-    if (isCreator! || widget.assignId) {
-      if (widget.autoRemove && GetInstance().isRegistered<T>(tag: widget.tag)) {
-        GetInstance().delete<T>(tag: widget.tag);
+    if (_isCreator! || widget.assignId) {
+      if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
+        Get.delete<T>(tag: widget.tag);
       }
     }
-    subs.cancel();
-    _observer!.close();
+
+    for (final disposer in disposers) {
+      disposer();
+    }
+
+    disposers.clear();
+
     controller = null;
-    isCreator = null;
+    _isCreator = null;
     super.dispose();
   }
 
-  Widget get notifyChildren {
-    final observer = RxInterface.proxy;
-    RxInterface.proxy = _observer;
-    final result = widget.builder(controller!);
-    if (!_observer!.canUpdate) {
-      throw """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
+  void _update() {
+    if (mounted) {
+      setState(() {});
     }
-    RxInterface.proxy = observer;
-    return result;
   }
 
+  final disposers = <Disposer>[];
+
   @override
-  Widget build(BuildContext context) => notifyChildren;
+  Widget build(BuildContext context) => Notifier.instance.append(
+      NotifyData(disposers: disposers, updater: _update),
+      () => widget.builder(controller!));
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<T>('controller', controller));
+  }
 }

@@ -6,14 +6,15 @@
     - [Get.putAsync](#getputasync)
     - [Get.create](#getcreate)
   - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
+  - [Specifying an alternate instance](#specifying-an-alternate-instance)
   - [Differences between methods](#differences-between-methods)
   - [Bindings](#bindings)
-    - [How to use](#how-to-use)
+    - [Bindings class](#bindings-class)
     - [BindingsBuilder](#bindingsbuilder)
     - [SmartManagement](#smartmanagement)
-      - [How to change](#How-to-change)
+      - [How to change](#how-to-change)
       - [SmartManagement.full](#smartmanagementfull)
-      - [SmartManagement.onlyBuilders](#smartmanagementonlybuilders)
+      - [SmartManagement.onlyBuilder](#smartmanagementonlybuilder)
       - [SmartManagement.keepFactory](#smartmanagementkeepfactory)
     - [How bindings work under the hood](#how-bindings-work-under-the-hood)
   - [Notes](#notes)
@@ -202,6 +203,35 @@ To remove an instance of Get:
 Get.delete<Controller>(); //usually you don't need to do this because GetX already delete unused controllers
 ```
 
+## Specifying an alternate instance
+
+A currently inserted instance can be replaced with a similar or extended class instance by using the `replace` or `lazyReplace` method. This can then be retrieved by using the original class.
+
+```dart
+abstract class BaseClass {}
+class ParentClass extends BaseClass {}
+
+class ChildClass extends ParentClass {
+  bool isChild = true;
+}
+
+
+Get.put<BaseClass>(ParentClass());
+
+Get.replace<BaseClass>(ChildClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); //true
+
+
+class OtherClass extends BaseClass {}
+Get.lazyReplace<BaseClass>(() => OtherClass());
+
+final instance = Get.find<BaseClass>();
+print(instance is ChildClass); // false
+print(instance is OtherClass); //true
+```
+
 ## Differences between methods
 
 First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other methods.
@@ -342,7 +372,7 @@ If you want to change this config (which you usually don't need) this is the way
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilders //here
+      smartManagement: SmartManagement.onlyBuilder //here
       home: Home(),
     )
   )
@@ -353,12 +383,12 @@ void main () {
 
 It is the default one. Dispose classes that are not being used and were not set to be permanent. In the majority of the cases you will want to keep this config untouched. If you new to GetX then don't change this.
 
-#### SmartManagement.onlyBuilders
+#### SmartManagement.onlyBuilder
 With this option, only controllers started in `init:` or loaded into a Binding with `Get.lazyPut()` will be disposed.
 
 If you use `Get.put()` or `Get.putAsync()` or any other approach, SmartManagement will not have permissions to exclude this dependency.
 
-With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilders.
+With the default behavior, even widgets instantiated with "Get.put" will be removed, unlike SmartManagement.onlyBuilder.
 
 #### SmartManagement.keepFactory
 

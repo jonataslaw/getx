@@ -20,6 +20,10 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
+dependency_overrides:
+  get:
+    path: ../
+
 dependencies:
   flutter:
     sdk: flutter
@@ -30,13 +34,10 @@ dependencies:
     path: ../
   #get_test: ^3.13.3
 
-dependency_overrides:
-  get:
-    path: ../
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  get_test: 4.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

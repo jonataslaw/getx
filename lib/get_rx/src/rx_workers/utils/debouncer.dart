@@ -1,6 +1,6 @@
 import 'dart:async';
 
-/// This "function" class is the implementation of [debouncer()] Worker.
+/// This "function" class is the implementation of `debouncer()` Worker.
 /// It calls the function passed after specified [delay] parameter.
 /// Example:
 /// ```
@@ -9,14 +9,14 @@ import 'dart:async';
 /// delayed( () => print( 'called after 1 sec' ));
 /// ```
 class Debouncer {
-  final Duration? delay;
+  final Duration delay;
   Timer? _timer;
 
-  Debouncer({this.delay});
+  Debouncer({required this.delay});
 
   void call(void Function() action) {
     _timer?.cancel();
-    _timer = Timer(delay!, action);
+    _timer = Timer(delay, action);
   }
 
   /// Notifies if the delayed call is active.

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+
 import '../request/request.dart';
 import '../utils/utils.dart';
 import 'multipart_file.dart';
@@ -8,7 +9,7 @@ import 'multipart_file.dart';
 class FormData {
   FormData(Map<String, dynamic> map) : boundary = _getBoundary() {
     map.forEach((key, value) {
-      if (value == null) return null;
+      if (value == null) return;
       if (value is MultipartFile) {
         files.add(MapEntry(key, value));
       } else if (value is List<MultipartFile>) {
@@ -36,7 +37,7 @@ class FormData {
   /// The form fields to send for this request.
   final fields = <MapEntry<String, String>>[];
 
-  /// The [files] to send for this request
+  /// The files to send for this request
   final files = <MapEntry<String, MultipartFile>>[];
 
   /// Returns the header string for a field. The return value is guaranteed to

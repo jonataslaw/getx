@@ -1,3 +1,254 @@
+## [4.6.1]
+Fix GetConnect on Flutter web
+
+## [4.6.0]
+Add useInheritedMediaQuery to GetMaterialApp and GetCupertinoApp (@davidhole)
+Add Circular reveal Transition (@parmarravi)
+Add request to failed response (@heftekharm)
+Fix internationalization with only country code (@codercengiz)
+Add GetTickerProviderStateMixin when multiple AnimationController objects are used (@NatsuOnFire)
+Add the followRedirects and maxRedirects fields to the Request object (@wei53881)
+Fix to rx.trigger fires twice (@gslender)
+Add proxy setting support to GetConnect (@jtans)
+Fix markAsDirty used on permanent controllers (@zenalex)
+Update Korean readme (@dumbokim)
+
+
+## [4.5.1]
+Fix Snackbar when it have action and icon the same time
+
+## [4.5.0] - Big Update
+To have a page-agnostic snackbar, we used OverlayRoute to display a partial route.
+However this had several problems:
+
+1: There was no possibility to close the page without closing the snackbar
+2: Get.back() could cause problems with tests of Get.isSnackbarOpen not being properly invoked
+3: Sometimes when using iOS popGesture with an open snackbar, some visual inconsistency might appear.
+4: When going to another route, the snackbar was not displayed on the new page, and if the user clicked on the new route as soon as he received a Snackbar, he could not read it.
+
+We remade the Snackbar from scratch, having its Api based on Overlay, and now opening a Snackbar won't be tied to a route, you can normally navigate routes while a Snackbar is shown at the top (or bottom), and even the PopGesture of the iOS is not influenced by it.
+
+Using Get.back() is handy, it's a small command, which closes routes, dialogs, snackbars, bottomsheets, etc, however Getx 5 will prioritize code safety, and splitting will reduce the check code as well. Currently we have to check if a snackbar is open, to close the snackbar and prevent the app from going back a page, all this boilerplate code will be removed, at the cost of having what it closes in front of Get.back command.
+
+For backwards compatibility, Get.back() still works for closing routes and overlays, however two new commands have been added: Get.closeCurrentSnackbar() and Get.closeAllSnackbars().
+Maybe we will have a clearer api in GetX 5, and maybe Get.back() will continue to do everything like it does today. The community will be consulted about the desired api. However version 5 will definitely have commands like: Get.closeCurrentSnackbar, Get.closeCurrentDialog etc. There is also the possibility to close a specific snackbar using the return of Get.snackbar, which will no longer return a void, and now return a SnackbarController.
+
+Snackbars now also have a Queue, and no longer stack one on top of the other, preventing viewing. GetX now has flexible, customizable, route-independent, and completely stable Snackbars.
+
+Fixed bugs where the snackbar showed an error in debug mode for a fraction of a second. We found that Flutter has a bug with blur below 0.001, so we set the minimum overlayBlur value to this value if it is ==true.
+
+Errors with internationalization were also fixed, where if you are in UK, and the app had the en_US language, you didn't have American English by default. Now, if the country code is not present, it will automatically fetch the language code before fetching a fallbackLanguage.
+
+Update locale also now returns a Future, allowing you to perform an action only when the language has already changed (@MHosssam)
+
+We are very happy to announce that GetX is now documented in Japanese as well, thanks to (@toshi-kuji)
+
+GetX has always been focused on transparency. You can tell what's going on with your app just by reading the logs on the console. However, these logs shouldn't appear in production, so it now only appears in debug mode (@maxzod)
+
+@maxzod has also started translating the docs into Arabic, we hope the documentation will be complete soon.
+
+Some remaining package logs have been moved to Get.log (@gairick-saha)
+
+RxList.removeWhere received performance optimizations (@zuvola)
+
+Optimizations in GetConnect and added the ability to modify all request items in GetConnect (@rodrigorahman)
+
+The current route could be inconsistent if a dialog were opened after a transition, fixed by @xiangzy1
+
+Fixed try/catch case missed in socket_notifier (@ShookLyngs)
+
+Also we had fixes in the docs: @DeathGun3344 @pinguluk
+
+GetX also surpassed the incredible mark of more than 7000 likes, being the most liked package in all pub.dev, went from 99% to 100% popularity, and has more than 5.3k stars on github. Documentation is now available in 12 languages, and we're happy for all the engagement from your community.
+
+This update is a preparation update for version 5, which will be released later this year.
+
+Breaking and Depreciation:
+GetBar is now deprecated, use GetSnackbar instead.
+dismissDirection now gets a DismissDirection, making the Snackbar more customizable.
+
+
+
+
+
+## [4.3.8] 
+- Fix nav2 toNamed remove the route
+
+## [4.3.7] 
+- Fix wrong currentRoute when a route is removed
+- Remove take that limits the router outlet depth (@steven-spiel)
+
+## [4.3.6] 
+- Fix error with autodispose of additional dependencies beyond GetxController
+- Added ability to add your own delegate to RouterOutlet (@steven-spiel)
+- Added listenAndPump to Rx to give Rx the same behavior as BehaviorSubject (@steven-spiel)
+
+## [4.3.5] 
+- Fix GetConnect timeout (@jasonlaw)
+- Improve Vietnamese docs (@hp1909)
+- Refactor placeholder name route to unnamed routes (@roipeker).
+- Fix: Navigate to a page identical to Get.offNamed.
+- Fix: Wrong nameRoute after a route is removed
+- Added assert to prevent the user from starting a route name without slash.
+
+## [4.3.4] 
+- Improve docs
+
+## [4.3.3] 
+- Fix Get.reset
+
+## [4.3.2] 
+- Fix nullable on internacionalization (@jmguillens)
+- Fix nullable on Rx.stream (@steven-spiel)
+
+## [4.3.1] 
+- Fix controller is not removed when keyboard is open.
+- Improved: Safe removal and insertion of controllers.
+
+## [4.3.0] 
+- Added GetResponsiveWidget (@ahmednfwela)
+- Added `Get.replace()` (@jwelmac)
+- Added Improve korean doc (@sejun2)
+- Fix multiple middlewares redirect (@liasica)
+- Added gestureWidth and showCupertinoParallax to GetPage to customize cupertino transitions
+
+## [4.2.5] 
+- Added anchorRoute and filterPages to GetRouterOutlet (@ahmednfwela)
+- Added scrollBehavior and scaffoldMessengerKey to GetMaterialapp(@ejabu and @alionour)
+- Fix error when child on MaterialApp is null (@ahmednfwela)
+- Fix Korean docs (@rws08)
+- Fix error with onClose called before routeTransition on Get.offNamed
+
+## [4.2.4] 
+- Fix Get.offAll removing GetxServices from memory
+
+## [4.2.3] 
+- Fix back button on navigator 2
+- Added parameters and arguments to Get.rootDelegate 
+
+## [4.2.1] 
+- Remove [] from docs to try fix pub score
+
+## [4.2.0] - Big update
+
+This update fixes important bugs as well as integrates with Navigator 2. It also adds GetRouterOutlet, similar to angular RouterOutlet thanks to @ahmednfwela. Also, the documentation translation for Vietnamese (@khangahs) has been added, making the GetX documentation available for 11 different languages, which is just fantastic for any opensource project. GetX has achieved more than 5.4k likes from the pub, and more than 4k stars on github, has videos about it with 48k on youtube, and has communities in the 4 hemispheres of the earth, besides having a large list of contributors as you see bellow. We're all happy to facilitate development with dart and flutter, and that making programming hassle-free has been taken around the world.
+
+Changes in this version:
+
+- Fix: Navigating to the same page with Get.offNamed does not delete the controller from that page using Get.lazyPut.
+
+- Fix Readme GetMiddleware typos 
+by @nivisi
+
+- Fix url replace error
+by @KevinZhang19870314 
+
+- Changed response default encoding from latin1 to utf8 
+by @heftekharm
+
+- Add Duration in ExtensionBottomSheet
+by @chanonpingpong
+
+- Added compatibility with dart-lang/mockito
+by @lifez
+
+- Added extensions methods to convert value in percent value 
+by @kauemurakami
+
+- Set darkTheme equal theme when darkTheme is null 
+by @eduardoFlorence
+
+- Add padding to 'defaultDialog' 
+by @KevinZhang19870314
+
+- GraphQLResponse inherit Response info 
+by @jasonlaw
+
+- Fix Redundant concatenating base url 
+by @jasonlaw
+
+- Add content type and length into the headers when the content type is 'application/x-www-form-urlencoded'
+by @calvingit
+
+- Make withCredentials configurable 
+by @jasonlaw
+
+- Fix flutter 2.0 error
+by @yunchiri
+
+- Allow deleting all registered instances
+by @lemps
+
+- Refactor/rx interface notify children 
+@by kranfix
+
+- Fixed parameter parsing and middleware sorting 
+by @ahmednfwela
+
+- Improvements to router outlet 
+by @ahmednfwela
+
+- Minor improvements and bug fixes 
+by @ahmednfwela
+
+- Adding route guards and improving navigation 
+by @ahmednfwela
+
+- Fix RxInterface.proxy losing its previous value on exception
+by @WillowWisp
+
+- Added dispose() for bottomSheet.
+by @furkankurt 
+
+- Added Pull request template 
+by @unacorbatanegra
+
+- Fix and update documentation:
+@Farid566, 
+@galaxykhh, 
+@arslee07, 
+@GoStaRoff, 
+@BondarenkoArtur, 
+@denisrudnei,
+@Charly6596, 
+@nateshmbhat, 
+@hrithikrtiwari, 
+@Undeadlol1,
+@rws08,
+@inuyashaaa,
+@broccolism, 
+@aadarshadhakalg,
+@ZeroMinJeon
+
+
+## [4.1.4] 
+- Adjust operator + and - to RxInt (@eduardoflorence)
+- Fix dark theme (@eduardoflorence)
+- Fix form-urlencoded on GetConnect (@aramayyes)
+
+
+## [4.1.3] 
+- Fix "Error: A value of type 'Locale?' can't be returned from a function"on flutter web (@nickwri)
+- Fix plural translations to expressions >1 (@WolfVic)
+
+## [4.1.2] 
+- Fix warning ˜can add data to a closed stream˜ when GetBuilder and Obx are nested
+- Fix get_connect decoder can not be null (@Goddchen)
+- Migrate example code (@3lB4rt0)
+- Fix initial value of nullables (@RafaRuiz)
+- Improve error message to navigation (@maxzod)
+- Fix typo on docs (@Rahulshahare)
+- Fixed darktheme being changed only through Get.changeTheme and not through the DarkTheme theme property in MaterialApp (@GoldenSoju)
+- Fix controller is removed when navigate to same page (@eduardoflorence)
+- Fix missing reload() and reloadAll() to Get extensions (@lkloon123)
+
+
+## [4.1.1] 
+- Remove mandatory initialValue to nullables types
+
+## [4.1.0] 
+- Added Rxn to non nullables reactives types
+
 ## [4.0.3] 
 - Added new linter rules to improve score
 

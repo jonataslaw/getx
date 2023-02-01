@@ -4,8 +4,8 @@ class GetMicrotask {
   int _version = 0;
   int _microtask = 0;
 
-  int get version => _version;
   int get microtask => _microtask;
+  int get version => _version;
 
   void exec(Function callback) {
     if (_microtask == _version) {
@@ -23,6 +23,17 @@ class GetQueue {
   final List<_Item> _queue = [];
   bool _active = false;
 
+  Future<T> add<T>(Function job) {
+    var completer = Completer<T>();
+    _queue.add(_Item(completer, job));
+    _check();
+    return completer.future;
+  }
+
+  void cancelAllJobs() {
+    _queue.clear();
+  }
+
   void _check() async {
     if (!_active && _queue.isNotEmpty) {
       _active = true;
@@ -35,13 +46,6 @@ class GetQueue {
       _active = false;
       _check();
     }
-  }
-
-  Future<T> add<T>(Function job) {
-    var completer = Completer<T>();
-    _queue.add(_Item(completer, job));
-    _check();
-    return completer.future;
   }
 }
 

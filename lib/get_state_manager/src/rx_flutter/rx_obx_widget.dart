@@ -1,6 +1,7 @@
-import 'dart:async';
 import 'package:flutter/widgets.dart';
+
 import '../../../get_rx/src/rx_types/rx_types.dart';
+import '../simple/simple_builder.dart';
 
 typedef WidgetCallback = Widget Function();
 
@@ -9,63 +10,8 @@ typedef WidgetCallback = Widget Function();
 /// See also:
 /// - [Obx]
 /// - [ObxValue]
-abstract class ObxWidget extends StatefulWidget {
+abstract class ObxWidget extends ObxStatelessWidget {
   const ObxWidget({Key? key}) : super(key: key);
-
-  @override
-  _ObxState createState() => _ObxState();
-
-  @protected
-  Widget build();
-}
-
-class _ObxState extends State<ObxWidget> {
-  RxInterface? _observer;
-  late StreamSubscription subs;
-
-  _ObxState() {
-    _observer = RxNotifier();
-  }
-
-  @override
-  void initState() {
-    subs = _observer!.listen(_updateTree);
-    super.initState();
-  }
-
-  void _updateTree(_) {
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  @override
-  void dispose() {
-    subs.cancel();
-    _observer!.close();
-    super.dispose();
-  }
-
-  Widget get notifyChilds {
-    final observer = RxInterface.proxy;
-    RxInterface.proxy = _observer;
-    final result = widget.build();
-    if (!_observer!.canUpdate) {
-      throw """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
-    }
-    RxInterface.proxy = observer;
-    return result;
-  }
-
-  @override
-  Widget build(BuildContext context) => notifyChilds;
 }
 
 /// The simplest reactive widget in GetX.
@@ -81,7 +27,9 @@ class Obx extends ObxWidget {
   const Obx(this.builder);
 
   @override
-  Widget build() => builder();
+  Widget build(BuildContext context) {
+    return builder();
+  }
 }
 
 /// Similar to Obx, but manages a local state.
@@ -102,5 +50,5 @@ class ObxValue<T extends RxInterface> extends ObxWidget {
   const ObxValue(this.builder, this.data, {Key? key}) : super(key: key);
 
   @override
-  Widget build() => builder(data);
+  Widget build(BuildContext context) => builder(data);
 }

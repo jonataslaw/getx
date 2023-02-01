@@ -1,11 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,6 +21,12 @@ class HomeView extends GetView<HomeController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Get.snackbar('title', 'message');
+            },
+          ),
           title: Text('covid'.tr),
           backgroundColor: Colors.white10,
           elevation: 0,
@@ -70,7 +76,8 @@ class HomeView extends GetView<HomeController> {
                       ),
                       shape: StadiumBorder(),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      //await Navigation  Get.rootDelegate.toNamed('/home/country');
                       Get.toNamed('/home/country');
                     },
                     child: Text(
@@ -80,7 +87,27 @@ class HomeView extends GetView<HomeController> {
                         color: Colors.black,
                       ),
                     ),
-                  )
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.black),
+                      side: BorderSide(
+                        color: Colors.deepPurple,
+                        width: 3,
+                      ),
+                      shape: StadiumBorder(),
+                    ),
+                    onPressed: () {
+                      Get.updateLocale(Locale('pt', 'BR'));
+                    },
+                    child: Text(
+                      'Update language to Portuguese',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
               );
             },

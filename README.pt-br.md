@@ -1,9 +1,11 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Idiomas: [Inglês](README.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreano](README.ko-kr.md), [Francês](README-fr.md)**
+**Idiomas: [Inglês](README.md), [Vietnamita](README-vi.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreano](README.ko-kr.md), [Francês](README-fr.md)**
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
+[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
+[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -189,7 +191,7 @@ Melhore seus prazos, entregue tudo a tempo sem perder performance. Get não é p
 
 ## Gerenciamento de estado
 
-GetX™ posuui dois gerenciadores de estado diferentes: o gerenciador de estado simples (vamos chamá-lo de GetBuilder) e o gerenciador de estado reativo (GetX/Obx)
+GetX™ possui dois gerenciadores de estado diferentes: o gerenciador de estado simples (vamos chamá-lo de GetBuilder) e o gerenciador de estado reativo (GetX/Obx)
 
 ### Reactive state manager
 
@@ -519,7 +521,7 @@ Esses middlewares serão executados nesta ordem:  **-8 => 2 => 4 => 5**
 Esta função será chamada quando a página da rota chamada estiver sendo pesquisada. RouteSettings se torna o resultado do redirecionamento. Ou retorne nulo e não haverá redirecionamento.
 
 ```dart
-GetPage redirect( ) {
+RouteSettings redirect(String route) {
   final authService = Get.find<AuthService>();
   return authService.authed.value ? null : RouteSettings(name: '/login')
 }

@@ -7,6 +7,8 @@ class HttpRequestImpl extends HttpRequestBase {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
+    bool withCredentials = false,
+    String Function(Uri url)? findProxy,
   });
   @override
   void close() {}
