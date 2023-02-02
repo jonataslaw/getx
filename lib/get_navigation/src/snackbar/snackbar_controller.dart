@@ -238,11 +238,15 @@ class SnackbarController {
 
   Widget _getBodyWidget() {
     return Builder(builder: (_) {
-      return GestureDetector(
-        child: snackbar,
-        onTap: snackbar.onTap != null
-            ? () => snackbar.onTap?.call(snackbar)
-            : null,
+      return MouseRegion(
+        onEnter: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.entered),
+        onExit: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.exited),
+        child: GestureDetector(
+          child: snackbar,
+          onTap: snackbar.onTap != null
+              ? () => snackbar.onTap?.call(snackbar)
+              : null,
+        ),
       );
     });
   }

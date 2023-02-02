@@ -7,6 +7,7 @@ import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
 typedef OnTap = void Function(GetSnackBar snack);
+typedef OnHover = void Function(GetSnackBar snack, SnackHoverState snackHoverState);
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
@@ -150,6 +151,9 @@ class GetSnackBar extends StatefulWidget {
   /// An alternative to [mainButton]
   final OnTap? onTap;
 
+  /// A callback that registers the user's hover anywhere over the Snackbar.
+  final OnHover? onHover;
+
   /// How long until Snack will hide itself (be dismissed).
   /// To make it indefinite, leave it null.
   final Duration? duration;
@@ -259,6 +263,7 @@ class GetSnackBar extends StatefulWidget {
     this.backgroundGradient,
     this.mainButton,
     this.onTap,
+    this.onHover,
     this.duration,
     this.isDismissible = true,
     this.dismissDirection,
@@ -657,3 +662,6 @@ enum SnackPosition { top, bottom }
 
 /// Indicates if snack will be attached to the edge of the screen or not
 enum SnackStyle { floating, grounded }
+
+/// Indicates if the mouse entered or exited
+enum SnackHoverState { entered, exited }
