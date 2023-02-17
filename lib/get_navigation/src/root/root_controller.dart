@@ -219,14 +219,12 @@ class GetMaterialController extends FullLifeCycleController {
   }
 
   void setTheme(ThemeData value) {
-    if (darkTheme == null) {
+    if (value.brightness == Brightness.light) {
+      themeMode = ThemeMode.light;
       theme = value;
     } else {
-      if (value.brightness == Brightness.light) {
-        theme = value;
-      } else {
-        darkTheme = value;
-      }
+      themeMode = ThemeMode.dark;
+      darkTheme = value;
     }
     update();
   }
