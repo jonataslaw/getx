@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../get.dart';
 import 'dialog/dialog_route.dart';
+import 'root/get_root.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
@@ -219,8 +220,8 @@ extension ExtensionDialog on GetInterface {
             ),
             child: Text(
               textConfirm ?? "Ok",
-              style:
-                  TextStyle(color: confirmTextColor ?? theme.backgroundColor),
+              style: TextStyle(
+                  color: confirmTextColor ?? theme.colorScheme.background),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -1009,36 +1010,36 @@ extension GetNavigationExt on GetInterface {
     }
     return Uri.tryParse(name)?.toString() ?? name;
   }
+  //TODO: Deprecated
+  // /// change default config of Get
+  // void config(
+  //     {bool? enableLog,
+  //     LogWriterCallback? logWriterCallback,
+  //     bool? defaultPopGesture,
+  //     bool? defaultOpaqueRoute,
+  //     Duration? defaultDurationTransition,
+  //     bool? defaultGlobalState,
+  //     Transition? defaultTransition}) {
+  //   if (enableLog != null) {
+  //     Get.isLogEnable = enableLog;
+  //   }
+  //   if (logWriterCallback != null) {
+  //     Get.log = logWriterCallback;
+  //   }
+  //   if (defaultPopGesture != null) {
+  //     _getxController.defaultPopGesture = defaultPopGesture;
+  //   }
+  //   if (defaultOpaqueRoute != null) {
+  //     _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
+  //   }
+  //   if (defaultTransition != null) {
+  //     _getxController.defaultTransition = defaultTransition;
+  //   }
 
-  /// change default config of Get
-  void config(
-      {bool? enableLog,
-      LogWriterCallback? logWriterCallback,
-      bool? defaultPopGesture,
-      bool? defaultOpaqueRoute,
-      Duration? defaultDurationTransition,
-      bool? defaultGlobalState,
-      Transition? defaultTransition}) {
-    if (enableLog != null) {
-      Get.isLogEnable = enableLog;
-    }
-    if (logWriterCallback != null) {
-      Get.log = logWriterCallback;
-    }
-    if (defaultPopGesture != null) {
-      _getxController.defaultPopGesture = defaultPopGesture;
-    }
-    if (defaultOpaqueRoute != null) {
-      _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
-    }
-    if (defaultTransition != null) {
-      _getxController.defaultTransition = defaultTransition;
-    }
-
-    if (defaultDurationTransition != null) {
-      _getxController.defaultTransitionDuration = defaultDurationTransition;
-    }
-  }
+  //   if (defaultDurationTransition != null) {
+  //     _getxController.defaultTransitionDuration = defaultDurationTransition;
+  //   }
+  // }
 
   Future<void> updateLocale(Locale l) async {
     Get.locale = l;
@@ -1062,22 +1063,22 @@ extension GetNavigationExt on GetInterface {
     await engine.performReassemble();
   }
 
-  void appUpdate() => _getxController.update();
+  void appUpdate() => rootController.update();
 
   void changeTheme(ThemeData theme) {
-    _getxController.setTheme(theme);
+    rootController.setTheme(theme);
   }
 
   void changeThemeMode(ThemeMode themeMode) {
-    _getxController.setThemeMode(themeMode);
+    rootController.setThemeMode(themeMode);
   }
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    return _getxController.addKey(newKey);
+    return rootController.addKey(newKey);
   }
 
   GetDelegate? nestedKey(String? key) {
-    return _getxController.nestedKey(key);
+    return rootController.nestedKey(key);
   }
 
   GetDelegate searchDelegate(dynamic k) {
@@ -1106,7 +1107,7 @@ extension GetNavigationExt on GetInterface {
 
   /// give current arguments
   //dynamic get arguments => routing.args;
-  dynamic get arguments => _getxController.rootDelegate.arguments();
+  dynamic get arguments => rootController.rootDelegate.arguments();
 
   /// give name from current route
   String get currentRoute => routing.current;
@@ -1219,11 +1220,13 @@ extension GetNavigationExt on GetInterface {
   // /// give access to Immutable MediaQuery.of(context).size.width
   // double get width => MediaQuery.of(context).size.width;
 
-  GlobalKey<NavigatorState> get key => _getxController.key;
+  GlobalKey<NavigatorState> get key => rootController.key;
 
-  Map<dynamic, GetDelegate> get keys => _getxController.keys;
+  Map<dynamic, GetDelegate> get keys => rootController.keys;
 
-  GetMaterialController get rootController => _getxController;
+  GetRootState get rootController => GetRootState.controller;
+
+  ConfigData get _getxController => GetRootState.controller.config;
 
   bool get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
@@ -1246,20 +1249,18 @@ extension GetNavigationExt on GetInterface {
 
   Routing get routing => _getxController.routing;
 
-  Map<String, String?> get parameters =>
-      _getxController.rootDelegate.parameters;
   set parameters(Map<String, String?> newParameters) =>
-      _getxController.parameters = newParameters;
+      rootController.parameters = newParameters;
+
+  set testMode(bool isTest) => rootController.testMode = isTest;
 
   bool get testMode => _getxController.testMode;
-  set testMode(bool isTest) => _getxController.testMode = isTest;
+
+  Map<String, String?> get parameters => rootController.rootDelegate.parameters;
 
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
       _getxController.routerDelegate as TDelegate?;
-
-  static final GetMaterialController _getxController =
-      Get.find<GetMaterialController>();
 }
 
 extension OverlayExt on GetInterface {

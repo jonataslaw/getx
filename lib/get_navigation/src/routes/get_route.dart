@@ -43,8 +43,10 @@ class GetPage<T> extends Page<T> {
   @override
   final String name;
 
+  final bool inheritParentPath;
+
   final List<GetPage> children;
-  final List<GetMiddleware>? middlewares;
+  final List<GetMiddleware> middlewares;
   final PathDecoded path;
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
@@ -73,7 +75,7 @@ class GetPage<T> extends Page<T> {
     this.customTransition,
     this.fullscreenDialog = false,
     this.children = const <GetPage>[],
-    this.middlewares,
+    this.middlewares = const [],
     this.unknownRoute,
     this.arguments,
     this.showCupertinoParallax = true,
@@ -81,6 +83,7 @@ class GetPage<T> extends Page<T> {
     this.preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.reorderRoutes,
     this.completer,
+    this.inheritParentPath = true,
     LocalKey? key,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
@@ -92,7 +95,7 @@ class GetPage<T> extends Page<T> {
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
-  GetPage<T> copy({
+  GetPage<T> copyWith({
     LocalKey? key,
     String? name,
     GetPageBuilder? page,
@@ -121,6 +124,7 @@ class GetPage<T> extends Page<T> {
     Object? arguments,
     bool? showCupertinoParallax,
     Completer<T?>? completer,
+    bool? inheritParentPath,
   }) {
     return GetPage(
       key: key ?? this.key,
@@ -153,6 +157,7 @@ class GetPage<T> extends Page<T> {
       showCupertinoParallax:
           showCupertinoParallax ?? this.showCupertinoParallax,
       completer: completer ?? this.completer,
+      inheritParentPath: inheritParentPath ?? this.inheritParentPath,
     );
   }
 

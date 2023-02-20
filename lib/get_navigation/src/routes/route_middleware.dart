@@ -131,7 +131,7 @@ class MiddlewareRunner {
 
   List<GetMiddleware> _getMiddlewares() {
     final _m = _middlewares ?? <GetMiddleware>[];
-    return _m
+    return List.of(_m)
       ..sort(
         (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0),
       );
@@ -248,7 +248,7 @@ class PageRedirect {
     addPageParameter(route!);
 
     // No middlewares found return match.
-    if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
+    if (match.route!.middlewares.isEmpty) {
       return false;
     }
     final newSettings = runner.runRedirect(settings!.name);

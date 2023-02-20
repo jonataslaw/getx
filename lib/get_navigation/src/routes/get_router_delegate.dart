@@ -12,6 +12,27 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
+  factory GetDelegate.createDelegate({
+    GetPage<dynamic>? notFoundRoute,
+    List<GetPage> pages = const [],
+    List<NavigatorObserver>? navigatorObservers,
+    TransitionDelegate<dynamic>? transitionDelegate,
+    PopMode backButtonPopMode = PopMode.history,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+    GlobalKey<NavigatorState>? navigatorKey,
+  }) {
+    return GetDelegate(
+      notFoundRoute: notFoundRoute,
+      navigatorObservers: navigatorObservers,
+      transitionDelegate: transitionDelegate,
+      backButtonPopMode: backButtonPopMode,
+      preventDuplicateHandlingMode: preventDuplicateHandlingMode,
+      pages: pages,
+      navigatorKey: navigatorKey,
+    );
+  }
+
   final List<RouteDecoder> _activePages = <RouteDecoder>[];
   final PopMode backButtonPopMode;
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
@@ -84,7 +105,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   Future<RouteDecoder?> runMiddleware(RouteDecoder config) async {
     final middlewares = config.currentTreeBranch.last.middlewares;
-    if (middlewares == null) {
+    if (middlewares.isEmpty) {
       return config;
     }
     var iterator = config;
@@ -143,10 +164,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   PageSettings? get pageSettings {
     return currentConfiguration?.pageSettings;
-  }
-
-  Future<T?> _removeHistoryEntry<T>(RouteDecoder entry, T result) async {
-    return _unsafeHistoryRemove<T>(entry, result);
   }
 
   Future<void> _pushHistory(RouteDecoder config) async {
@@ -560,7 +577,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _activePages.remove(RouteDecoder.fromRoute(name));
   }
 
- 
   bool get canBack {
     return _activePages.length > 1;
   }
@@ -691,7 +707,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       decoder.parameters.addAll(parameters);
     }
 
-    decoder.route = decoder.route?.copy(
+    decoder.route = decoder.route?.copyWith(
       completer: _activePages.isEmpty ? null : Completer(),
       arguments: arguments,
       parameters: parameters,
@@ -786,7 +802,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     if (wasPopup) return true;
 
     if (_canPop(popMode ?? backButtonPopMode)) {
-      await _pop(popMode ?? backButtonPopMode, result); 
+      await _pop(popMode ?? backButtonPopMode, result);
       notifyListeners();
       return true;
     }
@@ -800,7 +816,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _popWithResult<T>(result);
     notifyListeners();
   }
-
 
   bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final didPop = route.didPop(result);
