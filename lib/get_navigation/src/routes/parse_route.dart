@@ -174,22 +174,6 @@ class ParseRouteTree {
     }
   }
 
-  void handleChild(GetPage route) {
-    final children = route.children;
-    for (var child in children) {
-      final middlewares = List.of(route.middlewares);
-      final bindings = List.of(route.bindings);
-      middlewares.addAll(child.middlewares);
-      bindings.addAll(child.bindings);
-      child = child.copyWith(middlewares: middlewares, bindings: bindings);
-      if (child.inheritParentPath) {
-        child = child.copyWith(
-            name: ('${route.path}/${child.path}').replaceAll(r'//', '/'));
-      }
-      addRoute(child);
-    }
-  }
-
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
     if (route.children.isEmpty) {
