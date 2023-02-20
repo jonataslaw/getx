@@ -4,7 +4,7 @@ version: 5.0.0-beta.52
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: '>=2.16.0 <4.0.0'
+  sdk: '>=2.17.0 <4.0.0'
 
 dependencies:
   flutter:

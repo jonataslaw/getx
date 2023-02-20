@@ -4,6 +4,11 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
+  factory GetInformationParser.createInformationParser(
+      {String initialRoute = '/'}) {
+    return GetInformationParser(initialRoute: initialRoute);
+  }
+
   final String initialRoute;
 
   GetInformationParser({
@@ -19,7 +24,7 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
     if (location == '/') {
       //check if there is a corresponding page
       //if not, relocate to initialRoute
-      if (!(Get.rootController.routerDelegate as GetDelegate)
+      if (!(Get.rootController.rootDelegate)
           .registeredRoutes
           .any((element) => element.name == '/')) {
         location = initialRoute;
