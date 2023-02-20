@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../route_manager.dart';
+import '../../../get.dart';
 
 @immutable
 class RouteDecoder {
@@ -187,11 +187,25 @@ class ParseRouteTree {
         if (page.middlewares.isNotEmpty) ...page.middlewares,
         if (route.middlewares.isNotEmpty) ...route.middlewares
       ];
+
+      final parentBindings = [
+        if (page.binding != null) page.binding!,
+        if (page.bindings.isNotEmpty) ...page.bindings,
+        if (route.bindings.isNotEmpty) ...route.bindings
+      ];
+
+      final parentBinds = [
+        if (page.binds.isNotEmpty) ...page.binds,
+        if (route.binds.isNotEmpty) ...route.binds
+      ];
+
       result.add(
         _addChild(
           page,
           parentPath,
           parentMiddlewares,
+          parentBindings,
+          parentBinds,
         ),
       );
 
@@ -204,6 +218,15 @@ class ParseRouteTree {
             ...parentMiddlewares,
             if (child.middlewares.isNotEmpty) ...child.middlewares,
           ],
+          [
+            ...parentBindings,
+            if (child.binding != null) child.binding!,
+            if (child.bindings.isNotEmpty) ...child.bindings,
+          ],
+          [
+            ...parentBinds,
+            if (child.binds.isNotEmpty) ...child.binds,
+          ],
         ));
       }
     }
@@ -212,10 +235,19 @@ class ParseRouteTree {
 
   /// Change the Path for a [GetPage]
   GetPage _addChild(
-      GetPage origin, String parentPath, List<GetMiddleware> middlewares) {
+    GetPage origin,
+    String parentPath,
+    List<GetMiddleware> middlewares,
+    List<BindingsInterface> bindings,
+    List<Bind> binds,
+  ) {
     return origin.copyWith(
       middlewares: middlewares,
-      name: (parentPath + origin.name).replaceAll(r'//', '/'),
+      name: origin.inheritParentPath
+          ? (parentPath + origin.name).replaceAll(r'//', '/')
+          : origin.name,
+      bindings: bindings,
+      binds: binds,
       // key:
     );
   }
