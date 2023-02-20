@@ -133,11 +133,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _activePages.add(res);
   }
 
-  Future<T?> _unsafeHistoryRemove<T>(RouteDecoder config, T result) async {
-    var index = _activePages.indexOf(config);
-    if (index >= 0) return _unsafeHistoryRemoveAt(index, result);
-    return null;
-  }
+  // Future<T?> _unsafeHistoryRemove<T>(RouteDecoder config, T result) async {
+  //   var index = _activePages.indexOf(config);
+  //   if (index >= 0) return _unsafeHistoryRemoveAt(index, result);
+  //   return null;
+  // }
 
   Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
     if (index == _activePages.length - 1 && _activePages.length > 1) {

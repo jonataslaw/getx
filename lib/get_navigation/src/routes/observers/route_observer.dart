@@ -185,6 +185,7 @@ class GetObserver extends NavigatorObserver {
   }
 }
 
+//TODO: Use copyWith, and remove mutate variables
 class Routing {
   String current;
   String previous;
