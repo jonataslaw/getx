@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
 // import 'package:get_demo/routes/app_pages.dart';
 // import 'package:get_test/get_test.dart';
 import 'package:matcher/matcher.dart' as m;
@@ -53,6 +54,14 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => HttpOverrides.global = null);
   final binding = MockBinding();
+
+  test("get time", () {
+    var now = DateTime(2022, 07, 18) + 1.days;
+    print(now.weekday);
+    print(now.unixTimeStamp);
+    print(now.unixTimeStamp.fromUnixTimeStamp == now);
+    expect(true, true);
+  });
 
   test('Test Controller', () async {
     /// Controller can't be on memory
