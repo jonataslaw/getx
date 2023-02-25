@@ -83,7 +83,7 @@ class AppPages {
                   transition: Transition.cupertino,
                   showCupertinoParallax: true,
                   page: () => ProductDetailsView(),
-                  bindings: [],
+                  bindings: const [],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
