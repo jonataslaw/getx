@@ -18,38 +18,36 @@ class CountryView extends GetView<HomeController> {
                   "https://images.pexels.com/photos/3902882/pexels-photo-3902882.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"))),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
-        child: Container(
-          child: Scaffold(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text('corona_by_country'.tr),
             backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              title: Text('corona_by_country'.tr),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              centerTitle: true,
-            ),
-            body: Center(
-              child: ListView.builder(
-                  itemCount: controller.state.countries.length,
-                  itemBuilder: (context, index) {
-                    final country = controller.state.countries[index];
-                    return ListTile(
-                      onTap: () async {
-                        //Get.rootDelegate.toNamed('/home/country');
-                        final data = await Get.toNamed(
-                            '/home/country/details?id=$index');
-                        print(data);
-                      },
-                      trailing: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
-                      ),
-                      title: Text(country.country),
-                      subtitle: Text(
-                          // ignore: lines_longer_than_80_chars
-                          '${'total_infecteds'.tr}${' ${country.totalConfirmed}'}'),
-                    );
-                  }),
-            ),
+            elevation: 0,
+            centerTitle: true,
+          ),
+          body: Center(
+            child: ListView.builder(
+                itemCount: controller.state.countries.length,
+                itemBuilder: (context, index) {
+                  final country = controller.state.countries[index];
+                  return ListTile(
+                    onTap: () async {
+                      //Get.rootDelegate.toNamed('/home/country');
+                      final data =
+                          await Get.toNamed('/home/country/details?id=$index');
+                      print(data);
+                    },
+                    trailing: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
+                    ),
+                    title: Text(country.country),
+                    subtitle: Text(
+                        // ignore: lines_longer_than_80_chars
+                        '${'total_infecteds'.tr}${' ${country.totalConfirmed}'}'),
+                  );
+                }),
           ),
         ),
       ),

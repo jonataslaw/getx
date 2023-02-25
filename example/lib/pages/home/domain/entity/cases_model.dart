@@ -25,9 +25,11 @@ class CasesModel {
   factory CasesModel.fromJson(Map<String, dynamic> json) => CasesModel(
         message: json["Message"] as String,
         global: Global.fromJson(json["Global"] as Map<String, dynamic>),
-        countries: List<Country>.from((json["Countries"] as Iterable).map(
-          (x) => Country.fromJson(x as Map<String, dynamic>),
-        )),
+        countries: json["Countries"] == null
+            ? []
+            : List<Country>.from((json["Countries"] as Iterable).map(
+                (x) => Country.fromJson(x as Map<String, dynamic>),
+              )),
         date: DateTime.parse(json["Date"] as String),
       );
 
