@@ -161,11 +161,11 @@ extension Inst on GetInterface {
 
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final _dep = _singl[key];
-      if (_dep == null || !_dep.isDirty) {
+      final newDep = _singl[key];
+      if (newDep == null || !newDep.isDirty) {
         return;
       } else {
-        dep = _dep as _InstanceBuilderFactory<S>;
+        dep = newDep as _InstanceBuilderFactory<S>;
       }
     }
     _singl[key] = _InstanceBuilderFactory<S>(

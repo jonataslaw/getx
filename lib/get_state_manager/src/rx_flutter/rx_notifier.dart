@@ -32,7 +32,7 @@ mixin StateMixin<T> on ListNotifier {
   void _fillInitialStatus() {
     _status = (_value == null || _value!._isEmpty())
         ? GetStatus<T>.loading()
-        : GetStatus<T>.success(_value!);
+        : GetStatus<T>.success(_value as T);
   }
 
   GetStatus<T> get status {
@@ -231,12 +231,12 @@ extension StateExt<T> on StateMixin<T> {
             : Center(child: Text('A error occurred: ${status.errorMessage}'));
       } else if (status.isEmpty) {
         return onEmpty ??
-            SizedBox.shrink(); // Also can be widget(null); but is risky
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
       } else if (status.isSuccess) {
         return widget(value);
       } else if (status.isCustom) {
         return onCustom?.call(_) ??
-            SizedBox.shrink(); // Also can be widget(null); but is risky
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
     });

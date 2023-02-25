@@ -51,9 +51,9 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     return Semantics(
-      child: widget(context, animation, secondaryAnimation),
       scopesRoute: true,
       explicitChildNodes: true,
+      child: widget(context, animation, secondaryAnimation),
     );
   }
 

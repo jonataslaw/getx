@@ -44,7 +44,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final bool removeTop;
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 700);
+  Duration get transitionDuration => const Duration(milliseconds: 700);
 
   @override
   bool get barrierDismissible => isDismissible;

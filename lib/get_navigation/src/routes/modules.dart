@@ -57,17 +57,17 @@ class Dependencies {
 }
 
 abstract class Module extends StatefulWidget {
-  Module({Key? key}) : super(key: key);
+  const Module({Key? key}) : super(key: key);
 
   Widget view(BuildContext context);
 
   void dependencies(Dependencies i);
 
   @override
-  _ModuleState createState() => _ModuleState();
+  ModuleState createState() => ModuleState();
 }
 
-class _ModuleState extends State<Module> {
+class ModuleState extends State<Module> {
   @override
   void initState() {
     RouterReportManager.instance.reportCurrentRoute(this);

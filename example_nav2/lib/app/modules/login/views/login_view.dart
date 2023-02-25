@@ -6,6 +6,8 @@ import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
+  const LoginView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class LoginView extends GetView<LoginController> {
               },
             ),
             MaterialButton(
-              child: Text(
+              child: const Text(
                 'Do LOGIN !!',
                 style: TextStyle(color: Colors.blue, fontSize: 20),
               ),

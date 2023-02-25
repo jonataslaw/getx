@@ -13,8 +13,7 @@ void main() {
     await tester.pump();
 
     Get.defaultDialog(
-        onConfirm: () => print("Ok"),
-        middleText: "Dialog made in 3 lines of code");
+        onConfirm: () {}, middleText: "Dialog made in 3 lines of code");
 
     await tester.pumpAndSettle();
 
@@ -28,7 +27,7 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
 
     await tester.pumpAndSettle();
 
@@ -42,7 +41,7 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsOneWidget);

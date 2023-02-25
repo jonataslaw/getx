@@ -35,11 +35,14 @@ void main() {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => Container()),
-          GetPage(name: '/first', page: () => FirstScreen(), middlewares: [
-            RedirectMiddleware(),
-          ]),
-          GetPage(name: '/second', page: () => SecondScreen()),
-          GetPage(name: '/third', page: () => ThirdScreen()),
+          GetPage(
+              name: '/first',
+              page: () => const FirstScreen(),
+              middlewares: [
+                RedirectMiddleware(),
+              ]),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+          GetPage(name: '/third', page: () => const ThirdScreen()),
         ],
       ),
     );
@@ -47,7 +50,6 @@ void main() {
     Get.toNamed('/first');
 
     await tester.pumpAndSettle();
-    print(Get.rootController.rootDelegate.currentConfiguration?.route?.name);
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 
@@ -57,11 +59,14 @@ void main() {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => Container()),
-          GetPage(name: '/first', page: () => FirstScreen(), middlewares: [
-            RedirectMiddlewareNull(),
-          ]),
-          GetPage(name: '/second', page: () => SecondScreen()),
-          GetPage(name: '/third', page: () => ThirdScreen()),
+          GetPage(
+              name: '/first',
+              page: () => const FirstScreen(),
+              middlewares: [
+                RedirectMiddlewareNull(),
+              ]),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+          GetPage(name: '/third', page: () => const ThirdScreen()),
         ],
       ),
     );
@@ -71,7 +76,6 @@ void main() {
     Get.toNamed('/first');
 
     await tester.pumpAndSettle();
-    print(Get.rootController.rootDelegate.currentConfiguration?.route?.name);
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 }

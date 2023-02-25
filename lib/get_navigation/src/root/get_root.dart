@@ -276,7 +276,7 @@ class ConfigData {
 }
 
 class GetRoot extends StatefulWidget {
-  GetRoot({
+  const GetRoot({
     Key? key,
     required this.config,
     required this.child,
