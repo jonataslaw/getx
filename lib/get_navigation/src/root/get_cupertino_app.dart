@@ -65,7 +65,7 @@ class GetCupertinoApp extends StatelessWidget {
   final List<Bind> binds;
   final ScrollBehavior? scrollBehavior;
 
-  GetCupertinoApp({
+  const GetCupertinoApp({
     Key? key,
     this.theme,
     this.navigatorKey,
@@ -125,18 +125,7 @@ class GetCupertinoApp extends StatelessWidget {
         routerDelegate = null,
         super(key: key);
 
-  static String _cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncommonent for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
-  }
-
-  GetCupertinoApp.router({
+  const GetCupertinoApp.router({
     Key? key,
     this.theme,
     this.routeInformationProvider,
@@ -240,8 +229,8 @@ class GetCupertinoApp extends StatelessWidget {
                     ? TextDirection.rtl
                     : TextDirection.ltr),
             child: builder == null
-                ? (child ?? Material())
-                : builder!(context, child ?? Material()),
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
           ),
           title: title,
           onGenerateTitle: onGenerateTitle,

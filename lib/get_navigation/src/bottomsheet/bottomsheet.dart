@@ -44,7 +44,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final bool removeTop;
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 700);
+  Duration get transitionDuration => const Duration(milliseconds: 700);
 
   @override
   bool get barrierDismissible => isDismissible;
@@ -66,12 +66,11 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   @override
   Animation<double> createAnimation() {
     if (curve != null) {
-      return CurvedAnimation(
-          curve: curve!, parent: _animationController!.view);
+      return CurvedAnimation(curve: curve!, parent: _animationController!.view);
     }
     return _animationController!.view;
   }
-  
+
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);

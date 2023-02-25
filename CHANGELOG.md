@@ -1,3 +1,11 @@
+## [5.0.0-release-candidate]
+Refactor StateManager, RouteManager and InstanceManager from scratch
+Fixed Bugs 
+Added a Scopped DI 
+Api now uses Navigator 2 
+Added new RouteOutlet
+Added a new futurize method to StateMixin, that tracks updates, errors, and states programatically, 
+
 ## [4.6.1]
 Fix GetConnect on Flutter web
 

@@ -164,19 +164,19 @@ class GetPage<T> extends Page<T> {
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
-    final _page = PageRedirect(
+    final page = PageRedirect(
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
     ).getPageToRoute<T>(this, unknownRoute, context);
 
-    return _page;
+    return page;
   }
 
   static PathDecoded _nameToRegex(String path) {
     var keys = <String?>[];
 
-    String _replace(Match pattern) {
+    String recursiveReplace(Match pattern) {
       var buffer = StringBuffer('(?:');
 
       if (pattern[1] != null) buffer.write('.');
@@ -188,7 +188,7 @@ class GetPage<T> extends Page<T> {
     }
 
     var stringPath = '$path/?'
-        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
         .replaceAll('//', '/');
 
     return PathDecoded(RegExp('^$stringPath\$'), keys);

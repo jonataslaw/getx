@@ -16,7 +16,8 @@ typedef Decoder<T> = T Function(dynamic data);
 
 typedef Progress = Function(double percent);
 
-typedef ResponseInterceptor<T> = Future<Response<T>?> Function(Request<T> request, Type targetType, HttpClientResponse response);
+typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
+    Request<T> request, Type targetType, HttpClientResponse response);
 
 class GetHttpClient {
   String userAgent;
@@ -156,16 +157,15 @@ class GetHttpClient {
 
     final uri = _createUri(url, query);
     return Request<T>(
-      method: method,
-      url: uri,
-      headers: headers,
-      bodyBytes: bodyStream,
-      contentLength: bodyBytes?.length ?? 0,
-      followRedirects: followRedirects,
-      maxRedirects: maxRedirects,
-      decoder: decoder,
-      responseInterceptor: responseInterceptor
-    );
+        method: method,
+        url: uri,
+        headers: headers,
+        bodyBytes: bodyStream,
+        contentLength: bodyBytes?.length ?? 0,
+        followRedirects: followRedirects,
+        maxRedirects: maxRedirects,
+        decoder: decoder,
+        responseInterceptor: responseInterceptor);
   }
 
   void _setContentLenght(Map<String, String> headers, int contentLength) {
@@ -291,11 +291,14 @@ class GetHttpClient {
     ));
   }
 
-  ResponseInterceptor<T>? _responseInterceptor<T>(ResponseInterceptor<T>? actual) {
-    if(actual != null) return actual;
+  ResponseInterceptor<T>? _responseInterceptor<T>(
+      ResponseInterceptor<T>? actual) {
+    if (actual != null) return actual;
     final defaultInterceptor = defaultResponseInterceptor;
     return defaultInterceptor != null
-        ? (request, targetType, response) async => await defaultInterceptor(request, targetType, response) as Response<T>?
+        ? (request, targetType, response) async =>
+            await defaultInterceptor(request, targetType, response)
+                as Response<T>?
         : null;
   }
 
@@ -340,6 +343,7 @@ class GetHttpClient {
       responseInterceptor: _responseInterceptor(responseInterceptor),
     );
   }
+
   Future<Response<T>> send<T>(Request<T> request) async {
     try {
       var response = await _performRequest<T>(() => Future.value(request));
@@ -582,17 +586,16 @@ class GetHttpClient {
   //   return completer.future;
   // }
 
-  Future<Response<T>> delete<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    ResponseInterceptor<T>? responseInterceptor
-  }) async {
+  Future<Response<T>> delete<T>(String url,
+      {Map<String, String>? headers,
+      String? contentType,
+      Map<String, dynamic>? query,
+      Decoder<T>? decoder,
+      ResponseInterceptor<T>? responseInterceptor}) async {
     try {
       var response = await _performRequest<T>(
-        () async => _delete<T>(url, contentType, query, decoder, responseInterceptor),
+        () async =>
+            _delete<T>(url, contentType, query, decoder, responseInterceptor),
         headers: headers,
       );
       return response;

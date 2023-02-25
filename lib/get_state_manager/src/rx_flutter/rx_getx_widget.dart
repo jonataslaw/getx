@@ -22,6 +22,7 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final String? tag;
 
   const GetX({
+    super.key,
     this.tag,
     required this.builder,
     this.global = true,

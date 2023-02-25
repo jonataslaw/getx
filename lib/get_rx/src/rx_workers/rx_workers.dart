@@ -226,11 +226,11 @@ Worker debounce<T>(
   void Function()? onDone,
   bool? cancelOnError,
 }) {
-  final _debouncer =
+  final newDebouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
   StreamSubscription sub = listener.listen(
     (event) {
-      _debouncer(() {
+      newDebouncer(() {
         callback(event);
       });
     },

@@ -1,4 +1,4 @@
 # Include option is buggy:
-include: package:lints/recommended.yaml
+include: package:flutter_lints/flutter.yaml
 # In case the include issue gets fixed, lines below INCLUDE_FIX
 # can be removed

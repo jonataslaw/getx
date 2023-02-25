@@ -13,7 +13,7 @@ void main() {
     expect(Get.isRegistered<Controller2>(), false);
     expect(Get.isRegistered<Controller>(), false);
 
-    Get.to(() => First());
+    Get.to(() => const First());
 
     await tester.pumpAndSettle();
 
@@ -21,7 +21,7 @@ void main() {
 
     expect(Get.isRegistered<Controller>(), true);
 
-    Get.to(() => Second());
+    Get.to(() => const Second());
 
     await tester.pumpAndSettle();
 
@@ -53,20 +53,24 @@ class Controller extends GetxController {}
 class Controller2 extends GetxController {}
 
 class First extends StatelessWidget {
+  const First({super.key});
+
   @override
   Widget build(BuildContext context) {
     Get.put(Controller());
-    return Center(
+    return const Center(
       child: Text("first"),
     );
   }
 }
 
 class Second extends StatelessWidget {
+  const Second({super.key});
+
   @override
   Widget build(BuildContext context) {
     Get.put(Controller2());
-    return Center(
+    return const Center(
       child: Text("second"),
     );
   }

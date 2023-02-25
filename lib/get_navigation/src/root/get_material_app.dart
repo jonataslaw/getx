@@ -129,7 +129,7 @@ class GetMaterialApp extends StatelessWidget {
         routerDelegate = null,
         super(key: key);
 
-  GetMaterialApp.router({
+  const GetMaterialApp.router({
     Key? key,
     this.routeInformationProvider,
     this.scaffoldMessengerKey,
@@ -240,7 +240,6 @@ class GetMaterialApp extends StatelessWidget {
       // ],
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);
-        print('ROUTERRRR ${controller.config.routerDelegate}');
         return MaterialApp.router(
           routerDelegate: controller.config.routerDelegate,
           routeInformationParser: controller.config.routeInformationParser,
@@ -253,8 +252,8 @@ class GetMaterialApp extends StatelessWidget {
                     ? TextDirection.rtl
                     : TextDirection.ltr),
             child: builder == null
-                ? (child ?? Material())
-                : builder!(context, child ?? Material()),
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
           ),
           title: title,
           onGenerateTitle: onGenerateTitle,

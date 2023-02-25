@@ -11,13 +11,13 @@ class ProductsView extends GetView<ProductsController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => controller.loadDemoProductsFromSomeWhere(),
-        label: Text('Add'),
+        label: const Text('Add'),
       ),
       body: Column(
         children: [
-          Hero(
+          const Hero(
             tag: 'heroLogo',
-            child: const FlutterLogo(),
+            child: FlutterLogo(),
           ),
           Expanded(
             child: Obx(

@@ -57,10 +57,10 @@ class RouteDecoder {
   }
 
   void replaceArguments(Object? arguments) {
-    final _route = route;
-    if (_route != null) {
-      final index = currentTreeBranch.indexOf(_route);
-      currentTreeBranch[index] = _route.copyWith(arguments: arguments);
+    final newRoute = route;
+    if (newRoute != null) {
+      final index = currentTreeBranch.indexOf(newRoute);
+      currentTreeBranch[index] = newRoute.copyWith(arguments: arguments);
     }
   }
 

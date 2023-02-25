@@ -38,12 +38,16 @@ class ValueBuilder<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ValueBuilderState<T> createState() => _ValueBuilderState<T>(initialValue);
+  ValueBuilderState<T> createState() => ValueBuilderState<T>();
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  T value;
-  _ValueBuilderState(this.value);
+class ValueBuilderState<T> extends State<ValueBuilder<T>> {
+  late T value;
+  @override
+  void initState() {
+    value = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
