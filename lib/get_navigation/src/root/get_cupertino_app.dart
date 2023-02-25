@@ -125,17 +125,6 @@ class GetCupertinoApp extends StatelessWidget {
         routerDelegate = null,
         super(key: key);
 
-  static String _cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncommonent for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
-  }
-
   GetCupertinoApp.router({
     Key? key,
     this.theme,

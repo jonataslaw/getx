@@ -71,7 +71,7 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
-  void futurize(Future<T> Function()  body,
+  void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
     _value ??= initialData;

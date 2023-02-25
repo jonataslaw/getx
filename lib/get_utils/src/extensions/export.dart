@@ -3,6 +3,7 @@ export 'double_extensions.dart';
 export 'duration_extensions.dart';
 export 'dynamic_extensions.dart';
 export 'event_loop_extensions.dart';
+export 'int_extensions.dart';
 export 'internacionalization.dart' hide FirstWhereExt;
 export 'iterable_extensions.dart';
 export 'num_extensions.dart';
