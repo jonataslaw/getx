@@ -325,17 +325,110 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('WaveAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      WaveAnimation(
+        duration: const Duration(seconds: 1),
+        delay: Duration.zero,
+        begin: 1.0,
+        end: 2.0,
+        child: Container(),
+      ),
+    );
+    expect(find.byType(WaveAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('WobbleAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      WobbleAnimation(
+        duration: const Duration(seconds: 1),
+        delay: Duration.zero,
+        begin: 1.0,
+        end: 2.0,
+        child: Container(),
+      ),
+    );
+    expect(find.byType(WobbleAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('SlideAnimation', (WidgetTester tester) async {
     await tester.pumpWidget(
       SlideAnimation(
+        offsetBuild: (p0, p1) => const Offset(1.0, 1.0),
         duration: const Duration(seconds: 1),
         delay: Duration.zero,
-        begin: Offset.zero,
-        end: const Offset(1.0, 1.0),
+        begin: 0,
+        end: 1,
         child: Container(),
       ),
     );
     expect(find.byType(SlideAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('SlideInLeftAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _Wrapper(
+        child: SlideInLeftAnimation(
+          duration: const Duration(seconds: 1),
+          delay: Duration.zero,
+          begin: 1.0,
+          end: 2.0,
+          child: Container(),
+        ),
+      ),
+    );
+    expect(find.byType(SlideInLeftAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('SlideInRightAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _Wrapper(
+        child: SlideInRightAnimation(
+          duration: const Duration(seconds: 1),
+          delay: Duration.zero,
+          begin: 1.0,
+          end: 2.0,
+          child: Container(),
+        ),
+      ),
+    );
+    expect(find.byType(SlideInRightAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('SlideInUpAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _Wrapper(
+        child: SlideInUpAnimation(
+          duration: const Duration(seconds: 1),
+          delay: Duration.zero,
+          begin: 1.0,
+          end: 2.0,
+          child: Container(),
+        ),
+      ),
+    );
+    expect(find.byType(SlideInUpAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('SlideInDownAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _Wrapper(
+        child: SlideInDownAnimation(
+          duration: const Duration(seconds: 1),
+          delay: Duration.zero,
+          begin: 1.0,
+          end: 2.0,
+          child: Container(),
+        ),
+      ),
+    );
+    expect(find.byType(SlideInDownAnimation), findsOneWidget);
     await tester.pumpAndSettle();
   });
 
@@ -350,20 +443,6 @@ void main() {
       ),
     );
     expect(find.byType(BounceAnimation), findsOneWidget);
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('ShakeAnimation', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      ShakeAnimation(
-        duration: const Duration(seconds: 1),
-        delay: Duration.zero,
-        begin: 0.0,
-        end: 10.0,
-        child: Container(),
-      ),
-    );
-    expect(find.byType(ShakeAnimation), findsOneWidget);
     await tester.pumpAndSettle();
   });
 
@@ -404,6 +483,34 @@ void main() {
       ),
     );
     expect(find.byType(SizeAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('BlurAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      BlurAnimation(
+        duration: const Duration(seconds: 1),
+        delay: Duration.zero,
+        begin: 1.0,
+        end: 2.0,
+        child: Container(),
+      ),
+    );
+    expect(find.byType(BlurAnimation), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('FlipAnimation', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      FlipAnimation(
+        duration: const Duration(seconds: 1),
+        delay: Duration.zero,
+        begin: 1.0,
+        end: 2.0,
+        child: Container(),
+      ),
+    );
+    expect(find.byType(FlipAnimation), findsOneWidget);
     await tester.pumpAndSettle();
   });
 }

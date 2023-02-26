@@ -81,8 +81,9 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder slide({
-    required Offset begin,
-    required Offset end,
+    required OffsetBuilder offset,
+    double begin = 0,
+    double end = 1,
     Duration duration = _defaultDuration,
     Duration delay = _defaultDelay,
     ValueSetter<AnimationController>? onComplete,
@@ -94,6 +95,7 @@ extension AnimationExtension on Widget {
       begin: begin,
       end: end,
       onComplete: onComplete,
+      offsetBuild: offset,
       child: this,
     );
   }
@@ -107,24 +109,6 @@ extension AnimationExtension on Widget {
     bool isSequential = false,
   }) {
     return BounceAnimation(
-      duration: duration,
-      delay: _getDelay(isSequential, delay),
-      begin: begin,
-      end: end,
-      onComplete: onComplete,
-      child: this,
-    );
-  }
-
-  GetAnimatedBuilder shake({
-    required double begin,
-    required double end,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
-  }) {
-    return ShakeAnimation(
       duration: duration,
       delay: _getDelay(isSequential, delay),
       begin: begin,
@@ -157,6 +141,60 @@ extension AnimationExtension on Widget {
     bool isSequential = false,
   }) {
     return SizeAnimation(
+      duration: duration,
+      delay: _getDelay(isSequential, delay),
+      begin: begin,
+      end: end,
+      onComplete: onComplete,
+      child: this,
+    );
+  }
+
+  GetAnimatedBuilder blur({
+    double begin = 0,
+    double end = 15,
+    Duration duration = _defaultDuration,
+    Duration delay = _defaultDelay,
+    ValueSetter<AnimationController>? onComplete,
+    bool isSequential = false,
+  }) {
+    return BlurAnimation(
+      duration: duration,
+      delay: _getDelay(isSequential, delay),
+      begin: begin,
+      end: end,
+      onComplete: onComplete,
+      child: this,
+    );
+  }
+
+  GetAnimatedBuilder flip({
+    double begin = 0,
+    double end = 1,
+    Duration duration = _defaultDuration,
+    Duration delay = _defaultDelay,
+    ValueSetter<AnimationController>? onComplete,
+    bool isSequential = false,
+  }) {
+    return FlipAnimation(
+      duration: duration,
+      delay: _getDelay(isSequential, delay),
+      begin: begin,
+      end: end,
+      onComplete: onComplete,
+      child: this,
+    );
+  }
+
+  GetAnimatedBuilder wave({
+    double begin = 0,
+    double end = 1,
+    Duration duration = _defaultDuration,
+    Duration delay = _defaultDelay,
+    ValueSetter<AnimationController>? onComplete,
+    bool isSequential = false,
+  }) {
+    return WaveAnimation(
       duration: duration,
       delay: _getDelay(isSequential, delay),
       begin: begin,
