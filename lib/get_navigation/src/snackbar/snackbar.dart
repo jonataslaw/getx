@@ -7,87 +7,9 @@ import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
 typedef OnTap = void Function(GetSnackBar snack);
+typedef OnHover = void Function(GetSnackBar snack, SnackHoverState snackHoverState);
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
-
-@Deprecated('use GetSnackBar')
-class GetBar extends GetSnackBar {
-  GetBar({
-    Key? key,
-    String? title,
-    String? message,
-    Widget? titleText,
-    Widget? messageText,
-    Widget? icon,
-    bool shouldIconPulse = true,
-    double? maxWidth,
-    EdgeInsets margin = const EdgeInsets.all(0.0),
-    EdgeInsets padding = const EdgeInsets.all(16),
-    double borderRadius = 0.0,
-    Color? borderColor,
-    double borderWidth = 1.0,
-    Color backgroundColor = const Color(0xFF303030),
-    Color? leftBarIndicatorColor,
-    List<BoxShadow>? boxShadows,
-    Gradient? backgroundGradient,
-    Widget? mainButton,
-    OnTap? onTap,
-    Duration? duration,
-    bool isDismissible = true,
-    DismissDirection? dismissDirection,
-    bool showProgressIndicator = false,
-    AnimationController? progressIndicatorController,
-    Color? progressIndicatorBackgroundColor,
-    Animation<Color>? progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.bottom,
-    SnackStyle snackStyle = SnackStyle.floating,
-    Curve forwardAnimationCurve = Curves.easeOutCirc,
-    Curve reverseAnimationCurve = Curves.easeOutCirc,
-    Duration animationDuration = const Duration(seconds: 1),
-    double barBlur = 0.0,
-    double overlayBlur = 0.0,
-    Color overlayColor = Colors.transparent,
-    Form? userInputForm,
-    SnackbarStatusCallback? snackbarStatus,
-  }) : super(
-          key: key,
-          title: title,
-          message: message,
-          titleText: titleText,
-          messageText: messageText,
-          icon: icon,
-          shouldIconPulse: shouldIconPulse,
-          maxWidth: maxWidth,
-          margin: margin,
-          padding: padding,
-          borderRadius: borderRadius,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          backgroundColor: backgroundColor,
-          leftBarIndicatorColor: leftBarIndicatorColor,
-          boxShadows: boxShadows,
-          backgroundGradient: backgroundGradient,
-          mainButton: mainButton,
-          onTap: onTap,
-          duration: duration,
-          isDismissible: isDismissible,
-          dismissDirection: dismissDirection,
-          showProgressIndicator: showProgressIndicator,
-          progressIndicatorController: progressIndicatorController,
-          progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-          progressIndicatorValueColor: progressIndicatorValueColor,
-          snackPosition: snackPosition,
-          snackStyle: snackStyle,
-          forwardAnimationCurve: forwardAnimationCurve,
-          reverseAnimationCurve: reverseAnimationCurve,
-          animationDuration: animationDuration,
-          barBlur: barBlur,
-          overlayBlur: overlayBlur,
-          overlayColor: overlayColor,
-          userInputForm: userInputForm,
-          snackbarStatus: snackbarStatus,
-        );
-}
 
 class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
@@ -149,6 +71,9 @@ class GetSnackBar extends StatefulWidget {
   /// A callback that registers the user's click anywhere.
   /// An alternative to [mainButton]
   final OnTap? onTap;
+
+  /// A callback that registers the user's hover anywhere over the Snackbar.
+  final OnHover? onHover;
 
   /// How long until Snack will hide itself (be dismissed).
   /// To make it indefinite, leave it null.
@@ -259,6 +184,7 @@ class GetSnackBar extends StatefulWidget {
     this.backgroundGradient,
     this.mainButton,
     this.onTap,
+    this.onHover,
     this.duration,
     this.isDismissible = true,
     this.dismissDirection,
@@ -293,11 +219,11 @@ class GetSnackBarState extends State<GetSnackBar>
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
 
-  final Widget _emptyWidget = SizedBox(width: 0.0, height: 0.0);
+  final Widget _emptyWidget = const SizedBox(width: 0.0, height: 0.0);
   final double _initialOpacity = 1.0;
   final double _finalOpacity = 0.4;
 
-  final Duration _pulseAnimationDuration = Duration(seconds: 1);
+  final Duration _pulseAnimationDuration = const Duration(seconds: 1);
 
   late bool _isTitlePresent;
   late double _messageTopMargin;
@@ -513,9 +439,9 @@ You need to either use message[String], or messageText[Widget] or define a userI
         padding: const EdgeInsets.only(
             left: 8.0, right: 8.0, bottom: 8.0, top: 16.0),
         child: FocusScope(
-          child: widget.userInputForm!,
           node: _focusNode,
           autofocus: true,
+          child: widget.userInputForm!,
         ),
       ),
     );
@@ -581,7 +507,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
                         child: widget.titleText ??
                             Text(
                               widget.title ?? "",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -600,8 +526,8 @@ You need to either use message[String], or messageText[Widget] or define a userI
                       child: widget.messageText ??
                           Text(
                             widget.message ?? "",
-                            style:
-                                TextStyle(fontSize: 14.0, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 14.0, color: Colors.white),
                           ),
                     ),
                   ],
@@ -657,3 +583,6 @@ enum SnackPosition { top, bottom }
 
 /// Indicates if snack will be attached to the edge of the screen or not
 enum SnackStyle { floating, grounded }
+
+/// Indicates if the mouse entered or exited
+enum SnackHoverState { entered, exited }

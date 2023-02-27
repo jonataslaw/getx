@@ -176,11 +176,11 @@ class Notifier {
     _notifyData?.disposers.add(listener);
   }
 
-  void read(ListNotifierSingleMixin _updaters) {
+  void read(ListNotifierSingleMixin updaters) {
     final listener = _notifyData?.updater;
-    if (listener != null && !_updaters.containsListener(listener)) {
-      _updaters.addListener(listener);
-      add(() => _updaters.removeListener(listener));
+    if (listener != null && !updaters.containsListener(listener)) {
+      updaters.addListener(listener);
+      add(() => updaters.removeListener(listener));
     }
   }
 
@@ -188,7 +188,7 @@ class Notifier {
     _notifyData = data;
     final result = builder();
     if (data.disposers.isEmpty && data.throwException) {
-      throw ObxError();
+      throw const ObxError();
     }
     _notifyData = null;
     return result;

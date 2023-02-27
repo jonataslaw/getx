@@ -6,6 +6,8 @@ import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
 class RootView extends GetView<RootController> {
+  const RootView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return RouterOutlet.builder(
@@ -13,7 +15,7 @@ class RootView extends GetView<RootController> {
       builder: (context) {
         final title = context.location;
         return Scaffold(
-          drawer: DrawerWidget(),
+          drawer: const DrawerWidget(),
           appBar: AppBar(
             title: Text(title),
             centerTitle: true,

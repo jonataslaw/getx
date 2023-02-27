@@ -31,7 +31,7 @@ void main() {
                   'Map: ${controller.map.length}',
                 ),
                 TextButton(
-                  child: Text("increment"),
+                  child: const Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
                 GetX<Controller2>(builder: (controller) {

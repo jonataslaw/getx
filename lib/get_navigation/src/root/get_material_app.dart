@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 
-import '../../../get_core/get_core.dart';
-import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
-import '../router_report.dart';
+import 'get_root.dart';
 
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -132,7 +131,7 @@ class GetMaterialApp extends StatelessWidget {
         routerConfig = null,
         super(key: key);
 
-  GetMaterialApp.router({
+  const GetMaterialApp.router({
     Key? key,
     this.routeInformationProvider,
     this.scaffoldMessengerKey,
@@ -196,80 +195,80 @@ class GetMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Binds(
-      binds: [
-        Bind.lazyPut<GetMaterialController>(
-          () => GetMaterialController(
-            ConfigData(
-              backButtonDispatcher: backButtonDispatcher,
-              binds: binds,
-              customTransition: customTransition,
-              defaultGlobalState: defaultGlobalState,
-              defaultTransition: defaultTransition,
-              enableLog: enableLog,
-              fallbackLocale: fallbackLocale,
-              getPages: getPages,
-              home: home,
-              initialRoute: initialRoute,
-              locale: locale,
-              logWriterCallback: logWriterCallback,
-              navigatorKey: navigatorKey,
-              navigatorObservers: navigatorObservers,
-              onDispose: onDispose,
-              onInit: onInit,
-              onReady: onReady,
-              opaqueRoute: opaqueRoute,
-              popGesture: popGesture,
-              routeInformationParser: routeInformationParser,
-              routeInformationProvider: routeInformationProvider,
-              routerDelegate: routerDelegate,
-              routingCallback: routingCallback,
-              scaffoldMessengerKey: scaffoldMessengerKey,
-              smartManagement: smartManagement,
-              transitionDuration: transitionDuration,
-              translations: translations,
-              translationsKeys: translationsKeys,
-              unknownRoute: unknownRoute,
-            ),
-          ),
-          onClose: () {
-            Get.clearTranslations();
-            RouterReportManager.dispose();
-            Get.resetInstance(clearRouteBindings: true);
-          },
-        ),
-        ...binds,
-      ],
+    return GetRoot(
+      config: ConfigData(
+        backButtonDispatcher: backButtonDispatcher,
+        binds: binds,
+        customTransition: customTransition,
+        defaultGlobalState: defaultGlobalState,
+        defaultTransition: defaultTransition,
+        enableLog: enableLog,
+        fallbackLocale: fallbackLocale,
+        getPages: getPages,
+        home: home,
+        initialRoute: initialRoute,
+        locale: locale,
+        logWriterCallback: logWriterCallback,
+        navigatorKey: navigatorKey,
+        navigatorObservers: navigatorObservers,
+        onDispose: onDispose,
+        onInit: onInit,
+        onReady: onReady,
+        routeInformationParser: routeInformationParser,
+        routeInformationProvider: routeInformationProvider,
+        routerDelegate: routerDelegate,
+        routingCallback: routingCallback,
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        smartManagement: smartManagement,
+        transitionDuration: transitionDuration,
+        translations: translations,
+        translationsKeys: translationsKeys,
+        unknownRoute: unknownRoute,
+        theme: theme,
+        darkTheme: darkTheme,
+        themeMode: themeMode,
+      ),
+      // binds: [
+      //   Bind.lazyPut<GetMaterialController>(
+      //     () => GetMaterialController(
+
+      //     ),
+      //     onClose: () {
+      //       Get.clearTranslations();
+      //       RouterReportManager.dispose();
+      //       Get.resetInstance(clearRouteBindings: true);
+      //     },
+      //   ),
+      //   ...binds,
+      // ],
       child: Builder(builder: (context) {
-        final controller = context.listen<GetMaterialController>();
+        final controller = GetRoot.of(context);
         return MaterialApp.router(
-          routerDelegate: controller.routerDelegate,
-          routeInformationParser: controller.routeInformationParser,
+          routerDelegate: controller.config.routerDelegate,
+          routeInformationParser: controller.config.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
           routerConfig: routerConfig,
-          key: controller.unikey,
+          key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
                 (rtlLanguages.contains(Get.locale?.languageCode)
                     ? TextDirection.rtl
                     : TextDirection.ltr),
             child: builder == null
-                ? (child ?? Material())
-                : builder!(context, child ?? Material()),
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
           ),
           title: title,
           onGenerateTitle: onGenerateTitle,
           color: color,
-          theme: controller.theme ?? theme ?? ThemeData.fallback(),
-          darkTheme: controller.darkTheme ??
-              darkTheme ??
-              theme ??
+          theme: controller.config.theme ?? ThemeData.fallback(),
+          darkTheme: controller.config.darkTheme ??
+              controller.config.theme ??
               ThemeData.fallback(),
-          themeMode: controller.themeMode ?? themeMode,
+          themeMode: controller.config.themeMode,
           locale: Get.locale ?? locale,
-          scaffoldMessengerKey:
-              scaffoldMessengerKey ?? controller.scaffoldMessengerKey,
+          scaffoldMessengerKey: controller.config.scaffoldMessengerKey,
           localizationsDelegates: localizationsDelegates,
           localeListResolutionCallback: localeListResolutionCallback,
           localeResolutionCallback: localeResolutionCallback,

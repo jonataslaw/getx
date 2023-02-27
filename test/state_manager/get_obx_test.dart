@@ -18,8 +18,8 @@ void main() {
                 Text('Bool: ${controller.boolean.value}'),
                 Text('Map: ${controller.map.length}'),
                 TextButton(
-                  child: Text("increment"),
                   onPressed: controller.increment,
+                  child: const Text("increment"),
                 ),
                 Obx(() => Text('Obx: ${controller.map.length}'))
               ]),

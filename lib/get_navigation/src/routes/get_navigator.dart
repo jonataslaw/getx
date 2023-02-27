@@ -48,7 +48,7 @@ class GetNavigator extends Navigator {
         );
 
   GetNavigator({
-    GlobalKey<NavigatorState>? key,
+    Key? key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     required List<GetPage> pages,
     List<NavigatorObserver>? observers,

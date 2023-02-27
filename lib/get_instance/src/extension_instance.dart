@@ -27,6 +27,24 @@ class InstanceInfo {
   }
 }
 
+extension ResetInstance on GetInterface {
+  /// Clears all registered instances (and/or tags).
+  /// Even the persistent ones.
+  /// This should be used at the end or tearDown of unit tests.
+  ///
+  /// `clearFactory` clears the callbacks registered by [lazyPut]
+  /// `clearRouteBindings` clears Instances associated with routes.
+  ///
+  bool resetInstance({bool clearRouteBindings = true}) {
+    //  if (clearFactory) _factory.clear();
+    // deleteAll(force: true);
+    if (clearRouteBindings) RouterReportManager.instance.clearRouteKeys();
+    Inst._singl.clear();
+
+    return true;
+  }
+}
+
 extension Inst on GetInterface {
   T call<T>() => find<T>();
 
@@ -143,11 +161,11 @@ extension Inst on GetInterface {
 
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final _dep = _singl[key];
-      if (_dep == null || !_dep.isDirty) {
+      final newDep = _singl[key];
+      if (newDep == null || !newDep.isDirty) {
         return;
       } else {
-        dep = _dep as _InstanceBuilderFactory<S>;
+        dep = newDep as _InstanceBuilderFactory<S>;
       }
     }
     _singl[key] = _InstanceBuilderFactory<S>(
@@ -309,22 +327,6 @@ extension Inst on GetInterface {
   /// to register an Instance Builder in the hashmap.
   String _getKey(Type type, String? name) {
     return name == null ? type.toString() : type.toString() + name;
-  }
-
-  /// Clears all registered instances (and/or tags).
-  /// Even the persistent ones.
-  /// This should be used at the end or tearDown of unit tests.
-  ///
-  /// `clearFactory` clears the callbacks registered by [lazyPut]
-  /// `clearRouteBindings` clears Instances associated with routes.
-  ///
-  bool resetInstance({bool clearRouteBindings = true}) {
-    //  if (clearFactory) _factory.clear();
-    // deleteAll(force: true);
-    if (clearRouteBindings) RouterReportManager.instance.clearRouteKeys();
-    _singl.clear();
-
-    return true;
   }
 
   /// Delete registered Class Instance [S] (or [tag]) and, closes any open
