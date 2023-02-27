@@ -8,8 +8,8 @@ import '../../response/response.dart';
 import '../interface/request_base.dart';
 import '../utils/body_decoder.dart';
 
-/// A `dart:io` implementation of `HttpRequestBase`.
-class HttpRequestImpl extends HttpRequestBase {
+/// A `dart:io` implementation of `IClient`.
+class HttpRequestImpl extends IClient {
   io.HttpClient? _httpClient;
   io.SecurityContext? _securityContext;
 

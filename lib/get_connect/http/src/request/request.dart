@@ -68,7 +68,7 @@ class Request<T> {
     return Request._(
         url: url,
         method: method,
-        bodyBytes: bodyBytes ??= BodyBytesStream.fromBytes(const []),
+        bodyBytes: bodyBytes ??= <int>[].toStream(),
         headers: Map.from(headers),
         followRedirects: followRedirects,
         maxRedirects: maxRedirects,
@@ -113,9 +113,11 @@ class Request<T> {
   }
 }
 
-extension BodyBytesStream on Stream<List<int>> {
-  static Stream<List<int>> fromBytes(List<int> bytes) => Stream.value(bytes);
+extension StreamExt on List<int> {
+  Stream<List<int>> toStream() => Stream.value(this).asBroadcastStream();
+}
 
+extension BodyBytesStream on Stream<List<int>> {
   Future<Uint8List> toBytes() {
     var completer = Completer<Uint8List>();
     var sink = ByteConversionSink.withCallback(

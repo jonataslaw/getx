@@ -1,7 +1,6 @@
 import '../http/stub/file_decoder_stub.dart'
     if (dart.library.html) '../http/html/file_decoder_html.dart'
     if (dart.library.io) '../http/io/file_decoder_io.dart';
-
 import '../request/request.dart';
 
 class MultipartFile {
@@ -11,7 +10,7 @@ class MultipartFile {
     this.contentType = 'application/octet-stream',
   }) : _bytes = fileToBytes(data) {
     _length = _bytes.length;
-    _stream = BodyBytesStream.fromBytes(_bytes);
+    _stream = _bytes.toStream();
   }
 
   final List<int> _bytes;
