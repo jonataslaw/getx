@@ -11,85 +11,6 @@ typedef OnHover = void Function(GetSnackBar snack, SnackHoverState snackHoverSta
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
-@Deprecated('use GetSnackBar')
-class GetBar extends GetSnackBar {
-  GetBar({
-    Key? key,
-    String? title,
-    String? message,
-    Widget? titleText,
-    Widget? messageText,
-    Widget? icon,
-    bool shouldIconPulse = true,
-    double? maxWidth,
-    EdgeInsets margin = const EdgeInsets.all(0.0),
-    EdgeInsets padding = const EdgeInsets.all(16),
-    double borderRadius = 0.0,
-    Color? borderColor,
-    double borderWidth = 1.0,
-    Color backgroundColor = const Color(0xFF303030),
-    Color? leftBarIndicatorColor,
-    List<BoxShadow>? boxShadows,
-    Gradient? backgroundGradient,
-    Widget? mainButton,
-    OnTap? onTap,
-    Duration? duration,
-    bool isDismissible = true,
-    DismissDirection? dismissDirection,
-    bool showProgressIndicator = false,
-    AnimationController? progressIndicatorController,
-    Color? progressIndicatorBackgroundColor,
-    Animation<Color>? progressIndicatorValueColor,
-    SnackPosition snackPosition = SnackPosition.bottom,
-    SnackStyle snackStyle = SnackStyle.floating,
-    Curve forwardAnimationCurve = Curves.easeOutCirc,
-    Curve reverseAnimationCurve = Curves.easeOutCirc,
-    Duration animationDuration = const Duration(seconds: 1),
-    double barBlur = 0.0,
-    double overlayBlur = 0.0,
-    Color overlayColor = Colors.transparent,
-    Form? userInputForm,
-    SnackbarStatusCallback? snackbarStatus,
-  }) : super(
-          key: key,
-          title: title,
-          message: message,
-          titleText: titleText,
-          messageText: messageText,
-          icon: icon,
-          shouldIconPulse: shouldIconPulse,
-          maxWidth: maxWidth,
-          margin: margin,
-          padding: padding,
-          borderRadius: borderRadius,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          backgroundColor: backgroundColor,
-          leftBarIndicatorColor: leftBarIndicatorColor,
-          boxShadows: boxShadows,
-          backgroundGradient: backgroundGradient,
-          mainButton: mainButton,
-          onTap: onTap,
-          duration: duration,
-          isDismissible: isDismissible,
-          dismissDirection: dismissDirection,
-          showProgressIndicator: showProgressIndicator,
-          progressIndicatorController: progressIndicatorController,
-          progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-          progressIndicatorValueColor: progressIndicatorValueColor,
-          snackPosition: snackPosition,
-          snackStyle: snackStyle,
-          forwardAnimationCurve: forwardAnimationCurve,
-          reverseAnimationCurve: reverseAnimationCurve,
-          animationDuration: animationDuration,
-          barBlur: barBlur,
-          overlayBlur: overlayBlur,
-          overlayColor: overlayColor,
-          userInputForm: userInputForm,
-          snackbarStatus: snackbarStatus,
-        );
-}
-
 class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
@@ -298,11 +219,11 @@ class GetSnackBarState extends State<GetSnackBar>
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
 
-  final Widget _emptyWidget = SizedBox(width: 0.0, height: 0.0);
+  final Widget _emptyWidget = const SizedBox(width: 0.0, height: 0.0);
   final double _initialOpacity = 1.0;
   final double _finalOpacity = 0.4;
 
-  final Duration _pulseAnimationDuration = Duration(seconds: 1);
+  final Duration _pulseAnimationDuration = const Duration(seconds: 1);
 
   late bool _isTitlePresent;
   late double _messageTopMargin;
@@ -518,9 +439,9 @@ You need to either use message[String], or messageText[Widget] or define a userI
         padding: const EdgeInsets.only(
             left: 8.0, right: 8.0, bottom: 8.0, top: 16.0),
         child: FocusScope(
-          child: widget.userInputForm!,
           node: _focusNode,
           autofocus: true,
+          child: widget.userInputForm!,
         ),
       ),
     );
@@ -586,7 +507,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
                         child: widget.titleText ??
                             Text(
                               widget.title ?? "",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -605,8 +526,8 @@ You need to either use message[String], or messageText[Widget] or define a userI
                       child: widget.messageText ??
                           Text(
                             widget.message ?? "",
-                            style:
-                                TextStyle(fontSize: 14.0, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 14.0, color: Colors.white),
                           ),
                     ),
                   ],

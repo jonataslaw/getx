@@ -14,16 +14,16 @@ class AppPages {
   static final routes = [
     GetPage(
       name: Routes.HOME,
-      page: () => HomeView(),
+      page: () => const HomeView(),
       binding: HomeBinding(),
       children: [
         GetPage(
           name: Routes.COUNTRY,
-          page: () => CountryView(),
+          page: () => const CountryView(),
           children: [
             GetPage(
               name: Routes.DETAILS,
-              page: () => DetailsView(),
+              page: () => const DetailsView(),
             ),
           ],
         ),

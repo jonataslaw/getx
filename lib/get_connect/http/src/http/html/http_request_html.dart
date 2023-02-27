@@ -9,8 +9,8 @@ import '../../response/response.dart';
 import '../interface/request_base.dart';
 import '../utils/body_decoder.dart';
 
-/// A `dart:html` implementation of `HttpRequestBase`.
-class HttpRequestImpl implements HttpRequestBase {
+/// A `dart:html` implementation of `IClient`.
+class HttpRequestImpl implements IClient {
   HttpRequestImpl({
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
@@ -51,7 +51,7 @@ class HttpRequestImpl implements HttpRequestBase {
       var reader = FileReader();
 
       reader.onLoad.first.then((_) async {
-        var bodyBytes = BodyBytesStream.fromBytes(reader.result as List<int>);
+        var bodyBytes = (reader.result as List<int>).toStream();
 
         final stringBody =
             await bodyBytesToString(bodyBytes, xhr.responseHeaders);

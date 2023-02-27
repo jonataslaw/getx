@@ -18,11 +18,11 @@ class SplashService extends GetxService {
 
   Future<void> _initFunction() async {
     final t = Timer.periodic(
-      Duration(milliseconds: 500),
+      const Duration(milliseconds: 500),
       (t) => _changeActiveString(),
     );
     //simulate some long running operation
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
     //cancel the timer once we are done
     t.cancel();
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../get.dart';
 import 'dialog/dialog_route.dart';
+import 'root/get_root.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
@@ -27,6 +28,7 @@ extension ExtensionBottomSheet on GetInterface {
     RouteSettings? settings,
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
+    Curve? curve,
   }) {
     return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
@@ -52,6 +54,7 @@ extension ExtensionBottomSheet on GetInterface {
           enterBottomSheetDuration ?? const Duration(milliseconds: 250),
       exitBottomSheetDuration:
           exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+      curve: curve,
     ));
   }
 }
@@ -184,7 +187,7 @@ extension ExtensionDialog on GetInterface {
         actions.add(TextButton(
           style: TextButton.styleFrom(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: buttonColor ?? theme.colorScheme.secondary,
@@ -217,8 +220,8 @@ extension ExtensionDialog on GetInterface {
             ),
             child: Text(
               textConfirm ?? "Ok",
-              style:
-                  TextStyle(color: confirmTextColor ?? theme.backgroundColor),
+              style: TextStyle(
+                  color: confirmTextColor ?? theme.colorScheme.background),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -227,8 +230,8 @@ extension ExtensionDialog on GetInterface {
     }
 
     Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? EdgeInsets.all(8),
-      contentPadding: contentPadding ?? EdgeInsets.all(8),
+      titlePadding: titlePadding ?? const EdgeInsets.all(8),
+      contentPadding: contentPadding ?? const EdgeInsets.all(8),
 
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -241,7 +244,7 @@ extension ExtensionDialog on GetInterface {
           content ??
               Text(middleText,
                   textAlign: TextAlign.center, style: middleTextStyle),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ButtonTheme(
             minWidth: 78.0,
             height: 34.0,
@@ -431,14 +434,14 @@ extension ExtensionSnackbar on GetInterface {
             ),
         snackPosition: snackPosition ?? SnackPosition.top,
         borderRadius: borderRadius ?? 15,
-        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
         backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
-        padding: padding ?? EdgeInsets.all(16),
+        padding: padding ?? const EdgeInsets.all(16),
         borderColor: borderColor,
         borderWidth: borderWidth,
         leftBarIndicatorColor: leftBarIndicatorColor,
@@ -456,7 +459,7 @@ extension ExtensionSnackbar on GetInterface {
         snackStyle: snackStyle ?? SnackStyle.floating,
         forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
         reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? Duration(seconds: 1),
+        animationDuration: animationDuration ?? const Duration(seconds: 1),
         overlayBlur: overlayBlur ?? 0.0,
         overlayColor: overlayColor ?? Colors.transparent,
         userInputForm: userInputForm);
@@ -1009,36 +1012,36 @@ extension GetNavigationExt on GetInterface {
     }
     return Uri.tryParse(name)?.toString() ?? name;
   }
+  //TODO: Deprecated
+  // /// change default config of Get
+  // void config(
+  //     {bool? enableLog,
+  //     LogWriterCallback? logWriterCallback,
+  //     bool? defaultPopGesture,
+  //     bool? defaultOpaqueRoute,
+  //     Duration? defaultDurationTransition,
+  //     bool? defaultGlobalState,
+  //     Transition? defaultTransition}) {
+  //   if (enableLog != null) {
+  //     Get.isLogEnable = enableLog;
+  //   }
+  //   if (logWriterCallback != null) {
+  //     Get.log = logWriterCallback;
+  //   }
+  //   if (defaultPopGesture != null) {
+  //     _getxController.defaultPopGesture = defaultPopGesture;
+  //   }
+  //   if (defaultOpaqueRoute != null) {
+  //     _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
+  //   }
+  //   if (defaultTransition != null) {
+  //     _getxController.defaultTransition = defaultTransition;
+  //   }
 
-  /// change default config of Get
-  void config(
-      {bool? enableLog,
-      LogWriterCallback? logWriterCallback,
-      bool? defaultPopGesture,
-      bool? defaultOpaqueRoute,
-      Duration? defaultDurationTransition,
-      bool? defaultGlobalState,
-      Transition? defaultTransition}) {
-    if (enableLog != null) {
-      Get.isLogEnable = enableLog;
-    }
-    if (logWriterCallback != null) {
-      Get.log = logWriterCallback;
-    }
-    if (defaultPopGesture != null) {
-      _getxController.defaultPopGesture = defaultPopGesture;
-    }
-    if (defaultOpaqueRoute != null) {
-      _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
-    }
-    if (defaultTransition != null) {
-      _getxController.defaultTransition = defaultTransition;
-    }
-
-    if (defaultDurationTransition != null) {
-      _getxController.defaultTransitionDuration = defaultDurationTransition;
-    }
-  }
+  //   if (defaultDurationTransition != null) {
+  //     _getxController.defaultTransitionDuration = defaultDurationTransition;
+  //   }
+  // }
 
   Future<void> updateLocale(Locale l) async {
     Get.locale = l;
@@ -1062,33 +1065,33 @@ extension GetNavigationExt on GetInterface {
     await engine.performReassemble();
   }
 
-  void appUpdate() => _getxController.update();
+  void appUpdate() => rootController.update();
 
   void changeTheme(ThemeData theme) {
-    _getxController.setTheme(theme);
+    rootController.setTheme(theme);
   }
 
   void changeThemeMode(ThemeMode themeMode) {
-    _getxController.setThemeMode(themeMode);
+    rootController.setThemeMode(themeMode);
   }
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
-    return _getxController.addKey(newKey);
+    return rootController.addKey(newKey);
   }
 
   GetDelegate? nestedKey(String? key) {
-    return _getxController.nestedKey(key);
+    return rootController.nestedKey(key);
   }
 
   GetDelegate searchDelegate(dynamic k) {
-    GetDelegate _key;
+    GetDelegate key;
     if (k == null) {
-      _key = Get.rootController.rootDelegate;
+      key = Get.rootController.rootDelegate;
     } else {
       if (!keys.containsKey(k)) {
         throw 'Route id ($k) not found';
       }
-      _key = keys[k]!;
+      key = keys[k]!;
     }
 
     // if (_key.listenersLength == 0 && !testMode) {
@@ -1101,12 +1104,12 @@ extension GetNavigationExt on GetInterface {
     //   """;
     // }
 
-    return _key;
+    return key;
   }
 
   /// give current arguments
   //dynamic get arguments => routing.args;
-  dynamic get arguments => _getxController.rootDelegate.arguments();
+  dynamic get arguments => rootController.rootDelegate.arguments();
 
   /// give name from current route
   String get currentRoute => routing.current;
@@ -1155,11 +1158,11 @@ extension GetNavigationExt on GetInterface {
 
   /// give access to Theme.of(context)
   ThemeData get theme {
-    var _theme = ThemeData.fallback();
+    var theme = ThemeData.fallback();
     if (context != null) {
-      _theme = Theme.of(context!);
+      theme = Theme.of(context!);
     }
-    return _theme;
+    return theme;
   }
 
   /// The current null safe [WidgetsBinding]
@@ -1219,11 +1222,13 @@ extension GetNavigationExt on GetInterface {
   // /// give access to Immutable MediaQuery.of(context).size.width
   // double get width => MediaQuery.of(context).size.width;
 
-  GlobalKey<NavigatorState> get key => _getxController.key;
+  GlobalKey<NavigatorState> get key => rootController.key;
 
-  Map<dynamic, GetDelegate> get keys => _getxController.keys;
+  Map<dynamic, GetDelegate> get keys => rootController.keys;
 
-  GetMaterialController get rootController => _getxController;
+  GetRootState get rootController => GetRootState.controller;
+
+  ConfigData get _getxController => GetRootState.controller.config;
 
   bool get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
@@ -1246,20 +1251,18 @@ extension GetNavigationExt on GetInterface {
 
   Routing get routing => _getxController.routing;
 
-  Map<String, String?> get parameters =>
-      _getxController.rootDelegate.parameters;
   set parameters(Map<String, String?> newParameters) =>
-      _getxController.parameters = newParameters;
+      rootController.parameters = newParameters;
+
+  set testMode(bool isTest) => rootController.testMode = isTest;
 
   bool get testMode => _getxController.testMode;
-  set testMode(bool isTest) => _getxController.testMode = isTest;
+
+  Map<String, String?> get parameters => rootController.rootDelegate.parameters;
 
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>
       _getxController.routerDelegate as TDelegate?;
-
-  static final GetMaterialController _getxController =
-      Get.find<GetMaterialController>();
 }
 
 extension OverlayExt on GetInterface {
@@ -1282,8 +1285,8 @@ extension OverlayExt on GetInterface {
     });
     final overlayEntryLoader = OverlayEntry(builder: (context) {
       return loadingWidget ??
-          Center(
-              child: Container(
+          const Center(
+              child: SizedBox(
             height: 90,
             width: 90,
             child: Text('Loading...'),

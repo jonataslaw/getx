@@ -28,7 +28,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: '/',
-      page: () => RootView(),
+      page: () => const RootView(),
       bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
@@ -39,7 +39,7 @@ class AppPages {
             EnsureNotAuthedMiddleware(),
           ],
           name: _Paths.login,
-          page: () => LoginView(),
+          page: () => const LoginView(),
           bindings: [LoginBinding()],
         ),
         GetPage(
@@ -53,7 +53,7 @@ class AppPages {
           children: [
             GetPage(
               name: _Paths.dashboard,
-              page: () => DashboardView(),
+              page: () => const DashboardView(),
               bindings: [
                 DashboardBinding(),
               ],
@@ -64,7 +64,7 @@ class AppPages {
                 EnsureAuthMiddleware(),
               ],
               name: _Paths.profile,
-              page: () => ProfileView(),
+              page: () => const ProfileView(),
               title: 'Profile',
               transition: Transition.size,
               bindings: [ProfileBinding()],
@@ -82,8 +82,8 @@ class AppPages {
                   name: _Paths.productDetails,
                   transition: Transition.cupertino,
                   showCupertinoParallax: true,
-                  page: () => ProductDetailsView(),
-                  bindings: [],
+                  page: () => const ProductDetailsView(),
+                  bindings: const [],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
@@ -95,7 +95,7 @@ class AppPages {
         ),
         GetPage(
           name: _Paths.settings,
-          page: () => SettingsView(),
+          page: () => const SettingsView(),
           bindings: [
             SettingsBinding(),
           ],

@@ -19,7 +19,7 @@ class DrawerWidget extends StatelessWidget {
             color: Colors.red,
           ),
           ListTile(
-            title: Text('Home'),
+            title: const Text('Home'),
             onTap: () {
               Get.toNamed(Routes.home);
               //to close the drawer
@@ -28,7 +28,7 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Settings'),
+            title: const Text('Settings'),
             onTap: () {
               Get.toNamed(Routes.settings);
               //to close the drawer
@@ -38,7 +38,7 @@ class DrawerWidget extends StatelessWidget {
           ),
           if (AuthService.to.isLoggedInValue)
             ListTile(
-              title: Text(
+              title: const Text(
                 'Logout',
                 style: TextStyle(
                   color: Colors.red,
@@ -54,7 +54,7 @@ class DrawerWidget extends StatelessWidget {
             ),
           if (!AuthService.to.isLoggedInValue)
             ListTile(
-              title: Text(
+              title: const Text(
                 'Login',
                 style: TextStyle(
                   color: Colors.blue,

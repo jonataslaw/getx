@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
+import '../root/get_root.dart';
 
 const double _kBackGestureWidth = 20.0;
 
@@ -379,8 +380,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             ? CurvedAnimation(parent: animation, curve: finalCurve)
             : animation,
         secondaryRouteAnimation: secondaryAnimation,
-        child: child,
         linearTransition: linearTransition,
+        child: child,
       );
     } else {
       if (route.customTransition != null) {
@@ -635,7 +636,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.fade:
-          return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+          return const FadeUpwardsPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
@@ -655,7 +656,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.topLevel:
-          return ZoomPageTransitionsBuilder().buildTransitions(
+          return const ZoomPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
@@ -675,7 +676,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.native:
-          return PageTransitionsTheme().buildTransitions(
+          return const PageTransitionsTheme().buildTransitions(
               route,
               context,
               iosAnimation,
@@ -716,8 +717,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         default:
-          final customTransition =
-              context.get<GetMaterialController>().customTransition;
+          final customTransition = GetRoot.of(context).config.customTransition;
+
           if (customTransition != null) {
             return customTransition.buildTransition(context, route.curve,
                 route.alignment, animation, secondaryAnimation, child);

@@ -130,8 +130,8 @@ class MiddlewareRunner {
   final List<GetMiddleware>? _middlewares;
 
   List<GetMiddleware> _getMiddlewares() {
-    final _m = _middlewares ?? <GetMiddleware>[];
-    return _m
+    final newMiddleware = _middlewares ?? <GetMiddleware>[];
+    return List.of(newMiddleware)
       ..sort(
         (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0),
       );
@@ -198,34 +198,33 @@ class PageRedirect {
   GetPageRoute<T> getPageToRoute<T>(
       GetPage rou, GetPage? unk, BuildContext context) {
     while (needRecheck(context)) {}
-    final _r = (isUnknown ? unk : rou)!;
+    final r = (isUnknown ? unk : rou)!;
 
     return GetPageRoute<T>(
-      page: _r.page,
-      parameter: _r.parameters,
-      alignment: _r.alignment,
-      title: _r.title,
-      maintainState: _r.maintainState,
-      routeName: _r.name,
-      settings: _r,
-      curve: _r.curve,
-      showCupertinoParallax: _r.showCupertinoParallax,
-      gestureWidth: _r.gestureWidth,
-      opaque: _r.opaque,
-      customTransition: _r.customTransition,
-      bindings: _r.bindings,
-      binding: _r.binding,
-      binds: _r.binds,
-      transitionDuration:
-          _r.transitionDuration ?? Get.defaultTransitionDuration,
+      page: r.page,
+      parameter: r.parameters,
+      alignment: r.alignment,
+      title: r.title,
+      maintainState: r.maintainState,
+      routeName: r.name,
+      settings: r,
+      curve: r.curve,
+      showCupertinoParallax: r.showCupertinoParallax,
+      gestureWidth: r.gestureWidth,
+      opaque: r.opaque,
+      customTransition: r.customTransition,
+      bindings: r.bindings,
+      binding: r.binding,
+      binds: r.binds,
+      transitionDuration: r.transitionDuration ?? Get.defaultTransitionDuration,
       reverseTransitionDuration:
-          _r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
+          r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
       // performIncomeAnimation: _r.performIncomeAnimation,
       // performOutGoingAnimation: _r.performOutGoingAnimation,
-      transition: _r.transition,
-      popGesture: _r.popGesture,
-      fullscreenDialog: _r.fullscreenDialog,
-      middlewares: _r.middlewares,
+      transition: r.transition,
+      popGesture: r.popGesture,
+      fullscreenDialog: r.fullscreenDialog,
+      middlewares: r.middlewares,
     );
   }
 
@@ -248,7 +247,7 @@ class PageRedirect {
     addPageParameter(route!);
 
     // No middlewares found return match.
-    if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
+    if (match.route!.middlewares.isEmpty) {
       return false;
     }
     final newSettings = runner.runRedirect(settings!.name);

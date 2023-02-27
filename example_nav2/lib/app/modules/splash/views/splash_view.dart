@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/splash_service.dart';
 
 class SplashView extends GetView<SplashService> {
+  const SplashView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,10 +16,10 @@ class SplashView extends GetView<SplashService> {
             Obx(
               () => Text(
                 controller.welcomeStr[controller.activeStr.value],
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
           ],
         ),
       ),

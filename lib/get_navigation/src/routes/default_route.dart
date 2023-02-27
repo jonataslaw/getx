@@ -132,15 +132,15 @@ class GetPageRoute<T> extends PageRoute<T>
           final dep = item.dependencies();
           if (dep is List<Bind>) {
             _child = Binds(
-              child: middlewareRunner.runOnPageBuilt(pageToBuild()),
               binds: dep,
+              child: middlewareRunner.runOnPageBuilt(pageToBuild()),
             );
           }
         }
       } else if (bindingsToBind is List<Bind>) {
         _child = Binds(
-          child: middlewareRunner.runOnPageBuilt(pageToBuild()),
           binds: bindingsToBind,
+          child: middlewareRunner.runOnPageBuilt(pageToBuild()),
         );
       }
     }

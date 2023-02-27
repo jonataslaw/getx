@@ -89,7 +89,7 @@ class SlideDownTransition {
       Widget child) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0.0, 1.0),
+        begin: const Offset(0.0, 1.0),
         end: Offset.zero,
       ).animate(animation),
       child: child,
@@ -107,7 +107,7 @@ class SlideLeftTransition {
       Widget child) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(-1.0, 0.0),
+        begin: const Offset(-1.0, 0.0),
         end: Offset.zero,
       ).animate(animation),
       child: child,
@@ -125,7 +125,7 @@ class SlideRightTransition {
       Widget child) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(1.0, 0.0),
+        begin: const Offset(1.0, 0.0),
         end: Offset.zero,
       ).animate(animation),
       child: child,
@@ -143,7 +143,7 @@ class SlideTopTransition {
       Widget child) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0.0, -1.0),
+        begin: const Offset(0.0, -1.0),
         end: Offset.zero,
       ).animate(animation),
       child: child,

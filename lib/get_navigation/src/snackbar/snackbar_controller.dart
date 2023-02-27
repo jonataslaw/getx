@@ -220,15 +220,15 @@ class SnackbarController {
       ],
       OverlayEntry(
         builder: (context) => Semantics(
+          focused: false,
+          container: true,
+          explicitChildNodes: true,
           child: AlignTransition(
             alignment: _animation,
             child: snackbar.isDismissible
                 ? _getDismissibleSnack(child)
                 : _getSnackbarContainer(child),
           ),
-          focused: false,
-          container: true,
-          explicitChildNodes: true,
         ),
         maintainState: false,
         opaque: false,
