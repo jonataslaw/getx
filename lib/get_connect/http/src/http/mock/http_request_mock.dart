@@ -5,7 +5,7 @@ import '../utils/body_decoder.dart';
 
 typedef MockClientHandler = Future<Response> Function(Request request);
 
-class MockClient extends HttpRequestBase {
+class MockClient extends IClient {
   /// The handler for than transforms request on response
   final MockClientHandler _handler;
 
@@ -16,7 +16,7 @@ class MockClient extends HttpRequestBase {
   @override
   Future<Response<T>> send<T>(Request<T> request) async {
     var requestBody = await request.bodyBytes.toBytes();
-    var bodyBytes = BodyBytesStream.fromBytes(requestBody);
+    var bodyBytes = requestBody.toStream();
 
     var response = await _handler(request);
 
