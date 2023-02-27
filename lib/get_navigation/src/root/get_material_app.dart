@@ -63,6 +63,7 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
   final BackButtonDispatcher? backButtonDispatcher;
   final bool useInheritedMediaQuery;
 
@@ -127,6 +128,7 @@ class GetMaterialApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
+        routerConfig = null,
         super(key: key);
 
   const GetMaterialApp.router({
@@ -135,6 +137,7 @@ class GetMaterialApp extends StatelessWidget {
     this.scaffoldMessengerKey,
     this.routeInformationParser,
     this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -245,6 +248,7 @@ class GetMaterialApp extends StatelessWidget {
           routeInformationParser: controller.config.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
+          routerConfig: routerConfig,
           key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
