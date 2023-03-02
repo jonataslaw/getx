@@ -243,9 +243,7 @@ class SnackbarController {
         onExit: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.exited),
         child: GestureDetector(
           child: snackbar,
-          onTap: snackbar.onTap != null
-              ? () => snackbar.onTap?.call(snackbar)
-              : null,
+          onTap: snackbar.onTap != null ? () => snackbar.onTap?.call(snackbar) : null,
         ),
       );
     });
