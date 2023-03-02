@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  final controller = Get.put(Controller());
   testWidgets("GetxController smoke test", (tester) async {
+    final controller = Get.put(Controller());
     await tester.pumpWidget(
       MaterialApp(
         home: Column(
@@ -18,8 +18,8 @@ void main() {
                 Text('Bool: ${controller.boolean.value}'),
                 Text('Map: ${controller.map.length}'),
                 TextButton(
-                  child: Text("increment"),
                   onPressed: controller.increment,
+                  child: const Text("increment"),
                 ),
                 Obx(() => Text('Obx: ${controller.map.length}'))
               ]),

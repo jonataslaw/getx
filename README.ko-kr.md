@@ -1,7 +1,9 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
+[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
 [![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
+[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -96,7 +98,7 @@
   
   - **조직화:** GetX는 화면, 프레젠테이션 로직, 비즈니스 로직, 종속성 주입 및 네비게이션을 완전히 분리 할 수 있습니다. 라우트간 전환을 하는데에 컨텍스트가 필요하지 않아 위젯 트리(시각객체)에 독립적입니다. inheritedWidget을 통해 컨트롤러/블록에 접근하는 데 컨텍스트가 필요하지 않아 시각화 계층에서 프레젠테이션 로직과 비즈니스 로직을 완전히 분리됩니다. 이 GetX는 자체 종속성 주입 기능을 사용하여 DI를 뷰에서 완전히 분리하기 때문에 다중 Provider를 통해 위젯 트리에서 컨트롤러/모델/블록으로 주입 할 필요가 없습니다.
 
-  GetX를 사용하면 기본적으로 클린 코드를 가지게 되어 애플리케이션의 각 기능을 쉽게 찾을 수있습니다. 이것은 유지 보수를 용이하게 하며 모듈의 공유가 가능하고 Flutter에서는 생각할 수 없었던 것들도 전부 가능합니다.
+  GetX를 사용하면 기본적으로 클린 코드를 가지게 되어 애플리케이션의 각 기능을 쉽게 찾을 수 있습니다. 이것은 유지 보수를 용이하게 하며 모듈의 공유가 가능하고 Flutter에서는 생각할 수 없었던 것들도 전부 가능합니다.
   BLoC은 Flutter에서 코드를 구성하기 위한 시작점으로 비즈니스 로직과 시각객체를 분리합니다. Getx는 비즈니스 로직 뿐만 아니라 프레젠테이션 로직을 분리하는 자연스러운 진화입니다. 추가로 종속성 주입과 라우트 또한 분리되고 데이터 계층이 모두로부터 분리됩니다. Hello World를 구현하는 것보다 더 쉽게 모든 것이 어디 있는지 알수 있습니다.  
   Flutter SDK와 함께 GetX를 사용하면 가장 쉽고 실용적이며 확장 가능한 고성능 어플리케이션을 만들수 있습니다. 초보자에게는 쉬우며 전문가에게는 정확하고 완벽하게 동작하는 대규모 생태계가 함께합니다. 안전하고 안정적이며 업데이트되고 기본 Flutter SDK에 없는 광범위한 API 빌드를 제공합니다.
 
@@ -127,7 +129,7 @@ import 'package:get/get.dart';
 
 # GetX를 사용한 Counter 앱
 
-Flutter의 새 프로젝트에서 기본적으로 생성 되는 "counter" 프로젝트는 100줄이 넘습니다 (코멘트 포함). Get의 힘을 보여주기 위해 클릭 할 때마다 상태를 변경하고, 페이지 사이를 전환하고, 화면 사이의 상태를 공유하는 "counter"를 만드는 방법을 주석이 포함된 26줄의 코드로 보여줄 것입니다.
+Flutter의 새 프로젝트에서 기본적으로 생성 되는 "counter" 프로젝트는 100줄이 넘습니다 (코멘트 포함). Get의 강력함을 보여주기 위해 클릭 할 때마다 상태를 변경하고, 페이지 사이를 전환하고, 화면 사이의 상태를 공유하는 "counter"를 만드는 방법을 주석이 포함된 26줄의 코드로 보여줄 것입니다.
 
 - 1 단계:
   MaterialApp 에 "Get"을 추가하여 GetMaterialApp 으로 변경합니다.
@@ -326,7 +328,7 @@ Text(controller.textFromApi);
 
 ### 종속성 관리에 대한 자세한 내용
 
-**종속성 관리에 대한 더 제사한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
+**종속성 관리에 대한 더 자세한 사항은 [여기](./documentation/kr_KO/dependency_management.md)에 있습니다.**
 
 # 기능들
 
@@ -1089,6 +1091,73 @@ class SettingsService extends GetxService {
 `GetxService`를 실질적으로 지우는 한가지 방법은 앱의 "Hot Reboot"과 같은 `Get.reset()`뿐 입니다.
 따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 
 `GetxService`를 사용하세요.
+
+### 테스트
+
+당신은 당신의 컨트롤러들을 생성주기를 포함하여 다른 어떤 클래스처럼 테스트할 수 있습니다 : 
+
+```dart
+class Controller extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    //name2로 값 변경
+    name.value = 'name2';
+  }
+
+  @override
+  void onClose() {
+    name.value = '';
+    super.onClose();
+  }
+
+  final name = 'name1'.obs;
+
+  void changeName() => name.value = 'name3';
+}
+
+void main() {
+  test('''
+Test the state of the reactive variable "name" across all of its lifecycles''',
+      () {
+    /// 당신은 생성주기를 제외하고 컨트롤러를 테스트할 수 있습니다,
+    /// 그러나 당신이 사용하지 않는다면 추천되지 않습니다
+    ///  GetX 종속성 주입 
+    final controller = Controller();
+    expect(controller.name.value, 'name1');
+
+    /// 당신이 그것을 사용한다면, 당신은 모든 것을 테스트할 수 있습니다,
+    /// 각각의 생성주기 이후 어플리케이션의 상태를 포함하여.
+    Get.put(controller); // onInit was called
+    expect(controller.name.value, 'name2');
+
+    /// 당신의 함수를 테스트하세요
+    controller.changeName();
+    expect(controller.name.value, 'name3');
+
+    /// onClose 호출됨
+    Get.delete<Controller>();
+
+    expect(controller.name.value, '');
+  });
+}
+```
+
+#### 팁들
+
+##### Mockito 또는 mocktail
+당신이 당신의 GetxController/GetxService를 모킹하려고 한다면, 당신은 GetxController를 extend 하고, Mock과 mixin 하라, 그렇게 되면 
+
+```dart
+class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
+```
+
+##### Get.reset() 사용하기
+당신이 위젯 또는 테스트 그룹을 테스트하고 있다면, 당신의 테스트의 마지막 또는 해제 때 당신의 이전 테스트에서 모든 설정을 리셋하기 위해 Get.rest을 사용하십시오
+
+##### Get.testMode 
+당신이 당신의 컨트롤러에서 당신의 네비게이션을 사용하고 있다면, 당신의 메인의 시작에 `Get.testMode = true` 를 사용하십시오.
+
 
 # 2.0의 주요 변경점
 

@@ -1,3 +1,131 @@
+## [5.0.0-release-candidate-2]
+This version adds built-in support for animation in Flutter in an easy, clear way, and without having to create a StatefulWidget with controllers and animations. All you need to do is call the name of the animation.
+
+If you want to add a "fadeIn" effect to any widget, simply add .fadeIn() to the end of it.
+
+```dart
+ Container(
+              color: Colors.blue,
+              height: 100,
+              width: 100,
+       ).fadeIn(),
+```
+
+
+https://user-images.githubusercontent.com/35742643/221383556-075a0b71-1617-4a31-a3c7-1acc68732f59.mp4
+
+Maybe you want to merge two or more animations, just concatenate them at the end of the widget.
+
+```dart
+ Container(
+              color: Colors.blue,
+              height: 100,
+              width: 100,
+      ).fadeIn().bounce(begin: -0.8, end: 0.3),
+```
+
+https://user-images.githubusercontent.com/35742643/221383613-9044c92f-7c6b-48c4-aa79-0a0c20d4068a.mp4
+
+
+Creating animation sequences in Flutter is one of the most painful things to do with the framework. You need to create tons of AnimationControllers. Well, using GetX 5 you just need to tell your animation that it is sequential. Just like that.
+
+```dart
+ const FlutterLogo(size: 110)
+                        .bounce(begin: -0.8, end: 0.4)
+                        .fadeIn()
+                        .spin(isSequential: true)
+                        .wobble(isSequential: true, begin: 0, end: 8)
+                        .flip(isSequential: true)
+                        .fadeOut(isSequential: true),
+```
+
+Result:
+
+
+https://user-images.githubusercontent.com/35742643/221393968-20cb2411-516b-44a7-8b85-45090bece532.mp4
+
+
+## [5.0.0-release-candidate]
+Refactor StateManager, RouteManager and InstanceManager from scratch
+Fixed Bugs 
+Added a Scopped DI 
+Api now uses Navigator 2 
+Added new RouteOutlet
+Added a new futurize method to StateMixin, that tracks updates, errors, and states programatically, 
+
+## [4.6.1]
+Fix GetConnect on Flutter web
+
+## [4.6.0]
+Add useInheritedMediaQuery to GetMaterialApp and GetCupertinoApp (@davidhole)
+Add Circular reveal Transition (@parmarravi)
+Add request to failed response (@heftekharm)
+Fix internationalization with only country code (@codercengiz)
+Add GetTickerProviderStateMixin when multiple AnimationController objects are used (@NatsuOnFire)
+Add the followRedirects and maxRedirects fields to the Request object (@wei53881)
+Fix to rx.trigger fires twice (@gslender)
+Add proxy setting support to GetConnect (@jtans)
+Fix markAsDirty used on permanent controllers (@zenalex)
+Update Korean readme (@dumbokim)
+
+
+## [4.5.1]
+Fix Snackbar when it have action and icon the same time
+
+## [4.5.0] - Big Update
+To have a page-agnostic snackbar, we used OverlayRoute to display a partial route.
+However this had several problems:
+
+1: There was no possibility to close the page without closing the snackbar
+2: Get.back() could cause problems with tests of Get.isSnackbarOpen not being properly invoked
+3: Sometimes when using iOS popGesture with an open snackbar, some visual inconsistency might appear.
+4: When going to another route, the snackbar was not displayed on the new page, and if the user clicked on the new route as soon as he received a Snackbar, he could not read it.
+
+We remade the Snackbar from scratch, having its Api based on Overlay, and now opening a Snackbar won't be tied to a route, you can normally navigate routes while a Snackbar is shown at the top (or bottom), and even the PopGesture of the iOS is not influenced by it.
+
+Using Get.back() is handy, it's a small command, which closes routes, dialogs, snackbars, bottomsheets, etc, however Getx 5 will prioritize code safety, and splitting will reduce the check code as well. Currently we have to check if a snackbar is open, to close the snackbar and prevent the app from going back a page, all this boilerplate code will be removed, at the cost of having what it closes in front of Get.back command.
+
+For backwards compatibility, Get.back() still works for closing routes and overlays, however two new commands have been added: Get.closeCurrentSnackbar() and Get.closeAllSnackbars().
+Maybe we will have a clearer api in GetX 5, and maybe Get.back() will continue to do everything like it does today. The community will be consulted about the desired api. However version 5 will definitely have commands like: Get.closeCurrentSnackbar, Get.closeCurrentDialog etc. There is also the possibility to close a specific snackbar using the return of Get.snackbar, which will no longer return a void, and now return a SnackbarController.
+
+Snackbars now also have a Queue, and no longer stack one on top of the other, preventing viewing. GetX now has flexible, customizable, route-independent, and completely stable Snackbars.
+
+Fixed bugs where the snackbar showed an error in debug mode for a fraction of a second. We found that Flutter has a bug with blur below 0.001, so we set the minimum overlayBlur value to this value if it is ==true.
+
+Errors with internationalization were also fixed, where if you are in UK, and the app had the en_US language, you didn't have American English by default. Now, if the country code is not present, it will automatically fetch the language code before fetching a fallbackLanguage.
+
+Update locale also now returns a Future, allowing you to perform an action only when the language has already changed (@MHosssam)
+
+We are very happy to announce that GetX is now documented in Japanese as well, thanks to (@toshi-kuji)
+
+GetX has always been focused on transparency. You can tell what's going on with your app just by reading the logs on the console. However, these logs shouldn't appear in production, so it now only appears in debug mode (@maxzod)
+
+@maxzod has also started translating the docs into Arabic, we hope the documentation will be complete soon.
+
+Some remaining package logs have been moved to Get.log (@gairick-saha)
+
+RxList.removeWhere received performance optimizations (@zuvola)
+
+Optimizations in GetConnect and added the ability to modify all request items in GetConnect (@rodrigorahman)
+
+The current route could be inconsistent if a dialog were opened after a transition, fixed by @xiangzy1
+
+Fixed try/catch case missed in socket_notifier (@ShookLyngs)
+
+Also we had fixes in the docs: @DeathGun3344 @pinguluk
+
+GetX also surpassed the incredible mark of more than 7000 likes, being the most liked package in all pub.dev, went from 99% to 100% popularity, and has more than 5.3k stars on github. Documentation is now available in 12 languages, and we're happy for all the engagement from your community.
+
+This update is a preparation update for version 5, which will be released later this year.
+
+Breaking and Depreciation:
+GetBar is now deprecated, use GetSnackbar instead.
+dismissDirection now gets a DismissDirection, making the Snackbar more customizable.
+
+
+
+
+
 ## [4.3.8] 
 - Fix nav2 toNamed remove the route
 

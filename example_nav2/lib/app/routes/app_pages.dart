@@ -23,13 +23,13 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
       name: '/',
-      page: () => RootView(),
-      binding: RootBinding(),
+      page: () => const RootView(),
+      bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
       children: [
@@ -38,46 +38,52 @@ class AppPages {
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
-          name: _Paths.LOGIN,
-          page: () => LoginView(),
-          binding: LoginBinding(),
+          name: _Paths.login,
+          page: () => const LoginView(),
+          bindings: [LoginBinding()],
         ),
         GetPage(
           preventDuplicates: true,
-          name: _Paths.HOME,
-          page: () => HomeView(),
+          name: _Paths.home,
+          page: () => const HomeView(),
           bindings: [
             HomeBinding(),
           ],
           title: null,
           children: [
             GetPage(
-              name: _Paths.DASHBOARD,
-              page: () => DashboardView(),
-              binding: DashboardBinding(),
+              name: _Paths.dashboard,
+              page: () => const DashboardView(),
+              bindings: [
+                DashboardBinding(),
+              ],
             ),
             GetPage(
               middlewares: [
                 //only enter this route when authed
                 EnsureAuthMiddleware(),
               ],
-              name: _Paths.PROFILE,
-              page: () => ProfileView(),
+              name: _Paths.profile,
+              page: () => const ProfileView(),
               title: 'Profile',
               transition: Transition.size,
-              binding: ProfileBinding(),
+              bindings: [ProfileBinding()],
             ),
             GetPage(
-              name: _Paths.PRODUCTS,
-              page: () => ProductsView(),
+              name: _Paths.products,
+              page: () => const ProductsView(),
               title: 'Products',
-              transition: Transition.zoom,
-              binding: ProductsBinding(),
+              transition: Transition.cupertino,
+              showCupertinoParallax: true,
+              participatesInRootNavigator: false,
+              bindings: [ProductsBinding(), ProductDetailsBinding()],
               children: [
                 GetPage(
-                  name: _Paths.PRODUCT_DETAILS,
-                  page: () => ProductDetailsView(),
-                  binding: ProductDetailsBinding(),
+                  name: _Paths.productDetails,
+                  transition: Transition.cupertino,
+                  showCupertinoParallax: true,
+                  page: () => const ProductDetailsView(),
+                  bindings: const [],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
@@ -88,9 +94,11 @@ class AppPages {
           ],
         ),
         GetPage(
-          name: _Paths.SETTINGS,
-          page: () => SettingsView(),
-          binding: SettingsBinding(),
+          name: _Paths.settings,
+          page: () => const SettingsView(),
+          bindings: [
+            SettingsBinding(),
+          ],
         ),
       ],
     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import 'default_route.dart';
+
 enum Transition {
   fade,
   fadeIn,
@@ -15,7 +17,9 @@ enum Transition {
   cupertino,
   cupertinoDialog,
   size,
-  native
+  circularReveal,
+  native,
 }
 
 typedef GetPageBuilder = Widget Function();
+typedef GetRouteAwarePageBuilder<T> = Widget Function([GetPageRoute<T>? route]);

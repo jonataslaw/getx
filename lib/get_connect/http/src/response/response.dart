@@ -1,12 +1,15 @@
 import 'dart:collection';
 import 'dart:convert';
+
 import '../exceptions/exceptions.dart';
 import '../request/request.dart';
 import '../status/http_status.dart';
 
 class GraphQLResponse<T> extends Response<T> {
   final List<GraphQLError>? graphQLErrors;
+
   GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
+
   GraphQLResponse.fromResponse(Response res)
       : graphQLErrors = null,
         super(
@@ -29,6 +32,26 @@ class Response<T> {
     this.headers = const {},
     this.body,
   });
+
+  Response<T> copyWith({
+    Request? request,
+    int? statusCode,
+    Stream<List<int>>? bodyBytes,
+    String? bodyString,
+    String? statusText,
+    Map<String, String>? headers,
+    T? body,
+  }) {
+    return Response<T>(
+      request: request ?? this.request,
+      statusCode: statusCode ?? this.statusCode,
+      bodyBytes: bodyBytes ?? this.bodyBytes,
+      bodyString: bodyString ?? this.bodyString,
+      statusText: statusText ?? this.statusText,
+      headers: headers ?? this.headers,
+      body: body ?? this.body,
+    );
+  }
 
   /// The Http [Request] linked with this [Response].
   final Request? request;
@@ -206,7 +229,7 @@ class HeaderValue {
       }
 
       String? parseParameterValue() {
-        if (!done() && value[index] == '\"') {
+        if (!done() && value[index] == '"') {
           var stringBuffer = StringBuffer();
           index++;
           while (!done()) {
@@ -214,11 +237,11 @@ class HeaderValue {
               if (index + 1 == value.length) {
                 throw StateError('Failed to parse header value');
               }
-              if (preserveBackslash && value[index + 1] != '\"') {
+              if (preserveBackslash && value[index + 1] != '"') {
                 stringBuffer.write(value[index]);
               }
               index++;
-            } else if (value[index] == '\"') {
+            } else if (value[index] == '"') {
               index++;
               break;
             }

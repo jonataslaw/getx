@@ -31,11 +31,6 @@ class GetWidgetCacheElement extends ComponentElement {
   final WidgetCache<GetWidgetCache> cache;
 
   @override
-  void performRebuild() {
-    super.performRebuild();
-  }
-
-  @override
   void activate() {
     super.activate();
     markNeedsBuild();

@@ -269,6 +269,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! * other;
     }
+    return null;
   }
 
   /// Euclidean modulo operator.
@@ -288,6 +289,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! % other;
     }
+    return null;
   }
 
   /// Division operator.
@@ -295,6 +297,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! / other;
     }
+    return null;
   }
 
   /// Truncating division operator.
@@ -308,6 +311,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! ~/ other;
     }
+    return null;
   }
 
   /// Negate operator.
@@ -315,6 +319,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return -value!;
     }
+    return null;
   }
 
   /// Returns the remainder of the truncating division of `this` by [other].
@@ -330,6 +335,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! < other;
     }
+    return null;
   }
 
   /// Relational less than or equal operator.
@@ -337,6 +343,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! <= other;
     }
+    return null;
   }
 
   /// Relational greater than operator.
@@ -344,6 +351,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! > other;
     }
+    return null;
   }
 
   /// Relational greater than or equal operator.
@@ -351,6 +359,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
     if (value != null) {
       return value! >= other;
     }
+    return null;
   }
 
   /// True if the number is the double Not-a-Number value; otherwise, false.
@@ -585,6 +594,7 @@ class RxnNum extends Rx<num?> {
       value = value! + other;
       return value;
     }
+    return null;
   }
 
   /// Subtraction operator.
@@ -593,6 +603,7 @@ class RxnNum extends Rx<num?> {
       value = value! - other;
       return value;
     }
+    return null;
   }
 }
 
@@ -711,6 +722,7 @@ extension RxnDoubleExt on Rx<double?> {
       value = value! + other;
       return this;
     }
+    return null;
   }
 
   /// Subtraction operator.
@@ -719,6 +731,7 @@ extension RxnDoubleExt on Rx<double?> {
       value = value! + other;
       return this;
     }
+    return null;
   }
 
   /// Multiplication operator.
@@ -726,12 +739,14 @@ extension RxnDoubleExt on Rx<double?> {
     if (value != null) {
       return value! * other;
     }
+    return null;
   }
 
   double? operator %(num other) {
     if (value != null) {
       return value! % other;
     }
+    return null;
   }
 
   /// Division operator.
@@ -739,6 +754,7 @@ extension RxnDoubleExt on Rx<double?> {
     if (value != null) {
       return value! / other;
     }
+    return null;
   }
 
   /// Truncating division operator.
@@ -749,6 +765,7 @@ extension RxnDoubleExt on Rx<double?> {
     if (value != null) {
       return value! ~/ other;
     }
+    return null;
   }
 
   /// Negate operator. */
@@ -756,6 +773,7 @@ extension RxnDoubleExt on Rx<double?> {
     if (value != null) {
       return -value!;
     }
+    return null;
   }
 
   /// Returns the absolute value of this [double].
@@ -1104,6 +1122,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return value! & other;
     }
+    return null;
   }
 
   /// Bit-wise or operator.
@@ -1118,6 +1137,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return value! | other;
     }
+    return null;
   }
 
   /// Bit-wise exclusive-or operator.
@@ -1132,6 +1152,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return value! ^ other;
     }
+    return null;
   }
 
   /// The bit-wise negate operator.
@@ -1144,6 +1165,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return ~value!;
     }
+    return null;
   }
 
   /// Shift the bits of this integer to the left by [shiftAmount].
@@ -1160,6 +1182,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return value! << shiftAmount;
     }
+    return null;
   }
 
   /// Shift the bits of this integer to the right by [shiftAmount].
@@ -1173,6 +1196,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return value! >> shiftAmount;
     }
+    return null;
   }
 
   /// Returns this integer to the power of [exponent] modulo [modulus].
@@ -1290,6 +1314,7 @@ extension RxnIntExt on Rx<int?> {
     if (value != null) {
       return -value!;
     }
+    return null;
   }
 
   /// Returns the absolute value of this integer.

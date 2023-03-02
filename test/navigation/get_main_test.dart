@@ -8,7 +8,7 @@ void main() {
   testWidgets("Get.to navigates to provided route", (tester) async {
     await tester.pumpWidget(Wrapper(child: Container()));
 
-    Get.to(FirstScreen());
+    Get.to(() => const FirstScreen());
 
     await tester.pumpAndSettle();
 
@@ -19,9 +19,9 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/first',
       getPages: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
@@ -35,11 +35,11 @@ void main() {
   testWidgets("unknowroute", (tester) async {
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/first',
-      unknownRoute: GetPage(name: '/404', page: () => Scaffold()),
+      unknownRoute: GetPage(name: '/404', page: () => const Scaffold()),
       getPages: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
@@ -47,13 +47,15 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/404');
+    expect(Get.rootController.rootDelegate.currentConfiguration?.route?.name,
+        '/404');
   });
 
   testWidgets("Get.off navigates to provided route", (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(const Wrapper(child: FirstScreen()));
+    // await tester.pump();
 
-    Get.off(SecondScreen());
+    Get.off(() => const SecondScreen());
 
     await tester.pumpAndSettle();
 
@@ -61,9 +63,10 @@ void main() {
   });
 
   testWidgets("Get.off removes current route", (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(const Wrapper(child: FirstScreen()));
+    await tester.pump();
 
-    Get.off(SecondScreen());
+    Get.off(() => const SecondScreen());
     Get.back();
 
     await tester.pumpAndSettle();
@@ -75,11 +78,13 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/first',
       getPages: [
-        GetPage(name: '/first', page: () => FirstScreen()),
-        GetPage(name: '/second', page: () => SecondScreen()),
-        GetPage(name: '/third', page: () => ThirdScreen()),
+        GetPage(name: '/first', page: () => const FirstScreen()),
+        GetPage(name: '/second', page: () => const SecondScreen()),
+        GetPage(name: '/third', page: () => const ThirdScreen()),
       ],
     ));
+
+    await tester.pump();
 
     Get.offNamed('/second');
 
@@ -92,13 +97,16 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/first',
       getPages: [
-        GetPage(name: '/first', page: () => FirstScreen()),
-        GetPage(name: '/second', page: () => SecondScreen()),
-        GetPage(name: '/third', page: () => ThirdScreen()),
+        GetPage(name: '/first', page: () => const FirstScreen()),
+        GetPage(name: '/second', page: () => const SecondScreen()),
+        GetPage(name: '/third', page: () => const ThirdScreen()),
       ],
     ));
 
+    await tester.pump();
+
     Get.offNamed('/second');
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -110,25 +118,30 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/first',
       getPages: [
-        GetPage(name: '/first', page: () => FirstScreen()),
-        GetPage(name: '/second', page: () => SecondScreen()),
-        GetPage(name: '/third', page: () => ThirdScreen()),
+        GetPage(name: '/first', page: () => const FirstScreen()),
+        GetPage(name: '/second', page: () => const SecondScreen()),
+        GetPage(name: '/third', page: () => const ThirdScreen()),
       ],
     ));
 
-    Get.toNamed('/second');
-    Get.offNamed('/third');
-    Get.back();
+    // await tester.pump();
 
+    Get.toNamed('/second');
+    await tester.pumpAndSettle();
+    Get.offNamed('/third');
+    await tester.pumpAndSettle();
+    Get.back();
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+    await tester.pumpAndSettle();
   });
 
   testWidgets("Get.offAll navigates to provided route", (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(const Wrapper(child: FirstScreen()));
+    await tester.pump();
 
-    Get.offAll(SecondScreen());
+    Get.offAll(() => const SecondScreen());
 
     await tester.pumpAndSettle();
 
@@ -136,12 +149,14 @@ void main() {
   });
 
   testWidgets("Get.offAll removes all previous routes", (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(const Wrapper(child: FirstScreen()));
+    await tester.pump();
 
-    Get.to(SecondScreen());
-    Get.offAll(ThirdScreen());
+    Get.to(() => const SecondScreen());
+    await tester.pumpAndSettle();
+    Get.offAll(() => const ThirdScreen());
+    await tester.pumpAndSettle();
     Get.back();
-
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsNothing);
@@ -158,11 +173,13 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
+
+    await tester.pump();
 
     Get.toNamed('/second');
 
@@ -175,16 +192,19 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
-    Get.toNamed('/second');
-    Get.offAllNamed('/third');
-    Get.back();
+    await tester.pump();
 
+    Get.toNamed('/second');
+    await tester.pumpAndSettle();
+    Get.offAllNamed('/third');
+    await tester.pumpAndSettle();
+    Get.back();
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsNothing);
@@ -200,9 +220,9 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
@@ -217,13 +237,15 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
     Get.offAndToNamed('/second');
+
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -234,10 +256,12 @@ void main() {
   testWidgets("Get.offUntil navigates to provided route", (tester) async {
     await tester.pumpWidget(Wrapper(child: Container()));
 
-    Get.to(FirstScreen());
+    Get.to(() => const FirstScreen());
 
-    Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
-        (route) => (route as GetPageRoute).routeName == '/FirstScreen');
+    await tester.pumpAndSettle();
+
+    Get.offUntil(
+        () => const ThirdScreen(), (route) => route.name == '/FirstScreen');
 
     await tester.pumpAndSettle();
 
@@ -249,10 +273,13 @@ void main() {
       (tester) async {
     await tester.pumpWidget(Wrapper(child: Container()));
 
-    Get.to(FirstScreen());
-    Get.to(SecondScreen());
-    Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
-        (route) => (route as GetPageRoute).routeName == '/FirstScreen');
+    Get.to(() => const FirstScreen());
+    await tester.pumpAndSettle();
+    Get.to(() => const SecondScreen());
+    await tester.pumpAndSettle();
+    Get.offUntil(
+        () => const ThirdScreen(), (route) => route.name == '/FirstScreen');
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -265,10 +292,13 @@ void main() {
       (tester) async {
     await tester.pumpWidget(Wrapper(child: Container()));
 
-    Get.to(FirstScreen());
-    Get.to(SecondScreen());
-    Get.offUntil(GetPageRoute(page: () => ThirdScreen()),
-        (route) => (route as GetPageRoute).routeName == '/FirstScreen');
+    Get.to(() => const FirstScreen());
+    await tester.pumpAndSettle();
+    Get.to(() => const SecondScreen());
+    await tester.pumpAndSettle();
+    Get.offUntil(
+        () => const ThirdScreen(), (route) => route.name == '/FirstScreen');
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -280,13 +310,13 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
-    Get.offNamedUntil('/second', ModalRoute.withName('/first'));
+    Get.offNamedUntil('/second', (route) => route.name == '/first');
 
     await tester.pumpAndSettle();
 
@@ -299,14 +329,15 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third')
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
       ],
     ));
 
     Get.toNamed('/second');
-    Get.offNamedUntil('/third', ModalRoute.withName('/first'));
+    await tester.pumpAndSettle();
+    Get.offNamedUntil('/third', (route) => route.name == '/first');
 
     await tester.pumpAndSettle();
 
@@ -319,14 +350,16 @@ void main() {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
       namedRoutes: [
-        GetPage(page: () => FirstScreen(), name: '/first'),
-        GetPage(page: () => SecondScreen(), name: '/second'),
-        GetPage(page: () => ThirdScreen(), name: '/third'),
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third'),
       ],
     ));
 
     Get.toNamed('/second');
-    Get.offNamedUntil('/third', ModalRoute.withName('/first'));
+    await tester.pumpAndSettle();
+    Get.offNamedUntil('/third', (route) => route.name == '/first');
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -336,10 +369,19 @@ void main() {
 
   testWidgets("Get.back navigates back", (tester) async {
     await tester.pumpWidget(
-      Wrapper(child: FirstScreen()),
+      Wrapper(
+        defaultTransition: Transition.circularReveal,
+        child: Container(),
+      ),
     );
 
-    Get.to(SecondScreen());
+    // await tester.pump();
+
+    Get.to(() => const FirstScreen());
+    await tester.pumpAndSettle();
+
+    Get.to(() => const SecondScreen());
+    await tester.pumpAndSettle();
     Get.back();
 
     await tester.pumpAndSettle();
@@ -350,188 +392,180 @@ void main() {
   testWidgets(
       "Get.back with closeOverlays pops both snackbar and current route",
       (tester) async {
-    await tester.pumpWidget(Wrapper(child: FirstScreen()));
+    await tester.pumpWidget(
+      Wrapper(
+        defaultTransition: Transition.circularReveal,
+        child: Container(),
+      ),
+    );
 
-    Get.to(SecondScreen());
+    // await tester.pump();
+
+    Get.to(() => const FirstScreen());
+    await tester.pumpAndSettle();
+    Get.to(() => const SecondScreen());
+    await tester.pumpAndSettle();
     Get.snackbar('title', "message");
+    await tester.pumpAndSettle();
     Get.back(closeOverlays: true);
 
     await tester.pumpAndSettle();
 
     expect(Get.isSnackbarOpen, false);
-    expect(find.byType(FirstScreen), findsOneWidget);
-  });
-
-  testWidgets("Get.defaultTransition smoke test", (tester) async {
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.fadeIn,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.downToUp,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.fade,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.leftToRight,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.leftToRightWithFade,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.rightToLeft,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.rightToLeftWithFade,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.cupertino,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
-
-    expect(find.byType(FirstScreen), findsOneWidget);
-
-    await tester.pumpWidget(
-      Wrapper(
-        child: Container(),
-        defaultTransition: Transition.size,
-      ),
-    );
-
-    Get.to(FirstScreen());
-
-    await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
-  testWidgets("Get.snackbar test", (tester) async {
-    await tester.pumpWidget(
-      GetMaterialApp(
-        popGesture: true,
-        home: ElevatedButton(
-          child: Text('Open Snackbar'),
-          onPressed: () {
-            Get.snackbar('title', "message", duration: Duration(seconds: 1));
-          },
+  group("Get.defaultTransition smoke test", () {
+    testWidgets("fadeIn", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.fadeIn,
+          child: Container(),
         ),
-      ),
-    );
+      );
 
-    expect(Get.isSnackbarOpen, false);
-    await tester.tap(find.text('Open Snackbar'));
+      Get.to(() => const FirstScreen());
 
-    expect(Get.isSnackbarOpen, true);
-    await tester.pump(const Duration(seconds: 1));
-  });
+      await tester.pumpAndSettle();
 
-  testWidgets("Get.rawSnackbar test", (tester) async {
-    await tester.pumpWidget(
-      Wrapper(
-        child: ElevatedButton(
-          child: Text('Open Snackbar'),
-          onPressed: () {
-            Get.rawSnackbar(
-              title: 'title',
-              message: "message",
-              onTap: (_) {
-                print('snackbar tapped');
-              },
-              duration: Duration(seconds: 1),
-              shouldIconPulse: true,
-              icon: Icon(Icons.alarm),
-              showProgressIndicator: true,
-              barBlur: null,
-              isDismissible: true,
-              leftBarIndicatorColor: Colors.amber,
-              overlayBlur: 1.0,
-            );
-          },
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("downToUp", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.downToUp,
+          child: Container(),
         ),
-      ),
-    );
+      );
 
-    expect(Get.isSnackbarOpen, false);
-    await tester.tap(find.text('Open Snackbar'));
+      Get.to(() => const FirstScreen());
 
-    expect(Get.isSnackbarOpen, true);
-    await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("fade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.fade,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("leftToRight", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.leftToRight,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("leftToRightWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.leftToRightWithFade,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("leftToRightWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.rightToLeft,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("defaultTransition", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.rightToLeft,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("rightToLeftWithFade", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.rightToLeftWithFade,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("cupertino", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.cupertino,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
+
+    testWidgets("size", (tester) async {
+      await tester.pumpWidget(
+        Wrapper(
+          defaultTransition: Transition.size,
+          child: Container(),
+        ),
+      );
+
+      Get.to(() => const FirstScreen());
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+    });
   });
 }
 
@@ -540,7 +574,8 @@ class FirstScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text('FirstScreen'));
+    // ignore: avoid_unnecessary_containers
+    return Container(child: const Text('FirstScreen'));
   }
 }
 

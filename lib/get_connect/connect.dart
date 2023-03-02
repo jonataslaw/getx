@@ -12,7 +12,7 @@ export 'http/src/multipart/multipart_file.dart';
 export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
-abstract class GetConnectInterface with GetLifeCycleBase {
+abstract class GetConnectInterface with GetLifeCycleMixin {
   List<GetSocket>? sockets;
   GetHttpClient get httpClient;
 
@@ -100,9 +100,7 @@ class GetConnect extends GetConnectInterface {
     this.maxAuthRetries = 1,
     this.allowAutoSignedCert = false,
     this.withCredentials = false,
-  }) {
-    $configureLifeCycle();
-  }
+  });
 
   bool allowAutoSignedCert;
   String userAgent;
@@ -115,6 +113,7 @@ class GetConnect extends GetConnectInterface {
   Decoder? defaultDecoder;
   Duration timeout;
   List<TrustedCertificate>? trustedCertificates;
+  String Function(Uri url)? findProxy;
   GetHttpClient? _httpClient;
   List<GetSocket>? _sockets;
   bool withCredentials;
@@ -124,17 +123,17 @@ class GetConnect extends GetConnectInterface {
 
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
-        userAgent: userAgent,
-        sendUserAgent: sendUserAgent,
-        timeout: timeout,
-        followRedirects: followRedirects,
-        maxRedirects: maxRedirects,
-        maxAuthRetries: maxAuthRetries,
-        allowAutoSignedCert: allowAutoSignedCert,
-        baseUrl: baseUrl,
-        trustedCertificates: trustedCertificates,
-        withCredentials: withCredentials,
-      );
+      userAgent: userAgent,
+      sendUserAgent: sendUserAgent,
+      timeout: timeout,
+      followRedirects: followRedirects,
+      maxRedirects: maxRedirects,
+      maxAuthRetries: maxAuthRetries,
+      allowAutoSignedCert: allowAutoSignedCert,
+      baseUrl: baseUrl,
+      trustedCertificates: trustedCertificates,
+      withCredentials: withCredentials,
+      findProxy: findProxy);
 
   @override
   Future<Response<T>> get<T>(
@@ -269,9 +268,9 @@ class GetConnect extends GetConnectInterface {
   }) {
     _checkIfDisposed(isHttp: false);
 
-    final _socket = GetSocket(_concatUrl(url)!, ping: ping);
-    sockets.add(_socket);
-    return _socket;
+    final newSocket = GetSocket(_concatUrl(url)!, ping: ping);
+    sockets.add(newSocket);
+    return newSocket;
   }
 
   String? _concatUrl(String? url) {

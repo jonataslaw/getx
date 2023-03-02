@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 const Map<String, String> pt_BR = {
   'covid': 'Corona Vírus',
   'total_confirmed': 'Total confirmado',

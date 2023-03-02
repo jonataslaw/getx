@@ -3,17 +3,53 @@ import 'package:get/utils.dart';
 
 void main() {
   group('String extensions', () {
-    final text = "oi";
-    final digit = "5";
-    final specialCaracters = "#\$!%@";
-    final alphaNumeric = "123asd";
-    final numbers = "123";
-    final letters = "foo";
+    const text = "oi";
+    const digit = "5";
+    const specialCaracters = "#\$!%@";
+    const alphaNumeric = "123asd";
+    const numbers = "123";
+    const letters = "foo";
     // String notInitializedVar;
 
     test('var.isNum', () {
       expect(digit.isNum, true);
       expect(text.isNum, false);
+    });
+
+    test('var.capitalizeAllWordsFirstLetter()', () {
+      final List<String> sentences = [
+        "getx",
+        "this is an example sentence",
+        "this is an example sentence with a number 5",
+        "this is an example sentence with a number 5 and a special character #",
+        "this is an example sentence with a number 5 and a special character # and b letter C",
+        "    emm, lemme        think !",
+        "Bro, $letters is a good word",
+        "THIS IS A SENTENCE WITH ALL CAPITAL LETTERS",
+        ""
+      ];
+      expect(text.capitalizeAllWordsFirstLetter(), "Oi");
+      expect(digit.capitalizeAllWordsFirstLetter(), "5");
+      expect(specialCaracters.capitalizeAllWordsFirstLetter(), "#\$!%@");
+      expect(alphaNumeric.capitalizeAllWordsFirstLetter(), "123asd");
+      expect(numbers.capitalizeAllWordsFirstLetter(), "123");
+      expect(letters.capitalizeAllWordsFirstLetter(), "Foo");
+      expect(sentences[0].capitalizeAllWordsFirstLetter(), "Getx");
+      expect(sentences[1].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence");
+      expect(sentences[2].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5");
+      expect(sentences[3].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5 And A Special Character #");
+      expect(sentences[4].capitalizeAllWordsFirstLetter(),
+          "This Is An Example Sentence With A Number 5 And A Special Character # And B Letter C");
+      expect(
+          sentences[5].capitalizeAllWordsFirstLetter(), "Emm, Lemme Think !");
+      expect(sentences[6].capitalizeAllWordsFirstLetter(),
+          "Bro, Foo Is A Good Word");
+      expect(sentences[7].capitalizeAllWordsFirstLetter(),
+          "This Is A Sentence With All Capital Letters");
+      expect(sentences[8].capitalizeAllWordsFirstLetter(), "");
     });
 
     test('var.isNumericOnly', () {
@@ -30,27 +66,27 @@ void main() {
     });
 
     test('var.isBool', () {
-      final trueString = 'true';
+      const trueString = 'true';
       // expect(notInitializedVar.isBool, false);
       expect(letters.isBool, false);
       expect(trueString.isBool, true);
     });
 
     test('var.isVectorFileName', () {
-      final path = "logo.svg";
-      final fullPath = "C:/Users/Getx/Documents/logo.svg";
+      const path = "logo.svg";
+      const fullPath = "C:/Users/Getx/Documents/logo.svg";
       expect(path.isVectorFileName, true);
       expect(fullPath.isVectorFileName, true);
       expect(alphaNumeric.isVectorFileName, false);
     });
 
     test('var.isImageFileName', () {
-      final jpgPath = "logo.jpg";
-      final jpegPath = "logo.jpeg";
-      final pngPath = "logo.png";
-      final gifPath = "logo.gif";
-      final bmpPath = "logo.bmp";
-      final svgPath = "logo.svg";
+      const jpgPath = "logo.jpg";
+      const jpegPath = "logo.jpeg";
+      const pngPath = "logo.png";
+      const gifPath = "logo.gif";
+      const bmpPath = "logo.bmp";
+      const svgPath = "logo.svg";
 
       expect(jpgPath.isImageFileName, true);
       expect(jpegPath.isImageFileName, true);
@@ -61,12 +97,12 @@ void main() {
     });
 
     test('var.isAudioFileName', () {
-      final mp3Path = "logo.mp3";
-      final wavPath = "logo.wav";
-      final wmaPath = "logo.wma";
-      final amrPath = "logo.amr";
-      final oggPath = "logo.ogg";
-      final svgPath = "logo.svg";
+      const mp3Path = "logo.mp3";
+      const wavPath = "logo.wav";
+      const wmaPath = "logo.wma";
+      const amrPath = "logo.amr";
+      const oggPath = "logo.ogg";
+      const svgPath = "logo.svg";
 
       expect(mp3Path.isAudioFileName, true);
       expect(wavPath.isAudioFileName, true);
@@ -77,14 +113,14 @@ void main() {
     });
 
     test('var.isVideoFileName', () {
-      final mp4Path = "logo.mp4";
-      final aviPath = "logo.avi";
-      final wmvPath = "logo.wmv";
-      final rmvbPath = "logo.rmvb";
-      final mpgPath = "logo.mpg";
-      final mpegPath = "logo.mpeg";
-      final threegpPath = "logo.3gp";
-      final svgPath = "logo.svg";
+      const mp4Path = "logo.mp4";
+      const aviPath = "logo.avi";
+      const wmvPath = "logo.wmv";
+      const rmvbPath = "logo.rmvb";
+      const mpgPath = "logo.mpg";
+      const mpegPath = "logo.mpeg";
+      const threegpPath = "logo.3gp";
+      const svgPath = "logo.svg";
 
       expect(mp4Path.isVideoFileName, true);
       expect(aviPath.isVideoFileName, true);
@@ -103,8 +139,8 @@ void main() {
     });
 
     test('var.isDocumentFileName', () {
-      final docPath = "file.doc";
-      final docxPath = "file.docx";
+      const docPath = "file.doc";
+      const docxPath = "file.docx";
 
       expect(docPath.isDocumentFileName, true);
       expect(docxPath.isDocumentFileName, true);
@@ -112,8 +148,8 @@ void main() {
     });
 
     test('var.isExcelFileName', () {
-      final xlsPath = "file.xls";
-      final xlsxPath = "file.xlsx";
+      const xlsPath = "file.xls";
+      const xlsxPath = "file.xlsx";
 
       expect(xlsPath.isExcelFileName, true);
       expect(xlsxPath.isExcelFileName, true);
@@ -121,8 +157,8 @@ void main() {
     });
 
     test('var.isPPTFileName', () {
-      final pptPath = "file.ppt";
-      final pptxPath = "file.pptx";
+      const pptPath = "file.ppt";
+      const pptxPath = "file.pptx";
 
       expect(pptPath.isPPTFileName, true);
       expect(pptxPath.isPPTFileName, true);
@@ -130,20 +166,20 @@ void main() {
     });
 
     test('var.isAPKFileName', () {
-      final apkPath = "file.apk";
+      const apkPath = "file.apk";
 
       expect(apkPath.isAPKFileName, true);
       expect(alphaNumeric.isAPKFileName, false);
     });
 
     test('var.isPDFFileName', () {
-      final pdfPath = "file.pdf";
+      const pdfPath = "file.pdf";
 
       expect(pdfPath.isPDFFileName, true);
       expect(alphaNumeric.isPDFFileName, false);
     });
     test('var.isHTMLFileName', () {
-      final htmlPath = "file.html";
+      const htmlPath = "file.html";
 
       expect(htmlPath.isHTMLFileName, true);
       expect(alphaNumeric.isHTMLFileName, false);
@@ -177,6 +213,7 @@ void main() {
         'http://appliance.example.com/bee/badge',
         'http://www.example.org/berry.aspx',
         'http://example.org/',
+        'http://birds.example/',
       ];
 
       for (final url in urls) {
@@ -259,7 +296,7 @@ void main() {
         expect(phone.isPhoneNumber, true);
       }
 
-      final bigRandomNumber = '168468468465241327987624987327987';
+      const bigRandomNumber = '168468468465241327987624987327987';
       expect(bigRandomNumber.isPhoneNumber, false);
 
       expect(alphaNumeric.isPhoneNumber, false);
@@ -593,11 +630,11 @@ void main() {
       final currencies = [
         'R\$50.58',
         '\$82.48',
-        '\₩54.24',
-        '\¥81.04',
-        '\€4.06',
-        '\₹37.40',
-        '\₽18.12',
+        '₩54.24',
+        '¥81.04',
+        '€4.06',
+        '₹37.40',
+        '₽18.12',
         'fr95.15',
         'R81.04',
         '9.35USD',
@@ -656,7 +693,7 @@ void main() {
     });
 
     test('var.isCaseInsensitiveContains(string)', () {
-      final phrase = 'Back to Square One';
+      const phrase = 'Back to Square One';
 
       expect(phrase.isCaseInsensitiveContains('to'), true);
       expect(phrase.isCaseInsensitiveContains('square'), true);
@@ -665,7 +702,7 @@ void main() {
     });
 
     test('var.isCaseInsensitiveContainsAny(string)', () {
-      final phrase = 'Back to Square One';
+      const phrase = 'Back to Square One';
 
       expect(phrase.isCaseInsensitiveContainsAny('to'), true);
       expect(phrase.isCaseInsensitiveContainsAny('square'), true);

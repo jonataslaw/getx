@@ -6,6 +6,8 @@ import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
+  const LoginView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,15 +27,14 @@ class LoginView extends GetView<LoginController> {
               },
             ),
             MaterialButton(
-              child: Text(
+              child: const Text(
                 'Do LOGIN !!',
                 style: TextStyle(color: Colors.blue, fontSize: 20),
               ),
               onPressed: () {
                 AuthService.to.login();
-                final thenTo = Get.rootDelegate.currentConfiguration!
-                    .currentPage!.parameters?['then'];
-                Get.rootDelegate.offNamed(thenTo ?? Routes.HOME);
+                final thenTo = context.params['then'];
+                Get.offNamed(thenTo ?? Routes.home);
               },
             ),
           ],

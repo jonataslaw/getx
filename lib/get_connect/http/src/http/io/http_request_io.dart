@@ -8,8 +8,8 @@ import '../../response/response.dart';
 import '../interface/request_base.dart';
 import '../utils/body_decoder.dart';
 
-/// A `dart:io` implementation of `HttpRequestBase`.
-class HttpRequestImpl extends HttpRequestBase {
+/// A `dart:io` implementation of `IClient`.
+class HttpRequestImpl extends IClient {
   io.HttpClient? _httpClient;
   io.SecurityContext? _securityContext;
 
@@ -17,6 +17,7 @@ class HttpRequestImpl extends HttpRequestBase {
     bool allowAutoSignedCert = true,
     List<TrustedCertificate>? trustedCertificates,
     bool withCredentials = false,
+    String Function(Uri url)? findProxy,
   }) {
     _httpClient = io.HttpClient();
     if (trustedCertificates != null) {
@@ -29,6 +30,7 @@ class HttpRequestImpl extends HttpRequestBase {
 
     _httpClient = io.HttpClient(context: _securityContext);
     _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
+    _httpClient!.findProxy = findProxy;
   }
 
   @override
@@ -55,6 +57,11 @@ class HttpRequestImpl extends HttpRequestBase {
       });
 
       final bodyBytes = (response);
+
+      final interceptionResponse =
+          await request.responseInterceptor?.call(request, T, response);
+      if (interceptionResponse != null) return interceptionResponse;
+
       final stringBody = await bodyBytesToString(bodyBytes, headers);
 
       final body = bodyDecoded<T>(
