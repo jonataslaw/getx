@@ -8,7 +8,7 @@ class RxSet<E> extends GetListenable<Set<E>>
   /// inside the List,
   RxSet<E> operator +(Set<E> val) {
     addAll(val);
-    refresh();
+    //refresh();
     return this;
   }
 
@@ -25,13 +25,13 @@ class RxSet<E> extends GetListenable<Set<E>>
   //   // return _value;
   // }
 
-  @override
-  @protected
-  set value(Set<E> val) {
-    if (value == val) return;
-    value = val;
-    refresh();
-  }
+  // @override
+  // @protected
+  // set value(Set<E> val) {
+  //   if (value == val) return;
+  //   value = val;
+  //   refresh();
+  // }
 
   @override
   bool add(E value) {

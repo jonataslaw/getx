@@ -1,3 +1,9 @@
+## [5.0.0-release-candidate-4]
+-Fix changeThemeMode and RxList
+
+## [5.0.0-release-candidate-3]
+-Fix changeTheme
+
 ## [5.0.0-release-candidate-2]
 This version adds built-in support for animation in Flutter in an easy, clear way, and without having to create a StatefulWidget with controllers and animations. All you need to do is call the name of the animation.
 
