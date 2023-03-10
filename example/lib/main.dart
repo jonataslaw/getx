@@ -29,27 +29,27 @@ class MyApp extends StatelessWidget {
 
 /// Nav 2 snippet
 // void main() {
-//   runApp(MyApp());
+//   runApp(const MyApp());
 // }
 
 // class MyApp extends StatelessWidget {
-//   MyApp({Key? key}) : super(key: key);
+//   const MyApp({Key? key}) : super(key: key);
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return GetMaterialApp.router(
+//     return GetMaterialApp(
 //       getPages: [
 //         GetPage(
 //             participatesInRootNavigator: true,
 //             name: '/first',
-//             page: () => First()),
+//             page: () => const First()),
 //         GetPage(
 //           name: '/second',
-//           page: () => Second(),
+//           page: () => const Second(),
 //         ),
 //         GetPage(
 //           name: '/third',
-//           page: () => Third(),
+//           page: () => const Third(),
 //         ),
 //       ],
 //       debugShowCheckedModeBanner: false,
@@ -58,26 +58,32 @@ class MyApp extends StatelessWidget {
 // }
 
 // class First extends StatelessWidget {
+//   const First({Key? key}) : super(key: key);
+
 //   @override
 //   Widget build(BuildContext context) {
+//     print('First rebuild');
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: Text('page one'),
+//         title: const Text('page one'),
 //         leading: IconButton(
-//           icon: Icon(Icons.more),
+//           icon: const Icon(Icons.more),
 //           onPressed: () {
+//             print('THEME CHANGED');
 //             Get.changeTheme(
-//                 context.isDarkMode ? ThemeData.light() : ThemeData.dark());
+//                 Get.isDarkMode ? ThemeData.light() : ThemeData.dark());
 //           },
 //         ),
 //       ),
 //       body: Center(
-//         child: Container(
+//         child: SizedBox(
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
-//             onPressed: () {},
-//             child: Text('next screen'),
+//             onPressed: () {
+//               Get.toNamed('/second?id=123');
+//             },
+//             child: const Text('next screen'),
 //           ),
 //         ),
 //       ),
@@ -86,19 +92,22 @@ class MyApp extends StatelessWidget {
 // }
 
 // class Second extends StatelessWidget {
+//   const Second({Key? key}) : super(key: key);
+
 //   @override
 //   Widget build(BuildContext context) {
+//     print('second rebuild');
 //     return Scaffold(
 //       appBar: AppBar(
 //         title: Text('page two ${Get.parameters["id"]}'),
 //       ),
 //       body: Center(
-//         child: Container(
+//         child: SizedBox(
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
 //             onPressed: () {},
-//             child: Text('next screen'),
+//             child: const Text('next screen'),
 //           ),
 //         ),
 //       ),
@@ -107,20 +116,22 @@ class MyApp extends StatelessWidget {
 // }
 
 // class Third extends StatelessWidget {
+//   const Third({Key? key}) : super(key: key);
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       backgroundColor: Colors.red,
 //       appBar: AppBar(
-//         title: Text('page three'),
+//         title: const Text('page three'),
 //       ),
 //       body: Center(
-//         child: Container(
+//         child: SizedBox(
 //           height: 300,
 //           width: 300,
 //           child: ElevatedButton(
 //             onPressed: () {},
-//             child: Text('go to first screen'),
+//             child: const Text('go to first screen'),
 //           ),
 //         ),
 //       ),
