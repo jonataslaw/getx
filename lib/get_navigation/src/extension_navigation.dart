@@ -807,7 +807,7 @@ extension GetNavigationExt on GetInterface {
     //TODO: remove this when change own api to Dialog and BottomSheets
     //to declarative way
     if (isDialogOpen! || isBottomSheetOpen!) {
-      searchDelegate(id).navigatorKey.currentState?.pop();
+      searchDelegate(id).navigatorKey.currentState?.pop(result);
       return;
     }
 
@@ -826,7 +826,7 @@ extension GetNavigationExt on GetInterface {
       }
 
       while ((isDialogOpen! && isBottomSheetOpen!)) {
-        searchDelegate(id).navigatorKey.currentState?.pop();
+        searchDelegate(id).navigatorKey.currentState?.pop(result);
       }
 
       // navigator?.popUntil((route) {
