@@ -325,7 +325,7 @@ Text(controller.textFromApi);
 ### 翻译
 
 翻译被保存为一个简单的键值字典映射。
-要添加自定义翻译，请创建一个类并扩展 `翻译`。
+要添加自定义翻译，请创建一个类并扩展 `Translations`。
 
 ```dart
 import 'package:get/get.dart';
