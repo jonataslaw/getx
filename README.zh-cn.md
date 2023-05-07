@@ -805,7 +805,7 @@ print( 'Message "$message" has Type ${message.runtimeType}');
 即使 `message` _prints_ 实际的字符串值，类型也是 **RxString**！
 所以，你不能做 `message.substring( 0, 4 )`。
 你必须在 _observable_ 里面访问真正的 `value`。
-最常用的方法是 “。value”，但是你也可以用...
+最常用的方法是 “.value”，但是你也可以用...
 
 ```dart
 final name = 'GetX'.obs;
