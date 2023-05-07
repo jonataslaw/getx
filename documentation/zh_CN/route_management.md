@@ -5,26 +5,26 @@
     - [发送数据到别名路由](#发送数据到别名路由)
     - [动态网页链接](#动态网页链接)
     - [中间件](#中间件)
-  - [免context导航](#免context导航)
-    - [SnackBars](#SnackBars)
+  - [免 context 导航](#免-context-导航)
+    - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
-    - [BottomSheets](#bottomSheets)
+    - [BottomSheets](#bottomsheets)
   - [嵌套导航](#嵌套导航)
 
 # 路由管理
 
-这是关于Getx在路由管理方面的完整解释。
+这是关于 Getx 在路由管理方面的完整解释。
 
 ## 如何使用
 
-将此添加到你的pubspec.yaml文件中。
+将此添加到你的 pubspec.yaml 文件中。
 
 ```yaml
 dependencies:
   get:
 ```
 
-如果你要在没有context的情况下使用路由/SnackBars/Dialogs/BottomSheets，或者使用高级的Get API，你只需要在你的MaterialApp前面加上 "Get"，就可以把它变成GetMaterialApp，享受吧!
+如果你要在没有 context 的情况下使用路由/SnackBars/Dialogs/BottomSheets，或者使用高级的 Get API，你只需要在你的 MaterialApp 前面加上 “Get”，就可以把它变成 GetMaterialApp，享受吧！
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -40,19 +40,19 @@ GetMaterialApp( // Before: MaterialApp(
 Get.to(NextScreen());
 ```
 
-关闭SnackBars、Dialogs、BottomSheets或任何你通常会用Navigator.pop(context)关闭的东西。
+关闭 SnackBars、Dialogs、BottomSheets 或任何你通常会用 Navigator.pop(context) 关闭的东西。
 
 ```dart
 Get.back();
 ```
 
-进入下一个页面，但没有返回上一个页面的选项（用于SplashScreens，登录页面等）。
+进入下一个页面，但没有返回上一个页面的选项 (用于 SplashScreens，登录页面等)。
 
 ```dart
 Get.off(NextScreen());
 ```
 
-进入下一个界面并取消之前的所有路由（在购物车、投票和测试中很有用）。
+进入下一个界面并取消之前的所有路由 (在购物车、投票和测试中很有用)。
 
 ```dart
 Get.offAll(NextScreen());
@@ -77,7 +77,7 @@ if(data == 'success') madeAnything();
 ```
 
 你不想学习我们的语法吗？
-只要把 Navigator（大写）改成 navigator（小写），你就可以拥有标准导航的所有功能，而不需要使用context，例如：
+只要把 Navigator (大写) 改成 navigator (小写)，你就可以拥有标准导航的所有功能，而不需要使用 context，例如：
 
 ```dart
 
@@ -108,7 +108,7 @@ Get.to(HomePage());
 
 ## 别名路由导航
 
-- 如果你喜欢用别名路由导航，Get也支持。
+- 如果你喜欢用别名路由导航，Get 也支持。
 
 导航到下一个页面
 
@@ -128,7 +128,7 @@ Get.offNamed("/NextScreen");
 Get.offAllNamed("/NextScreen");
 ```
 
-要定义路由，使用GetMaterialApp。
+要定义路由，使用 GetMaterialApp。
 
 ```dart
 void main() {
@@ -149,7 +149,7 @@ void main() {
 }
 ```
 
-要处理到未定义路线的导航（404错误），可以在GetMaterialApp中定义unknownRoute页面。
+要处理到未定义路线的导航 (404 错误)，可以在 GetMaterialApp 中定义 unknownRoute 页面。
 
 ```dart
 void main() {
@@ -168,7 +168,7 @@ void main() {
 
 ### 发送数据到别名路由
 
-只要发送你想要的参数即可。Get在这里接受任何东西，无论是一个字符串，一个Map，一个List，甚至一个类的实例。
+只要发送你想要的参数即可。Get 在这里接受任何东西，无论是一个字符串，一个 Map，一个 List，甚至一个类的实例。
 
 ```dart
 Get.toNamed("/NextScreen", arguments: 'Get is the best');
@@ -183,13 +183,13 @@ print(Get.arguments);
 
 ### 动态网页链接
 
-Get提供高级动态URL，就像在Web上一样。Web开发者可能已经在Flutter上想要这个功能了，Get也解决了这个问题。
+Get 提供高级动态 URL，就像在 Web 上一样。Web 开发者可能已经在 Flutter 上想要这个功能了，Get 也解决了这个问题。
 
 ```dart
 Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
 ```
 
-在你的controller/bloc/stateful/stateless类上：
+在你的 controller/bloc/stateful/stateless 类上：
 
 ```dart
 print(Get.parameters['id']);
@@ -198,7 +198,7 @@ print(Get.parameters['name']);
 // out: Enzo
 ```
 
-你也可以用Get轻松接收NamedParameters。
+你也可以用 Get 轻松接收 NamedParameters。
 
 ```dart
 void main() {
@@ -258,11 +258,11 @@ print(Get.parameters['flag']);
 ```
 
 
-现在，你需要做的就是使用Get.toNamed()来导航你的别名路由，不需要任何context(你可以直接从你的BLoC或Controller类中调用你的路由)，当你的应用程序被编译到web时，你的路由将出现在URL中。
+现在，你需要做的就是使用 Get.toNamed() 来导航你的别名路由，不需要任何 context (你可以直接从你的 BLoC 或 Controller 类中调用你的路由)，当你的应用程序被编译到 web 时，你的路由将出现在 URL 中。
 
 ### 中间件
 
-如果你想通过监听Get事件来触发动作，你可以使用routingCallback来实现。
+如果你想通过监听 Get 事件来触发动作，你可以使用 routingCallback 来实现。
 
 ```dart
 GetMaterialApp(
@@ -274,7 +274,7 @@ GetMaterialApp(
 )
 ```
 
-如果你没有使用GetMaterialApp，你可以使用手动API来附加Middleware观察器。
+如果你没有使用 GetMaterialApp，你可以使用手动 API 来附加 Middleware 观察器。
 
 ```dart
 void main() {
@@ -291,7 +291,7 @@ void main() {
 }
 ```
 
-创建一个MiddleWare类
+创建一个 MiddleWare 类
 
 ```dart
 class MiddleWare {
@@ -306,7 +306,7 @@ class MiddleWare {
 }
 ```
 
-现在，在你的代码上使用Get：
+现在，在你的代码上使用 Get：
 
 ```dart
 class First extends StatelessWidget {
@@ -379,11 +379,11 @@ class Third extends StatelessWidget {
 }
 ```
 
-## 免context导航
+## 免 context 导航
 
 ### SnackBars
 
-用Flutter创建一个简单的SnackBar，你必须获得Scaffold的context，或者你必须使用一个GlobalKey附加到你的Scaffold上。
+用 Flutter 创建一个简单的 SnackBar，你必须获得 Scaffold 的 context，或者你必须使用一个 GlobalKey 附加到你的 Scaffold 上。
 
 ```dart
 final snackBar = SnackBar(
@@ -397,13 +397,13 @@ final snackBar = SnackBar(
 Scaffold.of(context).showSnackBar(snackBar);
 ```
 
-用Get：
+用 Get：
 
 ```dart
 Get.snackbar('Hi', 'i am a modern snackbar');
 ```
 
-有了Get，你所要做的就是在你代码的任何地方调用你的Get.snackbar，或者按照你的意愿定制它。
+有了 Get，你所要做的就是在你代码的任何地方调用你的 Get.snackbar，或者按照你的意愿定制它。
 
 ```dart
 Get.snackbar(
@@ -455,18 +455,18 @@ Get.snackbar(
   ///////////////////////////////////
 ```
 
-如果您喜欢传统的SnackBars，或者想从头开始定制，包括只添加一行(Get.snackbar使用了一个强制性的标题和信息)，您可以使用
-`Get.rawSnackbar();`它提供了建立Get.snackbar的RAW API。
+如果您喜欢传统的 SnackBars，或者想从头开始定制，包括只添加一行 (Get.snackbar 使用了一个强制性的标题和信息)，您可以使用
+`Get.rawSnackbar();` 它提供了建立 Get.snackbar 的 RAW API。
 
 ### Dialogs
 
-打开Dialogs：
+打开 Dialogs：
 
 ```dart
 Get.dialog(YourDialogWidget());
 ```
 
-打开默认Dialogs：
+打开默认 Dialogs：
 
 ```dart
 Get.defaultDialog(
@@ -475,15 +475,15 @@ Get.defaultDialog(
 );
 ```
 
-你也可以用Get.generalDialog代替showGeneralDialog。
+你也可以用 Get.generalDialog 代替 showGeneralDialog。
 
-对于所有其他的FlutterDialogs小部件，包括cupertinos，你可以使用Get.overlayContext来代替context，并在你的代码中任何地方打开它。
-对于不使用Overlay的小组件，你可以使用Get.context。
-这两个context在99%的情况下都可以代替你的UIcontext，除了在没有导航context的情况下使用 inheritedWidget的情况。
+对于所有其他的 FlutterDialogs 小部件，包括 cupertinos，你可以使用 Get.overlayContext 来代替 context，并在你的代码中任何地方打开它。
+对于不使用 Overlay 的小组件，你可以使用 Get.context。
+这两个 context 在 99%的情况下都可以代替你的 UIcontext，除了在没有导航 context 的情况下使用 inheritedWidget 的情况。
 
 ### BottomSheets
 
-Get.bottomSheet类似于showModalBottomSheet，但不需要context：
+Get.bottomSheet 类似于 showModalBottomSheet，但不需要 context：
 
 ```dart
 Get.bottomSheet(
@@ -508,12 +508,12 @@ Get.bottomSheet(
 
 ## 嵌套导航
 
-Get让Flutter的嵌套导航更加简单。
-你不需要context，而是通过Id找到你的导航栈。
+Get 让 Flutter 的嵌套导航更加简单。
+你不需要 context，而是通过 Id 找到你的导航栈。
 
-- 注意：创建平行导航堆栈可能是危险的。理想的情况是不要使用NestedNavigators，或者尽量少用。如果你的项目需要它，请继续，但请记住，在内存中保持多个导航堆栈可能不是一个好主意(消耗RAM)。
+- 注意：创建平行导航堆栈可能是危险的。理想的情况是不要使用 NestedNavigators，或者尽量少用。如果你的项目需要它，请继续，但请记住，在内存中保持多个导航堆栈可能不是一个好主意 (消耗 RAM)。
 
-看看它有多简单:
+看看它有多简单：
 
 ```dart
 Navigator(
