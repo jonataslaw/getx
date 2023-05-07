@@ -8,7 +8,7 @@
     - [什么时候重建](#什么时候重建)
     - [可以使用.obs 的地方](#可以使用obs-的地方)
     - [关于 List 的说明](#关于-list-的说明)
-    - [为什么使用.value](#为什么使用value)
+    - [为什么使用 .value](#为什么使用-value)
     - [Obx()](#obx)
     - [Workers](#workers)
   - [简单状态管理器](#简单状态管理器)
@@ -100,10 +100,10 @@ Obx (() => Text (controller.name));
 
 所以，只有当 _Rx_ 变量的值发生变化时，**GetX** 才会更新界面。
 
-```
+```dart
 final isOpen = false.obs;
 
-//什么都不会发生......相同的值。
+// 什么都不会发生......相同的值。
 void onButtonTap() => isOpen.value=false;
 ```
 ### 优势
@@ -274,7 +274,7 @@ fireRoute(logged) {
 此外，Get 还提供了精细的状态控制。你可以根据特定的条件对一个事件进行条件控制 (比如将一个对象添加到 List 中)。
 
 ```dart
-// 第一个参数：条件，必须返回true或false。
+// 第一个参数：条件，必须返回 true 或 false。
 // 第二个参数：如果条件为真，则为新的值。
 list.addIf(item < limit, item);
 ```
@@ -317,7 +317,7 @@ class User {
   var age;
 }
 
-//实例化时。
+// 实例化时。
 final user = User(name: "Camila", age: 18).obs;
 ```
 
@@ -326,7 +326,7 @@ final user = User(name: "Camila", age: 18).obs;
 List 和它里面的对象一样，是完全可以观察的。这样一来，如果你在 List 中添加一个值，它会自动重建使用它的 widget。
 
 你也不需要在 List 中使用 “.value”，神奇的 dart api 允许我们删除它。
-不幸的是，像 String 和 int 这样的原始类型不能被扩展，使得 .value 的使用是强制性的，但是如果你使用 get 和 setter 来处理这些类型，这将不是一个问题。
+不幸的是，像 String 和 int 这样的原始类型不能被继承，使得 .value 的使用是强制性的，但是如果你使用 get 和 setter 来处理这些类型，这将不是一个问题。
 
 ```dart
 // controller
@@ -334,9 +334,9 @@ final String title = 'User Info:'.obs
 final list = List<User>().obs;
 
 // view
-Text(controller.title.value), // 字符串后面需要有.value。
+Text(controller.title.value), // 字符串后面需要有 .value。
 ListView.builder (
-  itemCount: controller.list.length // List不需要它
+  itemCount: controller.list.length // List 不需要它
 )
 ```
 
@@ -353,7 +353,7 @@ class User{
 
 // controller
 final user = User().obs;
-//当你需要更新user变量时。
+// 当你需要更新user变量时。
 user.update( (user) { // 这个参数是你要更新的类本身。
     user.name = 'Jonny';
     user.age = 18;
@@ -363,15 +363,15 @@ user(User(name: 'João', age: 35));
 
 // view
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"));
-// 你也可以不使用.value来访问模型值。
-user().name; // 注意是user变量，而不是类变量（首字母是小写的）。
+// 你也可以不使用 .value 来访问模型值。
+user().name; // 注意是 user 变量，而不是类变量（首字母是小写的）。
 ```
 
 你可以使用 “assign” 和 “assignAll”。
 “assign” 会清除你的 List，并添加一个单个对象。
 “assignAll” 将清除现有的 List，并添加任何可迭代对象。
 
-### 为什么使用.value
+### 为什么使用 .value
 
 我们可以通过一个简单的装饰和代码生成器来消除使用 “String” 和 “int” 的值的义务，但这个库的目的正是为了避免外部依赖。我们希望提供一个准备好的编程的环境 (路由、依赖和状态的管理)，以一种简单、轻量级和高性能的方式，而不需要一个外部包。
 
@@ -395,16 +395,16 @@ user().name; // 注意是user变量，而不是类变量（首字母是小写的
 Workers 将协助你在事件发生时触发特定的回调。
 
 ```dart
-///每次`count1`变化时调用。
+// 每次`count1` 变化时调用。
 ever(count1, (_) => print("$_ has been changed"));
 
-///只有在变量$_第一次被改变时才会被调用。
+// 只有在变量 $_ 第一次被改变时才会被调用。
 once(count1, (_) => print("$_ was changed once"));
 
-///防DDos - 每当用户停止输入1秒时调用，例如。
+// 防 DDos - 每当用户停止输入1秒时调用，例如。
 debounce(count1, (_) => print("debouce$_"), time: Duration(seconds: 1));
 
-///忽略1秒内的所有变化。
+// 忽略 1 秒内的所有变化。
 interval(count1, (_) => print("interval $_"), time: Duration(seconds: 1));
 ```
 所有 Workers (除 “debounce” 外) 都有一个名为 “condition” 的参数，它可以是一个 “bool” 或一个返回 “bool” 的回调。
@@ -461,29 +461,29 @@ GetBuilder 正是针对多状态控制的。想象一下，你在购物车中添
 ### 用法
 
 ```dart
-// 创建控制器类并扩展GetxController。
+// 创建控制器类并继承 GetxController。
 class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
-    update(); // 当调用增量时，使用update()来更新用户界面上的计数器变量。
+    update(); // 当调用增量时，使用 update() 来更新用户界面上的计数器变量。
   }
 }
-// 在你的Stateless/Stateful类中，当调用increment时，使用GetBuilder来更新Text。
+// 在你的 Stateless/Stateful 类中，当调用 increment 时，使用 GetBuilder 来更新 Text。
 GetBuilder<Controller>(
   init: Controller(), // 首次启动
   builder: (_) => Text(
     '${_.counter}',
   ),
 )
-//只在第一次时初始化你的控制器。第二次使用ReBuilder时，不要再使用同一控制器。一旦将控制器标记为 "init "的部件部署完毕，你的控制器将自动从内存中移除。你不必担心这个问题，Get会自动做到这一点，只是要确保你不要两次启动同一个控制器。
+// 只在第一次时初始化你的控制器。第二次使用 ReBuilder 时，不要再使用同一控制器。一旦将控制器标记为 "init" 的部件部署完毕，你的控制器将自动从内存中移除。你不必担心这个问题，Get 会自动做到这一点，只是要确保你不要两次启动同一个控制器。
 ```
 
 **完成！**
 
 - 你已经学会了如何使用 Get 管理状态。
 
-- 注意：你可能想要一个更大的规模，而不是使用 init 属性。为此，你可以创建一个类并扩展 Bindings 类，并在其中添加将在该路由中创建的控制器。控制器不会在那个时候被创建，相反，这只是一个声明，这样你第一次使用 Controller 时，Get 就会知道去哪里找。Get 会保持懒加载，当不再需要 Controller 时，会自动移除它们。请看 pub.dev 的例子来了解它是如何工作的。
+- 注意：你可能想要一个更大的规模，而不是使用 init 属性。为此，你可以创建一个类并继承 Bindings 类，并在其中添加将在该路由中创建的控制器。控制器不会在那个时候被创建，相反，这只是一个声明，这样你第一次使用 Controller 时，Get 就会知道去哪里找。Get 会保持懒加载，当不再需要 Controller 时，会自动移除它们。请看 pub.dev 的例子来了解它是如何工作的。
 
 如果你导航了很多路由，并且需要之前使用的 Controller 中的数据，你只需要再用一次 GetBuilder (没有 init)。
 
@@ -507,10 +507,10 @@ class OtherClass extends StatelessWidget {
 ```dart
 class Controller extends GetxController {
 
-  /// 你不需要这个，我推荐使用它只是为了方便语法。
-  /// 用静态方法：Controller.to.increment()。
-  /// 没有静态方法的情况下：Get.find<Controller>().increment();
-  /// 使用这两种语法在性能上没有区别，也没有任何副作用。一个不需要类型，另一个IDE会自动完成。
+  // 你不需要这个，我推荐使用它只是为了方便语法。
+  // 用静态方法：Controller.to.increment()。
+  // 没有静态方法的情况下：Get.find<Controller>().increment();
+  // 使用这两种语法在性能上没有区别，也没有任何副作用。一个不需要类型，另一个 IDE 会自动完成。
   static Controller get to => Get.find(); // 添加这一行
 
   int counter = 0;
@@ -586,7 +586,7 @@ class Controller extends GetxController {
   StreamController<User> user = StreamController<User>();
   StreamController<String> name = StreamController<String>();
 
-  ///关闭流用onClose方法，而不是dispose
+  // 关闭流用onClose方法，而不是dispose
   @override
   void onClose() {
     user.close();
@@ -610,7 +610,7 @@ class Controller extends GetxController {
 GetBuilder<Controller>(
   init: Controller(),
   builder: (value) => Text(
-    '${value.counter}', //here
+    '${value.counter}',  // 这里
   ),
 ),
 ```
@@ -626,7 +626,7 @@ class Controller extends GetxController {
 GetBuilder<Controller>(  
   init: Controller(), // 每个控制器只用一次
   builder: (_) => Text(
-    '${Controller.to.counter}', //here
+    '${Controller.to.counter}', //这里
   )
 ),
 ```
@@ -642,7 +642,7 @@ class Controller extends GetxController {
 GetBuilder<Controller>(  
   init: Controller(), // 每个控制器只用一次
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // 这里
   ),
 ),
 ```
@@ -653,9 +653,9 @@ GetBuilder<Controller>(
 Controller controller = Controller();
 [...]
 GetBuilder<Controller>(
-  init: controller, //here
+  init: controller, // 这里
   builder: (_) => Text(
-    '${controller.counter}', // here
+    '${controller.counter}', // 这里
   ),
 ),
 
@@ -667,10 +667,10 @@ GetBuilder<Controller>(
 
 ```dart
 GetBuilder<Controller>(
-  id: 'text', //这里
+  id: 'text', // 这里
   init: Controller(), // 每个控制器只用一次
   builder: (_) => Text(
-    '${Get.find<Controller>().counter}', //here
+    '${Get.find<Controller>().counter}', // 这里
   ),
 ),
 ```
@@ -693,7 +693,7 @@ GetX 会自动进行重建，并且只重建使用被更改的变量的小组件
 
 有人开了一个功能请求，因为他们只想使用一种类型的响应式变量，而其他的则手动去更新，需要为此在 GetBuilder 中插入一个 Obx。思来想去，MixinBuilder 应运而生。它既可以通过改变 “.obs” 变量进行响应式改变，也可以通过 update() 进行手动更新。然而，在 4 个 widget 中，他是消耗资源最多的一个，因为除了有一个 Subscription 来接收来自他的子代的变化事件外，他还订阅了他的控制器的 update 方法。
 
-扩展 GetxController 是很重要的，因为它们有生命周期，可以在它们的 onInit() 和 onClose() 方法中 “开始” 和 “结束” 事件。你可以使用任何类来实现这一点，但我强烈建议你使用 GetxController 类来放置你的变量，无论它们是否是可观察的。
+继承 GetxController 是很重要的，因为它们有生命周期，可以在它们的 onInit() 和 onClose() 方法中 “开始” 和 “结束” 事件。你可以使用任何类来实现这一点，但我强烈建议你使用 GetxController 类来放置你的变量，无论它们是否是可观察的。
 
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder

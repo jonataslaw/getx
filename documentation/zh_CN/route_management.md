@@ -13,7 +13,7 @@
 
 # 路由管理
 
-这是关于 Getx 在路由管理方面的完整解释。
+这是关于 GetX 在路由管理方面的完整解释。
 
 ## 如何使用
 
@@ -81,7 +81,7 @@ if(data == 'success') madeAnything();
 
 ```dart
 
-// 默认的Flutter导航
+// 默认的 Flutter 导航
 Navigator.of(context).push(
   context,
   MaterialPageRoute(
@@ -91,7 +91,7 @@ Navigator.of(context).push(
   ),
 );
 
-// 使用Flutter语法获得，而不需要context。
+// 使用 Flutter 语法获得，而不需要 context。
 navigator.push(
   MaterialPageRoute(
     builder: (_) {
@@ -100,7 +100,7 @@ navigator.push(
   ),
 );
 
-// get语法 (这要好得多)
+// get 语法 (这要好得多)
 Get.to(HomePage());
 
 
@@ -178,7 +178,7 @@ Get.toNamed("/NextScreen", arguments: 'Get is the best');
 
 ```dart
 print(Get.arguments);
-//print out: Get is the best
+// print out: Get is the best
 ```
 
 ### 动态网页链接
@@ -214,7 +214,7 @@ void main() {
         name: '/profile/',
         page: () => MyProfile(),
       ),
-       //你可以为有参数的路由定义一个不同的页面，也可以为没有参数的路由定义一个不同的页面，但是你必须在不接收参数的路由上使用斜杠"/"，就像上面说的那样。
+       // 你可以为有参数的路由定义一个不同的页面，也可以为没有参数的路由定义一个不同的页面，但是你必须在不接收参数的路由上使用斜杠"/"，就像上面说的那样。
        GetPage(
         name: '/profile/:user',
         page: () => UserProfile(),
@@ -296,7 +296,7 @@ void main() {
 ```dart
 class MiddleWare {
   static observer(Routing routing) {
-    ///你除了可以监听路由外，还可以监听每个页面上的SnackBars、Dialogs和Bottomsheets。
+    // 你除了可以监听路由外，还可以监听每个页面上的SnackBars、Dialogs和Bottomsheets。
     if (routing.current == '/second' && !routing.isSnackbar) {
       Get.snackbar("Hi", "You are on second route");
     } else if (routing.current =='/third'){

@@ -51,20 +51,20 @@ Get.put<S>(
   S dependency
 
   // 可选：当你想要多个相同类型的类时，可以用这个方法。
-  // 因为你通常使用Get.find<Controller>()来获取一个类。
+  // 因为你通常使用 Get.find<Controller>() 来获取一个类。
   // 你需要使用标签来告诉你需要哪个实例。
   // 必须是唯一的字符串
   String tag,
 
   // 可选：默认情况下，get会在实例不再使用后进行销毁
-  // （例如：一个已经销毁的视图的Controller)
-  // 但你可能需要这个实例在整个应用生命周期中保留在那里，就像一个sharedPreferences的实例或其他东西。
-  //所以你设置这个选项
-  // 默认值为false
+  // （例如：一个已经销毁的视图的 Controller)
+  // 但你可能需要这个实例在整个应用生命周期中保留在那里，就像一个 sharedPreferences 的实例或其他东西。
+  // 所以你设置这个选项
+  // 默认值为 false
   bool permanent = false,
 
   // 可选：允许你在测试中使用一个抽象类后，用另一个抽象类代替它，然后再进行测试。
-  // 默认为false
+  // 默认为 false
   bool overrideAbstract = false,
 
   // 可选：允许你使用函数而不是依赖（dependency）本身来创建依赖。
@@ -77,7 +77,7 @@ Get.put<S>(
 可以懒加载一个依赖，这样它只有在使用时才会被实例化。这对于计算代价高的类来说非常有用，或者如果你想在一个地方实例化几个类 (比如在 Bindings 类中)，而且你知道你不会在那个时候使用这个类。
 
 ```dart
-///只有当第一次使用Get.find<ApiMock>时，ApiMock才会被调用。
+// 只有当第一次使用Get.find<ApiMock>时，ApiMock才会被调用。
 Get.lazyPut<ApiMock>(() => ApiMock());
 
 Get.lazyPut<FirebaseAuth>(
@@ -98,7 +98,7 @@ Get.lazyPut<S>(
   // 强制性：当你的类第一次被调用时，将被执行的方法。
   InstanceBuilderCallback builder,
   
-  // 可选：和Get.put()一样，当你想让同一个类有多个不同的实例时，就会用到它。
+  // 可选：和 Get.put() 一样，当你想让同一个类有多个不同的实例时，就会用到它。
   // 必须是唯一的
   String tag,
 
@@ -131,12 +131,12 @@ Get.putAsync<S>(
   // 必备：一个将被执行的异步方法，用于实例化你的类。
   AsyncInstanceBuilderCallback<S> builder,
 
-  // 可选：和Get.put()一样，当你想让同一个类有多个不同的实例时，就会用到它。
+  // 可选：和 Get.put() 一样，当你想让同一个类有多个不同的实例时，就会用到它。
   // 必须是唯一的
   String tag,
 
-  // 可选：与Get.put()相同，当你需要在整个应用程序中保持该实例的生命时使用。
-  // 默认值为false
+  // 可选：与 Get.put() 相同，当你需要在整个应用程序中保持该实例的生命时使用。
+  // 默认值为 false
   bool permanent = false
 )
 ```
@@ -154,18 +154,18 @@ Get.Create<LoginController>(() => LoginController());
 
 ```dart
 Get.create<S>(
-  // 需要：一个返回每次调用"Get.find() "都会被新建的类的函数。
+  // 需要：一个返回每次调用 "Get.find()"都会被新建的类的函数。
   // 示例: Get.create<YourClass>(()=>YourClass())
   FcBuilderFunc<S> builder,
 
-  // 可选：就像Get.put()一样，但当你需要多个同类的实例时，会用到它。
+  // 可选：就像 Get.put() 一样，但当你需要多个同类的实例时，会用到它。
   // 当你有一个列表，每个项目都需要自己的控制器时，这很有用。
   // 需要是一个唯一的字符串。只要把标签改成名字
   String name,
 
   // 可选：就像 Get.put() 一样，
   // 它是为了当你需要在整个应用中保活实例的时候
-  // 区别在于 Get.create 的 permanent默认为true
+  // 区别在于 Get.create 的 permanent 默认为 true
   bool permanent = true
 ```
 
@@ -178,8 +178,8 @@ final controller = Get.find<Controller>();
 // 或者
 Controller controller = Get.find();
 
-// 是的，它看起来像魔术，Get会找到你的控制器，并将其提供给你。
-// 你可以实例化100万个控制器，Get总会给你正确的控制器。
+// 是的，它看起来像魔术，Get 会找到你的控制器，并将其提供给你。
+// 你可以实例化 100 万个控制器，Get 总会给你正确的控制器。
 ```
 
 然后你就可以恢复你在后面获得的控制器数据。
@@ -197,7 +197,7 @@ print(count); // out: 12345
 移除一个 Get 实例：
 
 ```dart
-Get.delete<Controller>(); //通常你不需要这样做，因为GetX已经删除了未使用的控制器。
+Get.delete<Controller>(); // 通常你不需要这样做，因为GetX已经删除了未使用的控制器。
 ```
 
 ## 方法之间的差异
@@ -338,7 +338,7 @@ GetX 默认情况下会将未使用的控制器从内存中移除。
 void main () {
   runApp(
     GetMaterialApp(
-      smartManagement: SmartManagement.onlyBuilders //这里
+      smartManagement: SmartManagement.onlyBuilders // 这里
       home: Home(),
     )
   )
