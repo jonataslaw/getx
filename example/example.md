@@ -240,7 +240,7 @@ void main() {
   runApp(GetMaterialApp(
     initialRoute: '/home',
     getPages: [
-      GetPage(name: '/home', page: () => HomeView(), binding: HomeBinding()),
+      GetPage(name: '/home', page: () => Home(), binding: HomeBinding()),
     ],
   ));
 }
