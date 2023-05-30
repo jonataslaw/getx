@@ -1,5 +1,4 @@
-import 'dart:ui' as ui;
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../get.dart';
@@ -1171,14 +1170,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// The window to which this binding is bound.
-  ui.SingletonFlutterWindow get window => engine.window;
+  FlutterView get window => View.of(context!);
 
-  Locale? get deviceLocale => engine.window.locale;
+  Locale? get deviceLocale => WidgetsBinding.instance.platformDispatcher.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => engine.window.devicePixelRatio;
+  double get pixelRatio => window.devicePixelRatio;
 
-  Size get size => engine.window.physicalSize / pixelRatio;
+  Size get size => window.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1188,14 +1187,14 @@ extension GetNavigationExt on GetInterface {
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => engine.window.padding.top;
+  double get statusBarHeight => window.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => engine.window.padding.bottom;
+  double get bottomBarHeight => window.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => engine.window.textScaleFactor;
+  double get textScaleFactor => WidgetsBinding.instance.platformDispatcher.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme.textTheme;
@@ -1208,7 +1207,7 @@ extension GetNavigationExt on GetInterface {
 
   /// Check if dark mode theme is enable on platform on android Q+
   bool get isPlatformDarkMode =>
-      (ui.window.platformBrightness == Brightness.dark);
+      (WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;
