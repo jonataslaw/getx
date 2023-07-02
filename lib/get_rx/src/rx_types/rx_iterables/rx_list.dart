@@ -140,7 +140,7 @@ extension ListExtension<E> on List<E> {
   RxList<E> get obs => RxList<E>(this);
 
   /// Add [item] to [List<E>] only if [item] is not null.
-  void addNonNull(E item) {
+  void addNonNull(E? item) {
     if (item != null) add(item);
   }
 
