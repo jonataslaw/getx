@@ -700,9 +700,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       RouteDecoder decoder, PageSettings arguments) {
     final parameters =
         arguments.params.isEmpty ? arguments.query : arguments.params;
-    if (arguments.params.isEmpty) {
-      arguments.params.addAll(arguments.query);
-    }
+    arguments.params.addAll(arguments.query);
     if (decoder.parameters.isEmpty) {
       decoder.parameters.addAll(parameters);
     }
