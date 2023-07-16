@@ -9,7 +9,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         image: DecorationImage(
           fit: BoxFit.cover,
@@ -22,7 +22,7 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Get.snackbar('title', 'message');
             },
@@ -38,43 +38,45 @@ class HomeView extends GetView<HomeController> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   Text(
                     'total_confirmed'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                     ),
                   ),
                   Text(
                     '${state!.global.totalConfirmed}',
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 45, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
                     'total_deaths'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                     ),
                   ),
                   Text(
                     '${state.global.totalDeaths}',
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 45, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.black),
-                      side: BorderSide(
+                      textStyle: const TextStyle(color: Colors.black),
+                      side: const BorderSide(
                         color: Colors.deepPurple,
                         width: 3,
                       ),
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                     ),
                     onPressed: () async {
                       //await Navigation  Get.rootDelegate.toNamed('/home/country');
@@ -82,7 +84,7 @@ class HomeView extends GetView<HomeController> {
                     },
                     child: Text(
                       'fetch_country'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -90,17 +92,17 @@ class HomeView extends GetView<HomeController> {
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.black),
-                      side: BorderSide(
+                      textStyle: const TextStyle(color: Colors.black),
+                      side: const BorderSide(
                         color: Colors.deepPurple,
                         width: 3,
                       ),
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                     ),
                     onPressed: () {
-                      Get.updateLocale(Locale('pt', 'BR'));
+                      Get.updateLocale(const Locale('pt', 'BR'));
                     },
-                    child: Text(
+                    child: const Text(
                       'Update language to Portuguese',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

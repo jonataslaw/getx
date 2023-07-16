@@ -10,7 +10,7 @@ class CountryView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
               colorFilter: ColorFilter.linearToSrgbGamma(),
@@ -36,7 +36,7 @@ class CountryView extends GetView<HomeController> {
                       //Get.rootDelegate.toNamed('/home/country');
                       final data =
                           await Get.toNamed('/home/country/details?id=$index');
-                      print(data);
+                      Get.log(data);
                     },
                     trailing: CircleAvatar(
                       backgroundImage: NetworkImage(

@@ -63,6 +63,7 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
   final BackButtonDispatcher? backButtonDispatcher;
   final bool useInheritedMediaQuery;
 
@@ -127,14 +128,16 @@ class GetMaterialApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
+        routerConfig = null,
         super(key: key);
 
-  GetMaterialApp.router({
+  const GetMaterialApp.router({
     Key? key,
     this.routeInformationProvider,
     this.scaffoldMessengerKey,
     this.routeInformationParser,
     this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -240,12 +243,12 @@ class GetMaterialApp extends StatelessWidget {
       // ],
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);
-        print('ROUTERRRR ${controller.config.routerDelegate}');
         return MaterialApp.router(
           routerDelegate: controller.config.routerDelegate,
           routeInformationParser: controller.config.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
+          routerConfig: routerConfig,
           key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
@@ -253,8 +256,8 @@ class GetMaterialApp extends StatelessWidget {
                     ? TextDirection.rtl
                     : TextDirection.ltr),
             child: builder == null
-                ? (child ?? Material())
-                : builder!(context, child ?? Material()),
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
           ),
           title: title,
           onGenerateTitle: onGenerateTitle,

@@ -500,7 +500,6 @@ class GetUtils {
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
   static String? capitalize(String value) {
-    if (isNull(value)) return null;
     if (isBlank(value)!) return value;
     return value.split(' ').map(capitalizeFirst).join(' ');
   }
@@ -508,7 +507,6 @@ class GetUtils {
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
   static String? capitalizeFirst(String s) {
-    if (isNull(s)) return null;
     if (isBlank(s)!) return s;
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }

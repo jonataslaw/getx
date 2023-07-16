@@ -6,7 +6,7 @@ import 'pt_BR.dart';
 
 class TranslationService extends Translations {
   static Locale? get locale => Get.deviceLocale;
-  static final fallbackLocale = Locale('en', 'US');
+  static const fallbackLocale = Locale('en', 'US');
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': en_US,

@@ -59,13 +59,14 @@ class GetCupertinoApp extends StatelessWidget {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
   final List<Bind> binds;
   final ScrollBehavior? scrollBehavior;
 
-  GetCupertinoApp({
+  const GetCupertinoApp({
     Key? key,
     this.theme,
     this.navigatorKey,
@@ -123,25 +124,16 @@ class GetCupertinoApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
+        routerConfig = null,
         super(key: key);
 
-  static String _cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncommonent for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
-  }
-
-  GetCupertinoApp.router({
+  const GetCupertinoApp.router({
     Key? key,
     this.theme,
     this.routeInformationProvider,
     this.routeInformationParser,
     this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -233,6 +225,7 @@ class GetCupertinoApp extends StatelessWidget {
           routeInformationParser: controller.config.routeInformationParser,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
+          routerConfig: routerConfig,
           key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
@@ -240,8 +233,8 @@ class GetCupertinoApp extends StatelessWidget {
                     ? TextDirection.rtl
                     : TextDirection.ltr),
             child: builder == null
-                ? (child ?? Material())
-                : builder!(context, child ?? Material()),
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
           ),
           title: title,
           onGenerateTitle: onGenerateTitle,

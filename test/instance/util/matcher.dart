@@ -27,10 +27,10 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-class _FunctionMatcher<T> extends CustomMatcher {
+class FunctionMatcher<T> extends CustomMatcher {
   final Object Function(T value) _feature;
 
-  _FunctionMatcher(String name, this._feature, matcher)
+  FunctionMatcher(String name, this._feature, matcher)
       : super('`$name`:', '`$name`', matcher);
 
   @override
@@ -39,15 +39,15 @@ class _FunctionMatcher<T> extends CustomMatcher {
 
 class HavingMatcher<T> implements TypeMatcher<T> {
   final TypeMatcher<T> _parent;
-  final List<_FunctionMatcher<T>> _functionMatchers;
+  final List<FunctionMatcher<T>> _functionMatchers;
 
   HavingMatcher(TypeMatcher<T> parent, String description,
       Object Function(T) feature, dynamic matcher,
-      [Iterable<_FunctionMatcher<T>>? existing])
+      [Iterable<FunctionMatcher<T>>? existing])
       : _parent = parent,
         _functionMatchers = [
           ...?existing,
-          _FunctionMatcher<T>(description, feature, matcher)
+          FunctionMatcher<T>(description, feature, matcher)
         ];
 
   @override

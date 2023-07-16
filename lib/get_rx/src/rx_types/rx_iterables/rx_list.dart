@@ -48,7 +48,7 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   RxList<E> operator +(Iterable<E> val) {
     addAll(val);
-    refresh();
+    // refresh();
     return this;
   }
 
@@ -113,11 +113,11 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   Iterable<E> get reversed => value.reversed;
 
-  @override
-  set value(List<E> val) {
-    value = val;
-    refresh();
-  }
+  // @override
+  // set value(List<E> val) {
+  //   value = val;
+  //   refresh();
+  // }
 
   @override
   Iterable<E> where(bool Function(E) test) {

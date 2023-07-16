@@ -57,8 +57,8 @@ class WrapperNamed extends StatelessWidget {
 }
 
 class WrapperTranslations extends Translations {
-  static final fallbackLocale = Locale('en', 'US');
-  static Locale? get locale => Locale('en', 'US');
+  static const fallbackLocale = Locale('en', 'US');
+  static Locale? get locale => const Locale('en', 'US');
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {

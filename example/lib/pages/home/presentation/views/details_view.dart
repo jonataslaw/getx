@@ -15,7 +15,7 @@ class DetailsView extends GetView<HomeController> {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.linearToSrgbGamma(),
+          colorFilter: const ColorFilter.linearToSrgbGamma(),
           image: NetworkImage(
               "https://flagpedia.net/data/flags/normal/${country.countryCode.toLowerCase()}.png"),
         ),
@@ -35,53 +35,57 @@ class DetailsView extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${country.country}',
-                style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                country.country,
+                style:
+                    const TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               Text(
                 'total_confirmed'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                 ),
               ),
               Text(
                 '${country.totalConfirmed}',
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'total_deaths'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                 ),
               ),
               Text(
                 '${country.totalDeaths}',
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'total_recovered'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                 ),
               ),
               Text(
                 '${country.totalRecovered}',
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               TextButton(
                   onPressed: () {
                     Get.back(result: 'djsoidjsoidj');
                   },
-                  child: Text('back'))
+                  child: const Text('back'))
             ],
           )),
         ),

@@ -93,7 +93,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
         notFoundRoute = notFoundRoute ??= GetPage(
           name: '/404',
-          page: () => Scaffold(
+          page: () => const Scaffold(
             body: Center(child: Text('Route not found')),
           ),
         ) {

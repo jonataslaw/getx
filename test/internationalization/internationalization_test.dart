@@ -16,7 +16,7 @@ void main() {
     expect('total_confirmed'.tr, 'Total Confirmed');
     expect('total_deaths'.tr, 'Total Deaths');
 
-    Get.updateLocale(Locale('pt', 'BR'));
+    Get.updateLocale(const Locale('pt', 'BR'));
 
     await tester.pumpAndSettle();
 
@@ -24,7 +24,7 @@ void main() {
     expect('total_confirmed'.tr, 'Total confirmado');
     expect('total_deaths'.tr, 'Total de mortes');
 
-    Get.updateLocale(Locale('en', 'EN'));
+    Get.updateLocale(const Locale('en', 'EN'));
 
     await tester.pumpAndSettle();
 

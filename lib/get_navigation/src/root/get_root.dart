@@ -276,7 +276,7 @@ class ConfigData {
 }
 
 class GetRoot extends StatefulWidget {
-  GetRoot({
+  const GetRoot({
     Key? key,
     required this.config,
     required this.child,
@@ -438,7 +438,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   Transition? getThemeTransition() {
-    final platform = Get.theme.platform;
+    final platform = context.theme.platform;
     final matchingTransition =
         Get.theme.pageTransitionsTheme.builders[platform];
     switch (matchingTransition) {
@@ -489,7 +489,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   void update() {
-    setState(() {});
+    context.visitAncestorElements((element) {
+      element.markNeedsBuild();
+      return false;
+    });
   }
 
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;

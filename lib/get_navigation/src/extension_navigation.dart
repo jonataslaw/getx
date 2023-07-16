@@ -187,7 +187,7 @@ extension ExtensionDialog on GetInterface {
         actions.add(TextButton(
           style: TextButton.styleFrom(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: buttonColor ?? theme.colorScheme.secondary,
@@ -230,8 +230,8 @@ extension ExtensionDialog on GetInterface {
     }
 
     Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? EdgeInsets.all(8),
-      contentPadding: contentPadding ?? EdgeInsets.all(8),
+      titlePadding: titlePadding ?? const EdgeInsets.all(8),
+      contentPadding: contentPadding ?? const EdgeInsets.all(8),
 
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -244,7 +244,7 @@ extension ExtensionDialog on GetInterface {
           content ??
               Text(middleText,
                   textAlign: TextAlign.center, style: middleTextStyle),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ButtonTheme(
             minWidth: 78.0,
             height: 34.0,
@@ -395,6 +395,7 @@ extension ExtensionSnackbar on GetInterface {
     Gradient? backgroundGradient,
     TextButton? mainButton,
     OnTap? onTap,
+    OnHover? onHover,
     bool? isDismissible,
     bool? showProgressIndicator,
     DismissDirection? dismissDirection,
@@ -433,14 +434,14 @@ extension ExtensionSnackbar on GetInterface {
             ),
         snackPosition: snackPosition ?? SnackPosition.top,
         borderRadius: borderRadius ?? 15,
-        margin: margin ?? EdgeInsets.symmetric(horizontal: 10),
+        margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
         backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
-        padding: padding ?? EdgeInsets.all(16),
+        padding: padding ?? const EdgeInsets.all(16),
         borderColor: borderColor,
         borderWidth: borderWidth,
         leftBarIndicatorColor: leftBarIndicatorColor,
@@ -448,6 +449,7 @@ extension ExtensionSnackbar on GetInterface {
         backgroundGradient: backgroundGradient,
         mainButton: mainButton,
         onTap: onTap,
+        onHover: onHover,
         isDismissible: isDismissible ?? true,
         dismissDirection: dismissDirection,
         showProgressIndicator: showProgressIndicator ?? false,
@@ -457,7 +459,7 @@ extension ExtensionSnackbar on GetInterface {
         snackStyle: snackStyle ?? SnackStyle.floating,
         forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
         reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? Duration(seconds: 1),
+        animationDuration: animationDuration ?? const Duration(seconds: 1),
         overlayBlur: overlayBlur ?? 0.0,
         overlayColor: overlayColor ?? Colors.transparent,
         userInputForm: userInputForm);
@@ -1082,14 +1084,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   GetDelegate searchDelegate(dynamic k) {
-    GetDelegate _key;
+    GetDelegate key;
     if (k == null) {
-      _key = Get.rootController.rootDelegate;
+      key = Get.rootController.rootDelegate;
     } else {
       if (!keys.containsKey(k)) {
         throw 'Route id ($k) not found';
       }
-      _key = keys[k]!;
+      key = keys[k]!;
     }
 
     // if (_key.listenersLength == 0 && !testMode) {
@@ -1102,7 +1104,7 @@ extension GetNavigationExt on GetInterface {
     //   """;
     // }
 
-    return _key;
+    return key;
   }
 
   /// give current arguments
@@ -1156,11 +1158,11 @@ extension GetNavigationExt on GetInterface {
 
   /// give access to Theme.of(context)
   ThemeData get theme {
-    var _theme = ThemeData.fallback();
+    var theme = ThemeData.fallback();
     if (context != null) {
-      _theme = Theme.of(context!);
+      theme = Theme.of(context!);
     }
-    return _theme;
+    return theme;
   }
 
   /// The current null safe [WidgetsBinding]
@@ -1283,8 +1285,8 @@ extension OverlayExt on GetInterface {
     });
     final overlayEntryLoader = OverlayEntry(builder: (context) {
       return loadingWidget ??
-          Center(
-              child: Container(
+          const Center(
+              child: SizedBox(
             height: 90,
             width: 90,
             child: Text('Loading...'),
