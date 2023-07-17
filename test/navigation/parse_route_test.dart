@@ -160,6 +160,14 @@ void main() {
 
       expect(Get.parameters['id'], '1234');
       expect(Get.parameters['name'], 'ana');
+
+      Get.toNamed('/last/1234/ana/profile?job=dev');
+
+      await tester.pumpAndSettle();
+
+      expect(Get.parameters['id'], '1234');
+      expect(Get.parameters['name'], 'ana');
+      expect(Get.parameters['job'], 'dev');
     },
   );
 
