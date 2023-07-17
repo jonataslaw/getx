@@ -298,6 +298,17 @@ extension Inst on GetInterface {
     }
   }
 
+  
+  /// The findOrNull method will return the instance if it is registered;
+  /// otherwise, it will return null.
+  S? findOrNull<S>({String? tag}) {
+    if (isRegistered<S>(tag: tag)) {
+      return find<S>(tag: tag);
+    }
+    return null;
+  }
+
+
   /// Replace a parent instance of a class in dependency management
   /// with a [child] instance
   /// - [tag] optional, if you use a [tag] to register the Instance.
