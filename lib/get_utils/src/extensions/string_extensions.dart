@@ -105,10 +105,10 @@ extension GetStringUtils on String {
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
   /// capitalize the String
-  String? get capitalize => GetUtils.capitalize(this);
+  String get capitalize => GetUtils.capitalize(this);
 
   /// Capitalize the first letter of the String
-  String? get capitalizeFirst => GetUtils.capitalizeFirst(this);
+  String get capitalizeFirst => GetUtils.capitalizeFirst(this);
 
   /// remove all whitespace from the String
   String get removeAllWhitespace => GetUtils.removeAllWhitespace(this);

@@ -725,7 +725,6 @@ void main() {
       expect('foo bar'.capitalizeFirst, 'Foo bar');
       expect('FoO bAr'.capitalizeFirst, 'Foo bar');
       expect('FOO BAR'.capitalizeFirst, 'Foo bar');
-      // expect(null.capitalizeFirst, null);
       expect(''.capitalizeFirst, '');
     });
 
