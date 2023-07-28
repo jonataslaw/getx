@@ -61,11 +61,11 @@
 - [2.0 থেকে পরিবর্তন](#breaking-changes-from-20)
 - [কেন Getx ব্যবহার করবেন?](#why-getx)
 
-# About Get
+# Get সম্পর্কে
 
-- GetX is an extra-light and powerful solution for Flutter. It combines high-performance state management, intelligent dependency injection, and route management quickly and practically.
+- GetX হল ফ্লটারের জন্য একটি লাইটওয়েট এবং শক্তিশালী সমাধান। এটি দ্রুত এবং ব্যবহারিকভাবে উচ্চ-পারফরম্যান্স স্টেট ব্যবস্থাপনা, বুদ্ধিমান ডিপেনডেন্সি ইনজেকশন এবং রুট ব্যবস্থাপনাকে একত্রিত করে।
 
-- GetX has 3 basic principles. This means that these are the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
+- GetX এর ৩টি মৌলিক নীতি রয়েছে: **উৎপাদনশীলতা, কর্মক্ষমতা এবং সংগঠন**। এর মানে হল যে এইগুলি লাইব্রেরির সমস্ত রিসোর্স এর জন্য অগ্রাধিকার।
 
   - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
 
