@@ -204,9 +204,9 @@ GetX পাওয়ার সম্পর্কে ভালো ধারণা
 
 ## রুট ব্যবস্থাপনা
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
+আপনি যদি context ছাড়াই রুট/স্ন্যাকবার/ডায়ালগ/বটমশীট ব্যবহার করতে চান, GetX আপনার জন্য, এটি দেখুন:
 
-Add "Get" before your MaterialApp, turning it into GetMaterialApp
+আপনার MaterialApp এর আগে "Get" যোগ করুন, এটিকে GetMaterialApp এ পরিণত করুন
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -214,39 +214,39 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-Navigate to a new screen:
+একটি নতুন স্ক্রিনে নেভিগেট করুন:
 
 ```dart
 
 Get.to(NextScreen());
 ```
 
-Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+নাম সহ নতুন স্ক্রিনে নেভিগেট করুন। নামযুক্ত রুট সম্পর্কিত আরও বিস্তারিত বিবরণ দেখুন [এখানে](./documentation/en_US/route_management.md#navigation-with-named-routes)
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+স্ন্যাকবার, ডায়ালগ, বটমশীট, বা যেকোনো কিছু বন্ধ করতে আপনি Navigator.pop(context) এর পরিবর্তে ব্যবহার করুন:
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens, etc.)
+পরবর্তী স্ক্রিনে যাওয়ার পর আগের স্ক্রিনে ফিরে যাওয়া বন্ধ করুন (স্প্ল্যাশস্ক্রিন, লগইন স্ক্রিন ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+পরবর্তী স্ক্রিনে যেতে এবং আগের সমস্ত রুট বাতিল করতে (শপিং কার্ট, পোল  ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't have to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+লক্ষ্য করেছেন যে এই জিনিসগুলির কোনটি করার জন্য আপনাকে context ব্যবহার করতে হবে না? এটি Get রুট ম্যানেজমেন্ট ব্যবহার করার সবচেয়ে বড় সুবিধাগুলির মধ্যে একটি। এটির সাহায্যে, আপনি চিন্তা ছাড়াই আপনার controller class এর মধ্যে থেকে এই সমস্ত পদ্ধতিগুলি চালাতে পারেন।
 
 ### রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
