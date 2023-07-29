@@ -67,9 +67,9 @@
 
 - GetX এর ৩টি মৌলিক নীতি রয়েছে: **উৎপাদনশীলতা, কর্মক্ষমতা এবং সংগঠন**। এর মানে হল যে এইগুলি লাইব্রেরির সমস্ত রিসোর্স এর জন্য অগ্রাধিকার।
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
+  - **কর্মক্ষমতা:** GetX কর্মক্ষমতা এবং রিসোর্স এর ন্যূনতম ব্যবহারের উপর ফোকাস করে। এটি স্ট্রিম বা চেঞ্জনোটিফায়ার ব্যবহার করে না।
 
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with GetX. It will save hours of development and will provide the maximum performance your application can deliver.
+  - **উৎপাদনশীলতা:** GetX একটি সহজ এবং মনোরম সিনট্যাক্স ব্যবহার করে। আপনি যা করতে চান না কেন, Getx এর সাথে সর্বদা একটি সহজ উপায় রয়েছে। এটি ডেভেলপমেন্ট এর সময় সাশ্রয় করবে এবং এটি আপনার অ্যাপ্লিকেশনটি সরবরাহ করতে পারে এমন সর্বাধিক কর্মক্ষমতা সরবরাহ করবে।
 
     Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
 
