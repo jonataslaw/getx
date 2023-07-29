@@ -155,25 +155,15 @@ class Other extends StatelessWidget {
 }
 ```
 
-Result:
-
-![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
-
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
-
-Get was designed to work with teams, but it makes the job of an individual developer simple.
-
-Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
-
 # GetX এর তিনটি স্তম্ভ
 
 ## স্টেট ব্যবস্থাপনা
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+Get দুই ভিন্ন স্টেট ম্যানেজার আছে: সাধারণ স্টেট ম্যানেজার (আমরা একে GetBuilder বলব) and প্রতিক্রিয়াশীল স্টেট ম্যানেজার (GetX/Obx)
 
 ### প্রতিক্রিয়াশীল স্টেট ম্যানেজার
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+প্রতিক্রিয়াশীল প্রোগ্রামিং অনেক লোককে উদাসীন করতে পারে কারণ এটি জটিল। GetX প্রতিক্রিয়াশীল প্রোগ্রামিংকে বেশ সহজে পরিণত করে:
 
 - You won't need to create StreamControllers.
 - You won't need to create a StreamBuilder for each variable
