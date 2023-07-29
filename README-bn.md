@@ -252,7 +252,6 @@ Get.offAll(NextScreen());
 
 ## ডিপেনডেন্সি ব্যবস্থাপনা
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 Get এর একটি সহজ এবং শক্তিশালী ডিপেনডেন্সি পরিচালক রয়েছে যা আপনাকে কোনও Provider context বা inheritedWidget ছাড়াই, মাত্র 1 লাইনের কোডের মাধ্যমে আপনার ব্লক বা কন্ট্রোলারের মতো একই class রিট্রিভ করতে দেয়:
 
 ```dart
@@ -264,14 +263,11 @@ Controller controller = Get.put(Controller()); // Rather Controller controller =
 আপনি যে ক্লাসটি ব্যবহার করছেন তার মধ্যে আপনার ক্লাসকে ইনস্ট্যান্টিয়েট করার পরিবর্তে Get ইনস্ট্যান্সের মধ্যে ইনস্ট্যান্টিয়েট করুন, যা এটিকে আপনার অ্যাপ জুড়ে উপলব্ধ করবে।
 তখন আপনি স্বাভাবিকভাবে আপনার controller (বা class Bloc) ব্যবহার করতে পারবেন।
 
-**Tip:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
 **টিপ:** Get ডিপেন্ডেন্সি ম্যানেজমেন্ট প্যাকেজের অন্যান্য অংশ থেকে ডিকপল করা হয়েছে, উদাহরণ স্বরূপ, আপনার অ্যাপ ইতিমধ্যেই একটি স্টেট ম্যানেজার ব্যবহার করে (যেকোনোটি হতে পারে, এটা কোন ব্যাপার না), তবে আপনার পুনরায় সব লেখার দরকার নেই, আপনি কোনও সমস্যা ছাড়াই এই ডিপেন্ডেন্সি ইনজেকশনটি ব্যবহার করতে পারেন।
 
 ```dart
 controller.fetchApi();
 ```
-
-Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
 
 কল্পনা করুন যে আপনি অসংখ্য রুটে নেভিগেট করেছেন, এবং আপনার controller এর পিছনে ফেলে আসা ডেটার প্রয়োজন, আপনার প্রোভাইডার বা Get_it এর সাথে মিলিত একটি স্টেট ম্যানেজারের প্রয়োজন হবে, তাই না? Get এর সাথে তা প্রয়োজন নেই। আপনাকে শুধু আপনার controller এর জন্য "find" জিজ্ঞাসা করতে হবে, আপনার কোনো অতিরিক্ত ডিপেন্ডেন্সি প্রয়োজন নেই:
 
