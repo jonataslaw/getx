@@ -75,9 +75,9 @@
 
 - GetX এর একটি বিশাল ইকো সিস্টেম, একটি বৃহত সম্প্রদায়, প্রচুর সংখ্যক সহযোগী রয়েছে এবং যতক্ষণ ফ্লাটার বিদ্যমান থাকবে ততক্ষণ রক্ষণাবেক্ষণ করা হবে। গেটএক্স অ্যান্ড্রয়েড, আইওএস, ওয়েব, ম্যাক, লিনাক্স, উইন্ডোজ এবং আপনার সার্ভারে একই কোড দিয়ে চলতে সক্ষম। **[গেট সার্ভার (Get Server)](https://github.com/jonataslaw/get_server) দিয়ে আপনার ফ্রন্টএন্ডে তৈরি কোডটি পুনরায় সম্পূর্ণরূপে ব্যাকএন্ডে ব্যবহার করা সম্ভব।**
 
-**এছাড়াও সম্পূর্ণ ডেভেলপমেন্ট প্রক্রিয়া সার্ভারে এবং ফ্রন্টএন্ডে [Get CLI](https://github.com/jonataslaw/get_cli) এর মাধ্যমে স্বয়ংক্রিয়ভাবে করা যেতে পারে।**.
+**এছাড়াও সম্পূর্ণ ডেভেলপমেন্ট প্রক্রিয়া সার্ভারে এবং ফ্রন্টএন্ডে [Get CLI](https://github.com/jonataslaw/get_cli) এর মাধ্যমে স্বয়ংক্রিয়ভাবে করা যেতে পারে**।
 
-**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [VSCode extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [Android Studio/Intellij extension](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [VSCode extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [Android Studio/Intellij extension](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**।
 
 # ইনস্টল
 
@@ -96,19 +96,19 @@ import 'package:get/get.dart';
 
 # GetX দিয়ে কাউন্টার অ্যাপ
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+Flutter-এ নতুন ডিফল্ট তৈরি করা "কাউন্টার" প্রজেক্টে 100 টিরও বেশি লাইন রয়েছে (মন্তব্য সহ)। Get ব্যবহার করে এটি মাত্র ২৬ লাইনে করা সম্ভব (মন্তব্য সহ)।
 
-- Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+- ধাপ 1:
+  আপনার MaterialApp এর আগে "Get" যোগ করুন, এটিকে GetMaterialApp এ পরিণত করুন
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step is only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- নোট: এটি ফ্লটারের MaterialApp পরিবর্তন করে না, GetMaterialApp একটি পরিবর্তিত MaterialApp নয়, এটি শুধুমাত্র একটি পূর্ব-কনফিগার করা উইজেট, যেটিতে একটি চাইল্ড হিসাবে ডিফল্ট MaterialApp আছে। আপনি এটি ম্যানুয়ালি কনফিগার করতে পারেন, তবে এটি অবশ্যই প্রয়োজনীয় নয়। GetMaterialApp রুট তৈরি করবে, সেগুলিকে ইনজেকশন দেবে, অনুবাদগুলি ইনজেকশন করবে, রুট নেভিগেশনের জন্য আপনার প্রয়োজনীয় সমস্ত কিছু ইনজেক্ট করবে। আপনি যদি শুধুমাত্র স্টেট ব্যবস্থাপনা বা ডিপেন্ডেন্সি ব্যবস্থাপনার জন্য Get ব্যবহার করেন, তাহলে GetMaterialApp ব্যবহার করার প্রয়োজন নেই। GetMaterialApp রুট, স্ন্যাকবার, আন্তর্জাতিকীকরণ, বটমশিট, ডায়ালগ এবং রুট সম্পর্কিত উচ্চ-স্তরের এপিএস এবং প্রসঙ্গ অনুপস্থিতির জন্য প্রয়োজনীয়।
+- নোট-²: আপনি যদি রুট ম্যানেজমেন্ট ব্যবহার করেন তবেই এই ধাপটি প্রয়োজনীয় (`Get.to()`, `Get.back()` এবং অন্যান্য)। আপনি যদি এটি ব্যবহার না করেন তবে ধাপ-1 করার দরকার নেই
 
-- Step 2:
+- ধাপ 2:
   Create your business logic class and place all variables, methods and controllers inside it.
   You can make any variable observable using a simple ".obs".
 
@@ -119,7 +119,7 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
+- ধাপ 3:
   Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
 
 ```dart
