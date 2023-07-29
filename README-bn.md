@@ -59,7 +59,6 @@
     - [গেট উইজেট](#getwidget)
     - [গেট এক্স সার্ভিস](#getxservice)
 - [2.0 থেকে পরিবর্তন](#breaking-changes-from-20)
-- [কেন Getx ব্যবহার করবেন?](#why-getx)
 
 # Get সম্পর্কে
 
@@ -187,7 +186,6 @@ var name = 'Ashiqur Rahman Alif';
 var name = 'Ashiqur Rahman Alif'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever the values changes, simply do this:
 এবং UI-তে যখন আপনি সেই নামটি দেখাতে চান এবং যখনই মান পরিবর্তন হয় তখন স্ক্রীনটি আপডেট করতে চান, কেবল এটি করুন:
 
 ```dart
