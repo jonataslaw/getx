@@ -248,35 +248,39 @@ Get.offAll(NextScreen());
 
 ### রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ডকুমেন্টেশন আছে [এখানে](./documentation/en_US/route_management.md)**
 
 ## ডিপেনডেন্সি ব্যবস্থাপনা
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Get এর একটি সহজ এবং শক্তিশালী ডিপেনডেন্সি পরিচালক রয়েছে যা আপনাকে কোনও Provider context বা inheritedWidget ছাড়াই, মাত্র 1 লাইনের কোডের মাধ্যমে আপনার ব্লক বা কন্ট্রোলারের মতো একই class রিট্রিভ করতে দেয়:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Note: If you are using Get's State Manager, pay more attention to the bindings API, which will make it easier to connect your view to your controller.
+- দ্রষ্টব্য: আপনি যদি Get's State Manager ব্যবহার করেন, তাহলে bindings API-এ আরও মনোযোগ দিন, যা আপনার কন্ট্রোলারের সাথে আপনার ভিউকে সংযোগ করা সহজ করে তুলবে।
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
+আপনি যে ক্লাসটি ব্যবহার করছেন তার মধ্যে আপনার ক্লাসকে ইনস্ট্যান্টিয়েট করার পরিবর্তে Get ইনস্ট্যান্সের মধ্যে ইনস্ট্যান্টিয়েট করুন, যা এটিকে আপনার অ্যাপ জুড়ে উপলব্ধ করবে।
+তখন আপনি স্বাভাবিকভাবে আপনার controller (বা class Bloc) ব্যবহার করতে পারবেন।
 
 **Tip:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**টিপ:** Get ডিপেন্ডেন্সি ম্যানেজমেন্ট প্যাকেজের অন্যান্য অংশ থেকে ডিকপল করা হয়েছে, উদাহরণ স্বরূপ, আপনার অ্যাপ ইতিমধ্যেই একটি স্টেট ম্যানেজার ব্যবহার করে (যেকোনোটি হতে পারে, এটা কোন ব্যাপার না), তবে আপনার পুনরায় সব লেখার দরকার নেই, আপনি কোনও সমস্যা ছাড়াই এই ডিপেন্ডেন্সি ইনজেকশনটি ব্যবহার করতে পারেন।
 
 ```dart
 controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+
+কল্পনা করুন যে আপনি অসংখ্য রুটে নেভিগেট করেছেন, এবং আপনার controller এর পিছনে ফেলে আসা ডেটার প্রয়োজন, আপনার প্রোভাইডার বা Get_it এর সাথে মিলিত একটি স্টেট ম্যানেজারের প্রয়োজন হবে, তাই না? Get এর সাথে তা প্রয়োজন নেই। আপনাকে শুধু আপনার controller এর জন্য "find" জিজ্ঞাসা করতে হবে, আপনার কোনো অতিরিক্ত ডিপেন্ডেন্সি প্রয়োজন নেই:
 
 ```dart
 Controller controller = Get.find();
 //Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+এবং তারপরে আপনি আপনার নিয়ামক ডেটা পুনরুদ্ধার করতে সক্ষম হবেন যা সেখানে ফিরে প্রাপ্ত হয়েছিল:
 
 ```dart
 Text(controller.textFromApi);
