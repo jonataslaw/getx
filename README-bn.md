@@ -36,22 +36,22 @@
       - [লোকেল পরিবর্তন করুন](#change-locale)
       - [লোকেল পদ্ধতি](#system-locale)
   - [থিম পরিবর্তন করুন](#change-theme)
-  - [GetConnect](#getconnect)
+  - [গেট কানেক্ট](#getconnect)
     - [ডিফল্ট কনফিগারেশন](#default-configuration)
     - [কাস্টম কনফিগারেশন](#custom-configuration)
-  - [GetPage মিডিলওয়্যার](#getpage-middleware)
+  - [গেট পেজ মিডিলওয়্যার](#getpage-middleware)
     - [অগ্রাধিকার](#priority)
     - [পুনঃনির্দেশ](#redirect)
-    - [অনপেজ কলড](#onpagecalled)
+    - [অন-পেজ কলড](#onpagecalled)
     - [অন-বাইন্ডিং স্টার্ট](#onbindingsstart)
     - [অন-পেজ বিল্ড স্টার্ট](#onpagebuildstart)
     - [অন-পেজ বিল্ড](#onpagebuilt)
     - [অন-পেজ ডিসপোজ](#onpagedispose)
-  - [অন্যান্য এপিআই](#other-advanced-apis)
+  - [অন্যান্য এপিআই সমূহ](#other-advanced-apis)
     - [ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন](#optional-global-settings-and-manual-configurations)
     - [লোকাল স্টেট উইজেট](#local-state-widgets)
       - [ভ্যালু বিল্ডার](#valuebuilder)
-      - [ObxValue](#obxvalue)
+      - [অব এক্স ভ্যালু](#obxvalue)
   - [প্রয়োজনীয় পরামর্শ](#useful-tips)
     - [গেট ভিউ](#getview)
     - [গেট রেস্পন্সিভ ভিউ](#getresponsiveview)
@@ -420,7 +420,7 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
 
-## GetConnect
+## গেট কানেক্ট (GetConnect)
 
 GetConnect is an easy way to communicate from your back to your front with http or websockets
 
@@ -497,13 +497,13 @@ class HomeProvider extends GetConnect {
 }
 ```
 
-## GetPage মিডিলওয়্যার
+## গেট পেজ মিডিলওয়্যার
 
 The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
 
 **Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
 
-### Priority
+### অগ্রাধিকার (Priority)
 
 The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
 
@@ -518,7 +518,7 @@ final middlewares = [
 
 those middlewares will be run in this order **-8 => 2 => 4 => 5**
 
-### Redirect
+### পুনঃনির্দেশ (Redirect)
 
 This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
 
@@ -529,7 +529,7 @@ RouteSettings redirect(String route) {
 }
 ```
 
-### onPageCalled
+### অন-পেজ কলড (onPageCalled)
 
 This function will be called when this Page is called before anything created
 you can use it to change something about the page or give it new page
@@ -541,7 +541,7 @@ GetPage onPageCalled(GetPage page) {
 }
 ```
 
-### OnBindingsStart
+### অন-বাইন্ডিং স্টার্ট (OnBindingsStart)
 
 This function will be called right before the Bindings are initialize.
 Here you can change Bindings for this page.
@@ -556,7 +556,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 }
 ```
 
-### OnPageBuildStart
+### অন-পেজ বিল্ড স্টার্ট (OnPageBuildStart)
 
 This function will be called right after the Bindings are initialize.
 Here you can do something after that you created the bindings and before creating the page widget.
@@ -568,15 +568,15 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 }
 ```
 
-### OnPageBuilt
+### অন-পেজ বিল্ড (OnPageBuilt)
 
 This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
 
-### OnPageDispose
+### অন-পেজ ডিসপোজ (OnPageDispose)
 
 This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
 
-## Other Advanced APIs
+## অন্যান্য এপিআই সমূহ
 
 ```dart
 // give the current args from currentScreen
@@ -708,7 +708,7 @@ context.isTablet()
 context.responsiveValue<T>()
 ```
 
-### Optional Global Settings and Manual configurations
+### ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন
 
 GetMaterialApp configures everything for you, but if you want to configure Get manually.
 
@@ -768,7 +768,7 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ```
 
-### Local State Widgets
+### লোকাল স্টেট উইজেট
 
 These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
 We have flavours for Reactive and Simple.
@@ -776,7 +776,7 @@ For instance, you might use them to toggle obscureText in a `TextField`, maybe c
 Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
 of the body in a `Scaffold`.
 
-#### ValueBuilder
+#### ভ্যালু বিল্ডার (ValueBuilder)
 
 A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
 
@@ -793,7 +793,7 @@ ValueBuilder<bool>(
 ),
 ```
 
-#### ObxValue
+#### অবএক্সভ্যালু (ObxValue)
 
 Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
 updates automatically... isn't it awesome?
@@ -807,7 +807,7 @@ ObxValue((data) => Switch(
 ),
 ```
 
-## Useful tips
+## প্রয়োজনীয় পরামর্শ
 
 `.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
 
@@ -962,7 +962,7 @@ class OtherClass extends GetView<Controller> {
 }
 ```
 
-#### GetView
+#### গেট ভিউ (GetView)
 
 I love this Widget, is so simple, yet, so useful!
 
@@ -985,13 +985,13 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
  }
 ```
 
-#### GetResponsiveView
+#### গেট রেস্পন্সিভ ভিউ (GetResponsiveView)
 
 Extend this widget to build responsive view.
 this widget contains the `screen` property that have all
 information about the screen size and type.
 
-##### How to use it
+##### কিভাবে এটি ব্যবহার করতে হয়
 
 You have two options to build it.
 
@@ -1008,7 +1008,7 @@ With `settings` property you can set the width limit for the screen types.
 Code to this screen
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
-#### GetWidget
+#### গেট উইজেট (GetWidget)
 
 Most people have no idea about this Widget, or totally confuse the usage of it.
 The use case is very rare, but very specific: It `caches` a Controller.
@@ -1024,7 +1024,7 @@ If you use, another "not so common" feature of **GetX**: `Get.create()`.
 That's where `GetWidget` shines... as you can use it, for example,
 to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
 
-#### GetxService
+#### গেট এক্স সার্ভিস (GetxService)
 
 This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
 But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
@@ -1076,7 +1076,7 @@ The only way to actually delete a `GetxService`, is with `Get.reset()` which is 
 lifetime of your app, use `GetxService`.
 
 
-### Tests
+### পরীক্ষা (Tests)
 
 You can test your controllers like any other class, including their lifecycles:
 
@@ -1127,7 +1127,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
-#### Tips
+#### পরামর্শ
 
 ##### Mockito or mocktail
 If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
@@ -1143,7 +1143,7 @@ If you are testing widgets, or test groups, use Get.reset at the end of your tes
 if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
 
 
-# Breaking changes from 2.0
+# 2.0 থেকে পরিবর্তন
 
 1- Rx types:
 
@@ -1196,7 +1196,7 @@ GetMaterialApp(
 )
 ```
 
-# Why Getx?
+# কেন Getx ব্যবহার করবেন?
 
 1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
 
