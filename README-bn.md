@@ -284,7 +284,7 @@ Text(controller.textFromApi);
 
 ### ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
+**ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/dependency_management.md)**
 
 # ইউটিলিটি
 
@@ -292,8 +292,9 @@ Text(controller.textFromApi);
 
 ### অনুবাদ
 
-Translations are kept as a simple key-value dictionary map.
+অনুবাদগুলি একটি সাধারণ কী-মানের অভিধান মানচিত্র হিসাবে রাখা হয়।
 To add custom translations, create a class and extend `Translations`.
+কাস্টম অনুবাদ যোগ করতে, একটি class তৈরি করুন এবং `Translations` এ extends করুন।
 
 ```dart
 import 'package:get/get.dart';
@@ -313,20 +314,20 @@ class Messages extends Translations {
 
 #### অনুবাদের ব্যবহার
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+শুধুমাত্র নির্দিষ্ট key তে `.tr` যোগ করুন এবং এটি অনুবাদ করা হবে, `Get.locale` এবং `Get.fallbackLocale` এর বর্তমান মান ব্যবহার করে।
 
 ```dart
 Text('title'.tr);
 ```
 
-#### Using translation with singular and plural
+#### একবচন এবং বহুবচন সহ অনুবাদ ব্যবহার
 
 ```dart
 var products = [];
 Text('singularKey'.trPlural('pluralKey', products.length, Args));
 ```
 
-#### Using translation with parameters
+#### প্যারামিটার সহ অনুবাদ ব্যবহার
 
 ```dart
 import 'package:get/get.dart';
@@ -349,7 +350,7 @@ Text('logged_in'.trParams({
 
 ### লোকেল
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+লোকেল এবং অনুবাদ সংজ্ঞায়িত করতে `GetMaterialApp`-এ প্যারামিটার পাস করুন।
 
 ```dart
 return GetMaterialApp(
@@ -361,7 +362,7 @@ return GetMaterialApp(
 
 #### লোকেল পরিবর্তন করুন
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+লোকেল আপডেট করতে `Get.updateLocale(locale)` কল করুন। অনুবাদগুলি তখন স্বয়ংক্রিয়ভাবে নতুন লোকেল ব্যবহার করে।
 
 ```dart
 var locale = Locale('en', 'US');
@@ -370,7 +371,7 @@ Get.updateLocale(locale);
 
 #### লোকেল পদ্ধতি
 
-To read the system locale, you could use `Get.deviceLocale`.
+সিস্টেম লোকেল পড়তে, আপনি `Get.deviceLocale` ব্যবহার করতে পারেন।
 
 ```dart
 return GetMaterialApp(
