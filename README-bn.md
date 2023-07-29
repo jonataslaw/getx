@@ -18,7 +18,7 @@
 
 
 - [Get সম্পর্কে](#about-get)
-- [কিভাবে ইনস্টল করতে হবে](#installing)
+- [ইনস্টল](#installing)
 - [GetX দিয়ে কাউন্টার অ্যাপ তৈরি করুন](#counter-app-with-getx)
 - [GetX এর তিনটি স্তম্ভ](#the-three-pillars)
   - [স্টেট ব্যবস্থাপনা](#state-management)
@@ -89,16 +89,16 @@
 **In addition, to further increase your productivity, we have the
 [extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
-# Installing
+# ইনস্টল
 
-Add Get to your pubspec.yaml file:
+আপনার pubspec.yaml ফাইলে get যোগ করুন:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+যে ফাইল এ ব্যবহার করবেন সেখানে ইম্পোর্ট করুন:
 
 ```dart
 import 'package:get/get.dart';
