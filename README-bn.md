@@ -109,8 +109,8 @@ void main() => runApp(GetMaterialApp(home: Home()));
 - নোট-²: আপনি যদি রুট ম্যানেজমেন্ট ব্যবহার করেন তবেই এই ধাপটি প্রয়োজনীয় (`Get.to()`, `Get.back()` এবং অন্যান্য)। আপনি যদি এটি ব্যবহার না করেন তবে ধাপ-1 করার দরকার নেই
 
 - ধাপ 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+  আপনার বিজনেস লজিক ক্লাস তৈরি করুন এবং এর ভিতরে সমস্ত ভেরিয়েবল, পদ্ধতি এবং কন্ট্রোলার রাখুন।
+  আপনি একটি সাধারণ ".obs" ব্যবহার করে যেকোনো পরিবর্তনশীলকে পর্যবেক্ষণযোগ্য করতে পারেন।
 
 ```dart
 class Controller extends GetxController{
@@ -120,7 +120,7 @@ class Controller extends GetxController{
 ```
 
 - ধাপ 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+  আপনার ভিউ তৈরি করুন, স্টেটলেস উইজেট ব্যবহার করুন এবং কিছু র‌্যাম সেভ করুন, Get এর সাথে আপনাকে হয়তো আর StatefulWidget ব্যবহার করার প্রয়োজন হবে না।
 
 ```dart
 class Home extends StatelessWidget {
