@@ -165,41 +165,42 @@ Get দুই ভিন্ন স্টেট ম্যানেজার আছ
 
 প্রতিক্রিয়াশীল প্রোগ্রামিং অনেক লোককে উদাসীন করতে পারে কারণ এটি জটিল। GetX প্রতিক্রিয়াশীল প্রোগ্রামিংকে বেশ সহজে পরিণত করে:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
-- You will not need to use code generators
+- আপনাকে StreamControllers তৈরি করতে হবে না।
+- আপনাকে প্রতিটি ভেরিয়েবলের জন্য একটি StreamBuilder তৈরি করতে হবে না।
+- আপনাকে প্রতিটি স্টেটের জন্য একটি ক্লাস তৈরি করতে হবে না।
+- আপনাকে initial value এর জন্য get তৈরি করতে হবে না।
+- আপনাকে কোড জেনারেটর ব্যবহার করতে হবে না।
 
-Reactive programming with Get is as easy as using setState.
+Get এর সাথে প্রতিক্রিয়াশীল প্রোগ্রামিং setState ব্যবহার করার মতোই সহজ।
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+কল্পনা করুন যে আপনার একটি নাম ভ্যারিয়েবল আছে এবং আপনি চান যে প্রতিবার আপনি এটি পরিবর্তন করবেন, এটি ব্যবহার করে এমন সমস্ত উইজেট স্বয়ংক্রিয়ভাবে পরিবর্তন করতে পারবেন।
 
-This is your count variable:
+মনে করুন এটি আপনার নাম ভ্যারিয়েবল:
 
 ```dart
 var name = 'Ashiqur Rahman Alif';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+এটিকে observable করতে, আপনাকে এটির শেষে ".obs" যোগ করতে হবে:
 
 ```dart
 var name = 'Ashiqur Rahman Alif'.obs;
 ```
 
 And in the UI, when you want to show that value and update the screen whenever the values changes, simply do this:
+এবং UI-তে যখন আপনি সেই নামটি দেখাতে চান এবং যখনই মান পরিবর্তন হয় তখন স্ক্রীনটি আপডেট করতে চান, কেবল এটি করুন:
 
 ```dart
 Obx(() => Text("${controller.name}"));
 ```
 
-That's all. It's _that_ simple.
+এখানেই শেষ। এটা এমনই সহজ।
 
 ### স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
+**স্টেট পরিচালনার আরও ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/state_management.md)। সেখানে আপনি আরও উদাহরণ দেখতে পাবেন এবং সাধারণ স্টেট ব্যবস্থাপক এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপকের মধ্যে পার্থক্যও দেখতে পাবেন**
 
-You will get a good idea of GetX power.
+GetX পাওয়ার সম্পর্কে ভালো ধারণা পাবেন।
 
 ## রুট ব্যবস্থাপনা
 
