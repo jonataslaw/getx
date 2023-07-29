@@ -77,7 +77,7 @@
 
 **এছাড়াও সম্পূর্ণ ডেভেলপমেন্ট প্রক্রিয়া সার্ভারে এবং ফ্রন্টএন্ডে [Get CLI](https://github.com/jonataslaw/get_cli) এর মাধ্যমে স্বয়ংক্রিয়ভাবে করা যেতে পারে।**.
 
-**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [VSCode extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [Android Studio/Intellij extension](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # ইনস্টল
 
