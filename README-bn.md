@@ -71,23 +71,13 @@
 
   - **উৎপাদনশীলতা:** GetX একটি সহজ এবং মনোরম সিনট্যাক্স ব্যবহার করে। আপনি যা করতে চান না কেন, Getx এর সাথে সর্বদা একটি সহজ উপায় রয়েছে। এটি ডেভেলপমেন্ট এর সময় সাশ্রয় করবে এবং এটি আপনার অ্যাপ্লিকেশনটি সরবরাহ করতে পারে এমন সর্বাধিক কর্মক্ষমতা সরবরাহ করবে।
 
-    Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+  - **সংগঠন:** GetX ভিউ, প্রেজেন্টেশন লজিক, বিজনেস লজিক, ডিপেন্ডেন্সি ইনজেকশন এবং নেভিগেশনের মোট ডিকপলিং করার অনুমতি দেয়। রুটগুলির মধ্যে নেভিগেট করার জন্য আপনার কনটেক্সট (context) প্রয়োজন নেই, তাই আপনাকে এর জন্য উইজেট ট্রি (ভিজ্যুয়ালাইজেশন) এর উপর নির্ভরশীল হতে হবে না। 
 
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+- GetX এর একটি বিশাল ইকো সিস্টেম, একটি বৃহত সম্প্রদায়, প্রচুর সংখ্যক সহযোগী রয়েছে এবং যতক্ষণ ফ্লাটার বিদ্যমান থাকবে ততক্ষণ রক্ষণাবেক্ষণ করা হবে। গেটএক্স অ্যান্ড্রয়েড, আইওএস, ওয়েব, ম্যাক, লিনাক্স, উইন্ডোজ এবং আপনার সার্ভারে একই কোড দিয়ে চলতে সক্ষম। **[গেট সার্ভার (Get Server)](https://github.com/jonataslaw/get_server) দিয়ে আপনার ফ্রন্টএন্ডে তৈরি কোডটি পুনরায় সম্পূর্ণরূপে ব্যাকএন্ডে ব্যবহার করা সম্ভব।**
 
-    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
+**এছাড়াও সম্পূর্ণ ডেভেলপমেন্ট প্রক্রিয়া সার্ভারে এবং ফ্রন্টএন্ডে [Get CLI](https://github.com/jonataslaw/get_cli) এর মাধ্যমে স্বয়ংক্রিয়ভাবে করা যেতে পারে।**.
 
-- GetX is not bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
-
-- GetX has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. GetX too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
-
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
-
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # ইনস্টল
 
