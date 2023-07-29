@@ -19,10 +19,10 @@
 
 - [Get সম্পর্কে](#about-get)
 - [ইনস্টল](#installing)
-- [GetX দিয়ে কাউন্টার অ্যাপ তৈরি করুন](#counter-app-with-getx)
+- [GetX দিয়ে কাউন্টার অ্যাপ](#counter-app-with-getx)
 - [GetX এর তিনটি স্তম্ভ](#the-three-pillars)
   - [স্টেট ব্যবস্থাপনা](#state-management)
-    - [Reactive স্টেট ম্যানেজার](#reactive-state-manager)
+    - [প্রতিক্রিয়াশীল স্টেট ম্যানেজার](#reactive-state-manager)
     - [স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-state-management)
   - [রুট ব্যবস্থাপনা](#route-management)
     - [রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-route-management)
@@ -40,24 +40,24 @@
     - [ডিফল্ট কনফিগারেশন](#default-configuration)
     - [কাস্টম কনফিগারেশন](#custom-configuration)
   - [GetPage মিডিলওয়্যার](#getpage-middleware)
-    - [Priority](#priority)
-    - [Redirect](#redirect)
-    - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [অন্যান্য APIs](#other-advanced-apis)
+    - [অগ্রাধিকার](#priority)
+    - [পুনঃনির্দেশ](#redirect)
+    - [অনপেজ কলড](#onpagecalled)
+    - [অন-বাইন্ডিং স্টার্ট](#onbindingsstart)
+    - [অন-পেজ বিল্ড স্টার্ট](#onpagebuildstart)
+    - [অন-পেজ বিল্ড](#onpagebuilt)
+    - [অন-পেজ ডিসপোজ](#onpagedispose)
+  - [অন্যান্য এপিআই](#other-advanced-apis)
     - [ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন](#optional-global-settings-and-manual-configurations)
     - [লোকাল স্টেট উইজেট](#local-state-widgets)
-      - [ValueBuilder](#valuebuilder)
+      - [ভ্যালু বিল্ডার](#valuebuilder)
       - [ObxValue](#obxvalue)
   - [প্রয়োজনীয় পরামর্শ](#useful-tips)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
+    - [গেট ভিউ](#getview)
+    - [গেট রেস্পন্সিভ ভিউ](#getresponsiveview)
       - [কিভাবে এটি ব্যবহার করতে হয়](#how-to-use-it)
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
+    - [গেট উইজেট](#getwidget)
+    - [গেট এক্স সার্ভিস](#getxservice)
 - [2.0 থেকে পরিবর্তন](#breaking-changes-from-20)
 - [কেন Getx ব্যবহার করবেন?](#why-getx)
 
@@ -104,7 +104,7 @@ dependencies:
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# GetX দিয়ে কাউন্টার অ্যাপ
 
 The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
 
@@ -175,13 +175,13 @@ Get was designed to work with teams, but it makes the job of an individual devel
 
 Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
 
-# The Three pillars
+# GetX এর তিনটি স্তম্ভ
 
-## State management
+## স্টেট ব্যবস্থাপনা
 
 Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
 
-### Reactive State Manager
+### প্রতিক্রিয়াশীল স্টেট ম্যানেজার
 
 Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
 
@@ -215,13 +215,13 @@ Obx(() => Text("${controller.name}"));
 
 That's all. It's _that_ simple.
 
-### More details about state management
+### স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
 
 You will get a good idea of GetX power.
 
-## Route management
+## রুট ব্যবস্থাপনা
 
 If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
 
@@ -267,11 +267,11 @@ Get.offAll(NextScreen());
 
 Noticed that you didn't have to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
 
-### More details about route management
+### রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
 
-## Dependency management
+## ডিপেনডেন্সি ব্যবস্থাপনা
 
 Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
 
@@ -303,15 +303,15 @@ And then you will be able to recover your controller data that was obtained back
 Text(controller.textFromApi);
 ```
 
-### More details about dependency management
+### ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
 
-# Utils
+# ইউটিলিটি
 
-## Internationalization
+## আন্তর্জাতিকীকরণ
 
-### Translations
+### অনুবাদ
 
 Translations are kept as a simple key-value dictionary map.
 To add custom translations, create a class and extend `Translations`.
@@ -332,7 +332,7 @@ class Messages extends Translations {
 }
 ```
 
-#### Using translations
+#### অনুবাদের ব্যবহার
 
 Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
 
@@ -368,7 +368,7 @@ Text('logged_in'.trParams({
   }));
 ```
 
-### Locales
+### লোকেল
 
 Pass parameters to `GetMaterialApp` to define the locale and translations.
 
@@ -380,7 +380,7 @@ return GetMaterialApp(
 );
 ```
 
-#### Change locale
+#### লোকেল পরিবর্তন করুন
 
 Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
 
@@ -389,7 +389,7 @@ var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### System locale
+#### লোকেল পদ্ধতি
 
 To read the system locale, you could use `Get.deviceLocale`.
 
@@ -399,7 +399,7 @@ return GetMaterialApp(
 );
 ```
 
-## Change Theme
+## থিম পরিবর্তন করুন
 
 Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
 
@@ -424,7 +424,7 @@ When `.darkmode` is activated, it will switch to the _light theme_, and when the
 
 GetConnect is an easy way to communicate from your back to your front with http or websockets
 
-### Default configuration
+### ডিফল্ট কনফিগারেশন
 
 You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
 
@@ -449,7 +449,7 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Custom configuration
+### কাস্টম কনফিগারেশন
 
 GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
 
@@ -497,7 +497,7 @@ class HomeProvider extends GetConnect {
 }
 ```
 
-## GetPage Middleware
+## GetPage মিডিলওয়্যার
 
 The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
 
