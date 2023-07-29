@@ -1147,7 +1147,7 @@ if you are using your navigation in your controllers, use `Get.testMode = true` 
 
 1- Rx types:
 
-| Before  | After      |
+| পূর্বে  | এখন      |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
@@ -1156,10 +1156,10 @@ if you are using your navigation in your controllers, use `Get.testMode = true` 
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+RxController এবং GetBuilder এখন একত্রিত, আপনি কোন নিয়ামক ব্যবহার করতে চান তা আর মুখস্ত করার দরকার নেই, শুধু GetxController ব্যবহার করুন, এটি সাধারণ স্টেট ব্যবস্থাপনা এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপনা এর জন্যও কাজ করবে।
 
 2- NamedRoutes
-Before:
+আগে:
 
 ```dart
 GetMaterialApp(
@@ -1169,7 +1169,7 @@ GetMaterialApp(
 )
 ```
 
-Now:
+এখন:
 
 ```dart
 GetMaterialApp(
@@ -1179,9 +1179,8 @@ GetMaterialApp(
 )
 ```
 
-Why this change?
-Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
-Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
+কেন এই পরিবর্তন? প্রায়শই, কোন পৃষ্ঠাটি প্যারামিটার বা লগইন টোকেন থেকে প্রদর্শিত হবে তা নির্ধারণ করার প্রয়োজন হতে পারে, পূর্ববর্তী পদ্ধতিটি অনমনীয় ছিল, কারণ এটি সেই অনুমতি দিতো না।
+এটি ফাংশনে পৃষ্ঠাটি ইনসার্ট করার জন্য উল্লেখযোগ্যভাবে RAM খরচ হ্রাস করেছে, যেহেতু অ্যাপটি শুরু হওয়ার পর থেকে রুটগুলি মেমরিতে বরাদ্দ করা হবে না, এটি এই ধরণের পদ্ধতিরও অনুমতি দেয়:
 
 ```dart
 
