@@ -1159,6 +1159,7 @@ if you are using your navigation in your controllers, use `Get.testMode = true` 
 RxController এবং GetBuilder এখন একত্রিত, আপনি কোন নিয়ামক ব্যবহার করতে চান তা আর মুখস্ত করার দরকার নেই, শুধু GetxController ব্যবহার করুন, এটি সাধারণ স্টেট ব্যবস্থাপনা এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপনা এর জন্যও কাজ করবে।
 
 2- NamedRoutes
+
 আগে:
 
 ```dart
