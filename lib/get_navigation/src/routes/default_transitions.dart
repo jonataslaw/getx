@@ -10,22 +10,26 @@ class LeftToRightFadeTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(1.0, 0.0),
-            ).animate(secondaryAnimation),
-            child: child),
-      ),
-    );
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null) oldPage,
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(-1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset.zero,
+                end: const Offset(1.0, 0.0),
+              ).animate(secondaryAnimation),
+              child: child),
+        ),
+      )
+    ]);
   }
 }
 
@@ -36,22 +40,26 @@ class RightToLeftFadeTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(-1.0, 0.0),
-            ).animate(secondaryAnimation),
-            child: child),
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null) oldPage,
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset.zero,
+                end: const Offset(-1.0, 0.0),
+              ).animate(secondaryAnimation),
+              child: child),
+        ),
       ),
-    );
+    ]);
   }
 }
 
@@ -74,8 +82,16 @@ class FadeInTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return FadeTransition(opacity: animation, child: child);
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null)
+        FadeTransition(
+          opacity: Tween<double>(begin: 1, end: 0).animate(animation),
+          child: oldPage,
+        ),
+      FadeTransition(opacity: animation, child: child)
+    ]);
   }
 }
 
@@ -94,7 +110,7 @@ class SlideDownTransition {
           position: Tween<Offset>(
             begin: Offset.zero,
             end: const Offset(0.0, -1.0),
-          ).animate(secondaryAnimation),
+          ).animate(animation),
           child: oldPage,
         ),
       SlideTransition(
@@ -115,13 +131,26 @@ class SlideLeftTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
+      Widget child,
+      Widget? oldPage) {
+    return Stack(
+      children: [
+        if (oldPage != null)
+          SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(1.0, 0.0),
+            ).animate(animation),
+            child: oldPage,
+          ),
+        SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        )
+      ],
     );
   }
 }
@@ -133,32 +162,55 @@ class SlideRightTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null)
+        SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(-1.0, 0.0),
+          ).animate(animation),
+          child: oldPage,
+        ),
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      ),
+    ]);
   }
 }
 
 class SlideTopTransition {
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0.0, -1.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+    Widget? oldPage,
+  ) {
+    return Stack(children: [
+      if (oldPage != null)
+        SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0.0, 1.0),
+          ).animate(animation),
+          child: oldPage,
+        ),
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.0, -1.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      ),
+    ]);
   }
 }
 
@@ -169,11 +221,15 @@ class ZoomInTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return ScaleTransition(
-      scale: animation,
-      child: child,
-    );
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null) oldPage,
+      ScaleTransition(
+        scale: animation,
+        child: child,
+      ),
+    ]);
   }
 }
 
@@ -184,17 +240,21 @@ class SizeTransitions {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
-    return Align(
-      alignment: Alignment.center,
-      child: SizeTransition(
-        sizeFactor: CurvedAnimation(
-          parent: animation,
-          curve: curve,
+      Widget child,
+      Widget? oldPage) {
+    return Stack(children: [
+      if (oldPage != null) oldPage,
+      Align(
+        alignment: Alignment.center,
+        child: SizeTransition(
+          sizeFactor: CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          ),
+          child: child,
         ),
-        child: child,
       ),
-    );
+    ]);
   }
 }
 
