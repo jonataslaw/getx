@@ -231,6 +231,8 @@ class GetBackGestureController<T> {
 mixin GetPageRouteTransitionMixin<T> on PageRoute<T> {
   ValueNotifier<String?>? _previousTitle;
 
+  Widget? oldPage;
+
   @override
   Color? get barrierColor => null;
 
@@ -311,7 +313,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     return buildPageTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
+        this, context, animation, secondaryAnimation, child, oldPage: oldPage);
   }
 
   @override
@@ -363,6 +365,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     Widget child, {
     bool limitedSwipe = false,
     double initialOffset = 0,
+    Widget? oldPage,
   }) {
     // Check if the route has an animation that's currently participating
     // in a back swipe gesture.
@@ -452,7 +455,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ), oldPage);
 
         case Transition.upToDown:
           return SlideTopTransition().buildTransitions(

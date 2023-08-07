@@ -504,7 +504,8 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T?>? to<T>(Widget Function() page,
-      {bool? opaque,
+      {Widget? oldPage,
+      bool? opaque,
       Transition? transition,
       Curve? curve,
       Duration? duration,
@@ -522,6 +523,7 @@ extension GetNavigationExt on GetInterface {
           PreventDuplicateHandlingMode.reorderRoutes}) {
     return searchDelegate(id).to(
       page,
+      oldPage: oldPage,
       opaque: opaque,
       transition: transition,
       curve: curve,

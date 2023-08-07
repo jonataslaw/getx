@@ -225,7 +225,7 @@ class PageRedirect {
       popGesture: r.popGesture,
       fullscreenDialog: r.fullscreenDialog,
       middlewares: r.middlewares,
-    );
+    )..oldPage = r.oldPage;
   }
 
   /// check if redirect is needed
