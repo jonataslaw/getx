@@ -575,7 +575,7 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
-  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T?>? toNamed<T>(
     String page, {
     dynamic arguments,
@@ -616,7 +616,7 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
-  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T?>? offNamed<T>(
     String page, {
     dynamic arguments,
@@ -1005,7 +1005,7 @@ extension GetNavigationExt on GetInterface {
   String _cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
 
-    /// uncommonent for URL styling.
+    /// uncomment for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
       name = '/$name';

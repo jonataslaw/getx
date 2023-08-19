@@ -298,7 +298,6 @@ extension Inst on GetInterface {
     }
   }
 
-  
   /// The findOrNull method will return the instance if it is registered;
   /// otherwise, it will return null.
   S? findOrNull<S>({String? tag}) {
@@ -307,7 +306,6 @@ extension Inst on GetInterface {
     }
     return null;
   }
-
 
   /// Replace a parent instance of a class in dependency management
   /// with a [child] instance
@@ -510,7 +508,7 @@ class _InstanceBuilderFactory<S> {
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
 
-  /// When fenix mode is avaliable, when a new instance is need
+  /// When fenix mode is available, when a new instance is need
   /// Instance manager will recreate a new instance of S
   bool fenix;
 

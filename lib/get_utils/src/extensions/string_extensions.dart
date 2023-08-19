@@ -70,7 +70,7 @@ extension GetStringUtils on String {
   /// Discover if the String is a SHA256 Hash
   bool get isSHA256 => GetUtils.isSHA256(this);
 
-  /// Discover if the String is a bynary value
+  /// Discover if the String is a binary value
   bool get isBinary => GetUtils.isBinary(this);
 
   /// Discover if the String is a ipv4
@@ -81,8 +81,8 @@ extension GetStringUtils on String {
   /// Discover if the String is a Hexadecimal
   bool get isHexadecimal => GetUtils.isHexadecimal(this);
 
-  /// Discover if the String is a palindrom
-  bool get isPalindrom => GetUtils.isPalindrom(this);
+  /// Discover if the String is a palindrome
+  bool get isPalindrome => GetUtils.isPalindrome(this);
 
   /// Discover if the String is a passport number
   bool get isPassport => GetUtils.isPassport(this);

@@ -37,12 +37,12 @@ class RouterReportManager<T> {
 
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of `GetMaterialApp`.
-  void reportDependencyLinkedToRoute(String depedencyKey) {
+  void reportDependencyLinkedToRoute(String dependencyKey) {
     if (_current == null) return;
     if (_routesKey.containsKey(_current)) {
-      _routesKey[_current!]!.add(depedencyKey);
+      _routesKey[_current!]!.add(dependencyKey);
     } else {
-      _routesKey[_current] = <String>[depedencyKey];
+      _routesKey[_current] = <String>[dependencyKey];
     }
   }
 

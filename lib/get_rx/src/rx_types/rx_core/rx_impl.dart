@@ -8,7 +8,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   //late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
-  /// useful when you make use of Rx for custom Types to referesh your UI.
+  /// useful when you make use of Rx for custom Types to refresh your UI.
   ///
   /// Sample:
   /// ```

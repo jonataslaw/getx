@@ -119,10 +119,10 @@ class GetPageRoute<T> extends PageRoute<T>
     if (_child != null) return _child!;
     final middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localbinds = [if (binds != null) ...binds!];
+    final localBinds = [if (binds != null) ...binds!];
 
     final bindingsToBind = middlewareRunner
-        .runOnBindingsStart(bindings.isNotEmpty ? bindings : localbinds);
+        .runOnBindingsStart(bindings.isNotEmpty ? bindings : localBinds);
 
     final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
 
