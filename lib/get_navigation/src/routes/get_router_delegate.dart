@@ -805,7 +805,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       return true;
     }
 
-    return false;
+    return super.popRoute();
   }
 
   @override
