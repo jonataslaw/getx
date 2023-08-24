@@ -177,8 +177,9 @@ class MiddlewareRunner {
     return page;
   }
 
-  void runOnPageDispose() =>
-      _getMiddlewares().forEach((element) => element.onPageDispose());
+  void runOnPageDispose() {
+    _getMiddlewares().forEach((element) => element.onPageDispose());
+  }
 }
 
 class PageRedirect {
