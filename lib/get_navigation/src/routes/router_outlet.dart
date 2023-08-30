@@ -7,7 +7,6 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
   final TDelegate routerDelegate;
   final Widget Function(BuildContext context) builder;
 
-  //keys
   RouterOutlet.builder({
     super.key,
     TDelegate? delegate,
@@ -22,22 +21,20 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
       BuildContext context,
       TDelegate,
       Iterable<GetPage>? page,
-    )
-        pageBuilder,
+    ) pageBuilder,
   }) : this.builder(
-          key: key,
-          builder: (context) {
-            final currentConfig = context.delegate.currentConfiguration as T?;
-            final rDelegate = context.delegate as TDelegate;
-            var picked =
-                currentConfig == null ? null : pickPages(currentConfig);
-            if (picked?.isEmpty ?? true) {
-              picked = null;
-            }
-            return pageBuilder(context, rDelegate, picked);
-          },
-          delegate: delegate,
-        );
+            builder: (context) {
+              final currentConfig = context.delegate.currentConfiguration as T?;
+              final rDelegate = context.delegate as TDelegate;
+              var picked =
+                  currentConfig == null ? null : pickPages(currentConfig);
+              if (picked?.isEmpty ?? true) {
+                picked = null;
+              }
+              return pageBuilder(context, rDelegate, picked);
+            },
+            delegate: delegate,
+            key: key);
   @override
   RouterOutletState<TDelegate, T> createState() =>
       RouterOutletState<TDelegate, T>();
@@ -71,8 +68,6 @@ class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   void dispose() {
     super.dispose();
     disposer?.call();
-    // Get.routerDelegate?.removeListener(_listener);
-    //_backButtonDispatcher.forget(_backButtonDispatcher)
   }
 
   @override
@@ -82,53 +77,12 @@ class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   }
 }
 
-// class RouterOutletState<TDelegate extends RouterDelegate<T>,
-//T extends Object>
-//     extends State<RouterOutlet<TDelegate, T>> {
-//   TDelegate get delegate => context.delegate as TDelegate;
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   VoidCallback? disposer;
-
-//   @override
-//   void didChangeDependencies() {
-//     disposer?.call();
-//     delegate.addListener(onRouterDelegateChanged);
-//     disposer = () => delegate.removeListener(onRouterDelegateChanged);
-//     _getCurrentRoute();
-//     super.didChangeDependencies();
-//   }
-
-//   @override
-//   void dispose() {
-//     disposer?.call();
-//     super.dispose();
-//   }
-
-//   T? currentRoute;
-//   void _getCurrentRoute() {
-//     currentRoute = delegate.currentConfiguration;
-//   }
-
-//   void onRouterDelegateChanged() {
-//     setState(_getCurrentRoute);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return widget.builder(context);
-//   }
-// }
-
 class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
   GetRouterOutlet({
+    Key? key,
     String? anchorRoute,
     required String initialRoute,
     Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
-    // GlobalKey<NavigatorState>? key,
     GetDelegate? delegate,
   }) : this.pickPages(
           pickPages: (config) {
@@ -148,9 +102,10 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             }
             return ret;
           },
+          key: key,
           emptyPage: (delegate) =>
               delegate.matchRoute(initialRoute).route ?? delegate.notFoundRoute,
-          key: Get.nestedKey(anchorRoute)?.navigatorKey,
+          navigatorKey: Get.nestedKey(anchorRoute)?.navigatorKey,
           delegate: delegate,
         );
   GetRouterOutlet.pickPages({
@@ -159,6 +114,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     GetPage Function(GetDelegate delegate)? emptyPage,
     required Iterable<GetPage> Function(RouteDecoder currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
+    GlobalKey<NavigatorState>? navigatorKey,
     GetDelegate? delegate,
   }) : super(
           pageBuilder: (context, rDelegate, pages) {
@@ -178,7 +134,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                       return true;
                     },
                 pages: pageRes.toList(),
-                key: key,
+                key: navigatorKey,
               );
             }
             return (emptyWidget?.call(rDelegate) ?? const SizedBox.shrink());
@@ -191,8 +147,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     super.key,
     required Widget Function(
       BuildContext context,
-    )
-        builder,
+    ) builder,
     GetDelegate? routerDelegate,
   }) : super.builder(
           builder: builder,
