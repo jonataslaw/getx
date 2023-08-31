@@ -2,7 +2,6 @@ import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'app/modules/splash/controllers/splash_service.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
@@ -10,7 +9,6 @@ void main() {
     GetMaterialApp(
       title: "Application",
       binds: [
-        Bind.put(SplashService()),
         Bind.put(AuthService()),
       ],
       getPages: AppPages.routes,

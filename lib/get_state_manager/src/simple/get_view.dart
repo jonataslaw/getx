@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../instance_manager.dart';
 import '../../../utils.dart';
+import 'get_state.dart';
 import 'get_widget_cache.dart';
 
 /// GetView is a great way of quickly access your Controller
@@ -101,6 +102,9 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
 
   @override
   Widget build(BuildContext context) {
-    return widget!.build(context);
+    return Binder(
+      init: () => _controller,
+      child: widget!.build(context),
+    );
   }
 }
