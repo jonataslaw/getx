@@ -160,6 +160,16 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
+  static Bind spawn<S>(InstanceBuilderCallback<S> builder,
+      {String? tag, bool permanent = true}) {
+    Get.spawn<S>(builder, tag: tag, permanent: permanent);
+    return _FactoryBind<S>(
+      tag: tag,
+      global: false,
+      autoRemove: permanent,
+    );
+  }
+
   static S find<S>({String? tag}) => Get.find<S>(tag: tag);
 
   static Future<bool> delete<S>({String? tag, bool force = false}) async =>
@@ -465,7 +475,7 @@ class BindElement<T> extends InheritedElement {
     } else {
       if (widget.create != null) {
         _controllerBuilder = () => widget.create!.call(this);
-        Get.create<T>(_controllerBuilder!, tag: widget.tag, permanent: false);
+        Get.spawn<T>(_controllerBuilder!, tag: widget.tag, permanent: false);
       } else {
         _controllerBuilder = widget.init;
       }

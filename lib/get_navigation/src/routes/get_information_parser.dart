@@ -30,13 +30,13 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
           .any((element) => element.name == '/')) {
         location = initialRoute;
       }
+    } else if (location.isEmpty) {
+      location = initialRoute;
     }
 
     Get.log('GetInformationParser: route location: $location');
 
-    final routeName = location ?? initialRoute;
-
-    return SynchronousFuture(RouteDecoder.fromRoute(routeName));
+    return SynchronousFuture(RouteDecoder.fromRoute(location));
   }
 
   @override
