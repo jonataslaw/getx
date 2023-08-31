@@ -148,10 +148,14 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     required Widget Function(
       BuildContext context,
     ) builder,
+    String? route,
     GetDelegate? routerDelegate,
   }) : super.builder(
           builder: builder,
-          delegate: routerDelegate,
+          delegate: routerDelegate ??
+              (route != null
+                  ? Get.nestedKey(route)
+                  : Get.rootController.rootDelegate),
         );
 }
 
@@ -164,5 +168,56 @@ extension PagesListExt on List<GetPage> {
 
   Iterable<GetPage> pickAfterRoute(String route) {
     return pickAtRoute(route).skip(1);
+  }
+}
+
+class GetRouterOutletInherited extends InheritedWidget {
+  final String anchorRoute;
+
+  const GetRouterOutletInherited({
+    super.key,
+    required this.anchorRoute,
+    required Widget child,
+  }) : super(child: child);
+
+  static GetRouterOutletInherited? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<GetRouterOutletInherited>();
+  }
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return true;
+  }
+}
+
+typedef NavigatorItemBuilderBuilder = Widget Function(
+    BuildContext context, List<String> routes, int index);
+
+class IndexedRouteBuilder<T> extends StatelessWidget {
+  const IndexedRouteBuilder({
+    Key? key,
+    required this.builder,
+    required this.routes,
+  }) : super(key: key);
+  final List<String> routes;
+  final NavigatorItemBuilderBuilder builder;
+
+// Method to get the current index based on the route
+  int _getCurrentIndex(String currentLocation) {
+    for (int i = 0; i < routes.length; i++) {
+      if (currentLocation.startsWith(routes[i])) {
+        return i;
+      }
+    }
+    return 0; // default index
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final location = context.location;
+    final index = _getCurrentIndex(location);
+
+    return builder(context, routes, index);
   }
 }
