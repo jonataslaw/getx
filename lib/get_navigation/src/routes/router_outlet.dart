@@ -84,7 +84,9 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     required String initialRoute,
     Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
     GetDelegate? delegate,
+    String? restorationScopeId,
   }) : this.pickPages(
+          restorationScopeId: restorationScopeId,
           pickPages: (config) {
             Iterable<GetPage<dynamic>> ret;
             if (anchorRoute == null) {
@@ -114,6 +116,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     GetPage Function(GetDelegate delegate)? emptyPage,
     required Iterable<GetPage> Function(RouteDecoder currentNavStack) pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
+    String? restorationScopeId,
     GlobalKey<NavigatorState>? navigatorKey,
     GetDelegate? delegate,
   }) : super(
@@ -125,6 +128,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
 
             if (pageRes.isNotEmpty) {
               return GetNavigator(
+                restorationScopeId: restorationScopeId,
                 onPopPage: onPopPage ??
                     (route, result) {
                       final didPop = route.didPop(result);
