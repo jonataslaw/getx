@@ -66,6 +66,10 @@ class WrapperTranslations extends Translations {
           'total_confirmed': 'Total Confirmed',
           'total_deaths': 'Total Deaths',
         },
+        'pt': {
+          'covid': 'Corona Vírus only lang',
+          'total_confirmed': 'Total confirmado only lang',
+        },
         'pt_BR': {
           'covid': 'Corona Vírus',
           'total_confirmed': 'Total confirmado',
