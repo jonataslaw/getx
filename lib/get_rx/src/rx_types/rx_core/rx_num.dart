@@ -856,49 +856,11 @@ extension RxnDoubleExt on Rx<double?> {
   double? truncateToDouble() => value?.truncateToDouble();
 }
 
-class RxDouble extends Rx<double> {
-  RxDouble(double initial) : super(initial);
-}
+typedef RxDouble = Rx<double>;
+typedef RxnDouble = Rx<double?>;
 
-class RxnDouble extends Rx<double?> {
-  RxnDouble([double? initial]) : super(initial);
-}
-
-class RxInt extends Rx<int> {
-  RxInt(int initial) : super(initial);
-
-  /// Addition operator.
-  RxInt operator +(int other) {
-    value = value + other;
-    return this;
-  }
-
-  /// Subtraction operator.
-  RxInt operator -(int other) {
-    value = value - other;
-    return this;
-  }
-}
-
-class RxnInt extends Rx<int?> {
-  RxnInt([int? initial]) : super(initial);
-
-  /// Addition operator.
-  RxnInt operator +(int other) {
-    if (value != null) {
-      value = value! + other;
-    }
-    return this;
-  }
-
-  /// Subtraction operator.
-  RxnInt operator -(int other) {
-    if (value != null) {
-      value = value! - other;
-    }
-    return this;
-  }
-}
+typedef RxInt = Rx<int>;
+typedef RxnInt = Rx<int?>;
 
 extension RxIntExt on Rx<int> {
   /// Bit-wise and operator.

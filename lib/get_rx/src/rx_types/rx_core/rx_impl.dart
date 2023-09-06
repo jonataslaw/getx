@@ -147,6 +147,9 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
 
   Stream<R> map<R>(R Function(T? data) mapper) => stream.map(mapper);
 
+  Rx<R> pipe<R>(R mapper(T? data)) =>
+      mapper(value).obs..bindStream(map(mapper));
+
   /// Uses a callback to update [value] internally, similar to [refresh],
   /// but provides the current value as the argument.
   /// Makes sense for custom Rx types (like Models).
@@ -208,21 +211,8 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   }
 }
 
-class RxBool extends Rx<bool> {
-  RxBool(bool initial) : super(initial);
-  @override
-  String toString() {
-    return value ? "true" : "false";
-  }
-}
-
-class RxnBool extends Rx<bool?> {
-  RxnBool([bool? initial]) : super(initial);
-  @override
-  String toString() {
-    return "$value";
-  }
-}
+typedef RxBool = Rx<bool>;
+typedef RxnBool = Rx<bool?>;
 
 extension RxBoolExt on Rx<bool> {
   bool get isTrue => value;
@@ -305,26 +295,6 @@ class Rxn<T> extends Rx<T?> {
       throw '$T has not method [toJson]';
     }
   }
-}
-
-extension StringExtension on String {
-  /// Returns a `RxString` with [this] `String` as initial value.
-  RxString get obs => RxString(this);
-}
-
-extension IntExtension on int {
-  /// Returns a `RxInt` with [this] `int` as initial value.
-  RxInt get obs => RxInt(this);
-}
-
-extension DoubleExtension on double {
-  /// Returns a `RxDouble` with [this] `double` as initial value.
-  RxDouble get obs => RxDouble(this);
-}
-
-extension BoolExtension on bool {
-  /// Returns a `RxBool` with [this] `bool` as initial value.
-  RxBool get obs => RxBool(this);
 }
 
 extension RxT<T> on T {
