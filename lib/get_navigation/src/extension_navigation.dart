@@ -1171,14 +1171,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// The window to which this binding is bound.
-  ui.SingletonFlutterWindow get window => engine.window;
+  ui.PlatformDispatcher get window => engine.platformDispatcher;
 
-  Locale? get deviceLocale => engine.window.locale;
+  Locale? get deviceLocale => window.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => engine.window.devicePixelRatio;
+  double get pixelRatio => window.implicitView!.devicePixelRatio;
 
-  Size get size => engine.window.physicalSize / pixelRatio;
+  Size get size => window.implicitView!.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1188,14 +1188,14 @@ extension GetNavigationExt on GetInterface {
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => engine.window.padding.top;
+  double get statusBarHeight => window.implicitView!.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => engine.window.padding.bottom;
+  double get bottomBarHeight => window.implicitView!.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => engine.window.textScaleFactor;
+  double get textScaleFactor => window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme.textTheme;
