@@ -37,7 +37,6 @@ class ProfileView extends GetView<ProfileController> {
               child: const Text('Show a test dialog in Home router outlet'),
               onPressed: () {
                 //shows a dialog
-
                 Get.defaultDialog(
                   title: 'Test Dialog In Home Outlet !!',
                   barrierDismissible: true,
