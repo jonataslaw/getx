@@ -75,6 +75,10 @@ class RouteDecoder {
 
   @override
   int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
+
+  @override
+  String toString() =>
+      'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
 }
 
 class ParseRouteTree {

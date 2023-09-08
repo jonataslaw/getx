@@ -127,18 +127,22 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             ].whereType<GetPage>();
 
             if (pageRes.isNotEmpty) {
-              return GetNavigator(
-                restorationScopeId: restorationScopeId,
-                onPopPage: onPopPage ??
-                    (route, result) {
-                      final didPop = route.didPop(result);
-                      if (!didPop) {
-                        return false;
-                      }
-                      return true;
-                    },
-                pages: pageRes.toList(),
-                key: navigatorKey,
+              return InheritedNavigator(
+                navigatorKey: navigatorKey ??
+                    Get.rootController.rootDelegate.navigatorKey,
+                child: GetNavigator(
+                  restorationScopeId: restorationScopeId,
+                  onPopPage: onPopPage ??
+                      (route, result) {
+                        final didPop = route.didPop(result);
+                        if (!didPop) {
+                          return false;
+                        }
+                        return true;
+                      },
+                  pages: pageRes.toList(),
+                  key: navigatorKey,
+                ),
               );
             }
             return (emptyWidget?.call(rDelegate) ?? const SizedBox.shrink());
@@ -161,6 +165,30 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                   ? Get.nestedKey(route)
                   : Get.rootController.rootDelegate),
         );
+}
+
+class InheritedNavigator extends InheritedWidget {
+  const InheritedNavigator({
+    super.key,
+    required super.child,
+    required this.navigatorKey,
+  });
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  static InheritedNavigator? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedNavigator>();
+  }
+
+  @override
+  bool updateShouldNotify(InheritedNavigator oldWidget) {
+    return true;
+  }
+}
+
+extension NavKeyExt on BuildContext {
+  GlobalKey<NavigatorState>? get parentNavigatorKey {
+    return InheritedNavigator.of(this)?.navigatorKey;
+  }
 }
 
 extension PagesListExt on List<GetPage> {
@@ -225,7 +253,8 @@ mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
     super.didChangeDependencies();
     disposer?.call();
     final router = Router.of(context);
-    delegate ??= router.routerDelegate;
+    delegate ??= router.routerDelegate as GetDelegate;
+
     delegate?.addListener(_listener);
     disposer = () => delegate?.removeListener(_listener);
   }
