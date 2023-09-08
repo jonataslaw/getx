@@ -12,6 +12,7 @@ import '../../get_navigation.dart';
 
 class GetPage<T> extends Page<T> {
   final GetPageBuilder page;
+  final Widget? oldPage;
   final bool? popGesture;
   final Map<String, String>? parameters;
   final String? title;
@@ -56,6 +57,7 @@ class GetPage<T> extends Page<T> {
   GetPage({
     required this.name,
     required this.page,
+    this.oldPage,
     this.title,
     this.participatesInRootNavigator,
     this.gestureWidth,
@@ -99,6 +101,7 @@ class GetPage<T> extends Page<T> {
     LocalKey? key,
     String? name,
     GetPageBuilder? page,
+    Widget? oldPage,
     bool? popGesture,
     Map<String, String>? parameters,
     String? title,
@@ -133,6 +136,7 @@ class GetPage<T> extends Page<T> {
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
       name: name ?? this.name,
       page: page ?? this.page,
+      oldPage: oldPage ?? this.oldPage,
       popGesture: popGesture ?? this.popGesture,
       parameters: parameters ?? this.parameters,
       title: title ?? this.title,

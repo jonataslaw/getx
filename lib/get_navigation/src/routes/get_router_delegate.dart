@@ -358,6 +358,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   Future<T?> to<T>(
     Widget Function() page, {
+    Widget? oldPage,
     bool? opaque,
     Transition? transition,
     Curve? curve,
@@ -385,6 +386,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       name: routeName,
       opaque: opaque ?? true,
       page: page,
+      oldPage: oldPage,
       gestureWidth: gestureWidth,
       showCupertinoParallax: showCupertinoParallax,
       popGesture: popGesture ?? Get.defaultPopGesture,

@@ -495,6 +495,11 @@ extension GetNavigationExt on GetInterface {
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
+  /// 
+  /// [oldPage] is the page widget that you want to replace with the new one
+  /// when you use a custom [transition], we need to change the old page exit transition, 
+  /// otherwise it will show black container in some case, it fixes the bug:
+  /// https://github.com/jonataslaw/getx/issues/1560 
   ///
   /// If you want the same behavior of ios that pops a route when the user drag,
   /// you can set [popGesture] to true
@@ -504,7 +509,8 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T?>? to<T>(Widget Function() page,
-      {bool? opaque,
+      {Widget? oldPage,
+      bool? opaque,
       Transition? transition,
       Curve? curve,
       Duration? duration,
@@ -522,6 +528,7 @@ extension GetNavigationExt on GetInterface {
           PreventDuplicateHandlingMode.reorderRoutes}) {
     return searchDelegate(id).to(
       page,
+      oldPage: oldPage,
       opaque: opaque,
       transition: transition,
       curve: curve,

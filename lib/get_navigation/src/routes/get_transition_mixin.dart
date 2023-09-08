@@ -231,6 +231,8 @@ class GetBackGestureController<T> {
 mixin GetPageRouteTransitionMixin<T> on PageRoute<T> {
   ValueNotifier<String?>? _previousTitle;
 
+  Widget? oldPage;
+
   @override
   Color? get barrierColor => null;
 
@@ -311,7 +313,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     return buildPageTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
+        this, context, animation, secondaryAnimation, child,
+        oldPage: oldPage);
   }
 
   @override
@@ -363,6 +366,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     Widget child, {
     bool limitedSwipe = false,
     double initialOffset = 0,
+    Widget? oldPage,
   }) {
     // Check if the route has an animation that's currently participating
     // in a back swipe gesture.
@@ -431,7 +435,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.downToUp:
           return SlideDownTransition().buildTransitions(
@@ -452,7 +457,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.upToDown:
           return SlideTopTransition().buildTransitions(
@@ -473,7 +479,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.noTransition:
           return GetBackGestureDetector<T>(
@@ -509,7 +516,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.zoom:
           return ZoomInTransition().buildTransitions(
@@ -530,7 +538,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.fadeIn:
           return FadeInTransition().buildTransitions(
@@ -551,7 +560,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.rightToLeftWithFade:
           return RightToLeftFadeTransition().buildTransitions(
@@ -572,7 +582,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.leftToRightWithFade:
           return LeftToRightFadeTransition().buildTransitions(
@@ -593,7 +604,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.cupertino:
           return CupertinoPageTransition(
@@ -633,27 +645,32 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),
+              oldPage);
 
         case Transition.fade:
-          return const FadeUpwardsPageTransitionsBuilder().buildTransitions(
-              route,
-              context,
-              animation,
-              secondaryAnimation,
-              GetBackGestureDetector<T>(
-                popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route), context),
-                onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
-                  return _startPopGesture(route);
-                },
-                limitedSwipe: limitedSwipe,
-                gestureWidth:
-                    route.gestureWidth?.call(context) ?? _kBackGestureWidth,
-                initialOffset: initialOffset,
-                child: child,
-              ));
+          return Stack(children: [
+            if (oldPage != null) oldPage,
+            const FadeUpwardsPageTransitionsBuilder().buildTransitions(
+                route,
+                context,
+                animation,
+                secondaryAnimation,
+                GetBackGestureDetector<T>(
+                  popGestureEnable: () =>
+                      _isPopGestureEnabled(route, canSwipe(route), context),
+                  onStartPopGesture: () {
+                    assert(
+                        _isPopGestureEnabled(route, canSwipe(route), context));
+                    return _startPopGesture(route);
+                  },
+                  limitedSwipe: limitedSwipe,
+                  gestureWidth:
+                      route.gestureWidth?.call(context) ?? _kBackGestureWidth,
+                  initialOffset: initialOffset,
+                  child: child,
+                )),
+          ]);
 
         case Transition.topLevel:
           return const ZoomPageTransitionsBuilder().buildTransitions(
