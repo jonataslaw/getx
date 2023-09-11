@@ -362,7 +362,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Transition? transition,
     Curve? curve,
     Duration? duration,
-    int? id,
+    String? id,
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
@@ -414,7 +414,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Transition? transition,
     Curve? curve,
     Duration? duration,
-    int? id,
+    String? id,
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
@@ -449,7 +449,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool Function(GetPage route)? predicate,
     bool opaque = true,
     bool? popGesture,
-    int? id,
+    String? id,
     String? routeName,
     dynamic arguments,
     List<BindingsInterface> bindings = const [],
@@ -491,7 +491,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(newRouteName, arguments);
@@ -510,7 +510,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String page, {
     bool Function(GetPage route)? predicate,
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
@@ -530,7 +530,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?> offNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
@@ -692,7 +692,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final route = decoder.route;
     if (route == null) return null;
 
-    return _configureRouterDecoder(decoder, arguments);
+    return _configureRouterDecoder<T>(decoder, arguments);
   }
 
   @protected
@@ -706,7 +706,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
 
     decoder.route = decoder.route?.copyWith(
-      completer: _activePages.isEmpty ? null : Completer(),
+      completer: _activePages.isEmpty ? null : Completer<T?>(),
       arguments: arguments,
       parameters: parameters,
       key: ValueKey(arguments.name),

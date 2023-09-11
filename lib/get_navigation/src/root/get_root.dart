@@ -507,7 +507,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     return key;
   }
 
-  Map<dynamic, GetDelegate> keys = {};
+  Map<String, GetDelegate> keys = {};
 
   GetDelegate? nestedKey(String? key) {
     if (key == null) {
