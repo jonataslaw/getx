@@ -54,7 +54,7 @@ mixin IGetNavigation {
     Transition? transition,
     Curve? curve,
     Duration? duration,
-    int? id,
+    String? id,
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
@@ -76,7 +76,7 @@ mixin IGetNavigation {
     Transition? transition,
     Curve? curve,
     Duration? duration,
-    int? id,
+    String? id,
     String? routeName,
     bool fullscreenDialog = false,
     dynamic arguments,
@@ -92,7 +92,7 @@ mixin IGetNavigation {
     bool Function(GetPage route)? predicate,
     bool opaque = true,
     bool? popGesture,
-    int? id,
+    String? id,
     String? routeName,
     dynamic arguments,
     List<BindingsInterface> bindings = const [],
@@ -107,7 +107,7 @@ mixin IGetNavigation {
   Future<T?> toNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   });
@@ -115,7 +115,7 @@ mixin IGetNavigation {
   Future<T?> offNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   });
 
@@ -123,7 +123,7 @@ mixin IGetNavigation {
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   });
 
@@ -131,7 +131,7 @@ mixin IGetNavigation {
     String page, {
     bool Function(GetPage route)? predicate,
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   });
 

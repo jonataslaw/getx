@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/second',
           page: () => const Second(),
+          transition: Transition.downToUp,
         ),
         GetPage(
           name: '/third',

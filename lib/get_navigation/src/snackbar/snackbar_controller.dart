@@ -239,7 +239,8 @@ class SnackbarController {
   Widget _getBodyWidget() {
     return Builder(builder: (_) {
       return MouseRegion(
-        onEnter: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.entered),
+        onEnter: (_) =>
+            snackbar.onHover?.call(snackbar, SnackHoverState.entered),
         onExit: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.exited),
         child: GestureDetector(
           onTap: snackbar.onTap != null
