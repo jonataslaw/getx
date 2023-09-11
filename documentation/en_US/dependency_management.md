@@ -147,8 +147,8 @@ Get.putAsync<S>(
 This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.create<SomeClass>(() => SomeClass());
+Get.create<LoginController>(() => LoginController());
 ```
 
 This is all options you can set when using create:
