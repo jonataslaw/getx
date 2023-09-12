@@ -20,9 +20,9 @@ void main() {
       _Wrapper(
         child: GetAnimatedBuilder<int>(
           duration: const Duration(milliseconds: 500),
-          tween: Tween(begin: 0, end: 10),
+          tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, int value, __) => Text(value.toString()),
           delay: Duration.zero,
           child: Container(),
         ),
@@ -39,14 +39,15 @@ void main() {
     expect(find.text('10'), findsOneWidget);
   });
 
-  testWidgets('GetAnimatedBuilder changes value over time', (tester) async {
+  testWidgets('GetAnimatedBuilder changes value over time',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: GetAnimatedBuilder<double>(
           duration: const Duration(milliseconds: 500),
           tween: Tween<double>(begin: 0.0, end: 1.0),
           idleValue: 0.0,
-          builder: (context, value, child) {
+          builder: (BuildContext context, double value, Widget? child) {
             return Opacity(opacity: value);
           },
           delay: const Duration(milliseconds: 500),
@@ -90,17 +91,17 @@ void main() {
   testWidgets('onComplete callback is called when animation finishes',
       (WidgetTester tester) async {
     AnimationController? controller;
-    var onCompleteCalled = false;
+    bool onCompleteCalled = false;
 
     await tester.pumpWidget(
       _Wrapper(
         child: GetAnimatedBuilder<int>(
           duration: const Duration(milliseconds: 500),
-          tween: Tween(begin: 0, end: 10),
+          tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, int value, __) => Text(value.toString()),
           delay: Duration.zero,
-          onComplete: (c) {
+          onComplete: (AnimationController c) {
             onCompleteCalled = true;
             controller = c;
           },
@@ -122,16 +123,17 @@ void main() {
 
   testWidgets('onStart callback is called when animation starts',
       (WidgetTester tester) async {
-    var onStartCalled = false;
+    bool onStartCalled = false;
 
     await tester.pumpWidget(
       _Wrapper(
-        child: GetAnimatedBuilder(
+        child: GetAnimatedBuilder<num>(
           duration: const Duration(seconds: 1),
           delay: Duration.zero,
           tween: Tween<double>(begin: 0, end: 1),
           idleValue: 0,
-          builder: (context, value, child) => Container(),
+          builder: (BuildContext context, num value, Widget? child) =>
+              Container(),
           child: Container(),
           onStart: (_) {
             onStartCalled = true;
@@ -151,9 +153,9 @@ void main() {
       _Wrapper(
         child: GetAnimatedBuilder<int>(
           duration: const Duration(milliseconds: 500),
-          tween: Tween(begin: 0, end: 10),
+          tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, int value, __) => Text(value.toString()),
           delay: const Duration(milliseconds: 500),
           child: Container(),
         ),
@@ -184,7 +186,6 @@ void main() {
         child: FadeInAnimation(
           delay: const Duration(milliseconds: 500),
           duration: const Duration(milliseconds: 500),
-          idleValue: 0,
           child: const Text('Hello'),
         ),
       ),
@@ -243,7 +244,8 @@ void main() {
     // The variable starts as false
     expect(
         tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .state<GetAnimatedBuilderState<dynamic>>(
+                find.byType(FadeOutAnimation))
             .willResetOnDispose,
         false);
 
@@ -253,7 +255,8 @@ void main() {
     // The value should be false
     expect(
         tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .state<GetAnimatedBuilderState<dynamic>>(
+                find.byType(FadeOutAnimation))
             .willResetOnDispose,
         false);
 
@@ -280,7 +283,8 @@ void main() {
     // The variable starts as true
     expect(
         tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .state<GetAnimatedBuilderState<dynamic>>(
+                find.byType(FadeOutAnimation))
             .willResetOnDispose,
         true);
 
@@ -290,7 +294,8 @@ void main() {
     // The value should be true
     expect(
         tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .state<GetAnimatedBuilderState<dynamic>>(
+                find.byType(FadeOutAnimation))
             .willResetOnDispose,
         true);
 
@@ -356,7 +361,7 @@ void main() {
   testWidgets('SlideAnimation', (WidgetTester tester) async {
     await tester.pumpWidget(
       SlideAnimation(
-        offsetBuild: (p0, p1) => const Offset(1.0, 1.0),
+        offsetBuild: (BuildContext p0, double p1) => const Offset(1.0, 1.0),
         duration: const Duration(seconds: 1),
         delay: Duration.zero,
         begin: 0,

@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetxController smoke test", (tester) async {
+  testWidgets('GetxController smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: GetX<Controller>(
-          init: Controller(),
-          builder: (controller) {
+        home: GetX<Controller<dynamic>>(
+          init: Controller<dynamic>(),
+          builder: (Controller<dynamic> controller) {
             return Column(
-              children: [
+              children: <Widget>[
                 Text(
                   'Count: ${controller.counter.value}',
                 ),
@@ -31,16 +31,16 @@ void main() {
                   'Map: ${controller.map.length}',
                 ),
                 TextButton(
-                  child: const Text("increment"),
+                  child: const Text('increment'),
                   onPressed: () => controller.increment(),
                 ),
-                GetX<Controller2>(builder: (controller) {
+                GetX<Controller2>(builder: (Controller2 controller) {
                   return Text('lazy ${controller.lazy.value}');
                 }),
                 GetX<ControllerNonGlobal>(
                     init: ControllerNonGlobal(),
                     global: false,
-                    builder: (controller) {
+                    builder: (ControllerNonGlobal controller) {
                       return Text('single ${controller.nonGlobal.value}');
                     })
               ],
@@ -50,26 +50,26 @@ void main() {
       ),
     );
 
-    expect(find.text("Count: 0"), findsOneWidget);
-    expect(find.text("Double: 0.0"), findsOneWidget);
-    expect(find.text("String: string"), findsOneWidget);
-    expect(find.text("Bool: true"), findsOneWidget);
-    expect(find.text("List: 0"), findsOneWidget);
-    expect(find.text("Map: 0"), findsOneWidget);
+    expect(find.text('Count: 0'), findsOneWidget);
+    expect(find.text('Double: 0.0'), findsOneWidget);
+    expect(find.text('String: string'), findsOneWidget);
+    expect(find.text('Bool: true'), findsOneWidget);
+    expect(find.text('List: 0'), findsOneWidget);
+    expect(find.text('Map: 0'), findsOneWidget);
 
     Controller.to.increment();
 
     await tester.pump();
 
-    expect(find.text("Count: 1"), findsOneWidget);
+    expect(find.text('Count: 1'), findsOneWidget);
 
     await tester.tap(find.text('increment'));
 
     await tester.pump();
 
-    expect(find.text("Count: 2"), findsOneWidget);
-    expect(find.text("lazy 0"), findsOneWidget);
-    expect(find.text("single 0"), findsOneWidget);
+    expect(find.text('Count: 2'), findsOneWidget);
+    expect(find.text('lazy 0'), findsOneWidget);
+    expect(find.text('single 0'), findsOneWidget);
   });
 }
 
@@ -81,14 +81,14 @@ class ControllerNonGlobal extends GetxController {
   RxInt nonGlobal = 0.obs;
 }
 
-class Controller extends GetxController {
-  static Controller get to => Get.find();
+class Controller<T> extends GetxController {
+  static Controller<dynamic> get to => Get.find();
 
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
-  RxString string = "string".obs;
-  RxList list = [].obs;
-  RxMap map = {}.obs;
+  RxString string = 'string'.obs;
+  RxList<T> list = <T>[].obs;
+  RxMap<T, T> map = <T, T>{}.obs;
   RxBool boolean = true.obs;
 
   void increment() {
