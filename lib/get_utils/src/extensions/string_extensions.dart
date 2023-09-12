@@ -1,6 +1,6 @@
 import '../get_utils/get_utils.dart';
 
-extension GetStringUtils on String {
+extension GetStringUtils<T> on String {
   /// Discover if the String is a valid number
   bool get isNum => GetUtils.isNum(this);
 
@@ -120,8 +120,8 @@ extension GetStringUtils on String {
   String? get paramCase => GetUtils.paramCase(this);
 
   /// add segments to the String
-  String createPath([Iterable? segments]) {
-    final path = startsWith('/') ? this : '/$this';
+  String createPath([Iterable<T>? segments]) {
+    final String path = startsWith('/') ? this : '/$this';
     return GetUtils.createPath(path, segments);
   }
 
