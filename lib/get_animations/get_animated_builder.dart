@@ -3,6 +3,18 @@ import 'package:flutter/material.dart';
 import 'animations.dart';
 
 class GetAnimatedBuilder<T> extends StatefulWidget {
+  const GetAnimatedBuilder({
+    required this.duration,
+    required this.tween,
+    required this.idleValue,
+    required this.builder,
+    required this.child,
+    required this.delay,
+    super.key,
+    this.curve = Curves.linear,
+    this.onComplete,
+    this.onStart,
+  });
   final Duration duration;
   final Duration delay;
   final Widget child;
@@ -14,19 +26,6 @@ class GetAnimatedBuilder<T> extends StatefulWidget {
   final Curve curve;
 
   Duration get totalDuration => duration + delay;
-
-  const GetAnimatedBuilder({
-    super.key,
-    this.curve = Curves.linear,
-    this.onComplete,
-    this.onStart,
-    required this.duration,
-    required this.tween,
-    required this.idleValue,
-    required this.builder,
-    required this.child,
-    required this.delay,
-  });
   @override
   GetAnimatedBuilderState<T> createState() => GetAnimatedBuilderState<T>();
 }
@@ -71,12 +70,12 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
     super.initState();
 
     if (widget is OpacityAnimation) {
-      final current =
-          context.findRootAncestorStateOfType<GetAnimatedBuilderState>();
-      final isLast = current == null;
+      final GetAnimatedBuilderState<T>? current =
+          context.findRootAncestorStateOfType<GetAnimatedBuilderState<T>>();
+      final bool isLast = current == null;
 
       if (widget is FadeInAnimation) {
-        _idleValue = 1.0 as dynamic;
+        _idleValue = 1.0 as T;
       } else {
         if (isLast) {
           _willResetOnDispose = false;
@@ -103,13 +102,14 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
       ),
     );
 
-    Future.delayed(widget.delay, () {
+    Future<T?>.delayed(widget.delay, () {
       if (mounted) {
         setState(() {
           _wasStarted = true;
           _controller.forward();
         });
       }
+      return null;
     });
   }
 
@@ -124,8 +124,8 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) {
-        final value = _wasStarted ? _animation.value : _idleValue;
+      builder: (BuildContext context, Widget? child) {
+        final T value = _wasStarted ? _animation.value : _idleValue;
         return widget.builder(context, value, child);
       },
       child: widget.child,
