@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
-class OtimizedListView<T> extends StatelessWidget {
+class OptimizedListView<T> extends StatelessWidget {
+  const OptimizedListView({
+    required this.list,
+    required this.builder,
+    super.key,
+    this.scrollDirection = Axis.vertical,
+    this.reverse = false,
+    this.controller,
+    this.primary,
+    this.physics,
+    this.onEmpty = const SizedBox.shrink(),
+    this.shrinkWrap = false,
+  }) : lenght = list.length;
   final List<T> list;
   final Axis scrollDirection;
   final bool reverse;
@@ -10,23 +22,12 @@ class OtimizedListView<T> extends StatelessWidget {
   final bool shrinkWrap;
   final Widget onEmpty;
   final int lenght;
-  final Widget Function(BuildContext context, ValueKey key, T item) builder;
-  const OtimizedListView({
-    Key? key,
-    required this.list,
-    required this.builder,
-    this.scrollDirection = Axis.vertical,
-    this.reverse = false,
-    this.controller,
-    this.primary,
-    this.physics,
-    this.onEmpty = const SizedBox.shrink(),
-    this.shrinkWrap = false,
-  })  : lenght = list.length,
-        super(key: key);
+  final Widget Function(BuildContext context, ValueKey<T> key, T item) builder;
   @override
   Widget build(BuildContext context) {
-    if (list.isEmpty) return onEmpty;
+    if (list.isEmpty) {
+      return onEmpty;
+    }
 
     return CustomScrollView(
       controller: controller,
@@ -38,14 +39,13 @@ class OtimizedListView<T> extends StatelessWidget {
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, i) {
-              final item = list[i];
-              final key = ValueKey(item);
+            (BuildContext context, int i) {
+              final T item = list[i];
+              final ValueKey<T> key = ValueKey<T>(item);
               return builder(context, key, item);
             },
             childCount: list.length,
-            addAutomaticKeepAlives: true,
-            findChildIndexCallback: (key) {
+            findChildIndexCallback: (Key key) {
               return list.indexWhere((m) => m == (key as ValueKey<T>).value);
             },
           ),
