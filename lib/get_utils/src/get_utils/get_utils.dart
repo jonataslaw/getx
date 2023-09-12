@@ -517,9 +517,16 @@ class GetUtils {
     return value.replaceAll(' ', '');
   }
 
-  /// Camelcase string
-  /// Example: your name => yourName
+  /// This function has ambiguity about whether it is a lowercamelcase or an uppercamelcase.
+  /// Existing functions were replaced with lowerCamelCase function and deprecated
+  @deprecated
   static String? camelCase(String value) {
+    return lowerCamelCase(value);
+  }
+
+  /// lowerCamelcase string
+  /// Example: your name => yourName
+  static String? lowerCamelCase(String value) {
     if (isNullOrBlank(value)!) {
       return null;
     }
@@ -533,6 +540,24 @@ class GetUtils {
     }
 
     return newString[0].toLowerCase() + newString.substring(1);
+  }
+
+  /// UpperCamelCase string
+  /// Example: your name => YourName
+  static String? upperCamelCase(String value) {
+    if (isNullOrBlank(value)!) {
+      return null;
+    }
+
+    final separatedWords =
+    value.split(RegExp(r'[!@#<>?":`~;[\]\\|=+)(*&^%-\s_]+'));
+    var newString = '';
+
+    for (final word in separatedWords) {
+      newString += word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }
+
+    return newString[0].toUpperCase() + newString.substring(1);
   }
 
   /// credits to "ReCase" package.

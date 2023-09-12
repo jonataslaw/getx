@@ -113,8 +113,17 @@ extension GetStringUtils on String {
   /// remove all whitespace from the String
   String get removeAllWhitespace => GetUtils.removeAllWhitespace(this);
 
-  /// converter the String
+  /// Convert string to lowerCamelCase
+  /// This function has ambiguity about whether it is a lowercamelcase or an uppercamelcase.
+  /// Existing functions were replaced with lowerCamelCase function and deprecated
+  @deprecated
   String? get camelCase => GetUtils.camelCase(this);
+
+  /// Convert string to lowerCamelCase
+  String? get lowerCamelCase => GetUtils.lowerCamelCase(this);
+
+  /// Convert string to UpperCamelCase
+  String? get upperCamelCase => GetUtils.upperCamelCase(this);
 
   /// Discover if the String is a valid URL
   String? get paramCase => GetUtils.paramCase(this);
