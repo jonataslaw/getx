@@ -193,14 +193,15 @@ class MapEquality<K, V> implements IEquality<Map<K, V>> {
     if (length != map2.length) {
       return false;
     }
-    final Map<_MapEntry, int> equalElementCounts = HashMap<_MapEntry, int>();
+    final Map<_MapEntry<K, V>, int> equalElementCounts =
+        HashMap<_MapEntry<K, V>, int>();
     for (final K key in map1.keys) {
-      final _MapEntry entry = _MapEntry(this, key, map1[key]);
+      final _MapEntry<K, V> entry = _MapEntry<K, V>(this, key, map1[key]);
       final int count = equalElementCounts[entry] ?? 0;
       equalElementCounts[entry] = count + 1;
     }
     for (final K key in map2.keys) {
-      final _MapEntry entry = _MapEntry(this, key, map2[key]);
+      final _MapEntry<K, V> entry = _MapEntry<K, V>(this, key, map2[key]);
       final int? count = equalElementCounts[entry];
       if (count == null || count == 0) {
         return false;

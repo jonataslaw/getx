@@ -1,4 +1,4 @@
-part of rx_types;
+part of '../rx_types.dart';
 
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
@@ -85,8 +85,12 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object o) {
     // Todo, find a common implementation for the hashCode of different Types.
-    if (o is T) return value == o;
-    if (o is RxObjectMixin<T>) return value == o.value;
+    if (o is T) {
+      return value == o;
+    }
+    if (o is RxObjectMixin<T>) {
+      return value == o.value;
+    }
     return false;
   }
 
@@ -98,9 +102,13 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// Widget, only if it's different from the previous value.
   @override
   set value(T val) {
-    if (isDisposed) return;
+    if (isDisposed) {
+      return;
+    }
     sentToStream = false;
-    if (value == val && !firstRebuild) return;
+    if (value == val && !firstRebuild) {
+      return;
+    }
     firstRebuild = false;
     sentToStream = true;
     super.value = val;
@@ -112,7 +120,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// or anywhere else during the build process.
   StreamSubscription<T> listenAndPump(void Function(T event) onData,
       {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    final subscription = listen(
+    final StreamSubscription<T> subscription = listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -132,14 +140,14 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     // final listSubscriptions =
     //     _subscriptions[subject] ??= <StreamSubscription>[];
 
-    final sub = stream.listen((va) => value = va);
+    final StreamSubscription<T> sub = stream.listen((T va) => value = va);
     reportAdd(sub.cancel);
   }
 }
 
 /// Base Rx class that manages all the stream logic for any Type.
 abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
-  _RxImpl(T initial) : super(initial);
+  _RxImpl(super.initial);
 
   void addError(Object error, [StackTrace? stackTrace]) {
     subject.addError(error, stackTrace);
@@ -198,7 +206,7 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// ```
   ///
   void trigger(T v) {
-    var firstRebuild = this.firstRebuild;
+    final bool firstRebuild = this.firstRebuild;
     value = v;
     // If it's not the first rebuild, the listeners have been called already
     // So we won't call them again.
@@ -209,18 +217,18 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
 }
 
 class RxBool extends Rx<bool> {
-  RxBool(bool initial) : super(initial);
+  RxBool(super.initial);
   @override
   String toString() {
-    return value ? "true" : "false";
+    return value ? 'true' : 'false';
   }
 }
 
 class RxnBool extends Rx<bool?> {
-  RxnBool([bool? initial]) : super(initial);
+  RxnBool([super.initial]);
   @override
   String toString() {
-    return "$value";
+    return '$value';
   }
 }
 
@@ -247,7 +255,9 @@ extension RxnBoolExt on Rx<bool?> {
   bool? get isTrue => value;
 
   bool? get isFalse {
-    if (value != null) return !isTrue!;
+    if (value != null) {
+      return !isTrue!;
+    }
     return null;
   }
 
@@ -282,27 +292,27 @@ extension RxnBoolExt on Rx<bool?> {
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
-  Rx(T initial) : super(initial);
+  Rx(super.initial);
 
   @override
   dynamic toJson() {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
-      throw '$T has not method [toJson]';
+      throw Exception('$T has not method [toJson]');
     }
   }
 }
 
 class Rxn<T> extends Rx<T?> {
-  Rxn([T? initial]) : super(initial);
+  Rxn([super.initial]);
 
   @override
   dynamic toJson() {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
-      throw '$T has not method [toJson]';
+      throw Exception('$T has not method [toJson]');
     }
   }
 }

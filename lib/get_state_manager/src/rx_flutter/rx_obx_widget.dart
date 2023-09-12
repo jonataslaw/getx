@@ -11,7 +11,7 @@ typedef WidgetCallback = Widget Function();
 /// - [Obx]
 /// - [ObxValue]
 abstract class ObxWidget extends ObxStatelessWidget {
-  const ObxWidget({Key? key}) : super(key: key);
+  const ObxWidget({super.key});
 }
 
 /// The simplest reactive widget in GetX.
@@ -22,9 +22,8 @@ abstract class ObxWidget extends ObxStatelessWidget {
 /// final _name = "GetX".obs;
 /// Obx(() => Text( _name.value )),... ;
 class Obx extends ObxWidget {
-  final WidgetCallback builder;
-
   const Obx(this.builder, {super.key});
+  final WidgetCallback builder;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +42,10 @@ class Obx extends ObxWidget {
 ///    ),
 ///    false.obs,
 ///   ),
-class ObxValue<T extends RxInterface> extends ObxWidget {
+class ObxValue<T extends RxInterface<T>> extends ObxWidget {
+  const ObxValue(this.builder, this.data, {super.key});
   final Widget Function(T) builder;
   final T data;
-
-  const ObxValue(this.builder, this.data, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => builder(data);
