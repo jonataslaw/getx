@@ -80,11 +80,12 @@ extension ExtensionDialog on GetInterface {
     assert(debugCheckHasMaterialLocalizations(context!));
 
     //  final theme = Theme.of(context, shadowThemeOnly: true);
-    final theme = Theme.of(context!);
+    final ThemeData theme = Theme.of(context!);
     return generalDialog<T>(
-      pageBuilder: (buildContext, animation, secondaryAnimation) {
-        final pageChild = widget;
-        Widget dialog = Builder(builder: (context) {
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        final Widget pageChild = widget;
+        Widget dialog = Builder(builder: (BuildContext context) {
           return Theme(data: theme, child: pageChild);
         });
         if (useSafeArea) {
@@ -96,7 +97,8 @@ extension ExtensionDialog on GetInterface {
       barrierLabel: MaterialLocalizations.of(context!).modalBarrierDismissLabel,
       barrierColor: barrierColor ?? Colors.black54,
       transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
+      transitionBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) {
         return FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
@@ -124,8 +126,9 @@ extension ExtensionDialog on GetInterface {
       RouteSettings? routeSettings,
       String? id}) {
     assert(!barrierDismissible || barrierLabel != null);
-    final key = navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
-    final nav = key?.currentState ??
+    final GlobalKey<NavigatorState>? key =
+        navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
+    final NavigatorState nav = key?.currentState ??
         Navigator.of(overlayContext!,
             rootNavigator:
                 true); //overlay context will always return the root navigator
@@ -144,7 +147,7 @@ extension ExtensionDialog on GetInterface {
 
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
-    String title = "Alert",
+    String title = 'Alert',
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
@@ -164,7 +167,7 @@ extension ExtensionDialog on GetInterface {
     Color? backgroundColor,
     bool barrierDismissible = true,
     Color? buttonColor,
-    String middleText = "\n",
+    String middleText = '\n',
     TextStyle? middleTextStyle,
     double radius = 20.0,
     //   ThemeData themeData,
@@ -176,9 +179,9 @@ extension ExtensionDialog on GetInterface {
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
   }) {
-    var leanCancel = onCancel != null || textCancel != null;
-    var leanConfirm = onConfirm != null || textConfirm != null;
-    actions ??= [];
+    final bool leanCancel = onCancel != null || textCancel != null;
+    final bool leanConfirm = onConfirm != null || textConfirm != null;
+    actions ??= <Widget>[];
 
     if (cancel != null) {
       actions.add(cancel);
@@ -191,8 +194,7 @@ extension ExtensionDialog on GetInterface {
             shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: buttonColor ?? theme.colorScheme.secondary,
-                    width: 2,
-                    style: BorderStyle.solid),
+                    width: 2),
                 borderRadius: BorderRadius.circular(radius)),
           ),
           onPressed: () {
@@ -200,7 +202,7 @@ extension ExtensionDialog on GetInterface {
             back();
           },
           child: Text(
-            textCancel ?? "Cancel",
+            textCancel ?? 'Cancel',
             style: TextStyle(
                 color: cancelTextColor ?? theme.colorScheme.secondary),
           ),
@@ -219,7 +221,7 @@ extension ExtensionDialog on GetInterface {
                   borderRadius: BorderRadius.circular(radius)),
             ),
             child: Text(
-              textConfirm ?? "Ok",
+              textConfirm ?? 'Ok',
               style: TextStyle(
                   color: confirmTextColor ?? theme.colorScheme.background),
             ),
@@ -229,7 +231,7 @@ extension ExtensionDialog on GetInterface {
       }
     }
 
-    Widget baseAlertDialog = AlertDialog(
+    final Widget baseAlertDialog = AlertDialog(
       titlePadding: titlePadding ?? const EdgeInsets.all(8),
       contentPadding: contentPadding ?? const EdgeInsets.all(8),
 
@@ -238,9 +240,8 @@ extension ExtensionDialog on GetInterface {
           borderRadius: BorderRadius.all(Radius.circular(radius))),
       title: Text(title, textAlign: TextAlign.center, style: titleStyle),
       content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           content ??
               Text(middleText,
                   textAlign: TextAlign.center, style: middleTextStyle),
@@ -314,7 +315,7 @@ extension ExtensionSnackbar on GetInterface {
     Color? overlayColor,
     Form? userInputForm,
   }) {
-    final getSnackBar = GetSnackBar(
+    final GetSnackBar getSnackBar = GetSnackBar(
       snackbarStatus: snackbarStatus,
       title: title,
       message: message,
@@ -352,7 +353,7 @@ extension ExtensionSnackbar on GetInterface {
       userInputForm: userInputForm,
     );
 
-    final controller = SnackbarController(getSnackBar);
+    final SnackbarController controller = SnackbarController(getSnackBar);
 
     if (instantInit) {
       controller.show();
@@ -365,7 +366,7 @@ extension ExtensionSnackbar on GetInterface {
   }
 
   SnackbarController showSnackbar(GetSnackBar snackbar) {
-    final controller = SnackbarController(snackbar);
+    final SnackbarController controller = SnackbarController(snackbar);
     controller.show();
     return controller;
   }
@@ -412,7 +413,7 @@ extension ExtensionSnackbar on GetInterface {
     Color? overlayColor,
     Form? userInputForm,
   }) {
-    final getSnackBar = GetSnackBar(
+    final GetSnackBar getSnackBar = GetSnackBar(
         snackbarStatus: snackbarStatus,
         titleText: titleText ??
             Text(
@@ -464,7 +465,7 @@ extension ExtensionSnackbar on GetInterface {
         overlayColor: overlayColor ?? Colors.transparent,
         userInputForm: userInputForm);
 
-    final controller = SnackbarController(getSnackBar);
+    final SnackbarController controller = SnackbarController(getSnackBar);
 
     if (instantInit) {
       controller.show();
@@ -512,7 +513,7 @@ extension GetNavigationExt on GetInterface {
       String? routeName,
       bool fullscreenDialog = false,
       dynamic arguments,
-      List<BindingsInterface> bindings = const [],
+      List<BindingsInterface> bindings = const <BindingsInterface>[],
       bool preventDuplicates = true,
       bool? popGesture,
       bool showCupertinoParallax = true,
@@ -579,7 +580,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? toNamed<T>(
     String page, {
     dynamic arguments,
-    dynamic id,
+    String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) {
@@ -588,7 +589,7 @@ extension GetNavigationExt on GetInterface {
     // }
 
     if (parameters != null) {
-      final uri = Uri(path: page, queryParameters: parameters);
+      final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
 
@@ -628,7 +629,7 @@ extension GetNavigationExt on GetInterface {
     // }
 
     if (parameters != null) {
-      final uri = Uri(path: page, queryParameters: parameters);
+      final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
     return searchDelegate(id).offNamed(
@@ -685,7 +686,7 @@ extension GetNavigationExt on GetInterface {
     Map<String, String>? parameters,
   }) {
     if (parameters != null) {
-      final uri = Uri(path: page, queryParameters: parameters);
+      final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
 
@@ -717,7 +718,7 @@ extension GetNavigationExt on GetInterface {
     Map<String, String>? parameters,
   }) {
     if (parameters != null) {
-      final uri = Uri(path: page, queryParameters: parameters);
+      final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
     return searchDelegate(id).backAndtoNamed(
@@ -765,7 +766,7 @@ extension GetNavigationExt on GetInterface {
     Map<String, String>? parameters,
   }) {
     if (parameters != null) {
-      final uri = Uri(path: newRouteName, queryParameters: parameters);
+      final Uri uri = Uri(path: newRouteName, queryParameters: parameters);
       newRouteName = uri.toString();
     }
 
@@ -780,11 +781,11 @@ extension GetNavigationExt on GetInterface {
 
   /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
   bool get isOverlaysOpen =>
-      (isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!);
+      isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!;
 
   /// Returns true if there is no Snackbar, Dialog or BottomSheet open
   bool get isOverlaysClosed =>
-      (!isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!);
+      !isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!;
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
@@ -809,8 +810,8 @@ extension GetNavigationExt on GetInterface {
     }
 
     if (times > 1) {
-      var count = 0;
-      return searchDelegate(id).backUntil((route) => count++ == times);
+      int count = 0;
+      return searchDelegate(id).backUntil((GetPage route) => count++ == times);
     } else {
       if (canPop) {
         if (searchDelegate(id).canBack == true) {
@@ -848,8 +849,11 @@ extension GetNavigationExt on GetInterface {
     }
 
     if (times > 1) {
-      var count = 0;
-      return searchDelegate(id).navigatorKey.currentState?.popUntil((route) {
+      int count = 0;
+      return searchDelegate(id)
+          .navigatorKey
+          .currentState
+          ?.popUntil((Route route) {
         return count++ == times;
       });
     } else {
@@ -867,7 +871,7 @@ extension GetNavigationExt on GetInterface {
     String? id,
   ) {
     // It can not be divided, because dialogs and bottomsheets can not be consecutive
-    while ((isDialogOpen! && isBottomSheetOpen!)) {
+    while (isDialogOpen! && isBottomSheetOpen!) {
       closeOverlay(id: id);
     }
   }
@@ -875,7 +879,7 @@ extension GetNavigationExt on GetInterface {
   void closeAllDialogs({
     String? id,
   }) {
-    while ((isDialogOpen!)) {
+    while (isDialogOpen!) {
       closeOverlay(id: id);
     }
   }
@@ -887,7 +891,7 @@ extension GetNavigationExt on GetInterface {
   void closeAllBottomSheets({
     String? id,
   }) {
-    while ((isBottomSheetOpen!)) {
+    while (isBottomSheetOpen!) {
       searchDelegate(id).navigatorKey.currentState?.pop();
     }
   }
@@ -963,13 +967,13 @@ extension GetNavigationExt on GetInterface {
     String? id,
     String? routeName,
     dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
     double Function(BuildContext context)? gestureWidth,
   }) {
-    routeName ??= "/${page.runtimeType.toString()}";
+    routeName ??= '/${page.runtimeType}';
     routeName = _cleanRouteName(routeName);
     if (preventDuplicates && routeName == currentRoute) {
       return null;
@@ -1042,14 +1046,14 @@ extension GetNavigationExt on GetInterface {
     String? id,
     String? routeName,
     dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,
     Duration? duration,
     double Function(BuildContext context)? gestureWidth,
   }) {
-    routeName ??= "/${page.runtimeType.toString()}";
+    routeName ??= '/${page.runtimeType}';
     routeName = _cleanRouteName(routeName);
     return searchDelegate(id).offAll<T>(
       page,
@@ -1221,7 +1225,7 @@ extension GetNavigationExt on GetInterface {
   /// give access to current Overlay Context
   BuildContext? get overlayContext {
     BuildContext? overlay;
-    key.currentState?.overlay?.context.visitChildElements((element) {
+    key.currentState?.overlay?.context.visitChildElements((Element element) {
       overlay = element;
     });
     return overlay;
@@ -1229,7 +1233,7 @@ extension GetNavigationExt on GetInterface {
 
   /// give access to Theme.of(context)
   ThemeData get theme {
-    var theme = ThemeData.fallback();
+    ThemeData theme = ThemeData.fallback();
     if (context != null) {
       theme = Theme.of(context!);
     }
@@ -1275,11 +1279,11 @@ extension GetNavigationExt on GetInterface {
   MediaQueryData get mediaQuery => MediaQuery.of(context!);
 
   /// Check if dark mode theme is enable
-  bool get isDarkMode => (theme.brightness == Brightness.dark);
+  bool get isDarkMode => theme.brightness == Brightness.dark;
 
   /// Check if dark mode theme is enable on platform on android Q+
   bool get isPlatformDarkMode =>
-      (ui.window.platformBrightness == Brightness.dark);
+      ui.window.platformBrightness == Brightness.dark;
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;
@@ -1343,18 +1347,19 @@ extension OverlayExt on GetInterface {
     Widget? loadingWidget,
     double opacity = .5,
   }) async {
-    final navigatorState =
-        Navigator.of(Get.overlayContext!, rootNavigator: false);
-    final overlayState = navigatorState.overlay!;
+    final NavigatorState navigatorState = Navigator.of(Get.overlayContext!);
+    final OverlayState overlayState = navigatorState.overlay!;
 
-    final overlayEntryOpacity = OverlayEntry(builder: (context) {
+    final OverlayEntry overlayEntryOpacity =
+        OverlayEntry(builder: (BuildContext context) {
       return Opacity(
           opacity: opacity,
           child: Container(
             color: opacityColor,
           ));
     });
-    final overlayEntryLoader = OverlayEntry(builder: (context) {
+    final OverlayEntry overlayEntryLoader =
+        OverlayEntry(builder: (BuildContext context) {
       return loadingWidget ??
           const Center(
               child: SizedBox(
