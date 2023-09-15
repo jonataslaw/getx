@@ -1282,8 +1282,7 @@ extension GetNavigationExt on GetInterface {
   bool get isDarkMode => theme.brightness == Brightness.dark;
 
   /// Check if dark mode theme is enable on platform on android Q+
-  bool get isPlatformDarkMode =>
-      ui.window.platformBrightness == Brightness.dark;
+  bool get isPlatformDarkMode => window.platformBrightness == Brightness.dark;
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;

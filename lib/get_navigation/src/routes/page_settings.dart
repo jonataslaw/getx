@@ -40,7 +40,7 @@ extension PageArgExt on BuildContext {
   String get location {
     final parser = router.routeInformationParser;
     final config = delegate.currentConfiguration;
-    return parser?.restoreRouteInformation(config)?.location ?? '/';
+    return parser?.restoreRouteInformation(config)?.uri.path ?? '/';
   }
 
   GetDelegate get delegate {
