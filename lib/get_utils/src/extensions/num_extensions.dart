@@ -2,11 +2,48 @@ import 'dart:async';
 
 import '../get_utils/get_utils.dart';
 
-extension GetNumUtils<T> on num {
+/// An extension on [num] providing utility methods for numerical comparisons.
+extension GetNumUtilsExt<T> on num {
+  /// Checks if the current numerical value is lower than the provided [b].
+  ///
+  /// This method compares the current numerical value with [b] and returns `true`
+  /// if the current value is strictly lower (less than) than [b]. Otherwise, it returns `false`.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final a = 10;
+  /// final b = 20;
+  ///
+  /// final result = a.isLowerThan(b); // Result: true
+  /// ```
   bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
 
+  /// Checks if the current numerical value is greater than the provided [b].
+  ///
+  /// This method compares the current numerical value with [b] and returns `true`
+  /// if the current value is strictly greater (greater than) than [b]. Otherwise, it returns `false`.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final a = 30.5;
+  /// final b = 20.0;
+  ///
+  /// final result = a.isGreaterThan(b); // Result: true
+  /// ```
   bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
 
+  /// Checks if the current numerical value is equal to the provided [b].
+  ///
+  /// This method compares the current numerical value with [b] and returns `true`
+  /// if they are equal (have the same value). Otherwise, it returns `false`.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final a = 42;
+  /// final b = 42;
+  ///
+  /// final result = a.isEqual(b); // Result: true
+  /// ```
   bool isEqual(num b) => GetUtils.isEqual(this, b);
 
   /// Utility to delay some callback (or code execution).

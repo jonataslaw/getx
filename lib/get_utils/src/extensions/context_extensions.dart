@@ -57,7 +57,7 @@ extension ContextExt on BuildContext {
   ThemeData get theme => Theme.of(this);
 
   /// Check if dark mode theme is enable
-  bool get isDarkMode => (theme.brightness == Brightness.dark);
+  bool get isDarkMode => theme.brightness == Brightness.dark;
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;
@@ -96,7 +96,7 @@ extension ContextExt on BuildContext {
   double get mediaQueryShortestSide => mediaQuerySize.shortestSide;
 
   /// True if width be larger than 800
-  bool get showNavbar => (width > 800);
+  bool get showNavbar => width > 800;
 
   /// True if the width is smaller than 600p
   bool get isPhoneOrLess => width <= 600;
@@ -105,7 +105,7 @@ extension ContextExt on BuildContext {
   bool get isPhoneOrWider => width >= 600;
 
   /// True if the shortestSide is smaller than 600p
-  bool get isPhone => (mediaQueryShortestSide < 600);
+  bool get isPhone => mediaQueryShortestSide < 600;
 
   /// True if the width is smaller than 600p
   bool get isSmallTabletOrLess => width <= 600;
@@ -114,10 +114,10 @@ extension ContextExt on BuildContext {
   bool get isSmallTabletOrWider => width >= 600;
 
   /// True if the shortestSide is largest than 600p
-  bool get isSmallTablet => (mediaQueryShortestSide >= 600);
+  bool get isSmallTablet => mediaQueryShortestSide >= 600;
 
   /// True if the shortestSide is largest than 720p
-  bool get isLargeTablet => (mediaQueryShortestSide >= 720);
+  bool get isLargeTablet => mediaQueryShortestSide >= 720;
 
   /// True if the width is smaller than 720p
   bool get isLargeTabletOrLess => width <= 720;
@@ -152,29 +152,20 @@ extension ContextExt on BuildContext {
     assert(
         watch != null || mobile != null || tablet != null || desktop != null);
 
-    var deviceWidth = mediaQuerySize.width;
+    final double deviceWidth = mediaQuerySize.width;
     //big screen width can display smaller sizes
-    final strictValues = [
+    final Iterable<T> strictValues = <T?>[
       if (deviceWidth >= 1200) desktop, //desktop is allowed
       if (deviceWidth >= 600) tablet, //tablet is allowed
       if (deviceWidth >= 300) mobile, //mobile is allowed
       watch, //watch is allowed
     ].whereType<T>();
-    final looseValues = [
+    final Iterable<T> looseValues = <T?>[
       watch,
       mobile,
       tablet,
       desktop,
     ].whereType<T>();
     return strictValues.firstOrNull ?? looseValues.first;
-  }
-}
-
-extension IterableExt<T> on Iterable<T> {
-  /// The first element, or `null` if the iterable is empty.
-  T? get firstOrNull {
-    var iterator = this.iterator;
-    if (iterator.moveNext()) return iterator.current;
-    return null;
   }
 }

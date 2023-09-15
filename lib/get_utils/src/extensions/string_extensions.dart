@@ -1,6 +1,6 @@
 import '../get_utils/get_utils.dart';
 
-extension GetStringUtils<T> on String {
+extension GetStringUtilsExt<T> on String {
   /// Discover if the String is a valid number
   bool get isNum => GetUtils.isNum(this);
 
