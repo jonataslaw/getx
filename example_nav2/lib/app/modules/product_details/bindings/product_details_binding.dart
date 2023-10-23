@@ -6,8 +6,8 @@ class ProductDetailsBinding extends Binding {
   @override
   List<Bind> dependencies() {
     return [
-      Bind.create<ProductDetailsController>(
-        (_) => ProductDetailsController(
+      Bind.spawn<ProductDetailsController>(
+        () => ProductDetailsController(
           Get.parameters['productId'] ?? '',
         ),
       )

@@ -407,7 +407,7 @@ void main() {
     await tester.pumpAndSettle();
     Get.snackbar('title', "message");
     await tester.pumpAndSettle();
-    Get.back(closeOverlays: true);
+    Get.backLegacy(closeOverlays: true);
 
     await tester.pumpAndSettle();
 

@@ -503,12 +503,12 @@ extension GetNavigationExt on GetInterface {
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
-  Future<T?>? to<T>(Widget Function() page,
+  Future<T?>? to<T extends Object?>(Widget Function() page,
       {bool? opaque,
       Transition? transition,
       Curve? curve,
       Duration? duration,
-      int? id,
+      String? id,
       String? routeName,
       bool fullscreenDialog = false,
       dynamic arguments,
@@ -620,7 +620,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? offNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   }) {
     // if (preventDuplicates && page == currentRoute) {
@@ -653,7 +653,7 @@ extension GetNavigationExt on GetInterface {
   /// or also like this:
   /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the
   /// dialog is closed
-  void until(bool Function(GetPage<dynamic>) predicate, {int? id}) {
+  void until(bool Function(GetPage<dynamic>) predicate, {String? id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return searchDelegate(id).backUntil(predicate);
@@ -680,7 +680,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? offNamedUntil<T>(
     String page,
     bool Function(GetPage<dynamic>)? predicate, {
-    int? id,
+    String? id,
     dynamic arguments,
     Map<String, String>? parameters,
   }) {
@@ -712,7 +712,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? offAndToNamed<T>(
     String page, {
     dynamic arguments,
-    int? id,
+    String? id,
     dynamic result,
     Map<String, String>? parameters,
   }) {
@@ -733,7 +733,7 @@ extension GetNavigationExt on GetInterface {
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
-  void removeRoute(String name, {int? id}) {
+  void removeRoute(String name, {String? id}) {
     return searchDelegate(id).removeRoute(name);
   }
 
@@ -761,7 +761,7 @@ extension GetNavigationExt on GetInterface {
     String newRouteName, {
     // bool Function(GetPage<dynamic>)? predicate,
     dynamic arguments,
-    int? id,
+    String? id,
     Map<String, String>? parameters,
   }) {
     if (parameters != null) {
@@ -800,46 +800,101 @@ extension GetNavigationExt on GetInterface {
   /// from your business logic.
   void back<T>({
     T? result,
+    bool canPop = true,
+    int times = 1,
+    String? id,
+  }) {
+    if (times < 1) {
+      times = 1;
+    }
+
+    if (times > 1) {
+      var count = 0;
+      return searchDelegate(id).backUntil((route) => count++ == times);
+    } else {
+      if (canPop) {
+        if (searchDelegate(id).canBack == true) {
+          return searchDelegate(id).back<T>(result);
+        }
+      } else {
+        return searchDelegate(id).back<T>(result);
+      }
+    }
+  }
+
+  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
+  ///
+  /// if your set [closeOverlays] to true, Get.back() will close the
+  /// currently open snackbar/dialog/bottomsheet AND the current page
+  ///
+  /// [id] is for when you are using nested navigation,
+  /// as explained in documentation
+  ///
+  /// It has the advantage of not needing context, so you can call
+  /// from your business logic.
+  void backLegacy<T>({
+    T? result,
     bool closeOverlays = false,
     bool canPop = true,
-    int? id,
+    int times = 1,
+    String? id,
   }) {
-    //TODO: remove this when change own api to Dialog and BottomSheets
-    //to declarative way
-    if (isDialogOpen! || isBottomSheetOpen!) {
-      searchDelegate(id).navigatorKey.currentState?.pop();
-      return;
+    if (closeOverlays) {
+      closeAllOverlays();
     }
 
-    //TODO: This code brings compatibility of the new snackbar with GetX 4,
-    // remove this code in version 5
-    if (isSnackbarOpen && !closeOverlays) {
-      closeCurrentSnackbar();
-      return;
+    if (times < 1) {
+      times = 1;
     }
 
-    if (closeOverlays && isOverlaysOpen) {
-      //TODO: This code brings compatibility of the new snackbar with GetX 4,
-      // remove this code in version 5
-      if (isSnackbarOpen) {
-        closeAllSnackbars();
-      }
-
-      while ((isDialogOpen! && isBottomSheetOpen!)) {
-        searchDelegate(id).navigatorKey.currentState?.pop();
-      }
-
-      // navigator?.popUntil((route) {
-      //   return;
-      // });
-    }
-    if (canPop) {
-      if (searchDelegate(id).canBack == true) {
-        searchDelegate(id).back<T>(result);
-      }
+    if (times > 1) {
+      var count = 0;
+      return searchDelegate(id).navigatorKey.currentState?.popUntil((route) {
+        return count++ == times;
+      });
     } else {
-      searchDelegate(id).back<T>(result);
+      if (canPop) {
+        if (searchDelegate(id).navigatorKey.currentState?.canPop() == true) {
+          return searchDelegate(id).navigatorKey.currentState?.pop<T>(result);
+        }
+      } else {
+        return searchDelegate(id).navigatorKey.currentState?.pop<T>(result);
+      }
     }
+  }
+
+  void closeAllDialogsAndBottomSheets(
+    String? id,
+  ) {
+    // It can not be divided, because dialogs and bottomsheets can not be consecutive
+    while ((isDialogOpen! && isBottomSheetOpen!)) {
+      closeOverlay(id: id);
+    }
+  }
+
+  void closeAllDialogs({
+    String? id,
+  }) {
+    while ((isDialogOpen!)) {
+      closeOverlay(id: id);
+    }
+  }
+
+  void closeOverlay({String? id}) {
+    searchDelegate(id).navigatorKey.currentState?.pop();
+  }
+
+  void closeAllBottomSheets({
+    String? id,
+  }) {
+    while ((isBottomSheetOpen!)) {
+      searchDelegate(id).navigatorKey.currentState?.pop();
+    }
+  }
+
+  void closeAllOverlays() {
+    closeAllDialogsAndBottomSheets(null);
+    closeAllSnackbars();
   }
 
   /// **Navigation.popUntil()** (with predicate) shortcut .<br><br>
@@ -848,14 +903,30 @@ extension GetNavigationExt on GetInterface {
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
-  void close(int times, [int? id]) {
-    if (times < 1) {
-      times = 1;
+  void close<T extends Object>({
+    bool closeAll = true,
+    bool closeSnackbar = true,
+    bool closeDialog = true,
+    bool closeBottomSheet = true,
+    String? id,
+    T? result,
+  }) {
+    void handleClose(bool closeCondition, Function closeAllFunction,
+        Function closeSingleFunction,
+        [bool? isOpenCondition]) {
+      if (closeCondition) {
+        if (closeAll) {
+          closeAllFunction();
+        } else if (isOpenCondition == true) {
+          closeSingleFunction();
+        }
+      }
     }
-    var count = 0;
-    var back = searchDelegate(id).backUntil((route) => count++ == times);
 
-    return back;
+    handleClose(closeSnackbar, closeAllSnackbars, closeCurrentSnackbar);
+    handleClose(closeDialog, closeAllDialogs, closeOverlay, isDialogOpen);
+    handleClose(closeBottomSheet, closeAllBottomSheets, closeOverlay,
+        isBottomSheetOpen);
   }
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>
@@ -889,7 +960,7 @@ extension GetNavigationExt on GetInterface {
     Transition? transition,
     Curve? curve,
     bool? popGesture,
-    int? id,
+    String? id,
     String? routeName,
     dynamic arguments,
     List<BindingsInterface> bindings = const [],
@@ -924,7 +995,7 @@ extension GetNavigationExt on GetInterface {
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
-    int? id,
+    String? id,
   ]) {
     return searchDelegate(id).offUntil(
       page,
@@ -968,7 +1039,7 @@ extension GetNavigationExt on GetInterface {
     bool Function(GetPage<dynamic>)? predicate,
     bool? opaque,
     bool? popGesture,
-    int? id,
+    String? id,
     String? routeName,
     dynamic arguments,
     List<BindingsInterface> bindings = const [],
@@ -1083,7 +1154,7 @@ extension GetNavigationExt on GetInterface {
     return rootController.nestedKey(key);
   }
 
-  GetDelegate searchDelegate(dynamic k) {
+  GetDelegate searchDelegate(String? k) {
     GetDelegate key;
     if (k == null) {
       key = Get.rootController.rootDelegate;
@@ -1171,14 +1242,14 @@ extension GetNavigationExt on GetInterface {
   }
 
   /// The window to which this binding is bound.
-  ui.SingletonFlutterWindow get window => engine.window;
+  ui.PlatformDispatcher get window => engine.platformDispatcher;
 
-  Locale? get deviceLocale => engine.window.locale;
+  Locale? get deviceLocale => window.locale;
 
   ///The number of device pixels for each logical pixel.
-  double get pixelRatio => engine.window.devicePixelRatio;
+  double get pixelRatio => window.implicitView!.devicePixelRatio;
 
-  Size get size => engine.window.physicalSize / pixelRatio;
+  Size get size => window.implicitView!.physicalSize / pixelRatio;
 
   ///The horizontal extent of this size.
   double get width => size.width;
@@ -1188,14 +1259,14 @@ extension GetNavigationExt on GetInterface {
 
   ///The distance from the top edge to the first unpadded pixel,
   ///in physical pixels.
-  double get statusBarHeight => engine.window.padding.top;
+  double get statusBarHeight => window.implicitView!.padding.top;
 
   ///The distance from the bottom edge to the first unpadded pixel,
   ///in physical pixels.
-  double get bottomBarHeight => engine.window.padding.bottom;
+  double get bottomBarHeight => window.implicitView!.padding.bottom;
 
   ///The system-reported text scale.
-  double get textScaleFactor => engine.window.textScaleFactor;
+  double get textScaleFactor => window.textScaleFactor;
 
   /// give access to TextTheme.of(context)
   TextTheme get textTheme => theme.textTheme;
@@ -1224,7 +1295,7 @@ extension GetNavigationExt on GetInterface {
 
   GlobalKey<NavigatorState> get key => rootController.key;
 
-  Map<dynamic, GetDelegate> get keys => rootController.keys;
+  Map<String, GetDelegate> get keys => rootController.keys;
 
   GetRootState get rootController => GetRootState.controller;
 

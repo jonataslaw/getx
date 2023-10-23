@@ -7,7 +7,8 @@ import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
 typedef OnTap = void Function(GetSnackBar snack);
-typedef OnHover = void Function(GetSnackBar snack, SnackHoverState snackHoverState);
+typedef OnHover = void Function(
+    GetSnackBar snack, SnackHoverState snackHoverState);
 
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 

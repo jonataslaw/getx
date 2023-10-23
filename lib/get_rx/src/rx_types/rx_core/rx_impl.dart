@@ -327,7 +327,16 @@ extension BoolExtension on bool {
   RxBool get obs => RxBool(this);
 }
 
-extension RxT<T> on T {
+extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
+}
+
+/// This method will replace the old `.obs` method.
+/// It's a breaking change, but it is essential to avoid conflicts with
+/// the new dart 3 features. T will be inferred by contextual type inference
+/// rather than the extension type.
+extension RxTnew on Object {
+  /// Returns a `Rx` instance with [this] `T` as initial value.
+  Rx<T> obs<T>() => Rx<T>(this as T);
 }

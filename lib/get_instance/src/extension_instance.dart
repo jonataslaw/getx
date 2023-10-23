@@ -127,16 +127,16 @@ extension Inst on GetInterface {
   /// Route `Get.reference` to keep the lifecycle active.
   /// Is important to know that the instances created are only stored per Route.
   /// So, if you call `Get.delete<T>()` the "instance factory" used in this
-  /// method (`Get.create<T>()`) will be removed, but NOT the instances
+  /// method (`Get.spawn<T>()`) will be removed, but NOT the instances
   /// already created by it.
   ///
   /// Example:
   ///
-  /// ```create(() => Repl());
+  /// ```Get.spawn(() => Repl());
   /// Repl a = find();
   /// Repl b = find();
   /// print(a==b); (false)```
-  void create<S>(
+  void spawn<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
@@ -298,7 +298,6 @@ extension Inst on GetInterface {
     }
   }
 
-  
   /// The findOrNull method will return the instance if it is registered;
   /// otherwise, it will return null.
   S? findOrNull<S>({String? tag}) {
@@ -307,7 +306,6 @@ extension Inst on GetInterface {
     }
     return null;
   }
-
 
   /// Replace a parent instance of a class in dependency management
   /// with a [child] instance

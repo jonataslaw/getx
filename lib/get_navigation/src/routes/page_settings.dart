@@ -43,11 +43,7 @@ extension PageArgExt on BuildContext {
     return parser?.restoreRouteInformation(config)?.location ?? '/';
   }
 
-  RouterDelegate get delegate {
-    return router.routerDelegate;
-  }
-
-  GetDelegate get navigation {
+  GetDelegate get delegate {
     return router.routerDelegate as GetDelegate;
   }
 }

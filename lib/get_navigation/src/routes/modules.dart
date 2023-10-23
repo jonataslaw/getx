@@ -13,9 +13,9 @@ class Dependencies {
     return find<S>();
   }
 
-  void create<S>(InstanceBuilderCallback<S> builder,
+  void spawn<S>(InstanceBuilderCallback<S> builder,
           {String? tag, bool permanent = true}) =>
-      Get.create<S>(builder, tag: tag, permanent: permanent);
+      Get.spawn<S>(builder, tag: tag, permanent: permanent);
 
   S find<S>({String? tag}) => Get.find<S>(tag: tag);
 

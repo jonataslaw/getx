@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 extension ContextExt on BuildContext {
-  /// The same of [MediaQuery.of(context).size]
-  Size get mediaQuerySize => MediaQuery.of(this).size;
+  /// The same of [MediaQuery.sizeOf(context)]
+  Size get mediaQuerySize => MediaQuery.sizeOf(this);
 
   /// The same of [MediaQuery.of(context).size.height]
   /// Note: updates when you rezise your screen (like on a browser or
@@ -65,20 +65,20 @@ extension ContextExt on BuildContext {
   /// similar to [MediaQuery.of(context).padding]
   TextTheme get textTheme => Theme.of(this).textTheme;
 
-  /// similar to [MediaQuery.of(context).padding]
-  EdgeInsets get mediaQueryPadding => MediaQuery.of(this).padding;
+  /// similar to [MediaQuery.paddingOf(context)]
+  EdgeInsets get mediaQueryPadding => MediaQuery.paddingOf(this);
 
   /// similar to [MediaQuery.of(context).padding]
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
-  /// similar to [MediaQuery.of(context).viewPadding]
-  EdgeInsets get mediaQueryViewPadding => MediaQuery.of(this).viewPadding;
+  /// similar to [MediaQuery.viewPaddingOf(context)]
+  EdgeInsets get mediaQueryViewPadding => MediaQuery.viewPaddingOf(this);
 
-  /// similar to [MediaQuery.of(context).viewInsets]
-  EdgeInsets get mediaQueryViewInsets => MediaQuery.of(this).viewInsets;
+  /// similar to [MediaQuery.viewInsetsOf(context)]
+  EdgeInsets get mediaQueryViewInsets => MediaQuery.viewInsetsOf(this);
 
-  /// similar to [MediaQuery.of(context).orientation]
-  Orientation get orientation => MediaQuery.of(this).orientation;
+  /// similar to [MediaQuery.orientationOf(context)]
+  Orientation get orientation => MediaQuery.orientationOf(this);
 
   /// check if device is on landscape mode
   bool get isLandscape => orientation == Orientation.landscape;
@@ -86,11 +86,11 @@ extension ContextExt on BuildContext {
   /// check if device is on portrait mode
   bool get isPortrait => orientation == Orientation.portrait;
 
-  /// similar to [MediaQuery.of(this).devicePixelRatio]
-  double get devicePixelRatio => MediaQuery.of(this).devicePixelRatio;
+  /// similar to [MediaQuery.devicePixelRatioOf(context)]
+  double get devicePixelRatio => MediaQuery.devicePixelRatioOf(this);
 
-  /// similar to [MediaQuery.of(this).textScaleFactor]
-  double get textScaleFactor => MediaQuery.of(this).textScaleFactor;
+  /// similar to [MediaQuery.textScaleFactorOf(context)]
+  double get textScaleFactor => MediaQuery.textScaleFactorOf(this);
 
   /// get the shortestSide from screen
   double get mediaQueryShortestSide => mediaQuerySize.shortestSide;

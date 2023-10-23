@@ -681,19 +681,19 @@ context.height
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.of(context).size
+/// Similar to MediaQuery.sizeOf(context);
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// Similar to MediaQuery.paddingOf(context);
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// Similar to MediaQuery.viewPaddingOf(context);
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// Similar to MediaQuery.viewInsetsOf(context);
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// Similar to MediaQuery.orientationOf(context);
 context.orientation()
 
 /// Check if device is on landscape mode
@@ -702,10 +702,10 @@ context.isLandscape()
 /// Check if device is on portrait mode
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// Similar to MediaQuery.devicePixelRatioOf(context);
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// Similar to MediaQuery.textScaleFactorOf(context);
 context.textScaleFactor()
 
 /// Get the shortestSide from screen

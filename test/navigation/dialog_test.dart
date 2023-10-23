@@ -47,7 +47,7 @@ void main() {
     expect(find.byType(YourDialogWidget), findsOneWidget);
     // expect(Get.isDialogOpen, true);
 
-    Get.back();
+    Get.backLegacy();
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsNothing);

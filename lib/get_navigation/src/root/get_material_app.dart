@@ -281,7 +281,6 @@ class GetMaterialApp extends StatelessWidget {
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
           shortcuts: shortcuts,
           scrollBehavior: scrollBehavior,
-          useInheritedMediaQuery: useInheritedMediaQuery,
         );
       }),
     );
