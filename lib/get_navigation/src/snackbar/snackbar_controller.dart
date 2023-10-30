@@ -347,8 +347,8 @@ class SnackbarController {
     return future;
   }
 
-  static void cancelAllSnackbars() {
-    _snackBarQueue._cancelAllJobs();
+  static Future<void> cancelAllSnackbars() async {
+    await _snackBarQueue._cancelAllJobs();
   }
 
   static Future<void> closeCurrentSnackbar() async {
