@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../../request/request.dart';
 import '../../response/response.dart';
 import '../interface/request_base.dart';
@@ -6,23 +8,24 @@ import '../utils/body_decoder.dart';
 typedef MockClientHandler = Future<Response> Function(Request request);
 
 class MockClient extends IClient {
-
   /// Creates a [MockClient] with a handler that receives [Request]s and sends
   /// [Response]s.
   MockClient(this._handler);
+
   /// The handler for than transforms request on response
   final MockClientHandler _handler;
 
   @override
   Future<Response<T>> send<T>(final Request<T> request) async {
-    final requestBody = await request.bodyBytes.toBytes();
-    final bodyBytes = requestBody.toStream();
+    final Uint8List requestBody = await request.bodyBytes.toBytes();
+    final Stream<List<int>> bodyBytes = requestBody.toStream();
 
-    final response = await _handler(request);
+    final Response response = await _handler(request);
 
-    final stringBody = await bodyBytesToString(bodyBytes, response.headers!);
+    final String stringBody =
+        await bodyBytesToString(bodyBytes, response.headers!);
 
-    final mimeType = response.headers!.containsKey('content-type')
+    final String? mimeType = response.headers!.containsKey('content-type')
         ? response.headers!['content-type']
         : '';
 

@@ -6,19 +6,19 @@ import '../request/request.dart';
 import '../status/http_status.dart';
 
 class GraphQLResponse<T> extends Response<T> {
-
   GraphQLResponse({super.body, this.graphQLErrors});
 
   GraphQLResponse.fromResponse(final Response res)
       : graphQLErrors = null,
         super(
-            request: res.request,
-            statusCode: res.statusCode,
-            bodyBytes: res.bodyBytes,
-            bodyString: res.bodyString,
-            statusText: res.statusText,
-            headers: res.headers,
-            body: res.body['data'] as T?,);
+          request: res.request,
+          statusCode: res.statusCode,
+          bodyBytes: res.bodyBytes,
+          bodyString: res.bodyString,
+          statusText: res.statusText,
+          headers: res.headers,
+          body: res.body['data'] as T?,
+        );
   final List<GraphQLError>? graphQLErrors;
 }
 
@@ -29,12 +29,12 @@ class Response<T> {
     this.bodyBytes,
     this.bodyString,
     this.statusText = '',
-    this.headers = const {},
+    this.headers = const <String, String>{},
     this.body,
   });
 
   Response<T> copyWith({
-    final Request? request,
+    final Request<T>? request,
     final int? statusCode,
     final Stream<List<int>>? bodyBytes,
     final String? bodyString,
@@ -94,7 +94,9 @@ class Response<T> {
 }
 
 Future<String> bodyBytesToString(
-    final Stream<List<int>> bodyBytes, final Map<String, String> headers,) {
+  final Stream<List<int>> bodyBytes,
+  final Map<String, String> headers,
+) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 
@@ -109,7 +111,10 @@ Encoding _encodingForHeaders(final Map<String, String> headers) =>
 ///
 /// Returns [fallback] if [charset] is null or if no [Encoding] was found that
 /// corresponds to [charset].
-Encoding _encodingForCharset(final String? charset, [final Encoding fallback = utf8]) {
+Encoding _encodingForCharset(
+  final String? charset, [
+  final Encoding fallback = utf8,
+]) {
   if (charset == null) return fallback;
   return Encoding.getByName(charset) ?? fallback;
 }
@@ -118,13 +123,12 @@ Encoding _encodingForCharset(final String? charset, [final Encoding fallback = u
 ///
 /// Defaults to `application/octet-stream`.
 HeaderValue _contentTypeForHeaders(final Map<String, String> headers) {
-  final contentType = headers['content-type'];
+  final String? contentType = headers['content-type'];
   if (contentType != null) return HeaderValue.parse(contentType);
   return HeaderValue('application/octet-stream');
 }
 
 class HeaderValue {
-
   HeaderValue([this._value = '', final Map<String, String>? parameters]) {
     if (parameters != null) {
       _parameters = HashMap<String, String>.from(parameters);
@@ -134,11 +138,13 @@ class HeaderValue {
   Map<String, String?>? _parameters;
   Map<String, String?>? _unmodifiableParameters;
 
-  static HeaderValue parse(final String value,
-      {final String parameterSeparator = ';',
-      final String? valueSeparator,
-      final bool preserveBackslash = false,}) {
-    final result = HeaderValue();
+  static HeaderValue parse(
+    final String value, {
+    final String parameterSeparator = ';',
+    final String? valueSeparator,
+    final bool preserveBackslash = false,
+  }) {
+    final HeaderValue result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
     return result;
   }
@@ -157,10 +163,10 @@ class HeaderValue {
 
   @override
   String toString() {
-    final stringBuffer = StringBuffer();
+    final StringBuffer stringBuffer = StringBuffer();
     stringBuffer.write(_value);
     if (parameters != null && parameters!.isNotEmpty) {
-      _parameters!.forEach((final name, final value) {
+      _parameters!.forEach((final String name, final String? value) {
         stringBuffer
           ..write('; ')
           ..write(name)
@@ -171,9 +177,13 @@ class HeaderValue {
     return stringBuffer.toString();
   }
 
-  void _parse(final String value, final String parameterSeparator, final String? valueSeparator,
-      final bool preserveBackslash,) {
-    var index = 0;
+  void _parse(
+    final String value,
+    final String parameterSeparator,
+    final String? valueSeparator,
+    final bool preserveBackslash,
+  ) {
+    int index = 0;
 
     bool done() => index == value.length;
 
@@ -185,7 +195,7 @@ class HeaderValue {
     }
 
     String parseValue() {
-      final start = index;
+      final int start = index;
       while (!done()) {
         if (value[index] == ' ' ||
             value[index] == '\t' ||
@@ -210,11 +220,11 @@ class HeaderValue {
     }
 
     void parseParameters() {
-      final parameters = HashMap<String, String?>();
+      final HashMap<String, String?> parameters = HashMap<String, String?>();
       _parameters = UnmodifiableMapView(parameters);
 
       String parseParameterName() {
-        final start = index;
+        final int start = index;
         while (!done()) {
           if (value[index] == ' ' ||
               value[index] == '\t' ||
@@ -230,7 +240,7 @@ class HeaderValue {
 
       String? parseParameterValue() {
         if (!done() && value[index] == '"') {
-          final stringBuffer = StringBuffer();
+          final StringBuffer stringBuffer = StringBuffer();
           index++;
           while (!done()) {
             if (value[index] == r'\') {
@@ -250,7 +260,7 @@ class HeaderValue {
           }
           return stringBuffer.toString();
         } else {
-          final val = parseValue();
+          final String val = parseValue();
           return val == '' ? null : val;
         }
       }
@@ -258,7 +268,7 @@ class HeaderValue {
       while (!done()) {
         bump();
         if (done()) return;
-        final name = parseParameterName();
+        final String name = parseParameterName();
         bump();
         if (done()) {
           parameters[name] = null;
@@ -270,7 +280,7 @@ class HeaderValue {
           parameters[name] = null;
           return;
         }
-        var valueParameter = parseParameterValue();
+        String? valueParameter = parseParameterValue();
         if (name == 'charset' && valueParameter != null) {
           valueParameter = valueParameter.toLowerCase();
         }
