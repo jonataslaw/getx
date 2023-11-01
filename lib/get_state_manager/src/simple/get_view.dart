@@ -54,11 +54,11 @@ abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
   @protected
   final String? tag = null;
 
-  S get controller => GetWidget._cache[this] as S;
+  S get controller => GetWidget._cache[this]! as S;
 
   // static final _cache = <GetWidget, GetLifeCycleBase>{};
 
-  static final _cache = Expando<GetLifeCycleMixin>();
+  static final Expando<GetLifeCycleMixin> _cache = Expando<GetLifeCycleMixin>();
 
   @protected
   Widget build(final BuildContext context);

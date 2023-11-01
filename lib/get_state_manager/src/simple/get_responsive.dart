@@ -12,19 +12,27 @@ mixin GetResponsiveMixin on Widget {
     Widget? widget;
     if (alwaysUseBuilder) {
       widget = builder();
-      if (widget != null) return widget;
+      if (widget != null) {
+        return widget;
+      }
     }
     if (screen.isDesktop) {
       widget = desktop() ?? widget;
-      if (widget != null) return widget;
+      if (widget != null) {
+        return widget;
+      }
     }
     if (screen.isTablet) {
       widget = tablet() ?? desktop();
-      if (widget != null) return widget;
+      if (widget != null) {
+        return widget;
+      }
     }
     if (screen.isPhone) {
       widget = phone() ?? tablet() ?? desktop();
-      if (widget != null) return widget;
+      if (widget != null) {
+        return widget;
+      }
     }
     return watch() ?? phone() ?? tablet() ?? desktop() ?? builder()!;
   }
@@ -53,12 +61,11 @@ mixin GetResponsiveMixin on Widget {
 /// property `alwaysUseBuilder` to false
 /// With `settings` property you can set the width limit for the screen types.
 class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
-
   GetResponsiveView({
     this.alwaysUseBuilder = false,
     final ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
     super.key,
-  })  : screen = ResponsiveScreen(settings);
+  }) : screen = ResponsiveScreen(settings);
   @override
   final bool alwaysUseBuilder;
 
@@ -68,12 +75,11 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
 
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
-
   GetResponsiveWidget({
     this.alwaysUseBuilder = false,
     final ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
     super.key,
-  })  : screen = ResponsiveScreen(settings);
+  }) : screen = ResponsiveScreen(settings);
   @override
   final bool alwaysUseBuilder;
 
@@ -82,11 +88,12 @@ class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
 }
 
 class ResponsiveScreenSettings {
+  const ResponsiveScreenSettings({
+    this.desktopChangePoint = 1200,
+    this.tabletChangePoint = 600,
+    this.watchChangePoint = 300,
+  });
 
-  const ResponsiveScreenSettings(
-      {this.desktopChangePoint = 1200,
-      this.tabletChangePoint = 600,
-      this.watchChangePoint = 300,});
   /// When the width is greater als this value
   /// the display will be set as [ScreenType.Desktop]
   final double desktopChangePoint;
@@ -136,10 +143,16 @@ class ResponsiveScreen {
   }
 
   ScreenType get screenType {
-    final deviceWidth = _getdeviceWidth;
-    if (deviceWidth >= settings.desktopChangePoint) return ScreenType.desktop;
-    if (deviceWidth >= settings.tabletChangePoint) return ScreenType.tablet;
-    if (deviceWidth < settings.watchChangePoint) return ScreenType.watch;
+    final double deviceWidth = _getdeviceWidth;
+    if (deviceWidth >= settings.desktopChangePoint) {
+      return ScreenType.desktop;
+    }
+    if (deviceWidth >= settings.tabletChangePoint) {
+      return ScreenType.tablet;
+    }
+    if (deviceWidth < settings.watchChangePoint) {
+      return ScreenType.watch;
+    }
     return ScreenType.phone;
   }
 
@@ -155,9 +168,15 @@ class ResponsiveScreen {
     final T? desktop,
     final T? watch,
   }) {
-    if (isDesktop && desktop != null) return desktop;
-    if (isTablet && tablet != null) return tablet;
-    if (isPhone && mobile != null) return mobile;
+    if (isDesktop && desktop != null) {
+      return desktop;
+    }
+    if (isTablet && tablet != null) {
+      return tablet;
+    }
+    if (isPhone && mobile != null) {
+      return mobile;
+    }
     return watch;
   }
 }

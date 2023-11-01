@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 
 void main() {
   test('Parse Page with children', () {
-    final testParams = {'hi': 'value'};
-    final pageTree = GetPage(
+    final Map<String, String> testParams = <String, String>{'hi': 'value'};
+    final GetPage pageTree = GetPage(
       name: '/city',
       page: () => Container(),
-      children: [
+      children: <GetPage>[
         GetPage(
           name: '/home',
           page: () => Container(),
           transition: Transition.rightToLeftWithFade,
-          children: [
+          children: <GetPage>[
             GetPage(
               name: '/bed-room',
               transition: Transition.size,
@@ -30,12 +30,12 @@ void main() {
           name: '/work',
           transition: Transition.upToDown,
           page: () => Container(),
-          children: [
+          children: <GetPage>[
             GetPage(
               name: '/office',
               transition: Transition.zoom,
               page: () => Container(),
-              children: [
+              children: <GetPage>[
                 GetPage(
                   name: '/pen',
                   transition: Transition.cupertino,
@@ -59,85 +59,96 @@ void main() {
       ],
     );
 
-    final tree = ParseRouteTree(routes: <GetPage>[]);
+    final ParseRouteTree tree = ParseRouteTree(routes: <GetPage>[]);
 
     tree.addRoute(pageTree);
 
     // tree.addRoute(pageTree);
-    const searchRoute = '/city/work/office/pen';
-    final match = tree.matchRoute(searchRoute);
+    const String searchRoute = '/city/work/office/pen';
+    final RouteDecoder match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
-    final testRouteParam = match.route!.parameters!;
-    for (final tParam in testParams.entries) {
+    final Map<String, String> testRouteParam = match.route!.parameters!;
+    for (final MapEntry<String, String> tParam in testParams.entries) {
       expect(testRouteParam[tParam.key], tParam.value);
     }
   });
 
   test('Parse Page without children', () {
-    final pageTree = [
+    final List<GetPage> pageTree = <GetPage>[
       GetPage(
-          name: '/city',
-          page: () => Container(),
-          transition: Transition.cupertino,),
+        name: '/city',
+        page: () => Container(),
+        transition: Transition.cupertino,
+      ),
       GetPage(
-          name: '/city/home',
-          page: () => Container(),
-          transition: Transition.downToUp,),
+        name: '/city/home',
+        page: () => Container(),
+        transition: Transition.downToUp,
+      ),
       GetPage(
-          name: '/city/home/bed-room',
-          page: () => Container(),
-          transition: Transition.fade,),
+        name: '/city/home/bed-room',
+        page: () => Container(),
+        transition: Transition.fade,
+      ),
       GetPage(
-          name: '/city/home/living-room',
-          page: () => Container(),
-          transition: Transition.fadeIn,),
+        name: '/city/home/living-room',
+        page: () => Container(),
+        transition: Transition.fadeIn,
+      ),
       GetPage(
-          name: '/city/work',
-          page: () => Container(),
-          transition: Transition.leftToRight,),
+        name: '/city/work',
+        page: () => Container(),
+        transition: Transition.leftToRight,
+      ),
       GetPage(
-          name: '/city/work/office',
-          page: () => Container(),
-          transition: Transition.leftToRightWithFade,),
+        name: '/city/work/office',
+        page: () => Container(),
+        transition: Transition.leftToRightWithFade,
+      ),
       GetPage(
-          name: '/city/work/office/pen',
-          page: () => Container(),
-          transition: Transition.native,),
+        name: '/city/work/office/pen',
+        page: () => Container(),
+        transition: Transition.native,
+      ),
       GetPage(
-          name: '/city/work/office/paper',
-          page: () => Container(),
-          transition: Transition.noTransition,),
+        name: '/city/work/office/paper',
+        page: () => Container(),
+        transition: Transition.noTransition,
+      ),
       GetPage(
-          name: '/city/work/meeting-room',
-          page: () => Container(),
-          transition: Transition.rightToLeft,),
+        name: '/city/work/meeting-room',
+        page: () => Container(),
+        transition: Transition.rightToLeft,
+      ),
     ];
 
-    final tree = ParseRouteTree(routes: pageTree);
+    final ParseRouteTree tree = ParseRouteTree(routes: pageTree);
 
     // for (var p in pageTree) {
     //   tree.addRoute(p);
     // }
 
-    const searchRoute = '/city/work/office/pen';
-    final match = tree.matchRoute(searchRoute);
+    const String searchRoute = '/city/work/office/pen';
+    final RouteDecoder match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
   });
 
   testWidgets(
     'test params from dynamic route',
-    (final tester) async {
-      await tester.pumpWidget(GetMaterialApp(
-        initialRoute: '/first/juan',
-        getPages: [
-          GetPage(page: () => Container(), name: '/first/:name'),
-          GetPage(page: () => Container(), name: '/second/:id'),
-          GetPage(page: () => Container(), name: '/third'),
-          GetPage(page: () => Container(), name: '/last/:id/:name/profile'),
-        ],
-      ),);
+    (final WidgetTester tester) async {
+      await tester.pumpWidget(
+        GetMaterialApp(
+          initialRoute: '/first/juan',
+          getPages: <GetPage>[
+            GetPage(page: () => Container(), name: '/first/:name'),
+            GetPage(page: () => Container(), name: '/second/:id'),
+            GetPage(page: () => Container(), name: '/third'),
+            GetPage(page: () => Container(), name: '/last/:id/:name/profile'),
+          ],
+        ),
+      );
 
       expect(Get.parameters['name'], 'juan');
 
@@ -173,22 +184,24 @@ void main() {
 
   testWidgets(
     'params in url by parameters',
-    (final tester) async {
-      await tester.pumpWidget(GetMaterialApp(
-        initialRoute: '/first/juan',
-        getPages: [
-          GetPage(page: () => Container(), name: '/first/:name'),
-          GetPage(page: () => Container(), name: '/italy'),
-        ],
-      ),);
+    (final WidgetTester tester) async {
+      await tester.pumpWidget(
+        GetMaterialApp(
+          initialRoute: '/first/juan',
+          getPages: <GetPage>[
+            GetPage(page: () => Container(), name: '/first/:name'),
+            GetPage(page: () => Container(), name: '/italy'),
+          ],
+        ),
+      );
 
       // Get.parameters = ({"varginias": "varginia", "vinis": "viniiss"});
-      final parameters = <String, String>{
+      final Map<String, String> parameters = <String, String>{
         'varginias': 'varginia',
         'vinis': 'viniiss',
       };
       // print("Get.parameters: ${Get.parameters}");
-      parameters.addAll({'a': 'b', 'c': 'd'});
+      parameters.addAll(<String, String>{'a': 'b', 'c': 'd'});
       Get.toNamed('/italy', parameters: parameters);
 
       await tester.pumpAndSettle();

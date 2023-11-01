@@ -9,7 +9,10 @@ typedef OffsetBuilder = Offset Function(BuildContext, double);
 
 class FadeInAnimation extends OpacityAnimation {
   FadeInAnimation({
-    required super.duration, required super.delay, required super.child, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    super.key,
     super.onComplete,
     super.begin = 0,
     super.end = 1,
@@ -19,7 +22,10 @@ class FadeInAnimation extends OpacityAnimation {
 
 class FadeOutAnimation extends OpacityAnimation {
   FadeOutAnimation({
-    required super.duration, required super.delay, required super.child, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    super.key,
     super.onComplete,
     super.begin = 1,
     super.end = 0,
@@ -29,10 +35,18 @@ class FadeOutAnimation extends OpacityAnimation {
 
 class OpacityAnimation extends GetAnimatedBuilder<double> {
   OpacityAnimation({
-    required super.duration, required super.delay, required super.child, required super.onComplete, required final double begin, required final double end, required super.idleValue, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required super.onComplete,
+    required final double begin,
+    required final double end,
+    required super.idleValue,
+    super.key,
   }) : super(
           tween: Tween<double>(begin: begin, end: end),
-          builder: (final context, final value, final child) {
+          builder: (final BuildContext context, final double value,
+              final Widget? child) {
             return Opacity(
               opacity: value,
               child: child,
@@ -43,11 +57,18 @@ class OpacityAnimation extends GetAnimatedBuilder<double> {
 
 class RotateAnimation extends GetAnimatedBuilder<double> {
   RotateAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.rotate(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.rotate(
             angle: value,
             child: child,
           ),
@@ -57,11 +78,18 @@ class RotateAnimation extends GetAnimatedBuilder<double> {
 
 class ScaleAnimation extends GetAnimatedBuilder<double> {
   ScaleAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.scale(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.scale(
             scale: value,
             child: child,
           ),
@@ -90,12 +118,19 @@ class ScaleAnimation extends GetAnimatedBuilder<double> {
 
 class BounceAnimation extends GetAnimatedBuilder<double> {
   BounceAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.curve = Curves.bounceOut,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.scale(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.scale(
             scale: 1 + value.abs(),
             child: child,
           ),
@@ -105,11 +140,16 @@ class BounceAnimation extends GetAnimatedBuilder<double> {
 
 class SpinAnimation extends GetAnimatedBuilder<double> {
   SpinAnimation({
-    required super.duration, required super.delay, required super.child, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.rotate(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.rotate(
             angle: value * pi / 180.0,
             child: child,
           ),
@@ -119,11 +159,18 @@ class SpinAnimation extends GetAnimatedBuilder<double> {
 
 class SizeAnimation extends GetAnimatedBuilder<double> {
   SizeAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.scale(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.scale(
             scale: value,
             child: child,
           ),
@@ -133,11 +180,18 @@ class SizeAnimation extends GetAnimatedBuilder<double> {
 
 class BlurAnimation extends GetAnimatedBuilder<double> {
   BlurAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => BackdropFilter(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              BackdropFilter(
             filter: ImageFilter.blur(
               sigmaX: value,
               sigmaY: value,
@@ -150,12 +204,18 @@ class BlurAnimation extends GetAnimatedBuilder<double> {
 
 class FlipAnimation extends GetAnimatedBuilder<double> {
   FlipAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) {
-            final radians = value * pi;
+          builder: (final BuildContext context, final double value,
+              final Widget? child) {
+            final double radians = value * pi;
             return Transform(
               transform: Matrix4.rotationY(radians),
               alignment: Alignment.center,
@@ -168,11 +228,18 @@ class FlipAnimation extends GetAnimatedBuilder<double> {
 
 class WaveAnimation extends GetAnimatedBuilder<double> {
   WaveAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform(
             transform: Matrix4.translationValues(
               0.0,
               20.0 * sin(value * pi * 2),
@@ -186,11 +253,18 @@ class WaveAnimation extends GetAnimatedBuilder<double> {
 
 class WobbleAnimation extends GetAnimatedBuilder<double> {
   WobbleAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform(
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.001)
               ..rotateZ(sin(value * pi * 2) * 0.1),
@@ -203,55 +277,83 @@ class WobbleAnimation extends GetAnimatedBuilder<double> {
 
 class SlideInLeftAnimation extends SlideAnimation {
   SlideInLeftAnimation({
-    required super.duration, required super.delay, required super.child, required super.begin, required super.end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required super.begin,
+    required super.end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          offsetBuild: (final context, final value) =>
+          offsetBuild: (final BuildContext context, final double value) =>
               Offset(value * MediaQuery.of(context).size.width, 0),
         );
 }
 
 class SlideInRightAnimation extends SlideAnimation {
   SlideInRightAnimation({
-    required super.duration, required super.delay, required super.child, required super.begin, required super.end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required super.begin,
+    required super.end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          offsetBuild: (final context, final value) =>
+          offsetBuild: (final BuildContext context, final double value) =>
               Offset((1 - value) * MediaQuery.of(context).size.width, 0),
         );
 }
 
 class SlideInUpAnimation extends SlideAnimation {
   SlideInUpAnimation({
-    required super.duration, required super.delay, required super.child, required super.begin, required super.end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required super.begin,
+    required super.end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          offsetBuild: (final context, final value) =>
+          offsetBuild: (final BuildContext context, final double value) =>
               Offset(0, value * MediaQuery.of(context).size.height),
         );
 }
 
 class SlideInDownAnimation extends SlideAnimation {
   SlideInDownAnimation({
-    required super.duration, required super.delay, required super.child, required super.begin, required super.end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required super.begin,
+    required super.end,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          offsetBuild: (final context, final value) =>
+          offsetBuild: (final BuildContext context, final double value) =>
               Offset(0, (1 - value) * MediaQuery.of(context).size.height),
         );
 }
 
 class SlideAnimation extends GetAnimatedBuilder<double> {
   SlideAnimation({
-    required super.duration, required super.delay, required super.child, required final double begin, required final double end, required final OffsetBuilder offsetBuild, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final double begin,
+    required final double end,
+    required final OffsetBuilder offsetBuild,
+    super.key,
     super.onComplete,
     super.idleValue = 0,
   }) : super(
-          builder: (final context, final value, final child) => Transform.translate(
+          builder: (final BuildContext context, final double value,
+                  final Widget? child) =>
+              Transform.translate(
             offset: offsetBuild(context, value),
             child: child,
           ),
@@ -280,11 +382,18 @@ class SlideAnimation extends GetAnimatedBuilder<double> {
 
 class ColorAnimation extends GetAnimatedBuilder<Color?> {
   ColorAnimation({
-    required super.duration, required super.delay, required super.child, required final Color begin, required final Color end, super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    required final Color begin,
+    required final Color end,
+    super.key,
     super.onComplete,
     final Color? idleColor,
   }) : super(
-          builder: (final context, final value, final child) => ColorFiltered(
+          builder: (final BuildContext context, final Color? value,
+                  final Widget? child) =>
+              ColorFiltered(
             colorFilter: ColorFilter.mode(
               Color.lerp(begin, end, value!.value.toDouble())!,
               BlendMode.srcIn,

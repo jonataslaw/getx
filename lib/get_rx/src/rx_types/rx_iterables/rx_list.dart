@@ -5,32 +5,35 @@ class RxList<E> extends GetListenable<List<E>>
     with ListMixin<E>, RxObjectMixin<List<E>> {
   RxList([super.initial = const <Never>[]]);
 
-  factory RxList.filled(int length, E fill, {bool growable = false}) {
+  factory RxList.filled(final int length, final E fill,
+      {final bool growable = false}) {
     return RxList<E>(List<E>.filled(length, fill, growable: growable));
   }
 
-  factory RxList.empty({bool growable = false}) {
+  factory RxList.empty({final bool growable = false}) {
     return RxList<E>(List<E>.empty(growable: growable));
   }
 
   /// Creates a list containing all [elements].
-  factory RxList.from(Iterable<E> elements, {bool growable = true}) {
+  factory RxList.from(final Iterable<E> elements,
+      {final bool growable = true}) {
     return RxList<E>(List<E>.from(elements, growable: growable));
   }
 
   /// Creates a list from [elements].
-  factory RxList.of(Iterable<E> elements, {bool growable = true}) {
+  factory RxList.of(final Iterable<E> elements, {final bool growable = true}) {
     return RxList<E>(List<E>.of(elements, growable: growable));
   }
 
   /// Generates a list of values.
-  factory RxList.generate(int length, E Function(int index) generator,
-      {bool growable = true}) {
+  factory RxList.generate(
+      final int length, final E Function(int index) generator,
+      {final bool growable = true}) {
     return RxList<E>(List<E>.generate(length, generator, growable: growable));
   }
 
   /// Creates an unmodifiable list containing all [elements].
-  factory RxList.unmodifiable(Iterable<E> elements) {
+  factory RxList.unmodifiable(final Iterable<E> elements) {
     return RxList<E>(List<E>.unmodifiable(elements));
   }
 
@@ -38,7 +41,7 @@ class RxList<E> extends GetListenable<List<E>>
   Iterator<E> get iterator => value.iterator;
 
   @override
-  void operator []=(int index, E val) {
+  void operator []=(final int index, final E val) {
     value[index] = val;
     refresh();
   }
@@ -46,44 +49,44 @@ class RxList<E> extends GetListenable<List<E>>
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
   @override
-  RxList<E> operator +(Iterable<E> val) {
+  RxList<E> operator +(final Iterable<E> val) {
     addAll(val);
     // refresh();
     return this;
   }
 
   @override
-  E operator [](int index) {
+  E operator [](final int index) {
     return value[index];
   }
 
   @override
-  void add(E element) {
+  void add(final E element) {
     value.add(element);
     refresh();
   }
 
   @override
-  void addAll(Iterable<E> iterable) {
+  void addAll(final Iterable<E> iterable) {
     value.addAll(iterable);
     refresh();
   }
 
   @override
-  bool remove(Object? element) {
+  bool remove(final Object? element) {
     final bool removed = value.remove(element);
     refresh();
     return removed;
   }
 
   @override
-  void removeWhere(bool Function(E element) test) {
+  void removeWhere(final bool Function(E element) test) {
     value.removeWhere(test);
     refresh();
   }
 
   @override
-  void retainWhere(bool Function(E element) test) {
+  void retainWhere(final bool Function(E element) test) {
     value.retainWhere(test);
     refresh();
   }
@@ -99,13 +102,13 @@ class RxList<E> extends GetListenable<List<E>>
   // }
 
   @override
-  set length(int newLength) {
+  set length(final int newLength) {
     value.length = newLength;
     refresh();
   }
 
   @override
-  void insertAll(int index, Iterable<E> iterable) {
+  void insertAll(final int index, final Iterable<E> iterable) {
     value.insertAll(index, iterable);
     refresh();
   }
@@ -120,7 +123,7 @@ class RxList<E> extends GetListenable<List<E>>
   // }
 
   @override
-  Iterable<E> where(bool Function(E) test) {
+  Iterable<E> where(final bool Function(E) test) {
     return value.where(test);
   }
 
@@ -130,7 +133,7 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   @override
-  void sort([int Function(E a, E b)? compare]) {
+  void sort([final int Function(E a, E b)? compare]) {
     value.sort(compare);
     refresh();
   }
@@ -140,7 +143,7 @@ extension ListExtension<E> on List<E> {
   RxList<E> get obs => RxList<E>(this);
 
   /// Add [item] to [List<E>] only if [item] is not null.
-  void addNonNull(E item) {
+  void addNonNull(final E item) {
     if (item != null) {
       add(item);
     }
@@ -152,7 +155,7 @@ extension ListExtension<E> on List<E> {
   // }
 
   /// Add [item] to List<E> only if [condition] is true.
-  void addIf(dynamic condition, E item) {
+  void addIf(dynamic condition, final E item) {
     if (condition is Condition) {
       condition = condition();
     }
@@ -162,7 +165,7 @@ extension ListExtension<E> on List<E> {
   }
 
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
-  void addAllIf(dynamic condition, Iterable<E> items) {
+  void addAllIf(dynamic condition, final Iterable<E> items) {
     if (condition is Condition) {
       condition = condition();
     }
@@ -172,7 +175,7 @@ extension ListExtension<E> on List<E> {
   }
 
   /// Replaces all existing items of this list with [item]
-  void assign(E item) {
+  void assign(final E item) {
     // if (this is RxList) {
     //   (this as RxList)._value;
     // }
@@ -184,7 +187,7 @@ extension ListExtension<E> on List<E> {
   }
 
   /// Replaces all existing items of this list with [items]
-  void assignAll(Iterable<E> items) {
+  void assignAll(final Iterable<E> items) {
     if (this is RxList) {
       (this as RxList<E>).value.clear();
     }

@@ -19,7 +19,7 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
     if (ids == null) {
       refresh();
     } else {
-      for (final id in ids) {
+      for (final Object id in ids) {
         refreshGroup(id);
       }
     }
@@ -49,12 +49,16 @@ mixin ScrollMixin on GetLifeCycleMixin {
 
   Future<void> _checkIfCanLoadMore() async {
     if (scroll.position.pixels == 0) {
-      if (!_canFetchTop) return;
+      if (!_canFetchTop) {
+        return;
+      }
       _canFetchTop = false;
       await onTopScroll();
       _canFetchTop = true;
     } else {
-      if (!_canFetchBottom) return;
+      if (!_canFetchBottom) {
+        return;
+      }
       _canFetchBottom = false;
       await onEndScroll();
       _canFetchBottom = true;

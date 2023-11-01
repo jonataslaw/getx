@@ -28,7 +28,7 @@ class CharCode {
 const bool F = false;
 
 const bool T = true;
-const SEPARATOR_MAP = [
+const List<bool> SEPARATOR_MAP = <bool>[
   F, F, F, F, F, F, F, F, F, T, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
   F, F, F, F, F, F, F, F, T, F, T, F, F, F, F, F, T, T, F, F, T, F, F, T, //
   F, F, F, F, F, F, F, F, F, F, T, T, T, T, T, T, T, F, F, F, F, F, F, F, //
@@ -43,10 +43,13 @@ const SEPARATOR_MAP = [
 ];
 
 String validateField(final String field) {
-  for (var i = 0; i < field.length; i++) {
+  for (int i = 0; i < field.length; i++) {
     if (!isTokenChar(field.codeUnitAt(i))) {
       throw FormatException(
-          'Invalid HTTP header field name: ${json.encode(field)}', field, i,);
+        'Invalid HTTP header field name: ${json.encode(field)}',
+        field,
+        i,
+      );
     }
   }
   return field.toLowerCase();
@@ -56,9 +59,9 @@ String validateField(final String field) {
 //   return (stream);
 // }
 
-final _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
+final RegExp _asciiOnly = RegExp(r'^[\x00-\x7F]+$');
 
-final newlineRegExp = RegExp(r'\r\n|\r|\n');
+final RegExp newlineRegExp = RegExp(r'\r\n|\r|\n');
 
 /// Returns whether [string] is composed entirely of ASCII-compatible
 /// characters.
