@@ -5,7 +5,7 @@ import '../request/request.dart';
 
 class MultipartFile {
   MultipartFile(
-    dynamic data, {
+    final dynamic data, {
     required this.filename,
     this.contentType = 'application/octet-stream',
   }) : _bytes = fileToBytes(data) {

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'utils/wrapper.dart';
 
 void main() {
-  testWidgets("Test dispose dependencies with unnamed routes", (tester) async {
+  testWidgets('Test dispose dependencies with unnamed routes', (final tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
@@ -56,10 +56,10 @@ class First extends StatelessWidget {
   const First({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     Get.put(Controller());
     return const Center(
-      child: Text("first"),
+      child: Text('first'),
     );
   }
 }
@@ -68,10 +68,10 @@ class Second extends StatelessWidget {
   const Second({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     Get.put(Controller2());
     return const Center(
-      child: Text("second"),
+      child: Text('second'),
     );
   }
 }

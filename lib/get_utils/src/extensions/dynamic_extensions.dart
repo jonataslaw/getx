@@ -33,8 +33,8 @@ extension GetDynamicUtilsExt on dynamic {
   ///
   /// The [logFunction] parameter allows customizing the logging function; by default, it uses [GetUtils.printFunction].
   void printError({
-    String info = '',
-    Function logFunction = GetUtils.printFunction,
+    final String info = '',
+    final Function logFunction = GetUtils.printFunction,
   }) =>
       logFunction(
         'Error: $runtimeType',
@@ -57,8 +57,8 @@ extension GetDynamicUtilsExt on dynamic {
   ///
   /// The [printFunction] parameter allows customizing the printing function; by default, it uses [GetUtils.printFunction].
   void printInfo({
-    String info = '',
-    Function printFunction = GetUtils.printFunction,
+    final String info = '',
+    final Function printFunction = GetUtils.printFunction,
   }) =>
       printFunction(
         'Info: $runtimeType',

@@ -68,7 +68,7 @@ class OptimizedListView<T> extends StatelessWidget {
   final Widget Function(BuildContext context, ValueKey<T> key, T item) builder;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (list.isEmpty) {
       return onEmpty;
     }
@@ -83,14 +83,14 @@ class OptimizedListView<T> extends StatelessWidget {
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int i) {
+            (final BuildContext context, final int i) {
               final T item = list[i];
               final ValueKey<T> key = ValueKey<T>(item);
               return builder(context, key, item);
             },
             childCount: list.length,
-            findChildIndexCallback: (Key key) {
-              return list.indexWhere((m) => m == (key as ValueKey<T>).value);
+            findChildIndexCallback: (final Key key) {
+              return list.indexWhere((final m) => m == (key as ValueKey<T>).value);
             },
           ),
         ),

@@ -27,18 +27,18 @@ mixin ListNotifierSingleMixin on Listenable {
   // final int _microtaskVersion = 0;
 
   @override
-  Disposer addListener(GetStateUpdate listener) {
+  Disposer addListener(final GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.add(listener);
     return () => _updaters!.remove(listener);
   }
 
-  bool containsListener(GetStateUpdate listener) {
+  bool containsListener(final GetStateUpdate listener) {
     return _updaters?.contains(listener) ?? false;
   }
 
   @override
-  void removeListener(VoidCallback listener) {
+  void removeListener(final VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.remove(listener);
   }
@@ -55,7 +55,7 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   @protected
-  void reportAdd(VoidCallback disposer) {
+  void reportAdd(final VoidCallback disposer) {
     Notifier.instance.add(disposer);
   }
 
@@ -67,7 +67,7 @@ mixin ListNotifierSingleMixin on Listenable {
     //     _microtaskVersion = _version;
     final list = _updaters?.toList() ?? [];
 
-    for (var element in list) {
+    for (final element in list) {
       element();
     }
     //   });
@@ -103,24 +103,24 @@ mixin ListNotifierGroupMixin on Listenable {
   HashMap<Object?, ListNotifierSingleMixin>? _updatersGroupIds =
       HashMap<Object?, ListNotifierSingleMixin>();
 
-  void _notifyGroupUpdate(Object id) {
+  void _notifyGroupUpdate(final Object id) {
     if (_updatersGroupIds!.containsKey(id)) {
       _updatersGroupIds![id]!._notifyUpdate();
     }
   }
 
   @protected
-  void notifyGroupChildrens(Object id) {
+  void notifyGroupChildrens(final Object id) {
     assert(_debugAssertNotDisposed());
     Notifier.instance.read(_updatersGroupIds![id]!);
   }
 
-  bool containsId(Object id) {
+  bool containsId(final Object id) {
     return _updatersGroupIds?.containsKey(id) ?? false;
   }
 
   @protected
-  void refreshGroup(Object id) {
+  void refreshGroup(final Object id) {
     assert(_debugAssertNotDisposed());
     _notifyGroupUpdate(id);
   }
@@ -136,7 +136,7 @@ mixin ListNotifierGroupMixin on Listenable {
     return true;
   }
 
-  void removeListenerId(Object id, VoidCallback listener) {
+  void removeListenerId(final Object id, final VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     if (_updatersGroupIds!.containsKey(id)) {
       _updatersGroupIds![id]!.removeListener(listener);
@@ -146,11 +146,11 @@ mixin ListNotifierGroupMixin on Listenable {
   @mustCallSuper
   void dispose() {
     assert(_debugAssertNotDisposed());
-    _updatersGroupIds?.forEach((key, value) => value.dispose());
+    _updatersGroupIds?.forEach((final key, final value) => value.dispose());
     _updatersGroupIds = null;
   }
 
-  Disposer addListenerId(Object? key, GetStateUpdate listener) {
+  Disposer addListenerId(final Object? key, final GetStateUpdate listener) {
     _updatersGroupIds![key] ??= ListNotifierSingle();
     return _updatersGroupIds![key]!.addListener(listener);
   }
@@ -158,7 +158,7 @@ mixin ListNotifierGroupMixin on Listenable {
   /// To dispose an [id] from future updates(), this ids are registered
   /// by `GetBuilder()` or similar, so is a way to unlink the state change with
   /// the Widget from the Controller.
-  void disposeId(Object id) {
+  void disposeId(final Object id) {
     _updatersGroupIds?[id]?.dispose();
     _updatersGroupIds!.remove(id);
   }
@@ -172,11 +172,11 @@ class Notifier {
 
   NotifyData? _notifyData;
 
-  void add(VoidCallback listener) {
+  void add(final VoidCallback listener) {
     _notifyData?.disposers.add(listener);
   }
 
-  void read(ListNotifierSingleMixin updaters) {
+  void read(final ListNotifierSingleMixin updaters) {
     final listener = _notifyData?.updater;
     if (listener != null && !updaters.containsListener(listener)) {
       updaters.addListener(listener);
@@ -184,7 +184,7 @@ class Notifier {
     }
   }
 
-  T append<T>(NotifyData data, T Function() builder) {
+  T append<T>(final NotifyData data, final T Function() builder) {
     _notifyData = data;
     final result = builder();
     if (data.disposers.isEmpty && data.throwException) {
@@ -199,7 +199,7 @@ class NotifyData {
   const NotifyData(
       {required this.updater,
       required this.disposers,
-      this.throwException = true});
+      this.throwException = true,});
   final GetStateUpdate updater;
   final List<VoidCallback> disposers;
   final bool throwException;
@@ -209,13 +209,13 @@ class ObxError {
   const ObxError();
   @override
   String toString() {
-    return """
+    return '''
       [Get] the improper use of a GetX has been detected. 
       You should only use GetX or Obx for the specific widget that will be updated.
       If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
       or insert them outside the scope that GetX considers suitable for an update 
       (example: GetX => HeavyWidget => variableObservable).
       If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
+      ''';
   }
 }

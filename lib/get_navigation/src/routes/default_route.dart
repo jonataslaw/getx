@@ -39,7 +39,7 @@ class GetPageRoute<T> extends PageRoute<T>
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
   /// be null.
   GetPageRoute({
-    RouteSettings? settings,
+    super.settings,
     this.transitionDuration = const Duration(milliseconds: 300),
     this.reverseTransitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
@@ -52,8 +52,8 @@ class GetPageRoute<T> extends PageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    BindingsInterface? binding,
-    List<BindingsInterface> bindings = const [],
+    final BindingsInterface? binding,
+    final List<BindingsInterface> bindings = const [],
     this.binds,
     this.routeName,
     this.page,
@@ -61,13 +61,9 @@ class GetPageRoute<T> extends PageRoute<T>
     this.showCupertinoParallax = true,
     this.barrierLabel,
     this.maintainState = true,
-    bool fullscreenDialog = false,
+    super.fullscreenDialog,
     this.middlewares,
-  })  : bindings = (binding == null) ? bindings : [...bindings, binding],
-        super(
-          settings: settings,
-          fullscreenDialog: fullscreenDialog,
-        );
+  })  : bindings = (binding == null) ? bindings : [...bindings, binding];
 
   @override
   final Duration transitionDuration;
@@ -149,7 +145,7 @@ class GetPageRoute<T> extends PageRoute<T>
   }
 
   @override
-  Widget buildContent(BuildContext context) {
+  Widget buildContent(final BuildContext context) {
     return _getChild();
   }
 

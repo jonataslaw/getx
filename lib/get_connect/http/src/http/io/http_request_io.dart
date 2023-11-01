@@ -10,14 +10,12 @@ import '../utils/body_decoder.dart';
 
 /// A `dart:io` implementation of `IClient`.
 class HttpRequestImpl extends IClient {
-  io.HttpClient? _httpClient;
-  io.SecurityContext? _securityContext;
 
   HttpRequestImpl({
-    bool allowAutoSignedCert = true,
-    List<TrustedCertificate>? trustedCertificates,
-    bool withCredentials = false,
-    String Function(Uri url)? findProxy,
+    final bool allowAutoSignedCert = true,
+    final List<TrustedCertificate>? trustedCertificates,
+    final bool withCredentials = false,
+    final String Function(Uri url)? findProxy,
   }) {
     _httpClient = io.HttpClient();
     if (trustedCertificates != null) {
@@ -29,13 +27,15 @@ class HttpRequestImpl extends IClient {
     }
 
     _httpClient = io.HttpClient(context: _securityContext);
-    _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
+    _httpClient!.badCertificateCallback = (final _, final __, final ___) => allowAutoSignedCert;
     _httpClient!.findProxy = findProxy;
   }
+  io.HttpClient? _httpClient;
+  io.SecurityContext? _securityContext;
 
   @override
-  Future<Response<T>> send<T>(Request<T> request) async {
-    var stream = request.bodyBytes.asBroadcastStream();
+  Future<Response<T>> send<T>(final Request<T> request) async {
+    final stream = request.bodyBytes.asBroadcastStream();
     io.HttpClientRequest? ioRequest;
     try {
       _httpClient!.connectionTimeout = timeout;
@@ -46,17 +46,17 @@ class HttpRequestImpl extends IClient {
         ..contentLength = request.contentLength ?? -1;
       request.headers.forEach(ioRequest.headers.set);
 
-      var response = timeout == null
+      final response = timeout == null
           ? await stream.pipe(ioRequest) as io.HttpClientResponse
           : await stream.pipe(ioRequest).timeout(timeout!)
               as io.HttpClientResponse;
 
-      var headers = <String, String>{};
-      response.headers.forEach((key, values) {
+      final headers = <String, String>{};
+      response.headers.forEach((final key, final values) {
         headers[key] = values.join(',');
       });
 
-      final bodyBytes = (response);
+      final bodyBytes = response;
 
       final interceptionResponse =
           await request.responseInterceptor?.call(request, T, response);

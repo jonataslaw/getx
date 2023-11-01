@@ -17,76 +17,76 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   GetHttpClient get httpClient;
 
   Future<Response<T>> get<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url, {
+    final Map<String, String>? headers,
+    final String? contentType,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   });
 
   Future<Response<T>> request<T>(
-    String url,
-    String method, {
-    dynamic body,
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url,
+    final String method, {
+    final dynamic body,
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   });
 
   Future<Response<T>> post<T>(
-    String url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   });
 
   Future<Response<T>> put<T>(
-    String url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   });
 
   Future<Response<T>> delete<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url, {
+    final Map<String, String>? headers,
+    final String? contentType,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   });
 
   Future<Response<T>> patch<T>(
-    String url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
+    final String url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
+    final Progress? uploadProgress,
   });
 
   Future<GraphQLResponse<T>> query<T>(
-    String query, {
-    String? url,
-    Map<String, dynamic>? variables,
-    Map<String, String>? headers,
+    final String query, {
+    final String? url,
+    final Map<String, dynamic>? variables,
+    final Map<String, String>? headers,
   });
 
   Future<GraphQLResponse<T>> mutation<T>(
-    String mutation, {
-    String? url,
-    Map<String, dynamic>? variables,
-    Map<String, String>? headers,
+    final String mutation, {
+    final String? url,
+    final Map<String, dynamic>? variables,
+    final Map<String, String>? headers,
   });
 
   GetSocket socket(
-    String url, {
-    Duration ping = const Duration(seconds: 5),
+    final String url, {
+    final Duration ping = const Duration(seconds: 5),
   });
 }
 
@@ -133,15 +133,15 @@ class GetConnect extends GetConnectInterface {
       baseUrl: baseUrl,
       trustedCertificates: trustedCertificates,
       withCredentials: withCredentials,
-      findProxy: findProxy);
+      findProxy: findProxy,);
 
   @override
   Future<Response<T>> get<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url, {
+    final Map<String, String>? headers,
+    final String? contentType,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   }) {
     _checkIfDisposed();
     return httpClient.get<T>(
@@ -155,13 +155,13 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> post<T>(
-    String? url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
+    final String? url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
+    final Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.post<T>(
@@ -177,13 +177,13 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> put<T>(
-    String url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
+    final String url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
+    final Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.put<T>(
@@ -199,13 +199,13 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> patch<T>(
-    String url,
-    dynamic body, {
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
+    final String url,
+    final dynamic body, {
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
+    final Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.patch<T>(
@@ -221,14 +221,14 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> request<T>(
-    String url,
-    String method, {
-    dynamic body,
-    String? contentType,
-    Map<String, String>? headers,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-    Progress? uploadProgress,
+    final String url,
+    final String method, {
+    final dynamic body,
+    final String? contentType,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
+    final Progress? uploadProgress,
   }) {
     _checkIfDisposed();
     return httpClient.request<T>(
@@ -245,11 +245,11 @@ class GetConnect extends GetConnectInterface {
 
   @override
   Future<Response<T>> delete<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
+    final String url, {
+    final Map<String, String>? headers,
+    final String? contentType,
+    final Map<String, dynamic>? query,
+    final Decoder<T>? decoder,
   }) {
     _checkIfDisposed();
     return httpClient.delete(
@@ -263,8 +263,8 @@ class GetConnect extends GetConnectInterface {
 
   @override
   GetSocket socket(
-    String url, {
-    Duration ping = const Duration(seconds: 5),
+    final String url, {
+    final Duration ping = const Duration(seconds: 5),
   }) {
     _checkIfDisposed(isHttp: false);
 
@@ -273,7 +273,7 @@ class GetConnect extends GetConnectInterface {
     return newSocket;
   }
 
-  String? _concatUrl(String? url) {
+  String? _concatUrl(final String? url) {
     if (url == null) return baseUrl;
     return baseUrl == null ? url : baseUrl! + url;
   }
@@ -299,10 +299,10 @@ class GetConnect extends GetConnectInterface {
   ///print(response.body);
   @override
   Future<GraphQLResponse<T>> query<T>(
-    String query, {
-    String? url,
-    Map<String, dynamic>? variables,
-    Map<String, String>? headers,
+    final String query, {
+    final String? url,
+    final Map<String, dynamic>? variables,
+    final Map<String, String>? headers,
   }) async {
     try {
       final res = await post(
@@ -315,29 +315,28 @@ class GetConnect extends GetConnectInterface {
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
             graphQLErrors: listError
-                .map((e) => GraphQLError(
+                .map((final e) => GraphQLError(
                       code: e['extensions']['code']?.toString(),
                       message: e['message']?.toString(),
-                    ))
-                .toList());
+                    ),)
+                .toList(),);
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
-          code: null,
           message: _.toString(),
-        )
-      ]);
+        ),
+      ],);
     }
   }
 
   @override
   Future<GraphQLResponse<T>> mutation<T>(
-    String mutation, {
-    String? url,
-    Map<String, dynamic>? variables,
-    Map<String, String>? headers,
+    final String mutation, {
+    final String? url,
+    final Map<String, dynamic>? variables,
+    final Map<String, String>? headers,
   }) async {
     try {
       final res = await post(
@@ -350,20 +349,19 @@ class GetConnect extends GetConnectInterface {
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
             graphQLErrors: listError
-                .map((e) => GraphQLError(
+                .map((final e) => GraphQLError(
                       code: e['extensions']['code']?.toString(),
                       message: e['message']?.toString(),
-                    ))
-                .toList());
+                    ),)
+                .toList(),);
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
-          code: null,
           message: _.toString(),
-        )
-      ]);
+        ),
+      ],);
     }
   }
 
@@ -371,7 +369,7 @@ class GetConnect extends GetConnectInterface {
 
   bool get isDisposed => _isDisposed;
 
-  void _checkIfDisposed({bool isHttp = true}) {
+  void _checkIfDisposed({final bool isHttp = true}) {
     if (_isDisposed) {
       throw 'Can not emit events to disposed clients';
     }
@@ -379,7 +377,7 @@ class GetConnect extends GetConnectInterface {
 
   void dispose() {
     if (_sockets != null) {
-      for (var socket in sockets) {
+      for (final socket in sockets) {
         socket.close();
       }
       _sockets?.clear();

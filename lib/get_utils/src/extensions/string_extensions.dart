@@ -7,7 +7,7 @@ extension GetStringUtilsExt<T> on String {
   /// Discover if the String is numeric only
   bool get isNumericOnly => GetUtils.isNumericOnly(this);
 
-  String numericOnly({bool firstWordOnly = false}) =>
+  String numericOnly({final bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
 
   /// Discover if the String is alphanumeric only
@@ -97,11 +97,11 @@ extension GetStringUtilsExt<T> on String {
   bool get isCnpj => GetUtils.isCnpj(this);
 
   /// Discover if the String is a case insensitive
-  bool isCaseInsensitiveContains(String b) =>
+  bool isCaseInsensitiveContains(final String b) =>
       GetUtils.isCaseInsensitiveContains(this, b);
 
   /// Discover if the String is a case sensitive and contains any value
-  bool isCaseInsensitiveContainsAny(String b) =>
+  bool isCaseInsensitiveContainsAny(final String b) =>
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
   /// capitalize the String
@@ -120,7 +120,7 @@ extension GetStringUtilsExt<T> on String {
   String? get paramCase => GetUtils.paramCase(this);
 
   /// add segments to the String
-  String createPath([Iterable<T>? segments]) {
+  String createPath([final Iterable<T>? segments]) {
     final String path = startsWith('/') ? this : '/$this';
     return GetUtils.createPath(path, segments);
   }

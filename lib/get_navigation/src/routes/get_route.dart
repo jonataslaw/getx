@@ -11,6 +11,47 @@ import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
 
 class GetPage<T> extends Page<T> {
+
+  GetPage({
+    required this.name,
+    required this.page,
+    this.title,
+    this.participatesInRootNavigator,
+    this.gestureWidth,
+    // RouteSettings settings,
+    this.maintainState = true,
+    this.curve = Curves.linear,
+    this.alignment,
+    this.parameters,
+    this.opaque = true,
+    this.transitionDuration,
+    this.reverseTransitionDuration,
+    this.popGesture,
+    this.binding,
+    this.bindings = const [],
+    this.binds = const [],
+    this.transition,
+    this.customTransition,
+    this.fullscreenDialog = false,
+    this.children = const <GetPage>[],
+    this.middlewares = const [],
+    this.unknownRoute,
+    this.arguments,
+    this.showCupertinoParallax = true,
+    this.preventDuplicates = true,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+    this.completer,
+    this.inheritParentPath = true,
+    final LocalKey? key,
+  })  : path = _nameToRegex(name),
+        assert(name.startsWith('/'),
+            'It is necessary to start route name [$name] with a slash: /$name',),
+        super(
+          key: key ?? ValueKey(name),
+          name: name,
+          // arguments: Get.arguments,
+        );
   final GetPageBuilder page;
   final bool? popGesture;
   final Map<String, String>? parameters;
@@ -52,79 +93,38 @@ class GetPage<T> extends Page<T> {
   final bool showCupertinoParallax;
 
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
-
-  GetPage({
-    required this.name,
-    required this.page,
-    this.title,
-    this.participatesInRootNavigator,
-    this.gestureWidth,
-    // RouteSettings settings,
-    this.maintainState = true,
-    this.curve = Curves.linear,
-    this.alignment,
-    this.parameters,
-    this.opaque = true,
-    this.transitionDuration,
-    this.reverseTransitionDuration,
-    this.popGesture,
-    this.binding,
-    this.bindings = const [],
-    this.binds = const [],
-    this.transition,
-    this.customTransition,
-    this.fullscreenDialog = false,
-    this.children = const <GetPage>[],
-    this.middlewares = const [],
-    this.unknownRoute,
-    this.arguments,
-    this.showCupertinoParallax = true,
-    this.preventDuplicates = true,
-    this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.reorderRoutes,
-    this.completer,
-    this.inheritParentPath = true,
-    LocalKey? key,
-  })  : path = _nameToRegex(name),
-        assert(name.startsWith('/'),
-            'It is necessary to start route name [$name] with a slash: /$name'),
-        super(
-          key: key ?? ValueKey(name),
-          name: name,
-          // arguments: Get.arguments,
-        );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
   GetPage<T> copyWith({
-    LocalKey? key,
-    String? name,
-    GetPageBuilder? page,
-    bool? popGesture,
-    Map<String, String>? parameters,
-    String? title,
-    Transition? transition,
-    Curve? curve,
-    Alignment? alignment,
-    bool? maintainState,
-    bool? opaque,
-    List<BindingsInterface>? bindings,
-    BindingsInterface? binding,
-    List<Bind>? binds,
-    CustomTransition? customTransition,
-    Duration? transitionDuration,
-    Duration? reverseTransitionDuration,
-    bool? fullscreenDialog,
-    RouteSettings? settings,
-    List<GetPage<T>>? children,
-    GetPage? unknownRoute,
-    List<GetMiddleware>? middlewares,
-    bool? preventDuplicates,
+    final LocalKey? key,
+    final String? name,
+    final GetPageBuilder? page,
+    final bool? popGesture,
+    final Map<String, String>? parameters,
+    final String? title,
+    final Transition? transition,
+    final Curve? curve,
+    final Alignment? alignment,
+    final bool? maintainState,
+    final bool? opaque,
+    final List<BindingsInterface>? bindings,
+    final BindingsInterface? binding,
+    final List<Bind>? binds,
+    final CustomTransition? customTransition,
+    final Duration? transitionDuration,
+    final Duration? reverseTransitionDuration,
+    final bool? fullscreenDialog,
+    final RouteSettings? settings,
+    final List<GetPage<T>>? children,
+    final GetPage? unknownRoute,
+    final List<GetMiddleware>? middlewares,
+    final bool? preventDuplicates,
     final double Function(BuildContext context)? gestureWidth,
-    bool? participatesInRootNavigator,
-    Object? arguments,
-    bool? showCupertinoParallax,
-    Completer<T?>? completer,
-    bool? inheritParentPath,
+    final bool? participatesInRootNavigator,
+    final Object? arguments,
+    final bool? showCupertinoParallax,
+    final Completer<T?>? completer,
+    final bool? inheritParentPath,
   }) {
     return GetPage(
       key: key ?? this.key,
@@ -162,7 +162,7 @@ class GetPage<T> extends Page<T> {
   }
 
   @override
-  Route<T> createRoute(BuildContext context) {
+  Route<T> createRoute(final BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
     final page = PageRedirect(
       route: this,
@@ -173,21 +173,21 @@ class GetPage<T> extends Page<T> {
     return page;
   }
 
-  static PathDecoded _nameToRegex(String path) {
-    var keys = <String?>[];
+  static PathDecoded _nameToRegex(final String path) {
+    final keys = <String?>[];
 
-    String recursiveReplace(Match pattern) {
-      var buffer = StringBuffer('(?:');
+    String recursiveReplace(final Match pattern) {
+      final buffer = StringBuffer('(?:');
 
       if (pattern[1] != null) buffer.write('.');
-      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      buffer.write("([\\w%+-._~!\$&'()*,;=:@]+))");
       if (pattern[3] != null) buffer.write('?');
 
       keys.add(pattern[2]);
-      return "$buffer";
+      return '$buffer';
     }
 
-    var stringPath = '$path/?'
+    final stringPath = '$path/?'
         .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
         .replaceAll('//', '/');
 
@@ -195,7 +195,7 @@ class GetPage<T> extends Page<T> {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(final Object other) {
     if (identical(this, other)) return true;
     return other is GetPage<T> && other.key == key;
   }
@@ -212,15 +212,15 @@ class GetPage<T> extends Page<T> {
 
 @immutable
 class PathDecoded {
+  const PathDecoded(this.regex, this.keys);
   final RegExp regex;
   final List<String?> keys;
-  const PathDecoded(this.regex, this.keys);
 
   @override
   int get hashCode => regex.hashCode;
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(final Object other) {
     if (identical(this, other)) return true;
 
     return other is PathDecoded &&

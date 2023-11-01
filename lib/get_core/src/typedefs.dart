@@ -6,4 +6,4 @@ typedef ValueUpdater<T> = T Function();
 /// We use this so that APIs that have become
 /// non-nullable can still be used with `!` and `?`
 /// to support older versions of the API as well.
-T? ambiguate<T>(T? value) => value;
+T? ambiguate<T>(final T? value) => value;

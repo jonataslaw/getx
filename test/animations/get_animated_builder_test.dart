@@ -7,7 +7,7 @@ class _Wrapper extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MaterialApp(
       home: Scaffold(body: child),
     );
@@ -15,14 +15,14 @@ class _Wrapper extends StatelessWidget {
 }
 
 void main() {
-  testWidgets('GetAnimatedBuilder defaults', (WidgetTester tester) async {
+  testWidgets('GetAnimatedBuilder defaults', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: GetAnimatedBuilder<int>(
           duration: const Duration(milliseconds: 500),
           tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, int value, __) => Text(value.toString()),
+          builder: (final _, final int value, final __) => Text(value.toString()),
           delay: Duration.zero,
           child: Container(),
         ),
@@ -40,14 +40,14 @@ void main() {
   });
 
   testWidgets('GetAnimatedBuilder changes value over time',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: GetAnimatedBuilder<double>(
           duration: const Duration(milliseconds: 500),
           tween: Tween<double>(begin: 0.0, end: 1.0),
           idleValue: 0.0,
-          builder: (BuildContext context, double value, Widget? child) {
+          builder: (final BuildContext context, final double value, final Widget? child) {
             return Opacity(opacity: value);
           },
           delay: const Duration(milliseconds: 500),
@@ -69,27 +69,27 @@ void main() {
     // Verify that the value changes over time
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.2, 0.01));
+        closeTo(0.2, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.4, 0.01));
+        closeTo(0.4, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.6, 0.01));
+        closeTo(0.6, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.8, 0.01));
+        closeTo(0.8, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(1.0, 0.01));
+        closeTo(1.0, 0.01),);
   });
 
   testWidgets('onComplete callback is called when animation finishes',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     AnimationController? controller;
     bool onCompleteCalled = false;
 
@@ -99,9 +99,9 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, int value, __) => Text(value.toString()),
+          builder: (final _, final int value, final __) => Text(value.toString()),
           delay: Duration.zero,
-          onComplete: (AnimationController c) {
+          onComplete: (final AnimationController c) {
             onCompleteCalled = true;
             controller = c;
           },
@@ -122,7 +122,7 @@ void main() {
   });
 
   testWidgets('onStart callback is called when animation starts',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     bool onStartCalled = false;
 
     await tester.pumpWidget(
@@ -132,10 +132,10 @@ void main() {
           delay: Duration.zero,
           tween: Tween<double>(begin: 0, end: 1),
           idleValue: 0,
-          builder: (BuildContext context, num value, Widget? child) =>
+          builder: (final BuildContext context, final num value, final Widget? child) =>
               Container(),
           child: Container(),
-          onStart: (_) {
+          onStart: (final _) {
             onStartCalled = true;
           },
         ),
@@ -148,14 +148,14 @@ void main() {
     expect(onStartCalled, isTrue);
   });
 
-  testWidgets('GetAnimatedBuilder delay', (WidgetTester tester) async {
+  testWidgets('GetAnimatedBuilder delay', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: GetAnimatedBuilder<int>(
           duration: const Duration(milliseconds: 500),
           tween: Tween<int>(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, int value, __) => Text(value.toString()),
+          builder: (final _, final int value, final __) => Text(value.toString()),
           delay: const Duration(milliseconds: 500),
           child: Container(),
         ),
@@ -180,7 +180,7 @@ void main() {
 
   testWidgets(
       'FadeInAnimation in idle should be visible, but not visible when the animation starts',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: FadeInAnimation(
@@ -205,28 +205,28 @@ void main() {
 
     // The value should be updated
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.2, 0.01));
+        closeTo(0.2, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.4, 0.01));
+        closeTo(0.4, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.6, 0.01));
+        closeTo(0.6, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.8, 0.01));
+        closeTo(0.8, 0.01),);
 
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(1.0, 0.01));
+        closeTo(1.0, 0.01),);
   });
 
   testWidgets(
       'willResetOnDispose should false when fadeOut is the last animation in a sequential animation',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: const Text('Hello')
@@ -245,9 +245,9 @@ void main() {
     expect(
         tester
             .state<GetAnimatedBuilderState<dynamic>>(
-                find.byType(FadeOutAnimation))
+                find.byType(FadeOutAnimation),)
             .willResetOnDispose,
-        false);
+        false,);
 
     // Jump to middle of next animation
     await tester.pump(const Duration(milliseconds: 500));
@@ -256,16 +256,16 @@ void main() {
     expect(
         tester
             .state<GetAnimatedBuilderState<dynamic>>(
-                find.byType(FadeOutAnimation))
+                find.byType(FadeOutAnimation),)
             .willResetOnDispose,
-        false);
+        false,);
 
     await tester.pumpAndSettle();
   });
 
   testWidgets(
       'willResetOnDispose should true when fadeOut is not last animation in a sequential animation',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: const Text('Hello')
@@ -284,9 +284,9 @@ void main() {
     expect(
         tester
             .state<GetAnimatedBuilderState<dynamic>>(
-                find.byType(FadeOutAnimation))
+                find.byType(FadeOutAnimation),)
             .willResetOnDispose,
-        true);
+        true,);
 
     // Jump to middle of next animation
     await tester.pump(const Duration(milliseconds: 500));
@@ -295,14 +295,14 @@ void main() {
     expect(
         tester
             .state<GetAnimatedBuilderState<dynamic>>(
-                find.byType(FadeOutAnimation))
+                find.byType(FadeOutAnimation),)
             .willResetOnDispose,
-        true);
+        true,);
 
     await tester.pumpAndSettle();
   });
 
-  testWidgets('RotateAnimation', (WidgetTester tester) async {
+  testWidgets('RotateAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       RotateAnimation(
         duration: const Duration(seconds: 1),
@@ -316,7 +316,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('ScaleAnimation', (WidgetTester tester) async {
+  testWidgets('ScaleAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       ScaleAnimation(
         duration: const Duration(seconds: 1),
@@ -330,7 +330,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('WaveAnimation', (WidgetTester tester) async {
+  testWidgets('WaveAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       WaveAnimation(
         duration: const Duration(seconds: 1),
@@ -344,7 +344,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('WobbleAnimation', (WidgetTester tester) async {
+  testWidgets('WobbleAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       WobbleAnimation(
         duration: const Duration(seconds: 1),
@@ -358,10 +358,10 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SlideAnimation', (WidgetTester tester) async {
+  testWidgets('SlideAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       SlideAnimation(
-        offsetBuild: (BuildContext p0, double p1) => const Offset(1.0, 1.0),
+        offsetBuild: (final BuildContext p0, final double p1) => const Offset(1.0, 1.0),
         duration: const Duration(seconds: 1),
         delay: Duration.zero,
         begin: 0,
@@ -373,7 +373,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SlideInLeftAnimation', (WidgetTester tester) async {
+  testWidgets('SlideInLeftAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: SlideInLeftAnimation(
@@ -389,7 +389,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SlideInRightAnimation', (WidgetTester tester) async {
+  testWidgets('SlideInRightAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: SlideInRightAnimation(
@@ -405,7 +405,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SlideInUpAnimation', (WidgetTester tester) async {
+  testWidgets('SlideInUpAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: SlideInUpAnimation(
@@ -421,7 +421,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SlideInDownAnimation', (WidgetTester tester) async {
+  testWidgets('SlideInDownAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       _Wrapper(
         child: SlideInDownAnimation(
@@ -437,7 +437,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('BounceAnimation', (WidgetTester tester) async {
+  testWidgets('BounceAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       BounceAnimation(
         duration: const Duration(seconds: 1),
@@ -451,7 +451,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SpinAnimation', (WidgetTester tester) async {
+  testWidgets('SpinAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       SpinAnimation(
         duration: const Duration(seconds: 1),
@@ -463,7 +463,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('ColorAnimation', (WidgetTester tester) async {
+  testWidgets('ColorAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       ColorAnimation(
         duration: const Duration(seconds: 1),
@@ -477,7 +477,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SizeAnimation', (WidgetTester tester) async {
+  testWidgets('SizeAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       SizeAnimation(
         duration: const Duration(seconds: 1),
@@ -491,7 +491,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('BlurAnimation', (WidgetTester tester) async {
+  testWidgets('BlurAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       BlurAnimation(
         duration: const Duration(seconds: 1),
@@ -505,7 +505,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('FlipAnimation', (WidgetTester tester) async {
+  testWidgets('FlipAnimation', (final WidgetTester tester) async {
     await tester.pumpWidget(
       FlipAnimation(
         duration: const Duration(seconds: 1),

@@ -12,7 +12,7 @@ extension WidgetPaddingXExt on Widget {
   /// final myWidget = Text('Hello, World!');
   /// final paddedWidget = myWidget.paddingAll(16.0); // Adds 16.0 logical pixel padding to all sides.
   /// ```
-  Widget paddingAll(double padding) =>
+  Widget paddingAll(final double padding) =>
       Padding(padding: EdgeInsets.all(padding), child: this);
 
   /// Adds symmetric padding to the widget.
@@ -27,11 +27,11 @@ extension WidgetPaddingXExt on Widget {
   /// final paddedWidget = myWidget.paddingSymmetric(horizontal: 8.0, vertical: 16.0);
   /// // Adds 8.0 logical pixel horizontal padding and 16.0 logical pixel vertical padding.
   /// ```
-  Widget paddingSymmetric({double horizontal = 0.0, double vertical = 0.0}) =>
+  Widget paddingSymmetric({final double horizontal = 0.0, final double vertical = 0.0}) =>
       Padding(
           padding:
               EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
-          child: this);
+          child: this,);
 
   /// Adds padding to specific sides of the widget.
   ///
@@ -46,10 +46,10 @@ extension WidgetPaddingXExt on Widget {
   /// // Adds 8.0 logical pixel padding to the left and right sides.
   /// ```
   Widget paddingOnly({
-    double left = 0.0,
-    double top = 0.0,
-    double right = 0.0,
-    double bottom = 0.0,
+    final double left = 0.0,
+    final double top = 0.0,
+    final double right = 0.0,
+    final double bottom = 0.0,
   }) =>
       Padding(
         padding: EdgeInsets.only(
@@ -85,7 +85,7 @@ extension WidgetMarginX on Widget {
   /// final myWidget = Text('Hello, World!');
   /// final widgetWithMargin = myWidget.marginAll(16.0); // Adds 16.0 logical pixel margin to all sides.
   /// ```
-  Widget marginAll(double margin) => Container(
+  Widget marginAll(final double margin) => Container(
         margin: EdgeInsets.all(margin),
         child: this,
       );
@@ -102,7 +102,7 @@ extension WidgetMarginX on Widget {
   /// final widgetWithMargin = myWidget.marginSymmetric(horizontal: 8.0, vertical: 16.0);
   /// // Adds 8.0 logical pixel horizontal margin and 16.0 logical pixel vertical margin.
   /// ```
-  Widget marginSymmetric({double horizontal = 0.0, double vertical = 0.0}) =>
+  Widget marginSymmetric({final double horizontal = 0.0, final double vertical = 0.0}) =>
       Container(
         margin:
             EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
@@ -122,10 +122,10 @@ extension WidgetMarginX on Widget {
   /// // Adds 8.0 logical pixel margin to the left and right sides.
   /// ```
   Widget marginOnly({
-    double left = 0.0,
-    double top = 0.0,
-    double right = 0.0,
-    double bottom = 0.0,
+    final double left = 0.0,
+    final double top = 0.0,
+    final double right = 0.0,
+    final double bottom = 0.0,
   }) =>
       Container(
         margin:

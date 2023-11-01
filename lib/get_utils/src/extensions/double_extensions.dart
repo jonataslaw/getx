@@ -11,7 +11,7 @@ extension DoubleExt on double {
   /// final value = 3.14159265359;
   /// final roundedValue = value.toPrecision(2); // Result: 3.14
   /// ```
-  double toPrecision(int fractionDigits) {
+  double toPrecision(final int fractionDigits) {
     final double mod = pow(10, fractionDigits.toDouble()).toDouble();
     return (this * mod).round().toDouble() / mod;
   }

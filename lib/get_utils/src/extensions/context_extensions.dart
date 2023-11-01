@@ -23,7 +23,7 @@ extension ContextExt on BuildContext {
   ///
   /// [reducedBy] is a percentage value of how much of the height you want
   /// if you for example want 46% of the height, then you reduce it by 56%.
-  double heightTransformer({double dividedBy = 1, double reducedBy = 0.0}) {
+  double heightTransformer({final double dividedBy = 1, final double reducedBy = 0.0}) {
     return (mediaQuerySize.height -
             ((mediaQuerySize.height / 100) * reducedBy)) /
         dividedBy;
@@ -38,16 +38,16 @@ extension ContextExt on BuildContext {
   ///
   /// [reducedBy] is a percentage value of how much of the width you want
   /// if you for example want 46% of the width, then you reduce it by 56%.
-  double widthTransformer({double dividedBy = 1, double reducedBy = 0.0}) {
+  double widthTransformer({final double dividedBy = 1, final double reducedBy = 0.0}) {
     return (mediaQuerySize.width - ((mediaQuerySize.width / 100) * reducedBy)) /
         dividedBy;
   }
 
   /// Divide the height proportionally by the given value
   double ratio({
-    double dividedBy = 1,
-    double reducedByW = 0.0,
-    double reducedByH = 0.0,
+    final double dividedBy = 1,
+    final double reducedByW = 0.0,
+    final double reducedByH = 0.0,
   }) {
     return heightTransformer(dividedBy: dividedBy, reducedBy: reducedByH) /
         widthTransformer(dividedBy: dividedBy, reducedBy: reducedByW);
@@ -144,13 +144,13 @@ extension ContextExt on BuildContext {
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
   T responsiveValue<T>({
-    T? watch,
-    T? mobile,
-    T? tablet,
-    T? desktop,
+    final T? watch,
+    final T? mobile,
+    final T? tablet,
+    final T? desktop,
   }) {
     assert(
-        watch != null || mobile != null || tablet != null || desktop != null);
+        watch != null || mobile != null || tablet != null || desktop != null,);
 
     final double deviceWidth = mediaQuerySize.width;
     //big screen width can display smaller sizes

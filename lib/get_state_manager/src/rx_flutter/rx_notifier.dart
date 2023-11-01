@@ -42,7 +42,7 @@ mixin StateMixin<T> on ListNotifier {
 
   T get state => value;
 
-  set status(GetStatus<T> newStatus) {
+  set status(final GetStatus<T> newStatus) {
     if (newStatus == status) {
       return;
     }
@@ -60,7 +60,7 @@ mixin StateMixin<T> on ListNotifier {
   }
 
   @protected
-  set value(T newValue) {
+  set value(final T newValue) {
     if (_value == newValue) {
       return;
     }
@@ -69,17 +69,17 @@ mixin StateMixin<T> on ListNotifier {
   }
 
   @protected
-  void change(GetStatus<T> status) {
+  void change(final GetStatus<T> status) {
     if (status != this.status) {
       this.status = status;
     }
   }
 
-  void futurize(Future<T> Function() body,
-      {T? initialData, String? errorMessage, bool useEmpty = true}) {
+  void futurize(final Future<T> Function() body,
+      {final T? initialData, final String? errorMessage, final bool useEmpty = true,}) {
     final Future<T> Function() compute = body;
     _value ??= initialData;
-    compute().then((T newValue) {
+    compute().then((final T newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.loading();
       } else {
@@ -87,10 +87,10 @@ mixin StateMixin<T> on ListNotifier {
       }
 
       refresh();
-    }, onError: (err) {
+    }, onError: (final err) {
       status = GetStatus<T>.error(errorMessage ?? err.toString());
       refresh();
-    });
+    },);
   }
 }
 
@@ -99,7 +99,7 @@ typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
 typedef VoidCallback = void Function();
 
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
-  GetListenable(T val) : _value = val;
+  GetListenable(final T val) : _value = val;
 
   StreamController<T>? _controller;
 
@@ -142,7 +142,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     refresh();
   }
 
-  set value(T newValue) {
+  set value(final T newValue) {
     if (_value == newValue) {
       return;
     }
@@ -150,7 +150,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     _notify();
   }
 
-  T? call([T? v]) {
+  T? call([final T? v]) {
     if (v != null) {
       value = v;
     }
@@ -159,10 +159,10 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   @override
   StreamSubscription<T> listen(
-    void Function(T)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
+    final void Function(T)? onData, {
+    final Function? onError,
+    final void Function()? onDone,
+    final bool? cancelOnError,
   }) =>
       stream.listen(
         onData,
@@ -178,7 +178,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 class Value<T> extends ListNotifier
     with StateMixin<T>
     implements ValueListenable<T?> {
-  Value(T val) {
+  Value(final T val) {
     _value = val;
     _fillInitialStatus();
   }
@@ -190,7 +190,7 @@ class Value<T> extends ListNotifier
   }
 
   @override
-  set value(T newValue) {
+  set value(final T newValue) {
     if (_value == newValue) {
       return;
     }
@@ -198,14 +198,14 @@ class Value<T> extends ListNotifier
     refresh();
   }
 
-  T? call([T? v]) {
+  T? call([final T? v]) {
     if (v != null) {
       value = v;
     }
     return value;
   }
 
-  void update(T Function(T? value) fn) {
+  void update(final T Function(T? value) fn) {
     value = fn(value);
     // refresh();
   }
@@ -224,13 +224,13 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T?> widget, {
-    Widget Function(String? error)? onError,
-    Widget? onLoading,
-    Widget? onEmpty,
-    WidgetBuilder? onCustom,
+    final NotifierBuilder<T?> widget, {
+    final Widget Function(String? error)? onError,
+    final Widget? onLoading,
+    final Widget? onEmpty,
+    final WidgetBuilder? onCustom,
   }) {
-    return Observer(builder: (_) {
+    return Observer(builder: (final _) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
@@ -247,7 +247,7 @@ extension StateExt<T> on StateMixin<T> {
             const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
-    });
+    },);
   }
 }
 
@@ -256,9 +256,9 @@ typedef NotifierBuilder<T> = Widget Function(T state);
 abstract class GetStatus<T> with Equality {
   const GetStatus();
   factory GetStatus.loading() => LoadingStatus<T>();
-  factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
+  factory GetStatus.error(final String message) => ErrorStatus<T, String>(message);
   factory GetStatus.empty() => EmptyStatus<T>();
-  factory GetStatus.success(T data) => SuccessStatus<T>(data);
+  factory GetStatus.success(final T data) => SuccessStatus<T>(data);
   factory GetStatus.custom() => CustomStatus<T>();
 }
 

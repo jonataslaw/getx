@@ -7,15 +7,15 @@ import '../utils/utils.dart';
 import 'multipart_file.dart';
 
 class FormData {
-  FormData(Map<String, dynamic> map) : boundary = _getBoundary() {
-    map.forEach((key, value) {
+  FormData(final Map<String, dynamic> map) : boundary = _getBoundary() {
+    map.forEach((final key, final value) {
       if (value == null) return;
       if (value is MultipartFile) {
         files.add(MapEntry(key, value));
       } else if (value is List<MultipartFile>) {
-        files.addAll(value.map((e) => MapEntry(key, e)));
+        files.addAll(value.map((final e) => MapEntry(key, e)));
       } else if (value is List) {
-        fields.addAll(value.map((e) => MapEntry(key, e.toString())));
+        fields.addAll(value.map((final e) => MapEntry(key, e.toString())));
       } else {
         fields.add(MapEntry(key, value.toString()));
       }
@@ -26,9 +26,9 @@ class FormData {
 
   static String _getBoundary() {
     final newRandom = Random();
-    var list = List<int>.generate(_maxBoundaryLength - GET_BOUNDARY.length,
-        (_) => boundaryCharacters[newRandom.nextInt(boundaryCharacters.length)],
-        growable: false);
+    final list = List<int>.generate(_maxBoundaryLength - GET_BOUNDARY.length,
+        (final _) => boundaryCharacters[newRandom.nextInt(boundaryCharacters.length)],
+        growable: false,);
     return '$GET_BOUNDARY${String.fromCharCodes(list)}';
   }
 
@@ -42,7 +42,7 @@ class FormData {
 
   /// Returns the header string for a field. The return value is guaranteed to
   /// contain only ASCII characters.
-  String _fieldHeader(String name, String value) {
+  String _fieldHeader(final String name, final String value) {
     var header =
         'content-disposition: form-data; name="${browserEncode(name)}"';
     if (!isPlainAscii(value)) {
@@ -55,7 +55,7 @@ class FormData {
 
   /// Returns the header string for a file. The return value is guaranteed to
   /// contain only ASCII characters.
-  String _fileHeader(MapEntry<String, MultipartFile> file) {
+  String _fileHeader(final MapEntry<String, MultipartFile> file) {
     var header =
         'content-disposition: form-data; name="${browserEncode(file.key)}"';
     header = '$header; filename="${browserEncode(file.value.filename)}"';
@@ -77,7 +77,7 @@ class FormData {
           '\r\n'.length;
     }
 
-    for (var file in files) {
+    for (final file in files) {
       length += '--'.length +
           _maxBoundaryLength +
           '\r\n'.length +
@@ -98,7 +98,7 @@ class FormData {
     final separator = utf8.encode('--$boundary\r\n');
     final close = utf8.encode('--$boundary--\r\n');
 
-    for (var field in fields) {
+    for (final field in fields) {
       yield separator;
       yield utf8.encode(_fieldHeader(field.key, field.value));
       yield utf8.encode(field.value);

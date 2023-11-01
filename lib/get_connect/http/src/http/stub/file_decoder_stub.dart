@@ -1,5 +1,5 @@
-void writeOnFile(List<int> bytes) {}
+void writeOnFile(final List<int> bytes) {}
 
-List<int> fileToBytes(dynamic data) {
+List<int> fileToBytes(final dynamic data) {
   throw UnimplementedError();
 }

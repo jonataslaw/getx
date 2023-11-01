@@ -15,6 +15,6 @@ extension GetDurationUtilsExt<T> on Duration {
   ///   await 0.7.seconds.delay(() {
   /// }
   ///```
-  Future<T> delay([FutureOr<T> Function()? callback]) async =>
+  Future<T> delay([final FutureOr<T> Function()? callback]) async =>
       Future<T>.delayed(this, callback);
 }

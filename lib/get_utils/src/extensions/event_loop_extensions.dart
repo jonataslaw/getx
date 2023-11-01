@@ -18,7 +18,7 @@ extension LoopEventsExt on GetInterface {
   ///   return result;
   /// });
   /// ```
-  Future<T> toEnd<T>(FutureOr<T> Function() computation) async {
+  Future<T> toEnd<T>(final FutureOr<T> Function() computation) async {
     await Future<T>.delayed(Duration.zero);
     final FutureOr<T> val = computation();
     return val;
@@ -41,8 +41,8 @@ extension LoopEventsExt on GetInterface {
   ///   return shouldDelayTask();
   /// });
   /// ```
-  FutureOr<T> asap<T>(T Function() computation,
-      {bool Function()? condition}) async {
+  FutureOr<T> asap<T>(final T Function() computation,
+      {final bool Function()? condition,}) async {
     T val;
     if (condition == null || !condition()) {
       await Future<T>.delayed(Duration.zero);

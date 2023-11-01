@@ -47,7 +47,7 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
 
   bool get willResetOnDispose => _willResetOnDispose;
 
-  void _listener(AnimationStatus status) {
+  void _listener(final AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
         widget.onComplete?.call(_controller);
@@ -121,10 +121,10 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (BuildContext context, Widget? child) {
+      builder: (final BuildContext context, final Widget? child) {
         final T value = _wasStarted ? _animation.value : _idleValue;
         return widget.builder(context, value, child);
       },

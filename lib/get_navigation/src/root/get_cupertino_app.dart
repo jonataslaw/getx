@@ -10,64 +10,9 @@ import '../../get_navigation.dart';
 import 'get_root.dart';
 
 class GetCupertinoApp extends StatelessWidget {
-  final GlobalKey<NavigatorState>? navigatorKey;
-  final Widget? home;
-  final Map<String, WidgetBuilder>? routes;
-  final String? initialRoute;
-  final RouteFactory? onGenerateRoute;
-  final InitialRouteListFactory? onGenerateInitialRoutes;
-  final RouteFactory? onUnknownRoute;
-  final List<NavigatorObserver>? navigatorObservers;
-  final TransitionBuilder? builder;
-  final String title;
-  final GenerateAppTitle? onGenerateTitle;
-  final CustomTransition? customTransition;
-  final Color? color;
-  final Map<String, Map<String, String>>? translationsKeys;
-  final Translations? translations;
-  final TextDirection? textDirection;
-  final Locale? locale;
-  final Locale? fallbackLocale;
-  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
-  final LocaleListResolutionCallback? localeListResolutionCallback;
-  final LocaleResolutionCallback? localeResolutionCallback;
-  final Iterable<Locale> supportedLocales;
-  final bool showPerformanceOverlay;
-  final bool checkerboardRasterCacheImages;
-  final bool checkerboardOffscreenLayers;
-  final bool showSemanticsDebugger;
-  final bool debugShowCheckedModeBanner;
-  final Map<LogicalKeySet, Intent>? shortcuts;
-  final ThemeData? highContrastTheme;
-  final ThemeData? highContrastDarkTheme;
-  final Map<Type, Action<Intent>>? actions;
-  final Function(Routing?)? routingCallback;
-  final Transition? defaultTransition;
-  final bool? opaqueRoute;
-  final VoidCallback? onInit;
-  final VoidCallback? onReady;
-  final VoidCallback? onDispose;
-  final bool? enableLog;
-  final LogWriterCallback? logWriterCallback;
-  final bool? popGesture;
-  final SmartManagement smartManagement;
-  final BindingsInterface? initialBinding;
-  final Duration? transitionDuration;
-  final bool? defaultGlobalState;
-  final List<GetPage>? getPages;
-  final GetPage? unknownRoute;
-  final RouteInformationProvider? routeInformationProvider;
-  final RouteInformationParser<Object>? routeInformationParser;
-  final RouterDelegate<Object>? routerDelegate;
-  final RouterConfig<Object>? routerConfig;
-  final BackButtonDispatcher? backButtonDispatcher;
-  final CupertinoThemeData? theme;
-  final bool useInheritedMediaQuery;
-  final List<Bind> binds;
-  final ScrollBehavior? scrollBehavior;
 
   const GetCupertinoApp({
-    Key? key,
+    super.key,
     this.theme,
     this.navigatorKey,
     this.home,
@@ -124,11 +69,10 @@ class GetCupertinoApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
-        routerConfig = null,
-        super(key: key);
+        routerConfig = null;
 
   const GetCupertinoApp.router({
-    Key? key,
+    super.key,
     this.theme,
     this.routeInformationProvider,
     this.routeInformationParser,
@@ -183,11 +127,65 @@ class GetCupertinoApp extends StatelessWidget {
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
+  final GlobalKey<NavigatorState>? navigatorKey;
+  final Widget? home;
+  final Map<String, WidgetBuilder>? routes;
+  final String? initialRoute;
+  final RouteFactory? onGenerateRoute;
+  final InitialRouteListFactory? onGenerateInitialRoutes;
+  final RouteFactory? onUnknownRoute;
+  final List<NavigatorObserver>? navigatorObservers;
+  final TransitionBuilder? builder;
+  final String title;
+  final GenerateAppTitle? onGenerateTitle;
+  final CustomTransition? customTransition;
+  final Color? color;
+  final Map<String, Map<String, String>>? translationsKeys;
+  final Translations? translations;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final Locale? fallbackLocale;
+  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  final LocaleListResolutionCallback? localeListResolutionCallback;
+  final LocaleResolutionCallback? localeResolutionCallback;
+  final Iterable<Locale> supportedLocales;
+  final bool showPerformanceOverlay;
+  final bool checkerboardRasterCacheImages;
+  final bool checkerboardOffscreenLayers;
+  final bool showSemanticsDebugger;
+  final bool debugShowCheckedModeBanner;
+  final Map<LogicalKeySet, Intent>? shortcuts;
+  final ThemeData? highContrastTheme;
+  final ThemeData? highContrastDarkTheme;
+  final Map<Type, Action<Intent>>? actions;
+  final Function(Routing?)? routingCallback;
+  final Transition? defaultTransition;
+  final bool? opaqueRoute;
+  final VoidCallback? onInit;
+  final VoidCallback? onReady;
+  final VoidCallback? onDispose;
+  final bool? enableLog;
+  final LogWriterCallback? logWriterCallback;
+  final bool? popGesture;
+  final SmartManagement smartManagement;
+  final BindingsInterface? initialBinding;
+  final Duration? transitionDuration;
+  final bool? defaultGlobalState;
+  final List<GetPage>? getPages;
+  final GetPage? unknownRoute;
+  final RouteInformationProvider? routeInformationProvider;
+  final RouteInformationParser<Object>? routeInformationParser;
+  final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
+  final BackButtonDispatcher? backButtonDispatcher;
+  final CupertinoThemeData? theme;
+  final bool useInheritedMediaQuery;
+  final List<Bind> binds;
+  final ScrollBehavior? scrollBehavior;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return GetRoot(
       config: ConfigData(
         backButtonDispatcher: backButtonDispatcher,
@@ -218,7 +216,7 @@ class GetCupertinoApp extends StatelessWidget {
         translationsKeys: translationsKeys,
         unknownRoute: unknownRoute,
       ),
-      child: Builder(builder: (context) {
+      child: Builder(builder: (final context) {
         final controller = GetRoot.of(context);
         return CupertinoApp.router(
           routerDelegate: controller.config.routerDelegate,
@@ -227,7 +225,7 @@ class GetCupertinoApp extends StatelessWidget {
           routeInformationProvider: routeInformationProvider,
           routerConfig: routerConfig,
           key: controller.config.unikey,
-          builder: (context, child) => Directionality(
+          builder: (final context, final child) => Directionality(
             textDirection: textDirection ??
                 (rtlLanguages.contains(Get.locale?.languageCode)
                     ? TextDirection.rtl
@@ -253,7 +251,7 @@ class GetCupertinoApp extends StatelessWidget {
           shortcuts: shortcuts,
           scrollBehavior: scrollBehavior,
         );
-      }),
+      },),
     );
   }
 }

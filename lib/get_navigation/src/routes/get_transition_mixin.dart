@@ -23,14 +23,8 @@ const int _kMaxPageBackAnimationTime = 300; // Milliseconds.
 
 class GetBackGestureDetector<T> extends StatefulWidget {
   const GetBackGestureDetector({
-    Key? key,
-    required this.limitedSwipe,
-    required this.gestureWidth,
-    required this.initialOffset,
-    required this.popGestureEnable,
-    required this.onStartPopGesture,
-    required this.child,
-  }) : super(key: key);
+    required this.limitedSwipe, required this.gestureWidth, required this.initialOffset, required this.popGestureEnable, required this.onStartPopGesture, required this.child, super.key,
+  });
 
   final bool limitedSwipe;
   final double gestureWidth;
@@ -48,13 +42,13 @@ class GetBackGestureDetector<T> extends StatefulWidget {
 class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
   GetBackGestureController<T>? _backGestureController;
 
-  void _handleDragStart(DragStartDetails details) {
+  void _handleDragStart(final DragStartDetails details) {
     assert(mounted);
     assert(_backGestureController == null);
     _backGestureController = widget.onStartPopGesture();
   }
 
-  void _handleDragUpdate(DragUpdateDetails details) {
+  void _handleDragUpdate(final DragUpdateDetails details) {
     assert(mounted);
     assert(_backGestureController != null);
     _backGestureController!.dragUpdate(
@@ -62,12 +56,12 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
     );
   }
 
-  void _handleDragEnd(DragEndDetails details) {
+  void _handleDragEnd(final DragEndDetails details) {
     assert(mounted);
     assert(_backGestureController != null);
     _backGestureController!.dragEnd(_convertToLogical(
       details.velocity.pixelsPerSecond.dx / context.size!.width,
-    ));
+    ),);
     _backGestureController = null;
   }
 
@@ -79,7 +73,7 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
     _backGestureController = null;
   }
 
-  double _convertToLogical(double value) {
+  double _convertToLogical(final double value) {
     switch (Directionality.of(context)) {
       case TextDirection.rtl:
         return -value;
@@ -89,7 +83,7 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     assert(debugCheckHasDirectionality(context));
 
     final gestureDetector = RawGestureDetector(
@@ -108,12 +102,12 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
               popGestureEnable: widget.popGestureEnable,
             );
           },
-          (directionalityDragGesture) => directionalityDragGesture
+          (final directionalityDragGesture) => directionalityDragGesture
             ..onStart = _handleDragStart
             ..onUpdate = _handleDragUpdate
             ..onEnd = _handleDragEnd
             ..onCancel = _handleDragCancel,
-        )
+        ),
       },
     );
 
@@ -135,7 +129,7 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
     );
   }
 
-  double _dragAreaWidth(BuildContext context) {
+  double _dragAreaWidth(final BuildContext context) {
     // For devices with notches, the drag area needs to be larger on the side
     // that has the notch.
     final dragAreaWidth = Directionality.of(context) == TextDirection.ltr
@@ -158,13 +152,13 @@ class GetBackGestureController<T> {
 
   /// The drag gesture has changed by [delta]. The total range of the
   /// drag should be 0.0 to 1.0.
-  void dragUpdate(double delta) {
+  void dragUpdate(final double delta) {
     controller.value -= delta;
   }
 
   /// The drag gesture has ended with a horizontal motion of [velocity] as a
   /// fraction of screen width per second.
-  void dragEnd(double velocity) {
+  void dragEnd(final double velocity) {
     // Fling in the appropriate direction.
     // AnimationController.fling is guaranteed to
     // take at least one frame.
@@ -194,7 +188,7 @@ class GetBackGestureController<T> {
       );
       controller.animateTo(1.0,
           duration: Duration(milliseconds: droppedPageForwardAnimationTime),
-          curve: animationCurve);
+          curve: animationCurve,);
     } else {
       // This route is destined to pop at this point. Reuse navigator's pop.
       Get.back();
@@ -204,11 +198,11 @@ class GetBackGestureController<T> {
       if (controller.isAnimating) {
         // Otherwise, use a custom popping animation duration and curve.
         final droppedPageBackAnimationTime = lerpDouble(
-                0, _kMaxMidSwipePageForwardAnimationTime, controller.value)!
+                0, _kMaxMidSwipePageForwardAnimationTime, controller.value,)!
             .floor();
         controller.animateBack(0.0,
             duration: Duration(milliseconds: droppedPageBackAnimationTime),
-            curve: animationCurve);
+            curve: animationCurve,);
       }
     }
 
@@ -217,7 +211,7 @@ class GetBackGestureController<T> {
       // curve of the page transition mid-flight since CupertinoPageTransition
       // depends on userGestureInProgress.
       late AnimationStatusListener animationStatusCallback;
-      animationStatusCallback = (status) {
+      animationStatusCallback = (final status) {
         navigator.didStopUserGesture();
         controller.removeStatusListener(animationStatusCallback);
       };
@@ -293,11 +287,11 @@ Cannot read the previousTitle for a route that has not yet been installed''',
 
   /// Builds the primary contents of the route.
   @protected
-  Widget buildContent(BuildContext context);
+  Widget buildContent(final BuildContext context);
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(final BuildContext context, final Animation<double> animation,
+      final Animation<double> secondaryAnimation,) {
     final child = buildContent(context);
     final Widget result = Semantics(
       scopesRoute: true,
@@ -308,14 +302,14 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(final BuildContext context, final Animation<double> animation,
+      final Animation<double> secondaryAnimation, final Widget child,) {
     return buildPageTransitions<T>(
-        this, context, animation, secondaryAnimation, child);
+        this, context, animation, secondaryAnimation, child,);
   }
 
   @override
-  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
+  bool canTransitionTo(final TransitionRoute<dynamic> nextRoute) {
     // Don't perform outgoing animation if the next route is a
     // fullscreen dialog.
     return (nextRoute is GetPageRouteTransitionMixin &&
@@ -326,7 +320,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   }
 
   @override
-  void didChangePrevious(Route<dynamic>? previousRoute) {
+  void didChangePrevious(final Route<dynamic>? previousRoute) {
     final previousTitleString = previousRoute is CupertinoRouteTransitionMixin
         ? previousRoute.title
         : null;
@@ -338,7 +332,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     super.didChangePrevious(previousRoute);
   }
 
-  static bool canSwipe(GetPageRoute route) =>
+  static bool canSwipe(final GetPageRoute route) =>
       route.popGesture ?? Get.defaultPopGesture;
 
   /// Returns a [CupertinoFullscreenDialogTransition] if [route] is a full
@@ -356,13 +350,13 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   ///  * [CupertinoPageTransitionsBuilder], which uses this method to define a
   ///    [PageTransitionsBuilder] for the [PageTransitionsTheme].
   static Widget buildPageTransitions<T>(
-    PageRoute<T> rawRoute,
-    BuildContext context,
+    final PageRoute<T> rawRoute,
+    final BuildContext context,
     Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child, {
-    bool limitedSwipe = false,
-    double initialOffset = 0,
+    final Animation<double> secondaryAnimation,
+    final Widget child, {
+    final bool limitedSwipe = false,
+    final double initialOffset = 0,
   }) {
     // Check if the route has an animation that's currently participating
     // in a back swipe gesture.
@@ -431,7 +425,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.downToUp:
           return SlideDownTransition().buildTransitions(
@@ -452,7 +446,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.upToDown:
           return SlideTopTransition().buildTransitions(
@@ -473,7 +467,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.noTransition:
           return GetBackGestureDetector<T>(
@@ -509,7 +503,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.zoom:
           return ZoomInTransition().buildTransitions(
@@ -530,7 +524,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.fadeIn:
           return FadeInTransition().buildTransitions(
@@ -551,7 +545,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.rightToLeftWithFade:
           return RightToLeftFadeTransition().buildTransitions(
@@ -572,7 +566,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.leftToRightWithFade:
           return LeftToRightFadeTransition().buildTransitions(
@@ -593,7 +587,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.cupertino:
           return CupertinoPageTransition(
@@ -612,7 +606,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.size:
           return SizeTransitions().buildTransitions(
@@ -633,7 +627,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.fade:
           return const FadeUpwardsPageTransitionsBuilder().buildTransitions(
@@ -653,7 +647,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.topLevel:
           return const ZoomPageTransitionsBuilder().buildTransitions(
@@ -673,7 +667,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.native:
           return const PageTransitionsTheme().buildTransitions(
@@ -693,7 +687,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         case Transition.circularReveal:
           return CircularRevealTransition().buildTransitions(
@@ -714,17 +708,17 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
 
         default:
           final customTransition = GetRoot.of(context).config.customTransition;
 
           if (customTransition != null) {
             return customTransition.buildTransition(context, route.curve,
-                route.alignment, animation, secondaryAnimation, child);
+                route.alignment, animation, secondaryAnimation, child,);
           }
 
-          PageTransitionsTheme pageTransitionsTheme =
+          final PageTransitionsTheme pageTransitionsTheme =
               Theme.of(context).pageTransitionsTheme;
 
           return pageTransitionsTheme.buildTransitions(
@@ -746,7 +740,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
                 child: child,
-              ));
+              ),);
       }
     }
   }
@@ -763,13 +757,13 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   ///
   ///  * [popGestureEnabled], which returns true if a user-triggered pop gesture
   ///    would be allowed.
-  static bool isPopGestureInProgress(BuildContext context) {
+  static bool isPopGestureInProgress(final BuildContext context) {
     final route = ModalRoute.of(context)!;
     return route.navigator!.userGestureInProgress;
   }
 
   static bool _isPopGestureEnabled<T>(
-      PageRoute<T> route, bool canSwipe, BuildContext context) {
+      final PageRoute<T> route, final bool canSwipe, final BuildContext context,) {
     // If there's nothing to go back to, then obviously we don't support
     // the back gesture.
     if (route.isFirst) return false;
@@ -803,7 +797,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   }
 
   static GetBackGestureController<T> _startPopGesture<T>(
-    PageRoute<T> route,
+    final PageRoute<T> route,
   ) {
     return GetBackGestureController<T>(
       navigator: route.navigator!,
@@ -814,21 +808,21 @@ Cannot read the previousTitle for a route that has not yet been installed''',
 
 class _DirectionalityDragGestureRecognizer
     extends HorizontalDragGestureRecognizer {
-  final ValueGetter<bool> popGestureEnable;
-  final ValueGetter<bool> hasbackGestureController;
-  final bool isRTL;
-  final bool isLTR;
 
   _DirectionalityDragGestureRecognizer({
     required this.isRTL,
     required this.isLTR,
     required this.popGestureEnable,
     required this.hasbackGestureController,
-    Object? debugOwner,
-  }) : super(debugOwner: debugOwner);
+    super.debugOwner,
+  });
+  final ValueGetter<bool> popGestureEnable;
+  final ValueGetter<bool> hasbackGestureController;
+  final bool isRTL;
+  final bool isLTR;
 
   @override
-  void handleEvent(PointerEvent event) {
+  void handleEvent(final PointerEvent event) {
     final dx = event.delta.dx;
     if (hasbackGestureController() ||
         popGestureEnable() && (isRTL && dx < 0 || isLTR && dx > 0 || dx == 0)) {

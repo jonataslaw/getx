@@ -32,14 +32,14 @@ import 'get_widget_cache.dart';
 /// }
 ///``
 abstract class GetView<T> extends StatelessWidget {
-  const GetView({Key? key}) : super(key: key);
+  const GetView({super.key});
 
   final String? tag = null;
 
   T get controller => Get.find<T>(tag: tag)!;
 
   @override
-  Widget build(BuildContext context);
+  Widget build(final BuildContext context);
 }
 
 /// GetWidget is a great way of quickly access your individual Controller
@@ -49,7 +49,7 @@ abstract class GetView<T> extends StatelessWidget {
 /// GetWidget will have your own controller, and will be call events as `onInit`
 /// and `onClose` when the controller get in/get out on memory.
 abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
-  const GetWidget({Key? key}) : super(key: key);
+  const GetWidget({super.key});
 
   @protected
   final String? tag = null;
@@ -61,7 +61,7 @@ abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
   static final _cache = Expando<GetLifeCycleMixin>();
 
   @protected
-  Widget build(BuildContext context);
+  Widget build(final BuildContext context);
 
   @override
   WidgetCache createWidgetCache() => _GetCache<S>();
@@ -101,7 +101,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Binder(
       init: () => _controller,
       child: widget!.build(context),

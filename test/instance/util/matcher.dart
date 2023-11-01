@@ -28,34 +28,34 @@
 import 'package:flutter_test/flutter_test.dart';
 
 class FunctionMatcher<T> extends CustomMatcher {
-  FunctionMatcher(String name, this._feature, T matcher)
+  FunctionMatcher(final String name, this._feature, final T matcher)
       : super('`$name`:', '`$name`', matcher);
   final Object Function(T value) _feature;
 
   @override
-  Object featureValueOf(covariant T actual) => _feature(actual);
+  Object featureValueOf(covariant final T actual) => _feature(actual);
 }
 
 class HavingMatcher<T> implements TypeMatcher<T> {
-  HavingMatcher(TypeMatcher<T> parent, String description,
-      Object Function(T) feature, T matcher,
-      [Iterable<FunctionMatcher<T>>? existing])
+  HavingMatcher(final TypeMatcher<T> parent, final String description,
+      final Object Function(T) feature, final T matcher,
+      [final Iterable<FunctionMatcher<T>>? existing,])
       : _parent = parent,
         _functionMatchers = <FunctionMatcher<T>>[
           ...?existing,
-          FunctionMatcher<T>(description, feature, matcher)
+          FunctionMatcher<T>(description, feature, matcher),
         ];
   final TypeMatcher<T> _parent;
   final List<FunctionMatcher<T>> _functionMatchers;
 
   @override
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, T matcher) =>
+          final Object Function(T) feature, final String description, final T matcher,) =>
       HavingMatcher<T>(
-          _parent, description, feature, matcher, _functionMatchers);
+          _parent, description, feature, matcher, _functionMatchers,);
 
   @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
+  bool matches(final dynamic item, final Map<dynamic, dynamic> matchState) {
     for (final Matcher matcher
         in <Matcher>[_parent].followedBy(_functionMatchers)) {
       if (!matcher.matches(item, matchState)) {
@@ -68,19 +68,19 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   Description describeMismatch(
-    dynamic item,
-    Description mismatchDescription,
-    Map<dynamic, dynamic> matchState,
-    bool verbose,
+    final dynamic item,
+    final Description mismatchDescription,
+    final Map<dynamic, dynamic> matchState,
+    final bool verbose,
   ) {
     final Matcher matcher = matchState['matcher']! as Matcher;
     matcher.describeMismatch(item, mismatchDescription,
-        matchState['state']! as Map<dynamic, dynamic>, verbose);
+        matchState['state']! as Map<dynamic, dynamic>, verbose,);
     return mismatchDescription;
   }
 
   @override
-  Description describe(Description description) => description
+  Description describe(final Description description) => description
       .add('')
       .addDescriptionOf(_parent)
       .add(' with ')
@@ -91,30 +91,30 @@ class TypeMatcher<T> extends Matcher {
   const TypeMatcher();
 
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, T matcher) =>
+          final Object Function(T) feature, final String description, final T matcher,) =>
       HavingMatcher<T>(this, description, feature, matcher);
 
   @override
-  Description describe(Description description) {
+  Description describe(final Description description) {
     final String name = _stripDynamic(T);
     return description.add("<Instance of '$name'>");
   }
 
   @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) => item is T;
+  bool matches(final Object? item, final Map<dynamic, dynamic> matchState) => item is T;
 
   @override
   Description describeMismatch(
-    dynamic item,
-    Description mismatchDescription,
-    Map<dynamic, dynamic> matchState,
-    bool verbose,
+    final dynamic item,
+    final Description mismatchDescription,
+    final Map<dynamic, dynamic> matchState,
+    final bool verbose,
   ) {
     final String name = _stripDynamic(T);
     return mismatchDescription.add("is not an instance of '$name'");
   }
 }
 
-String _stripDynamic(Type type) =>
+String _stripDynamic(final Type type) =>
     type.toString().replaceAll(_dart2DynamicArgs, '');
 final RegExp _dart2DynamicArgs = RegExp('<dynamic(, dynamic)*>');

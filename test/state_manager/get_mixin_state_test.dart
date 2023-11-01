@@ -5,12 +5,12 @@ import 'package:get/get_state_manager/src/simple/mixin_builder.dart';
 
 void main() {
   testWidgets('MixinBuilder with reactive and not reactive',
-      (WidgetTester tester) async {
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MixinBuilder<Controller<dynamic>>(
           init: Controller<dynamic>(),
-          builder: (Controller<dynamic> controller) {
+          builder: (final Controller<dynamic> controller) {
             return Column(
               children: <Widget>[
                 Text(
@@ -41,7 +41,7 @@ void main() {
                 TextButton(
                   child: const Text('increment2'),
                   onPressed: () => controller.increment2(),
-                )
+                ),
               ],
             );
           },

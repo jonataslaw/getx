@@ -56,11 +56,11 @@ void main() {
     final Controller instance2 = Get.put<Controller>(Controller(), tag: 'two');
     expect(instance == instance2, false);
     expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'two'),
-        false);
+        false,);
     expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'one'),
-        true);
+        true,);
     expect(Get.find<Controller>(tag: 'two') == Get.find<Controller>(tag: 'two'),
-        true);
+        true,);
     Get.reset();
   });
 
@@ -69,11 +69,11 @@ void main() {
     Get.lazyPut<Controller>(() => Controller(), tag: 'two');
 
     expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'two'),
-        false);
+        false,);
     expect(Get.find<Controller>(tag: 'one') == Get.find<Controller>(tag: 'one'),
-        true);
+        true,);
     expect(Get.find<Controller>(tag: 'two') == Get.find<Controller>(tag: 'two'),
-        true);
+        true,);
     Get.reset();
   });
 
@@ -102,7 +102,7 @@ void main() {
     expect(Get.find<Controller>().count, 1);
     Get.delete<Controller>();
     expect(
-        () => Get.find<Controller>(), throwsA(const m.TypeMatcher<String>()));
+        () => Get.find<Controller>(), throwsA(const m.TypeMatcher<String>()),);
     Get.reset();
   });
 
@@ -163,7 +163,7 @@ void main() {
       // Get.put(DisposableController());
       expect(Get.delete<DisposableController>(), true);
       expect(() => Get.find<DisposableController>(),
-          throwsA(const m.TypeMatcher<String>()));
+          throwsA(const m.TypeMatcher<String>()),);
     });
 
     test('Get.put test after delete with disposable controller and init check',

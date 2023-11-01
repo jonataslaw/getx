@@ -7,7 +7,7 @@ void main() {
   test('once', () async {
     final count = 0.obs;
     var result = -1;
-    once(count, (dynamic _) {
+    once(count, (final dynamic _) {
       result = _ as int;
     });
     count.value++;
@@ -24,7 +24,7 @@ void main() {
   test('ever', () async {
     final count = 0.obs;
     var result = -1;
-    ever<int>(count, (value) {
+    ever<int>(count, (final value) {
       result = value;
     });
     count.value++;
@@ -41,10 +41,10 @@ void main() {
   test('debounce', () async {
     final count = 0.obs;
     int? result = -1;
-    debounce(count, (dynamic _) {
+    debounce(count, (final dynamic _) {
       // print(_);
       result = _ as int?;
-    }, time: const Duration(milliseconds: 100));
+    }, time: const Duration(milliseconds: 100),);
 
     count.value++;
     count.value++;
@@ -59,9 +59,9 @@ void main() {
   test('interval', () async {
     final count = 0.obs;
     int? result = -1;
-    interval<int>(count, (v) {
+    interval<int>(count, (final v) {
       result = v;
-    }, time: const Duration(milliseconds: 100));
+    }, time: const Duration(milliseconds: 100),);
 
     count.value++;
     await Future.delayed(Duration.zero);
@@ -84,7 +84,7 @@ void main() {
     final controller = StreamController<int>();
     final rx = 0.obs;
 
-    rx.listen((value) {
+    rx.listen((final value) {
       count = value;
     });
     rx.bindStream(controller.stream);
@@ -97,9 +97,9 @@ void main() {
   });
 
   test('Rx same value will not call the same listener when call', () async {
-    var reactiveInteger = RxInt(2);
+    final reactiveInteger = RxInt(2);
     var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    reactiveInteger.listen((final newInt) {
       timesCalled++;
     });
 
@@ -114,9 +114,9 @@ void main() {
   });
 
   test('Rx different value will call the listener when trigger', () async {
-    var reactiveInteger = RxInt(0);
+    final reactiveInteger = RxInt(0);
     var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    reactiveInteger.listen((final newInt) {
       timesCalled++;
     });
 
@@ -132,9 +132,9 @@ void main() {
   });
 
   test('Rx same value will call the listener when trigger', () async {
-    var reactiveInteger = RxInt(2);
+    final reactiveInteger = RxInt(2);
     var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    reactiveInteger.listen((final newInt) {
       timesCalled++;
     });
 
@@ -150,41 +150,41 @@ void main() {
   });
 
   test('Rx String with non null values', () async {
-    final reactiveString = Rx<String>("abc");
+    final reactiveString = Rx<String>('abc');
     String? currentString;
-    reactiveString.listen((newString) {
+    reactiveString.listen((final newString) {
       currentString = newString;
     });
 
-    expect(reactiveString.endsWith("c"), true);
+    expect(reactiveString.endsWith('c'), true);
 
     // we call 3
-    reactiveString("b");
+    reactiveString('b');
 
     await Future.delayed(Duration.zero);
-    expect(currentString, "b");
+    expect(currentString, 'b');
   });
 
   test('Rx String with null values', () async {
-    var reactiveString = Rx<String?>(null);
+    final reactiveString = Rx<String?>(null);
     String? currentString;
 
-    reactiveString.listen((newString) {
+    reactiveString.listen((final newString) {
       currentString = newString;
     });
 
     // we call 3
-    reactiveString("abc");
+    reactiveString('abc');
 
     await Future.delayed(Duration.zero);
-    expect(reactiveString.endsWith("c"), true);
-    expect(currentString, "abc");
+    expect(reactiveString.endsWith('c'), true);
+    expect(currentString, 'abc');
   });
 
   test('Number of times "ever" is called in RxList', () async {
     final list = [1, 2, 3].obs;
     var count = 0;
-    ever<List<int>>(list, (value) {
+    ever<List<int>>(list, (final value) {
       count++;
     });
 
@@ -203,12 +203,12 @@ void main() {
     expect(count, 1);
 
     count = 0;
-    list.removeWhere((element) => element == 2);
+    list.removeWhere((final element) => element == 2);
     await Future.delayed(Duration.zero);
     expect(count, 1);
 
     count = 0;
-    list.retainWhere((element) => element == 1);
+    list.retainWhere((final element) => element == 1);
     await Future.delayed(Duration.zero);
     expect(count, 1);
   });

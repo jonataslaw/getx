@@ -26,10 +26,10 @@ extension LocalesIntlExt on GetInterface {
   Locale? get fallbackLocale => _intlHost.fallbackLocale;
 
   /// Sets the current locale to be used for translations.
-  set locale(Locale? newLocale) => _intlHost.locale = newLocale;
+  set locale(final Locale? newLocale) => _intlHost.locale = newLocale;
 
   /// Sets the fallback locale to be used if translations are not available in the current locale.
-  set fallbackLocale(Locale? newLocale) => _intlHost.fallbackLocale = newLocale;
+  set fallbackLocale(final Locale? newLocale) => _intlHost.fallbackLocale = newLocale;
 
   /// Gets the map containing translations for different locales.
   Map<String, Map<String, String>> get translations => _intlHost.translations;
@@ -37,7 +37,7 @@ extension LocalesIntlExt on GetInterface {
   /// Adds translations to the internationalization host.
   ///
   /// The [tr] parameter is a map containing translations for different locales.
-  void addTranslations(Map<String, Map<String, String>> tr) {
+  void addTranslations(final Map<String, Map<String, String>> tr) {
     translations.addAll(tr);
   }
 
@@ -49,8 +49,8 @@ extension LocalesIntlExt on GetInterface {
   /// Appends translations to existing translations in the internationalization host.
   ///
   /// The [tr] parameter is a map containing translations for different locales.
-  void appendTranslations(Map<String, Map<String, String>> tr) {
-    tr.forEach((String key, Map<String, String> map) {
+  void appendTranslations(final Map<String, Map<String, String>> tr) {
+    tr.forEach((final String key, final Map<String, String> map) {
       if (translations.containsKey(key)) {
         translations[key]!.addAll(map);
       } else {
@@ -66,7 +66,7 @@ extension TransExt on String {
   // whether the key is also present.
   bool get _fullLocaleAndKey {
     return Get.translations.containsKey(
-            '${Get.locale!.languageCode}_${Get.locale!.countryCode}') &&
+            '${Get.locale!.languageCode}_${Get.locale!.countryCode}',) &&
         Get.translations[
                 '${Get.locale!.languageCode}_${Get.locale!.countryCode}']!
             .containsKey(this);
@@ -76,8 +76,8 @@ extension TransExt on String {
   // country, and if it contains that key.
   Map<String, String>? get _getSimilarLanguageTranslation {
     final Map<String, Map<String, String>> translationsWithNoCountry =
-        Get.translations.map((String key, Map<String, String> value) =>
-            MapEntry<String, Map<String, String>>(key.split('_').first, value));
+        Get.translations.map((final String key, final Map<String, String> value) =>
+            MapEntry<String, Map<String, String>>(key.split('_').first, value),);
     final bool containsKey = translationsWithNoCountry
         .containsKey(Get.locale!.languageCode.split('_').first);
 
@@ -153,7 +153,7 @@ extension TransExt on String {
   /// ```dart
   /// final greeting = 'Hello, %s!'.trArgs(['John']);
   ///
-  String trArgs([List<String> args = const <String>[]]) {
+  String trArgs([final List<String> args = const <String>[]]) {
     String key = tr;
     if (args.isNotEmpty) {
       for (final String arg in args) {
@@ -177,7 +177,7 @@ extension TransExt on String {
   /// // Uses 'apples' translation for plural count 3.
   /// ```
   String trPlural(
-      [String? pluralKey, int? i, List<String> args = const <String>[]]) {
+      [final String? pluralKey, final int? i, final List<String> args = const <String>[],]) {
     return i == 1 ? trArgs(args) : pluralKey!.trArgs(args);
   }
 
@@ -193,10 +193,10 @@ extension TransExt on String {
   /// ```dart
   /// final message = 'Hello, @name!'.trParams({'name': 'John'});
   /// ```
-  String trParams([Map<String, String> params = const <String, String>{}]) {
+  String trParams([final Map<String, String> params = const <String, String>{}]) {
     String trans = tr;
     if (params.isNotEmpty) {
-      params.forEach((String key, String value) {
+      params.forEach((final String key, final String value) {
         trans = trans.replaceAll('@$key', value);
       });
     }
@@ -217,9 +217,9 @@ extension TransExt on String {
   /// // Uses 'There are @count apples' translation for plural count 3 and replaces '@count' with '3'.
   /// ```
   String trPluralParams(
-      [String? pluralKey,
-      int? i,
-      Map<String, String> params = const <String, String>{}]) {
+      [final String? pluralKey,
+      final int? i,
+      final Map<String, String> params = const <String, String>{},]) {
     return i == 1 ? trParams(params) : pluralKey!.trParams(params);
   }
 }

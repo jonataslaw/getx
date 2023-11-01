@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 
-bool isTokenChar(int byte) {
+bool isTokenChar(final int byte) {
   return byte > 31 && byte < 128 && !SEPARATOR_MAP[byte];
 }
 
-bool isValueChar(int byte) {
+bool isValueChar(final int byte) {
   return (byte > 31 && byte < 128) ||
       (byte == CharCode.SP) ||
       (byte == CharCode.HT);
@@ -39,14 +39,14 @@ const SEPARATOR_MAP = [
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
   F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, //
-  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F
+  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F,
 ];
 
-String validateField(String field) {
+String validateField(final String field) {
   for (var i = 0; i < field.length; i++) {
     if (!isTokenChar(field.codeUnitAt(i))) {
       throw FormatException(
-          'Invalid HTTP header field name: ${json.encode(field)}', field, i);
+          'Invalid HTTP header field name: ${json.encode(field)}', field, i,);
     }
   }
   return field.toLowerCase();
@@ -62,12 +62,12 @@ final newlineRegExp = RegExp(r'\r\n|\r|\n');
 
 /// Returns whether [string] is composed entirely of ASCII-compatible
 /// characters.
-bool isPlainAscii(String string) => _asciiOnly.hasMatch(string);
+bool isPlainAscii(final String string) => _asciiOnly.hasMatch(string);
 
 const String GET_BOUNDARY = 'getx-http-boundary-';
 
 /// Encode [value] like browsers
-String browserEncode(String value) {
+String browserEncode(final String value) {
   return value.replaceAll(newlineRegExp, '%0D%0A').replaceAll('"', '%22');
 }
 
@@ -137,5 +137,5 @@ const List<int> boundaryCharacters = <int>[
   119,
   120,
   121,
-  122
+  122,
 ];

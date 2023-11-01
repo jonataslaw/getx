@@ -26,7 +26,7 @@ class Obx extends ObxWidget {
   final WidgetCallback builder;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return builder();
   }
 }
@@ -48,5 +48,5 @@ class ObxValue<T extends RxInterface<T>> extends ObxWidget {
   final T data;
 
   @override
-  Widget build(BuildContext context) => builder(data);
+  Widget build(final BuildContext context) => builder(data);
 }

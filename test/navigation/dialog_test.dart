@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'utils/wrapper.dart';
 
 void main() {
-  testWidgets("Get.defaultDialog smoke test", (tester) async {
+  testWidgets('Get.defaultDialog smoke test', (final tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
@@ -13,14 +13,14 @@ void main() {
     await tester.pump();
 
     Get.defaultDialog(
-        onConfirm: () {}, middleText: "Dialog made in 3 lines of code");
+        onConfirm: () {}, middleText: 'Dialog made in 3 lines of code',);
 
     await tester.pumpAndSettle();
 
-    expect(find.text("Ok"), findsOneWidget);
+    expect(find.text('Ok'), findsOneWidget);
   });
 
-  testWidgets("Get.dialog smoke test", (tester) async {
+  testWidgets('Get.dialog smoke test', (final tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
@@ -34,7 +34,7 @@ void main() {
     expect(find.byType(YourDialogWidget), findsOneWidget);
   });
 
-  testWidgets("Get.dialog close test", (tester) async {
+  testWidgets('Get.dialog close test', (final tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
@@ -57,10 +57,10 @@ void main() {
 }
 
 class YourDialogWidget extends StatelessWidget {
-  const YourDialogWidget({Key? key}) : super(key: key);
+  const YourDialogWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container();
   }
 }

@@ -16,7 +16,7 @@ extension IterableExt<T> on Iterable<T> {
   ///
   /// The [selector] function returns an [Iterable] of type `TRes` or `null`.
   Iterable<TRes> mapMany<TRes>(
-      Iterable<TRes>? Function(T item) selector) sync* {
+      final Iterable<TRes>? Function(T item) selector,) sync* {
     for (final T item in this) {
       final Iterable<TRes>? res = selector(item);
       if (res != null) {

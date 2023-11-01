@@ -16,7 +16,7 @@ extension GetNumUtilsExt<T> on num {
   ///
   /// final result = a.isLowerThan(b); // Result: true
   /// ```
-  bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
+  bool isLowerThan(final num b) => GetUtils.isLowerThan(this, b);
 
   /// Checks if the current numerical value is greater than the provided [b].
   ///
@@ -30,7 +30,7 @@ extension GetNumUtilsExt<T> on num {
   ///
   /// final result = a.isGreaterThan(b); // Result: true
   /// ```
-  bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
+  bool isGreaterThan(final num b) => GetUtils.isGreaterThan(this, b);
 
   /// Checks if the current numerical value is equal to the provided [b].
   ///
@@ -44,7 +44,7 @@ extension GetNumUtilsExt<T> on num {
   ///
   /// final result = a.isEqual(b); // Result: true
   /// ```
-  bool isEqual(num b) => GetUtils.isEqual(this, b);
+  bool isEqual(final num b) => GetUtils.isEqual(this, b);
 
   /// Utility to delay some callback (or code execution).
   /// TODO: Add a separated implementation of delay() with the ability
@@ -61,7 +61,7 @@ extension GetNumUtilsExt<T> on num {
   ///   print('currently running callback 1.2sec');
   /// }
   ///```
-  Future<T> delay([FutureOr<T> Function()? callback]) async =>
+  Future<T> delay([final FutureOr<T> Function()? callback]) async =>
       Future<T>.delayed(
         Duration(milliseconds: (this * 1000).round()),
         callback,

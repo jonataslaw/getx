@@ -7,7 +7,7 @@ mixin GetResponsiveMixin on Widget {
   bool get alwaysUseBuilder;
 
   @protected
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     screen.context = context;
     Widget? widget;
     if (alwaysUseBuilder) {
@@ -53,37 +53,40 @@ mixin GetResponsiveMixin on Widget {
 /// property `alwaysUseBuilder` to false
 /// With `settings` property you can set the width limit for the screen types.
 class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
+
+  GetResponsiveView({
+    this.alwaysUseBuilder = false,
+    final ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
+    super.key,
+  })  : screen = ResponsiveScreen(settings);
   @override
   final bool alwaysUseBuilder;
 
   @override
   final ResponsiveScreen screen;
-
-  GetResponsiveView({
-    this.alwaysUseBuilder = false,
-    ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
 }
 
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
+
+  GetResponsiveWidget({
+    this.alwaysUseBuilder = false,
+    final ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
+    super.key,
+  })  : screen = ResponsiveScreen(settings);
   @override
   final bool alwaysUseBuilder;
 
   @override
   final ResponsiveScreen screen;
-
-  GetResponsiveWidget({
-    this.alwaysUseBuilder = false,
-    ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
 }
 
 class ResponsiveScreenSettings {
+
+  const ResponsiveScreenSettings(
+      {this.desktopChangePoint = 1200,
+      this.tabletChangePoint = 600,
+      this.watchChangePoint = 300,});
   /// When the width is greater als this value
   /// the display will be set as [ScreenType.Desktop]
   final double desktopChangePoint;
@@ -99,36 +102,31 @@ class ResponsiveScreenSettings {
   /// or when width greater als this value and smaller als [tabletChangePoint]
   /// the display will be [ScreenType.Phone]
   final double watchChangePoint;
-
-  const ResponsiveScreenSettings(
-      {this.desktopChangePoint = 1200,
-      this.tabletChangePoint = 600,
-      this.watchChangePoint = 300});
 }
 
 class ResponsiveScreen {
+  ResponsiveScreen(this.settings) {
+    _isPaltformDesktop = GetPlatform.isDesktop;
+  }
   late BuildContext context;
   final ResponsiveScreenSettings settings;
 
   late bool _isPaltformDesktop;
-  ResponsiveScreen(this.settings) {
-    _isPaltformDesktop = GetPlatform.isDesktop;
-  }
 
   double get height => context.height;
   double get width => context.width;
 
   /// Is [screenType] [ScreenType.Desktop]
-  bool get isDesktop => (screenType == ScreenType.desktop);
+  bool get isDesktop => screenType == ScreenType.desktop;
 
   /// Is [screenType] [ScreenType.Tablet]
-  bool get isTablet => (screenType == ScreenType.tablet);
+  bool get isTablet => screenType == ScreenType.tablet;
 
   /// Is [screenType] [ScreenType.Phone]
-  bool get isPhone => (screenType == ScreenType.phone);
+  bool get isPhone => screenType == ScreenType.phone;
 
   /// Is [screenType] [ScreenType.Watch]
-  bool get isWatch => (screenType == ScreenType.watch);
+  bool get isWatch => screenType == ScreenType.watch;
 
   double get _getdeviceWidth {
     if (_isPaltformDesktop) {
@@ -152,10 +150,10 @@ class ResponsiveScreen {
   /// and if `mobile` object is null the `watch` object will be returned
   ///  also when it is null.
   T? responsiveValue<T>({
-    T? mobile,
-    T? tablet,
-    T? desktop,
-    T? watch,
+    final T? mobile,
+    final T? tablet,
+    final T? desktop,
+    final T? watch,
   }) {
     if (isDesktop && desktop != null) return desktop;
     if (isTablet && tablet != null) return tablet;

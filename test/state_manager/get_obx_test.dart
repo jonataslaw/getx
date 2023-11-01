@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  testWidgets('GetxController smoke test', (WidgetTester tester) async {
+  testWidgets('GetxController smoke test', (final WidgetTester tester) async {
     final Controller<dynamic> controller = Get.put(Controller<dynamic>());
     await tester.pumpWidget(
       MaterialApp(
@@ -21,8 +21,8 @@ void main() {
                   onPressed: controller.increment,
                   child: const Text('increment'),
                 ),
-                Obx(() => Text('Obx: ${controller.map.length}'))
-              ]),
+                Obx(() => Text('Obx: ${controller.map.length}')),
+              ],),
             ),
           ],
         ),

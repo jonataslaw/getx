@@ -4,68 +4,68 @@ import 'package:get/get.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetxController smoke test", (test) async {
+  testWidgets('GetxController smoke test', (final test) async {
     await test.pumpWidget(
       MaterialApp(
         home: GetBuilder<Controller>(
           init: Controller(),
-          builder: (controller) => Column(
+          builder: (final controller) => Column(
             children: [
               Text(
                 '${controller.counter}',
               ),
               TextButton(
-                child: const Text("increment"),
+                child: const Text('increment'),
                 onPressed: () => controller.increment(),
               ),
               TextButton(
-                child: const Text("incrementWithId"),
+                child: const Text('incrementWithId'),
                 onPressed: () => controller.incrementWithId(),
               ),
               GetBuilder<Controller>(
                   id: '1',
-                  didChangeDependencies: (_) {
+                  didChangeDependencies: (final _) {
                     // print("didChangeDependencies called");
                   },
-                  builder: (controller) {
+                  builder: (final controller) {
                     return Text('id ${controller.counter}');
-                  }),
-              GetBuilder<Controller2>(builder: (controller) {
+                  },),
+              GetBuilder<Controller2>(builder: (final controller) {
                 return Text('lazy ${controller.test}');
-              }),
+              },),
               GetBuilder<ControllerNonGlobal>(
                   init: ControllerNonGlobal(),
                   global: false,
-                  builder: (controller) {
+                  builder: (final controller) {
                     return Text('single ${controller.nonGlobal}');
-                  })
+                  },),
             ],
           ),
         ),
       ),
     );
 
-    expect(find.text("0"), findsOneWidget);
+    expect(find.text('0'), findsOneWidget);
 
     Controller.to.increment();
 
     await test.pump();
 
-    expect(find.text("1"), findsOneWidget);
+    expect(find.text('1'), findsOneWidget);
 
     await test.tap(find.text('increment'));
 
     await test.pump();
 
-    expect(find.text("2"), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
 
     await test.tap(find.text('incrementWithId'));
 
     await test.pump();
 
-    expect(find.text("id 3"), findsOneWidget);
-    expect(find.text("lazy 0"), findsOneWidget);
-    expect(find.text("single 0"), findsOneWidget);
+    expect(find.text('id 3'), findsOneWidget);
+    expect(find.text('lazy 0'), findsOneWidget);
+    expect(find.text('single 0'), findsOneWidget);
   });
 
   // testWidgets(

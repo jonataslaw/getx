@@ -4,10 +4,10 @@ import '../stub/http_request_stub.dart'
     if (dart.library.io) '../io/http_request_io.dart';
 
 HttpRequestImpl createHttp({
-  bool allowAutoSignedCert = true,
-  List<TrustedCertificate>? trustedCertificates,
-  bool withCredentials = false,
-  String Function(Uri url)? findProxy,
+  final bool allowAutoSignedCert = true,
+  final List<TrustedCertificate>? trustedCertificates,
+  final bool withCredentials = false,
+  final String Function(Uri url)? findProxy,
 }) {
   return HttpRequestImpl(
     allowAutoSignedCert: allowAutoSignedCert,

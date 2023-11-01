@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets('GetxController smoke test', (WidgetTester tester) async {
+  testWidgets('GetxController smoke test', (final WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: GetX<Controller<dynamic>>(
           init: Controller<dynamic>(),
-          builder: (Controller<dynamic> controller) {
+          builder: (final Controller<dynamic> controller) {
             return Column(
               children: <Widget>[
                 Text(
@@ -34,15 +34,15 @@ void main() {
                   child: const Text('increment'),
                   onPressed: () => controller.increment(),
                 ),
-                GetX<Controller2>(builder: (Controller2 controller) {
+                GetX<Controller2>(builder: (final Controller2 controller) {
                   return Text('lazy ${controller.lazy.value}');
-                }),
+                },),
                 GetX<ControllerNonGlobal>(
                     init: ControllerNonGlobal(),
                     global: false,
-                    builder: (ControllerNonGlobal controller) {
+                    builder: (final ControllerNonGlobal controller) {
                       return Text('single ${controller.nonGlobal.value}');
-                    })
+                    },),
               ],
             );
           },

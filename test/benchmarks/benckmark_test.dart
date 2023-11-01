@@ -6,7 +6,7 @@ import 'package:get/state_manager.dart';
 
 int times = 30;
 
-void printValue(String value) {
+void printValue(final String value) {
   // ignore: avoid_print
   print(value);
 }
@@ -21,7 +21,7 @@ Future<int> valueNotifier() {
     if (times == value.value) {
       timer.stop();
       printValue(
-          """${value.value} listeners notified | [VALUE_NOTIFIER] time: ${timer.elapsedMicroseconds}ms""");
+          '''${value.value} listeners notified | [VALUE_NOTIFIER] time: ${timer.elapsedMicroseconds}ms''',);
       c.complete(timer.elapsedMicroseconds);
     }
   });
@@ -43,7 +43,7 @@ Future<int> getValue() {
     if (times == value.value) {
       timer.stop();
       printValue(
-          """${value.value} listeners notified | [GETX_VALUE] time: ${timer.elapsedMicroseconds}ms""");
+          '''${value.value} listeners notified | [GETX_VALUE] time: ${timer.elapsedMicroseconds}ms''',);
       c.complete(timer.elapsedMicroseconds);
     }
   });
@@ -62,11 +62,11 @@ Future<int> stream() {
   final timer = Stopwatch();
   timer.start();
 
-  value.stream.listen((v) {
+  value.stream.listen((final v) {
     if (times == v) {
       timer.stop();
       printValue(
-          """$v listeners notified | [STREAM] time: ${timer.elapsedMicroseconds}ms""");
+          '''$v listeners notified | [STREAM] time: ${timer.elapsedMicroseconds}ms''',);
       c.complete(timer.elapsedMicroseconds);
       value.close();
     }
@@ -110,11 +110,11 @@ Future<int> miniStream() {
   final timer = Stopwatch();
   timer.start();
 
-  value.listen((v) {
+  value.listen((final v) {
     if (times == v) {
       timer.stop();
       printValue(
-          """$v listeners notified | [MINI_STREAM] time: ${timer.elapsedMicroseconds}ms""");
+          '''$v listeners notified | [MINI_STREAM] time: ${timer.elapsedMicroseconds}ms''',);
       c.complete(timer.elapsedMicroseconds);
     }
   });
@@ -191,6 +191,6 @@ GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Strea
   });
 }
 
-int calculePercentage(int dart, int getx) {
+int calculePercentage(final int dart, final int getx) {
   return (dart / getx * 100).round() - 100;
 }

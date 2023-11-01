@@ -51,7 +51,7 @@ extension PageArgExt on BuildContext {
 class PageSettings extends RouteSettings {
   PageSettings(
     this.uri, [
-    Object? arguments,
+    final Object? arguments,
   ]) : super(arguments: arguments);
 
   @override
@@ -73,8 +73,8 @@ class PageSettings extends RouteSettings {
   String toString() => name;
 
   PageSettings copy({
-    Uri? uri,
-    Object? arguments,
+    final Uri? uri,
+    final Object? arguments,
   }) {
     return PageSettings(
       uri ?? this.uri,
@@ -83,7 +83,7 @@ class PageSettings extends RouteSettings {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(final Object other) {
     if (identical(this, other)) return true;
 
     return other is PageSettings &&

@@ -32,14 +32,14 @@ mixin GetSingleTickerProviderStateMixin on GetxController
   Ticker? _ticker;
 
   @override
-  Ticker createTicker(TickerCallback onTick) {
+  Ticker createTicker(final TickerCallback onTick) {
     assert(() {
       if (_ticker == null) return true;
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary(
-            '$runtimeType is a GetSingleTickerProviderStateMixin but multiple tickers were created.'),
+            '$runtimeType is a GetSingleTickerProviderStateMixin but multiple tickers were created.',),
         ErrorDescription(
-            'A GetSingleTickerProviderStateMixin can only be used as a TickerProvider once.'),
+            'A GetSingleTickerProviderStateMixin can only be used as a TickerProvider once.',),
         ErrorHint(
           'If a State is used for multiple AnimationController objects, or if it is passed to other '
           'objects and those objects might use it more than one time in total, then instead of '
@@ -56,7 +56,7 @@ mixin GetSingleTickerProviderStateMixin on GetxController
     return _ticker!;
   }
 
-  void didChangeDependencies(BuildContext context) {
+  void didChangeDependencies(final BuildContext context) {
     if (_ticker != null) _ticker!.muted = !TickerMode.of(context);
   }
 
@@ -112,21 +112,21 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
   Set<Ticker>? _tickers;
 
   @override
-  Ticker createTicker(TickerCallback onTick) {
+  Ticker createTicker(final TickerCallback onTick) {
     _tickers ??= <_WidgetTicker>{};
     final result = _WidgetTicker(onTick, this,
-        debugLabel: kDebugMode ? 'created by ${describeIdentity(this)}' : null);
+        debugLabel: kDebugMode ? 'created by ${describeIdentity(this)}' : null,);
     _tickers!.add(result);
     return result;
   }
 
-  void _removeTicker(_WidgetTicker ticker) {
+  void _removeTicker(final _WidgetTicker ticker) {
     assert(_tickers != null);
     assert(_tickers!.contains(ticker));
     _tickers!.remove(ticker);
   }
 
-  void didChangeDependencies(BuildContext context) {
+  void didChangeDependencies(final BuildContext context) {
     final muted = !TickerMode.of(context);
     if (_tickers != null) {
       for (final ticker in _tickers!) {
@@ -165,8 +165,7 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
 }
 
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(TickerCallback onTick, this._creator, {String? debugLabel})
-      : super(onTick, debugLabel: debugLabel);
+  _WidgetTicker(super.onTick, this._creator, {super.debugLabel});
 
   final GetTickerProviderStateMixin _creator;
 
@@ -200,5 +199,5 @@ class _WidgetTicker extends Ticker {
 mixin SingleGetTickerProviderMixin on GetLifeCycleMixin
     implements TickerProvider {
   @override
-  Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
+  Ticker createTicker(final TickerCallback onTick) => Ticker(onTick);
 }
