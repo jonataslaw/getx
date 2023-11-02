@@ -9,7 +9,7 @@ class OtimizedListView<T> extends StatelessWidget {
   final ScrollPhysics? physics;
   final bool shrinkWrap;
   final Widget onEmpty;
-  final int lenght;
+  final int length;
   final Widget Function(BuildContext context, ValueKey key, T item) builder;
   const OtimizedListView({
     Key? key,
@@ -22,7 +22,7 @@ class OtimizedListView<T> extends StatelessWidget {
     this.physics,
     this.onEmpty = const SizedBox.shrink(),
     this.shrinkWrap = false,
-  })  : lenght = list.length,
+  })  : length = list.length,
         super(key: key);
   @override
   Widget build(BuildContext context) {

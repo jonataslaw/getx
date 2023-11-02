@@ -39,7 +39,7 @@ class RouteDecoder {
     }
   }
 
-  List<GetPage>? get currentChildrens => route?.children;
+  List<GetPage>? get currentChildren => route?.children;
 
   Map<String, String> get parameters => pageSettings?.params ?? {};
 

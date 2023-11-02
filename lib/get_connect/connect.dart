@@ -278,7 +278,7 @@ class GetConnect extends GetConnectInterface {
     return baseUrl == null ? url : baseUrl! + url;
   }
 
-  /// query allow made GraphQL raw querys
+  /// query allow made GraphQL raw queries
   /// final connect = GetConnect();
   /// connect.baseUrl = 'https://countries.trevorblades.com/';
   /// final response = await connect.query(

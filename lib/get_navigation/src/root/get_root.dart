@@ -518,7 +518,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       () => GetDelegate(
         showHashOnUrl: true,
         //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildrens ?? [],
+        pages: RouteDecoder.fromRoute(key).currentChildren ?? [],
       ),
     );
     return keys[key];
@@ -532,7 +532,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   String cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
 
-    /// uncommonent for URL styling.
+    /// uncomment for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
       name = '/$name';
