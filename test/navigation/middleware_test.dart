@@ -11,7 +11,7 @@ class RedirectMiddleware extends GetMiddleware {
   // }
 
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+  Future<RouteDecoder?> redirectDelegate(final RouteDecoder route) async {
     return RouteDecoder.fromRoute('/second');
   }
 }
@@ -23,13 +23,13 @@ class RedirectMiddlewareNull extends GetMiddleware {
   // }
 
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+  Future<RouteDecoder?> redirectDelegate(final RouteDecoder route) async {
     return null;
   }
 }
 
 void main() {
-  testWidgets("Middleware redirect smoke test", (tester) async {
+  testWidgets('Middleware redirect smoke test', (final tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',
@@ -53,7 +53,7 @@ void main() {
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 
-  testWidgets("Middleware redirect null test", (tester) async {
+  testWidgets('Middleware redirect null test', (final tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',

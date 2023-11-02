@@ -4,7 +4,7 @@ import '../router_report.dart';
 import 'default_route.dart';
 
 class RouteReport extends StatefulWidget {
-  const RouteReport({Key? key, required this.builder}) : super(key: key);
+  const RouteReport({required this.builder, super.key});
   final WidgetBuilder builder;
 
   @override
@@ -25,7 +25,7 @@ class RouteReportState extends State<RouteReport> with RouteReportMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return widget.builder(context);
   }
 }

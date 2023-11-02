@@ -13,6 +13,46 @@ typedef OnHover = void Function(
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
 class GetSnackBar extends StatefulWidget {
+
+  const GetSnackBar({
+    super.key,
+    this.title,
+    this.message,
+    this.titleText,
+    this.messageText,
+    this.icon,
+    this.shouldIconPulse = true,
+    this.maxWidth,
+    this.margin = const EdgeInsets.all(0.0),
+    this.padding = const EdgeInsets.all(16),
+    this.borderRadius = 0.0,
+    this.borderColor,
+    this.borderWidth = 1.0,
+    this.backgroundColor = const Color(0xFF303030),
+    this.leftBarIndicatorColor,
+    this.boxShadows,
+    this.backgroundGradient,
+    this.mainButton,
+    this.onTap,
+    this.onHover,
+    this.duration,
+    this.isDismissible = true,
+    this.dismissDirection,
+    this.showProgressIndicator = false,
+    this.progressIndicatorController,
+    this.progressIndicatorBackgroundColor,
+    this.progressIndicatorValueColor,
+    this.snackPosition = SnackPosition.bottom,
+    this.snackStyle = SnackStyle.floating,
+    this.forwardAnimationCurve = Curves.easeOutCirc,
+    this.reverseAnimationCurve = Curves.easeOutCirc,
+    this.animationDuration = const Duration(seconds: 1),
+    this.barBlur = 0.0,
+    this.overlayBlur = 0.0,
+    this.overlayColor = Colors.transparent,
+    this.userInputForm,
+    this.snackbarStatus,
+  });
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
 
@@ -165,46 +205,6 @@ class GetSnackBar extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form? userInputForm;
 
-  const GetSnackBar({
-    Key? key,
-    this.title,
-    this.message,
-    this.titleText,
-    this.messageText,
-    this.icon,
-    this.shouldIconPulse = true,
-    this.maxWidth,
-    this.margin = const EdgeInsets.all(0.0),
-    this.padding = const EdgeInsets.all(16),
-    this.borderRadius = 0.0,
-    this.borderColor,
-    this.borderWidth = 1.0,
-    this.backgroundColor = const Color(0xFF303030),
-    this.leftBarIndicatorColor,
-    this.boxShadows,
-    this.backgroundGradient,
-    this.mainButton,
-    this.onTap,
-    this.onHover,
-    this.duration,
-    this.isDismissible = true,
-    this.dismissDirection,
-    this.showProgressIndicator = false,
-    this.progressIndicatorController,
-    this.progressIndicatorBackgroundColor,
-    this.progressIndicatorValueColor,
-    this.snackPosition = SnackPosition.bottom,
-    this.snackStyle = SnackStyle.floating,
-    this.forwardAnimationCurve = Curves.easeOutCirc,
-    this.reverseAnimationCurve = Curves.easeOutCirc,
-    this.animationDuration = const Duration(seconds: 1),
-    this.barBlur = 0.0,
-    this.overlayBlur = 0.0,
-    this.overlayColor = Colors.transparent,
-    this.userInputForm,
-    this.snackbarStatus,
-  }) : super(key: key);
-
   @override
   State createState() => GetSnackBarState();
 
@@ -259,7 +259,7 @@ class GetSnackBarState extends State<GetSnackBar>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Align(
       heightFactor: 1.0,
       child: Material(
@@ -279,7 +279,7 @@ class GetSnackBarState extends State<GetSnackBar>
             children: [
               FutureBuilder<Size>(
                 future: _boxHeightCompleter.future,
-                builder: (context, snapshot) {
+                builder: (final context, final snapshot) {
                   if (snapshot.hasData) {
                     if (widget.barBlur == 0) {
                       return _emptyWidget;
@@ -338,7 +338,7 @@ class GetSnackBarState extends State<GetSnackBar>
         '''
 You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar''');
 
-    _isTitlePresent = (widget.title != null || widget.titleText != null);
+    _isTitlePresent = widget.title != null || widget.titleText != null;
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
 
     _configureLeftBarFuture();
@@ -357,7 +357,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
     if (widget.leftBarIndicatorColor != null) {
       return FutureBuilder<Size>(
         future: _boxHeightCompleter.future,
-        builder: (buildContext, snapshot) {
+        builder: (final buildContext, final snapshot) {
           if (snapshot.hasData) {
             return Container(
               color: widget.leftBarIndicatorColor,
@@ -376,7 +376,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
 
   void _configureLeftBarFuture() {
     ambiguate(Engine.instance)!.addPostFrameCallback(
-      (_) {
+      (final _) {
         final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
           final box = keyContext.findRenderObject() as RenderBox;
@@ -406,7 +406,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
       ),
     );
 
-    _fadeController!.addStatusListener((status) {
+    _fadeController!.addStatusListener((final status) {
       if (status == AnimationStatus.completed) {
         _fadeController!.reverse();
       }
@@ -473,15 +473,13 @@ You need to either use message[String], or messageText[Widget] or define a userI
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.showProgressIndicator
-              ? LinearProgressIndicator(
+          if (widget.showProgressIndicator) LinearProgressIndicator(
                   value: widget.progressIndicatorController != null
                       ? _progressAnimation.value
                       : null,
                   backgroundColor: widget.progressIndicatorBackgroundColor,
                   valueColor: widget.progressIndicatorValueColor,
-                )
-              : _emptyWidget,
+                ) else _emptyWidget,
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -507,7 +505,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
                         ),
                         child: widget.titleText ??
                             Text(
-                              widget.title ?? "",
+                              widget.title ?? '',
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
@@ -526,7 +524,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
                       ),
                       child: widget.messageText ??
                           Text(
-                            widget.message ?? "",
+                            widget.message ?? '',
                             style: const TextStyle(
                                 fontSize: 14.0, color: Colors.white),
                           ),

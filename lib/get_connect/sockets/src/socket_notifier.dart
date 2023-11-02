@@ -11,10 +11,10 @@ typedef OpenSocket = void Function();
 
 /// Wrapper class to message and reason from SocketNotifier
 class Close {
-  final String? message;
-  final int? reason;
 
   Close(this.message, this.reason);
+  final String? message;
+  final int? reason;
 
   @override
   String toString() {
@@ -33,23 +33,23 @@ class SocketNotifier {
   late OpenSocket open;
 
   /// subscribe to close events
-  void addCloses(CloseSocket socket) {
+  void addCloses(final CloseSocket socket) {
     _onCloses!.add(socket);
   }
 
   /// subscribe to error events
-  void addErrors(CloseSocket socket) {
-    _onErrors!.add((socket));
+  void addErrors(final CloseSocket socket) {
+    _onErrors!.add(socket);
   }
 
   /// subscribe to named events
-  void addEvents(String event, MessageSocket socket) {
+  void addEvents(final String event, final MessageSocket socket) {
     _onEvents![event] = socket;
   }
 
   /// subscribe to message events
-  void addMessages(MessageSocket socket) {
-    _onMessages!.add((socket));
+  void addMessages(final MessageSocket socket) {
+    _onMessages!.add(socket);
   }
 
   /// Dispose messages, events, closes and errors subscriptions
@@ -61,15 +61,15 @@ class SocketNotifier {
   }
 
   /// Notify all subscriptions on [addCloses]
-  void notifyClose(Close err) {
-    for (var item in _onCloses!) {
+  void notifyClose(final Close err) {
+    for (final item in _onCloses!) {
       item(err);
     }
   }
 
   /// Notify all subscriptions on [addMessages]
-  void notifyData(dynamic data) {
-    for (var item in _onMessages!) {
+  void notifyData(final dynamic data) {
+    for (final item in _onMessages!) {
       item(data);
     }
     if (data is String) {
@@ -78,16 +78,16 @@ class SocketNotifier {
   }
 
   /// Notify all subscriptions on [addErrors]
-  void notifyError(Close err) {
+  void notifyError(final Close err) {
     // rooms.removeWhere((key, value) => value.contains(_ws));
-    for (var item in _onErrors!) {
+    for (final item in _onErrors!) {
       item(err);
     }
   }
 
-  void _tryOn(String message) {
+  void _tryOn(final String message) {
     try {
-      var msg = jsonDecode(message);
+      final msg = jsonDecode(message);
       final event = msg['type'];
       final data = msg['data'];
       if (_onEvents!.containsKey(event)) {

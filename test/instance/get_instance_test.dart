@@ -121,8 +121,8 @@ void main() {
 
   test('GetxService test', () async {
     Get.lazyPut<PermanentService>(() => PermanentService());
-    var sv1 = Get.find<PermanentService>();
-    var sv2 = Get.find<PermanentService>();
+    final sv1 = Get.find<PermanentService>();
+    final sv2 = Get.find<PermanentService>();
     expect(sv1, sv2);
     expect(Get.isRegistered<PermanentService>(), true);
     Get.delete<PermanentService>();

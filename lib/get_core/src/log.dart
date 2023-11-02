@@ -5,6 +5,6 @@ import 'get_main.dart';
 typedef LogWriterCallback = void Function(String text, {bool isError});
 
 /// default logger from GetX
-void defaultLogWriterCallback(String value, {bool isError = false}) {
+void defaultLogWriterCallback(final String value, {final bool isError = false}) {
   if (isError || Get.isLogEnable) developer.log(value, name: 'GETX');
 }

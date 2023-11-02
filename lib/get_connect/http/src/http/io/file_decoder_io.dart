@@ -1,6 +1,6 @@
 import 'dart:io';
 
-List<int> fileToBytes(dynamic data) {
+List<int> fileToBytes(final dynamic data) {
   if (data is File) {
     return data.readAsBytesSync();
   } else if (data is String) {
@@ -17,4 +17,4 @@ List<int> fileToBytes(dynamic data) {
   }
 }
 
-void writeOnFile(List<int> bytes) {}
+void writeOnFile(final List<int> bytes) {}

@@ -5,7 +5,7 @@ import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
 import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
 
-bool _conditional(dynamic condition) {
+bool _conditional(final dynamic condition) {
   if (condition == null) return true;
   if (condition is bool) return condition;
   if (condition is bool Function()) return condition();
@@ -58,15 +58,15 @@ class Workers {
 /// }
 /// ```
 Worker ever<T>(
-  GetListenable<T> listener,
-  WorkerCallback<T> callback, {
-  dynamic condition = true,
-  Function? onError,
-  void Function()? onDone,
-  bool? cancelOnError,
+  final GetListenable<T> listener,
+  final WorkerCallback<T> callback, {
+  final dynamic condition = true,
+  final Function? onError,
+  final void Function()? onDone,
+  final bool? cancelOnError,
 }) {
-  StreamSubscription sub = listener.listen(
-    (event) {
+  final StreamSubscription sub = listener.listen(
+    (final event) {
       if (_conditional(condition)) callback(event);
     },
     onError: onError,
@@ -81,17 +81,17 @@ Worker ever<T>(
 /// and the [callback] is executed to each one of them. The [Worker] is
 /// common to all, so `worker.dispose()` will cancel all streams.
 Worker everAll(
-  List<RxInterface> listeners,
-  WorkerCallback callback, {
-  dynamic condition = true,
-  Function? onError,
-  void Function()? onDone,
-  bool? cancelOnError,
+  final List<RxInterface> listeners,
+  final WorkerCallback callback, {
+  final dynamic condition = true,
+  final Function? onError,
+  final void Function()? onDone,
+  final bool? cancelOnError,
 }) {
   final evers = <StreamSubscription>[];
-  for (var i in listeners) {
+  for (final i in listeners) {
     final sub = i.listen(
-      (event) {
+      (final event) {
         if (_conditional(condition)) callback(event);
       },
       onError: onError,
@@ -102,7 +102,7 @@ Worker everAll(
   }
 
   Future<void> cancel() async {
-    for (var i in evers) {
+    for (final i in evers) {
       i.cancel();
     }
   }
@@ -132,17 +132,17 @@ Worker everAll(
 /// }
 ///```
 Worker once<T>(
-  GetListenable<T> listener,
-  WorkerCallback<T> callback, {
-  dynamic condition = true,
-  Function? onError,
-  void Function()? onDone,
-  bool? cancelOnError,
+  final GetListenable<T> listener,
+  final WorkerCallback<T> callback, {
+  final dynamic condition = true,
+  final Function? onError,
+  final void Function()? onDone,
+  final bool? cancelOnError,
 }) {
   late Worker ref;
   StreamSubscription? sub;
   sub = listener.listen(
-    (event) {
+    (final event) {
       if (!_conditional(condition)) return;
       ref._disposed = true;
       ref._log('called');
@@ -175,17 +175,17 @@ Worker once<T>(
 /// );
 /// ```
 Worker interval<T>(
-  GetListenable<T> listener,
-  WorkerCallback<T> callback, {
-  Duration time = const Duration(seconds: 1),
-  dynamic condition = true,
-  Function? onError,
-  void Function()? onDone,
-  bool? cancelOnError,
+  final GetListenable<T> listener,
+  final WorkerCallback<T> callback, {
+  final Duration time = const Duration(seconds: 1),
+  final dynamic condition = true,
+  final Function? onError,
+  final void Function()? onDone,
+  final bool? cancelOnError,
 }) {
   var debounceActive = false;
-  StreamSubscription sub = listener.listen(
-    (event) async {
+  final StreamSubscription sub = listener.listen(
+    (final event) async {
       if (debounceActive || !_conditional(condition)) return;
       debounceActive = true;
       await Future.delayed(time);
@@ -219,17 +219,17 @@ Worker interval<T>(
 ///  }
 ///  ```
 Worker debounce<T>(
-  GetListenable<T> listener,
-  WorkerCallback<T> callback, {
-  Duration? time,
-  Function? onError,
-  void Function()? onDone,
-  bool? cancelOnError,
+  final GetListenable<T> listener,
+  final WorkerCallback<T> callback, {
+  final Duration? time,
+  final Function? onError,
+  final void Function()? onDone,
+  final bool? cancelOnError,
 }) {
   final newDebouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
-  StreamSubscription sub = listener.listen(
-    (event) {
+  final StreamSubscription sub = listener.listen(
+    (final event) {
       newDebouncer(() {
         callback(event);
       });
@@ -254,7 +254,7 @@ class Worker {
   bool get disposed => _disposed;
 
   //final bool _verbose = true;
-  void _log(String msg) {
+  void _log(final String msg) {
     //  if (!_verbose) return;
     Get.log('$runtimeType $type $msg');
   }

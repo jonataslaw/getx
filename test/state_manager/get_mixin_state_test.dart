@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/mixin_builder.dart';
 
 void main() {
-  testWidgets("MixinBuilder with reactive and not reactive", (tester) async {
+  testWidgets('MixinBuilder with reactive and not reactive', (final tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MixinBuilder<Controller>(
           init: Controller(),
-          builder: (controller) {
+          builder: (final controller) {
             return Column(
               children: [
                 Text(
@@ -34,11 +34,11 @@ void main() {
                   'Map: ${controller.map.length}',
                 ),
                 TextButton(
-                  child: const Text("increment"),
+                  child: const Text('increment'),
                   onPressed: () => controller.increment(),
                 ),
                 TextButton(
-                  child: const Text("increment2"),
+                  child: const Text('increment2'),
                   onPressed: () => controller.increment2(),
                 )
               ],
@@ -48,31 +48,31 @@ void main() {
       ),
     );
 
-    expect(find.text("Count: 0"), findsOneWidget);
-    expect(find.text("Count2: 0"), findsOneWidget);
-    expect(find.text("Double: 0.0"), findsOneWidget);
-    expect(find.text("String: string"), findsOneWidget);
-    expect(find.text("Bool: true"), findsOneWidget);
-    expect(find.text("List: 0"), findsOneWidget);
-    expect(find.text("Map: 0"), findsOneWidget);
+    expect(find.text('Count: 0'), findsOneWidget);
+    expect(find.text('Count2: 0'), findsOneWidget);
+    expect(find.text('Double: 0.0'), findsOneWidget);
+    expect(find.text('String: string'), findsOneWidget);
+    expect(find.text('Bool: true'), findsOneWidget);
+    expect(find.text('List: 0'), findsOneWidget);
+    expect(find.text('Map: 0'), findsOneWidget);
 
     Controller.to.increment();
 
     await tester.pump();
 
-    expect(find.text("Count: 1"), findsOneWidget);
+    expect(find.text('Count: 1'), findsOneWidget);
 
     await tester.tap(find.text('increment'));
 
     await tester.pump();
 
-    expect(find.text("Count: 2"), findsOneWidget);
+    expect(find.text('Count: 2'), findsOneWidget);
 
     await tester.tap(find.text('increment2'));
 
     await tester.pump();
 
-    expect(find.text("Count2: 1"), findsOneWidget);
+    expect(find.text('Count2: 1'), findsOneWidget);
   });
 
   // testWidgets(
@@ -94,7 +94,7 @@ class Controller extends GetxController {
   int count = 0;
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
-  RxString string = "string".obs;
+  RxString string = 'string'.obs;
   RxList list = [].obs;
   RxMap map = {}.obs;
   RxBool boolean = true.obs;

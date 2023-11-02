@@ -12,7 +12,7 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
   /// `GetBuilder( id: )`,
   /// [ids] can be reused among `GetBuilders` like group tags.
   /// The update will only notify the Widgets, if [condition] is true.
-  void update([List<Object>? ids, bool condition = true]) {
+  void update([final List<Object>? ids, final bool condition = true]) {
     if (!condition) {
       return;
     }
@@ -108,7 +108,7 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
 
   @mustCallSuper
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
         onResumed();

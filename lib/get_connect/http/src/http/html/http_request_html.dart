@@ -12,10 +12,10 @@ import '../utils/body_decoder.dart';
 /// A `dart:html` implementation of `IClient`.
 class HttpRequestImpl implements IClient {
   HttpRequestImpl({
-    bool allowAutoSignedCert = true,
-    List<TrustedCertificate>? trustedCertificates,
+    final bool allowAutoSignedCert = true,
+    final List<TrustedCertificate>? trustedCertificates,
     this.withCredentials = false,
-    String Function(Uri url)? findProxy,
+    final String Function(Uri url)? findProxy,
   });
 
   /// The currently active XHRs.
@@ -30,8 +30,8 @@ class HttpRequestImpl implements IClient {
 
   /// Sends an HTTP request and asynchronously returns the response.
   @override
-  Future<Response<T>> send<T>(Request<T> request) async {
-    var bytes = await request.bodyBytes.toBytes();
+  Future<Response<T>> send<T>(final Request<T> request) async {
+    final bytes = await request.bodyBytes.toBytes();
     HttpRequest xhr;
 
     xhr = HttpRequest()
@@ -45,13 +45,13 @@ class HttpRequestImpl implements IClient {
       ..withCredentials = withCredentials;
     request.headers.forEach(xhr.setRequestHeader);
 
-    var completer = Completer<Response<T>>();
-    xhr.onLoad.first.then((_) {
-      var blob = xhr.response as Blob? ?? Blob([]);
-      var reader = FileReader();
+    final completer = Completer<Response<T>>();
+    xhr.onLoad.first.then((final _) {
+      final blob = xhr.response as Blob? ?? Blob([]);
+      final reader = FileReader();
 
-      reader.onLoad.first.then((_) async {
-        var bodyBytes = (reader.result as List<int>).toStream();
+      reader.onLoad.first.then((final _) async {
+        final bodyBytes = (reader.result as List<int>).toStream();
 
         if(request.responseInterceptor != null) throw 'response interception not implemented for web yet!';
 
@@ -95,7 +95,7 @@ class HttpRequestImpl implements IClient {
         completer.complete(response);
       });
 
-      reader.onError.first.then((error) {
+      reader.onError.first.then((final error) {
         completer.completeError(
           GetHttpException(error.toString(), request.url),
           StackTrace.current,
@@ -105,7 +105,7 @@ class HttpRequestImpl implements IClient {
       reader.readAsArrayBuffer(blob);
     });
 
-    xhr.onError.first.then((_) {
+    xhr.onError.first.then((final _) {
       completer.completeError(
           GetHttpException('XMLHttpRequest error.', request.url),
           StackTrace.current);
@@ -123,7 +123,7 @@ class HttpRequestImpl implements IClient {
   /// Closes the client and abort all active requests.
   @override
   void close() {
-    for (var xhr in _xhrs) {
+    for (final xhr in _xhrs) {
       xhr.abort();
     }
   }

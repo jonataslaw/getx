@@ -3,10 +3,10 @@ import 'package:get/utils.dart';
 
 void main() {
   test('String test', () {
-    var value = 'string';
+    final value = 'string';
     var expected = '';
-    void logFunction(String prefix, dynamic value, String info,
-        {bool isError = false}) {
+    void logFunction(final String prefix, final dynamic value, final String info,
+        {final bool isError = false}) {
       expected = '$prefix $value $info'.trim();
     }
 
@@ -14,10 +14,10 @@ void main() {
     expect(expected, 'Error: String string');
   });
   test('Int test', () {
-    var value = 1;
+    final value = 1;
     var expected = '';
-    void logFunction(String prefix, dynamic value, String info,
-        {bool isError = false}) {
+    void logFunction(final String prefix, final dynamic value, final String info,
+        {final bool isError = false}) {
       expected = '$prefix $value $info'.trim();
     }
 
@@ -25,10 +25,10 @@ void main() {
     expect(expected, 'Error: int 1');
   });
   test('Double test', () {
-    var value = 1.0;
+    final value = 1.0;
     var expected = '';
-    void logFunction(String prefix, dynamic value, String info,
-        {bool isError = false}) {
+    void logFunction(final String prefix, final dynamic value, final String info,
+        {final bool isError = false}) {
       expected = '$prefix $value $info'.trim();
     }
 

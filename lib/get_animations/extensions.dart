@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'animations.dart';
 import 'get_animated_builder.dart';
 
-const _defaultDuration = Duration(seconds: 2);
-const _defaultDelay = Duration.zero;
+const Duration _defaultDuration = Duration(seconds: 2);
+const Duration _defaultDelay = Duration.zero;
 
 extension AnimationExtension on Widget {
   GetAnimatedBuilder? get _currentAnimation =>
       (this is GetAnimatedBuilder) ? this as GetAnimatedBuilder : null;
 
   GetAnimatedBuilder fadeIn({
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     assert(isSequential || this is! FadeOutAnimation,
         'Can not use fadeOut + fadeIn when isSequential is false');
@@ -28,10 +28,10 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder fadeOut({
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     assert(isSequential || this is! FadeInAnimation,
         'Can not use fadeOut() + fadeIn when isSequential is false');
@@ -45,12 +45,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder rotate({
-    required double begin,
-    required double end,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    required final double begin,
+    required final double end,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return RotateAnimation(
       duration: duration,
@@ -63,12 +63,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder scale({
-    required double begin,
-    required double end,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    required final double begin,
+    required final double end,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return ScaleAnimation(
       duration: duration,
@@ -81,13 +81,13 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder slide({
-    required OffsetBuilder offset,
-    double begin = 0,
-    double end = 1,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    required final OffsetBuilder offset,
+    final double begin = 0,
+    final double end = 1,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return SlideAnimation(
       duration: duration,
@@ -101,12 +101,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder bounce({
-    required double begin,
-    required double end,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    required final double begin,
+    required final double end,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return BounceAnimation(
       duration: duration,
@@ -119,10 +119,10 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder spin({
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return SpinAnimation(
       duration: duration,
@@ -133,12 +133,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder size({
-    required double begin,
-    required double end,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    required final double begin,
+    required final double end,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return SizeAnimation(
       duration: duration,
@@ -151,12 +151,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder blur({
-    double begin = 0,
-    double end = 15,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final double begin = 0,
+    final double end = 15,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return BlurAnimation(
       duration: duration,
@@ -169,12 +169,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder flip({
-    double begin = 0,
-    double end = 1,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final double begin = 0,
+    final double end = 1,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return FlipAnimation(
       duration: duration,
@@ -187,12 +187,12 @@ extension AnimationExtension on Widget {
   }
 
   GetAnimatedBuilder wave({
-    double begin = 0,
-    double end = 1,
-    Duration duration = _defaultDuration,
-    Duration delay = _defaultDelay,
-    ValueSetter<AnimationController>? onComplete,
-    bool isSequential = false,
+    final double begin = 0,
+    final double end = 1,
+    final Duration duration = _defaultDuration,
+    final Duration delay = _defaultDelay,
+    final ValueSetter<AnimationController>? onComplete,
+    final bool isSequential = false,
   }) {
     return WaveAnimation(
       duration: duration,
@@ -204,9 +204,9 @@ extension AnimationExtension on Widget {
     );
   }
 
-  Duration _getDelay(bool isSequential, Duration delay) {
+  Duration _getDelay(final bool isSequential, final Duration delay) {
     assert(!(isSequential && delay != Duration.zero),
-        "Error: When isSequential is true, delay must be non-zero. Context: isSequential: $isSequential delay: $delay");
+        'Error: When isSequential is true, delay must be non-zero. Context: isSequential: $isSequential delay: $delay');
 
     return isSequential
         ? (_currentAnimation?.totalDuration ?? Duration.zero)

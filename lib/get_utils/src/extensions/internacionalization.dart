@@ -12,8 +12,8 @@ class _IntlHost {
 
 extension FirstWhereExt<T> on List<T> {
   /// The first element satisfying [test], or `null` if there are none.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
+  T? firstWhereOrNull(final bool Function(T element) test) {
+    for (final element in this) {
       if (test(element)) return element;
     }
     return null;
@@ -27,13 +27,13 @@ extension LocalesIntl on GetInterface {
 
   Locale? get fallbackLocale => _intlHost.fallbackLocale;
 
-  set locale(Locale? newLocale) => _intlHost.locale = newLocale;
+  set locale(final Locale? newLocale) => _intlHost.locale = newLocale;
 
-  set fallbackLocale(Locale? newLocale) => _intlHost.fallbackLocale = newLocale;
+  set fallbackLocale(final Locale? newLocale) => _intlHost.fallbackLocale = newLocale;
 
   Map<String, Map<String, String>> get translations => _intlHost.translations;
 
-  void addTranslations(Map<String, Map<String, String>> tr) {
+  void addTranslations(final Map<String, Map<String, String>> tr) {
     translations.addAll(tr);
   }
 
@@ -41,8 +41,8 @@ extension LocalesIntl on GetInterface {
     translations.clear();
   }
 
-  void appendTranslations(Map<String, Map<String, String>> tr) {
-    tr.forEach((key, map) {
+  void appendTranslations(final Map<String, Map<String, String>> tr) {
+    tr.forEach((final key, final map) {
       if (translations.containsKey(key)) {
         translations[key]!.addAll(map);
       } else {
@@ -57,9 +57,9 @@ extension Trans on String {
   // whether the key is also present.
   bool get _fullLocaleAndKey {
     return Get.translations.containsKey(
-            "${Get.locale!.languageCode}_${Get.locale!.countryCode}") &&
+            '${Get.locale!.languageCode}_${Get.locale!.countryCode}') &&
         Get.translations[
-                "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
+                '${Get.locale!.languageCode}_${Get.locale!.countryCode}']!
             .containsKey(this);
   }
 
@@ -67,15 +67,15 @@ extension Trans on String {
   // country, and if it contains that key.
   Map<String, String>? get _getSimilarLanguageTranslation {
     final translationsWithNoCountry = Get.translations
-        .map((key, value) => MapEntry(key.split("_").first, value));
+        .map((final key, final value) => MapEntry(key.split('_').first, value));
     final containsKey = translationsWithNoCountry
-        .containsKey(Get.locale!.languageCode.split("_").first);
+        .containsKey(Get.locale!.languageCode.split('_').first);
 
     if (!containsKey) {
       return null;
     }
 
-    return translationsWithNoCountry[Get.locale!.languageCode.split("_").first];
+    return translationsWithNoCountry[Get.locale!.languageCode.split('_').first];
   }
 
   String get tr {
@@ -89,7 +89,7 @@ extension Trans on String {
 
     if (_fullLocaleAndKey) {
       return Get.translations[
-          "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!;
+          '${Get.locale!.languageCode}_${Get.locale!.countryCode}']![this]!;
     }
     final similarTranslation = _getSimilarLanguageTranslation;
     if (similarTranslation != null && similarTranslation.containsKey(this)) {
@@ -98,7 +98,7 @@ extension Trans on String {
       // the key.
     } else if (Get.fallbackLocale != null) {
       final fallback = Get.fallbackLocale!;
-      final key = "${fallback.languageCode}_${fallback.countryCode}";
+      final key = '${fallback.languageCode}_${fallback.countryCode}';
 
       if (Get.translations.containsKey(key) &&
           Get.translations[key]!.containsKey(this)) {
@@ -114,7 +114,7 @@ extension Trans on String {
     }
   }
 
-  String trArgs([List<String> args = const []]) {
+  String trArgs([final List<String> args = const []]) {
     var key = tr;
     if (args.isNotEmpty) {
       for (final arg in args) {
@@ -124,14 +124,14 @@ extension Trans on String {
     return key;
   }
 
-  String trPlural([String? pluralKey, int? i, List<String> args = const []]) {
+  String trPlural([final String? pluralKey, final int? i, final List<String> args = const []]) {
     return i == 1 ? trArgs(args) : pluralKey!.trArgs(args);
   }
 
-  String trParams([Map<String, String> params = const {}]) {
+  String trParams([final Map<String, String> params = const {}]) {
     var trans = tr;
     if (params.isNotEmpty) {
-      params.forEach((key, value) {
+      params.forEach((final key, final value) {
         trans = trans.replaceAll('@$key', value);
       });
     }
@@ -139,7 +139,7 @@ extension Trans on String {
   }
 
   String trPluralParams(
-      [String? pluralKey, int? i, Map<String, String> params = const {}]) {
+      [final String? pluralKey, final int? i, final Map<String, String> params = const {}]) {
     return i == 1 ? trParams(params) : pluralKey!.trParams(params);
   }
 }

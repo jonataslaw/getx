@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../../../../get_core/get_core.dart';
 import '../../request/request.dart';
 
-T? bodyDecoded<T>(Request<T> request, String stringBody, String? mimeType) {
+T? bodyDecoded<T>(final Request<T> request, final String stringBody, final String? mimeType) {
   T? body;
   dynamic bodyToDecode;
 

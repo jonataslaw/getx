@@ -5,6 +5,50 @@ import '../../../get.dart';
 import '../router_report.dart';
 
 class ConfigData {
+
+  ConfigData({
+    required this.routingCallback,
+    required this.defaultTransition,
+    required this.onInit,
+    required this.onReady,
+    required this.onDispose,
+    required this.enableLog,
+    required this.logWriterCallback,
+    required this.smartManagement,
+    required this.binds,
+    required this.transitionDuration,
+    required this.defaultGlobalState,
+    required this.getPages,
+    required this.unknownRoute,
+    required this.routeInformationProvider,
+    required this.routeInformationParser,
+    required this.routerDelegate,
+    required this.backButtonDispatcher,
+    required this.navigatorObservers,
+    required this.navigatorKey,
+    required this.scaffoldMessengerKey,
+    required this.translationsKeys,
+    required this.translations,
+    required this.locale,
+    required this.fallbackLocale,
+    required this.initialRoute,
+    required this.customTransition,
+    required this.home,
+    this.theme,
+    this.darkTheme,
+    this.themeMode,
+    this.unikey,
+    this.testMode = false,
+    this.defaultOpaqueRoute = true,
+    this.defaultTransitionDuration = const Duration(milliseconds: 300),
+    this.defaultTransitionCurve = Curves.easeOutQuad,
+    this.defaultDialogTransitionCurve = Curves.easeOutQuad,
+    this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
+    this.parameters = const {},
+    final Routing? routing,
+    final bool? defaultPopGesture,
+  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
+        routing = routing ?? Routing();
   final ValueChanged<Routing?>? routingCallback;
   final Transition? defaultTransition;
   final VoidCallback? onInit;
@@ -46,91 +90,47 @@ class ConfigData {
   final Routing routing;
   final Map<String, String?> parameters;
 
-  ConfigData({
-    required this.routingCallback,
-    required this.defaultTransition,
-    required this.onInit,
-    required this.onReady,
-    required this.onDispose,
-    required this.enableLog,
-    required this.logWriterCallback,
-    required this.smartManagement,
-    required this.binds,
-    required this.transitionDuration,
-    required this.defaultGlobalState,
-    required this.getPages,
-    required this.unknownRoute,
-    required this.routeInformationProvider,
-    required this.routeInformationParser,
-    required this.routerDelegate,
-    required this.backButtonDispatcher,
-    required this.navigatorObservers,
-    required this.navigatorKey,
-    required this.scaffoldMessengerKey,
-    required this.translationsKeys,
-    required this.translations,
-    required this.locale,
-    required this.fallbackLocale,
-    required this.initialRoute,
-    required this.customTransition,
-    required this.home,
-    this.theme,
-    this.darkTheme,
-    this.themeMode,
-    this.unikey,
-    this.testMode = false,
-    this.defaultOpaqueRoute = true,
-    this.defaultTransitionDuration = const Duration(milliseconds: 300),
-    this.defaultTransitionCurve = Curves.easeOutQuad,
-    this.defaultDialogTransitionCurve = Curves.easeOutQuad,
-    this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
-    this.parameters = const {},
-    Routing? routing,
-    bool? defaultPopGesture,
-  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
-        routing = routing ?? Routing();
-
   ConfigData copyWith({
-    ValueChanged<Routing?>? routingCallback,
-    Transition? defaultTransition,
-    VoidCallback? onInit,
-    VoidCallback? onReady,
-    VoidCallback? onDispose,
-    bool? enableLog,
-    LogWriterCallback? logWriterCallback,
-    SmartManagement? smartManagement,
-    List<Bind>? binds,
-    Duration? transitionDuration,
-    bool? defaultGlobalState,
-    List<GetPage>? getPages,
-    GetPage? unknownRoute,
-    RouteInformationProvider? routeInformationProvider,
-    RouteInformationParser<Object>? routeInformationParser,
-    RouterDelegate<Object>? routerDelegate,
-    BackButtonDispatcher? backButtonDispatcher,
-    List<NavigatorObserver>? navigatorObservers,
-    GlobalKey<NavigatorState>? navigatorKey,
-    GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey,
-    Map<String, Map<String, String>>? translationsKeys,
-    Translations? translations,
-    Locale? locale,
-    Locale? fallbackLocale,
-    String? initialRoute,
-    CustomTransition? customTransition,
-    Widget? home,
-    bool? testMode,
-    Key? unikey,
-    ThemeData? theme,
-    ThemeData? darkTheme,
-    ThemeMode? themeMode,
-    bool? defaultPopGesture,
-    bool? defaultOpaqueRoute,
-    Duration? defaultTransitionDuration,
-    Curve? defaultTransitionCurve,
-    Curve? defaultDialogTransitionCurve,
-    Duration? defaultDialogTransitionDuration,
-    Routing? routing,
-    Map<String, String?>? parameters,
+    final ValueChanged<Routing?>? routingCallback,
+    final Transition? defaultTransition,
+    final VoidCallback? onInit,
+    final VoidCallback? onReady,
+    final VoidCallback? onDispose,
+    final bool? enableLog,
+    final LogWriterCallback? logWriterCallback,
+    final SmartManagement? smartManagement,
+    final List<Bind>? binds,
+    final Duration? transitionDuration,
+    final bool? defaultGlobalState,
+    final List<GetPage>? getPages,
+    final GetPage? unknownRoute,
+    final RouteInformationProvider? routeInformationProvider,
+    final RouteInformationParser<Object>? routeInformationParser,
+    final RouterDelegate<Object>? routerDelegate,
+    final BackButtonDispatcher? backButtonDispatcher,
+    final List<NavigatorObserver>? navigatorObservers,
+    final GlobalKey<NavigatorState>? navigatorKey,
+    final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey,
+    final Map<String, Map<String, String>>? translationsKeys,
+    final Translations? translations,
+    final Locale? locale,
+    final Locale? fallbackLocale,
+    final String? initialRoute,
+    final CustomTransition? customTransition,
+    final Widget? home,
+    final bool? testMode,
+    final Key? unikey,
+    final ThemeData? theme,
+    final ThemeData? darkTheme,
+    final ThemeMode? themeMode,
+    final bool? defaultPopGesture,
+    final bool? defaultOpaqueRoute,
+    final Duration? defaultTransitionDuration,
+    final Curve? defaultTransitionCurve,
+    final Curve? defaultDialogTransitionCurve,
+    final Duration? defaultDialogTransitionDuration,
+    final Routing? routing,
+    final Map<String, String?>? parameters,
   }) {
     return ConfigData(
       routingCallback: routingCallback ?? this.routingCallback,
@@ -183,7 +183,7 @@ class ConfigData {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(final Object other) {
     if (identical(this, other)) return true;
 
     return other is ConfigData &&
@@ -277,16 +277,14 @@ class ConfigData {
 
 class GetRoot extends StatefulWidget {
   const GetRoot({
-    Key? key,
-    required this.config,
-    required this.child,
-  }) : super(key: key);
+    required this.config, required this.child, super.key,
+  });
   final ConfigData config;
   final Widget child;
   @override
   State<GetRoot> createState() => GetRootState();
 
-  static GetRootState of(BuildContext context) {
+  static GetRootState of(final BuildContext context) {
     // Handles the case where the input context is a navigator element.
     GetRootState? root;
     if (context is StatefulElement && context.state is GetRootState) {
@@ -363,7 +361,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
         pages: config.getPages ??
             [
               GetPage(
-                name: cleanRouteName("/${config.home.runtimeType}"),
+                name: cleanRouteName('/${config.home.runtimeType}'),
                 page: () => config.home!,
               ),
             ],
@@ -386,7 +384,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
           GetInformationParser.createInformationParser(
         initialRoute: config.initialRoute ??
             config.getPages?.first.name ??
-            cleanRouteName("/${config.home.runtimeType}"),
+            cleanRouteName('/${config.home.runtimeType}'),
       );
 
       config =
@@ -423,12 +421,12 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     Future(() => onReady());
   }
 
-  set parameters(Map<String, String?> newParameters) {
+  set parameters(final Map<String, String?> newParameters) {
     // rootController.parameters = newParameters;
     config = config.copyWith(parameters: newParameters);
   }
 
-  set testMode(bool isTest) {
+  set testMode(final bool isTest) {
     config = config.copyWith(testMode: isTest);
     // _getxController.testMode = isTest;
   }
@@ -456,7 +454,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeLocales(List<Locale>? locales) {
+  void didChangeLocales(final List<Locale>? locales) {
     Get.asap(() {
       final locale = Get.deviceLocale;
       if (locale != null) {
@@ -465,7 +463,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     });
   }
 
-  void setTheme(ThemeData value) {
+  void setTheme(final ThemeData value) {
     if (config.darkTheme == null) {
       config = config.copyWith(theme: value);
     } else {
@@ -478,7 +476,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     update();
   }
 
-  void setThemeMode(ThemeMode value) {
+  void setThemeMode(final ThemeMode value) {
     config = config.copyWith(themeMode: value);
     update();
   }
@@ -489,7 +487,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   void update() {
-    context.visitAncestorElements((element) {
+    context.visitAncestorElements((final element) {
       element.markNeedsBuild();
       return false;
     });
@@ -502,14 +500,14 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   RouteInformationParser<Object> get informationParser =>
       config.routeInformationParser!;
 
-  GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
+  GlobalKey<NavigatorState>? addKey(final GlobalKey<NavigatorState> newKey) {
     rootDelegate.navigatorKey = newKey;
     return key;
   }
 
   Map<String, GetDelegate> keys = {};
 
-  GetDelegate? nestedKey(String? key) {
+  GetDelegate? nestedKey(final String? key) {
     if (key == null) {
       return rootDelegate;
     }
@@ -525,7 +523,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return widget.child;
   }
 

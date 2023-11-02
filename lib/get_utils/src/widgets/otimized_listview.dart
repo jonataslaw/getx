@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class OtimizedListView<T> extends StatelessWidget {
+  const OtimizedListView({
+    required this.list, required this.builder, super.key,
+    this.scrollDirection = Axis.vertical,
+    this.reverse = false,
+    this.controller,
+    this.primary,
+    this.physics,
+    this.onEmpty = const SizedBox.shrink(),
+    this.shrinkWrap = false,
+  })  : length = list.length;
   final List<T> list;
   final Axis scrollDirection;
   final bool reverse;
@@ -11,21 +21,8 @@ class OtimizedListView<T> extends StatelessWidget {
   final Widget onEmpty;
   final int length;
   final Widget Function(BuildContext context, ValueKey key, T item) builder;
-  const OtimizedListView({
-    Key? key,
-    required this.list,
-    required this.builder,
-    this.scrollDirection = Axis.vertical,
-    this.reverse = false,
-    this.controller,
-    this.primary,
-    this.physics,
-    this.onEmpty = const SizedBox.shrink(),
-    this.shrinkWrap = false,
-  })  : length = list.length,
-        super(key: key);
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (list.isEmpty) return onEmpty;
 
     return CustomScrollView(
@@ -38,15 +35,15 @@ class OtimizedListView<T> extends StatelessWidget {
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, i) {
+            (final context, final i) {
               final item = list[i];
               final key = ValueKey(item);
               return builder(context, key, item);
             },
             childCount: list.length,
             addAutomaticKeepAlives: true,
-            findChildIndexCallback: (key) {
-              return list.indexWhere((m) => m == (key as ValueKey<T>).value);
+            findChildIndexCallback: (final key) {
+              return list.indexWhere((final m) => m == (key as ValueKey<T>).value);
             },
           ),
         ),

@@ -4,6 +4,6 @@ void setUrlStrategy() {
   removeHash();
 }
 
-void removeLastHistory(String? url) {
+void removeLastHistory(final String? url) {
   removeLastHistory(url);
 }

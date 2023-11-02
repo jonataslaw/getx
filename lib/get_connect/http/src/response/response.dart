@@ -6,11 +6,10 @@ import '../request/request.dart';
 import '../status/http_status.dart';
 
 class GraphQLResponse<T> extends Response<T> {
-  final List<GraphQLError>? graphQLErrors;
 
-  GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
+  GraphQLResponse({super.body, this.graphQLErrors});
 
-  GraphQLResponse.fromResponse(Response res)
+  GraphQLResponse.fromResponse(final Response res)
       : graphQLErrors = null,
         super(
             request: res.request,
@@ -20,6 +19,7 @@ class GraphQLResponse<T> extends Response<T> {
             statusText: res.statusText,
             headers: res.headers,
             body: res.body['data'] as T?);
+  final List<GraphQLError>? graphQLErrors;
 }
 
 class Response<T> {
@@ -34,13 +34,13 @@ class Response<T> {
   });
 
   Response<T> copyWith({
-    Request? request,
-    int? statusCode,
-    Stream<List<int>>? bodyBytes,
-    String? bodyString,
-    String? statusText,
-    Map<String, String>? headers,
-    T? body,
+    final Request? request,
+    final int? statusCode,
+    final Stream<List<int>>? bodyBytes,
+    final String? bodyString,
+    final String? statusText,
+    final Map<String, String>? headers,
+    final T? body,
   }) {
     return Response<T>(
       request: request ?? this.request,
@@ -94,7 +94,7 @@ class Response<T> {
 }
 
 Future<String> bodyBytesToString(
-    Stream<List<int>> bodyBytes, Map<String, String> headers) {
+    final Stream<List<int>> bodyBytes, final Map<String, String> headers) {
   return bodyBytes.bytesToString(_encodingForHeaders(headers));
 }
 
@@ -102,14 +102,14 @@ Future<String> bodyBytesToString(
 ///
 /// Defaults to [utf8] if the headers don't specify a charset or if that
 /// charset is unknown.
-Encoding _encodingForHeaders(Map<String, String> headers) =>
+Encoding _encodingForHeaders(final Map<String, String> headers) =>
     _encodingForCharset(_contentTypeForHeaders(headers).parameters!['charset']);
 
 /// Returns the [Encoding] that corresponds to [charset].
 ///
 /// Returns [fallback] if [charset] is null or if no [Encoding] was found that
 /// corresponds to [charset].
-Encoding _encodingForCharset(String? charset, [Encoding fallback = utf8]) {
+Encoding _encodingForCharset(final String? charset, [final Encoding fallback = utf8]) {
   if (charset == null) return fallback;
   return Encoding.getByName(charset) ?? fallback;
 }
@@ -117,28 +117,28 @@ Encoding _encodingForCharset(String? charset, [Encoding fallback = utf8]) {
 /// Returns the MediaType object for the given headers's content-type.
 ///
 /// Defaults to `application/octet-stream`.
-HeaderValue _contentTypeForHeaders(Map<String, String> headers) {
-  var contentType = headers['content-type'];
+HeaderValue _contentTypeForHeaders(final Map<String, String> headers) {
+  final contentType = headers['content-type'];
   if (contentType != null) return HeaderValue.parse(contentType);
   return HeaderValue('application/octet-stream');
 }
 
 class HeaderValue {
-  String _value;
-  Map<String, String?>? _parameters;
-  Map<String, String?>? _unmodifiableParameters;
 
-  HeaderValue([this._value = '', Map<String, String>? parameters]) {
+  HeaderValue([this._value = '', final Map<String, String>? parameters]) {
     if (parameters != null) {
       _parameters = HashMap<String, String>.from(parameters);
     }
   }
+  String _value;
+  Map<String, String?>? _parameters;
+  Map<String, String?>? _unmodifiableParameters;
 
-  static HeaderValue parse(String value,
-      {String parameterSeparator = ';',
-      String? valueSeparator,
-      bool preserveBackslash = false}) {
-    var result = HeaderValue();
+  static HeaderValue parse(final String value,
+      {final String parameterSeparator = ';',
+      final String? valueSeparator,
+      final bool preserveBackslash = false}) {
+    final result = HeaderValue();
     result._parse(value, parameterSeparator, valueSeparator, preserveBackslash);
     return result;
   }
@@ -157,10 +157,10 @@ class HeaderValue {
 
   @override
   String toString() {
-    var stringBuffer = StringBuffer();
+    final stringBuffer = StringBuffer();
     stringBuffer.write(_value);
     if (parameters != null && parameters!.isNotEmpty) {
-      _parameters!.forEach((name, value) {
+      _parameters!.forEach((final name, final value) {
         stringBuffer
           ..write('; ')
           ..write(name)
@@ -171,8 +171,8 @@ class HeaderValue {
     return stringBuffer.toString();
   }
 
-  void _parse(String value, String parameterSeparator, String? valueSeparator,
-      bool preserveBackslash) {
+  void _parse(final String value, final String parameterSeparator, final String? valueSeparator,
+      final bool preserveBackslash) {
     var index = 0;
 
     bool done() => index == value.length;
@@ -185,7 +185,7 @@ class HeaderValue {
     }
 
     String parseValue() {
-      var start = index;
+      final start = index;
       while (!done()) {
         if (value[index] == ' ' ||
             value[index] == '\t' ||
@@ -198,23 +198,23 @@ class HeaderValue {
       return value.substring(start, index);
     }
 
-    void expect(String expected) {
+    void expect(final String expected) {
       if (done() || value[index] != expected) {
         throw StateError('Failed to parse header value');
       }
       index++;
     }
 
-    void maybeExpect(String expected) {
+    void maybeExpect(final String expected) {
       if (value[index] == expected) index++;
     }
 
     void parseParameters() {
-      var parameters = HashMap<String, String?>();
+      final parameters = HashMap<String, String?>();
       _parameters = UnmodifiableMapView(parameters);
 
       String parseParameterName() {
-        var start = index;
+        final start = index;
         while (!done()) {
           if (value[index] == ' ' ||
               value[index] == '\t' ||
@@ -230,10 +230,10 @@ class HeaderValue {
 
       String? parseParameterValue() {
         if (!done() && value[index] == '"') {
-          var stringBuffer = StringBuffer();
+          final stringBuffer = StringBuffer();
           index++;
           while (!done()) {
-            if (value[index] == '\\') {
+            if (value[index] == r'\') {
               if (index + 1 == value.length) {
                 throw StateError('Failed to parse header value');
               }
@@ -250,7 +250,7 @@ class HeaderValue {
           }
           return stringBuffer.toString();
         } else {
-          var val = parseValue();
+          final val = parseValue();
           return val == '' ? null : val;
         }
       }
@@ -258,7 +258,7 @@ class HeaderValue {
       while (!done()) {
         bump();
         if (done()) return;
-        var name = parseParameterName();
+        final name = parseParameterName();
         bump();
         if (done()) {
           parameters[name] = null;

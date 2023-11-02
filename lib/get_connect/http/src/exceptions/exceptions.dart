@@ -1,9 +1,9 @@
 class GetHttpException implements Exception {
+
+  GetHttpException(this.message, [this.uri]);
   final String message;
 
   final Uri? uri;
-
-  GetHttpException(this.message, [this.uri]);
 
   @override
   String toString() => message;
@@ -26,8 +26,8 @@ class UnauthorizedException implements Exception {
 }
 
 class UnexpectedFormat implements Exception {
-  final String message;
   UnexpectedFormat(this.message);
+  final String message;
   @override
   String toString() {
     return 'Unexpected format: $message';

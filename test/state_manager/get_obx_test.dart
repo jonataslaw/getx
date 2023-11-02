@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  testWidgets("GetxController smoke test", (tester) async {
+  testWidgets('GetxController smoke test', (final tester) async {
     final controller = Get.put(Controller());
     await tester.pumpWidget(
       MaterialApp(
@@ -19,7 +19,7 @@ void main() {
                 Text('Map: ${controller.map.length}'),
                 TextButton(
                   onPressed: controller.increment,
-                  child: const Text("increment"),
+                  child: const Text('increment'),
                 ),
                 Obx(() => Text('Obx: ${controller.map.length}'))
               ]),
@@ -29,25 +29,25 @@ void main() {
       ),
     );
 
-    expect(find.text("Count: 0"), findsOneWidget);
-    expect(find.text("Double: 0.0"), findsOneWidget);
-    expect(find.text("String: string"), findsOneWidget);
-    expect(find.text("Bool: true"), findsOneWidget);
-    expect(find.text("List: 0"), findsOneWidget);
-    expect(find.text("Map: 0"), findsOneWidget);
-    expect(find.text("Obx: 0"), findsOneWidget);
+    expect(find.text('Count: 0'), findsOneWidget);
+    expect(find.text('Double: 0.0'), findsOneWidget);
+    expect(find.text('String: string'), findsOneWidget);
+    expect(find.text('Bool: true'), findsOneWidget);
+    expect(find.text('List: 0'), findsOneWidget);
+    expect(find.text('Map: 0'), findsOneWidget);
+    expect(find.text('Obx: 0'), findsOneWidget);
 
     Controller.to.increment();
 
     await tester.pump();
 
-    expect(find.text("Count: 1"), findsOneWidget);
+    expect(find.text('Count: 1'), findsOneWidget);
 
     await tester.tap(find.text('increment'));
 
     await tester.pump();
 
-    expect(find.text("Count: 2"), findsOneWidget);
+    expect(find.text('Count: 2'), findsOneWidget);
   });
 }
 
@@ -56,7 +56,7 @@ class Controller extends GetxController {
 
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
-  RxString string = "string".obs;
+  RxString string = 'string'.obs;
   RxList list = [].obs;
   RxMap map = {}.obs;
   RxBool boolean = true.obs;

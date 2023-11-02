@@ -13,7 +13,7 @@ void main() {
     }
 
     testWidgets('fadeIn() and fadeOut() can not be used sequentially',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       final widget = buildWidget();
 
       expect(() => widget.fadeIn().fadeOut(), throwsAssertionError);
@@ -26,7 +26,7 @@ void main() {
     });
 
     testWidgets('can not use delay when isSequential is true',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       final widget = buildWidget();
 
       expect(
@@ -37,7 +37,7 @@ void main() {
 
     testWidgets(
         'fadeIn() and fadeOut() can be used together when isSequential is true',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       final widget = buildWidget();
 
       expect(
@@ -49,7 +49,7 @@ void main() {
     });
 
     testWidgets('fadeIn() returns a FadeInAnimation',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       final widget = buildWidget();
       const begin = 0.0;
       const end = 1.0;
@@ -61,7 +61,7 @@ void main() {
           animation: animation, widget: widget, begin: begin, end: end);
     });
 
-    testWidgets('fadeOut() returns a animation', (WidgetTester tester) async {
+    testWidgets('fadeOut() returns a animation', (final WidgetTester tester) async {
       final widget = buildWidget();
       const begin = 1.0;
       const end = 0.0;
@@ -74,7 +74,7 @@ void main() {
     });
 
     testWidgets('rotate() returns a RotateAnimation',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       const begin = 0.9;
       const end = 1.1;
       final widget = buildWidget();
@@ -87,7 +87,7 @@ void main() {
     });
 
     testWidgets('scale() returns a ScaleAnimation',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       const begin = 0.9;
       const end = 1.1;
       final widget = buildWidget();
@@ -100,11 +100,11 @@ void main() {
     });
 
     testWidgets('slide() returns a SlideAnimation',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       const begin = 0;
       const end = 1;
       final widget = buildWidget();
-      final animation = widget.slide(offset: (_, __) => const Offset(0, 0));
+      final animation = widget.slide(offset: (final _, final __) => const Offset(0, 0));
 
       expect(animation, isA<SlideAnimation>());
 
@@ -113,7 +113,7 @@ void main() {
     });
 
     testWidgets('bounce() returns a BounceAnimation',
-        (WidgetTester tester) async {
+        (final WidgetTester tester) async {
       const begin = 0.9;
       const end = 1.1;
       final widget = buildWidget();
@@ -130,7 +130,7 @@ void main() {
       );
     });
 
-    testWidgets('spin() returns a SpinAnimation', (WidgetTester tester) async {
+    testWidgets('spin() returns a SpinAnimation', (final WidgetTester tester) async {
       final widget = buildWidget();
       const begin = 0.0;
       const end = 360;
@@ -142,7 +142,7 @@ void main() {
           animation: animation, widget: widget, begin: begin, end: end);
     });
 
-    testWidgets('size() returns a SizeAnimation', (WidgetTester tester) async {
+    testWidgets('size() returns a SizeAnimation', (final WidgetTester tester) async {
       final widget = buildWidget();
 
       const begin = 0.9;
@@ -155,7 +155,7 @@ void main() {
           animation: animation, widget: widget, begin: begin, end: end);
     });
 
-    testWidgets('blur() returns a BlurAnimation', (WidgetTester tester) async {
+    testWidgets('blur() returns a BlurAnimation', (final WidgetTester tester) async {
       final widget = buildWidget();
 
       const begin = 0.9;
@@ -168,7 +168,7 @@ void main() {
           animation: animation, widget: widget, begin: begin, end: end);
     });
 
-    testWidgets('flip() returns a FlipAnimation', (WidgetTester tester) async {
+    testWidgets('flip() returns a FlipAnimation', (final WidgetTester tester) async {
       final widget = buildWidget();
 
       const begin = 0.9;
@@ -181,7 +181,7 @@ void main() {
           animation: animation, widget: widget, begin: begin, end: end);
     });
 
-    testWidgets('wave() returns a FlipAnimation', (WidgetTester tester) async {
+    testWidgets('wave() returns a FlipAnimation', (final WidgetTester tester) async {
       final widget = buildWidget();
 
       const begin = 0.9;
@@ -197,11 +197,11 @@ void main() {
 }
 
 void _testDefaultValues<T>({
-  required GetAnimatedBuilder animation,
-  required Widget widget,
-  required T begin,
-  required T end,
-  Curve curve = Curves.linear,
+  required final GetAnimatedBuilder animation,
+  required final Widget widget,
+  required final T begin,
+  required final T end,
+  final Curve curve = Curves.linear,
 }) {
   expect(animation.tween.begin, begin);
   expect(animation.tween.end, end);

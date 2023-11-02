@@ -4,11 +4,6 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 class CircularRevealClipper extends CustomClipper<Path> {
-  final double fraction;
-  final Alignment? centerAlignment;
-  final Offset? centerOffset;
-  final double? minRadius;
-  final double? maxRadius;
 
   CircularRevealClipper({
     required this.fraction,
@@ -17,9 +12,14 @@ class CircularRevealClipper extends CustomClipper<Path> {
     this.minRadius,
     this.maxRadius,
   });
+  final double fraction;
+  final Alignment? centerAlignment;
+  final Offset? centerOffset;
+  final double? minRadius;
+  final double? maxRadius;
 
   @override
-  Path getClip(Size size) {
+  Path getClip(final Size size) {
     final center = centerAlignment?.alongSize(size) ??
         centerOffset ??
         Offset(size.width / 2, size.height / 2);
@@ -36,9 +36,9 @@ class CircularRevealClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  bool shouldReclip(final CustomClipper<Path> oldClipper) => true;
 
-  static double calcMaxRadius(Size size, Offset center) {
+  static double calcMaxRadius(final Size size, final Offset center) {
     final w = max(center.dx, size.width - center.dx);
     final h = max(center.dy, size.height - center.dy);
     return sqrt(w * w + h * h);
