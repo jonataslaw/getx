@@ -476,7 +476,7 @@ Amateur Coder hizo un video asombroso sobre utilidades, almacenamiento, enlaces 
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController y GetBuilder ahora se han fusionado, ya no necesita memorizar qué controlador desea usar, solo use GetXController, funcionará para gestión de estádo simple y también para reactivo.
+RxController y GetBuilder ahora se han fusionado, ya no necesita memorizar qué controlador desea usar, solo use GetxController, funcionará para gestión de estádo simple y también para reactivo.
 
 2- Rutas Nombradas
 
