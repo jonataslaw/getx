@@ -316,8 +316,8 @@ class GetConnect extends GetConnectInterface {
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
-                      code: e['extensions']['code']?.toString(),
-                      message: e['message']?.toString(),
+                      code: (e['extensions'] != null ? e['extensions']['code'] ?? '' : '').toString(),
+                      message: (e['message'] ?? '').toString(),
                     ))
                 .toList());
       }
