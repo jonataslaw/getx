@@ -17,137 +17,99 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 
-<div align="center">
+- [Get সম্পর্কে](#about-get)
+- [ইনস্টল](#installing)
+- [GetX দিয়ে কাউন্টার অ্যাপ](#counter-app-with-getx)
+- [GetX এর তিনটি স্তম্ভ](#the-three-pillars)
+  - [স্টেট ব্যবস্থাপনা](#state-management)
+    - [প্রতিক্রিয়াশীল স্টেট ম্যানেজার](#reactive-state-manager)
+    - [স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-state-management)
+  - [রুট ব্যবস্থাপনা](#route-management)
+    - [রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-route-management)
+  - [ডিপেনডেন্সি ব্যবস্থাপনা](#dependency-management)
+    - [ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-dependency-management)
+- [ইউটিলিটি](#utils)
+  - [আন্তর্জাতিকীকরণ](#internationalization)
+    - [অনুবাদ](#translations)
+      - [অনুবাদের ব্যবহার](#using-translations)
+    - [লোকেল](#locales)
+      - [লোকেল পরিবর্তন করুন](#change-locale)
+      - [লোকেল পদ্ধতি](#system-locale)
+  - [থিম পরিবর্তন করুন](#change-theme)
+  - [গেট কানেক্ট](#getconnect)
+    - [ডিফল্ট কনফিগারেশন](#default-configuration)
+    - [কাস্টম কনফিগারেশন](#custom-configuration)
+  - [গেট পেজ মিডিলওয়্যার](#getpage-middleware)
+    - [অগ্রাধিকার](#priority)
+    - [পুনঃনির্দেশ](#redirect)
+    - [অন-পেজ কলড](#onpagecalled)
+    - [অন-বাইন্ডিং স্টার্ট](#onbindingsstart)
+    - [অন-পেজ বিল্ড স্টার্ট](#onpagebuildstart)
+    - [অন-পেজ বিল্ড](#onpagebuilt)
+    - [অন-পেজ ডিসপোজ](#onpagedispose)
+  - [অন্যান্য এপিআই সমূহ](#other-advanced-apis)
+    - [ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন](#optional-global-settings-and-manual-configurations)
+    - [লোকাল স্টেট উইজেট](#local-state-widgets)
+      - [ভ্যালু বিল্ডার](#valuebuilder)
+      - [অব এক্স ভ্যালু](#obxvalue)
+  - [প্রয়োজনীয় পরামর্শ](#useful-tips)
+    - [গেট ভিউ](#getview)
+    - [গেট রেস্পন্সিভ ভিউ](#getresponsiveview)
+      - [কিভাবে এটি ব্যবহার করতে হয়](#how-to-use-it)
+    - [গেট উইজেট](#getwidget)
+    - [গেট এক্স সার্ভিস](#getxservice)
+- [2.0 থেকে পরিবর্তন](#breaking-changes-from-20)
 
-**Languages:**
+# Get সম্পর্কে
 
-  
-[![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
-[![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
-[![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
-[![Urdu](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
-[![Chinese](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
-[![Portuguese](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
-[![Spanish](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
-[![Russian](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
-[![Polish](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
-[![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
-[![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
-[![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
-[![Hindi](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
-[![Bangla](https://img.shields.io/badge/Language-Bangla-blueviolet?style=for-the-badge)](README-bn.md)
-  
-  
-</div>
+- GetX হল ফ্লটারের জন্য একটি লাইটওয়েট এবং শক্তিশালী সমাধান। এটি দ্রুত এবং ব্যবহারিকভাবে উচ্চ-পারফরম্যান্স স্টেট ব্যবস্থাপনা, বুদ্ধিমান ডিপেনডেন্সি ইনজেকশন এবং রুট ব্যবস্থাপনাকে একত্রিত করে।
 
-- [About Get](#about-get)
-- [Installing](#installing)
-- [Counter App with GetX](#counter-app-with-getx)
-- [The Three pillars](#the-three-pillars)
-  - [State management](#state-management)
-    - [Reactive State Manager](#reactive-state-manager)
-    - [More details about state management](#more-details-about-state-management)
-  - [Route management](#route-management)
-    - [More details about route management](#more-details-about-route-management)
-  - [Dependency management](#dependency-management)
-    - [More details about dependency management](#more-details-about-dependency-management)
-- [Utils](#utils)
-  - [Internationalization](#internationalization)
-    - [Translations](#translations)
-      - [Using translations](#using-translations)
-    - [Locales](#locales)
-      - [Change locale](#change-locale)
-      - [System locale](#system-locale)
-  - [Change Theme](#change-theme)
-  - [GetConnect](#getconnect)
-    - [Default configuration](#default-configuration)
-    - [Custom configuration](#custom-configuration)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Priority](#priority)
-    - [Redirect](#redirect)
-    - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [Other Advanced APIs](#other-advanced-apis)
-    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-    - [Local State Widgets](#local-state-widgets)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Useful tips](#useful-tips)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
-      - [How to use it](#how-to-use-it)
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
-- [Why Getx?](#why-getx)
-- [Community](#community)
-  - [Community channels](#community-channels)
-  - [How to contribute](#how-to-contribute)
-  - [Articles and videos](#articles-and-videos)
+- GetX এর ৩টি মৌলিক নীতি রয়েছে: **উৎপাদনশীলতা, কর্মক্ষমতা এবং সংগঠন**। এর মানে হল যে এইগুলি লাইব্রেরির সমস্ত রিসোর্স এর জন্য অগ্রাধিকার।
 
-# About Get
+  - **কর্মক্ষমতা:** GetX কর্মক্ষমতা এবং রিসোর্স এর ন্যূনতম ব্যবহারের উপর ফোকাস করে। এটি স্ট্রিম বা চেঞ্জনোটিফায়ার ব্যবহার করে না।
 
-- GetX is an extra-light and powerful solution for Flutter. It combines high-performance state management, intelligent dependency injection, and route management quickly and practically.
+  - **উৎপাদনশীলতা:** GetX একটি সহজ এবং মনোরম সিনট্যাক্স ব্যবহার করে। আপনি যা করতে চান না কেন, Getx এর সাথে সর্বদা একটি সহজ উপায় রয়েছে। এটি ডেভেলপমেন্ট এর সময় সাশ্রয় করবে এবং এটি আপনার অ্যাপ্লিকেশনটি সরবরাহ করতে পারে এমন সর্বাধিক কর্মক্ষমতা সরবরাহ করবে।
 
-- GetX has 3 basic principles. This means that these are the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
+  - **সংগঠন:** GetX ভিউ, প্রেজেন্টেশন লজিক, বিজনেস লজিক, ডিপেন্ডেন্সি ইনজেকশন এবং নেভিগেশনের মোট ডিকপলিং করার অনুমতি দেয়। রুটগুলির মধ্যে নেভিগেট করার জন্য আপনার কনটেক্সট (context) প্রয়োজন নেই, তাই আপনাকে এর জন্য উইজেট ট্রি (ভিজ্যুয়ালাইজেশন) এর উপর নির্ভরশীল হতে হবে না। 
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
+- GetX এর একটি বিশাল ইকো সিস্টেম, একটি বৃহত সম্প্রদায়, প্রচুর সংখ্যক সহযোগী রয়েছে এবং যতক্ষণ ফ্লাটার বিদ্যমান থাকবে ততক্ষণ রক্ষণাবেক্ষণ করা হবে। গেটএক্স অ্যান্ড্রয়েড, আইওএস, ওয়েব, ম্যাক, লিনাক্স, উইন্ডোজ এবং আপনার সার্ভারে একই কোড দিয়ে চলতে সক্ষম। **[গেট সার্ভার (Get Server)](https://github.com/jonataslaw/get_server) দিয়ে আপনার ফ্রন্টএন্ডে তৈরি কোডটি পুনরায় সম্পূর্ণরূপে ব্যাকএন্ডে ব্যবহার করা সম্ভব।**
 
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with GetX. It will save hours of development and will provide the maximum performance your application can deliver.
+**এছাড়াও সম্পূর্ণ ডেভেলপমেন্ট প্রক্রিয়া সার্ভারে এবং ফ্রন্টএন্ডে [Get CLI](https://github.com/jonataslaw/get_cli) এর মাধ্যমে স্বয়ংক্রিয়ভাবে করা যেতে পারে**।
 
-    Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+**এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [VSCode extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [Android Studio/Intellij extension](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**।
 
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+# ইনস্টল
 
-    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
-
-- GetX is not bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
-
-- GetX has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. GetX too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
-
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
-
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
-
-# Installing
-
-Add Get to your pubspec.yaml file:
+আপনার pubspec.yaml ফাইলে get যোগ করুন:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+যে ফাইল এ ব্যবহার করবেন সেখানে ইম্পোর্ট করুন:
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# GetX দিয়ে কাউন্টার অ্যাপ
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+Flutter-এ নতুন ডিফল্ট তৈরি করা "কাউন্টার" প্রজেক্টে 100 টিরও বেশি লাইন রয়েছে (মন্তব্য সহ)। Get ব্যবহার করে এটি মাত্র ২৬ লাইনে করা সম্ভব (মন্তব্য সহ)।
 
-- Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+- ধাপ 1:
+  আপনার MaterialApp এর আগে "Get" যোগ করুন, এটিকে GetMaterialApp এ পরিণত করুন
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step is only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- নোট: এটি ফ্লটারের MaterialApp পরিবর্তন করে না, GetMaterialApp একটি পরিবর্তিত MaterialApp নয়, এটি শুধুমাত্র একটি পূর্ব-কনফিগার করা উইজেট, যেটিতে একটি চাইল্ড হিসাবে ডিফল্ট MaterialApp আছে। আপনি এটি ম্যানুয়ালি কনফিগার করতে পারেন, তবে এটি অবশ্যই প্রয়োজনীয় নয়। GetMaterialApp রুট তৈরি করবে, সেগুলিকে ইনজেকশন দেবে, অনুবাদগুলি ইনজেকশন করবে, রুট নেভিগেশনের জন্য আপনার প্রয়োজনীয় সমস্ত কিছু ইনজেক্ট করবে। আপনি যদি শুধুমাত্র স্টেট ব্যবস্থাপনা বা ডিপেন্ডেন্সি ব্যবস্থাপনার জন্য Get ব্যবহার করেন, তাহলে GetMaterialApp ব্যবহার করার প্রয়োজন নেই। GetMaterialApp রুট, স্ন্যাকবার, আন্তর্জাতিকীকরণ, বটমশিট, ডায়ালগ এবং রুট সম্পর্কিত উচ্চ-স্তরের এপিএস এবং প্রসঙ্গ অনুপস্থিতির জন্য প্রয়োজনীয়।
+- নোট-²: আপনি যদি রুট ম্যানেজমেন্ট ব্যবহার করেন তবেই এই ধাপটি প্রয়োজনীয় (`Get.to()`, `Get.back()` এবং অন্যান্য)। আপনি যদি এটি ব্যবহার না করেন তবে ধাপ-1 করার দরকার নেই
 
-- Step 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+- ধাপ 2:
+  আপনার বিজনেস লজিক ক্লাস তৈরি করুন এবং এর ভিতরে সমস্ত ভেরিয়েবল, পদ্ধতি এবং কন্ট্রোলার রাখুন।
+  আপনি একটি সাধারণ ".obs" ব্যবহার করে যেকোনো পরিবর্তনশীলকে পর্যবেক্ষণযোগ্য করতে পারেন।
 
 ```dart
 class Controller extends GetxController{
@@ -156,8 +118,8 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+- ধাপ 3:
+  আপনার ভিউ তৈরি করুন, স্টেটলেস উইজেট ব্যবহার করুন এবং কিছু র‌্যাম সেভ করুন, Get এর সাথে আপনাকে হয়তো আর StatefulWidget ব্যবহার করার প্রয়োজন হবে না।
 
 ```dart
 class Home extends StatelessWidget {
@@ -192,67 +154,57 @@ class Other extends StatelessWidget {
 }
 ```
 
-Result:
+# GetX এর তিনটি স্তম্ভ
 
-![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
+## স্টেট ব্যবস্থাপনা
 
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
+Get দুই ভিন্ন স্টেট ম্যানেজার আছে: সাধারণ স্টেট ম্যানেজার (আমরা একে GetBuilder বলব) and প্রতিক্রিয়াশীল স্টেট ম্যানেজার (GetX/Obx)
 
-Get was designed to work with teams, but it makes the job of an individual developer simple.
+### প্রতিক্রিয়াশীল স্টেট ম্যানেজার
 
-Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+প্রতিক্রিয়াশীল প্রোগ্রামিং অনেক লোককে উদাসীন করতে পারে কারণ এটি জটিল। GetX প্রতিক্রিয়াশীল প্রোগ্রামিংকে বেশ সহজে পরিণত করে:
 
-# The Three pillars
+- আপনাকে StreamControllers তৈরি করতে হবে না।
+- আপনাকে প্রতিটি ভেরিয়েবলের জন্য একটি StreamBuilder তৈরি করতে হবে না।
+- আপনাকে প্রতিটি স্টেটের জন্য একটি ক্লাস তৈরি করতে হবে না।
+- আপনাকে initial value এর জন্য get তৈরি করতে হবে না।
+- আপনাকে কোড জেনারেটর ব্যবহার করতে হবে না।
 
-## State management
+Get এর সাথে প্রতিক্রিয়াশীল প্রোগ্রামিং setState ব্যবহার করার মতোই সহজ।
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+কল্পনা করুন যে আপনার একটি নাম ভ্যারিয়েবল আছে এবং আপনি চান যে প্রতিবার আপনি এটি পরিবর্তন করবেন, এটি ব্যবহার করে এমন সমস্ত উইজেট স্বয়ংক্রিয়ভাবে পরিবর্তন করতে পারবেন।
 
-### Reactive State Manager
-
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
-
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
-- You will not need to use code generators
-
-Reactive programming with Get is as easy as using setState.
-
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
-
-This is your count variable:
+মনে করুন এটি আপনার নাম ভ্যারিয়েবল:
 
 ```dart
-var name = 'Jonatas Borges';
+var name = 'Ashiqur Rahman Alif';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+এটিকে observable করতে, আপনাকে এটির শেষে ".obs" যোগ করতে হবে:
 
 ```dart
-var name = 'Jonatas Borges'.obs;
+var name = 'Ashiqur Rahman Alif'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever the values changes, simply do this:
+এবং UI-তে যখন আপনি সেই নামটি দেখাতে চান এবং যখনই মান পরিবর্তন হয় তখন স্ক্রীনটি আপডেট করতে চান, কেবল এটি করুন:
 
 ```dart
 Obx(() => Text("${controller.name}"));
 ```
 
-That's all. It's _that_ simple.
+এখানেই শেষ। এটা এমনই সহজ।
 
-### More details about state management
+### স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
+**স্টেট পরিচালনার আরও ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/state_management.md)। সেখানে আপনি আরও উদাহরণ দেখতে পাবেন এবং সাধারণ স্টেট ব্যবস্থাপক এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপকের মধ্যে পার্থক্যও দেখতে পাবেন**
 
-You will get a good idea of GetX power.
+GetX পাওয়ার সম্পর্কে ভালো ধারণা পাবেন।
 
-## Route management
+## রুট ব্যবস্থাপনা
 
-If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
+আপনি যদি context ছাড়াই রুট/স্ন্যাকবার/ডায়ালগ/বটমশীট ব্যবহার করতে চান, GetX আপনার জন্য, এটি দেখুন:
 
-Add "Get" before your MaterialApp, turning it into GetMaterialApp
+আপনার MaterialApp এর আগে "Get" যোগ করুন, এটিকে GetMaterialApp এ পরিণত করুন
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -260,88 +212,89 @@ GetMaterialApp( // Before: MaterialApp(
 )
 ```
 
-Navigate to a new screen:
+একটি নতুন স্ক্রিনে নেভিগেট করুন:
 
 ```dart
 
 Get.to(NextScreen());
 ```
 
-Navigate to new screen with name. See more details on named routes [here](./documentation/en_US/route_management.md#navigation-with-named-routes)
+নাম সহ নতুন স্ক্রিনে নেভিগেট করুন। নামযুক্ত রুট সম্পর্কিত আরও বিস্তারিত বিবরণ দেখুন [এখানে](./documentation/en_US/route_management.md#navigation-with-named-routes)
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
+স্ন্যাকবার, ডায়ালগ, বটমশীট, বা যেকোনো কিছু বন্ধ করতে আপনি Navigator.pop(context) এর পরিবর্তে ব্যবহার করুন:
 
 ```dart
 Get.back();
 ```
 
-To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens, etc.)
+পরবর্তী স্ক্রিনে যাওয়ার পর আগের স্ক্রিনে ফিরে যাওয়া বন্ধ করুন (স্প্ল্যাশস্ক্রিন, লগইন স্ক্রিন ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
 Get.off(NextScreen());
 ```
 
-To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
+পরবর্তী স্ক্রিনে যেতে এবং আগের সমস্ত রুট বাতিল করতে (শপিং কার্ট, পোল  ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
 Get.offAll(NextScreen());
 ```
 
-Noticed that you didn't have to use context to do any of these things? That's one of the biggest advantages of using Get route management. With this, you can execute all these methods from within your controller class, without worries.
+লক্ষ্য করেছেন যে এই জিনিসগুলির কোনটি করার জন্য আপনাকে context ব্যবহার করতে হবে না? এটি Get রুট ম্যানেজমেন্ট ব্যবহার করার সবচেয়ে বড় সুবিধাগুলির মধ্যে একটি। এটির সাহায্যে, আপনি চিন্তা ছাড়াই আপনার controller class এর মধ্যে থেকে এই সমস্ত পদ্ধতিগুলি চালাতে পারেন।
 
-### More details about route management
+### রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**Get works with named routes and also offers lower-level control over your routes! There is in-depth documentation [here](./documentation/en_US/route_management.md)**
+**রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ডকুমেন্টেশন আছে [এখানে](./documentation/en_US/route_management.md)**
 
-## Dependency management
+## ডিপেনডেন্সি ব্যবস্থাপনা
 
-Get has a simple and powerful dependency manager that allows you to retrieve the same class as your Bloc or Controller with just 1 lines of code, no Provider context, no inheritedWidget:
+Get এর একটি সহজ এবং শক্তিশালী ডিপেনডেন্সি পরিচালক রয়েছে যা আপনাকে কোনও Provider context বা inheritedWidget ছাড়াই, মাত্র 1 লাইনের কোডের মাধ্যমে আপনার ব্লক বা কন্ট্রোলারের মতো একই class রিট্রিভ করতে দেয়:
 
 ```dart
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- Note: If you are using Get's State Manager, pay more attention to the bindings API, which will make it easier to connect your view to your controller.
+- দ্রষ্টব্য: আপনি যদি Get's State Manager ব্যবহার করেন, তাহলে bindings API-এ আরও মনোযোগ দিন, যা আপনার কন্ট্রোলারের সাথে আপনার ভিউকে সংযোগ করা সহজ করে তুলবে।
 
-Instead of instantiating your class within the class you are using, you are instantiating it within the Get instance, which will make it available throughout your App.
-So you can use your controller (or class Bloc) normally
+আপনি যে ক্লাসটি ব্যবহার করছেন তার মধ্যে আপনার ক্লাসকে ইনস্ট্যান্টিয়েট করার পরিবর্তে Get ইনস্ট্যান্সের মধ্যে ইনস্ট্যান্টিয়েট করুন, যা এটিকে আপনার অ্যাপ জুড়ে উপলব্ধ করবে।
+তখন আপনি স্বাভাবিকভাবে আপনার controller (বা class Bloc) ব্যবহার করতে পারবেন।
 
-**Tip:** Get dependency management is decoupled from other parts of the package, so if for example, your app is already using a state manager (any one, it doesn't matter), you don't need to rewrite it all, you can use this dependency injection with no problems at all
+**টিপ:** Get ডিপেন্ডেন্সি ম্যানেজমেন্ট প্যাকেজের অন্যান্য অংশ থেকে ডিকপল করা হয়েছে, উদাহরণ স্বরূপ, আপনার অ্যাপ ইতিমধ্যেই একটি স্টেট ম্যানেজার ব্যবহার করে (যেকোনোটি হতে পারে, এটা কোন ব্যাপার না), তবে আপনার পুনরায় সব লেখার দরকার নেই, আপনি কোনও সমস্যা ছাড়াই এই ডিপেন্ডেন্সি ইনজেকশনটি ব্যবহার করতে পারেন।
 
 ```dart
 controller.fetchApi();
 ```
 
-Imagine that you have navigated through numerous routes, and you need data that was left behind in your controller, you would need a state manager combined with the Provider or Get_it, correct? Not with Get. You just need to ask Get to "find" for your controller, you don't need any additional dependencies:
+কল্পনা করুন যে আপনি অসংখ্য রুটে নেভিগেট করেছেন, এবং আপনার controller এর পিছনে ফেলে আসা ডেটার প্রয়োজন, আপনার প্রোভাইডার বা Get_it এর সাথে মিলিত একটি স্টেট ম্যানেজারের প্রয়োজন হবে, তাই না? Get এর সাথে তা প্রয়োজন নেই। আপনাকে শুধু আপনার controller এর জন্য "find" জিজ্ঞাসা করতে হবে, আপনার কোনো অতিরিক্ত ডিপেন্ডেন্সি প্রয়োজন নেই:
 
 ```dart
 Controller controller = Get.find();
 //Yes, it looks like Magic, Get will find your controller, and will deliver it to you. You can have 1 million controllers instantiated, Get will always give you the right controller.
 ```
 
-And then you will be able to recover your controller data that was obtained back there:
+এবং তারপরে আপনি আপনার নিয়ামক ডেটা পুনরুদ্ধার করতে সক্ষম হবেন যা সেখানে ফিরে প্রাপ্ত হয়েছিল:
 
 ```dart
 Text(controller.textFromApi);
 ```
 
-### More details about dependency management
+### ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
-**See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
+**ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/dependency_management.md)**
 
-# Utils
+# ইউটিলিটি
 
-## Internationalization
+## আন্তর্জাতিকীকরণ
 
-### Translations
+### অনুবাদ
 
-Translations are kept as a simple key-value dictionary map.
+অনুবাদগুলি একটি সাধারণ কী-মানের অভিধান মানচিত্র হিসাবে রাখা হয়।
 To add custom translations, create a class and extend `Translations`.
+কাস্টম অনুবাদ যোগ করতে, একটি class তৈরি করুন এবং `Translations` এ extends করুন।
 
 ```dart
 import 'package:get/get.dart';
@@ -359,22 +312,22 @@ class Messages extends Translations {
 }
 ```
 
-#### Using translations
+#### অনুবাদের ব্যবহার
 
-Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
+শুধুমাত্র নির্দিষ্ট key তে `.tr` যোগ করুন এবং এটি অনুবাদ করা হবে, `Get.locale` এবং `Get.fallbackLocale` এর বর্তমান মান ব্যবহার করে।
 
 ```dart
 Text('title'.tr);
 ```
 
-#### Using translation with singular and plural
+#### একবচন এবং বহুবচন সহ অনুবাদ ব্যবহার
 
 ```dart
 var products = [];
 Text('singularKey'.trPlural('pluralKey', products.length, Args));
 ```
 
-#### Using translation with parameters
+#### প্যারামিটার সহ অনুবাদ ব্যবহার
 
 ```dart
 import 'package:get/get.dart';
@@ -395,9 +348,9 @@ Text('logged_in'.trParams({
   }));
 ```
 
-### Locales
+### লোকেল
 
-Pass parameters to `GetMaterialApp` to define the locale and translations.
+লোকেল এবং অনুবাদ সংজ্ঞায়িত করতে `GetMaterialApp`-এ প্যারামিটার পাস করুন।
 
 ```dart
 return GetMaterialApp(
@@ -407,18 +360,18 @@ return GetMaterialApp(
 );
 ```
 
-#### Change locale
+#### লোকেল পরিবর্তন করুন
 
-Call `Get.updateLocale(locale)` to update the locale. Translations then automatically use the new locale.
+লোকেল আপডেট করতে `Get.updateLocale(locale)` কল করুন। অনুবাদগুলি তখন স্বয়ংক্রিয়ভাবে নতুন লোকেল ব্যবহার করে।
 
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### System locale
+#### লোকেল পদ্ধতি
 
-To read the system locale, you could use `Get.deviceLocale`.
+সিস্টেম লোকেল পড়তে, আপনি `Get.deviceLocale` ব্যবহার করতে পারেন।
 
 ```dart
 return GetMaterialApp(
@@ -426,7 +379,7 @@ return GetMaterialApp(
 );
 ```
 
-## Change Theme
+## থিম পরিবর্তন করুন
 
 Please do not use any higher level widget than `GetMaterialApp` in order to update it. This can trigger duplicate keys. A lot of people are used to the prehistoric approach of creating a "ThemeProvider" widget just to change the theme of your app, and this is definitely NOT necessary with **GetX™**.
 
@@ -447,11 +400,11 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
 
-## GetConnect
+## গেট কানেক্ট (GetConnect)
 
 GetConnect is an easy way to communicate from your back to your front with http or websockets
 
-### Default configuration
+### ডিফল্ট কনফিগারেশন
 
 You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
 
@@ -476,7 +429,7 @@ class UserProvider extends GetConnect {
 }
 ```
 
-### Custom configuration
+### কাস্টম কনফিগারেশন
 
 GetConnect is highly customizable You can define base Url, as answer modifiers, as Requests modifiers, define an authenticator, and even the number of attempts in which it will try to authenticate itself, in addition to giving the possibility to define a standard decoder that will transform all your requests into your Models without any additional configuration.
 
@@ -524,13 +477,13 @@ class HomeProvider extends GetConnect {
 }
 ```
 
-## GetPage Middleware
+## গেট পেজ মিডিলওয়্যার
 
 The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
 
 **Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
 
-### Priority
+### অগ্রাধিকার (Priority)
 
 The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
 
@@ -545,7 +498,7 @@ final middlewares = [
 
 those middlewares will be run in this order **-8 => 2 => 4 => 5**
 
-### Redirect
+### পুনঃনির্দেশ (Redirect)
 
 This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
 
@@ -556,7 +509,7 @@ RouteSettings redirect(String route) {
 }
 ```
 
-### onPageCalled
+### অন-পেজ কলড (onPageCalled)
 
 This function will be called when this Page is called before anything created
 you can use it to change something about the page or give it new page
@@ -568,7 +521,7 @@ GetPage onPageCalled(GetPage page) {
 }
 ```
 
-### OnBindingsStart
+### অন-বাইন্ডিং স্টার্ট (OnBindingsStart)
 
 This function will be called right before the Bindings are initialize.
 Here you can change Bindings for this page.
@@ -583,7 +536,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 }
 ```
 
-### OnPageBuildStart
+### অন-পেজ বিল্ড স্টার্ট (OnPageBuildStart)
 
 This function will be called right after the Bindings are initialize.
 Here you can do something after that you created the bindings and before creating the page widget.
@@ -595,15 +548,15 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 }
 ```
 
-### OnPageBuilt
+### অন-পেজ বিল্ড (OnPageBuilt)
 
 This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
 
-### OnPageDispose
+### অন-পেজ ডিসপোজ (OnPageDispose)
 
 This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
 
-## Other Advanced APIs
+## অন্যান্য এপিআই সমূহ
 
 ```dart
 // give the current args from currentScreen
@@ -681,19 +634,19 @@ context.height
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.sizeOf(context);
+/// Similar to MediaQuery.of(context).size
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.paddingOf(context);
+/// Similar to MediaQuery.of(context).padding
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.viewPaddingOf(context);
+/// Similar to MediaQuery.of(context).viewPadding
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.viewInsetsOf(context);
+/// Similar to MediaQuery.of(context).viewInsets;
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.orientationOf(context);
+/// Similar to MediaQuery.of(context).orientation;
 context.orientation()
 
 /// Check if device is on landscape mode
@@ -702,10 +655,10 @@ context.isLandscape()
 /// Check if device is on portrait mode
 context.isPortrait()
 
-/// Similar to MediaQuery.devicePixelRatioOf(context);
+/// Similar to MediaQuery.of(context).devicePixelRatio;
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.textScaleFactorOf(context);
+/// Similar to MediaQuery.of(context).textScaleFactor;
 context.textScaleFactor()
 
 /// Get the shortestSide from screen
@@ -735,7 +688,7 @@ context.isTablet()
 context.responsiveValue<T>()
 ```
 
-### Optional Global Settings and Manual configurations
+### ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন
 
 GetMaterialApp configures everything for you, but if you want to configure Get manually.
 
@@ -795,7 +748,7 @@ void localLogWriter(String text, {bool isError = false}) {
 
 ```
 
-### Local State Widgets
+### লোকাল স্টেট উইজেট
 
 These Widgets allows you to manage a single value, and keep the state ephemeral and locally.
 We have flavours for Reactive and Simple.
@@ -803,7 +756,7 @@ For instance, you might use them to toggle obscureText in a `TextField`, maybe c
 Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
 of the body in a `Scaffold`.
 
-#### ValueBuilder
+#### ভ্যালু বিল্ডার (ValueBuilder)
 
 A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
 
@@ -820,7 +773,7 @@ ValueBuilder<bool>(
 ),
 ```
 
-#### ObxValue
+#### অবএক্সভ্যালু (ObxValue)
 
 Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
 updates automatically... isn't it awesome?
@@ -834,7 +787,7 @@ ObxValue((data) => Switch(
 ),
 ```
 
-## Useful tips
+## প্রয়োজনীয় পরামর্শ
 
 `.obs`ervables (also known as _Rx_ Types) have a wide variety of internal methods and operators.
 
@@ -989,7 +942,7 @@ class OtherClass extends GetView<Controller> {
 }
 ```
 
-#### GetView
+#### গেট ভিউ (GetView)
 
 I love this Widget, is so simple, yet, so useful!
 
@@ -1012,13 +965,13 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
  }
 ```
 
-#### GetResponsiveView
+#### গেট রেস্পন্সিভ ভিউ (GetResponsiveView)
 
 Extend this widget to build responsive view.
 this widget contains the `screen` property that have all
 information about the screen size and type.
 
-##### How to use it
+##### কিভাবে এটি ব্যবহার করতে হয়
 
 You have two options to build it.
 
@@ -1035,7 +988,7 @@ With `settings` property you can set the width limit for the screen types.
 Code to this screen
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
-#### GetWidget
+#### গেট উইজেট (GetWidget)
 
 Most people have no idea about this Widget, or totally confuse the usage of it.
 The use case is very rare, but very specific: It `caches` a Controller.
@@ -1051,7 +1004,7 @@ If you use, another "not so common" feature of **GetX**: `Get.create()`.
 That's where `GetWidget` shines... as you can use it, for example,
 to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
 
-#### GetxService
+#### গেট এক্স সার্ভিস (GetxService)
 
 This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
 But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
@@ -1103,7 +1056,7 @@ The only way to actually delete a `GetxService`, is with `Get.reset()` which is 
 lifetime of your app, use `GetxService`.
 
 
-### Tests
+### পরীক্ষা (Tests)
 
 You can test your controllers like any other class, including their lifecycles:
 
@@ -1154,7 +1107,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
-#### Tips
+#### পরামর্শ
 
 ##### Mockito or mocktail
 If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
@@ -1170,11 +1123,11 @@ If you are testing widgets, or test groups, use Get.reset at the end of your tes
 if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
 
 
-# Breaking changes from 2.0
+# 2.0 থেকে পরিবর্তন
 
-1- Rx types:
+1- Rx এর প্রকারভেদ :
 
-| Before  | After      |
+| পূর্বে  | এখন      |
 | ------- | ---------- |
 | StringX | `RxString` |
 | IntX    | `RxInt`    |
@@ -1183,10 +1136,11 @@ if you are using your navigation in your controllers, use `Get.testMode = true` 
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController and GetBuilder now have merged, you no longer need to memorize which controller you want to use, just use GetxController, it will work for simple state management and for reactive as well.
+RxController এবং GetBuilder এখন একত্রিত, আপনি কোন নিয়ামক ব্যবহার করতে চান তা আর মুখস্ত করার দরকার নেই, শুধু GetxController ব্যবহার করুন, এটি সাধারণ স্টেট ব্যবস্থাপনা এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপনা এর জন্যও কাজ করবে।
 
-2- NamedRoutes
-Before:
+2- নেমড রুটস (NamedRoutes)
+
+আগে:
 
 ```dart
 GetMaterialApp(
@@ -1196,7 +1150,7 @@ GetMaterialApp(
 )
 ```
 
-Now:
+এখন:
 
 ```dart
 GetMaterialApp(
@@ -1206,9 +1160,8 @@ GetMaterialApp(
 )
 ```
 
-Why this change?
-Often, it may be necessary to decide which page will be displayed from a parameter, or a login token, the previous approach was inflexible, as it did not allow this.
-Inserting the page into a function has significantly reduced the RAM consumption, since the routes will not be allocated in memory since the app was started, and it also allowed to do this type of approach:
+কেন এই পরিবর্তন? প্রায়শই, কোন পৃষ্ঠাটি প্যারামিটার বা লগইন টোকেন থেকে প্রদর্শিত হবে তা নির্ধারণ করার প্রয়োজন হতে পারে, পূর্ববর্তী পদ্ধতিটি অনমনীয় ছিল, কারণ এটি সেই অনুমতি দিতো না।
+এটি ফাংশনে পৃষ্ঠাটি ইনসার্ট করার জন্য উল্লেখযোগ্যভাবে RAM খরচ হ্রাস করেছে, যেহেতু অ্যাপটি শুরু হওয়ার পর থেকে রুটগুলি মেমরিতে বরাদ্দ করা হবে না, এটি এই ধরণের পদ্ধতিরও অনুমতি দেয়:
 
 ```dart
 
@@ -1222,58 +1175,3 @@ GetMaterialApp(
   ]
 )
 ```
-
-# Why Getx?
-
-1- Many times after a Flutter update, many of your packages will break. Sometimes compilation errors happen, errors often appear that there are still no answers about, and the developer needs to know where the error came from, track the error, only then try to open an issue in the corresponding repository, and see its problem solved. Get centralizes the main resources for development (State, dependency and route management), allowing you to add a single package to your pubspec, and start working. After a Flutter update, the only thing you need to do is update the Get dependency, and get to work. Get also resolves compatibility issues. How many times a version of a package is not compatible with the version of another, because one uses a dependency in one version, and the other in another version? This is also not a concern using Get, as everything is in the same package and is fully compatible.
-
-2- Flutter is easy, Flutter is incredible, but Flutter still has some boilerplate that may be unwanted for most developers, such as `Navigator.of(context).push (context, builder [...]`. Get simplifies development. Instead of writing 8 lines of code to just call a route, you can just do it: `Get.to(Home())` and you're done, you'll go to the next page. Dynamic web urls are a really painful thing to do with Flutter currently, and that with GetX is stupidly simple. Managing states in Flutter, and managing dependencies is also something that generates a lot of discussion, as there are hundreds of patterns in the pub. But there is nothing as easy as adding a ".obs" at the end of your variable, and place your widget inside an Obx, and that's it, all updates to that variable will be automatically updated on the screen.
-
-3- Ease without worrying about performance. Flutter's performance is already amazing, but imagine that you use a state manager, and a locator to distribute your blocs/stores/controllers/ etc. classes. You will have to manually call the exclusion of that dependency when you don't need it. But have you ever thought of simply using your controller, and when it was no longer being used by anyone, it would simply be deleted from memory? That's what GetX does. With SmartManagement, everything that is not being used is deleted from memory, and you shouldn't have to worry about anything but programming. You will be assured that you are consuming the minimum necessary resources, without even having created a logic for this.
-
-4- Actual decoupling. You may have heard the concept "separate the view from the business logic". This is not a peculiarity of BLoC, MVC, MVVM, and any other standard on the market has this concept. However, this concept can often be mitigated in Flutter due to the use of context.
-If you need context to find an InheritedWidget, you need it in the view, or pass the context by parameter. I particularly find this solution very ugly, and to work in teams we will always have a dependence on View's business logic. Getx is unorthodox with the standard approach, and while it does not completely ban the use of StatefulWidgets, InitState, etc., it always has a similar approach that can be cleaner. Controllers have life cycles, and when you need to make an APIREST request for example, you don't depend on anything in the view. You can use onInit to initiate the http call, and when the data arrives, the variables will be populated. As GetX is fully reactive (really, and works under streams), once the items are filled, all widgets that use that variable will be automatically updated in the view. This allows people with UI expertise to work only with widgets, and not have to send anything to business logic other than user events (like clicking a button), while people working with business logic will be free to create and test the business logic separately.
-
-This library will always be updated and implementing new features. Feel free to offer PRs and contribute to them.
-
-# Community
-
-## Community channels
-
-GetX has a highly active and helpful community. If you have questions, or would like any assistance regarding the use of this framework, please join our community channels, your question will be answered more quickly, and it will be the most suitable place. This repository is exclusive for opening issues, and requesting resources, but feel free to be part of GetX Community.
-
-| **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
-| :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
-| [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
-
-## How to contribute
-
-_Want to contribute to the project? We will be proud to highlight you as one of our collaborators. Here are some points where you can contribute and make Get (and Flutter) even better._
-
-- Helping to translate the readme into other languages.
-- Adding documentation to the readme (a lot of Get's functions haven't been documented yet).
-- Write articles or make videos teaching how to use Get (they will be inserted in the Readme and in the future in our Wiki).
-- Offering PRs for code/tests.
-- Including new functions.
-
-Any contribution is welcome!
-
-## Articles and videos
-
-- [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
-- [Dynamic Themes in 3 lines using GetX™](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial by [Rod Brown](https://github.com/RodBr).
-- [Complete GetX™ Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI) - Route management video by Amateur Coder.
-- [Complete GetX State Management](https://www.youtube.com/watch?v=CNpXbeI_slw) - State management video by Amateur Coder.
-- [GetX™ Other Features](https://youtu.be/ttQtlX_Q0eU) - Utils, storage, bindings and other features video by Amateur Coder.
-- [Firestore User with GetX | Todo App](https://www.youtube.com/watch?v=BiV0DcXgk58) - Video by Amateur Coder.
-- [Firebase Auth with GetX | Todo App](https://www.youtube.com/watch?v=-H-T_BSgfOE) - Video by Amateur Coder.
-- [The Flutter GetX™ Ecosystem ~ State Management](https://medium.com/flutter-community/the-flutter-getx-ecosystem-state-management-881c7235511d) - State management by [Aachman Garg](https://github.com/imaachman).
-- [The Flutter GetX™ Ecosystem ~ Dependency Injection](https://medium.com/flutter-community/the-flutter-getx-ecosystem-dependency-injection-8e763d0ec6b9) - Dependency Injection by [Aachman Garg](https://github.com/imaachman).
-- [GetX, the all-in-one Flutter package](https://www.youtube.com/watch?v=IYQgtu9TM74) - A brief tutorial covering State Management and Navigation by Thad Carnevalli.
-- [Build a To-do List App from scratch using Flutter and GetX](https://www.youtube.com/watch?v=EcnqFasHf18) - UI + State Management + Storage video by Thad Carnevalli.
-- [GetX Flutter Firebase Auth Example](https://medium.com/@jeffmcmorris/getx-flutter-firebase-auth-example-b383c1dd1de2) - Article by Jeff McMorris.
-- [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
-- [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
-- [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)
-- [GetConnect: The best way to perform API operations in Flutter with Get.](https://absyz.com/getconnect-the-best-way-to-perform-api-operations-in-flutter-with-getx/) - by [MD Sarfaraj](https://github.com/socialmad)
-- [How To Create an App with GetX Architect in Flutter with Get CLI](https://www.youtube.com/watch?v=7mb4qBA7kTk&t=1380s) - by [MD Sarfaraj](https://github.com/socialmad)
