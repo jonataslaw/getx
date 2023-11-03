@@ -4,14 +4,15 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/mixin_builder.dart';
 
 void main() {
-  testWidgets('MixinBuilder with reactive and not reactive', (final tester) async {
+  testWidgets('MixinBuilder with reactive and not reactive',
+      (final WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MixinBuilder<Controller>(
           init: Controller(),
-          builder: (final controller) {
+          builder: (final Controller controller) {
             return Column(
-              children: [
+              children: <Widget>[
                 Text(
                   'Count: ${controller.counter.value}',
                 ),
@@ -89,14 +90,14 @@ void main() {
   // );
 }
 
-class Controller extends GetxController {
+class Controller<T> extends GetxController {
   static Controller get to => Get.find();
   int count = 0;
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
   RxString string = 'string'.obs;
-  RxList list = [].obs;
-  RxMap map = {}.obs;
+  RxList<T> list = <T>[].obs;
+  RxMap<T, T> map = <T, T>{}.obs;
   RxBool boolean = true.obs;
 
   void increment() {

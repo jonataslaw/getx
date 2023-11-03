@@ -1,7 +1,7 @@
 import 'dart:async';
 
 /// Duration utilities.
-extension GetDurationUtils on Duration {
+extension GetDurationUtils<T> on Duration {
   /// Utility to delay some callback (or code execution).
   ///
   /// Sample:
@@ -15,6 +15,6 @@ extension GetDurationUtils on Duration {
   ///   await 0.7.seconds.delay(() {
   /// }
   ///```
-  Future delay([final FutureOr Function()? callback]) async =>
-      Future.delayed(this, callback);
+  Future<T> delay([final FutureOr<T> Function()? callback]) async =>
+      Future<T>.delayed(this, callback);
 }
