@@ -9,12 +9,12 @@ import 'dart:async';
 /// delayed( () => print( 'called after 1 sec' ));
 /// ```
 class Debouncer {
+
+  Debouncer({required this.delay});
   final Duration delay;
   Timer? _timer;
 
-  Debouncer({required this.delay});
-
-  void call(void Function() action) {
+  void call(final void Function() action) {
     _timer?.cancel();
     _timer = Timer(delay, action);
   }

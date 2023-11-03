@@ -7,15 +7,6 @@ import '../../../get_core/get_core.dart';
 import 'socket_notifier.dart';
 
 class BaseWebSocket {
-  String url;
-  WebSocket? socket;
-  SocketNotifier? socketNotifier = SocketNotifier();
-  Duration ping;
-  bool isDisposed = false;
-  bool allowSelfSigned;
-
-  ConnectionStatus? connectionStatus;
-  Timer? _t;
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
@@ -25,8 +16,17 @@ class BaseWebSocket {
         ? url.replaceAll('https:', 'wss:')
         : url.replaceAll('http:', 'ws:');
   }
+  String url;
+  WebSocket? socket;
+  SocketNotifier? socketNotifier = SocketNotifier();
+  Duration ping;
+  bool isDisposed = false;
+  bool allowSelfSigned;
 
-  void close([int? status, String? reason]) {
+  ConnectionStatus? connectionStatus;
+  Timer? _t;
+
+  void close([final int? status, final String? reason]) {
     socket?.close(status, reason);
   }
 
@@ -35,25 +35,25 @@ class BaseWebSocket {
     try {
       connectionStatus = ConnectionStatus.connecting;
       socket = WebSocket(url);
-      socket!.onOpen.listen((e) {
+      socket!.onOpen.listen((final e) {
         socketNotifier?.open();
-        _t = Timer?.periodic(ping, (t) {
+        _t = Timer?.periodic(ping, (final t) {
           socket!.send('');
         });
         connectionStatus = ConnectionStatus.connected;
       });
 
-      socket!.onMessage.listen((event) {
+      socket!.onMessage.listen((final event) {
         socketNotifier!.notifyData(event.data);
       });
 
-      socket!.onClose.listen((e) {
+      socket!.onClose.listen((final e) {
         _t?.cancel();
 
         connectionStatus = ConnectionStatus.closed;
         socketNotifier!.notifyClose(Close(e.reason, e.code));
       });
-      socket!.onError.listen((event) {
+      socket!.onError.listen((final event) {
         _t?.cancel();
         socketNotifier!.notifyError(Close(event.toString(), 0));
         connectionStatus = ConnectionStatus.closed;
@@ -72,32 +72,32 @@ class BaseWebSocket {
     isDisposed = true;
   }
 
-  void emit(String event, dynamic data) {
+  void emit(final String event, final dynamic data) {
     send(jsonEncode({'type': event, 'data': data}));
   }
 
-  void on(String event, MessageSocket message) {
+  void on(final String event, final MessageSocket message) {
     socketNotifier!.addEvents(event, message);
   }
 
-  void onClose(CloseSocket fn) {
+  void onClose(final CloseSocket fn) {
     socketNotifier!.addCloses(fn);
   }
 
-  void onError(CloseSocket fn) {
+  void onError(final CloseSocket fn) {
     socketNotifier!.addErrors(fn);
   }
 
-  void onMessage(MessageSocket fn) {
+  void onMessage(final MessageSocket fn) {
     socketNotifier!.addMessages(fn);
   }
 
   // ignore: use_setters_to_change_properties
-  void onOpen(OpenSocket fn) {
+  void onOpen(final OpenSocket fn) {
     socketNotifier!.open = fn;
   }
 
-  void send(dynamic data) {
+  void send(final dynamic data) {
     if (connectionStatus == ConnectionStatus.closed) {
       connect();
     }

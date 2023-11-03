@@ -24,18 +24,16 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
+
+  const ValueBuilder({
+    required this.initialValue, required this.builder, super.key,
+    this.onDispose,
+    this.onUpdate,
+  });
   final T initialValue;
   final ValueBuilderBuilder<T> builder;
   final void Function()? onDispose;
   final void Function(T)? onUpdate;
-
-  const ValueBuilder({
-    Key? key,
-    required this.initialValue,
-    this.onDispose,
-    this.onUpdate,
-    required this.builder,
-  }) : super(key: key);
 
   @override
   ValueBuilderState<T> createState() => ValueBuilderState<T>();
@@ -50,9 +48,9 @@ class ValueBuilderState<T> extends State<ValueBuilder<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(value, updater);
+  Widget build(final BuildContext context) => widget.builder(value, updater);
 
-  void updater(T newValue) {
+  void updater(final T newValue) {
     if (widget.onUpdate != null) {
       widget.onUpdate!(newValue);
     }
@@ -77,18 +75,18 @@ class ObxElement = StatelessElement with StatelessObserverComponent;
 
 // It's a experimental feature
 class Observer extends ObxStatelessWidget {
+
+  const Observer({required this.builder, super.key});
   final WidgetBuilder builder;
 
-  const Observer({Key? key, required this.builder}) : super(key: key);
-
   @override
-  Widget build(BuildContext context) => builder(context);
+  Widget build(final BuildContext context) => builder(context);
 }
 
 /// A StatelessWidget than can listen reactive changes.
 abstract class ObxStatelessWidget extends StatelessWidget {
   /// Initializes [key] for subclasses.
-  const ObxStatelessWidget({Key? key}) : super(key: key);
+  const ObxStatelessWidget({super.key});
   @override
   StatelessElement createElement() => ObxElement(this);
 }

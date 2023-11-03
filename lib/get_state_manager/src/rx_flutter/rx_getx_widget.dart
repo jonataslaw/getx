@@ -10,21 +10,10 @@ typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
-  final GetXControllerBuilder<T> builder;
-  final bool global;
-  final bool autoRemove;
-  final bool assignId;
-  final void Function(GetXState<T> state)? initState,
-      dispose,
-      didChangeDependencies;
-  final void Function(GetX oldWidget, GetXState<T> state)? didUpdateWidget;
-  final T? init;
-  final String? tag;
-
   const GetX({
+    required this.builder,
     super.key,
     this.tag,
-    required this.builder,
     this.global = true,
     this.autoRemove = true,
     this.initState,
@@ -36,12 +25,22 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
     this.init,
     // this.streamController
   });
+  final GetXControllerBuilder<T> builder;
+  final bool global;
+  final bool autoRemove;
+  final bool assignId;
+  final void Function(GetXState<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(GetX<T> oldWidget, GetXState<T> state)? didUpdateWidget;
+  final T? init;
+  final String? tag;
 
   @override
   StatefulElement createElement() => StatefulElement(this);
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  void debugFillProperties(final DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
       ..add(
@@ -63,7 +62,7 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   @override
   void initState() {
     // var isPrepared = Get.isPrepared<T>(tag: widget.tag);
-    final isRegistered = Get.isRegistered<T>(tag: widget.tag);
+    final bool isRegistered = Get.isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
@@ -96,21 +95,23 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   }
 
   @override
-  void didUpdateWidget(GetX oldWidget) {
-    super.didUpdateWidget(oldWidget as GetX<T>);
+  void didUpdateWidget(final GetX<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
     widget.didUpdateWidget?.call(oldWidget, this);
   }
 
   @override
   void dispose() {
-    if (widget.dispose != null) widget.dispose!(this);
+    if (widget.dispose != null) {
+      widget.dispose!(this);
+    }
     if (_isCreator! || widget.assignId) {
       if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
         Get.delete<T>(tag: widget.tag);
       }
     }
 
-    for (final disposer in disposers) {
+    for (final Disposer disposer in disposers) {
       disposer();
     }
 
@@ -127,15 +128,15 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
     }
   }
 
-  final disposers = <Disposer>[];
+  final List<Disposer> disposers = <Disposer>[];
 
   @override
-  Widget build(BuildContext context) => Notifier.instance.append(
+  Widget build(final BuildContext context) => Notifier.instance.append(
       NotifyData(disposers: disposers, updater: _update),
       () => widget.builder(controller!));
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  void debugFillProperties(final DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<T>('controller', controller));
   }

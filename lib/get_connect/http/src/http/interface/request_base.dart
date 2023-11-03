@@ -4,7 +4,7 @@ import '../../response/response.dart';
 /// Abstract interface of [HttpRequestImpl].
 abstract class IClient {
   /// Sends an HTTP [Request].
-  Future<Response<T>> send<T>(Request<T> request);
+  Future<Response<T>> send<T>(final Request<T> request);
 
   /// Closes the [Request] and cleans up any resources associated with it.
   void close();

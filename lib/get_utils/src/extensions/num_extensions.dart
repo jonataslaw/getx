@@ -3,11 +3,11 @@ import 'dart:async';
 import '../get_utils/get_utils.dart';
 
 extension GetNumUtils on num {
-  bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);
+  bool isLowerThan(final num b) => GetUtils.isLowerThan(this, b);
 
-  bool isGreaterThan(num b) => GetUtils.isGreaterThan(this, b);
+  bool isGreaterThan(final num b) => GetUtils.isGreaterThan(this, b);
 
-  bool isEqual(num b) => GetUtils.isEqual(this, b);
+  bool isEqual(final num b) => GetUtils.isEqual(this, b);
 
   /// Utility to delay some callback (or code execution).
   /// TODO: Add a separated implementation of delay() with the ability
@@ -24,7 +24,7 @@ extension GetNumUtils on num {
   ///   print('currently running callback 1.2sec');
   /// }
   ///```
-  Future delay([FutureOr Function()? callback]) async => Future.delayed(
+  Future delay([final FutureOr Function()? callback]) async => Future.delayed(
         Duration(milliseconds: (this * 1000).round()),
         callback,
       );

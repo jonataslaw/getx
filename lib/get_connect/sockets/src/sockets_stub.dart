@@ -1,9 +1,6 @@
 import './socket_notifier.dart';
 
 class BaseWebSocket {
-  String url;
-  Duration ping;
-  bool allowSelfSigned;
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
@@ -11,36 +8,39 @@ class BaseWebSocket {
   }) {
     throw 'To use sockets you need dart:io or dart:html';
   }
+  String url;
+  Duration ping;
+  bool allowSelfSigned;
 
   Future connect() async {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void onOpen(OpenSocket fn) {
+  void onOpen(final OpenSocket fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void onClose(CloseSocket fn) {
+  void onClose(final CloseSocket fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void onError(CloseSocket fn) {
+  void onError(final CloseSocket fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void onMessage(MessageSocket fn) {
+  void onMessage(final MessageSocket fn) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void on(String event, MessageSocket message) {
+  void on(final String event, final MessageSocket message) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void close([int? status, String? reason]) {
+  void close([final int? status, final String? reason]) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void send(dynamic data) async {
+  void send(final dynamic data) async {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
@@ -48,7 +48,7 @@ class BaseWebSocket {
     throw 'To use sockets you need dart:io or dart:html';
   }
 
-  void emit(String event, dynamic data) {
+  void emit(final String event, final dynamic data) {
     throw 'To use sockets you need dart:io or dart:html';
   }
 }

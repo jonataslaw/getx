@@ -49,111 +49,111 @@ enum PreventDuplicateHandlingMode {
 
 mixin IGetNavigation {
   Future<T?> to<T>(
-    Widget Function() page, {
-    bool? opaque,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    String? id,
-    String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool preventDuplicates = true,
-    bool? popGesture,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
+    final Widget Function() page, {
+    final bool? opaque,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final String? id,
+    final String? routeName,
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const [],
+    final bool preventDuplicates = true,
+    final bool? popGesture,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
   });
 
   Future<void> popModeUntil(
-    String fullRoute, {
-    PopMode popMode = PopMode.history,
+    final String fullRoute, {
+    final PopMode popMode = PopMode.history,
   });
 
   Future<T?> off<T>(
-    Widget Function() page, {
-    bool? opaque,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    String? id,
-    String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool preventDuplicates = true,
-    bool? popGesture,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
+    final Widget Function() page, {
+    final bool? opaque,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final String? id,
+    final String? routeName,
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const [],
+    final bool preventDuplicates = true,
+    final bool? popGesture,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
   });
 
   Future<T?>? offAll<T>(
-    Widget Function() page, {
-    bool Function(GetPage route)? predicate,
-    bool opaque = true,
-    bool? popGesture,
-    String? id,
-    String? routeName,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool fullscreenDialog = false,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
+    final Widget Function() page, {
+    final bool Function(GetPage route)? predicate,
+    final bool opaque = true,
+    final bool? popGesture,
+    final String? id,
+    final String? routeName,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const [],
+    final bool fullscreenDialog = false,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
   });
 
   Future<T?> toNamed<T>(
-    String page, {
-    dynamic arguments,
-    String? id,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
+    final String page, {
+    final dynamic arguments,
+    final String? id,
+    final bool preventDuplicates = true,
+    final Map<String, String>? parameters,
   });
 
   Future<T?> offNamed<T>(
-    String page, {
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final String page, {
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   });
 
   Future<T?>? offAllNamed<T>(
-    String newRouteName, {
+    final String newRouteName, {
     // bool Function(GetPage route)? predicate,
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   });
 
   Future<T?>? offNamedUntil<T>(
-    String page, {
-    bool Function(GetPage route)? predicate,
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final String page, {
+    final bool Function(GetPage route)? predicate,
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   });
 
   Future<T?> toNamedAndOffUntil<T>(
-    String page,
-    bool Function(GetPage) predicate, [
-    Object? data,
+    final String page,
+    final bool Function(GetPage) predicate, [
+    final Object? data,
   ]);
 
   Future<T?> offUntil<T>(
-    Widget Function() page,
-    bool Function(GetPage) predicate, [
-    Object? arguments,
+    final Widget Function() page,
+    final bool Function(GetPage) predicate, [
+    final Object? arguments,
   ]);
 
-  void removeRoute<T>(String name);
+  void removeRoute<T>(final String name);
 
-  void back<T>([T? result]);
+  void back<T>([final T? result]);
 
-  Future<R?> backAndtoNamed<T, R>(String page, {T? result, Object? arguments});
+  Future<R?> backAndtoNamed<T, R>(final String page, {final T? result, final Object? arguments});
 
-  void backUntil(bool Function(GetPage) predicate);
+  void backUntil(final bool Function(GetPage) predicate);
 
-  void goToUnknownPage([bool clearPages = true]);
+  void goToUnknownPage([final bool clearPages = true]);
 }

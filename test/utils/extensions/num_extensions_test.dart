@@ -2,14 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/utils.dart';
 
 void main() {
-  num x = 5;
-  num y = 7;
-  num z = 5;
+  const num x = 5;
+  const num y = 7;
+  const num z = 5;
 
-  var doubleX = 2.1;
-  var doubleY = 3.1;
-  var doubleZ = 5.0;
-  var pi = 3.14159265359;
+  const doubleX = 2.1;
+  const doubleY = 3.1;
+  const doubleZ = 5.0;
+  const pi = 3.14159265359;
 
   group('num extensions text', () {
     test('var.isLowerThan(value)', () {

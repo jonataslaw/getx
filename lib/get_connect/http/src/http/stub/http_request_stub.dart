@@ -5,16 +5,16 @@ import '../interface/request_base.dart';
 
 class HttpRequestImpl extends IClient {
   HttpRequestImpl({
-    bool allowAutoSignedCert = true,
-    List<TrustedCertificate>? trustedCertificates,
-    bool withCredentials = false,
-    String Function(Uri url)? findProxy,
+    final bool allowAutoSignedCert = true,
+    final List<TrustedCertificate>? trustedCertificates,
+    final bool withCredentials = false,
+    final String Function(Uri url)? findProxy,
   });
   @override
   void close() {}
 
   @override
-  Future<Response<T>> send<T>(Request<T> request) {
+  Future<Response<T>> send<T>(final Request<T> request) {
     throw UnimplementedError();
   }
 }

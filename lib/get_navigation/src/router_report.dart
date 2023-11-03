@@ -3,6 +3,8 @@ import 'dart:collection';
 import '../../get.dart';
 
 class RouterReportManager<T> {
+
+  RouterReportManager._();
   /// Holds a reference to `Get.reference` when the Instance was
   /// created to manage the memory.
   final Map<T?, List<String>> _routesKey = {};
@@ -14,8 +16,6 @@ class RouterReportManager<T> {
   final Map<T?, HashSet<Function>> _routesByCreate = {};
 
   static RouterReportManager? _instance;
-
-  RouterReportManager._();
 
   static RouterReportManager get instance =>
       _instance ??= RouterReportManager._();
@@ -31,13 +31,13 @@ class RouterReportManager<T> {
   T? _current;
 
   // ignore: use_setters_to_change_properties
-  void reportCurrentRoute(T newRoute) {
+  void reportCurrentRoute(final T newRoute) {
     _current = newRoute;
   }
 
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of `GetMaterialApp`.
-  void reportDependencyLinkedToRoute(String dependencyKey) {
+  void reportDependencyLinkedToRoute(final String dependencyKey) {
     if (_current == null) return;
     if (_routesKey.containsKey(_current)) {
       _routesKey[_current!]!.add(dependencyKey);
@@ -51,13 +51,13 @@ class RouterReportManager<T> {
     _routesByCreate.clear();
   }
 
-  void appendRouteByCreate(GetLifeCycleMixin i) {
+  void appendRouteByCreate(final GetLifeCycleMixin i) {
     _routesByCreate[_current] ??= HashSet<Function>();
     // _routesByCreate[Get.reference]!.add(i.onDelete as Function);
     _routesByCreate[_current]!.add(i.onDelete);
   }
 
-  void reportRouteDispose(T disposed) {
+  void reportRouteDispose(final T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
       // ambiguate(Engine.instance)!.addPostFrameCallback((_) {
       // Future.microtask(() {
@@ -66,7 +66,7 @@ class RouterReportManager<T> {
     }
   }
 
-  void reportRouteWillDispose(T disposed) {
+  void reportRouteWillDispose(final T disposed) {
     final keysToRemove = <String>[];
 
     _routesKey[disposed]?.forEach(keysToRemove.add);
@@ -95,7 +95,7 @@ class RouterReportManager<T> {
   /// using `Get.smartManagement` as [SmartManagement.full] or
   /// [SmartManagement.keepFactory]
   /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
-  void _removeDependencyByRoute(T routeName) {
+  void _removeDependencyByRoute(final T routeName) {
     final keysToRemove = <String>[];
 
     _routesKey[routeName]?.forEach(keysToRemove.add);

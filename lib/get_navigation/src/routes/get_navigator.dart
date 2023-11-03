@@ -3,30 +3,54 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 
 class GetNavigator extends Navigator {
-  GetNavigator.onGenerateRoute({
-    GlobalKey<NavigatorState>? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-    String? restorationScopeId,
+
+  GetNavigator({
+    required List<GetPage> super.pages, super.key,
+    final bool Function(Route<dynamic>, dynamic)? onPopPage,
+    final List<NavigatorObserver>? observers,
+    super.reportsRouteUpdateToEngine,
+    final TransitionDelegate? transitionDelegate,
+    super.initialRoute,
+    super.restorationScopeId,
   }) : super(
           //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
           onPopPage: onPopPage ??
-              (route, result) {
+              (final route, final result) {
                 final didPop = route.didPop(result);
                 if (!didPop) {
                   return false;
                 }
                 return true;
               },
-          onGenerateRoute: (settings) {
+          observers: [
+            // GetObserver(null, Get.routing),
+            HeroController(),
+            ...?observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
+  GetNavigator.onGenerateRoute({
+    required List<GetPage> super.pages, GlobalKey<NavigatorState>? super.key,
+    final bool Function(Route<dynamic>, dynamic)? onPopPage,
+    final List<NavigatorObserver>? observers,
+    super.reportsRouteUpdateToEngine,
+    final TransitionDelegate? transitionDelegate,
+    super.initialRoute,
+    super.restorationScopeId,
+  }) : super(
+          //keys should be optional
+          onPopPage: onPopPage ??
+              (final route, final result) {
+                final didPop = route.didPop(result);
+                if (!didPop) {
+                  return false;
+                }
+                return true;
+              },
+          onGenerateRoute: (final settings) {
             final selectedPageList =
-                pages.where((element) => element.name == settings.name);
+                pages.where((final element) => element.name == settings.name);
             if (selectedPageList.isNotEmpty) {
               final selectedPage = selectedPageList.first;
               return GetPageRoute(
@@ -36,44 +60,8 @@ class GetNavigator extends Navigator {
             }
             return null;
           },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          restorationScopeId: restorationScopeId,
-          pages: pages,
           observers: [
             // GetObserver(),
-            ...?observers,
-          ],
-          transitionDelegate:
-              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-        );
-
-  GetNavigator({
-    Key? key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
-    List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
-    TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-    String? restorationScopeId,
-  }) : super(
-          //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          restorationScopeId: restorationScopeId,
-          pages: pages,
-          observers: [
-            // GetObserver(null, Get.routing),
-            HeroController(),
             ...?observers,
           ],
           transitionDelegate:

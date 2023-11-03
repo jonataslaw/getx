@@ -82,7 +82,7 @@ class HttpStatus {
   bool get isServerError =>
       between(internalServerError, networkConnectTimeoutError);
 
-  bool between(int begin, int end) {
+  bool between(final int begin, final int end) {
     return !connectionError && code! >= begin && code! <= end;
   }
 

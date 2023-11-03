@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  testWidgets("test if Get.isSnackbarOpen works with Get.snackbar",
-      (tester) async {
+  testWidgets('test if Get.isSnackbarOpen works with Get.snackbar',
+      (final tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
@@ -13,7 +13,7 @@ void main() {
           onPressed: () {
             Get.snackbar(
               'title',
-              "message",
+              'message',
               duration: const Duration(seconds: 1),
               mainButton:
                   TextButton(onPressed: () {}, child: const Text('button')),
@@ -34,7 +34,7 @@ void main() {
     expect(Get.isSnackbarOpen, false);
   });
 
-  testWidgets("Get.rawSnackbar test", (tester) async {
+  testWidgets('Get.rawSnackbar test', (final tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
@@ -43,13 +43,11 @@ void main() {
           onPressed: () {
             Get.rawSnackbar(
               title: 'title',
-              message: "message",
-              onTap: (_) {},
-              shouldIconPulse: true,
+              message: 'message',
+              onTap: (final _) {},
               icon: const Icon(Icons.alarm),
               showProgressIndicator: true,
               duration: const Duration(seconds: 1),
-              isDismissible: true,
               leftBarIndicatorColor: Colors.amber,
               overlayBlur: 1.0,
             );
@@ -70,7 +68,7 @@ void main() {
     expect(Get.isSnackbarOpen, false);
   });
 
-  testWidgets("test snackbar queue", (tester) async {
+  testWidgets('test snackbar queue', (final tester) async {
     const messageOne = Text('title');
 
     const messageTwo = Text('titleTwo');
@@ -106,7 +104,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets("test snackbar dismissible", (tester) async {
+  testWidgets('test snackbar dismissible', (final tester) async {
     const dismissDirection = DismissDirection.vertical;
     const snackBarTapTarget = Key('snackbar-tap-target');
 
@@ -115,7 +113,7 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       home: Scaffold(
         body: Builder(
-          builder: (context) {
+          builder: (final context) {
             return Column(
               children: <Widget>[
                 GestureDetector(
@@ -124,7 +122,6 @@ void main() {
                     getBar = const GetSnackBar(
                       message: 'bar1',
                       duration: Duration(seconds: 2),
-                      isDismissible: true,
                       dismissDirection: dismissDirection,
                     );
                     Get.showSnackbar(getBar);
@@ -160,7 +157,7 @@ void main() {
     expect(Get.isSnackbarOpen, false);
   });
 
-  testWidgets("test snackbar onTap", (tester) async {
+  testWidgets('test snackbar onTap', (final tester) async {
     const dismissDirection = DismissDirection.vertical;
     const snackBarTapTarget = Key('snackbar-tap-target');
     var counter = 0;
@@ -172,7 +169,7 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(
       home: Scaffold(
         body: Builder(
-          builder: (context) {
+          builder: (final context) {
             return Column(
               children: <Widget>[
                 GestureDetector(
@@ -180,11 +177,10 @@ void main() {
                   onTap: () {
                     getBar = GetSnackBar(
                       message: 'bar1',
-                      onTap: (_) {
+                      onTap: (final _) {
                         counter++;
                       },
                       duration: const Duration(seconds: 2),
-                      isDismissible: true,
                       dismissDirection: dismissDirection,
                     );
                     getBarController = Get.showSnackbar(getBar);
@@ -220,7 +216,7 @@ void main() {
     await getBarController.close(withAnimations: false);
   });
 
-  testWidgets("Get test actions and icon", (tester) async {
+  testWidgets('Get test actions and icon', (final tester) async {
     const icon = Icon(Icons.alarm);
     final action = TextButton(onPressed: () {}, child: const Text('button'));
 

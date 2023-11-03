@@ -128,7 +128,7 @@ void main() {
 
   testWidgets(
     'test params from dynamic route',
-    (tester) async {
+    (final tester) async {
       await tester.pumpWidget(GetMaterialApp(
         initialRoute: '/first/juan',
         getPages: [
@@ -173,7 +173,7 @@ void main() {
 
   testWidgets(
     'params in url by parameters',
-    (tester) async {
+    (final tester) async {
       await tester.pumpWidget(GetMaterialApp(
         initialRoute: '/first/juan',
         getPages: [
@@ -183,13 +183,13 @@ void main() {
       ));
 
       // Get.parameters = ({"varginias": "varginia", "vinis": "viniiss"});
-      var parameters = <String, String>{
-        "varginias": "varginia",
-        "vinis": "viniiss"
+      final parameters = <String, String>{
+        'varginias': 'varginia',
+        'vinis': 'viniiss'
       };
       // print("Get.parameters: ${Get.parameters}");
-      parameters.addAll({"a": "b", "c": "d"});
-      Get.toNamed("/italy", parameters: parameters);
+      parameters.addAll({'a': 'b', 'c': 'd'});
+      Get.toNamed('/italy', parameters: parameters);
 
       await tester.pumpAndSettle();
       expect(Get.parameters['varginias'], 'varginia');

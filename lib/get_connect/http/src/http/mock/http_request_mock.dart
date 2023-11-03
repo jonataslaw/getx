@@ -6,23 +6,23 @@ import '../utils/body_decoder.dart';
 typedef MockClientHandler = Future<Response> Function(Request request);
 
 class MockClient extends IClient {
-  /// The handler for than transforms request on response
-  final MockClientHandler _handler;
 
   /// Creates a [MockClient] with a handler that receives [Request]s and sends
   /// [Response]s.
   MockClient(this._handler);
+  /// The handler for than transforms request on response
+  final MockClientHandler _handler;
 
   @override
-  Future<Response<T>> send<T>(Request<T> request) async {
-    var requestBody = await request.bodyBytes.toBytes();
-    var bodyBytes = requestBody.toStream();
+  Future<Response<T>> send<T>(final Request<T> request) async {
+    final requestBody = await request.bodyBytes.toBytes();
+    final bodyBytes = requestBody.toStream();
 
-    var response = await _handler(request);
+    final response = await _handler(request);
 
     final stringBody = await bodyBytesToString(bodyBytes, response.headers!);
 
-    var mimeType = response.headers!.containsKey('content-type')
+    final mimeType = response.headers!.containsKey('content-type')
         ? response.headers!['content-type']
         : '';
 

@@ -23,7 +23,7 @@ extension ContextExt on BuildContext {
   ///
   /// [reducedBy] is a percentage value of how much of the height you want
   /// if you for example want 46% of the height, then you reduce it by 56%.
-  double heightTransformer({double dividedBy = 1, double reducedBy = 0.0}) {
+  double heightTransformer({final double dividedBy = 1, final double reducedBy = 0.0}) {
     return (mediaQuerySize.height -
             ((mediaQuerySize.height / 100) * reducedBy)) /
         dividedBy;
@@ -38,16 +38,16 @@ extension ContextExt on BuildContext {
   ///
   /// [reducedBy] is a percentage value of how much of the width you want
   /// if you for example want 46% of the width, then you reduce it by 56%.
-  double widthTransformer({double dividedBy = 1, double reducedBy = 0.0}) {
+  double widthTransformer({final double dividedBy = 1, final double reducedBy = 0.0}) {
     return (mediaQuerySize.width - ((mediaQuerySize.width / 100) * reducedBy)) /
         dividedBy;
   }
 
   /// Divide the height proportionally by the given value
   double ratio({
-    double dividedBy = 1,
-    double reducedByW = 0.0,
-    double reducedByH = 0.0,
+    final double dividedBy = 1,
+    final double reducedByW = 0.0,
+    final double reducedByH = 0.0,
   }) {
     return heightTransformer(dividedBy: dividedBy, reducedBy: reducedByH) /
         widthTransformer(dividedBy: dividedBy, reducedBy: reducedByW);
@@ -57,7 +57,7 @@ extension ContextExt on BuildContext {
   ThemeData get theme => Theme.of(this);
 
   /// Check if dark mode theme is enable
-  bool get isDarkMode => (theme.brightness == Brightness.dark);
+  bool get isDarkMode => theme.brightness == Brightness.dark;
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;
@@ -96,7 +96,7 @@ extension ContextExt on BuildContext {
   double get mediaQueryShortestSide => mediaQuerySize.shortestSide;
 
   /// True if width be larger than 800
-  bool get showNavbar => (width > 800);
+  bool get showNavbar => width > 800;
 
   /// True if the width is smaller than 600p
   bool get isPhoneOrLess => width <= 600;
@@ -105,7 +105,7 @@ extension ContextExt on BuildContext {
   bool get isPhoneOrWider => width >= 600;
 
   /// True if the shortestSide is smaller than 600p
-  bool get isPhone => (mediaQueryShortestSide < 600);
+  bool get isPhone => mediaQueryShortestSide < 600;
 
   /// True if the width is smaller than 600p
   bool get isSmallTabletOrLess => width <= 600;
@@ -114,10 +114,10 @@ extension ContextExt on BuildContext {
   bool get isSmallTabletOrWider => width >= 600;
 
   /// True if the shortestSide is largest than 600p
-  bool get isSmallTablet => (mediaQueryShortestSide >= 600);
+  bool get isSmallTablet => mediaQueryShortestSide >= 600;
 
   /// True if the shortestSide is largest than 720p
-  bool get isLargeTablet => (mediaQueryShortestSide >= 720);
+  bool get isLargeTablet => mediaQueryShortestSide >= 720;
 
   /// True if the width is smaller than 720p
   bool get isLargeTabletOrLess => width <= 720;
@@ -144,15 +144,15 @@ extension ContextExt on BuildContext {
   /// if the device width is less than 300  return [watch] value.
   /// in other cases return [mobile] value.
   T responsiveValue<T>({
-    T? watch,
-    T? mobile,
-    T? tablet,
-    T? desktop,
+    final T? watch,
+    final T? mobile,
+    final T? tablet,
+    final T? desktop,
   }) {
     assert(
         watch != null || mobile != null || tablet != null || desktop != null);
 
-    var deviceWidth = mediaQuerySize.width;
+    final deviceWidth = mediaQuerySize.width;
     //big screen width can display smaller sizes
     final strictValues = [
       if (deviceWidth >= 1200) desktop, //desktop is allowed
@@ -173,7 +173,7 @@ extension ContextExt on BuildContext {
 extension IterableExt<T> on Iterable<T> {
   /// The first element, or `null` if the iterable is empty.
   T? get firstOrNull {
-    var iterator = this.iterator;
+    final iterator = this.iterator;
     if (iterator.moveNext()) return iterator.current;
     return null;
   }

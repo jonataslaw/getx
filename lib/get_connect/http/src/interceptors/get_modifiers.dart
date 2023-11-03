@@ -5,36 +5,36 @@ import '../response/response.dart';
 
 typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T?> request);
 
-typedef ResponseModifier<T> = FutureOr Function(
+typedef ResponseModifier<T> = FutureOr<T> Function(
     Request<T?> request, Response<T?> response);
 
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
 class GetModifier<S> {
-  final _requestModifiers = <RequestModifier>[];
-  final _responseModifiers = <ResponseModifier>[];
+  final List<RequestModifier> _requestModifiers = <RequestModifier>[];
+  final List<ResponseModifier> _responseModifiers = <ResponseModifier>[];
   RequestModifier? authenticator;
 
-  void addRequestModifier<T>(RequestModifier<T> interceptor) {
+  void addRequestModifier<T>(final RequestModifier<T> interceptor) {
     _requestModifiers.add(interceptor as RequestModifier);
   }
 
-  void removeRequestModifier<T>(RequestModifier<T> interceptor) {
+  void removeRequestModifier<T>(final RequestModifier<T> interceptor) {
     _requestModifiers.remove(interceptor);
   }
 
-  void addResponseModifier<T>(ResponseModifier<T> interceptor) {
+  void addResponseModifier<T>(final ResponseModifier<T> interceptor) {
     _responseModifiers.add(interceptor as ResponseModifier);
   }
 
-  void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
+  void removeResponseModifier<T>(final ResponseModifier<T> interceptor) {
     _requestModifiers.remove(interceptor);
   }
 
-  Future<Request<T>> modifyRequest<T>(Request<T> request) async {
-    var newRequest = request;
+  Future<Request<T>> modifyRequest<T>(final Request<T> request) async {
+    Request<T> newRequest = request;
     if (_requestModifiers.isNotEmpty) {
-      for (var interceptor in _requestModifiers) {
+      for (final RequestModifier interceptor in _requestModifiers) {
         newRequest = await interceptor(newRequest) as Request<T>;
       }
     }
@@ -43,10 +43,10 @@ class GetModifier<S> {
   }
 
   Future<Response<T>> modifyResponse<T>(
-      Request<T> request, Response<T> response) async {
-    var newResponse = response;
+      final Request<T> request, final Response<T> response) async {
+    Response<T> newResponse = response;
     if (_responseModifiers.isNotEmpty) {
-      for (var interceptor in _responseModifiers) {
+      for (final ResponseModifier interceptor in _responseModifiers) {
         newResponse = await interceptor(request, response) as Response<T>;
       }
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 abstract class GetWidgetCache extends Widget {
-  const GetWidgetCache({Key? key}) : super(key: key);
+  const GetWidgetCache({super.key});
 
   @override
   GetWidgetCacheElement createElement() => GetWidgetCacheElement(this);
@@ -12,7 +12,7 @@ abstract class GetWidgetCache extends Widget {
 }
 
 class GetWidgetCacheElement extends ComponentElement {
-  GetWidgetCacheElement(GetWidgetCache widget)
+  GetWidgetCacheElement(final GetWidgetCache widget)
       : cache = widget.createWidgetCache(),
         super(widget) {
     cache._element = this;
@@ -20,7 +20,7 @@ class GetWidgetCacheElement extends ComponentElement {
   }
 
   @override
-  void mount(Element? parent, dynamic newSlot) {
+  void mount(final Element? parent, final dynamic newSlot) {
     cache.onInit();
     super.mount(parent, newSlot);
   }
@@ -62,5 +62,5 @@ abstract class WidgetCache<T extends GetWidgetCache> {
   void onClose() {}
 
   @protected
-  Widget build(BuildContext context);
+  Widget build(final BuildContext context);
 }

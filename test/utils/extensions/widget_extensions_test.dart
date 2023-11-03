@@ -6,15 +6,15 @@ class Foo extends StatelessWidget {
   const Foo({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return const SizedBox.shrink();
   }
 }
 
 void main() {
   group('Group test for PaddingX Extension', () {
-    testWidgets('Test of paddingAll', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of paddingAll', (final tester) async {
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -23,8 +23,8 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingOnly', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of paddingOnly', (final tester) async {
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -33,8 +33,8 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingSymmetric', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of paddingSymmetric', (final tester) async {
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -43,8 +43,8 @@ void main() {
       expect(find.byType(Padding), findsOneWidget);
     });
 
-    testWidgets('Test of paddingZero', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of paddingZero', (final tester) async {
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -55,32 +55,32 @@ void main() {
   });
 
   group('Group test for MarginX Extension', () {
-    testWidgets('Test of marginAll', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of marginAll', (final tester) async {
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginAll(16));
 
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginOnly', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of marginOnly', (final tester) async {
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginOnly(top: 16));
 
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginSymmetric', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of marginSymmetric', (final tester) async {
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginSymmetric(vertical: 16));
 
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('Test of marginZero', (tester) async {
-      Widget containerTest = const Foo();
+    testWidgets('Test of marginZero', (final tester) async {
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginZero);
 

@@ -12,15 +12,39 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
-  factory GetDelegate.createDelegate({
-    GetPage<dynamic>? notFoundRoute,
-    List<GetPage> pages = const [],
-    List<NavigatorObserver>? navigatorObservers,
-    TransitionDelegate<dynamic>? transitionDelegate,
-    PopMode backButtonPopMode = PopMode.history,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+  GetDelegate({
+    required final List<GetPage> pages,
+    GetPage? notFoundRoute,
+    this.navigatorObservers,
+    this.transitionDelegate,
+    this.backButtonPopMode = PopMode.history,
+    this.preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.reorderRoutes,
-    GlobalKey<NavigatorState>? navigatorKey,
+    this.pickPagesForRootNavigator,
+    this.restorationScopeId,
+    final bool showHashOnUrl = false,
+    final GlobalKey<NavigatorState>? navigatorKey,
+  })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
+        notFoundRoute = notFoundRoute ??= GetPage(
+          name: '/404',
+          page: () => const Scaffold(
+            body: Center(child: Text('Route not found')),
+          ),
+        ) {
+    if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
+    addPages(pages);
+    addPage(notFoundRoute);
+    Get.log('GetDelegate is created !');
+  }
+  factory GetDelegate.createDelegate({
+    final GetPage<dynamic>? notFoundRoute,
+    final List<GetPage> pages = const <GetPage>[],
+    final List<NavigatorObserver>? navigatorObservers,
+    final TransitionDelegate<dynamic>? transitionDelegate,
+    final PopMode backButtonPopMode = PopMode.history,
+    final PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+    final GlobalKey<NavigatorState>? navigatorKey,
   }) {
     return GetDelegate(
       notFoundRoute: notFoundRoute,
@@ -47,11 +71,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   List<RouteDecoder> get activePages => _activePages;
 
-  final _routeTree = ParseRouteTree(routes: []);
+  final ParseRouteTree _routeTree = ParseRouteTree(routes: <GetPage>[]);
 
   List<GetPage> get registeredRoutes => _routeTree.routes;
 
-  void addPages(List<GetPage> getPages) {
+  void addPages(final List<GetPage> getPages) {
     _routeTree.addRoutes(getPages);
   }
 
@@ -59,15 +83,15 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _routeTree.routes.clear();
   }
 
-  void addPage(GetPage getPage) {
+  void addPage(final GetPage getPage) {
     _routeTree.addRoute(getPage);
   }
 
-  void removePage(GetPage getPage) {
+  void removePage(final GetPage getPage) {
     _routeTree.removeRoute(getPage);
   }
 
-  RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
+  RouteDecoder matchRoute(final String name, {final PageSettings? arguments}) {
     return _routeTree.matchRoute(name, arguments: arguments);
   }
 
@@ -78,39 +102,15 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   final String? restorationScopeId;
 
-  GetDelegate({
-    GetPage? notFoundRoute,
-    this.navigatorObservers,
-    this.transitionDelegate,
-    this.backButtonPopMode = PopMode.history,
-    this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.reorderRoutes,
-    this.pickPagesForRootNavigator,
-    this.restorationScopeId,
-    bool showHashOnUrl = false,
-    GlobalKey<NavigatorState>? navigatorKey,
-    required List<GetPage> pages,
-  })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
-        notFoundRoute = notFoundRoute ??= GetPage(
-          name: '/404',
-          page: () => const Scaffold(
-            body: Center(child: Text('Route not found')),
-          ),
-        ) {
-    if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
-    addPages(pages);
-    addPage(notFoundRoute);
-    Get.log('GetDelegate is created !');
-  }
-
-  Future<RouteDecoder?> runMiddleware(RouteDecoder config) async {
-    final middlewares = config.currentTreeBranch.last.middlewares;
+  Future<RouteDecoder?> runMiddleware(final RouteDecoder config) async {
+    final List<GetMiddleware> middlewares =
+        config.currentTreeBranch.last.middlewares;
     if (middlewares.isEmpty) {
       return config;
     }
-    var iterator = config;
-    for (var item in middlewares) {
-      var redirectRes = await item.redirectDelegate(iterator);
+    RouteDecoder iterator = config;
+    for (final GetMiddleware item in middlewares) {
+      final RouteDecoder? redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
       // Stop the iteration over the middleware if we changed page
@@ -127,8 +127,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return iterator;
   }
 
-  Future<void> _unsafeHistoryAdd(RouteDecoder config) async {
-    final res = await runMiddleware(config);
+  Future<void> _unsafeHistoryAdd(final RouteDecoder config) async {
+    final RouteDecoder? res = await runMiddleware(config);
     if (res == null) return;
     _activePages.add(res);
   }
@@ -139,16 +139,16 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   //   return null;
   // }
 
-  Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
+  Future<T?> _unsafeHistoryRemoveAt<T>(final int index, final T result) async {
     if (index == _activePages.length - 1 && _activePages.length > 1) {
       //removing WILL update the current route
-      final toCheck = _activePages[_activePages.length - 2];
-      final resMiddleware = await runMiddleware(toCheck);
+      final RouteDecoder toCheck = _activePages[_activePages.length - 2];
+      final RouteDecoder? resMiddleware = await runMiddleware(toCheck);
       if (resMiddleware == null) return null;
       _activePages[_activePages.length - 2] = resMiddleware;
     }
 
-    final completer = _activePages.removeAt(index).route?.completer;
+    final Completer? completer = _activePages.removeAt(index).route?.completer;
     if (completer?.isCompleted == false) completer!.complete(result);
 
     return completer?.future as T?;
@@ -159,17 +159,18 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Map<String, String> get parameters {
-    return currentConfiguration?.pageSettings?.params ?? {};
+    return currentConfiguration?.pageSettings?.params ?? <String, String>{};
   }
 
   PageSettings? get pageSettings {
     return currentConfiguration?.pageSettings;
   }
 
-  Future<void> _pushHistory(RouteDecoder config) async {
+  Future<void> _pushHistory(final RouteDecoder config) async {
     if (config.route!.preventDuplicates) {
-      final originalEntryIndex = _activePages.indexWhere(
-          (element) => element.pageSettings?.name == config.pageSettings?.name);
+      final int originalEntryIndex = _activePages.indexWhere(
+          (final RouteDecoder element) =>
+              element.pageSettings?.name == config.pageSettings?.name);
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.popUntilOriginalRoute:
@@ -189,35 +190,37 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     await _unsafeHistoryAdd(config);
   }
 
-  Future<T?> _popHistory<T>(T result) async {
+  Future<T?> _popHistory<T>(final T result) async {
     if (!_canPopHistory()) return null;
     return await _doPopHistory(result);
   }
 
-  Future<T?> _doPopHistory<T>(T result) async {
+  Future<T?> _doPopHistory<T>(final T result) async {
     return _unsafeHistoryRemoveAt<T>(_activePages.length - 1, result);
   }
 
-  Future<T?> _popPage<T>(T result) async {
+  Future<T?> _popPage<T>(final T result) async {
     if (!_canPopPage()) return null;
     return await _doPopPage(result);
   }
 
   // returns the popped page
-  Future<T?> _doPopPage<T>(T result) async {
-    final currentBranch = currentConfiguration?.currentTreeBranch;
+  Future<T?> _doPopPage<T>(final T result) async {
+    final List<GetPage>? currentBranch =
+        currentConfiguration?.currentTreeBranch;
     if (currentBranch != null && currentBranch.length > 1) {
       //remove last part only
-      final remaining = currentBranch.take(currentBranch.length - 1);
-      final prevHistoryEntry = _activePages.length > 1
+      final Iterable<GetPage> remaining =
+          currentBranch.take(currentBranch.length - 1);
+      final RouteDecoder? prevHistoryEntry = _activePages.length > 1
           ? _activePages[_activePages.length - 2]
           : null;
 
       //check if current route is the same as the previous route
       if (prevHistoryEntry != null) {
         //if so, pop the entire _activePages entry
-        final newLocation = remaining.last.name;
-        final prevLocation = prevHistoryEntry.pageSettings?.name;
+        final String newLocation = remaining.last.name;
+        final String? prevLocation = prevHistoryEntry.pageSettings?.name;
         if (newLocation == prevLocation) {
           //pop the entire _activePages entry
           return await _popHistory(result);
@@ -240,7 +243,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
   }
 
-  Future<T?> _pop<T>(PopMode mode, T result) async {
+  Future<T?> _pop<T>(final PopMode mode, final T result) async {
     switch (mode) {
       case PopMode.history:
         return await _popHistory<T>(result);
@@ -251,7 +254,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
   }
 
-  Future<T?> popHistory<T>(T result) async {
+  Future<T?> popHistory<T>(final T result) async {
     return await _popHistory<T>(result);
   }
 
@@ -264,7 +267,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   bool _canPopPage() {
-    final currentTreeBranch = currentConfiguration?.currentTreeBranch;
+    final List<GetPage>? currentTreeBranch =
+        currentConfiguration?.currentTreeBranch;
     if (currentTreeBranch == null) return false;
     return currentTreeBranch.length > 1 ? true : _canPopHistory();
   }
@@ -273,7 +277,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return SynchronousFuture(_canPopPage());
   }
 
-  bool _canPop(mode) {
+  bool _canPop(final mode) {
     switch (mode) {
       case PopMode.history:
         return _canPopHistory();
@@ -286,23 +290,23 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   /// gets the visual pages from the current _activePages entry
   ///
   /// visual pages must have [GetPage.participatesInRootNavigator] set to true
-  Iterable<GetPage> getVisualPages(RouteDecoder? currentHistory) {
-    final res = currentHistory!.currentTreeBranch
-        .where((r) => r.participatesInRootNavigator != null);
+  Iterable<GetPage> getVisualPages(final RouteDecoder? currentHistory) {
+    final Iterable<GetPage> res = currentHistory!.currentTreeBranch
+        .where((final GetPage r) => r.participatesInRootNavigator != null);
     if (res.isEmpty) {
       //default behavior, all routes participate in root navigator
-      return _activePages.map((e) => e.route!);
+      return _activePages.map((final RouteDecoder e) => e.route!);
     } else {
       //user specified at least one participatesInRootNavigator
-      return res
-          .where((element) => element.participatesInRootNavigator == true);
+      return res.where((final GetPage element) =>
+          element.participatesInRootNavigator == true);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final currentHistory = currentConfiguration;
-    final pages = currentHistory == null
+  Widget build(final BuildContext context) {
+    final RouteDecoder? currentHistory = currentConfiguration;
+    final List<GetPage> pages = currentHistory == null
         ? <GetPage>[]
         : pickPagesForRootNavigator?.call(currentHistory).toList() ??
             getVisualPages(currentHistory).toList();
@@ -322,31 +326,31 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<void> goToUnknownPage([bool clearPages = false]) async {
+  Future<void> goToUnknownPage([final bool clearPages = false]) async {
     if (clearPages) _activePages.clear();
 
-    final pageSettings = _buildPageSettings(notFoundRoute.name);
-    final routeDecoder = _getRouteDecoder(pageSettings);
+    final PageSettings pageSettings = _buildPageSettings(notFoundRoute.name);
+    final RouteDecoder? routeDecoder = _getRouteDecoder(pageSettings);
 
     _push(routeDecoder!);
   }
 
   @protected
-  void _popWithResult<T>([T? result]) {
-    final completer = _activePages.removeLast().route?.completer;
+  void _popWithResult<T>([final T? result]) {
+    final Completer? completer = _activePages.removeLast().route?.completer;
     if (completer?.isCompleted == false) completer!.complete(result);
   }
 
   @override
   Future<T?> toNamed<T>(
-    String page, {
-    dynamic arguments,
-    dynamic id,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
+    final String page, {
+    final dynamic arguments,
+    final dynamic id,
+    final bool preventDuplicates = true,
+    final Map<String, String>? parameters,
   }) async {
-    final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final PageSettings args = _buildPageSettings(page, arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(args);
     if (route != null) {
       return _push<T>(route);
     } else {
@@ -357,31 +361,31 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?> to<T>(
-    Widget Function() page, {
-    bool? opaque,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    String? id,
+    final Widget Function() page, {
+    final bool? opaque,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final String? id,
     String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool preventDuplicates = true,
-    bool? popGesture,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
-    bool rebuildStack = true,
-    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const <BindingsInterface>[],
+    final bool preventDuplicates = true,
+    final bool? popGesture,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
+    final bool rebuildStack = true,
+    final PreventDuplicateHandlingMode preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName = _cleanRouteName('/${page.runtimeType}');
     // if (preventDuplicateHandlingMode ==
     //PreventDuplicateHandlingMode.Recreate) {
     //   routeName = routeName + page.hashCode.toString();
     // }
 
-    final getPage = GetPage<T>(
+    final GetPage<T> getPage = GetPage<T>(
       name: routeName,
       opaque: opaque ?? true,
       page: page,
@@ -397,8 +401,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     );
 
     _routeTree.addRoute(getPage);
-    final args = _buildPageSettings(routeName, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final PageSettings args = _buildPageSettings(routeName, arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(args);
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
@@ -409,23 +413,23 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?> off<T>(
-    Widget Function() page, {
-    bool? opaque,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    String? id,
+    final Widget Function() page, {
+    final bool? opaque,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final String? id,
     String? routeName,
-    bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool preventDuplicates = true,
-    bool? popGesture,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
+    final bool fullscreenDialog = false,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const <BindingsInterface>[],
+    final bool preventDuplicates = true,
+    final bool? popGesture,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
-    final route = GetPage<T>(
+    routeName = _cleanRouteName('/${page.runtimeType}');
+    final GetPage<T> route = GetPage<T>(
       name: routeName,
       opaque: opaque ?? true,
       page: page,
@@ -439,29 +443,29 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       transitionDuration: duration ?? Get.defaultTransitionDuration,
     );
 
-    final args = _buildPageSettings(routeName, arguments);
+    final PageSettings args = _buildPageSettings(routeName, arguments);
     return _replace(args, route);
   }
 
   @override
   Future<T?>? offAll<T>(
-    Widget Function() page, {
-    bool Function(GetPage route)? predicate,
-    bool opaque = true,
-    bool? popGesture,
-    String? id,
+    final Widget Function() page, {
+    final bool Function(GetPage route)? predicate,
+    final bool opaque = true,
+    final bool? popGesture,
+    final String? id,
     String? routeName,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
-    bool fullscreenDialog = false,
-    Transition? transition,
-    Curve? curve,
-    Duration? duration,
-    bool showCupertinoParallax = true,
-    double Function(BuildContext context)? gestureWidth,
+    final dynamic arguments,
+    final List<BindingsInterface> bindings = const <BindingsInterface>[],
+    final bool fullscreenDialog = false,
+    final Transition? transition,
+    final Curve? curve,
+    final Duration? duration,
+    final bool showCupertinoParallax = true,
+    final double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
-    final route = GetPage<T>(
+    routeName = _cleanRouteName('/${page.runtimeType}');
+    final GetPage<T> route = GetPage<T>(
       name: routeName,
       opaque: opaque,
       page: page,
@@ -475,9 +479,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       transitionDuration: duration ?? Get.defaultTransitionDuration,
     );
 
-    final args = _buildPageSettings(routeName, arguments);
+    final PageSettings args = _buildPageSettings(routeName, arguments);
 
-    final newPredicate = predicate ?? (route) => false;
+    final bool Function(GetPage route) newPredicate =
+        predicate ?? (final GetPage route) => false;
 
     while (_activePages.length > 1 && !newPredicate(_activePages.last.route!)) {
       _popWithResult();
@@ -488,14 +493,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?>? offAllNamed<T>(
-    String newRouteName, {
+    final String newRouteName, {
     // bool Function(GetPage route)? predicate,
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   }) async {
-    final args = _buildPageSettings(newRouteName, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final PageSettings args = _buildPageSettings(newRouteName, arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
     while (_activePages.length > 1) {
@@ -507,17 +512,18 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?>? offNamedUntil<T>(
-    String page, {
-    bool Function(GetPage route)? predicate,
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final String page, {
+    final bool Function(GetPage route)? predicate,
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   }) async {
-    final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final PageSettings args = _buildPageSettings(page, arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
-    final newPredicate = predicate ?? (route) => false;
+    final bool Function(GetPage route) newPredicate =
+        predicate ?? (final GetPage route) => false;
 
     while (_activePages.length > 1 && newPredicate(_activePages.last.route!)) {
       _activePages.removeLast();
@@ -528,13 +534,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?> offNamed<T>(
-    String page, {
-    dynamic arguments,
-    String? id,
-    Map<String, String>? parameters,
+    final String page, {
+    final dynamic arguments,
+    final String? id,
+    final Map<String, String>? parameters,
   }) async {
-    final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final PageSettings args = _buildPageSettings(page, arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(args);
     if (route == null) return null;
     _popWithResult();
     return _push<T>(route);
@@ -542,13 +548,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?> toNamedAndOffUntil<T>(
-    String page,
-    bool Function(GetPage) predicate, [
-    Object? data,
+    final String page,
+    final bool Function(GetPage) predicate, [
+    final Object? data,
   ]) async {
-    final arguments = _buildPageSettings(page, data);
+    final PageSettings arguments = _buildPageSettings(page, data);
 
-    final route = _getRouteDecoder<T>(arguments);
+    final RouteDecoder? route = _getRouteDecoder<T>(arguments);
 
     if (route == null) return null;
 
@@ -561,9 +567,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<T?> offUntil<T>(
-    Widget Function() page,
-    bool Function(GetPage) predicate, [
-    Object? arguments,
+    final Widget Function() page,
+    final bool Function(GetPage) predicate, [
+    final Object? arguments,
   ]) async {
     while (_activePages.isNotEmpty && !predicate(_activePages.last.route!)) {
       _popWithResult();
@@ -573,7 +579,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  void removeRoute<T>(String name) {
+  void removeRoute<T>(final String name) {
     _activePages.remove(RouteDecoder.fromRoute(name));
   }
 
@@ -584,8 +590,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   void _checkIfCanBack() {
     assert(() {
       if (!canBack) {
-        final last = _activePages.last;
-        final name = last.route?.name;
+        final RouteDecoder last = _activePages.last;
+        final String? name = last.route?.name;
         throw 'The page $name cannot be popped';
       }
       return true;
@@ -593,10 +599,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<R?> backAndtoNamed<T, R>(String page,
-      {T? result, Object? arguments}) async {
-    final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<R>(args);
+  Future<R?> backAndtoNamed<T, R>(final String page,
+      {final T? result, final Object? arguments}) async {
+    final PageSettings args = _buildPageSettings(page, arguments);
+    final RouteDecoder? route = _getRouteDecoder<R>(args);
     if (route == null) return null;
     _popWithResult<T>(result);
     return _push<R>(route);
@@ -607,11 +613,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   /// DOES NOT remove the [fullRoute]
   @override
   Future<void> popModeUntil(
-    String fullRoute, {
-    PopMode popMode = PopMode.history,
+    final String fullRoute, {
+    final PopMode popMode = PopMode.history,
   }) async {
     // remove history or page entries until you meet route
-    var iterator = currentConfiguration;
+    RouteDecoder? iterator = currentConfiguration;
     while (_canPop(popMode) &&
         iterator != null &&
         iterator.pageSettings?.name != fullRoute) {
@@ -623,7 +629,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  void backUntil(bool Function(GetPage) predicate) {
+  void backUntil(final bool Function(GetPage) predicate) {
     while (_activePages.length <= 1 && !predicate(_activePages.last.route!)) {
       _popWithResult();
     }
@@ -631,30 +637,33 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     notifyListeners();
   }
 
-  Future<T?> _replace<T>(PageSettings arguments, GetPage<T> page) async {
-    final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
+  Future<T?> _replace<T>(
+      final PageSettings arguments, final GetPage<T> page) async {
+    final int index = _activePages.length > 1 ? _activePages.length - 1 : 0;
     _routeTree.addRoute(page);
 
-    final activePage = _getRouteDecoder(arguments);
+    final RouteDecoder? activePage = _getRouteDecoder(arguments);
 
     // final activePage = _configureRouterDecoder<T>(route!, arguments);
 
     _activePages[index] = activePage!;
 
     notifyListeners();
-    final result = await activePage.route?.completer?.future as Future<T?>?;
+    final Future<T?>? result =
+        await activePage.route?.completer?.future as Future<T?>?;
     _routeTree.removeRoute(page);
 
     return result;
   }
 
-  Future<T?> _replaceNamed<T>(RouteDecoder activePage) async {
-    final index = _activePages.length > 1 ? _activePages.length - 1 : 0;
+  Future<T?> _replaceNamed<T>(final RouteDecoder activePage) async {
+    final int index = _activePages.length > 1 ? _activePages.length - 1 : 0;
     // final activePage = _configureRouterDecoder<T>(page, arguments);
     _activePages[index] = activePage;
 
     notifyListeners();
-    final result = await activePage.route?.completer?.future as Future<T?>?;
+    final Future<T?>? result =
+        await activePage.route?.completer?.future as Future<T?>?;
     return result;
   }
 
@@ -674,22 +683,23 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return Uri.tryParse(name)?.toString() ?? name;
   }
 
-  PageSettings _buildPageSettings(String page, [Object? data]) {
-    var uri = Uri.parse(page);
+  PageSettings _buildPageSettings(final String page, [final Object? data]) {
+    final Uri uri = Uri.parse(page);
     return PageSettings(uri, data);
   }
 
   @protected
-  RouteDecoder? _getRouteDecoder<T>(PageSettings arguments) {
-    var page = arguments.uri.path;
-    final parameters = arguments.params;
+  RouteDecoder? _getRouteDecoder<T>(final PageSettings arguments) {
+    String page = arguments.uri.path;
+    final Map<String, String> parameters = arguments.params;
     if (parameters.isNotEmpty) {
-      final uri = Uri(path: page, queryParameters: parameters);
+      final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
     }
 
-    final decoder = _routeTree.matchRoute(page, arguments: arguments);
-    final route = decoder.route;
+    final RouteDecoder decoder =
+        _routeTree.matchRoute(page, arguments: arguments);
+    final GetPage? route = decoder.route;
     if (route == null) return null;
 
     return _configureRouterDecoder<T>(decoder, arguments);
@@ -697,8 +707,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @protected
   RouteDecoder _configureRouterDecoder<T>(
-      RouteDecoder decoder, PageSettings arguments) {
-    final parameters =
+      final RouteDecoder decoder, final PageSettings arguments) {
+    final Map<String, String> parameters =
         arguments.params.isEmpty ? arguments.query : arguments.params;
     arguments.params.addAll(arguments.query);
     if (decoder.parameters.isEmpty) {
@@ -715,17 +725,18 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return decoder;
   }
 
-  Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
-    var mid = await runMiddleware(decoder);
-    final res = mid ?? decoder;
+  Future<T?> _push<T>(final RouteDecoder decoder,
+      {final bool rebuildStack = true}) async {
+    final RouteDecoder? mid = await runMiddleware(decoder);
+    final RouteDecoder res = mid ?? decoder;
     // if (res == null) res = decoder;
 
-    final preventDuplicateHandlingMode =
+    final PreventDuplicateHandlingMode preventDuplicateHandlingMode =
         res.route?.preventDuplicateHandlingMode ??
             PreventDuplicateHandlingMode.reorderRoutes;
 
-    final onStackPage = _activePages
-        .firstWhereOrNull((element) => element.route?.key == res.route?.key);
+    final RouteDecoder? onStackPage = _activePages.firstWhereOrNull(
+        (final RouteDecoder element) => element.route?.key == res.route?.key);
 
     /// There are no duplicate routes in the stack
     if (onStackPage == null) {
@@ -759,8 +770,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<void> setNewRoutePath(RouteDecoder configuration) async {
-    final page = configuration.route;
+  Future<void> setNewRoutePath(final RouteDecoder configuration) async {
+    final GetPage? page = configuration.route;
     if (page == null) {
       goToUnknownPage();
       return;
@@ -772,15 +783,15 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   RouteDecoder? get currentConfiguration {
     if (_activePages.isEmpty) return null;
-    final route = _activePages.last;
+    final RouteDecoder route = _activePages.last;
     return route;
   }
 
   Future<bool> handlePopupRoutes({
-    Object? result,
+    final Object? result,
   }) async {
     Route? currentRoute;
-    navigatorKey.currentState!.popUntil((route) {
+    navigatorKey.currentState!.popUntil((final Route route) {
       currentRoute = route;
       return true;
     });
@@ -792,11 +803,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<bool> popRoute({
-    Object? result,
-    PopMode? popMode,
+    final Object? result,
+    final PopMode? popMode,
   }) async {
     //Returning false will cause the entire app to be popped.
-    final wasPopup = await handlePopupRoutes(result: result);
+    final bool wasPopup = await handlePopupRoutes(result: result);
     if (wasPopup) return true;
 
     if (_canPop(popMode ?? backButtonPopMode)) {
@@ -809,14 +820,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  void back<T>([T? result]) {
+  void back<T>([final T? result]) {
     _checkIfCanBack();
     _popWithResult<T>(result);
     notifyListeners();
   }
 
-  bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
-    final didPop = route.didPop(result);
+  bool _onPopVisualRoute(final Route<dynamic> route, final dynamic result) {
+    final bool didPop = route.didPop(result);
     if (!didPop) {
       return false;
     }

@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 class TestClass {
-  final name = "John";
+  final name = 'John';
 }
 
 class EmptyClass {}
 
 void main() {
-  dynamic newId(dynamic e) => e;
+  dynamic newId(final dynamic e) => e;
 
   test('null isNullOrBlank should be true for null', () {
     expect(GetUtils.isNullOrBlank(null), true);
@@ -28,13 +28,13 @@ void main() {
   });
 
   test('isNullOrBlank should validate strings', () {
-    expect(GetUtils.isNullOrBlank(""), true);
-    expect(GetUtils.isNullOrBlank("  "), true);
+    expect(GetUtils.isNullOrBlank(''), true);
+    expect(GetUtils.isNullOrBlank('  '), true);
 
-    expect(GetUtils.isNullOrBlank("foo"), false);
-    expect(GetUtils.isNullOrBlank(" foo "), false);
+    expect(GetUtils.isNullOrBlank('foo'), false);
+    expect(GetUtils.isNullOrBlank(' foo '), false);
 
-    expect(GetUtils.isNullOrBlank("null"), false);
+    expect(GetUtils.isNullOrBlank('null'), false);
   });
 
   test('isNullOrBlank should validate iterables', () {
@@ -58,11 +58,11 @@ void main() {
   test('isNullOrBlank should validate maps', () {
     expect(GetUtils.isNullOrBlank({}), true);
     expect(GetUtils.isNullOrBlank({1: 1}), false);
-    expect(GetUtils.isNullOrBlank({"other": "thing"}), false);
+    expect(GetUtils.isNullOrBlank({'other': 'thing'}), false);
 
-    final map = {"foo": 'bar', "one": "um"};
-    expect(GetUtils.isNullOrBlank(map["foo"]), false);
-    expect(GetUtils.isNullOrBlank(map["other"]), true);
+    final map = {'foo': 'bar', 'one': 'um'};
+    expect(GetUtils.isNullOrBlank(map['foo']), false);
+    expect(GetUtils.isNullOrBlank(map['other']), true);
   });
   group('GetUtils.isLength* functions', () {
     test('isLengthEqualTo should validate iterable lengths', () {
@@ -74,9 +74,9 @@ void main() {
       expect(GetUtils.isLengthEqualTo({1: 1, 2: 1}, 2), true);
       expect(GetUtils.isLengthEqualTo({}, 2), false);
 
-      expect(GetUtils.isLengthEqualTo("", 0), true);
-      expect(GetUtils.isLengthEqualTo("a", 0), false);
-      expect(GetUtils.isLengthEqualTo("a", 1), true);
+      expect(GetUtils.isLengthEqualTo('', 0), true);
+      expect(GetUtils.isLengthEqualTo('a', 0), false);
+      expect(GetUtils.isLengthEqualTo('a', 1), true);
     });
 
     test('isLengthGreaterOrEqual should validate lengths', () {
@@ -90,9 +90,9 @@ void main() {
       expect(GetUtils.isLengthGreaterOrEqual({1: 1, 2: 1}, 2), true);
       expect(GetUtils.isLengthGreaterOrEqual({}, 2), false);
 
-      expect(GetUtils.isLengthGreaterOrEqual("", 0), true);
-      expect(GetUtils.isLengthGreaterOrEqual("a", 0), true);
-      expect(GetUtils.isLengthGreaterOrEqual("", 1), false);
+      expect(GetUtils.isLengthGreaterOrEqual('', 0), true);
+      expect(GetUtils.isLengthGreaterOrEqual('a', 0), true);
+      expect(GetUtils.isLengthGreaterOrEqual('', 1), false);
     });
 
     test('isLengthLessOrEqual should validate lengths', () {
@@ -106,9 +106,9 @@ void main() {
       expect(GetUtils.isLengthLessOrEqual({1: 1, 2: 1}, 3), true);
       expect(GetUtils.isLengthLessOrEqual({}, 2), true);
 
-      expect(GetUtils.isLengthLessOrEqual("", 0), true);
-      expect(GetUtils.isLengthLessOrEqual("a", 2), true);
-      expect(GetUtils.isLengthLessOrEqual("a", 0), false);
+      expect(GetUtils.isLengthLessOrEqual('', 0), true);
+      expect(GetUtils.isLengthLessOrEqual('a', 2), true);
+      expect(GetUtils.isLengthLessOrEqual('a', 0), false);
     });
   });
 }
