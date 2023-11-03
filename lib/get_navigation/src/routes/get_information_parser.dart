@@ -43,7 +43,6 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   RouteInformation restoreRouteInformation(final RouteDecoder configuration) {
     return RouteInformation(
       uri: Uri.tryParse(configuration.pageSettings?.name ?? ''),
-      state: null,
     );
   }
 }

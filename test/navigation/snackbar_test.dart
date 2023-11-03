@@ -45,11 +45,9 @@ void main() {
               title: 'title',
               message: 'message',
               onTap: (final _) {},
-              shouldIconPulse: true,
               icon: const Icon(Icons.alarm),
               showProgressIndicator: true,
               duration: const Duration(seconds: 1),
-              isDismissible: true,
               leftBarIndicatorColor: Colors.amber,
               overlayBlur: 1.0,
             );
@@ -124,7 +122,6 @@ void main() {
                     getBar = const GetSnackBar(
                       message: 'bar1',
                       duration: Duration(seconds: 2),
-                      isDismissible: true,
                       dismissDirection: dismissDirection,
                     );
                     Get.showSnackbar(getBar);
@@ -184,7 +181,6 @@ void main() {
                         counter++;
                       },
                       duration: const Duration(seconds: 2),
-                      isDismissible: true,
                       dismissDirection: dismissDirection,
                     );
                     getBarController = Get.showSnackbar(getBar);

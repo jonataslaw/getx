@@ -180,7 +180,7 @@ class GetPage<T> extends Page<T> {
       final buffer = StringBuffer('(?:');
 
       if (pattern[1] != null) buffer.write('.');
-      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      buffer.write("([\\w%+-._~!\$&'()*,;=:@]+))");
       if (pattern[3] != null) buffer.write('?');
 
       keys.add(pattern[2]);

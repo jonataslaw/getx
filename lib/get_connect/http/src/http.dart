@@ -20,7 +20,6 @@ typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
     Request<T> request, Type targetType, HttpClientResponse response);
 
 class GetHttpClient {
-
   GetHttpClient({
     this.userAgent = 'getx-client',
     this.timeout = const Duration(seconds: 8),
@@ -92,7 +91,7 @@ class GetHttpClient {
     if (baseUrl != null) {
       url = baseUrl! + url!;
     }
-    final uri = Uri.parse(url!);
+    final Uri uri = Uri.parse(url!);
     if (query != null) {
       return uri.replace(queryParameters: query);
     }
@@ -111,7 +110,7 @@ class GetHttpClient {
   ) async {
     List<int>? bodyBytes;
     Stream<List<int>>? bodyStream;
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
 
     if (sendUserAgent) {
       headers['user-agent'] = userAgent;
@@ -125,17 +124,18 @@ class GetHttpClient {
     } else if (contentType != null &&
         contentType.toLowerCase() == 'application/x-www-form-urlencoded' &&
         body is Map) {
-      final parts = [];
-      (body as Map<String, dynamic>).forEach((final key, final value) {
+      final List<String> parts = <String>[];
+      (body as Map<String, dynamic>)
+          .forEach((final String key, final dynamic value) {
         parts.add('${Uri.encodeQueryComponent(key)}='
             '${Uri.encodeQueryComponent(value.toString())}');
       });
-      final formData = parts.join('&');
+      final String formData = parts.join('&');
       bodyBytes = utf8.encode(formData);
       _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType;
     } else if (body is Map || body is List) {
-      final jsonString = json.encode(body);
+      final String jsonString = json.encode(body);
       bodyBytes = utf8.encode(jsonString);
       _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType ?? defaultContentType;
@@ -157,7 +157,7 @@ class GetHttpClient {
       bodyStream = _trackProgress(bodyBytes, uploadProgress);
     }
 
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
     return Request<T>(
         method: method,
         url: uri,
@@ -170,7 +170,8 @@ class GetHttpClient {
         responseInterceptor: responseInterceptor);
   }
 
-  void _setContentLength(final Map<String, String> headers, final int contentLength) {
+  void _setContentLength(
+      final Map<String, String> headers, final int contentLength) {
     if (sendContentLength) {
       headers['content-length'] = '$contentLength';
     }
@@ -180,15 +181,17 @@ class GetHttpClient {
     final List<int> bodyBytes,
     final Progress? uploadProgress,
   ) {
-    var total = 0;
-    final length = bodyBytes.length;
+    int total = 0;
+    final int length = bodyBytes.length;
 
-    final byteStream =
-        Stream.fromIterable(bodyBytes.map((final i) => [i])).transform<List<int>>(
-      StreamTransformer.fromHandlers(handleData: (final data, final sink) {
+    final Stream<List<int>> byteStream =
+        Stream<List<int>>.fromIterable(bodyBytes.map((final int i) => <int>[i]))
+            .transform<List<int>>(
+      StreamTransformer<List<int>, List<int>>.fromHandlers(
+          handleData: (final List<int> data, final EventSink<List<int>> sink) {
         total += data.length;
         if (uploadProgress != null) {
-          final percent = total / length * 100;
+          final double percent = total / length * 100;
           uploadProgress(percent);
         }
         sink.add(data);
@@ -213,20 +216,22 @@ class GetHttpClient {
     final int requestNumber = 1,
     final Map<String, String>? headers,
   }) async {
-    final request = await handler();
+    final Request<T> request = await handler();
 
-    headers?.forEach((final key, final value) {
+    headers?.forEach((final String key, final String value) {
       request.headers[key] = value;
     });
 
-    if (authenticate) await _modifier.authenticator!(request);
-    final newRequest = await _modifier.modifyRequest<T>(request);
+    if (authenticate) {
+      await _modifier.authenticator!(request);
+    }
+    final Request<T> newRequest = await _modifier.modifyRequest<T>(request);
 
     _httpClient.timeout = timeout;
     try {
-      final response = await _httpClient.send<T>(newRequest);
+      final Response<T> response = await _httpClient.send<T>(newRequest);
 
-      final newResponse =
+      final Response<T> newResponse =
           await _modifier.modifyResponse<T>(newRequest, response);
 
       if (HttpStatus.unauthorized == newResponse.statusCode &&
@@ -262,8 +267,6 @@ class GetHttpClient {
         return Response<T>(
           request: newRequest,
           headers: null,
-          statusCode: null,
-          body: null,
           statusText: '$err',
         );
       }
@@ -277,11 +280,11 @@ class GetHttpClient {
     final Decoder<T>? decoder,
     final ResponseInterceptor<T>? responseInterceptor,
   ) {
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
 
-    return Future.value(Request<T>(
+    return Future<Request<T>>.value(Request<T>(
       method: 'get',
       url: uri,
       headers: headers,
@@ -295,10 +298,13 @@ class GetHttpClient {
 
   ResponseInterceptor<T>? _responseInterceptor<T>(
       final ResponseInterceptor<T>? actual) {
-    if (actual != null) return actual;
-    final defaultInterceptor = defaultResponseInterceptor;
+    if (actual != null) {
+      return actual;
+    }
+    final ResponseInterceptor? defaultInterceptor = defaultResponseInterceptor;
     return defaultInterceptor != null
-        ? (final request, final targetType, final response) async =>
+        ? (final Request<T> request, final Type targetType,
+                final HttpClientResponse response) async =>
             await defaultInterceptor(request, targetType, response)
                 as Response<T>?
         : null;
@@ -307,7 +313,10 @@ class GetHttpClient {
   Future<Request<T>> _request<T>(
     final String? url,
     final String method, {
-    required final dynamic body, required final Map<String, dynamic>? query, required final Progress? uploadProgress, final String? contentType,
+    required final dynamic body,
+    required final Map<String, dynamic>? query,
+    required final Progress? uploadProgress,
+    final String? contentType,
     final Decoder<T>? decoder,
     final ResponseInterceptor<T>? responseInterceptor,
   }) {
@@ -330,9 +339,9 @@ class GetHttpClient {
     final Decoder<T>? decoder,
     final ResponseInterceptor<T>? responseInterceptor,
   ) {
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
 
     return Request<T>(
       method: 'delete',
@@ -345,13 +354,14 @@ class GetHttpClient {
 
   Future<Response<T>> send<T>(final Request<T> request) async {
     try {
-      final response = await _performRequest<T>(() => Future.value(request));
+      final Response<T> response =
+          await _performRequest<T>(() => Future<Request<T>>.value(request));
       return response;
     } on Exception catch (e) {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -369,7 +379,7 @@ class GetHttpClient {
     // List<MultipartFile> files,
   }) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'patch',
@@ -387,7 +397,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -405,7 +415,7 @@ class GetHttpClient {
     // List<MultipartFile> files,
   }) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'post',
@@ -423,7 +433,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -441,7 +451,7 @@ class GetHttpClient {
     final Progress? uploadProgress,
   }) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           method,
@@ -459,7 +469,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -476,7 +486,7 @@ class GetHttpClient {
     final Progress? uploadProgress,
   }) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'put',
@@ -494,7 +504,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -509,7 +519,7 @@ class GetHttpClient {
     final ResponseInterceptor<T>? responseInterceptor,
   }) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _get<T>(url, contentType, query, decoder, responseInterceptor),
         headers: headers,
       );
@@ -518,7 +528,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }
@@ -531,7 +541,7 @@ class GetHttpClient {
       final Decoder<T>? decoder,
       final ResponseInterceptor<T>? responseInterceptor}) async {
     try {
-      final response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () async =>
             _delete<T>(url, contentType, query, decoder, responseInterceptor),
         headers: headers,
@@ -541,7 +551,7 @@ class GetHttpClient {
       if (!errorSafety) {
         throw GetHttpException(e.toString());
       }
-      return Future.value(Response<T>(
+      return Future<Response<T>>.value(Response<T>(
         statusText: 'Can not connect to server. Reason: $e',
       ));
     }

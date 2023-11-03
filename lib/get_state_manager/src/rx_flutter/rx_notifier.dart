@@ -46,7 +46,7 @@ mixin StateMixin<T> on ListNotifier {
     if (newStatus == status) return;
     _status = newStatus;
     if (newStatus is SuccessStatus<T>) {
-      _value = newStatus.data!;
+      _value = newStatus.data;
     }
     refresh();
   }

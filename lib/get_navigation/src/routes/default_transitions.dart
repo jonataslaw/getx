@@ -175,7 +175,6 @@ class SizeTransitions {
       final Animation<double> secondaryAnimation,
       final Widget child) {
     return Align(
-      alignment: Alignment.center,
       child: SizeTransition(
         sizeFactor: CurvedAnimation(
           parent: animation,

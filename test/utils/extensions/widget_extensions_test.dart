@@ -14,7 +14,7 @@ class Foo extends StatelessWidget {
 void main() {
   group('Group test for PaddingX Extension', () {
     testWidgets('Test of paddingAll', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -24,7 +24,7 @@ void main() {
     });
 
     testWidgets('Test of paddingOnly', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -34,7 +34,7 @@ void main() {
     });
 
     testWidgets('Test of paddingSymmetric', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -44,7 +44,7 @@ void main() {
     });
 
     testWidgets('Test of paddingZero', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       expect(find.byType(Padding), findsNothing);
 
@@ -56,7 +56,7 @@ void main() {
 
   group('Group test for MarginX Extension', () {
     testWidgets('Test of marginAll', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginAll(16));
 
@@ -64,7 +64,7 @@ void main() {
     });
 
     testWidgets('Test of marginOnly', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginOnly(top: 16));
 
@@ -72,7 +72,7 @@ void main() {
     });
 
     testWidgets('Test of marginSymmetric', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginSymmetric(vertical: 16));
 
@@ -80,7 +80,7 @@ void main() {
     });
 
     testWidgets('Test of marginZero', (final tester) async {
-      final Widget containerTest = const Foo();
+      const Widget containerTest = Foo();
 
       await tester.pumpWidget(containerTest.marginZero);
 

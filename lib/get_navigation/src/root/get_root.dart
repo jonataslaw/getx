@@ -340,7 +340,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     Get.clearTranslations();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
-    Get.resetInstance(clearRouteBindings: true);
+    Get.resetInstance();
     _controller = null;
     ambiguate(Engine.instance)!.removeObserver(this);
   }

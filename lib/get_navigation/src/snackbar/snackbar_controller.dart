@@ -214,8 +214,6 @@ class SnackbarController {
               },
             ),
           ),
-          maintainState: false,
-          opaque: false,
         ),
       ],
       OverlayEntry(
@@ -230,8 +228,6 @@ class SnackbarController {
                 : _getSnackbarContainer(child),
           ),
         ),
-        maintainState: false,
-        opaque: false,
       ),
     ];
   }

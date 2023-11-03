@@ -184,7 +184,6 @@ void main() {
         child: FadeInAnimation(
           delay: const Duration(milliseconds: 500),
           duration: const Duration(milliseconds: 500),
-          idleValue: 0,
           child: const Text('Hello'),
         ),
       ),

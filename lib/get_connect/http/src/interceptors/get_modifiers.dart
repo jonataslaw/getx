@@ -5,14 +5,14 @@ import '../response/response.dart';
 
 typedef RequestModifier<T> = FutureOr<Request<T>> Function(Request<T?> request);
 
-typedef ResponseModifier<T> = FutureOr Function(
+typedef ResponseModifier<T> = FutureOr<T> Function(
     Request<T?> request, Response<T?> response);
 
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
 class GetModifier<S> {
-  final _requestModifiers = <RequestModifier>[];
-  final _responseModifiers = <ResponseModifier>[];
+  final List<RequestModifier> _requestModifiers = <RequestModifier>[];
+  final List<ResponseModifier> _responseModifiers = <ResponseModifier>[];
   RequestModifier? authenticator;
 
   void addRequestModifier<T>(final RequestModifier<T> interceptor) {
@@ -32,9 +32,9 @@ class GetModifier<S> {
   }
 
   Future<Request<T>> modifyRequest<T>(final Request<T> request) async {
-    var newRequest = request;
+    Request<T> newRequest = request;
     if (_requestModifiers.isNotEmpty) {
-      for (final interceptor in _requestModifiers) {
+      for (final RequestModifier interceptor in _requestModifiers) {
         newRequest = await interceptor(newRequest) as Request<T>;
       }
     }
@@ -44,9 +44,9 @@ class GetModifier<S> {
 
   Future<Response<T>> modifyResponse<T>(
       final Request<T> request, final Response<T> response) async {
-    var newResponse = response;
+    Response<T> newResponse = response;
     if (_responseModifiers.isNotEmpty) {
-      for (final interceptor in _responseModifiers) {
+      for (final ResponseModifier interceptor in _responseModifiers) {
         newResponse = await interceptor(request, response) as Response<T>;
       }
     }

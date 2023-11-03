@@ -481,7 +481,6 @@ You need to either use message[String], or messageText[Widget] or define a userI
                   valueColor: widget.progressIndicatorValueColor,
                 ) else _emptyWidget,
           Row(
-            mainAxisSize: MainAxisSize.max,
             children: [
               _buildLeftBarIndicator(),
               if (_rowStyle == RowStyle.icon || _rowStyle == RowStyle.all)
@@ -491,7 +490,6 @@ You need to either use message[String], or messageText[Widget] or define a userI
                   child: _getIcon(),
                 ),
               Expanded(
-                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
