@@ -83,3 +83,8 @@ example/macos/Flutter/GeneratedPluginRegistrant.swift
 
 # Coverage files
 coverage/
+
+/docs/node_modules
+/docs/.idea
+/docs/build
+/docs/.docusaurus
