@@ -12,7 +12,6 @@ Translations are kept as a simple key-value dictionary map.
 To add custom translations, create a class and extend `Translations`.
 
 
-
 ```dart
 import 'package:get/get.dart';
 
