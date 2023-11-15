@@ -40,7 +40,7 @@ function HomepageHeader() {
           <div className="container landing-code">
               <h2 className="mb-4">Flutter Made Easy</h2>
               <div>
-                  <img className="img-code" src="/img/img.png" alt="image code"/>
+                  <img className="img-code" src="./img/img.png" alt="image code"/>
               </div>
           </div>
 
@@ -63,19 +63,19 @@ function HomepageHeader() {
                               <h2>Commnuity</h2>
                               <div>
                                   <Link to="https://communityinviter.com/apps/getxworkspace/getx">
-                                      <img className="media-link" src="/img/slack.png" alt="slack"/>
+                                      <img className="media-link" src="./img/slack.png" alt="slack"/>
                                   </Link>
 
                                   <Link to="https://discord.com/invite/9Hpt99N">
-                                      <img className="media-link" src="/img/discord.svg" alt="discord"/>
+                                      <img className="media-link" src="./img/discord.svg" alt="discord"/>
                                   </Link>
 
                                   <Link to="https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g">
-                                      <img className="media-link" src="/img/telegram.svg" alt="telegram"/>
+                                      <img className="media-link" src="./img/telegram.svg" alt="telegram"/>
                                   </Link>
 
                                   <Link to="https://github.com/jonataslaw/getx">
-                                      <img className="media-link" src="/img/github.svg" alt="github"/>
+                                      <img className="media-link" src="./img/github.svg" alt="github"/>
                                   </Link>
                               </div>
                           </div>
