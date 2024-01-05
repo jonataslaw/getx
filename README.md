@@ -75,6 +75,7 @@
     - [Local State Widgets](#local-state-widgets)
       - [ValueBuilder](#valuebuilder)
       - [ObxValue](#obxvalue)
+      - [GetBuilder](#getbuilder)
   - [Useful tips](#useful-tips)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
@@ -831,6 +832,29 @@ ObxValue((data) => Switch(
         onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
     ),
     false.obs,
+),
+```
+
+#### GetBuilder
+
+The `GetBuilder` widget is used to control and update the UI based on changes in the state managed by a specific controller. Any changes to
+the state of the controller will trigger a rebuild of the UI within the `GetBuilder` widget, ensuring that the UI stays reactive and in sync
+with the controller's state.
+
+```dart
+GetBuilder<Controller>(
+  init: Controller(),
+  builder: (controller) {
+    return Column(
+      children: [
+        Text('Value: ${controller.value}'),
+        ElevatedButton(
+          onPressed: () => controller.increment(),
+          child: Text('Increment'),
+        ),
+      ],
+    );
+  },
 ),
 ```
 
