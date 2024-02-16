@@ -197,6 +197,7 @@ extension ExtensionDialog on GetInterface {
           ),
           onPressed: () {
             if (onCancel == null) {
+              //TODO: Close current dialog after api change
               closeAllDialogs();
             } else {
               onCancel.call();
