@@ -196,8 +196,12 @@ extension ExtensionDialog on GetInterface {
                 borderRadius: BorderRadius.circular(radius)),
           ),
           onPressed: () {
-            onCancel?.call();
-            back();
+            if (onCancel == null) {
+              //TODO: Close current dialog after api change
+              closeAllDialogs();
+            } else {
+              onCancel.call();
+            }
           },
           child: Text(
             textCancel ?? "Cancel",
