@@ -38,8 +38,8 @@
 
 </div>
 
-- [เกี่ยวกับ Get](#about-get)
-- [การติดตั้ง](#installing)
+- [เกี่ยวกับ Get](#เกี่ยวกับ-Get)
+- [การติดตั้ง](#การติดตั้ง)
 - [สร้างแอปตัวนับด้วย GetX](#counter-app-with-getx)
 - [เสาหลัก 3 ประการ](#the-three-pillars)
   - [ตัวจัดการข้อมูล](#state-management)
