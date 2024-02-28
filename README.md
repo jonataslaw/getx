@@ -36,6 +36,7 @@
 [![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
 [![Hindi](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
 [![Bangla](https://img.shields.io/badge/Language-Bangla-blueviolet?style=for-the-badge)](README-bn.md)
+[![Thai](https://img.shields.io/badge/Language-Thai-blueviolet?style=for-the-badge)](README.th-TH.md)
   
   
 </div>
