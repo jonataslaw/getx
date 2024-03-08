@@ -76,9 +76,16 @@ class First extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.more),
           onPressed: () {
-            print('THEME CHANGED');
-            Get.changeTheme(
-                Get.isDarkMode ? ThemeData.light() : ThemeData.dark());
+            Get.snackbar(
+              'title',
+              "message",
+              mainButton:
+                  TextButton(onPressed: () {}, child: const Text('button')),
+              isDismissible: false,
+            );
+            // print('THEME CHANGED');
+            // Get.changeTheme(
+            //     Get.isDarkMode ? ThemeData.light() : ThemeData.dark());
           },
         ),
       ),

@@ -6,9 +6,10 @@ mixin Equality {
   List get props;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         runtimeType == other.runtimeType &&
+            other is Equality &&
             const DeepCollectionEquality().equals(props, other.props);
   }
 
