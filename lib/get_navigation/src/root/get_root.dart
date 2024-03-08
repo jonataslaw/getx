@@ -45,6 +45,7 @@ class ConfigData {
   final Duration defaultDialogTransitionDuration;
   final Routing routing;
   final Map<String, String?> parameters;
+  final SnackBarQueue snackBarQueue = SnackBarQueue();
 
   ConfigData({
     required this.routingCallback,
@@ -340,6 +341,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
+    config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);
