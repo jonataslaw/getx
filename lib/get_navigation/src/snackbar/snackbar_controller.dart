@@ -245,6 +245,7 @@ class SnackbarController {
             snackbar.onHover?.call(snackbar, SnackHoverState.entered),
         onExit: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.exited),
         child: GestureDetector(
+          behavior: snackbar.hitTestBehavior ?? HitTestBehavior.deferToChild,
           onTap: snackbar.onTap != null
               ? () => snackbar.onTap?.call(snackbar)
               : null,
@@ -263,6 +264,7 @@ class SnackbarController {
 
   Widget _getDismissibleSnack(Widget child) {
     return Dismissible(
+      behavior: snackbar.hitTestBehavior ?? HitTestBehavior.opaque,
       direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
       resizeDuration: null,
       confirmDismiss: (_) {
@@ -382,10 +384,19 @@ class SnackBarQueue {
     _snackbarList.clear();
   }
 
-  Future<void> disposeControllers() async {
+  void disposeControllers() {
+    if (_currentSnackbar != null) {
+      _currentSnackbar?._removeOverlay();
+      _currentSnackbar?._controller.dispose();
+      _snackbarList.remove(_currentSnackbar);
+    }
+
+    _queue.cancelAllJobs();
+
     for (var element in _snackbarList) {
       element._controller.dispose();
     }
+    _snackbarList.clear();
   }
 
   Future<void> closeCurrentJob() async {

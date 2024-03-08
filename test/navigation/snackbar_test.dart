@@ -107,13 +107,15 @@ void main() {
   });
 
   testWidgets("test snackbar dismissible", (tester) async {
-    const dismissDirection = DismissDirection.vertical;
+    const dismissDirection = DismissDirection.down;
     const snackBarTapTarget = Key('snackbar-tap-target');
 
     const GetSnackBar getBar = GetSnackBar(
+      key: ValueKey('dismissible'),
       message: 'bar1',
       duration: Duration(seconds: 2),
       isDismissible: true,
+      snackPosition: SnackPosition.bottom,
       dismissDirection: dismissDirection,
     );
 
@@ -149,14 +151,14 @@ void main() {
     await tester.tap(find.byKey(snackBarTapTarget));
     await tester.pumpAndSettle();
 
-    // expect(Get.isSnackbarOpen, true);
-    // await tester.pump(const Duration(milliseconds: 500));
-    // expect(find.byWidget(getBar), findsOneWidget);
-    // await tester.ensureVisible(find.byWidget(getBar));
-    // await tester.drag(find.byWidget(getBar), const Offset(0.0, 50.0));
-    // await tester.pump(const Duration(milliseconds: 500));
-
-    // expect(Get.isSnackbarOpen, false);
+    expect(Get.isSnackbarOpen, true);
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byWidget(getBar), findsOneWidget);
+    await tester.ensureVisible(find.byWidget(getBar));
+    await tester.drag(find.byType(Dismissible), const Offset(0.0, 50.0));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Get.isSnackbarOpen, false);
   });
 
   testWidgets("test snackbar onTap", (tester) async {

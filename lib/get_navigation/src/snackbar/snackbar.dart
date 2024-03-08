@@ -19,6 +19,13 @@ class GetSnackBar extends StatefulWidget {
   /// The title displayed to the user
   final String? title;
 
+  /// Defines how the snack bar area, including margin, will behave during hit testing.
+  ///
+  /// If this property is null and [margin] is not null, then [HitTestBehavior.deferToChild] is used by default.
+  ///
+  /// Please refer to [HitTestBehavior] for a detailed explanation of every behavior.
+  final HitTestBehavior? hitTestBehavior;
+
   /// The direction in which the SnackBar can be dismissed.
   ///
   /// Default is [DismissDirection.down] when
@@ -203,6 +210,7 @@ class GetSnackBar extends StatefulWidget {
     this.overlayColor = Colors.transparent,
     this.userInputForm,
     this.snackbarStatus,
+    this.hitTestBehavior,
   }) : super(key: key);
 
   @override

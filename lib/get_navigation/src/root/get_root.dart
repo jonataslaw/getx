@@ -341,13 +341,12 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
+    config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);
     _controller = null;
     ambiguate(Engine.instance)!.removeObserver(this);
-    config.snackBarQueue.cancelAllJobs();
-    config.snackBarQueue.disposeControllers();
   }
 
   @override
