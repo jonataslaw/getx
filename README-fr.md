@@ -644,7 +644,7 @@ Get.width
 Get.context
 
 // Donne le contexte du snackbar / dialogue / bottomsheet au premier plan, n'importe où dans votre code.
-Get.contextOverlay
+Get.overlayContext
 
 // Remarque: les méthodes suivantes sont des extensions sur le 'context'. Puisque vous
 // avez accès au contexte à n'importe quel endroit de votre interface utilisateur, vous pouvez l'utiliser n'importe où dans le code de l'interface utilisateur
