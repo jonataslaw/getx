@@ -22,6 +22,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
     this.curve,
+    this.constraints,
   }) : super(settings: settings) {
     RouterReportManager.instance.reportCurrentRoute(this);
   }
@@ -42,6 +43,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Curve? curve;
   // remove safearea from top
   final bool removeTop;
+  final BoxConstraints? constraints;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 700);
@@ -105,6 +107,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
           clipBehavior: clipBehavior,
           isScrollControlled: isScrollControlled,
           enableDrag: enableDrag,
+          constraints: constraints,
         ),
       ),
     );
@@ -124,6 +127,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.isScrollControlled = false,
     this.enableDrag = true,
     this.isPersistent = false,
+    this.constraints,
   }) : super(key: key);
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -133,6 +137,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
   final ShapeBorder? shape;
   final Clip? clipBehavior;
   final bool enableDrag;
+  final BoxConstraints? constraints;
 
   @override
   _GetModalBottomSheetState<T> createState() => _GetModalBottomSheetState<T>();
@@ -187,6 +192,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
+                        constraints: widget.constraints,
                       )
                     : Scaffold(
                         bottomSheet: BottomSheet(
@@ -203,6 +209,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                           shape: widget.shape,
                           clipBehavior: widget.clipBehavior,
                           enableDrag: widget.enableDrag,
+                          constraints: widget.constraints,
                         ),
                       )),
           ),
@@ -223,6 +230,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
+    this.constraints,
   }) : super(key: key);
   final bool? isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -232,6 +240,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
   final ShapeBorder? shape;
   final Clip? clipBehavior;
   final bool enableDrag;
+  final BoxConstraints? constraints;
 
   @override
   // ignore: lines_longer_than_80_chars
@@ -290,6 +299,7 @@ class _GetPerModalBottomSheetState<T>
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
+                        constraints: widget.constraints,
                       )
                     : Scaffold(
                         bottomSheet: BottomSheet(
@@ -306,6 +316,7 @@ class _GetPerModalBottomSheetState<T>
                           shape: widget.shape,
                           clipBehavior: widget.clipBehavior,
                           enableDrag: widget.enableDrag,
+                          constraints: widget.constraints,
                         ),
                       )),
           ),
