@@ -118,6 +118,15 @@
 
 # Installing
 
+Depend on it
+
+Run this command:
+
+With Flutter:
+```
+flutter pub add get
+```
+
 Add Get to your pubspec.yaml file:
 
 ```yaml
