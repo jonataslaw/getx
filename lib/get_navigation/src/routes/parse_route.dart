@@ -267,17 +267,17 @@ class ParseRouteTree {
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
     var idx = path.indexOf('?');
+    final uri = Uri.tryParse(path);
+    if (uri == null) return params;
     if (idx > -1) {
-      path = path.substring(0, idx);
-      final uri = Uri.tryParse(path);
-      if (uri != null) {
-        params.addAll(uri.queryParameters);
-      }
+      params.addAll(uri.queryParameters);
     }
-    var paramsMatch = routePath.regex.firstMatch(path);
-
+    var paramsMatch = routePath.regex.firstMatch(uri.path);
+    if (paramsMatch == null) {
+      return params;
+    }
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;
