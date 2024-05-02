@@ -94,15 +94,15 @@
   
   - **생산성:** GetX는 쉽고 친숙한 구문을 사용합니다. 원하시는 것보다 Getx에는 항상 더 쉬운 방법이 있습니다. 개발 시간을 아끼고 애플리케이션을 최대 성능으로 제공할 수 있습니다. 
 
-  일반적으로 개발자는 메모리에서 컨트롤러들을 제거하는 데 관심을 가져야합니다. GetX에서는 리소스가 기본적으로 사용되지 않으면 메모리에서 제거되므로 필요하지 않습니다. 만약 메모리에 유지하려면 종속성에서 "permanent : true"를 명시적으로 선언해야합니다. 이렇게하면 시간을 절약 할 수있을뿐만 아니라 불필요한 메모리 종속성이 발생할 위험이 줄어 듭니다. 종속성은 기본적으로 lazy로 로드됩니다.
+  일반적으로 개발자는 메모리에서 컨트롤러들을 제거하는 데 관심을 가져야 합니다. GetX에서는 기본적으로 리소스가 사용되지 않으면 메모리에서 제거되므로 필요하지 않습니다. 만약 메모리에 유지하려면 종속성에서 "permanent : true"를 명시적으로 선언해야 합니다. 이렇게 하면 시간을 절약할 수 있을 뿐만 아니라 불필요한 메모리 종속성이 발생할 위험이 줄어듭니다. 종속성은 기본적으로 lazy로 로드됩니다.
   
-  - **조직화:** GetX는 화면, 프레젠테이션 로직, 비즈니스 로직, 종속성 주입 및 네비게이션을 완전히 분리 할 수 있습니다. 라우트간 전환을 하는데에 컨텍스트가 필요하지 않아 위젯 트리(시각객체)에 독립적입니다. inheritedWidget을 통해 컨트롤러/블록에 접근하는 데 컨텍스트가 필요하지 않아 시각화 계층에서 프레젠테이션 로직과 비즈니스 로직을 완전히 분리됩니다. 이 GetX는 자체 종속성 주입 기능을 사용하여 DI를 뷰에서 완전히 분리하기 때문에 다중 Provider를 통해 위젯 트리에서 컨트롤러/모델/블록으로 주입 할 필요가 없습니다.
+  - **조직화:** GetX는 화면, 프레젠테이션 로직, 비즈니스 로직, 종속성 주입 및 네비게이션을 완전히 분리할 수 있습니다. 라우트 간 전환을 하는 데에 컨텍스트가 필요하지 않아 위젯 트리(시각 객체)에 독립적입니다. inheritedWidget을 통해 컨트롤러/블록에 접근하는 데 컨텍스트가 필요하지 않아 시각화 계층에서 프레젠테이션 로직과 비즈니스 로직을 완전히 분리합니다. 이 GetX는 자체 종속성 주입 기능을 사용하여 DI를 뷰에서 완전히 분리하기 때문에 다중 Provider를 통해 위젯 트리에서 컨트롤러/모델/블록으로 주입할 필요가 없습니다.
 
   GetX를 사용하면 기본적으로 클린 코드를 가지게 되어 애플리케이션의 각 기능을 쉽게 찾을 수 있습니다. 이것은 유지 보수를 용이하게 하며 모듈의 공유가 가능하고 Flutter에서는 생각할 수 없었던 것들도 전부 가능합니다.
-  BLoC은 Flutter에서 코드를 구성하기 위한 시작점으로 비즈니스 로직과 시각객체를 분리합니다. Getx는 비즈니스 로직 뿐만 아니라 프레젠테이션 로직을 분리하는 자연스러운 진화입니다. 추가로 종속성 주입과 라우트 또한 분리되고 데이터 계층이 모두로부터 분리됩니다. Hello World를 구현하는 것보다 더 쉽게 모든 것이 어디 있는지 알수 있습니다.  
-  Flutter SDK와 함께 GetX를 사용하면 가장 쉽고 실용적이며 확장 가능한 고성능 어플리케이션을 만들수 있습니다. 초보자에게는 쉬우며 전문가에게는 정확하고 완벽하게 동작하는 대규모 생태계가 함께합니다. 안전하고 안정적이며 업데이트되고 기본 Flutter SDK에 없는 광범위한 API 빌드를 제공합니다.
+  BLoC은 Flutter에서 코드를 구성하기 위한 시작점으로 비즈니스 로직과 시각 객체를 분리합니다. GetX는 이를 자연스럽게 진화시킨 것으로 비즈니스 로직뿐만 아니라 프레젠테이션 로직도 분리합니다. 추가로 종속성 주입과 라우트 또한 분리되고 데이터 계층이 모두 분리되어 있습니다. Hello World를 구현하는 것보다 더 쉽게 모든 것이 어디 있는지 알수 있습니다.  
+  Flutter SDK와 함께 GetX를 사용하면 가장 쉽고 실용적이며 확장 가능한 고성능 어플리케이션을 만들 수 있습니다. 초보자에게는 쉬우며 전문가에게는 정확하고 완벽하게 동작하는 대규모 생태계가 함께합니다. 안전하고 안정적이며 업데이트되고 기본 Flutter SDK에 없는 광범위한 API 빌드를 제공합니다.
 
-- GetX는 비대하지 않습니다. 아무 걱정없이 프로그래밍을 시작할 수 있는 다양한 기능이 있지만 각 기능은 별도의 컨테이너에 있으며 사용한 후에만 시작됩니다. 만약 상태 관리만 사용하면 오직 상태 관리만 컴파일 됩니다. 라우트만 사용하는 경우 상태 관리는 컴파일되지 않습니다.
+- GetX는 비대하지 않습니다. 아무 걱정 없이 프로그래밍을 시작할 수 있는 다양한 기능이 있지만 각 기능은 별도의 컨테이너에 있으며 사용한 후에만 시작됩니다. 만약 상태 관리만 사용하면 오직 상태 관리만 컴파일 됩니다. 라우트만 사용하는 경우 상태 관리는 컴파일되지 않습니다.
 
 - GetX는 거대한 생태계, 대규모 커뮤니티, 수많은 공동 작업자를 보유하고 있으며 Flutter가 존재하는 한 유지됩니다. GetX도 Android, iOS, 웹, Mac, Linux, Windows 및 서버에서 동일한 코드로 실행할 수 있습니다.
 **[Get Server](https://github.com/jonataslaw/get_server)를 사용한 백엔드에는 프런트엔드에서 만든 코드를 완전히 재사용 할 수 있습니다.**
@@ -129,7 +129,7 @@ import 'package:get/get.dart';
 
 # GetX를 사용한 Counter 앱
 
-Flutter의 새 프로젝트에서 기본적으로 생성 되는 "counter" 프로젝트는 100줄이 넘습니다 (코멘트 포함). Get의 강력함을 보여주기 위해 클릭 할 때마다 상태를 변경하고, 페이지 사이를 전환하고, 화면 사이의 상태를 공유하는 "counter"를 만드는 방법을 주석이 포함된 26줄의 코드로 보여줄 것입니다.
+Flutter의 새 프로젝트에서 기본적으로 생성되는 "counter" 프로젝트는 100줄이 넘습니다(주석 포함). Get의 강력함을 보여주기 위해 클릭할 때마다 상태를 변경하고, 페이지 사이를 전환하고, 화면 사이의 상태를 공유하는 "counter"를 만드는 방법을 주석이 포함된 26줄의 코드로 보여줄 것입니다.
 
 - 1 단계:
   MaterialApp 에 "Get"을 추가하여 GetMaterialApp 으로 변경합니다.
@@ -138,8 +138,8 @@ Flutter의 새 프로젝트에서 기본적으로 생성 되는 "counter" 프로
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- 주석: 이는 Flutter의 MaterialApp을 변경하지 않으며 GetMaterialApp 또한 수정 된 MaterialApp이 아니고, 기본 MaterialApp을 자식으로 갖는 사전 구성된 위젯 일뿐입니다. 수동으로 구성 할 수 있지만 반드시 필요한 것은 아닙니다. GetMaterialApp은 라우트를 생성하고 추가하며, 번역을 추가하고, 라우트 탐색에 필요한 모든 것을 추가합니다. 만약 상태 관리 또는 종속성 관리에만 Get을 사용하는 경우 GetMaterialApp을 사용할 필요가 없습니다. GetMaterialApp은 라우트, 스택바, 국제화, bottomSheets, 다이얼로그 및 컨텍스트 부재와 라우트에 연관된 상위 api들에 필요합니다.
-- 주석²: 이 단계는 라우트 관리 (`Get.to ()`,`Get.back ()` 등)를 사용하려는 경우에만 필요합니다. 사용하지 않을 경우 1 단계를 수행 할 필요가 없습니다.
+- 주석: 이는 Flutter의 MaterialApp을 변경하지 않으며 GetMaterialApp 또한 수정된 MaterialApp이 아니고, 기본 MaterialApp을 자식으로 갖는 사전 구성된 위젯일 뿐입니다. 수동으로 구성할 수 있지만 반드시 필요한 것은 아닙니다. GetMaterialApp은 라우트를 생성하고 추가하며, 번역을 추가하고, 라우트 탐색에 필요한 모든 것을 추가합니다. 만약 상태 관리 또는 종속성 관리에만 Get을 사용하는 경우 GetMaterialApp을 사용할 필요가 없습니다. GetMaterialApp은 라우트, 스낵바, 국제화, 바텀시트, 다이얼로그 및 컨텍스트 부재와 라우트에 연관된 상위 api들에 필요합니다.
+- 주석²: 이 단계는 라우트 관리 (`Get.to ()`,`Get.back ()` 등)를 사용하려는 경우에만 필요합니다. 사용하지 않을 경우 1 단계를 수행할 필요가 없습니다.
 
 - 2 단계:
   비즈니스 로직 클래스를 만들고 모든 변수, 함수, 컨트롤러를 포함하십시오.
@@ -161,14 +161,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
 
-    // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 "child'에서 사용가능하게 합니다.
+    // Get.put()을 사용하여 클래스를 인스턴스화하여 모든 "child'에서 사용 가능하게 합니다.
     final Controller c = Get.put(Controller());
     
     return Scaffold(
-      // count가 변경 될 때마다 Obx(()=> 를 사용하여 Text()에 업데이트합니다.
+      // count가 변경될 때마다 Obx(()=> 를 사용하여 Text()에 업데이트합니다.
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
-      // 8줄의 Navigator.push를 간단한 Get.to()로 변경합니다. context는 필요없습니다.
+      // 8줄의 Navigator.push를 간단한 Get.to()로 변경합니다. context는 필요 없습니다.
       body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
@@ -192,21 +192,21 @@ class Other extends StatelessWidget {
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
-이것은 간단한 프로젝트 이지만 Get이 얼마나 강력한지 명확히 보여줍니다. 프로젝트가 성장하면 차이점이 더 커질 것 입니다.
+이것은 간단한 프로젝트지만 Get이 얼마나 강력한지 명확히 보여줍니다. 프로젝트가 성장하면 차이점이 더 커질 것입니다.
 
-Get은 팀단위 업무에 맞춰 디자인되었지만 개별 개발자의 작업도 단순화합니다.
+Get은 팀 단위 업무에 맞춰 디자인되었지만 개인 개발자의 작업도 단순화합니다.
 
-마감일을 개선하고 성능의 손실 없이 재시간에 제공하십시오. Get은 모두를 위한 것은 아니지만 위의 설명에 해당사항이 있으면 당신을 위한 것입니다!
+마감일을 개선하고 성능의 손실 없이 제시간에 제공하십시오. Get은 모두를 위한 것은 아니지만 위의 설명에 해당사항이 있으면 당신을 위한 것입니다!
 
 # 세가지 주요점
 
 ## 상태 관리
 
-Get은 두가지 상태 관리자가 있습니다: 단순 상태관리자(GetBuilder라고 함)와 반응형 상태관리자(GetX/Obx)
+Get에는 두가지 상태 관리자가 있습니다: 단순 상태 관리자(GetBuilder라고 함)와 반응형 상태 관리자(GetX/Obx)
 
 ### 반응형 상태 관리자
 
-반응형 프로그래밍은 복잡하다고 알려져있기 때문에 많은 사람들에게 소외될 수 있습니다. GetX가 매우 단순하게 반응형 프로그래밍을 바꿉니다:
+반응형 프로그래밍은 복잡하다고 알려져 있기 때문에 많은 사람들에게 소외될 수 있습니다. GetX가 매우 단순하게 반응형 프로그래밍을 바꿉니다:
 
 - StreamControllers를 만들 필요가 없습니다.
 - 각 변수에 대해 StreamBuilder를 만들 필요가 없습니다.
@@ -216,7 +216,7 @@ Get은 두가지 상태 관리자가 있습니다: 단순 상태관리자(GetBui
 
 Get의 반응형 프로그램은 setState를 사용하는 것 만큼 쉽습니다.
 
-매번 변경되기를 원하고 모든 위젯에서 자동적으로 반영되는 변수가 있다고 가정해봅시다.
+매번 변경되기를 원하고 모든 위젯에서 자동적으로 반영되는 변수가 있다고 가정해 봅시다.
 
 여기 name 변수가 있습니다:
 
@@ -246,7 +246,7 @@ GetX 능력에 대한 좋은 아이디어를 얻을 수 있습니다.
 
 ## 라우트 관리
 
-만약 라우트/스낵바/다이얼로그/bottomsheets을 context 없이 사용하려면 GetX는 훌륭한 대안입니다. 여기를 보십시오:
+만약 라우트/스낵바/다이얼로그/바텀시트를 context 없이 사용하려면 GetX는 훌륭한 대안입니다. 여기를 보십시오:
 
 MaterialApp 앞에 "Get"을 추가해서 GetMaterialApp으로 변경합니다.
 
@@ -270,7 +270,7 @@ Get.to(NextScreen());
 Get.toNamed('/details');
 ```
 
-스낵바, 다이얼로그, bottomsheets 또는 Navigator.pop(context);로 닫아야 하는 어떤것도 닫게 합니다:
+스낵바, 다이얼로그, 바텀시트 또는 Navigator.pop(context);로 닫아야 하는 어떤 것도 닫게 합니다:
 
 ```dart
 Get.back();
@@ -302,25 +302,25 @@ Get은 간단하고 강력한 종속성 관리자를 가지고 있어 Bloc나 Co
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- 주석: Get의 상태 관리자를 사용중이면 뷰를 controller에 더 쉽게 연결할 수 있는 바인딩 api에 더 주의를 기울이십시오.
+- 주석: Get의 상태 관리자를 사용 중이면 뷰를 controller에 더 쉽게 연결할 수 있는 바인딩 api에 더 주의를 기울이십시오.
 
 사용 중인 클래스에서 클래스를 인스턴스화하는 대신에 Get 인스턴스에서 인스턴스화하면 앱에서 해당 클래스를 사용할 수 있습니다.
 그래서 controller(또는 Bloc)를 정상적으로 사용할 수 있습니다.
 
-**팁:** Get 종속성 관리는 패키지의 다른 부분과 분리되어서 예제 앱이 이미 상태 관리자(하나여도 상관없음)를 사용중이면 모두 다시 작성할 필요 없이 아무 문제 없이 종속성 주입을 사용할 수 있습니다.
+**팁:** Get 종속성 관리는 패키지의 다른 부분과 분리되어서 예제 앱이 이미 상태 관리자(하나여도 상관없음)를 사용 중이면 모두 다시 작성할 필요 없이 아무 문제 없이 종속성 주입을 사용할 수 있습니다.
 
 ```dart
 controller.fetchApi();
 ```
 
-여러 경로들을 탐색했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요없이 controller를 Get의 "find"로 찾으면 됩니다:
+여러 경로들을 탐색했고 controller에 남아있는 데이터가 필요가 있다고 가정하십시오. Get_it이나 Provider와 조합된 상태 관리자가 필요합니다. 맞습니까? Get은 아닙니다. 다른 추가적인 종속성이 필요 없이 controller를 Get의 "find"로 찾으면 됩니다:
 
 ```dart
 Controller controller = Get.find();
-//마법처럼 Get이 controller를 찾아서 가져올 것 입니다. 백만개의 인스턴스화 contrller를 가질수 있고 Get은 올바른 controller를 항상 가져다 줄 것입니다.
+//마법처럼 Get이 controller를 찾아서 가져올 것 입니다. 100만 개의 컨트롤러를 인스턴스화할 수 있습니다. Get은 항상 적합한 컨트롤러를 제공합니다.
 ```
 
-그리고나서 가져온 controller 데이터를 사용할 수 있습니다:
+그러고 나서 가져온 controller 데이터를 사용할 수 있습니다:
 
 ```dart
 Text(controller.textFromApi);
@@ -357,7 +357,7 @@ class Messages extends Translations {
 
 #### 번역 사용법
 
-단지 `.tr`로 명시된 키만 추가하면 `Get.locale`과 `Get.fallbackLocale`의 현재값을 사용해서 번역될 것 입니다.
+단지 `.tr`로 명시된 키만 추가하면 `Get.locale`과 `Get.fallbackLocale`의 현재 값을 사용해서 번역될 것입니다.
 
 ```dart
 Text('title'.tr);
@@ -405,7 +405,7 @@ return GetMaterialApp(
 
 #### 지역 변경
 
-지역을 업데이트할때 `Get.updateLocale(locale)`를 콜하십시오. 새로운 지역을 사용하여 자동적으로 번역합니다.
+지역을 업데이트할 때 `Get.updateLocale(locale)`를 콜 하십시오. 새로운 지역을 사용하여 자동적으로 번역합니다.
 
 ```dart
 var locale = Locale('en', 'US');
@@ -424,9 +424,9 @@ return GetMaterialApp(
 
 ## 테마 변경
 
-테마를 업데이트하기 위해 `GetMaterialApp` 보다 더 상위 위젯을 사용하지 말아 주십시오. 이러면 중복 키가 트리거 될 수 있습니다. 많은 사람들이 테마를 바꾸기 위해 "ThemeProvider" 위젯을 사용하고 있는데 **GetX**는 이런 방식이 필요 없습니다.
+테마를 업데이트하기 위해 `GetMaterialApp` 보다 더 상위 위젯을 사용하지 말아주십시오. 이러면 중복 키가 트리거 될 수 있습니다. 많은 사람들이 테마를 바꾸기 위해 "ThemeProvider" 위젯을 사용하고 있는데 **GetX**는 이런 방식이 필요 없습니다.
 
-다른 표준사항은 없이 `Get.changeTheme`로 추가하고 간단하게 커스텀 테마를 만들수 있습니다:
+다른 표준 사항은 없이 `Get.changeTheme`로 추가하고 간단하게 커스텀 테마를 만들 수 있습니다:
 
 ```dart
 Get.changeTheme(ThemeData.light());
@@ -434,14 +434,14 @@ Get.changeTheme(ThemeData.light());
 
 `onTap`에 테마 변경이 있는 버튼 같은 무언가를 만들고 싶다면 두개의 **GetX™** API를 조합하여 가능합니다:
 
-- 다크`테마`를 사용중인지 확인합니다.
-- 그리고 `테마` 변경 API 를 `onPressed`에 넣으면 됩니다:
+- 다크`테마`를 사용 중인지 확인합니다.
+- 그리고 `테마` 변경 API를 `onPressed`에 넣으면 됩니다:
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-`.darkmode`가 활성화 될때 _light theme_ 로 바뀔것 이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
+`.darkmode`가 활성화될 때 _light theme_ 로 바뀔 것이고 _light theme_ 가 활성화되면 _dark theme_ 로 변경될 것입니다.
 
 ## GetConnect
 
@@ -474,7 +474,7 @@ class UserProvider extends GetConnect {
 
 ### 커스텀 구성
 
-GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
+GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
 
 ```dart
 class HomeProvider extends GetConnect {
@@ -484,7 +484,7 @@ class HomeProvider extends GetConnect {
     httpClient.defaultDecoder = CasesModel.fromJson;
     httpClient.baseUrl = 'https://api.covid19api.com';
     // baseUrl = 'https://api.covid19api.com';
-    // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
+    // [httpClient] 인스턴스 없이 사용하는 경우 Http와 websockets의 baseUrl 정의
     
     // 모든 요청의 헤더에 'apikey' 속성을 첨부합니다.
     httpClient.addRequestModifier((request) {
@@ -525,7 +525,7 @@ class HomeProvider extends GetConnect {
 
 GetPage는 GetMiddleWare의 목록을 특정 순서로 실행하는 새로운 프로퍼티를 가집니다.
 
-**주석**: GetPage가 Middleware를 가질때 페이지의 모든 하위는 같은 Middleware를 자동적으로 가지게 됩니다.
+**주석**: GetPage가 Middleware를 가질 때 페이지의 모든 자식 페이지는 자동적으로 같은 Middleware를 가지게 됩니다.
 
 ### Priority
 
@@ -544,7 +544,7 @@ final middlewares = [
 
 ### Redirect
 
-이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다.
+이 함수는 호출된 라우트의 페이지를 검색할 때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트하지 않습니다.
 
 ```dart
 RouteSettings redirect(String route) {
@@ -556,7 +556,7 @@ RouteSettings redirect(String route) {
 ### onPageCalled
 
 이 함수는 생성되지 않은 페이지가 호출될 때 호출됩니다.
-페이지에 대한 어떤것을 변경하는데 사용하거나 새로운 페이지를 줄 수 있습니다.
+페이지에 대한 어떤 것을 변경하는 데 사용하거나 새로운 페이지를 줄 수 있습니다.
 
 ```dart
 GetPage onPageCalled(GetPage page) {
@@ -594,7 +594,7 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 
 ### OnPageBuilt
 
-이 함수는 GetPage.page 함수가 호출된 직후에 호출며 함수의 결과를 제공합니다. 그리고 표시될 위젯을 가져옵니다.
+이 함수는 GetPage.page 함수가 호출된 직후에 호출되어 함수의 결과를 제공합니다. 그리고 표시될 위젯을 가져옵니다.
 
 ### OnPageDispose
 
@@ -612,7 +612,7 @@ Get.previousRoute
 // rawRoute.isFirst()와 같은 접근에 필요한 원시 경로를 제공
 Get.rawRoute
 
-// GetObserver로 부터 Rounting API의 접근을 제공
+// GetObserver로부터 Rounting API의 접근을 제공
 Get.routing
 
 // snackbar가 열려 있는지 확인
@@ -627,13 +627,13 @@ Get.isBottomSheetOpen
 // 1개의 경로 제거
 Get.removeRoute()
 
-// 값이 true가 될때까지 반복적으로 되돌림
+// 값이 true가 될 때까지 반복적으로 되돌림
 Get.until()
 
-// 다음 경로로 이동하고 값이 true가 될때까지 이전 모든 경로를 제거
+// 다음 경로로 이동하고 값이 true가 될 때까지 이전 모든 경로를 제거
 Get.offUntil()
 
-// 명명된 다음 경로로 이동하고 값이 true가 될때까지 이전 모든 경로를 제거
+// 명명된 다음 경로로 이동하고 값이 true가 될 때까지 이전 모든 경로를 제거
 Get.offNamedUntil()
 
 // 앱이 구동중인 플랫폼을 확인
@@ -649,11 +649,11 @@ GetPlatform.isMobile
 GetPlatform.isDesktop
 // 모든 플랫폼은 독립적으로 웹을 제공합니다!
 // Windows, iOS, OSX, Android 등의
-// 브러우저에서 구동중이면 알 수 있습니다.
+// 브라우저에서 구동 중이면 알 수 있습니다.
 GetPlatform.isWeb
 
 
-// MediaQuery.of(context).size.height 과 동일
+// MediaQuery.of(context).size.height 와 동일
 // 하지만 불변함.
 Get.height
 Get.width
@@ -665,9 +665,9 @@ Get.context
 Get.contextOverlay
 
 // 주석: 다음 메서드는 context의 확장입니다.
-// UI의 모든 위치에서 컨텍스트에 액세스 할 수 있으므로 UI 코드의 어느 곳에서나 사용할 수 있습니다.
+// UI의 모든 위치에서 컨텍스트에 액세스할 수 있으므로 UI 코드의 어느 곳에서나 사용할 수 있습니다.
 
-// 변경되는 height/width(데스크탑이나 브라우저와 같이 늘어날 수 있는 것)가 필요하면 context를 사용해야함
+// 변경되는 height/width(데스크탑이나 브라우저와 같이 늘어날 수 있는 것)가 필요하면 context를 사용해야 함
 context.width
 context.height
 
@@ -678,19 +678,19 @@ context.height
 context.heightTransformer()
 context.widthTransformer()
 
-/// MediaQuery.of(context).size 와 유사함
+/// MediaQuery.of(context).size; 와 유사함
 context.mediaQuerySize()
 
-/// MediaQuery.of(context).padding 와 유사함
+/// MediaQuery.of(context).padding; 과 유사함
 context.mediaQueryPadding()
 
-/// MediaQuery.of(context).viewPadding 와 유사함
+/// MediaQuery.of(context).viewPadding; 과 유사함
 context.mediaQueryViewPadding()
 
 /// MediaQuery.of(context).viewInsets; 와 유사함
 context.mediaQueryViewInsets()
 
-/// MediaQuery.of(context).orientation; 와 유사함
+/// MediaQuery.of(context).orientation; 과 유사함
 context.orientation()
 
 /// 장치의 가로 모드 확인
@@ -708,7 +708,7 @@ context.textScaleFactor()
 /// 화면에서 shortestSide를 제공
 context.mediaQueryShortestSide()
 
-/// True if width be larger than 800
+/// width가 800 이상이면 True
 context.showNavbar()
 
 /// shortestSide가 600p 미만이면 True
@@ -743,7 +743,7 @@ MaterialApp(
 );
 ```
 
-`GetObserver`안에 Middleware를 사용할 수 있고 이로 인한 어떤 영향도 없습니다.
+`GetObserver` 안에 Middleware를 사용할 수 있고 이로 인한 어떤 영향도 없습니다.
 
 ```dart
 MaterialApp(
@@ -754,8 +754,8 @@ MaterialApp(
 );
 ```
 
-`Get`을 위한 _Global Settings_ 을 만들수 있습니다. 어떠한 라우트도 포함되기 전에 `Get.config`에 추가하십시오.
-또는 `GetMaterialApp`에 직접 추가 하십시오.
+`Get`을 위한 _Global Settings_ 을 만들 수 있습니다. 어떠한 라우트도 포함되기 전에 `Get.config`에 추가하십시오.
+또는 `GetMaterialApp`에 직접 추가하십시오.
 
 ```dart
 GetMaterialApp(
@@ -774,9 +774,8 @@ Get.config(
 )
 ```
 
-선택적으로 `Get`으로 모든 로그 메세지를 리다이렉트 할 수 있습니다.
-만약 유명한 로그 패키지를 사용하고 싶으면
-여기에서 원하는 로그가 있습니다:
+선택적으로 Get에서 모든 로깅 메시지를 리디렉션할 수 있습니다. 
+자신만의 즐겨찾기 로깅 패키지를 사용하고 로그를 캡처하고 싶다면:
 
 ```dart
 GetMaterialApp(
@@ -788,21 +787,24 @@ void localLogWriter(String text, {bool isError = false}) {
   // pass the message to your favourite logging package here
   // please note that even if enableLog: false log messages will be pushed in this callback
   // you get check the flag if you want through GetConfig.isLogEnable
+  // 여기에서 가장 좋아하는 로깅 패키지로 메시지를 전달합니다
+  // enableLog: 잘못된 로그 메시지가 이 콜백에서 푸시됨에 유의하십시오
+  // GetConfig.isLogEnable을 통해 원하는 플래그를 확인할 수 있습니다
 }
 
 ```
 
 ### 지역 상태 위젯들
 
-이러한 위젯은 단일값을 관리하고 지역적이고 임시적인 상태를 유지합니다.
+이러한 위젯은 단일 값을 관리하고 지역적이고 일시적인 상태를 유지합니다.
 우리는 반응적이고 단순함을 위해 추가할 수 있습니다.
 예를 들어 `TextField`의 obscureText의 전환으로 사용하거나 
-커스텀된 확장되는 패널을 만들거나 
+커스텀된 확장 패널을 만들거나 
 `Scaffold`의 body가 변경되는 동안 `BottomNavigationBar`의 현재 index를 수정할 수 있습니다.
 
 #### ValueBuilder
 
-업데이트된 값을 되돌려 받는 `.setState`로 작동하는 `StatefulWidget`의 단순화 입니다.
+업데이트된 값을 되돌려 받는 `.setState`로 작동하는 `StatefulWidget`의 단순화입니다.
 
 ```dart
 ValueBuilder<bool>(
@@ -811,7 +813,7 @@ ValueBuilder<bool>(
     value: value,
     onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
   ),
-  // if you need to call something outside the builder method.
+  // 빌더 메서드 이외의 것을 호출해야 하는 경우
   onUpdate: (value) => print("Value updated: $value"),
   onDispose: () => print("Widget unmounted"),
 ),
@@ -825,7 +827,7 @@ ValueBuilder<bool>(
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx에는 호출가능한 함수가 있습니다! (flag) => data.value = flag, 가 사용가능 합니다.
+        onChanged: data, // Rx에는 호출가능한 함수가 있습니다! (flag) => data.value = flag, 가 사용 가능합니다.
     ),
     false.obs,
 ),
@@ -856,17 +858,17 @@ final name = 'GetX'.obs;
 name.value = 'Hey';
 
 // 모든 Rx 프로퍼티가 "호출 가능"하고 새로운 값을 반환합니다.
-// 하지만 이 접근방식은 `null`를 허용하지 않고 UI가 재구축하지 않습니다.
+// 하지만 이 접근방식은 `null`를 허용하지 않고 UI를 리빌드하지 않습니다.
 name('Hello');
 
-// getter와 과 같이 'Hello'를 출력합니다.
+// getter와 같이 'Hello'를 출력합니다.
 name() ;
 
 /// 숫자 타입들:
 
 final count = 0.obs;
 
-// 기존 숫자 타입으로 모든 변형 불가 작업을 사용할수 있습니다.
+// 기존 숫자 타입으로 모든 변형 불가 작업을 사용할 수 있습니다.
 count + 1;
 
 // 주의하세요! 아래는 `count`가 final이 아닌 경우에만 유효합니다.
@@ -902,13 +904,13 @@ abc.add(12); // list에 12가 들어가고 stream을 업데이트합니다.
 abc[3]; // List와 같이 인덱스 3을 읽습니다.
 
 
-// 동등비교는 Rx와 값에서 동작하지만 해시코드는 항상 값으로부터 받습니다.
+// 동등 비교는 Rx와 값에서 동작하지만 해시 코드는 항상 값으로부터 받습니다.
 final number = 12.obs;
 print( number == 12 ); // prints > true
 
 /// 커스텀 Rx 모델들:
 
-// toJson(), toString()은 child에게 지연됩니다. 그래서 이것들을 재정의 하고 직접 관찰하여 print() 할수 있습니다.
+// toJson(), toString()은 child에게 지연됩니다. 그래서 이것들을 재정의 하고 직접 관찰하여 print() 할 수 있습니다.
 
 class User {
     String name, last;
@@ -924,8 +926,8 @@ final user = User(name: 'John', last: 'Doe', age: 33).obs;
 // `user`는 "반응형"이지만 내부 프로퍼티들은 아닙니다!
 // 그래서 만약 내부의 변수를 바꾸면...
 user.value.name = 'Roi';
-// 위젯은 재구성 되지 않을것 입니다!
-// user의 내부의 무언가가 바뀌어도 `Rx`는 알 수가 않습니다.
+// 위젯은 재구성되지 않을 것 입니다!
+// user의 내부의 무언가가 바뀌어도 `Rx`는 알 수 없습니다.
 // 그래서 커스텀 클래스들은 수동으로 바뀌었다고 "알릴" 필요가 있습니다.
 user.refresh();
 
@@ -946,7 +948,7 @@ T 모델을 허용하는 컨트롤러에 연결합니다.
 class Controller extends GetController with StateMixin<User>{}
 ```
 
-`change()` 메소드는 우리가 원할 때마다 State를 변경합니다.
+`change()` 메서드는 우리가 원할 때마다 State를 변경합니다.
 다음과 같이 데이터와 상태를 전달하면 됩니다:
 
 ```dart
@@ -997,7 +999,7 @@ class OtherClass extends GetView<Controller> {
    final String title = 'My Awesome View';
  }
 
-  // controller를 등록할때 사용한 `타입`을 전달하는 것을 항상 기억하세요!
+  // controller를 등록할 때 사용한 `타입`을 전달하는 것을 항상 기억하세요!
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
@@ -1015,9 +1017,10 @@ ResponsiveView 를 빌드하려면 이 위젯을 확장하세요. 이 위젯에�
 
 ##### 사용 방법
 
-그것을 빌드하기 위한 두가지 옵션이 있습니다.
-- `builder` method 를 사용하면 빌드 할 위젯을 반환합니다.
-- `desktop`, `tablet`, `phone`, `watch` method를 사용하면 특정 메소드는 screen type 이 일치할때 빌드됩니다. Screen type이 [ScreenType.Tablet] 일때, tablet method 가 스며나옵니다. 참고: 만약 이 method 를 사용할 경우, `alwaysUseBuilder` 프로퍼티를 `false` 로 설정해주세요.   
+그것을 빌드하기 위한 두 가지 옵션이 있습니다.
+- `builder` 메서드를 사용하면 빌드할 위젯을 반환합니다.
+- `desktop`, `tablet`, `phone`, `watch` 메서드를 사용하면 특정 메서드는 screen type 이 일치할 때 빌드됩니다. Screen type이 [ScreenType.Tablet] 일 때, tablet 메서드가 스며나옵니다.
+참고: 만약 이 메서드를 사용할 경우, `alwaysUseBuilder` 프로퍼티를 `false`로 설정해 주세요.   
  
 `settings` 프로퍼티를 사용하면 screen types 를 위한 width limit 를 설정할 수 있습니다.
 
@@ -1027,7 +1030,7 @@ Code to this screen
 
 #### GetWidget
 
-대부분의 사람들이 이 위젯에대해 모르거나 사용법을 완전히 혼동합니다.
+대부분의 사람들이 이 위젯에 대해 모르거나 사용법을 완전히 혼동합니다.
 사용 사례는 매우 드물지만 매우 구체적입니다: Controller를 `caches`합니다.
 _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
@@ -1036,10 +1039,10 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 만약 **GetX**의 기능 중 또 다른 "흔하지 않은" 기능을 사용하는 경우:`Get.create()`
 
 `Get.create(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다 
-새로운 `Controller`를 생성할 것 입니다.
+새로운 `Controller`를 생성할 것입니다.
 
-여기서 `GetWidget`이 빛나게 됩니다... 예를 들어 Todo 리스트를 유지하려고 사용할 때 입니다.
-위젯이 "재구성"될때 동일한 controller 인스턴스를 유지할 것입니다.
+여기서 `GetWidget`이 빛나게 됩니다... 예를 들어 Todo 리스트를 유지하려고 사용할 때입니다.
+위젯이 "재구성"될 때 동일한 controller 인스턴스를 유지할 것입니다.
 
 #### GetxService
 
@@ -1047,7 +1050,7 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 하지만 이안에 "로직"은 없습니다. 단지 **GetX** 종속성 주입 시스템이 하위클래스를 메모리에서 
 **삭제할 수 없음**을 알립니다.
 
-그래서 `Get.find()`로 활성화하고 항상 접근하는 "서비스들"을 유지하는데 매우 유용합니다. :
+그래서 `Get.find()`로 활성화하고 항상 접근하는 "서비스들"을 유지하는 데 매우 유용합니다. :
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
@@ -1057,12 +1060,12 @@ Future<void> main() async {
 }
 
 /// 플러터 앱이 실행되기 전에 서비스들을 초기화하는 현명한 방법입니다.
-/// 실행 흐름을 제어 할수 있으므로(테마 구성, apiKey, 사용자가 정의한 언어등을 로드해야 할 필요가 있으므로 
-/// ApiService의 구동전에 SettingService를 로드해야 합니다.
-/// 그래서 GetMaterialApp()은 재구성하지 않고 직접적으로 값을 가져옵니다.
+/// 실행 흐름을 제어할 수 있으므로(테마 구성, apiKey, 사용자가 정의한 언어 등을 로드해야 할 필요가 있으므로 
+/// ApiService의 구동 전에 SettingService를 로드해야 합니다.
+/// 그래서 GetMaterialApp()은 재구성하지 않고 직접 값을 가져옵니다.
 Future<void> initServices() async {
   print('starting services ...');
-  /// 여기에서 get_storage, hive, shared_pref 초기화를 하세요.
+  /// 여기에서 get_storage, hive, shared_pref 초기화하세요.
   /// 또는 연결 고정 또는 비동기적인 무엇이든 하세요.
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
@@ -1088,9 +1091,8 @@ class SettingsService extends GetxService {
 
 ```
 
-`GetxService`를 실질적으로 지우는 한가지 방법은 앱의 "Hot Reboot"과 같은 `Get.reset()`뿐 입니다.
-따라서 앱 실행중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 
-`GetxService`를 사용하세요.
+`GetxService`를 실질적으로 지우는 한 가지 방법은 앱의 "Hot Reboot"과 같은 `Get.reset()`뿐입니다.
+따라서 앱 실행 중 절대로 유지되어야 하는 클래스 인스턴스가 필요하면 `GetxService`를 사용하세요.
 
 ### 테스트
 
@@ -1153,10 +1155,10 @@ class NotificationServiceMock extends GetxService with Mock implements Notificat
 ```
 
 ##### Get.reset() 사용하기
-당신이 위젯 또는 테스트 그룹을 테스트하고 있다면, 당신의 테스트의 마지막 또는 해제 때 당신의 이전 테스트에서 모든 설정을 리셋하기 위해 Get.rest을 사용하십시오
+당신이 위젯 또는 테스트 그룹을 테스트하고 있다면, 당신의 테스트의 마지막 또는 해제 때 당신의 이전 테스트에서 모든 설정을 리셋하기 위해 Get.rest을 사용하십시오.
 
 ##### Get.testMode 
-당신이 당신의 컨트롤러에서 당신의 네비게이션을 사용하고 있다면, 당신의 메인의 시작에 `Get.testMode = true` 를 사용하십시오.
+당신이 당신의 네비게이션을 당신의 컨트롤러에서 사용하고 있다면, 당신의 메인의 시작에 `Get.testMode = true` 를 사용하십시오.
 
 
 # 2.0의 주요 변경점
@@ -1196,7 +1198,7 @@ GetMaterialApp(
 ```
 
 무엇이 달라졌습니까?
-종종 매개 변수 또는 로그인 토큰에 의해 표시 할 페이지를 결정해야 할 수 있습니다. 이전 접근 방식은 이를 허용하지 않았기 때문에 유연하지 않았습니다.
+종종 매개 변수 또는 로그인 토큰에 의해 표시할 페이지를 결정해야 할 수 있습니다. 이전 접근 방식은 이를 허용하지 않았기 때문에 유연하지 않았습니다.
 페이지를 함수에 삽입하면 앱이 시작된 이후 라우트가 메모리에 할당되지 않고 이러한 유형의 접근 방식이 가능하기 때문에 RAM 소비가 크게 감소했습니다:
 
 ```dart
@@ -1214,14 +1216,14 @@ GetMaterialApp(
 
 # 왜 Getx인가?
 
-1- 플러터가 업데이트된 이후 자주 많은 패키지가 깨졌을 것입니다. 때때로 컴파일중 에러가 발생하고 종종 이에 대해 답변을 해줄 사람이 없었을 겁니다. 그리고 개발자는 에러가 어디에서 발생했는지 추적해서 알아야합니다. 그리고 오직 리포지트리를 통해서 이슈를 오픈하고 해결책을 찾아야합니다. Get은 개발을 위한 주 리소스들(상태, 종속성, 라우트 관리)을 중앙화합니다. pubspec에 단일 패키지를 추가하고 작업을 시작 할 수 있습니다. 플러터가 업데이트 된 이후에도 Get 의존을 업데이트하면 작업할 수 있습니다. Get은 호환성 이슈도 해결합니다. 한 버전에서 종속적으로 사용하여 다른 버전에서 다른 버전을 사용할때 패키지 버전이 다른 버전과 호환되지 않는 경우가 몇 번입니까? 모든 것이 동일한 패키지에 있고 완벽하게 호환되므로 Get을 사용하면 문제가 되지 않습니다.
+1- 플러터가 업데이트된 이후 자주 많은 패키지가 깨졌을 것입니다. 때때로 컴파일 중 에러가 발생하고 종종 이에 대해 답변을 해줄 사람이 없었을 겁니다. 그리고 개발자는 에러가 어디에서 발생했는지 추적해서 알아야 합니다. 그리고 오직 리포지트리를 통해서 이슈를 오픈하고 해결책을 찾아야 합니다. Get은 개발을 위한 주 리소스들(상태, 종속성, 라우트 관리)을 중앙화합니다. pubspec에 단일 패키지를 추가하고 작업을 시작할 수 있습니다. 플러터가 업데이트 된 이후에도 Get 의존을 업데이트하면 작업할 수 있습니다. Get은 호환성 이슈도 해결합니다. 한 버전에서 종속적으로 사용하여 다른 버전에서 다른 버전을 사용할 때 패키지 버전이 다른 버전과 호환되지 않는 경우가 몇 번입니까? 모든 것이 동일한 패키지에 있고 완벽하게 호환되므로 Get을 사용하면 문제가 되지 않습니다.
 
-2- 플러터는 쉽고 놀랍지만 대다수의 개발자들이 원하지 않는 몇가지 상용구가 있습니다. `Navigator.of(context).push (context, builder [...]` 같은 것들 입니다. Get은 개발을 단순화합니다. 라우트를 위해 8줄의 코드를 작성하고 `Get.to(Home())`만 하면 다음 페이지로 갈 수 있습니다. 동적 웹 url은 현재 플러터에서 정말로 고통스러운 것이고 GetX로 하는 것은 정말 간단합니다. 플러터에서 상태와 종속성을 관리하는 것은 pub에서 수백가지의 패턴이라 많은 논의를 생산합니다. 그러나 변수 끝에 ".obs"를 추가하고 위젯을 Obx 안에 배치하는 것만큼 쉬운 것은 없습니다. 이것으로 해당 변수가 업데이트되면 화면에 자동으로 업데이트됩니다.
+2- 플러터는 쉽고 놀랍지만 대다수의 개발자들이 원하지 않는 몇 가지 상용구가 있습니다. `Navigator.of(context).push (context, builder [...]` 같은 것들입니다. Get은 개발을 단순화합니다. 라우트를 위해 8줄의 코드를 작성하고 `Get.to(Home())`만 하면 다음 페이지로 갈 수 있습니다. 동적 웹 url은 현재 플러터에서 정말로 고통스러운 것이고 GetX로 하는 것은 정말 간단합니다. 플러터에서 상태와 종속성을 관리하는 것은 pub에서 수백 가지의 패턴이라 많은 논의를 생산합니다. 그러나 변수 끝에 ".obs"를 추가하고 위젯을 Obx 안에 배치하는 것만큼 쉬운 것은 없습니다. 이것으로 해당 변수가 업데이트되면 화면에 자동으로 업데이트됩니다.
 
-3- 성능에 대하여 걱정하지 않아도 됩니다. 플러터의 성능은 이미 놀랍습니다. 하지만 상태관리자를 사용하고 blocs/stores/controllers 등의 클래스들을 로케이터로 배포하는 것을 상상해보십시오. 종속성이 필요 없는 경우 종속성 제외를 수동으로 호출해야 합니다. 하지만 간단하게 controller를 사용하고 이것들을 더이상 사용하지 않을때 간단하게 메모리에서 삭제될수 있을까요? 이것이 GetX가 하는 일입니다. SmartManagement를 사용하면 사용하지 않는 모든것이 메모리에서 삭제되기 때문에 프로그래밍 말고 다른 걱정을 할 필요가 없습니다. 이러한 로직을 만들지 않고도 최소한의 리소스만 사용함을 보장합니다.
+3- 성능에 대하여 걱정하지 않아도 됩니다. 플러터의 성능은 이미 놀랍습니다. 하지만 상태 관리자를 사용하고 blocs/stores/controllers 등의 클래스들을 로케이터로 배포하는 것을 상상해 보십시오. 종속성이 필요 없는 경우 종속성 제외를 수동으로 호출해야 합니다. 하지만 간단하게 controller를 사용하고 이것들을 더 이상 사용하지 않을 때 간단하게 메모리에서 삭제될 수 있을까요? 이것이 GetX가 하는 일입니다. SmartManagement를 사용하면 사용하지 않는 모든 것이 메모리에서 삭제되기 때문에 프로그래밍 말고 다른 걱정을 할 필요가 없습니다. 이러한 로직을 만들지 않고도 최소한의 리소스만 사용함을 보장합니다.
 
 4- 실질적으로 분리됨. "비즈니스 로직으로부터 뷰를 분리"라는 개념을 들어보셨을 겁니다. 이것은 BLoC, MVC, MVVM의 특징이 아니며 이미 나와 있는 또 다른 표준 개념입니다. 그러나 이 개념은 context의 사용으로 인해 플러터에서 종종 완화됩니다.
-만약 InheritedWidget을 찾기 위해 context가 필요하면 뷰나 파라미터로 conetext를 전달해야 합니다. 저는 특히 이 방식이 매우 별로이고 팀의 작업이 항상 뷰의 비즈니스 로직에 의존하게 됩니다. GetX는 표준 접근에서 비정통적이고 StatefulWidgets, InitState 등의 사용을 완전 배제하지 않지만 항상 깔끔하게 유사한 접근을 제공합니다. 예를 들어 Controllers의 수명주기에서 APIREST 요청이 필요할 때 뷰에 어떤 것도 의존할 필요가 없습니다. http 호출의 초기화를 onInit 에서 사용가능 하고 데이터가 도착하면 변수들이 채워집니다. GetX는 완전히 반응형이며(실제 스트림으로 동작) 아이탬중 하나가 채워지면 이 변수를 사용중인 모든 위젯이 자동적으로 화면에서 갱신됩니다. 이를 통해 UI 전문가는 위젯으로만 작업하고 사용자 이벤트(예 : 버튼 클릭) 이외의 비즈니스 로직에 아무것도 보낼 필요가 없으며 비즈니스 로직을 개발하는 사람들은 비즈니스 로직을 별도로 만들고 테스트 할 수 있습니다.
+만약 InheritedWidget을 찾기 위해 context가 필요하면 뷰나 파라미터로 conetext를 전달해야 합니다. 저는 특히 이 방식이 매우 별로이고 팀의 작업이 항상 뷰의 비즈니스 로직에 의존하게 됩니다. GetX는 표준 접근에서 비정통적이고 StatefulWidgets, InitState 등의 사용을 완전 배제하지 않지만 항상 깔끔하게 유사한 접근을 제공합니다. 예를 들어 Controllers의 수명주기에서 APIREST 요청이 필요할 때 뷰에 어떤 것도 의존할 필요가 없습니다. http 호출의 초기화를 onInit에서 사용 가능하고 데이터가 도착하면 변수들이 채워집니다. GetX는 완전히 반응형이며(실제 스트림으로 동작) 아이템 중 하나가 채워지면 이 변수를 사용 중인 모든 위젯이 자동적으로 화면에서 갱신됩니다. 이를 통해 UI 전문가는 위젯으로만 작업하고 사용자 이벤트(예 : 버튼 클릭) 이외의 비즈니스 로직에 아무것도 보낼 필요가 없으며 비즈니스 로직을 개발하는 사람들은 비즈니스 로직을 별도로 만들고 테스트할 수 있습니다.
 
 이 라이브러리는 항상 업데이트되고 새로운 기능이 포함됩니다. 자유롭게 PR을 제공하고 여기에 기여하세요.
 
@@ -1229,7 +1231,7 @@ GetMaterialApp(
 
 ## 커뮤니티 채널
 
-GetX에는 매우 활동적이고 유용한 커뮤니티가 있습니다. 이 프레임워크의 사용과 관련하여 질문이 있거나 도움이 필요한 경우 커뮤니티 채널에 가입하십시오. 질문에 대한 답변이 더 빨리 제공되며 가장 적합한 장소가 될 것입니다. 이 저장소는 이슈오픈 및 리소스 요청 전용이지만 GetX 커뮤니티의 일부에 속해있습니다.
+GetX에는 매우 활동적이고 유용한 커뮤니티가 있습니다. 이 프레임워크의 사용과 관련하여 질문이 있거나 도움이 필요한 경우 커뮤니티 채널에 가입하십시오. 질문에 대한 답변이 더 빨리 제공되며 가장 적합한 장소가 될 것입니다. 이 저장소는 이슈 오픈 및 리소스 요청 전용이지만 GetX 커뮤니티의 일부에 속해있습니다.
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
