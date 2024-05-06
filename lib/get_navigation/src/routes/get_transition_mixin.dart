@@ -116,7 +116,6 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
         )
       },
     );
-
     return Stack(
       fit: StackFit.passthrough,
       children: [
@@ -607,7 +606,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                   assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
-                limitedSwipe: limitedSwipe,
+                limitedSwipe: true,
                 gestureWidth:
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
