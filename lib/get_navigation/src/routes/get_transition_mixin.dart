@@ -361,7 +361,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    bool limitedSwipe = true,
+    bool limitedSwipe = false,
     double initialOffset = 0,
   }) {
     // Check if the route has an animation that's currently participating
@@ -607,7 +607,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                   assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
-                limitedSwipe: limitedSwipe,
+                limitedSwipe: true,
                 gestureWidth:
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
