@@ -607,7 +607,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                   assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
-                limitedSwipe: true,
+                limitedSwipe: limitedSwipe,
                 gestureWidth:
                     route.gestureWidth?.call(context) ?? _kBackGestureWidth,
                 initialOffset: initialOffset,
