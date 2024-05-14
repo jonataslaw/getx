@@ -18,7 +18,7 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
   final T? init;
 
   const MixinBuilder({
-    Key? key,
+    super.key,
     this.init,
     this.global = true,
     required this.builder,
@@ -28,7 +28,7 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

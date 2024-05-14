@@ -68,7 +68,7 @@ class GetMaterialApp extends StatelessWidget {
   final bool useInheritedMediaQuery;
 
   const GetMaterialApp({
-    Key? key,
+    super.key,
     this.navigatorKey,
     this.scaffoldMessengerKey,
     this.home,
@@ -128,11 +128,10 @@ class GetMaterialApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
-        routerConfig = null,
-        super(key: key);
+        routerConfig = null;
 
   const GetMaterialApp.router({
-    Key? key,
+    super.key,
     this.routeInformationProvider,
     this.scaffoldMessengerKey,
     this.routeInformationParser,
@@ -190,8 +189,7 @@ class GetMaterialApp extends StatelessWidget {
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
 
   @override
   Widget build(BuildContext context) {

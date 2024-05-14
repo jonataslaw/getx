@@ -1,4 +1,4 @@
-part of rx_types;
+part of '../rx_types.dart';
 
 /// This class is the foundation for all reactive (Rx) classes that makes Get
 /// so powerful.

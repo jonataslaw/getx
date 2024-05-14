@@ -30,12 +30,12 @@ class ValueBuilder<T> extends StatefulWidget {
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
-    Key? key,
+    super.key,
     required this.initialValue,
     this.onDispose,
     this.onUpdate,
     required this.builder,
-  }) : super(key: key);
+  });
 
   @override
   ValueBuilderState<T> createState() => ValueBuilderState<T>();
@@ -79,7 +79,7 @@ class ObxElement = StatelessElement with StatelessObserverComponent;
 class Observer extends ObxStatelessWidget {
   final WidgetBuilder builder;
 
-  const Observer({Key? key, required this.builder}) : super(key: key);
+  const Observer({super.key, required this.builder});
 
   @override
   Widget build(BuildContext context) => builder(context);
@@ -88,7 +88,7 @@ class Observer extends ObxStatelessWidget {
 /// A StatelessWidget than can listen reactive changes.
 abstract class ObxStatelessWidget extends StatelessWidget {
   /// Initializes [key] for subclasses.
-  const ObxStatelessWidget({Key? key}) : super(key: key);
+  const ObxStatelessWidget({super.key});
   @override
   StatelessElement createElement() => ObxElement(this);
 }

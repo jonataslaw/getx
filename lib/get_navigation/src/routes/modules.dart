@@ -57,7 +57,7 @@ class Dependencies {
 }
 
 abstract class Module extends StatefulWidget {
-  const Module({Key? key}) : super(key: key);
+  const Module({super.key});
 
   Widget view(BuildContext context);
 

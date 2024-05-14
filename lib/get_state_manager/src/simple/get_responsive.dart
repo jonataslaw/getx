@@ -62,9 +62,8 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
   GetResponsiveView({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
+    super.key,
+  }) : screen = ResponsiveScreen(settings);
 }
 
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
@@ -78,9 +77,8 @@ class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
   GetResponsiveWidget({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
+    super.key,
+  }) : screen = ResponsiveScreen(settings);
 }
 
 class ResponsiveScreenSettings {

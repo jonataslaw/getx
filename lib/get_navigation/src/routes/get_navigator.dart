@@ -4,18 +4,16 @@ import '../../../get.dart';
 
 class GetNavigator extends Navigator {
   GetNavigator.onGenerateRoute({
-    GlobalKey<NavigatorState>? key,
+    GlobalKey<NavigatorState>? super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
+    required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
+    super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-    String? restorationScopeId,
+    super.initialRoute,
+    super.restorationScopeId,
   }) : super(
           //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -36,9 +34,6 @@ class GetNavigator extends Navigator {
             }
             return null;
           },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          restorationScopeId: restorationScopeId,
-          pages: pages,
           observers: [
             // GetObserver(),
             ...?observers,
@@ -48,18 +43,16 @@ class GetNavigator extends Navigator {
         );
 
   GetNavigator({
-    Key? key,
+    super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> pages,
+    required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
-    bool reportsRouteUpdateToEngine = false,
+    super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
-    String? initialRoute,
-    String? restorationScopeId,
+    super.initialRoute,
+    super.restorationScopeId,
   }) : super(
           //keys should be optional
-          key: key,
-          initialRoute: initialRoute,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -68,9 +61,6 @@ class GetNavigator extends Navigator {
                 }
                 return true;
               },
-          reportsRouteUpdateToEngine: reportsRouteUpdateToEngine,
-          restorationScopeId: restorationScopeId,
-          pages: pages,
           observers: [
             // GetObserver(null, Get.routing),
             HeroController(),
