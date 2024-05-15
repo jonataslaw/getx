@@ -316,17 +316,20 @@ class GetConnect extends GetConnectInterface {
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
-                      code: (e['extensions'] != null ? e['extensions']['code'] ?? '' : '').toString(),
+                      code: (e['extensions'] != null
+                              ? e['extensions']['code'] ?? ''
+                              : '')
+                          .toString(),
                       message: (e['message'] ?? '').toString(),
                     ))
                 .toList());
       }
       return GraphQLResponse<T>.fromResponse(res);
-    } on Exception catch (_) {
+    } on Exception catch (err) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
           code: null,
-          message: _.toString(),
+          message: err.toString(),
         )
       ]);
     }
@@ -357,11 +360,11 @@ class GetConnect extends GetConnectInterface {
                 .toList());
       }
       return GraphQLResponse<T>.fromResponse(res);
-    } on Exception catch (_) {
+    } on Exception catch (err) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
           code: null,
-          message: _.toString(),
+          message: err.toString(),
         )
       ]);
     }

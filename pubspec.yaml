@@ -4,14 +4,15 @@ version: 5.0.0-release-candidate-5
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  web: any
+  web: ">=0.4.0 <0.6.0"
 
 dev_dependencies:
   flutter_lints: ^4.0.0
