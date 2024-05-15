@@ -11,7 +11,7 @@ class OtimizedListView<T> extends StatelessWidget {
   final Widget onEmpty;
   final int length;
   final Widget Function(BuildContext context, ValueKey key, T item) builder;
-  const OtimizedListView({
+  const OptimizedListView({
     Key? key,
     required this.list,
     required this.builder,
