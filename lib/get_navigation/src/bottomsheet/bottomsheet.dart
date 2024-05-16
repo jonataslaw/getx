@@ -18,11 +18,11 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.isDismissible = true,
     this.enableDrag = true,
     required this.isScrollControlled,
-    RouteSettings? settings,
+    super.settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
     this.curve,
-  }) : super(settings: settings) {
+  }) {
     RouterReportManager.instance.reportCurrentRoute(this);
   }
   final bool? isPersistent;
@@ -115,7 +115,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
 class _GetModalBottomSheet<T> extends StatefulWidget {
   const _GetModalBottomSheet({
-    Key? key,
+    super.key,
     this.route,
     this.backgroundColor,
     this.elevation,
@@ -124,7 +124,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.isScrollControlled = false,
     this.enableDrag = true,
     this.isPersistent = false,
-  }) : super(key: key);
+  });
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;
@@ -214,7 +214,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
 
 class _GetPerModalBottomSheet<T> extends StatefulWidget {
   const _GetPerModalBottomSheet({
-    Key? key,
+    super.key,
     this.route,
     this.isPersistent,
     this.backgroundColor,
@@ -223,7 +223,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
-  }) : super(key: key);
+  });
   final bool? isPersistent;
   final GetModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;

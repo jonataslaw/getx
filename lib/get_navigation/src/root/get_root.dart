@@ -278,10 +278,10 @@ class ConfigData {
 
 class GetRoot extends StatefulWidget {
   const GetRoot({
-    Key? key,
+    super.key,
     required this.config,
     required this.child,
-  }) : super(key: key);
+  });
   final ConfigData config;
   final Widget child;
   @override

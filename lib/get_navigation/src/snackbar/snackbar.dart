@@ -173,7 +173,7 @@ class GetSnackBar extends StatefulWidget {
   final Form? userInputForm;
 
   const GetSnackBar({
-    Key? key,
+    super.key,
     this.title,
     this.message,
     this.titleText,
@@ -211,7 +211,7 @@ class GetSnackBar extends StatefulWidget {
     this.userInputForm,
     this.snackbarStatus,
     this.hitTestBehavior,
-  }) : super(key: key);
+  });
 
   @override
   State createState() => GetSnackBarState();

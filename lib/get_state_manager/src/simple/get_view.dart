@@ -32,7 +32,7 @@ import 'get_widget_cache.dart';
 /// }
 ///``
 abstract class GetView<T> extends StatelessWidget {
-  const GetView({Key? key}) : super(key: key);
+  const GetView({super.key});
 
   final String? tag = null;
 
@@ -49,7 +49,7 @@ abstract class GetView<T> extends StatelessWidget {
 /// GetWidget will have your own controller, and will be call events as `onInit`
 /// and `onClose` when the controller get in/get out on memory.
 abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
-  const GetWidget({Key? key}) : super(key: key);
+  const GetWidget({super.key});
 
   @protected
   final String? tag = null;

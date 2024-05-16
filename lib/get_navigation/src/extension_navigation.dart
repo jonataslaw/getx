@@ -171,7 +171,7 @@ extension ExtensionDialog on GetInterface {
     List<Widget>? actions,
 
     // onWillPop Scope
-    WillPopCallback? onWillPop,
+    PopInvokedCallback? onWillPop,
 
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
@@ -225,7 +225,7 @@ extension ExtensionDialog on GetInterface {
             child: Text(
               textConfirm ?? "Ok",
               style: TextStyle(
-                  color: confirmTextColor ?? theme.colorScheme.background),
+                  color: confirmTextColor ?? theme.colorScheme.surface),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -267,8 +267,8 @@ extension ExtensionDialog on GetInterface {
 
     return dialog<T>(
       onWillPop != null
-          ? WillPopScope(
-              onWillPop: onWillPop,
+          ? PopScope(
+              onPopInvoked: onWillPop,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
@@ -1283,7 +1283,7 @@ extension GetNavigationExt on GetInterface {
 
   /// Check if dark mode theme is enable on platform on android Q+
   bool get isPlatformDarkMode =>
-      (ui.window.platformBrightness == Brightness.dark);
+      (ui.PlatformDispatcher.instance.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;
