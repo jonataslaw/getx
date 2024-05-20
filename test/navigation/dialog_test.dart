@@ -57,7 +57,7 @@ void main() {
 }
 
 class YourDialogWidget extends StatelessWidget {
-  const YourDialogWidget({Key? key}) : super(key: key);
+  const YourDialogWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

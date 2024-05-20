@@ -63,7 +63,7 @@ void main() {
 
     var showNavbar = (width > 800);
     expect(showNavbar, context.showNavbar);
-    var textScaleFactor = mediaQuery.textScaleFactor;
+    var textScaleFactor = mediaQuery.textScaler;
     expect(textScaleFactor, context.textScaleFactor);
   });
 }

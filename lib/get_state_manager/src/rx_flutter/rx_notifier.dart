@@ -211,7 +211,7 @@ class Value<T> extends ListNotifier
 /// GetNotifier has a native status and state implementation, with the
 /// Get Lifecycle
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
-  GetNotifier(T initial) : super(initial);
+  GetNotifier(super.initial);
 }
 
 extension StateExt<T> on StateMixin<T> {

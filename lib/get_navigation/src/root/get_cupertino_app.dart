@@ -67,7 +67,7 @@ class GetCupertinoApp extends StatelessWidget {
   final ScrollBehavior? scrollBehavior;
 
   const GetCupertinoApp({
-    Key? key,
+    super.key,
     this.theme,
     this.navigatorKey,
     this.home,
@@ -124,11 +124,10 @@ class GetCupertinoApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
-        routerConfig = null,
-        super(key: key);
+        routerConfig = null;
 
   const GetCupertinoApp.router({
-    Key? key,
+    super.key,
     this.theme,
     this.routeInformationProvider,
     this.routeInformationParser,
@@ -183,8 +182,7 @@ class GetCupertinoApp extends StatelessWidget {
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
 
   @override
   Widget build(BuildContext context) {

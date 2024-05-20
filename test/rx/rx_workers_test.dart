@@ -7,8 +7,8 @@ void main() {
   test('once', () async {
     final count = 0.obs;
     var result = -1;
-    once(count, (dynamic _) {
-      result = _ as int;
+    once(count, (dynamic val) {
+      result = val as int;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -41,9 +41,9 @@ void main() {
   test('debounce', () async {
     final count = 0.obs;
     int? result = -1;
-    debounce(count, (dynamic _) {
+    debounce(count, (dynamic val) {
       // print(_);
-      result = _ as int?;
+      result = val as int?;
     }, time: const Duration(milliseconds: 100));
 
     count.value++;
