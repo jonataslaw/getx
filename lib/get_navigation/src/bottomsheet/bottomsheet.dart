@@ -17,6 +17,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.modalBarrierColor,
     this.isDismissible = true,
     this.enableDrag = true,
+    this.showDragHandle,
     required this.isScrollControlled,
     super.settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
@@ -35,6 +36,17 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Clip? clipBehavior;
   final Color? modalBarrierColor;
   final bool isDismissible;
+
+  /// A parameter to control the visibility of a drag handle in the bottom sheet.
+  ///
+  /// When `showDragHandle` is set to `true`, a drag handle will be displayed at the top
+  /// of the bottom sheet, allowing users to easily identify and interact with the sheet
+  /// by dragging it. This is particularly useful for enhancing the user experience in
+  /// applications where intuitive UI interactions are important.
+  ///
+  /// When `showDragHandle` is set to `false`, the drag handle will be hidden. By default,
+  /// the drag handle is hidden to maintain backward compatibility with existing implementations.
+  final bool? showDragHandle;
   final bool enableDrag;
   // final String name;
   final Duration enterBottomSheetDuration;
@@ -105,6 +117,8 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
           clipBehavior: clipBehavior,
           isScrollControlled: isScrollControlled,
           enableDrag: enableDrag,
+          showDragHandle: showDragHandle ??
+              (enableDrag && (sheetTheme.showDragHandle ?? false)),
         ),
       ),
     );
@@ -124,6 +138,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.isScrollControlled = false,
     this.enableDrag = true,
     this.isPersistent = false,
+    this.showDragHandle,
   });
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -133,6 +148,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
   final ShapeBorder? shape;
   final Clip? clipBehavior;
   final bool enableDrag;
+  final bool? showDragHandle;
 
   @override
   _GetModalBottomSheetState<T> createState() => _GetModalBottomSheetState<T>();
@@ -187,6 +203,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
+                        showDragHandle: widget.showDragHandle,
                       )
                     : Scaffold(
                         bottomSheet: BottomSheet(
@@ -203,6 +220,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                           shape: widget.shape,
                           clipBehavior: widget.clipBehavior,
                           enableDrag: widget.enableDrag,
+                          showDragHandle: widget.showDragHandle,
                         ),
                       )),
           ),
@@ -223,6 +241,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
+    this.showDragHandle,
   });
   final bool? isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -232,6 +251,7 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
   final ShapeBorder? shape;
   final Clip? clipBehavior;
   final bool enableDrag;
+  final bool? showDragHandle;
 
   @override
   // ignore: lines_longer_than_80_chars
@@ -290,6 +310,7 @@ class _GetPerModalBottomSheetState<T>
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
+                        showDragHandle: widget.showDragHandle,
                       )
                     : Scaffold(
                         bottomSheet: BottomSheet(
@@ -306,6 +327,7 @@ class _GetPerModalBottomSheetState<T>
                           shape: widget.shape,
                           clipBehavior: widget.clipBehavior,
                           enableDrag: widget.enableDrag,
+                          showDragHandle: widget.showDragHandle,
                         ),
                       )),
           ),
