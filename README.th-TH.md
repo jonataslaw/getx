@@ -16,12 +16,10 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-
 <div align="center">
 
-**Languages:**
+**ภาษาอื่นๆ**
 
-  
 [![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
 [![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
 [![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
@@ -36,119 +34,118 @@
 [![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
 [![Hindi](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
 [![Bangla](https://img.shields.io/badge/Language-Bangla-blueviolet?style=for-the-badge)](README-bn.md)
-[![Thai](https://img.shields.io/badge/Language-Thai-blueviolet?style=for-the-badge)](README.th-TH.md)
-  
-  
+[![Thai](https://img.shields.io/badge/Language-Thai-blueviolet?style=for-the-badge)](README-bn.md)
+
 </div>
 
-- [About Get](#about-get)
-- [Installing](#installing)
-- [Counter App with GetX](#counter-app-with-getx)
-- [The Three pillars](#the-three-pillars)
-  - [State management](#state-management)
-    - [Reactive State Manager](#reactive-state-manager)
-    - [More details about state management](#more-details-about-state-management)
-  - [Route management](#route-management)
-    - [More details about route management](#more-details-about-route-management)
-  - [Dependency management](#dependency-management)
-    - [More details about dependency management](#more-details-about-dependency-management)
-- [Utils](#utils)
-  - [Internationalization](#internationalization)
-    - [Translations](#translations)
-      - [Using translations](#using-translations)
-    - [Locales](#locales)
-      - [Change locale](#change-locale)
-      - [System locale](#system-locale)
-  - [Change Theme](#change-theme)
+- [เกี่ยวกับ Get](#เกี่ยวกับ-Get)
+- [การติดตั้ง](#การติดตั้ง)
+- [สร้างแอปตัวนับด้วย GetX](#สร้างแอปตัวนับด้วย-GetX)
+- [เสาหลัก 3 ประการ](#เสาหลัก-3-ประการ)
+  - [ตัวจัดการข้อมูล](#ตัวจัดการข้อมูล)
+    - [ตัวจัดการข้อมูลแบบตอบโต้](#ตัวจัดการข้อมูลแบบตอบโต้)
+    - [รายละเอียดเพิ่มเติมเกี่ยวกับตัวจัดการข้อมูล](#รายละเอียดเพิ่มเติมเกี่ยวกับตัวจัดการข้อมูล)
+  - [ตัวจัดการเส้นทาง](#ตัวจัดการเส้นทาง)
+    - [รายละเอียดเพิ่มเติมเกี่ยวกับตัวจัดการเส้นทาง](#more-details-about-route-management)
+  - [ตัวจัดการ Dependency](#dependency-management)
+    - [รายละเอียดเพิ่มเติมเกี่ยวกับตัวจัดการ dependency](#more-details-about-dependency-management)
+- [ยูทิล (Utils)](#utils)
+  - [การทำให้เป็นสากล](#internationalization)
+    - [แปลภาษา](#translations)
+      - [การแปลภาษา](#using-translations)
+    - [ท้องถิ่น](#locales)
+      - [การเปลี่ยนข้อมูลท้องถิ่น](#change-locale)
+      - [ข้อมูลท้องถิ่นจากเครื่อง](#system-locale)
+  - [เปลี่ยนธีม](#change-theme)
   - [GetConnect](#getconnect)
-    - [Default configuration](#default-configuration)
-    - [Custom configuration](#custom-configuration)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Priority](#priority)
-    - [Redirect](#redirect)
+    - [การตั้งค่าแบบค่าเริ่มต้น](#default-configuration)
+    - [การตั้งค่าแบบกำหนดเอง](#custom-configuration)
+  - [GetPage มิดเดิลแวร์](#getpage-middleware)
+    - [ลำดับความสำคัญ](#priority)
+    - [redirect](#redirect)
     - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [Other Advanced APIs](#other-advanced-apis)
-    - [Optional Global Settings and Manual configurations](#optional-global-settings-and-manual-configurations)
-    - [Local State Widgets](#local-state-widgets)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Useful tips](#useful-tips)
+    - [onBindingsStart](#onbindingsstart)
+    - [onPageBuildStart](#onpagebuildstart)
+    - [onPageBuilt](#onpagebuilt)
+    - [onPageDispose](#onpagedispose)
+  - [ฟีเจอร์ขั้นสูงอื่น ๆ](#other-advanced-apis)
+    - [การตั้งค่าทั่วโลกแบบทางเลือกและการกำหนดค่าด้วยตนเอง](#optional-global-settings-and-manual-configurations)
+    - [วิดเจ็ตสถานะภายใน)](#local-state-widgets)
+      - [ตัวสร้างค่า](#valuebuilder)
+      - [ค่า Obx](#obxvalue)
+  - [เคล็ดลับที่เป็นประโยชน์](#useful-tips)
     - [GetView](#getview)
     - [GetResponsiveView](#getresponsiveview)
-      - [How to use it](#how-to-use-it)
+      - [วิธีใช้](#how-to-use-it)
     - [GetWidget](#getwidget)
     - [GetxService](#getxservice)
-- [Breaking changes from 2.0](#breaking-changes-from-20)
-- [Why Getx?](#why-getx)
-- [Community](#community)
-  - [Community channels](#community-channels)
-  - [How to contribute](#how-to-contribute)
-  - [Articles and videos](#articles-and-videos)
+- [การเปลี่ยนแปลงที่สำคัญจากเวอร์ชัน 2.0](#breaking-changes-from-20)
+- [ทำไมต้องGetX?](#why-getx)
+- [ชุมชน](#community)
+  - [ช่องทางชุมชนต่างๆ](#community-channels)
+  - [วิธีการมีส่วนร่วม](#how-to-contribute)
+  - [บทความและวิดีโอ](#articles-and-videos)
 
-# About Get
+# เกี่ยวกับ Get
 
-- GetX is an extra-light and powerful solution for Flutter. It combines high-performance state management, intelligent dependency injection, and route management quickly and practically.
+- GetX คือ การแก้ไขปัญหาที่มีประสิทธิภาพ และเบา (ไลบรารีมีขนาดเล็ก) สำหรับ Flutter ผสมผสานตัวจัดการข้อมูล (State Management) ที่มีประสิทธิภาพ, การแทรก dependency ที่ฉลาด และตัวจัดการเส้นทางอย่างรวดเร็ว และใช้งานได้จริง
 
-- GetX has 3 basic principles. This means that these are the priority for all resources in the library: **PRODUCTIVITY, PERFORMANCE AND ORGANIZATION.**
+- GetX มีหลักการพื้นฐาน 3 ประการ หมายถึง สิ่งเหล่านี้เป็นสิ่งสำคัญอันดับแรกสำหรับทรัพยากรทั้งหมดในไลบรารี: **ผลผลิต, ประสิทธิภาพ และการจัดระเบียบ**
 
-  - **PERFORMANCE:** GetX is focused on performance and minimum consumption of resources. GetX does not use Streams or ChangeNotifier.
+  - **ประสิทธิภาพ:** GetX มุ่งเน้นไปที่ประสิทธิภาพและการใช้ทรัพยากรน้อยที่สุด GetX ไม่ใช้ Streams หรือ ChangeNotifier
 
-  - **PRODUCTIVITY:** GetX uses an easy and pleasant syntax. No matter what you want to do, there is always an easier way with GetX. It will save hours of development and will provide the maximum performance your application can deliver.
+  - **ผลผลิต:** GetX ใช้ไวยากรณ์ที่ง่ายและสะดวก ไม่ว่าคุณต้องการทำอะไรก็ตาม GetX จะมีวิธีที่ง่ายกว่าเสมอ มันจะช่วยประหยัดเวลาในการพัฒนาหลายชั่วโมงและจะมอบประสิทธิภาพสูงสุดที่แอปพลิเคชันของคุณสามารถส่งมอบได้
 
-    Generally, the developer should be concerned with removing controllers from memory. With GetX this is not necessary because resources are removed from memory when they are not used by default. If you want to keep it in memory, you must explicitly declare "permanent: true" in your dependency. That way, in addition to saving time, you are less at risk of having unnecessary dependencies on memory. Dependency loading is also lazy by default.
+    โดยทั่วไป ผู้พัฒนาควรคำนึงถึงการนำ ตัวควบคุม(controller) ออกจากหน่วยความจำ ด้วย GetX สิ่งนี้ไม่จำเป็น เนื่องจากทรัพยากรจะถูกลบออกจากหน่วยความจำเมื่อไม่ได้ใช้งานตามค่าเริ่มต้น หากคุณต้องการเก็บไว้ในหน่วยความจำ คุณต้องประกาศ "permanent: true" อย่างชัดเจนในการอ้างอิงของคุณ ด้วยวิธีนี้ นอกเหนือจากการประหยัดเวลาแล้ว คุณยังเสี่ยงน้อยลงที่จะมีการอ้างอิงที่ไม่จำเป็นในหน่วยความจำ การโหลดการอ้างอิงยังเป็นแบบ Lazy ตามค่าเริ่มต้น
 
-  - **ORGANIZATION:** GetX allows the total decoupling of the View, presentation logic, business logic, dependency injection, and navigation. You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+  - **การจัดระเบียบ:** GetX อนุญาตให้แยก View, ตรรกทางการนำเสนอ, ตรรกเชิงธุระกิจ, dependency injection และการนำทางออกจากกันโดยสิ้นเชิง คุณไม่จำเป็นต้องใช้ Context เพื่อนำทางระหว่างเส้นทาง ดังนั้น คุณจึงไม่ขึ้นอยู่กับโครงสร้าง Widget (การจำลอง) สำหรับสิ่งนี้ คุณไม่จำเป็นต้องใช้ Context เพื่อเข้าถึงตัวควบคุม/บล็อกของคุณผ่าน inheritedWidget ดังนั้น คุณจึงแยกตรรกะการนำเสนอและตรรกะทางธุรกิจของคุณออกจากเลเยอร์การมองเห็นของคุณอย่างสมบูรณ์ คุณไม่จำเป็นต้อง inject คลาสตัวควบคุม/โมเดล/บล็อกของคุณลงในโครงสร้าง Widget ของคุณผ่าน `MultiProvider`s สำหรับสิ่งนี้ GetX ใช้คุณสมบัติ dependency injection ของตัวเอง ทำให้ DI แยกออกจากมุมมองอย่างสมบูรณ์
 
-    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
-    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
-    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
+    ด้วย GetX ณจะทราบว่าฟีเจอร์ต่างๆ ของแอปพลิเคชันของคุณอยู่ที่ไหน ส่งผลให้โค้ดมีความสะอาดตั้งแต่เริ่มต้น นอกจากนี้ ยังช่วยให้การแชร์โมดูลทำได้ง่ายขึ้น ซึ่งก่อนหน้านี้ถือว่าเป็นเรื่องที่คิดไม่ถึงใน Flutter แต่ GetX ทำให้เป็นไปได้อย่างสมบูรณ์
+    BLoC เป็นจุดเริ่มต้นสำหรับการจัดระเบียบโค้ดใน Flutter โดยแยกตรรกะทางธุรกิจออกจากการแสดงผล GetX ถือเป็นวิวัฒนาการตามธรรมชาติของแนวคิดนี้ ไม่เพียงแต่แยกตรรกะทางธุรกิจเท่านั้น แต่ยังแยกตรรกะการนำเสนอด้วย นอกจากนี้ dependency injection และการจัดการเส้นทาง (route) ยังแยกออกจากกันอย่างอิสระ และเลเยอร์ข้อมูลก็แยกออกจากส่วนอื่นๆ ทั้งหมด ด้วย GetX คุณจะทราบว่าทุกอย่างอยู่ที่ไหน และทั้งหมดนี้ทำได้ง่ายกว่าการสร้างโปรแกรม "Hello World" เสียอีก
+    GetX เป็นวิธีที่ง่ายที่สุด ปฏิบัติได้จริง และปรับขยายได้ง่ายที่สุดในการสร้างแอปพลิเคชันประสิทธิภาพสูงด้วย Flutter SDK GetX มีระบบนิเวศที่หลากหลายรอบๆ ตัวมันเอง ซึ่งทำงานร่วมกันได้อย่างสมบูรณ์ เหมาะสำหรับผู้เริ่มต้นใช้งาน และมีประสิทธิภาพสำหรับผู้เชี่ยวชาญ นอกจากนี้ GetX ยังมีความปลอดภัย เสถียรภาพ และทันสมัย รวมถึงมี API มากมายที่สร้างไว้ภายใน ซึ่งไม่มีอยู่ใน Flutter SDK เริ่มต้น
 
-- GetX is not bloated. It has a multitude of features that allow you to start programming without worrying about anything, but each of these features are in separate containers and are only started after use. If you only use State Management, only State Management will be compiled. If you only use routes, nothing from the state management will be compiled.
+- GetX ไม่ใช่ไลบรารีที่ใหญ่เกินไป แม้จะมีฟีเจอร์มากมายที่ช่วยให้คุณเริ่มเขียนโปรแกรมได้โดยไม่ต้องกังวล แต่ละฟีเจอร์จะอยู่ในคอนเทนเนอร์แยกต่างหากและจะเริ่มทำงานเฉพาะหลังจากใช้งานเท่านั้น ตัวอย่างเช่น หากคุณใช้แค่ตัวจัดการข้อมูล (State Management) เฉพาะส่วนของ ตัวจัดการข้อมูล (State Management) เท่านั้นที่จะถูกคอมไพล์ ส่วนฟีเจอร์อื่น ๆ จะไม่ถูกคอมไพล์
 
-- GetX has a huge ecosystem, a large community, a large number of collaborators, and will be maintained as long as the Flutter exists. GetX too is capable of running with the same code on Android, iOS, Web, Mac, Linux, Windows, and on your server.
-  **It is possible to fully reuse your code made on the frontend on your backend with [Get Server](https://github.com/jonataslaw/get_server)**.
+- GetX มี ecosystem ใหญ่ ชุมชนผู้ใช้ขนาดใหญ่ จำนวนผู้ร่วมพัฒนาจำนวนมาก และจะได้รับการดูแลต่อไปตราบเท่าที่ Flutter ยังคงอยู่ นอกจากนี้ GetX ยังสามารถรันโค้ดเดียวกันบน Android, iOS, Web, Mac, Linux, Windows และบนเซิร์ฟเวอร์ของคุณได้อีกด้วย
+  **คุณสามารถนำโค้ดที่เขียนไว้บน Frontend ไปใช้บน Backend ได้อย่างเต็มที่ด้วย [Get Server](https://github.com/jonataslaw/get_server)**.
 
-**In addition, the entire development process can be completely automated, both on the server and on the front end with [Get CLI](https://github.com/jonataslaw/get_cli)**.
+**นอกจากนี้ กระบวนการพัฒนาทั้งหมดสามารถ automat ได้อย่างสมบูรณ์ ทั้งบนเซิร์ฟเวอร์และบน Frontend ด้วย [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-**In addition, to further increase your productivity, we have the
-[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) and the [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**นอกจากนี้ เพื่อเพิ่มผลผลิตของคุณให้มากขึ้น เรามี
+[extension to VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) และ [extension to Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
-# Installing
+# การติดตั้ง
 
-Add Get to your pubspec.yaml file:
+เพิ่ม Get ไปที่ไฟล์ pubspec.yaml:
 
 ```yaml
 dependencies:
   get:
 ```
 
-Import get in files that it will be used:
+เพิ่ม get โดยการอิมพอร์ตในไฟล์ที่ต้องการใช้:
 
 ```dart
 import 'package:get/get.dart';
 ```
 
-# Counter App with GetX
+# สร้างแอปตัวนับด้วย GetX
 
-The "counter" project created by default on new project on Flutter has over 100 lines (with comments). To show the power of Get, I will demonstrate how to make a "counter" changing the state with each click, switching between pages and sharing the state between screens, all in an organized way, separating the business logic from the view, in ONLY 26 LINES CODE INCLUDING COMMENTS.
+counter โปรเจ็กต์ ที่สร้างขึ้นตามค่าเริ่มต้นในโปรเจ็กต์ใหม่บน Flutter มีโค้ดเกินกว่า 100 บรรทัด (รวมคอมเมนต์) เพื่อแสดงพลังของ GetX ผมจะสาธิตวิธีการสร้าง "counter" ที่เปลี่ยนสถานะทุกครั้งที่คลิก สลับหน้าจอ และแชร์สถานะระหว่างหน้าจอทั้งหมดนี้ในรูปแบบที่จัดระเบียบ แยกตรรกะทางธุรกิจออกจากมุมมอง ใช้ง่าย "เพียง 26 บรรทัด รวมคอมเมนต์"
 
-- Step 1:
-  Add "Get" before your MaterialApp, turning it into GetMaterialApp
+- ขั้นตอนที่ 1:
+  เพิ่ม "Get" ก่อนหน้า MaterialApp, จะได้ GetMaterialApp
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Note: this does not modify the MaterialApp of the Flutter, GetMaterialApp is not a modified MaterialApp, it is just a pre-configured Widget, which has the default MaterialApp as a child. You can configure this manually, but it is definitely not necessary. GetMaterialApp will create routes, inject them, inject translations, inject everything you need for route navigation. If you use Get only for state management or dependency management, it is not necessary to use GetMaterialApp. GetMaterialApp is necessary for routes, snackbars, internationalization, bottomSheets, dialogs, and high-level apis related to routes and absence of context.
-- Note²: This step is only necessary if you gonna use route management (`Get.to()`, `Get.back()` and so on). If you not gonna use it then it is not necessary to do step 1
+- หมายเหตุ: สิ่งนี้ไม่ได้แก้ไข MaterialApp ของ Flutter, GetMaterialApp ไม่ใช่ MaterialApp ที่ได้รับการแก้ไข มันเป็นเพียงวิดเจ็ตที่กำหนดค่าไว้ล่วงหน้าซึ่งมี MaterialApp เริ่มต้นเป็น child คุณสามารถกำหนดค่านี้ได้ด้วยตนเอง แต่ไม่จำเป็นอย่างแน่นอน GetMaterialApp จะสร้างเส้นทาง แทรกเส้นทาง แทรกการแปล แทรกทุกสิ่งที่คุณต้องการสำหรับการนำทางเส้นทาง หากคุณใช้ Get เพื่อการจัดการสถานะหรือการจัดการ dependency เท่านั้น คุณไม่จำเป็นต้องใช้ GetMaterialApp GetMaterialApp จำเป็นสำหรับเส้นทาง (routes), สแน็คบาร์ (snackbars), การเปลี่ยนข้อมูลท้องถิ่น (internationalization), BottomSheets, ไดอะล็อก (dialogs) และ API ระดับสูง (high-level apis) ที่เกี่ยวข้องกับเส้นทางและไม่มีบริบท
+- หมายเหตุ²: ขั้นตอนนี้จำเป็นเฉพาะในกรณีที่คุณใช้การจัดการเส้นทาง (`Get.to()`, `Get.back()` และอื่นๆ) หากคุณจะไม่ใช้ก็ไม่จำเป็นต้องทำขั้นตอนที่ 1
 
-- Step 2:
-  Create your business logic class and place all variables, methods and controllers inside it.
-  You can make any variable observable using a simple ".obs".
+- ขั้นตอนที่ 2:
+  สร้างคลาสตรรกะทางธุรกิจของคุณและวางตัวแปร วิธีการ และตัวควบคุมทั้งหมดไว้ข้างใน
+  คุณสามารถทำให้ตัวแปรใดๆ สังเกตได้โดยใช้ ".obs" แบบง่ายๆ
 
 ```dart
 class Controller extends GetxController{
@@ -157,8 +154,8 @@ class Controller extends GetxController{
 }
 ```
 
-- Step 3:
-  Create your View, use StatelessWidget and save some RAM, with Get you may no longer need to use StatefulWidget.
+- ขั้นตอนที่ 3:
+  สร้างมุมมองของคุณ ใช้ StatelessWidget และประหยัด RAM บางส่วน ด้วย Get คุณอาจไม่จำเป็นต้องใช้ StatefulWidget อีกต่อไป
 
 ```dart
 class Home extends StatelessWidget {
@@ -166,14 +163,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
 
-    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    // สร้างอินสแตนซ์ชั้นเรียนของคุณโดยใช้ Get.put() เพื่อให้พร้อมใช้งานสำหรับเส้นทาง "ลูก" ทั้งหมดที่นั่น
     final Controller c = Get.put(Controller());
 
     return Scaffold(
-      // Use Obx(()=> to update Text() whenever count is changed.
+      // ใช้ Obx(()=> เพื่ออัปเดต Text() ทุกครั้งที่มีการเปลี่ยนแปลงการนับ
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
-      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+      // แทนที่ Navigator.push 8 บรรทัดด้วย Get.to() แบบธรรมดา คุณไม่จำเป็นต้องมีบริบท
       body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
@@ -182,74 +179,74 @@ class Home extends StatelessWidget {
 }
 
 class Other extends StatelessWidget {
-  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
+  // คุณสามารถขอให้ Get ค้นหาคอนโทรลเลอร์ที่เพจอื่นใช้อยู่และเปลี่ยนเส้นทางคุณไปยังคอนโทรลเลอร์นั้น
   final Controller c = Get.find();
 
   @override
   Widget build(context){
-     // Access the updated count variable
+     // เข้าถึงตัวแปรการนับที่อัปเดต
      return Scaffold(body: Center(child: Text("${c.count}")));
   }
 }
 ```
 
-Result:
+ผลลัพธ์:
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
-This is a simple project but it already makes clear how powerful Get is. As your project grows, this difference will become more significant.
+นี่เป็นโปรเจ็กต์ที่เรียบง่ายแต่ได้แสดงให้เห็นชัดเจนว่า Get มีประสิทธิภาพเพียงใด เมื่อโครงการของคุณเติบโตขึ้น ความแตกต่างนี้จะมีความสำคัญมากขึ้น
 
-Get was designed to work with teams, but it makes the job of an individual developer simple.
+Get ได้รับการออกแบบมาเพื่อทำงานร่วมกับทีม แต่ทำให้งานของนักพัฒนารายบุคคลเป็นเรื่องง่าย
 
-Improve your deadlines, deliver everything on time without losing performance. Get is not for everyone, but if you identified with that phrase, Get is for you!
+ปรับปรุงกำหนดเวลาของคุณ ส่งมอบทุกอย่างตรงเวลาโดยไม่สูญเสียประสิทธิภาพ Get ไม่ใช่สำหรับทุกคน แต่ถ้าคุณระบุด้วยวลีนั้น Get ก็เหมาะกับคุณ!
 
-# The Three pillars
+# เสาหลัก 3 ประการ
 
-## State management
+## ตัวจัดการข้อมูล
 
-Get has two different state managers: the simple state manager (we'll call it GetBuilder) and the reactive state manager (GetX/Obx)
+Get มีตัวจัดการข้อมูลที่แตกต่างกันสองแบบ: ตัวจัดการข้อมูลแบบธรรมดา (เราจะเรียกว่า GetBuilder) และตัวจัดการข้อมูลแบบโต้ตอบ (GetX/Obx)
 
-### Reactive State Manager
+### ตัวจัดการข้อมูลแบบตอบโต้
 
-Reactive programming can alienate many people because it is said to be complicated. GetX turns reactive programming into something quite simple:
+การเขียนโปรแกรมเชิงโต้ตอบอาจทำให้คนจำนวนมากแปลกแยกเพราะว่ามีความซับซ้อน GetX เปลี่ยนการเขียนโปรแกรมเชิงโต้ตอบให้เป็นสิ่งที่ค่อนข้างง่าย:
 
-- You won't need to create StreamControllers.
-- You won't need to create a StreamBuilder for each variable
-- You will not need to create a class for each state.
-- You will not need to create a get for an initial value.
-- You will not need to use code generators
+- คุณไม่จำเป็นต้องสร้าง StreamControllers
+- คุณไม่จำเป็นต้องสร้าง StreamBuilder สำหรับแต่ละตัวแปร
+- คุณไม่จำเป็นต้องสร้างคลาสสำหรับแต่ละ state
+- คุณไม่จำเป็นต้องสร้าง ตัวรับ ให้เป็นค่าเริ่มต้น
+- คุณจะไม่จำเป็นต้องใช้ตัวสร้างโค้ด
 
-Reactive programming with Get is as easy as using setState.
+การเขียนโปรแกรมแบบโต้ตอบด้วย Get นั้นง่ายเหมือนกับการใช้ setState
 
-Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
+ลองจินตนาการว่าคุณมีชื่อตัวแปร และต้องการให้ทุกครั้งที่คุณเปลี่ยน วิดเจ็ตทั้งหมดที่ใช้ตัวแปรนั้นจะถูกเปลี่ยนโดยอัตโนมัติ
 
-This is your count variable:
+นี่คือตัวแปรการนับของคุณ:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-To make it observable, you just need to add ".obs" to the end of it:
+ต้องการทำ observable คุณเพียงแค่ต้องเพิ่ม ".obs" ต่อท้าย:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-And in the UI, when you want to show that value and update the screen whenever the values changes, simply do this:
+และใน UI เมื่อคุณต้องการแสดงค่านั้นและอัปเดตหน้าจอทุกครั้งที่ค่าเปลี่ยนแปลง เพียงทำดังนี้:
 
 ```dart
 Obx(() => Text("${controller.name}"));
 ```
 
-That's all. It's _that_ simple.
+นั่นคือทั้งหมดที่ มัน _ง่าย_ ขนาดนั้น
 
-### More details about state management
+### รายละเอียดเพิ่มเติมเกี่ยวกับตัวจัดการข้อมูล
 
-**See an more in-depth explanation of state management [here](./documentation/en_US/state_management.md). There you will see more examples and also the difference between the simple state manager and the reactive state manager**
+**ดูคำอธิบายเชิงลึกเพิ่มเติมเกี่ยวกับตัวจัดการข้อมูล [ที่นี้](./documentation/en_US/state_management.md). ณจะเห็นตัวอย่างเพิ่มเติมและความแตกต่างระหว่างตัวจัดการข้อมูลแบบธรรมดาและตัวจัดการข้อมูลแบบโต้ตอบ (Reactive)**
 
-You will get a good idea of GetX power.
+คุณจะได้รับแนวคิดดีๆ เกี่ยวกับพลังของ GetX
 
-## Route management
+## ตัวจัดการเส้นทาง
 
 If you are going to use routes/snackbars/dialogs/bottomsheets without context, GetX is excellent for you too, just see it:
 
@@ -940,13 +937,14 @@ user.update((value){
 
 print( user );
 ```
+
 ## StateMixin
 
 Another way to handle your `UI` state is use the `StateMixin<T>` .
 To implement it, use the `with` to add the `StateMixin<T>`
 to your controller which allows a T model.
 
-``` dart
+```dart
 class Controller extends GetController with StateMixin<User>{}
 ```
 
@@ -959,7 +957,7 @@ change(data, status: RxStatus.success());
 
 RxStatus allow these status:
 
-``` dart
+```dart
 RxStatus.loading();
 RxStatus.success();
 RxStatus.empty();
@@ -976,7 +974,7 @@ class OtherClass extends GetView<Controller> {
 
       body: controller.obx(
         (state)=>Text(state.name),
-        
+
         // here you can put your custom loading indicator, but
         // by default would be Center(child:CircularProgressIndicator())
         onLoading: CustomLoadingIndicator(),
@@ -1103,7 +1101,6 @@ The only way to actually delete a `GetxService`, is with `Get.reset()` which is 
 "Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
 lifetime of your app, use `GetxService`.
 
-
 ### Tests
 
 You can test your controllers like any other class, including their lifecycles:
@@ -1158,6 +1155,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 #### Tips
 
 ##### Mockito or mocktail
+
 If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
 
 ```dart
@@ -1165,11 +1163,12 @@ class NotificationServiceMock extends GetxService with Mock implements Notificat
 ```
 
 ##### Using Get.reset()
+
 If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
 
-##### Get.testMode 
-if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
+##### Get.testMode
 
+if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
 
 # Breaking changes from 2.0
 
