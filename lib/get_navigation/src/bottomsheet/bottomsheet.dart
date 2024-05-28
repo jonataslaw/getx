@@ -36,6 +36,16 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Clip? clipBehavior;
   final Color? modalBarrierColor;
   final bool isDismissible;
+
+  /// A parameter to control the visibility of a drag handle in the bottom sheet.
+  ///
+  /// When `showDragHandle` is set to `true`, a drag handle will be displayed at the top
+  /// of the bottom sheet, allowing users to easily identify and interact with the sheet
+  /// by dragging it. This is particularly useful for enhancing the user experience in
+  /// applications where intuitive UI interactions are important.
+  ///
+  /// When `showDragHandle` is set to `false`, the drag handle will be hidden. By default,
+  /// the drag handle is hidden to maintain backward compatibility with existing implementations.
   final bool? showDragHandle;
   final bool enableDrag;
   // final String name;
