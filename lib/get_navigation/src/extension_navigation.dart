@@ -144,7 +144,7 @@ extension ExtensionDialog on GetInterface {
 
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
-    String title = "Alert",
+   String? title = "Alert",
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
@@ -240,7 +240,7 @@ extension ExtensionDialog on GetInterface {
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+      title: title != null ? Text(title, textAlign: TextAlign.center, style: titleStyle) : null,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
