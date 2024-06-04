@@ -60,6 +60,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/SecondScreen');
   });
 
   testWidgets("Get.off removes current route", (tester) async {
@@ -72,6 +73,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/SecondScreen');
   });
 
   testWidgets("Get.offNamed navigates to provided named route", (tester) async {
@@ -91,6 +93,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets("Get.offNamed removes current route", (tester) async {
@@ -112,6 +115,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets("Get.offNamed removes only current route", (tester) async {
@@ -134,6 +138,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/first');
     await tester.pumpAndSettle();
   });
 
@@ -146,6 +151,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/SecondScreen');
   });
 
   testWidgets("Get.offAll removes all previous routes", (tester) async {
@@ -166,6 +172,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/ThirdScreen');
   });
 
   testWidgets("Get.offAllNamed navigates to provided named route",
@@ -186,6 +193,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets("Get.offAllNamed removes all previous routes", (tester) async {
@@ -214,6 +222,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/third');
   });
 
   testWidgets("Get.offAndToNamed navigates to provided route", (tester) async {
@@ -231,6 +240,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets("Get.offAndToNamed removes previous route", (tester) async {
@@ -251,6 +261,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets("Get.offUntil navigates to provided route", (tester) async {
@@ -266,6 +277,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ThirdScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/ThirdScreen');
   });
 
   testWidgets(
@@ -285,6 +297,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/FirstScreen');
   });
 
   testWidgets(
@@ -304,6 +317,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/FirstScreen');
   });
 
   testWidgets("Get.offNamedUntil navigates to provided route", (tester) async {
@@ -321,6 +335,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/second');
   });
 
   testWidgets(
@@ -342,6 +357,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SecondScreen), findsNothing);
+    expect(Get.rawRoute?.settings.name, '/third');
   });
 
   testWidgets(
@@ -365,6 +381,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(FirstScreen), findsOneWidget);
+    expect(Get.rawRoute?.settings.name, '/first');
   });
 
   testWidgets("Get.back navigates back", (tester) async {
