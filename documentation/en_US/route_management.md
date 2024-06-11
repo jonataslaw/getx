@@ -159,15 +159,17 @@ void main() {
   runApp(
     GetMaterialApp(
       unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
-      initialRoute: '/',
+      initialRoute: '/home',
       getPages: [
-        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/home', page: () => MyHomePage()),
         GetPage(name: '/second', page: () => Second()),
       ],
     )
   );
 }
 ```
+
+Note that: To make the `unknownRoute` work, your `initialRoute` can be anything but "/", otherwise Get will navigate to the initialRoute when it finds out a non-defined route. 
 
 ### Send data to named Routes
 
