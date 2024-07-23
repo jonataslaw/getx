@@ -5,12 +5,12 @@ extension ContextExt on BuildContext {
   Size get mediaQuerySize => MediaQuery.sizeOf(this);
 
   /// The same of [MediaQuery.of(context).size.height]
-  /// Note: updates when you rezise your screen (like on a browser or
+  /// Note: updates when you resize your screen (like on a browser or
   /// desktop window)
   double get height => mediaQuerySize.height;
 
   /// The same of [MediaQuery.of(context).size.width]
-  /// Note: updates when you rezise your screen (like on a browser or
+  /// Note: updates when you resize your screen (like on a browser or
   /// desktop window)
   double get width => mediaQuerySize.width;
 
@@ -90,7 +90,7 @@ extension ContextExt on BuildContext {
   double get devicePixelRatio => MediaQuery.devicePixelRatioOf(this);
 
   /// similar to [MediaQuery.textScaleFactorOf(context)]
-  double get textScaleFactor => MediaQuery.textScaleFactorOf(this);
+  TextScaler get textScaleFactor => MediaQuery.textScalerOf(this);
 
   /// get the shortestSide from screen
   double get mediaQueryShortestSide => mediaQuerySize.shortestSide;

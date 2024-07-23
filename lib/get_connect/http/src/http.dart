@@ -132,20 +132,20 @@ class GetHttpClient {
       });
       var formData = parts.join('&');
       bodyBytes = utf8.encode(formData);
-      _setContentLenght(headers, bodyBytes.length);
+      _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType;
     } else if (body is Map || body is List) {
       var jsonString = json.encode(body);
       bodyBytes = utf8.encode(jsonString);
-      _setContentLenght(headers, bodyBytes.length);
+      _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType ?? defaultContentType;
     } else if (body is String) {
       bodyBytes = utf8.encode(body);
-      _setContentLenght(headers, bodyBytes.length);
+      _setContentLength(headers, bodyBytes.length);
 
       headers['content-type'] = contentType ?? defaultContentType;
     } else if (body == null) {
-      _setContentLenght(headers, 0);
+      _setContentLength(headers, 0);
       headers['content-type'] = contentType ?? defaultContentType;
     } else {
       if (!errorSafety) {
@@ -170,7 +170,7 @@ class GetHttpClient {
         responseInterceptor: responseInterceptor);
   }
 
-  void _setContentLenght(Map<String, String> headers, int contentLength) {
+  void _setContentLength(Map<String, String> headers, int contentLength) {
     if (sendContentLength) {
       headers['content-length'] = '$contentLength';
     }

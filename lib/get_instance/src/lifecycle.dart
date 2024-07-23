@@ -39,7 +39,7 @@ mixin GetLifeCycleMixin {
   bool get initialized => _initialized;
 
   /// Called at the exact moment the widget is allocated in memory.
-  /// It uses an internal "callable" type, to avoid any @overrides in subclases.
+  /// It uses an internal "callable" type, to avoid any @overrides in subclasses.
   /// This method should be internal and is required to define the
   /// lifetime cycle of the subclass.
   // @protected

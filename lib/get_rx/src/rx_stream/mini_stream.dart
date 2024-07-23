@@ -1,4 +1,4 @@
-part of rx_stream;
+part of 'rx_stream.dart';
 
 class Node<T> {
   T? data;

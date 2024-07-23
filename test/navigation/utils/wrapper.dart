@@ -8,12 +8,12 @@ class Wrapper extends StatelessWidget {
   final Transition? defaultTransition;
 
   const Wrapper({
-    Key? key,
+    super.key,
     this.child,
     this.namedRoutes,
     this.initialRoute,
     this.defaultTransition,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +39,12 @@ class WrapperNamed extends StatelessWidget {
   final Transition? defaultTransition;
 
   const WrapperNamed({
-    Key? key,
+    super.key,
     this.child,
     this.namedRoutes,
     this.initialRoute,
     this.defaultTransition,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

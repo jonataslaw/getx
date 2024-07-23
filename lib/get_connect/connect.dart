@@ -278,7 +278,7 @@ class GetConnect extends GetConnectInterface {
     return baseUrl == null ? url : baseUrl! + url;
   }
 
-  /// query allow made GraphQL raw querys
+  /// query allow made GraphQL raw queries
   /// final connect = GetConnect();
   /// connect.baseUrl = 'https://countries.trevorblades.com/';
   /// final response = await connect.query(
@@ -316,17 +316,20 @@ class GetConnect extends GetConnectInterface {
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
-                      code: e['extensions']['code']?.toString(),
-                      message: e['message']?.toString(),
+                      code: (e['extensions'] != null
+                              ? e['extensions']['code'] ?? ''
+                              : '')
+                          .toString(),
+                      message: (e['message'] ?? '').toString(),
                     ))
                 .toList());
       }
       return GraphQLResponse<T>.fromResponse(res);
-    } on Exception catch (_) {
+    } on Exception catch (err) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
           code: null,
-          message: _.toString(),
+          message: err.toString(),
         )
       ]);
     }
@@ -357,11 +360,11 @@ class GetConnect extends GetConnectInterface {
                 .toList());
       }
       return GraphQLResponse<T>.fromResponse(res);
-    } on Exception catch (_) {
+    } on Exception catch (err) {
       return GraphQLResponse<T>(graphQLErrors: [
         GraphQLError(
           code: null,
-          message: _.toString(),
+          message: err.toString(),
         )
       ]);
     }

@@ -6,9 +6,10 @@ mixin Equality {
   List get props;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         runtimeType == other.runtimeType &&
+            other is Equality &&
             const DeepCollectionEquality().equals(props, other.props);
   }
 
@@ -272,9 +273,7 @@ class IterableEquality<E> implements IEquality<Iterable<E>> {
 /// and the elements of one set can be paired with the elements
 /// of the other set, so that each pair are equal.
 class SetEquality<E> extends _UnorderedEquality<E, Set<E>> {
-  const SetEquality(
-      [IEquality<E> elementEquality = const DefaultEquality<Never>()])
-      : super(elementEquality);
+  const SetEquality([super.elementEquality = const DefaultEquality<Never>()]);
 
   @override
   bool isValidKey(Object? o) => o is Set<E>;
@@ -331,8 +330,7 @@ abstract class _UnorderedEquality<E, T extends Iterable<E>>
 /// of the other iterable, so that each pair are equal.
 class UnorderedIterableEquality<E> extends _UnorderedEquality<E, Iterable<E>> {
   const UnorderedIterableEquality(
-      [IEquality<E> elementEquality = const DefaultEquality<Never>()])
-      : super(elementEquality);
+      [super.elementEquality = const DefaultEquality<Never>()]);
 
   @override
   bool isValidKey(Object? o) => o is Iterable<E>;

@@ -290,7 +290,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final res = currentHistory!.currentTreeBranch
         .where((r) => r.participatesInRootNavigator != null);
     if (res.isEmpty) {
-      //default behavoir, all routes participate in root navigator
+      //default behavior, all routes participate in root navigator
       return _activePages.map((e) => e.route!);
     } else {
       //user specified at least one participatesInRootNavigator
@@ -603,7 +603,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   /// Removes routes according to [PopMode]
-  /// until it reaches the specifc [fullRoute],
+  /// until it reaches the specific [fullRoute],
   /// DOES NOT remove the [fullRoute]
   @override
   Future<void> popModeUntil(
@@ -612,9 +612,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }) async {
     // remove history or page entries until you meet route
     var iterator = currentConfiguration;
-    while (_canPop(popMode) &&
-        iterator != null &&
-        iterator.pageSettings?.name != fullRoute) {
+    while (_canPop(popMode) && iterator != null) {
+      //the next line causes wasm compile error if included in the while loop
+      //https://github.com/flutter/flutter/issues/140110
+      if (iterator.pageSettings?.name == fullRoute) {
+        break;
+      }
       await _pop(popMode, null);
       // replace iterator
       iterator = currentConfiguration;
@@ -666,7 +669,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   String _cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
 
-    /// uncommonent for URL styling.
+    /// uncomment for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
       name = '/$name';

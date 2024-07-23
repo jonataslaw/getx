@@ -64,10 +64,10 @@ class GetUtils {
 
   /// In dart2js (in flutter v1.17) a var by default is undefined.
   /// *Use this only if you are in version <- 1.17*.
-  /// So we assure the null type in json convertions to avoid the
+  /// So we assure the null type in json conversions to avoid the
   /// "value":value==null?null:value; someVar.nil will force the null type
   /// if the var is null or undefined.
-  /// `nil` taken from ObjC just to have a shorter sintax.
+  /// `nil` taken from ObjC just to have a shorter syntax.
   static dynamic nil(dynamic s) => s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
@@ -103,7 +103,7 @@ class GetUtils {
   static bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
 
   /// Checks if string contains at least one Capital Letter
-  static bool hasCapitalletter(String s) => hasMatch(s, r'[A-Z]');
+  static bool hasCapitalLetter(String s) => hasMatch(s, r'[A-Z]');
 
   /// Checks if string is boolean.
   static bool isBool(String value) {
@@ -253,8 +253,8 @@ class GetUtils {
   static bool isHexadecimal(String s) =>
       hasMatch(s, r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
 
-  /// Checks if string is Palindrom.
-  static bool isPalindrom(String string) {
+  /// Checks if string is Palindrome.
+  static bool isPalindrome(String string) {
     final cleanString = string
         .toLowerCase()
         .replaceAll(RegExp(r"\s+"), '')
@@ -397,25 +397,25 @@ class GetUtils {
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
 
-  //Check if num is a cnpj
+  // Checks if num is a cnpj
   static bool isCnpj(String cnpj) {
-    // Obter somente os números do CNPJ
+    // Get only the numbers from the CNPJ
     final numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
-    // Testar se o CNPJ possui 14 dígitos
+    // Test if the CNPJ has 14 digits
     if (numbers.length != 14) {
       return false;
     }
 
-    // Testar se todos os dígitos do CNPJ são iguais
+    // Test if all digits of the CNPJ are the same
     if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) {
       return false;
     }
 
-    // Dividir dígitos
+    // Divide digits
     final digits = numbers.split('').map(int.parse).toList();
 
-    // Calcular o primeiro dígito verificador
+    // Calculate the first check digit
     var calcDv1 = 0;
     var j = 0;
     for (var i in Iterable<int>.generate(12, (i) => i < 4 ? 5 - i : 13 - i)) {
@@ -424,12 +424,12 @@ class GetUtils {
     calcDv1 %= 11;
     final dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
 
-    // Testar o primeiro dígito verificado
+    // Test the first check digit
     if (digits[12] != dv1) {
       return false;
     }
 
-    // Calcular o segundo dígito verificador
+    // Calculate the second check digit
     var calcDv2 = 0;
     j = 0;
     for (var i in Iterable<int>.generate(13, (i) => i < 5 ? 6 - i : 14 - i)) {
@@ -438,7 +438,7 @@ class GetUtils {
     calcDv2 %= 11;
     final dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
 
-    // Testar o segundo dígito verificador
+    // Test the second check digit
     if (digits[13] != dv2) {
       return false;
     }
@@ -517,7 +517,7 @@ class GetUtils {
     return value.replaceAll(' ', '');
   }
 
-  /// Camelcase string
+  /// camelCase string
   /// Example: your name => yourName
   static String? camelCase(String value) {
     if (isNullOrBlank(value)!) {
@@ -576,7 +576,7 @@ class GetUtils {
 
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
-  /// If firstword only is true, then the example return is "12312"
+  /// If firstWordOnly is true, then the example return is "12312"
   /// (first found numeric word)
   static String numericOnly(String s, {bool firstWordOnly = false}) {
     var numericOnlyStr = '';

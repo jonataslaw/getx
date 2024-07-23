@@ -114,7 +114,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     super.key,
     Widget Function(GetDelegate delegate)? emptyWidget,
     GetPage Function(GetDelegate delegate)? emptyPage,
-    required Iterable<GetPage> Function(RouteDecoder currentNavStack) pickPages,
+    required super.pickPages,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
     String? restorationScopeId,
     GlobalKey<NavigatorState>? navigatorKey,
@@ -147,19 +147,15 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             }
             return (emptyWidget?.call(rDelegate) ?? const SizedBox.shrink());
           },
-          pickPages: pickPages,
           delegate: delegate ?? Get.rootController.rootDelegate,
         );
 
   GetRouterOutlet.builder({
     super.key,
-    required Widget Function(
-      BuildContext context,
-    ) builder,
+    required super.builder,
     String? route,
     GetDelegate? routerDelegate,
   }) : super.builder(
-          builder: builder,
           delegate: routerDelegate ??
               (route != null
                   ? Get.nestedKey(route)
@@ -213,10 +209,10 @@ typedef NavigatorItemBuilderBuilder = Widget Function(
 
 class IndexedRouteBuilder<T> extends StatelessWidget {
   const IndexedRouteBuilder({
-    Key? key,
+    super.key,
     required this.builder,
     required this.routes,
-  }) : super(key: key);
+  });
   final List<String> routes;
   final NavigatorItemBuilderBuilder builder;
 
@@ -269,8 +265,8 @@ mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
 class RouterListenerInherited extends InheritedWidget {
   const RouterListenerInherited({
     super.key,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
   static RouterListenerInherited? of(BuildContext context) {
     return context
@@ -285,9 +281,9 @@ class RouterListenerInherited extends InheritedWidget {
 
 class RouterListener extends StatefulWidget {
   const RouterListener({
-    Key? key,
+    super.key,
     required this.builder,
-  }) : super(key: key);
+  });
   final WidgetBuilder builder;
 
   @override
@@ -303,7 +299,7 @@ class RouteListenerState extends State<RouterListener>
 }
 
 class BackButtonCallback extends StatefulWidget {
-  const BackButtonCallback({Key? key, required this.builder}) : super(key: key);
+  const BackButtonCallback({super.key, required this.builder});
   final WidgetBuilder builder;
 
   @override

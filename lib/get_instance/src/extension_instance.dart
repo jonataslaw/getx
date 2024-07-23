@@ -508,7 +508,7 @@ class _InstanceBuilderFactory<S> {
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
 
-  /// When fenix mode is avaliable, when a new instance is need
+  /// When fenix mode is available, when a new instance is need
   /// Instance manager will recreate a new instance of S
   bool fenix;
 

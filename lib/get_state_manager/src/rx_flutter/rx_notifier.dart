@@ -211,7 +211,7 @@ class Value<T> extends ListNotifier
 /// GetNotifier has a native status and state implementation, with the
 /// Get Lifecycle
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
-  GetNotifier(T initial) : super(initial);
+  GetNotifier(super.initial);
 }
 
 extension StateExt<T> on StateMixin<T> {
@@ -247,10 +247,15 @@ typedef NotifierBuilder<T> = Widget Function(T state);
 
 abstract class GetStatus<T> with Equality {
   const GetStatus();
+
   factory GetStatus.loading() => LoadingStatus<T>();
+
   factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
+
   factory GetStatus.empty() => EmptyStatus<T>();
+
   factory GetStatus.success(T data) => SuccessStatus<T>(data);
+
   factory GetStatus.custom() => CustomStatus<T>();
 }
 
@@ -266,6 +271,7 @@ class LoadingStatus<T> extends GetStatus<T> {
 
 class SuccessStatus<T> extends GetStatus<T> {
   final T data;
+
   const SuccessStatus(this.data);
 
   @override
@@ -274,6 +280,7 @@ class SuccessStatus<T> extends GetStatus<T> {
 
 class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
+
   const ErrorStatus([this.error]);
 
   @override
@@ -287,10 +294,15 @@ class EmptyStatus<T> extends GetStatus<T> {
 
 extension StatusDataExt<T> on GetStatus<T> {
   bool get isLoading => this is LoadingStatus;
+
   bool get isSuccess => this is SuccessStatus;
+
   bool get isError => this is ErrorStatus;
+
   bool get isEmpty => this is EmptyStatus;
+
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
+
   String get errorMessage {
     final isError = this is ErrorStatus;
     if (isError) {

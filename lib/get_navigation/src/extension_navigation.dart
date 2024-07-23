@@ -171,7 +171,7 @@ extension ExtensionDialog on GetInterface {
     List<Widget>? actions,
 
     // onWillPop Scope
-    WillPopCallback? onWillPop,
+    PopInvokedCallback? onWillPop,
 
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
@@ -196,8 +196,12 @@ extension ExtensionDialog on GetInterface {
                 borderRadius: BorderRadius.circular(radius)),
           ),
           onPressed: () {
-            onCancel?.call();
-            back();
+            if (onCancel == null) {
+              //TODO: Close current dialog after api change
+              closeAllDialogs();
+            } else {
+              onCancel.call();
+            }
           },
           child: Text(
             textCancel ?? "Cancel",
@@ -221,7 +225,7 @@ extension ExtensionDialog on GetInterface {
             child: Text(
               textConfirm ?? "Ok",
               style: TextStyle(
-                  color: confirmTextColor ?? theme.colorScheme.background),
+                  color: confirmTextColor ?? theme.colorScheme.surface),
             ),
             onPressed: () {
               onConfirm?.call();
@@ -263,8 +267,8 @@ extension ExtensionDialog on GetInterface {
 
     return dialog<T>(
       onWillPop != null
-          ? WillPopScope(
-              onWillPop: onWillPop,
+          ? PopScope(
+              onPopInvoked: onWillPop,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
@@ -575,7 +579,7 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
-  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T?>? toNamed<T>(
     String page, {
     dynamic arguments,
@@ -616,7 +620,7 @@ extension GetNavigationExt on GetInterface {
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
-  /// Note: Always put a slash on the route ('/page1'), to avoid unnexpected errors
+  /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T?>? offNamed<T>(
     String page, {
     dynamic arguments,
@@ -1076,7 +1080,7 @@ extension GetNavigationExt on GetInterface {
   String _cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
 
-    /// uncommonent for URL styling.
+    /// uncomment for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
       name = '/$name';
@@ -1279,7 +1283,7 @@ extension GetNavigationExt on GetInterface {
 
   /// Check if dark mode theme is enable on platform on android Q+
   bool get isPlatformDarkMode =>
-      (ui.window.platformBrightness == Brightness.dark);
+      (ui.PlatformDispatcher.instance.platformBrightness == Brightness.dark);
 
   /// give access to Theme.of(context).iconTheme.color
   Color? get iconColor => theme.iconTheme.color;

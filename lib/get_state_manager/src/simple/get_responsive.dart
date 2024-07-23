@@ -62,9 +62,8 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
   GetResponsiveView({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
+    super.key,
+  }) : screen = ResponsiveScreen(settings);
 }
 
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
@@ -78,9 +77,8 @@ class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
   GetResponsiveWidget({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
-    Key? key,
-  })  : screen = ResponsiveScreen(settings),
-        super(key: key);
+    super.key,
+  }) : screen = ResponsiveScreen(settings);
 }
 
 class ResponsiveScreenSettings {
@@ -110,9 +108,9 @@ class ResponsiveScreen {
   late BuildContext context;
   final ResponsiveScreenSettings settings;
 
-  late bool _isPaltformDesktop;
+  late bool _isPlatformDesktop;
   ResponsiveScreen(this.settings) {
-    _isPaltformDesktop = GetPlatform.isDesktop;
+    _isPlatformDesktop = GetPlatform.isDesktop;
   }
 
   double get height => context.height;
@@ -130,15 +128,15 @@ class ResponsiveScreen {
   /// Is [screenType] [ScreenType.Watch]
   bool get isWatch => (screenType == ScreenType.watch);
 
-  double get _getdeviceWidth {
-    if (_isPaltformDesktop) {
+  double get _getDeviceWidth {
+    if (_isPlatformDesktop) {
       return width;
     }
     return context.mediaQueryShortestSide;
   }
 
   ScreenType get screenType {
-    final deviceWidth = _getdeviceWidth;
+    final deviceWidth = _getDeviceWidth;
     if (deviceWidth >= settings.desktopChangePoint) return ScreenType.desktop;
     if (deviceWidth >= settings.tabletChangePoint) return ScreenType.tablet;
     if (deviceWidth < settings.watchChangePoint) return ScreenType.watch;

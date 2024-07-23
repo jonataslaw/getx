@@ -555,7 +555,7 @@ void main() {
 
       expect(alphaNumeric.isHexadecimal, false);
     });
-    test('var.isPalindrom', () {
+    test('var.isPalindrome', () {
       final palindroms = [
         'Anna',
         'Civic',
@@ -584,7 +584,7 @@ void main() {
         'A dama admirou o rim da amada.',
         'A Daniela ama a lei? Nada!',
 
-        // TODO make isPalindrom regex support UTF8 characters
+        // TODO make isPalindrome regex support UTF8 characters
         // 'Adias a data da saída.',
         // 'A diva em Argel alegra-me a vida.',
         // 'A droga do dote é todo da gorda.',
@@ -607,9 +607,9 @@ void main() {
       ];
       for (final palindrom in palindroms) {
         // print("testing $palindrom");
-        expect(palindrom.isPalindrom, true);
+        expect(palindrom.isPalindrome, true);
       }
-      expect(alphaNumeric.isPalindrom, false);
+      expect(alphaNumeric.isPalindrome, false);
     });
     test('var.isPassport', () {
       final passports = [

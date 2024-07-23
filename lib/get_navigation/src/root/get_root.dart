@@ -45,6 +45,7 @@ class ConfigData {
   final Duration defaultDialogTransitionDuration;
   final Routing routing;
   final Map<String, String?> parameters;
+  final SnackBarQueue snackBarQueue = SnackBarQueue();
 
   ConfigData({
     required this.routingCallback,
@@ -277,10 +278,10 @@ class ConfigData {
 
 class GetRoot extends StatefulWidget {
   const GetRoot({
-    Key? key,
+    super.key,
     required this.config,
     required this.child,
-  }) : super(key: key);
+  });
   final ConfigData config;
   final Widget child;
   @override
@@ -340,6 +341,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
+    config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);
@@ -518,7 +520,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       () => GetDelegate(
         showHashOnUrl: true,
         //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildrens ?? [],
+        pages: RouteDecoder.fromRoute(key).currentChildren ?? [],
       ),
     );
     return keys[key];
@@ -532,7 +534,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   String cleanRouteName(String name) {
     name = name.replaceAll('() => ', '');
 
-    /// uncommonent for URL styling.
+    /// uncomment for URL styling.
     // name = name.paramCase!;
     if (!name.startsWith('/')) {
       name = '/$name';

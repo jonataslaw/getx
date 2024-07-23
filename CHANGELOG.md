@@ -1,3 +1,7 @@
+## [5.0.0-release-candidate-6]
+
+-Fix Snackbar, upgrade to flutter 3.22 @Aniketkhote, improve parse route @korutx, fix popScope @wowbox, improve defaultDialog @leeyi, add support to wasm compilation @Ty, fix typos @CodeWithEmad, fix snackbar cancel @seungsuyoo update GetConnect @DaZealous and @ wheeOs, add bengali language @aratheunseen, fix lint issues: @MuhammamdArslanKhan
+
 ## [5.0.0-release-candidate-5]
 
 -Fix nested route issues, fixed issues in the latest flutter version
