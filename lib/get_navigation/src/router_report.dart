@@ -117,6 +117,8 @@ class RouterReportManager<T> {
         _routesKey[routeName]?.remove(element);
       }
     }
+    
+    _routesKey.remove(routeName);
 
     keysToRemove.clear();
   }
