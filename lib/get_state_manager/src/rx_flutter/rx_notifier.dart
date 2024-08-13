@@ -46,7 +46,7 @@ mixin StateMixin<T> on ListNotifier {
     if (newStatus == status) return;
     _status = newStatus;
     if (newStatus is SuccessStatus<T>) {
-      _value = newStatus.data!;
+      _value = newStatus.data;
     }
     refresh();
   }
@@ -216,13 +216,13 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T?> widget, {
+    NotifierBuilder<T> widget, {
     Widget Function(String? error)? onError,
     Widget? onLoading,
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) {
-    return Observer(builder: (_) {
+    return Observer(builder: (context) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
@@ -235,7 +235,7 @@ extension StateExt<T> on StateMixin<T> {
       } else if (status.isSuccess) {
         return widget(value);
       } else if (status.isCustom) {
-        return onCustom?.call(_) ??
+        return onCustom?.call(context) ??
             const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
