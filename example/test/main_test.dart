@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/test_kit.dart';
 import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
 import 'package:get_demo/pages/home/domain/entity/country_model.dart';
+import 'package:get_demo/pages/home/presentation/controllers/details_controller.dart';
 import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
-// import 'package:get_demo/routes/app_pages.dart';
-// import 'package:get_test/get_test.dart';
 
+// Mock data
 const country1 = CountriesItem(
   country: 'Lalaland',
   countryCode: 'LA',
@@ -19,136 +20,127 @@ const country2 = CountriesItem(
   countryCode: 'LO',
 );
 
+// Mock repository for success
 class MockRepositorySuccess implements IHomeRepository {
-  Future<List<CountriesItem>> getCountries() {
-    return Future.value([
-      country1,
-      country2,
-    ]);
-  }
-
-  Future<Country> getCountry(String path) {
-    return Future.value(Country(
-      name: 'Lalaland',
-      countryCode: 'LA',
-      numberOfPrizes: 3,
-      averageAgeOfLaureates: 4,
-    ));
-  }
-}
-
-class MockRepositoryFailure implements IHomeRepository {
-  Future<List<CountriesItem>> getCountries() {
-    return Future<List<CountriesItem>>.error('error');
-  }
-
-  Future<Country> getCountry(String path) {
-    return Future<Country>.error('error');
-  }
-}
-
-class MockBinding extends Binding {
   @override
-  List<Bind> dependencies() {
-    return [
-      Bind.lazyPut<IHomeRepository>(() => MockRepositorySuccess()),
-      Bind.lazyPut<HomeController>(
-        () => HomeController(homeRepository: Get.find()),
-      )
-    ];
-  }
+  Future<List<CountriesItem>> getCountries() async => [country1, country2];
+
+  @override
+  Future<Country> getCountry(String path) async => Country(
+        name: 'Lalaland',
+        countryCode: 'LA',
+        numberOfPrizes: 3,
+        averageAgeOfLaureates: 4,
+      );
+}
+
+// Mock repository for failure
+class MockRepositoryFailure implements IHomeRepository {
+  @override
+  Future<List<CountriesItem>> getCountries() async =>
+      Future.error(FetchException('Failed to load countries'));
+
+  @override
+  Future<Country> getCountry(String path) async =>
+      Future.error(FetchException('Failed to load country'));
+}
+
+class FetchException implements Exception {
+  final String message;
+  FetchException(this.message);
+}
+
+// Custom bindings
+class TestHomeBinding extends Binding {
+  final IHomeRepository repository;
+  TestHomeBinding({required this.repository});
+
+  @override
+  List<Bind> dependencies() => [
+        Bind.lazyPut<IHomeRepository>(() => repository),
+        Bind.lazyPut<HomeController>(
+          () => HomeController(homeRepository: Get.find()),
+        ),
+      ];
+}
+
+class TestDetailsBinding extends Binding {
+  final IHomeRepository repository;
+  TestDetailsBinding({required this.repository});
+
+  @override
+  List<Bind> dependencies() => [
+        Bind.lazyPut<IHomeRepository>(() => repository),
+        Bind.lazyPut<DetailsController>(
+          () => DetailsController(homeRepository: Get.find()),
+        ),
+      ];
 }
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() => HttpOverrides.global = null);
-  final binding = MockBinding();
-
-  test('Test Controller', () async {
-    /// Controller can't be on memory
-    expect(() => Get.find<HomeController>(tag: 'success'),
-        throwsA(const TypeMatcher<String>()));
-
-    /// binding will put the controller on memory
-    binding.dependencies();
-
-    /// recover your controller
-    HomeController controller = Get.find<HomeController>();
-
-    /// check if onInit was called
-    expect(controller.initialized, true);
-
-    /// check initial Status
-    expect(controller.status.isLoading, true);
-
-    /// await time request
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    /// test if status is success
-    expect(controller.status.isSuccess, true);
-    expect(controller.state.length, 2);
-    expect(controller.state.first, country1);
-    expect(controller.state.last, country2);
-
-    /// test if status is error
-    Get.lazyReplace<IHomeRepository>(() => MockRepositoryFailure());
-    controller = Get.find<HomeController>();
-    print(controller.getCountryByName('Lalaland'));
-    // expect(controller.status.isError, true);
-    // expect(controller.state, null);
+  setUpAll(() {
+    HttpOverrides.global = null;
+    GetTestMode.active = true;
   });
 
-  /// Tests with GetTests
-  /// TEMPORARILY REMOVED from the null-safetym branch as
-  /// get_test is not yet null safety.
-  /* getTest(
-    "test description",
-    getPages: AppPages.routes,
-    initialRoute: AppPages.INITIAL,
-    widgetTest: (tester) async {
-      expect('/home', Get.currentRoute);
+  setUp(() => Get.reset());
 
-      Get.toNamed('/home/country');
-      expect('/home/country', Get.currentRoute);
+  group('HomeController Tests', () {
+    test('Success Scenario', () async {
+      TestHomeBinding(repository: MockRepositorySuccess()).dependencies();
+      final controller = Get.find<HomeController>();
 
-      Get.toNamed('/home/country/details');
-      expect('/home/country/details', Get.currentRoute);
+      expect(controller.initialized, isTrue);
 
-      Get.back();
+      await Future.delayed(const Duration(milliseconds: 200));
 
-      expect('/home/country', Get.currentRoute);
-    },
-  );
+      expect(controller.status.isSuccess, isTrue);
+      expect(controller.state.length, 2);
+      expect(controller.state, containsAll([country1, country2]));
+    });
 
-  testGetX(
-    'GetX test',
-    widget: GetX<Controller>(
-      init: Controller(),
-      builder: (controller) {
-        return Text("ban:${controller.count}");
-      },
-    ),
-    test: (e) {
-      expect(find.text("ban:0"), findsOneWidget);
-    },
-  );
+    test('Failure Scenario', () async {
+      TestHomeBinding(repository: MockRepositoryFailure()).dependencies();
+      final controller = Get.find<HomeController>();
 
-  testController<Controller>(
-    'Controller test',
-    (controller) {
-      print('controllllllll ${controller.count}');
-    },
-    controller: Controller(),
-    onInit: (c) {
-      c.increment();
-      print('onInit');
-    },
-    onReady: (c) {
-      print('onReady');
-      c.increment();
-    },
-    onClose: (c) {
-      print('onClose');
-    },
-  );*/
+      expect(controller.initialized, isTrue);
+
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      expect(controller.status.isError, isTrue);
+      expect(controller.status.error, isA<FetchException>());
+    });
+  });
+
+  group('DetailsController Tests', () {
+    test('Success Scenario', () async {
+      TestDetailsBinding(repository: MockRepositorySuccess()).dependencies();
+      GetTestMode.setTestArguments(country1);
+      final controller = Get.find<DetailsController>();
+
+      expect(controller.initialized, isTrue);
+
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      expect(controller.status.isSuccess, isTrue);
+      expect(controller.state.name, 'Lalaland');
+      expect(controller.state.countryCode, 'LA');
+      expect(controller.state.numberOfPrizes, 3);
+      expect(controller.state.averageAgeOfLaureates, 4);
+    });
+
+    test('Failure Scenario', () async {
+      TestDetailsBinding(repository: MockRepositoryFailure()).dependencies();
+      GetTestMode.setTestArguments(country1);
+      final controller = Get.find<DetailsController>();
+
+      expect(controller.initialized, isTrue);
+
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      expect(controller.status.isError, isTrue);
+      expect(controller.status.error, isA<FetchException>());
+    });
+  });
 }

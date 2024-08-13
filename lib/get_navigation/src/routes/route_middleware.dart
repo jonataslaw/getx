@@ -235,7 +235,7 @@ class PageRedirect {
       settings = route;
     }
     final match = context.delegate.matchRoute(settings!.name!);
-    Get.parameters = match.parameters;
+    // Get.parameters = match.parameters;
 
     // No Match found
     if (match.route == null) {

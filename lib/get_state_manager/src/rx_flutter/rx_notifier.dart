@@ -71,20 +71,38 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
+  void setSuccess(T data) {
+    change(GetStatus<T>.success(data));
+  }
+
+  void setError(Object error) {
+    change(GetStatus<T>.error(error));
+  }
+
+  void setLoading() {
+    change(GetStatus<T>.loading());
+  }
+
+  void setEmpty() {
+    change(GetStatus<T>.empty());
+  }
+
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
     _value ??= initialData;
+    status = GetStatus<T>.loading();
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        status = GetStatus<T>.loading();
+        status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
 
       refresh();
     }, onError: (err) {
-      status = GetStatus.error(errorMessage ?? err.toString());
+      status = GetStatus.error(
+          err is Exception ? err : Exception(errorMessage ?? err.toString()));
       refresh();
     });
   }
@@ -250,7 +268,7 @@ abstract class GetStatus<T> with Equality {
 
   factory GetStatus.loading() => LoadingStatus<T>();
 
-  factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
+  factory GetStatus.error(Object message) => ErrorStatus<T, Object>(message);
 
   factory GetStatus.empty() => EmptyStatus<T>();
 
@@ -303,12 +321,22 @@ extension StatusDataExt<T> on GetStatus<T> {
 
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
+  dynamic get error {
+    if (this is ErrorStatus) {
+      return (this as ErrorStatus).error;
+    }
+    return null;
+  }
+
   String get errorMessage {
     final isError = this is ErrorStatus;
     if (isError) {
       final err = this as ErrorStatus;
-      if (err.error != null && err.error is String) {
-        return err.error as String;
+      if (err.error != null) {
+        if (err.error is String) {
+          return err.error as String;
+        }
+        return err.error.toString();
       }
     }
 
