@@ -11,14 +11,7 @@ class HomeController extends StateController<List<CountriesItem>> {
   @override
   void onInit() {
     super.onInit();
-    change(GetStatus.success([]));
-    change(GetStatus.loading());
-    //Loading, Success, Error handle with 1 line of code
-    try {
-      futurize(homeRepository.getCountries);
-    } catch (e) {
-      print(e);
-    }
+    futurize(homeRepository.getCountries);
   }
 
   Future<Country> getCountryByName(String name) async {

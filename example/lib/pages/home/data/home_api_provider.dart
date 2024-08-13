@@ -22,14 +22,8 @@ class HomeProvider extends GetConnect implements IHomeProvider {
   Future<Response<List<CountriesItem>>> getCountries() {
     return get(
       '/countries',
-      decoder: (data) {
-        print(data.runtimeType);
-        final foo = (data as List).map((item) {
-          return CountriesItem.fromJson(item);
-        });
-        print("foo: ${foo.runtimeType}");
-        return foo.toList();
-      },
+      decoder: (data) =>
+          (data as List).map((item) => CountriesItem.fromJson(item)).toList(),
     );
   }
 
