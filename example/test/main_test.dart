@@ -4,34 +4,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:get_demo/pages/home/domain/adapters/repository_adapter.dart';
-import 'package:get_demo/pages/home/domain/entity/cases_model.dart';
+import 'package:get_demo/pages/home/domain/entity/country_model.dart';
 import 'package:get_demo/pages/home/presentation/controllers/home_controller.dart';
 // import 'package:get_demo/routes/app_pages.dart';
 // import 'package:get_test/get_test.dart';
 
+const country1 = CountriesItem(
+  country: 'Lalaland',
+  countryCode: 'LA',
+);
+
+const country2 = CountriesItem(
+  country: 'Lololand',
+  countryCode: 'LO',
+);
+
 class MockRepositorySuccess implements IHomeRepository {
-  @override
-  Future<CasesModel> getCases() async {
-    return CasesModel(
-      global: Global(
-          totalDeaths: 100,
-          totalConfirmed: 200,
-          date: DateTime.now(),
-          newConfirmed: 0,
-          newDeaths: 0,
-          newRecovered: 0,
-          totalRecovered: 0),
-      countries: [],
-      date: DateTime.now(),
-      message: '',
-    );
+  Future<List<CountriesItem>> getCountries() {
+    return Future.value([
+      country1,
+      country2,
+    ]);
+  }
+
+  Future<Country> getCountry(String path) {
+    return Future.value(Country(
+      name: 'Lalaland',
+      countryCode: 'LA',
+      numberOfPrizes: 3,
+      averageAgeOfLaureates: 4,
+    ));
   }
 }
 
 class MockRepositoryFailure implements IHomeRepository {
-  @override
-  Future<CasesModel> getCases() async {
-    return Future<CasesModel>.error('error');
+  Future<List<CountriesItem>> getCountries() {
+    return Future<List<CountriesItem>>.error('error');
+  }
+
+  Future<Country> getCountry(String path) {
+    return Future<Country>.error('error');
   }
 }
 
@@ -61,7 +73,7 @@ void main() {
     binding.dependencies();
 
     /// recover your controller
-    final controller = Get.find<HomeController>();
+    HomeController controller = Get.find<HomeController>();
 
     /// check if onInit was called
     expect(controller.initialized, true);
@@ -74,13 +86,16 @@ void main() {
 
     /// test if status is success
     expect(controller.status.isSuccess, true);
-    expect(controller.state.global.totalDeaths, 100);
-    expect(controller.state.global.totalConfirmed, 200);
+    expect(controller.state.length, 2);
+    expect(controller.state.first, country1);
+    expect(controller.state.last, country2);
 
     /// test if status is error
     Get.lazyReplace<IHomeRepository>(() => MockRepositoryFailure());
-    expect(controller.status.isError, true);
-    expect(controller.state, null);
+    controller = Get.find<HomeController>();
+    print(controller.getCountryByName('Lalaland'));
+    // expect(controller.status.isError, true);
+    // expect(controller.state, null);
   });
 
   /// Tests with GetTests

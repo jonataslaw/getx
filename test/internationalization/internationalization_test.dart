@@ -12,24 +12,24 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect('covid'.tr, 'Corona Virus');
-    expect('total_confirmed'.tr, 'Total Confirmed');
-    expect('total_deaths'.tr, 'Total Deaths');
+    expect('details'.tr, 'Details');
+    expect('number_of_prizes'.tr, 'Number of prizes');
+    expect('average_age_of_laureates'.tr, 'Average age of laureates');
 
     Get.updateLocale(const Locale('pt', 'BR'));
 
     await tester.pumpAndSettle();
 
-    expect('covid'.tr, 'Corona Vírus');
-    expect('total_confirmed'.tr, 'Total confirmado');
-    expect('total_deaths'.tr, 'Total de mortes');
+    expect('details'.tr, 'Detalhes');
+    expect('number_of_prizes'.tr, 'Número de prêmios');
+    expect('average_age_of_laureates'.tr, 'Idade média dos laureados');
 
     Get.updateLocale(const Locale('en', 'EN'));
 
     await tester.pumpAndSettle();
 
-    expect('covid'.tr, 'Corona Virus');
-    expect('total_confirmed'.tr, 'Total Confirmed');
-    expect('total_deaths'.tr, 'Total Deaths');
+    expect('details'.tr, 'Details');
+    expect('number_of_prizes'.tr, 'Number of prizes');
+    expect('average_age_of_laureates'.tr, 'Average age of laureates');
   });
 }
