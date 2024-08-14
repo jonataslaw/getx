@@ -1,32 +1,157 @@
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+
+// import 'lang/translation_service.dart';
+// import 'routes/app_pages.dart';
+// import 'shared/logger/logger_utils.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'lang/translation_service.dart';
-import 'routes/app_pages.dart';
-import 'shared/logger/logger_utils.dart';
-
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      debugShowCheckedModeBanner: false,
-      enableLog: true,
-      logWriterCallback: Logger.write,
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      locale: TranslationService.locale,
-      fallbackLocale: TranslationService.fallbackLocale,
-      translations: TranslationService(),
+      initialRoute: '/login',
+      getPages: [
+        GetPage(
+          name: '/login',
+          page: () => LoginPage(),
+        ),
+        GetPage(
+          name: '/builder/:sessionUID/:tabUID',
+          page: () => MyLandingPage(),
+          middlewares: [CustomMiddleware('/builder', hasTabUID: "hasTabUID")],
+        ),
+        GetPage(
+          name: '/builder/:sessionUID',
+          page: () => MyLandingPage(),
+          middlewares: [CustomMiddleware('/builder', hasTabUID: "noTabUID")],
+        ),
+        GetPage(
+          name: '/redirect',
+          page: () => RedirectTest(),
+        ),
+      ],
     );
   }
 }
+
+class RedirectTest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Redirect Test')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Get.toNamed('/builder/1234');
+          },
+          child: Text('Redirect to Builder'),
+        ),
+      ),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Login Page')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            String sessionUID = "1234";
+            Get.toNamed('/builder/$sessionUID');
+          },
+          child: Text('Login and Go to Builder'),
+        ),
+      ),
+    );
+  }
+}
+
+class MyLandingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Landing Page')),
+      body: Center(
+        child: Text(
+          'Session UID: ${Get.parameters['sessionUID']}\n'
+          'Tab UID: ${Get.parameters['tabUID'] ?? "No Tab UID"}',
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomMiddleware extends GetMiddleware {
+  @override
+  int? get priority => 1;
+
+  final String? baseRoute;
+  final String? hasTabUID;
+
+  CustomMiddleware(this.baseRoute, {this.hasTabUID});
+
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    if (true) {
+      return RouteDecoder.fromRoute('/redirect');
+    }
+    // print("get.parameters: ${Get.parameters}");
+    // print('routeparas: ${route.parameters}');
+    // if (route.parameters.containsKey('sessionUID')) {
+    //   String sessionUID = route.parameters['sessionUID']!;
+    //   if (route.parameters.containsKey('tabUID')) {
+    //     print('dsjdsdsds');
+    //     return null; // Tab UID is already present, no need to redirect
+    //   }
+    //   // Generate a new Tab UID
+
+    //   String tabUID = "323232";
+    //   print('qqqqqqqqqqq');
+    //   // Redirect to the route with both sessionUID and tabUID
+    //   return RouteDecoder.fromRoute('$baseRoute/$sessionUID/$tabUID');
+    // }
+
+    // print('aaaaaaaaaa');
+    // return await super.redirectDelegate(route);
+  }
+}
+
+ 
+
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       theme: ThemeData(useMaterial3: true),
+//       debugShowCheckedModeBanner: false,
+//       enableLog: true,
+//       logWriterCallback: Logger.write,
+//       initialRoute: AppPages.INITIAL,
+//       getPages: AppPages.routes,
+//       locale: TranslationService.locale,
+//       fallbackLocale: TranslationService.fallbackLocale,
+//       translations: TranslationService(),
+//     );
+//   }
+// }
 
 // /// Nav 2 snippet
 // void main() {

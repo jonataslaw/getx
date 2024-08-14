@@ -110,8 +110,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     var iterator = config;
     for (var item in middlewares) {
+      print(currentConfiguration?.route?.name);
       var redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
+      if (config != redirectRes) {
+        Get.log('Redirect to ${redirectRes.pageSettings?.name}');
+      }
+
       iterator = redirectRes;
       // Stop the iteration over the middleware if we changed page
       // and that redirectRes is not the same as the current config.
@@ -719,8 +724,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
-    var mid = await runMiddleware(decoder);
-    final res = mid ?? decoder;
+    var res = await runMiddleware(decoder);
+    if (res == null) return null;
+    // final res = mid ?? decoder;
     // if (res == null) res = decoder;
 
     final preventDuplicateHandlingMode =
