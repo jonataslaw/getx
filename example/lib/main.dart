@@ -69,9 +69,12 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(title: Text('Login Page')),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             String sessionUID = "1234";
-            Get.toNamed('/builder/$sessionUID');
+            final foo = await Get.toNamed(
+              '/redirect',
+            );
+            print('foo: $foo');
           },
           child: Text('Login and Go to Builder'),
         ),
@@ -99,7 +102,7 @@ class MyLandingPage extends StatelessWidget {
 
 class CustomMiddleware extends GetMiddleware {
   @override
-  int? get priority => 1;
+  int get priority => 1;
 
   final String? baseRoute;
   final String? hasTabUID;
