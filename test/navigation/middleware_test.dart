@@ -10,6 +10,13 @@ class RedirectMiddleware extends GetMiddleware {
   }
 }
 
+class Redirect2Middleware extends GetMiddleware {
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    return RouteDecoder.fromRoute('/first');
+  }
+}
+
 class RedirectMiddlewareNull extends GetMiddleware {
   @override
   Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
@@ -25,7 +32,12 @@ class RedirectBypassMiddleware extends GetMiddleware {
 }
 
 void main() {
+  tearDown(() {
+    Get.reset();
+  });
+
   testWidgets("Middleware should redirect to second screen", (tester) async {
+    // Test setup
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',
@@ -34,9 +46,7 @@ void main() {
           GetPage(
             name: '/first',
             page: () => const FirstScreen(),
-            middlewares: [
-              RedirectMiddleware(),
-            ],
+            middlewares: [RedirectMiddleware()],
           ),
           GetPage(name: '/second', page: () => const SecondScreen()),
           GetPage(name: '/third', page: () => const ThirdScreen()),
@@ -44,17 +54,18 @@ void main() {
       ),
     );
 
+    // Act
     Get.toNamed('/first');
-
     await tester.pumpAndSettle();
 
-    // Ensure that we are redirected to the second screen
+    // Assert
     expect(find.byType(SecondScreen), findsOneWidget);
-    // Ensure that we are not seeing the first screen
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.currentRoute, '/second');
   });
 
   testWidgets("Middleware should stop navigation", (tester) async {
+    // Test setup
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',
@@ -63,9 +74,7 @@ void main() {
           GetPage(
             name: '/first',
             page: () => const FirstScreen(),
-            middlewares: [
-              RedirectMiddlewareNull(),
-            ],
+            middlewares: [RedirectMiddlewareNull()],
           ),
           GetPage(name: '/second', page: () => const SecondScreen()),
           GetPage(name: '/third', page: () => const ThirdScreen()),
@@ -73,18 +82,19 @@ void main() {
       ),
     );
 
-    await tester.pump();
-
+    // Act
+    await tester.pumpAndSettle();
     Get.toNamed('/first');
-
     await tester.pumpAndSettle();
 
-    // Ensure that we remain on the initial route and do not navigate to the first screen
+    // Assert
     expect(find.byType(Home), findsOneWidget);
     expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.currentRoute, '/');
   });
 
   testWidgets("Middleware should be bypassed", (tester) async {
+    // Test setup
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',
@@ -93,9 +103,7 @@ void main() {
           GetPage(
             name: '/first',
             page: () => const FirstScreen(),
-            middlewares: [
-              RedirectBypassMiddleware(),
-            ],
+            middlewares: [RedirectBypassMiddleware()],
           ),
           GetPage(name: '/second', page: () => const SecondScreen()),
           GetPage(name: '/third', page: () => const ThirdScreen()),
@@ -103,17 +111,83 @@ void main() {
       ),
     );
 
-    await tester.pump();
-
+    // Act
+    await tester.pumpAndSettle();
     Get.toNamed('/first');
-
     await tester.pumpAndSettle();
 
-    // Ensure that the navigation is not redirected and we land on the first screen
+    // Assert
     expect(find.byType(FirstScreen), findsOneWidget);
-    // Ensure that we do not see the second screen
     expect(find.byType(SecondScreen), findsNothing);
-    // Ensure that we do not see the home screen
     expect(find.byType(Home), findsNothing);
+    expect(Get.currentRoute, '/first');
+  });
+
+  testWidgets("Middleware should redirect twice", (tester) async {
+    // Test setup
+    await tester.pumpWidget(
+      GetMaterialApp(
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const Home()),
+          GetPage(
+            name: '/first',
+            page: () => const FirstScreen(),
+            middlewares: [RedirectMiddleware()],
+          ),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+          GetPage(name: '/third', page: () => const ThirdScreen()),
+          GetPage(
+            name: '/fourth',
+            page: () => const FourthScreen(),
+            middlewares: [Redirect2Middleware()],
+          ),
+        ],
+      ),
+    );
+
+    // Act
+    Get.toNamed('/fourth');
+    await tester.pumpAndSettle();
+
+    // Assert
+    expect(find.byType(SecondScreen), findsOneWidget);
+    expect(find.byType(FirstScreen), findsNothing);
+    expect(Get.currentRoute, '/second');
+  });
+
+  testWidgets("Navigation history should be correct after redirects",
+      (tester) async {
+    // Test setup
+    await tester.pumpWidget(
+      GetMaterialApp(
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const Home()),
+          GetPage(
+            name: '/first',
+            page: () => const FirstScreen(),
+            middlewares: [RedirectMiddleware()],
+          ),
+          GetPage(name: '/second', page: () => const SecondScreen()),
+        ],
+      ),
+    );
+
+    // Act
+    Get.toNamed('/first');
+    await tester.pumpAndSettle();
+
+    // Assert
+    expect(Get.currentRoute, '/second');
+    expect(Get.previousRoute, '/');
+
+    // Act: go back
+    Get.back();
+    await tester.pumpAndSettle();
+
+    // Assert
+    expect(find.byType(Home), findsOneWidget);
+    expect(Get.currentRoute, '/');
   });
 }

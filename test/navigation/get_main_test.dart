@@ -606,3 +606,12 @@ class ThirdScreen extends StatelessWidget {
     return Container();
   }
 }
+
+class FourthScreen extends StatelessWidget {
+  const FourthScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

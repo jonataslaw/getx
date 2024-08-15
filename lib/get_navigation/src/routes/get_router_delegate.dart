@@ -110,10 +110,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     var iterator = config;
     for (var item in middlewares) {
-      print(currentConfiguration?.route?.name);
       var redirectRes = await item.redirectDelegate(iterator);
-      if (redirectRes == null) return null;
+
+      if (redirectRes == null) {
+        config.route?.completer?.complete();
+        return null;
+      }
       if (config != redirectRes) {
+        config.route?.completer?.complete();
         Get.log('Redirect to ${redirectRes.pageSettings?.name}');
       }
 
