@@ -528,11 +528,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     final newPredicate = predicate ?? (route) => false;
 
-    while (_activePages.length > 1 && newPredicate(_activePages.last.route!)) {
+    while (_activePages.length > 1 && !newPredicate(_activePages.last.route!)) {
       _activePages.removeLast();
     }
 
-    return _replaceNamed(route);
+    return _push(route);
   }
 
   @override

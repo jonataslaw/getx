@@ -53,6 +53,10 @@ class MyApp extends StatelessWidget {
           name: '/third',
           page: () => const Third(),
         ),
+        GetPage(
+          name: '/fourth',
+          page: () => const Fourth(),
+        ),
       ],
       debugShowCheckedModeBanner: false,
     );
@@ -172,10 +176,35 @@ class Third extends StatelessWidget {
           width: 300,
           child: ElevatedButton(
             onPressed: () {
-              Get.until((route) {
-                print(Get.currentRoute);
+              Get.offNamedUntil('/fourth', (route) {
                 return Get.currentRoute == '/first';
               });
+            },
+            child: const Text('go to first screen'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Fourth extends StatelessWidget {
+  const Fourth({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.red,
+      appBar: AppBar(
+        title: const Text('page four'),
+      ),
+      body: Center(
+        child: SizedBox(
+          height: 300,
+          width: 300,
+          child: ElevatedButton(
+            onPressed: () {
+              Get.back();
             },
             child: const Text('go to first screen'),
           ),

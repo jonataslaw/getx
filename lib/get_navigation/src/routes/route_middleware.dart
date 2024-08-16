@@ -11,6 +11,8 @@ import '../../../get.dart';
 abstract class GetMiddleware {
   GetMiddleware({this.priority = 0});
 
+  final bool _wasInitiated = false;
+
   /// The Order of the Middlewares to run.
   ///
   /// {@tool snippet}
@@ -99,60 +101,67 @@ abstract class GetMiddleware {
 }
 
 class MiddlewareRunner {
-  MiddlewareRunner(this._middlewares);
-
-  final List<GetMiddleware>? _middlewares;
-
-  List<GetMiddleware> _getMiddlewares() {
-    final newMiddleware = _middlewares ?? <GetMiddleware>[];
-    return List.of(newMiddleware)
-      ..sort(
-        (a, b) => (a.priority).compareTo(b.priority),
-      );
+  MiddlewareRunner(List<GetMiddleware>? middlewares)
+      : _middlewares = middlewares != null
+            ? (List.of(middlewares)..sort(_compareMiddleware))
+            : const [] {
+    // for (final middleware in _middlewares) {
+    //   if (middleware._wasInitiated) continue;
+    //   middleware._wasInitiated = true;
+    // }
   }
 
+  final List<GetMiddleware> _middlewares;
+
+  static int _compareMiddleware(GetMiddleware a, GetMiddleware b) =>
+      a.priority.compareTo(b.priority);
+
   GetPage? runOnPageCalled(GetPage? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageCalled(page);
-    });
+    for (final middleware in _middlewares) {
+      if (middleware._wasInitiated) {
+        _middlewares.remove(middleware);
+        continue;
+      }
+      page = middleware.onPageCalled(page);
+    }
     return page;
   }
 
   RouteSettings? runRedirect(String? route) {
-    RouteSettings? to;
-    for (final element in _getMiddlewares()) {
-      to = element.redirect(route);
-      if (to != null) {
-        break;
+    for (final middleware in _middlewares) {
+      final redirectTo = middleware.redirect(route);
+      if (redirectTo != null) {
+        return redirectTo;
       }
     }
-
-    return to;
+    return null;
   }
 
   List<R>? runOnBindingsStart<R>(List<R>? bindings) {
-    _getMiddlewares().forEach((element) {
-      bindings = element.onBindingsStart(bindings);
-    });
+    for (final middleware in _middlewares) {
+      bindings = middleware.onBindingsStart(bindings);
+    }
     return bindings;
   }
 
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuildStart(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuildStart(page);
+    }
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuilt(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuilt(page);
+    }
     return page;
   }
 
   void runOnPageDispose() {
-    _getMiddlewares().forEach((element) => element.onPageDispose());
+    for (final middleware in _middlewares) {
+      middleware.onPageDispose();
+    }
   }
 }
 

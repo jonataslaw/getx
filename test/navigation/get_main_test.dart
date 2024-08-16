@@ -332,6 +332,120 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
+  group('Get.offNamedUntil Tests', () {
+    testWidgets("Navigates to provided route", (tester) async {
+      await tester.pumpWidget(WrapperNamed(
+        initialRoute: '/first',
+        namedRoutes: [
+          GetPage(page: () => const FirstScreen(), name: '/first'),
+          GetPage(page: () => const SecondScreen(), name: '/second'),
+          GetPage(page: () => const ThirdScreen(), name: '/third')
+        ],
+      ));
+
+      Get.offNamedUntil('/second', (route) => route.name == '/first');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SecondScreen), findsOneWidget);
+      expect(Get.currentRoute, '/second');
+    });
+
+    testWidgets("Removes routes that don't match predicate", (tester) async {
+      await tester.pumpWidget(WrapperNamed(
+        initialRoute: '/first',
+        namedRoutes: [
+          GetPage(page: () => const FirstScreen(), name: '/first'),
+          GetPage(page: () => const SecondScreen(), name: '/second'),
+          GetPage(page: () => const ThirdScreen(), name: '/third')
+        ],
+      ));
+
+      Get.toNamed('/second');
+      await tester.pumpAndSettle();
+      Get.offNamedUntil('/third', (route) => route.name == '/first');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ThirdScreen), findsOneWidget);
+      expect(Get.currentRoute, '/third');
+      expect(Get.previousRoute, '/first');
+    });
+
+    testWidgets("Keeps routes that match predicate", (tester) async {
+      await tester.pumpWidget(WrapperNamed(
+        initialRoute: '/first',
+        namedRoutes: [
+          GetPage(page: () => const FirstScreen(), name: '/first'),
+          GetPage(page: () => const SecondScreen(), name: '/second'),
+          GetPage(page: () => const ThirdScreen(), name: '/third'),
+        ],
+      ));
+
+      Get.toNamed('/second');
+      await tester.pumpAndSettle();
+      Get.offNamedUntil('/third', (route) => route.name == '/first');
+      await tester.pumpAndSettle();
+      Get.back();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+      expect(Get.currentRoute, '/first');
+    });
+
+    testWidgets("Handles predicate that never returns true", (tester) async {
+      await tester.pumpWidget(WrapperNamed(
+        initialRoute: '/first',
+        namedRoutes: [
+          GetPage(page: () => const FirstScreen(), name: '/first'),
+          GetPage(page: () => const SecondScreen(), name: '/second'),
+          GetPage(page: () => const ThirdScreen(), name: '/third'),
+          GetPage(page: () => const FourthScreen(), name: '/fourth'),
+        ],
+      ));
+
+      Get.toNamed('/second');
+      await tester.pumpAndSettle();
+
+      Get.toNamed('/third');
+      await tester.pumpAndSettle();
+
+      Get.offNamedUntil('/fourth', (route) => false);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FourthScreen), findsOneWidget);
+      expect(Get.currentRoute, '/fourth');
+      expect(Get.previousRoute, '/first');
+    });
+
+    testWidgets("Handles complex navigation scenario", (tester) async {
+      await tester.pumpWidget(WrapperNamed(
+        initialRoute: '/first',
+        namedRoutes: [
+          GetPage(page: () => const FirstScreen(), name: '/first'),
+          GetPage(page: () => const SecondScreen(), name: '/second'),
+          GetPage(page: () => const ThirdScreen(), name: '/third'),
+          GetPage(page: () => const FourthScreen(), name: '/fourth'),
+        ],
+      ));
+
+      Get.toNamed('/second');
+      await tester.pumpAndSettle();
+      Get.toNamed('/third');
+      await tester.pumpAndSettle();
+      Get.offNamedUntil('/fourth', (route) => route.name == '/first');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FourthScreen), findsOneWidget);
+      expect(Get.currentRoute, '/fourth');
+      expect(Get.previousRoute, '/first');
+
+      Get.back();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FirstScreen), findsOneWidget);
+      expect(Get.currentRoute, '/first');
+    });
+  });
+
   testWidgets("Get.offNamedUntil navigates to provided route", (tester) async {
     await tester.pumpWidget(WrapperNamed(
       initialRoute: '/first',
