@@ -3,7 +3,8 @@ part of 'rx_stream.dart';
 class Node<T> {
   T? data;
   Node<T>? next;
-  Node({this.data, this.next});
+  Node<T>? prev;
+  Node({this.data, this.next, this.prev});
 }
 
 class MiniSubscription<T> {
@@ -74,51 +75,41 @@ class MiniStream<T> {
 
 class FastList<T> {
   Node<MiniSubscription<T>>? _head;
+  Node<MiniSubscription<T>>? _tail;
+  int _length = 0;
 
   void _notifyData(T data) {
     var currentNode = _head;
-    do {
-      currentNode?.data?.data(data);
-      currentNode = currentNode?.next;
-    } while (currentNode != null);
+    while (currentNode != null) {
+      currentNode.data?.data(data);
+      currentNode = currentNode.next;
+    }
   }
 
   void _notifyDone() {
     var currentNode = _head;
-    do {
-      currentNode?.data?.onDone?.call();
-      currentNode = currentNode?.next;
-    } while (currentNode != null);
+    while (currentNode != null) {
+      currentNode.data?.onDone?.call();
+      currentNode = currentNode.next;
+    }
   }
 
   void _notifyError(Object error, [StackTrace? stackTrace]) {
     var currentNode = _head;
     while (currentNode != null) {
-      currentNode.data!.onError?.call(error, stackTrace);
+      currentNode.data?.onError?.call(error, stackTrace);
       currentNode = currentNode.next;
     }
   }
 
-  /// Checks if this list is empty
-  bool get isEmpty => _head == null;
+  bool get isEmpty => _length == 0;
 
-  bool get isNotEmpty => !isEmpty;
+  bool get isNotEmpty => _length > 0;
 
-  /// Returns the length of this list
-  int get length {
-    var length = 0;
-    var currentNode = _head;
+  int get length => _length;
 
-    while (currentNode != null) {
-      currentNode = currentNode.next;
-      length++;
-    }
-    return length;
-  }
-
-  /// Shows the element at position [position]. `null` for invalid positions.
-  MiniSubscription<T>? _elementAt(int position) {
-    if (isEmpty || length < position || position < 0) return null;
+  MiniSubscription<T>? elementAt(int position) {
+    if (isEmpty || position < 0 || position >= _length) return null;
 
     var node = _head;
     var current = 0;
@@ -130,74 +121,57 @@ class FastList<T> {
     return node!.data;
   }
 
-  /// Inserts [data] at the end of the list.
   void addListener(MiniSubscription<T> data) {
     var newNode = Node(data: data);
 
     if (isEmpty) {
-      _head = newNode;
+      _head = _tail = newNode;
     } else {
-      var currentNode = _head!;
-      while (currentNode.next != null) {
-        currentNode = currentNode.next!;
-      }
-      currentNode.next = newNode;
+      _tail!.next = newNode;
+      newNode.prev = _tail;
+      _tail = newNode;
     }
+    _length++;
   }
 
   bool contains(T element) {
-    var length = this.length;
-    for (var i = 0; i < length; i++) {
-      if (_elementAt(i) == element) return true;
-      if (length != this.length) {
-        throw ConcurrentModificationError(this);
-      }
+    var currentNode = _head;
+    while (currentNode != null) {
+      if (currentNode.data == element) return true;
+      currentNode = currentNode.next;
     }
     return false;
   }
 
   void removeListener(MiniSubscription<T> element) {
-    var length = this.length;
-    for (var i = 0; i < length; i++) {
-      if (_elementAt(i) == element) {
-        _removeAt(i);
+    var currentNode = _head;
+    while (currentNode != null) {
+      if (currentNode.data == element) {
+        _removeNode(currentNode);
         break;
       }
+      currentNode = currentNode.next;
     }
   }
 
   void clear() {
-    var length = this.length;
-    for (var i = 0; i < length; i++) {
-      _removeAt(i);
-    }
+    _head = _tail = null;
+    _length = 0;
   }
 
-  MiniSubscription<T>? _removeAt(int position) {
-    var index = 0;
-    var currentNode = _head;
-    Node<MiniSubscription<T>>? previousNode;
-
-    if (isEmpty || length < position || position < 0) {
-      throw Exception('Invalid position');
-    } else if (position == 0) {
-      _head = _head!.next;
+  void _removeNode(Node<MiniSubscription<T>> node) {
+    if (node.prev == null) {
+      _head = node.next;
     } else {
-      while (index != position) {
-        previousNode = currentNode;
-        currentNode = currentNode!.next;
-        index++;
-      }
-
-      if (previousNode == null) {
-        _head = null;
-      } else {
-        previousNode.next = currentNode!.next;
-      }
-
-      currentNode!.next = null;
+      node.prev!.next = node.next;
     }
 
-    return currentNode!.data;
+    if (node.next == null) {
+      _tail = node.prev;
+    } else {
+      node.next!.prev = node.prev;
+    }
+
+    _length--;
   }
 }
