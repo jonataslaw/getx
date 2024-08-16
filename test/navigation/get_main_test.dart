@@ -556,6 +556,28 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
+  testWidgets("Get.until", (tester) async {
+    await tester.pumpWidget(WrapperNamed(
+      initialRoute: '/first',
+      namedRoutes: [
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
+      ],
+    ));
+
+    await tester.pump();
+
+    Get.toNamed('/second');
+    await tester.pumpAndSettle();
+    Get.toNamed('/third');
+    await tester.pumpAndSettle();
+    Get.until((route) => route.name == '/first');
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FirstScreen), findsOneWidget);
+  });
+
   group("Get.defaultTransition smoke test", () {
     testWidgets("fadeIn", (tester) async {
       await tester.pumpWidget(
