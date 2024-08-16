@@ -268,6 +268,32 @@ void main() {
     expect(find.byType(ThirdScreen), findsOneWidget);
   });
 
+  testWidgets("Get.until removes each route that meet the predicate",
+      (tester) async {
+    await tester.pumpWidget(WrapperNamed(
+      initialRoute: '/first',
+      namedRoutes: [
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+        GetPage(page: () => const ThirdScreen(), name: '/third')
+      ],
+    ));
+
+    Get.toNamed('/second');
+    await tester.pumpAndSettle();
+
+    Get.toNamed('/third');
+    await tester.pumpAndSettle();
+
+    Get.until((route) => route.name == '/first');
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FirstScreen), findsOneWidget);
+    expect(find.byType(SecondScreen), findsNothing);
+    expect(find.byType(ThirdScreen), findsNothing);
+  });
+
   testWidgets(
       "Get.offUntil removes previous routes if they don't match predicate",
       (tester) async {
@@ -569,6 +595,16 @@ void main() {
   });
 }
 
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
+    return Container(child: const Text('Home'));
+  }
+}
+
 class FirstScreen extends StatelessWidget {
   const FirstScreen({super.key});
 
@@ -590,6 +626,15 @@ class SecondScreen extends StatelessWidget {
 
 class ThirdScreen extends StatelessWidget {
   const ThirdScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class FourthScreen extends StatelessWidget {
+  const FourthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
