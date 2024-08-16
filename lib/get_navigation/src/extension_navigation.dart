@@ -172,7 +172,7 @@ extension ExtensionDialog on GetInterface {
     List<Widget>? actions,
 
     // onWillPop Scope
-    PopInvokedCallback? onWillPop,
+    PopInvokedWithResultCallback<T>? onWillPop,
 
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
@@ -268,8 +268,10 @@ extension ExtensionDialog on GetInterface {
 
     return dialog<T>(
       onWillPop != null
-          ? PopScope(
-              onPopInvoked: onWillPop,
+          ? PopScope<T>(
+              onPopInvokedWithResult: (didPop, result) =>
+                  onWillPop(didPop, result),
+              // onPopInvoked: onWillPop,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
