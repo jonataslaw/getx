@@ -1,8 +1,15 @@
+## [5.0.0-release-candidate-9]
+
+- Fix redirectDelegate middleware
+- Fix Get.until
+
 ## [5.0.0-release-candidate-8]
+
 - Add wasm compilation support to GetConnect
 - Refactor example
 
 ## [5.0.0-release-candidate-7]
+
 - Fix latest flutter version
 
 ## [5.0.0-release-candidate-6]
