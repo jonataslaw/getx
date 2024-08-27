@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../middleware/auth_middleware.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -34,11 +35,12 @@ class AppPages {
       bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
-      middlewares: [
-        MainMiddleware(),
-      ],
       children: [
         GetPage(
+          middlewares: [
+            //only enter this route when not authed
+            EnsureNotAuthedMiddleware(),
+          ],
           name: _Paths.login,
           page: () => const LoginView(),
           bindings: [LoginBinding()],
@@ -60,9 +62,9 @@ class AppPages {
               ],
             ),
             GetPage(
-              middlewares: const [
+              middlewares: [
                 //only enter this route when authed
-                // EnsureAuthMiddleware(),
+                EnsureAuthMiddleware(),
               ],
               name: _Paths.profile,
               page: () => const ProfileView(),
@@ -85,6 +87,10 @@ class AppPages {
                   showCupertinoParallax: true,
                   page: () => const ProductDetailsView(),
                   bindings: const [],
+                  middlewares: [
+                    //only enter this route when authed
+                    EnsureAuthMiddleware(),
+                  ],
                 ),
               ],
             ),
