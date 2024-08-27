@@ -1,6 +1,8 @@
+import 'dart:developer';
+
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import '../middleware/auth_middleware.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -32,12 +34,11 @@ class AppPages {
       bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
+      middlewares: [
+        MainMiddleware(),
+      ],
       children: [
         GetPage(
-          middlewares: [
-            //only enter this route when not authed
-            EnsureNotAuthedMiddleware(),
-          ],
           name: _Paths.login,
           page: () => const LoginView(),
           bindings: [LoginBinding()],
@@ -59,9 +60,9 @@ class AppPages {
               ],
             ),
             GetPage(
-              middlewares: [
+              middlewares: const [
                 //only enter this route when authed
-                EnsureAuthMiddleware(),
+                // EnsureAuthMiddleware(),
               ],
               name: _Paths.profile,
               page: () => const ProfileView(),
@@ -84,10 +85,6 @@ class AppPages {
                   showCupertinoParallax: true,
                   page: () => const ProductDetailsView(),
                   bindings: const [],
-                  middlewares: [
-                    //only enter this route when authed
-                    EnsureAuthMiddleware(),
-                  ],
                 ),
               ],
             ),
@@ -103,4 +100,37 @@ class AppPages {
       ],
     ),
   ];
+}
+
+class MainMiddleware extends GetMiddleware {
+  @override
+  void onPageDispose() {
+    log('MainMiddleware onPageDispose');
+    super.onPageDispose();
+  }
+
+  @override
+  Widget onPageBuilt(Widget page) {
+    log('MainMiddleware onPageBuilt');
+    return super.onPageBuilt(page);
+  }
+
+  @override
+  GetPage? onPageCalled(GetPage? page) {
+    log('MainMiddleware onPageCalled for route: ${page?.name}');
+    return super.onPageCalled(page);
+  }
+
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) {
+    log('MainMiddleware onBindingsStart');
+    return super.onBindingsStart(bindings);
+  }
+
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) {
+    log('MainMiddleware onPageBuildStart');
+
+    return super.onPageBuildStart(page);
+  }
 }
