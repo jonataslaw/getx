@@ -1,3 +1,7 @@
+## [5.0.0-release-candidate-11]
+
+- Add canPop to GetPage
+
 ## [5.0.0-release-candidate-10]
 
 - Fix Get.offNamedUntil
