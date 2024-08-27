@@ -163,7 +163,7 @@ class RouteTree {
 
   void removeRoute(GetPage route) {
     matcher.removeRoute(route.name);
-    tree.remove(route.path);
+    tree.remove(route.name);
   }
 
   void removeRoutes(List<GetPage> routes) {

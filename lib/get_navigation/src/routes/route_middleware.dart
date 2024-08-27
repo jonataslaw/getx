@@ -11,8 +11,6 @@ import '../../../get.dart';
 abstract class GetMiddleware {
   GetMiddleware({this.priority = 0});
 
-  final bool _wasInitiated = false;
-
   /// The Order of the Middlewares to run.
   ///
   /// {@tool snippet}
@@ -104,12 +102,7 @@ class MiddlewareRunner {
   MiddlewareRunner(List<GetMiddleware>? middlewares)
       : _middlewares = middlewares != null
             ? (List.of(middlewares)..sort(_compareMiddleware))
-            : const [] {
-    // for (final middleware in _middlewares) {
-    //   if (middleware._wasInitiated) continue;
-    //   middleware._wasInitiated = true;
-    // }
-  }
+            : const [];
 
   final List<GetMiddleware> _middlewares;
 
@@ -118,10 +111,6 @@ class MiddlewareRunner {
 
   GetPage? runOnPageCalled(GetPage? page) {
     for (final middleware in _middlewares) {
-      if (middleware._wasInitiated) {
-        _middlewares.remove(middleware);
-        continue;
-      }
       page = middleware.onPageCalled(page);
     }
     return page;
@@ -225,14 +214,15 @@ class PageRedirect {
       return false;
     }
 
+    // No middlewares found return match.
+    if (match.route!.middlewares.isEmpty) {
+      return false;
+    }
+
     final runner = MiddlewareRunner(match.route!.middlewares);
     route = runner.runOnPageCalled(match.route);
     addPageParameter(route!);
 
-    // // No middlewares found return match.
-    // if (match.route!.middlewares.isEmpty) {
-    //   return false;
-    // }
     final newSettings = runner.runRedirect(settings!.name);
     if (newSettings == null) {
       return false;
