@@ -14,6 +14,7 @@ void main() {
     expect(GetPlatform.isLinux, Platform.isLinux);
     expect(GetPlatform.isMacOS, Platform.isMacOS);
     expect(GetPlatform.isWindows, Platform.isWindows);
-    expect(GetPlatform.isWeb, false);
+    expect(GetPlatform.isWeb, isFalse);
+    expect(GetPlatform.isTesting, isTrue);
   });
 }
