@@ -1,9 +1,10 @@
-## [5.0.0-release-candidate-11]
+## [5.0.0-release-candidate-9.2]
+
+- Remove dart:html references
+
+## [5.0.0-release-candidate-9.1]
 
 - Add canPop to GetPage
-
-## [5.0.0-release-candidate-10]
-
 - Fix Get.offNamedUntil
 - Fix GetObserver
 
