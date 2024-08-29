@@ -1,6 +1,6 @@
 import '../../certificates/certificates.dart';
 import '../stub/http_request_stub.dart'
-    if (dart.library.html) '../html/http_request_html.dart'
+    if (dart.library.js_interop) '../html/http_request_html.dart'
     if (dart.library.io) '../io/http_request_io.dart';
 
 HttpRequestImpl createHttp({

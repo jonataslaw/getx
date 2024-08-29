@@ -1,4 +1,6 @@
-import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
+import 'platform_stub.dart'
+    if (dart.library.js_interop) 'platform_web.dart'
+    if (dart.library.io) 'platform_io.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class GetPlatform {
