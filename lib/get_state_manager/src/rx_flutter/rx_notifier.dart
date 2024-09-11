@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 
 import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../../instance_manager.dart';
@@ -31,7 +32,7 @@ mixin StateMixin<T> on ListNotifier {
   void _fillInitialStatus() {
     _status = (_value == null || _value!._isEmpty())
         ? GetStatus<T>.loading()
-        : GetStatus<T>.success(_value!);
+        : GetStatus<T>.success(_value as T);
   }
 
   GetStatus<T> get status {
@@ -45,7 +46,7 @@ mixin StateMixin<T> on ListNotifier {
     if (newStatus == status) return;
     _status = newStatus;
     if (newStatus is SuccessStatus<T>) {
-      _value = newStatus.data!;
+      _value = newStatus.data;
     }
     refresh();
   }
@@ -68,37 +69,48 @@ mixin StateMixin<T> on ListNotifier {
     if (status != this.status) {
       this.status = status;
     }
-    // var _canUpdate = false;
-    // if (status != null) {
-    //   _status = status;
-    //   _canUpdate = true;
-    // }
-    // if (newState != _value) {
-    //   _value = newState;
-    //   _canUpdate = true;
-    // }
-    // if (_canUpdate) {
-    //   refresh();
-    // }
   }
 
-  void futurize(Future<T> Function() body(),
-      {String? errorMessage, bool useEmpty = true}) {
-    final compute = body();
+  void setSuccess(T data) {
+    change(GetStatus<T>.success(data));
+  }
+
+  void setError(Object error) {
+    change(GetStatus<T>.error(error));
+  }
+
+  void setLoading() {
+    change(GetStatus<T>.loading());
+  }
+
+  void setEmpty() {
+    change(GetStatus<T>.empty());
+  }
+
+  void futurize(Future<T> Function() body,
+      {T? initialData, String? errorMessage, bool useEmpty = true}) {
+    final compute = body;
+    _value ??= initialData;
+    status = GetStatus<T>.loading();
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        status = GetStatus<T>.loading();
+        status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
 
       refresh();
     }, onError: (err) {
-      status = GetStatus.error(errorMessage ?? err.toString());
+      status = GetStatus.error(
+          err is Exception ? err : Exception(errorMessage ?? err.toString()));
       refresh();
     });
   }
 }
+
+typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
+
+typedef VoidCallback = void Function();
 
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
@@ -203,9 +215,9 @@ class Value<T> extends ListNotifier
     return value;
   }
 
-  void update(void fn(T? value)) {
-    fn(value);
-    refresh();
+  void update(T Function(T? value) fn) {
+    value = fn(value);
+    // refresh();
   }
 
   @override
@@ -217,18 +229,18 @@ class Value<T> extends ListNotifier
 /// GetNotifier has a native status and state implementation, with the
 /// Get Lifecycle
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
-  GetNotifier(T initial) : super(initial);
+  GetNotifier(super.initial);
 }
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T?> widget, {
+    NotifierBuilder<T> widget, {
     Widget Function(String? error)? onError,
     Widget? onLoading,
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) {
-    return Observer(builder: (_) {
+    return Observer(builder: (context) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
@@ -236,14 +248,13 @@ extension StateExt<T> on StateMixin<T> {
             ? onError(status.errorMessage)
             : Center(child: Text('A error occurred: ${status.errorMessage}'));
       } else if (status.isEmpty) {
-        return onEmpty != null
-            ? onEmpty
-            : SizedBox.shrink(); // Also can be widget(null); but is risky
+        return onEmpty ??
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
       } else if (status.isSuccess) {
         return widget(value);
       } else if (status.isCustom) {
-        return onCustom?.call(_) ??
-            SizedBox.shrink(); // Also can be widget(null); but is risky
+        return onCustom?.call(context) ??
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
     });
@@ -252,41 +263,80 @@ extension StateExt<T> on StateMixin<T> {
 
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GetStatus<T> {
+abstract class GetStatus<T> with Equality {
   const GetStatus();
-  factory GetStatus.loading() => LoadingStatus();
-  factory GetStatus.error(String message) => ErrorStatus(message);
-  factory GetStatus.empty() => EmptyStatus();
-  factory GetStatus.success(T data) => SuccessStatus(data);
+
+  factory GetStatus.loading() => LoadingStatus<T>();
+
+  factory GetStatus.error(Object message) => ErrorStatus<T, Object>(message);
+
+  factory GetStatus.empty() => EmptyStatus<T>();
+
+  factory GetStatus.success(T data) => SuccessStatus<T>(data);
+
+  factory GetStatus.custom() => CustomStatus<T>();
 }
 
-class LoadingStatus<T> extends GetStatus<T> {}
+class CustomStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
+
+class LoadingStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
 
 class SuccessStatus<T> extends GetStatus<T> {
   final T data;
 
-  SuccessStatus(this.data);
+  const SuccessStatus(this.data);
+
+  @override
+  List get props => [data];
 }
 
 class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
-  ErrorStatus([this.error]);
+
+  const ErrorStatus([this.error]);
+
+  @override
+  List get props => [error];
 }
 
-class EmptyStatus<T> extends GetStatus<T> {}
+class EmptyStatus<T> extends GetStatus<T> {
+  @override
+  List get props => [];
+}
 
 extension StatusDataExt<T> on GetStatus<T> {
   bool get isLoading => this is LoadingStatus;
+
   bool get isSuccess => this is SuccessStatus;
+
   bool get isError => this is ErrorStatus;
+
   bool get isEmpty => this is EmptyStatus;
+
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
+
+  dynamic get error {
+    if (this is ErrorStatus) {
+      return (this as ErrorStatus).error;
+    }
+    return null;
+  }
+
   String get errorMessage {
     final isError = this is ErrorStatus;
     if (isError) {
       final err = this as ErrorStatus;
-      if (err.error != null && err.error is String) {
-        return err.error as String;
+      if (err.error != null) {
+        if (err.error is String) {
+          return err.error as String;
+        }
+        return err.error.toString();
       }
     }
 

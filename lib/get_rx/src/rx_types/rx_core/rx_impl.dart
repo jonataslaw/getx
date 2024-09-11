@@ -1,4 +1,4 @@
-part of rx_types;
+part of '../rx_types.dart';
 
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
@@ -8,7 +8,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   //late T _value;
 
   /// Makes a direct update of [value] adding it to the Stream
-  /// useful when you make use of Rx for custom Types to referesh your UI.
+  /// useful when you make use of Rx for custom Types to refresh your UI.
   ///
   /// Sample:
   /// ```
@@ -139,13 +139,13 @@ mixin RxObjectMixin<T> on GetListenable<T> {
 
 /// Base Rx class that manages all the stream logic for any Type.
 abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
-  _RxImpl(T initial) : super(initial);
+  _RxImpl(super.initial);
 
   void addError(Object error, [StackTrace? stackTrace]) {
     subject.addError(error, stackTrace);
   }
 
-  Stream<R> map<R>(R mapper(T? data)) => stream.map(mapper);
+  Stream<R> map<R>(R Function(T? data) mapper) => stream.map(mapper);
 
   /// Uses a callback to update [value] internally, similar to [refresh],
   /// but provides the current value as the argument.
@@ -167,9 +167,9 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// });
   /// print( person );
   /// ```
-  void update(void fn(T? val)) {
-    fn(value);
-    subject.add(value);
+  void update(T Function(T? val) fn) {
+    value = fn(value);
+    // subject.add(value);
   }
 
   /// Following certain practices on Rx data, we might want to react to certain
@@ -209,7 +209,7 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
 }
 
 class RxBool extends Rx<bool> {
-  RxBool(bool initial) : super(initial);
+  RxBool(super.initial);
   @override
   String toString() {
     return value ? "true" : "false";
@@ -217,7 +217,7 @@ class RxBool extends Rx<bool> {
 }
 
 class RxnBool extends Rx<bool?> {
-  RxnBool([bool? initial]) : super(initial);
+  RxnBool([super.initial]);
   @override
   String toString() {
     return "$value";
@@ -238,7 +238,7 @@ extension RxBoolExt on Rx<bool> {
   /// Toggles the bool [value] between false and true.
   /// A shortcut for `flag.value = !flag.value;`
   void toggle() {
-    subject.add(!value);
+    call(!value);
     // return this;
   }
 }
@@ -271,7 +271,7 @@ extension RxnBoolExt on Rx<bool?> {
   /// A shortcut for `flag.value = !flag.value;`
   void toggle() {
     if (value != null) {
-      subject.add(!value!);
+      call(!value!);
       // return this;
     }
   }
@@ -282,7 +282,7 @@ extension RxnBoolExt on Rx<bool?> {
 /// For example, any custom "Model" class, like User().obs will use `Rx` as
 /// wrapper.
 class Rx<T> extends _RxImpl<T> {
-  Rx(T initial) : super(initial);
+  Rx(super.initial);
 
   @override
   dynamic toJson() {
@@ -295,7 +295,7 @@ class Rx<T> extends _RxImpl<T> {
 }
 
 class Rxn<T> extends Rx<T?> {
-  Rxn([T? initial]) : super(initial);
+  Rxn([super.initial]);
 
   @override
   dynamic toJson() {
@@ -327,7 +327,16 @@ extension BoolExtension on bool {
   RxBool get obs => RxBool(this);
 }
 
-extension RxT<T> on T {
+extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
+}
+
+/// This method will replace the old `.obs` method.
+/// It's a breaking change, but it is essential to avoid conflicts with
+/// the new dart 3 features. T will be inferred by contextual type inference
+/// rather than the extension type.
+extension RxTnew on Object {
+  /// Returns a `Rx` instance with [this] `T` as initial value.
+  Rx<T> obs<T>() => Rx<T>(this as T);
 }

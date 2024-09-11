@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
@@ -39,8 +39,9 @@ class GetPageRoute<T> extends PageRoute<T>
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
   /// be null.
   GetPageRoute({
-    RouteSettings? settings,
+    super.settings,
     this.transitionDuration = const Duration(milliseconds: 300),
+    this.reverseTransitionDuration = const Duration(milliseconds: 300),
     this.opaque = true,
     this.parameter,
     this.gestureWidth,
@@ -51,7 +52,8 @@ class GetPageRoute<T> extends PageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    this.bindings = const [],
+    BindingsInterface? binding,
+    List<BindingsInterface> bindings = const [],
     this.binds,
     this.routeName,
     this.page,
@@ -59,16 +61,16 @@ class GetPageRoute<T> extends PageRoute<T>
     this.showCupertinoParallax = true,
     this.barrierLabel,
     this.maintainState = true,
-    bool fullscreenDialog = false,
+    super.fullscreenDialog,
     this.middlewares,
-  }) : super(
-          settings: settings,
-          fullscreenDialog: fullscreenDialog,
-          // builder: (context) => Container(),
-        );
+  })  : bindings = (binding == null) ? bindings : [...bindings, binding],
+        _middlewareRunner = MiddlewareRunner(middlewares);
 
   @override
   final Duration transitionDuration;
+  @override
+  final Duration reverseTransitionDuration;
+
   final GetPageBuilder? page;
   final String? routeName;
   //final String reference;
@@ -100,25 +102,26 @@ class GetPageRoute<T> extends PageRoute<T>
   @override
   final bool maintainState;
 
+  final MiddlewareRunner _middlewareRunner;
+
   @override
   void dispose() {
     super.dispose();
-    final middlewareRunner = MiddlewareRunner(middlewares);
-    middlewareRunner.runOnPageDispose();
+    _middlewareRunner.runOnPageDispose();
+    _child = null;
   }
 
   Widget? _child;
 
   Widget _getChild() {
     if (_child != null) return _child!;
-    final middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localbinds = [if (binds != null) ...binds!];
+    final localBinds = [if (binds != null) ...binds!];
 
-    final bindingsToBind = middlewareRunner
-        .runOnBindingsStart(bindings.isNotEmpty ? bindings : localbinds);
+    final bindingsToBind = _middlewareRunner
+        .runOnBindingsStart(bindings.isNotEmpty ? bindings : localBinds);
 
-    final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
+    final pageToBuild = _middlewareRunner.runOnPageBuildStart(page)!;
 
     if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
       if (bindingsToBind is List<BindingsInterface>) {
@@ -126,20 +129,20 @@ class GetPageRoute<T> extends PageRoute<T>
           final dep = item.dependencies();
           if (dep is List<Bind>) {
             _child = Binds(
-              child: middlewareRunner.runOnPageBuilt(pageToBuild()),
               binds: dep,
+              child: _middlewareRunner.runOnPageBuilt(pageToBuild()),
             );
           }
         }
       } else if (bindingsToBind is List<Bind>) {
         _child = Binds(
-          child: middlewareRunner.runOnPageBuilt(pageToBuild()),
           binds: bindingsToBind,
+          child: _middlewareRunner.runOnPageBuilt(pageToBuild()),
         );
       }
     }
 
-    return _child ??= middlewareRunner.runOnPageBuilt(pageToBuild());
+    return _child ??= _middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
   @override

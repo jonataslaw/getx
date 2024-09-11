@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../middleware/auth_middleware.dart';
@@ -23,12 +26,12 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
       name: '/',
-      page: () => RootView(),
+      page: () => const RootView(),
       bindings: [RootBinding()],
       participatesInRootNavigator: true,
       preventDuplicates: true,
@@ -38,13 +41,13 @@ class AppPages {
             //only enter this route when not authed
             EnsureNotAuthedMiddleware(),
           ],
-          name: _Paths.LOGIN,
-          page: () => LoginView(),
+          name: _Paths.login,
+          page: () => const LoginView(),
           bindings: [LoginBinding()],
         ),
         GetPage(
           preventDuplicates: true,
-          name: _Paths.HOME,
+          name: _Paths.home,
           page: () => const HomeView(),
           bindings: [
             HomeBinding(),
@@ -52,8 +55,8 @@ class AppPages {
           title: null,
           children: [
             GetPage(
-              name: _Paths.DASHBOARD,
-              page: () => DashboardView(),
+              name: _Paths.dashboard,
+              page: () => const DashboardView(),
               bindings: [
                 DashboardBinding(),
               ],
@@ -63,24 +66,27 @@ class AppPages {
                 //only enter this route when authed
                 EnsureAuthMiddleware(),
               ],
-              name: _Paths.PROFILE,
-              page: () => ProfileView(),
+              name: _Paths.profile,
+              page: () => const ProfileView(),
               title: 'Profile',
               transition: Transition.size,
               bindings: [ProfileBinding()],
             ),
             GetPage(
-              name: _Paths.PRODUCTS,
+              name: _Paths.products,
               page: () => const ProductsView(),
               title: 'Products',
-              transition: Transition.zoom,
+              transition: Transition.cupertino,
+              showCupertinoParallax: true,
               participatesInRootNavigator: false,
-              bindings: [ProductsBinding()],
+              bindings: [ProductsBinding(), ProductDetailsBinding()],
               children: [
                 GetPage(
-                  name: _Paths.PRODUCT_DETAILS,
-                  page: () => ProductDetailsView(),
-                  bindings: [ProductDetailsBinding()],
+                  name: _Paths.productDetails,
+                  transition: Transition.cupertino,
+                  showCupertinoParallax: true,
+                  page: () => const ProductDetailsView(),
+                  bindings: const [],
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),
@@ -91,8 +97,8 @@ class AppPages {
           ],
         ),
         GetPage(
-          name: _Paths.SETTINGS,
-          page: () => SettingsView(),
+          name: _Paths.settings,
+          page: () => const SettingsView(),
           bindings: [
             SettingsBinding(),
           ],
@@ -100,4 +106,37 @@ class AppPages {
       ],
     ),
   ];
+}
+
+class MainMiddleware extends GetMiddleware {
+  @override
+  void onPageDispose() {
+    log('MainMiddleware onPageDispose');
+    super.onPageDispose();
+  }
+
+  @override
+  Widget onPageBuilt(Widget page) {
+    log('MainMiddleware onPageBuilt');
+    return super.onPageBuilt(page);
+  }
+
+  @override
+  GetPage? onPageCalled(GetPage? page) {
+    log('MainMiddleware onPageCalled for route: ${page?.name}');
+    return super.onPageCalled(page);
+  }
+
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) {
+    log('MainMiddleware onBindingsStart');
+    return super.onBindingsStart(bindings);
+  }
+
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) {
+    log('MainMiddleware onPageBuildStart');
+
+    return super.onPageBuildStart(page);
+  }
 }

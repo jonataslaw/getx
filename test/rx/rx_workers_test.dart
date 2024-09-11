@@ -7,8 +7,8 @@ void main() {
   test('once', () async {
     final count = 0.obs;
     var result = -1;
-    once(count, (dynamic _) {
-      result = _ as int;
+    once(count, (dynamic val) {
+      result = val as int;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -41,10 +41,10 @@ void main() {
   test('debounce', () async {
     final count = 0.obs;
     int? result = -1;
-    debounce(count, (dynamic _) {
+    debounce(count, (dynamic val) {
       // print(_);
-      result = _ as int?;
-    }, time: Duration(milliseconds: 100));
+      result = val as int?;
+    }, time: const Duration(milliseconds: 100));
 
     count.value++;
     count.value++;
@@ -52,32 +52,31 @@ void main() {
     count.value++;
     await Future.delayed(Duration.zero);
     expect(-1, result);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(4, result);
   });
 
   test('interval', () async {
     final count = 0.obs;
     int? result = -1;
-    interval(count, (dynamic _) {
-      // print(_);
-      result = _ as int?;
-    }, time: Duration(milliseconds: 100));
+    interval<int>(count, (v) {
+      result = v;
+    }, time: const Duration(milliseconds: 100));
 
     count.value++;
     await Future.delayed(Duration.zero);
-    await Future.delayed(Duration(milliseconds: 100));
-    expect(1, result);
+    await Future.delayed(const Duration(milliseconds: 100));
+    expect(result, 1);
     count.value++;
     count.value++;
     count.value++;
     await Future.delayed(Duration.zero);
-    await Future.delayed(Duration(milliseconds: 100));
-    expect(2, result);
+    await Future.delayed(const Duration(milliseconds: 100));
+    expect(result, 2);
     count.value++;
     await Future.delayed(Duration.zero);
-    await Future.delayed(Duration(milliseconds: 100));
-    expect(5, result);
+    await Future.delayed(const Duration(milliseconds: 100));
+    expect(result, 5);
   });
 
   test('bindStream test', () async {
@@ -110,7 +109,7 @@ void main() {
     reactiveInteger.call(3);
     reactiveInteger.call(3);
 
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(1, timesCalled);
   });
 
@@ -127,7 +126,8 @@ void main() {
     reactiveInteger.trigger(2);
     reactiveInteger.trigger(3);
 
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
+
     expect(3, timesCalled);
   });
 
@@ -145,13 +145,13 @@ void main() {
     reactiveInteger.trigger(3);
     reactiveInteger.trigger(1);
 
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(4, timesCalled);
   });
 
   test('Rx String with non null values', () async {
     final reactiveString = Rx<String>("abc");
-    var currentString;
+    String? currentString;
     reactiveString.listen((newString) {
       currentString = newString;
     });
@@ -167,7 +167,7 @@ void main() {
 
   test('Rx String with null values', () async {
     var reactiveString = Rx<String?>(null);
-    var currentString;
+    String? currentString;
 
     reactiveString.listen((newString) {
       currentString = newString;
@@ -194,6 +194,11 @@ void main() {
 
     count = 0;
     list.addAll([4, 5]);
+    await Future.delayed(Duration.zero);
+    expect(count, 1);
+
+    count = 0;
+    list.remove(2);
     await Future.delayed(Duration.zero);
     expect(count, 1);
 

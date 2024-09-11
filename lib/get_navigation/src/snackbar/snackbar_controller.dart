@@ -5,11 +5,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
+import '../root/get_root.dart';
 
 class SnackbarController {
-  static final _snackBarQueue = _SnackBarQueue();
-  static bool get isSnackbarBeingShown => _snackBarQueue._isJobInProgress;
   final key = GlobalKey<GetSnackBarState>();
+
+  static bool get isSnackbarBeingShown =>
+      GetRootState.controller.config.snackBarQueue.isJobInProgress;
 
   late Animation<double> _filterBlurAnimation;
   late Animation<Color?> _filterColorAnimation;
@@ -60,7 +62,7 @@ class SnackbarController {
   /// Only one GetSnackbar will be displayed at a time, and this method returns
   /// a future to when the snackbar disappears.
   Future<void> show() {
-    return _snackBarQueue._addJob(this);
+    return GetRootState.controller.config.snackBarQueue.addJob(this);
   }
 
   void _cancelTimer() {
@@ -72,13 +74,13 @@ class SnackbarController {
   // ignore: avoid_returning_this
   void _configureAlignment(SnackPosition snackPosition) {
     switch (snackbar.snackPosition) {
-      case SnackPosition.TOP:
+      case SnackPosition.top:
         {
           _initialAlignment = const Alignment(-1.0, -2.0);
           _endAlignment = const Alignment(-1.0, -1.0);
           break;
         }
-      case SnackPosition.BOTTOM:
+      case SnackPosition.bottom:
         {
           _initialAlignment = const Alignment(-1.0, 2.0);
           _endAlignment = const Alignment(-1.0, 1.0);
@@ -220,15 +222,15 @@ class SnackbarController {
       ],
       OverlayEntry(
         builder: (context) => Semantics(
+          focused: false,
+          container: true,
+          explicitChildNodes: true,
           child: AlignTransition(
             alignment: _animation,
             child: snackbar.isDismissible
                 ? _getDismissibleSnack(child)
                 : _getSnackbarContainer(child),
           ),
-          focused: false,
-          container: true,
-          explicitChildNodes: true,
         ),
         maintainState: false,
         opaque: false,
@@ -238,17 +240,23 @@ class SnackbarController {
 
   Widget _getBodyWidget() {
     return Builder(builder: (_) {
-      return GestureDetector(
-        child: snackbar,
-        onTap: snackbar.onTap != null
-            ? () => snackbar.onTap?.call(snackbar)
-            : null,
+      return MouseRegion(
+        onEnter: (_) =>
+            snackbar.onHover?.call(snackbar, SnackHoverState.entered),
+        onExit: (_) => snackbar.onHover?.call(snackbar, SnackHoverState.exited),
+        child: GestureDetector(
+          behavior: snackbar.hitTestBehavior ?? HitTestBehavior.deferToChild,
+          onTap: snackbar.onTap != null
+              ? () => snackbar.onTap?.call(snackbar)
+              : null,
+          child: snackbar,
+        ),
       );
     });
   }
 
   DismissDirection _getDefaultDismissDirection() {
-    if (snackbar.snackPosition == SnackPosition.TOP) {
+    if (snackbar.snackPosition == SnackPosition.top) {
       return DismissDirection.up;
     }
     return DismissDirection.down;
@@ -256,11 +264,12 @@ class SnackbarController {
 
   Widget _getDismissibleSnack(Widget child) {
     return Dismissible(
+      behavior: snackbar.hitTestBehavior ?? HitTestBehavior.opaque,
       direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
       resizeDuration: null,
       confirmDismiss: (_) {
-        if (_currentStatus == SnackbarStatus.OPENING ||
-            _currentStatus == SnackbarStatus.CLOSING) {
+        if (_currentStatus == SnackbarStatus.opening ||
+            _currentStatus == SnackbarStatus.closing) {
           return Future.value(false);
         }
         return Future.value(true);
@@ -284,23 +293,23 @@ class SnackbarController {
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
-        _currentStatus = SnackbarStatus.OPEN;
+        _currentStatus = SnackbarStatus.open;
         _snackbarStatus?.call(_currentStatus);
         if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
 
         break;
       case AnimationStatus.forward:
-        _currentStatus = SnackbarStatus.OPENING;
+        _currentStatus = SnackbarStatus.opening;
         _snackbarStatus?.call(_currentStatus);
         break;
       case AnimationStatus.reverse:
-        _currentStatus = SnackbarStatus.CLOSING;
+        _currentStatus = SnackbarStatus.closing;
         _snackbarStatus?.call(_currentStatus);
         if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
         break;
       case AnimationStatus.dismissed:
         assert(!_overlayEntries.first.opaque);
-        _currentStatus = SnackbarStatus.CLOSED;
+        _currentStatus = SnackbarStatus.closed;
         _snackbarStatus?.call(_currentStatus);
         _removeOverlay();
         break;
@@ -342,16 +351,16 @@ class SnackbarController {
     return future;
   }
 
-  static void cancelAllSnackbars() {
-    _snackBarQueue._cancelAllJobs();
+  static Future<void> cancelAllSnackbars() async {
+    await GetRootState.controller.config.snackBarQueue.cancelAllJobs();
   }
 
   static Future<void> closeCurrentSnackbar() async {
-    await _snackBarQueue._closeCurrentJob();
+    await GetRootState.controller.config.snackBarQueue.closeCurrentJob();
   }
 }
 
-class _SnackBarQueue {
+class SnackBarQueue {
   final _queue = GetQueue();
   final _snackbarList = <SnackbarController>[];
 
@@ -360,22 +369,37 @@ class _SnackBarQueue {
     return _snackbarList.first;
   }
 
-  bool get _isJobInProgress => _snackbarList.isNotEmpty;
+  bool get isJobInProgress => _snackbarList.isNotEmpty;
 
-  Future<void> _addJob(SnackbarController job) async {
+  Future<void> addJob(SnackbarController job) async {
     _snackbarList.add(job);
     final data = await _queue.add(job._show);
     _snackbarList.remove(job);
     return data;
   }
 
-  Future<void> _cancelAllJobs() async {
+  Future<void> cancelAllJobs() async {
     await _currentSnackbar?.close();
     _queue.cancelAllJobs();
     _snackbarList.clear();
   }
 
-  Future<void> _closeCurrentJob() async {
+  void disposeControllers() {
+    if (_currentSnackbar != null) {
+      _currentSnackbar?._removeOverlay();
+      _currentSnackbar?._controller.dispose();
+      _snackbarList.remove(_currentSnackbar);
+    }
+
+    _queue.cancelAllJobs();
+
+    for (var element in _snackbarList) {
+      element._controller.dispose();
+    }
+    _snackbarList.clear();
+  }
+
+  Future<void> closeCurrentJob() async {
     if (_currentSnackbar == null) return;
     await _currentSnackbar!.close();
   }

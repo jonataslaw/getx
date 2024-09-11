@@ -23,6 +23,9 @@ class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
 
+  // final int _version = 0;
+  // final int _microtaskVersion = 0;
+
   @override
   Disposer addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
@@ -57,9 +60,18 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    for (var element in _updaters!) {
+    // if (_microtaskVersion == _version) {
+    //   _microtaskVersion++;
+    //   scheduleMicrotask(() {
+    //     _version++;
+    //     _microtaskVersion = _version;
+    final list = _updaters?.toList() ?? [];
+
+    for (var element in list) {
       element();
     }
+    //   });
+    // }
   }
 
   bool get isDisposed => _updaters == null;
@@ -164,11 +176,11 @@ class Notifier {
     _notifyData?.disposers.add(listener);
   }
 
-  void read(ListNotifierSingleMixin _updaters) {
+  void read(ListNotifierSingleMixin updaters) {
     final listener = _notifyData?.updater;
-    if (listener != null && !_updaters.containsListener(listener)) {
-      _updaters.addListener(listener);
-      add(() => _updaters.removeListener(listener));
+    if (listener != null && !updaters.containsListener(listener)) {
+      updaters.addListener(listener);
+      add(() => updaters.removeListener(listener));
     }
   }
 
@@ -176,7 +188,7 @@ class Notifier {
     _notifyData = data;
     final result = builder();
     if (data.disposers.isEmpty && data.throwException) {
-      throw ObxError();
+      throw const ObxError();
     }
     _notifyData = null;
     return result;

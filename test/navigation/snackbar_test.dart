@@ -9,13 +9,14 @@ void main() {
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: Text('Open Snackbar'),
+          child: const Text('Open Snackbar'),
           onPressed: () {
             Get.snackbar(
               'title',
               "message",
-              duration: Duration(seconds: 1),
-              mainButton: TextButton(onPressed: () {}, child: Text('button')),
+              duration: const Duration(seconds: 1),
+              mainButton:
+                  TextButton(onPressed: () {}, child: const Text('button')),
               isDismissible: false,
             );
           },
@@ -38,18 +39,16 @@ void main() {
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: Text('Open Snackbar'),
+          child: const Text('Open Snackbar'),
           onPressed: () {
             Get.rawSnackbar(
               title: 'title',
               message: "message",
-              onTap: (_) {
-                print('snackbar tapped');
-              },
+              onTap: (_) {},
               shouldIconPulse: true,
-              icon: Icon(Icons.alarm),
+              icon: const Icon(Icons.alarm),
               showProgressIndicator: true,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               isDismissible: true,
               leftBarIndicatorColor: Colors.amber,
               overlayBlur: 1.0,
@@ -72,20 +71,20 @@ void main() {
   });
 
   testWidgets("test snackbar queue", (tester) async {
-    final messageOne = Text('title');
+    const messageOne = Text('title');
 
-    final messageTwo = Text('titleTwo');
+    const messageTwo = Text('titleTwo');
 
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: Text('Open Snackbar'),
+          child: const Text('Open Snackbar'),
           onPressed: () {
             Get.rawSnackbar(
-                messageText: messageOne, duration: Duration(seconds: 1));
+                messageText: messageOne, duration: const Duration(seconds: 1));
             Get.rawSnackbar(
-                messageText: messageTwo, duration: Duration(seconds: 1));
+                messageText: messageTwo, duration: const Duration(seconds: 1));
           },
         ),
       ),
@@ -108,10 +107,17 @@ void main() {
   });
 
   testWidgets("test snackbar dismissible", (tester) async {
-    const dismissDirection = DismissDirection.vertical;
+    const dismissDirection = DismissDirection.down;
     const snackBarTapTarget = Key('snackbar-tap-target');
 
-    late final GetSnackBar getBar;
+    const GetSnackBar getBar = GetSnackBar(
+      key: ValueKey('dismissible'),
+      message: 'bar1',
+      duration: Duration(seconds: 2),
+      isDismissible: true,
+      snackPosition: SnackPosition.bottom,
+      dismissDirection: dismissDirection,
+    );
 
     await tester.pumpWidget(GetMaterialApp(
       home: Scaffold(
@@ -122,12 +128,6 @@ void main() {
                 GestureDetector(
                   key: snackBarTapTarget,
                   onTap: () {
-                    getBar = GetSnackBar(
-                      message: 'bar1',
-                      duration: const Duration(seconds: 2),
-                      isDismissible: true,
-                      dismissDirection: dismissDirection,
-                    );
                     Get.showSnackbar(getBar);
                   },
                   behavior: HitTestBehavior.opaque,
@@ -155,9 +155,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byWidget(getBar), findsOneWidget);
     await tester.ensureVisible(find.byWidget(getBar));
-    await tester.drag(find.byWidget(getBar), Offset(0.0, 50.0));
+    await tester.drag(find.byType(Dismissible), const Offset(0.0, 50.0));
+    await tester.pumpAndSettle();
     await tester.pump(const Duration(milliseconds: 500));
-
     expect(Get.isSnackbarOpen, false);
   });
 
@@ -222,12 +222,12 @@ void main() {
   });
 
   testWidgets("Get test actions and icon", (tester) async {
-    final icon = Icon(Icons.alarm);
-    final action = TextButton(onPressed: () {}, child: Text('button'));
+    const icon = Icon(Icons.alarm);
+    final action = TextButton(onPressed: () {}, child: const Text('button'));
 
     late final GetSnackBar getBar;
 
-    await tester.pumpWidget(GetMaterialApp(home: Scaffold()));
+    await tester.pumpWidget(const GetMaterialApp(home: Scaffold()));
 
     await tester.pump();
 

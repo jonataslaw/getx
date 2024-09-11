@@ -34,11 +34,11 @@ void main() {
                   'Map: ${controller.map.length}',
                 ),
                 TextButton(
-                  child: Text("increment"),
+                  child: const Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
                 TextButton(
-                  child: Text("increment2"),
+                  child: const Text("increment2"),
                   onPressed: () => controller.increment2(),
                 )
               ],

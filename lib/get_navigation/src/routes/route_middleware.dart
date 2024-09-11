@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../get.dart';
 
-abstract class _RouteMiddleware {
+/// The Page Middlewares.
+/// The Functions will be called in this order
+/// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
+/// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
+abstract class GetMiddleware {
+  GetMiddleware({this.priority = 0});
+
   /// The Order of the Middlewares to run.
   ///
   /// {@tool snippet}
@@ -18,7 +25,7 @@ abstract class _RouteMiddleware {
   /// ```
   ///  -8 => 2 => 4 => 5
   /// {@end-tool}
-  int? priority;
+  final int priority;
 
   /// This function will be called when the page of
   /// the called route is being searched for.
@@ -32,7 +39,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  RouteSettings? redirect(String route);
+  RouteSettings? redirect(String? route) => null;
 
   /// Similar to [redirect],
   /// This function will be called when the router delegate changes the
@@ -51,7 +58,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route);
+  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route) => (route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -63,10 +70,10 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  GetPage? onPageCalled(GetPage page);
+  GetPage? onPageCalled(GetPage? page) => page;
 
-  /// This function will be called right before the [Bindings] are initialize.
-  /// Here you can change [Bindings] for this page
+  /// This function will be called right before the [BindingsInterface] are initialize.
+  /// Here you can change [BindingsInterface] for this page
   /// {@tool snippet}
   /// ```dart
   /// List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -78,107 +85,73 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  List<R>? onBindingsStart<R>(List<R> bindings);
+  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
 
-  /// This function will be called right after the [Bindings] are initialize.
-  GetPageBuilder? onPageBuildStart(GetPageBuilder page);
+  /// This function will be called right after the [BindingsInterface] are initialize.
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 
   /// This function will be called right after the
   /// GetPage.page function is called and will give you the result
   /// of the function. and take the widget that will be showed.
-  Widget onPageBuilt(Widget page);
-
-  void onPageDispose();
-}
-
-/// The Page Middlewares.
-/// The Functions will be called in this order
-/// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
-/// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
-class GetMiddleware implements _RouteMiddleware {
-  @override
-  int? priority = 0;
-
-  GetMiddleware({this.priority});
-
-  @override
-  RouteSettings? redirect(String? route) => null;
-
-  @override
-  GetPage? onPageCalled(GetPage? page) => page;
-
-  @override
-  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
-
-  @override
-  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
-
-  @override
   Widget onPageBuilt(Widget page) => page;
 
-  @override
   void onPageDispose() {}
-
-  @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) =>
-      SynchronousFuture(route);
 }
 
 class MiddlewareRunner {
-  MiddlewareRunner(this._middlewares);
+  MiddlewareRunner(List<GetMiddleware>? middlewares)
+      : _middlewares = middlewares != null
+            ? (List.of(middlewares)..sort(_compareMiddleware))
+            : const [];
 
-  final List<GetMiddleware>? _middlewares;
+  final List<GetMiddleware> _middlewares;
 
-  List<GetMiddleware> _getMiddlewares() {
-    final _m = _middlewares ?? <GetMiddleware>[];
-    return _m
-      ..sort(
-        (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0),
-      );
-  }
+  static int _compareMiddleware(GetMiddleware a, GetMiddleware b) =>
+      a.priority.compareTo(b.priority);
 
   GetPage? runOnPageCalled(GetPage? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageCalled(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageCalled(page);
+    }
     return page;
   }
 
   RouteSettings? runRedirect(String? route) {
-    RouteSettings? to;
-    for (final element in _getMiddlewares()) {
-      to = element.redirect(route);
-      if (to != null) {
-        break;
+    for (final middleware in _middlewares) {
+      final redirectTo = middleware.redirect(route);
+      if (redirectTo != null) {
+        return redirectTo;
       }
     }
-    Get.log('Redirect to $to');
-    return to;
+    return null;
   }
 
   List<R>? runOnBindingsStart<R>(List<R>? bindings) {
-    _getMiddlewares().forEach((element) {
-      bindings = element.onBindingsStart(bindings);
-    });
+    for (final middleware in _middlewares) {
+      bindings = middleware.onBindingsStart(bindings);
+    }
     return bindings;
   }
 
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuildStart(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuildStart(page);
+    }
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuilt(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuilt(page);
+    }
     return page;
   }
 
-  void runOnPageDispose() =>
-      _getMiddlewares().forEach((element) => element.onPageDispose());
+  void runOnPageDispose() {
+    for (final middleware in _middlewares) {
+      middleware.onPageDispose();
+    }
+  }
 }
 
 class PageRedirect {
@@ -195,70 +168,45 @@ class PageRedirect {
   });
 
   // redirect all pages that needes redirecting
-  GetPageRoute<T> page<T>() {
-    while (needRecheck()) {}
-    final _r = (isUnknown ? unknownRoute : route)!;
-    return GetPageRoute<T>(
-      page: _r.page,
-      parameter: _r.parameters,
-      settings: isUnknown
-          ? RouteSettings(
-              name: _r.name,
-              arguments: settings!.arguments,
-            )
-          : settings,
-      curve: _r.curve,
-      opaque: _r.opaque,
-      showCupertinoParallax: _r.showCupertinoParallax,
-      gestureWidth: _r.gestureWidth,
-      customTransition: _r.customTransition,
-      bindings: _r.bindings,
-      binds: _r.binds,
-      transitionDuration:
-          _r.transitionDuration ?? Get.defaultTransitionDuration,
-      transition: _r.transition,
-      popGesture: _r.popGesture,
-      fullscreenDialog: _r.fullscreenDialog,
-      middlewares: _r.middlewares,
-    );
-  }
-
-  // redirect all pages that needes redirecting
-  GetPageRoute<T> getPageToRoute<T>(GetPage rou, GetPage? unk) {
-    while (needRecheck()) {}
-    final _r = (isUnknown ? unk : rou)!;
+  GetPageRoute<T> getPageToRoute<T>(
+      GetPage rou, GetPage? unk, BuildContext context) {
+    while (needRecheck(context)) {}
+    final r = (isUnknown ? unk : rou)!;
 
     return GetPageRoute<T>(
-      page: _r.page,
-      parameter: _r.parameters,
-      alignment: _r.alignment,
-      title: _r.title,
-      maintainState: _r.maintainState,
-      routeName: _r.name,
-      settings: _r,
-      curve: _r.curve,
-      showCupertinoParallax: _r.showCupertinoParallax,
-      gestureWidth: _r.gestureWidth,
-      opaque: _r.opaque,
-      customTransition: _r.customTransition,
-      bindings: _r.bindings,
-      binds: _r.binds,
-      transitionDuration:
-          _r.transitionDuration ?? Get.defaultTransitionDuration,
-      transition: _r.transition,
-      popGesture: _r.popGesture,
-      fullscreenDialog: _r.fullscreenDialog,
-      middlewares: _r.middlewares,
+      page: r.page,
+      parameter: r.parameters,
+      alignment: r.alignment,
+      title: r.title,
+      maintainState: r.maintainState,
+      routeName: r.name,
+      settings: r,
+      curve: r.curve,
+      showCupertinoParallax: r.showCupertinoParallax,
+      gestureWidth: r.gestureWidth,
+      opaque: r.opaque,
+      customTransition: r.customTransition,
+      bindings: r.bindings,
+      binding: r.binding,
+      binds: r.binds,
+      transitionDuration: r.transitionDuration ?? Get.defaultTransitionDuration,
+      reverseTransitionDuration:
+          r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
+      // performIncomeAnimation: _r.performIncomeAnimation,
+      // performOutGoingAnimation: _r.performOutGoingAnimation,
+      transition: r.transition,
+      popGesture: r.popGesture,
+      fullscreenDialog: r.fullscreenDialog,
+      middlewares: r.middlewares,
     );
   }
 
   /// check if redirect is needed
-  bool needRecheck() {
+  bool needRecheck(BuildContext context) {
     if (settings == null && route != null) {
       settings = route;
     }
-    final match = Get.routeTree.matchRoute(settings!.name!);
-    Get.parameters = match.parameters;
+    final match = context.delegate.matchRoute(settings!.name!);
 
     // No Match found
     if (match.route == null) {
@@ -266,14 +214,15 @@ class PageRedirect {
       return false;
     }
 
+    // No middlewares found return match.
+    if (match.route!.middlewares.isEmpty) {
+      return false;
+    }
+
     final runner = MiddlewareRunner(match.route!.middlewares);
     route = runner.runOnPageCalled(match.route);
     addPageParameter(route!);
 
-    // No middlewares found return match.
-    if (match.route!.middlewares == null || match.route!.middlewares!.isEmpty) {
-      return false;
-    }
     final newSettings = runner.runRedirect(settings!.name);
     if (newSettings == null) {
       return false;

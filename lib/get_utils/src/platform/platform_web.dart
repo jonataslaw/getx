@@ -1,6 +1,5 @@
-// TODO: resolve platform/desktop by JS browser agent.
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 
 import '../../get_utils.dart';
 
@@ -26,7 +25,7 @@ class GeneralPlatform {
   static bool get isIOS {
     // maxTouchPoints is needed to separate iPad iOS13 vs new MacOS
     return GetUtils.hasMatch(_navigator.platform, r'/iPad|iPhone|iPod/') ||
-        (_navigator.platform == 'MacIntel' && _navigator.maxTouchPoints! > 1);
+        (_navigator.platform == 'MacIntel' && _navigator.maxTouchPoints > 1);
   }
 
   static bool get isFuchsia => false;

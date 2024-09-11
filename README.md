@@ -1,9 +1,9 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
-[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
-[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
-[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
+[![popularity](https://img.shields.io/pub/popularity/get?logo=dart)](https://pub.dev/packages/get/score)
+[![likes](https://img.shields.io/pub/likes/get?logo=dart)](https://pub.dev/packages/get/score)
+[![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -34,9 +34,10 @@
 [![Korean](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
 [![French](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
 [![Japanese](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
-[![Turkish](https://img.shields.io/badge/Language-Turkish-blueviolet?style=for-the-badge)](README.tr-TR.md)
+[![Hindi](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
+[![Bangla](https://img.shields.io/badge/Language-Bangla-blueviolet?style=for-the-badge)](README-bn.md)
   
-
+  
 </div>
 
 - [About Get](#about-get)
@@ -517,7 +518,6 @@ class HomeProvider extends GetConnect {
     //HttpStatus.unauthorized
     httpClient.maxAuthRetries = 3;
   }
-  }
 
   @override
   Future<Response<CasesModel>> getCases(String path) => get(path);
@@ -681,19 +681,19 @@ context.height
 context.heightTransformer()
 context.widthTransformer()
 
-/// Similar to MediaQuery.of(context).size
+/// Similar to MediaQuery.sizeOf(context);
 context.mediaQuerySize()
 
-/// Similar to MediaQuery.of(context).padding
+/// Similar to MediaQuery.paddingOf(context);
 context.mediaQueryPadding()
 
-/// Similar to MediaQuery.of(context).viewPadding
+/// Similar to MediaQuery.viewPaddingOf(context);
 context.mediaQueryViewPadding()
 
-/// Similar to MediaQuery.of(context).viewInsets;
+/// Similar to MediaQuery.viewInsetsOf(context);
 context.mediaQueryViewInsets()
 
-/// Similar to MediaQuery.of(context).orientation;
+/// Similar to MediaQuery.orientationOf(context);
 context.orientation()
 
 /// Check if device is on landscape mode
@@ -702,10 +702,10 @@ context.isLandscape()
 /// Check if device is on portrait mode
 context.isPortrait()
 
-/// Similar to MediaQuery.of(context).devicePixelRatio;
+/// Similar to MediaQuery.devicePixelRatioOf(context);
 context.devicePixelRatio()
 
-/// Similar to MediaQuery.of(context).textScaleFactor;
+/// Similar to MediaQuery.textScaleFactorOf(context);
 context.textScaleFactor()
 
 /// Get the shortestSide from screen
@@ -1275,3 +1275,5 @@ Any contribution is welcome!
 - [Flutter State Management with GetX – Complete App](https://www.appwithflutter.com/flutter-state-management-with-getx/) - by App With Flutter.
 - [Flutter Routing with Animation using Get Package](https://www.appwithflutter.com/flutter-routing-using-get-package/) - by App With Flutter.
 - [A minimal example on dartpad](https://dartpad.dev/2b3d0d6f9d4e312c5fdbefc414c1727e?) - by [Roi Peker](https://github.com/roipeker)
+- [GetConnect: The best way to perform API operations in Flutter with Get.](https://absyz.com/getconnect-the-best-way-to-perform-api-operations-in-flutter-with-getx/) - by [MD Sarfaraj](https://github.com/socialmad)
+- [How To Create an App with GetX Architect in Flutter with Get CLI](https://www.youtube.com/watch?v=7mb4qBA7kTk&t=1380s) - by [MD Sarfaraj](https://github.com/socialmad)

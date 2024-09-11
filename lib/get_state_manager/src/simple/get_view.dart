@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../instance_manager.dart';
 import '../../../utils.dart';
+import 'get_state.dart';
 import 'get_widget_cache.dart';
 
 /// GetView is a great way of quickly access your Controller
@@ -31,11 +32,11 @@ import 'get_widget_cache.dart';
 /// }
 ///``
 abstract class GetView<T> extends StatelessWidget {
-  const GetView({Key? key}) : super(key: key);
+  const GetView({super.key});
 
   final String? tag = null;
 
-  T get controller => GetInstance().find<T>(tag: tag)!;
+  T get controller => Get.find<T>(tag: tag)!;
 
   @override
   Widget build(BuildContext context);
@@ -48,7 +49,7 @@ abstract class GetView<T> extends StatelessWidget {
 /// GetWidget will have your own controller, and will be call events as `onInit`
 /// and `onClose` when the controller get in/get out on memory.
 abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
-  const GetWidget({Key? key}) : super(key: key);
+  const GetWidget({super.key});
 
   @protected
   final String? tag = null;
@@ -72,7 +73,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   InstanceInfo? info;
   @override
   void onInit() {
-    info = GetInstance().getInstanceInfo<S>(tag: widget!.tag);
+    info = Get.getInstanceInfo<S>(tag: widget!.tag);
 
     _isCreator = info!.isPrepared && info!.isCreate;
 
@@ -81,6 +82,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
     }
 
     GetWidget._cache[widget!] = _controller;
+
     super.onInit();
   }
 
@@ -91,7 +93,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
         widget!.controller.onDelete();
         Get.log('"${widget!.controller.runtimeType}" onClose() called');
         Get.log('"${widget!.controller.runtimeType}" deleted from memory');
-        GetWidget._cache[widget!] = null;
+        // GetWidget._cache[widget!] = null;
       });
     }
     info = null;
@@ -100,6 +102,9 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
 
   @override
   Widget build(BuildContext context) {
-    return widget!.build(context);
+    return Binder(
+      init: () => _controller,
+      child: widget!.build(context),
+    );
   }
 }

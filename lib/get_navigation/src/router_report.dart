@@ -1,7 +1,5 @@
 import 'dart:collection';
 
-import 'package:flutter/widgets.dart';
-
 import '../../get.dart';
 
 class RouterReportManager<T> {
@@ -15,7 +13,16 @@ class RouterReportManager<T> {
   /// non-singleton instances.
   final Map<T?, HashSet<Function>> _routesByCreate = {};
 
-  static late final RouterReportManager instance = RouterReportManager();
+  static RouterReportManager? _instance;
+
+  RouterReportManager._();
+
+  static RouterReportManager get instance =>
+      _instance ??= RouterReportManager._();
+
+  static void dispose() {
+    _instance = null;
+  }
 
   void printInstanceStack() {
     Get.log(_routesKey.toString());
@@ -30,12 +37,12 @@ class RouterReportManager<T> {
 
   /// Links a Class instance [S] (or [tag]) to the current route.
   /// Requires usage of `GetMaterialApp`.
-  void reportDependencyLinkedToRoute(String depedencyKey) {
+  void reportDependencyLinkedToRoute(String dependencyKey) {
     if (_current == null) return;
     if (_routesKey.containsKey(_current)) {
-      _routesKey[_current!]!.add(depedencyKey);
+      _routesKey[_current!]!.add(dependencyKey);
     } else {
-      _routesKey[_current] = <String>[depedencyKey];
+      _routesKey[_current] = <String>[dependencyKey];
     }
   }
 
@@ -52,9 +59,10 @@ class RouterReportManager<T> {
 
   void reportRouteDispose(T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-        _removeDependencyByRoute(disposed);
-      });
+      // ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      // Future.microtask(() {
+      _removeDependencyByRoute(disposed);
+      // });
     }
   }
 
@@ -75,7 +83,7 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      GetInstance().markAsDirty(key: element);
+      Get.markAsDirty(key: element);
 
       //_routesKey.remove(element);
     }
@@ -104,11 +112,13 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      final value = GetInstance().delete(key: element);
+      final value = Get.delete(key: element);
       if (value) {
         _routesKey[routeName]?.remove(element);
       }
     }
+    
+    _routesKey.remove(routeName);
 
     keysToRemove.clear();
   }

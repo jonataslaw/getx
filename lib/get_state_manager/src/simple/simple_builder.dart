@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../get_core/src/typedefs.dart';
 import 'list_notifier.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -32,20 +30,24 @@ class ValueBuilder<T> extends StatefulWidget {
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
-    Key? key,
+    super.key,
     required this.initialValue,
     this.onDispose,
     this.onUpdate,
     required this.builder,
-  }) : super(key: key);
+  });
 
   @override
-  _ValueBuilderState<T> createState() => _ValueBuilderState<T>(initialValue);
+  ValueBuilderState<T> createState() => ValueBuilderState<T>();
 }
 
-class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  T value;
-  _ValueBuilderState(this.value);
+class ValueBuilderState<T> extends State<ValueBuilder<T>> {
+  late T value;
+  @override
+  void initState() {
+    value = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
@@ -71,13 +73,13 @@ class _ValueBuilderState<T> extends State<ValueBuilder<T>> {
   }
 }
 
-class ObxElement = StatelessElement with ObserverComponent;
+class ObxElement = StatelessElement with StatelessObserverComponent;
 
 // It's a experimental feature
 class Observer extends ObxStatelessWidget {
   final WidgetBuilder builder;
 
-  const Observer({Key? key, required this.builder}) : super(key: key);
+  const Observer({super.key, required this.builder});
 
   @override
   Widget build(BuildContext context) => builder(context);
@@ -86,38 +88,22 @@ class Observer extends ObxStatelessWidget {
 /// A StatelessWidget than can listen reactive changes.
 abstract class ObxStatelessWidget extends StatelessWidget {
   /// Initializes [key] for subclasses.
-  const ObxStatelessWidget({Key? key}) : super(key: key);
+  const ObxStatelessWidget({super.key});
   @override
   StatelessElement createElement() => ObxElement(this);
 }
 
 /// a Component that can track changes in a reactive variable
-mixin ObserverComponent on ComponentElement {
+mixin StatelessObserverComponent on StatelessElement {
   List<Disposer>? disposers = <Disposer>[];
 
   void getUpdate() {
+    // if (disposers != null && !dirty) {
+    //   markNeedsBuild();
+    // }
     if (disposers != null) {
-      _safeRebuild();
+      scheduleMicrotask(markNeedsBuild);
     }
-  }
-
-  Future<bool> _safeRebuild() async {
-    if (dirty) return false;
-    if (ambiguate(SchedulerBinding.instance) == null) {
-      markNeedsBuild();
-    } else {
-      // refresh was called during the building
-      if (ambiguate(SchedulerBinding.instance)!.schedulerPhase 
-      != SchedulerPhase.idle) {
-        // Await for the end of build
-        await ambiguate(SchedulerBinding.instance)!.endOfFrame;
-        if (dirty) return false;
-      }
-
-      markNeedsBuild();
-    }
-
-    return true;
   }
 
   @override

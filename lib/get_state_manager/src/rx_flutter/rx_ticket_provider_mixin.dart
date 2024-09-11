@@ -165,8 +165,7 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
 }
 
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(TickerCallback onTick, this._creator, {String? debugLabel})
-      : super(onTick, debugLabel: debugLabel);
+  _WidgetTicker(super.onTick, this._creator, {super.debugLabel});
 
   final GetTickerProviderStateMixin _creator;
 

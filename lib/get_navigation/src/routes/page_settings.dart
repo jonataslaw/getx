@@ -40,14 +40,10 @@ extension PageArgExt on BuildContext {
   String get location {
     final parser = router.routeInformationParser;
     final config = delegate.currentConfiguration;
-    return parser?.restoreRouteInformation(config)?.location ?? '/';
+    return parser?.restoreRouteInformation(config)?.uri.toString() ?? '/';
   }
 
-  RouterDelegate get delegate {
-    return router.routerDelegate;
-  }
-
-  GetDelegate get navigation {
+  GetDelegate get delegate {
     return router.routerDelegate as GetDelegate;
   }
 }
@@ -55,14 +51,11 @@ extension PageArgExt on BuildContext {
 class PageSettings extends RouteSettings {
   PageSettings(
     this.uri, [
-    this.arguments,
-  ]);
+    Object? arguments,
+  ]) : super(arguments: arguments);
 
   @override
   String get name => '$uri';
-
-  @override
-  late final Object? arguments;
 
   final Uri uri;
 

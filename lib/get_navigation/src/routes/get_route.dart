@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -20,11 +22,12 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  //final BindingsInterface? binding;
+  final BindingsInterface? binding;
   final List<BindingsInterface> bindings;
   final List<Bind> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
+  final Duration? reverseTransitionDuration;
   final bool fullscreenDialog;
   final bool preventDuplicates;
   final Completer<T?>? completer;
@@ -40,13 +43,17 @@ class GetPage<T> extends Page<T> {
   @override
   final String name;
 
+  final bool inheritParentPath;
+
   final List<GetPage> children;
-  final List<GetMiddleware>? middlewares;
+  final List<GetMiddleware> middlewares;
   final PathDecoded path;
   final GetPage? unknownRoute;
   final bool showCupertinoParallax;
 
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
+
+  static void _defaultPopInvokedHandler(bool didPop, Object? result) {}
 
   GetPage({
     required this.name,
@@ -61,22 +68,28 @@ class GetPage<T> extends Page<T> {
     this.parameters,
     this.opaque = true,
     this.transitionDuration,
+    this.reverseTransitionDuration,
     this.popGesture,
+    this.binding,
     this.bindings = const [],
     this.binds = const [],
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
     this.children = const <GetPage>[],
-    this.middlewares,
+    this.middlewares = const [],
     this.unknownRoute,
     this.arguments,
     this.showCupertinoParallax = true,
     this.preventDuplicates = true,
     this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.ReorderRoutes,
+        PreventDuplicateHandlingMode.reorderRoutes,
     this.completer,
+    this.inheritParentPath = true,
     LocalKey? key,
+    super.canPop,
+    super.onPopInvoked = _defaultPopInvokedHandler,
+    super.restorationId,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
@@ -87,7 +100,7 @@ class GetPage<T> extends Page<T> {
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
-  GetPage<T> copy({
+  GetPage<T> copyWith({
     LocalKey? key,
     String? name,
     GetPageBuilder? page,
@@ -100,10 +113,11 @@ class GetPage<T> extends Page<T> {
     bool? maintainState,
     bool? opaque,
     List<BindingsInterface>? bindings,
-    // BindingsInterface? binding,
+    BindingsInterface? binding,
     List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
+    Duration? reverseTransitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
     List<GetPage<T>>? children,
@@ -115,6 +129,10 @@ class GetPage<T> extends Page<T> {
     Object? arguments,
     bool? showCupertinoParallax,
     Completer<T?>? completer,
+    bool? inheritParentPath,
+    bool? canPop,
+    PopInvokedWithResultCallback<T>? onPopInvoked,
+    String? restorationId,
   }) {
     return GetPage(
       key: key ?? this.key,
@@ -133,8 +151,11 @@ class GetPage<T> extends Page<T> {
       opaque: opaque ?? this.opaque,
       bindings: bindings ?? this.bindings,
       binds: binds ?? this.binds,
+      binding: binding ?? this.binding,
       customTransition: customTransition ?? this.customTransition,
       transitionDuration: transitionDuration ?? this.transitionDuration,
+      reverseTransitionDuration:
+          reverseTransitionDuration ?? this.reverseTransitionDuration,
       fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
       children: children ?? this.children,
       unknownRoute: unknownRoute ?? this.unknownRoute,
@@ -144,28 +165,32 @@ class GetPage<T> extends Page<T> {
       showCupertinoParallax:
           showCupertinoParallax ?? this.showCupertinoParallax,
       completer: completer ?? this.completer,
+      inheritParentPath: inheritParentPath ?? this.inheritParentPath,
+      canPop: canPop ?? this.canPop,
+      onPopInvoked: onPopInvoked ?? this.onPopInvoked,
+      restorationId: restorationId ?? restorationId,
     );
   }
 
   @override
   Route<T> createRoute(BuildContext context) {
     // return GetPageRoute<T>(settings: this, page: page);
-    final _page = PageRedirect(
+    final page = PageRedirect(
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
-    ).getPageToRoute<T>(this, unknownRoute);
+    ).getPageToRoute<T>(this, unknownRoute, context);
 
-    return _page;
+    return page;
   }
 
   static PathDecoded _nameToRegex(String path) {
     var keys = <String?>[];
 
-    String _replace(Match pattern) {
+    String recursiveReplace(Match pattern) {
       var buffer = StringBuffer('(?:');
 
-      if (pattern[1] != null) buffer.write('\.');
+      if (pattern[1] != null) buffer.write('.');
       buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
       if (pattern[3] != null) buffer.write('?');
 
@@ -174,7 +199,7 @@ class GetPage<T> extends Page<T> {
     }
 
     var stringPath = '$path/?'
-        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), _replace)
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
         .replaceAll('//', '/');
 
     return PathDecoded(RegExp('^$stringPath\$'), keys);

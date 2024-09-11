@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../get.dart';
 
@@ -18,8 +17,7 @@ mixin GetLifeCycleMixin {
   @protected
   @mustCallSuper
   void onInit() {
-    ambiguate(SchedulerBinding.instance)
-        ?.addPostFrameCallback((_) => onReady());
+    ambiguate(Engine.instance)?.addPostFrameCallback((_) => onReady());
   }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
@@ -41,7 +39,7 @@ mixin GetLifeCycleMixin {
   bool get initialized => _initialized;
 
   /// Called at the exact moment the widget is allocated in memory.
-  /// It uses an internal "callable" type, to avoid any @overrides in subclases.
+  /// It uses an internal "callable" type, to avoid any @overrides in subclasses.
   /// This method should be internal and is required to define the
   /// lifetime cycle of the subclass.
   // @protected

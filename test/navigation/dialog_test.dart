@@ -13,8 +13,7 @@ void main() {
     await tester.pump();
 
     Get.defaultDialog(
-        onConfirm: () => print("Ok"),
-        middleText: "Dialog made in 3 lines of code");
+        onConfirm: () {}, middleText: "Dialog made in 3 lines of code");
 
     await tester.pumpAndSettle();
 
@@ -28,7 +27,7 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
 
     await tester.pumpAndSettle();
 
@@ -42,13 +41,13 @@ void main() {
 
     await tester.pump();
 
-    Get.dialog(YourDialogWidget());
+    Get.dialog(const YourDialogWidget());
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsOneWidget);
     // expect(Get.isDialogOpen, true);
 
-    Get.back();
+    Get.backLegacy();
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsNothing);
@@ -58,7 +57,7 @@ void main() {
 }
 
 class YourDialogWidget extends StatelessWidget {
-  const YourDialogWidget({Key? key}) : super(key: key);
+  const YourDialogWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

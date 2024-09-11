@@ -7,10 +7,10 @@ import '../../../get_instance/get_instance.dart';
 import '../../../get_state_manager/get_state_manager.dart';
 import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
+import 'get_root.dart';
 
 class GetCupertinoApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
-
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
   final String? initialRoute;
@@ -59,11 +59,15 @@ class GetCupertinoApp extends StatelessWidget {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
-  GetCupertinoApp({
-    Key? key,
+  final List<Bind> binds;
+  final ScrollBehavior? scrollBehavior;
+
+  const GetCupertinoApp({
+    super.key,
     this.theme,
     this.navigatorKey,
     this.home,
@@ -86,6 +90,8 @@ class GetCupertinoApp extends StatelessWidget {
     this.onInit,
     this.onDispose,
     this.locale,
+    this.binds = const [],
+    this.scrollBehavior,
     this.fallbackLocale,
     this.localizationsDelegates,
     this.localeListResolutionCallback,
@@ -118,25 +124,15 @@ class GetCupertinoApp extends StatelessWidget {
         backButtonDispatcher = null,
         routeInformationParser = null,
         routerDelegate = null,
-        super(key: key);
+        routerConfig = null;
 
-  static String _cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncommonent for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
-  }
-
-  GetCupertinoApp.router({
-    Key? key,
+  const GetCupertinoApp.router({
+    super.key,
     this.theme,
     this.routeInformationProvider,
     this.routeInformationParser,
     this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.builder,
     this.title = '',
@@ -156,6 +152,8 @@ class GetCupertinoApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
+    this.binds = const [],
+    this.scrollBehavior,
     this.actions,
     this.customTransition,
     this.translationsKeys,
@@ -184,129 +182,76 @@ class GetCupertinoApp extends StatelessWidget {
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
 
   @override
-  Widget build(BuildContext context) => GetBuilder<GetMaterialController>(
-        init: Get.rootController,
-        dispose: (d) {
-          onDispose?.call();
-          Get.clearRouteTree();
-          Get.clearTranslations();
-          Get.resetRootNavigator();
-          Get.routerDelegate = null;
-          Get.routeInformationParser = null;
-        },
-        initState: (i) {
-          Get.engine.addPostFrameCallback((timeStamp) {
-            onReady?.call();
-          });
-          if (locale != null) Get.locale = locale;
-
-          if (fallbackLocale != null) Get.fallbackLocale = fallbackLocale;
-
-          if (translations != null) {
-            Get.addTranslations(translations!.keys);
-          } else if (translationsKeys != null) {
-            Get.addTranslations(translationsKeys!);
-          }
-
-          Get.customTransition = customTransition;
-
-          initialBinding?.dependencies();
-          if (getPages != null) {
-            Get.addPages(getPages!);
-          } else {
-            Get.addPage(
-              GetPage(
-                name: _cleanRouteName("/${home.runtimeType}"),
-                page: () => home!,
-              ),
-            );
-          }
-
-          Get.smartManagement = smartManagement;
-          onInit?.call();
-
-          Get.config(
-            enableLog: enableLog ?? Get.isLogEnable,
-            logWriterCallback: logWriterCallback,
-            defaultTransition: defaultTransition ?? Get.defaultTransition,
-            defaultOpaqueRoute: opaqueRoute ?? Get.isOpaqueRouteDefault,
-            defaultPopGesture: popGesture ?? Get.isPopGestureEnable,
-            defaultDurationTransition:
-                transitionDuration ?? Get.defaultTransitionDuration,
-          );
-        },
-        builder: (_) {
-          final routerDelegate = Get.createDelegate(
-              pages: getPages ?? [],
-              notFoundRoute: unknownRoute,
-              navigatorKey: navigatorKey,
-              navigatorObservers: (navigatorObservers == null
-                  ? <NavigatorObserver>[
-                      GetObserver(routingCallback, Get.routing)
-                    ]
-                  : <NavigatorObserver>[
-                      GetObserver(routingCallback, Get.routing)
-                    ]
-                ..addAll(navigatorObservers!)));
-          final routeInformationParser = Get.createInformationParser(
-            initialRoute: initialRoute ??
-                getPages?.first.name ??
-                _cleanRouteName("/${home.runtimeType}"),
-          );
-
-          return CupertinoApp.router(
-            routerDelegate: routerDelegate,
-            routeInformationParser: routeInformationParser,
-            backButtonDispatcher: backButtonDispatcher,
-            routeInformationProvider: routeInformationProvider,
-            key: _.unikey,
-            theme: theme,
-            builder: defaultBuilder,
-            title: title,
-            onGenerateTitle: onGenerateTitle,
-            color: color,
-            locale: Get.locale ?? locale,
-            localizationsDelegates: localizationsDelegates,
-            localeListResolutionCallback: localeListResolutionCallback,
-            localeResolutionCallback: localeResolutionCallback,
-            supportedLocales: supportedLocales,
-            showPerformanceOverlay: showPerformanceOverlay,
-            checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-            checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-            showSemanticsDebugger: showSemanticsDebugger,
-            debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-            shortcuts: shortcuts,
-            useInheritedMediaQuery: useInheritedMediaQuery,
-          );
-        },
-      );
-
-  Widget defaultBuilder(BuildContext context, Widget? child) {
-    return Directionality(
-      textDirection: textDirection ??
-          (rtlLanguages.contains(Get.locale?.languageCode)
-              ? TextDirection.rtl
-              : TextDirection.ltr),
-      child: builder == null
-          ? (child ?? Material())
-          : builder!(context, child ?? Material()),
-    );
-  }
-
-  Route<dynamic> generator(RouteSettings settings) {
-    return PageRedirect(settings: settings, unknownRoute: unknownRoute).page();
-  }
-
-  List<Route<dynamic>> initialRoutesGenerate(String name) {
-    return [
-      PageRedirect(
-        settings: RouteSettings(name: name),
+  Widget build(BuildContext context) {
+    return GetRoot(
+      config: ConfigData(
+        backButtonDispatcher: backButtonDispatcher,
+        binds: binds,
+        customTransition: customTransition,
+        defaultGlobalState: defaultGlobalState,
+        defaultTransition: defaultTransition,
+        enableLog: enableLog,
+        fallbackLocale: fallbackLocale,
+        getPages: getPages,
+        home: home,
+        initialRoute: initialRoute,
+        locale: locale,
+        logWriterCallback: logWriterCallback,
+        navigatorKey: navigatorKey,
+        navigatorObservers: navigatorObservers,
+        onDispose: onDispose,
+        onInit: onInit,
+        onReady: onReady,
+        routeInformationParser: routeInformationParser,
+        routeInformationProvider: routeInformationProvider,
+        routerDelegate: routerDelegate,
+        routingCallback: routingCallback,
+        scaffoldMessengerKey: GlobalKey<ScaffoldMessengerState>(),
+        smartManagement: smartManagement,
+        transitionDuration: transitionDuration,
+        translations: translations,
+        translationsKeys: translationsKeys,
         unknownRoute: unknownRoute,
-      ).page()
-    ];
+      ),
+      child: Builder(builder: (context) {
+        final controller = GetRoot.of(context);
+        return CupertinoApp.router(
+          routerDelegate: controller.config.routerDelegate,
+          routeInformationParser: controller.config.routeInformationParser,
+          backButtonDispatcher: backButtonDispatcher,
+          routeInformationProvider: routeInformationProvider,
+          routerConfig: routerConfig,
+          key: controller.config.unikey,
+          builder: (context, child) => Directionality(
+            textDirection: textDirection ??
+                (rtlLanguages.contains(Get.locale?.languageCode)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr),
+            child: builder == null
+                ? (child ?? const Material())
+                : builder!(context, child ?? const Material()),
+          ),
+          title: title,
+          onGenerateTitle: onGenerateTitle,
+          color: color,
+          theme: theme,
+          locale: Get.locale ?? locale,
+          localizationsDelegates: localizationsDelegates,
+          localeListResolutionCallback: localeListResolutionCallback,
+          localeResolutionCallback: localeResolutionCallback,
+          supportedLocales: supportedLocales,
+          showPerformanceOverlay: showPerformanceOverlay,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+          showSemanticsDebugger: showSemanticsDebugger,
+          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+          shortcuts: shortcuts,
+          scrollBehavior: scrollBehavior,
+        );
+      }),
+    );
   }
 }

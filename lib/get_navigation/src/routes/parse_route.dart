@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../route_manager.dart';
+import '../../../get.dart';
 
 @immutable
 class RouteDecoder {
@@ -14,8 +14,9 @@ class RouteDecoder {
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
     final args = PageSettings(uri);
-    final decoder = Get.routeTree.matchRoute(location, arguments: args);
-    decoder.route = decoder.route?.copy(
+    final decoder =
+        (Get.rootController.rootDelegate).matchRoute(location, arguments: args);
+    decoder.route = decoder.route?.copyWith(
       completer: null,
       arguments: args,
       parameters: args.params,
@@ -38,7 +39,7 @@ class RouteDecoder {
     }
   }
 
-  List<GetPage>? get currentChildrens => route?.children;
+  List<GetPage>? get currentChildren => route?.children;
 
   Map<String, String> get parameters => pageSettings?.params ?? {};
 
@@ -55,13 +56,13 @@ class RouteDecoder {
     }
   }
 
-  void replaceArguments(Object? arguments) {
-    final _route = route;
-    if (_route != null) {
-      final index = currentTreeBranch.indexOf(_route);
-      currentTreeBranch[index] = _route.copy(arguments: arguments);
-    }
-  }
+  // void replaceArguments(Object? arguments) {
+  //   final newRoute = route;
+  //   if (newRoute != null) {
+  //     final index = currentTreeBranch.indexOf(newRoute);
+  //     currentTreeBranch[index] = newRoute.copyWith(arguments: arguments);
+  //   }
+  // }
 
   @override
   bool operator ==(Object other) {
@@ -74,6 +75,10 @@ class RouteDecoder {
 
   @override
   int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
+
+  @override
+  String toString() =>
+      'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
 }
 
 class ParseRouteTree {
@@ -85,7 +90,6 @@ class ParseRouteTree {
 
   RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
-    // /home/profile/123 => home,profile,123 => /,/home,/home/profile,/home/profile/123
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
     var curPath = '/';
     final cumulativePaths = <String>[
@@ -93,7 +97,7 @@ class ParseRouteTree {
     ];
     for (var item in split) {
       if (curPath.endsWith('/')) {
-        curPath += '$item';
+        curPath += item;
       } else {
         curPath += '/$item';
       }
@@ -105,7 +109,7 @@ class ParseRouteTree {
         .where((element) => element.value != null)
 
         ///Prevent page be disposed
-        .map((e) => MapEntry(e.key, e.value!.copy(key: ValueKey(e.key))))
+        .map((e) => MapEntry(e.key, e.value!.copyWith(key: ValueKey(e.key))))
         .toList();
 
     final params = Map<String, String>.from(uri.queryParameters);
@@ -119,7 +123,7 @@ class ParseRouteTree {
       //copy parameters to all pages.
       final mappedTreeBranch = treeBranch
           .map(
-            (e) => e.value.copy(
+            (e) => e.value.copyWith(
               parameters: {
                 if (e.value.parameters != null) ...e.value.parameters!,
                 ...params,
@@ -184,14 +188,28 @@ class ParseRouteTree {
     for (var page in route.children) {
       // Add Parent middlewares to children
       final parentMiddlewares = [
-        if (page.middlewares != null) ...page.middlewares!,
-        if (route.middlewares != null) ...route.middlewares!
+        if (page.middlewares.isNotEmpty) ...page.middlewares,
+        if (route.middlewares.isNotEmpty) ...route.middlewares
       ];
+
+      final parentBindings = [
+        if (page.binding != null) page.binding!,
+        if (page.bindings.isNotEmpty) ...page.bindings,
+        if (route.bindings.isNotEmpty) ...route.bindings
+      ];
+
+      final parentBinds = [
+        if (page.binds.isNotEmpty) ...page.binds,
+        if (route.binds.isNotEmpty) ...route.binds
+      ];
+
       result.add(
         _addChild(
           page,
           parentPath,
           parentMiddlewares,
+          parentBindings,
+          parentBinds,
         ),
       );
 
@@ -202,7 +220,16 @@ class ParseRouteTree {
           parentPath,
           [
             ...parentMiddlewares,
-            if (child.middlewares != null) ...child.middlewares!,
+            if (child.middlewares.isNotEmpty) ...child.middlewares,
+          ],
+          [
+            ...parentBindings,
+            if (child.binding != null) child.binding!,
+            if (child.bindings.isNotEmpty) ...child.bindings,
+          ],
+          [
+            ...parentBinds,
+            if (child.binds.isNotEmpty) ...child.binds,
           ],
         ));
       }
@@ -212,10 +239,19 @@ class ParseRouteTree {
 
   /// Change the Path for a [GetPage]
   GetPage _addChild(
-      GetPage origin, String parentPath, List<GetMiddleware> middlewares) {
-    return origin.copy(
+    GetPage origin,
+    String parentPath,
+    List<GetMiddleware> middlewares,
+    List<BindingsInterface> bindings,
+    List<Bind> binds,
+  ) {
+    return origin.copyWith(
       middlewares: middlewares,
-      name: (parentPath + origin.name).replaceAll(r'//', '/'),
+      name: origin.inheritParentPath
+          ? (parentPath + origin.name).replaceAll(r'//', '/')
+          : origin.name,
+      bindings: bindings,
+      binds: binds,
       // key:
     );
   }
@@ -231,17 +267,17 @@ class ParseRouteTree {
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
     var idx = path.indexOf('?');
+    final uri = Uri.tryParse(path);
+    if (uri == null) return params;
     if (idx > -1) {
-      path = path.substring(0, idx);
-      final uri = Uri.tryParse(path);
-      if (uri != null) {
-        params.addAll(uri.queryParameters);
-      }
+      params.addAll(uri.queryParameters);
     }
-    var paramsMatch = routePath.regex.firstMatch(path);
-
+    var paramsMatch = routePath.regex.firstMatch(uri.path);
+    if (paramsMatch == null) {
+      return params;
+    }
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;

@@ -70,7 +70,7 @@ extension GetStringUtils on String {
   /// Discover if the String is a SHA256 Hash
   bool get isSHA256 => GetUtils.isSHA256(this);
 
-  /// Discover if the String is a bynary value
+  /// Discover if the String is a binary value
   bool get isBinary => GetUtils.isBinary(this);
 
   /// Discover if the String is a ipv4
@@ -81,8 +81,8 @@ extension GetStringUtils on String {
   /// Discover if the String is a Hexadecimal
   bool get isHexadecimal => GetUtils.isHexadecimal(this);
 
-  /// Discover if the String is a palindrom
-  bool get isPalindrom => GetUtils.isPalindrom(this);
+  /// Discover if the String is a palindrome
+  bool get isPalindrome => GetUtils.isPalindrome(this);
 
   /// Discover if the String is a passport number
   bool get isPassport => GetUtils.isPassport(this);
@@ -105,10 +105,10 @@ extension GetStringUtils on String {
       GetUtils.isCaseInsensitiveContainsAny(this, b);
 
   /// capitalize the String
-  String? get capitalize => GetUtils.capitalize(this);
+  String get capitalize => GetUtils.capitalize(this);
 
   /// Capitalize the first letter of the String
-  String? get capitalizeFirst => GetUtils.capitalizeFirst(this);
+  String get capitalizeFirst => GetUtils.capitalizeFirst(this);
 
   /// remove all whitespace from the String
   String get removeAllWhitespace => GetUtils.removeAllWhitespace(this);
@@ -124,4 +124,8 @@ extension GetStringUtils on String {
     final path = startsWith('/') ? this : '/$this';
     return GetUtils.createPath(path, segments);
   }
+
+  /// capitalize only first letter in String words to upper case
+  String capitalizeAllWordsFirstLetter() =>
+      GetUtils.capitalizeAllWordsFirstLetter(this);
 }

@@ -1,4 +1,4 @@
-part of rx_types;
+part of '../rx_types.dart';
 
 extension RxNumExt<T extends num> on Rx<T> {
   /// Multiplication operator.
@@ -572,7 +572,7 @@ extension RxnNumExt<T extends num> on Rx<T?> {
 }
 
 class RxNum extends Rx<num> {
-  RxNum(num initial) : super(initial);
+  RxNum(super.initial);
 
   num operator +(num other) {
     value += other;
@@ -587,7 +587,7 @@ class RxNum extends Rx<num> {
 }
 
 class RxnNum extends Rx<num?> {
-  RxnNum([num? initial]) : super(initial);
+  RxnNum([super.initial]);
 
   num? operator +(num other) {
     if (value != null) {
@@ -857,15 +857,15 @@ extension RxnDoubleExt on Rx<double?> {
 }
 
 class RxDouble extends Rx<double> {
-  RxDouble(double initial) : super(initial);
+  RxDouble(super.initial);
 }
 
 class RxnDouble extends Rx<double?> {
-  RxnDouble([double? initial]) : super(initial);
+  RxnDouble([super.initial]);
 }
 
 class RxInt extends Rx<int> {
-  RxInt(int initial) : super(initial);
+  RxInt(super.initial);
 
   /// Addition operator.
   RxInt operator +(int other) {
@@ -881,7 +881,7 @@ class RxInt extends Rx<int> {
 }
 
 class RxnInt extends Rx<int?> {
-  RxnInt([int? initial]) : super(initial);
+  RxnInt([super.initial]);
 
   /// Addition operator.
   RxnInt operator +(int other) {

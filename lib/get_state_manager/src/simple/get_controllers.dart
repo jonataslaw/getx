@@ -96,13 +96,13 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   @override
   void onInit() {
     super.onInit();
-    ambiguate(WidgetsBinding.instance)!.addObserver(this);
+    ambiguate(Engine.instance)!.addObserver(this);
   }
 
   @mustCallSuper
   @override
   void onClose() {
-    ambiguate(WidgetsBinding.instance)!.removeObserver(this);
+    ambiguate(Engine.instance)!.removeObserver(this);
     super.onClose();
   }
 
@@ -122,6 +122,9 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
       case AppLifecycleState.detached:
         onDetached();
         break;
+      case AppLifecycleState.hidden:
+        onHidden();
+        break;
     }
   }
 
@@ -129,4 +132,5 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   void onPaused() {}
   void onInactive() {}
   void onDetached() {}
+  void onHidden() {}
 }

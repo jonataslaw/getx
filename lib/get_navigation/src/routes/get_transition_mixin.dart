@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get.dart';
+import '../root/get_root.dart';
 
 const double _kBackGestureWidth = 20.0;
 
@@ -22,14 +23,14 @@ const int _kMaxPageBackAnimationTime = 300; // Milliseconds.
 
 class GetBackGestureDetector<T> extends StatefulWidget {
   const GetBackGestureDetector({
-    Key? key,
+    super.key,
     required this.limitedSwipe,
     required this.gestureWidth,
     required this.initialOffset,
     required this.popGestureEnable,
     required this.onStartPopGesture,
     required this.child,
-  }) : super(key: key);
+  });
 
   final bool limitedSwipe;
   final double gestureWidth;
@@ -187,8 +188,7 @@ class GetBackGestureController<T> {
       // We want to cap the animation time, but we want to use a linear curve
       // to determine it.
       final droppedPageForwardAnimationTime = min(
-        lerpDouble(
-                _kMaxMidSwipePageForwardAnimationTime, 0, controller.value)!
+        lerpDouble(_kMaxMidSwipePageForwardAnimationTime, 0, controller.value)!
             .floor(),
         _kMaxPageBackAnimationTime,
       );
@@ -286,7 +286,10 @@ Cannot read the previousTitle for a route that has not yet been installed''',
 
   @override
   // A relatively rigorous eyeball estimation.
-  Duration get transitionDuration => const Duration(milliseconds: 400);
+  Duration get transitionDuration;
+
+  @override
+  Duration get reverseTransitionDuration;
 
   /// Builds the primary contents of the route.
   @protected
@@ -367,8 +370,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     // In the middle of a back gesture drag, let the transition be linear to
     // match finger motions.
     final route = rawRoute as GetPageRoute<T>;
-    final linearTransition =
-        CupertinoRouteTransitionMixin.isPopGestureInProgress(route);
+    final linearTransition = route.popGestureInProgress;
     final finalCurve = route.curve ?? Get.defaultTransitionCurve;
     final hasCurve = route.curve != null;
     if (route.fullscreenDialog && route.transition == null) {
@@ -377,8 +379,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             ? CurvedAnimation(parent: animation, curve: finalCurve)
             : animation,
         secondaryRouteAnimation: secondaryAnimation,
-        child: child,
         linearTransition: linearTransition,
+        child: child,
       );
     } else {
       if (route.customTransition != null) {
@@ -390,9 +392,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
           secondaryAnimation,
           GetBackGestureDetector<T>(
             popGestureEnable: () =>
-                _isPopGestureEnabled(route, canSwipe(route)),
+                _isPopGestureEnabled(route, canSwipe(route), context),
             onStartPopGesture: () {
-              assert(_isPopGestureEnabled(route, canSwipe(route)));
+              assert(_isPopGestureEnabled(route, canSwipe(route), context));
               return _startPopGesture(route);
             },
             limitedSwipe: limitedSwipe,
@@ -418,9 +420,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -439,9 +441,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -460,9 +462,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -475,9 +477,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
         case Transition.noTransition:
           return GetBackGestureDetector<T>(
             popGestureEnable: () =>
-                _isPopGestureEnabled(route, canSwipe(route)),
+                _isPopGestureEnabled(route, canSwipe(route), context),
             onStartPopGesture: () {
-              assert(_isPopGestureEnabled(route, canSwipe(route)));
+              assert(_isPopGestureEnabled(route, canSwipe(route), context));
               return _startPopGesture(route);
             },
             limitedSwipe: limitedSwipe,
@@ -496,9 +498,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -517,9 +519,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -538,9 +540,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -559,9 +561,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -580,9 +582,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -599,9 +601,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               linearTransition: linearTransition,
               child: GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -620,9 +622,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -633,16 +635,16 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.fade:
-          return FadeUpwardsPageTransitionsBuilder().buildTransitions(
+          return const FadeUpwardsPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -653,16 +655,16 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.topLevel:
-          return ZoomPageTransitionsBuilder().buildTransitions(
+          return const ZoomPageTransitionsBuilder().buildTransitions(
               route,
               context,
               animation,
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -673,16 +675,16 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         case Transition.native:
-          return PageTransitionsTheme().buildTransitions(
+          return const PageTransitionsTheme().buildTransitions(
               route,
               context,
               iosAnimation,
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -701,9 +703,9 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -714,21 +716,28 @@ Cannot read the previousTitle for a route that has not yet been installed''',
               ));
 
         default:
-          if (Get.customTransition != null) {
-            return Get.customTransition!.buildTransition(context, route.curve,
+          final customTransition = GetRoot.of(context).config.customTransition;
+
+          if (customTransition != null) {
+            return customTransition.buildTransition(context, route.curve,
                 route.alignment, animation, secondaryAnimation, child);
           }
 
-          return PageTransitionsTheme().buildTransitions(
+          PageTransitionsTheme pageTransitionsTheme =
+              Theme.of(context).pageTransitionsTheme;
+
+          return pageTransitionsTheme.buildTransitions(
               route,
               context,
               iosAnimation,
               secondaryAnimation,
               GetBackGestureDetector<T>(
                 popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route)),
+                    _isPopGestureEnabled(route, canSwipe(route), context),
                 onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route)));
+                  assert(
+                    _isPopGestureEnabled(route, canSwipe(route), context),
+                  );
                   return _startPopGesture(route);
                 },
                 limitedSwipe: limitedSwipe,
@@ -753,11 +762,13 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   ///
   ///  * [popGestureEnabled], which returns true if a user-triggered pop gesture
   ///    would be allowed.
-  // static bool isPopGestureInProgress(PageRoute<dynamic> route) {
-  //   return route.navigator!.userGestureInProgress;
-  // }
+  static bool isPopGestureInProgress(BuildContext context) {
+    final route = ModalRoute.of(context)!;
+    return route.navigator!.userGestureInProgress;
+  }
 
-  static bool _isPopGestureEnabled<T>(PageRoute<T> route, bool canSwipe) {
+  static bool _isPopGestureEnabled<T>(
+      PageRoute<T> route, bool canSwipe, BuildContext context) {
     // If there's nothing to go back to, then obviously we don't support
     // the back gesture.
     if (route.isFirst) return false;
@@ -765,9 +776,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     // would be really confusing (or would skip internal routes),
     // so disallow it.
     if (route.willHandlePopInternally) return false;
-    // If attempts to dismiss this route might be vetoed such as in a page
-    // with forms, then do not allow the user to dismiss the route with a swipe.
-    if (route.hasScopedWillPopCallback) return false;
+    // support [PopScope]
+    if (route.popDisposition == RoutePopDisposition.doNotPop) return false;
     // Fullscreen dialogs aren't dismissible by back swipe.
     if (route.fullscreenDialog) return false;
     // If we're in an animation already, we cannot be manually swiped.
@@ -779,7 +789,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
       return false;
     }
     // If we're in a gesture already, we cannot start another.
-    if (CupertinoRouteTransitionMixin.isPopGestureInProgress(route)) {
+    if (GetPageRouteTransitionMixin.isPopGestureInProgress(context)) {
       return false;
     }
 
@@ -812,8 +822,8 @@ class _DirectionalityDragGestureRecognizer
     required this.isLTR,
     required this.popGestureEnable,
     required this.hasbackGestureController,
-    Object? debugOwner,
-  }) : super(debugOwner: debugOwner);
+    super.debugOwner,
+  });
 
   @override
   void handleEvent(PointerEvent event) {

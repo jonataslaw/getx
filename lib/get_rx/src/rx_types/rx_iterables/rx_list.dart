@@ -1,9 +1,9 @@
-part of rx_types;
+part of '../rx_types.dart';
 
 /// Create a list similar to `List<T>`
 class RxList<E> extends GetListenable<List<E>>
     with ListMixin<E>, RxObjectMixin<List<E>> {
-  RxList([List<E> initial = const []]) : super(initial);
+  RxList([super.initial = const []]);
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));
@@ -24,7 +24,7 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   /// Generates a list of values.
-  factory RxList.generate(int length, E generator(int index),
+  factory RxList.generate(int length, E Function(int index) generator,
       {bool growable = true}) {
     return RxList(List.generate(length, generator, growable: growable));
   }
@@ -48,7 +48,7 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   RxList<E> operator +(Iterable<E> val) {
     addAll(val);
-    refresh();
+    // refresh();
     return this;
   }
 
@@ -58,25 +58,32 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   @override
-  void add(E item) {
-    value.add(item);
+  void add(E element) {
+    value.add(element);
     refresh();
   }
 
   @override
-  void addAll(Iterable<E> item) {
-    value.addAll(item);
+  void addAll(Iterable<E> iterable) {
+    value.addAll(iterable);
     refresh();
   }
 
   @override
-  void removeWhere(bool test(E element)) {
+  bool remove(Object? element) {
+    final removed = value.remove(element);
+    refresh();
+    return removed;
+  }
+
+  @override
+  void removeWhere(bool Function(E element) test) {
     value.removeWhere(test);
     refresh();
   }
 
   @override
-  void retainWhere(bool test(E element)) {
+  void retainWhere(bool Function(E element) test) {
     value.retainWhere(test);
     refresh();
   }
@@ -106,6 +113,12 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   Iterable<E> get reversed => value.reversed;
 
+  // @override
+  // set value(List<E> val) {
+  //   value = val;
+  //   refresh();
+  // }
+
   @override
   Iterable<E> where(bool Function(E) test) {
     return value.where(test);
@@ -117,7 +130,7 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   @override
-  void sort([int compare(E a, E b)?]) {
+  void sort([int Function(E a, E b)? compare]) {
     value.sort(compare);
     refresh();
   }

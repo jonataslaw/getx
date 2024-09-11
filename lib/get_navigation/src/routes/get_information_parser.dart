@@ -4,6 +4,11 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
+  factory GetInformationParser.createInformationParser(
+      {String initialRoute = '/'}) {
+    return GetInformationParser(initialRoute: initialRoute);
+  }
+
   final String initialRoute;
 
   GetInformationParser({
@@ -15,26 +20,29 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   SynchronousFuture<RouteDecoder> parseRouteInformation(
     RouteInformation routeInformation,
   ) {
-    var location = routeInformation.location;
+    final uri = routeInformation.uri;
+    var location = uri.toString();
     if (location == '/') {
       //check if there is a corresponding page
       //if not, relocate to initialRoute
-      if (!Get.routeTree.routes.any((element) => element.name == '/')) {
+      if (!(Get.rootController.rootDelegate)
+          .registeredRoutes
+          .any((element) => element.name == '/')) {
         location = initialRoute;
       }
+    } else if (location.isEmpty) {
+      location = initialRoute;
     }
 
     Get.log('GetInformationParser: route location: $location');
 
-    final routeName = location ?? initialRoute;
-
-    return SynchronousFuture(RouteDecoder.fromRoute(routeName));
+    return SynchronousFuture(RouteDecoder.fromRoute(location));
   }
 
   @override
-  RouteInformation restoreRouteInformation(RouteDecoder config) {
+  RouteInformation restoreRouteInformation(RouteDecoder configuration) {
     return RouteInformation(
-      location: config.pageSettings?.name,
+      uri: Uri.tryParse(configuration.pageSettings?.name ?? ''),
       state: null,
     );
   }
