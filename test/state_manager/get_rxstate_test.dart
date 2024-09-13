@@ -91,7 +91,7 @@ class Controller extends GetxController {
 
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
-  final nullableNum = (null as int?).obs;
+  final nullableNum = null.obs<int?>();
   RxString string = "string".obs;
   RxList list = [].obs;
   RxMap map = {}.obs;

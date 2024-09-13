@@ -327,7 +327,7 @@ extension BoolExtension on bool {
   RxBool get obs => RxBool(this);
 }
 
-extension RxT<T extends Object?> on T {
+extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
 }
