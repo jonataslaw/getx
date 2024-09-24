@@ -26,7 +26,8 @@ jobs:
           flutter-version: "3.24.0"
           channel: "stable"
       - run: flutter pub get
-      #- run: flutter analyze
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       # Upload coverage reports to Codecov
