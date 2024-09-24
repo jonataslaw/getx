@@ -30,7 +30,7 @@ import 'get_widget_cache.dart';
 ///     );
 ///   }
 /// }
-///``
+///```
 abstract class GetView<T> extends StatelessWidget {
   const GetView({super.key});
 
