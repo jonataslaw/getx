@@ -1,3 +1,7 @@
+## [5.0.0-release-candidate-9.2.1]
+
+- Remove remaining dart:html references
+
 ## [5.0.0-release-candidate-9.2]
 
 - Remove dart:html references
