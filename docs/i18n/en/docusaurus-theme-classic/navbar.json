@@ -1,0 +1,30 @@
+{
+  "logo.alt": {
+    "message": "Site Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Get Started": {
+    "message": "Get Started",
+    "description": "Navbar item with label Get Started"
+  },
+  "item.label.About": {
+    "message": "About",
+    "description": "Navbar item with label About"
+  },
+  "item.label.Pillars": {
+    "message": "Pillars",
+    "description": "Navbar item with label Pillars"
+  },
+  "item.label.Utils": {
+    "message": "Utils",
+    "description": "Navbar item with label Utils"
+  },
+  "item.label.Community": {
+    "message": "Community",
+    "description": "Navbar item with label Community"
+  },
+  "item.label.Concepts": {
+    "message": "Concepts",
+    "description": "Navbar item with label Concepts"
+  }
+}
