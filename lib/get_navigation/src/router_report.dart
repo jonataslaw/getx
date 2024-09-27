@@ -120,6 +120,10 @@ class RouterReportManager<T> {
     
     _routesKey.remove(routeName);
 
+    if (_routesKey[routeName]?.isEmpty ?? false) {
+      _routesKey.remove(routeName);
+    }
+
     keysToRemove.clear();
   }
 }
