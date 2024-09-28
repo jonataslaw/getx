@@ -14,9 +14,9 @@ class DashboardView extends GetView<DashboardController> {
           () => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'DashboardView is working',
-                style: TextStyle(fontSize: 20),
+              Text(
+                "PAGES.DASHBOARD.TITLE".tr,
+                style: const TextStyle(fontSize: 20),
               ),
               Text('Time: ${controller.now.value.toString()}'),
             ],
