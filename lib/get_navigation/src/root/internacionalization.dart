@@ -7,5 +7,5 @@ const List<String> rtlLanguages = <String>[
 ];
 
 abstract class Translations {
-  Map<String, Map<String, String>> get keys;
+  Map<String, Map<String, dynamic>> get keys;
 }
