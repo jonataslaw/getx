@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:example_nav2/lang/languages/en_US.dart';
-import 'package:example_nav2/lang/languages/es_ES.dart';
-import 'package:example_nav2/lang/languages/pt_BR.dart';
+import 'package:example_nav2/lang/languages/en_us.dart';
+import 'package:example_nav2/lang/languages/es_es.dart';
+import 'package:example_nav2/lang/languages/pt_br.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
