@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      opaqueRoute: false,
       getPages: [
         GetPage(
             participatesInRootNavigator: true,
@@ -132,6 +133,17 @@ class Second extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SecondController());
     print('second rebuild');
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+            width: double.infinity,
+            color: Colors.red,
+          )
+        ],
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('page two ${Get.parameters["id"]}'),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_navigation/src/root/get_root.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
@@ -42,7 +43,7 @@ class GetPageRoute<T> extends PageRoute<T>
     super.settings,
     this.transitionDuration = const Duration(milliseconds: 300),
     this.reverseTransitionDuration = const Duration(milliseconds: 300),
-    this.opaque = true,
+    this.getOpaque,
     this.parameter,
     this.gestureWidth,
     this.curve,
@@ -82,8 +83,9 @@ class GetPageRoute<T> extends PageRoute<T>
   @override
   final bool showCupertinoParallax;
 
+  final bool? getOpaque;
   @override
-  final bool opaque;
+  bool get opaque => getOpaque??Get.defaultOpaqueRoute;
   final bool? popGesture;
 
   @override

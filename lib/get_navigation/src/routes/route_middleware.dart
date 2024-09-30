@@ -184,7 +184,7 @@ class PageRedirect {
       curve: r.curve,
       showCupertinoParallax: r.showCupertinoParallax,
       gestureWidth: r.gestureWidth,
-      opaque: r.opaque,
+      getOpaque: r.opaque,
       customTransition: r.customTransition,
       bindings: r.bindings,
       binding: r.binding,
