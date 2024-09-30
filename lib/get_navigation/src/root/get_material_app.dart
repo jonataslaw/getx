@@ -195,6 +195,7 @@ class GetMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetRoot(
       config: ConfigData(
+        defaultOpaqueRoute: opaqueRoute??true,
         backButtonDispatcher: backButtonDispatcher,
         binds: binds,
         customTransition: customTransition,
