@@ -74,30 +74,53 @@ void main() {
     });
   });
 
-  testWidgets("Get.dialog close and return value test", (tester) async {
-    await tester.pumpWidget(
-      Wrapper(child: Container()),
-    );
+  group("Get.closeDialog", () {
+    testWidgets("Get.closeDialog - closes dialog and returns value",
+        (tester) async {
+      await tester.pumpWidget(
+        Wrapper(child: Container()),
+      );
 
-    await tester.pump();
+      await tester.pump();
 
-    final result = Get.dialog(const YourDialogWidget());
-    await tester.pumpAndSettle();
+      final result = Get.dialog(const YourDialogWidget());
+      await tester.pumpAndSettle();
 
-    expect(find.byType(YourDialogWidget), findsOneWidget);
-    expect(Get.isDialogOpen, true);
+      expect(find.byType(YourDialogWidget), findsOneWidget);
+      expect(Get.isDialogOpen, true);
 
-    const dialogResult = "My dialog result";
+      const dialogResult = "My dialog result";
 
-    Get.closeDialog(result: dialogResult);
-    await tester.pumpAndSettle();
+      Get.closeDialog(result: dialogResult);
+      await tester.pumpAndSettle();
 
-    final returnedResult = await result;
-    expect(returnedResult, dialogResult);
+      final returnedResult = await result;
+      expect(returnedResult, dialogResult);
 
-    expect(find.byType(YourDialogWidget), findsNothing);
-    expect(Get.isDialogOpen, false);
-    await tester.pumpAndSettle();
+      expect(find.byType(YourDialogWidget), findsNothing);
+      expect(Get.isDialogOpen, false);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets("Get.closeDialog - does not close bottomsheets",
+        (tester) async {
+      await tester.pumpWidget(
+        Wrapper(child: Container()),
+      );
+
+      await tester.pump();
+
+      Get.bottomSheet(const YourDialogWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(YourDialogWidget), findsOneWidget);
+      expect(Get.isDialogOpen, false);
+
+      Get.closeDialog();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(YourDialogWidget), findsOneWidget);
+    });
   });
 }
 
