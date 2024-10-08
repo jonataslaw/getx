@@ -34,25 +34,70 @@ void main() {
     expect(find.byType(YourDialogWidget), findsOneWidget);
   });
 
-  testWidgets("Get.dialog close test", (tester) async {
+  group("Get dialog close tests", () {
+    /// Set up the test by opening a dialog and checking to ensure state is correct
+    Future<void> setUpCloseTest(WidgetTester tester) async {
+      await tester.pumpWidget(
+        Wrapper(child: Container()),
+      );
+
+      await tester.pump();
+
+      Get.dialog(const YourDialogWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(YourDialogWidget), findsOneWidget);
+      expect(Get.isDialogOpen, true);
+    }
+
+    /// Tear down the test by checking after closing the dialog
+    Future<void> tearDownCloseTest(WidgetTester tester) async {
+      await tester.pumpAndSettle();
+
+      expect(find.byType(YourDialogWidget), findsNothing);
+      expect(Get.isDialogOpen, false);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets("Get dialog close - with backLegacy", (tester) async {
+      await setUpCloseTest(tester);
+      // Close using backLegacy
+      Get.backLegacy();
+      await tearDownCloseTest(tester);
+    });
+
+    testWidgets("Get dialog close - with closeDialog", (tester) async {
+      await setUpCloseTest(tester);
+      // Close using closeDialog
+      Get.closeDialog();
+      await tearDownCloseTest(tester);
+    });
+  });
+
+  testWidgets("Get.dialog close and return value test", (tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
 
     await tester.pump();
 
-    Get.dialog(const YourDialogWidget());
+    final result = Get.dialog(const YourDialogWidget());
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsOneWidget);
-    // expect(Get.isDialogOpen, true);
+    expect(Get.isDialogOpen, true);
 
-    Get.backLegacy();
+    const dialogResult = "My dialog result";
+
+    Get.closeDialog(result: dialogResult);
     await tester.pumpAndSettle();
 
+    final returnedResult = await result;
+    expect(returnedResult, dialogResult);
+
     expect(find.byType(YourDialogWidget), findsNothing);
-    // expect(Get.isDialogOpen, false);
-    // await tester.pumpAndSettle();
+    expect(Get.isDialogOpen, false);
+    await tester.pumpAndSettle();
   });
 }
 
