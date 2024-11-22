@@ -133,6 +133,7 @@ class GetPage<T> extends Page<T> {
     bool? canPop,
     PopInvokedWithResultCallback<T>? onPopInvoked,
     String? restorationId,
+    PreventDuplicateHandlingMode? preventDuplicateHandlingMode,
   }) {
     return GetPage(
       key: key ?? this.key,
@@ -168,7 +169,9 @@ class GetPage<T> extends Page<T> {
       inheritParentPath: inheritParentPath ?? this.inheritParentPath,
       canPop: canPop ?? this.canPop,
       onPopInvoked: onPopInvoked ?? this.onPopInvoked,
-      restorationId: restorationId ?? restorationId,
+      restorationId: restorationId ?? this.restorationId,
+      preventDuplicateHandlingMode:
+          preventDuplicateHandlingMode ?? this.preventDuplicateHandlingMode,
     );
   }
 
