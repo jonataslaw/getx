@@ -117,6 +117,7 @@ mixin IGetNavigation {
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
+    bool preventDuplicates = true,
   });
 
   Future<T?>? offAllNamed<T>(
@@ -133,25 +134,33 @@ mixin IGetNavigation {
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
+    bool preventDuplicates = true,
   });
 
   Future<T?> toNamedAndOffUntil<T>(
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
+    bool preventDuplicates = true,
   ]);
 
   Future<T?> offUntil<T>(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
+    bool preventDuplicates = true,
   ]);
 
   void removeRoute<T>(String name);
 
   void back<T>([T? result]);
 
-  Future<R?> backAndtoNamed<T, R>(String page, {T? result, Object? arguments});
+  Future<R?> backAndtoNamed<T, R>(
+    String page, {
+    T? result,
+    Object? arguments,
+    bool preventDuplicates = true,
+  });
 
   void backUntil(bool Function(GetPage) predicate);
 

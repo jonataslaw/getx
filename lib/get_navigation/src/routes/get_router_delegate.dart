@@ -355,7 +355,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Map<String, String>? parameters,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(
+      args,
+      preventDuplicates: preventDuplicates,
+    );
     if (route != null) {
       return _push<T>(route);
     } else {
@@ -407,7 +410,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     _routeTree.addRoute(getPage);
     final args = _buildPageSettings(routeName, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(
+      args,
+      preventDuplicates: preventDuplicates,
+    );
     final result = await _push<T>(
       route!,
       rebuildStack: rebuildStack,
@@ -521,9 +527,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
+    bool preventDuplicates = true,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(
+      args,
+      preventDuplicates: preventDuplicates,
+    );
     if (route == null) return null;
 
     final newPredicate = predicate ?? (route) => false;
@@ -541,9 +551,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
+    bool preventDuplicates = true,
   }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<T>(args);
+    final route = _getRouteDecoder<T>(
+      args,
+      preventDuplicates: preventDuplicates,
+    );
     if (route == null) return null;
     _popWithResult();
     return _push<T>(route);
@@ -554,10 +568,14 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
+    bool preventDuplicates = true,
   ]) async {
     final arguments = _buildPageSettings(page, data);
 
-    final route = _getRouteDecoder<T>(arguments);
+    final route = _getRouteDecoder<T>(
+      arguments,
+      preventDuplicates: preventDuplicates,
+    );
 
     if (route == null) return null;
 
@@ -573,12 +591,17 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
+    bool preventDuplicates = true,
   ]) async {
     while (_activePages.isNotEmpty && !predicate(_activePages.last.route!)) {
       _popWithResult();
     }
 
-    return to<T>(page, arguments: arguments);
+    return to<T>(
+      page,
+      arguments: arguments,
+      preventDuplicates: preventDuplicates,
+    );
   }
 
   @override
@@ -602,10 +625,17 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<R?> backAndtoNamed<T, R>(String page,
-      {T? result, Object? arguments}) async {
+  Future<R?> backAndtoNamed<T, R>(
+    String page, {
+    T? result,
+    Object? arguments,
+    bool preventDuplicates = true,
+  }) async {
     final args = _buildPageSettings(page, arguments);
-    final route = _getRouteDecoder<R>(args);
+    final route = _getRouteDecoder<R>(
+      args,
+      preventDuplicates: preventDuplicates,
+    );
     if (route == null) return null;
     _popWithResult<T>(result);
     return _push<R>(route);
@@ -692,7 +722,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @protected
-  RouteDecoder? _getRouteDecoder<T>(PageSettings arguments) {
+  RouteDecoder? _getRouteDecoder<T>(
+    PageSettings arguments, {
+    bool? preventDuplicates,
+  }) {
     var page = arguments.uri.path;
     final parameters = arguments.params;
     if (parameters.isNotEmpty) {
@@ -704,12 +737,19 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final route = decoder.route;
     if (route == null) return null;
 
-    return _configureRouterDecoder<T>(decoder, arguments);
+    return _configureRouterDecoder<T>(
+      decoder,
+      arguments,
+      preventDuplicates: preventDuplicates,
+    );
   }
 
   @protected
   RouteDecoder _configureRouterDecoder<T>(
-      RouteDecoder decoder, PageSettings arguments) {
+    RouteDecoder decoder,
+    PageSettings arguments, {
+    bool? preventDuplicates,
+  }) {
     final parameters =
         arguments.params.isEmpty ? arguments.query : arguments.params;
     arguments.params.addAll(arguments.query);
@@ -722,6 +762,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       arguments: arguments,
       parameters: parameters,
       key: ValueKey(arguments.name),
+      preventDuplicates: preventDuplicates,
     );
 
     return decoder;
@@ -737,11 +778,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         res.route?.preventDuplicateHandlingMode ??
             PreventDuplicateHandlingMode.reorderRoutes;
 
+    final preventDuplicates = res.route?.preventDuplicates ?? true;
+
     final onStackPage = _activePages
         .firstWhereOrNull((element) => element.route?.key == res.route?.key);
 
-    /// There are no duplicate routes in the stack
-    if (onStackPage == null) {
+    /// There are no duplicate routes in the stack or route.preventDuplicates == false
+    if (onStackPage == null || preventDuplicates == false) {
       _activePages.add(res);
     } else {
       /// There are duplicate routes, reorder
