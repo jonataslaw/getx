@@ -165,7 +165,7 @@ class GetSnackBar extends StatefulWidget {
 
   /// Default is [Colors.transparent]. Only takes effect if [overlayBlur] > 0.0.
   /// Make sure you use a color with transparency here e.g.
-  /// Colors.grey[600].withOpacity(0.2).
+  /// Colors.grey[600].withValues(alpha:0.2).
   final Color? overlayColor;
 
   /// A [TextFormField] in case you want a simple user input.

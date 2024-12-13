@@ -23,7 +23,7 @@ class HomeView extends GetView<HomeController> {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
           child: Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.6),
+            backgroundColor: Colors.black.withValues(alpha: 0.6),
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               title: Text(
@@ -45,14 +45,14 @@ class HomeView extends GetView<HomeController> {
                     'New Feature',
                     'Coming soon!',
                     snackPosition: SnackPosition.bottom,
-                    backgroundColor: Colors.white.withOpacity(0.9),
+                    backgroundColor: Colors.white.withValues(alpha: 0.9),
                     colorText: Colors.black,
                     borderRadius: 10,
                     duration: Duration(seconds: 3),
                     animationDuration: Duration(milliseconds: 500),
                     boxShadows: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         spreadRadius: 1,
                         blurRadius: 5,
                         offset: Offset(0, 3),
@@ -70,14 +70,15 @@ class HomeView extends GetView<HomeController> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.blueAccent.withOpacity(0.8),
+                        backgroundColor:
+                            Colors.blueAccent.withValues(alpha: 0.8),
                         padding:
                             EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                         elevation: 8,
-                        shadowColor: Colors.blueAccent.withOpacity(0.5),
+                        shadowColor: Colors.blueAccent.withValues(alpha: 0.5),
                       ),
                       onPressed: () {
                         Get.updateLocale(Get.locale?.languageCode == 'en'
@@ -108,7 +109,7 @@ class HomeView extends GetView<HomeController> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 child: ListTile(
                                   onTap: () async {
                                     final data = await Get.toNamed(

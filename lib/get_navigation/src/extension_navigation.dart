@@ -444,7 +444,7 @@ extension ExtensionSnackbar on GetInterface {
         margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        backgroundColor: backgroundColor ?? Colors.grey.withValues(alpha: 0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
