@@ -1,0 +1,1 @@
+/home/oussama/development/getx/example_nav2/build/app/intermediates/cxx/Debug/wm266v4p/obj/x86

@@ -1,0 +1,2 @@
+/home/oussama/development/getx/example_nav2/android/app/.cxx/Debug/wm266v4p/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/oussama/development/getx/example_nav2/android/app/.cxx/Debug/wm266v4p/armeabi-v7a/CMakeFiles/rebuild_cache.dir
