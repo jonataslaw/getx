@@ -4,7 +4,13 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../get.dart';
 
-abstract class _RouteMiddleware {
+/// The Page Middlewares.
+/// The Functions will be called in this order
+/// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
+/// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
+abstract class GetMiddleware {
+  GetMiddleware({this.priority = 0});
+
   /// The Order of the Middlewares to run.
   ///
   /// {@tool snippet}
@@ -19,7 +25,7 @@ abstract class _RouteMiddleware {
   /// ```
   ///  -8 => 2 => 4 => 5
   /// {@end-tool}
-  int? priority;
+  final int priority;
 
   /// This function will be called when the page of
   /// the called route is being searched for.
@@ -33,7 +39,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  RouteSettings? redirect(String route);
+  RouteSettings? redirect(String? route) => null;
 
   /// Similar to [redirect],
   /// This function will be called when the router delegate changes the
@@ -52,7 +58,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route);
+  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route) => (route);
 
   /// This function will be called when this Page is called
   /// you can use it to change something about the page or give it new page
@@ -64,7 +70,7 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  GetPage? onPageCalled(GetPage page);
+  GetPage? onPageCalled(GetPage? page) => page;
 
   /// This function will be called right before the [BindingsInterface] are initialize.
   /// Here you can change [BindingsInterface] for this page
@@ -79,106 +85,72 @@ abstract class _RouteMiddleware {
   /// }
   /// ```
   /// {@end-tool}
-  List<R>? onBindingsStart<R>(List<R> bindings);
+  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
 
   /// This function will be called right after the [BindingsInterface] are initialize.
-  GetPageBuilder? onPageBuildStart(GetPageBuilder page);
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 
   /// This function will be called right after the
   /// GetPage.page function is called and will give you the result
   /// of the function. and take the widget that will be showed.
-  Widget onPageBuilt(Widget page);
-
-  void onPageDispose();
-}
-
-/// The Page Middlewares.
-/// The Functions will be called in this order
-/// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
-/// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
-class GetMiddleware implements _RouteMiddleware {
-  @override
-  int? priority = 0;
-
-  GetMiddleware({this.priority});
-
-  @override
-  RouteSettings? redirect(String? route) => null;
-
-  @override
-  GetPage? onPageCalled(GetPage? page) => page;
-
-  @override
-  List<R>? onBindingsStart<R>(List<R>? bindings) => bindings;
-
-  @override
-  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
-
-  @override
   Widget onPageBuilt(Widget page) => page;
 
-  @override
   void onPageDispose() {}
-
-  @override
-  FutureOr<RouteDecoder?> redirectDelegate(RouteDecoder route) => (route);
 }
 
 class MiddlewareRunner {
-  MiddlewareRunner(this._middlewares);
+  MiddlewareRunner(List<GetMiddleware>? middlewares)
+      : _middlewares = middlewares != null
+            ? (List.of(middlewares)..sort(_compareMiddleware))
+            : const [];
 
-  final List<GetMiddleware>? _middlewares;
+  final List<GetMiddleware> _middlewares;
 
-  List<GetMiddleware> _getMiddlewares() {
-    final newMiddleware = _middlewares ?? <GetMiddleware>[];
-    return List.of(newMiddleware)
-      ..sort(
-        (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0),
-      );
-  }
+  static int _compareMiddleware(GetMiddleware a, GetMiddleware b) =>
+      a.priority.compareTo(b.priority);
 
   GetPage? runOnPageCalled(GetPage? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageCalled(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageCalled(page);
+    }
     return page;
   }
 
   RouteSettings? runRedirect(String? route) {
-    RouteSettings? to;
-    for (final element in _getMiddlewares()) {
-      to = element.redirect(route);
-      if (to != null) {
-        break;
+    for (final middleware in _middlewares) {
+      final redirectTo = middleware.redirect(route);
+      if (redirectTo != null) {
+        return redirectTo;
       }
     }
-    Get.log('Redirect to $to');
-    return to;
+    return null;
   }
 
   List<R>? runOnBindingsStart<R>(List<R>? bindings) {
-    _getMiddlewares().forEach((element) {
-      bindings = element.onBindingsStart(bindings);
-    });
+    for (final middleware in _middlewares) {
+      bindings = middleware.onBindingsStart(bindings);
+    }
     return bindings;
   }
 
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuildStart(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuildStart(page);
+    }
     return page;
   }
 
   Widget runOnPageBuilt(Widget page) {
-    _getMiddlewares().forEach((element) {
-      page = element.onPageBuilt(page);
-    });
+    for (final middleware in _middlewares) {
+      page = middleware.onPageBuilt(page);
+    }
     return page;
   }
 
   void runOnPageDispose() {
-    _getMiddlewares().forEach((element) => element.onPageDispose());
+    for (final middleware in _middlewares) {
+      middleware.onPageDispose();
+    }
   }
 }
 
@@ -235,7 +207,6 @@ class PageRedirect {
       settings = route;
     }
     final match = context.delegate.matchRoute(settings!.name!);
-    Get.parameters = match.parameters;
 
     // No Match found
     if (match.route == null) {
@@ -243,14 +214,15 @@ class PageRedirect {
       return false;
     }
 
-    final runner = MiddlewareRunner(match.route!.middlewares);
-    route = runner.runOnPageCalled(match.route);
-    addPageParameter(route!);
-
     // No middlewares found return match.
     if (match.route!.middlewares.isEmpty) {
       return false;
     }
+
+    final runner = MiddlewareRunner(match.route!.middlewares);
+    route = runner.runOnPageCalled(match.route);
+    addPageParameter(route!);
+
     final newSettings = runner.runRedirect(settings!.name);
     if (newSettings == null) {
       return false;

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/test_kit.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
@@ -287,6 +288,8 @@ class GetRoot extends StatefulWidget {
   @override
   State<GetRoot> createState() => GetRootState();
 
+  static bool get treeInitialized => GetRootState._controller != null;
+
   static GetRootState of(BuildContext context) {
     // Handles the case where the input context is a navigator element.
     GetRootState? root;
@@ -432,7 +435,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   set testMode(bool isTest) {
     config = config.copyWith(testMode: isTest);
-    // _getxController.testMode = isTest;
+    GetTestMode.active = isTest;
   }
 
   void onReady() {

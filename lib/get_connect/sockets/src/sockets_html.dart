@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'dart:js_interop';
+
+import 'package:web/web.dart' as html;
 
 import '../../../get_core/get_core.dart';
 import 'socket_notifier.dart';
 
 class BaseWebSocket {
   String url;
-  WebSocket? socket;
+  html.WebSocket? socket;
   SocketNotifier? socketNotifier = SocketNotifier();
   Duration ping;
   bool isDisposed = false;
@@ -27,18 +28,26 @@ class BaseWebSocket {
   }
 
   void close([int? status, String? reason]) {
-    socket?.close(status, reason);
+    // This weird code is fault of web package, they are not using null safety yet
+    // See https://github.com/dart-lang/web/blob/main/web/lib/src/dom/websockets.dart#L60
+    if (status != null && reason != null) {
+      socket?.close(status, reason);
+    } else if (status != null) {
+      socket?.close(status);
+    } else {
+      socket?.close();
+    }
   }
 
   // ignore: use_setters_to_change_properties
   void connect() {
     try {
       connectionStatus = ConnectionStatus.connecting;
-      socket = WebSocket(url);
+      socket = html.WebSocket(url);
       socket!.onOpen.listen((e) {
         socketNotifier?.open();
         _t = Timer?.periodic(ping, (t) {
-          socket!.send('');
+          socket!.send(''.toJSBox);
         });
         connectionStatus = ConnectionStatus.connected;
       });
@@ -97,12 +106,12 @@ class BaseWebSocket {
     socketNotifier!.open = fn;
   }
 
-  void send(dynamic data) {
+  void send(Object data) {
     if (connectionStatus == ConnectionStatus.closed) {
       connect();
     }
-    if (socket != null && socket!.readyState == WebSocket.OPEN) {
-      socket!.send(data);
+    if (socket != null && socket!.readyState == html.WebSocket.OPEN) {
+      socket!.send(data.toJSBox);
     } else {
       Get.log('WebSocket not connected, message $data not sent');
     }

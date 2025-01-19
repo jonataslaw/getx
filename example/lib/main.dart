@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// import 'lang/translation_service.dart';
+// import 'routes/app_pages.dart';
+// import 'shared/logger/logger_utils.dart';
+
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -48,6 +52,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/third',
           page: () => const Third(),
+        ),
+        GetPage(
+          name: '/fourth',
+          page: () => const Fourth(),
         ),
       ],
       debugShowCheckedModeBanner: false,
@@ -139,7 +147,9 @@ class Second extends StatelessWidget {
               height: 300,
               width: 300,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed('/third');
+                },
                 child: const Text('next screen'),
               ),
             ),
@@ -165,7 +175,37 @@ class Third extends StatelessWidget {
           height: 300,
           width: 300,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.offNamedUntil('/fourth', (route) {
+                return Get.currentRoute == '/first';
+              });
+            },
+            child: const Text('go to first screen'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Fourth extends StatelessWidget {
+  const Fourth({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.red,
+      appBar: AppBar(
+        title: const Text('page four'),
+      ),
+      body: Center(
+        child: SizedBox(
+          height: 300,
+          width: 300,
+          child: ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
             child: const Text('go to first screen'),
           ),
         ),

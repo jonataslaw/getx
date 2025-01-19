@@ -111,7 +111,16 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     var iterator = config;
     for (var item in middlewares) {
       var redirectRes = await item.redirectDelegate(iterator);
-      if (redirectRes == null) return null;
+
+      if (redirectRes == null) {
+        config.route?.completer?.complete();
+        return null;
+      }
+      if (config != redirectRes) {
+        config.route?.completer?.complete();
+        Get.log('Redirect to ${redirectRes.pageSettings?.name}');
+      }
+
       iterator = redirectRes;
       // Stop the iteration over the middleware if we changed page
       // and that redirectRes is not the same as the current config.
@@ -519,11 +528,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     final newPredicate = predicate ?? (route) => false;
 
-    while (_activePages.length > 1 && newPredicate(_activePages.last.route!)) {
+    while (_activePages.length > 1 && !newPredicate(_activePages.last.route!)) {
       _activePages.removeLast();
     }
 
-    return _replaceNamed(route);
+    return _push(route);
   }
 
   @override
@@ -627,7 +636,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   void backUntil(bool Function(GetPage) predicate) {
-    while (_activePages.length <= 1 && !predicate(_activePages.last.route!)) {
+    while (_activePages.length > 1 && !predicate(_activePages.last.route!)) {
       _popWithResult();
     }
 
@@ -719,8 +728,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
-    var mid = await runMiddleware(decoder);
-    final res = mid ?? decoder;
+    var res = await runMiddleware(decoder);
+    if (res == null) return null;
+    // final res = mid ?? decoder;
     // if (res == null) res = decoder;
 
     final preventDuplicateHandlingMode =

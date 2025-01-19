@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import '../src/certificates/certificates.dart';
 import '../src/exceptions/exceptions.dart';
@@ -11,6 +10,7 @@ import '../src/status/http_status.dart';
 import 'http/interface/request_base.dart';
 import 'http/request/http_request.dart';
 import 'interceptors/get_modifiers.dart';
+import 'response/client_response.dart';
 
 typedef Decoder<T> = T Function(dynamic data);
 

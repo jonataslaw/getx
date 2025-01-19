@@ -1,3 +1,31 @@
+## [5.0.0-release-candidate-9.2.1]
+
+- Remove remaining dart:html references
+
+## [5.0.0-release-candidate-9.2]
+
+- Remove dart:html references
+
+## [5.0.0-release-candidate-9.1]
+
+- Add canPop to GetPage
+- Fix Get.offNamedUntil
+- Fix GetObserver
+
+## [5.0.0-release-candidate-9]
+
+- Fix redirectDelegate middleware
+- Fix Get.until
+
+## [5.0.0-release-candidate-8]
+
+- Add wasm compilation support to GetConnect
+- Refactor example
+
+## [5.0.0-release-candidate-7]
+
+- Fix latest flutter version
+
 ## [5.0.0-release-candidate-6]
 
 -Fix Snackbar, upgrade to flutter 3.22 @Aniketkhote, improve parse route @korutx, fix popScope @wowbox, improve defaultDialog @leeyi, add support to wasm compilation @Ty, fix typos @CodeWithEmad, fix snackbar cancel @seungsuyoo update GetConnect @DaZealous and @ wheeOs, add bengali language @aratheunseen, fix lint issues: @MuhammamdArslanKhan

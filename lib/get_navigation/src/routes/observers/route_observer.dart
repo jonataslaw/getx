@@ -41,11 +41,6 @@ class GetObserver extends NavigatorObserver {
     final currentRoute = _RouteData.ofRoute(route);
     final newRoute = _RouteData.ofRoute(previousRoute);
 
-    // if (currentRoute.isSnackbar) {
-    //   // Get.log("CLOSE SNACKBAR ${currentRoute.name}");
-    //   Get.log("CLOSE SNACKBAR");
-    // } else
-
     if (currentRoute.isBottomSheet || currentRoute.isDialog) {
       Get.log("CLOSE ${currentRoute.name}");
     } else if (currentRoute.isGetPageRoute) {
@@ -71,12 +66,9 @@ class GetObserver extends NavigatorObserver {
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
-      // value.isSnackbar = newRoute.isSnackbar;
       value.isBottomSheet = newRoute.isBottomSheet;
       value.isDialog = newRoute.isDialog;
     });
-
-    // print('currentRoute.isDialog ${currentRoute.isDialog}');
 
     routing?.call(_routeSend);
   }
@@ -86,11 +78,6 @@ class GetObserver extends NavigatorObserver {
     super.didPush(route, previousRoute);
     final newRoute = _RouteData.ofRoute(route);
 
-    // if (newRoute.isSnackbar) {
-    //   // Get.log("OPEN SNACKBAR ${newRoute.name}");
-    //   Get.log("OPEN SNACKBAR");
-    // } else
-
     if (newRoute.isBottomSheet || newRoute.isDialog) {
       Get.log("OPEN ${newRoute.name}");
     } else if (newRoute.isGetPageRoute) {
@@ -99,7 +86,6 @@ class GetObserver extends NavigatorObserver {
 
     RouterReportManager.instance.reportCurrentRoute(route);
     _routeSend!.update((value) {
-      // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';
       }
@@ -127,15 +113,16 @@ class GetObserver extends NavigatorObserver {
     super.didRemove(route, previousRoute);
     final routeName = _extractRouteName(route);
     final currentRoute = _RouteData.ofRoute(route);
+    final previousRouteName = _extractRouteName(previousRoute);
 
     Get.log("REMOVING ROUTE $routeName");
+    Get.log("PREVIOUS ROUTE $previousRouteName");
 
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
       value.removed = routeName ?? '';
-      value.previous = routeName ?? '';
-      // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
+      value.previous = previousRouteName ?? '';
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
@@ -172,7 +159,6 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = '';
       value.previous = '$oldName';
-      // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
@@ -193,7 +179,6 @@ class Routing {
   String removed;
   Route<dynamic>? route;
   bool? isBack;
-  // bool? isSnackbar;
   bool? isBottomSheet;
   bool? isDialog;
 
@@ -204,7 +189,6 @@ class Routing {
     this.removed = '',
     this.route,
     this.isBack,
-    // this.isSnackbar,
     this.isBottomSheet,
     this.isDialog,
   });
