@@ -887,8 +887,20 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  void closeOverlay({String? id}) {
-    searchDelegate(id).navigatorKey.currentState?.pop();
+  /// Close the currently open dialog, returning a [result], if provided
+  void closeDialog<T>({String? id, T? result}) {
+    // Stop if there is no dialog open
+    if (isDialogOpen == null || !isDialogOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  /// Close the current overlay returning the [result], if provided
+  void closeOverlay<T>({
+    String? id,
+    T? result,
+  }) {
+    searchDelegate(id).navigatorKey.currentState?.pop(result);
   }
 
   void closeAllBottomSheets({
