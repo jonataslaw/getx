@@ -1,5 +1,5 @@
 /// Get State Manager is a light, modern and powerful state manager to Flutter
-library state_manager;
+library;
 
 export 'get_core/get_core.dart';
 export 'get_rx/get_rx.dart';

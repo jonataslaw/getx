@@ -373,7 +373,7 @@ class ColorAnimation extends GetAnimatedBuilder<Color?> {
   }) : super(
           builder: (context, value, child) => ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Color.lerp(begin, end, value!.value.toDouble())!,
+              Color.lerp(begin, end, value!.a.toDouble())!,
               BlendMode.srcIn,
             ),
             child: child,

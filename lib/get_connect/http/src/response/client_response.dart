@@ -195,7 +195,6 @@ abstract interface class HttpHeaders {
   static const cookieHeader = "cookie";
   static const setCookieHeader = "set-cookie";
 
-  // TODO(39783): Document this.
   static const generalHeaders = [
     cacheControlHeader,
     connectionHeader,
