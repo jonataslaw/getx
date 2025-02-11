@@ -255,8 +255,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         return await _popHistory<T>(result);
       case PopMode.page:
         return await _popPage<T>(result);
-      default:
-        return null;
     }
   }
 
@@ -760,8 +758,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         case PreventDuplicateHandlingMode.recreate:
           _activePages.remove(onStackPage);
           _activePages.add(res);
-          break;
-        default:
       }
     }
     if (rebuildStack) {

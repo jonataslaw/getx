@@ -23,7 +23,7 @@ class DetailsView extends GetView<DetailsController> {
           image: DecorationImage(
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.2),
+              Colors.black.withValues(alpha: 0.2),
               BlendMode.darken,
             ),
             image: NetworkImage(
@@ -60,8 +60,8 @@ class DetailsView extends GetView<DetailsController> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  shadowColor: Colors.blueAccent.withOpacity(0.5),
-                  color: Colors.white.withOpacity(0.85),
+                  shadowColor: Colors.blueAccent.withValues(alpha: 0.5),
+                  color: Colors.white.withValues(alpha: 0.85),
                   child: Padding(
                     padding: const EdgeInsets.all(32.0),
                     child: Column(

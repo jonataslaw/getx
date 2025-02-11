@@ -1,4 +1,4 @@
-library get_navigation;
+library;
 
 export 'src/bottomsheet/bottomsheet.dart';
 export 'src/extension_navigation.dart';

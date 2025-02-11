@@ -1,4 +1,7 @@
 # Include option is buggy:
 include: package:flutter_lints/flutter.yaml
+analyzer:
+  errors:
+    unintended_html_in_doc_comment: ignore
 # In case the include issue gets fixed, lines below INCLUDE_FIX
 # can be removed

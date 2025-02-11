@@ -1,4 +1,4 @@
-library get_core;
+library;
 
 export 'src/flutter_engine.dart';
 export 'src/get_interface.dart';
