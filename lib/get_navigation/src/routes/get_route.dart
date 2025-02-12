@@ -20,7 +20,7 @@ class GetPage<T> extends Page<T> {
   final bool? participatesInRootNavigator;
   final Alignment? alignment;
   final bool maintainState;
-  final bool opaque;
+  final bool? opaque;
   final double Function(BuildContext context)? gestureWidth;
   final BindingsInterface? binding;
   final List<BindingsInterface> bindings;
@@ -66,7 +66,7 @@ class GetPage<T> extends Page<T> {
     this.curve = Curves.linear,
     this.alignment,
     this.parameters,
-    this.opaque = true,
+    this.opaque,
     this.transitionDuration,
     this.reverseTransitionDuration,
     this.popGesture,
