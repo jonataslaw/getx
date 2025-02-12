@@ -1,33 +1,19 @@
 import 'package:get/get.dart';
-
-import '../../../shared/constants/endpoints.dart';
-import '../domain/entity/country_model.dart';
+import '../domain/entity/cases_model.dart';
 
 // ignore: one_member_abstracts
 abstract class IHomeProvider {
-  Future<Response<List<CountriesItem>>> getCountries();
-
-  Future<Response<Country>> getCountry(String path);
+  Future<Response<CasesModel>> getCases(String path);
 }
 
 class HomeProvider extends GetConnect implements IHomeProvider {
   @override
   void onInit() {
-    httpClient.baseUrl = API_URL;
-
-    super.onInit();
+    httpClient.defaultDecoder =
+        (val) => CasesModel.fromJson(val as Map<String, dynamic>);
+    httpClient.baseUrl = 'https://api.covid19api.com';
   }
 
   @override
-  Future<Response<List<CountriesItem>>> getCountries() {
-    return get(
-      '/countries',
-      decoder: (data) =>
-          (data as List).map((item) => CountriesItem.fromJson(item)).toList(),
-    );
-  }
-
-  Future<Response<Country>> getCountry(String path) async {
-    return get('/country/$path', decoder: (data) => Country.fromJson(data));
-  }
+  Future<Response<CasesModel>> getCases(String path) => get(path);
 }

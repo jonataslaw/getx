@@ -1,50 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/parse_route.dart';
 
 void main() {
   test('Parse Page with children', () {
     final testParams = {'hi': 'value'};
     final pageTree = GetPage(
       name: '/city',
-      page: () => Container(),
+      page: Container.new,
       children: [
         GetPage(
           name: '/home',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.rightToLeftWithFade,
           children: [
             GetPage(
               name: '/bed-room',
               transition: Transition.size,
-              page: () => Container(),
+              page: Container.new,
             ),
             GetPage(
               name: '/living-room',
               transition: Transition.topLevel,
-              page: () => Container(),
+              page: Container.new,
             ),
           ],
         ),
         GetPage(
           name: '/work',
           transition: Transition.upToDown,
-          page: () => Container(),
+          page: Container.new,
           children: [
             GetPage(
               name: '/office',
               transition: Transition.zoom,
-              page: () => Container(),
+              page: Container.new,
               children: [
                 GetPage(
                   name: '/pen',
                   transition: Transition.cupertino,
-                  page: () => Container(),
+                  page: Container.new,
                   parameters: testParams,
                 ),
                 GetPage(
                   name: '/paper',
-                  page: () => Container(),
+                  page: Container.new,
                   transition: Transition.downToUp,
                 ),
               ],
@@ -52,7 +53,7 @@ void main() {
             GetPage(
               name: '/meeting-room',
               transition: Transition.fade,
-              page: () => Container(),
+              page: Container.new,
             ),
           ],
         ),
@@ -77,40 +78,38 @@ void main() {
   test('Parse Page without children', () {
     final pageTree = [
       GetPage(
-          name: '/city',
-          page: () => Container(),
-          transition: Transition.cupertino),
+          name: '/city', page: Container.new, transition: Transition.cupertino),
       GetPage(
           name: '/city/home',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.downToUp),
       GetPage(
           name: '/city/home/bed-room',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.fade),
       GetPage(
           name: '/city/home/living-room',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.fadeIn),
       GetPage(
           name: '/city/work',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.leftToRight),
       GetPage(
           name: '/city/work/office',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.leftToRightWithFade),
       GetPage(
           name: '/city/work/office/pen',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.native),
       GetPage(
           name: '/city/work/office/paper',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.noTransition),
       GetPage(
           name: '/city/work/meeting-room',
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.rightToLeft),
     ];
 
@@ -132,11 +131,10 @@ void main() {
       await tester.pumpWidget(GetMaterialApp(
         initialRoute: '/first/juan',
         getPages: [
-          GetPage(page: () => Container(), name: '/first/:name'),
-          GetPage(page: () => Container(), name: '/second/:id'),
-          GetPage(page: () => Container(), name: '/third'),
-          GetPage(page: () => Container(), name: '/last/:id/:name/profile'),
-          GetPage(page: () => Container(), name: '/first/second/:token')
+          GetPage(page: Container.new, name: '/first/:name'),
+          GetPage(page: Container.new, name: '/second/:id'),
+          GetPage(page: Container.new, name: '/third'),
+          GetPage(page: Container.new, name: '/last/:id/:name/profile')
         ],
       ));
 
@@ -161,20 +159,6 @@ void main() {
 
       expect(Get.parameters['id'], '1234');
       expect(Get.parameters['name'], 'ana');
-
-      Get.toNamed('/last/1234/ana/profile?job=dev');
-
-      await tester.pumpAndSettle();
-
-      expect(Get.parameters['id'], '1234');
-      expect(Get.parameters['name'], 'ana');
-      expect(Get.parameters['job'], 'dev');
-
-      Get.toNamed(
-        'https://www.example.com/first/second/fa9662f4-ec3f-11ee-a806-169a3915b383',
-      );
-      await tester.pumpAndSettle();
-      expect(Get.parameters['token'], 'fa9662f4-ec3f-11ee-a806-169a3915b383');
     },
   );
 
@@ -184,8 +168,8 @@ void main() {
       await tester.pumpWidget(GetMaterialApp(
         initialRoute: '/first/juan',
         getPages: [
-          GetPage(page: () => Container(), name: '/first/:name'),
-          GetPage(page: () => Container(), name: '/italy'),
+          GetPage(page: Container.new, name: '/first/:name'),
+          GetPage(page: Container.new, name: '/italy'),
         ],
       ));
 

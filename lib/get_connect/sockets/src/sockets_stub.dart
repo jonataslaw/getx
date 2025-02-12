@@ -2,7 +2,7 @@ import './socket_notifier.dart';
 
 class BaseWebSocket {
   String url;
-  Duration ping;
+  Duration? ping;
   bool allowSelfSigned;
   BaseWebSocket(
     this.url, {

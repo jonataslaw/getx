@@ -1,9 +1,12 @@
 // ignore_for_file: file_names
 
 const Map<String, String> pt_BR = {
-  'update_language': 'Atualizar idioma para Inglês',
-  'number_of_prizes': 'Número de prêmios',
-  'average_age_of_laureates': 'Idade média dos laureados',
+  'covid': 'Corona Vírus',
+  'total_confirmed': 'Total confirmado',
+  'total_deaths': 'Total de mortes',
+  'fetch_country': 'Listar por país',
+  'corona_by_country': 'Corona por país',
+  'total_infecteds': 'Total de infectados',
   'details': 'Detalhes',
-  'nobel_by_country': 'Nobel por país',
+  'total_recovered': 'Total de recuperados'
 };

@@ -1,9 +1,12 @@
 // ignore_for_file: file_names
 
 const Map<String, String> en_US = {
-  'update_language': 'Update language to Portuguese',
-  'number_of_prizes': 'Number of prizes',
-  'average_age_of_laureates': 'Average age of laureates',
+  'covid': 'Corona Virus',
+  'total_confirmed': 'Total Confirmed',
+  'total_deaths': 'Total Deaths',
+  'fetch_country': 'Fetch by country',
+  'corona_by_country': 'Corona by country',
+  'total_infecteds': 'Total Infecteds',
   'details': 'Details',
-  'nobel_by_country': 'Nobel by country',
+  'total_recovered': 'Total Recovered',
 };

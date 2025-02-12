@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/utils.dart';
 
 class Foo extends StatelessWidget {
-  const Foo({super.key});
+  const Foo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

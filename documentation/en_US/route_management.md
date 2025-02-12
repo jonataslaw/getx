@@ -488,33 +488,6 @@ Get.defaultDialog(
 );
 ```
 
-To close the dialog and return a result use `Get.closeDialog` providing the `result` to return to the awaited `Get.dialog` call.
-```dart
-Widget buttonWithResult({
-  required final String text,
-  required final bool result,
-}) => TextButton(
-          onPressed: () {
-            Get.closeDialog(result: result);
-          },
-          child: Text(text),
-        );
-
-bool? delete = await Get.dialog(
-    AlertDialog(
-      content: const Text('Are you sure you would like to delete?'),
-      actions: [
-        buttonWithResult(text: 'No', result: false),
-        buttonWithResult(text: 'Yes', result: true),
-      ],
-    ),
-  );
-
-if (delete != null && delete) {
-  // Perform the deletion
-}
-```
-
 You can also use Get.generalDialog instead of showGeneralDialog.
 
 For all other Flutter dialog widgets, including cupertinos, you can use Get.overlayContext instead of context, and open it anywhere in your code.

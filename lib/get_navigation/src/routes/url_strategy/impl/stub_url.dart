@@ -1,3 +1,0 @@
-void removeHash() {
-  throw UnimplementedError();
-}

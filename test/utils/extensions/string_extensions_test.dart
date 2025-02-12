@@ -16,42 +16,6 @@ void main() {
       expect(text.isNum, false);
     });
 
-    test('var.capitalizeAllWordsFirstLetter()', () {
-      final List<String> sentences = [
-        "getx",
-        "this is an example sentence",
-        "this is an example sentence with a number 5",
-        "this is an example sentence with a number 5 and a special character #",
-        "this is an example sentence with a number 5 and a special character # and b letter C",
-        "    emm, lemme        think !",
-        "Bro, $letters is a good word",
-        "THIS IS A SENTENCE WITH ALL CAPITAL LETTERS",
-        ""
-      ];
-      expect(text.capitalizeAllWordsFirstLetter(), "Oi");
-      expect(digit.capitalizeAllWordsFirstLetter(), "5");
-      expect(specialCaracters.capitalizeAllWordsFirstLetter(), "#\$!%@");
-      expect(alphaNumeric.capitalizeAllWordsFirstLetter(), "123asd");
-      expect(numbers.capitalizeAllWordsFirstLetter(), "123");
-      expect(letters.capitalizeAllWordsFirstLetter(), "Foo");
-      expect(sentences[0].capitalizeAllWordsFirstLetter(), "Getx");
-      expect(sentences[1].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence");
-      expect(sentences[2].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5");
-      expect(sentences[3].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5 And A Special Character #");
-      expect(sentences[4].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5 And A Special Character # And B Letter C");
-      expect(
-          sentences[5].capitalizeAllWordsFirstLetter(), "Emm, Lemme Think !");
-      expect(sentences[6].capitalizeAllWordsFirstLetter(),
-          "Bro, Foo Is A Good Word");
-      expect(sentences[7].capitalizeAllWordsFirstLetter(),
-          "This Is A Sentence With All Capital Letters");
-      expect(sentences[8].capitalizeAllWordsFirstLetter(), "");
-    });
-
     test('var.isNumericOnly', () {
       expect(numbers.isNumericOnly, true);
       expect(letters.isNumericOnly, false);
@@ -213,7 +177,6 @@ void main() {
         'http://appliance.example.com/bee/badge',
         'http://www.example.org/berry.aspx',
         'http://example.org/',
-        'http://birds.example/',
       ];
 
       for (final url in urls) {
@@ -555,7 +518,7 @@ void main() {
 
       expect(alphaNumeric.isHexadecimal, false);
     });
-    test('var.isPalindrome', () {
+    test('var.isPalindrom', () {
       final palindroms = [
         'Anna',
         'Civic',
@@ -584,7 +547,7 @@ void main() {
         'A dama admirou o rim da amada.',
         'A Daniela ama a lei? Nada!',
 
-        // TODO make isPalindrome regex support UTF8 characters
+        // TODO make isPalindrom regex support UTF8 characters
         // 'Adias a data da saída.',
         // 'A diva em Argel alegra-me a vida.',
         // 'A droga do dote é todo da gorda.',
@@ -607,9 +570,9 @@ void main() {
       ];
       for (final palindrom in palindroms) {
         // print("testing $palindrom");
-        expect(palindrom.isPalindrome, true);
+        expect(palindrom.isPalindrom, true);
       }
-      expect(alphaNumeric.isPalindrome, false);
+      expect(alphaNumeric.isPalindrom, false);
     });
     test('var.isPassport', () {
       final passports = [
@@ -725,6 +688,7 @@ void main() {
       expect('foo bar'.capitalizeFirst, 'Foo bar');
       expect('FoO bAr'.capitalizeFirst, 'Foo bar');
       expect('FOO BAR'.capitalizeFirst, 'Foo bar');
+      // expect(null.capitalizeFirst, null);
       expect(''.capitalizeFirst, '');
     });
 

@@ -200,14 +200,12 @@ Bindings is the first step towards having a scalable application, you can visual
 To create a Binding, simply create a class and implement Bindings
 
 ```dart
-class SampleBind extends Binding {
+class SampleBind extends Bindings {
   @override
-  List<Bind> dependencies() {
-    return [
-      Bind.lazyPut<Controller>(() => Controller()),
-      Bind.lazyPut<Controller2>(() => Controller2()),
-      Bind.lazyPut<Controller3>(() => Controller3()),
-    ];
+  void dependencies() {
+    Get.lazyPut<Controller>(() => Controller());
+    Get.lazyPut<Controller2>(() => Controller2());
+    Get.lazyPut<Controller3>(() => Controller3());
   }
 }
 ```
@@ -489,7 +487,7 @@ class Third extends GetView<ControllerX> {
   }
 }
 
-class SampleBind extends Binding {
+class SampleBind extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<ControllerX>(() => ControllerX());

@@ -8,7 +8,7 @@ class TestClass {
 class EmptyClass {}
 
 void main() {
-  dynamic newId(dynamic e) => e;
+  dynamic id(dynamic e) => e;
 
   test('null isNullOrBlank should be true for null', () {
     expect(GetUtils.isNullOrBlank(null), true);
@@ -38,8 +38,8 @@ void main() {
   });
 
   test('isNullOrBlank should validate iterables', () {
-    expect(GetUtils.isNullOrBlank([].map(newId)), true);
-    expect(GetUtils.isNullOrBlank([1].map(newId)), false);
+    expect(GetUtils.isNullOrBlank([].map(id)), true);
+    expect(GetUtils.isNullOrBlank([1].map(id)), false);
   });
 
   test('isNullOrBlank should validate lists', () {
@@ -67,8 +67,8 @@ void main() {
   group('GetUtils.isLength* functions', () {
     test('isLengthEqualTo should validate iterable lengths', () {
       // iterables should cover list and set
-      expect(GetUtils.isLengthEqualTo([].map(newId), 0), true);
-      expect(GetUtils.isLengthEqualTo([1, 2].map(newId), 2), true);
+      expect(GetUtils.isLengthEqualTo([].map(id), 0), true);
+      expect(GetUtils.isLengthEqualTo([1, 2].map(id), 2), true);
 
       expect(GetUtils.isLengthEqualTo({}, 0), true);
       expect(GetUtils.isLengthEqualTo({1: 1, 2: 1}, 2), true);
@@ -81,9 +81,9 @@ void main() {
 
     test('isLengthGreaterOrEqual should validate lengths', () {
       // iterables should cover list and set
-      expect(GetUtils.isLengthGreaterOrEqual([].map(newId), 0), true);
-      expect(GetUtils.isLengthGreaterOrEqual([1, 2].map(newId), 2), true);
-      expect(GetUtils.isLengthGreaterOrEqual([1, 2].map(newId), 1), true);
+      expect(GetUtils.isLengthGreaterOrEqual([].map(id), 0), true);
+      expect(GetUtils.isLengthGreaterOrEqual([1, 2].map(id), 2), true);
+      expect(GetUtils.isLengthGreaterOrEqual([1, 2].map(id), 1), true);
 
       expect(GetUtils.isLengthGreaterOrEqual({}, 0), true);
       expect(GetUtils.isLengthGreaterOrEqual({1: 1, 2: 1}, 1), true);
@@ -97,9 +97,9 @@ void main() {
 
     test('isLengthLessOrEqual should validate lengths', () {
       // iterables should cover list and set
-      expect(GetUtils.isLengthLessOrEqual([].map(newId), 0), true);
-      expect(GetUtils.isLengthLessOrEqual([1, 2].map(newId), 2), true);
-      expect(GetUtils.isLengthLessOrEqual([1, 2].map(newId), 1), false);
+      expect(GetUtils.isLengthLessOrEqual([].map(id), 0), true);
+      expect(GetUtils.isLengthLessOrEqual([1, 2].map(id), 2), true);
+      expect(GetUtils.isLengthLessOrEqual([1, 2].map(id), 1), false);
 
       expect(GetUtils.isLengthLessOrEqual({}, 0), true);
       expect(GetUtils.isLengthLessOrEqual({1: 1, 2: 1}, 1), false);

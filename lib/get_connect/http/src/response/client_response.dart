@@ -1,5 +1,5 @@
 /// Redirect information.
-abstract interface class RedirectInfo {
+abstract class RedirectInfo {
   /// Returns the status code used for the redirect.
   int get statusCode;
 
@@ -10,7 +10,7 @@ abstract interface class RedirectInfo {
   Uri get location;
 }
 
-abstract interface class HttpClientResponse implements Stream<List<int>> {
+abstract class HttpClientResponse implements Stream<List<int>> {
   /// Returns the status code.
   ///
   /// The status code must be set before the body is written
@@ -129,7 +129,7 @@ abstract interface class HttpClientResponse implements Stream<List<int>> {
 /// as the standard allows. In most cases a name holds only a single value,
 /// The most common mode of operation is to use `set()` for setting a value,
 /// and `value()` for retrieving a value.
-abstract interface class HttpHeaders {
+abstract class HttpHeaders {
   static const acceptHeader = "accept";
   static const acceptCharsetHeader = "accept-charset";
   static const acceptEncodingHeader = "accept-encoding";

@@ -1,8 +1,11 @@
-part of '../rx_types.dart';
+part of rx_types;
 
-class RxMap<K, V> extends GetListenable<Map<K, V>>
-    with MapMixin<K, V>, RxObjectMixin<Map<K, V>> {
-  RxMap([super.initial = const {}]);
+class RxMap<K, V> extends MapMixin<K, V>
+    with NotifyManager<Map<K, V>>, RxObjectMixin<Map<K, V>>
+    implements RxInterface<Map<K, V>> {
+  RxMap([Map<K, V> initial = const {}]) {
+    _value = Map.from(initial);
+  }
 
   factory RxMap.from(Map<K, V> other) {
     return RxMap(Map.from(other));
@@ -30,13 +33,13 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
 
   @override
   void operator []=(K key, V value) {
-    this.value[key] = value;
+    _value[key] = value;
     refresh();
   }
 
   @override
   void clear() {
-    value.clear();
+    _value.clear();
     refresh();
   }
 
@@ -45,18 +48,17 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
 
   @override
   V? remove(Object? key) {
-    final val = value.remove(key);
+    final val = _value.remove(key);
     refresh();
     return val;
   }
 
-  // @override
-  // @protected
-  // Map<K, V> get value {
-  //   return subject.value;
-  //   // RxInterface.proxy?.addListener(subject);
-  //   // return _value;
-  // }
+  @override
+  @protected
+  Map<K, V> get value {
+    RxInterface.proxy?.addListener(subject);
+    return _value;
+  }
 }
 
 extension MapExtension<K, V> on Map<K, V> {
@@ -80,7 +82,7 @@ extension MapExtension<K, V> on Map<K, V> {
     if (this is RxMap) {
       final map = (this as RxMap);
       // map._value;
-      map.value.clear();
+      map._value.clear();
       this[key] = val;
     } else {
       clear();
@@ -90,13 +92,12 @@ extension MapExtension<K, V> on Map<K, V> {
 
   void assignAll(Map<K, V> val) {
     if (val is RxMap && this is RxMap) {
-      if ((val as RxMap).value == (this as RxMap).value) return;
+      if ((val as RxMap)._value == (this as RxMap)._value) return;
     }
     if (this is RxMap) {
       final map = (this as RxMap);
-      if (map.value == val) return;
-      map.value = val;
-      // ignore: invalid_use_of_protected_member
+      if (map._value == val) return;
+      map._value = val;
       map.refresh();
     } else {
       if (this == val) return;

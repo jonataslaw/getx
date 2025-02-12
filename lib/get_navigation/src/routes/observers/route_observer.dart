@@ -41,13 +41,18 @@ class GetObserver extends NavigatorObserver {
     final currentRoute = _RouteData.ofRoute(route);
     final newRoute = _RouteData.ofRoute(previousRoute);
 
+    // if (currentRoute.isSnackbar) {
+    //   // Get.log("CLOSE SNACKBAR ${currentRoute.name}");
+    //   Get.log("CLOSE SNACKBAR");
+    // } else
+
     if (currentRoute.isBottomSheet || currentRoute.isDialog) {
       Get.log("CLOSE ${currentRoute.name}");
     } else if (currentRoute.isGetPageRoute) {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
     if (previousRoute != null) {
-      RouterReportManager.instance.reportCurrentRoute(previousRoute);
+      RouterReportManager.reportCurrentRoute(previousRoute);
     }
 
     // Here we use a 'inverse didPush set', meaning that we use
@@ -66,9 +71,12 @@ class GetObserver extends NavigatorObserver {
       value.route = previousRoute;
       value.isBack = true;
       value.removed = '';
+      // value.isSnackbar = newRoute.isSnackbar;
       value.isBottomSheet = newRoute.isBottomSheet;
       value.isDialog = newRoute.isDialog;
     });
+
+    // print('currentRoute.isDialog ${currentRoute.isDialog}');
 
     routing?.call(_routeSend);
   }
@@ -78,14 +86,20 @@ class GetObserver extends NavigatorObserver {
     super.didPush(route, previousRoute);
     final newRoute = _RouteData.ofRoute(route);
 
+    // if (newRoute.isSnackbar) {
+    //   // Get.log("OPEN SNACKBAR ${newRoute.name}");
+    //   Get.log("OPEN SNACKBAR");
+    // } else
+
     if (newRoute.isBottomSheet || newRoute.isDialog) {
       Get.log("OPEN ${newRoute.name}");
     } else if (newRoute.isGetPageRoute) {
       Get.log("GOING TO ROUTE ${newRoute.name}");
     }
 
-    RouterReportManager.instance.reportCurrentRoute(route);
-    _routeSend!.update((value) {
+    RouterReportManager.reportCurrentRoute(route);
+    _routeSend?.update((value) {
+      // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';
       }
@@ -113,23 +127,22 @@ class GetObserver extends NavigatorObserver {
     super.didRemove(route, previousRoute);
     final routeName = _extractRouteName(route);
     final currentRoute = _RouteData.ofRoute(route);
-    final previousRouteName = _extractRouteName(previousRoute);
 
     Get.log("REMOVING ROUTE $routeName");
-    Get.log("PREVIOUS ROUTE $previousRouteName");
 
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
       value.removed = routeName ?? '';
-      value.previous = previousRouteName ?? '';
+      value.previous = routeName ?? '';
+      // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
     if (route is GetPageRoute) {
-      RouterReportManager.instance.reportRouteWillDispose(route);
+      RouterReportManager.reportRouteWillDispose(route);
     }
     routing?.call(_routeSend);
   }
@@ -145,7 +158,7 @@ class GetObserver extends NavigatorObserver {
     Get.log("NEW ROUTE $newName");
 
     if (newRoute != null) {
-      RouterReportManager.instance.reportCurrentRoute(newRoute);
+      RouterReportManager.reportCurrentRoute(newRoute);
     }
 
     _routeSend?.update((value) {
@@ -159,19 +172,19 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = '';
       value.previous = '$oldName';
+      // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
     if (oldRoute is GetPageRoute) {
-      RouterReportManager.instance.reportRouteWillDispose(oldRoute);
+      RouterReportManager.reportRouteWillDispose(oldRoute);
     }
 
     routing?.call(_routeSend);
   }
 }
 
-//TODO: Use copyWith, and remove mutate variables
 class Routing {
   String current;
   String previous;
@@ -179,6 +192,7 @@ class Routing {
   String removed;
   Route<dynamic>? route;
   bool? isBack;
+  // bool? isSnackbar;
   bool? isBottomSheet;
   bool? isDialog;
 
@@ -189,6 +203,7 @@ class Routing {
     this.removed = '',
     this.route,
     this.isBack,
+    // this.isSnackbar,
     this.isBottomSheet,
     this.isDialog,
   });
@@ -201,6 +216,7 @@ class Routing {
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
   final bool isGetPageRoute;
+  //final bool isSnackbar;
   final bool isBottomSheet;
   final bool isDialog;
   final String? name;
@@ -208,6 +224,7 @@ class _RouteData {
   _RouteData({
     required this.name,
     required this.isGetPageRoute,
+    // required this.isSnackbar,
     required this.isBottomSheet,
     required this.isDialog,
   });
@@ -216,6 +233,7 @@ class _RouteData {
     return _RouteData(
       name: _extractRouteName(route),
       isGetPageRoute: route is GetPageRoute,
+      // isSnackbar: route is SnackRoute,
       isDialog: route is GetDialogRoute,
       isBottomSheet: route is GetModalBottomSheetRoute,
     );

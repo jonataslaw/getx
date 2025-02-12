@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import '../../../get_core/get_core.dart';
-import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
 import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
 
@@ -58,7 +57,7 @@ class Workers {
 /// }
 /// ```
 Worker ever<T>(
-  GetListenable<T> listener,
+  RxInterface<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
   Function? onError,
@@ -101,10 +100,12 @@ Worker everAll(
     evers.add(sub);
   }
 
-  Future<void> cancel() async {
+  Future<void> cancel() {
     for (var i in evers) {
       i.cancel();
     }
+
+    return Future.value();
   }
 
   return Worker(cancel, '[everAll]');
@@ -132,7 +133,7 @@ Worker everAll(
 /// }
 ///```
 Worker once<T>(
-  GetListenable<T> listener,
+  RxInterface<T> listener,
   WorkerCallback<T> callback, {
   dynamic condition = true,
   Function? onError,
@@ -175,7 +176,7 @@ Worker once<T>(
 /// );
 /// ```
 Worker interval<T>(
-  GetListenable<T> listener,
+  RxInterface<T> listener,
   WorkerCallback<T> callback, {
   Duration time = const Duration(seconds: 1),
   dynamic condition = true,
@@ -219,18 +220,18 @@ Worker interval<T>(
 ///  }
 ///  ```
 Worker debounce<T>(
-  GetListenable<T> listener,
+  RxInterface<T> listener,
   WorkerCallback<T> callback, {
   Duration? time,
   Function? onError,
   void Function()? onDone,
   bool? cancelOnError,
 }) {
-  final newDebouncer =
+  final debouncerCallback =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
   StreamSubscription sub = listener.listen(
     (event) {
-      newDebouncer(() {
+      debouncerCallback(() {
         callback(event);
       });
     },

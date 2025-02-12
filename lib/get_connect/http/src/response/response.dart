@@ -8,7 +8,7 @@ import '../status/http_status.dart';
 class GraphQLResponse<T> extends Response<T> {
   final List<GraphQLError>? graphQLErrors;
 
-  GraphQLResponse({super.body, this.graphQLErrors});
+  GraphQLResponse({T? body, this.graphQLErrors}) : super(body: body);
 
   GraphQLResponse.fromResponse(Response res)
       : graphQLErrors = null,

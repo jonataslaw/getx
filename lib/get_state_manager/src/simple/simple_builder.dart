@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+import 'get_state.dart';
 import 'list_notifier.dart';
 
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -24,35 +25,36 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
-  final T initialValue;
+  final T? initialValue;
   final ValueBuilderBuilder<T> builder;
   final void Function()? onDispose;
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
-    super.key,
-    required this.initialValue,
+    Key? key,
+    this.initialValue,
     this.onDispose,
     this.onUpdate,
     required this.builder,
-  });
+  }) : super(key: key);
 
   @override
   ValueBuilderState<T> createState() => ValueBuilderState<T>();
 }
 
-class ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  late T value;
+class ValueBuilderState<T> extends State<ValueBuilder<T?>> {
+  T? value;
+
   @override
   void initState() {
-    value = widget.initialValue;
     super.initState();
+    value = widget.initialValue;
   }
 
   @override
   Widget build(BuildContext context) => widget.builder(value, updater);
 
-  void updater(T newValue) {
+  void updater(T? newValue) {
     if (widget.onUpdate != null) {
       widget.onUpdate!(newValue);
     }
@@ -70,55 +72,39 @@ class ValueBuilderState<T> extends State<ValueBuilder<T>> {
     } else if (value is StreamController) {
       (value as StreamController?)?.close();
     }
+    value = null;
   }
 }
-
-class ObxElement = StatelessElement with StatelessObserverComponent;
 
 // It's a experimental feature
-class Observer extends ObxStatelessWidget {
-  final WidgetBuilder builder;
+class SimpleBuilder extends StatefulWidget {
+  final Widget Function(BuildContext) builder;
 
-  const Observer({super.key, required this.builder});
+  const SimpleBuilder({Key? key, required this.builder}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => builder(context);
+  SimpleBuilderState createState() => SimpleBuilderState();
 }
 
-/// A StatelessWidget than can listen reactive changes.
-abstract class ObxStatelessWidget extends StatelessWidget {
-  /// Initializes [key] for subclasses.
-  const ObxStatelessWidget({super.key});
-  @override
-  StatelessElement createElement() => ObxElement(this);
-}
-
-/// a Component that can track changes in a reactive variable
-mixin StatelessObserverComponent on StatelessElement {
-  List<Disposer>? disposers = <Disposer>[];
-
-  void getUpdate() {
-    // if (disposers != null && !dirty) {
-    //   markNeedsBuild();
-    // }
-    if (disposers != null) {
-      scheduleMicrotask(markNeedsBuild);
-    }
-  }
+class SimpleBuilderState extends State<SimpleBuilder>
+    with GetStateUpdaterMixin {
+  final disposers = <Disposer>[];
 
   @override
-  Widget build() {
-    return Notifier.instance.append(
-        NotifyData(disposers: disposers!, updater: getUpdate), super.build);
-  }
-
-  @override
-  void unmount() {
-    super.unmount();
-    for (final disposer in disposers!) {
+  void dispose() {
+    super.dispose();
+    for (final disposer in disposers) {
       disposer();
     }
-    disposers!.clear();
-    disposers = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TaskManager.instance.exchange(
+      disposers,
+      getUpdate,
+      widget.builder,
+      context,
+    );
   }
 }

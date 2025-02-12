@@ -507,7 +507,7 @@ GetBuilder<Controller>(
 
 * You have already learned how to manage states with Get.
 
-* Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Binding class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
+* Note: You may want a larger organization, and not use the init property. For that, you can create a class and extends Bindings class, and within it mention the controllers that will be created within that route. Controllers will not be created at that time, on the contrary, this is just a statement, so that the first time you use a Controller, Get will know where to look. Get will remain lazyLoad, and will continue to dispose Controllers when they are no longer needed. See the pub.dev example to see how it works.
 
 If you navigate many routes and need data that was in your previously used controller, you just need to use GetBuilder Again (with no init):
 

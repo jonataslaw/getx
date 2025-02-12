@@ -10,14 +10,15 @@ class GetDialogRoute<T> extends PopupRoute<T> {
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder? transitionBuilder,
-    super.settings,
+    RouteSettings? settings,
   })  : widget = pageBuilder,
         _barrierDismissible = barrierDismissible,
         _barrierLabel = barrierLabel,
         _barrierColor = barrierColor,
         _transitionDuration = transitionDuration,
-        _transitionBuilder = transitionBuilder {
-    RouterReportManager.instance.reportCurrentRoute(this);
+        _transitionBuilder = transitionBuilder,
+        super(settings: settings) {
+    RouterReportManager.reportCurrentRoute(this);
   }
 
   final RoutePageBuilder widget;
@@ -28,7 +29,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    RouterReportManager.instance.reportRouteDispose(this);
+    RouterReportManager.reportRouteDispose(this);
     super.dispose();
   }
 
@@ -67,6 +68,6 @@ class GetDialogRoute<T> extends PopupRoute<T> {
           ),
           child: child);
     } // Some default transition
-    return _transitionBuilder(context, animation, secondaryAnimation, child);
+    return _transitionBuilder!(context, animation, secondaryAnimation, child);
   }
 }

@@ -28,4 +28,41 @@ extension GetNumUtils on num {
         Duration(milliseconds: (this * 1000).round()),
         callback,
       );
+
+  /// Easy way to make Durations from numbers.
+  ///
+  /// Sample:
+  /// ```
+  /// print(1.seconds + 200.milliseconds);
+  /// print(1.hours + 30.minutes);
+  /// print(1.5.hours);
+  ///```
+  Duration get milliseconds => Duration(microseconds: (this * 1000).round());
+
+  Duration get seconds => Duration(milliseconds: (this * 1000).round());
+
+  Duration get minutes =>
+      Duration(seconds: (this * Duration.secondsPerMinute).round());
+
+  Duration get hours =>
+      Duration(minutes: (this * Duration.minutesPerHour).round());
+
+  Duration get days => Duration(hours: (this * Duration.hoursPerDay).round());
+
+//final _delayMaps = <Function, Future>{};
+// TODO: create a proper Future and control the Timer.
+//  Future delay([double seconds = 0, VoidCallback callback]) async {
+//    final ms = (seconds * 1000).round();
+//    return Future.delayed(Duration(milliseconds: ms), callback);
+//  return _delayMaps[callback];
+//  }
+//killDelay(VoidCallback callback) {
+//  if (_delayMaps.containsKey(callback)) {
+//    _delayMaps[callback]?.timeout(Duration.zero, onTimeout: () {
+//      print('callbacl eliminado!');
+//    });
+//    _delayMaps.remove(callback);
+//  }
+//}
+
 }

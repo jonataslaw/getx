@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/mixin_builder.dart';
 
 void main() {
-  testWidgets("MixinBuilder with reactive and not reactive", (tester) async {
+  testWidgets("MixinBuilder smoke test", (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MixinBuilder<Controller>(
@@ -36,10 +35,6 @@ void main() {
                 TextButton(
                   child: const Text("increment"),
                   onPressed: () => controller.increment(),
-                ),
-                TextButton(
-                  child: const Text("increment2"),
-                  onPressed: () => controller.increment2(),
                 )
               ],
             );
@@ -67,12 +62,6 @@ void main() {
     await tester.pump();
 
     expect(find.text("Count: 2"), findsOneWidget);
-
-    await tester.tap(find.text('increment2'));
-
-    await tester.pump();
-
-    expect(find.text("Count2: 1"), findsOneWidget);
   });
 
   // testWidgets(

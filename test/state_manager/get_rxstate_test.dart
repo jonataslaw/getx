@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
-  Get.lazyPut<Controller2>(() => Controller2());
+  Get.lazyPut<Controller2>(Controller2.new);
   testWidgets("GetxController smoke test", (tester) async {
     await tester.pumpWidget(
       MaterialApp(

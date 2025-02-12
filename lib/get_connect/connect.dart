@@ -12,7 +12,7 @@ export 'http/src/multipart/multipart_file.dart';
 export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
-abstract class GetConnectInterface with GetLifeCycleMixin {
+abstract class GetConnectInterface with GetLifeCycleBase {
   List<GetSocket>? sockets;
   GetHttpClient get httpClient;
 

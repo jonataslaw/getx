@@ -64,11 +64,11 @@ class GetUtils {
 
   /// In dart2js (in flutter v1.17) a var by default is undefined.
   /// *Use this only if you are in version <- 1.17*.
-  /// So we assure the null type in json conversions to avoid the
+  /// So we assure the null type in json convertions to avoid the
   /// "value":value==null?null:value; someVar.nil will force the null type
   /// if the var is null or undefined.
-  /// `nil` taken from ObjC just to have a shorter syntax.
-  static dynamic nil(dynamic s) => s;
+  /// `nil` taken from ObjC just to have a shorter sintax.
+  // static dynamic nil(dynamic s) => s == null ? null : s;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
   static bool? isNullOrBlank(dynamic value) {
@@ -103,7 +103,7 @@ class GetUtils {
   static bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
 
   /// Checks if string contains at least one Capital Letter
-  static bool hasCapitalLetter(String s) => hasMatch(s, r'[A-Z]');
+  static bool hasCapitalletter(String s) => hasMatch(s, r'[A-Z]');
 
   /// Checks if string is boolean.
   static bool isBool(String value) {
@@ -206,7 +206,7 @@ class GetUtils {
 
   /// Checks if string is URL.
   static bool isURL(String s) => hasMatch(s,
-      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,7}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
 
   /// Checks if string is email.
   static bool isEmail(String s) => hasMatch(s,
@@ -253,8 +253,8 @@ class GetUtils {
   static bool isHexadecimal(String s) =>
       hasMatch(s, r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
 
-  /// Checks if string is Palindrome.
-  static bool isPalindrome(String string) {
+  /// Checks if string is Palindrom.
+  static bool isPalindrom(String string) {
     final cleanString = string
         .toLowerCase()
         .replaceAll(RegExp(r"\s+"), '')
@@ -331,6 +331,12 @@ class GetUtils {
     return length >= maxLength;
   }
 
+  /// Checks if length of data is LOWER than maxLength.
+  ///
+  @Deprecated("This method is deprecated, use [isLengthLessThan] instead")
+  static bool isLengthLowerThan(dynamic value, int maxLength) =>
+      isLengthLessThan(value, maxLength);
+
   /// Checks if length of data is LESS than maxLength.
   static bool isLengthLessThan(dynamic value, int maxLength) {
     final length = _obtainDynamicLength(value);
@@ -340,6 +346,12 @@ class GetUtils {
 
     return length < maxLength;
   }
+
+  /// Checks if length of data is LOWER OR EQUAL to maxLength.
+  ///
+  @Deprecated("This method is deprecated, use [isLengthLessOrEqual] instead")
+  static bool isLengthLowerOrEqual(dynamic value, int maxLength) =>
+      isLengthLessOrEqual(value, maxLength);
 
   /// Checks if length of data is LESS OR EQUAL to maxLength.
   static bool isLengthLessOrEqual(dynamic value, int maxLength) {
@@ -397,25 +409,25 @@ class GetUtils {
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
 
-  // Checks if num is a cnpj
+  //Check if num is a cnpj
   static bool isCnpj(String cnpj) {
-    // Get only the numbers from the CNPJ
+    // Obter somente os números do CNPJ
     final numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
-    // Test if the CNPJ has 14 digits
+    // Testar se o CNPJ possui 14 dígitos
     if (numbers.length != 14) {
       return false;
     }
 
-    // Test if all digits of the CNPJ are the same
+    // Testar se todos os dígitos do CNPJ são iguais
     if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) {
       return false;
     }
 
-    // Divide digits
+    // Dividir dígitos
     final digits = numbers.split('').map(int.parse).toList();
 
-    // Calculate the first check digit
+    // Calcular o primeiro dígito verificador
     var calcDv1 = 0;
     var j = 0;
     for (var i in Iterable<int>.generate(12, (i) => i < 4 ? 5 - i : 13 - i)) {
@@ -424,12 +436,12 @@ class GetUtils {
     calcDv1 %= 11;
     final dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
 
-    // Test the first check digit
+    // Testar o primeiro dígito verificado
     if (digits[12] != dv1) {
       return false;
     }
 
-    // Calculate the second check digit
+    // Calcular o segundo dígito verificador
     var calcDv2 = 0;
     j = 0;
     for (var i in Iterable<int>.generate(13, (i) => i < 5 ? 6 - i : 14 - i)) {
@@ -438,7 +450,7 @@ class GetUtils {
     calcDv2 %= 11;
     final dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
 
-    // Test the second check digit
+    // Testar o segundo dígito verificador
     if (digits[13] != dv2) {
       return false;
     }
@@ -499,14 +511,16 @@ class GetUtils {
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
-  static String capitalize(String value) {
+  static String? capitalize(String value) {
+    if (isNull(value)) return null;
     if (isBlank(value)!) return value;
     return value.split(' ').map(capitalizeFirst).join(' ');
   }
 
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
-  static String capitalizeFirst(String s) {
+  static String? capitalizeFirst(String s) {
+    if (isNull(s)) return null;
     if (isBlank(s)!) return s;
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
@@ -517,7 +531,7 @@ class GetUtils {
     return value.replaceAll(' ', '');
   }
 
-  /// camelCase string
+  /// Camelcase string
   /// Example: your name => yourName
   static String? camelCase(String value) {
     if (isNullOrBlank(value)!) {
@@ -576,7 +590,7 @@ class GetUtils {
 
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
-  /// If firstWordOnly is true, then the example return is "12312"
+  /// If firstword only is true, then the example return is "12312"
   /// (first found numeric word)
   static String numericOnly(String s, {bool firstWordOnly = false}) {
     var numericOnlyStr = '';
@@ -591,44 +605,6 @@ class GetUtils {
     }
 
     return numericOnlyStr;
-  }
-
-  /// Capitalize only the first letter of each word in a string
-  /// Example: getx will make it easy  => Getx Will Make It Easy
-  /// Example 2 : this is an example text => This Is An Example Text
-  static String capitalizeAllWordsFirstLetter(String s) {
-    String lowerCasedString = s.toLowerCase();
-    String stringWithoutExtraSpaces = lowerCasedString.trim();
-
-    if (stringWithoutExtraSpaces.isEmpty) {
-      return "";
-    }
-    if (stringWithoutExtraSpaces.length == 1) {
-      return stringWithoutExtraSpaces.toUpperCase();
-    }
-
-    List<String> stringWordsList = stringWithoutExtraSpaces.split(" ");
-    List<String> capitalizedWordsFirstLetter = stringWordsList
-        .map(
-          (word) {
-            if (word.trim().isEmpty) return "";
-            return word.trim();
-          },
-        )
-        .where(
-          (word) => word != "",
-        )
-        .map(
-          (word) {
-            if (word.startsWith(RegExp(r'[\n\t\r]'))) {
-              return word;
-            }
-            return word[0].toUpperCase() + word.substring(1).toLowerCase();
-          },
-        )
-        .toList();
-    String finalResult = capitalizedWordsFirstLetter.join(" ");
-    return finalResult;
   }
 
   static bool hasMatch(String? value, String pattern) {

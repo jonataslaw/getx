@@ -10,8 +10,6 @@ void main() {
       Wrapper(child: Container()),
     );
 
-    await tester.pump();
-
     Get.bottomSheet(Wrap(
       children: <Widget>[
         ListTile(
@@ -32,8 +30,6 @@ void main() {
       Wrapper(child: Container()),
     );
 
-    await tester.pump();
-
     Get.bottomSheet(Wrap(
       children: <Widget>[
         ListTile(
@@ -44,13 +40,9 @@ void main() {
       ],
     ));
 
-    await tester.pumpAndSettle();
-
     expect(Get.isBottomSheetOpen, true);
 
-    Get.backLegacy();
-    await tester.pumpAndSettle();
-
+    Get.back();
     expect(Get.isBottomSheetOpen, false);
 
     // expect(() => Get.bottomSheet(Container(), isScrollControlled: null),

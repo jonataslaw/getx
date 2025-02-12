@@ -73,7 +73,7 @@ Get.put<S>(
 ```
 
 ### Get.lazyPut
-인스턴스를 사용하는 경우에만 의존성을 lazyLoad 할 수 있습니다. 계산 비용이 많이 드는 클래스나 한곳에서 다양한 클래스를 당장 사용하지 않으면서 인스턴스화 하기를 원한다면(Bindings 클래스처럼) 매우 유용합니다.
+인스턴스하게 사용하는 경우에만 의존성을 lazyLoad 할 수 있습니다. 계산 비용이 많이 드는 클래스나 한곳에서 다양한 클래스를 당장 사용하지 않으면서 인스턴스화 하기를 원한다면(Bindings 클래스처럼) 매우 유용합니다.
 
 ```dart
 /// ApiMock은 처음으로 Get.find<ApiMock>을 사용하는 경우에만 호출됩니다.
@@ -94,7 +94,7 @@ Get.lazyPut<Controller>( () => Controller() )
 lazyPut을 사용시 설정 가능한 모든 사항:
 ```dart
 Get.lazyPut<S>(
-  // 필수: 이 메서드는 처음으로 클래스가 호출할 때 실행될 것입니다.
+  // 필수: 이 메서드는 처음으로 클래스가 호출할 때 실행될 것입니다
   InstanceBuilderCallback builder,
   
   // 선택: Get.put()과 같이 같은 클래스를 다중으로 인스턴스할 경우 사용합니다.
@@ -148,7 +148,7 @@ Get.Create<SomeClass>(() => SomeClass());
 Get.Create<LoginController>(() => LoginController());
 ```
 
-create 사용 시 설정 가능한 모든 사항:
+create 사용시 설정 가능한 모든 사항:
 
 ```dart
 Get.create<S>(
@@ -177,7 +177,7 @@ final controller = Get.find<Controller>();
 // OR
 Controller controller = Get.find();
 
-// 그렇습니다. 마법 같아요. Get은 controller를 찾아 가져다 줍니다.
+// 그렇습니다. 마법 같아요. Get은 controller를 찾고 배달해 줍니다.
 // Get은 백만개의 contrller를 인스턴스화해서 가질수 있고 항상 올바르게 전달해 줍니다.
 ```
 
@@ -199,35 +199,6 @@ Get의 인스턴스에서 삭제합니다:
 ```dart
 Get.delete<Controller>(); // 보통 GetX는 미사용 controller를 삭제하기 때문에 수행할 필요가 없습니다
 ```
-
-## 대체 인스턴스 지정
-
-현재 추가된 인스턴스는 `replace` 또는 `lazyReplace` 메소드를 사용하여 유사하거나 확장된 클래스 인스턴스로 교체할 수 있습니다. 이후 원본 클래스를 사용하여 찾을 수 있습니다.
-```dart
-abstract class BaseClass {}
-class ParentClass extends BaseClass {}
-
-class ChildClass extends ParentClass {
-  bool isChild = true;
-}
-
-
-Get.put<BaseClass>(ParentClass());
-
-Get.replace<BaseClass>(ChildClass());
-
-final instance = Get.find<BaseClass>();
-print(instance is ChildClass); //true
-
-
-class OtherClass extends BaseClass {}
-Get.lazyReplace<BaseClass>(() => OtherClass());
-
-final instance = Get.find<BaseClass>();
-print(instance is ChildClass); // false
-print(instance is OtherClass); //true
-```
-
 
 ## 메서드간의 차이점
 
