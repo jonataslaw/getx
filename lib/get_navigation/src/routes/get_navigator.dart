@@ -52,7 +52,6 @@ class GetNavigator extends Navigator {
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-          //keys should be optional
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);

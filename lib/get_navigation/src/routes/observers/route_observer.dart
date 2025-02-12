@@ -205,7 +205,7 @@ class _RouteData {
   final bool isDialog;
   final String? name;
 
-  _RouteData({
+  const _RouteData({
     required this.name,
     required this.isGetPageRoute,
     required this.isBottomSheet,
