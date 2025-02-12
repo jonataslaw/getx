@@ -1,3 +1,9 @@
+## [5.0.0-release-candidate-9.3.0]
+
+- Support for Flutter 3.29.0
+
+- Remove remaining dart:html references
+
 ## [5.0.0-release-candidate-9.2.1]
 
 - Remove remaining dart:html references
