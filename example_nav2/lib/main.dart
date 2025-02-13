@@ -1,3 +1,4 @@
+import 'package:example_nav2/lang/translation_service.dart';
 import 'package:example_nav2/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,8 @@ void main() {
       ],
       getPages: AppPages.routes,
       initialRoute: AppPages.initial,
+      translations: TranslationService(),
+      locale: TranslationService.locale,
       // builder: (context, child) {
       //   return FutureBuilder<void>(
       //     key: ValueKey('initFuture'),

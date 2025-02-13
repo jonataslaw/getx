@@ -33,8 +33,12 @@ extension LocalesIntl on GetInterface {
 
   Map<String, Map<String, String>> get translations => _intlHost.translations;
 
-  void addTranslations(Map<String, Map<String, String>> tr) {
-    translations.addAll(tr);
+  void addTranslations(Map<String, Map<String, dynamic>> tr) {
+    Map<String, Map<String, String>> translationsX = {};
+    tr.forEach((key, value) {
+      translationsX[key] = flattenMap(value);
+    });
+    translations.addAll(translationsX);
   }
 
   void clearTranslations() {
@@ -49,6 +53,20 @@ extension LocalesIntl on GetInterface {
         translations[key] = map;
       }
     });
+  }
+
+  Map<String, String> flattenMap(Map<String, dynamic> map,
+      [String prefix = '']) {
+    Map<String, String> flattenedMap = {};
+    map.forEach((key, value) {
+      if (value is Map) {
+        flattenedMap.addAll(flattenMap(value.cast<String, dynamic>(),
+            prefix.isEmpty ? key : '$prefix.$key'));
+      } else {
+        flattenedMap[prefix.isEmpty ? key : '$prefix.$key'] = value;
+      }
+    });
+    return flattenedMap;
   }
 }
 
