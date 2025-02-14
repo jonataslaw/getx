@@ -1,3 +1,11 @@
+## [5.0.0-release-candidate-9.3.2]
+
+- Fix pana score
+
+## [5.0.0-release-candidate-9.3.1]
+
+- Fix lint errors
+
 ## [5.0.0-release-candidate-9.3.0]
 
 - Support for Flutter 3.29.0
