@@ -367,7 +367,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -480,7 +480,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -898,6 +898,13 @@ extension GetNavigationExt on GetInterface {
     closeOverlay(id: id, result: result);
   }
 
+  void closeBottomSheet<T>({String? id, T? result}) {
+    // Stop if there is no bottomsheet open
+    if (isBottomSheetOpen == null || !isBottomSheetOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
   /// Close the current overlay returning the [result], if provided
   void closeOverlay<T>({
     String? id,
@@ -1227,9 +1234,6 @@ extension GetNavigationExt on GetInterface {
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
 
-  /// check if popGesture is enable
-  bool get isPopGestureEnable => defaultPopGesture;
-
   /// check if default opaque route is enable
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
@@ -1319,7 +1323,7 @@ extension GetNavigationExt on GetInterface {
 
   ConfigData get _getxController => GetRootState.controller.config;
 
-  bool get defaultPopGesture => _getxController.defaultPopGesture;
+  bool? get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
 
   Transition? get defaultTransition => _getxController.defaultTransition;

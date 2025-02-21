@@ -383,7 +383,7 @@ You need to either use message[String], or messageText[Widget] or define a userI
   }
 
   void _configureLeftBarFuture() {
-    ambiguate(Engine.instance)!.addPostFrameCallback(
+    Engine.instance.addPostFrameCallback(
       (_) {
         final keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
