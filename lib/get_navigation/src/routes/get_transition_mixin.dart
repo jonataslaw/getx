@@ -116,7 +116,6 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
         )
       },
     );
-
     return Stack(
       fit: StackFit.passthrough,
       children: [
@@ -361,7 +360,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    bool limitedSwipe = false,
+    bool limitedSwipe = true,
     double initialOffset = 0,
   }) {
     // Check if the route has an animation that's currently participating
