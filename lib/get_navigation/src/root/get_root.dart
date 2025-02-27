@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/test_kit.dart';
 
 import '../../../get.dart';
 import '../router_report.dart';
@@ -37,7 +38,7 @@ class ConfigData {
   final ThemeData? theme;
   final ThemeData? darkTheme;
   final ThemeMode? themeMode;
-  final bool defaultPopGesture;
+  final bool? defaultPopGesture;
   final bool defaultOpaqueRoute;
   final Duration defaultTransitionDuration;
   final Curve defaultTransitionCurve;
@@ -86,10 +87,9 @@ class ConfigData {
     this.defaultDialogTransitionCurve = Curves.easeOutQuad,
     this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
     this.parameters = const {},
+    required this.defaultPopGesture,
     Routing? routing,
-    bool? defaultPopGesture,
-  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
-        routing = routing ?? Routing();
+  }) : routing = routing ?? Routing();
 
   ConfigData copyWith({
     ValueChanged<Routing?>? routingCallback,
@@ -287,6 +287,8 @@ class GetRoot extends StatefulWidget {
   @override
   State<GetRoot> createState() => GetRootState();
 
+  static bool get treeInitialized => GetRootState._controller != null;
+
   static GetRootState of(BuildContext context) {
     // Handles the case where the input context is a navigator element.
     GetRootState? root;
@@ -324,7 +326,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void initState() {
     config = widget.config;
     GetRootState._controller = this;
-    ambiguate(Engine.instance)!.addObserver(this);
+    Engine.instance.addObserver(this);
     onInit();
     super.initState();
   }
@@ -346,7 +348,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);
     _controller = null;
-    ambiguate(Engine.instance)!.removeObserver(this);
+    Engine.instance.removeObserver(this);
   }
 
   @override
@@ -432,7 +434,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   set testMode(bool isTest) {
     config = config.copyWith(testMode: isTest);
-    // _getxController.testMode = isTest;
+    GetTestMode.active = isTest;
   }
 
   void onReady() {

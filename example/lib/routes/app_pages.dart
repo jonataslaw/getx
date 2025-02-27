@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
+import 'package:get_demo/pages/home/bindings/details_binding.dart';
 
 import '../pages/home/bindings/home_binding.dart';
-import '../pages/home/presentation/views/country_view.dart';
 import '../pages/home/presentation/views/details_view.dart';
 import '../pages/home/presentation/views/home_view.dart';
 
@@ -18,15 +18,9 @@ class AppPages {
       binding: HomeBinding(),
       children: [
         GetPage(
-          name: Routes.COUNTRY,
-          page: () => const CountryView(),
-          children: [
-            GetPage(
-              name: Routes.DETAILS,
-              page: () => const DetailsView(),
-            ),
-          ],
-        ),
+            name: Routes.DETAILS,
+            page: () => const DetailsView(),
+            binding: DetailsBinding()),
       ],
     ),
   ];

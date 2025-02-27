@@ -46,7 +46,7 @@ mixin StateMixin<T> on ListNotifier {
     if (newStatus == status) return;
     _status = newStatus;
     if (newStatus is SuccessStatus<T>) {
-      _value = newStatus.data!;
+      _value = newStatus.data;
     }
     refresh();
   }
@@ -71,20 +71,38 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
+  void setSuccess(T data) {
+    change(GetStatus<T>.success(data));
+  }
+
+  void setError(Object error) {
+    change(GetStatus<T>.error(error));
+  }
+
+  void setLoading() {
+    change(GetStatus<T>.loading());
+  }
+
+  void setEmpty() {
+    change(GetStatus<T>.empty());
+  }
+
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
     _value ??= initialData;
+    status = GetStatus<T>.loading();
     compute().then((newValue) {
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        status = GetStatus<T>.loading();
+        status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
 
       refresh();
     }, onError: (err) {
-      status = GetStatus.error(errorMessage ?? err.toString());
+      status = GetStatus.error(
+          err is Exception ? err : Exception(errorMessage ?? err.toString()));
       refresh();
     });
   }
@@ -216,13 +234,13 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
 
 extension StateExt<T> on StateMixin<T> {
   Widget obx(
-    NotifierBuilder<T?> widget, {
+    NotifierBuilder<T> widget, {
     Widget Function(String? error)? onError,
     Widget? onLoading,
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) {
-    return Observer(builder: (_) {
+    return Observer(builder: (context) {
       if (status.isLoading) {
         return onLoading ?? const Center(child: CircularProgressIndicator());
       } else if (status.isError) {
@@ -235,7 +253,7 @@ extension StateExt<T> on StateMixin<T> {
       } else if (status.isSuccess) {
         return widget(value);
       } else if (status.isCustom) {
-        return onCustom?.call(_) ??
+        return onCustom?.call(context) ??
             const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
@@ -250,7 +268,7 @@ abstract class GetStatus<T> with Equality {
 
   factory GetStatus.loading() => LoadingStatus<T>();
 
-  factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
+  factory GetStatus.error(Object message) => ErrorStatus<T, Object>(message);
 
   factory GetStatus.empty() => EmptyStatus<T>();
 
@@ -303,12 +321,22 @@ extension StatusDataExt<T> on GetStatus<T> {
 
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
+  dynamic get error {
+    if (this is ErrorStatus) {
+      return (this as ErrorStatus).error;
+    }
+    return null;
+  }
+
   String get errorMessage {
     final isError = this is ErrorStatus;
     if (isError) {
       final err = this as ErrorStatus;
-      if (err.error != null && err.error is String) {
-        return err.error as String;
+      if (err.error != null) {
+        if (err.error is String) {
+          return err.error as String;
+        }
+        return err.error.toString();
       }
     }
 

@@ -1,4 +1,4 @@
-library equality;
+library;
 
 import 'dart:collection';
 

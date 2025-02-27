@@ -59,7 +59,7 @@ class RouterReportManager<T> {
 
   void reportRouteDispose(T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      // ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      // Engine.instance.addPostFrameCallback((_) {
       // Future.microtask(() {
       _removeDependencyByRoute(disposed);
       // });
@@ -117,6 +117,8 @@ class RouterReportManager<T> {
         _routesKey[routeName]?.remove(element);
       }
     }
+
+    _routesKey.remove(routeName);
 
     keysToRemove.clear();
   }

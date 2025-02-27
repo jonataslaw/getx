@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/test_kit.dart';
 
 import '../../get.dart';
 import 'dialog/dialog_route.dart';
@@ -171,7 +172,7 @@ extension ExtensionDialog on GetInterface {
     List<Widget>? actions,
 
     // onWillPop Scope
-    PopInvokedCallback? onWillPop,
+    PopInvokedWithResultCallback<T>? onWillPop,
 
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
@@ -233,42 +234,47 @@ extension ExtensionDialog on GetInterface {
       }
     }
 
-    Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? const EdgeInsets.all(8),
-      contentPadding: contentPadding ?? const EdgeInsets.all(8),
+    Widget baseAlertDialog = Builder(builder: (context) {
+      return AlertDialog(
+        titlePadding: titlePadding ?? const EdgeInsets.all(8),
+        contentPadding: contentPadding ?? const EdgeInsets.all(8),
 
-      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          content ??
-              Text(middleText,
-                  textAlign: TextAlign.center, style: middleTextStyle),
-          const SizedBox(height: 16),
-          ButtonTheme(
-            minWidth: 78.0,
-            height: 34.0,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
-          )
-        ],
-      ),
-      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-      buttonPadding: EdgeInsets.zero,
-    );
+        backgroundColor:
+            backgroundColor ?? DialogTheme.of(context).backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            content ??
+                Text(middleText,
+                    textAlign: TextAlign.center, style: middleTextStyle),
+            const SizedBox(height: 16),
+            ButtonTheme(
+              minWidth: 78.0,
+              height: 34.0,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: actions!,
+              ),
+            )
+          ],
+        ),
+        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+        buttonPadding: EdgeInsets.zero,
+      );
+    });
 
     return dialog<T>(
       onWillPop != null
-          ? PopScope(
-              onPopInvoked: onWillPop,
+          ? PopScope<T>(
+              onPopInvokedWithResult: (didPop, result) =>
+                  onWillPop(didPop, result),
+              // onPopInvoked: onWillPop,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
@@ -361,7 +367,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -441,7 +447,7 @@ extension ExtensionSnackbar on GetInterface {
         margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        backgroundColor: backgroundColor ?? Colors.grey.withValues(alpha: 0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
@@ -474,7 +480,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -884,8 +890,27 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  void closeOverlay({String? id}) {
-    searchDelegate(id).navigatorKey.currentState?.pop();
+  /// Close the currently open dialog, returning a [result], if provided
+  void closeDialog<T>({String? id, T? result}) {
+    // Stop if there is no dialog open
+    if (isDialogOpen == null || !isDialogOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  void closeBottomSheet<T>({String? id, T? result}) {
+    // Stop if there is no bottomsheet open
+    if (isBottomSheetOpen == null || !isBottomSheetOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  /// Close the current overlay returning the [result], if provided
+  void closeOverlay<T>({
+    String? id,
+    T? result,
+  }) {
+    searchDelegate(id).navigatorKey.currentState?.pop(result);
   }
 
   void closeAllBottomSheets({
@@ -1182,10 +1207,6 @@ extension GetNavigationExt on GetInterface {
     return key;
   }
 
-  /// give current arguments
-  //dynamic get arguments => routing.args;
-  dynamic get arguments => rootController.rootDelegate.arguments();
-
   /// give name from current route
   String get currentRoute => routing.current;
 
@@ -1212,9 +1233,6 @@ extension GetNavigationExt on GetInterface {
 
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
-
-  /// check if popGesture is enable
-  bool get isPopGestureEnable => defaultPopGesture;
 
   /// check if default opaque route is enable
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
@@ -1305,7 +1323,7 @@ extension GetNavigationExt on GetInterface {
 
   ConfigData get _getxController => GetRootState.controller.config;
 
-  bool get defaultPopGesture => _getxController.defaultPopGesture;
+  bool? get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
 
   Transition? get defaultTransition => _getxController.defaultTransition;
@@ -1326,14 +1344,37 @@ extension GetNavigationExt on GetInterface {
 
   Routing get routing => _getxController.routing;
 
-  set parameters(Map<String, String?> newParameters) =>
-      rootController.parameters = newParameters;
+  bool get _shouldUseMock => GetTestMode.active && !GetRoot.treeInitialized;
 
-  set testMode(bool isTest) => rootController.testMode = isTest;
+  /// give current arguments
+  dynamic get arguments {
+    return args();
+  }
 
-  bool get testMode => _getxController.testMode;
+  T args<T>() {
+    if (_shouldUseMock) {
+      return GetTestMode.arguments as T;
+    }
+    return rootController.rootDelegate.arguments<T>();
+  }
 
-  Map<String, String?> get parameters => rootController.rootDelegate.parameters;
+  // set parameters(Map<String, String?> newParameters) {
+  //   rootController.parameters = newParameters;
+  // }
+
+  // @Deprecated('Use GetTestMode.active=true instead')
+  set testMode(bool isTest) => GetTestMode.active = isTest;
+
+  // @Deprecated('Use GetTestMode.active instead')
+  bool get testMode => GetTestMode.active;
+
+  Map<String, String?> get parameters {
+    if (_shouldUseMock) {
+      return GetTestMode.parameters;
+    }
+
+    return rootController.rootDelegate.parameters;
+  }
 
   /// Casts the stored router delegate to a desired type
   TDelegate? delegate<TDelegate extends RouterDelegate<TPage>, TPage>() =>

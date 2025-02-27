@@ -47,7 +47,7 @@ class GetModifier<S> {
     var newResponse = response;
     if (_responseModifiers.isNotEmpty) {
       for (var interceptor in _responseModifiers) {
-        newResponse = await interceptor(request, response) as Response<T>;
+        newResponse = await interceptor(request, newResponse) as Response<T>;
       }
     }
 

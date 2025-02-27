@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
 import '../../domain/adapters/repository_adapter.dart';
-import '../../domain/entity/cases_model.dart';
+import '../../domain/entity/country_model.dart';
 
-class HomeController extends StateController<CasesModel> {
+class HomeController extends StateController<List<CountriesItem>> {
   HomeController({required this.homeRepository});
 
   final IHomeRepository homeRepository;
@@ -11,12 +11,11 @@ class HomeController extends StateController<CasesModel> {
   @override
   void onInit() {
     super.onInit();
-    //Loading, Success, Error handle with 1 line of code
-    futurize(homeRepository.getCases);
+    futurize(homeRepository.getCountries);
   }
 
-  Country getCountryById(String id) {
-    final index = int.tryParse(id);
-    return index != null ? state.countries[index] : state.countries.first;
+  Future<Country> getCountryByName(String name) async {
+    final country = await homeRepository.getCountry(name);
+    return country;
   }
 }

@@ -53,6 +53,8 @@ class GetPage<T> extends Page<T> {
 
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
 
+  static void _defaultPopInvokedHandler(bool didPop, Object? result) {}
+
   GetPage({
     required this.name,
     required this.page,
@@ -85,6 +87,9 @@ class GetPage<T> extends Page<T> {
     this.completer,
     this.inheritParentPath = true,
     LocalKey? key,
+    super.canPop,
+    super.onPopInvoked = _defaultPopInvokedHandler,
+    super.restorationId,
   })  : path = _nameToRegex(name),
         assert(name.startsWith('/'),
             'It is necessary to start route name [$name] with a slash: /$name'),
@@ -125,6 +130,9 @@ class GetPage<T> extends Page<T> {
     bool? showCupertinoParallax,
     Completer<T?>? completer,
     bool? inheritParentPath,
+    bool? canPop,
+    PopInvokedWithResultCallback<T>? onPopInvoked,
+    String? restorationId,
   }) {
     return GetPage(
       key: key ?? this.key,
@@ -158,6 +166,9 @@ class GetPage<T> extends Page<T> {
           showCupertinoParallax ?? this.showCupertinoParallax,
       completer: completer ?? this.completer,
       inheritParentPath: inheritParentPath ?? this.inheritParentPath,
+      canPop: canPop ?? this.canPop,
+      onPopInvoked: onPopInvoked ?? this.onPopInvoked,
+      restorationId: restorationId ?? restorationId,
     );
   }
 
