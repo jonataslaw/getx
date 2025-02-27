@@ -1,11 +1,9 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-_语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西亚](README.id-ID.md), [乌尔都语](README.ur-PK.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md), [法语](README-fr.md), [French](README-fr.md)._
-
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
-[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
-[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
-[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
+[![popularity](https://img.shields.io/pub/popularity/get?logo=dart)](https://pub.dev/packages/get/score)
+[![likes](https://img.shields.io/pub/likes/get?logo=dart)](https://pub.dev/packages/get/score)
+[![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -17,6 +15,30 @@ _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西�
 <a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
+
+
+<div align="center">
+
+**Languages:**
+
+  
+[![英语](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![越南语](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
+[![印尼语](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![乌尔都语](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![中文](https://img.shields.io/badge/Language-Chinese-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![葡萄牙语](https://img.shields.io/badge/Language-Portuguese-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![西班牙语](https://img.shields.io/badge/Language-Spanish-blueviolet?style=for-the-badge)](README-es.md)
+[![俄语](https://img.shields.io/badge/Language-Russian-blueviolet?style=for-the-badge)](README.ru.md)
+[![波兰语](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
+[![韩语](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![法语](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
+[![日语](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
+[![印地语](https://img.shields.io/badge/Language-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
+[![孟加拉语](https://img.shields.io/badge/Language-Bangla-blueviolet?style=for-the-badge)](README-bn.md)
+  
+  
+</div>
 
 - [关于Get](#关于get)
 - [安装](#安装)
@@ -68,13 +90,25 @@ _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西�
 
 - GetX 是 Flutter 上的一个轻量且强大的解决方案：高性能的状态管理、智能的依赖注入和便捷的路由管理。
 
-- GetX 有3个基本原则：
+- GetX 有3个基本原则，库里的所有资源都要遵守，也就是：**效率、性能和结构化**。
 
-  - **性能：** GetX 专注于性能和最小资源消耗。GetX 打包后的apk占用大小和运行时的内存占用与其他状态管理插件不相上下。如果你感兴趣，这里有一个[性能测试](https://github.com/jonataslaw/benchmarks)。
-  - **效率：** GetX 的语法非常简捷，并保持了极高的性能，能极大缩短你的开发时长。
+  - **性能：** GetX 专注于性能、消耗最少的资源。GetX 不使用 Stream 或 ChangeNotifier。
+
+  - **效率：** GetX 的语法非常简捷。不管你做什么，借助 GetX 都会让工作更加简洁。GetX 可以减少开发时间，同时提供应用的最大性能。
+
+    一般来说，开发者需要注意在内存中把控制器清理掉。使用 GetX 就没有必要了，它默认可以自动把资源从内存里移除。如果你想把东西留在内存里，就要在依赖里声明“permanent: true”。借助这一特性，开发时间也节省了，在内存里遗留非必要的依赖也不用担心了。同时，依赖默认懒加载。
+
   - **结构：** GetX 可以将界面、逻辑、依赖和路由完全解耦，用起来更清爽，逻辑更清晰，代码更容易维护。
   
 - GetX 并不臃肿，却很轻量。如果你只使用状态管理，只有状态管理模块会被编译，其他没用到的东西都不会被编译到你的代码中。它拥有众多的功能，但这些功能都在独立的容器中，只有在使用后才会启动。
+
+<!-- TODO:
+You do not need context to navigate between routes, so you are not dependent on the widget tree (visualization) for this. You don't need context to access your controllers/blocs through an inheritedWidget, so you completely decouple your presentation logic and business logic from your visualization layer. You do not need to inject your Controllers/Models/Blocs classes into your widget tree through `MultiProvider`s. For this, GetX uses its own dependency injection feature, decoupling the DI from its view completely.
+
+    With GetX you know where to find each feature of your application, having clean code by default. In addition to making maintenance easy, this makes the sharing of modules something that until then in Flutter was unthinkable, something totally possible.
+    BLoC was a starting point for organizing code in Flutter, it separates business logic from visualization. GetX is a natural evolution of this, not only separating the business logic but the presentation logic. Bonus injection of dependencies and routes are also decoupled, and the data layer is out of it all. You know where everything is, and all of this in an easier way than building a hello world.
+    GetX is the easiest, practical, and scalable way to build high-performance applications with the Flutter SDK. It has a large ecosystem around it that works perfectly together, it's easy for beginners, and it's accurate for experts. It is secure, stable, up-to-date, and offers a huge range of APIs built-in that are not present in the default Flutter SDK.
+-->
 
 - Getx有一个庞大的生态系统，能够在Android、iOS、Web、Mac、Linux、Windows和你的服务器上用同样的代码运行。
 **通过[Get Server](https://github.com/jonataslaw/get_server)** 可以在你的后端完全重用你在前端写的代码。
@@ -374,13 +408,13 @@ Get.updateLocale(locale);
 
 #### 系统语言
 
-要读取系统语言，可以使用`window.locale`。
+要读取系统语言，可以使用`Get.deviceLocale`。
 
 ```dart
 import 'dart:ui' as ui;
 
 return GetMaterialApp(
-    locale: ui.window.locale,
+    locale: Get.deviceLocale,
 );
 ```
 
