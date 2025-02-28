@@ -144,12 +144,7 @@ extension ListExtension<E> on List<E> {
     if (item != null) add(item);
   }
 
-  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  // void addAllNonNull(Iterable<E> item) {
-  //   if (item != null) addAll(item);
-  // }
-
-  /// Add [item] to List<E> only if [condition] is true.
+  /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) add(item);

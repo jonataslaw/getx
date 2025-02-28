@@ -124,7 +124,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     return subscription;
   }
 
-  /// Binds an existing `Stream<T>` to this Rx<T> to keep the values in sync.
+  /// Binds an existing `Stream<T>` to this `Rx<T>` to keep the values in sync.
   /// You can bind multiple sources to update the value.
   /// Closing the subscription will happen automatically when the observer
   /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
@@ -182,8 +182,8 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   ///
   /// For example, supposed we have a `int seconds = 2` and we want to animate
   /// from invisible to visible a widget in two seconds:
-  /// RxEvent<int>.call(seconds);
-  /// then after a click happens, you want to call a RxEvent<int>.call(seconds).
+  /// `RxEvent<int>.call(seconds);`
+  /// then after a click happens, you want to call a `RxEvent<int>.call(seconds)`.
   /// By doing `call(seconds)`, if the value being held is the same,
   /// the listeners won't trigger, hence we need this new `trigger` function.
   /// This will refresh the listener of an AnimatedWidget and will keep

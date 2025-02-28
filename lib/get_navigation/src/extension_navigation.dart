@@ -234,37 +234,40 @@ extension ExtensionDialog on GetInterface {
       }
     }
 
-    Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? const EdgeInsets.all(8),
-      contentPadding: contentPadding ?? const EdgeInsets.all(8),
+    Widget baseAlertDialog = Builder(builder: (context) {
+      return AlertDialog(
+        titlePadding: titlePadding ?? const EdgeInsets.all(8),
+        contentPadding: contentPadding ?? const EdgeInsets.all(8),
 
-      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          content ??
-              Text(middleText,
-                  textAlign: TextAlign.center, style: middleTextStyle),
-          const SizedBox(height: 16),
-          ButtonTheme(
-            minWidth: 78.0,
-            height: 34.0,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
-          )
-        ],
-      ),
-      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
-      buttonPadding: EdgeInsets.zero,
-    );
+        backgroundColor:
+            backgroundColor ?? DialogTheme.of(context).backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            content ??
+                Text(middleText,
+                    textAlign: TextAlign.center, style: middleTextStyle),
+            const SizedBox(height: 16),
+            ButtonTheme(
+              minWidth: 78.0,
+              height: 34.0,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: actions!,
+              ),
+            )
+          ],
+        ),
+        // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+        buttonPadding: EdgeInsets.zero,
+      );
+    });
 
     return dialog<T>(
       onWillPop != null
@@ -364,7 +367,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -444,7 +447,7 @@ extension ExtensionSnackbar on GetInterface {
         margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        backgroundColor: backgroundColor ?? Colors.grey.withValues(alpha: 0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
@@ -477,7 +480,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -892,8 +895,27 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  void closeOverlay({String? id}) {
-    searchDelegate(id).navigatorKey.currentState?.pop();
+  /// Close the currently open dialog, returning a [result], if provided
+  void closeDialog<T>({String? id, T? result}) {
+    // Stop if there is no dialog open
+    if (isDialogOpen == null || !isDialogOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  void closeBottomSheet<T>({String? id, T? result}) {
+    // Stop if there is no bottomsheet open
+    if (isBottomSheetOpen == null || !isBottomSheetOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  /// Close the current overlay returning the [result], if provided
+  void closeOverlay<T>({
+    String? id,
+    T? result,
+  }) {
+    searchDelegate(id).navigatorKey.currentState?.pop(result);
   }
 
   void closeAllBottomSheets({
@@ -1219,9 +1241,6 @@ extension GetNavigationExt on GetInterface {
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
 
-  /// check if popGesture is enable
-  bool get isPopGestureEnable => defaultPopGesture;
-
   /// check if default opaque route is enable
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
@@ -1311,7 +1330,7 @@ extension GetNavigationExt on GetInterface {
 
   ConfigData get _getxController => GetRootState.controller.config;
 
-  bool get defaultPopGesture => _getxController.defaultPopGesture;
+  bool? get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
 
   Transition? get defaultTransition => _getxController.defaultTransition;

@@ -132,28 +132,32 @@ class Second extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SecondController());
     print('second rebuild');
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('page two ${Get.parameters["id"]}'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-                child: TextField(
-              controller: controller.textEdit,
-            )),
-            SizedBox(
-              height: 300,
-              width: 300,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed('/third');
-                },
-                child: const Text('next screen'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) => print('pop invoked'),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('page two ${Get.parameters["id"]}'),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Expanded(
+                  child: TextField(
+                controller: controller.textEdit,
+              )),
+              SizedBox(
+                height: 300,
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.toNamed('/third');
+                  },
+                  child: const Text('next screen'),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

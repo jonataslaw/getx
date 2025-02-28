@@ -255,8 +255,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         return await _popHistory<T>(result);
       case PopMode.page:
         return await _popPage<T>(result);
-      default:
-        return null;
     }
   }
 
@@ -387,7 +385,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     PreventDuplicateHandlingMode preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
     // if (preventDuplicateHandlingMode ==
     //PreventDuplicateHandlingMode.Recreate) {
     //   routeName = routeName + page.hashCode.toString();
@@ -439,7 +437,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool showCupertinoParallax = true,
     double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
     final route = GetPage<T>(
       name: routeName,
       opaque: opaque ?? true,
@@ -475,7 +473,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool showCupertinoParallax = true,
     double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
     final route = GetPage<T>(
       name: routeName,
       opaque: opaque,
@@ -803,8 +801,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         case PreventDuplicateHandlingMode.recreate:
           _activePages.remove(onStackPage);
           _activePages.add(res);
-          break;
-        default:
       }
     }
     if (rebuildStack) {
