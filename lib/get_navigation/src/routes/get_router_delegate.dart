@@ -525,7 +525,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   }) async {
     final args = _buildPageSettings(page, arguments);
     final route = _getRouteDecoder<T>(
@@ -549,7 +549,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   }) async {
     final args = _buildPageSettings(page, arguments);
     final route = _getRouteDecoder<T>(
@@ -566,7 +566,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   ]) async {
     final arguments = _buildPageSettings(page, data);
 
@@ -589,7 +589,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   ]) async {
     while (_activePages.isNotEmpty && !predicate(_activePages.last.route!)) {
       _popWithResult();

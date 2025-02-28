@@ -632,7 +632,7 @@ extension GetNavigationExt on GetInterface {
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   }) {
     // if (preventDuplicates && page == currentRoute) {
     //   return null;
@@ -694,7 +694,7 @@ extension GetNavigationExt on GetInterface {
     String? id,
     dynamic arguments,
     Map<String, String>? parameters,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   }) {
     if (parameters != null) {
       final uri = Uri(path: page, queryParameters: parameters);
@@ -728,7 +728,7 @@ extension GetNavigationExt on GetInterface {
     String? id,
     dynamic result,
     Map<String, String>? parameters,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   }) {
     if (parameters != null) {
       final uri = Uri(path: page, queryParameters: parameters);
@@ -1030,7 +1030,7 @@ extension GetNavigationExt on GetInterface {
     bool Function(GetPage) predicate, [
     Object? arguments,
     String? id,
-    bool preventDuplicates = true,
+    bool preventDuplicates = false,
   ]) {
     return searchDelegate(id).offUntil(
       page,
