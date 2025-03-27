@@ -1,11 +1,27 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
-**Bahasa: Indonesia (file ini), [Inggris](README.md), [Orang Vietnam](README-vi.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
+**Bahasa**
+
+
+[![Bahasa Inggris](https://img.shields.io/badge/Bahasa-Inggris-blueviolet?style=for-the-badge)](README.md)
+[![Bahasa Vietnam](https://img.shields.io/badge/Bahasa-Vietnam-blueviolet?style=for-the-badge)](README-vi.md)
+[![Bahasa Indonesia](https://img.shields.io/badge/Bahasa-Indonesia-blueviolet?style=for-the-badge)](README.id-ID.md)
+[![Bahasa Urdu](https://img.shields.io/badge/Bahasa-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
+[![Bahasa Cina](https://img.shields.io/badge/Bahasa-China-blueviolet?style=for-the-badge)](README.zh-cn.md)
+[![Bahasa Portugal](https://img.shields.io/badge/Bahasa-Portugal-blueviolet?style=for-the-badge)](README.pt-br.md)
+[![Bahasa Spanyol](https://img.shields.io/badge/Bahasa-Spanyol-blueviolet?style=for-the-badge)](README-es.md)
+[![Bahasa Rusia](https://img.shields.io/badge/Bahasa-Rusia-blueviolet?style=for-the-badge)](README.ru.md)
+[![Bahasa Polandia](https://img.shields.io/badge/Bahasa-Polandia-blueviolet?style=for-the-badge)](README.pl.md)
+[![Bahasa Korea](https://img.shields.io/badge/Bahasa-Korea-blueviolet?style=for-the-badge)](README.ko-kr.md)
+[![Bahasa Prancis](https://img.shields.io/badge/Bahasa-Prancis-blueviolet?style=for-the-badge)](README-fr.md)
+[![Bahasa Jepang](https://img.shields.io/badge/Bahasa-Jepang-blueviolet?style=for-the-badge)](README.ja-JP.md)
+[![Bahasa Hindi](https://img.shields.io/badge/Bahasa-Hindi-blueviolet?style=for-the-badge)](README-hi.md)
+[![Bahasa Bangladesh](https://img.shields.io/badge/Bahasa-Bangladesh-blueviolet?style=for-the-badge)](README-bn.md)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
-[![popularity](https://badges.bar/get/popularity)](https://pub.dev/packages/sentry/score)
-[![likes](https://badges.bar/get/likes)](https://pub.dev/packages/get/score)
-[![pub points](https://badges.bar/get/pub%20points)](https://pub.dev/packages/get/score)
+[![popularitas](https://img.shields.io/pub/popularity/get?logo=dart)](https://pub.dev/packages/get/score)
+[![jumlah suka](https://img.shields.io/pub/likes/get?logo=dart)](https://pub.dev/packages/get/score)
+[![poin pub](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/get/score)
 ![building](https://github.com/jonataslaw/get/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N)
@@ -14,13 +30,15 @@
 <a href="https://github.com/Solido/awesome-flutter">
 <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
 </a>
-<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://i.imgur.com/aV6DDA7.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
+
+
+<a href="https://www.buymeacoffee.com/jonataslaw" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important; box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" > </a>
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Tentang Get](#tentang-get)
+- [Tentang GetX](#tentang-get)
 - [Instalasi](#instalasi)
-- [Aplikasi Counter menggunakan GetX](#aplikasi-counter-menggunakan-getx)
+- [Membuat Aplikasi Counter menggunakan GetX](#aplikasi-counter-menggunakan-getx)
 - [Tiga Pilar](#tiga-pilar)
   - [State management](#state-management)
     - [Reactive State Manager](#reactive-state-manager)
@@ -48,7 +66,7 @@
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [API Lanjutan Lainnya](#api-lanjutan-lainnya)
+  - [Lainnya mengenai API Tingkat Lanjut](#api-lanjutan-lainnya)
     - [Pengaturan Global Opsional dan Konfigurasi Manual](#pengaturan-global-opsional-dan-konfigurasi-manual)
     - [Local State Widgets](#local-state-widgets)
       - [ValueBuilder](#valuebuilder)
@@ -59,7 +77,7 @@
         - [Cara pakai](#cara-pakai)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
-- [Breaking change dari 2.0](#breaking-change-dari-20)
+- [Perubahan Besar dari 2.0](#breaking-change-dari-20)
 - [Mengapa Getx?](#mengapa-getx)
 - [Komunitas](#komunitas)
   - [Channel Komunitas](#kanal-komunitas)
@@ -68,33 +86,33 @@
 
 # Tentang Get
 
-- GetX adalah solusi ekstra-ringan dan powerful untuk Flutter. Ini mengkombinasikan state management dengan performa tinggi, injeksi dependensi yang cerdas, dan route management secara singkat dan praktis.
+- GetX adalah solusi ekstra-ringan dan powerful untuk Flutter. Mengkombinasikan state management dengan performa tinggi, injeksi dependensi yang cerdas, dan route management secara singkat dan praktis.
 
 - GetX memiliki 3 prinsip dasar, yang menjadi prioritas untuk semua resource yang ada di dalamnya: **PRODUKTIFITAS, PERFORMA DAN ORGANISASI**
 
-  - **PERFORMA:** GetX fokus pada performa dan konsumsi resource minimum. GetX tidak menggunakan Stream atau ChangeNotifier.
+  - **PERFORMA:** GetX fokus pada performa dan minim konsumsi resource. GetX tidak menggunakan Stream atau ChangeNotifier.
 
-  - **PRODUKTIFITAS:** GetX menggunakan sintaks yang mudah dan nyaman. Tidak peduli apa yang akan anda lakukan, akan selalu ada cara yang lebih mudah dengan GetX. Ini akan menghemat waktu development, dan meng-ekstrak performa maksimum pada aplikasi anda.
-  Umumnya, developer akan selalu berhubungan dengan penghapusan controller dari memori. Dengan GetX, ini tidak diperlukan, karena resource akan dihapus dari memori secara default ketika tidak digunakan. Jika anda ingin menyimpannnya kedalam memori, anda harus secara eksplisit mendeklarasikan "permanent: true" pada dependensi anda. Dengan begitu, selain menghemat waktu, anda juga mengurangi resiko memiliki dependensi yang tidak diperlukan dalam memori. Pemuatan dependensi juga bersifat "lazy" secara default.
+  - **PRODUKTIFITAS:** GetX menggunakan sintaks yang mudah dan sederhana. Tidak peduli apa yang kita lakukan, akan selalu ada cara yang lebih mudah dengan GetX. Ini akan menghemat waktu development, dan meningkatkan performa pada aplikasimu.
+  Umumnya, developer akan selalu berhubungan dengan penghapusan controller dari memori. Dengan GetX, ini tidak diperlukan, karena resource akan dihapus dari memori secara default ketika tidak digunakan. Jika kita ingin menyimpannya kedalam memori, kita harus secara eksplisit mendeklarasikan "permanent: true" pada dependensi. Dengan begitu, selain menghemat waktu, kita juga mengurangi resiko memiliki dependensi yang tidak diperlukan dalam memori. Pemuatan dependensi juga bersifat "lazy" secara default.
 
-  - **ORGANISASI:** GetX memungkinkan pemisahan View, Presentation Logic, Business Logic, Dependency Injection, dan Navigasi.
-  Anda tidak perlu konteks untuk berpindah antar halaman. Jadi, anda tidak lagi bergantung pada widget tree (visualisasi) untuk hal ini. Anda tidak perlu konteks untuk mengakses controller/bloc melalui InheritedWidget. Dengan ini, anda benar benar memisahkan presentation logic dan business logic dari lapisan visual. Anda tidak perlu menginjeksi kelas Controller/Model/Bloc kedalam widget tree melalui multiprovider, untuk hal ini GetX menggunakan fitur dependency injection nya sendiri, memisahkan DI dari View secara total.
-  Dengan GetX, anda tahu dimana harus mencari setiap fitur dalam aplikasi anda, memiliki kode yang bersih secara default. Ini selain untuk memfasilitasi maintenance, membuat pembagian modul, sesuatu yang hingga saat itu di Flutter tidak terpikirkan, sesuatu yang sangat mungkin.
-  BLoC adalah permulaan awal dalam meng-organisir kode di Flutter, ini memisahkan business logic dari visualisasi. GetX adalah evolusi natural dari ini, tidak hanya memisahkan business logic, tapi juga presentation logic. Injeksi dependensi dan route juga dipisahkan sebagai bonus, dan lapisan data benar-benar terpisah secara menyeluruh. Anda tahu dimana semuanya berada, dan segalanya dengan cara yang lebih mudah daripada membuat sebuah hello world.
-  GetX adalah cara termudah, praktis, dan scalable untuk membangun aplikasi dengan performa tinggi menggunakan Flutter SDK, dengan ekosistem besar di sekelilingnya yang bekerjasama secara sempurna, mudah dipahami untuk pemula, dan akurat untuk ahli. Aman, stabil, up-to-date, dan menawarkan banyak cakupan build-in API yang tidak tersedia di dalam default Flutter SDK.
+  - **ORGANISASI:** GetX memungkinkan kita memisahkan View, Presentation Logic, Business Logic, Dependency Injection, dan Navigasi.
+  Kita tidak perlu lagi konteks untuk berpindah antar halaman. Jadi tidak lagi bergantung pada widget tree (visualisasi). Kita tidak perlu konteks untuk mengakses controller/bloc melalui InheritedWidget. Dengan ini, kita benar benar memisahkan presentation logic dan business logic dari lapisan visual. Kita tidak perlu menginjeksi kelas Controller/Model/Bloc kedalam widget tree melalui multiprovider, untuk hal ini GetX menggunakan fitur dependency injection nya sendiri, memisahkan Dependency Injection dari View secara total.
+  Dengan GetX, kita tahu dimana harus mencari setiap fitur dalam aplikasimu, memiliki kode yang _clean_ secara default. Selain untuk memfasilitasi _maintenance_, membuat pembagian modul, sesuatu yang hingga saat itu di Flutter tidak terpikirkan, ternyata sesuatu yang sangat mungkin.
+  BLoC adalah permulaan awal dalam meng-organisir kode di Flutter, ini memisahkan business logic dari visualisasi. GetX adalah evolusi dari ini, tidak hanya memisahkan business logic, tapi juga presentation logic, injeksi dependensi dan route juga dipisahkan sebagai bonus, dan lapisan data benar-benar terpisah secara menyeluruh. Kita tahu dimana semuanya berada, dan segalanya dengan cara yang lebih mudah daripada membuat sebuah hello world.
+  GetX adalah cara termudah, praktis, dan scalable untuk membangun aplikasi dengan performa tinggi menggunakan Flutter SDK, dengan ekosistem besar di sekelilingnya yang bekerjasama secara sempurna, _beginner friendly_, dan akurat untuk profesional. Aman, stabil, _up-to-date_, dan menawarkan banyak cakupan build-in API yang tidak tersedia di dalam default Flutter SDK.
 
-- GetX tidak "bloated". Dirinya memiliki banyak fitur yang memungkinkan anda memulai programming tanpa mengkhawatirkan apapun, namun setiap fiturnya terletak didalam kontainer terpisah, dan hanya dimulai setelah digunakan. Jika anda hanya menggunakan State Management, hanya State Management yang akan di-compile. Jika anda hanya menggunakan routes, state management tidak akan di-compile.
+- GetX tidak boros. GetX memiliki banyak fitur yang memungkinkan Anda memulai pemrograman tanpa perlu mengkhawatirkan apa pun, tetapi setiap fitur ini berada dalam wadah terpisah dan hanya dimulai setelah digunakan. Jika Anda hanya menggunakan State Management, hanya State Management yang akan dikompilasi. Jika Anda hanya menggunakan rute, tidak ada yang akan dikompilasi dari state management.
 
-- GetX memiliki ekosistem yang besar, komunitas yang juga besar, banyak kolaborator, dan akan di maintenance selama Flutter ada. GetX juga mampu berjalan dengan kode yang sama di Android, iOS, Web, Mac, Linux, Windows, dan server anda.
+- GetX memiliki ekosistem yang besar, komunitas yang juga besar, banyak kolaborator, dan akan di maintenance selama Flutter ada. GetX juga mampu berjalan dengan kode yang sama di Android, iOS, Web, Mac, Linux, Windows, dan server kita.
 **Juga memungkinkan untuk me-reuse kode yang dibuat di frontend ke backend dengan [Get Server](https://github.com/jonataslaw/get_server)**.
 
-**Selain itu, seluruh proses development bisa di automasi secara menyeluruh, untuk keduanya (server dan frontend) menggunakan [Get CLI](https://github.com/jonataslaw/get_cli)**.
+**Selain itu, seluruh proses pengembangan dapat sepenuhnya diotomatisasi, baik di server maupun di front end dengan [Get CLI](https://github.com/jonataslaw/get_cli)**.
 
-**Selain itu, untuk lebih meningkatkan produktifitas anda, kami memiliki [ekstensi untuk VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) dan [ekstensi untuk Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
+**Selain itu, untuk lebih meningkatkan produktifitas, kami memiliki [ekstensi untuk VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) dan [ekstensi untuk Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
 # Instalasi
 
-Tambahkan Get kedalam file `pubspec.yaml` anda:
+Tambahkan Get kedalam file `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -109,7 +127,7 @@ import 'package:get/get.dart';
 
 # Aplikasi Counter menggunakan GetX
 
-Proyek "counter" yang dibuat secara default ketika membuat proyek Flutter memiliki lebih dari 100 baris (termasuk comment). Untuk menunjukkan kekuatan Get, kami akan mendemonstrasikan bagaimana cara membuat "counter" yang mengubah state setiap klik, berpindah, dan berbagi state antar halaman, semua dalam cara yang terorganisir, memisahkan business logic dari view, dalam HANYA 26 BARIS KODE TERMASUK COMMENT.
+Proyek “ counter ” yang dibuat secara default pada proyek baru di Flutter memiliki lebih dari 100 baris (dengan komentar). Untuk menunjukkan kekuatan Get, saya akan mendemonstrasikan cara membuat “penghitung” yang akan mengubah status pada saat diklik, berpindah antar halaman dan berbagi status antar layar, semuanya dengan cara yang terorganisir, memisahkan logika bisnis dari view, HANYA dengan 26 BARIS KODE TERMASUK KOMENTAR.
 
 - Langkah 1:
   Tambahkan "Get" sebelum MaterialApp, mengubahnya menjadi GetMaterialApp
@@ -118,13 +136,13 @@ Proyek "counter" yang dibuat secara default ketika membuat proyek Flutter memili
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- Catatan: ini tidak mengubah MaterialApp bawaan Flutter, GetMaterialApp bukan sebuah MaterialApp yang dimodifikasi, itu hanyalah sebuah Widget yang telah dikonfigurasi sebelumnya, yang mana memiliki default MaterialApp sebagai child. Anda bisa mengkonfigurasinya secara manual, namun hal itu benar-benar tidak diperlukan. GetMaterialApp akan membuat route, menginjeksinya, menginjeksi translasi/terjemahan, dan semua yang anda butuhkan untuk navigasi route. Jika anda hanya menggunakan Get untuk manajemen state atau manajemen dependensi, tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk route, snackbar, internasionalisasi/terjemahan, bottomSheet, dialog, dan high-level API yang berhubungan dengan route dan ketiadaan konteks.
+- Catatan: ini tidak mengubah MaterialApp dari Flutter, GetMaterialApp bukanlah MaterialApp yang dimodifikasi, ini hanyalah Widget yang sudah dikonfigurasi sebelumnya, yang memiliki MaterialApp default sebagai child. Kita dapat mengkonfigurasi ini secara manual, tetapi tidak diperlukan. GetMaterialApp akan membuat rute, menginjeksi mereka, menginjeksi terjemahan, menginjeksi semua yang Anda butuhkan untuk navigasi route. Jika Anda menggunakan Get hanya untuk manajemen state atau manajemen dependency, Anda tidak perlu menggunakan GetMaterialApp. GetMaterialApp diperlukan untuk rute, snackbar, internasionalisasi, bottomSheets, dialog, dan API tingkat tinggi yang terkait dengan rute dan ketiadaan konteks.
 
-- Catatan²: Langkah ini hanya diperlukan jika anda akan menggunakan manajemen route (`Get.to()`, `Get.back()` dan seterusnya). Jika anda tidak menggunakannya, langkah 1 tidak diperlukan.
+- Catatan²: Langkah ini hanya diperlukan jika kita akan menggunakan manajemen route (`Get.to()`, `Get.back()` dan seterusnya). Jika kita tidak menggunakannya, langkah 1 tidak diperlukan.
 
 - Langkah 2:
   Buat file baru untuk business logic dan taruh semua variabel, metode, dan kontroler didalamnya.
-  Anda bisa membuat variabel apapun menjadi "observable" menggunakan notasi tambahan ".obs".
+  kita bisa membuat variabel apapun menjadi "observable" menggunakan notasi tambahan ".obs".
 
 ```dart
 class Controller extends GetxController{
@@ -134,7 +152,7 @@ class Controller extends GetxController{
 ```
 
 - Langkah 3:
-  Buat file baru untuk View, gunakan StatelessWidget dan hemat penggunaan RAM, dengan Get, anda mungkin tidak perlu lagi menggunakan StatefulWidget.
+  Buat View Anda, gunakan StatelessWidget untuk menghemat RAM, dengan Get Anda mungkin tidak lagi perlu menggunakan StatefulWidget.
 
 ```dart
 class Home extends StatelessWidget {
@@ -142,14 +160,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(context) {
 
-    // Instansiasi kelas anda menggunakan Get.put() untuk membuatnya tersedia untuk seluruh "child" route dibawahnya.    
+    // Instansiasi kelas kita menggunakan Get.put() untuk membuatnya tersedia untuk seluruh "child" route dibawahnya.    
     final Controller c = Get.put(Controller());
 
     return Scaffold(
       // Gunakan Obx(() => ...) untuk mengupdate Text() ketika `count` berubah.
       appBar: AppBar(title: Obx(() => Text("Clicks: ${c.count}"))),
 
-      // Ganti 8 baris Navigator.push menggunan Get.to() agar lebih sederhana. Anda tidak perlu `context`.
+      // Ganti 8 baris Navigator.push menggunan Get.to() agar lebih sederhana. kita tidak perlu `context`.
       body: Center(child: ElevatedButton(
               child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
       floatingActionButton:
@@ -158,7 +176,7 @@ class Home extends StatelessWidget {
 }
 
 class Other extends StatelessWidget {
-  // Anda bisa meminta Get untuk menemukan kontroler yang digunakan di halaman lain dan redirect ke halaman itu.
+  // kita bisa meminta Get untuk menemukan kontroler yang digunakan di halaman lain dan redirect ke halaman itu.
   final Controller c = Get.find();
 
   @override
@@ -173,11 +191,11 @@ Hasil:
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
-Ini adalah proyek sederhana, namun sudah membuatnya terlihat jelas betapa powerful kemampuan yang dimiliki Get. Sepanjang proyek anda berkembang, perbedaan ini akan menjadi lebih signifikan.
+Ini adalah proyek sederhana tetapi sudah menjelaskan betapa hebatnya Get. Seiring dengan berkembangnya proyek, perbedaaan ini akan semakin signifikan.
 
-Get di desain untuk bekerja dalam tim, namun juga memudahkan pekerjaan untuk developer perseorangan dan membuatnya menjadi lebih sederhana.
+Get dirancang untuk bisa digunakan bersama tim, sehingga membuat pekerjaan seorang developer menjadi lebih mudah.
 
-Tingkatkan deadline anda, antarkan semuanya tanpa kehilangan performa. Get bukan untuk semua orang, namun jika anda tersinggung dengan frasa tersebut, Get cocok untukmu!
+Tingkatkan ketepatan targetmu, selesaikan semuanya tepat waktu tanpa kehilangan performa. Get bukan untuk semua orang, tetapi jika Anda merasa cocok dengan ungkapan tersebut, Get cocok untuk Anda!
 
 # Tiga Pilar
 
@@ -187,31 +205,32 @@ Get memiliki dua state manager berbeda: Simple state manager (kami menyebutnya G
 
 ### Reactive State Manager
 
-Reactive programming bisa meng-alienasi banya orang karena katanya, sulit dimengerti. GetX mengubah reactive programming menjadi sesuatu yang cukup sederhana:
+Reactive programming dapat membuat banyak orang merasa kesulitan karena dianggap rumit. GetX mengubah reactive programming menjadi sesuatu yang cukup sederhana
 
-- Anda tidak perlu membuat StreamController.
-- Anda tidak perlu membuat StreamBuilder untuk setiap variabel.
-- Anda tidak perlu membuat kelas untuk setiap state.
-- Anda tidak perlu membuat get untuk sebuah value awal (initial value).
-- Anda tidak perlu menggunakan generator kode.
+Tidak Perlu Lagi:
+- membuat StreamController.
+- membuat StreamBuilder untuk setiap variabel.
+- membuat kelas untuk setiap state.
+- membuat get untuk sebuah value awal (initial value).
+- menggunakan generator kode.
 
 Reactive programming dengan Get semudah menggunakan setState.
 
-Bayangkan anda memiliki variabel nama, dan setiap kali anda mengubahnya, semua widget yang menggunakannya akan berubah secara otomatis.
+Bayangkan kita memiliki variabel nama, dan setiap kali mengubahnya, semua widget yang menggunakannya akan berubah secara otomatis.
 
-Ini variabel count anda:
+Ini variabel count kita:
 
 ```dart
 var name = 'Jonatas Borges';
 ```
 
-Untuk membuatnya "observable", anda hanya perlu menambahkan ".obs" di belakangnya:
+Untuk membuatnya "observable", kita hanya perlu menambahkan ".obs" di belakangnya:
 
 ```dart
 var name = 'Jonatas Borges'.obs;
 ```
 
-Dan didalam UI, ketika anda ingin menampilkan value dan update tampilan ketika value itu berubah, cukup lakukan ini:
+Dan didalam UI, ketika kita ingin menampilkan value dan update tampilan ketika value itu berubah, cukup lakukan ini:
 
 ```dart
 Obx(() => Text("${controller.name}"));
@@ -221,13 +240,13 @@ Selesai! _Sesederhana_ itu.
 
 ### Detail lebih lanjut mengenai state management
 
-**Baca penjelasan lebih lanjut tentang state management [disini](./documentation/id_ID/state_management.md). Disana anda akan melihat contoh lebih banyak dan juga perbedaan diantara simple state manager dengan reactive state manager**
+**Lihat penjelasan yang lebih mendalam tentang manajemen state [di sini](./documentation/id_ID/state_management.md) untuk melihat lebih banyak contoh dan juga perbedaan antara state manager sederhana dan reactive state manager**
 
-Anda akan mendapatkan pemahaman yang baik tentang kekuatan dari GetX.
+Kita akan mendapatkan gambaran yang lebih baik tentang kemampuan GetX.
 
 ## Route management
 
-Jika anda ingin menggunakan routes/snackbars/dialogs/bottomsheets tanpa context, GetX luar biasa cocok untuk anda, lihat ini:
+Jika kita ingin menggunakan routes/snackbars/dialogs/bottomsheets tanpa context, GetX sangat cocok untuk itu, lihat ini:
 
 Tambahkan "Get" sebelum MaterialApp, mengubahnya menjadi GetMaterialApp
 
@@ -244,14 +263,14 @@ Pindah ke halaman baru:
 Get.to(NextScreen());
 ```
 
-Pindah ke halaman baru menggunakan nama. Baca detail lebih lanjut tentang penamaan route [disini](./documentation/id_ID/route_management.md#navigation-with-named-routes)
+Pindah ke halaman baru menggunakan nama route. Baca detail lebih lanjut tentang penamaan route [disini](./documentation/id_ID/route_management.md#navigation-with-named-routes)
 
 ```dart
 
 Get.toNamed('/details');
 ```
 
-Untuk menutup snackbar, dialog, bottomsheet, atau apapun yang normalnya anda tutup menggunakan Navigator.pop(context);
+Untuk menutup snackbar, dialog, bottomsheet, atau apapun yang normalnya kita tutup menggunakan Navigator.pop(context);
 
 ```dart
 Get.back();
@@ -269,39 +288,39 @@ Untuk pergi ke halaman baru dan batalkan navigasi sebelumnya (berguna untuk shop
 Get.offAll(NextScreen());
 ```
 
-Sadarkah bahwa anda tidak menggunakan context sama sekali untuk hal tersebut? Itu adalah keuntungan terbesar dalam menggunakan Get route management. Dengan ini, anda bisa mengeksekusi semua metode dari controller, tanpa ragu.
+Perhatikan bahwa kita tidak perlu menggunakan context untuk melakukan semua hal ini? Itulah salah satu keunggulan terbesar menggunakan route management Get. Dengan ini, Anda dapat mengeksekusi semua method ini dari dalam kelas controller Anda, tanpa perlu khawatir.
 
 ### Detail lebih lanjut mengenai route management
 
-**Get bekerja dengan named route dan juga menawarkan kontrol dengan level yang lebih rendah untuk navigasimu! Dokumentasinya ada [disini](./documentation/id_ID/route_management.md)**
+**Get bekerja dengan named route dan juga menawarkan kontrol lebih mudah untuk navigasimu! Dokumentasinya ada [disini](./documentation/id_ID/route_management.md)**
 
 ## Dependency management
 
-Get memiliki dependency manager sederhana dan powerful yang memungkinkan anda mendapatkan kelas yang setara dengan Bloc atau Controller hanya dengan 1 baris kode, tanpa Provider context, tanpa inheritedWidget:
+Get memiliki dependency manager yang sederhana dan powerful yang memungkinkan kita untuk memperoleh kelas yang sama dengan Bloc atau Controller hanya dengan 1 baris kode, tanpa konteks Provider, dan tanpa inheritedWidget:
 
 ```dart
 Controller controller = Get.put(Controller());
 ```
 
-- Catatan: Jika anda menggunakan State Manager milik Get, harap untuk lebih memperhatikan [Bindings](./documentation/id_ID/dependency_management.md#bindings) api, yang mana akan membuat pengkoneksian View terhadap Controller jadi lebih mudah.
+- Catatan: Jika kita menggunakan State Manager milik Get, harap untuk lebih memperhatikan [Bindings](./documentation/id_ID/dependency_management.md#bindings) api, yang mana akan membuat pengkoneksian View terhadap Controller jadi lebih mudah.
 
-Daripada menginstansiasi kelas anda didalam kelas yang anda gunakan, cukup lakukan hal itu di dalam Get instance, ini akan membuatnya tersedia di semua tempat di Aplikasimu. Jadi anda bisa menggunakan controller (atau class Bloc) secara normal.
+Daripada menginstansiasi kelas Anda di dalam kelas yang Anda gunakan, Anda menginstansiasi kelas tersebut di dalam instance Get, yang akan membuatnya dapat digunakan di seluruh Aplikasi Anda. Jadi Anda dapat menggunakan kontroler Anda (atau class Bloc) secara normal
 
-**Tips:** Dependency Management Get terpisah dari bagian lain dari package, jadi jika sebagai contoh aplikasi anda sudah menggunakan state manager (tidak peduli apapun itu), anda tidak perlu menulis ulang sama sekali, anda bisa menggunakan dependency injection tanpa masalah.
+**Tips:** Dependency Management Get terpisah dari bagian lain dari package, jadi jika sebagai contoh aplikasi kita sudah menggunakan state manager (tidak peduli apapun itu), kita tidak perlu menulis ulang sama sekali, kita bisa menggunakan dependency injection tanpa masalah.
 
 ```dart
 controller.fetchApi();
 ```
 
-Bayangkan anda bernavigasi melewati route yang sangat banyak, dan anda membutuhkan data yang tertinggal didalam controller jauh di belakang route sebelumnya, anda akan butuh state manager dikombinasikan dengan Provider atau Get_it, benar kan? Tidak dengan Get. Anda hanya perlu meminta Get untuk "menemukan" controllernya, anda tidak perlu dependensi tambahan:
+Bayangkan kita bernavigasi melewati route yang sangat banyak, dan kita membutuhkan data yang tertinggal didalam controller jauh di belakang route sebelumnya, kita akan butuh state manager dikombinasikan dengan Provider atau Get_it, benar kan? Tidak dengan Get. kita hanya perlu meminta Get untuk "menemukan" controllernya, kita tidak perlu dependensi tambahan:
 
 ```dart
 Controller controller = Get.find();
-// Ya, terlihat seperti Sulap, Get akan menemukan controller anda, dan akan mengantarkannya ke lokasi anda.
-// Anda bisa memiliki 1 juta controller terinisialisasi, Get akan selalu memberimu controller yang tepat.
+// Ya, terlihat seperti Sulap, Get akan menemukan controller kita, dan akan mengantarkannya ke lokasi kita.
+// kita bisa memiliki 1 juta controller terinisialisasi, Get akan selalu memberimu controller yang tepat.
 ```
 
-Dan setelahnya anda bisa memperoleh data yang tertinggal sebelumnya:
+Dan setelahnya kita bisa memperoleh data yang tertinggal sebelumnya:
 
 ```dart
 Text(controller.textFromApi);
@@ -346,28 +365,28 @@ Text('title'.tr);
 
 ### Lokalisasi
 
-Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokal dan translasi.
+Berikan parameter ke `GetMaterialApp` untuk mendefinisikan lokaliasi dan translasi.
 
 ```dart
 return GetMaterialApp(
-    translations: Messages(), // gunakan translasi yang anda buat
+    translations: Messages(), // gunakan translasi yang kita buat
     locale: Locale('id', 'ID'), // translasi akan ditampilkan di lokal ini
     fallbackLocale: Locale('en', 'US'), // berikan lokal penumpu untuk berjaga-jaga jika lokal yang tidak valid dipilih
 );
 ```
 
-#### Mengubah Lokal
+#### Mengubah Lokalisasi
 
-Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, translasi akan menggunakan lokal baru.
+Panggil `Get.updateLocale(locale)` untuk memperbarui lokalisasi. Setelahnya, translasi akan menggunakan lokalisasi baru.
 
 ```dart
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
 
-#### Lokal Sistem
+#### Lokalisasi Sistem
 
-Untuk membaca lokal sistem, anda bisa menggunakan `Get.deviceLocale`.
+Untuk membaca lokalisasi sistem, kita bisa menggunakan `Get.deviceLocale`.
 
 ```dart
 return GetMaterialApp(
@@ -377,24 +396,24 @@ return GetMaterialApp(
 
 ## Mengubah Tema
 
-Harap untuk tidak menggunakan widget dengan level lebih tinggi daripada `GetMaterialApp` untuk memperbaruinya. Ini akan menyebabkan "duplicate keys". Banyak orang terbiasa menggunakan cara lama untuk membuat sebuah "ThemeProvider" widget hanya untuk mengubah tema aplikasi anda, dan ini tentu saja TIDAK diperlukan dengan **GetX™**.
+Harap untuk tidak menggunakan widget dengan level lebih tinggi daripada `GetMaterialApp` untuk memperbaruinya. Ini akan menyebabkan "duplicate keys". Banyak orang terbiasa menggunakan cara lama untuk membuat sebuah "ThemeProvider" widget hanya untuk mengubah tema aplikasi kita, dan ini tentu saja TIDAK diperlukan dengan **GetX™**.
 
-Anda bisa membuat tema kustom anda sendiri dan cukup menambahkannya kedalam `Get.changeTheme` tanpa boilerplate:
+kita bisa membuat tema kustom kita sendiri dan cukup menambahkannya kedalam `Get.changeTheme` tanpa boilerplate:
 
 ```dart
 Get.changeTheme(ThemeData.light());
 ```
 
-Jika anda ingin membuat sesuatu seperti tombol yang mengubah Tema ketika `onPressed`, anda bisa mengkombinasikan dua **GetX™** API:
+Jika kita ingin membuat sesuatu seperti tombol yang mengubah Tema ketika `onPressed`, kita bisa mengkombinasikan dua **GetX™** API:
 
 - API yang melakukan pengecekan terhadap tema gelap `Get.isDarkMode`.
-- Dan API pengubah tema `Get.changeTheme`, anda cukup meletakannya didalam `onPressed`:
+- Dan API pengubah tema `Get.changeTheme`, kita cukup meletakannya didalam `onPressed`:
 
 ```dart
 Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 ```
 
-Ketika `.darkmode` aktif, ini akan mengubah aplikasi anda ke _light theme_, dan sebaliknya, jika _light theme_ sedang aktif, ini akan mengubah aplikasi anda ke _dark theme_.
+Ketika `.darkmode` aktif, ini akan mengubah aplikasi kita ke _light theme_, dan sebaliknya, jika _light theme_ sedang aktif, ini akan mengubah aplikasi kita ke _dark theme_.
 
 ## GetConnect
 
@@ -402,7 +421,7 @@ GetConnect adalah cara mudah untuk berkomunikasi dari backend ke frontend menggu
 
 ### Konfigurasi Default
 
-Anda bisa secara sederhana meng-extend GetConnect dan menggunakan GET/POST/PUT/DELETE/SOCKET untuk berkomunikasi dengan REST API atau Websocket anda.
+kita bisa secara sederhana meng-extend GetConnect dan menggunakan GET/POST/PUT/DELETE/SOCKET untuk berkomunikasi dengan REST API atau Websocket kita.
 
 ```dart
 class UserProvider extends GetConnect {
@@ -427,7 +446,7 @@ class UserProvider extends GetConnect {
 
 ### Konfigurasi Kustom
 
-GetConnect sangat bisa di disesuaikan, anda bisa mendefinisikan base URL, Response Modifier, Request Modifier, Authenticator, dan bahkan jumlah percobaan akses ulang (retry) yang mana akan mencoba meng-autentikasi dirinya sendiri, sebagai tambahan, anda juga bisa mendefinisikan dekoder standar yang akan mengubah seluruh request kedalam Model anda tanpa konfigurasi tambahan.
+GetConnect sangat bisa di disesuaikan, kita bisa mendefinisikan base URL, Response Modifier, Request Modifier, Authenticator, dan bahkan jumlah percobaan akses ulang (retry) yang mana akan mencoba meng-autentikasi dirinya sendiri, sebagai tambahan, kita juga bisa mendefinisikan dekoder standar yang akan mengubah seluruh request kedalam Model kita tanpa konfigurasi tambahan.
 
 ```dart
 class HomeProvider extends GetConnect {
@@ -446,7 +465,7 @@ class HomeProvider extends GetConnect {
     });
 
     // Bahkan jika server mengirim data dari negara "Brazil"
-    // itu tidak akan pernah ditampilkan ke user, karena anda menghapus
+    // itu tidak akan pernah ditampilkan ke user, karena kita menghapus
     // data tersebut sebelum response, bahkan sebelum response diantarkan.
     httpClient.addResponseModifier<CasesModel>((request, response) {
       CasesModel model = response.body;
@@ -509,7 +528,7 @@ RouteSettings redirect(String route) {
 ### OnPageCalled
 
 Fungsi ini akan terpanggil ketika halaman yang dituju dipanggil sebelum apapun dibuat,
-anda bisa menggunakannya untuk mengubah sesuatu tentang halaman tersebut atau
+kita bisa menggunakannya untuk mengubah sesuatu tentang halaman tersebut atau
 berikan halaman baru.
 
 ```dart
@@ -522,7 +541,7 @@ GetPage onPageCalled(GetPage page) {
 ### OnBindingsStart
 
 Fungsi ini akan terpanggil tepat sebelum Binding ter-inisialisasi.
-Disini anda bisa mengubah Binding untuk halaman yang dituju.
+Disini kita bisa mengubah Binding untuk halaman yang dituju.
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -537,7 +556,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 ### OnPageBuildStart
 
 Fungsi ini akan terpanggil tepat setelah Binding ter-inisialisasi.
-Disini anda bisa melakukan sesuatu sebelum halaman yang dituju dibuat.
+Disini kita bisa melakukan sesuatu sebelum halaman yang dituju dibuat.
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -548,13 +567,13 @@ GetPageBuilder onPageBuildStart(GetPageBuilder page) {
 
 ### OnPageBuilt
 
-Fungsi ini akan terpanggil tepat setelah fungsi `GetPage.page` terpanggil dan akan memberikan anda hasil dari fungsinya. Dan mengambil widget yang akan ditampilkan.
+Fungsi ini akan terpanggil tepat setelah fungsi `GetPage.page` terpanggil dan akan memberikan kita hasil dari fungsinya. Dan mengambil widget yang akan ditampilkan.
 
 ### OnPageDispose
 
 Fungsi ini akan terpanggil tepat setelah semua objek yang berhubungan (Controller, Views, ...) ter-dispose dari halaman.
 
-## API Lanjutan Lainnya
+## API Tingkat Lanjut Lainnya
 
 ```dart
 // memberikan argument dari halaman yang sedang ditampilkan
@@ -602,7 +621,7 @@ GetPlatform.isFuchsia
 GetPlatform.isMobile
 GetPlatform.isDesktop
 // Semua platform didukung secara independen di web!
-// Anda bisa mengetahui apakah anda menjalankannya didalam browser
+// kita bisa mengetahui apakah kita menjalankannya didalam browser
 // di Windows, iOS, OSX, Android, dsb.
 GetPlatform.isWeb
 
@@ -615,17 +634,17 @@ Get.width
 // Memberikan konteks saat ini dari sebuah Navigator
 Get.context
 
-// Memberikan konteks dari snackbar/dialog/bottomsheet di Gives the latar depan, dimanapun di kode anda
+// Memberikan konteks dari snackbar/dialog/bottomsheet di Gives the latar depan, dimanapun di kode kita
 Get.contextOverlay
 
-// Catatan: metode berikut adalah sebuah perluasan konteks. Berhubung anda
-// memiliki akses terhadap konteks dimanapun di UI anda, anda bisa menggunakannya dimanapun di kode UI
+// Catatan: metode berikut adalah sebuah perluasan konteks. Berhubung kita
+// memiliki akses terhadap konteks dimanapun di UI kita, kita bisa menggunakannya dimanapun di kode UI
 
-// Jika anda memerlukan height/width yang bisa dirubah (seperti Desktop atau browser yang bisa di sesuaikan) anda akan memerlukan konteks
+// Jika kita memerlukan height/width yang bisa dirubah (seperti Desktop atau browser yang bisa di sesuaikan) kita akan memerlukan konteks
 context.width
 context.height
 
-// Memberikan anda kemampuan untuk mendefinisikan separuh layar, sepertiga, dan seterusnya.
+// Memberikan kita kemampuan untuk mendefinisikan separuh layar, sepertiga, dan seterusnya.
 // Berguna untuk aplikasi responsive.
 // param dibagi dengan (double) optional - default: 1
 // param dikurangi dengan (double) optional - default: 0
@@ -688,7 +707,7 @@ context.responsiveValue<T>()
 
 ### Pengaturan Global Opsional dan Konfigurasi Manual
 
-GetMaterialApp mengkonfigurasi semuanya untuk anda, namun jika anda ingin mengkonfigurasi Get secara manual.
+GetMaterialApp mengkonfigurasi semuanya untuk kita, namun jika kita ingin mengkonfigurasi Get secara manual.
 
 ```dart
 MaterialApp(
@@ -697,7 +716,7 @@ MaterialApp(
 );
 ```
 
-Anda juga bisa menggunakan Middleware anda sendiri melalui `GetObserver`, ini tidak akan mempengaruhi apapun.
+kita juga bisa menggunakan Middleware kita sendiri melalui `GetObserver`, ini tidak akan mempengaruhi apapun.
 
 ```dart
 MaterialApp(
@@ -708,7 +727,7 @@ MaterialApp(
 );
 ```
 
-Anda bisa membuat _Pengaturan Global_ untuk `Get`. Cukup tambahkan `Get.config` kedalam kode anda sebelum berpindah ke route manapun.
+kita bisa membuat _Pengaturan Global_ untuk `Get`. Cukup tambahkan `Get.config` kedalam kode kita sebelum berpindah ke route manapun.
 Atau lakukan secara langsung di `GetMaterialApp`
 
 ```dart
@@ -728,8 +747,8 @@ Get.config(
 )
 ```
 
-Anda bisa secara opsional me-redirect seluruh pesan logging dari `Get`.
-Jika anda ingin menggunakan logging buatan anda sendiri, logging package favorit,
+kita bisa secara opsional me-redirect seluruh pesan logging dari `Get`.
+Jika kita ingin menggunakan logging buatan kita sendiri, logging package favorit,
 dan ingin meng-capture lognya:
 
 ```dart
@@ -739,18 +758,18 @@ GetMaterialApp(
 );
 
 void localLogWriter(String text, {bool isError = false}) {
-  // oper message ke logging package favorit anda disini
+  // oper message ke logging package favorit kita disini
   // harap dicatat bahwa meskipun enableLog: false, pesan log akan di-push dalam callback ini,
-  // anda dapat memeriksa flag-nya jika anda mau melalui GetConfig.isLogEnable
+  // kita dapat memeriksa flag-nya jika kita mau melalui GetConfig.isLogEnable
 }
 
 ```
 
 ### Local State Widgets
 
-Widget ini memungkinkan anda untuk mengelola satu nilai, dan menjaga state emphemeral dan lokal.
+Widget ini memungkinkan kita untuk mengelola satu nilai, dan menjaga state emphemeral dan lokal.
 Kita memiliki rasa untuk Reactive dan Simple.
-Contohnya, anda mungkin menggunakannya untuk men-toggle obscureText di sebuah `TextField`, mungkin membuat
+Contohnya, kita mungkin ingin menggunakannya untuk men-toggle obscureText di sebuah `TextField`, mungkin membuat
 Expandable Panel kustom, atau mungkin memodifikasi index saat ini dalam `BottomNavigationBar` sembari mengganti konten
 dari body didalam `Scaffold`
 
@@ -763,9 +782,9 @@ ValueBuilder<bool>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
     value: value,
-    onChanged: updateFn, // signaturenya sama! anda bisa menggunakan ( newValue ) => updateFn( newValue )
+    onChanged: updateFn, // signaturenya sama! kita bisa menggunakan ( newValue ) => updateFn( newValue )
   ),
-  // jika anda perlu memanggil sesuatu diluar builder method.
+  // jika kita perlu memanggil sesuatu diluar builder method.
   onUpdate: (value) => print("Value updated: $value"),
   onDispose: () => print("Widget unmounted"),
 ),
@@ -773,13 +792,13 @@ ValueBuilder<bool>(
 
 #### ObxValue
 
-Mirip seperti [`ValueBuilder`](#valuebuilder), tapi ini versi Reactive nya, anda bisa menaruh Rx instance (ingat .obs?) dan
+Mirip seperti [`ValueBuilder`](#valuebuilder), tapi ini versi Reactive nya, kita bisa menaruh Rx instance (ingat .obs?) dan
 akan ter-update secara otomatis... keren kan?
 
 ```dart
 ObxValue((data) => Switch(
         value: data.value,
-        onChanged: data, // Rx memiliki sebuah _callable_ function! Anda bisa menggunakan (flag) => data.value = flag,
+        onChanged: data, // Rx memiliki sebuah _callable_ function! kita bisa menggunakan (flag) => data.value = flag,
     ),
     false.obs,
 ),
@@ -789,8 +808,8 @@ ObxValue((data) => Switch(
 
 `.obs`ervables (juga dikenal sebagai _Rx_ Types) memiliki beragam metode dan operator internal.
 
-> Sangat umum untuk _percaya_ bahwa sebuah properti dengan `.obs` **ADALAH** nilai aktual... jangan salah!
-> Kami menghindari Type declaration dari sebuah variabel, karena compiler Dart cukup pintar, dan kode nya
+> Sangat umum untuk meyakini bahwa sebuah properti dengan .obs adalah nilai sebenarnya... tapi jangan salah!
+> Kita sebaiknya menghindari deklarasi Type dari variabel, karena kompiler Dart cukup pintar, dan kodenya akan
 > terlihat lebih bersih, tapi:
 
 ```dart
@@ -798,11 +817,11 @@ var message = 'Hello world'.obs;
 print( 'Message "$message" has Type ${message.runtimeType}');
 ```
 
-Meskipun `message` _mengeluarkan output_ nilai String aktual, tipenya adalah **RxString**!
+Meskipun `message` mencetak nilai String yang sebenarnya, jenisnya tetaplah **RxString**!
 
-Jadi, anda tidak bisa melakukan `message.substring( 0, 4 )`.
-Anda perlu mengakses `value` aslinya didalam _observable_:
-Cara yang paling "sering digunakan" adalah `.value`, tapi, tahukah anda bahwa anda juga bisa menggunakan...
+Jadi, kita tidak bisa melakukan `message.substring( 0, 4 )`.
+kita perlu mengakses `value` aslinya didalam _observable_:
+Cara yang paling "sering digunakan" adalah `.value`, tapi, tahukah kita bahwa kita juga bisa menggunakan...
 
 ```dart
 final name = 'GetX'.obs;
@@ -820,13 +839,13 @@ name();
 
 final count = 0.obs;
 
-// Anda bisa menggunakan semua operasi non-mutable dari primitif num!
+// kita bisa menggunakan semua operasi non-mutable dari primitif num!
 count + 1;
 
 // Hati hati! ini hanya valid jika `count` tidak final, melainkan var
 count += 1;
 
-// Anda juga bisa melakukan komparasi antar nilai:
+// kita juga bisa melakukan komparasi antar nilai:
 count > 2;
 
 /// boolean:
@@ -851,7 +870,7 @@ final abc = [0,1,2].obs;
 print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
 
 // RxMap, RxList dan RxSet adalah tipe Rx spesial, mereka meng-extends native type masing-masing.
-// tapi anda bisa bekerja menggunakan List sebagai list biasa, meskipun reactive!
+// tapi kita bisa bekerja menggunakan List sebagai list biasa, meskipun reactive!
 abc.add(12); // memasukkan 12 kedalam list, dan MEMPERBARUI stream.
 abc[3]; // seperti List, membaca index ke 3.
 
@@ -862,7 +881,7 @@ print( number == 12 ); // mengeluarkan output: true
 
 /// Model Rx Kustom:
 
-// toJson(), toString() ditangguhkan ke child, jadi anda bisa mengimplementasi override pada mereka dan print() observable nya secara langsung
+// toJson(), toString() ditangguhkan ke child, jadi kita bisa mengimplementasi override pada mereka dan print() observable nya secara langsung
 
 class User {
     String name, last;
@@ -879,7 +898,7 @@ final user = User(name: 'John', last: 'Doe', age: 33).obs;
 // Jadi, jika kita mengubah variabel didalamnya...
 user.value.name = 'Roi';
 // Widget tidak akan rebuild!,
-// `Rx` tidak mengetahui apapun ketika anda mengubah sesuatu didalam user.
+// `Rx` tidak mengetahui apapun ketika kita mengubah sesuatu didalam user.
 // Jadi, untuk kelas kustom, kita perlu secara manual "memberi tahu" perubahannya.
 user.refresh();
 
@@ -891,9 +910,59 @@ user.update((value){
 print( user );
 ```
 
+## StateMixin
+
+Cara lain untuk menangani state `UI` Anda adalah dengan menggunakan `StateMixin&lt;T&gt;`.
+Untuk mengimplementasikannya, gunakan `with` untuk menambahkan `StateMixin&lt;T&gt;`
+ke kontroler Anda yang mengizinkan model T.
+
+``` dart
+class Controller extends GetController with StateMixin<User>{}
+```
+
+Metode `change()` mengubah status kapanpun kita inginkan.
+Cukup berikan data dan statusnya dengan cara ini:
+
+```dart
+change(data, status: RxStatus.success());
+```
+
+RxStatus membolehkan status-status berikut:
+
+``` dart
+RxStatus.loading();
+RxStatus.success();
+RxStatus.empty();
+RxStatus.error('message');
+```
+
+Untuk memakainya di UI, gunakan:
+
+```dart
+class OtherClass extends GetView<Controller> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: controller.obx(
+        (state)=>Text(state.name),
+        
+        // di sini kita bisa menaruh custom loading indicator kita, tetapi
+        // secara default akan menjadi Center(child: CircularProgressIndicator())
+        onLoading: CustomLoadingIndicator(),
+        onEmpty: Text('No data found'),
+
+        // di sini kita juga dapat mengatur error widget kita sendiri, tetapi
+        // secara default akan menjadi Center(child:Text(error))
+        onError: (error)=>Text(error),
+      ),
+    );
+}
+```
+
 #### GetView
 
-Saya menyukai Widget ini, sangat simpel dan berguna!
+Saya suka Widget ini, sangat sederhana, namun sangat berguna!
 
 Adalah sebuah `const Stateless` Widget yang memiliki getter `controller` untuk `Controller` yang terdaftar, itu saja.
 
@@ -902,7 +971,7 @@ Adalah sebuah `const Stateless` Widget yang memiliki getter `controller` untuk `
    final String title = 'My Awesome View';
  }
 
-  // SELALU ingat untuk memberikan `Type` yang anda gunakan untuk mendaftarkan controller anda!
+  // SELALU ingat untuk memberikan `Type` yang kita gunakan untuk mendaftarkan controller kita!
  class AwesomeView extends GetView<AwesomeController> {
    @override
    Widget build(BuildContext context) {
@@ -922,16 +991,16 @@ informasi tentang ukuran layar dan tipenya.
 
 ##### Cara pakai
 
-Anda memiliki dua opsi untuk mem-buildnya.
+kita memiliki dua opsi untuk mem-buildnya.
 
-- dengan `builder` method yang anda return ke widget yang akan di-build.
+- dengan `builder` method yang kita return ke widget yang akan di-build.
 - dengan metode `desktop`, `tablet`,`phone`, `watch`. method
 spesifik akan dibuat ketika tipe layar cocok dengan method.
 ketika layarnya adalah [ScreenType.Tablet] maka method `tablet`
 akan di eksekusi dan seterusnya.
-**Catatan:** Jika anda menggunakan metode ini, mohon atur properti `alwaysUseBuilder` ke `false`
+**Catatan:** Jika kita menggunakan metode ini, atur properti `alwaysUseBuilder` ke `false`
 
-Dengan properti `settings` anda bisa mengatur batasan lebar untuk tipe layar.
+Dengan properti `settings` kita bisa mengatur batasan lebar untuk tipe layar.
 
 ![example](https://github.com/SchabanBo/get_page_example/blob/master/docs/Example.gif?raw=true)
 Code to this screen
@@ -943,15 +1012,15 @@ Kebanyakan orang tidak tahu untuk apa Widget ini, atau benar benar membingungkan
 Kasus penggunaannya sangat langka, namun sangat spesifik: Melakukan `cache` terhadap Controller.
 Karena _cache_, tidak bisa dijadikan `const Stateless`.
 
-> Lalu, kapan anda harus men-"cache" sebuah Controller?
+> Lalu, kapan kita harus men-"cache" sebuah Controller?
 
-Jika anda menggunakan, fitur "tidak terlalu umum" dari **GetX**: `Get.create()`.
+Jika kita menggunakan, fitur "tidak terlalu umum" dari **GetX**: `Get.create()`.
 
-`Get.create(()=>Controller())` akan men-generate `Controller` baru setiap kali anda memanggil
+`Get.create(()=>Controller())` akan men-generate `Controller` baru setiap kali kita memanggil
 `Get.find<Controller>()`,
 
-Itulah dimana `GetWidget` bercahaya... karena anda bisa menggunakannya, sebagai contoh,
-untuk menyimpan list dari sebuah Todo item. Jadi, jika widget ter-"rebuild", dia akan meyimpan controller yang sama.
+Itulah dimana `GetWidget` tampil bersinar... karena kita bisa menggunakannya, sebagai contoh,
+untuk menyimpan list dari sebuah Todo item. Jadi, jika widget di-"rebuild", dia akan meyimpan controller yang sama.
 
 #### GetxService
 
@@ -959,7 +1028,7 @@ Kelas ini mirip seperti `GetxController`, dia berbagi lifecycle ( `onInit()`, `o
 Tetapi tidak memiliki "logic" didalamnya. Dia hanya memberi tahu Sistem Dependency Injection **GetX**, bahwa subclass
 ini **TIDAK BISA** dihapus dari memori.
 
-Jadi ini sangat berguna untuk memastikan "Service" anda selalu dapat dijangkau dan aktif dengan `Get.find()`. Seperti:
+Jadi ini sangat berguna untuk memastikan "Service" kita selalu dapat dijangkau dan aktif dengan `Get.find()`. Seperti:
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
@@ -968,13 +1037,13 @@ Future<void> main() async {
   runApp(SomeApp());
 }
 
-/// Adalah gerakan yang cerdas untuk membuat Service anda menginisialisasi sebelum anda menjalankan aplikasi Flutter
-/// seperti anda bisa mengontrol flow eksekusi (mungkin anda perlu memuat beberapa konfigurasi tema,
-/// apiKey, bahasa yang ditentukan oleh user...) jadi, load SettingSerice sebelum menjalankan ApiService.
+/// Adalah gerakan yang bagus untuk membuat Service kita menginisialisasi sebelum kita menjalankan aplikasi Flutter
+/// seperti kita bisa mengontrol flow eksekusi (mungkin kita perlu memuat beberapa konfigurasi tema,
+/// apiKey, bahasa yang ditentukan oleh user...) jadi, load SettingService sebelum menjalankan ApiService.
 /// supaya GetMaterialApp() tidak perlu rebuild, dan mengambil nilainya secara langsung.
 void initServices() async {
   print('starting services ...');
-  /// Disini adalah dimana anda meletakkan get_storage, hive, inisialisasi shared_pref.
+  /// Disini adalah dimana kita meletakkan get_storage, hive, inisialisasi shared_pref.
   /// atau koneksi moor, atau apapun yang sifatnya async.
   await Get.putAsync(() => DbService().init());
   await Get.putAsync(SettingsService()).init();
@@ -1000,13 +1069,75 @@ class SettingsService extends GetxService {
 
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
-lifetime of your app, use `GetxService`.
-
 Satu-satunya cara untuk benar benar menghapus sebuah `GetxService`, adalah dengan `Get.reset()` dimana ini seperti
-"Hot Reboot" dari aplikasi anda. Jadi ingat, jika anda butuh persistensi absolut dari sebuah instance kelas selama
-masa hidup aplikasi anda, gunakan `GetxService`.
+"Hot Reboot" dari aplikasi kita. Jadi ingat, jika kita butuh persistensi absolut dari sebuah instance kelas selama
+masa hidup aplikasi kita, gunakan `GetxService`.
+
+### Tests
+
+Anda dapat menguji kontroler Anda seperti kelas lainnya, termasuk _lifecycle_nya:
+
+```dart
+class Controller extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    //Ganti value ke name2
+    name.value = 'name2';
+  }
+
+  @override
+  void onClose() {
+    name.value = '';
+    super.onClose();
+  }
+
+  final name = 'name1'.obs;
+
+  void changeName() => name.value = 'name3';
+}
+
+void main() {
+  test('''
+Test the state of the reactive variable "name" across all of its lifecycles''',
+      () {
+    /// Anda dapat mengetes kontroler tanpa lifecycle,
+    /// namun tidak disarankan kecuali Anda tidak menggunakan
+    /// dependency injection GetX
+    final controller = Controller();
+    expect(controller.name.value, 'name1');
+
+    /// Jika Anda menggunakannya, Anda dapat mengetes semuanya,
+    /// termasuk keadaan aplikasi setelah setiap lifecycle.
+    Get.put(controller); // onInit was called
+    expect(controller.name.value, 'name2');
+
+    /// Tes methodnya
+    controller.changeName();
+    expect(controller.name.value, 'name3');
+
+    /// onClose dipanggil
+    Get.delete<Controller>();
+
+    expect(controller.name.value, '');
+  });
+}
+```
+
+#### Tips
+
+##### Mockito atau mocktail
+Jika Anda perlu meniru GetxController/GetxService Anda, Anda harus memperpanjang GetxController, dan mencampurnya dengan Mock, dengan cara itu
+
+```dart
+class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
+```
+
+##### Menggunakan Get.reset ()
+Jika Anda mengetes widget, atau grup tes, gunakan Get.reset di akhir tes atau di tearDown untuk mengatur ulang semua pengaturan dari tes sebelumnya.
+
+##### Get.testMode 
+jika Anda menggunakan navigasi di kontroler Anda, gunakan `Get.testMode = true` di awal main Anda.
 
 # Breaking change dari 2.0
 
@@ -1021,7 +1152,7 @@ masa hidup aplikasi anda, gunakan `GetxService`.
 | NumX    | `RxNum`    |
 | DoubleX | `RxDouble` |
 
-RxController dan GetBuilder sekarang digabungkan, anda tidak lagi perlu mengingat kontroler mana yang ingin anda gunakan, cukup gunakan GetxController, ini akan bekerja untuk simple state management dan reactive juga.
+RxController dan GetBuilder sekarang digabungkan, tidak lagi perlu mengingat kontroler mana yang ingin digunakan, cukup gunakan GetxController, ini akan bekerja untuk simple state management juga reactive.
 
 2- NamedRoutes
 Sebelumnya:
@@ -1063,14 +1194,16 @@ GetMaterialApp(
 
 # Mengapa Getx?
 
-1- Seringkali setelah Flutter update, banyak package anda yang akan berhenti bekerja. Terkadang compilation error terjadi, error yang sering muncul dan belum ada jawabannya, dan developer perlu mengetahui dimana errornya berasal, mencari errornya, lalu kemudian mencoba membuka sebuah isu di repository yang bersangkutan, dan melihat apakah problemnya terselesaikan. Get memusatkan resource utama untuk development (State, dependency dan route management), memungkinkan anda untuk menambahkan satu package kedalam pubspec, dan mulai bekerja. Setelah Flutter update, satu-satunya hal yang anda perlu lakukan adalah memperbarui dependensi Get, dan kembali bekerja. Get juga menyelesaikan isu kompatibilitas. Berapa kali sebuah versi dari sebuah package tidak kompatibel dengan versi lainnya, karena yang satu menggunakan sebuah dependensi dalam satu versi, dan yang lain menggunakan versi lainnya? Ini juga bukan sebuah masalah menggunakan Get, yang mana semua berada di package yang sama dan kompatibel secara penuh.
+1- Sering kali setelah update Flutter, banyak package yang akan rusak. Terkadang terjadi kesalahan kompilasi, sering muncul kesalahan yang masih belum terjawab, dan developer perlu mengetahui dari mana kesalahan itu berasal, melacak kesalahan tersebut, baru kemudian mencoba membuat isu di repositori yang bersangkutan, dan melihat permasalahannya terpecahkan. Get memusatkan sumber daya utama untuk pengembangan (State, ketergantungan, dan manajemen rute), memungkinkan kita untuk menambahkan satu paket ke pubspec, dan mulai bekerja. Setelah update Flutter, satu-satunya hal yang perlu dilakukan adalah memperbarui dependencyGet, dan mulai bekerja. Get juga menyelesaikan masalah kompatibilitas. Berapa kali sebuah versi package tidak kompatibel dengan versi yang lain, karena yang satu menggunakan dependency di satu versi, dan yang lain di versi yang lain? Hal ini juga tidak menjadi masalah dengan menggunakan Get, karena semuanya berada dalam package yang sama dan sepenuhnya kompatibel.
 
-2- Flutter mudah digunakan, Flutter luar biasa, tetapi Flutter masih memiliki beberapa boilerplate yang mungkin tidak diinginkan untuk kebanyakan developer, seperti `Navigator.of(context).push(context builder [...]`. Get menyederhanakan proses development. Daripada menulis 8 baris kode hanya untuk memanggil route, anda bisa menggunakan: `Get.to(Home())` dan selesai, anda akan pergi ke halaman selanjutnya. URL web dinamis adalah hal yang sangat menyakitkan untuk dilakukan dengan Flutter saat ini, dan dengan GetX sangat sederhana. Mengelola state di Flutter, dan megelola dependensi juga suatu hal yang menghasilkan banyak diskusi, dengan ratusan jenis pattern di pub. Tetapi tidak ada yang semudah menambahkan ".obs" di akhir variabel anda, dan meletakkan widget didalam Obx, dan selesai, semua update terhadap variabel tersebut akan secara otomatis terupdate di layar.
+2- Flutter itu mudah, Flutter itu luar biasa, tetapi Flutter masih memiliki sejumlah boilerplate yang mungkin tidak diinginkan oleh sebagian besar pengembang, seperti `Navigator.of(context).push(context, builder [...]`. Get menyederhanakan pengembangan. Daripada menulis 8 baris kode untuk memanggil sebuah route, Anda bisa melakukannya: `Get.to(Home())` dan selesai, pergi ke halaman berikutnya. URL web dinamis adalah hal yang sangat menyulitkan untuk dilakukan dengan Flutter saat ini, namun dengan GetX sangatlah mudah. Mengelola status di Flutter, dan mengelola dependensi juga merupakan sesuatu yang menimbulkan banyak diskusi, karena ada ratusan pattern di pub. Tetapi tidak ada yang semudah menambahkan “.obs” di akhir variabel Anda, dan letakkan widget Anda di dalam Obx, dan hanya itu, semua pembaruan pada variabel tersebut akan diperbarui secara otomatis di layar.
 
-3- Meringankan tanpa mengkhawatirkan performa. Performa Flutter sudah luar biasa, tetapi bayangkan anda menggunakan state manager, dan sebuah locator untuk mendistribusikan bloc/store/controller dsb, kelas. Anda perlu secara manual memanggil pengecualian terhadap dependensi ketika anda tidak membutuhkannya. Namun apakah anda pernah terfikirkan ketika simpelnya, anda menggunakan controller, dan tidak lagi digunakan oleh siapapun, akan dihapus dari memori? Itu yang GetX lakukan. Dengan SmartManagement, semua yang tidak digunakan akan dihapus dari memori, dan anda tidak perlu khawatir tentang apapun selain programming. Anda akan terjamin bahwa anda mengkonsumsi resource minimum yang diperlukan, bahkan tanpa harus membuat logic untuk hal ini.
+3- Kemudahan tanpa khawatir tentang performa. Performa Flutter sudah luar biasa, tetapi bayangkan Anda menggunakan state manager, dan locator untuk mendistribusikan class blocs/stores/controllers/dll. Anda harus secara manual memanggil pengecualian dependensi tersebut ketika Anda tidak membutuhkannya. Tetapi pernahkah Anda berpikir untuk hanya menggunakan kontroler Anda, dan ketika kontroler tersebut tidak lagi digunakan oleh siapa pun, kontroler tersebut akan dihapus dari memori? Itulah yang dilakukan GetX. Dengan SmartManagement, semua yang tidak digunakan akan dihapus dari memori, dan Anda tidak perlu khawatir tentang hal lain kecuali pemrograman. Kita bisa yakin bahwa kita menggunakan resource seminimal mungkin, bahkan tanpa harus membuat sebuah logika untuk itu.
 
-4- Actual decoupling. Anda mungkin pernah mendengar konsep "pisahkan view dari business logic". Ini bukanlah sebuah keanehan dari BLoC, MVC, MVVM, dan standard lainnya dalam market yang memiliki konsep ini. Namun, konsep ini terkadang termitigasi di Flutter karena penggunaan konteks.
-Jika anda memerlukan konteks untuk menemukan InheritedWidget, anda membutuhkannya di view, atau mengirim konteks melalui parameter. Saya menemukan bahwa solusi ini sangat jelek, dan untuk bekerja dalam tim kami harus selalu memiliki sebuah ketergantungan pada business logic di dalam view. GetX adalah cara yang tidak lazim dengan metode standard, dan sementara itu tidak benar-benar secara penuh melarang penggunaan StatefulWidgets, InitState, dsb., ini selalu memiliki metode yang mirip dan bisa lebih bersih. Controller memiliki life cycle, dan ketika anda perlu membuat APIREST request sebagai contoh, anda tidak bergantung pada apapun didalam view. Anda bisa menggunakan onInit untuk menginisiasi pemanggilan http dan ketika datanya sampai, variabel akan dipopulasikan. GetX juga secara penuh reaktif (serius, dan bekerja dibawah stream), sekali items terisi, semua widget yang menggunakan variabel itu akan secara otomatis diperbarui didalam view. Ini memungkinkan orang orang dengan keahlian di bagian UI untuk bekerja hanya dengan widget, dan tidak perlu mengirim apapun ke business logic selain user event (seperti meng-klik sebuah tombol), sementara orang yang bekerja dengan business logic akan bebas membuat dan melakukan test terhadap business logic secara terpisah.
+4- Decoupling yang sebenarnya. Anda mungkin pernah mendengar konsep “memisahkan tampilan dari logika bisnis”. Ini bukan keunikan BLoC, MVC, MVVM, dan standar lainnya di pasaran yang memiliki konsep ini. Namun, konsep ini sering kali dapat diatasi dalam Flutter karena penggunaan konteks.
+Jika Anda membutuhkan konteks untuk menemukan InheritedWidget, Anda memerlukannya di dalam tampilan, atau meneruskan konteks dengan parameter. Saya secara khusus merasa solusi ini sangat jelek, dan untuk bekerja dalam tim kita akan selalu memiliki dependensi pada logika bisnis View. Getx berbeda dengan pendekatan standar, dan meskipun tidak sepenuhnya membuang penggunaan StatefulWidgets, InitState, dll, Getx selalu memiliki pendekatan sejenis yang dapat lebih bersih. Controller memiliki lifecycle, dan ketika kita perlu membuat permintaan REST API misalnya, kita bisa tidak bergantung pada apa pun yang ada di dalam tampilan. Kita dapat menggunakan onInit untuk menginisiasi pemanggilan http, dan ketika datanya masuk, variabel akan terisi. Karena GetX sepenuhnya reaktif (benar-benar, dan bekerja di bawah stream), setelah item diisi, semua widget yang menggunakan variabel tersebut akan secara otomatis diperbarui dalam tampilan. Hal ini memungkinkan orang yang memiliki keahlian UI untuk bekerja hanya dengan widget, dan tidak perlu mengirimkan apa pun ke logika bisnis selain event pengguna (seperti mengklik tombol), sementara orang yang bekerja dengan logika bisnis akan bebas membuat dan menguji logika bisnis secara terpisah.
+
+Library ini akan selalu diperbarui dan mengimplementasikan fitur-fitur baru. Jangan ragu untuk mengajukan PR dan berkontribusi di dalamnya.
 
 Library ini akan terus diperbarui dan mengimplementasikan fitur baru. Jangan ragu untuk menawarkan PR dan berkontribusi ke mereka.
 
@@ -1078,7 +1211,7 @@ Library ini akan terus diperbarui dan mengimplementasikan fitur baru. Jangan rag
 
 ## Channel Komunitas
 
-GetX memiliki komunitas yang sangat aktif dan membantu. Jika anda memiliki pertanyaan, atau membutuhkan bantuan mengenai penggunaan framework ini, bergabunglah dengan kanal komunitas kami, pertanyaan anda akan dijawab lebih cepat, dan akan menjadi tempat yang paling cocok. Repositori ini eksklusif untuk pembukaan isu dan permintaan resource, tapi jangan ragu untuk menjadi bagian dari Komunitas GetX.
+GetX memiliki komunitas yang sangat aktif dan membantu. Jika memiliki pertanyaan, atau membutuhkan bantuan mengenai penggunaan framework ini, bergabunglah dengan kanal komunitas kami, pertanyaan akan dijawab lebih cepat, dan akan menjadi tempat yang paling cocok. Repositori ini eksklusif untuk pembukaan isu dan permintaan resource, tapi jangan ragu untuk menjadi bagian dari Komunitas GetX.
 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
@@ -1086,11 +1219,11 @@ GetX memiliki komunitas yang sangat aktif dan membantu. Jika anda memiliki perta
 
 ## Cara berkontribusi
 
-_Ingin berkontribusi kedalam proyek? Kami akan sangat bangga untuk menyorot anda sebagai salah satu dari kolaborator kami. Ini adalah beberapa point dimana anda bisa berkontribusi dan membuat Get (dan Flutter) jadi lebih baik_
+_Ingin berkontribusi kedalam proyek? Kami akan sangat bangga untuk menyorotimu sebagai salah satu dari kolaborator kami. Ini adalah beberapa point dimana kamu bisa berkontribusi dan membuat Get (dan Flutter) jadi lebih baik_
 
 - Membantu menerjemahkan readme ke dalam bahasa lain.
 - Menambahkan dokumentasi ke dalam readme (banyak fungsi dari Get yang masih belum terdokumentasi).
-- Menulis artikel atau membuat video mengajarkan tentang penggunaan Get (akan dimasukkan kedalam readme dan Wiki kami di masa yang akan datang).
+- Menulis artikel atau membuat video tutorial tentang penggunaan Get (akan dimasukkan kedalam readme dan Wiki kami di masa yang akan datang).
 - Menawarkan PR untuk kode/test.
 - Menambahkan fungsi baru.
 
