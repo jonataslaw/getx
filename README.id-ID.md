@@ -52,8 +52,8 @@
     - [Translasi](#translasi)
       - [Menggunakan Translasi](#menggunakan-translasi)
     - [Lokalisasi](#lokalisasi)
-      - [Mengubah Lokal](#mengubah-lokal)
-      - [Lokal Sistem](#lokal-sistem)
+      - [Mengubah Lokalisasi](#mengubah-lokalisasi)
+      - [Lokalisasi Sistem](#lokalisasi-sistem)
   - [Mengubah Tema](#mengubah-tema)
   - [GetConnect](#getconnect)
     - [Konfigurasi Default](#konfigurasi-default)
@@ -66,7 +66,7 @@
     - [OnPageBuildStart](#onpagebuildstart)
     - [OnPageBuilt](#onpagebuilt)
     - [OnPageDispose](#onpagedispose)
-  - [Lainnya mengenai API Tingkat Lanjut](#api-lanjutan-lainnya)
+  - [API Tingkat Lanjut Lainnya](#api-tingkat-lanjut-lainnya)
     - [Pengaturan Global Opsional dan Konfigurasi Manual](#pengaturan-global-opsional-dan-konfigurasi-manual)
     - [Local State Widgets](#local-state-widgets)
       - [ValueBuilder](#valuebuilder)
@@ -77,10 +77,10 @@
         - [Cara pakai](#cara-pakai)
       - [GetWidget](#getwidget)
       - [GetxService](#getxservice)
-- [Perubahan Besar dari 2.0](#breaking-change-dari-20)
+- [Perubahan Besar dari 2.0](#perubahan-besar-dari-20)
 - [Mengapa Getx?](#mengapa-getx)
 - [Komunitas](#komunitas)
-  - [Channel Komunitas](#kanal-komunitas)
+  - [Channel Komunitas](#channel-komunitas)
   - [Cara berkontribusi](#cara-berkontribusi)
   - [Artikel dan Video](#artikel-dan-video)
 
@@ -1139,7 +1139,7 @@ Jika Anda mengetes widget, atau grup tes, gunakan Get.reset di akhir tes atau di
 ##### Get.testMode 
 jika Anda menggunakan navigasi di kontroler Anda, gunakan `Get.testMode = true` di awal main Anda.
 
-# Breaking change dari 2.0
+# Perubahan Besar dari 2.0
 
 1- Tipe Rx:
 
