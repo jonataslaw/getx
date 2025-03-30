@@ -322,6 +322,8 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             !nextRoute.fullscreenDialog &&
             nextRoute.showCupertinoParallax) ||
         (nextRoute is CupertinoRouteTransitionMixin &&
+            !nextRoute.fullscreenDialog) ||
+        (nextRoute is CupertinoSheetRoute &&
             !nextRoute.fullscreenDialog);
   }
 
