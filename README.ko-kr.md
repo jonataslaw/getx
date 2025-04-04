@@ -487,7 +487,7 @@ class HomeProvider extends GetConnect {
     // [httpClient] 인스턴트 없이 사용하는경우 Http와 websockets의 baseUrl 정의
     
     // 모든 요청의 헤더에 'apikey' 속성을 첨부합니다.
-    httpClient.addRequestModifier((request) {
+    httpClient.addRequestModifier<Object?>((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
