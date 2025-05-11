@@ -96,13 +96,13 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   @override
   void onInit() {
     super.onInit();
-    ambiguate(Engine.instance)!.addObserver(this);
+    Engine.instance.addObserver(this);
   }
 
   @mustCallSuper
   @override
   void onClose() {
-    ambiguate(Engine.instance)!.removeObserver(this);
+    Engine.instance.removeObserver(this);
     super.onClose();
   }
 

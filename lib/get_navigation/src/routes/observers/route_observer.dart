@@ -85,7 +85,7 @@ class GetObserver extends NavigatorObserver {
     }
 
     RouterReportManager.instance.reportCurrentRoute(route);
-    _routeSend!.update((value) {
+    _routeSend?.update((value) {
       if (route is PageRoute) {
         value.current = newRoute.name ?? '';
       }
@@ -158,7 +158,7 @@ class GetObserver extends NavigatorObserver {
       value.route = newRoute;
       value.isBack = false;
       value.removed = '';
-      value.previous = '$oldName';
+      value.previous = oldName ?? '';
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
@@ -205,7 +205,7 @@ class _RouteData {
   final bool isDialog;
   final String? name;
 
-  _RouteData({
+  const _RouteData({
     required this.name,
     required this.isGetPageRoute,
     required this.isBottomSheet,

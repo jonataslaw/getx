@@ -215,6 +215,7 @@ class GetCupertinoApp extends StatelessWidget {
         translations: translations,
         translationsKeys: translationsKeys,
         unknownRoute: unknownRoute,
+        defaultPopGesture: popGesture,
       ),
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);

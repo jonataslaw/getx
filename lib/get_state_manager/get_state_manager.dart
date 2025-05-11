@@ -1,4 +1,4 @@
-library get_state_manager;
+library;
 
 export 'src/rx_flutter/rx_getx_widget.dart';
 export 'src/rx_flutter/rx_notifier.dart';

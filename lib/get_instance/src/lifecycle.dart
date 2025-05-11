@@ -17,7 +17,7 @@ mixin GetLifeCycleMixin {
   @protected
   @mustCallSuper
   void onInit() {
-    ambiguate(Engine.instance)?.addPostFrameCallback((_) => onReady());
+    Engine.instance.addPostFrameCallback((_) => onReady());
   }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
