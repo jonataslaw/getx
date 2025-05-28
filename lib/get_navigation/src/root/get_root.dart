@@ -459,16 +459,6 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     }
   }
 
-  @override
-  void didChangeLocales(List<Locale>? locales) {
-    Get.asap(() {
-      final locale = Get.deviceLocale;
-      if (locale != null) {
-        Get.updateLocale(locale);
-      }
-    });
-  }
-
   void setTheme(ThemeData value) {
     if (config.darkTheme == null) {
       config = config.copyWith(theme: value);
