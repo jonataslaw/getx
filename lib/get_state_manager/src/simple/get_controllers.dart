@@ -15,7 +15,7 @@ import 'list_notifier.dart';
 /// ```dart
 /// class CounterController extends GetxController {
 ///   var count = 0;
-///   
+///
 ///   void increment() {
 ///     count++;
 ///     update(); // Triggers UI update
@@ -34,28 +34,16 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
   /// - [ids]: Optional list of widget IDs to update. If null, updates all widgets.
   /// - [condition]: If false, the update will be skipped.
   ///
-  /// Throws:
-  /// - [FlutterError] if the controller is not properly initialized.
   void update([List<Object>? ids, bool condition = true]) {
     if (!condition) {
       return;
     }
-    try {
-      if (ids == null) {
-        refresh();
-      } else {
-        for (final id in ids) {
-          refreshGroup(id);
-        }
+    if (ids == null) {
+      refresh();
+    } else {
+      for (final id in ids) {
+        refreshGroup(id);
       }
-    } catch (error, stackTrace) {
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: error,
-        stack: stackTrace,
-        library: 'get_state_manager',
-        context: ErrorDescription('while updating controller state'),
-      ));
-      rethrow;
     }
   }
 }
@@ -72,7 +60,7 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
 ///   Future<void> onEndScroll() async {
 ///     // Load more data when scrolled to bottom
 ///   }
-///   
+///
 ///   @override
 ///   Future<void> onTopScroll() async {
 ///     // Load previous data when scrolled to top
@@ -185,7 +173,7 @@ abstract class StateController<T> extends GetxController with StateMixin<T> {}
 ///     // App came to foreground
 ///     fetchData();
 ///   }
-///   
+///
 ///   Future<void> fetchData() async {
 ///     change(state, status: RxStatus.loading());
 ///     try {
@@ -218,12 +206,12 @@ abstract class SuperController<T> extends FullLifeCycleController
 ///   void onResumed() {
 ///     // App came to foreground
 ///   }
-///   
+///
 ///   @override
 ///   void onPaused() {
 ///     // App went to background
 ///   }
-///   
+///
 ///   @override
 ///   void onClose() {
 ///     // Clean up resources
@@ -248,7 +236,7 @@ abstract class FullLifeCycleController extends GetxController
 ///   void onResumed() {
 ///     // App came to foreground
 ///   }
-///   
+///
 ///   @override
 ///   void onMemoryPressure() {
 ///     // Clean up resources when system is low on memory
@@ -273,47 +261,35 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   @mustCallSuper
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    try {
-      switch (state) {
-        case AppLifecycleState.resumed:
-          onResumed();
-          break;
-        case AppLifecycleState.inactive:
-          onInactive();
-          break;
-        case AppLifecycleState.paused:
-          onPaused();
-          break;
-        case AppLifecycleState.detached:
-          onDetached();
-          break;
-        case AppLifecycleState.hidden:
-          onHidden();
-          break;
-      }
-    } catch (error, stackTrace) {
-      _reportError('Error in didChangeAppLifecycleState', error, stackTrace);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        onResumed();
+        break;
+      case AppLifecycleState.inactive:
+        onInactive();
+        break;
+      case AppLifecycleState.paused:
+        onPaused();
+        break;
+      case AppLifecycleState.detached:
+        onDetached();
+        break;
+      case AppLifecycleState.hidden:
+        onHidden();
+        break;
     }
   }
 
   @override
   void didHaveMemoryPressure() {
     super.didHaveMemoryPressure();
-    try {
-      onMemoryPressure();
-    } catch (error, stackTrace) {
-      _reportError('Error in didHaveMemoryPressure', error, stackTrace);
-    }
+    onMemoryPressure();
   }
 
   @override
   void didChangeAccessibilityFeatures() {
     super.didChangeAccessibilityFeatures();
-    try {
-      onAccessibilityChanged();
-    } catch (error, stackTrace) {
-      _reportError('Error in didChangeAccessibilityFeatures', error, stackTrace);
-    }
+    onAccessibilityChanged();
   }
 
   /// Called when the system reports that the app is visible and interactive.
@@ -335,22 +311,13 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
 
   /// Called when the app is hidden (e.g., when the device is locked).
   void onHidden() {}
-  
+
   /// Called when the system is running low on memory.
   /// Override this method to release caches or other resources that aren't
   /// critical for the app to function.
   void onMemoryPressure() {}
-  
+
   /// Called when the system changes the set of currently active accessibility
   /// features.
   void onAccessibilityChanged() {}
-
-  void _reportError(String message, dynamic error, StackTrace stackTrace) {
-    FlutterError.reportError(FlutterErrorDetails(
-      exception: error,
-      stack: stackTrace,
-      library: 'get_state_manager',
-      context: ErrorDescription(message),
-    ));
-  }
 }
