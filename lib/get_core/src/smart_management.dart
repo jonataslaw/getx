@@ -4,7 +4,7 @@
 /// [SmartManagement.full] is the default one. Dispose classes that are
 /// not being used and were not set to be permanent. In the majority
 /// of the cases you will want to keep this config untouched.
-/// If you new to GetX then don't change this.
+/// If you are new to GetX then don't change this.
 /// [SmartManagement.onlyBuilder] only controllers started in init:
 /// or loaded into a Binding with Get.lazyPut() will be disposed. If you use
 /// Get.put() or Get.putAsync() or any other approach, SmartManagement
