@@ -462,7 +462,7 @@ class HomeProvider extends GetConnect {
     // Http e websockets se usado sem uma instância [httpClient]
 
     // Anexa a propriedade 'apikey' no cabeçalho de todas as requisições
-    httpClient.addRequestModifier((request) {
+    httpClient.addRequestModifier<Object?>((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
