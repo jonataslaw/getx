@@ -9,6 +9,7 @@ export 'http/src/certificates/certificates.dart';
 export 'http/src/http.dart';
 export 'http/src/multipart/form_data.dart';
 export 'http/src/multipart/multipart_file.dart';
+export 'http/src/request/request.dart';
 export 'http/src/response/response.dart';
 export 'sockets/sockets.dart';
 
