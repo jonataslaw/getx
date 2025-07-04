@@ -296,6 +296,12 @@ Cannot read the previousTitle for a route that has not yet been installed''',
   Widget buildContent(BuildContext context);
 
   @override
+  void dispose() {
+    _previousTitle?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     final child = buildContent(context);
@@ -323,8 +329,7 @@ Cannot read the previousTitle for a route that has not yet been installed''',
             nextRoute.showCupertinoParallax) ||
         (nextRoute is CupertinoRouteTransitionMixin &&
             !nextRoute.fullscreenDialog) ||
-        (nextRoute is CupertinoSheetRoute &&
-            !nextRoute.fullscreenDialog);
+        (nextRoute is CupertinoSheetRoute && !nextRoute.fullscreenDialog);
   }
 
   @override
