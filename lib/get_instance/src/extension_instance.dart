@@ -53,7 +53,7 @@ extension Inst on GetInterface {
   static final Map<String, _InstanceBuilderFactory> _singl = {};
 
   /// Injects an instance `<S>` in memory to be globally accessible. Works like [find]
-  /// if the instance `<S>` already exists.
+  /// if the instance of `<S>` already exists.
   ///
   /// No need to define the generic type `<S>` as it's inferred from
   /// the [dependency]
