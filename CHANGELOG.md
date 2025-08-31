@@ -976,7 +976,7 @@ The 9000% figures are real, however, they refer to the gross performance between
 - Update PT-br Readme (@eduardoflorence)
 - Fix analyzer crash (@eduardoflorence)
 - Fix for switch types usages in GetUtils (@grohden)
-- Improvement: RxList, RxMap and RxSet null check in the constructor (@Hitsu91)
+- Improvement: RxList, RxSet and RxMap null check in the constructor (@Hitsu91)
 - Improve readme example (@dafinoer)
 
 ## [3.10.2]
@@ -1027,7 +1027,7 @@ Getx 3.10 released with CLI and Get Server.
 
 ## [3.7.0]
 
-- Added RxSet. Sets can now also be reactive.
+- Added: RxSet. Sets can now also be reactive.
 - Added isDesktop/isMobile (@roipeker)
 - Improve GetPlatform: It is now possible to know which device the user is using if GetPlatform.isWeb is true.
   context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation. (@roipeker)
@@ -1317,26 +1317,75 @@ Added fenix mode to Get.lazyPut.
 
 ## [2.6.3]
 
-- Improve extensions tests (@Nipodemos)
-- Improve performance
+- Flutter currently has a problem on some devices where using showModalBottomSheet() can cause TextFields to be hidden behind the keyboard (https://github.com/flutter/flutter/issues/18564) this issue is closed, even users reporting that the problem still occurs.
+  The problem happens casually, as well as the problem of the snackbar on the iPhone SE 2, and checking the code, I realized that a padding with MediaQuery.of(context).viewInsets.bottom is missing inside the bottomSheet to make it work correctly, since it does not have any constraint with the keyboard.
+  For stability, I decided not to use the standard Flutter bottomSheet, which contains many bugs, mainly related to keyboard padding, and the lack of respect for topBar's safeArea, and to use a proprietary bottomSheet implementation that is more stable. The Flutter dialog has no problem, so it will be used as the basis for Get.dialog. The bottomSheet will be based on the Flutter bottomSheet Raw API (\_ModalBottomSheetRoute), applying bug fixes.
+- Added Get.isSnackbarOpen tests
 
 ## [2.6.2]
 
-- Fix ListX
+- Refactor Bindings API
 
 ## [2.6.1]
 
-- Fix ListX
+- Expose Bindings API
 
 ## [2.6.0]
 
-- Added List.obs
-- Now you can transform any class on obs
+- Added bindings.
+  You can now add bindings from your controllers to your routes, to prepare GetBuilder or GetX to create a dependency already declared in a Binding class. This feature is in an experimental phase, and will not be documented until the end of the tests.
+
+## [2.5.10]
+
+- Removed remnants of previousArgs on routeObserver.
+  This feature had been deprecated in previous updates, and was removed in version 2.5.8. Some remaining references on the routeObserver were causing exceptions in version 2.5.9, and were removed completely in version 2.5.10.
+
+## [2.5.9]
+
+- Fix Get.find with named instance
+
+## [2.5.8]
+
+- Added docs
+- Added tests(@chimon2000)
+
+## [2.5.7]
+
+- Fix Get.generalDialog optionals
+- Added GetX onInit support
+
+## [2.5.6]
+
+- GetBuilder refactor to work with lazyPut.
+  Now you can list your controllers in advance with Get.lazyPut, and only when it is called for the first time will it be relocated in memory.
+- Fix english typos(@gumbarros)
+
+## [2.5.5]
+
+- Fix arguments broken by new methods
+
+## [2.5.4]
+
+- Refactor methods
+
+## [2.5.3]
+
+- Fix snackbar padding on iPhone SE 2.
+- Added themes docs
+- Added ThemeMode (@RodBr)
+
+## [2.5.2]
+
+- Fix: key not found when Get.key is used with no MaterialApp
+
+## [2.5.1]
+
+- Improve - GetBuilder uses 18% less ram on more of 20 controllers.
 
 ## [2.5.0]
 
-- Added GetX, state manager rxDart based.
-- Fix error on add for non global controllers
+- Added List.obs
+- Now you can transform any class on obs
 
 ## [2.4.0]
 
