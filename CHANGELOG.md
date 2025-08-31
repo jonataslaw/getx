@@ -1,3 +1,60 @@
+## [5.0.0-release-candidate-10.0.0]
+
+### New Features
+- **Sealed Classes for Status Handling**: Refactored `GetStatus` to use Dart's sealed classes for better type safety and pattern matching.
+  - Added exhaustive pattern matching with the `match` method
+  - Improved type safety with proper generic parameters
+  - Added `dataOrNull` and `errorOrNull` extensions for safer access to data
+  - Added `when` method for side-effect based status handling
+  - Added `mapSuccess` for transforming success values
+
+### Improvements
+- **Type Safety**: Enhanced type safety throughout the state management system
+- **Documentation**: Added comprehensive documentation for all public APIs
+- **Testing**: Added extensive test coverage for the new sealed class implementation
+- **Performance**: Optimized state updates with more efficient equality checks
+
+### Breaking Changes
+- The `GetStatus` class is now a sealed class with a private constructor
+- The `ErrorStatus` class now only has one type parameter instead of two
+- Custom status implementations must now extend one of the predefined status classes
+- The `isCustom` getter now only returns true for `CustomStatus` instances
+
+### Migration Guide
+To migrate to this version:
+
+1. **Pattern Matching**: Replace if-else chains with the new `match` method:
+   ```dart
+   // Before
+   if (status.isLoading) {
+     return LoadingWidget();
+   } else if (status.isError) {
+     return ErrorWidget(status.errorMessage);
+   } else {
+     return SuccessWidget(status.data);
+   }
+
+   // After
+   return status.match(
+     loading: () => LoadingWidget(),
+     error: (error) => ErrorWidget(error?.toString() ?? 'Unknown error'),
+     success: (data) => SuccessWidget(data),
+     empty: () => EmptyWidget(),
+     custom: () => CustomWidget(),
+   );
+   ```
+
+2. **Error Status**: Update any code that uses `ErrorStatus` with two type parameters:
+   ```dart
+   // Before
+   ErrorStatus<MyData, Exception> status;
+   
+   // After
+   ErrorStatus<MyData> status;
+   ```
+
+3. **Custom Status**: If you've created custom status classes, update them to extend one of the predefined status classes.
+
 ## [5.0.0-release-candidate-9.3.2]
 
 - Fix pana score

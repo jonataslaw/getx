@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/get_status.dart';
 
 import '../../domain/adapters/repository_adapter.dart';
 import '../../domain/entity/country_model.dart';

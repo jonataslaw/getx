@@ -379,7 +379,7 @@ class HttpRequestImpl extends IClient {
     }
 
     _httpClient = io.HttpClient(context: _securityContext);
-    _httpClient!.badCertificateCallback = (_, __, ___) => allowAutoSignedCert;
+    _httpClient!.badCertificateCallback = (_, _, _) => allowAutoSignedCert;
     _httpClient!.findProxy = findProxy;
   }
 

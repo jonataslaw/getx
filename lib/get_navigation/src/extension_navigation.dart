@@ -1112,36 +1112,6 @@ extension GetNavigationExt on GetInterface {
     }
     return Uri.tryParse(name)?.toString() ?? name;
   }
-  //TODO: Deprecated
-  // /// change default config of Get
-  // void config(
-  //     {bool? enableLog,
-  //     LogWriterCallback? logWriterCallback,
-  //     bool? defaultPopGesture,
-  //     bool? defaultOpaqueRoute,
-  //     Duration? defaultDurationTransition,
-  //     bool? defaultGlobalState,
-  //     Transition? defaultTransition}) {
-  //   if (enableLog != null) {
-  //     Get.isLogEnable = enableLog;
-  //   }
-  //   if (logWriterCallback != null) {
-  //     Get.log = logWriterCallback;
-  //   }
-  //   if (defaultPopGesture != null) {
-  //     _getxController.defaultPopGesture = defaultPopGesture;
-  //   }
-  //   if (defaultOpaqueRoute != null) {
-  //     _getxController.defaultOpaqueRoute = defaultOpaqueRoute;
-  //   }
-  //   if (defaultTransition != null) {
-  //     _getxController.defaultTransition = defaultTransition;
-  //   }
-
-  //   if (defaultDurationTransition != null) {
-  //     _getxController.defaultTransitionDuration = defaultDurationTransition;
-  //   }
-  // }
 
   Future<void> updateLocale(Locale l) async {
     Get.locale = l;
