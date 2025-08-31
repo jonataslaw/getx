@@ -109,7 +109,7 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 200));
 
       expect(controller.status.isError, isTrue);
-      expect(controller.status.error, isA<FetchException>());
+      expect(controller.status.errorOrNull, isA<FetchException>());
     });
   });
 
@@ -140,7 +140,7 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 200));
 
       expect(controller.status.isError, isTrue);
-      expect(controller.status.error, isA<FetchException>());
+      expect(controller.status.errorOrNull, isA<FetchException>());
     });
   });
 }

@@ -4,7 +4,7 @@ version: 5.0.0-release-candidate-9.3.2
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
   flutter: ">=3.22.0"
 
 dependencies:

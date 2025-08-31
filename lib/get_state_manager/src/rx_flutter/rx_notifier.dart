@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
 
 import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
+import 'get_status.dart';
 
 extension _Empty on Object {
   bool _isEmpty() {
@@ -87,24 +87,35 @@ mixin StateMixin<T> on ListNotifier {
     change(GetStatus<T>.empty());
   }
 
-  void futurize(Future<T> Function() body,
-      {T? initialData, String? errorMessage, bool useEmpty = true}) {
-    final compute = body;
+  /// Executes the given async function and updates the status accordingly
+  Future<T> futurize(
+    Future<T> Function() body, {
+    T? initialData,
+    String? errorMessage,
+    bool useEmpty = true,
+  }) async {
     _value ??= initialData;
-    status = GetStatus<T>.loading();
-    compute().then((newValue) {
-      if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-        status = GetStatus<T>.empty();
+    change(GetStatus<T>.loading());
+    
+    try {
+      final newValue = await body();
+      
+      if (useEmpty && (newValue == null || newValue._isEmpty())) {
+        change(GetStatus<T>.empty());
       } else {
-        status = GetStatus<T>.success(newValue);
+        change(GetStatus<T>.success(newValue));
       }
-
+      
+      return newValue;
+    } catch (err) {
+      final error = errorMessage != null 
+          ? Exception('$errorMessage: ${err.toString()}')
+          : err is Exception ? err : Exception(err.toString());
+      change(GetStatus<T>.error(error));
+      rethrow;
+    } finally {
       refresh();
-    }, onError: (err) {
-      status = GetStatus.error(
-          err is Exception ? err : Exception(errorMessage ?? err.toString()));
-      refresh();
-    });
+    }
   }
 }
 
@@ -119,11 +130,10 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller =
-          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller = StreamController<T>.broadcast(
+        onCancel: addListener(_streamListener),
+      );
       _controller?.add(_value);
-
-      ///TODO: report to controller dispose
     }
     return _controller!;
   }
@@ -175,13 +185,12 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     Function? onError,
     void Function()? onDone,
     bool? cancelOnError,
-  }) =>
-      stream.listen(
-        onData,
-        onError: onError,
-        onDone: onDone,
-        cancelOnError: cancelOnError ?? false,
-      );
+  }) => stream.listen(
+    onData,
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError ?? false,
+  );
 
   @override
   String toString() => value.toString();
@@ -240,114 +249,23 @@ extension StateExt<T> on StateMixin<T> {
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) {
-    return Observer(builder: (context) {
-      if (status.isLoading) {
-        return onLoading ?? const Center(child: CircularProgressIndicator());
-      } else if (status.isError) {
-        return onError != null
-            ? onError(status.errorMessage)
-            : Center(child: Text('A error occurred: ${status.errorMessage}'));
-      } else if (status.isEmpty) {
-        return onEmpty ??
-            const SizedBox.shrink(); // Also can be widget(null); but is risky
-      } else if (status.isSuccess) {
-        return widget(value);
-      } else if (status.isCustom) {
-        return onCustom?.call(context) ??
-            const SizedBox.shrink(); // Also can be widget(null); but is risky
-      }
-      return widget(value);
-    });
+    return Observer(
+      builder: (context) {
+        return status.when<Widget>(
+          loading: () =>
+              onLoading ?? const Center(child: CircularProgressIndicator()),
+          error: (error) => onError != null
+              ? onError(error?.toString())
+              : Center(
+                  child: Text('An error occurred: ${error ?? "Unknown error"}'),
+                ),
+          empty: () => onEmpty ?? const SizedBox.shrink(),
+          success: (data) => widget(data),
+          custom: () => onCustom?.call(context) ?? const SizedBox.shrink(),
+        );
+      },
+    );
   }
 }
 
 typedef NotifierBuilder<T> = Widget Function(T state);
-
-abstract class GetStatus<T> with Equality {
-  const GetStatus();
-
-  factory GetStatus.loading() => LoadingStatus<T>();
-
-  factory GetStatus.error(Object message) => ErrorStatus<T, Object>(message);
-
-  factory GetStatus.empty() => EmptyStatus<T>();
-
-  factory GetStatus.success(T data) => SuccessStatus<T>(data);
-
-  factory GetStatus.custom() => CustomStatus<T>();
-}
-
-class CustomStatus<T> extends GetStatus<T> {
-  @override
-  List get props => [];
-}
-
-class LoadingStatus<T> extends GetStatus<T> {
-  @override
-  List get props => [];
-}
-
-class SuccessStatus<T> extends GetStatus<T> {
-  final T data;
-
-  const SuccessStatus(this.data);
-
-  @override
-  List get props => [data];
-}
-
-class ErrorStatus<T, S> extends GetStatus<T> {
-  final S? error;
-
-  const ErrorStatus([this.error]);
-
-  @override
-  List get props => [error];
-}
-
-class EmptyStatus<T> extends GetStatus<T> {
-  @override
-  List get props => [];
-}
-
-extension StatusDataExt<T> on GetStatus<T> {
-  bool get isLoading => this is LoadingStatus;
-
-  bool get isSuccess => this is SuccessStatus;
-
-  bool get isError => this is ErrorStatus;
-
-  bool get isEmpty => this is EmptyStatus;
-
-  bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
-
-  dynamic get error {
-    if (this is ErrorStatus) {
-      return (this as ErrorStatus).error;
-    }
-    return null;
-  }
-
-  String get errorMessage {
-    final isError = this is ErrorStatus;
-    if (isError) {
-      final err = this as ErrorStatus;
-      if (err.error != null) {
-        if (err.error is String) {
-          return err.error as String;
-        }
-        return err.error.toString();
-      }
-    }
-
-    return '';
-  }
-
-  T? get data {
-    if (this is SuccessStatus<T>) {
-      final success = this as SuccessStatus<T>;
-      return success.data;
-    }
-    return null;
-  }
-}

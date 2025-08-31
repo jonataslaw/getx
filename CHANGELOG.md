@@ -1,3 +1,60 @@
+## [5.0.0-release-candidate-10.0.0]
+
+### New Features
+- **Sealed Classes for Status Handling**: Refactored `GetStatus` to use Dart's sealed classes for better type safety and pattern matching.
+  - Added exhaustive pattern matching with the `match` method
+  - Improved type safety with proper generic parameters
+  - Added `dataOrNull` and `errorOrNull` extensions for safer access to data
+  - Added `when` method for side-effect based status handling
+  - Added `mapSuccess` for transforming success values
+
+### Improvements
+- **Type Safety**: Enhanced type safety throughout the state management system
+- **Documentation**: Added comprehensive documentation for all public APIs
+- **Testing**: Added extensive test coverage for the new sealed class implementation
+- **Performance**: Optimized state updates with more efficient equality checks
+
+### Breaking Changes
+- The `GetStatus` class is now a sealed class with a private constructor
+- The `ErrorStatus` class now only has one type parameter instead of two
+- Custom status implementations must now extend one of the predefined status classes
+- The `isCustom` getter now only returns true for `CustomStatus` instances
+
+### Migration Guide
+To migrate to this version:
+
+1. **Pattern Matching**: Replace if-else chains with the new `match` method:
+   ```dart
+   // Before
+   if (status.isLoading) {
+     return LoadingWidget();
+   } else if (status.isError) {
+     return ErrorWidget(status.errorMessage);
+   } else {
+     return SuccessWidget(status.data);
+   }
+
+   // After
+   return status.match(
+     loading: () => LoadingWidget(),
+     error: (error) => ErrorWidget(error?.toString() ?? 'Unknown error'),
+     success: (data) => SuccessWidget(data),
+     empty: () => EmptyWidget(),
+     custom: () => CustomWidget(),
+   );
+   ```
+
+2. **Error Status**: Update any code that uses `ErrorStatus` with two type parameters:
+   ```dart
+   // Before
+   ErrorStatus<MyData, Exception> status;
+   
+   // After
+   ErrorStatus<MyData> status;
+   ```
+
+3. **Custom Status**: If you've created custom status classes, update them to extend one of the predefined status classes.
+
 ## [5.0.0-release-candidate-9.3.2]
 
 - Fix pana score
@@ -919,7 +976,7 @@ The 9000% figures are real, however, they refer to the gross performance between
 - Update PT-br Readme (@eduardoflorence)
 - Fix analyzer crash (@eduardoflorence)
 - Fix for switch types usages in GetUtils (@grohden)
-- Improvement: RxList, RxSet and RxMap null check in the constructor (@Hitsu91)
+- Improvement: RxList, RxMap and RxSet null check in the constructor (@Hitsu91)
 - Improve readme example (@dafinoer)
 
 ## [3.10.2]
@@ -970,7 +1027,7 @@ Getx 3.10 released with CLI and Get Server.
 
 ## [3.7.0]
 
-- Added: RxSet. Sets can now also be reactive.
+- Added RxSet. Sets can now also be reactive.
 - Added isDesktop/isMobile (@roipeker)
 - Improve GetPlatform: It is now possible to know which device the user is using if GetPlatform.isWeb is true.
   context.responsiveValue used device orientation based on web and non-web applications. Now it checks if it is a desktop application (web or desktop application) to do the responsiveness calculation. (@roipeker)
@@ -1260,75 +1317,26 @@ Added fenix mode to Get.lazyPut.
 
 ## [2.6.3]
 
-- Flutter currently has a problem on some devices where using showModalBottomSheet() can cause TextFields to be hidden behind the keyboard (https://github.com/flutter/flutter/issues/18564) this issue is closed, even users reporting that the problem still occurs.
-  The problem happens casually, as well as the problem of the snackbar on the iPhone SE 2, and checking the code, I realized that a padding with MediaQuery.of(context).viewInsets.bottom is missing inside the bottomSheet to make it work correctly, since it does not have any constraint with the keyboard.
-  For stability, I decided not to use the standard Flutter bottomSheet, which contains many bugs, mainly related to keyboard padding, and the lack of respect for topBar's safeArea, and to use a proprietary bottomSheet implementation that is more stable. The Flutter dialog has no problem, so it will be used as the basis for Get.dialog. The bottomSheet will be based on the Flutter bottomSheet Raw API (\_ModalBottomSheetRoute), applying bug fixes.
-- Added Get.isSnackbarOpen tests
+- Improve extensions tests (@Nipodemos)
+- Improve performance
 
 ## [2.6.2]
 
-- Refactor Bindings API
+- Fix ListX
 
 ## [2.6.1]
 
-- Expose Bindings API
+- Fix ListX
 
 ## [2.6.0]
 
-- Added bindings.
-  You can now add bindings from your controllers to your routes, to prepare GetBuilder or GetX to create a dependency already declared in a Binding class. This feature is in an experimental phase, and will not be documented until the end of the tests.
-
-## [2.5.10]
-
-- Removed remnants of previousArgs on routeObserver.
-  This feature had been deprecated in previous updates, and was removed in version 2.5.8. Some remaining references on the routeObserver were causing exceptions in version 2.5.9, and were removed completely in version 2.5.10.
-
-## [2.5.9]
-
-- Fix Get.find with named instance
-
-## [2.5.8]
-
-- Added docs
-- Added tests(@chimon2000)
-
-## [2.5.7]
-
-- Fix Get.generalDialog optionals
-- Added GetX onInit support
-
-## [2.5.6]
-
-- GetBuilder refactor to work with lazyPut.
-  Now you can list your controllers in advance with Get.lazyPut, and only when it is called for the first time will it be relocated in memory.
-- Fix english typos(@gumbarros)
-
-## [2.5.5]
-
-- Fix arguments broken by new methods
-
-## [2.5.4]
-
-- Refactor methods
-
-## [2.5.3]
-
-- Fix snackbar padding on iPhone SE 2.
-- Added themes docs
-- Added ThemeMode (@RodBr)
-
-## [2.5.2]
-
-- Fix: key not found when Get.key is used with no MaterialApp
-
-## [2.5.1]
-
-- Improve - GetBuilder uses 18% less ram on more of 20 controllers.
+- Added List.obs
+- Now you can transform any class on obs
 
 ## [2.5.0]
 
-- Added List.obs
-- Now you can transform any class on obs
+- Added GetX, state manager rxDart based.
+- Fix error on add for non global controllers
 
 ## [2.4.0]
 

@@ -22,7 +22,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: Duration.zero,
           child: Container(),
         ),
@@ -98,7 +98,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: Duration.zero,
           onComplete: (c) {
             onCompleteCalled = true;
@@ -153,7 +153,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: const Duration(milliseconds: 500),
           child: Container(),
         ),
