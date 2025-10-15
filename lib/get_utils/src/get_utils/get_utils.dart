@@ -124,7 +124,8 @@ class GetUtils {
         ext.endsWith(".rmvb") ||
         ext.endsWith(".mpg") ||
         ext.endsWith(".mpeg") ||
-        ext.endsWith(".3gp");
+        ext.endsWith(".3gp") ||
+        ext.endsWith(".mov");
   }
 
   /// Checks if string is an image file.
