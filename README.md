@@ -358,6 +358,7 @@ class Messages extends Translations {
       };
 }
 ```
+
 #### Using translations
 
 Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
