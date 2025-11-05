@@ -358,7 +358,6 @@ class Messages extends Translations {
       };
 }
 ```
-
 #### Using translations
 
 Just append `.tr` to the specified key and it will be translated, using the current value of `Get.locale` and `Get.fallbackLocale`.
@@ -425,6 +424,50 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+#### Optimum structure for language maps
+
+In order to reduce the repition of language keys when using variants of a language you can place all the keys in a language only key-value dictionary map and then add only the keys that need to be changed to the language variant.
+
+```dart
+import 'package:get/get.dart';
+
+class Messages extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en': {
+          'hello': 'Hello World',
+          'netAmount': 'Net amount',
+          'tax': 'Tax'
+        },
+        'en_GB': {
+          'tax': 'VAT'
+        },
+        'en_US': {
+          'tax': 'Sales tax'
+        },
+        'de_DE': {
+          'hello': 'Hallo Welt',
+          'netAmount': 'Nettobetrag'
+          'tax': 'Steuer'
+        }
+      };
+}
+```
+
+Using the code above the translations for the keys when using different English language variants is as follows:
+
+| Locale | Key       | Translation | Dictionary map used |
+| ------ | --------- | ----------- | ------------------- |
+| en_GB  | hello     | Hello World | en                  |
+|        | netAmount | Net amount  | en                  |
+|        | tax       | VAT         | en_GB               |
+| en_US  | hello     | Hello World | en                  |
+|        | netAmount | Net amount  | en                  |
+|        | tax       | Sales tax   | en_US               |
+| en_AU  | hello     | Hello World | en                  |
+|        | netAmount | Net amount  | en                  |
+|        | tax       | Tax         | en                  |
 
 ## Change Theme
 
