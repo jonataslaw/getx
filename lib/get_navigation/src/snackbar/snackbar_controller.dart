@@ -88,7 +88,7 @@ class SnackbarController {
   }
 
   void _configureOverlay() {
-    _overlayState = Overlay.of(Get.overlayContext!);
+    _overlayState = Get.key.currentState?.overlay;
     _overlayEntries.clear();
     _overlayEntries.addAll(_createOverlayEntries(_getBodyWidget()));
     _overlayState!.insertAll(_overlayEntries);
