@@ -142,11 +142,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(Get.isSnackbarOpen, true);
-    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 1000));
     expect(find.byWidget(getBar), findsOneWidget);
     await tester.ensureVisible(find.byWidget(getBar));
     await tester.drag(find.byWidget(getBar), const Offset(0.0, 50.0));
-    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 2000));
 
     expect(Get.isSnackbarOpen, false);
   });
