@@ -61,10 +61,16 @@ class WrapperTranslations extends Translations {
   static Locale? get locale => const Locale('en', 'US');
   @override
   Map<String, Map<String, String>> get keys => {
-        'en_US': {
+        'en': {
           'covid': 'Corona Virus',
           'total_confirmed': 'Total Confirmed',
           'total_deaths': 'Total Deaths',
+        },
+        'en_US': {
+          'covid': 'Corona Virus (US totals)',
+        },
+        'en_GB': {
+          'covid': 'Corona Virus (UK totals)',
         },
         'pt_BR': {
           'covid': 'Corona Vírus',

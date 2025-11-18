@@ -12,7 +12,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect('covid'.tr, 'Corona Virus');
+    expect('covid'.tr, 'Corona Virus (US totals)');
     expect('total_confirmed'.tr, 'Total Confirmed');
     expect('total_deaths'.tr, 'Total Deaths');
 
@@ -25,6 +25,22 @@ void main() {
     expect('total_deaths'.tr, 'Total de mortes');
 
     Get.updateLocale(const Locale('en', 'EN'));
+
+    await tester.pumpAndSettle();
+
+    expect('covid'.tr, 'Corona Virus');
+    expect('total_confirmed'.tr, 'Total Confirmed');
+    expect('total_deaths'.tr, 'Total Deaths');
+
+    Get.updateLocale(const Locale('en', 'GB'));
+
+    await tester.pumpAndSettle();
+
+    expect('covid'.tr, 'Corona Virus (UK totals)');
+    expect('total_confirmed'.tr, 'Total Confirmed');
+    expect('total_deaths'.tr, 'Total Deaths');
+
+    Get.updateLocale(const Locale('en', 'AU'));
 
     await tester.pumpAndSettle();
 

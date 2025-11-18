@@ -66,6 +66,9 @@ extension Trans on String {
   // Checks if there is a callback language in the absence of the specific
   // country, and if it contains that key.
   Map<String, String>? get _getSimilarLanguageTranslation {
+    if(Get.translations.containsKey(Get.locale!.languageCode.split("_").first)){
+      return Get.translations[Get.locale!.languageCode.split("_").first];
+    }
     final translationsWithNoCountry = Get.translations
         .map((key, value) => MapEntry(key.split("_").first, value));
     final containsKey = translationsWithNoCountry
