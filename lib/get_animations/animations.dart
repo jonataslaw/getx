@@ -74,6 +74,7 @@ class RotateAnimation extends GetAnimatedBuilder<double> {
 }
 
 class ScaleAnimation extends GetAnimatedBuilder<double> {
+  // TODO: Add scale origin
   ScaleAnimation({
     super.key,
     required super.duration,
