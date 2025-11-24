@@ -623,7 +623,7 @@ Get.width
 Get.context
 
 // 在你的代码中的任何地方，在前台提供 snackbar/dialog/bottomsheet 的上下文。
-Get.contextOverlay
+Get.overlayContext
 
 // 注意：以下方法是对上下文的扩展。
 // 因为在你的UI的任何地方都可以访问上下文，你可以在UI代码的任何地方使用它。
