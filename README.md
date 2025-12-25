@@ -808,10 +808,10 @@ of the body in a `Scaffold`.
 A simplification of `StatefulWidget` that works with a `.setState` callback that takes the updated value.
 
 ```dart
-ValueBuilder<bool>(
+ValueBuilder<bool?>(
   initialValue: false,
   builder: (value, updateFn) => Switch(
-    value: value,
+    value: value!,
     onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
   ),
   // if you need to call something outside the builder method.
@@ -826,12 +826,14 @@ Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, yo
 updates automatically... isn't it awesome?
 
 ```dart
-ObxValue((data) => Switch(
+     ObxValue<RxBool>(
+      (data) => Switch(
         value: data.value,
-        onChanged: data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
-    ),
-    false.obs,
-),
+        onChanged:
+            data, // Rx has a _callable_ function! You could use (flag) => data.value = flag,
+      ),
+      false.obs,
+    );
 ```
 
 ## Useful tips
