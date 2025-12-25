@@ -1,0 +1,7 @@
+# Canaux
+
+GetX a une communauté très active et utile. Si vous avez des questions, ou si vous souhaitez une aide concernant l'utilisation de ce cadre, rejoignez les canaux de la communauté, votre question sera traitée plus rapidement, et ce sera l'endroit le plus approprié. Ce dépôt est exclusif à l'ouverture des problèmes et à la demande de ressources, mais n'hésitez pas à faire partie de la communauté GetX.
+
+| **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Télégramme**                                                                                                        |
+| :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
