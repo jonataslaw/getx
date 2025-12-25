@@ -100,7 +100,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   set value(T val) {
     if (isDisposed) return;
     sentToStream = false;
-    if (value == val && !firstRebuild) return;
+    if (_value.hashCode == val.hashCode && !firstRebuild) return;
     firstRebuild = false;
     sentToStream = true;
     super.value = val;
