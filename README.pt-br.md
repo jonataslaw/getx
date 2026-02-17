@@ -1021,7 +1021,7 @@ RxController e GetBuilder agora viraram um só, você não precisa mais memoriza
 
 ```dart
 //Gerenciador de estado simples
-class Controller extends GetXController {
+class Controller extends GetxController {
   String nome = '';
 
   void atualizarNome(String novoNome) {
@@ -1032,7 +1032,7 @@ class Controller extends GetXController {
 ```
 
 ```dart
-class Controller extends GetXController {
+class Controller extends GetxController {
   final nome = ''.obs;
 
   // não precisa de um método direto pra atualizar o nome

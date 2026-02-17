@@ -695,7 +695,7 @@ GetX는 위젯이 정말 값이 변경되었을 때에만 재빌드합니다. �
 
 단 하나의 반응변수(.obs)와 다른 메커니즘(update())가 모두 필요해서 Getbuilder 안에 Obx를 넣어야 하는 경우가 필요했습니다. 이 경우를 위해 MixinBuilder가 만들어졌습니다. ".obs"변수의 값이 바뀔 때 즉각적으로 바뀌는 것과 update()를 통해 바뀌는 것 모두를 지원합니다. 하지만, 이 위젯이 GetBuilder, GetX, Obx 보다 더 많은 리소스를 필요로합니다. 왜냐하면 controller의 update() 메소드와 자식으로부터의 .obs 변수의 변화를 주시하고 있어야 하기 때문입니다.
 
-GetxController를 상속(extends)하는 것은 중요합니다. onInit()과 onClose()에서 "시작"과 "종료" 이벤트를 수행할 수 있는 생명 주기를 갖고 있기 때문입니다. 이를 위해서 어떤 클래스를 사용해도 괜찮지만, obervable한 변수든 아니든 간에 GetXController를 사용해 변수를 다루길 적극 권장합니다.
+GetxController를 상속(extends)하는 것은 중요합니다. onInit()과 onClose()에서 "시작"과 "종료" 이벤트를 수행할 수 있는 생명 주기를 갖고 있기 때문입니다. 이를 위해서 어떤 클래스를 사용해도 괜찮지만, obervable한 변수든 아니든 간에 GetxController를 사용해 변수를 다루길 적극 권장합니다.
 
 
 ## GetBuilder vs GetX vs Obx vs MixinBuilder
