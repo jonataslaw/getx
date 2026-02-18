@@ -98,6 +98,37 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   @override
   void didUpdateWidget(GetX oldWidget) {
     super.didUpdateWidget(oldWidget as GetX<T>);
+    
+    if (oldWidget.tag != widget.tag) {
+      if (_isCreator! && oldWidget.autoRemove) {
+        if (Get.isRegistered<T>(tag: oldWidget.tag)) {
+          Get.delete<T>(tag: oldWidget.tag);
+        }
+      }
+      
+      for (final disposer in disposers) {
+        disposer();
+      }
+      disposers.clear();
+
+      final isRegistered = Get.isRegistered<T>(tag: widget.tag);
+
+      if (widget.global) {
+        if (isRegistered) {
+          _isCreator = Get.isPrepared<T>(tag: widget.tag);
+          controller = Get.find<T>(tag: widget.tag);
+        } else {
+          controller = widget.init;
+          _isCreator = true;
+          Get.put<T>(controller!, tag: widget.tag);
+        }
+      } else {
+        controller = widget.init;
+        _isCreator = true;
+        controller?.onStart();
+      }
+    }
+    
     widget.didUpdateWidget?.call(oldWidget, this);
   }
 
