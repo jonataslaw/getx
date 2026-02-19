@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+import '../../../get_utils/src/extensions/iterable_extensions.dart';
 import 'get_route.dart';
 
 class RouteMatcher {
@@ -247,11 +248,3 @@ class RouteNode {
       'RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )';
 }
 
-extension Foo<T> on Iterable<T> {
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
-}

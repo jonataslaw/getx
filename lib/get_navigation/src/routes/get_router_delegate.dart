@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';
+import '../../../get_utils/src/extensions/iterable_extensions.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
 
@@ -280,12 +281,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return SynchronousFuture(_canPopPage());
   }
 
-  bool _canPop(mode) {
+  bool _canPop(PopMode mode) {
     switch (mode) {
       case PopMode.history:
         return _canPopHistory();
       case PopMode.page:
-      default:
         return _canPopPage();
     }
   }
