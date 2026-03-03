@@ -643,7 +643,7 @@ Get.width
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
-Get.contextOverlay
+Get.overlayContext
 
 // Chí ú: Nếu bạn dùng cái này, nhớ đặtt. thànhnce you
 // have access to context in any place of your UI, you can use it anywhere in the UI code
