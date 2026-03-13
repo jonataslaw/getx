@@ -37,7 +37,7 @@ GetMaterialApp( // Before: MaterialApp(
 To navigate to a new screen:
 
 ```dart
-Get.to(NextScreen());
+Get.to(()=>NextScreen());
 ```
 
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
@@ -49,19 +49,19 @@ Get.back();
 To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(()=>NextScreen());
 ```
 
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(()=>NextScreen());
 ```
 
 To navigate to the next route, and receive or update data as soon as you return from it:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(()=>Payment());
 ```
 
 on other screen, send a data for previous route:
@@ -104,7 +104,7 @@ navigator.push(
 );
 
 // Get syntax (It is much better, but you have the right to disagree)
-Get.to(HomePage());
+Get.to(()=>HomePage());
 
 
 ```
