@@ -132,18 +132,18 @@ import 'package:get/get.dart';
 Flutter의 새 프로젝트에서 기본적으로 생성 되는 "counter" 프로젝트는 100줄이 넘습니다 (코멘트 포함). Get의 강력함을 보여주기 위해 클릭 할 때마다 상태를 변경하고, 페이지 사이를 전환하고, 화면 사이의 상태를 공유하는 "counter"를 만드는 방법을 주석이 포함된 26줄의 코드로 보여줄 것입니다.
 
 - 1 단계:
-  MaterialApp 에 "Get"을 추가하여 GetMaterialApp 으로 변경합니다.
+  MaterialApp 에 "Get"을 추가하여 GetMaterialApp 으로 변경합니다:
 
 ```dart
 void main() => runApp(GetMaterialApp(home: Home()));
 ```
 
-- 주석: 이는 Flutter의 MaterialApp을 변경하지 않으며 GetMaterialApp 또한 수정 된 MaterialApp이 아니고, 기본 MaterialApp을 자식으로 갖는 사전 구성된 위젯 일뿐입니다. 수동으로 구성 할 수 있지만 반드시 필요한 것은 아닙니다. GetMaterialApp은 라우트를 생성하고 추가하며, 번역을 추가하고, 라우트 탐색에 필요한 모든 것을 추가합니다. 만약 상태 관리 또는 종속성 관리에만 Get을 사용하는 경우 GetMaterialApp을 사용할 필요가 없습니다. GetMaterialApp은 라우트, 스택바, 국제화, bottomSheets, 다이얼로그 및 컨텍스트 부재와 라우트에 연관된 상위 api들에 필요합니다.
+- 주석: 이는 Flutter의 MaterialApp을 변경하지 않으며 GetMaterialApp 또한 수정 된 MaterialApp이 아니고, 기본 MaterialApp을 자식으로 갖는 사전 구성된 위젯 일뿐입니다. 수동으로 구성 할 수 있지만 반드시 필요한 것은 아닙니다. GetMaterialApp은 라우트를 생성하고 추가하며, 번역을 추가하고, 라우트 탐색에 필요한 모든 것을 추가합니다. 만약 상태 관리 또는 종속성 관리에만 Get을 사용하는 경우 GetMaterialApp을 사용할 필요가 없습니다. GetMaterialApp은 라우트, 스택바, 국제화, bottomSheets, 다이얼로그 및 컨텍스트 부재와 라우트에 연관된 상위 API들에 필요합니다.
 - 주석²: 이 단계는 라우트 관리 (`Get.to ()`,`Get.back ()` 등)를 사용하려는 경우에만 필요합니다. 사용하지 않을 경우 1 단계를 수행 할 필요가 없습니다.
 
 - 2 단계:
   비즈니스 로직 클래스를 만들고 모든 변수, 함수, 컨트롤러를 포함하십시오.
-  ".obs"를 이용하면 간단히 모든 변수를 observable로 만들수 있습니다.
+  ".obs"를 이용하면 간단히 모든 변수를 observable로 만들수 있습니다:
 
 ```dart
 class Controller extends GetxController{
@@ -153,7 +153,7 @@ class Controller extends GetxController{
 ```
 
 - 3 단계:
-  StatelessWidget를 이용해 View를 만들어 RAM을 아끼고 StatefulWidget은 더 이상 사용하지 않아도 됩니다.
+  StatelessWidget를 이용해 View를 만들어 RAM을 아끼고 StatefulWidget은 더 이상 사용하지 않아도 됩니다:
 
 ```dart
 class Home extends StatelessWidget {
@@ -248,7 +248,7 @@ GetX 능력에 대한 좋은 아이디어를 얻을 수 있습니다.
 
 만약 라우트/스낵바/다이얼로그/bottomsheets을 context 없이 사용하려면 GetX는 훌륭한 대안입니다. 여기를 보십시오:
 
-MaterialApp 앞에 "Get"을 추가해서 GetMaterialApp으로 변경합니다.
+MaterialApp 앞에 "Get"을 추가해서 GetMaterialApp으로 변경합니다:
 
 ```dart
 GetMaterialApp( // Before: MaterialApp(
@@ -263,7 +263,7 @@ GetMaterialApp( // Before: MaterialApp(
 Get.to(NextScreen());
 ```
 
-명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/kr_KO/route_management.md#이름있는-라우트-탐색) 있습니다.
+명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/kr_KO/route_management.md#이름있는-라우트-탐색) 있습니다:
 
 ```dart
 
@@ -276,13 +276,13 @@ Get.toNamed('/details');
 Get.back();
 ```
 
-다음 화면으로 이동하고 이전 화면으로 돌아갈 필요가 없는 경우 (스플래시, 로그인화면 등..)
+다음 화면으로 이동하고 이전 화면으로 돌아갈 필요가 없는 경우: (스플래시, 로그인화면 등..) 
 
 ```dart
 Get.off(NextScreen());
 ```
 
-다음 화면으로 이동하고 이전 화면들 모두 닫는 경우 (쇼핑카트, 투표, 테스트에 유용)
+다음 화면으로 이동하고 이전 화면들 모두 닫는 경우: (쇼핑카트, 투표, 테스트에 유용) 
 
 ```dart
 Get.offAll(NextScreen());
@@ -302,12 +302,12 @@ Get은 간단하고 강력한 종속성 관리자를 가지고 있어 Bloc나 Co
 Controller controller = Get.put(Controller()); // Rather Controller controller = Controller();
 ```
 
-- 주석: Get의 상태 관리자를 사용중이면 뷰를 controller에 더 쉽게 연결할 수 있는 바인딩 api에 더 주의를 기울이십시오.
+- 주석: Get의 상태 관리자를 사용중이면 뷰를 controller에 더 쉽게 연결할 수 있는 바인딩 API에 더 주의를 기울이십시오.
 
 사용 중인 클래스에서 클래스를 인스턴스화하는 대신에 Get 인스턴스에서 인스턴스화하면 앱에서 해당 클래스를 사용할 수 있습니다.
 그래서 controller(또는 Bloc)를 정상적으로 사용할 수 있습니다.
 
-**팁:** Get 종속성 관리는 패키지의 다른 부분과 분리되어서 예제 앱이 이미 상태 관리자(하나여도 상관없음)를 사용중이면 모두 다시 작성할 필요 없이 아무 문제 없이 종속성 주입을 사용할 수 있습니다.
+**팁:** Get 종속성 관리는 패키지의 다른 부분과 분리되어서 예제 앱이 이미 상태 관리자(하나여도 상관없음)를 사용중이면 모두 다시 작성할 필요 없이 아무 문제 없이 종속성 주입을 사용할 수 있습니다:
 
 ```dart
 controller.fetchApi();
@@ -337,7 +337,7 @@ Text(controller.textFromApi);
 ### 번역
 
 번역은 간단한 key-value 맵으로 유지됩니다.
-커스텀 번역을 추가하려면 `Translations`으로 확장하여 클래스를 만드세요.
+커스텀 번역을 추가하려면 `Translations`으로 확장하여 클래스를 만드세요:
 
 ```dart
 import 'package:get/get.dart';
@@ -357,20 +357,20 @@ class Messages extends Translations {
 
 #### 번역 사용법
 
-단지 `.tr`로 명시된 키만 추가하면 `Get.locale`과 `Get.fallbackLocale`의 현재값을 사용해서 번역될 것 입니다.
+단지 `.tr`로 명시된 키만 추가하면 `Get.locale`과 `Get.fallbackLocale`의 현재값을 사용해서 번역될 것 입니다:
 
 ```dart
 Text('title'.tr);
 ```
 
-#### 단수와 복수의 번역 사용법
+#### 단수와 복수의 번역 사용법:
 
 ```dart
 var products = [];
 Text('singularKey'.trPlural('pluralKey', products.length, Args));
 ```
 
-#### 파라미터로 번역 사용하는 방법
+#### 파라미터로 번역 사용하는 방법:
 
 ```dart
 import 'package:get/get.dart';
@@ -393,7 +393,7 @@ Text('logged_in'.trParams({
 
 ### 지역화
 
-`GetMaterialApp`의 파라미터를 전달하여 지역과 번역어를 정의합니다.
+`GetMaterialApp`의 파라미터를 전달하여 지역과 번역어를 정의합니다:
 
 ```dart
 return GetMaterialApp(
@@ -405,7 +405,7 @@ return GetMaterialApp(
 
 #### 지역 변경
 
-지역을 업데이트할때 `Get.updateLocale(locale)`를 콜하십시오. 새로운 지역을 사용하여 자동적으로 번역합니다.
+지역을 업데이트할때 `Get.updateLocale(locale)`를 콜하십시오. 새로운 지역을 사용하여 자동적으로 번역합니다:
 
 ```dart
 var locale = Locale('en', 'US');
@@ -414,7 +414,7 @@ Get.updateLocale(locale);
 
 #### 시스템 지역
 
-`Get.deviceLocale`를 사용해서 시스템 지역을 읽어옵니다.
+`Get.deviceLocale`를 사용해서 시스템 지역을 읽어옵니다:
 
 ```dart
 return GetMaterialApp(
@@ -449,7 +449,7 @@ GetConnect는 http나 websockets으로 프론트와 백엔드의 통신을 위�
 
 ### 기본 구성
 
-GetConnect를 간단하게 확장하고 Rest API나 websockets의 GET/POST/PUT/DELETE/SOCKET 메서드를 사용할 수 있습니다.
+GetConnect를 간단하게 확장하고 Rest API나 websockets의 GET/POST/PUT/DELETE/SOCKET 메서드를 사용할 수 있습니다:
 
 ```dart
 class UserProvider extends GetConnect {
@@ -474,7 +474,7 @@ class UserProvider extends GetConnect {
 
 ### 커스텀 구성
 
-GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다.
+GetConnect는 고도로 커스텀화 할 수 있습니다. base Url을 정의하고 응답자 및 요청을 수정하고 인증자를 정의할 수 있습니다. 그리고 인증 횟수까지 정의 할 수 있습니다. 더해서 추가 구성없이 모델로 응답을 변형시킬 수 있는 표준 디코더 정의도 가능합니다:
 
 ```dart
 class HomeProvider extends GetConnect {
@@ -529,7 +529,7 @@ GetPage는 GetMiddleWare의 목록을 특정 순서로 실행하는 새로운 �
 
 ### Priority
 
-Middleware의 실행 순서는 GetMiddleware안의 priority에 따라서 설정할 수 있습니다.
+Middleware의 실행 순서는 GetMiddleware안의 priority에 따라서 설정할 수 있습니다:
 
 ```dart
 final middlewares = [
@@ -544,7 +544,7 @@ final middlewares = [
 
 ### Redirect
 
-이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다.
+이 함수는 호출된 라우트의 페이지를 검색할때 호출됩니다. 리다이렉트한 결과로 RouteSettings을 사용합니다. 또는 null을 주면 리다이렉트 하지 않습니다:
 
 ```dart
 RouteSettings redirect(String route) {
@@ -556,7 +556,7 @@ RouteSettings redirect(String route) {
 ### onPageCalled
 
 이 함수는 생성되지 않은 페이지가 호출될 때 호출됩니다.
-페이지에 대한 어떤것을 변경하는데 사용하거나 새로운 페이지를 줄 수 있습니다.
+페이지에 대한 어떤것을 변경하는데 사용하거나 새로운 페이지를 줄 수 있습니다:
 
 ```dart
 GetPage onPageCalled(GetPage page) {
@@ -568,7 +568,7 @@ GetPage onPageCalled(GetPage page) {
 ### OnBindingsStart
 
 이 함수는 Bindings가 초기화되기 바로 직전에 호출됩니다.
-여기에서 이 페이지를 위해 Bindings을 변경할 수 있습니다.
+여기에서 이 페이지를 위해 Bindings을 변경할 수 있습니다:
 
 ```dart
 List<Bindings> onBindingsStart(List<Bindings> bindings) {
@@ -583,7 +583,7 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 ### OnPageBuildStart
 
 이 함수는 Bindings가 초기화된 직후에 호출됩니다.
-여기에서 bindings를 생성한 후 페이지 위젯을 생성하기 전에 무엇이든 할 수 있습니다.
+여기에서 bindings를 생성한 후 페이지 위젯을 생성하기 전에 무엇이든 할 수 있습니다:
 
 ```dart
 GetPageBuilder onPageBuildStart(GetPageBuilder page) {
@@ -734,7 +734,7 @@ context.responsiveValue<T>()
 
 ### 선택적 전역 설정과 수동 구성
 
-GetMaterialApp은 모든 것이 구성되어 있지만 원한다면 수동으로 Get을 구성할 수 있습니다.
+GetMaterialApp은 모든 것이 구성되어 있지만 원한다면 수동으로 Get을 구성할 수 있습니다:
 
 ```dart
 MaterialApp(
@@ -743,7 +743,7 @@ MaterialApp(
 );
 ```
 
-`GetObserver`안에 Middleware를 사용할 수 있고 이로 인한 어떤 영향도 없습니다.
+`GetObserver`안에 Middleware를 사용할 수 있고 이로 인한 어떤 영향도 없습니다:
 
 ```dart
 MaterialApp(
@@ -754,7 +754,7 @@ MaterialApp(
 );
 ```
 
-`Get`을 위한 _Global Settings_ 을 만들수 있습니다. 어떠한 라우트도 포함되기 전에 `Get.config`에 추가하십시오.
+`Get`을 위한 _Global Settings_ 을 만들수 있습니다. 어떠한 라우트도 포함되기 전에 `Get.config`에 추가하십시오:
 또는 `GetMaterialApp`에 직접 추가 하십시오.
 
 ```dart
@@ -802,7 +802,7 @@ void localLogWriter(String text, {bool isError = false}) {
 
 #### ValueBuilder
 
-업데이트된 값을 되돌려 받는 `.setState`로 작동하는 `StatefulWidget`의 단순화 입니다.
+업데이트된 값을 되돌려 받는 `.setState`로 작동하는 `StatefulWidget`의 단순화 입니다:
 
 ```dart
 ValueBuilder<bool>(
@@ -940,7 +940,7 @@ print( user );
 
 `UI` 상태를 처리하는 또 다른 방법은 `StateMixin<T>` 를 사용하는 것입니다.
 이를 구현하려면 `with`를 사용하여 `StateMixin<T>`을 추가하고
-T 모델을 허용하는 컨트롤러에 연결합니다.
+T 모델을 허용하는 컨트롤러에 연결합니다:
 
 ``` dart
 class Controller extends GetController with StateMixin<User>{}
@@ -990,7 +990,7 @@ class OtherClass extends GetView<Controller> {
 
 이 위젯을 사랑합니다. 매우 간단하고 유용합니다!
 
-등록된 `Controller`인 `controller`의 getter로 가져온 `const Stateless`위젯 입니다. 이게 전부입니다.
+등록된 `Controller`인 `controller`의 getter로 가져온 `const Stateless`위젯 입니다. 이게 전부입니다:
 
 ```dart
  class AwesomeController extends GetxController {
