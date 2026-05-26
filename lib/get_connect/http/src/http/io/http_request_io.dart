@@ -11,8 +11,7 @@ import '../utils/body_decoder.dart';
 
 class IoRedirectInfo implements RedirectInfo {
   final io.RedirectInfo _redirectInfo;
-  IoRedirectInfo({required io.RedirectInfo redirectInfo})
-    : _redirectInfo = redirectInfo;
+  IoRedirectInfo({required this._redirectInfo});
 
   @override
   int get statusCode => _redirectInfo.statusCode;
@@ -26,7 +25,7 @@ class IoRedirectInfo implements RedirectInfo {
 
 class IoHttpHeaders implements HttpHeaders {
   final io.HttpHeaders _headers;
-  IoHttpHeaders({required io.HttpHeaders headers}) : _headers = headers;
+  IoHttpHeaders({required this._headers});
 
   @override
   bool get chunkedTransferEncoding => _headers.chunkedTransferEncoding;
@@ -139,8 +138,7 @@ class IoHttpHeaders implements HttpHeaders {
 }
 
 class IOHttpResponse implements HttpClientResponse {
-  IOHttpResponse({required io.HttpClientResponse response})
-    : _response = response;
+  IOHttpResponse({required this._response});
   final io.HttpClientResponse _response;
   @override
   Future<bool> any(bool Function(List<int> element) test) {

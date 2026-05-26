@@ -116,7 +116,7 @@ class GetPageRoute<T> extends PageRoute<T>
   Widget _getChild() {
     if (_child != null) return _child!;
 
-    final localBinds = [if (binds != null) ...binds!];
+    final localBinds = [...?binds];
 
     final bindingsToBind = _middlewareRunner
         .runOnBindingsStart(bindings.isNotEmpty ? bindings : localBinds);
