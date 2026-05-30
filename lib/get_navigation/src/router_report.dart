@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../../get.dart';
 
 class RouterReportManager<T> {
@@ -11,11 +12,11 @@ class RouterReportManager<T> {
   /// non-singleton instances.
   final Map<T?, Set<VoidCallback>> _routesByCreate = <T?, Set<VoidCallback>>{};
 
-  static RouterReportManager? _instance;
+  static RouterReportManager<dynamic>? _instance;
 
   RouterReportManager._();
 
-  static RouterReportManager get instance =>
+  static RouterReportManager<dynamic> get instance =>
       _instance ??= RouterReportManager._();
 
   static void dispose() {
@@ -78,7 +79,7 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      Get.markAsDirty(key: element);
+      Get.markAsDirty<dynamic>(key: element);
 
       //_routesKey.remove(element);
     }
@@ -103,7 +104,7 @@ class RouterReportManager<T> {
     }
 
     for (final element in keysToRemove) {
-      final value = Get.delete(key: element);
+      final value = Get.delete<dynamic>(key: element);
       if (value) {
         _routesKey[routeName]?.remove(element);
       }

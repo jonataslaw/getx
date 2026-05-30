@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
 
 import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../../../instance_manager.dart';
@@ -118,8 +117,6 @@ mixin StateMixin<T> on ListNotifier {
 
 typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
 
-typedef VoidCallback = void Function();
-
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
 
@@ -231,7 +228,16 @@ class Value<T> extends ListNotifier
   @override
   String toString() => value.toString();
 
-  dynamic toJson() => (value as dynamic)?.toJson();
+  dynamic toJson() {
+    final val = value;
+    if (val == null) return null;
+    try {
+      // ignore: avoid_dynamic_calls
+      return (val as dynamic).toJson();
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 /// GetNotifier has a native status and state implementation, with the
@@ -250,22 +256,23 @@ extension StateExt<T> on StateMixin<T> {
   }) {
     return Observer(
       builder: (context) {
-        if (status.isLoading) {
-          return onLoading ?? const Center(child: CircularProgressIndicator());
-        } else if (status.isError) {
-          return onError != null
-              ? onError(status.errorMessage)
-              : Center(child: Text('A error occurred: ${status.errorMessage}'));
-        } else if (status.isEmpty) {
-          return onEmpty ??
-              const SizedBox.shrink(); // Also can be widget(null); but is risky
-        } else if (status.isSuccess) {
-          return widget(value);
-        } else if (status.isCustom) {
-          return onCustom?.call(context) ??
-              const SizedBox.shrink(); // Also can be widget(null); but is risky
-        }
-        return widget(value);
+        final currentStatus = status;
+        return switch (currentStatus) {
+          LoadingStatus<T>() =>
+            onLoading ?? const Center(child: CircularProgressIndicator()),
+          ErrorStatus<T>() =>
+            onError != null
+                ? onError(currentStatus.errorMessage)
+                : Center(
+                    child: Text(
+                      'An error occurred: ${currentStatus.errorMessage}',
+                    ),
+                  ),
+          EmptyStatus<T>() => onEmpty ?? const SizedBox.shrink(),
+          SuccessStatus<T>() => widget(value),
+          CustomStatus<T>() =>
+            onCustom?.call(context) ?? const SizedBox.shrink(),
+        };
       },
     );
   }
@@ -273,12 +280,12 @@ extension StateExt<T> on StateMixin<T> {
 
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-abstract class GetStatus<T> with Equality {
+sealed class GetStatus<T> {
   const GetStatus();
 
   factory GetStatus.loading() => LoadingStatus<T>();
 
-  factory GetStatus.error(Object message) => ErrorStatus<T, Object>(message);
+  factory GetStatus.error(Object message) => ErrorStatus<T>(message);
 
   factory GetStatus.empty() => EmptyStatus<T>();
 
@@ -287,76 +294,99 @@ abstract class GetStatus<T> with Equality {
   factory GetStatus.custom() => CustomStatus<T>();
 }
 
-class CustomStatus<T> extends GetStatus<T> {
+final class CustomStatus<T> extends GetStatus<T> {
+  const CustomStatus();
+
   @override
-  List get props => [];
+  bool operator ==(Object other) => other is CustomStatus<T>;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
 }
 
-class LoadingStatus<T> extends GetStatus<T> {
+final class LoadingStatus<T> extends GetStatus<T> {
+  const LoadingStatus();
+
   @override
-  List get props => [];
+  bool operator ==(Object other) => other is LoadingStatus<T>;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
 }
 
-class SuccessStatus<T> extends GetStatus<T> {
+final class SuccessStatus<T> extends GetStatus<T> {
   final T data;
 
   const SuccessStatus(this.data);
 
   @override
-  List get props => [data];
+  bool operator ==(Object other) =>
+      identical(this, other) || other is SuccessStatus<T> && other.data == data;
+
+  @override
+  int get hashCode => data.hashCode;
 }
 
-class ErrorStatus<T, S> extends GetStatus<T> {
-  final S? error;
+final class ErrorStatus<T> extends GetStatus<T> {
+  final Object? error;
 
   const ErrorStatus([this.error]);
 
   @override
-  List get props => [error];
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ErrorStatus<T> && other.error == error;
+
+  @override
+  int get hashCode => error.hashCode;
 }
 
-class EmptyStatus<T> extends GetStatus<T> {
+final class EmptyStatus<T> extends GetStatus<T> {
+  const EmptyStatus();
+
   @override
-  List get props => [];
+  bool operator ==(Object other) => other is EmptyStatus<T>;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
 }
 
 extension StatusDataExt<T> on GetStatus<T> {
-  bool get isLoading => this is LoadingStatus;
+  bool get isLoading => this is LoadingStatus<T>;
 
-  bool get isSuccess => this is SuccessStatus;
+  bool get isSuccess => this is SuccessStatus<T>;
 
-  bool get isError => this is ErrorStatus;
+  bool get isError => this is ErrorStatus<T>;
 
-  bool get isEmpty => this is EmptyStatus;
+  bool get isEmpty => this is EmptyStatus<T>;
 
-  bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
+  bool get isCustom => this is CustomStatus<T>;
 
-  dynamic get error {
-    if (this is ErrorStatus) {
-      return (this as ErrorStatus).error;
+  Object? get error {
+    final current = this;
+    if (current is ErrorStatus<T>) {
+      return current.error;
     }
     return null;
   }
 
   String get errorMessage {
-    final isError = this is ErrorStatus;
-    if (isError) {
-      final err = this as ErrorStatus;
-      if (err.error != null) {
-        if (err.error is String) {
-          return err.error as String;
+    final current = this;
+    if (current is ErrorStatus<T>) {
+      final err = current.error;
+      if (err != null) {
+        if (err is String) {
+          return err;
         }
-        return err.error.toString();
+        return err.toString();
       }
     }
-
     return '';
   }
 
   T? get data {
-    if (this is SuccessStatus<T>) {
-      final success = this as SuccessStatus<T>;
-      return success.data;
+    final current = this;
+    if (current is SuccessStatus<T>) {
+      return current.data;
     }
     return null;
   }

@@ -102,7 +102,7 @@ class GetHttpClient {
   Future<Request<T>> _requestWithBody<T>(
     String? url,
     String? contentType,
-    dynamic body,
+    Object? body,
     String method,
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
@@ -308,7 +308,7 @@ class GetHttpClient {
     String? url,
     String method, {
     String? contentType,
-    required dynamic body,
+    required Object? body,
     required Map<String, dynamic>? query,
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
@@ -362,7 +362,7 @@ class GetHttpClient {
 
   Future<Response<T>> patch<T>(
     String url, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -398,7 +398,7 @@ class GetHttpClient {
 
   Future<Response<T>> post<T>(
     String? url, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -435,7 +435,7 @@ class GetHttpClient {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -470,7 +470,7 @@ class GetHttpClient {
 
   Future<Response<T>> put<T>(
     String url, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,

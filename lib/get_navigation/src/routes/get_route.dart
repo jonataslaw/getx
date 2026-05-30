@@ -22,9 +22,9 @@ class GetPage<T> extends Page<T> {
   final bool maintainState;
   final bool opaque;
   final double Function(BuildContext context)? gestureWidth;
-  final BindingsInterface? binding;
-  final List<BindingsInterface> bindings;
-  final List<Bind> binds;
+  final BindingsInterface<dynamic>? binding;
+  final List<BindingsInterface<dynamic>> bindings;
+  final List<Bind<dynamic>> binds;
   final CustomTransition? customTransition;
   final Duration? transitionDuration;
   final Duration? reverseTransitionDuration;
@@ -45,10 +45,10 @@ class GetPage<T> extends Page<T> {
 
   final bool inheritParentPath;
 
-  final List<GetPage> children;
+  final List<GetPage<dynamic>> children;
   final List<GetMiddleware> middlewares;
   final PathDecoded path;
-  final GetPage? unknownRoute;
+  final GetPage<dynamic>? unknownRoute;
   final bool showCupertinoParallax;
 
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
@@ -76,7 +76,7 @@ class GetPage<T> extends Page<T> {
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.children = const <GetPage>[],
+    this.children = const <GetPage<dynamic>>[],
     this.middlewares = const [],
     this.unknownRoute,
     this.arguments,
@@ -112,16 +112,16 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    List<BindingsInterface>? bindings,
-    BindingsInterface? binding,
-    List<Bind>? binds,
+    List<BindingsInterface<dynamic>>? bindings,
+    BindingsInterface<dynamic>? binding,
+    List<Bind<dynamic>>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
-    List<GetPage<T>>? children,
-    GetPage? unknownRoute,
+    List<GetPage<dynamic>>? children,
+    GetPage<dynamic>? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
     final double Function(BuildContext context)? gestureWidth,
@@ -168,7 +168,7 @@ class GetPage<T> extends Page<T> {
       inheritParentPath: inheritParentPath ?? this.inheritParentPath,
       canPop: canPop ?? this.canPop,
       onPopInvoked: onPopInvoked ?? this.onPopInvoked,
-      restorationId: restorationId ?? restorationId,
+      restorationId: restorationId ?? this.restorationId,
     );
   }
 
@@ -202,7 +202,7 @@ class GetPage<T> extends Page<T> {
         .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
         .replaceAll('//', '/');
 
-    return PathDecoded(RegExp('^$stringPath\$'), keys);
+    return (regex: RegExp('^$stringPath\$'), keys: keys);
   }
 
   @override
@@ -221,20 +221,4 @@ class GetPage<T> extends Page<T> {
   }
 }
 
-@immutable
-class PathDecoded {
-  final RegExp regex;
-  final List<String?> keys;
-  const PathDecoded(this.regex, this.keys);
-
-  @override
-  int get hashCode => regex.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is PathDecoded &&
-        other.regex == regex; // && listEquals(other.keys, keys);
-  }
-}
+typedef PathDecoded = ({RegExp regex, List<String?> keys});

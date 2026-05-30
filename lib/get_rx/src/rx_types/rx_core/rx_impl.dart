@@ -251,10 +251,13 @@ class Rx<T> extends _RxImpl<T> {
 
   @override
   dynamic toJson() {
+    final val = value;
+    if (val == null) return null;
     try {
-      return (value as dynamic)?.toJson();
-    } on Exception catch (_) {
-      throw Exception('$T has not method [toJson]');
+      // ignore: avoid_dynamic_calls
+      return (val as dynamic).toJson();
+    } catch (_) {
+      throw Exception('$T does not implement a toJson method');
     }
   }
 }
@@ -264,10 +267,13 @@ class Rxn<T> extends Rx<T?> {
 
   @override
   dynamic toJson() {
+    final val = value;
+    if (val == null) return null;
     try {
-      return (value as dynamic)?.toJson();
-    } on Exception catch (_) {
-      throw Exception('$T has not method [toJson]');
+      // ignore: avoid_dynamic_calls
+      return (val as dynamic).toJson();
+    } catch (_) {
+      throw Exception('$T does not implement a toJson method');
     }
   }
 }

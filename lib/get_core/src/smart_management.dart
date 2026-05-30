@@ -16,7 +16,11 @@
 /// However, it will keep their factory, which means it will recreate
 /// the dependency if you need that instance again.
 enum SmartManagement {
-  full,
-  onlyBuilder,
-  keepFactory,
+  full('Dispose unused controllers automatically'),
+  onlyBuilder('Only dispose controllers started via Binding/lazyPut'),
+  keepFactory('Dispose instances but keep factories for recreation');
+
+  final String description;
+  const SmartManagement(this.description);
 }
+

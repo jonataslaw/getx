@@ -7,7 +7,7 @@ class GetNavigator extends Navigator {
     required super.pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
-    TransitionDelegate? transitionDelegate,
+    TransitionDelegate<dynamic>? transitionDelegate,
     super.initialRoute,
     super.restorationScopeId,
   }) : super(

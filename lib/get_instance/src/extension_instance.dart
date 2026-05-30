@@ -7,12 +7,12 @@ import '../../get_navigation/src/router_report.dart';
 import 'lifecycle.dart';
 
 class InstanceInfo {
-  final bool? isPermanent;
-  final bool? isSingleton;
-  bool get isCreate => !isSingleton!;
+  final bool isPermanent;
+  final bool isSingleton;
+  bool get isCreate => !isSingleton;
   final bool isRegistered;
   final bool isPrepared;
-  final bool? isInit;
+  final bool isInit;
   const InstanceInfo({
     required this.isPermanent,
     required this.isSingleton,
@@ -128,7 +128,7 @@ extension Inst on GetInterface {
 
   /// Injects the Instance [S] builder into the `_singleton` HashMap.
   void _insert<S>({
-    bool? isSingleton,
+    bool isSingleton = false,
     String? name,
     bool permanent = false,
     required InstanceBuilderCallback<S> builder,
@@ -191,11 +191,11 @@ extension Inst on GetInterface {
     final build = _getDependency<S>(tag: tag);
 
     return InstanceInfo(
-      isPermanent: build?.permanent,
-      isSingleton: build?.isSingleton,
+      isPermanent: build?.permanent ?? false,
+      isSingleton: build?.isSingleton ?? false,
       isRegistered: isRegistered<S>(tag: tag),
       isPrepared: !(build?.isInit ?? true),
-      isInit: build?.isInit,
+      isInit: build?.isInit ?? false,
     );
   }
 
@@ -228,7 +228,7 @@ extension Inst on GetInterface {
       } else {
         Get.log('Instance "$S" with tag "$tag" has been initialized');
       }
-      if (!_singl[key]!.isSingleton!) {
+      if (!_singl[key]!.isSingleton) {
         RouterReportManager.instance.appendRouteByCreate(i);
       }
     }
@@ -285,7 +285,7 @@ extension Inst on GetInterface {
   /// - [tag] optional, if you use a [tag] to register the Instance.
   void replace<P>(P child, {String? tag}) {
     final info = getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final permanent = (info.isPermanent);
     delete<P>(tag: tag, force: permanent);
     put(child, tag: tag, permanent: permanent);
   }
@@ -303,7 +303,7 @@ extension Inst on GetInterface {
     bool? fenix,
   }) {
     final info = getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final permanent = (info.isPermanent);
     delete<P>(tag: tag, force: permanent);
     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
@@ -470,7 +470,7 @@ typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 class _InstanceBuilderFactory<S> {
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
-  bool? isSingleton;
+  bool isSingleton;
 
   /// When fenix mode is available, when a new instance is need
   /// Instance manager will recreate a new instance of S
@@ -515,7 +515,7 @@ class _InstanceBuilderFactory<S> {
 
   /// Gets the actual instance by it's [builderFunc] or the persisted instance.
   S getDependency() {
-    if (isSingleton!) {
+    if (isSingleton) {
       if (dependency == null) {
         _showInitLog();
         dependency = builderFunc();

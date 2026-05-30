@@ -4,8 +4,11 @@ import '../../../instance_manager.dart';
 import '../router_report.dart';
 
 class Dependencies {
-  void lazyPut<S>(InstanceBuilderCallback<S> builder,
-      {String? tag, bool fenix = false}) {
+  void lazyPut<S>(
+    InstanceBuilderCallback<S> builder, {
+    String? tag,
+    bool fenix = false,
+  }) {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
@@ -13,17 +16,20 @@ class Dependencies {
     return find<S>();
   }
 
-  void spawn<S>(InstanceBuilderCallback<S> builder,
-          {String? tag, bool permanent = true}) =>
-      Get.spawn<S>(builder, tag: tag, permanent: permanent);
+  void spawn<S>(
+    InstanceBuilderCallback<S> builder, {
+    String? tag,
+    bool permanent = true,
+  }) => Get.spawn<S>(builder, tag: tag, permanent: permanent);
 
   S find<S>({String? tag}) => Get.find<S>(tag: tag);
 
-  S put<S>(S dependency,
-          {String? tag,
-          bool permanent = false,
-          InstanceBuilderCallback<S>? builder}) =>
-      Get.put<S>(dependency, tag: tag, permanent: permanent);
+  S put<S>(
+    S dependency, {
+    String? tag,
+    bool permanent = false,
+    InstanceBuilderCallback<S>? builder,
+  }) => Get.put<S>(dependency, tag: tag, permanent: permanent);
 
   Future<bool> delete<S>({String? tag, bool force = false}) async =>
       Get.delete<S>(tag: tag, force: force);
@@ -42,15 +48,18 @@ class Dependencies {
 
   void replace<P>(P child, {String? tag}) {
     final info = Get.getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final permanent = (info.isPermanent);
     delete<P>(tag: tag, force: permanent);
     put(child, tag: tag, permanent: permanent);
   }
 
-  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix}) {
+  void lazyReplace<P>(
+    InstanceBuilderCallback<P> builder, {
+    String? tag,
+    bool? fenix,
+  }) {
     final info = Get.getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final permanent = (info.isPermanent);
     delete<P>(tag: tag, force: permanent);
     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }

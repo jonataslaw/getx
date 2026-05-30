@@ -55,11 +55,11 @@ class GetMaterialApp extends StatelessWidget {
   final LogWriterCallback? logWriterCallback;
   final bool? popGesture;
   final SmartManagement smartManagement;
-  final List<Bind> binds;
+  final List<Bind<dynamic>> binds;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
-  final List<GetPage>? getPages;
-  final GetPage? unknownRoute;
+  final List<GetPage<dynamic>>? getPages;
+  final GetPage<dynamic>? unknownRoute;
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;

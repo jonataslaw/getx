@@ -90,13 +90,6 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   int get length => value.length;
 
-  // @override
-  // @protected
-  // List<E> get value {
-  //   RxInterface.proxy?.addListener(subject);
-  //   return subject.value;
-  // }
-
   @override
   set length(int newLength) {
     value.length = newLength;
@@ -111,12 +104,6 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   Iterable<E> get reversed => value.reversed;
-
-  // @override
-  // set value(List<E> val) {
-  //   value = val;
-  //   refresh();
-  // }
 
   @override
   Iterable<E> where(bool Function(E) test) {

@@ -616,7 +616,7 @@ extension GetNavigationExt on GetInterface {
   Future<T?>? toNamed<T>(
     String page, {
     dynamic arguments,
-    dynamic id,
+    String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) {
@@ -1010,7 +1010,7 @@ extension GetNavigationExt on GetInterface {
     String? id,
     String? routeName,
     dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    List<BindingsInterface<dynamic>> bindings = const [],
     bool fullscreenDialog = false,
     bool preventDuplicates = true,
     Duration? duration,
@@ -1040,7 +1040,7 @@ extension GetNavigationExt on GetInterface {
 
   Future<T?> offUntil<T>(
     Widget Function() page,
-    bool Function(GetPage) predicate, [
+    bool Function(GetPage<dynamic>) predicate, [
     Object? arguments,
     String? id,
   ]) {
@@ -1085,7 +1085,7 @@ extension GetNavigationExt on GetInterface {
     String? id,
     String? routeName,
     dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    List<BindingsInterface<dynamic>> bindings = const [],
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,

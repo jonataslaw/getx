@@ -15,11 +15,11 @@ class ConfigData {
   final bool? enableLog;
   final LogWriterCallback? logWriterCallback;
   final SmartManagement smartManagement;
-  final List<Bind> binds;
+  final List<Bind<dynamic>> binds;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
-  final List<GetPage>? getPages;
-  final GetPage? unknownRoute;
+  final List<GetPage<dynamic>>? getPages;
+  final GetPage<dynamic>? unknownRoute;
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
@@ -101,11 +101,11 @@ class ConfigData {
     bool? enableLog,
     LogWriterCallback? logWriterCallback,
     SmartManagement? smartManagement,
-    List<Bind>? binds,
+    List<Bind<dynamic>>? binds,
     Duration? transitionDuration,
     bool? defaultGlobalState,
-    List<GetPage>? getPages,
-    GetPage? unknownRoute,
+    List<GetPage<dynamic>>? getPages,
+    GetPage<dynamic>? unknownRoute,
     RouteInformationProvider? routeInformationProvider,
     RouteInformationParser<Object>? routeInformationParser,
     RouterDelegate<Object>? routerDelegate,
@@ -312,7 +312,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   static GetRootState? _controller;
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception('GetRoot is not part of the tree');
     } else {
       return _controller!;
     }

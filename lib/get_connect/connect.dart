@@ -27,7 +27,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -36,7 +36,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
 
   Future<Response<T>> post<T>(
     String url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -45,7 +45,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
 
   Future<Response<T>> put<T>(
     String url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -62,7 +62,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
 
   Future<Response<T>> patch<T>(
     String url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -154,7 +154,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> post<T>(
     String? url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -176,7 +176,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> put<T>(
     String url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -198,7 +198,7 @@ class GetConnect extends GetConnectInterface {
   @override
   Future<Response<T>> patch<T>(
     String url,
-    dynamic body, {
+    Object? body, {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -221,7 +221,7 @@ class GetConnect extends GetConnectInterface {
   Future<Response<T>> request<T>(
     String url,
     String method, {
-    dynamic body,
+    Object? body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,

@@ -8,7 +8,7 @@ class RouteDecoder {
     this.currentTreeBranch,
     this.pageSettings,
   );
-  final List<GetPage> currentTreeBranch;
+  final List<GetPage<dynamic>> currentTreeBranch;
   final PageSettings? pageSettings;
 
   factory RouteDecoder.fromRoute(String location) {
@@ -24,13 +24,13 @@ class RouteDecoder {
     return decoder;
   }
 
-  GetPage? get route =>
+  GetPage<dynamic>? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
 
-  GetPage routeOrUnknown(GetPage onUnknow) =>
+  GetPage<dynamic> routeOrUnknown(GetPage<dynamic> onUnknow) =>
       currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
 
-  set route(GetPage? getPage) {
+  set route(GetPage<dynamic>? getPage) {
     if (getPage == null) return;
     if (currentTreeBranch.isEmpty) {
       currentTreeBranch.add(getPage);
@@ -39,7 +39,7 @@ class RouteDecoder {
     }
   }
 
-  List<GetPage>? get currentChildren => route?.children;
+  List<GetPage<dynamic>>? get currentChildren => route?.children;
 
   Map<String, String> get parameters => pageSettings?.params ?? {};
 
@@ -86,7 +86,7 @@ class ParseRouteTree {
     required this.routes,
   });
 
-  final List<GetPage> routes;
+  final List<GetPage<dynamic>> routes;
 
   RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
@@ -178,8 +178,8 @@ class ParseRouteTree {
     }
   }
 
-  List<GetPage> _flattenPage(GetPage route) {
-    final result = <GetPage>[];
+  List<GetPage<dynamic>> _flattenPage(GetPage<dynamic> route) {
+    final result = <GetPage<dynamic>>[];
     if (route.children.isEmpty) {
       return result;
     }
@@ -238,12 +238,12 @@ class ParseRouteTree {
   }
 
   /// Change the Path for a [GetPage]
-  GetPage _addChild(
-    GetPage origin,
+  GetPage<dynamic> _addChild(
+    GetPage<dynamic> origin,
     String parentPath,
     List<GetMiddleware> middlewares,
-    List<BindingsInterface> bindings,
-    List<Bind> binds,
+    List<BindingsInterface<dynamic>> bindings,
+    List<Bind<dynamic>> binds,
   ) {
     return origin.copyWith(
       middlewares: middlewares,
@@ -252,11 +252,10 @@ class ParseRouteTree {
           : origin.name,
       bindings: bindings,
       binds: binds,
-      // key:
     );
   }
 
-  GetPage? _findRoute(String name) {
+  GetPage<dynamic>? _findRoute(String name) {
     final value = routes.firstWhereOrNull(
       (route) => route.path.regex.hasMatch(name),
     );

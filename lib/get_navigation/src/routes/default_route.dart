@@ -52,8 +52,8 @@ class GetPageRoute<T> extends PageRoute<T>
     this.customTransition,
     this.barrierDismissible = false,
     this.barrierColor,
-    BindingsInterface? binding,
-    List<BindingsInterface> bindings = const [],
+    BindingsInterface<dynamic>? binding,
+    List<BindingsInterface<dynamic>> bindings = const [],
     this.binds,
     this.routeName,
     this.page,
@@ -75,9 +75,9 @@ class GetPageRoute<T> extends PageRoute<T>
   final String? routeName;
   //final String reference;
   final CustomTransition? customTransition;
-  final List<BindingsInterface> bindings;
+  final List<BindingsInterface<dynamic>> bindings;
   final Map<String, String>? parameter;
-  final List<Bind>? binds;
+  final List<Bind<dynamic>>? binds;
 
   @override
   final bool showCupertinoParallax;

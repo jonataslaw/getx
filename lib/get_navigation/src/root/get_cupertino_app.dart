@@ -41,7 +41,7 @@ class GetCupertinoApp extends StatelessWidget {
   final ThemeData? highContrastTheme;
   final ThemeData? highContrastDarkTheme;
   final Map<Type, Action<Intent>>? actions;
-  final Function(Routing?)? routingCallback;
+  final ValueChanged<Routing?>? routingCallback;
   final Transition? defaultTransition;
   final bool? opaqueRoute;
   final VoidCallback? onInit;
@@ -51,11 +51,11 @@ class GetCupertinoApp extends StatelessWidget {
   final LogWriterCallback? logWriterCallback;
   final bool? popGesture;
   final SmartManagement smartManagement;
-  final BindingsInterface? initialBinding;
+  final BindingsInterface<dynamic>? initialBinding;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
-  final List<GetPage>? getPages;
-  final GetPage? unknownRoute;
+  final List<GetPage<dynamic>>? getPages;
+  final GetPage<dynamic>? unknownRoute;
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
@@ -63,7 +63,7 @@ class GetCupertinoApp extends StatelessWidget {
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
-  final List<Bind> binds;
+  final List<Bind<dynamic>> binds;
   final ScrollBehavior? scrollBehavior;
 
   const GetCupertinoApp({

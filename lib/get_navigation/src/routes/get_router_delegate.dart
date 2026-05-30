@@ -13,7 +13,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         IGetNavigation {
   factory GetDelegate.createDelegate({
     GetPage<dynamic>? notFoundRoute,
-    List<GetPage> pages = const [],
+    List<GetPage<dynamic>> pages = const [],
     List<NavigatorObserver>? navigatorObservers,
     TransitionDelegate<dynamic>? transitionDelegate,
     PopMode backButtonPopMode = PopMode.history,
@@ -36,21 +36,21 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   final PopMode backButtonPopMode;
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
 
-  final GetPage notFoundRoute;
+  final GetPage<dynamic> notFoundRoute;
 
   final List<NavigatorObserver>? navigatorObservers;
   final TransitionDelegate<dynamic>? transitionDelegate;
 
-  final Iterable<GetPage> Function(RouteDecoder currentNavStack)?
+  final Iterable<GetPage<dynamic>> Function(RouteDecoder currentNavStack)?
   pickPagesForRootNavigator;
 
   List<RouteDecoder> get activePages => _activePages;
 
   final _routeTree = ParseRouteTree(routes: []);
 
-  List<GetPage> get registeredRoutes => _routeTree.routes;
+  List<GetPage<dynamic>> get registeredRoutes => _routeTree.routes;
 
-  void addPages(List<GetPage> getPages) {
+  void addPages(List<GetPage<dynamic>> getPages) {
     _routeTree.addRoutes(getPages);
   }
 
@@ -58,11 +58,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _routeTree.routes.clear();
   }
 
-  void addPage(GetPage getPage) {
+  void addPage(GetPage<dynamic> getPage) {
     _routeTree.addRoute(getPage);
   }
 
-  void removePage(GetPage getPage) {
+  void removePage(GetPage<dynamic> getPage) {
     _routeTree.removeRoute(getPage);
   }
 
@@ -78,7 +78,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   final String? restorationScopeId;
 
   GetDelegate({
-    GetPage? notFoundRoute,
+    GetPage<dynamic>? notFoundRoute,
     this.navigatorObservers,
     this.transitionDelegate,
     this.backButtonPopMode = PopMode.history,
@@ -88,7 +88,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     this.restorationScopeId,
     bool showHashOnUrl = false,
     GlobalKey<NavigatorState>? navigatorKey,
-    required List<GetPage> pages,
+    required List<GetPage<dynamic>> pages,
   }) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
        notFoundRoute = notFoundRoute ??= GetPage(
          name: '/404',
@@ -140,15 +140,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _activePages.add(res);
   }
 
-  // Future<T?> _unsafeHistoryRemove<T>(RouteDecoder config, T result) async {
-  //   var index = _activePages.indexOf(config);
-  //   if (index >= 0) return _unsafeHistoryRemoveAt(index, result);
-  //   return null;
-  // }
-
   Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
     if (index == _activePages.length - 1 && _activePages.length > 1) {
-      //removing WILL update the current route
       final toCheck = _activePages[_activePages.length - 2];
       final resMiddleware = await runMiddleware(toCheck);
       if (resMiddleware == null) return null;
@@ -291,7 +284,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   /// gets the visual pages from the current _activePages entry
   ///
   /// visual pages must have [GetPage.participatesInRootNavigator] set to true
-  Iterable<GetPage> getVisualPages(RouteDecoder? currentHistory) {
+  Iterable<GetPage<dynamic>> getVisualPages(RouteDecoder? currentHistory) {
     if (currentHistory == null) return const [];
 
     final treeBranch = currentHistory.currentTreeBranch;
@@ -314,7 +307,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Widget build(BuildContext context) {
     final currentHistory = currentConfiguration;
     final pages = currentHistory == null
-        ? <GetPage>[]
+        ? <GetPage<dynamic>>[]
         : pickPagesForRootNavigator?.call(currentHistory).toList() ??
               getVisualPages(currentHistory).toList();
     if (pages.isEmpty) {
