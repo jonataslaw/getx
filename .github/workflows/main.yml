@@ -18,7 +18,7 @@ jobs:
     steps:
       # The branch or tag ref that triggered the workflow will be checked out.
       # https://github.com/actions/checkout
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # Setup a flutter environment.
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v2
@@ -31,4 +31,4 @@ jobs:
       - run: flutter test --coverage
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v6
