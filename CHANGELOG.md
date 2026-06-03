@@ -1,3 +1,7 @@
+## [5.0.0-release-candidate-9.3.3]
+
+Fix flutter 3.44.0
+
 ## [5.0.0-release-candidate-9.3.2]
 
 - Fix pana score
