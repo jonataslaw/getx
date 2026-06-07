@@ -212,4 +212,23 @@ void main() {
     await Future.delayed(Duration.zero);
     expect(count, 1);
   });
+
+  test('Next "ever" after first one disposed', () async {
+    final list = [1, 2, 3].obs;
+    Future<void> register() async {
+      var count = 0;
+      final worker = ever<List<int>>(list, (value) {
+        count++;
+      });
+
+      list.add(4);
+      await Future.delayed(Duration.zero);
+      expect(count, 1);
+
+      worker.dispose();
+    }
+
+    await register();
+    await register();
+  });
 }

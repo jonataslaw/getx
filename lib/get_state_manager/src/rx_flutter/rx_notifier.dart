@@ -119,8 +119,10 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller =
-          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller = StreamController<T>.broadcast(
+        onListen: () => addListener(_streamListener),
+        onCancel: () => removeListener(_streamListener),
+      );
       _controller?.add(_value);
 
       ///TODO: report to controller dispose
