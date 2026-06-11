@@ -10,16 +10,6 @@ class _IntlHost {
   Map<String, Map<String, String>> translations = {};
 }
 
-extension FirstWhereExt<T> on List<T> {
-  /// The first element satisfying [test], or `null` if there are none.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
-}
-
 extension LocalesIntl on GetInterface {
   static final _intlHost = _IntlHost();
 
@@ -57,19 +47,21 @@ extension Trans on String {
   // whether the key is also present.
   bool get _fullLocaleAndKey {
     return Get.translations.containsKey(
-            "${Get.locale!.languageCode}_${Get.locale!.countryCode}") &&
-        Get.translations[
-                "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
+          "${Get.locale!.languageCode}_${Get.locale!.countryCode}",
+        ) &&
+        Get.translations["${Get.locale!.languageCode}_${Get.locale!.countryCode}"]!
             .containsKey(this);
   }
 
   // Checks if there is a callback language in the absence of the specific
   // country, and if it contains that key.
   Map<String, String>? get _getSimilarLanguageTranslation {
-    final translationsWithNoCountry = Get.translations
-        .map((key, value) => MapEntry(key.split("_").first, value));
-    final containsKey = translationsWithNoCountry
-        .containsKey(Get.locale!.languageCode.split("_").first);
+    final translationsWithNoCountry = Get.translations.map(
+      (key, value) => MapEntry(key.split("_").first, value),
+    );
+    final containsKey = translationsWithNoCountry.containsKey(
+      Get.locale!.languageCode.split("_").first,
+    );
 
     if (!containsKey) {
       return null;
@@ -88,8 +80,8 @@ extension Trans on String {
     if (Get.locale?.languageCode == null) return this;
 
     if (_fullLocaleAndKey) {
-      return Get.translations[
-          "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!;
+      return Get
+          .translations["${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!;
     }
     final similarTranslation = _getSimilarLanguageTranslation;
     if (similarTranslation != null && similarTranslation.containsKey(this)) {
@@ -138,8 +130,11 @@ extension Trans on String {
     return trans;
   }
 
-  String trPluralParams(
-      [String? pluralKey, int? i, Map<String, String> params = const {}]) {
+  String trPluralParams([
+    String? pluralKey,
+    int? i,
+    Map<String, String> params = const {},
+  ]) {
     return i == 1 ? trParams(params) : pluralKey!.trParams(params);
   }
 }
