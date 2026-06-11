@@ -280,13 +280,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return SynchronousFuture(_canPopPage());
   }
 
-  bool _canPop(mode) {
+  bool _canPop(PopMode mode) {
     switch (mode) {
       case PopMode.history:
         return _canPopHistory();
       case PopMode.page:
-      default:
-        return _canPopPage();
+      return _canPopPage();
     }
   }
 
