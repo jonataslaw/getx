@@ -104,7 +104,7 @@ void main() {
       const begin = 0;
       const end = 1;
       final widget = buildWidget();
-      final animation = widget.slide(offset: (_, __) => const Offset(0, 0));
+      final animation = widget.slide(offset: (_, _) => const Offset(0, 0));
 
       expect(animation, isA<SlideAnimation>());
 

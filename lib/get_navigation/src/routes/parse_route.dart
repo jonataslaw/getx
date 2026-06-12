@@ -4,18 +4,17 @@ import '../../../get.dart';
 
 @immutable
 class RouteDecoder {
-  const RouteDecoder(
-    this.currentTreeBranch,
-    this.pageSettings,
-  );
+  const RouteDecoder(this.currentTreeBranch, this.pageSettings);
   final List<GetPage> currentTreeBranch;
   final PageSettings? pageSettings;
 
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
     final args = PageSettings(uri);
-    final decoder =
-        (Get.rootController.rootDelegate).matchRoute(location, arguments: args);
+    final decoder = (Get.rootController.rootDelegate).matchRoute(
+      location,
+      arguments: args,
+    );
     decoder.route = decoder.route?.copyWith(
       completer: null,
       arguments: args,
@@ -82,9 +81,7 @@ class RouteDecoder {
 }
 
 class ParseRouteTree {
-  ParseRouteTree({
-    required this.routes,
-  });
+  ParseRouteTree({required this.routes});
 
   final List<GetPage> routes;
 
@@ -92,9 +89,7 @@ class ParseRouteTree {
     final uri = Uri.parse(name);
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
     var curPath = '/';
-    final cumulativePaths = <String>[
-      '/',
-    ];
+    final cumulativePaths = <String>['/'];
     for (var item in split) {
       if (curPath.endsWith('/')) {
         curPath += item;
@@ -107,7 +102,6 @@ class ParseRouteTree {
     final treeBranch = cumulativePaths
         .map((e) => MapEntry(e, _findRoute(e)))
         .where((element) => element.value != null)
-
         ///Prevent page be disposed
         .map((e) => MapEntry(e.key, e.value!.copyWith(key: ValueKey(e.key))))
         .toList();
@@ -134,20 +128,14 @@ class ParseRouteTree {
           .toList();
       arguments?.params.clear();
       arguments?.params.addAll(params);
-      return RouteDecoder(
-        mappedTreeBranch,
-        arguments,
-      );
+      return RouteDecoder(mappedTreeBranch, arguments);
     }
 
     arguments?.params.clear();
     arguments?.params.addAll(params);
 
     //route not found
-    return RouteDecoder(
-      treeBranch.map((e) => e.value).toList(),
-      arguments,
-    );
+    return RouteDecoder(treeBranch.map((e) => e.value).toList(), arguments);
   }
 
   void addRoutes<T>(List<GetPage<T>> getPages) {
@@ -189,18 +177,18 @@ class ParseRouteTree {
       // Add Parent middlewares to children
       final parentMiddlewares = [
         if (page.middlewares.isNotEmpty) ...page.middlewares,
-        if (route.middlewares.isNotEmpty) ...route.middlewares
+        if (route.middlewares.isNotEmpty) ...route.middlewares,
       ];
 
       final parentBindings = [
         if (page.binding != null) page.binding!,
         if (page.bindings.isNotEmpty) ...page.bindings,
-        if (route.bindings.isNotEmpty) ...route.bindings
+        if (route.bindings.isNotEmpty) ...route.bindings,
       ];
 
       final parentBinds = [
         if (page.binds.isNotEmpty) ...page.binds,
-        if (route.binds.isNotEmpty) ...route.binds
+        if (route.binds.isNotEmpty) ...route.binds,
       ];
 
       result.add(
@@ -215,23 +203,22 @@ class ParseRouteTree {
 
       final children = _flattenPage(page);
       for (var child in children) {
-        result.add(_addChild(
-          child,
-          parentPath,
-          [
-            ...parentMiddlewares,
-            if (child.middlewares.isNotEmpty) ...child.middlewares,
-          ],
-          [
-            ...parentBindings,
-            if (child.binding != null) child.binding!,
-            if (child.bindings.isNotEmpty) ...child.bindings,
-          ],
-          [
-            ...parentBinds,
-            if (child.binds.isNotEmpty) ...child.binds,
-          ],
-        ));
+        result.add(
+          _addChild(
+            child,
+            parentPath,
+            [
+              ...parentMiddlewares,
+              if (child.middlewares.isNotEmpty) ...child.middlewares,
+            ],
+            [
+              ...parentBindings,
+              if (child.binding != null) child.binding!,
+              if (child.bindings.isNotEmpty) ...child.bindings,
+            ],
+            [...parentBinds, if (child.binds.isNotEmpty) ...child.binds],
+          ),
+        );
       }
     }
     return result;
@@ -281,15 +268,5 @@ class ParseRouteTree {
       params[routePath.keys[i]!] = param;
     }
     return params;
-  }
-}
-
-extension FirstWhereOrNullExt<T> on List<T> {
-  /// The first element satisfying [test], or `null` if there are none.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
   }
 }

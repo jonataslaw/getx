@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/test_kit.dart';
@@ -314,7 +315,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   static GetRootState? _controller;
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception('GetRoot is not part of the tree');
     } else {
       return _controller!;
     }

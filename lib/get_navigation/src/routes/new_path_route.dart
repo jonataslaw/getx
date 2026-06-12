@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:get/get_utils/src/extensions/iterable_extensions.dart';
 
 import 'get_route.dart';
 
@@ -51,8 +52,9 @@ class RouteMatcher {
   }
 
   RouteNode? _findChild(RouteNode currentNode, String segment) {
-    return currentNode.nodeSegments
-        .firstWhereOrNull((node) => node.matches(segment));
+    return currentNode.nodeSegments.firstWhereOrNull(
+      (node) => node.matches(segment),
+    );
   }
 
   MatchResult? matchRoute(String path) {
@@ -97,10 +99,7 @@ class RouteTreeResult {
   final GetPage? route;
   final MatchResult matchResult;
 
-  RouteTreeResult({
-    required this.route,
-    required this.matchResult,
-  });
+  RouteTreeResult({required this.route, required this.matchResult});
 
   @override
   String toString() {
@@ -109,18 +108,16 @@ class RouteTreeResult {
 
   RouteTreeResult configure(String page, Object? arguments) {
     return copyWith(
-        route: route?.copyWith(
-      key: ValueKey(page),
-      settings: RouteSettings(name: page, arguments: arguments),
-      completer: Completer(),
-      arguments: arguments,
-    ));
+      route: route?.copyWith(
+        key: ValueKey(page),
+        settings: RouteSettings(name: page, arguments: arguments),
+        completer: Completer(),
+        arguments: arguments,
+      ),
+    );
   }
 
-  RouteTreeResult copyWith({
-    GetPage? route,
-    MatchResult? matchResult,
-  }) {
+  RouteTreeResult copyWith({GetPage? route, MatchResult? matchResult}) {
     return RouteTreeResult(
       route: route ?? this.route,
       matchResult: matchResult ?? this.matchResult,
@@ -155,7 +152,8 @@ class RouteTree {
       child = child.copyWith(middlewares: middlewares, bindings: bindings);
       if (child.inheritParentPath) {
         child = child.copyWith(
-            name: ('${route.path}/${child.path}').replaceAll(r'//', '/'));
+          name: ('${route.path}/${child.path}').replaceAll(r'//', '/'),
+        );
       }
       addRoute(child);
     }
@@ -176,10 +174,7 @@ class RouteTree {
     final matchResult = matcher.matchRoute(path);
     if (matchResult != null) {
       final route = tree[matchResult.node.originalPath];
-      return RouteTreeResult(
-        route: route,
-        matchResult: matchResult,
-      );
+      return RouteTreeResult(route: route, matchResult: matchResult);
     }
     return null;
   }
@@ -199,8 +194,12 @@ class MatchResult {
   /// Route url parameters eg: adding 'user' the match result for 'user?foo=bar' will be: {foo: bar}
   final Map<String, String> urlParameters;
 
-  MatchResult(this.node, this.parameters, this.currentPath,
-      {this.urlParameters = const {}});
+  MatchResult(
+    this.node,
+    this.parameters,
+    this.currentPath, {
+    this.urlParameters = const {},
+  });
 
   @override
   String toString() =>
@@ -245,13 +244,4 @@ class RouteNode {
   @override
   String toString() =>
       'RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )';
-}
-
-extension Foo<T> on Iterable<T> {
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
 }
