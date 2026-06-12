@@ -8,9 +8,7 @@ class _Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(body: child),
-    );
+    return MaterialApp(home: Scaffold(body: child));
   }
 }
 
@@ -22,7 +20,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: Duration.zero,
           child: Container(),
         ),
@@ -50,11 +48,7 @@ void main() {
             return Opacity(opacity: value);
           },
           delay: const Duration(milliseconds: 500),
-          child: Container(
-            width: 100,
-            height: 100,
-            color: Colors.red,
-          ),
+          child: Container(width: 100, height: 100, color: Colors.red),
         ),
       ),
     );
@@ -67,28 +61,39 @@ void main() {
 
     // Verify that the value changes over time
     await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.2, 0.01));
+    expect(
+      tester.widget<Opacity>(find.byType(Opacity)).opacity,
+      closeTo(0.2, 0.01),
+    );
 
     await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.4, 0.01));
+    expect(
+      tester.widget<Opacity>(find.byType(Opacity)).opacity,
+      closeTo(0.4, 0.01),
+    );
 
     await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.6, 0.01));
+    expect(
+      tester.widget<Opacity>(find.byType(Opacity)).opacity,
+      closeTo(0.6, 0.01),
+    );
 
     await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.8, 0.01));
+    expect(
+      tester.widget<Opacity>(find.byType(Opacity)).opacity,
+      closeTo(0.8, 0.01),
+    );
 
     await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(1.0, 0.01));
+    expect(
+      tester.widget<Opacity>(find.byType(Opacity)).opacity,
+      closeTo(1.0, 0.01),
+    );
   });
 
-  testWidgets('onComplete callback is called when animation finishes',
-      (WidgetTester tester) async {
+  testWidgets('onComplete callback is called when animation finishes', (
+    WidgetTester tester,
+  ) async {
     AnimationController? controller;
     var onCompleteCalled = false;
 
@@ -98,7 +103,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: Duration.zero,
           onComplete: (c) {
             onCompleteCalled = true;
@@ -120,8 +125,9 @@ void main() {
     expect(onCompleteCalled, isTrue);
   });
 
-  testWidgets('onStart callback is called when animation starts',
-      (WidgetTester tester) async {
+  testWidgets('onStart callback is called when animation starts', (
+    WidgetTester tester,
+  ) async {
     var onStartCalled = false;
 
     await tester.pumpWidget(
@@ -153,7 +159,7 @@ void main() {
           duration: const Duration(milliseconds: 500),
           tween: Tween(begin: 0, end: 10),
           idleValue: 0,
-          builder: (_, value, __) => Text(value.toString()),
+          builder: (_, value, _) => Text(value.toString()),
           delay: const Duration(milliseconds: 500),
           child: Container(),
         ),
@@ -177,125 +183,142 @@ void main() {
   });
 
   testWidgets(
-      'FadeInAnimation in idle should be visible, but not visible when the animation starts',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      _Wrapper(
-        child: FadeInAnimation(
-          delay: const Duration(milliseconds: 500),
-          duration: const Duration(milliseconds: 500),
-          idleValue: 0,
-          child: const Text('Hello'),
+    'FadeInAnimation in idle should be visible, but not visible when the animation starts',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _Wrapper(
+          child: FadeInAnimation(
+            delay: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
+            idleValue: 0,
+            child: const Text('Hello'),
+          ),
         ),
-      ),
-    );
+      );
 
-    // in idle, the opacity should be 1.0
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity, 1.0);
+      // in idle, the opacity should be 1.0
+      expect(tester.widget<Opacity>(find.byType(Opacity)).opacity, 1.0);
 
-    // Wait for the delay to finish
-    await tester.pump(const Duration(milliseconds: 500));
+      // Wait for the delay to finish
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // When the animation starts the opacity should not be visible
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity, 0.0);
+      // When the animation starts the opacity should not be visible
+      expect(tester.widget<Opacity>(find.byType(Opacity)).opacity, 0.0);
 
-    // Verify that the value changes over time
-    await tester.pump(const Duration(milliseconds: 100));
+      // Verify that the value changes over time
+      await tester.pump(const Duration(milliseconds: 100));
 
-    // The value should be updated
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.2, 0.01));
+      // The value should be updated
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity)).opacity,
+        closeTo(0.2, 0.01),
+      );
 
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.4, 0.01));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity)).opacity,
+        closeTo(0.4, 0.01),
+      );
 
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.6, 0.01));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity)).opacity,
+        closeTo(0.6, 0.01),
+      );
 
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(0.8, 0.01));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity)).opacity,
+        closeTo(0.8, 0.01),
+      );
 
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.widget<Opacity>(find.byType(Opacity)).opacity,
-        closeTo(1.0, 0.01));
-  });
-
-  testWidgets(
-      'willResetOnDispose should false when fadeOut is the last animation in a sequential animation',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      _Wrapper(
-        child: const Text('Hello')
-            .fadeIn(
-              isSequential: true,
-              duration: const Duration(milliseconds: 500),
-            )
-            .fadeOut(
-              isSequential: true,
-              duration: const Duration(milliseconds: 500),
-            ),
-      ),
-    );
-
-    // The variable starts as false
-    expect(
-        tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
-            .willResetOnDispose,
-        false);
-
-    // Jump to middle of next animation
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // The value should be false
-    expect(
-        tester
-            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
-            .willResetOnDispose,
-        false);
-
-    await tester.pumpAndSettle();
-  });
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(
+        tester.widget<Opacity>(find.byType(Opacity)).opacity,
+        closeTo(1.0, 0.01),
+      );
+    },
+  );
 
   testWidgets(
-      'willResetOnDispose should true when fadeOut is not last animation in a sequential animation',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      _Wrapper(
-        child: const Text('Hello')
-            .fadeOut(
-              isSequential: true,
-              duration: const Duration(milliseconds: 500),
-            )
-            .fadeIn(
-              isSequential: true,
-              duration: const Duration(milliseconds: 500),
-            ),
-      ),
-    );
+    'willResetOnDispose should false when fadeOut is the last animation in a sequential animation',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _Wrapper(
+          child: const Text('Hello')
+              .fadeIn(
+                isSequential: true,
+                duration: const Duration(milliseconds: 500),
+              )
+              .fadeOut(
+                isSequential: true,
+                duration: const Duration(milliseconds: 500),
+              ),
+        ),
+      );
 
-    // The variable starts as true
-    expect(
+      // The variable starts as false
+      expect(
         tester
             .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
             .willResetOnDispose,
-        true);
+        false,
+      );
 
-    // Jump to middle of next animation
-    await tester.pump(const Duration(milliseconds: 500));
+      // Jump to middle of next animation
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // The value should be true
-    expect(
+      // The value should be false
+      expect(
         tester
             .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
             .willResetOnDispose,
-        true);
+        false,
+      );
 
-    await tester.pumpAndSettle();
-  });
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'willResetOnDispose should true when fadeOut is not last animation in a sequential animation',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _Wrapper(
+          child: const Text('Hello')
+              .fadeOut(
+                isSequential: true,
+                duration: const Duration(milliseconds: 500),
+              )
+              .fadeIn(
+                isSequential: true,
+                duration: const Duration(milliseconds: 500),
+              ),
+        ),
+      );
+
+      // The variable starts as true
+      expect(
+        tester
+            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .willResetOnDispose,
+        true,
+      );
+
+      // Jump to middle of next animation
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // The value should be true
+      expect(
+        tester
+            .state<GetAnimatedBuilderState>(find.byType(FadeOutAnimation))
+            .willResetOnDispose,
+        true,
+      );
+
+      await tester.pumpAndSettle();
+    },
+  );
 
   testWidgets('RotateAnimation', (WidgetTester tester) async {
     await tester.pumpWidget(
