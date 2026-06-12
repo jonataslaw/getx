@@ -456,16 +456,16 @@ Sadece GetConnect'den extend ederek gelen GET/POST/PUT/DELETE/SOCKET metodların
 ```dart
 class UserProvider extends GetConnect {
   // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  Future<Response> getUser(int id) => get('http://yourapi/users/$id');
   // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  Future<Response> postUser(Map data) => post('http://yourapi/users', body: data);
   // File  ile Post request
   Future<Response<CasesModel>> postCases(List<int> image) {
     final form = FormData({
       'file': MultipartFile(image, filename: 'avatar.png'),
       'otherFile': MultipartFile(image, filename: 'cover.png'),
     });
-    return post('http://youapi/users/upload', form);
+    return post('http://yourapi/users/upload', form);
   }
 
   GetSocket userMessages() {
