@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+
 void main() {
   // testWidgets('Back swipe dismiss interrupted by route push',
   // (tester) async {
@@ -103,4 +107,71 @@ void main() {
   //     moreOrLessEquals(798, epsilon: 1),
   //   );
   // });
+  testWidgets("test previousTitle dispose", (tester) async {
+    GetPageRoute? secondRoute;
+    await tester.pumpWidget(GetMaterialApp(
+      initialRoute: '/first',
+      getPages: [
+        GetPage(page: () => const FirstScreen(), name: '/first'),
+        GetPage(page: () => const SecondScreen(), name: '/second'),
+      ],
+      navigatorObservers: [
+        GetObserver(
+          (routing) {
+            if (routing?.current == '/second') {
+              secondRoute = routing?.route as GetPageRoute?;
+            }
+          },
+          Routing(),
+        ),
+      ],
+    ));
+
+    Get.toNamed('/second');
+
+    await tester.pumpAndSettle();
+
+    assert(secondRoute != null);
+
+    ValueNotifier<String?> previousTitle =
+        secondRoute?.previousTitle as ValueNotifier<String?>;
+
+    // Check if the previousTitle not disposed
+    bool isNoDisposed = ChangeNotifier.debugAssertNotDisposed(previousTitle);
+
+    assert(isNoDisposed, true);
+
+    Get.back();
+
+    await tester.pumpAndSettle();
+
+    try {
+      // Check whether previousTitle has been disposed
+      // if disposed, an exception will be thrown
+      isNoDisposed = ChangeNotifier.debugAssertNotDisposed(previousTitle);
+      expect(isNoDisposed, false);
+    } catch (e) {
+      expect(e.toString(),
+          contains("A ValueNotifier<String?> was used after being disposed."));
+    }
+  });
+}
+
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
+    return Container(child: const Text('FirstScreen'));
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
