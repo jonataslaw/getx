@@ -431,16 +431,16 @@ Você pode simplesmente estender GetConnect e usar os métodos GET/POST/PUT/DELE
 ```dart
 class UserProvider extends GetConnect {
   // Requisição Get
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  Future<Response> getUser(int id) => get('http://yourapi/users/$id');
   // Requisição Post
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  Future<Response> postUser(Map data) => post('http://yourapi/users', body: data);
   // Requisição Post com Arquivo
   Future<Response<CasesModel>> postCases(List<int> image) {
     final form = FormData({
       'file': MultipartFile(image, filename: 'avatar.png'),
       'otherFile': MultipartFile(image, filename: 'cover.png'),
     });
-    return post('http://youapi/users/upload', form);
+    return post('http://yourapi/users/upload', form);
   }
 
   GetSocket userMessages() {

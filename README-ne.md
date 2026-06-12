@@ -456,16 +456,16 @@ GetConnect भनेको backend र frontend बीच http वा websocket 
 ```dart
 class UserProvider extends GetConnect {
   // GET अनुरोध
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  Future<Response> getUser(int id) => get('http://yourapi/users/$id');
   // POST अनुरोध
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  Future<Response> postUser(Map data) => post('http://yourapi/users', body: data);
   // फाइलसहित POST अनुरोध
   Future<Response<CasesModel>> postCases(List<int> image) {
     final form = FormData({
       'file': MultipartFile(image, filename: 'avatar.png'),
       'otherFile': MultipartFile(image, filename: 'cover.png'),
     });
-    return post('http://youapi/users/upload', form);
+    return post('http://yourapi/users/upload', form);
   }
 
   GetSocket userMessages() {

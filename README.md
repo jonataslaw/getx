@@ -455,16 +455,16 @@ You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods 
 ```dart
 class UserProvider extends GetConnect {
   // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
+  Future<Response> getUser(int id) => get('http://yourapi/users/$id');
   // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
+  Future<Response> postUser(Map data) => post('http://yourapi/users', body: data);
   // Post request with File
   Future<Response<CasesModel>> postCases(List<int> image) {
     final form = FormData({
       'file': MultipartFile(image, filename: 'avatar.png'),
       'otherFile': MultipartFile(image, filename: 'cover.png'),
     });
-    return post('http://youapi/users/upload', form);
+    return post('http://yourapi/users/upload', form);
   }
 
   GetSocket userMessages() {
@@ -1064,7 +1064,7 @@ Future<void> main() async {
   runApp(SomeApp());
 }
 
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
+/// Is a smart move to make your Services initialize before you run the Flutter app.
 /// as you can control the execution flow (maybe you need to load some Theme configuration,
 /// apiKey, language defined by the User... so load SettingService before running ApiService.
 /// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
