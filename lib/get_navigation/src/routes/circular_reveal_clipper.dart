@@ -36,13 +36,7 @@ class CircularRevealClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(covariant CircularRevealClipper oldClipper) {
-    return fraction != oldClipper.fraction ||
-        centerAlignment != oldClipper.centerAlignment ||
-        centerOffset != oldClipper.centerOffset ||
-        minRadius != oldClipper.minRadius ||
-        maxRadius != oldClipper.maxRadius;
-  }
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 
   static double calcMaxRadius(Size size, Offset center) {
     final w = max(center.dx, size.width - center.dx);

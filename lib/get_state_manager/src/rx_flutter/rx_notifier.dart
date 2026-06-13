@@ -87,32 +87,24 @@ mixin StateMixin<T> on ListNotifier {
     change(GetStatus<T>.empty());
   }
 
-  void futurize(
-    Future<T> Function() body, {
-    T? initialData,
-    String? errorMessage,
-    bool useEmpty = true,
-  }) {
+  void futurize(Future<T> Function() body,
+      {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
     _value ??= initialData;
     status = GetStatus<T>.loading();
-    compute().then(
-      (newValue) {
-        if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-          status = GetStatus<T>.empty();
-        } else {
-          status = GetStatus<T>.success(newValue);
-        }
+    compute().then((newValue) {
+      if ((newValue == null || newValue._isEmpty()) && useEmpty) {
+        status = GetStatus<T>.empty();
+      } else {
+        status = GetStatus<T>.success(newValue);
+      }
 
-        refresh();
-      },
-      onError: (err) {
-        status = GetStatus.error(
-          err is Exception ? err : Exception(errorMessage ?? err.toString()),
-        );
-        refresh();
-      },
-    );
+      refresh();
+    }, onError: (err) {
+      status = GetStatus.error(
+          err is Exception ? err : Exception(errorMessage ?? err.toString()));
+      refresh();
+    });
   }
 }
 
@@ -127,9 +119,8 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller = StreamController<T>.broadcast(
-        onCancel: addListener(_streamListener),
-      );
+      _controller =
+          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
       _controller?.add(_value);
 
       ///TODO: report to controller dispose
@@ -184,12 +175,13 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     Function? onError,
     void Function()? onDone,
     bool? cancelOnError,
-  }) => stream.listen(
-    onData,
-    onError: onError,
-    onDone: onDone,
-    cancelOnError: cancelOnError ?? false,
-  );
+  }) =>
+      stream.listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError ?? false,
+      );
 
   @override
   String toString() => value.toString();
@@ -231,7 +223,7 @@ class Value<T> extends ListNotifier
   @override
   String toString() => value.toString();
 
-  Object? toJson() => (value as dynamic)?.toJson();
+  dynamic toJson() => (value as dynamic)?.toJson();
 }
 
 /// GetNotifier has a native status and state implementation, with the
@@ -248,32 +240,30 @@ extension StateExt<T> on StateMixin<T> {
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) {
-    return Observer(
-      builder: (context) {
-        if (status.isLoading) {
-          return onLoading ?? const Center(child: CircularProgressIndicator());
-        } else if (status.isError) {
-          return onError != null
-              ? onError(status.errorMessage)
-              : Center(child: Text('A error occurred: ${status.errorMessage}'));
-        } else if (status.isEmpty) {
-          return onEmpty ??
-              const SizedBox.shrink(); // Also can be widget(null); but is risky
-        } else if (status.isSuccess) {
-          return widget(value);
-        } else if (status.isCustom) {
-          return onCustom?.call(context) ??
-              const SizedBox.shrink(); // Also can be widget(null); but is risky
-        }
+    return Observer(builder: (context) {
+      if (status.isLoading) {
+        return onLoading ?? const Center(child: CircularProgressIndicator());
+      } else if (status.isError) {
+        return onError != null
+            ? onError(status.errorMessage)
+            : Center(child: Text('A error occurred: ${status.errorMessage}'));
+      } else if (status.isEmpty) {
+        return onEmpty ??
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
+      } else if (status.isSuccess) {
         return widget(value);
-      },
-    );
+      } else if (status.isCustom) {
+        return onCustom?.call(context) ??
+            const SizedBox.shrink(); // Also can be widget(null); but is risky
+      }
+      return widget(value);
+    });
   }
 }
 
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-sealed class GetStatus<T> with Equality {
+abstract class GetStatus<T> with Equality {
   const GetStatus();
 
   factory GetStatus.loading() => LoadingStatus<T>();
@@ -331,7 +321,7 @@ extension StatusDataExt<T> on GetStatus<T> {
 
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
-  Object? get error {
+  dynamic get error {
     if (this is ErrorStatus) {
       return (this as ErrorStatus).error;
     }

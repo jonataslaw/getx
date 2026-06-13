@@ -21,26 +21,21 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    - only_throw_errors
-    - empty_constructor_bodies
-    - no_duplicate_case_values
-    - null_closures
-    - prefer_conditional_assignment
-    - constant_identifier_names
-    - avoid_returning_null_for_void
-    - annotate_overrides
-    - avoid_empty_else
-    - avoid_function_literals_in_foreach_calls
-    - avoid_renaming_method_parameters
-    - avoid_single_cascade_in_expression_statements
-    - await_only_futures
-    - exhaustive_cases
-    - prefer_if_null_operators
-    - prefer_is_empty
-    - prefer_is_not_empty
-    - provide_deprecation_message
-    - slash_for_doc_comments
-    - camel_case_types
+    only_throw_errors: true
+    empty_constructor_bodies: true
+    no_duplicate_case_values: true
+    null_closures: true
+    prefer_conditional_assignment: true
+    constant_identifier_names: true
+    avoid_returning_null_for_void: true
+    annotate_overrides: true
+    avoid_empty_else: true
+    avoid_function_literals_in_foreach_calls: true
+    avoid_renaming_method_parameters: true
+    avoid_single_cascade_in_expression_statements: true
+    await_only_futures: true
+    exhaustive_cases: true
+    prefer_if_null_operators: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

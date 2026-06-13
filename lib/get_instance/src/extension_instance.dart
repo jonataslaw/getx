@@ -50,7 +50,7 @@ extension Inst on GetInterface {
 
   /// Holds references to every registered Instance when using
   /// `Get.put()`
-  static final Map<String, _InstanceBuilderFactory<Object?>> _singl = {};
+  static final Map<String, _InstanceBuilderFactory> _singl = {};
 
   /// Holds a reference to every registered callback when using
   /// `Get.lazyPut()`
@@ -219,7 +219,7 @@ extension Inst on GetInterface {
     );
   }
 
-  _InstanceBuilderFactory<Object?>? _getDependency<S>({String? tag, String? key}) {
+  _InstanceBuilderFactory? _getDependency<S>({String? tag, String? key}) {
     final newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
@@ -369,7 +369,12 @@ extension Inst on GetInterface {
 
     if (dep == null) return false;
 
-    final _InstanceBuilderFactory<Object?> builder = dep.lateRemove ?? dep;
+    final _InstanceBuilderFactory builder;
+    if (dep.isDirty) {
+      builder = dep.lateRemove ?? dep;
+    } else {
+      builder = dep;
+    }
 
     if (builder.permanent && !force) {
       Get.log(
