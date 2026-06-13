@@ -487,7 +487,7 @@ class HomeProvider extends GetConnect {
     // baseUrlをセット
 
     // リクエストヘッダーに 'apikey' プロパティを付け足しています。
-    httpClient.addRequestModifier((request) {
+    httpClient.addRequestModifier<Object?>((request) {
       request.headers['apikey'] = '12345678';
       return request;
     });
