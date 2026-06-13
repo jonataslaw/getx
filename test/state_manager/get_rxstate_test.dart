@@ -30,6 +30,9 @@ void main() {
                 Text(
                   'Map: ${controller.map.length}',
                 ),
+                Text(
+                  'Nullable: ${controller.nullableNum.value}',
+                ),
                 TextButton(
                   child: const Text("increment"),
                   onPressed: () => controller.increment(),
@@ -56,12 +59,14 @@ void main() {
     expect(find.text("Bool: true"), findsOneWidget);
     expect(find.text("List: 0"), findsOneWidget);
     expect(find.text("Map: 0"), findsOneWidget);
+    expect(find.text("Nullable: null"), findsOneWidget);
 
     Controller.to.increment();
 
     await tester.pump();
 
     expect(find.text("Count: 1"), findsOneWidget);
+    expect(find.text("Nullable: 0"), findsOneWidget);
 
     await tester.tap(find.text('increment'));
 
@@ -86,6 +91,7 @@ class Controller extends GetxController {
 
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
+  final nullableNum = null.obs<int?>();
   RxString string = "string".obs;
   RxList list = [].obs;
   RxMap map = {}.obs;
@@ -93,5 +99,6 @@ class Controller extends GetxController {
 
   void increment() {
     counter.value++;
+    nullableNum.value ??= 0;
   }
 }
