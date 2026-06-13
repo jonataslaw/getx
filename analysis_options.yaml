@@ -1,7 +1,41 @@
-# Include option is buggy:
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
-analyzer:
-  errors:
-    unintended_html_in_doc_comment: ignore
-# In case the include issue gets fixed, lines below INCLUDE_FIX
-# can be removed
+
+linter:
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at https://dart.dev/lints.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+  rules:
+    only_throw_errors: true
+    empty_constructor_bodies: true
+    no_duplicate_case_values: true
+    null_closures: true
+    prefer_conditional_assignment: true
+    constant_identifier_names: true
+    avoid_returning_null_for_void: true
+    annotate_overrides: true
+    avoid_empty_else: true
+    avoid_function_literals_in_foreach_calls: true
+    avoid_renaming_method_parameters: true
+    avoid_single_cascade_in_expression_statements: true
+    await_only_futures: true
+    exhaustive_cases: true
+    prefer_if_null_operators: true
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
