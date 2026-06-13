@@ -353,7 +353,7 @@ class _FactoryBind<T> extends Bind<T> {
 }
 
 class Binds extends StatelessWidget {
-  final List<Bind<dynamic>> binds;
+  final List<Bind<Object?>> binds;
   final Widget child;
 
   Binds({

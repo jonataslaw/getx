@@ -3,7 +3,7 @@ library;
 import 'dart:collection';
 
 mixin Equality {
-  List get props;
+  List<Object?> get props => [];
 
   @override
   bool operator ==(Object other) {
@@ -64,13 +64,13 @@ class IdentityEquality<E> implements IEquality<E> {
   bool isValidKey(Object? o) => true;
 }
 
-class DeepCollectionEquality implements IEquality {
+class DeepCollectionEquality implements IEquality<Object?> {
   final IEquality _base = const DefaultEquality<Never>();
   final bool _unordered = false;
   const DeepCollectionEquality();
 
   @override
-  bool equals(e1, e2) {
+  bool equals(Object? e1, Object? e2) {
     if (e1 is Set) {
       return e2 is Set && SetEquality(this).equals(e1, e2);
     }

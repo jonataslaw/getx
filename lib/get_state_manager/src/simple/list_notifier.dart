@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get_common/obx_error.dart';
 
 // This callback remove the listener on addListener function
 typedef Disposer = void Function();
@@ -79,8 +80,10 @@ mixin ListNotifierSingleMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (isDisposed) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError(
+          '''A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.''',
+        );
       }
       return true;
     }());
@@ -128,8 +131,10 @@ mixin ListNotifierGroupMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (_updatersGroupIds == null) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError(
+          '''A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.''',
+        );
       }
       return true;
     }());
@@ -196,26 +201,12 @@ class Notifier {
 }
 
 class NotifyData {
-  const NotifyData(
-      {required this.updater,
-      required this.disposers,
-      this.throwException = true});
+  const NotifyData({
+    required this.updater,
+    required this.disposers,
+    this.throwException = true,
+  });
   final GetStateUpdate updater;
   final List<VoidCallback> disposers;
   final bool throwException;
-}
-
-class ObxError {
-  const ObxError();
-  @override
-  String toString() {
-    return """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
-  }
 }
