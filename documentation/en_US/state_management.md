@@ -65,6 +65,12 @@ To make it observable, you just need to add ".obs" to the end of it:
 var name = 'Jonatas Borges'.obs;
 ```
 
+And to set new valaue,you just need to set it:
+
+``` dart
+name.value = 'my new value'
+```
+
 That's all. It's *that* simple.
 
 From now on, we might refer to this reactive-".obs"(ervables) variables as _Rx_.   
