@@ -402,6 +402,88 @@ Factories take up little memory, they don't hold instances, but a function with 
 This has a very low cost in memory, but since the purpose of this lib is to get the maximum performance possible using the minimum resources, Get removes even the factories by default.
 Use whichever is most convenient for you.
 
+## Practical Examples
+
+### State Management with Dependency Injection
+
+This example demonstrates how to properly combine GetX state management with dependency injection. It shows:
+- How to create and manage a controller
+- How to inject and use services
+- How to properly scope your dependencies
+- Best practices for reactive state management
+
+The following example shows a complete implementation of a user management system:
+
+```dart
+// First, let's create a simple user model
+class User {
+  final String name;
+  final int age;
+
+  User({required this.name, required this.age});
+}
+
+// Create a controller that manages user state
+class UserController extends GetxController {
+  final user = Rx<User?>(null);
+  
+  void setUser(User newUser) {
+    user.value = newUser;
+  }
+  
+  void clearUser() {
+    user.value = null;
+  }
+}
+
+// Create a service that handles user data
+class UserService {
+  Future<User> fetchUser() async {
+    // Simulate API call
+    await Future.delayed(Duration(seconds: 1));
+    return User(name: "John Doe", age: 25);
+  }
+}
+
+// Example of how to put it all together
+void main() {
+  // Register our service first
+  Get.put(UserService());
+  
+  // Register our controller
+  Get.put(UserController());
+  
+  // Example widget that uses both
+  class UserProfilePage extends StatelessWidget {
+    final UserController userController = Get.find();
+    final UserService userService = Get.find();
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: Obx(() {
+          final currentUser = userController.user.value;
+          return currentUser == null
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    Text('Name: ${currentUser.name}'),
+                    Text('Age: ${currentUser.age}'),
+                  ],
+                );
+        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final user = await userService.fetchUser();
+            userController.setUser(user);
+          },
+          child: Icon(Icons.refresh),
+        ),
+      );
+    }
+  }
+}
+
 ## Notes
 
 - DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
