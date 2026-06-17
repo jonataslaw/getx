@@ -1,0 +1,43 @@
+.copyright {
+  text-align: center;
+  padding: 8px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.69);
+}
+
+.copyright a {
+  color: #fff !important;
+}
+
+.heroText {
+  font-weight: 800;
+  max-width: 610px;
+  line-height: 1.1;
+  text-align: left;
+  font-size: 48px;
+}
+
+@media screen and (max-width: 996px) {
+  .heroText {
+    text-align: center;
+    font-size: 36px;
+    margin: 15px auto;
+  }
+}
+
+.heroText svg {
+  display: inline-block !important;
+}
+
+.heroText svg:first-child {
+  display: inline-block !important;
+  margin-bottom: -17px !important;
+  transform: rotateZ(359deg);
+}
+
+.footerInner {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+}

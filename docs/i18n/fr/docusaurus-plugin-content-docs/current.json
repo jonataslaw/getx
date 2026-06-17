@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Suivant",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.The 3 Pillars": {
+    "message": "Les 3 piliers",
+    "description": "The label for category The 3 Pillars in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.The 3 Pillars.link.generated-index.description": {
+    "message": "Les 3 piliers de GetX.",
+    "description": "The generated-index page description for category The 3 Pillars in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Community": {
+    "message": "Communauté",
+    "description": "The label for category Community in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Community.link.generated-index.description": {
+    "message": "Communauté",
+    "description": "The generated-index page description for category Community in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Concepts": {
+    "message": "Concepts",
+    "description": "The label for category Concepts in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Concepts.link.generated-index.description": {
+    "message": "Les concepts des 3 piliers de GetX.",
+    "description": "The generated-index page description for category Concepts in sidebar tutorialSidebar"
+  }
+}

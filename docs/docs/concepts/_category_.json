@@ -1,0 +1,8 @@
+{
+  "label": "Concepts",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "The concepts about the 3 pillars of GetX."
+  }
+}
