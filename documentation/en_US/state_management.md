@@ -389,7 +389,7 @@ You don't have to work with sets if you don't want to. you can use the "assign '
 The "assign" api will clear your list, and add a single object that you want to start there.
 The "assignAll" api will clear the existing list and add any iterable objects that you inject into it.
 
-### Why i have to use .value
+### Why do I have to use .value
 
 We could remove the obligation to use 'value' to `String` and `int` with a simple decoration and code generator, but the purpose of this library is precisely avoid external dependencies. We want to offer an environment ready for programming, involving the essentials (management of routes, dependencies and states), in a simple, lightweight and performant way, without a need of an external package.
 
