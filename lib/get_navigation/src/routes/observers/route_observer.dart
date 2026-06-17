@@ -119,7 +119,6 @@ class GetObserver extends NavigatorObserver {
     Get.log("PREVIOUS ROUTE $previousRouteName");
 
     _routeSend?.update((value) {
-      value.route = previousRoute;
       value.isBack = false;
       value.removed = routeName ?? '';
       value.previous = previousRouteName ?? '';
