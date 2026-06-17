@@ -146,7 +146,8 @@ class GetUtils {
         ext.endsWith(".wav") ||
         ext.endsWith(".wma") ||
         ext.endsWith(".amr") ||
-        ext.endsWith(".ogg");
+        ext.endsWith(".ogg") ||
+        ext.endsWith(".m4a");
   }
 
   /// Checks if string is an powerpoint file.
