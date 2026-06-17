@@ -162,8 +162,6 @@ final myMap = Rx<Map<String, int>>({});
 final user = Rx<User>();
 ```
 
-3 - The third, more practical, easier and preferred approach, just add **`.obs`** as a property of your `value`:
-
 3 - 세 번째 방법: 실용적이며 쉽고 선호되는 방법으로, 단순히 **`.obs`**를 `value`의 속성으로 덧붙이는 방법
 
 ```dart
