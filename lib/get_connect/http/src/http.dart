@@ -90,7 +90,7 @@ class GetHttpClient {
 
   Uri createUri(String? url, Map<String, dynamic>? query) {
     if (baseUrl != null) {
-      url = baseUrl! + url!;
+      url = baseUrl! + url ?? "";
     }
     final uri = Uri.parse(url!);
     if (query != null) {
