@@ -53,7 +53,7 @@ Reactive programming with Get is as easy as using setState.
 
 Let's imagine that you have a name variable and want that every time you change it, all widgets that use it are automatically changed.
 
-This is your count variable:
+This is your name variable:
 
 ``` dart
 var name = 'Jonatas Borges';
