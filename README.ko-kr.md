@@ -785,9 +785,9 @@ GetMaterialApp(
 );
 
 void localLogWriter(String text, {bool isError = false}) {
-  // pass the message to your favourite logging package here
-  // please note that even if enableLog: false log messages will be pushed in this callback
-  // you get check the flag if you want through GetConfig.isLogEnable
+  // 여기에서 원하는 로깅 패키지에 메시지를 전달하세요.
+  // 알아두어야 하는 것은 `enableLog: false` 로 선언되어 있어도 log message는 이 callback을 실행합니다.
+  // GetConfig.isLogEnable를 활용하여 flag 값을 확인할 수 있습니다.
 }
 
 ```
@@ -848,7 +848,7 @@ print( 'Message "$message" has Type ${message.runtimeType}');
 
 그래서 `message.substring( 0, 4 )`은 사용하지 못합니다.
 _observable(.obs)_ 안의 실제 값에 접근해야 합니다:
-가장 많이 사용되는 방법은 `.value`지만 사용할 수 있었는지 알고 있었나요...
+가장 많이 사용되는 방법은 `.value`지만 이렇게도 사용할 수 있었는지 알고 계셨나요...
 
 ```dart
 final name = 'GetX'.obs;
@@ -1128,7 +1128,7 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 
     /// 당신이 그것을 사용한다면, 당신은 모든 것을 테스트할 수 있습니다,
     /// 각각의 생성주기 이후 어플리케이션의 상태를 포함하여.
-    Get.put(controller); // onInit was called
+    Get.put(controller); // onInit 호출됨
     expect(controller.name.value, 'name2');
 
     /// 당신의 함수를 테스트하세요
