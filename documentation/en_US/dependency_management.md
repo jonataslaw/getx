@@ -239,7 +239,7 @@ First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other meth
 The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
 
 Reinforcing: by default, GetX deletes instances when they are not in use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost its use so it will be erased.
+It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 is lost and so it will be removed.
 
 But if you want to opt for using `permanent:true`, then the controller will not be lost in this transition - which is very useful for services that you want to keep alive throughout the entire application.
 
