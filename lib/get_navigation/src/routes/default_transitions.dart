@@ -5,12 +5,13 @@ import 'circular_reveal_clipper.dart';
 
 class LeftToRightFadeTransition {
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1.0, 0.0),
