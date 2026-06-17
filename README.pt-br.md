@@ -639,7 +639,7 @@ Get.width
 Get.context
 
 // fornece o context de snackbar/dialog/bottomsheet em qualquer lugar do seu código.
-Get.contextOverlay
+Get.overlayContext
 
 // Obs: os métodos a seguir são extensions do context. Já que se
 // tem acesso ao context em qualquer lugar do código da UI, você pode usar lá

@@ -357,7 +357,7 @@ Get.width
 Get.context
 
 // Da el contexto de la barra de bocadillos / diálogo / hoja inferior en primer plano en cualquier parte de su código.
-Get.contextOverlay
+Get.overlayContext
 
 // Note: los siguientes métodos son extensiones de context. Desde que tu
 // tiene acceso al contexto en cualquier lugar de su interfaz de usuario, puede usarlo en cualquier lugar del código de la interfaz de usuario

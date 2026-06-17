@@ -616,7 +616,7 @@ Get.width
 Get.context
 
 // Memberikan konteks dari snackbar/dialog/bottomsheet di Gives the latar depan, dimanapun di kode anda
-Get.contextOverlay
+Get.overlayContext
 
 // Catatan: metode berikut adalah sebuah perluasan konteks. Berhubung anda
 // memiliki akses terhadap konteks dimanapun di UI anda, anda bisa menggunakannya dimanapun di kode UI

@@ -662,7 +662,7 @@ Get.width
 Get.context
 
 // 코드 어디에서든지 foreground에서 snackbar/dialog/bottomsheet의 context를 제공
-Get.contextOverlay
+Get.overlayContext
 
 // 주석: 다음 메서드는 context의 확장입니다.
 // UI의 모든 위치에서 컨텍스트에 액세스 할 수 있으므로 UI 코드의 어느 곳에서나 사용할 수 있습니다.
