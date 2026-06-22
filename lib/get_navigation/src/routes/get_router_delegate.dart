@@ -590,7 +590,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       if (!canBack) {
         final last = _activePages.last;
         final name = last.route?.name;
-        throw 'The page $name cannot be popped';
+        throw Exception('The page $name cannot be popped');
       }
       return true;
     }());

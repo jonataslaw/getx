@@ -9,7 +9,12 @@ class Node<T> {
 
 class MiniSubscription<T> {
   const MiniSubscription(
-      this.data, this.onError, this.onDone, this.cancelOnError, this.listener);
+    this.data,
+    this.onError,
+    this.onDone,
+    this.cancelOnError,
+    this.listener,
+  );
   final OnData<T> data;
   final Function? onError;
   final Callback? onDone;
@@ -46,10 +51,12 @@ class MiniStream<T> {
 
   bool get isClosed => _isClosed;
 
-  MiniSubscription<T> listen(void Function(T event) onData,
-      {Function? onError,
-      void Function()? onDone,
-      bool cancelOnError = false}) {
+  MiniSubscription<T> listen(
+    void Function(T event) onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool cancelOnError = false,
+  }) {
     final subs = MiniSubscription<T>(
       onData,
       onError,
@@ -65,7 +72,7 @@ class MiniStream<T> {
 
   void close() {
     if (_isClosed) {
-      throw 'You can not close a closed Stream';
+      throw Exception('You can not close a closed Stream');
     }
     listenable._notifyDone();
     listenable.clear();

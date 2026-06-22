@@ -3,6 +3,22 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+/// A custom clipper that creates a circular reveal animation effect.
+///
+/// This clipper is used to create a circular expanding/collapsing reveal
+/// effect, commonly used in page transitions or material design animations.
+/// The circle expands from a center point to cover the entire widget.
+///
+/// Example usage:
+/// ```dart
+/// ClipPath(
+///   clipper: CircularRevealClipper(
+///     fraction: animation.value,
+///     centerAlignment: Alignment.center,
+///   ),
+///   child: YourWidget(),
+/// )
+/// ```
 class CircularRevealClipper extends CustomClipper<Path> {
   final double fraction;
   final Alignment? centerAlignment;
@@ -20,23 +36,29 @@ class CircularRevealClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final center = centerAlignment?.alongSize(size) ??
+    final center =
+        centerAlignment?.alongSize(size) ??
         centerOffset ??
         Offset(size.width / 2, size.height / 2);
     final minRadius = this.minRadius ?? 0;
     final maxRadius = this.maxRadius ?? calcMaxRadius(size, center);
 
-    return Path()
-      ..addOval(
-        Rect.fromCircle(
-          center: center,
-          radius: lerpDouble(minRadius, maxRadius, fraction)!,
-        ),
-      );
+    return Path()..addOval(
+      Rect.fromCircle(
+        center: center,
+        radius: lerpDouble(minRadius, maxRadius, fraction)!,
+      ),
+    );
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  bool shouldReclip(covariant CircularRevealClipper oldClipper) {
+    return fraction != oldClipper.fraction ||
+        centerAlignment != oldClipper.centerAlignment ||
+        centerOffset != oldClipper.centerOffset ||
+        minRadius != oldClipper.minRadius ||
+        maxRadius != oldClipper.maxRadius;
+  }
 
   static double calcMaxRadius(Size size, Offset center) {
     final w = max(center.dx, size.width - center.dx);

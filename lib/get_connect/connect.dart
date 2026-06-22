@@ -84,10 +84,7 @@ abstract class GetConnectInterface with GetLifeCycleMixin {
     Map<String, String>? headers,
   });
 
-  GetSocket socket(
-    String url, {
-    Duration ping = const Duration(seconds: 5),
-  });
+  GetSocket socket(String url, {Duration ping = const Duration(seconds: 5)});
 }
 
 class GetConnect extends GetConnectInterface {
@@ -123,17 +120,18 @@ class GetConnect extends GetConnectInterface {
 
   @override
   GetHttpClient get httpClient => _httpClient ??= GetHttpClient(
-      userAgent: userAgent,
-      sendUserAgent: sendUserAgent,
-      timeout: timeout,
-      followRedirects: followRedirects,
-      maxRedirects: maxRedirects,
-      maxAuthRetries: maxAuthRetries,
-      allowAutoSignedCert: allowAutoSignedCert,
-      baseUrl: baseUrl,
-      trustedCertificates: trustedCertificates,
-      withCredentials: withCredentials,
-      findProxy: findProxy);
+    userAgent: userAgent,
+    sendUserAgent: sendUserAgent,
+    timeout: timeout,
+    followRedirects: followRedirects,
+    maxRedirects: maxRedirects,
+    maxAuthRetries: maxAuthRetries,
+    allowAutoSignedCert: allowAutoSignedCert,
+    baseUrl: baseUrl,
+    trustedCertificates: trustedCertificates,
+    withCredentials: withCredentials,
+    findProxy: findProxy,
+  );
 
   @override
   Future<Response<T>> get<T>(
@@ -262,10 +260,7 @@ class GetConnect extends GetConnectInterface {
   }
 
   @override
-  GetSocket socket(
-    String url, {
-    Duration ping = const Duration(seconds: 5),
-  }) {
+  GetSocket socket(String url, {Duration ping = const Duration(seconds: 5)}) {
     _checkIfDisposed(isHttp: false);
 
     final newSocket = GetSocket(_concatUrl(url)!, ping: ping);
@@ -305,33 +300,33 @@ class GetConnect extends GetConnectInterface {
     Map<String, String>? headers,
   }) async {
     try {
-      final res = await post(
-        url,
-        {'query': query, 'variables': variables},
-        headers: headers,
-      );
+      final res = await post(url, {
+        'query': query,
+        'variables': variables,
+      }, headers: headers);
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
-            graphQLErrors: listError
-                .map((e) => GraphQLError(
-                      code: (e['extensions'] != null
+          graphQLErrors: listError
+              .map(
+                (e) => GraphQLError(
+                  code:
+                      (e['extensions'] != null
                               ? e['extensions']['code'] ?? ''
                               : '')
                           .toString(),
-                      message: (e['message'] ?? '').toString(),
-                    ))
-                .toList());
+                  message: (e['message'] ?? '').toString(),
+                ),
+              )
+              .toList(),
+        );
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (err) {
-      return GraphQLResponse<T>(graphQLErrors: [
-        GraphQLError(
-          code: null,
-          message: err.toString(),
-        )
-      ]);
+      return GraphQLResponse<T>(
+        graphQLErrors: [GraphQLError(code: null, message: err.toString())],
+      );
     }
   }
 
@@ -343,30 +338,29 @@ class GetConnect extends GetConnectInterface {
     Map<String, String>? headers,
   }) async {
     try {
-      final res = await post(
-        url,
-        {'query': mutation, 'variables': variables},
-        headers: headers,
-      );
+      final res = await post(url, {
+        'query': mutation,
+        'variables': variables,
+      }, headers: headers);
 
       final listError = res.body['errors'];
       if ((listError is List) && listError.isNotEmpty) {
         return GraphQLResponse<T>(
-            graphQLErrors: listError
-                .map((e) => GraphQLError(
-                      code: e['extensions']['code']?.toString(),
-                      message: e['message']?.toString(),
-                    ))
-                .toList());
+          graphQLErrors: listError
+              .map(
+                (e) => GraphQLError(
+                  code: e['extensions']['code']?.toString(),
+                  message: e['message']?.toString(),
+                ),
+              )
+              .toList(),
+        );
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (err) {
-      return GraphQLResponse<T>(graphQLErrors: [
-        GraphQLError(
-          code: null,
-          message: err.toString(),
-        )
-      ]);
+      return GraphQLResponse<T>(
+        graphQLErrors: [GraphQLError(code: null, message: err.toString())],
+      );
     }
   }
 
@@ -376,7 +370,7 @@ class GetConnect extends GetConnectInterface {
 
   void _checkIfDisposed({bool isHttp = true}) {
     if (_isDisposed) {
-      throw 'Can not emit events to disposed clients';
+      throw Exception('Can not emit events to disposed clients');
     }
   }
 

@@ -50,6 +50,10 @@ class GetObserver extends NavigatorObserver {
       RouterReportManager.instance.reportCurrentRoute(previousRoute);
     }
 
+    if (route is GetPageRoute) {
+      RouterReportManager.instance.reportRouteWillDispose(route);
+    }
+
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
@@ -98,8 +102,9 @@ class GetObserver extends NavigatorObserver {
       value.route = route;
       value.isBack = false;
       value.removed = '';
-      value.isBottomSheet =
-          newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
+      value.isBottomSheet = newRoute.isBottomSheet
+          ? true
+          : value.isBottomSheet ?? false;
       value.isDialog = newRoute.isDialog ? true : value.isDialog ?? false;
     });
 
@@ -123,8 +128,9 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = routeName ?? '';
       value.previous = previousRouteName ?? '';
-      value.isBottomSheet =
-          currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isBottomSheet = currentRoute.isBottomSheet
+          ? false
+          : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
@@ -159,8 +165,9 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = '';
       value.previous = oldName ?? '';
-      value.isBottomSheet =
-          currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isBottomSheet = currentRoute.isBottomSheet
+          ? false
+          : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
     if (oldRoute is GetPageRoute) {
@@ -171,11 +178,10 @@ class GetObserver extends NavigatorObserver {
   }
 }
 
-//TODO: Use copyWith, and remove mutate variables
 class Routing {
   String current;
   String previous;
-  dynamic args;
+  Object? args;
   String removed;
   Route<dynamic>? route;
   bool? isBack;

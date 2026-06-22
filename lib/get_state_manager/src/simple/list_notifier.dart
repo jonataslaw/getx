@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get_common/obx_error.dart';
 
 // This callback remove the listener on addListener function
 typedef Disposer = void Function();
@@ -22,9 +23,6 @@ class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
 /// containsListener implementation
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
-
-  // final int _version = 0;
-  // final int _microtaskVersion = 0;
 
   @override
   Disposer addListener(GetStateUpdate listener) {
@@ -60,18 +58,11 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    // if (_microtaskVersion == _version) {
-    //   _microtaskVersion++;
-    //   scheduleMicrotask(() {
-    //     _version++;
-    //     _microtaskVersion = _version;
     final list = _updaters?.toList() ?? [];
 
     for (var element in list) {
       element();
     }
-    //   });
-    // }
   }
 
   bool get isDisposed => _updaters == null;
@@ -79,8 +70,10 @@ mixin ListNotifierSingleMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (isDisposed) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError(
+          '''A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.''',
+        );
       }
       return true;
     }());
@@ -128,8 +121,10 @@ mixin ListNotifierGroupMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (_updatersGroupIds == null) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError(
+          '''A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.''',
+        );
       }
       return true;
     }());
@@ -151,6 +146,7 @@ mixin ListNotifierGroupMixin on Listenable {
   }
 
   Disposer addListenerId(Object? key, GetStateUpdate listener) {
+    assert(_debugAssertNotDisposed());
     _updatersGroupIds![key] ??= ListNotifierSingle();
     return _updatersGroupIds![key]!.addListener(listener);
   }
@@ -159,6 +155,7 @@ mixin ListNotifierGroupMixin on Listenable {
   /// by `GetBuilder()` or similar, so is a way to unlink the state change with
   /// the Widget from the Controller.
   void disposeId(Object id) {
+    assert(_debugAssertNotDisposed());
     _updatersGroupIds?[id]?.dispose();
     _updatersGroupIds!.remove(id);
   }
@@ -196,26 +193,12 @@ class Notifier {
 }
 
 class NotifyData {
-  const NotifyData(
-      {required this.updater,
-      required this.disposers,
-      this.throwException = true});
+  const NotifyData({
+    required this.updater,
+    required this.disposers,
+    this.throwException = true,
+  });
   final GetStateUpdate updater;
   final List<VoidCallback> disposers;
   final bool throwException;
-}
-
-class ObxError {
-  const ObxError();
-  @override
-  String toString() {
-    return """
-      [Get] the improper use of a GetX has been detected. 
-      You should only use GetX or Obx for the specific widget that will be updated.
-      If you are seeing this error, you probably did not insert any observable variables into GetX/Obx 
-      or insert them outside the scope that GetX considers suitable for an update 
-      (example: GetX => HeavyWidget => variableObservable).
-      If you need to update a parent widget and a child widget, wrap each one in an Obx/GetX.
-      """;
-  }
 }

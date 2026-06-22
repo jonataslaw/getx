@@ -70,16 +70,13 @@ extension Inst on GetInterface {
   //   );
   // }
 
-  S put<S>(
-    S dependency, {
-    String? tag,
-    bool permanent = false,
-  }) {
+  S put<S>(S dependency, {String? tag, bool permanent = false}) {
     _insert(
-        isSingleton: true,
-        name: tag,
-        permanent: permanent,
-        builder: (() => dependency));
+      isSingleton: true,
+      name: tag,
+      permanent: permanent,
+      builder: (() => dependency),
+    );
     return find<S>(tag: tag);
   }
 
@@ -201,8 +198,9 @@ extension Inst on GetInterface {
 
       if (isSingleton) {
         if (Get.smartManagement != SmartManagement.onlyBuilder) {
-          RouterReportManager.instance
-              .reportDependencyLinkedToRoute(_getKey(S, name));
+          RouterReportManager.instance.reportDependencyLinkedToRoute(
+            _getKey(S, name),
+          );
         }
       }
     }
@@ -281,9 +279,9 @@ extension Inst on GetInterface {
       final dep = _singl[key];
       if (dep == null) {
         if (tag == null) {
-          throw 'Class "$S" is not registered';
+          throw Exception('Class "$S" is not registered');
         } else {
-          throw 'Class "$S" with tag "$tag" is not registered';
+          throw Exception('Class "$S" with tag "$tag" is not registered');
         }
       }
 
@@ -294,7 +292,9 @@ extension Inst on GetInterface {
       return i ?? dep.getDependency() as S;
     } else {
       // ignore: lines_longer_than_80_chars
-      throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
+      throw Exception(
+        '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"',
+      );
     }
   }
 
@@ -324,8 +324,11 @@ extension Inst on GetInterface {
   ///
   ///  Note: if fenix is not provided it will be set to true if
   /// the parent instance was permanent
-  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix}) {
+  void lazyReplace<P>(
+    InstanceBuilderCallback<P> builder, {
+    String? tag,
+    bool? fenix,
+  }) {
     final info = getInstanceInfo<P>(tag: tag);
     final permanent = (info.isPermanent ?? false);
     delete<P>(tag: tag, force: permanent);
@@ -436,11 +439,7 @@ extension Inst on GetInterface {
     });
   }
 
-  void reload<S>({
-    String? tag,
-    String? key,
-    bool force = false,
-  }) {
+  void reload<S>({String? tag, String? key, bool force = false}) {
     final newKey = key ?? _getKey(S, tag);
 
     final builder = _getDependency<S>(tag: tag, key: newKey);
