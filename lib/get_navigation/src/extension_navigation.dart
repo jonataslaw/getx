@@ -453,7 +453,7 @@ extension ExtensionSnackbar on GetInterface {
         maxWidth: maxWidth,
         padding: padding ?? const EdgeInsets.all(16),
         borderColor: borderColor,
-        borderWidth: borderWidth,
+        borderWidth: borderWidth ?? 1.0,
         leftBarIndicatorColor: leftBarIndicatorColor,
         boxShadows: boxShadows,
         backgroundGradient: backgroundGradient,
