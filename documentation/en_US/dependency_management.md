@@ -147,8 +147,8 @@ Get.putAsync<S>(
 This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.create<SomeClass>(() => SomeClass());
+Get.create<LoginController>(() => LoginController());
 ```
 
 This is all options you can set when using create:
@@ -158,18 +158,19 @@ Get.create<S>(
   // required: a function that returns a class that will be "fabricated" every
   // time `Get.find()` is called
   // Example: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
+  InstanceBuilderCallback<S> builder,
 
   // optional: just like Get.put(), but it is used when you need multiple instances
   // of a of a same class
   // Useful in case you have a list that each item need it's own controller
-  // needs to be a unique string. Just change from tag to name
-  String name,
+  // needs to be a unique string
+  String tag,
 
-  // optional: just like int`Get.put()`, it is for when you need to keep the
+  // optional: just like `Get.put()`, it is for when you need to keep the
   // instance alive thoughout the entire app. The difference is in Get.create
   // permanent is true by default
   bool permanent = true
+);
 ```
 
 ## Using instantiated methods/classes
