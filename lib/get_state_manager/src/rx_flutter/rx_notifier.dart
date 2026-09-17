@@ -117,15 +117,28 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   StreamController<T>? _controller;
 
+  /// Removes the notifier listener that feeds [_controller], or null when
+  /// no listener is currently attached.
+  ///
+  /// The attach/detach pair must stay symmetric: the controller outlives
+  /// its subscribers, so the bridge has to be re-armed on every `onListen`,
+  /// not once at construction.
+  VoidCallback? _removeStreamListener;
+
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller =
-          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller = StreamController<T>.broadcast(
+        onListen: () => _removeStreamListener ??= addListener(_streamListener),
+        onCancel: _detachStreamListener,
+      );
       _controller?.add(_value);
-
-      ///TODO: report to controller dispose
     }
     return _controller!;
+  }
+
+  void _detachStreamListener() {
+    _removeStreamListener?.call();
+    _removeStreamListener = null;
   }
 
   void _streamListener() {
@@ -135,6 +148,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   @override
   @mustCallSuper
   void close() {
+    _detachStreamListener();
     removeListener(_streamListener);
     _controller?.close();
     dispose();
