@@ -502,8 +502,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     final route = _getRouteDecoder<T>(args);
     if (route == null) return null;
 
+    // `_popWithResult` rather than a bare `removeLast`: the pages dropped
+    // here may have been pushed by an awaited `toNamed`, and their route
+    // completers must be completed or those futures hang forever.
     while (_activePages.length > 1) {
-      _activePages.removeLast();
+      _popWithResult();
     }
 
     return _replaceNamed(route);
@@ -523,8 +526,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     final newPredicate = predicate ?? (route) => false;
 
+    // Same reason as in [offAllNamed]: complete the dropped pages' route
+    // completers instead of discarding them.
     while (_activePages.length > 1 && !newPredicate(_activePages.last.route!)) {
-      _activePages.removeLast();
+      _popWithResult();
     }
 
     return _push(route);
