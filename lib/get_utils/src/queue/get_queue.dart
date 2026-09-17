@@ -40,10 +40,17 @@ class GetQueue {
       var item = _queue.removeAt(0);
       try {
         item.completer.complete(await item.job());
-      } on Exception catch (e) {
+      } catch (e) {
+        // Catch Error as well as Exception. `on Exception` lets a TypeError,
+        // a failed assertion, a null-check or a raw `throw 'string'` escape;
+        // `_active` then stays true forever and the queue never drains
+        // again -- silently, with no trace.
         item.completer.completeError(e);
+      } finally {
+        // Release the slot even if completing the completer itself throws
+        // (it does, when the future was already completed).
+        _active = false;
       }
-      _active = false;
       _check();
     }
   }
