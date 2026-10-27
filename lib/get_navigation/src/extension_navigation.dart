@@ -13,6 +13,11 @@ import 'root/get_root.dart';
 NavigatorState? get navigator => GetNavigationExt(Get).key.currentState;
 
 extension ExtensionBottomSheet on GetInterface {
+  /// Shows a modal [BottomSheet] without a [BuildContext].
+  ///
+  /// [showDragHandle] is forwarded to [BottomSheet.showDragHandle], the same
+  /// flag as [showModalBottomSheet]. `null` (the default) keeps Flutter's
+  /// default: [BottomSheetThemeData.showDragHandle], then false.
   Future<T?> bottomSheet<T>(
     Widget bottomsheet, {
     Color? backgroundColor,
@@ -26,6 +31,7 @@ extension ExtensionBottomSheet on GetInterface {
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
+    bool? showDragHandle,
     RouteSettings? settings,
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
@@ -51,6 +57,7 @@ extension ExtensionBottomSheet on GetInterface {
       modalBarrierColor: barrierColor,
       settings: settings,
       enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
       enterBottomSheetDuration:
           enterBottomSheetDuration ?? const Duration(milliseconds: 250),
       exitBottomSheetDuration:

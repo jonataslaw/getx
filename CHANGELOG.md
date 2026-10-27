@@ -1,3 +1,7 @@
+## [Unreleased]
+
+- Add optional `showDragHandle` to `Get.bottomSheet` (#2796). `null` keeps Flutter's default.
+
 ## [5.0.0-release-candidate-9.3.3]
 
 Fix flutter 3.44.0

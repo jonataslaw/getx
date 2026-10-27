@@ -277,6 +277,15 @@ To close snackbars, dialogs, bottomsheets, or anything you would normally close 
 Get.back();
 ```
 
+Open a bottom sheet. `showDragHandle` matches Flutter's `showModalBottomSheet` flag; omit it to keep the theme default.
+
+```dart
+Get.bottomSheet(
+  Container(child: Text('Hello')),
+  showDragHandle: true,
+);
+```
+
 To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens, etc.)
 
 ```dart

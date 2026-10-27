@@ -546,6 +546,25 @@ Get.bottomSheet(
 );
 ```
 
+`showDragHandle` is forwarded to Flutter's `BottomSheet`, the same flag as `showModalBottomSheet`. Leave it `null` (the default) to follow `BottomSheetThemeData.showDragHandle`.
+
+```dart
+Get.bottomSheet(
+  Container(
+    child: Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.music_note),
+          title: Text('Music'),
+          onTap: () {},
+        ),
+      ],
+    ),
+  ),
+  showDragHandle: true,
+);
+```
+
 ## Nested Navigation
 
 Get made Flutter's nested navigation even easier.
