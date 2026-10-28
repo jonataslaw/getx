@@ -17,6 +17,7 @@ void main() {
         home: const _ThemeProbe(),
       ),
     );
+    await tester.pumpAndSettle();
 
     final context = tester.element(find.byType(_ThemeProbe));
     final ThemeData resolvedTheme = context.theme;
@@ -35,6 +36,7 @@ void main() {
           home: const _ThemeProbe(),
         ),
       );
+      await tester.pumpAndSettle();
 
       Get.changeTheme(ThemeData.dark());
       Get.changeThemeMode(ThemeMode.dark);

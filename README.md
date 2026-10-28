@@ -116,6 +116,8 @@
 
 # Installing
 
+GetX requires Flutter 3.47 / Dart 3.13 or later.
+
 Add Get to your pubspec.yaml file:
 
 ```yaml
@@ -131,15 +133,15 @@ import 'package:get/get.dart';
 
 ## Flutter 3.47 standalone Material package
 
-Flutter 3.47 provides Material widgets and theme types through the standalone
-`material_ui` package. GetX uses the same package for `GetMaterialApp`,
-`ThemeData`, and `ThemeMode`, so applications using Flutter 3.47 or later
+GetX requires Flutter 3.47 / Dart 3.13 or later. Flutter 3.47 provides Material
+widgets and theme types through the standalone `material_ui` package. GetX uses
+the same package for `GetMaterialApp`, `ThemeData`, and `ThemeMode`, so apps
 should import Material APIs from `material_ui`:
 
 ```yaml
 dependencies:
   get: any
-  material_ui: any
+  material_ui: ^1.8.0
 ```
 
 ```dart
