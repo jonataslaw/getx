@@ -3,7 +3,9 @@ part of '../rx_types.dart';
 /// Create a list similar to `List<T>`
 class RxList<E> extends GetListenable<List<E>>
     with ListMixin<E>, RxObjectMixin<List<E>> {
-  RxList([super.initial = const []]);
+  /// Growable empty list. Do not default to `const []` — that is an
+  /// unmodifiable `List<Never>` and `addAll` then throws at runtime.
+  RxList([List<E>? initial]) : super(initial ?? <E>[]);
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get_navigation/src/routes/test_kit.dart';
 
 import '../../../get.dart';
@@ -313,6 +313,7 @@ class GetRoot extends StatefulWidget {
 
 class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   static GetRootState? _controller;
+  static GetRootState? get maybeController => _controller;
   static GetRootState get controller {
     if (_controller == null) {
       throw Exception('GetRoot is not part of the tree');

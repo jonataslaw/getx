@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';

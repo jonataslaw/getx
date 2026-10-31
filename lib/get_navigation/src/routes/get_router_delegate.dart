@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get_utils/src/extensions/iterable_extensions.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';

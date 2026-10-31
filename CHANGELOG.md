@@ -1,6 +1,10 @@
 ## [5.0.0-release-candidate-9.3.3]
 
-Fix flutter 3.44.0
+- Require Flutter 3.47 / Dart 3.13 so older SDKs cannot resolve this candidate against `material_ui`
+- Depend on `material_ui: ^1.8.0` and `cupertino_ui: ^1.1.4` instead of `any`
+- Wait for `GetMaterialApp` to finish the first frame in standalone Material theme tests
+- Remove an invalid `final` modifier from `GetPage.copyWith` that Dart 3.13 rejects
+- Fix flutter 3.44.0
 
 ## [5.0.0-release-candidate-9.3.2]
 
