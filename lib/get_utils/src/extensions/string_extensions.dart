@@ -19,7 +19,7 @@ extension GetStringUtils on String {
   /// Discover if the String is a vector
   bool get isVectorFileName => GetUtils.isVector(this);
 
-  /// Discover if the String is a ImageFileName
+  /// Checks for a JPG, JPEG, PNG, GIF, BMP, or WebP file extension, ignoring case.
   bool get isImageFileName => GetUtils.isImage(this);
 
   /// Discover if the String is a AudioFileName

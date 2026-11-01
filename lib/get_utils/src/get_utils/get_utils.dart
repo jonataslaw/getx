@@ -127,7 +127,9 @@ class GetUtils {
         ext.endsWith(".3gp");
   }
 
-  /// Checks if string is an image file.
+  /// Checks whether [filePath] ends with a supported image file extension.
+  ///
+  /// Supports JPG, JPEG, PNG, GIF, BMP, and WebP, ignoring case.
   static bool isImage(String filePath) {
     final ext = filePath.toLowerCase();
 
@@ -135,7 +137,8 @@ class GetUtils {
         ext.endsWith(".jpeg") ||
         ext.endsWith(".png") ||
         ext.endsWith(".gif") ||
-        ext.endsWith(".bmp");
+        ext.endsWith(".bmp") ||
+        ext.endsWith(".webp");
   }
 
   /// Checks if string is an audio file.
