@@ -40,6 +40,7 @@
 
 - [About Get](#about-get)
 - [Installing](#installing)
+  - [Migrating from GetX 4.x](#migrating-from-getx-4x)
 - [Flutter 3.47 standalone Material package](#flutter-347-standalone-material-package)
 - [Counter App with GetX](#counter-app-with-getx)
 - [The Three pillars](#the-three-pillars)
@@ -130,6 +131,12 @@ Import get in files that it will be used:
 ```dart
 import 'package:get/get.dart';
 ```
+
+## Migrating from GetX 4.x
+
+For the current GetX 5 release candidate, see the
+[migration guide](documentation/en_US/migration_guide_5.md) for SDK requirements,
+standalone UI package imports, and the `Get.create` to `Get.spawn` rename.
 
 ## Flutter 3.47 standalone Material package
 
