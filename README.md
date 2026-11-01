@@ -51,6 +51,7 @@
   - [Dependency management](#dependency-management)
     - [More details about dependency management](#more-details-about-dependency-management)
 - [Utils](#utils)
+  - [Image file names](#image-file-names)
   - [Internationalization](#internationalization)
     - [Translations](#translations)
       - [Using translations](#using-translations)
@@ -369,6 +370,19 @@ Text(controller.textFromApi);
 **See a more in-depth explanation of dependency management [here](./documentation/en_US/dependency_management.md)**
 
 # Utils
+
+## Image file names
+
+`GetUtils.isImage` and the `String.isImageFileName` extension recognize JPG,
+JPEG, PNG, GIF, BMP, and WebP file extensions, ignoring case:
+
+```dart
+GetUtils.isImage('photo.webp'); // true
+'photo.WEBP'.isImageFileName; // true
+```
+
+These helpers check only the file extension at the end of the string, not the
+file contents. URL query strings and fragments are not removed before checking.
 
 ## Internationalization
 

@@ -96,6 +96,32 @@ void main() {
       expect(svgPath.isImageFileName, false);
     });
 
+    test('var.isImageFileName recognizes WebP file names and paths', () {
+      for (final path in [
+        'logo.webp',
+        'logo.WEBP',
+        'logo.WeBp',
+        '/images/logo.webp',
+        r'C:\images\logo.webp',
+      ]) {
+        expect(path.isImageFileName, isTrue, reason: path);
+      }
+    });
+
+    test(
+      'var.isImageFileName rejects strings without a final WebP extension',
+      () {
+        for (final path in [
+          'webp',
+          'logo.webp.exe',
+          'logo.webp?size=100',
+          'logo.webp#preview',
+        ]) {
+          expect(path.isImageFileName, isFalse, reason: path);
+        }
+      },
+    );
+
     test('var.isAudioFileName', () {
       const mp3Path = "logo.mp3";
       const wavPath = "logo.wav";

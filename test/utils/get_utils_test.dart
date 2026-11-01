@@ -10,6 +10,65 @@ class EmptyClass {}
 void main() {
   dynamic newId(dynamic e) => e;
 
+  group('GetUtils.isImage', () {
+    test('recognizes every capitalization of the WebP extension', () {
+      for (var mask = 0; mask < 16; mask++) {
+        const letters = 'webp';
+        final extension = List.generate(letters.length, (index) {
+          final letter = letters[index];
+          return mask & (1 << index) == 0 ? letter : letter.toUpperCase();
+        }).join();
+        final path = 'photo.$extension';
+        expect(GetUtils.isImage(path), isTrue, reason: path);
+      }
+    });
+
+    test('recognizes WebP at the end of file names and paths', () {
+      for (final path in [
+        'photo.webp',
+        '.webp',
+        'photo.preview.webp',
+        'my photo.webp',
+        '/images/photo.webp',
+        r'C:\images\photo.webp',
+        'images/عکس.webp',
+        'https://example.com/images/photo.webp',
+      ]) {
+        expect(GetUtils.isImage(path), isTrue, reason: path);
+      }
+    });
+
+    test('preserves support for existing image extensions', () {
+      for (final extension in ['jpg', 'jpeg', 'png', 'gif', 'bmp']) {
+        for (final variant in [extension, extension.toUpperCase()]) {
+          final path = 'photo.$variant';
+          expect(GetUtils.isImage(path), isTrue, reason: path);
+        }
+      }
+    });
+
+    test('requires a supported extension at the end of the string', () {
+      for (final path in [
+        '',
+        'photo',
+        'webp',
+        'photowebp',
+        'photo.webp2',
+        'photo.webp.exe',
+        '/images.webp/photo',
+        'photo.webp ',
+        'photo.webp\n',
+        'photo.webp?size=100',
+        'photo.webp#preview',
+        'photo.svg',
+        'photo.avif',
+        'photo.txt',
+      ]) {
+        expect(GetUtils.isImage(path), isFalse, reason: path);
+      }
+    });
+  });
+
   test('null isNullOrBlank should be true for null', () {
     expect(GetUtils.isNullOrBlank(null), true);
   });
