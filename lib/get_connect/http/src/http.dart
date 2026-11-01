@@ -84,6 +84,8 @@ class GetHttpClient {
     _modifier.addResponseModifier(interceptor);
   }
 
+  /// Removes a response modifier using the same callback registered with
+  /// [addResponseModifier]. Other request and response modifiers are unaffected.
   void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
     _modifier.removeResponseModifier<T>(interceptor);
   }
