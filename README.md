@@ -558,6 +558,23 @@ class HomeProvider extends GetConnect {
 }
 ```
 
+Response modifiers can be removed when they are no longer needed. Pass the same
+callback instance that was registered with `addResponseModifier`; other request
+and response modifiers remain active:
+
+```dart
+final client = GetHttpClient();
+final modifier = (request, response) {
+  // Inspect or modify the response here.
+  return response;
+};
+
+client.addResponseModifier(modifier);
+// Later, stop applying this modifier to subsequent responses.
+client.removeResponseModifier(modifier);
+client.close();
+```
+
 ## GetPage Middleware
 
 The GetPage has now new property that takes a list of GetMiddleWare and run them in the specific order.
