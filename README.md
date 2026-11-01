@@ -1294,6 +1294,17 @@ _Want to contribute to the project? We will be proud to highlight you as one of 
 
 Any contribution is welcome!
 
+Before submitting a pull request, run the same checks used by CI:
+
+```sh
+flutter pub get
+flutter analyze --no-fatal-warnings
+flutter test --coverage
+```
+
+Analysis errors and info-level diagnostics fail CI. Warnings are reported but
+are currently non-fatal so the existing warnings do not block unrelated fixes.
+
 ## Articles and videos
 
 - [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).
