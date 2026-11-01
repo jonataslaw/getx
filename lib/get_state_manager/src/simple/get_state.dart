@@ -45,6 +45,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
+  final T Function()? controllerBuilder;
 
   const GetBuilder({
     super.key,
@@ -60,12 +61,20 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
+    this.controllerBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
+     final controller = switch (init) {
+      T c => c,
+      null => switch (controllerBuilder) {
+        null => null,
+        T Function() cb => cb(),
+      },
+    };
     return Binder(
-      init: init == null ? null : () => init!,
+      init: controller == null ? null : () => controller,
       global: global,
       autoRemove: autoRemove,
       assignId: assignId,
