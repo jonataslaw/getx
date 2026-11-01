@@ -172,10 +172,23 @@ extension ListExtension<E> on List<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
+    // Materialise the source BEFORE clearing. [items] is very often lazy --
+    // `list.map(...)`, `list.where(...)` -- and two things go wrong if it is
+    // consumed after the clear:
+    //
+    //   * a lazy view derived from this very list reads a collection that
+    //     has just been emptied, so the assignment silently drops
+    //     everything;
+    //   * an element that throws mid-iteration (a malformed row coming back
+    //     from a server, for instance) leaves the list cleared and only
+    //     partially refilled -- data lost, no error recovery possible.
+    //
+    // Snapshotting first makes the operation atomic from the caller's point
+    // of view: it either replaces the contents or leaves them untouched.
+    final source = items is List<E> ? items : List<E>.of(items);
     if (this is RxList) {
       (this as RxList).value.clear();
     }
-    //clear();
-    addAll(items);
+    addAll(source);
   }
 }

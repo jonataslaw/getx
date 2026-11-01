@@ -17,7 +17,15 @@ mixin GetLifeCycleMixin {
   @protected
   @mustCallSuper
   void onInit() {
-    Engine.instance.addPostFrameCallback((_) => onReady());
+    Engine.instance.addPostFrameCallback((_) {
+      // A controller can be created and destroyed within the same frame --
+      // a middleware redirect, an `offNamed` chain, a deep link arriving
+      // during boot. Without this guard the post-frame callback still runs,
+      // so `onReady()` fires AFTER `onClose()`, on a controller that is
+      // already disposed. `onReady` is the documented place to start work,
+      // so the effect is not cosmetic.
+      if (!_isClosed) onReady();
+    });
   }
 
   /// Called 1 frame after onInit(). It is the perfect place to enter
