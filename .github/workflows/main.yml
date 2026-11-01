@@ -26,7 +26,9 @@ jobs:
           flutter-version: "3.47.8"
           channel: "stable"
       - run: flutter pub get
-      #- run: flutter analyze
+      # Keep existing warnings visible while failing on analysis errors.
+      - name: Analyze Dart code
+        run: flutter analyze --no-fatal-warnings
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       # Upload coverage reports to Codecov
