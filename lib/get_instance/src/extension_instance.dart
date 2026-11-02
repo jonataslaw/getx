@@ -52,24 +52,17 @@ extension Inst on GetInterface {
   /// `Get.put()`
   static final Map<String, _InstanceBuilderFactory> _singl = {};
 
-  /// Holds a reference to every registered callback when using
-  /// `Get.lazyPut()`
-  // static final Map<String, _Lazy> _factory = {};
-
-  // void injector<S>(
-  //   InjectorBuilderCallback<S> fn, {
-  //   String? tag,
-  //   bool fenix = false,
-  //   //  bool permanent = false,
-  // }) {
-  //   lazyPut(
-  //     () => fn(this),
-  //     tag: tag,
-  //     fenix: fenix,
-  //     // permanent: permanent,
-  //   );
-  // }
-
+  /// Injects an instance `<S>` in memory to be globally accessible. Works like [find]
+  /// if the instance of `<S>` already exists.
+  ///
+  /// No need to define the generic type `<S>` as it's inferred from
+  /// the [dependency]
+  ///
+  /// - [dependency] The Instance to be injected.
+  /// - [tag] optionally, use a [tag] as an "id" to create multiple records of
+  /// the same Type<[S]>
+  /// - [permanent] keeps the Instance in memory, not following
+  /// `Get.smartManagement` rules.
   S put<S>(
     S dependency, {
     String? tag,
