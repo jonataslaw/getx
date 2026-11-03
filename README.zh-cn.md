@@ -1,3 +1,5 @@
+> GetX 5 RC：当前 API 请参阅[本分支迁移指南](documentation/en_US/migration_guide_5.md)。标为 **GetX 4 legacy** 的示例说明旧版 API。
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西亚](README.id-ID.md), [乌尔都语](README.ur-PK.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md), [法语](README-fr.md), [French](README-fr.md)._
@@ -153,7 +155,7 @@ class Home extends StatelessWidget {
 
       // 用一个简单的Get.to()即可代替Navigator.push那8行，无需上下文！
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -248,7 +250,7 @@ GetMaterialApp( // Before: MaterialApp(
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 用别名导航到新页面。查看更多关于命名路由的详细信息[这里](./documentation/zh_CN/route_management.md#navigation-with-named-routes)
@@ -261,19 +263,23 @@ Get.toNamed('/details');
 要关闭snackbars, dialogs, bottomsheets或任何你通常会用Navigator.pop(context)关闭的东西。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 进入下一个页面，但没有返回上一个页面的选项（用于闪屏页，登录页面等）。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 进入下一个页面并取消之前的所有路由（在购物车、投票和测试中很有用）。
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 注意到你不需要使用context来做这些事情吗？这就是使用Get路由管理的最大优势之一。有了它，你可以在你的控制器类中执行所有这些方法，而不用担心context在哪里。
@@ -886,9 +892,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // 或者我们可以使用`update()`方法!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -923,9 +931,9 @@ print( user );
 
 > 那么，什么时候你需要 "缓存 "一个Controller？
 
-如果你使用了**GetX**的另一个 "不常见 "的特性 `Get.create()`
+如果你使用了**GetX**的另一个 "不常见 "的特性 `Get.spawn()`
 
-`Get.create(()=>Controller())` 会在每次调用时生成一个新的`Controller`
+`Get.spawn(()=>Controller())` 会在每次调用时生成一个新的`Controller`
 `Get.find<Controller>()`
 
 你可以用它来保存Todo项目的列表，如果小组件被 "重建"，它将保持相同的控制器实例。
@@ -937,6 +945,8 @@ print( user );
 
 所以这对保持你的 "服务 "总是可以被`Get.find()`获取到并保持运行是超级有用的。比如
 `ApiService`，`StorageService`，`CacheService`。
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1036,7 +1046,7 @@ GetMaterialApp(
 
 1- Flutter更新后，很多时候，你的很多包都会坏掉。有时会发生编译错误，经常出现的错误，至今仍没有答案，开发者需要知道错误的来源，跟踪错误，才会尝试在相应的仓库中开一个问题，并看到其问题的解决。Get集中了开发的主要资源（状态、依赖和路由管理），让你可以在pubspec中添加一个包，然后开始工作。Flutter更新后，你唯一需要做的就是更新Get依赖，然后开始工作。Get还可以解决兼容性问题。有多少次，一个包的版本与另一个包的版本不兼容，因为一个包在一个版本中使用了依赖，而另一个包在另一个版本中使用了依赖？使用Get也不用担心这个问题，因为所有的东西都在同一个包里，是完全兼容的。
 
-2- Flutter很简单，Flutter很不可思议，但是Flutter仍然有一些代码，对于大多数开发者来说可能是不需要的，比如`Navigator.of(context).push (context, builder [...]`，你写了8行代码仅仅只为了调用一个路由。而使用Get只需`Get.to(Home())`就完成了，你将进入下一个页面。动态网页URL是目前Flutter中非常痛苦的一件事，而用GetX则非常简单。在Flutter中管理状态，管理依赖关系也产生了很多讨论，因为pub中的模式有上百种。但是没有什么比在你的变量末尾加一个".obs "更简单的了，把你的widget放在一个Obx里面，就这样，所有对这个变量的更新都会在页面上自动更新。
+2- Flutter很简单，Flutter很不可思议，但是Flutter仍然有一些代码，对于大多数开发者来说可能是不需要的，比如`Navigator.of(context).push (context, builder [...]`，你写了8行代码仅仅只为了调用一个路由。而使用Get只需`Get.to(() => Home())`就完成了，你将进入下一个页面。动态网页URL是目前Flutter中非常痛苦的一件事，而用GetX则非常简单。在Flutter中管理状态，管理依赖关系也产生了很多讨论，因为pub中的模式有上百种。但是没有什么比在你的变量末尾加一个".obs "更简单的了，把你的widget放在一个Obx里面，就这样，所有对这个变量的更新都会在页面上自动更新。
 
 3-轻松，不用担心性能。Flutter的性能已经很惊人了，但是想象一下，你使用一个状态管理器，和一个定位器来分布你的blocs/stores/controllers/等等类。当你不需要那个依赖的时候，你必须手动调用排除它。但是，你有没有想过简单地使用你的控制器，当它不再被任何人使用时，它会简单地从内存中删除？这就是GetX所做的。有了SmartManagement，所有不被使用的东西都会从内存中删除，除了编程，您不应该担心任何事情。GetX将保证您消耗的是最低限度的必要资源，甚至没有为此创建一个逻辑。
 

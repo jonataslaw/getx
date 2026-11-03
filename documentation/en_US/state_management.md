@@ -1,3 +1,5 @@
+> GetX 5 RC: use the branch-specific [migration guide](../en_US/migration_guide_5.md) for the current API. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
+
 * [State Management](#state-management)
   + [Reactive State Manager](#reactive-state-manager)
     - [Advantages](#advantages)
@@ -271,9 +273,9 @@ onInit() async {
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -330,9 +332,9 @@ class RxUser {
 
 ``` dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // when instantianting:
@@ -363,7 +365,7 @@ When you are making your own classes observable, there is a different way to upd
 ``` dart
 // on the model file
 // we are going to make the entire class observable instead of each attribute
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -372,10 +374,7 @@ class User() {
 // on the controller file
 final user = User().obs;
 // when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // an alternative way of update the user variable:
 user(User(name: 'João', age: 35));
 
@@ -726,23 +725,23 @@ To implement it, use the `with` to add the `StateMixin<T>`
 to your controller which allows a T model.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 The `change()` method change the State whenever we want.
-Just pass the data and the status in this way:
+Pass a status containing the successful data from inside your controller:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus allow these status:
+GetStatus allow these status:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 To represent it in the UI, use:
@@ -763,7 +762,7 @@ class OtherClass extends GetView<Controller> {
 
         // here also you can set your own error widget, but by
         // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }

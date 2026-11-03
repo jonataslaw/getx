@@ -1,3 +1,5 @@
+> GetX 5 RC: वर्तमान API के लिए इस शाखा की [माइग्रेशन गाइड](documentation/en_US/migration_guide_5.md) देखें। **GetX 4 legacy** वाले उदाहरण पुराने API के लिए हैं।
+
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
@@ -271,7 +273,7 @@ class Home extends StatelessWidget {
 
       body: Center(child: ElevatedButton(
 
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
 
       floatingActionButton:
 
@@ -384,7 +386,7 @@ GetMaterialApp( // यह पहले MaterialApp था
 एक नई स्क्रीन पर Navigate करें:
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 
 ```
 
@@ -400,6 +402,10 @@ Snackbar, Dialog तथा Bottomsheets या ऐसी किसी भी च
 
 ```dart
 
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 
 ```
@@ -407,7 +413,7 @@ Get.back();
 
 ```dart
 
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 
 ```
 
@@ -415,7 +421,7 @@ Get.off(NextScreen());
 
 ```dart
 
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 
 ```
 

@@ -94,8 +94,7 @@ class SnackbarController {
   void _configureOverlay() {
     final overlayContext = Get.overlayContext;
     _isTesting = overlayContext == null;
-    _overlayState =
-        _isTesting ? OverlayState() : Overlay.of(Get.overlayContext!);
+    _overlayState = _isTesting ? OverlayState() : Get.key.currentState?.overlay;
     _overlayEntries.clear();
     _overlayEntries.addAll(_createOverlayEntries(_getBodyWidget()));
     if (!_isTesting) {

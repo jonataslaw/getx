@@ -1,3 +1,5 @@
+> GetX 5 RC: lihat [panduan migrasi cabang ini](../en_US/migration_guide_5.md) untuk API saat ini. Contoh bertanda **GetX 4 legacy** menjelaskan API lama.
+
 - [State Management](#state-management)
   - [Reactive State Manager](#reactive-state-manager)
     - [Keuntungan](#keuntungan)
@@ -267,9 +269,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -326,9 +328,9 @@ class RxUser {
 
 ```dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // saat menginstansiasi:
@@ -361,7 +363,7 @@ Ketika anda membuat kelas anda sendiri observable, ada berbagai cara untuk mempe
 // didalam file model
 // kita akan membuat seluruh kelas menjadi observable daripada
 // mengimplementasikannya pada masing-masing atribut.
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -371,10 +373,7 @@ class User() {
 // didalam file controller
 final user = User().obs;
 // ketika anda perlu mengupdate variabel user:
-user.update( (user) { // parameter ini adalah kelas itu sendiri yang akan anda update
-  user.name = 'Jonny';
-  user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // cara alternatif untuk melakukannya:
 user(User(name: 'João', age: 35));
 

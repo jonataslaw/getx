@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/test_kit.dart';
@@ -22,6 +23,8 @@ class ConfigData {
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
+  final String? restorationScopeId;
   final BackButtonDispatcher? backButtonDispatcher;
   final List<NavigatorObserver>? navigatorObservers;
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -65,6 +68,8 @@ class ConfigData {
     required this.routeInformationProvider,
     required this.routeInformationParser,
     required this.routerDelegate,
+    this.routerConfig,
+    this.restorationScopeId,
     required this.backButtonDispatcher,
     required this.navigatorObservers,
     required this.navigatorKey,
@@ -109,6 +114,8 @@ class ConfigData {
     RouteInformationProvider? routeInformationProvider,
     RouteInformationParser<Object>? routeInformationParser,
     RouterDelegate<Object>? routerDelegate,
+    RouterConfig<Object>? routerConfig,
+    String? restorationScopeId,
     BackButtonDispatcher? backButtonDispatcher,
     List<NavigatorObserver>? navigatorObservers,
     GlobalKey<NavigatorState>? navigatorKey,
@@ -153,6 +160,8 @@ class ConfigData {
       routeInformationParser:
           routeInformationParser ?? this.routeInformationParser,
       routerDelegate: routerDelegate ?? this.routerDelegate,
+      routerConfig: routerConfig ?? this.routerConfig,
+      restorationScopeId: restorationScopeId ?? this.restorationScopeId,
       backButtonDispatcher: backButtonDispatcher ?? this.backButtonDispatcher,
       navigatorObservers: navigatorObservers ?? this.navigatorObservers,
       navigatorKey: navigatorKey ?? this.navigatorKey,
@@ -205,6 +214,8 @@ class ConfigData {
         other.routeInformationProvider == routeInformationProvider &&
         other.routeInformationParser == routeInformationParser &&
         other.routerDelegate == routerDelegate &&
+        other.routerConfig == routerConfig &&
+        other.restorationScopeId == restorationScopeId &&
         other.backButtonDispatcher == backButtonDispatcher &&
         listEquals(other.navigatorObservers, navigatorObservers) &&
         other.navigatorKey == navigatorKey &&
@@ -250,6 +261,8 @@ class ConfigData {
         routeInformationProvider.hashCode ^
         routeInformationParser.hashCode ^
         routerDelegate.hashCode ^
+        routerConfig.hashCode ^
+        restorationScopeId.hashCode ^
         backButtonDispatcher.hashCode ^
         navigatorObservers.hashCode ^
         navigatorKey.hashCode ^
@@ -322,6 +335,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   late ConfigData config;
+  GetDelegate? _ownedDelegate;
 
   @override
   void initState() {
@@ -343,6 +357,8 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   void onClose() {
     config.onDispose?.call();
+    _ownedDelegate?.dispose();
+    _ownedDelegate = null;
     Get.clearTranslations();
     config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
@@ -359,11 +375,14 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   void onInit() {
-    if (config.getPages == null && config.home == null) {
+    if (config.routerConfig == null &&
+        config.routerDelegate == null &&
+        config.getPages == null &&
+        config.home == null) {
       throw 'You need add pages or home';
     }
 
-    if (config.routerDelegate == null) {
+    if (config.routerConfig == null && config.routerDelegate == null) {
       final newDelegate = GetDelegate.createDelegate(
         pages: config.getPages ??
             [
@@ -374,6 +393,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
             ],
         notFoundRoute: config.unknownRoute,
         navigatorKey: config.navigatorKey,
+        restorationScopeId: config.restorationScopeId,
         navigatorObservers: (config.navigatorObservers == null
             ? <NavigatorObserver>[
                 GetObserver(config.routingCallback, Get.routing)
@@ -383,10 +403,13 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
                 ...config.navigatorObservers!
               ]),
       );
+      _ownedDelegate = newDelegate;
       config = config.copyWith(routerDelegate: newDelegate);
     }
 
-    if (config.routeInformationParser == null) {
+    if (config.routerConfig == null &&
+        config.routeInformationParser == null &&
+        config.routerDelegate is GetDelegate) {
       final newRouteInformationParser =
           GetInformationParser.createInformationParser(
         initialRoute: config.initialRoute ??
@@ -416,7 +439,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     Get.isLogEnable = config.enableLog ?? kDebugMode;
     Get.log = config.logWriterCallback ?? defaultLogWriterCallback;
 
-    if (config.defaultTransition == null) {
+    if (config.defaultTransition == null &&
+        config.routerConfig == null &&
+        config.routerDelegate is GetDelegate) {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
@@ -502,10 +527,19 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
-  GetDelegate get rootDelegate => config.routerDelegate as GetDelegate;
+  GetDelegate get rootDelegate {
+    final delegate =
+        config.routerConfig?.routerDelegate ?? config.routerDelegate;
+    if (delegate is GetDelegate) return delegate;
+    throw FlutterError(
+      'Get navigation requires a GetDelegate. '
+      'Use the navigation API of your custom RouterDelegate instead.',
+    );
+  }
 
   RouteInformationParser<Object> get informationParser =>
-      config.routeInformationParser!;
+      (config.routerConfig?.routeInformationParser ??
+          config.routeInformationParser)!;
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
     rootDelegate.navigatorKey = newKey;

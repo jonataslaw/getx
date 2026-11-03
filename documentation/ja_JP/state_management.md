@@ -1,3 +1,5 @@
+> GetX 5 RC: 現在の API は[このブランチの移行ガイド](../en_US/migration_guide_5.md)を参照してください。**GetX 4 legacy** と記された例は旧 API の説明です。
+
 * [状態管理](#状態管理)
   + [リアクティブな状態管理](#リアクティブな状態管理)
     - [利点](#利点)
@@ -272,9 +274,9 @@ onInit() async {
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -331,9 +333,9 @@ class RxUser {
 
 ``` dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // インスタンス化の際
@@ -363,7 +365,7 @@ ListView.builder (
 ``` dart
 // モデルクラス
 // 属性をobsにするやり方ではなく、クラス全体をobsにする方法を採ります
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -372,10 +374,7 @@ class User() {
 // Controllerクラス
 final user = User().obs;
 // user変数を更新するときはこのようなメソッドを作ります
-user.update( (user) { // このパラメーターは更新するオブジェクトそのもの
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // あるいは、この方法でも。変数名は呼び出し可能です。
 user(User(name: 'João', age: 35));
 
@@ -724,23 +723,23 @@ MixinBuilderに使用するControllerクラスには、変数を `.obs`（Observ
 `with` を使って `StateMixin<T>` をControllerにミックスインしてください。Tにはモデルのクラス名が入ります。
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 状態を変更するには `change()` メソッドを使ってください。
 パラメーターにはビューに渡すデータと「状態」をセットします。
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus の「状態」は以下の4つです。
+GetStatus の「状態」は以下の4つです。
 
 ``` dart
-RxStatus.loading(); // ロード中
-RxStatus.success(); // ロード成功
-RxStatus.empty(); // データが空
-RxStatus.error('message'); // エラー
+GetStatus.loading(); // ロード中
+GetStatus.success(data); // ロード成功
+GetStatus.empty(); // データが空
+GetStatus.error('message'); // エラー
 ```
 
 それぞれの「状態」をUIで表すには以下のようにします。
@@ -761,7 +760,7 @@ class OtherClass extends GetView<Controller> {
 
         // ここもカスタムのエラーWidgetでも構いませんが、
         // デフォルトは Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }

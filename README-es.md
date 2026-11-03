@@ -1,3 +1,5 @@
+> GetX 5 RC: consulta la [guía de migración de esta rama](documentation/en_US/migration_guide_5.md) para las API actuales. Los ejemplos marcados **GetX 4 legacy** describen API anteriores.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Idiomas: Español (este archivo), [Vietnamita](README-vi.md), [Indonesio](README.id-ID.md), [Urdu](README.ur-PK.md), [Lengua china](README.zh-cn.md), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Ruso](README.ru.md), [Polaco](README.pl.md), [Coreano](README.ko-kr.md), [Francés](README-fr.md).*
@@ -117,7 +119,7 @@ class Home extends StatelessWidget {
 
       // Reemplace el Navigator.push de 8 líneas por un simple Get.to(). No necesitas contexto
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -191,31 +193,35 @@ Obtendrá una buena idea de la potencia de GetX.
 Para navegar a una nueva pantalla:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Para cerrar snackbars, dialogs, bottomsheets o cualquier cosa que normalmente cierre con Navigator.pop(contexto);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Para ir a la siguiente pantalla, sin opción a volver (util por ejemplo en SplashScreens, LoginScreen, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Para ir a la siguiente pantalla y cancelar todas las rutas anteriores (útil en carritos de compras, encuestas y exámenes)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Para navegar a la siguiente ruta y recibir o actualizar datos tan pronto como se regrese de ella:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 ### Más detalles sobre la gestión de rutas.
@@ -522,7 +528,7 @@ GetMaterialApp(
 
 1- Después de una actualización de Flutter, muchos paquetes suelen romperse. A veces se producen errores de compilación, errores de los que aún no hay respuestas y el desarrollador necesita saber el origen del error, poder rastrear, y solo entonces intentar abrir un issue en el repositorio correspondiente, para finalmente ver su problema resuelto. Getx centraliza los principales recursos para el desarrollo (gestión de estado, dependencia y rutas), lo que le permite agregar un único paquete a su pubspec y comenzar a trabajar. Después de una actualización de Flutter, lo único que debe hacer es actualizar la dependencia Get y ponerse a trabajar. Get también resuelve problemas de compatibilidad. ¿Cuántas veces una versión de un paquete no es compatible con la versión de otro, porque una usa una dependencia en una versión y la otra en otra? Tampoco es una preocupación usando Get, ya que todo estará en el mismo paquete y será totalmente compatible.
 
-2- Flutter es fácil, Flutter es increíble, pero todavía tiene algo repetitivo que puede ser no deseado para la mayoría de los desarrolladores, como `Navigator.of(context).push (context, builder [...]`. Get simplifica el desarrollo. En lugar de escribir 8 líneas de código para simplemente llamar a una ruta, simplemente puede hacerlo: `Get.to(Home())` y listo, irá a la página siguiente. Algo doloroso de hacer con Flutter actualmente, mientras que con GetX es estúpidamente simple. Gestionar estados en Flutter y dependencias también es algo que genera mucho debate, ya que hay cientos de patrones en el pub. Pero no hay nada tan fácil como agregar un ".obs" al final de su variable, y colocar su widget dentro de un Obx, y eso es todo, todas las actualizaciones de esa variable se actualizarán automáticamente en la pantalla.
+2- Flutter es fácil, Flutter es increíble, pero todavía tiene algo repetitivo que puede ser no deseado para la mayoría de los desarrolladores, como `Navigator.of(context).push (context, builder [...]`. Get simplifica el desarrollo. En lugar de escribir 8 líneas de código para simplemente llamar a una ruta, simplemente puede hacerlo: `Get.to(() => Home())` y listo, irá a la página siguiente. Algo doloroso de hacer con Flutter actualmente, mientras que con GetX es estúpidamente simple. Gestionar estados en Flutter y dependencias también es algo que genera mucho debate, ya que hay cientos de patrones en el pub. Pero no hay nada tan fácil como agregar un ".obs" al final de su variable, y colocar su widget dentro de un Obx, y eso es todo, todas las actualizaciones de esa variable se actualizarán automáticamente en la pantalla.
 
 3- Facilidad sin preocuparse por el rendimiento. El rendimiento de Flutter ya es sorprendente, pero imagine que usa un gestor de estado y un localizador para distribuir sus clases de bloc/stores/controllers/ etc. Tendrá que llamar manualmente a la exclusión de esa dependencia cuando no la necesite. Pero, ¿alguna vez pensó en simplemente usar el controlador, y cuando ya no sea necesario, simplemente se elimine de la memoria? Eso es lo que hace GetX. Con SmartManagement, todo lo que no se está utilizando se elimina de la memoria, y no debería tener que preocuparse por nada más que la programación. Se le garantiza el consumo mínimo de recursos, sin siquiera haber creado una lógica para esto.
 

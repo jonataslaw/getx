@@ -1,3 +1,5 @@
+> GetX 5 RC: актуальный API описан в [руководстве по миграции этой ветки](../en_US/migration_guide_5.md). Примеры с пометкой **GetX 4 legacy** относятся к старому API.
+
 - [Управление состоянием](#управление-состоянием)
   - [Реактивное управление состоянием](#реактивное-управление-состоянием)
     - [Преимущества](#преимущества)
@@ -254,9 +256,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -310,9 +312,9 @@ class RxUser {
 * или вы можете преобразовать весь класс в observable
 ```dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // when instantianting:
@@ -343,7 +345,7 @@ ListView.builder (
 ```dart
 // on the model file
 // we are going to make the entire class observable instead of each attribute
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -353,10 +355,7 @@ class User() {
 // on the controller file
 final user = User().obs;
 // when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // an alternative way of update the user variable:
 user(User(name: 'João', age: 35));
 

@@ -1,3 +1,23 @@
+## [Unreleased]
+
+- Restore Rx stream notifications after the last subscription is canceled and a
+  new subscription is created; make disposal safe during notification delivery.
+- Prevent `onReady` after controller deletion, release locally owned bindings, and
+  correct `Bind.spawn` initialization and `Bind.put` cleanup.
+- Recover queued jobs after errors while preserving stack traces, and make
+  collection assignment safe for aliased inputs.
+- Handle synchronous `StateMixin.futurize` errors and ignore completion after
+  notifier disposal without duplicate status notifications.
+- Complete displaced navigation results, honor middleware before replacing
+  history, preserve route configuration, and respect back-navigation vetoes.
+- Correct selective overlay closing and snackbar overlay lookup.
+- Support custom router configurations, forward app settings, and expose
+  restoration scopes in the app wrappers.
+- Correct response modifier removal and keep asynchronous authentication retries
+  inside their error-handling scope.
+- Add RC-specific migration guidance, refresh translated documentation and
+  replace placeholder example tests with navigation and authentication scenarios.
+
 ## [5.0.0-release-candidate-9.3.0]
 
 - Support for Flutter 3.29.0

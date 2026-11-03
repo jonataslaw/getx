@@ -1,10 +1,12 @@
+> GetX 5 RC：当前 API 请参阅[本分支迁移指南](../en_US/migration_guide_5.md)。标为 **GetX 4 legacy** 的示例说明旧版 API。
+
 # ＃依赖管理
 - [依赖管理](#依赖管理)
   - [实例方法](#实例方法)
     - [Get.put()](#Get.put())
     - [Get.lazyPut](#Get.lazyPut)
     - [Get.putAsync](#Get.putAsync)
-    - [Get.create](#Get.create)
+    - [Get.spawn](#Get.spawn)
   - [使用实例化方法/类](#使用实例化方法/类)
   - [方法之间的差异](#方法之间的差异)
   - [Bindings](#Bindings)
@@ -112,7 +114,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 如果你想注册一个异步实例，你可以使用`Get.putAsync`。
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -125,6 +131,8 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 这都是你在使用putAsync时可以设置的选项。
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -141,32 +149,24 @@ Get.putAsync<S>(
 )
 ```
 
-### Get.create
+### Get.spawn
 
 这个就比较棘手了。关于这个是什么和其他的区别，可以在[方法之间的差异](#方法之间的差异)部分找到详细的解释。
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
 这是你在使用create时可以设置的所有选项。
 
 ```dart
-Get.create<S>(
-  // 需要：一个返回每次调用"Get.find() "都会被新建的类的函数。
-  // 示例: Get.create<YourClass>(()=>YourClass())
-  FcBuilderFunc<S> builder,
-
-  // 可选：就像Get.put()一样，但当你需要多个同类的实例时，会用到它。
-  // 当你有一个列表，每个项目都需要自己的控制器时，这很有用。
-  // 需要是一个唯一的字符串。只要把标签改成名字
-  String name,
-
-  // 可选：就像 Get.put() 一样，
-  // 它是为了当你需要在整个应用中保活实例的时候
-  // 区别在于 Get.create 的 permanent默认为true
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## 使用实例化方法/类
@@ -215,9 +215,10 @@ Get.delete<Controller>(); //通常你不需要这样做，因为GetX已经删除
 
 继续说说方法之间的区别：
 
-- Get.put和Get.putAsync的创建顺序是一样的，不同的是，第二个方法使用的是异步方法创建和初始化实例。put是直接插入内存，使用内部方法`insert`，参数`permanent: false`和`isSingleton: true`（这个isSingleton参数只是告诉它是使用`dependency`上的依赖，还是使用`FcBuilderFunc`上的依赖），之后，调用`Get.find()`，立即初始化内存中的实例。
+> **GetX 4 legacy**
+> - Get.put和Get.putAsync的创建顺序是一样的，不同的是，第二个方法使用的是异步方法创建和初始化实例。put是直接插入内存，使用内部方法`insert`，参数`permanent: false`和`isSingleton: true`（这个isSingleton参数只是告诉它是使用`dependency`上的依赖，还是使用`FcBuilderFunc`上的依赖），之后，调用`Get.find()`，立即初始化内存中的实例。
 
-- Get.create。顾名思义，它将 "创建 "你的依赖关系！类似于`Get.put()`。与`Get.put()`类似，它也会调用内部方法`insert`来实例化。但是`permanent`变成了true，而`isSingleton`变成了false（因为我们是在 "创建 "我们的依赖关系，所以它没有办法成为一个单例，这就是为什么是false）。因为它有`permanent: true`，所以我们默认的好处是不会在页面跳转之间销毁它。另外，`Get.find()`并不是立即被调用，而是等待在页面中被调用，这样创建是为了利用 "permanent "这个参数，值得注意的是，`Get.create()`的目标是创建不共享的实例，但不会被销毁，比如listView中的一个按钮，你想为该列表创建一个唯一的实例--正因为如此，Get.create必须和GetWidget一起使用。
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut。顾名思义，这是一个懒加载的过程。实例被创建了，但它并没有被调用来立即使用，而是一直等待被调用。与其他方法相反，这里没有调用 "insert"。取而代之的是，实例被插入到内存的另一个部分，这个部分负责判断实例是否可以被重新创建，我们称之为 "工厂"。如果我们想创建一些以后使用的东西，它不会和现在使用的东西混在一起。这就是 "fenix "的魔力所在：如果你选择留下 "fenix: false"，并且你的 "smartManagement "不是 "keepFactory"，那么当使用 "Get.find "时，实例将把内存中的位置从 "工厂 "改为普通实例内存区域。紧接着，默认情况下，它将从 "工厂 "中移除。现在，如果你选择 "fenix: true"，实例将继续存在这个专用的部分，甚至进入公共区域，以便将来再次被调用。
 
@@ -236,25 +237,25 @@ Binding类是一个将解耦依赖注入的类，同时 "Bindings "路由到状�
 - 创建一个类并实现Binding
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 你的IDE会自动要求你重写 "dependencies"方法，然后插入你要在该路由上使用的所有类。
 
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.put<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.put<Service>(Api()),
+  ];
 }
 
-class DetailsBinding implements Bindings {
+class DetailsBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetailsController>(() => DetailsController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetailsController>(() => DetailsController()),
+  ];
 }
 ```
 
@@ -267,12 +268,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: DetailsBinding(),
+    bindings: [DetailsBinding()],
   ),
 ];
 ```
@@ -280,26 +281,30 @@ getPages: [
 - 使用正常路由。
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetailsView(), binding: DetailsBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetailsView(), bindings: [DetailsBinding()])
 ```
 
 至此，你不必再担心你的应用程序的内存管理，Get将为你做这件事。
 
-Binding类在调用路由时被调用，你可以在你的GetMaterialApp中创建一个 "initialBinding "来插入所有将要创建的依赖关系。
+Binding类在调用路由时被调用，你可以在你的GetMaterialApp中创建一个 "binds "来插入所有将要创建的依赖关系。
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```
 
 ### BindingsBuilder
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 创建Bindings的默认方式是创建一个实现Bindings的类，但是，你也可以使用`BindingsBuilder`回调，这样你就可以简单地使用一个函数来实例化任何你想要的东西。
 
 例子:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 getPages: [

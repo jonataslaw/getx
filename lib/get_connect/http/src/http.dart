@@ -232,7 +232,7 @@ class GetHttpClient {
       if (HttpStatus.unauthorized == newResponse.statusCode &&
           _modifier.authenticator != null &&
           requestNumber <= maxAuthRetries) {
-        return _performRequest<T>(
+        return await _performRequest<T>(
           handler,
           authenticate: true,
           requestNumber: requestNumber + 1,

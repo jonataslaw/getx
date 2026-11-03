@@ -1,3 +1,5 @@
+> GetX 5 RC : consultez le [guide de migration de cette branche](documentation/en_US/migration_guide_5.md) pour les API actuelles. Les exemples marqués **GetX 4 legacy** décrivent les anciennes API.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Langues: Français (Ce fichier), [Anglais](README.md), [Vietnamien](README-vi.md), [Indonésien](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinois](README.zh-cn.md), [Portuguais du Brésil](README.pt-br.md), [Espagnol](README-es.md), [Russe](README.ru.md), [Polonais](README.pl.md), [Koréen](README.ko-kr.md).**
@@ -152,7 +154,7 @@ class Home extends StatelessWidget {
 
       // Remplacez les 8 lignes Navigator.push par un simple Get.to(). Vous n'avez pas besoin de 'context'
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -255,19 +257,23 @@ Get.toNamed('/details');
 Pour fermer des snackbars, dialogs, bottomsheets, ou tout ce que vous auriez normalement fermé avec Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Pour aller à l'écran suivant avec aucune option pour revenir à l'écran précédent (pour une utilisation dans SplashScreens, écrans de connexion, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Pour aller à l'écran suivant et annuler tous les itinéraires précédents (utile dans les paniers d'achat en ligne, les sondages et les tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Avez-vous remarqué que vous n'avez eu besoin d'utiliser 'context' pour aucune de ces opérations? C'est l'un des plus grands avantages de l'utilisation de la gestion de route avec Get. Avec cela, vous pouvez appeler toutes ces méthodes à partir de votre classe de contrôleur, sans soucis.
@@ -912,9 +918,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // ou utiliser `update()`!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -971,9 +979,9 @@ En raison du _cache_, ne peut pas être un `const Stateless`.
 
 > Alors, quand avez-vous besoin de "mettre en cache" un contrôleur?
 
-Si vous utilisez, une autre fonctionnalité "pas si courante" de **GetX**: `Get.create()`.
+Si vous utilisez, une autre fonctionnalité "pas si courante" de **GetX**: `Get.spawn()`.
 
-`Get.create(()=>Controller())` générera un nouveau `Controller` chaque fois que vous appelez
+`Get.spawn(()=>Controller())` générera un nouveau `Controller` chaque fois que vous appelez
 `Get.find<Controller>()`.
 
 C'est là que `GetWidget` brille ... comme vous pouvez l'utiliser, par exemple,
@@ -987,6 +995,8 @@ Il notifie simplement le **GetX** Dependency Injection system, que cette sous-cl
 
 Donc est très utile pour garder vos "Services" toujours à portée de main et actifs avec `Get.find()`. Comme:
 `ServiceAPI`, `ServiceDeSauvegarde`, `ServiceDeCaching`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {

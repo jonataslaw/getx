@@ -89,21 +89,20 @@ mixin StateMixin<T> on ListNotifier {
 
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
-    final compute = body;
+    if (isDisposed) return;
     _value ??= initialData;
     status = GetStatus<T>.loading();
-    compute().then((newValue) {
+    Future<T>.sync(body).then((newValue) {
+      if (isDisposed) return;
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
-
-      refresh();
     }, onError: (err) {
+      if (isDisposed) return;
       status = GetStatus.error(
           err is Exception ? err : Exception(errorMessage ?? err.toString()));
-      refresh();
     });
   }
 }
@@ -116,26 +115,37 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
 
   StreamController<T>? _controller;
+  VoidCallback? _removeStreamListener;
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller =
-          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller = StreamController<T>.broadcast(
+        onListen: () => _removeStreamListener ??= addListener(_streamListener),
+        onCancel: _detachStreamListener,
+      );
       _controller?.add(_value);
-
-      ///TODO: report to controller dispose
     }
     return _controller!;
   }
 
+  void _detachStreamListener() {
+    _removeStreamListener?.call();
+    _removeStreamListener = null;
+  }
+
   void _streamListener() {
-    _controller?.add(_value);
+    final controller = _controller;
+    // An earlier notifier callback can close this Rx during the same dispatch.
+    if (controller != null && !controller.isClosed) {
+      controller.add(_value);
+    }
   }
 
   @override
   @mustCallSuper
   void close() {
-    removeListener(_streamListener);
+    if (isDisposed) return;
+    _detachStreamListener();
     _controller?.close();
     dispose();
   }

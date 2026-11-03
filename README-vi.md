@@ -1,3 +1,5 @@
+> GetX 5 RC: xem [hướng dẫn chuyển đổi của nhánh này](documentation/en_US/migration_guide_5.md) để dùng API hiện tại. Ví dụ có nhãn **GetX 4 legacy** mô tả API cũ.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Ngôn ngữ: Tiếng Việt (file này), [English](README.md), [Indonesian](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md), [French](README-fr.md).**
@@ -154,7 +156,7 @@ class Home extends StatelessWidget {
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -244,7 +246,7 @@ Di chuyển tới màn hình mới:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Di chuyển tới màn hình mới theo tên. Xem thêm tại [đây](./documentation/en_US/route_management.md#navigation-with-named-routes)
@@ -257,19 +259,23 @@ Get.toNamed('/details');
 Để đóng snackbars, dialogs, bottomsheets, hay bất kì thứ gì, bạn có thể xài cái này để thay Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Đi đến màn hình kế tiếp và bỏ luôn màn hình cũ (thường dùng cho màn hình giới thiệu, màn hình đăng nhập, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Đi đến màn hình kế tiếp và đóng tất cả các routes (hữu dụng cho shopping cart, polls, và tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Bạn có thấy nãy giờ chúng ta không sử dụng từ khóa "context"? Đây chính là thang điểm 9 + 1 của quản lý route ở Get. Với điểm mạnh trên, bạn có thể thao tác bất cứ đâu, kể cả trong controller class.
@@ -907,9 +913,11 @@ user.value.name = 'Kaiser';
 user.refresh();
 
 // or we can use the `update()` method!
-user.update((value){
-  value.name='Kaiser';
-});
+user.update((previous) => User(
+  name: 'Kaiser',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -920,23 +928,23 @@ Một cách khác để xử lý trạng thái `UI` của bạn là sử dụng`
 Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` vào bộ điều khiển (controller) của bạn cho phép tích hợp kèm mô hình T.
 
 ```dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 Phương thức `change()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
 Chỉ cần chuyển dữ liệu và trạng thái theo cách này:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus cho phép những trang thái này:
+GetStatus cho phép những trang thái này:
 
 ```dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 Để biểu hiện nó trên UI, sử dụng:
@@ -957,7 +965,7 @@ class OtherClass extends GetView<Controller> {
 
         // here also you can set your own error widget, but by
         // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }
@@ -970,7 +978,7 @@ Widget này là bảo bối của GetX, rất đơn giản, nhưng rất hữu �
 Là một Widget `const Stateless` có getter` controller` cho một `Controller` đã đăng ký, chỉ vậy thôi người ơi~.
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -1014,9 +1022,9 @@ Bởi vì _cache_ không thể là một `const Stateless`.
 
 > Vậy khi nào mình cần cache bộ điều khiển (controller)?
 
-Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.create()`.
+Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.spawn()`.
 
-`Get.create(()=>Controller())` sẽ tạo một `Controller` với mỗi lần gọi `Get.find<Controller>()`,
+`Get.spawn(()=>Controller())` sẽ tạo một `Controller` với mỗi lần gọi `Get.find<Controller>()`,
 
 Đó là nơi mà `GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
 
@@ -1027,6 +1035,8 @@ Nhưng không có "logic" bên trong của nó. Nó chỉ thông báo cho ** Get
 
 Vì vậy, rất hữu ích để giữ cho "Service" của bạn luôn có thể truy cập và hoạt động với `Get.find ()`. Giống:
 `ApiService`,` StorageService`, `CacheService`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {

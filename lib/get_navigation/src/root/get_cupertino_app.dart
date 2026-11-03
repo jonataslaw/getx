@@ -60,6 +60,9 @@ class GetCupertinoApp extends StatelessWidget {
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
   final RouterConfig<Object>? routerConfig;
+
+  /// The restoration scope identifier for the app and its root navigator.
+  final String? restorationScopeId;
   final BackButtonDispatcher? backButtonDispatcher;
   final CupertinoThemeData? theme;
   final bool useInheritedMediaQuery;
@@ -68,6 +71,7 @@ class GetCupertinoApp extends StatelessWidget {
 
   const GetCupertinoApp({
     super.key,
+    this.restorationScopeId,
     this.theme,
     this.navigatorKey,
     this.home,
@@ -128,6 +132,7 @@ class GetCupertinoApp extends StatelessWidget {
 
   const GetCupertinoApp.router({
     super.key,
+    this.restorationScopeId,
     this.theme,
     this.routeInformationProvider,
     this.routeInformationParser,
@@ -208,6 +213,8 @@ class GetCupertinoApp extends StatelessWidget {
         routeInformationParser: routeInformationParser,
         routeInformationProvider: routeInformationProvider,
         routerDelegate: routerDelegate,
+        routerConfig: routerConfig,
+        restorationScopeId: restorationScopeId,
         routingCallback: routingCallback,
         scaffoldMessengerKey: GlobalKey<ScaffoldMessengerState>(),
         smartManagement: smartManagement,
@@ -219,11 +226,15 @@ class GetCupertinoApp extends StatelessWidget {
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);
         return CupertinoApp.router(
-          routerDelegate: controller.config.routerDelegate,
-          routeInformationParser: controller.config.routeInformationParser,
+          routerDelegate:
+              routerConfig == null ? controller.config.routerDelegate : null,
+          routeInformationParser: routerConfig == null
+              ? controller.config.routeInformationParser
+              : null,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
           routerConfig: routerConfig,
+          restorationScopeId: restorationScopeId,
           key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
@@ -249,6 +260,7 @@ class GetCupertinoApp extends StatelessWidget {
           showSemanticsDebugger: showSemanticsDebugger,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
           shortcuts: shortcuts,
+          actions: actions,
           scrollBehavior: scrollBehavior,
         );
       }),

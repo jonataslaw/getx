@@ -1,16 +1,27 @@
-# example
+# GetX 5 example
 
-A new Flutter project.
+This application uses the parent checkout through a path dependency. Read the
+[RC migration guide](../documentation/en_US/migration_guide_5.md) and the
+[example walkthrough](example.md) for the APIs in this branch.
 
-## Getting Started
+Use one selected Flutter SDK for resolution, analysis and tests. Flutter 3.47.5
+is the provisional validation environment; Flutter 3.47.8 and 3.47.9 validation
+is pending. From this directory:
 
-This project is a starting point for a Flutter application.
+```sh
+flutter --version
+flutter pub get --offline
+flutter analyze --no-pub
+flutter test --no-pub --no-dds
+flutter run --no-pub
+```
 
-A few resources to get you started if this is your first Flutter project:
+Offline resolution requires an existing dependency cache. These commands do not
+install or upgrade an SDK. Root-package tests do not include this package's
+tests. See [example_nav2](../example_nav2/README.md) for the nested Navigator 2
+application and authentication/route smoke checks.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/documentation/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/documentation/cookbook)
+Flutter resources:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter cookbook](https://docs.flutter.dev/cookbook)

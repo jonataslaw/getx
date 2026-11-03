@@ -1,3 +1,5 @@
+> GetX 5 RC: 현재 API는 [이 브랜치의 마이그레이션 가이드](documentation/en_US/migration_guide_5.md)를 참고하세요. **GetX 4 legacy** 표시는 이전 API 예제입니다.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -170,7 +172,7 @@ class Home extends StatelessWidget {
 
       // 8줄의 Navigator.push를 간단한 Get.to()로 변경합니다. context는 필요없습니다.
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -260,7 +262,7 @@ GetMaterialApp( // Before: MaterialApp(
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 명칭으로 새로운 화면으로 이동합니다. 명칭으로 라우트하는 더 자세한 사항은 [여기](./documentation/kr_KO/route_management.md#이름있는-라우트-탐색) 있습니다.
@@ -273,19 +275,23 @@ Get.toNamed('/details');
 스낵바, 다이얼로그, bottomsheets 또는 Navigator.pop(context);로 닫아야 하는 어떤것도 닫게 합니다:
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 다음 화면으로 이동하고 이전 화면으로 돌아갈 필요가 없는 경우 (스플래시, 로그인화면 등..)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 다음 화면으로 이동하고 이전 화면들 모두 닫는 경우 (쇼핑카트, 투표, 테스트에 유용)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 이러한 작업을 수행하기 위해 컨텍스트를 사용할 필요가 없다는 것을 보셨나요? 이것이 Get 라우트 관리를 사용하는 가장 큰 장점 중 하나입니다. 이를 통해 걱정없이 컨트롤러 클래스 내에서 이러한 모든 메서드를 실행할 수 있습니다.
@@ -930,9 +936,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // 또는 `update()` 함수를 사용할 수 있습니다!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -943,23 +951,23 @@ print( user );
 T 모델을 허용하는 컨트롤러에 연결합니다.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 `change()` 메소드는 우리가 원할 때마다 State를 변경합니다.
 다음과 같이 데이터와 상태를 전달하면 됩니다:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus는 다음 상태를 허용합니다:
+GetStatus는 다음 상태를 허용합니다:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 UI에서 사용하는 방법:
@@ -980,7 +988,7 @@ class OtherClass extends GetView<Controller> {
 
         // 여기에서도 자신의 오류 위젯을 설정할 수 있지만
         // 기본값은 Center(child:Text(error)) 입니다
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }
@@ -1033,9 +1041,9 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
 > 그러면 언제 Controller를 "cache"할 필요가 있을까요?
 
-만약 **GetX**의 기능 중 또 다른 "흔하지 않은" 기능을 사용하는 경우:`Get.create()`
+만약 **GetX**의 기능 중 또 다른 "흔하지 않은" 기능을 사용하는 경우:`Get.spawn()`
 
-`Get.create(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다 
+`Get.spawn(()=>Controller())`가 `Get.find<Controller>()`을 호출할 때마다
 새로운 `Controller`를 생성할 것 입니다.
 
 여기서 `GetWidget`이 빛나게 됩니다... 예를 들어 Todo 리스트를 유지하려고 사용할 때 입니다.
@@ -1049,6 +1057,8 @@ _cache_ 이기 때문에 `const Stateless`가 될 수 없습니다.
 
 그래서 `Get.find()`로 활성화하고 항상 접근하는 "서비스들"을 유지하는데 매우 유용합니다. :
 `ApiService`, `StorageService`, `CacheService`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1216,7 +1226,7 @@ GetMaterialApp(
 
 1- 플러터가 업데이트된 이후 자주 많은 패키지가 깨졌을 것입니다. 때때로 컴파일중 에러가 발생하고 종종 이에 대해 답변을 해줄 사람이 없었을 겁니다. 그리고 개발자는 에러가 어디에서 발생했는지 추적해서 알아야합니다. 그리고 오직 리포지트리를 통해서 이슈를 오픈하고 해결책을 찾아야합니다. Get은 개발을 위한 주 리소스들(상태, 종속성, 라우트 관리)을 중앙화합니다. pubspec에 단일 패키지를 추가하고 작업을 시작 할 수 있습니다. 플러터가 업데이트 된 이후에도 Get 의존을 업데이트하면 작업할 수 있습니다. Get은 호환성 이슈도 해결합니다. 한 버전에서 종속적으로 사용하여 다른 버전에서 다른 버전을 사용할때 패키지 버전이 다른 버전과 호환되지 않는 경우가 몇 번입니까? 모든 것이 동일한 패키지에 있고 완벽하게 호환되므로 Get을 사용하면 문제가 되지 않습니다.
 
-2- 플러터는 쉽고 놀랍지만 대다수의 개발자들이 원하지 않는 몇가지 상용구가 있습니다. `Navigator.of(context).push (context, builder [...]` 같은 것들 입니다. Get은 개발을 단순화합니다. 라우트를 위해 8줄의 코드를 작성하고 `Get.to(Home())`만 하면 다음 페이지로 갈 수 있습니다. 동적 웹 url은 현재 플러터에서 정말로 고통스러운 것이고 GetX로 하는 것은 정말 간단합니다. 플러터에서 상태와 종속성을 관리하는 것은 pub에서 수백가지의 패턴이라 많은 논의를 생산합니다. 그러나 변수 끝에 ".obs"를 추가하고 위젯을 Obx 안에 배치하는 것만큼 쉬운 것은 없습니다. 이것으로 해당 변수가 업데이트되면 화면에 자동으로 업데이트됩니다.
+2- 플러터는 쉽고 놀랍지만 대다수의 개발자들이 원하지 않는 몇가지 상용구가 있습니다. `Navigator.of(context).push (context, builder [...]` 같은 것들 입니다. Get은 개발을 단순화합니다. 라우트를 위해 8줄의 코드를 작성하고 `Get.to(() => Home())`만 하면 다음 페이지로 갈 수 있습니다. 동적 웹 url은 현재 플러터에서 정말로 고통스러운 것이고 GetX로 하는 것은 정말 간단합니다. 플러터에서 상태와 종속성을 관리하는 것은 pub에서 수백가지의 패턴이라 많은 논의를 생산합니다. 그러나 변수 끝에 ".obs"를 추가하고 위젯을 Obx 안에 배치하는 것만큼 쉬운 것은 없습니다. 이것으로 해당 변수가 업데이트되면 화면에 자동으로 업데이트됩니다.
 
 3- 성능에 대하여 걱정하지 않아도 됩니다. 플러터의 성능은 이미 놀랍습니다. 하지만 상태관리자를 사용하고 blocs/stores/controllers 등의 클래스들을 로케이터로 배포하는 것을 상상해보십시오. 종속성이 필요 없는 경우 종속성 제외를 수동으로 호출해야 합니다. 하지만 간단하게 controller를 사용하고 이것들을 더이상 사용하지 않을때 간단하게 메모리에서 삭제될수 있을까요? 이것이 GetX가 하는 일입니다. SmartManagement를 사용하면 사용하지 않는 모든것이 메모리에서 삭제되기 때문에 프로그래밍 말고 다른 걱정을 할 필요가 없습니다. 이러한 로직을 만들지 않고도 최소한의 리소스만 사용함을 보장합니다.
 

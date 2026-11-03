@@ -1,3 +1,5 @@
+> GetX 5 RC: 現在の API は[このブランチの移行ガイド](documentation/en_US/migration_guide_5.md)を参照してください。**GetX 4 legacy** と記された例は旧 API の説明です。
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -176,7 +178,7 @@ class Home extends StatelessWidget {
 
       // 8行使っていたNavigator.pushの代わりに短い Get.to()を使ってください。context不要です。
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -263,7 +265,7 @@ GetMaterialApp( // MaterialApp の前に Get
 新しいRouteに画面遷移するにはこのシンタックス。
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 名前付きRouteに画面遷移するにはこのシンタックス。名前付きRouteの詳細は[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
@@ -275,19 +277,23 @@ Get.toNamed('/details');
 SnackBar、Dialog、BottomSheetなど、Navigator.pop(context)で閉じられるRouteはこれで閉じます。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 次の画面に移動した後、前の画面に戻れないようにする場合（スプラッシュスクリーンやログイン画面など）はこちら。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 次の画面に進み、前のRouteをすべてキャンセルする場合（ショッピングカート、アンケート、テストなど）はこちら。
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 以上、contextを一度も使わなかったことに気付きましたか？これがGetでRoute管理を行う最大のメリットのひとつです。contextを使わないので、たとえばcontrollerクラスの中でも、これらのメソッドを実行することができます。
@@ -923,9 +929,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // もしくは `update()` メソッドを使用してください。
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -935,23 +943,23 @@ print( user );
 controllerクラスに`with`を使って`StateMixin<T>`を追加することで実装可能です。
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 `change()`メソッドにより好きなタイミングで状態を変更することができます。
 このようにデータと状態を渡すだけです。
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus には以下のステータスが存在します。
+GetStatus には以下のステータスが存在します。
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 ステータスごとにUIを設定するにはこのようにします。
@@ -972,7 +980,7 @@ class OtherClass extends GetView<Controller> {
 
         // 同様にエラーWidgetはカスタム可能ですが、
         // デフォルトは Center(child:Text(error)) です。
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }
@@ -985,7 +993,7 @@ class OtherClass extends GetView<Controller> {
 このWidgetを一言で表現すると、「controllerをgetterに持つ `const` な StatelessWidget」です。
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -1030,9 +1038,9 @@ GetViewとの違いは、Controllerを`キャッシュ`してくれる点です�
 
 > それでは一体いつControllerをキャッシュする必要があるのかって？
 
-それは **GetX** のこれまた使う機会の少ない `Get.create()` を使うときです。
+それは **GetX** のこれまた使う機会の少ない `Get.spawn()` を使うときです。
 
-`Get.create(()=>Controller())` は `Get.find<Controller>()` を実行するたびに
+`Get.spawn(()=>Controller())` は `Get.find<Controller>()` を実行するたびに
 新しいControllerインスタンスを生成します。
 
 そこで `GetWidget` の出番です。たとえば、Todoアイテムのリスト内容を保持したいとき。
@@ -1043,6 +1051,8 @@ Widgetが更新されてもアイテムはControllerのキャッシュを参照�
 このクラスは `GetxController` に似ており、同様のライフサイクル（`onInit()`, `onReady()`, `onClose()`）を共有しますが、そこに「ロジック」はありません。**GetX**の依存オブジェクト注入システムに、このサブクラスがメモリから **削除できない** ということを知らせるだけです。
 
 そのため `Get.find()` で `ApiService`, `StorageService`, `CacheService` のようなサービス系クラスにいつでもアクセスできるようにしておくと非常に便利です。
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1206,7 +1216,7 @@ GetMaterialApp(
 
 1- Flutterのアップデートが重なると、依存パッケージがうまく動かなくなることがあります。コンパイルエラーを起こしたり、その時点で解決方法がないようなエラーが発生したり。開発者はそのエラーを追跡し、該当リポジトリにissueを提起し、問題が解決されるのを待つ必要があります。Getは開発に必要な主要リソース（状態管理、依存オブジェクト管理、Route管理）を一元化し、Pubspecにパッケージを1つ追加するだけでコーディングを開始することができます。Flutterがアップデートしたときに必要なことは、Getも併せてアップデートすることだけです。それですぐに作業を再開できます。またGetはパッケージ間の互換性の問題も解消します。互いに依存するパッケージAの最新バージョンとBの最新バージョンの間に互換性がない、ということが何度あったでしょうか。Getを使えばすべてが同じパッケージ内にあるため、互換性の心配はありません。
 
-2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文が一部にあります。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(Home())`を実行すれば、次の画面に遷移することができるのです。またウェブURLを動的なものにすることは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクト管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変シンプルです。これは一例ですが、変数の最後に「.obs」を追加して「Obx()」の中にWidgetを配置するだけで、その変数の状態変化が自動でWidgetに反映されます。
+2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文が一部にあります。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(() => Home())`を実行すれば、次の画面に遷移することができるのです。またウェブURLを動的なものにすることは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクト管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変シンプルです。これは一例ですが、変数の最後に「.obs」を追加して「Obx()」の中にWidgetを配置するだけで、その変数の状態変化が自動でWidgetに反映されます。
 
 3- GetXではパフォーマンスのことをあまり気にせず開発ができます。Flutterのパフォーマンスはそれだけで素晴らしいものですが、状態管理と併せて BLoC / データストア / Controller などを届けるためのサービスロケーターを使用することを想像してみてください。そのインスタンスが必要ないときはリソースを解放するイベントを明示的に呼び出さなければなりません。そんなとき、使用されなくなったら自動でメモリから削除してくれればいいのに、と考えたことはありませんか？それを実現してくれるのがGetXです。SmartManagement機能により未使用のリソースはすべて自動でメモリから破棄されるので、本来の開発作業に集中することができます。メモリ管理のためのロジックを作らなくても、常に必要最小限のリソースを使っていることが保証されるのです。
 

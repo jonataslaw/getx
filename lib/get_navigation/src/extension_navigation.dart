@@ -876,42 +876,43 @@ extension GetNavigationExt on GetInterface {
   void closeAllDialogsAndBottomSheets(
     String? id,
   ) {
-    // It can not be divided, because dialogs and bottomsheets can not be consecutive
-    while ((isDialogOpen! && isBottomSheetOpen!)) {
-      closeOverlay(id: id);
-    }
+    searchDelegate(id).navigatorKey.currentState?.popUntil(
+          (route) =>
+              route is! GetDialogRoute && route is! GetModalBottomSheetRoute,
+        );
   }
 
-  void closeAllDialogs({
-    String? id,
-  }) {
-    while ((isDialogOpen!)) {
-      closeOverlay(id: id);
-    }
+  void closeAllDialogs({String? id}) {
+    searchDelegate(id).navigatorKey.currentState?.popUntil(
+          (route) => route is! GetDialogRoute,
+        );
+  }
+
+  Route<dynamic>? _currentNavigatorRoute(String? id) {
+    Route<dynamic>? current;
+    searchDelegate(id).navigatorKey.currentState?.popUntil((route) {
+      current = route;
+      return true;
+    });
+    return current;
   }
 
   /// Close the currently open dialog, returning a [result], if provided
   void closeDialog<T>({String? id, T? result}) {
-    // Stop if there is no dialog open
-    if (isDialogOpen == null || !isDialogOpen!) return;
-
+    if (_currentNavigatorRoute(id) is! GetDialogRoute) return;
     closeOverlay(id: id, result: result);
   }
 
   /// Close the current overlay returning the [result], if provided
-  void closeOverlay<T>({
-    String? id,
-    T? result,
-  }) {
+  void closeOverlay<T>({String? id, T? result}) {
+    if (_currentNavigatorRoute(id) is! PopupRoute) return;
     searchDelegate(id).navigatorKey.currentState?.pop(result);
   }
 
-  void closeAllBottomSheets({
-    String? id,
-  }) {
-    while ((isBottomSheetOpen!)) {
-      searchDelegate(id).navigatorKey.currentState?.pop();
-    }
+  void closeAllBottomSheets({String? id}) {
+    searchDelegate(id).navigatorKey.currentState?.popUntil(
+          (route) => route is! GetModalBottomSheetRoute,
+        );
   }
 
   void closeAllOverlays() {
@@ -933,22 +934,28 @@ extension GetNavigationExt on GetInterface {
     String? id,
     T? result,
   }) {
-    void handleClose(bool closeCondition, Function closeAllFunction,
-        Function closeSingleFunction,
-        [bool? isOpenCondition]) {
-      if (closeCondition) {
-        if (closeAll) {
-          closeAllFunction();
-        } else if (isOpenCondition == true) {
-          closeSingleFunction();
-        }
+    if (closeSnackbar) {
+      if (closeAll) {
+        closeAllSnackbars();
+      } else {
+        closeCurrentSnackbar();
       }
     }
-
-    handleClose(closeSnackbar, closeAllSnackbars, closeCurrentSnackbar);
-    handleClose(closeDialog, closeAllDialogs, closeOverlay, isDialogOpen);
-    handleClose(closeBottomSheet, closeAllBottomSheets, closeOverlay,
-        isBottomSheetOpen);
+    if (closeAll) {
+      if (closeDialog && closeBottomSheet) {
+        closeAllDialogsAndBottomSheets(id);
+      } else if (closeDialog) {
+        closeAllDialogs(id: id);
+      } else if (closeBottomSheet) {
+        closeAllBottomSheets(id: id);
+      }
+    } else {
+      final current = _currentNavigatorRoute(id);
+      if ((closeDialog && current is GetDialogRoute) ||
+          (closeBottomSheet && current is GetModalBottomSheetRoute)) {
+        closeOverlay<T>(id: id, result: result);
+      }
+    }
   }
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>

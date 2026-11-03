@@ -1,3 +1,5 @@
+> GetX 5 RC: consulte o [guia de migração desta branch](documentation/en_US/migration_guide_5.md) para a API atual. Exemplos marcados **GetX 4 legacy** descrevem APIs antigas.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Idiomas: [Inglês](README.md), [Vietnamita](README-vi.md), [Indonésia](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinês](README.zh-cn.md), Português (este arquivo), [Espanhol](README-es.md), [Russo](README.ru.md), [Polonês](README.pl.md), [Coreano](README.ko-kr.md), [Francês](README-fr.md)**
@@ -161,7 +163,7 @@ class Home extends StatelessWidget {
 
       // Troque o Navigator.push de 8 linhas por um simples Get.to(). Você não precisa do 'context'
       body: Center(child: ElevatedButton(
-              child: Text("Ir pra Outra tela"), onPressed: () => Get.to(Outra()))),
+              child: Text("Ir pra Outra tela"), onPressed: () => Get.to(() => Outra()))),
       floatingActionButton: 
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   } 
@@ -252,7 +254,7 @@ GetMaterialApp( // Antes: MaterialApp(
 Para navegar para uma próxima tela:
 
 ```dart
-Get.to(ProximaTela());
+Get.to(() => ProximaTela());
 ```
 
 Para navegar para uma próxima tela com uma rota nomeada. Veja mais detalhes sobre rotas nomeadas [aqui](./documentation/pt_BR/route_management.md#navegar-com-rotas-nomeadas)
@@ -264,25 +266,29 @@ Get.toNamed('/detalhes');
 Para fechar snackbars, dialogs, bottomsheets, ou qualquer coisa que você normalmente fecharia com o `Navigator.pop(context)` (como por exemplo fechar a View atual e voltar para a anterior):
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Para ir para a próxima tela e NÃO deixar opção para voltar para a tela anterior (bom para SplashScreens, telas de login e etc.):
 
 ```dart
-Get.off(ProximaTela());
+Get.off(() => ProximaTela());
 ```
 
 Para ir para a próxima tela e cancelar todas as rotas anteriores (útil em telas de carrinho, votações ou testes):
 
 ```dart
-Get.offAll(ProximaTela());
+Get.offAll(() => ProximaTela());
 ```
 
 Para navegar para a próxima rota e receber ou atualizar dados assim que retornar da rota:
 
 ```dart
-var dados = await Get.to(Pagamento());
+var dados = await Get.to(() => Pagamento());
 ```
 
 Notou que você não precisou usar `context` para fazer nenhuma dessas coisas? Essa é uma das maiores vantagens de usar o gerenciamento de rotas do GetX™. Com isso, você pode executar todos esse métodos de dentro da classe Controller, sem preocupações.
@@ -905,9 +911,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // ou podemos usar o método `update()`!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user ); // Resultado (toString): Roi Doe, 33 years old
 ```
@@ -943,9 +951,9 @@ Por causa do _cache_, não pode ser um `const Stateless`.
 
 > Então, quando você precisa armazenar em "cache" um Controller?
 
-Se você usar, uma outra característica "não tão comum" de **GetX™**: `Get.create()`.
+Se você usar, uma outra característica "não tão comum" de **GetX™**: `Get.spawn()`.
 
-`Get.create(()=>Controller())` irá gerar um novo `Controller` cada vez que você chamar
+`Get.spawn(()=>Controller())` irá gerar um novo `Controller` cada vez que você chamar
 `Get.find<Controller>()`,
 
 É aí que `GetWidget` brilha... já que você pode usá-lo, por exemplo, 
@@ -959,6 +967,8 @@ Mas não tem "lógica" dentro dele. Ele apenas notifica o sistema de injeção d
 
 Portanto, é muito útil manter seus "Services" sempre acessíveis e ativos com `Get.find()`. Como: 
 `ApiService`, `StorageService`, `CacheService`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1085,7 +1095,7 @@ GetMaterialApp(
 
 1- Muitas vezes após uma atualização do Flutter, muitos dos seus packages irão quebrar. As vezes acontecem erros de compilação, muitas vezes aparecem erros que ainda não existem respostas sobre e o desenvolvedor necessita saber de onde o erro veio, rastreá-lo, para só então tentar abrir uma issue no repositório correspondente e ver seu problema resolvido. Get centraliza os principais recursos para o desenvolvimento (Gerência de estado, de dependências e de rotas), permitindo você adicionar um único package em seu pubspec e começar a trabalhar. Após uma atualização do Flutter, a única coisa que você precisa fazer é atualizar a dependencia do Get e começar a trabalhar. Get também resolve problemas de compatibilidade. Quantas vezes uma versão de um package não é compatível com a versão de outro, porque um utiliza uma dependência em uma versão e o outro em outra versão? Essa também não é uma preocupação usando Get, já que tudo está no mesmo package e é totalmente compatível.
 
-2- Flutter é fácil, Flutter é incrível, mas Flutter ainda tem algum boilerplate que pode ser indesejado para maioria dos desenvolvedores, como o Navigator.of(context).push(context, builder[...]. Get simplifica o desenvolvimento. Em vez de escrever 8 linhas de código para apenas chamar uma rota, você pode simplesmente fazer: Get.to(Home()) e pronto, você irá para a próxima página. Urls dinâmicas da web é algo realmente doloroso de fazer com o Flutter atualmente e isso com o GetX™ é estupidamente simples. Gerenciar estados no Flutter e gerenciar dependências também é algo que gera muita discussão, por haver centenas de padrões na pub. Mas não há nada que seja tão fácil quanto adicionar um ".obs" no final de sua variável, colocar o seu widget dentro de um Obx e pronto, todas atualizações daquela variável serão automaticamente atualizadas na tela.
+2- Flutter é fácil, Flutter é incrível, mas Flutter ainda tem algum boilerplate que pode ser indesejado para maioria dos desenvolvedores, como o Navigator.of(context).push(context, builder[...]. Get simplifica o desenvolvimento. Em vez de escrever 8 linhas de código para apenas chamar uma rota, você pode simplesmente fazer: Get.to(() => Home()) e pronto, você irá para a próxima página. Urls dinâmicas da web é algo realmente doloroso de fazer com o Flutter atualmente e isso com o GetX™ é estupidamente simples. Gerenciar estados no Flutter e gerenciar dependências também é algo que gera muita discussão, por haver centenas de padrões na pub. Mas não há nada que seja tão fácil quanto adicionar um ".obs" no final de sua variável, colocar o seu widget dentro de um Obx e pronto, todas atualizações daquela variável serão automaticamente atualizadas na tela.
 
 3- Facilidade sem se preocupar com desempenho. O desempenho do Flutter já é incrível, mas imagine que você use um gerenciador de estados e um locator para distribuir suas classes blocs/stores/controllers/ etc. Você deverá chamar manualmente a exclusão daquela dependência quando não precisar dela. Mas já pensou em simplesmente usar seu controlador e quando ele não tivesse mais sendo usado por ninguém, ele simplesmente fosse excluído da memória? É isso que GetX™ faz. Com o SmartManagement, tudo que não está sendo usado é excluído da memória e você não deve se preocupar em nada além de programar. Você terá garantia que está consumindo o mínimo de recursos necessários, sem ao menos ter criado uma lógica para isso.
 

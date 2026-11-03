@@ -1,0 +1,279 @@
+# Migrating from GetX 4 to GetX 5 RC
+
+This guide describes the `latest-getx5-RC` line, whose package version is
+`5.0.0-release-candidate-9.3.0`. It is specific to this source tree, rather than
+an announcement of a stable GetX 5 release or a guide to the newer `master`
+branch. Check your resolved GetX revision before applying it.
+
+## SDK and imports
+
+The [manifest](../../pubspec.yaml) declares Dart `>=3.4.0 <4.0.0` and Flutter
+`>=3.22.0`. These are declared constraints, not a claim that every intervening
+SDK and platform has passed the same tests. Flutter 3.47.5 is the provisional
+local validation environment for this stabilization work; Flutter 3.47.8 and
+3.47.9 validation remains pending. Do not infer their support from this guide.
+
+This RC uses Flutter's bundled design libraries:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+```
+
+For Cupertino widgets, import `package:flutter/cupertino.dart`. This branch does
+not depend on the standalone `material_ui` or `cupertino_ui` packages. The
+migration on `master` has different SDK and UI type requirements; do not combine
+those instructions with this RC's package manifest.
+
+Before upgrading an application, record `flutter --version` and its resolved
+GetX version/revision. Resolve dependencies with your selected SDK, analyze the
+application, and run its tests. Test web deep links, platform back gestures,
+overlays, and controller ownership in the actual application as well as unit
+and widget tests. A successful root-package test run does not test the separate
+example packages or every target platform.
+
+## Factory registrations: `Get.create` becomes `Get.spawn`
+
+`Get.spawn` registers a factory that is invoked for each `Get.find`. It is not a
+lazy singleton:
+
+```dart
+import 'package:get/get.dart';
+
+class ItemController {}
+
+void main() {
+  Get.spawn<ItemController>(() => ItemController(), tag: 'item');
+  final first = Get.find<ItemController>(tag: 'item');
+  final second = Get.find<ItemController>(tag: 'item');
+  assert(!identical(first, second));
+}
+```
+
+Use `tag`, not the old factory example's `name`, both when registering and when
+finding. `permanent` defaults to `true` and controls retention of the factory
+registration; it does not turn all instances produced by the factory into one
+singleton. `Get.put` registers an instance, and `Get.lazyPut` registers a lazy
+singleton. Keep those lifetimes when migrating.
+
+Do **not** rename `Bind.create` to `Bind.spawn` mechanically. `Bind.create`
+receives a `BuildContext` callback and creates a local binding. It is a different
+API from the removed global `Get.create` registration.
+
+The old `Get.putAsync` examples are not supported by this RC. Initialize an
+asynchronous dependency before registering its resolved value:
+
+```dart
+Future<void> registerSettings(Future<Settings> Function() load) async {
+  final settings = await load();
+  Get.put<Settings>(settings, permanent: true);
+}
+```
+
+Here `Settings` is your application's type. Handle initialization errors before
+running the application or showing a screen that needs that dependency.
+
+## Route bindings and application bindings
+
+The new `Binding` class (singular) returns `List<Bind>`. The deprecated
+`Bindings` class (plural) returns `void`; changing only its return type is not
+the migration. `BindingsBuilder` is not available in this RC.
+
+```dart
+class HomeController extends GetxController {}
+
+class HomeBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+        Bind.lazyPut<HomeController>(() => HomeController()),
+      ];
+}
+```
+
+Attach a binding through a list. For named routes:
+
+```dart
+GetPage(
+  name: '/home',
+  page: () => HomePage(),
+  bindings: [HomeBinding()],
+);
+```
+
+For direct navigation:
+
+```dart
+Get.to<void>(() => HomePage(), bindings: [HomeBinding()]);
+```
+
+`HomePage` is your application's widget. `GetPage` also has `binds` for a list
+of `Bind` values, while `bindings` takes objects such as `HomeBinding`.
+The old `binding` property remains on `GetPage` for compatibility, but direct
+navigation methods use `bindings`, not `binding`.
+
+`GetMaterialApp` uses `binds`, rather than `initialBinding`:
+
+```dart
+GetMaterialApp(
+  binds: [Bind.lazyPut<HomeController>(() => HomeController())],
+  home: HomePage(),
+);
+```
+
+Review dependency lifetime as well as syntax. Test creation, sharing across
+routes, and disposal after the final owner leaves. Do not add `permanent: true`
+to every controller to hide a lifecycle failure. A `GetView` resolves its
+controller through dependency lookup; retain `GetWidget` only where its cached
+controller behavior is intentional, especially with a per-find factory.
+
+## StateMixin: status carries the successful value
+
+GetX 4 used `change(data, status: RxStatus.success())`. This RC uses
+`change(GetStatus<T>.success(data))` inside a controller, or the public
+`setSuccess(data)` helper. Loading, empty, and error states are explicit:
+
+```dart
+class NamesController extends GetxController with StateMixin<List<String>> {
+  void showNames(List<String> names) {
+    change(GetStatus<List<String>>.success(names));
+  }
+
+  void showLoading() => setLoading();
+  void showEmpty() => setEmpty();
+  void showError(Object error) => setError(error);
+
+  void load(Future<List<String>> Function() fetch) {
+    futurize(fetch);
+  }
+}
+```
+
+`futurize` receives a function returning a future, rather than an already
+started future. With `useEmpty: true` (the default), an empty iterable, map,
+trimmed string, or null result maps to empty status; `useEmpty: false` retains
+successful empty data. It returns `void` in this RC; do not `await` it as an
+application completion signal.
+
+In `controller.obx`, handle loading, empty and error as well as success. The
+success callback receives the typed data; it is not an `RxStatus` object.
+Do not assume the status classes are sealed or provide the proposed
+`match`/`when` APIs from an unmerged PR.
+
+## Updating a custom reactive object
+
+`Rx.update` expects a callback returning the next value. The mutation-only
+callback from GetX 4 examples does not meet that signature. Prefer returning a
+new value, so equality checks can detect the change:
+
+```dart
+class Person {
+  const Person(this.name);
+  final String name;
+}
+
+final person = const Person('John').obs;
+
+void renamePerson() {
+  person.update((previous) => const Person('Roi'));
+}
+```
+
+Custom fields do not become reactive automatically. For an intentionally mutable
+model, mutate the value and explicitly notify with `refresh()`; do not rely on
+returning the same object from `update` to notify observers:
+
+```dart
+user.value.name = 'Roi';
+user.refresh();
+```
+
+Here `user` is your application's reactive mutable model. This is a separate
+choice from making individual model fields reactive.
+
+## Navigation uses Navigator 2
+
+Pass widget factories to direct navigation methods:
+
+```dart
+Get.to(() => DetailsPage());
+Get.off(() => LoginPage());
+Get.offAll(() => HomePage());
+```
+
+For results, specify the intended type and return a matching value:
+
+```dart
+final accepted = await Get.to<bool>(() => ConfirmationPage());
+// On ConfirmationPage:
+Get.back<bool>(result: true);
+```
+
+These fragments belong at the two corresponding call sites. A platform back
+operation may return null, so callers must handle it.
+
+Nested navigation uses the configured `GetPage.children` hierarchy and
+`GetRouterOutlet`, rather than copying the GetX 4 recipe with
+`Navigator(key: Get.nestedKey(1), onGenerateRoute: ...)`. For a parent `/shell`
+with a registered child `/shell/home`, the shell view can render:
+
+```dart
+GetRouterOutlet(
+  anchorRoute: '/shell',
+  initialRoute: '/shell/home',
+);
+```
+
+Define the matching parent and children in `getPages` first. See the
+[Navigator 2 example](../../example_nav2/lib/app/routes/app_pages.dart) and its
+[root outlet](../../example_nav2/lib/app/modules/root/views/root_view.dart).
+Configure the delegate/outlet before navigating to a nested destination. Nested
+navigator IDs are strings in this RC, not the integers in older examples;
+`id` identifies a navigator/delegate, not an arbitrary dialog instance.
+
+For web apps, test entering a child URL directly and refreshing it after a
+release build. Path URL hosting must serve the application entry point for
+those paths. Test parent and child bindings on that first load.
+
+`WillPopScope` recipes from Navigator 1 are not a drop-in solution for this
+router. Choose the back handler appropriate to your selected Flutter SDK and
+route configuration, and test platform back, browser back and swipe gestures.
+Do not assume every back source follows the same path as a direct `Get.back`.
+
+## Pages and overlays have separate closing operations
+
+| Intention | API in this RC |
+|---|---|
+| Return one page, optionally with a result | `Get.back<T>(result: value)` |
+| Return several pages | `Get.back(times: count)` |
+| Close the current dialog | `Get.closeDialog<T>(result: value)` |
+| Close the current bottom sheet/overlay | `Get.closeOverlay<T>(result: value)` |
+| Close the current snackbar | `Get.closeCurrentSnackbar()` |
+| Close all snackbars | `Get.closeAllSnackbars()` |
+| Close selected overlay categories | `Get.close(...)` |
+| Transitional Navigator-pop behavior | `Get.backLegacy(...)` |
+
+`Get.back()` no longer means “close whichever page or overlay is on top”.
+`Get.close()` no longer takes a number of pages. Migrate each call according to
+its purpose; replacing every call with the same helper obscures that purpose.
+`backLegacy` is a migration aid, not a guarantee that every application mixing
+Navigator 1, nested routers and overlays preserves its old behavior.
+
+This RC's overlay helpers use navigator popping. Do not interpret a helper name
+or `id` as a guarantee that an arbitrary lower overlay can be removed through
+another overlay. Test stacked dialogs, bottom sheets and snackbars together.
+Also test the intended result recipient when popping multiple pages; the
+single-page result example does not promise result propagation to every route.
+
+## Check the migration in your application
+
+- Verify factory/singleton identity, tags and controller disposal.
+- Exercise StateMixin success, loading, error, empty and retry paths.
+- Check custom-model notifications and workers after updating state.
+- Test named/direct routes, nested outlets, typed results and deep links.
+- Test dialog, bottom sheet and snackbar closing with the actual overlay order.
+- Analyze and test each example/application package separately with the selected
+  SDK. Repeat platform checks when the target SDK becomes available.
+
+The translated manuals retain historical explanations where marked
+**GetX 4 legacy**. Use this guide for the RC API at those points; a legacy
+snippet is not presented as an equivalent GetX 5 implementation.

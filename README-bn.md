@@ -1,3 +1,5 @@
+> GetX 5 RC: বর্তমান API-এর জন্য এই শাখার [মাইগ্রেশন নির্দেশিকা](documentation/en_US/migration_guide_5.md) দেখুন। **GetX 4 legacy** চিহ্নিত উদাহরণগুলো পুরোনো API-এর জন্য।
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -136,7 +138,7 @@ class Home extends StatelessWidget {
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -216,7 +218,7 @@ GetMaterialApp( // Before: MaterialApp(
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 নাম সহ নতুন স্ক্রিনে নেভিগেট করুন। নামযুক্ত রুট সম্পর্কিত আরও বিস্তারিত বিবরণ দেখুন [এখানে](./documentation/en_US/route_management.md#navigation-with-named-routes)
@@ -229,19 +231,23 @@ Get.toNamed('/details');
 স্ন্যাকবার, ডায়ালগ, বটমশীট, বা যেকোনো কিছু বন্ধ করতে আপনি Navigator.pop(context) এর পরিবর্তে ব্যবহার করুন:
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 পরবর্তী স্ক্রিনে যাওয়ার পর আগের স্ক্রিনে ফিরে যাওয়া বন্ধ করুন (স্প্ল্যাশস্ক্রিন, লগইন স্ক্রিন ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 পরবর্তী স্ক্রিনে যেতে এবং আগের সমস্ত রুট বাতিল করতে (শপিং কার্ট, পোল  ইত্যাদিতে ব্যবহারের জন্য)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 লক্ষ্য করেছেন যে এই জিনিসগুলির কোনটি করার জন্য আপনাকে context ব্যবহার করতে হবে না? এটি Get রুট ম্যানেজমেন্ট ব্যবহার করার সবচেয়ে বড় সুবিধাগুলির মধ্যে একটি। এটির সাহায্যে, আপনি চিন্তা ছাড়াই আপনার controller class এর মধ্যে থেকে এই সমস্ত পদ্ধতিগুলি চালাতে পারেন।
@@ -886,9 +892,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // or we can use the `update()` method!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -899,23 +907,23 @@ To implement it, use the `with` to add the `StateMixin<T>`
 to your controller which allows a T model.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 The `change()` method change the State whenever we want.
 Just pass the data and the status in this way:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus allow these status:
+GetStatus allow these status:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 To represent it in the UI, use:
@@ -936,7 +944,7 @@ class OtherClass extends GetView<Controller> {
 
         // here also you can set your own error widget, but by
         // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }
@@ -949,7 +957,7 @@ I love this Widget, is so simple, yet, so useful!
 Is a `const Stateless` Widget that has a getter `controller` for a registered `Controller`, that's all.
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -996,9 +1004,9 @@ Because of the _cache_, can't be a `const Stateless`.
 
 > So, when do you need to "cache" a Controller?
 
-If you use, another "not so common" feature of **GetX**: `Get.create()`.
+If you use, another "not so common" feature of **GetX**: `Get.spawn()`.
 
-`Get.create(()=>Controller())` will generate a new `Controller` each time you call
+`Get.spawn(()=>Controller())` will generate a new `Controller` each time you call
 `Get.find<Controller>()`,
 
 That's where `GetWidget` shines... as you can use it, for example,
@@ -1012,6 +1020,8 @@ But has no "logic" inside of it. It just notifies **GetX** Dependency Injection 
 
 So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
 `ApiService`, `StorageService`, `CacheService`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {

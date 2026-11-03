@@ -126,7 +126,7 @@ abstract class Bind<T> extends StatelessWidget {
   }) {
     Get.put<S>(dependency, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
-      autoRemove: permanent,
+      autoRemove: !permanent,
       assignId: true,
       tag: tag,
     );
@@ -166,9 +166,10 @@ abstract class Bind<T> extends StatelessWidget {
       {String? tag, bool permanent = true}) {
     Get.spawn<S>(builder, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
+      init: builder,
       tag: tag,
       global: false,
-      autoRemove: permanent,
+      autoRemove: !permanent,
     );
   }
 
@@ -336,6 +337,7 @@ class _FactoryBind<T> extends Bind<T> {
   @override
   Widget build(BuildContext context) {
     return Binder<T>(
+      init: init,
       create: create,
       global: global,
       autoRemove: autoRemove,
@@ -534,6 +536,11 @@ class BindElement<T> extends InheritedElement {
       if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
         Get.delete<T>(tag: widget.tag);
       }
+    }
+
+    final localController = _controller;
+    if (_wasStarted && localController is GetLifeCycleMixin) {
+      localController.onDelete();
     }
 
     for (final disposer in disposers) {

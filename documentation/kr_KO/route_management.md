@@ -1,3 +1,5 @@
+> GetX 5 RC: 현재 API는 [이 브랜치의 마이그레이션 가이드](../en_US/migration_guide_5.md)를 참고하세요. **GetX 4 legacy** 표시는 이전 API 예제입니다.
+
 - [라우트 관리](#라우트-관리)
   - [사용하는 방법](#사용하는-방법)
   - [이름없는 라우트 탐색](#이름없는-라우트-탐색)
@@ -37,31 +39,35 @@ GetMaterialApp( // 이전: MaterialApp(
 새 화면으로 이동:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 snackbars, dialogs, bottomsheets 또는 Navigator.pop(context);로 보통 닫았던 것들을 닫기
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 다음 화면으로 이동하고 이전 화면에서 돌아오지 않는 경우 (스플래시나 로그인 화면 등을 사용하는 경우)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 다음 화면으로 이동하고 이전 화면이 모두 닫히는 경우 (장바구니, 투표, 테스트에 유용함)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 다음 화면으로 이동하고 돌아올때 바로 데이터를 받거나 업데이트할 경우:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 다른 화면에서 이전화면으로 데이터를 전달할때:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // GetX 문법 (이것은 동의하지 않겠지만 더 좋습니다)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -280,6 +286,8 @@ GetMaterialApp(
 ```
 
 GetMaterialApp을 사용하지 않는다면 수동 API를 사용해서 Middleware observer를 추가할 수 있습니다.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -522,6 +530,8 @@ context가 필요 없고 Id로 탐색 스택을 찾을 수 있습니다.
 - 주석: 병렬 탐색 스택을 만드는 것은 위험 할 수 있습니다. 이상적인 것은 NestedNavigators를 사용하지 않거나 아껴서 사용하는 것입니다. 프로젝트에 필요한 경우 여러 탐색 스택을 메모리에 유지하는 것이 RAM 소비에 좋지 않을 수 있음을 명심하십시오.
 
 간단합니다:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

@@ -28,7 +28,7 @@ class GetModifier<S> {
   }
 
   void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
-    _requestModifiers.remove(interceptor);
+    _responseModifiers.remove(interceptor);
   }
 
   Future<Request<T>> modifyRequest<T>(Request<T> request) async {

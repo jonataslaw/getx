@@ -1,3 +1,5 @@
+> GetX 5 RC: xem [hướng dẫn chuyển đổi của nhánh này](../en_US/migration_guide_5.md) để dùng API hiện tại. Ví dụ có nhãn **GetX 4 legacy** mô tả API cũ.
+
 - [Quản lý route](#route-management)
   - [Hướng dẫn sử dụng trước khi dùng](#how-to-use)
   - [Điều hướng không cần tên](#navigation-without-named-routes)
@@ -37,31 +39,35 @@ GetMaterialApp( // Before: MaterialApp(
 Để điều hướng đến một màn hình mới:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Để đóng snackbars, dialog, bottomsheets hoặc bất cứ thứ gì bạn thường đóng bằng Navigator.pop (context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Để chuyển đến màn hình tiếp theo và không có tùy chọn nào để quay lại màn hình trước đó (để sử dụng trong SplashScreens, màn hình đăng nhập, v.v.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Để chuyển đến màn hình tiếp theo và hủy tất cả các lộ trình trước đó (hữu ích trong giỏ hàng, polls và test)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Để điều hướng đến routes tiếp theo và nhận hoặc cập nhật dữ liệu ngay sau khi bạn trở về từ routes đó:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 trên màn hình khác, gửi dữ liệu cho routes trước đó:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // Get syntax (It is much better, but you have the right to disagree)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -285,6 +291,8 @@ GetMaterialApp(
 ```
 
 Nếu bạn không sử dụng GetMaterialApp, bạn có thể sử dụng API thủ công để đính kèm trình quan sát Middleware.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -527,6 +535,8 @@ Bạn không cần context và bạn sẽ tìm thấy stack điều hướng c�
 - CHÍ Ú: Việc tạo các stack điều hướng song song có thể gây nguy hiểm. Lý tưởng nhất là không sử dụng NestedNavigators, hoặc sử dụng một cách tối thiểu. Nếu dự án của bạn yêu cầu, hãy tiếp tục, nhưng hãy nhớ rằng việc giữ nhiều stack điều hướng trong bộ nhớ có thể không phải là một ý tưởng hay cho việc tiêu thụ RAM.
 
 Xem nó code đơn giản nè:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

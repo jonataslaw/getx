@@ -3,9 +3,10 @@ name: build
 # Trigger the workflow on push or pull request
 on:
   push:
-    branches: [master]
+    branches: [master, latest-getx5-RC, getx5-rc-stabilize]
   pull_request:
-    branches: [master]
+    branches: [master, latest-getx5-RC]
+  workflow_dispatch:
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
   test:
@@ -14,6 +15,10 @@ jobs:
       run:
         working-directory: ./
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter: ["3.47.8", "3.47.9"]
     #sequence of tasks called
     steps:
       # The branch or tag ref that triggered the workflow will be checked out.
@@ -23,12 +28,28 @@ jobs:
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.0"
+          flutter-version: ${{ matrix.flutter }}
           channel: "stable"
       - run: flutter pub get
-      #- run: flutter analyze
+      - run: flutter analyze --no-fatal-infos lib test
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
+      - run: flutter pub get
+        working-directory: example
+      - run: flutter analyze --no-fatal-infos lib test
+        working-directory: example
+      - run: flutter test
+        working-directory: example
+      - run: flutter pub get
+        working-directory: example_nav2
+      - run: flutter analyze --no-fatal-infos lib test
+        working-directory: example_nav2
+      - run: flutter test
+        working-directory: example_nav2
+      - run: flutter build web --no-pub
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --wasm
+        working-directory: example_nav2
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
       - uses: codecov/codecov-action@v4

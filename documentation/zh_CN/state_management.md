@@ -1,3 +1,5 @@
+> GetX 5 RC：当前 API 请参阅[本分支迁移指南](../en_US/migration_guide_5.md)。标为 **GetX 4 legacy** 的示例说明旧版 API。
+
 - [状态管理](#状态管理)
   - [响应式状态管理器](#响应式状态管理器)
     - [优点](#优势)
@@ -254,9 +256,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -310,9 +312,9 @@ class RxUser {
 * 或者可以将整个类转换为一个可观察的类。
 ```dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 //实例化时。
@@ -352,10 +354,7 @@ class User{
 // controller
 final user = User().obs;
 //当你需要更新user变量时。
-user.update( (user) { // 这个参数是你要更新的类本身。
-    user.name = 'Jonny';
-    user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // 更新user变量的另一种方式。
 user(User(name: 'João', age: 35));
 

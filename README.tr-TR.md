@@ -1,3 +1,5 @@
+> GetX 5 RC: güncel API için [bu dalın geçiş kılavuzuna](documentation/en_US/migration_guide_5.md) bakın. **GetX 4 legacy** işaretli örnekler eski API içindir.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -171,7 +173,7 @@ class Home extends StatelessWidget {
 
       // Navigator.push içeren 8 satırı basit bir şekilde Get.to() ile değiştirin. Bunda context'e ihtiyacınız kalmamaktadır.
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -261,7 +263,7 @@ Yeni ekrana geçmek için:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Name (isim) ile yeni sayfaya geçiş yapılabilir. Named routes (İsimli rotalar) hakkında daha çok bilgiye [buradan](./documentation/tr_TR/route_management.md#navigation-with-named-routes) ulaşabilirsiniz.
@@ -274,19 +276,23 @@ Get.toNamed('/details');
 Snackbars, dialogs, bottomsheets ve normalde Navigator.pop(context) ile kapatacağınız herhangi bir şeyi kapatmak için;
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Önceki ekrana geri dönme seçeneğinin olmadan bir sonraki ekrana gitmek için (örnek olarak SplashScreens, login screens, vs.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Sonraki ekrana gitmek ve önceki tüm route'ları kapatmak için shopping carts, polls, ve test'lerde kullanılır)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Bunlardan herhangi birini yapmak için context kullanmanız gerekmediğini fark ettiniz mi? Get route management'ı kullanmanın en büyük avantajlarından biri de budur. Böylelikle controller sınıfınızda olan tüm metodları endişe olmadan çalıştırabilirsiniz.
@@ -933,9 +939,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // Ya da `update()` metodunu kullanabiliriz
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -947,23 +955,23 @@ Bu sizin T modelini kullanmanızı sağlar.
 
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 `change()` metodu istediğiniz yerde State'i değiştirmemizi sağlar.
 Veri(data) ve durum(status) aktarmak için kullanılan yol:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus şu durumları kullanmanızı sağlar:
+GetStatus şu durumları kullanmanızı sağlar:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 UI'ın içinde temsil edilmesi için şu şekilde kullanılır:
@@ -984,7 +992,7 @@ class OtherClass extends GetView<Controller> {
 
         // Keni hata widget'ınızı buraya yazabilirsiniz
         // hali hazırda gelen yapı şudur: Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }
@@ -997,7 +1005,7 @@ Bu widget'ı çok seviyorum, oldukça basit ve çok kullanışlı!
 `const Stateless` Widget, `Controller`'ı tanımlamak için `controller` özelliği içerir. 
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -1042,9 +1050,9 @@ Bu kullanım oldukça nadir fakat özel: Controller `caches`'leme işlemi _cache
 
 > Peki ne zaman Controller'ı "cache"'yemeye ihtiyacınız olacak?
 
-"Çok da yaygın olmayan" bir **GetX** özelliğini kullanıyorsanız: `Get.create()`.
+"Çok da yaygın olmayan" bir **GetX** özelliğini kullanıyorsanız: `Get.spawn()`.
 
-`Get.create(()=>Controller())` yapısı siz her `Get.find<Controller>()` dediğinizde size yeni bir `Controller` oluşturacak.
+`Get.spawn(()=>Controller())` yapısı siz her `Get.find<Controller>()` dediğinizde size yeni bir `Controller` oluşturacak.
 
 `GetWidget`'ın ışığı burada parlıyor. Örnek olarak bir listede 
 
@@ -1060,6 +1068,8 @@ Bunun alt sınıfları, memory (bellekten) hiçbir şekilde **kaldırılamaz**.
 
 Bu yöntem "Servislerinizi" tutmak için oldukça kullanışlıdır. Servisleriniz bu şekilde her zaman ulaşılabilir ve aktif olur.  `Get.find()` metodu buna yeter. Örnek olarak:`ApiService`, `StorageService`, `CacheService`.
 
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1229,7 +1239,7 @@ GetMaterialApp(
 
 1- Birçok kez Flutter güncellendikten sonra, birçok paket çalışmaz hale gelecek. Genelde derleme hataları gerçekleşir. Bu hataların hala cevabı olmayabilir. Geliştiricinin bu hatanın nerden geldiğini bilmesi gereklidir. Sonrasında bu hatayı izleyip bunun hakkında repository'de issue açması ve sorunun çözülmesini beklemelidir. Get, geliştirme için gereken ana kaynaklarını  (State, dependency ve route management) merkezde toplar, pubspec'e tek bir paket eklemeye izin verir ve çalışmaya başlar. Flutter güncellendikten sonra tek yapmanız gereken Get dependency'yi güncellemek ve çalışmaya başlamaktır. Get uyumluluk problemlerini de çözer. Paketler arasında genelde güncellemeler sonrası uyumsuzluklar olabilir. Get'in kendi içinde her şey birbiri ile uyumlu olduğundan bunun için endişelenmenize gerek yoktur.
 
-2- Flutter oldukça kolay kullanımı olan inanılmaz olmasının yanı sıra birçok geliştirici tarafından istenmeyen `Navigator.of(context).push (context, builder [...]` gibi ezber yapılar içerir. Get geliştirmeyi basitleştirir. Route çağırmak için 8 kod yazmak yerine sadece `Get.to(Home())` diyerek bir sonraki sayfaya geçebilirsin. Dynamic web urls ile çalışmak mevcut Flutter ile çalışırken zorlayıcı olabilir. Get ile durum tam tersi hal alır ve işleri çok kolay bir hale getirir. Flutter'da State'leri yönetmek için dependency'leri pub içerindeki yüzlerce kütüphane arasından seçmek birçok tartışmayı da beraberinde getiren bir konudur. Get sayesinde ekranda değişkeni otomatik olarak güncellemesini sağlamak için değişkeninizin sonuna ".obs" eklemek ve widget'ınızı Obx ile sarmalamak yeterlidir.
+2- Flutter oldukça kolay kullanımı olan inanılmaz olmasının yanı sıra birçok geliştirici tarafından istenmeyen `Navigator.of(context).push (context, builder [...]` gibi ezber yapılar içerir. Get geliştirmeyi basitleştirir. Route çağırmak için 8 kod yazmak yerine sadece `Get.to(() => Home())` diyerek bir sonraki sayfaya geçebilirsin. Dynamic web urls ile çalışmak mevcut Flutter ile çalışırken zorlayıcı olabilir. Get ile durum tam tersi hal alır ve işleri çok kolay bir hale getirir. Flutter'da State'leri yönetmek için dependency'leri pub içerindeki yüzlerce kütüphane arasından seçmek birçok tartışmayı da beraberinde getiren bir konudur. Get sayesinde ekranda değişkeni otomatik olarak güncellemesini sağlamak için değişkeninizin sonuna ".obs" eklemek ve widget'ınızı Obx ile sarmalamak yeterlidir.
 
 3- Performansı kafaya takmayın. Flutter'ın performansı zaten çok iyi. Bir de state manager kullanırken ve blocs/stores/controllers gibi sınıflarınızı locator ile yönetirken de aynı performansı aldığınızı düşünün. İhtiyacınız olmadığında  dependency'lerinizi dışarıdan çağırmak zorunda kalacaksınız. Hiç düşündünüz mü, basitçe kullandığınız controller'ınızın artık kimse tarafından kullanılmadığında kolayca bellekten silindiğini? İşte  GetX bunu yapar. SmartManagement sayesinde kullanılmayan her şey endişelenmenize gerek kalmadan otomatik olarak hafızadan silinir. Bunun için bir logic yaratmaya gerek bile kalmadan, kaynakları minimum ölçüde tükettiğinize emin olabilirsiniz. 
 

@@ -1,3 +1,5 @@
+> GetX 5 RC: güncel API için [bu dalın geçiş kılavuzuna](../en_US/migration_guide_5.md) bakın. **GetX 4 legacy** işaretli örnekler eski API içindir.
+
 - [Rota Yönetimi (Route Management)](#route-management)
   - [Nasıl kullanılır?](#nasıl-kullanılır)
   - [Adlandırılmış rotalar olmadan navigasyon](#adlandırılmış-rotalar-olmadan-navigasyon)
@@ -37,31 +39,35 @@ GetMaterialApp( // Öncesi: MaterialApp(
 Yeni bir ekrana gitmek için:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Snackbar'ları, Dialog'ları, Bottomsheet'leri veya normalde kapatacağınız herhangi bir şeyi kapatmak için `Navigator.pop(context);`
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Bir sonraki ekrana gittikten sonra önceki ekrana geri dönme seçeneğinin olmaması için (SplashScreens, Login ekranlarında vb. kullanım için)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Bir sonraki ekrana gittikten sonra önceki tüm rotaları iptal etmek için (Alışveriş sepetlerinde, Anketlerde ve Testlerde kullanışlıdır)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Bir sonraki rotaya gitmek ve geri döner dönmez verileri almak veya güncellemek için:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 diğer ekrandan önceki rota için bir veri gönderin:
@@ -103,7 +109,7 @@ navigator.push(
 );
 
 // Get syntax (Bu kullanım çok daha iyidir. Tabiki siz karşı çıkma hakkına sahipsiniz.)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -285,6 +291,8 @@ GetMaterialApp(
 ```
 
 GetMaterialApp kullanmıyorsanız, Middleware gözlemcisini(observer) eklemek için manuel API'yi kullanabilirsiniz.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -527,6 +535,8 @@ Flutter'ın iç içe gezinmesini daha da kolaylaştırın.
 - NOT: Paralel gezinme yığınları oluşturmak tehlikeli olabilir. İdeal olan, NestedNavigators'ı kullanmamak veya idareli kullanmaktır. Projeniz gerektiriyorsa, devam edin, ancak bellekte birden çok gezinme yığınını tutmanın RAM tüketimi için iyi bir fikir olmayabileceğini unutmayın.
 
 Bakın ne kadar basit:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

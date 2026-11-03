@@ -1,3 +1,5 @@
+> GetX 5 RC: lihat [panduan migrasi cabang ini](documentation/en_US/migration_guide_5.md) untuk API saat ini. Contoh bertanda **GetX 4 legacy** menjelaskan API lama.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Bahasa: Indonesia (file ini), [Inggris](README.md), [Orang Vietnam](README-vi.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
@@ -151,7 +153,7 @@ class Home extends StatelessWidget {
 
       // Ganti 8 baris Navigator.push menggunan Get.to() agar lebih sederhana. Anda tidak perlu `context`.
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -241,7 +243,7 @@ Pindah ke halaman baru:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Pindah ke halaman baru menggunakan nama. Baca detail lebih lanjut tentang penamaan route [disini](./documentation/id_ID/route_management.md#navigation-with-named-routes)
@@ -254,19 +256,23 @@ Get.toNamed('/details');
 Untuk menutup snackbar, dialog, bottomsheet, atau apapun yang normalnya anda tutup menggunakan Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Untuk pergi ke halaman baru dan mencegah user kembali ke halaman sebelumnya (biasanya digunakan untuk SplashScreen, LoginScreen, dsb).
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Untuk pergi ke halaman baru dan batalkan navigasi sebelumnya (berguna untuk shopping cart, polls, dan test).
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Sadarkah bahwa anda tidak menggunakan context sama sekali untuk hal tersebut? Itu adalah keuntungan terbesar dalam menggunakan Get route management. Dengan ini, anda bisa mengeksekusi semua metode dari controller, tanpa ragu.
@@ -884,9 +890,11 @@ user.value.name = 'Roi';
 user.refresh();
 
 // atau kita bisa menggunakan `update()` method!
-user.update((value){
-  value.name='Roi';
-});
+user.update((previous) => User(
+  name: 'Roi',
+  last: previous!.last,
+  age: previous.age,
+));
 
 print( user );
 ```
@@ -945,9 +953,9 @@ Karena _cache_, tidak bisa dijadikan `const Stateless`.
 
 > Lalu, kapan anda harus men-"cache" sebuah Controller?
 
-Jika anda menggunakan, fitur "tidak terlalu umum" dari **GetX**: `Get.create()`.
+Jika anda menggunakan, fitur "tidak terlalu umum" dari **GetX**: `Get.spawn()`.
 
-`Get.create(()=>Controller())` akan men-generate `Controller` baru setiap kali anda memanggil
+`Get.spawn(()=>Controller())` akan men-generate `Controller` baru setiap kali anda memanggil
 `Get.find<Controller>()`,
 
 Itulah dimana `GetWidget` bercahaya... karena anda bisa menggunakannya, sebagai contoh,
@@ -961,6 +969,8 @@ ini **TIDAK BISA** dihapus dari memori.
 
 Jadi ini sangat berguna untuk memastikan "Service" anda selalu dapat dijangkau dan aktif dengan `Get.find()`. Seperti:
 `ApiService`, `StorageService`, `CacheService`.
+
+> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
 
 ```dart
 Future<void> main() async {
@@ -1065,7 +1075,7 @@ GetMaterialApp(
 
 1- Seringkali setelah Flutter update, banyak package anda yang akan berhenti bekerja. Terkadang compilation error terjadi, error yang sering muncul dan belum ada jawabannya, dan developer perlu mengetahui dimana errornya berasal, mencari errornya, lalu kemudian mencoba membuka sebuah isu di repository yang bersangkutan, dan melihat apakah problemnya terselesaikan. Get memusatkan resource utama untuk development (State, dependency dan route management), memungkinkan anda untuk menambahkan satu package kedalam pubspec, dan mulai bekerja. Setelah Flutter update, satu-satunya hal yang anda perlu lakukan adalah memperbarui dependensi Get, dan kembali bekerja. Get juga menyelesaikan isu kompatibilitas. Berapa kali sebuah versi dari sebuah package tidak kompatibel dengan versi lainnya, karena yang satu menggunakan sebuah dependensi dalam satu versi, dan yang lain menggunakan versi lainnya? Ini juga bukan sebuah masalah menggunakan Get, yang mana semua berada di package yang sama dan kompatibel secara penuh.
 
-2- Flutter mudah digunakan, Flutter luar biasa, tetapi Flutter masih memiliki beberapa boilerplate yang mungkin tidak diinginkan untuk kebanyakan developer, seperti `Navigator.of(context).push(context builder [...]`. Get menyederhanakan proses development. Daripada menulis 8 baris kode hanya untuk memanggil route, anda bisa menggunakan: `Get.to(Home())` dan selesai, anda akan pergi ke halaman selanjutnya. URL web dinamis adalah hal yang sangat menyakitkan untuk dilakukan dengan Flutter saat ini, dan dengan GetX sangat sederhana. Mengelola state di Flutter, dan megelola dependensi juga suatu hal yang menghasilkan banyak diskusi, dengan ratusan jenis pattern di pub. Tetapi tidak ada yang semudah menambahkan ".obs" di akhir variabel anda, dan meletakkan widget didalam Obx, dan selesai, semua update terhadap variabel tersebut akan secara otomatis terupdate di layar.
+2- Flutter mudah digunakan, Flutter luar biasa, tetapi Flutter masih memiliki beberapa boilerplate yang mungkin tidak diinginkan untuk kebanyakan developer, seperti `Navigator.of(context).push(context builder [...]`. Get menyederhanakan proses development. Daripada menulis 8 baris kode hanya untuk memanggil route, anda bisa menggunakan: `Get.to(() => Home())` dan selesai, anda akan pergi ke halaman selanjutnya. URL web dinamis adalah hal yang sangat menyakitkan untuk dilakukan dengan Flutter saat ini, dan dengan GetX sangat sederhana. Mengelola state di Flutter, dan megelola dependensi juga suatu hal yang menghasilkan banyak diskusi, dengan ratusan jenis pattern di pub. Tetapi tidak ada yang semudah menambahkan ".obs" di akhir variabel anda, dan meletakkan widget didalam Obx, dan selesai, semua update terhadap variabel tersebut akan secara otomatis terupdate di layar.
 
 3- Meringankan tanpa mengkhawatirkan performa. Performa Flutter sudah luar biasa, tetapi bayangkan anda menggunakan state manager, dan sebuah locator untuk mendistribusikan bloc/store/controller dsb, kelas. Anda perlu secara manual memanggil pengecualian terhadap dependensi ketika anda tidak membutuhkannya. Namun apakah anda pernah terfikirkan ketika simpelnya, anda menggunakan controller, dan tidak lagi digunakan oleh siapapun, akan dihapus dari memori? Itu yang GetX lakukan. Dengan SmartManagement, semua yang tidak digunakan akan dihapus dari memori, dan anda tidak perlu khawatir tentang apapun selain programming. Anda akan terjamin bahwa anda mengkonsumsi resource minimum yang diperlukan, bahkan tanpa harus membuat logic untuk hal ini.
 

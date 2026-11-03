@@ -64,11 +64,15 @@ class GetMaterialApp extends StatelessWidget {
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
   final RouterConfig<Object>? routerConfig;
+
+  /// The restoration scope identifier for the app and its root navigator.
+  final String? restorationScopeId;
   final BackButtonDispatcher? backButtonDispatcher;
   final bool useInheritedMediaQuery;
 
   const GetMaterialApp({
     super.key,
+    this.restorationScopeId,
     this.navigatorKey,
     this.scaffoldMessengerKey,
     this.home,
@@ -132,6 +136,7 @@ class GetMaterialApp extends StatelessWidget {
 
   const GetMaterialApp.router({
     super.key,
+    this.restorationScopeId,
     this.routeInformationProvider,
     this.scaffoldMessengerKey,
     this.routeInformationParser,
@@ -215,6 +220,8 @@ class GetMaterialApp extends StatelessWidget {
         routeInformationParser: routeInformationParser,
         routeInformationProvider: routeInformationProvider,
         routerDelegate: routerDelegate,
+        routerConfig: routerConfig,
+        restorationScopeId: restorationScopeId,
         routingCallback: routingCallback,
         scaffoldMessengerKey: scaffoldMessengerKey,
         smartManagement: smartManagement,
@@ -242,11 +249,15 @@ class GetMaterialApp extends StatelessWidget {
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);
         return MaterialApp.router(
-          routerDelegate: controller.config.routerDelegate,
-          routeInformationParser: controller.config.routeInformationParser,
+          routerDelegate:
+              routerConfig == null ? controller.config.routerDelegate : null,
+          routeInformationParser: routerConfig == null
+              ? controller.config.routeInformationParser
+              : null,
           backButtonDispatcher: backButtonDispatcher,
           routeInformationProvider: routeInformationProvider,
           routerConfig: routerConfig,
+          restorationScopeId: restorationScopeId,
           key: controller.config.unikey,
           builder: (context, child) => Directionality(
             textDirection: textDirection ??
@@ -265,6 +276,8 @@ class GetMaterialApp extends StatelessWidget {
               controller.config.theme ??
               ThemeData.fallback(),
           themeMode: controller.config.themeMode,
+          highContrastTheme: highContrastTheme,
+          highContrastDarkTheme: highContrastDarkTheme,
           locale: Get.locale ?? locale,
           scaffoldMessengerKey: controller.config.scaffoldMessengerKey,
           localizationsDelegates: localizationsDelegates,
@@ -278,6 +291,7 @@ class GetMaterialApp extends StatelessWidget {
           showSemanticsDebugger: showSemanticsDebugger,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
           shortcuts: shortcuts,
+          actions: actions,
           scrollBehavior: scrollBehavior,
         );
       }),

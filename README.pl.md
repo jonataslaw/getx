@@ -1,3 +1,5 @@
+> GetX 5 RC: aktualne API opisuje [przewodnik migracji tej gałęzi](documentation/en_US/migration_guide_5.md). Przykłady oznaczone **GetX 4 legacy** dotyczą starszego API.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Languages: [English](README.md), [Wietnamski](README-vi.md), [Indonezyjski](README.id-ID.md), [Urdu](README.ur-PK.md), [Język chiński](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md),  Polish (Jesteś tu), [Koreański](README.ko-kr.md), [French](README-fr.md)*
@@ -117,7 +119,7 @@ class Home extends StatelessWidget {
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -208,30 +210,34 @@ GetMaterialApp( // Before: MaterialApp(
 By nawigować do nowego ekranu:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 By powrócić do poprzedniego ekranu
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 By przejść do następnego ekranu bez możliwości powrotu do poprzedniego (do zastosowania SplashScreenów, ekranów logowania itd.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 By przejść do następnego ekranu niszcząc poprzednie routy (użyteczne w koszykach, ankietach i testach)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 By nawigować do następnego routa i otrzymać, lub uaktualnić dane zaraz po tym jak z niego wrócisz:
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 w innym ekranie wyślij dane z poprzedniego routa:featury
 

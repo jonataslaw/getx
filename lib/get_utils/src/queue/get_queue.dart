@@ -40,10 +40,11 @@ class GetQueue {
       var item = _queue.removeAt(0);
       try {
         item.completer.complete(await item.job());
-      } on Exception catch (e) {
-        item.completer.completeError(e);
+      } catch (error, stackTrace) {
+        item.completer.completeError(error, stackTrace);
+      } finally {
+        _active = false;
       }
-      _active = false;
       _check();
     }
   }

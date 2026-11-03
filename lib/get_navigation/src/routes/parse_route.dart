@@ -277,7 +277,7 @@ class ParseRouteTree {
       return params;
     }
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
+      var param = Uri.decodeComponent(paramsMatch[i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;
