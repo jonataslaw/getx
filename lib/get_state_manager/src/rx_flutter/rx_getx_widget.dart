@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../../get_core/get_core.dart';
 import '../../../get_instance/src/extension_instance.dart';
 import '../../../get_instance/src/lifecycle.dart';
+import '../simple/binding_lifetime.dart';
 import '../simple/list_notifier.dart';
 
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
@@ -59,6 +60,7 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
 class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   T? controller;
   bool? _isCreator = false;
+  VoidCallback? _releaseRegistration;
 
   @override
   void initState() {
@@ -78,6 +80,13 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
       controller = widget.init;
       _isCreator = true;
       controller?.onStart();
+    }
+    if (widget.global) {
+      _releaseRegistration = retainBindingRegistration<T>(
+        tag: widget.tag,
+        autoRemove: () => widget.autoRemove,
+        ownsRegistration: () => _isCreator! || widget.assignId,
+      );
     }
     widget.initState?.call(this);
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
@@ -104,11 +113,9 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   @override
   void dispose() {
     if (widget.dispose != null) widget.dispose!(this);
-    if (_isCreator! || widget.assignId) {
-      if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
-        Get.delete<T>(tag: widget.tag);
-      }
-    }
+    _releaseRegistration?.call();
+    _releaseRegistration = null;
+    if (!widget.global && widget.autoRemove) controller?.onDelete();
 
     for (final disposer in disposers) {
       disposer();

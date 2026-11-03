@@ -10,11 +10,38 @@ import 'get_root.dart';
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
+
+  /// The initial home widget owned by this app's root navigator.
   final Widget? home;
+
+  /// The named builders adapted to Navigator 2 pages.
+  ///
+  /// When combined with routes, [home] supplies `/`. Builders take precedence
+  /// over [getPages] with the same name. Use [getPages] for bindings, middleware,
+  /// and route options. Read arguments through [Get.arguments].
   final Map<String, WidgetBuilder>? routes;
+
+  /// The initial route used when the platform starts at `/`.
+  ///
+  /// An incoming platform deep link takes precedence.
   final String? initialRoute;
+
+  /// The unsupported Navigator 1 route factory.
+  ///
+  /// Supplying this callback throws [UnsupportedError]. Use [getPages] and
+  /// [GetMiddleware] or provide a custom router instead.
   final RouteFactory? onGenerateRoute;
+
+  /// The unsupported Navigator 1 initial route factory.
+  ///
+  /// Supplying this callback throws [UnsupportedError]. Use [initialRoute]
+  /// with [getPages] or provide a custom router instead.
   final InitialRouteListFactory? onGenerateInitialRoutes;
+
+  /// The unsupported Navigator 1 fallback route factory.
+  ///
+  /// Supplying this callback throws [UnsupportedError]. Use [unknownRoute]
+  /// with [getPages] or provide a custom router instead.
   final RouteFactory? onUnknownRoute;
   final List<NavigatorObserver>? navigatorObservers;
   final TransitionBuilder? builder;
@@ -55,9 +82,16 @@ class GetMaterialApp extends StatelessWidget {
   final LogWriterCallback? logWriterCallback;
   final bool? popGesture;
   final SmartManagement smartManagement;
+
+  /// The initial scoped dependencies retained until the app is unmounted.
   final List<Bind> binds;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
+
+  /// The initial declarative route definitions.
+  ///
+  /// Changing routing definitions or the home widget requires a new app key.
+  /// Ordinary theme and locale rebuilds preserve the existing navigation stack.
   final List<GetPage>? getPages;
   final GetPage? unknownRoute;
   final RouteInformationProvider? routeInformationProvider;
@@ -198,6 +232,15 @@ class GetMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (onGenerateRoute != null ||
+        onGenerateInitialRoutes != null ||
+        onUnknownRoute != null) {
+      throw UnsupportedError(
+        'Navigator 1 route factories are not supported by GetX 5. '
+        'Use getPages with initialRoute, GetMiddleware, and unknownRoute, '
+        'or provide a custom router with the .router constructor.',
+      );
+    }
     return GetRoot(
       config: ConfigData(
         backButtonDispatcher: backButtonDispatcher,
@@ -208,6 +251,7 @@ class GetMaterialApp extends StatelessWidget {
         enableLog: enableLog,
         fallbackLocale: fallbackLocale,
         getPages: getPages,
+        routes: routes,
         home: home,
         initialRoute: initialRoute,
         locale: locale,
@@ -226,6 +270,10 @@ class GetMaterialApp extends StatelessWidget {
         scaffoldMessengerKey: scaffoldMessengerKey,
         smartManagement: smartManagement,
         transitionDuration: transitionDuration,
+        defaultTransitionDuration:
+            transitionDuration ?? const Duration(milliseconds: 300),
+        defaultPopGesture: popGesture,
+        defaultOpaqueRoute: opaqueRoute ?? true,
         translations: translations,
         translationsKeys: translationsKeys,
         unknownRoute: unknownRoute,
@@ -255,7 +303,7 @@ class GetMaterialApp extends StatelessWidget {
               ? controller.config.routeInformationParser
               : null,
           backButtonDispatcher: backButtonDispatcher,
-          routeInformationProvider: routeInformationProvider,
+          routeInformationProvider: controller.config.routeInformationProvider,
           routerConfig: routerConfig,
           restorationScopeId: restorationScopeId,
           key: controller.config.unikey,

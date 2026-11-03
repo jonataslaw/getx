@@ -532,7 +532,7 @@ extension GetNavigationExt on GetInterface {
           PreventDuplicateHandlingMode.reorderRoutes}) {
     return searchDelegate(id).to(
       page,
-      opaque: opaque,
+      opaque: opaque ?? Get.defaultOpaqueRoute,
       transition: transition,
       curve: curve,
       duration: duration,
@@ -796,18 +796,15 @@ extension GetNavigationExt on GetInterface {
   bool get isOverlaysClosed =>
       (!isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!);
 
-  /// **Navigation.popUntil()** shortcut.<br><br>
+  /// Pops pages from the selected GetX navigator.
   ///
-  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
+  /// Pops [times] pages, treating values below one as one. For a single pop,
+  /// [result] completes the removed page's navigation future. [id] selects a
+  /// nested navigator. When [canPop] is true, the navigator must be able to
+  /// return to an earlier page.
   ///
-  /// if your set [closeOverlays] to true, Get.back() will close the
-  /// currently open snackbar/dialog/bottomsheet AND the current page
-  ///
-  /// [id] is for when you are using nested navigation,
-  /// as explained in documentation
-  ///
-  /// It has the advantage of not needing context, so you can call
-  /// from your business logic.
+  /// Use [close] or a specific overlay-closing method for dialogs, bottom
+  /// sheets and snackbars. Use [backLegacy] for the Navigator-based behavior.
   void back<T>({
     T? result,
     bool canPop = true,
@@ -832,16 +829,12 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
+  /// Pops the current route using the legacy Navigator behavior.
   ///
-  /// if your set [closeOverlays] to true, Get.back() will close the
-  /// currently open snackbar/dialog/bottomsheet AND the current page
-  ///
-  /// [id] is for when you are using nested navigation,
-  /// as explained in documentation
-  ///
-  /// It has the advantage of not needing context, so you can call
-  /// from your business logic.
+  /// The current route can be a page, dialog or bottom sheet. [closeOverlays]
+  /// first closes root overlays and snackbars before performing the pop.
+  /// [id] selects the navigator used for the pop; [times] selects how many
+  /// routes to remove. [result] applies when popping a single route.
   void backLegacy<T>({
     T? result,
     bool closeOverlays = false,
@@ -897,13 +890,28 @@ extension GetNavigationExt on GetInterface {
     return current;
   }
 
-  /// Close the currently open dialog, returning a [result], if provided
+  /// Closes the top dialog in the selected navigator with [result].
+  ///
+  /// Does nothing when another route type covers the dialog. [id] identifies
+  /// a nested navigator, rather than an individual dialog.
   void closeDialog<T>({String? id, T? result}) {
     if (_currentNavigatorRoute(id) is! GetDialogRoute) return;
     closeOverlay(id: id, result: result);
   }
 
-  /// Close the current overlay returning the [result], if provided
+  /// Closes the top bottom sheet in the selected navigator with [result].
+  ///
+  /// Does nothing when another route type covers the sheet. [id] selects a
+  /// nested navigator, rather than an individual bottom sheet.
+  void closeBottomSheet<T>({String? id, T? result}) {
+    if (_currentNavigatorRoute(id) is! GetModalBottomSheetRoute) return;
+    closeOverlay(id: id, result: result);
+  }
+
+  /// Closes the top popup route in the selected navigator with [result].
+  ///
+  /// Does nothing when the top route is a page. Snackbars use their separate
+  /// closing methods. [id] selects a nested navigator.
   void closeOverlay<T>({String? id, T? result}) {
     if (_currentNavigatorRoute(id) is! PopupRoute) return;
     searchDelegate(id).navigatorKey.currentState?.pop(result);
@@ -920,12 +928,17 @@ extension GetNavigationExt on GetInterface {
     closeAllSnackbars();
   }
 
-  /// **Navigation.popUntil()** (with predicate) shortcut .<br><br>
+  /// Closes selected overlays without popping a page.
   ///
-  /// Close as many routes as defined by [times]
+  /// [closeSnackbar], [closeDialog] and [closeBottomSheet] choose the overlay
+  /// types. When [closeAll] is false, closes only a matching top overlay in
+  /// the navigator selected by [id], returning [result]. Snackbars have a
+  /// separate queue and are selected independently.
   ///
-  /// [id] is for when you are using nested navigation,
-  /// as explained in documentation
+  /// When [closeAll] is true, closes matching consecutive overlays from the
+  /// top of that navigator and the selected snackbars. A different overlay
+  /// type is left in place when it is not selected. [result] is not returned
+  /// to every overlay during a bulk close.
   void close<T extends Object>({
     bool closeAll = true,
     bool closeSnackbar = true,
@@ -1005,7 +1018,7 @@ extension GetNavigationExt on GetInterface {
     }
     return searchDelegate(id).off(
       page,
-      opaque: opaque ?? true,
+      opaque: opaque ?? Get.defaultOpaqueRoute,
       transition: transition,
       curve: curve,
       popGesture: popGesture,
@@ -1083,7 +1096,7 @@ extension GetNavigationExt on GetInterface {
     return searchDelegate(id).offAll<T>(
       page,
       predicate: predicate,
-      opaque: opaque ?? true,
+      opaque: opaque ?? Get.defaultOpaqueRoute,
       popGesture: popGesture,
       id: id,
       //  routeName routeName,

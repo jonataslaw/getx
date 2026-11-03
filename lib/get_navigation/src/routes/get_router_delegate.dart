@@ -316,12 +316,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return SynchronousFuture(_canPopPage());
   }
 
-  bool _canPop(mode) {
+  bool _canPop(PopMode mode) {
     switch (mode) {
       case PopMode.history:
         return _canPopHistory();
       case PopMode.page:
-      default:
         return _canPopPage();
     }
   }
@@ -724,7 +723,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       _activePages[index] = activePage;
     }
     if (previousPage != null &&
-        !identical(previousPage.route?.completer, activePage.route?.completer)) {
+        !identical(
+            previousPage.route?.completer, activePage.route?.completer)) {
       _completePage(previousPage);
     }
 
@@ -745,7 +745,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       _activePages[index] = activePage;
     }
     if (previousPage != null &&
-        !identical(previousPage.route?.completer, activePage.route?.completer)) {
+        !identical(
+            previousPage.route?.completer, activePage.route?.completer)) {
       _completePage(previousPage);
     }
 

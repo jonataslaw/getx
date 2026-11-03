@@ -70,6 +70,7 @@ mixin ScrollMixin on GetLifeCycleMixin {
   @override
   void onClose() {
     scroll.removeListener(_listener);
+    scroll.dispose();
     super.onClose();
   }
 }
@@ -133,4 +134,22 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
   void onInactive() {}
   void onDetached() {}
   void onHidden() {}
+
+  @override
+  void didHaveMemoryPressure() {
+    super.didHaveMemoryPressure();
+    onMemoryPressure();
+  }
+
+  @override
+  void didChangeAccessibilityFeatures() {
+    super.didChangeAccessibilityFeatures();
+    onAccessibilityChanged();
+  }
+
+  /// Handles a system request to release nonessential memory.
+  void onMemoryPressure() {}
+
+  /// Handles changes to the platform accessibility features.
+  void onAccessibilityChanged() {}
 }

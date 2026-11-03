@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+- Adapt app `routes` maps to Navigator 2 and report unsupported RouteFactory
+  callbacks explicitly. Preserve live theme, locale, routing and binding
+  ownership across ordinary app rebuilds.
+- Honor shared binding lifetimes, current `autoRemove` settings and replacement
+  registrations; ignore asynchronous state completion after controller deletion.
+- Dispose scroll resources and forward memory-pressure and accessibility events.
+- Support typed HTTP modifiers and authenticators, replacement authentication
+  requests, response-body timeouts and IO WebSocket reconnection/disposal.
+- Preserve snackbar completion and cleanup for queued cancellation, immediate
+  close, swipe dismissal and application teardown.
+- Add safe `closeBottomSheet`, native Cupertino sheet transitions, nullable
+  routing observer support and current TickerMode frame settings.
 - Restore Rx stream notifications after the last subscription is canceled and a
   new subscription is created; make disposal safe during notification delivery.
 - Prevent `onReady` after controller deletion, release locally owned bindings, and

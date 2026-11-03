@@ -34,10 +34,11 @@ mixin PageRouteReportMixin<T> on Route<T> {
 
 class GetPageRoute<T> extends PageRoute<T>
     with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
-  /// Creates a page route for use in an iOS designed app.
+  /// Creates a GetX page route with configurable transitions.
   ///
-  /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
-  /// be null.
+  /// [page] supplies the page content. [maintainState] controls whether its
+  /// state is retained while another route covers it. [fullscreenDialog]
+  /// selects the fullscreen dialog presentation.
   GetPageRoute({
     super.settings,
     this.transitionDuration = const Duration(milliseconds: 300),

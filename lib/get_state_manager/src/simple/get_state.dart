@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
+import 'binding_lifetime.dart';
 import 'list_notifier.dart';
 
 typedef InitBuilder<T> = T Function();
@@ -124,11 +125,17 @@ abstract class Bind<T> extends StatelessWidget {
     String? tag,
     bool permanent = false,
   }) {
+    final wasRegistered = Get.isRegistered<S>(tag: tag);
     Get.put<S>(dependency, tag: tag, permanent: permanent);
+    final registration = Get.getInstanceInfo<S>(tag: tag).registrationId;
     return _FactoryBind<S>(
       autoRemove: !permanent,
       assignId: true,
       tag: tag,
+      initState: (state) {
+        state._registrationId = registration;
+        state._ownsRegistration = !wasRegistered;
+      },
     );
   }
 
@@ -141,9 +148,15 @@ abstract class Bind<T> extends StatelessWidget {
     // VoidCallback? onInit,
     VoidCallback? onClose,
   }) {
+    final wasRegistered = Get.isRegistered<S>(tag: tag);
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix ?? fenixMode);
+    final registration = Get.getInstanceInfo<S>(tag: tag).registrationId;
     return _FactoryBind<S>(
       tag: tag,
+      initState: (state) {
+        state._registrationId = registration;
+        state._ownsRegistration = !wasRegistered;
+      },
       // initState: (_) {
       //   onInit?.call();
       // },
@@ -164,12 +177,19 @@ abstract class Bind<T> extends StatelessWidget {
 
   static Bind spawn<S>(InstanceBuilderCallback<S> builder,
       {String? tag, bool permanent = true}) {
+    final wasRegistered = Get.isRegistered<S>(tag: tag);
     Get.spawn<S>(builder, tag: tag, permanent: permanent);
+    final registration = Get.getInstanceInfo<S>(tag: tag).registrationId;
     return _FactoryBind<S>(
       init: builder,
       tag: tag,
       global: false,
+      assignId: true,
       autoRemove: !permanent,
+      initState: (state) {
+        state._registrationId = registration;
+        state._ownsRegistration = !wasRegistered;
+      },
     );
   }
 
@@ -448,6 +468,9 @@ class BindElement<T> extends InheritedElement {
   bool? _isCreator = false;
   bool? _needStart = false;
   bool _wasStarted = false;
+  Object? _registrationId;
+  bool? _ownsRegistration;
+  VoidCallback? _releaseRegistration;
   VoidCallback? _remove;
   Object? _filter;
 
@@ -478,7 +501,6 @@ class BindElement<T> extends InheritedElement {
     } else {
       if (widget.create != null) {
         _controllerBuilder = () => widget.create!.call(this);
-        Get.spawn<T>(_controllerBuilder!, tag: widget.tag, permanent: false);
       } else {
         _controllerBuilder = widget.init;
       }
@@ -487,6 +509,15 @@ class BindElement<T> extends InheritedElement {
               widget.init;
       _isCreator = true;
       _needStart = true;
+    }
+    if (widget.global || widget.assignId) {
+      _releaseRegistration = retainBindingRegistration<T>(
+        tag: widget.tag,
+        autoRemove: () => widget.autoRemove,
+        ownsRegistration: () =>
+            (_isCreator! || widget.assignId) && (_ownsRegistration ?? true),
+        expectedRegistration: _registrationId,
+      );
     }
   }
 
@@ -532,14 +563,13 @@ class BindElement<T> extends InheritedElement {
 
   void dispose() {
     widget.dispose?.call(this);
-    if (_isCreator! || widget.assignId) {
-      if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
-        Get.delete<T>(tag: widget.tag);
-      }
-    }
+    _releaseRegistration?.call();
+    _releaseRegistration = null;
 
     final localController = _controller;
-    if (_wasStarted && localController is GetLifeCycleMixin) {
+    if (_wasStarted &&
+        widget.autoRemove &&
+        localController is GetLifeCycleMixin) {
       localController.onDelete();
     }
 

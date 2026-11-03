@@ -29,6 +29,10 @@ mixin StateMixin<T> on ListNotifier {
   T? _value;
   GetStatus<T>? _status;
 
+  bool get _isStateClosed =>
+      isDisposed ||
+      (this is GetLifeCycleMixin && (this as GetLifeCycleMixin).isClosed);
+
   void _fillInitialStatus() {
     _status = (_value == null || _value!._isEmpty())
         ? GetStatus<T>.loading()
@@ -89,18 +93,18 @@ mixin StateMixin<T> on ListNotifier {
 
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
-    if (isDisposed) return;
+    if (_isStateClosed) return;
     _value ??= initialData;
     status = GetStatus<T>.loading();
     Future<T>.sync(body).then((newValue) {
-      if (isDisposed) return;
+      if (_isStateClosed) return;
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
     }, onError: (err) {
-      if (isDisposed) return;
+      if (_isStateClosed) return;
       status = GetStatus.error(
           err is Exception ? err : Exception(errorMessage ?? err.toString()));
     });

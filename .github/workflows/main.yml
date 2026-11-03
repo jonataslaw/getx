@@ -34,6 +34,7 @@ jobs:
       - run: flutter analyze --no-fatal-infos lib test
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
+      - run: flutter test --platform chrome test/documentation/public_imports_test.dart test/rx/rx_workers_test.dart
       - run: flutter pub get
         working-directory: example
       - run: flutter analyze --no-fatal-infos lib test

@@ -69,7 +69,7 @@ class GetHttpClient {
         _modifier = GetModifier();
 
   void addAuthenticator<T>(RequestModifier<T> auth) {
-    _modifier.authenticator = auth as RequestModifier;
+    _modifier.authenticator = auth;
   }
 
   void addRequestModifier<T>(RequestModifier<T> interceptor) {
@@ -219,7 +219,9 @@ class GetHttpClient {
       request.headers[key] = value;
     });
 
-    if (authenticate) await _modifier.authenticator!(request);
+    if (authenticate) {
+      request = await _modifier.authenticator!(request) as Request<T>;
+    }
     final newRequest = await _modifier.modifyRequest<T>(request);
 
     _httpClient.timeout = timeout;
