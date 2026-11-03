@@ -91,6 +91,24 @@ mixin StateMixin<T> on ListNotifier {
     change(GetStatus<T>.empty());
   }
 
+  /// Starts [body] and updates the state when its future completes.
+  ///
+  /// Concurrent calls run independently and apply results in completion order.
+  /// An older call that finishes later can replace a newer call's result or
+  /// status. Loading describes a state transition, not the number of pending
+  /// calls; a completion can set success or error while another call is pending.
+  ///
+  /// [initialData] initializes data only when no value has been set. With
+  /// [useEmpty], an empty result selects [EmptyStatus] without replacing the
+  /// current data. Otherwise the result becomes successful data.
+  ///
+  /// Failures select error status without replacing the current data.
+  /// Exceptions are retained; other errors are wrapped in an [Exception] using
+  /// [errorMessage] when supplied, or the error's string representation.
+  ///
+  /// Calls made after disposal or controller deletion do not start [body].
+  /// Closing the state ignores later results but does not cancel work already
+  /// started. This method returns `void`; it is not a completion future.
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     if (_isStateClosed) return;

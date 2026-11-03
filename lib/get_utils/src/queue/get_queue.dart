@@ -19,10 +19,16 @@ class GetMicrotask {
   }
 }
 
+/// Runs jobs one at a time in the order they were added.
 class GetQueue {
   final List<_Item> _queue = [];
   bool _active = false;
 
+  /// Enqueues [job] and forwards its result or original error and stack trace.
+  ///
+  /// The job can return a value or a future. When the queue is idle, its first
+  /// job starts immediately. See [cancelAllJobs] before awaiting jobs that may
+  /// be discarded.
   Future<T> add<T>(Function job) {
     var completer = Completer<T>();
     _queue.add(_Item(completer, job));
@@ -30,6 +36,12 @@ class GetQueue {
     return completer.future;
   }
 
+  /// Discards queued jobs that have not started.
+  ///
+  /// The running job continues and its future still completes normally or with
+  /// an error. Futures returned by [add] for discarded jobs remain pending;
+  /// this method does not provide a cancellation result for them. Jobs added
+  /// afterward can run once the running job finishes.
   void cancelAllJobs() {
     _queue.clear();
   }

@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [master, latest-getx5-RC]
   workflow_dispatch:
+    inputs:
+      encoded_query:
+        description: Check the strict encoded-query browser gate
+        type: boolean
+        default: false
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
   test:
@@ -35,6 +40,8 @@ jobs:
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
       - run: flutter test --platform chrome test/documentation/public_imports_test.dart test/rx/rx_workers_test.dart
+      - run: dart test/connect/support/run_browser_transport.dart
+      - run: dart test/connect/support/run_browser_transport.dart flutter --wasm
       - run: flutter pub get
         working-directory: example
       - run: flutter analyze --no-fatal-infos lib test
@@ -51,6 +58,23 @@ jobs:
         working-directory: example_nav2
       - run: flutter build web --no-pub --wasm
         working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run -t lib/browser_navigation_probe.dart -o build/browser-js
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/js.json
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --wasm -t lib/browser_navigation_probe.dart -o build/browser-wasm
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-wasm --mode wasm --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/wasm.json
+        working-directory: example_nav2
+      - name: Strict encoded-query diagnostics
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.encoded_query }}
+        run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case encoded --chrome /usr/bin/google-chrome --report build/browser-results/encoded.json
+        working-directory: example_nav2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-results-${{ matrix.flutter }}
+          path: example_nav2/build/browser-results/
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
       - uses: codecov/codecov-action@v4

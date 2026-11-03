@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+- Complete browser HTTP timeout, abort and decoding-error futures and release
+  their event subscriptions.
+- Send browser WebSocket text and binary values with the correct JS types;
+  close replaced connections and release heartbeat timers on disposal.
+- Document queue cancellation and concurrent `futurize` completion ordering.
+- Add real-browser HTTP, upload, socket and JS/WASM navigation checks, plus
+  local HTTPS/WSS certificate validation tests.
+- Exclude generated machine-specific example files from the package inputs.
 - Adapt app `routes` maps to Navigator 2 and report unsupported RouteFactory
   callbacks explicitly. Preserve live theme, locale, routing and binding
   ownership across ordinary app rebuilds.

@@ -44,6 +44,10 @@ class BaseWebSocket {
       isDisposed = false;
     }
     final generation = ++_generation;
+    final previous = socket;
+    socket = null;
+    await previous?.close();
+    if (isDisposed || generation != _generation) return;
     try {
       connectionStatus = ConnectionStatus.connecting;
       final connected = allowSelfSigned

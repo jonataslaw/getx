@@ -125,7 +125,7 @@ class GetPage<T> extends Page<T> {
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
     PreventDuplicateHandlingMode? preventDuplicateHandlingMode,
-    final double Function(BuildContext context)? gestureWidth,
+    double Function(BuildContext context)? gestureWidth,
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,

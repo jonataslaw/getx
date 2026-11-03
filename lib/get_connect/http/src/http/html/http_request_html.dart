@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:js_interop';
 
-import 'package:web/web.dart' show XHRGetters, XMLHttpRequest;
+import 'package:web/web.dart'
+    show XHRGetters, XMLHttpRequest, EventStreamProvider, ProgressEvent;
 
 import '../../certificates/certificates.dart';
 import '../../exceptions/exceptions.dart';
@@ -29,6 +30,10 @@ class HttpRequestImpl implements IClient {
     }
 
     var bytes = await request.bodyBytes.toBytes();
+    if (_isClosed) {
+      throw GetHttpException(
+          'HTTP request failed. Client is already closed.', request.url);
+    }
     XMLHttpRequest xhr = XMLHttpRequest();
 
     xhr
@@ -43,57 +48,73 @@ class HttpRequestImpl implements IClient {
 
     request.headers.forEach((key, value) => xhr.setRequestHeader(key, value));
 
-    var completer = Completer<Response<T>>();
+    final completer = Completer<Response<T>>();
+    final subscriptions = <StreamSubscription<dynamic>>[];
 
-    unawaited(xhr.onLoad.first.then((_) async {
-      final bodyBytes =
-          (xhr.response as JSArrayBuffer).toDart.asUint8List().toStream();
-
-      if (request.responseInterceptor != null) {
-        throw GetHttpException(
-            'Response interception not implemented for web yet!', request.url);
+    void fail(Object error, [StackTrace? stack]) {
+      if (!completer.isCompleted) {
+        completer.completeError(error, stack ?? StackTrace.current);
       }
+    }
 
-      final stringBody =
-          await bodyBytesToString(bodyBytes, xhr.responseHeaders);
-      final contentType =
-          xhr.responseHeaders['content-type'] ?? 'application/json';
-
-      final body = bodyDecoded<T>(request, stringBody, contentType);
-
-      final response = Response<T>(
-        bodyBytes: bodyBytes,
-        statusCode: xhr.status,
-        request: request,
-        headers: xhr.responseHeaders,
-        statusText: xhr.statusText,
-        body: body,
-        bodyString: stringBody,
-      );
-
-      completer.complete(response);
+    subscriptions.add(xhr.onLoad.listen((_) async {
+      try {
+        final bodyBytes =
+            (xhr.response as JSArrayBuffer).toDart.asUint8List().toStream();
+        if (request.responseInterceptor != null) {
+          throw GetHttpException(
+              'Response interception not implemented for web yet!',
+              request.url);
+        }
+        final stringBody =
+            await bodyBytesToString(bodyBytes, xhr.responseHeaders);
+        final contentType =
+            xhr.responseHeaders['content-type'] ?? 'application/json';
+        final body = bodyDecoded<T>(request, stringBody, contentType);
+        if (!completer.isCompleted) {
+          completer.complete(Response<T>(
+            bodyBytes: bodyBytes,
+            statusCode: xhr.status,
+            request: request,
+            headers: xhr.responseHeaders,
+            statusText: xhr.statusText,
+            body: body,
+            bodyString: stringBody,
+          ));
+        }
+      } catch (error, stack) {
+        fail(error, stack);
+      }
     }));
-
-    unawaited(xhr.onError.first.then((_) {
-      completer.completeError(
-        GetHttpException('XMLHttpRequest error.', request.url),
-        StackTrace.current,
-      );
+    subscriptions.add(xhr.onError.listen((_) {
+      fail(GetHttpException('XMLHttpRequest error.', request.url));
     }));
-
-    xhr.send(bytes.toJS);
+    subscriptions.add(const EventStreamProvider<ProgressEvent>('timeout')
+        .forTarget(xhr)
+        .listen((_) {
+      fail(GetHttpException('XMLHttpRequest timeout.', request.url));
+    }));
+    subscriptions.add(const EventStreamProvider<ProgressEvent>('abort')
+        .forTarget(xhr)
+        .listen((_) {
+      fail(GetHttpException('XMLHttpRequest aborted.', request.url));
+    }));
 
     try {
+      xhr.send(bytes.toJS);
       return await completer.future;
     } finally {
       _xhrs.remove(xhr);
+      for (final subscription in subscriptions) {
+        await subscription.cancel();
+      }
     }
   }
 
   @override
   void close() {
     _isClosed = true;
-    for (var xhr in _xhrs) {
+    for (var xhr in _xhrs.toList()) {
       xhr.abort();
     }
     _xhrs.clear();

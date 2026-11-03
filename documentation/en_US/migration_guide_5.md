@@ -9,9 +9,12 @@ branch. Check your resolved GetX revision before applying it.
 
 The [manifest](../../pubspec.yaml) declares Dart `>=3.4.0 <4.0.0` and Flutter
 `>=3.22.0`. These are declared constraints, not a claim that every intervening
-SDK and platform has passed the same tests. Flutter 3.47.5 is the provisional
-local validation environment for this stabilization work; Flutter 3.47.8 and
-3.47.9 validation remains pending. Do not infer their support from this guide.
+SDK and platform has passed the same tests. Local checks use Flutter 3.47.5.
+The [CI workflow](../../.github/workflows/main.yml) pins Flutter 3.47.8 and
+3.47.9 for analysis, root and example tests, Chrome smoke tests and JS/WASM
+builds. Check the CI result for your exact revision. The final SDK constraints
+and release version remain pending; the historical lower bounds above are
+not a tested support matrix.
 
 This RC uses Flutter's bundled design libraries:
 
@@ -154,6 +157,12 @@ trimmed string, or null result maps to empty status; `useEmpty: false` retains
 successful empty data. It returns `void` in this RC; do not `await` it as an
 application completion signal.
 
+Concurrent `futurize` calls apply each result in completion order. An older
+request can finish later and replace a newer result. Loading is not a count
+of pending requests. Serialize requests or manage request ownership in your
+controller when your application requires a different policy. Closing the
+controller ignores later results without canceling the underlying operation.
+
 In `controller.obx`, handle loading, empty and error as well as success. The
 success callback receives the typed data; it is not an `RxStatus` object.
 Do not assume the status classes are sealed or provide the proposed
@@ -241,12 +250,19 @@ Do not assume every back source follows the same path as a direct `Get.back`.
 
 ## Pages and overlays have separate closing operations
 
+`GetQueue.cancelAllJobs()` discards work that has not started. Its active job
+continues; futures for discarded jobs remain pending, without a cancellation
+result. Account for this when retaining or awaiting those futures. The snackbar
+queue manages its own completion: canceling queued snackbars completes their
+show futures and removes their controllers.
+
 | Intention | API in this RC |
 |---|---|
 | Return one page, optionally with a result | `Get.back<T>(result: value)` |
 | Return several pages | `Get.back(times: count)` |
 | Close the current dialog | `Get.closeDialog<T>(result: value)` |
-| Close the current bottom sheet/overlay | `Get.closeOverlay<T>(result: value)` |
+| Close the current bottom sheet | `Get.closeBottomSheet<T>(result: value)` |
+| Close the current popup overlay | `Get.closeOverlay<T>(result: value)` |
 | Close the current snackbar | `Get.closeCurrentSnackbar()` |
 | Close all snackbars | `Get.closeAllSnackbars()` |
 | Close selected overlay categories | `Get.close(...)` |

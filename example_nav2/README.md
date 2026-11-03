@@ -6,8 +6,9 @@ for this branch; it uses Flutter's bundled Material library rather than the
 standalone UI packages used by newer `master` revisions.
 
 Use the same selected Flutter SDK for dependency resolution, analysis, tests and
-running the application. The provisional validation environment is Flutter
-3.47.5; validation on Flutter 3.47.8 and 3.47.9 remains pending.
+running the application. Local validation used Flutter 3.47.5. Fork CI passed on
+Flutter 3.47.8 and 3.47.9 for commit `6cf29222`; those results apply to that exact
+revision. Check the CI result for your current revision before claiming support.
 
 From this directory:
 
@@ -44,3 +45,7 @@ not cover these flows. Also check the app interactively on the intended target:
 
 Widget tests do not establish browser-history behavior, platform gesture
 compatibility or production-host configuration.
+
+
+For real Chrome deep links, refresh, back/forward, nested redirects and WASM
+runtime checks, see [the browser integration harness](test/browser/README.md).

@@ -4,9 +4,10 @@ This application uses the parent checkout through a path dependency. Read the
 [RC migration guide](../documentation/en_US/migration_guide_5.md) and the
 [example walkthrough](example.md) for the APIs in this branch.
 
-Use one selected Flutter SDK for resolution, analysis and tests. Flutter 3.47.5
-is the provisional validation environment; Flutter 3.47.8 and 3.47.9 validation
-is pending. From this directory:
+Use one selected Flutter SDK for resolution, analysis and tests. Local checks
+use Flutter 3.47.5; the [CI workflow](../.github/workflows/main.yml) also tests
+this example on Flutter 3.47.8 and 3.47.9. Check the CI result for the exact
+revision you consume. From this directory:
 
 ```sh
 flutter --version

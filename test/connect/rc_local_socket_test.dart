@@ -137,6 +137,22 @@ void main() {
     expect(peers, hasLength(2));
   });
 
+  test('manual native reconnect closes its previous live transport', () async {
+    final oldClosed = Completer<void>();
+    accepted = (peer) {
+      final isFirst = peers.length == 1;
+      peer.listen(peer.add, onDone: () {
+        if (isFirst && !oldClosed.isCompleted) oldClosed.complete();
+      });
+    };
+    final client = makeClient();
+    client.onOpen(() {});
+    await client.connect();
+    await client.connect();
+    await oldClosed.future.timeout(const Duration(seconds: 2));
+    expect(peers, hasLength(2));
+  });
+
   test('connection refusal notifies onError without an open callback',
       () async {
     final unavailable =
