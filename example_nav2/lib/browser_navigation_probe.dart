@@ -12,14 +12,23 @@ external set _browserState(JSString value);
 @JS('window.getxProbeNavigate')
 external set _browserNavigate(JSFunction value);
 
+@JS('window.getxProbeNavigateWithArguments')
+external set _browserNavigateWithArguments(JSFunction value);
+
 final _boot = DateTime.now().microsecondsSinceEpoch.toString();
 
 void main() {
   _browserNavigate = ((JSString location) {
     Get.toNamed<void>(location.toDart);
   }).toJS;
+  _browserNavigateWithArguments = ((JSString location, JSString arguments) {
+    Get.toNamed<void>(location.toDart, arguments: jsonDecode(arguments.toDart));
+  }).toJS;
   runApp(GetMaterialApp(
     initialRoute: '/',
+    restorationScopeId: const bool.fromEnvironment('GETX_PROBE_RESTORATION')
+        ? 'browser_navigation_probe'
+        : null,
     defaultTransition: Transition.noTransition,
     getPages: [
       GetPage(name: '/', page: () => const _ProbePage('home')),
@@ -78,6 +87,13 @@ class _ProbePage extends StatelessWidget {
             'label': label,
             'location': location,
             'parameters': parameters,
+            'arguments': Get.arguments,
+            'argumentIsInt': Get.arguments is int,
+            'argumentIsDouble': Get.arguments is double,
+            'history': [
+              for (final entry in Get.rootController.rootDelegate.activePages)
+                entry.pageSettings?.name,
+            ],
           }).toJS;
         });
         return Scaffold(

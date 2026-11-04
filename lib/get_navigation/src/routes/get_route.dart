@@ -100,6 +100,9 @@ class GetPage<T> extends Page<T> {
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
+  /// Copies this page with a typed result completer for internal restoration.
+  GetPage<T> withFreshCompleter() => copyWith(completer: Completer<T?>());
+
   GetPage<T> copyWith({
     LocalKey? key,
     String? name,

@@ -129,6 +129,41 @@ try {
   });
   await call('Page.enable'); await call('Runtime.enable'); await call('Network.enable');
   report.browser = await call('Browser.getVersion');
+  if (args.case === 'history') {
+    report.case = 'history';
+    const argumentFlags = new Map();
+    async function historyStep(name, action, path, label, parameters, history, argumentType) {
+      const state = await step(name, action, path, label, parameters);
+      if (!state) return;
+      try {
+        assert.deepEqual(state.history, history);
+        if (argumentType === 'int') assert.equal(state.argumentIsInt, true);
+        if (argumentType === 'double') assert.equal(state.argumentIsDouble, true);
+        if (argumentType) {
+          const flags = [state.argumentIsInt, state.argumentIsDouble];
+          if (argumentFlags.has(path)) assert.deepEqual(flags, argumentFlags.get(path));
+          else argumentFlags.set(path, flags);
+        }
+      } catch (error) {
+        const result = report.steps.at(-1);
+        result.passed = false; result.error = error.message;
+        process.stdout.write(`FAIL ${name} snapshot: ${error.message}\n`);
+      }
+    }
+    const paths = ['/', '/item/1?q=one', '/second?from=two', '/item/2?q=three'];
+    const labels = ['home', 'item', 'second', 'item'];
+    const parameters = [{}, { id: '1', q: 'one' }, { from: 'two' }, { id: '2', q: 'three' }];
+    const argumentValues = [null, '42', '42.0', 'null'];
+    const argumentTypes = [null, 'int', 'double', null];
+    await historyStep('cold root starts one-entry history', () => call('Page.navigate', { url: origin + '/' }), paths[0], labels[0], parameters[0], paths.slice(0, 1));
+    for (let i = 1; i < paths.length; i++) {
+      await historyStep(`push query entry ${i}`, () => evaluate(`window.getxProbeNavigateWithArguments(${JSON.stringify(paths[i])}, ${JSON.stringify(argumentValues[i])})`), paths[i], labels[i], parameters[i], paths.slice(0, i + 1), argumentTypes[i]);
+    }
+    await historyStep('browser back replays three entries and double argument', () => evaluate('history.back()'), paths[2], labels[2], parameters[2], paths.slice(0, 3), 'double');
+    await historyStep('second back replays two entries and int argument', () => evaluate('history.back()'), paths[1], labels[1], parameters[1], paths.slice(0, 2), 'int');
+    await historyStep('forward restores three entries without appending', () => evaluate('history.forward()'), paths[2], labels[2], parameters[2], paths.slice(0, 3), 'double');
+    await historyStep('forward restores four entries without duplication', () => evaluate('history.forward()'), paths[3], labels[3], parameters[3], paths);
+  } else {
   const encoded = args.case === 'encoded';
   report.case = args.case ?? 'all';
   const initial = encoded ? '/item/a+b?tag=a%2Bb&label=%D8%B3%D9%84%D8%A7%D9%85' : '/item/42?tag=active&label=%D8%B3%D9%84%D8%A7%D9%85';
@@ -158,6 +193,7 @@ try {
     const strictFirst = await step('strict encoded query deep link', () => call('Page.navigate', { url: origin + strictPath }), strictPath, 'item', strictParameters);
     await step('strict encoded query survives refresh', () => call('Page.reload', { ignoreCache: true }), strictPath, 'item', strictParameters, strictFirst?.boot);
   }
+  }
   const appWasm = report.resources.some(resource => resource.url.endsWith('/main.dart.wasm') && resource.status === 200);
   const appJs = report.resources.some(resource => resource.url.endsWith('/main.dart.js') && resource.status === 200);
   assert.equal(appWasm, mode === 'wasm', 'Check actual app WASM module loading, not only CanvasKit WASM.');
@@ -165,6 +201,8 @@ try {
   assert.deepEqual(report.exceptions, [], 'No uncaught browser runtime exceptions.');
   assert.deepEqual(report.consoleErrors, [], 'No Flutter framework console errors.');
   assert(report.steps.every(step => step.passed), 'One or more browser navigation steps failed.');
+  // Probe state is published after a Dart frame; allow the compositor to paint.
+  await pause(1500);
   const capture = await call('Page.captureScreenshot', { format: 'png' });
   await writeFile(`${args.report}.png`, Buffer.from(capture.data, 'base64'));
 } catch (error) {

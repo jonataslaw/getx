@@ -5,6 +5,10 @@
 - Require Flutter 3.47.9 and Dart 3.13.7, matching the selected stable SDK.
 - Modernize the Navigator 2 example's Android host for the current Flutter
   Gradle plugin and document the upstream web-history encoding limitation.
+- Restore opt-in named-route history and supported arguments without losing
+  live navigation result futures; preserve numeric argument types in WASM.
+- Migrate the iOS navigation example to Flutter's scene lifecycle and add
+  physical-device back, gesture and process-death restoration checks.
 - Complete browser HTTP timeout, abort and decoding-error futures and release
   their event subscriptions.
 - Send browser WebSocket text and binary values with the correct JS types;

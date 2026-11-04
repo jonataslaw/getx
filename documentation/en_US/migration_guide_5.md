@@ -17,6 +17,10 @@ JS/WASM builds. Check the CI result for your exact revision. Later SDKs and
 every target platform are not automatically certified by these lower bounds.
 This candidate has not been published as a stable release.
 
+The Navigator 2 example's native hosts target Android API 24 or later and iOS
+15 or later. Its iOS host uses Flutter's scene lifecycle and implicit-engine
+plugin registration. Keep that host migration when testing on current iOS.
+
 This RC uses Flutter's bundled design libraries:
 
 ```dart
@@ -251,12 +255,65 @@ Flutter documents the correction for
 [3.50 or later](https://docs.flutter.dev/deployment/web#url-percent-encoding-in-browser-history).
 That version is not this branch's tested stable baseline. Before relying on
 arbitrary encoded URLs, run the [strict browser checks](../../example_nav2/test/browser/README.md)
-on your selected SDK. No global double-encoding workaround is applied.
+on your selected SDK. This remains a documented SDK limitation for the current
+RC baseline; passing the other navigation tests does not resolve it. No global
+double-encoding workaround is applied.
 
 `WillPopScope` recipes from Navigator 1 are not a drop-in solution for this
 router. Choose the back handler appropriate to your selected Flutter SDK and
 route configuration, and test platform back, browser back and swipe gestures.
 Do not assume every back source follows the same path as a direct `Get.back`.
+
+## Named-route history and restoration
+
+Setting `GetMaterialApp.restorationScopeId` or
+`GetCupertinoApp.restorationScopeId` opts the default GetDelegate into restoring
+named-route history, as well as enabling Flutter restoration scopes. With a
+custom delegate, set its `GetDelegate.restorationScopeId` explicitly and enable
+the app's restoration scope too. A delegate without a scope keeps the previous
+URI-only behavior and accepts transient arguments as before.
+
+Give restorable pages distinct, stable `GetPage.restorationId` values and use
+Flutter's RestorationMixin/restorable properties for page data. Named routes
+must be registered again after startup. The delegate persists ordered history
+in versioned `RouteInformation.state`; the selected URI retains its normal
+meaning. Browser back/forward can import these snapshots without appending the
+whole saved history to the live stack. Common live entries keep their keys and
+pending result futures; removed live entries complete with null.
+
+Restorable arguments are JSON-shaped values: null, booleans, finite numbers,
+strings, lists and maps with string keys. The wire carries validated argument
+JSON as text to preserve numeric representations across platform bridges,
+including Dart WASM's integer/double distinction. This does not restore custom
+model classes or generic collection runtime types. Supported snapshots contain
+at most 128 entries, arguments at most 16 levels deep, and a complete encoded
+payload at most 64 KiB. Unsupported or cyclic arguments, incompatible page
+identities and excessive payloads fall back to the selected URI without saved
+history or arguments. Use URI identifiers to reload application data instead
+of passing controllers, widgets, closures or arbitrary model objects.
+
+Unknown/malformed snapshots, a different scope, an unregistered destination or
+a mismatch with the selected URI also fall back to ordinary guarded deep-link
+handling. Middleware runs for restored entries; a cancellation, redirect or
+in-place mutation rejects that complete snapshot, then the selected URI goes
+through the normal guard pipeline. A guard may therefore run again. Pending
+imports are discarded after disposal, a newer import or a change to live
+history, rather than overwriting accepted navigation.
+
+A restored process receives fresh runtime completers and controllers. An old
+Dart call's awaiting Future or continuation cannot survive process death.
+`Get.back<int>(result: value)` and new navigation futures still work after a
+history restore, but do not treat a former process's pending callback as a
+restoration mechanism. Verify both page data and returning to preceding pages.
+
+On the tested Flutter 3.47.9 web bootstrap, a full browser reload supplies only
+the initial URI, rather than the previous RouteInformation.state. That is a
+cold deep-link load: do not claim full-history restoration from reload.
+Browser back/forward snapshot replay and OS-driven Flutter state restoration
+are separate checks. Neither a widget restart test nor background/foreground
+resume alone proves restoration after native process death.
+See the [physical-device checks](../../example_nav2/test/device/README.md) for
+host setup and the current unverified process-death boundary on iOS.
 
 ## Pages and overlays have separate closing operations
 

@@ -41,6 +41,31 @@ and middleware redirects. A rendered current page publishes test state through
 small JS hooks; navigation hooks call the public GetX API. Browser history and
 reload operations are Chrome operations, and refresh must start a new Dart app.
 
+## Opt-in history restoration
+
+Build the same probe with `--dart-define=GETX_PROBE_RESTORATION=true` and run
+`--case history` in both JS and WASM modes. For example:
+
+```sh
+flutter build web --no-pub --no-web-resources-cdn --wasm \
+  --dart-define=GETX_PROBE_RESTORATION=true \
+  --target lib/browser_navigation_probe.dart --output build/browser-history-wasm
+node --experimental-websocket test/browser/navigation_smoke.mjs \
+  --build-dir build/browser-history-wasm --mode wasm --case history \
+  --report build/browser-results/history-wasm.json
+```
+
+This case checks the complete ordered stack through three pushes and real
+browser back/forward, including integer and double argument types. Use
+`--no-wasm-dry-run` instead of `--wasm`, a separate build output, and `--mode js`
+for the JavaScript counterpart. Ordinary builds leave restoration disabled.
+
+A fresh browser reload uses Flutter's initial URI. It does not import the
+previous browser entry's full route state through the default information
+provider on the selected SDK. Full stack persistence across web refresh is
+therefore outside this case's contract; live back/forward replay and native
+OS restoration are verified separately.
+
 ## Strict query encoding gate
 
 Run the complete contract with `--case all` (the default), or isolate the strict

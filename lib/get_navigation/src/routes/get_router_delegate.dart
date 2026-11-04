@@ -7,6 +7,8 @@ import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_utils/src/platform/platform.dart';
 import '../../../route_manager.dart';
 
+import 'parse_route.dart';
+
 class GetDelegate extends RouterDelegate<RouteDecoder>
     with
         ChangeNotifier,
@@ -37,11 +39,15 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   final List<RouteDecoder> _activePages = <RouteDecoder>[];
   bool _isDisposed = false;
+  int _restorationImport = 0;
+  int _nextRestorationId = 0;
+  final _restorationIds = Expando<int>('GetX navigation restoration');
   final _pendingMiddleware = <Completer<RouteDecoder?>>{};
 
   @override
   void dispose() {
     _isDisposed = true;
+    _restorationImport++;
     for (final pending in _pendingMiddleware.toList()) {
       pending.complete(null);
     }
@@ -94,6 +100,20 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   GlobalKey<NavigatorState> navigatorKey;
 
+  /// The navigator scope and opt-in for named-route history restoration.
+  ///
+  /// When non-null, route information includes up to 128 registered named
+  /// entries and JSON-shaped arguments: null, booleans, finite numbers,
+  /// strings, lists and maps with string keys. Arguments travel as JSON text
+  /// inside the versioned state so platform JSON bridges preserve numeric types.
+  /// Arguments are limited to depth
+  /// 16 and the complete payload to 64 KiB. Unsupported values, cycles,
+  /// incompatible page identities or excessive payloads fall back to the
+  /// selected URI without history or arguments. Destinations must still be
+  /// registered when restoring; middleware is evaluated again.
+  ///
+  /// Existing runtime futures for a retained history prefix remain live.
+  /// Futures and their continuations cannot be restored after process death.
   final String? restorationScopeId;
 
   GetDelegate({
@@ -873,20 +893,164 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<void> setNewRoutePath(RouteDecoder configuration) async {
+    final generation = ++_restorationImport;
+    final history = configuration.restorationHistory;
+    if (history != null) {
+      if (history.scope == restorationScopeId &&
+          await _restoreHistory(history, generation)) {
+        return;
+      }
+      if (_isDisposed || generation != _restorationImport) return;
+      // Invalid or rejected history retains ordinary guarded deep-link behavior.
+      final uri = configuration.pageSettings?.uri;
+      if (uri == null) return;
+      final args = PageSettings(uri);
+      configuration = matchRoute(uri.toString(), arguments: args);
+      configuration.route = configuration.route?.copyWith(
+        arguments: args,
+        parameters: args.params,
+      );
+    }
     final page = configuration.route;
     if (page == null) {
       goToUnknownPage();
-      return;
     } else {
       _push(configuration);
     }
   }
 
   @override
+  Future<void> setRestoredRoutePath(RouteDecoder configuration) =>
+      setNewRoutePath(configuration);
+
+  bool _sameLiveHistory(List<RouteDecoder> previous) =>
+      previous.length == _activePages.length &&
+      List.generate(
+        previous.length,
+        (index) => identical(previous[index], _activePages[index]),
+      ).every((same) => same);
+
+  RouteDecoder? _restoredEntry(RestorableRouteEntry entry) {
+    final args = PageSettings(entry.uri, entry.copyArguments());
+    final decoder = matchRoute(entry.uri.toString(), arguments: args);
+    final page = decoder.route;
+    if (page == null || !page.path.regex.hasMatch(entry.uri.path)) return null;
+    decoder.route = page.withFreshCompleter().copyWith(
+      arguments: args,
+      parameters: args.params,
+      preventDuplicates: entry.preventDuplicates,
+      key: entry.preventDuplicates ? ValueKey(args.name) : UniqueKey(),
+    );
+    return decoder;
+  }
+
+  Future<bool> _restoreHistory(
+    RestorableRouteHistory history,
+    int generation,
+  ) async {
+    final previous = List<RouteDecoder>.of(_activePages);
+    final candidates = <RouteDecoder>[];
+    final keys = <LocalKey?>{};
+    final restorationIds = <String>{};
+    for (final entry in history.entries) {
+      final candidate = _restoredEntry(entry);
+      if (candidate == null ||
+          !keys.add(candidate.route!.key) ||
+          (candidate.route!.restorationId != null &&
+              !restorationIds.add(candidate.route!.restorationId!))) {
+        return false;
+      }
+      candidates.add(candidate);
+    }
+
+    bool stale() =>
+        _isDisposed ||
+        generation != _restorationImport ||
+        !_sameLiveHistory(previous);
+    for (var index = 0; index < candidates.length; index++) {
+      final candidate = candidates[index];
+      final page = candidate.route;
+      final branch = List<GetPage>.of(candidate.currentTreeBranch);
+      final guarded = await runMiddleware(candidate);
+      if (stale()) return true;
+      if (!identical(guarded, candidate) || !identical(candidate.route, page) ||
+          candidate.currentTreeBranch.length != branch.length ||
+          Iterable<int>.generate(branch.length).any((index) =>
+              !identical(branch[index], candidate.currentTreeBranch[index])) ||
+          !history.entries[index].hasArguments(candidate.pageSettings?.arguments)) {
+        return false;
+      }
+    }
+    if (stale()) return true;
+
+    var retained = 0;
+    while (retained < previous.length && retained < candidates.length) {
+      final old = previous[retained];
+      final entry = history.entries[retained];
+      final replacement = candidates[retained];
+      if (_restorationIds[old] != entry.id ||
+          old.pageSettings?.uri != entry.uri ||
+          old.route?.preventDuplicates != entry.preventDuplicates ||
+          old.route?.restorationId != replacement.route?.restorationId ||
+          old.route?.page != replacement.route?.page ||
+          !entry.hasArguments(old.pageSettings?.arguments)) {
+        break;
+      }
+      candidates[retained] = old;
+      retained++;
+    }
+    for (var index = 0; index < candidates.length; index++) {
+      final id = history.entries[index].id;
+      _restorationIds[candidates[index]] = id;
+      if (_nextRestorationId <= id) _nextRestorationId = id + 1;
+    }
+    _activePages
+      ..clear()
+      ..addAll(candidates);
+    // Settle only removed live entries after publishing a coherent replacement.
+    for (final removed in previous.skip(retained)) {
+      _completePage(removed);
+    }
+    if (!_isDisposed) notifyListeners();
+    return true;
+  }
+
+  @override
   RouteDecoder? get currentConfiguration {
     if (_activePages.isEmpty) return null;
-    final route = _activePages.last;
-    return route;
+    final selected = _activePages.last;
+    final scope = restorationScopeId;
+    if (scope == null) return selected;
+    final entries = <RestorableRouteEntry>[];
+    final keys = <LocalKey?>{};
+    final restorationIds = <String>{};
+    for (final page in _activePages) {
+      final settings = page.pageSettings;
+      final route = page.route;
+      if (settings == null ||
+          route == null ||
+          !keys.add(route.key) ||
+          (route.restorationId != null &&
+              !restorationIds.add(route.restorationId!))) {
+        return selected;
+      }
+      final id = _restorationIds[page] ??= _nextRestorationId++;
+      entries.add(
+        RestorableRouteEntry(
+          id,
+          settings.uri,
+          settings.arguments,
+          route.preventDuplicates,
+        ),
+      );
+    }
+    final history = RestorableRouteHistory.create(scope, entries);
+    if (history == null) return selected;
+    return RouteDecoder(
+      List.of(selected.currentTreeBranch),
+      selected.pageSettings,
+      restorationHistory: history,
+    );
   }
 
   Future<bool> handlePopupRoutes({

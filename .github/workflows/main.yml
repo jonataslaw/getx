@@ -66,6 +66,14 @@ jobs:
         working-directory: example_nav2
       - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-wasm --mode wasm --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/wasm.json
         working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run --dart-define=GETX_PROBE_RESTORATION=true -t lib/browser_navigation_probe.dart -o build/browser-history-js
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-history-js --mode js --case history --chrome /usr/bin/google-chrome --report build/browser-results/history-js.json
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --wasm --dart-define=GETX_PROBE_RESTORATION=true -t lib/browser_navigation_probe.dart -o build/browser-history-wasm
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-history-wasm --mode wasm --case history --chrome /usr/bin/google-chrome --report build/browser-results/history-wasm.json
+        working-directory: example_nav2
       - name: Strict encoded-query diagnostics
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.encoded_query }}
         run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case encoded --chrome /usr/bin/google-chrome --report build/browser-results/encoded.json
