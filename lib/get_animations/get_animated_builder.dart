@@ -49,6 +49,7 @@ class GetAnimatedBuilderState<T> extends State<GetAnimatedBuilder<T>>
   bool get willResetOnDispose => _willResetOnDispose;
 
   void _listener(AnimationStatus status) {
+    // _wasStarted = true;
     switch (status) {
       case AnimationStatus.completed:
         widget.onComplete?.call(_controller);
