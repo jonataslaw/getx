@@ -13,15 +13,15 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: Routes.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-      children: [
-        GetPage(
-            name: Routes.DETAILS,
-            page: () => const DetailsView(),
-            binding: DetailsBinding()),
-      ],
-    ),
+        name: Routes.HOME,
+        page: () => const HomeView(),
+        binding: HomeBinding(),
+        participatesInRootNavigator: true,
+        children: [
+          GetPage(
+              name: Routes.DETAILS,
+              page: () => const DetailsView(),
+              binding: DetailsBinding()),
+        ]),
   ];
 }
