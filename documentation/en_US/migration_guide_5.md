@@ -1,20 +1,21 @@
 # Migrating from GetX 4 to GetX 5 RC
 
-This guide describes the `latest-getx5-RC` line, whose package version is
-`5.0.0-release-candidate-9.3.0`. It is specific to this source tree, rather than
+This guide describes stabilization work based on `latest-getx5-RC`. This
+working tree's package version is `5.0.0-release-candidate-9.4.0`, an unreleased
+candidate. The guide is specific to this source tree, rather than
 an announcement of a stable GetX 5 release or a guide to the newer `master`
 branch. Check your resolved GetX revision before applying it.
 
 ## SDK and imports
 
-The [manifest](../../pubspec.yaml) declares Dart `>=3.4.0 <4.0.0` and Flutter
-`>=3.22.0`. These are declared constraints, not a claim that every intervening
-SDK and platform has passed the same tests. Local checks use Flutter 3.47.5.
-The [CI workflow](../../.github/workflows/main.yml) pins Flutter 3.47.8 and
-3.47.9 for analysis, root and example tests, Chrome smoke tests and JS/WASM
-builds. Check the CI result for your exact revision. The final SDK constraints
-and release version remain pending; the historical lower bounds above are
-not a tested support matrix.
+This stabilization branch requires **Flutter 3.47.9 or later** and
+**Dart 3.13.7 or later, below 4.0.0**. These match the selected stable SDK;
+the historical Flutter 3.22/Dart 3.4 lower bounds are no longer supported.
+The [CI workflow](../../.github/workflows/main.yml) pins Flutter 3.47.9 for
+analysis, root and example tests, real Chrome transport/navigation checks and
+JS/WASM builds. Check the CI result for your exact revision. Later SDKs and
+every target platform are not automatically certified by these lower bounds.
+This candidate has not been published as a stable release.
 
 This RC uses Flutter's bundled design libraries:
 
@@ -242,6 +243,15 @@ navigator IDs are strings in this RC, not the integers in older examples;
 For web apps, test entering a child URL directly and refreshing it after a
 release build. Path URL hosting must serve the application entry point for
 those paths. Test parent and child bindings on that first load.
+
+Flutter 3.47.9 has a known web-engine limitation: reporting an encoded URL to
+browser history can decode reserved characters, changing query values after a
+refresh. GetX and an independent Flutter router reproduce this behavior.
+Flutter documents the correction for
+[3.50 or later](https://docs.flutter.dev/deployment/web#url-percent-encoding-in-browser-history).
+That version is not this branch's tested stable baseline. Before relying on
+arbitrary encoded URLs, run the [strict browser checks](../../example_nav2/test/browser/README.md)
+on your selected SDK. No global double-encoding workaround is applied.
 
 `WillPopScope` recipes from Navigator 1 are not a drop-in solution for this
 router. Choose the back handler appropriate to your selected Flutter SDK and
