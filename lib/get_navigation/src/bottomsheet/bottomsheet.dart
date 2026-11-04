@@ -74,16 +74,20 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
-    _animationController =
-        BottomSheet.createAnimationController(navigator!.overlay!);
+    _animationController = BottomSheet.createAnimationController(
+      navigator!.overlay!,
+    );
     _animationController!.duration = enterBottomSheetDuration;
     _animationController!.reverseDuration = exitBottomSheetDuration;
     return _animationController!;
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     final sheetTheme =
         theme?.bottomSheetTheme ?? Theme.of(context).bottomSheetTheme;
     // By definition, the bottom sheet is aligned to the bottom of the page
@@ -92,11 +96,13 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
       context: context,
       removeTop: removeTop,
       child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.viewInsetsOf(context).bottom,
+        ),
         child: _GetModalBottomSheet<T>(
           route: this,
-          backgroundColor: backgroundColor ??
+          backgroundColor:
+              backgroundColor ??
               sheetTheme.modalBackgroundColor ??
               sheetTheme.backgroundColor,
           elevation:
@@ -152,7 +158,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    final mediaQuery = MediaQuery.of(context);
+    final accessibleNavigation = MediaQuery.accessibleNavigationOf(context);
     final localizations = MaterialLocalizations.of(context);
     final routeLabel = _getRouteLabel(localizations);
 
@@ -161,7 +167,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
       builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
-        final animationValue = mediaQuery.accessibleNavigation
+        final animationValue = accessibleNavigation
             ? 1.0
             : widget.route!.animation!.value;
         return Semantics(
@@ -171,15 +177,32 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
           explicitChildNodes: true,
           child: ClipRect(
             child: CustomSingleChildLayout(
-                delegate: _GetModalBottomSheetLayout(
-                    animationValue, widget.isScrollControlled),
-                child: widget.isPersistent == false
-                    ? BottomSheet(
+              delegate: _GetModalBottomSheetLayout(
+                animationValue,
+                widget.isScrollControlled,
+              ),
+              child: widget.isPersistent == false
+                  ? BottomSheet(
+                      animationController: widget.route!._animationController,
+                      onClosing: () {
+                        if (widget.route!.isCurrent) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      builder: widget.route!.builder!,
+                      backgroundColor: widget.backgroundColor,
+                      elevation: widget.elevation,
+                      shape: widget.shape,
+                      clipBehavior: widget.clipBehavior,
+                      enableDrag: widget.enableDrag,
+                    )
+                  : Scaffold(
+                      bottomSheet: BottomSheet(
                         animationController: widget.route!._animationController,
                         onClosing: () {
-                          if (widget.route!.isCurrent) {
-                            Navigator.pop(context);
-                          }
+                          // if (widget.route.isCurrent) {
+                          //   Navigator.pop(context);
+                          // }
                         },
                         builder: widget.route!.builder!,
                         backgroundColor: widget.backgroundColor,
@@ -187,24 +210,9 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
-                      )
-                    : Scaffold(
-                        bottomSheet: BottomSheet(
-                          animationController:
-                              widget.route!._animationController,
-                          onClosing: () {
-                            // if (widget.route.isCurrent) {
-                            //   Navigator.pop(context);
-                            // }
-                          },
-                          builder: widget.route!.builder!,
-                          backgroundColor: widget.backgroundColor,
-                          elevation: widget.elevation,
-                          shape: widget.shape,
-                          clipBehavior: widget.clipBehavior,
-                          enableDrag: widget.enableDrag,
-                        ),
-                      )),
+                      ),
+                    ),
+            ),
           ),
         );
       },
@@ -255,7 +263,7 @@ class _GetPerModalBottomSheetState<T>
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    final mediaQuery = MediaQuery.of(context);
+    final accessibleNavigation = MediaQuery.accessibleNavigationOf(context);
     final localizations = MaterialLocalizations.of(context);
     final routeLabel = _getRouteLabel(localizations);
 
@@ -264,7 +272,7 @@ class _GetPerModalBottomSheetState<T>
       builder: (context, child) {
         // Disable the initial animation when accessible navigation is on so
         // that the semantics are added to the tree at the correct time.
-        final animationValue = mediaQuery.accessibleNavigation
+        final animationValue = accessibleNavigation
             ? 1.0
             : widget.route!.animation!.value;
         return Semantics(
@@ -274,15 +282,32 @@ class _GetPerModalBottomSheetState<T>
           explicitChildNodes: true,
           child: ClipRect(
             child: CustomSingleChildLayout(
-                delegate: _GetModalBottomSheetLayout(
-                    animationValue, widget.isScrollControlled),
-                child: widget.isPersistent == false
-                    ? BottomSheet(
+              delegate: _GetModalBottomSheetLayout(
+                animationValue,
+                widget.isScrollControlled,
+              ),
+              child: widget.isPersistent == false
+                  ? BottomSheet(
+                      animationController: widget.route!._animationController,
+                      onClosing: () {
+                        if (widget.route!.isCurrent) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      builder: widget.route!.builder!,
+                      backgroundColor: widget.backgroundColor,
+                      elevation: widget.elevation,
+                      shape: widget.shape,
+                      clipBehavior: widget.clipBehavior,
+                      enableDrag: widget.enableDrag,
+                    )
+                  : Scaffold(
+                      bottomSheet: BottomSheet(
                         animationController: widget.route!._animationController,
                         onClosing: () {
-                          if (widget.route!.isCurrent) {
-                            Navigator.pop(context);
-                          }
+                          // if (widget.route.isCurrent) {
+                          //   Navigator.pop(context);
+                          // }
                         },
                         builder: widget.route!.builder!,
                         backgroundColor: widget.backgroundColor,
@@ -290,24 +315,9 @@ class _GetPerModalBottomSheetState<T>
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
-                      )
-                    : Scaffold(
-                        bottomSheet: BottomSheet(
-                          animationController:
-                              widget.route!._animationController,
-                          onClosing: () {
-                            // if (widget.route.isCurrent) {
-                            //   Navigator.pop(context);
-                            // }
-                          },
-                          builder: widget.route!.builder!,
-                          backgroundColor: widget.backgroundColor,
-                          elevation: widget.elevation,
-                          shape: widget.shape,
-                          clipBehavior: widget.clipBehavior,
-                          enableDrag: widget.enableDrag,
-                        ),
-                      )),
+                      ),
+                    ),
+            ),
           ),
         );
       },

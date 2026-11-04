@@ -1346,6 +1346,15 @@ extension GetNavigationExt on GetInterface {
   /// give access to Mediaquery.of(context)
   MediaQueryData get mediaQuery => MediaQuery.of(context!);
 
+  /// give access to Mediaquery.PaddingOf(context)
+  EdgeInsets get padding => MediaQuery.paddingOf(context!);
+
+  /// give access to Mediaquery.viewInsets(context)
+  EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(context!);
+
+  /// give access to Mediaquery.sizeOf(context)
+  ui.Size get sizeOf => MediaQuery.sizeOf(context!);
+
   /// Check if dark mode theme is enable
   bool get isDarkMode => (theme.brightness == Brightness.dark);
 
@@ -1359,11 +1368,11 @@ extension GetNavigationExt on GetInterface {
   /// give access to FocusScope.of(context)
   FocusNode? get focusScope => FocusManager.instance.primaryFocus;
 
-  // /// give access to Immutable MediaQuery.of(context).size.height
-  // double get height => MediaQuery.of(context).size.height;
+  // /// give access to Immutable MediaQuery.sizeOf(context).height
+  // double get height => MediaQuery.sizeOf(context).height;
 
-  // /// give access to Immutable MediaQuery.of(context).size.width
-  // double get width => MediaQuery.of(context).size.width;
+  // /// give access to Immutable MediaQuery.sizeOf(context).width
+  // double get width => MediaQuery.sizeOf(context).width;
 
   GlobalKey<NavigatorState> get key => rootController.key;
 
