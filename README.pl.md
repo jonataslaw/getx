@@ -239,13 +239,13 @@ Zawsze dotrzymuj deadlinów i dostarczaj swoje rozwiązania na czas bez straty n
 
 ## Menadżer stanu
 
-Obecnie istnieje kilka menadżeów dla Fluttera. Jednak większość z nich wymaga używania ChangeNotifier, po to aby zaktualizować widżety, co nie sprawdza się pod kątem wydajności w średnich i dużych aplikacach. Możesz sprawdzić w oficjalnej dokumentacji, że ChangeNotifier powinien być używany z maksimum dwoma listinerami (https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html), będąc praktycznie bezużytecznym w średnich i duzych projektach. 
+**Wydajność:** GetX udostępnia reaktywne API i strumienie bez ręcznego tworzenia StreamController/StreamBuilder dla każdej wartości. Wybieraj Obx lub GetBuilder zgodnie z aktualizacjami i mierz przebudowy oraz zasoby aplikacji.
 
 Get nie jest ani lepszy, ani gorszy od innych menadżerów stanów, ale powinieneś rozpatrzyć te punkty jak i poniższe, aby wybrać między użyciem Get w czystej formie (Vanilla), albo używaniem go wraz z innym menadżerem. 
 
 Definitywnie Get nie jest przeciwnikiem żadnego innego menadżera, ponieważ jest on mikroframeworkiem, nie tylko menadżerem stanu. Może być użyty samodzielnie, lub w koegzystencji.
 
-Get ma bardzo lekki i prosty menadżer stanu (napisany w tylko 95 lini kodu), który nie używa ChangeNotifier. Sprosta on wymaganiom szczególnie nowych we Flutterze i nie sprawi problemu nawet w dużych aplikacjach.
+**Wydajność:** GetX udostępnia reaktywne API i strumienie bez ręcznego tworzenia StreamController/StreamBuilder dla każdej wartości. Wybieraj Obx lub GetBuilder zgodnie z aktualizacjami i mierz przebudowy oraz zasoby aplikacji.
 
 <a id="readme-section-8"></a>
 

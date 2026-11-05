@@ -175,7 +175,7 @@ Eski Get.config yerine GetMaterialApp veya GetCupertinoApp ayarlarını kullanı
 
 - GetX'in 3 temel ilkesi vardır. Bu ilkeler kütüphanedeki tüm kaynaklar için önemlidir: **ÜRETKENLİK, PERFORMANS VE ORGANİZASYON.**
 
-  - **PERFORMANS:** GetX, performansa ve kaynakların minimum düzeyde tüketimine odaklanmıştır. GetX, Streams ya da ChangeNotifier kullanmaz.
+  - **Performans:** GetX, her değer için elle StreamController/StreamBuilder oluşturmadan reaktif ve stream API'leri sunar. Güncelleme biçimine göre Obx veya GetBuilder seçin, uygulamadaki rebuild ve kaynakları ölçün.
 
   - **ÜRETKENLİK:** GetX kolay ve keyifli bir syntax (yazım kuralları) kullanır. Ne yapmak istersen iste GetX'de her zaman kolay bir çözüm yolu vardır. Saatlerce süren geliştirmeden tasarruf etmeyi ve uygulanın size sağladığı  performansı maksimum seviyede kullanmayı mümkün kılar.
 

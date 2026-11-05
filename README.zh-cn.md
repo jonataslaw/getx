@@ -273,7 +273,7 @@ Get的设计是为了与团队合作，但它也可以让个人开发者的工�
 
 ## 状态管理
 
-目前，Flutter有几种状态管理器。但是，它们中的大多数都涉及到使用ChangeNotifier来更新widget，这对于中大型应用的性能来说是一个很糟糕的方法。你可以在Flutter的官方文档中查看到，[ChangeNotifier应该使用1个或最多2个监听器](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html)，这使得它们实际上无法用于任何中等或大型应用。
+**性能：** GetX 提供响应式和 stream API，无需为每个值手动创建 StreamController/StreamBuilder。请按更新方式选择 Obx 或 GetBuilder，并在应用中测量重建和资源使用。
 
 Get 并不是比任何其他状态管理器更好或更差，而是说你应该分析这些要点以及下面的要点来选择只用Get，还是与其他状态管理器结合使用。
 

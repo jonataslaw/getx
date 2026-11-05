@@ -151,7 +151,7 @@ Giới hạn percent-encoding trong browser history của Flutter 3.47.9 vẫn �
 
 - GetX hướng tới 3 tham vọng chính, nghĩa là tất cả các tài nguyên của thư viện sẽ dành cho những điểm ưu tiên sau: **NĂNG SUẤT, HIỆU SUẤT VÀ TỔ CHỨC.**
 
-  - **HIỆU SUẤT:** GetX tập trung vào hiệu suất và mức tiêu thụ tài nguyên tối thiểu, do đó nó không sử dụng Streams hoặc ChangeNotifier.
+  - **Hiệu suất:** GetX có API reactive và stream, không cần tự tạo StreamController/StreamBuilder cho từng giá trị. Chọn Obx hoặc GetBuilder theo cách cập nhật và đo số lần rebuild cùng tài nguyên trong ứng dụng.
 
   - **NĂNG SUẤT:** GetX sử dụng một cú pháp dễ dàng và dễ thở. Bất kể bạn muốn làm gì, luôn có một cách dễ dàng hơn với GetX. Nó sẽ tiết kiệm hàng giờ phát triển và sẽ cung cấp hiệu suất tối đa mà ứng dụng của bạn có thể mang lại.
 

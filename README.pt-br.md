@@ -156,7 +156,7 @@ Configure GetMaterialApp ou GetCupertinoApp em vez do antigo Get.config. Um rout
 
 - GetX™ possui 3 princípios básicos, o que significa que esta é a prioridade para todos os recursos da biblioteca: **PRODUTIVIDADE, PERFORMANCE AND ORGANIZAÇÃO.**
 
-  - **PERFOMANCE**: GetX™ é focado em desempenho e consumo mínimo de recursos. GetX não usa Streams ou ChangeNotifier. 
+  - **Desempenho:** GetX oferece APIs reativas e de streams sem criar manualmente um StreamController/StreamBuilder por valor. Escolha Obx ou GetBuilder conforme as atualizações e meça reconstruções e recursos da aplicação.
 
   - **PRODUTIVIDADE**: GetX™ usa uma sintaxe fácil e agradável. Não importa o que você queira fazer, sempre há uma maneira mais fácil com GetX™. Isso economizará horas de desenvolvimento e extrairá o máximo de desempenho que seu aplicativo pode oferecer.
   Geralmente, o desenvolvedor deve se preocupar em remover os controladores da memória. Com GetX™, isso não é necessário porque, por padrão, os recursos são removidos da memória quando não são usados. Se quiser mantê-lo na memória, você deve declarar explicitamente "permanent: true" em sua dependência. Dessa forma, além de economizar tempo, você corre menos risco de ter dependências desnecessárias na memória. O carregamento da dependência também é lazy por padrão.

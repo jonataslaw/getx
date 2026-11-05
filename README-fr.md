@@ -154,7 +154,7 @@ Configurez GetMaterialApp ou GetCupertinoApp, pas l'ancien Get.config. Un routeu
 
 - GetX a 3 principes de base. Cela signifie que ces principes sont les priorités pour toutes les ressources de la bibliothèque GetX: **PRODUCTIVITÉ, PERFORMANCE ET ORGANIZATION.**
 
-  - **PERFORMANCE:** GetX se concentre sur la performance et la consommation minimale de ressources. GetX n'utilise ni Streams ni ChangeNotifier.
+  - **Performance :** GetX expose des API réactives et de streams sans construire manuellement un StreamController/StreamBuilder par valeur. Choisissez Obx ou GetBuilder selon les mises à jour et mesurez les reconstructions et ressources de votre application.
 
   - **PRODUCTIVITÉ:** GetX utilise une syntaxe simple et agréable. Peu importe ce que vous voulez faire, il existe toujours un moyen plus simple avec GetX. Cela économisera des heures de développement et fournira les performances maximales que votre application peut offrir.
 
