@@ -352,9 +352,13 @@ class GetRoot extends StatefulWidget {
 class GetRootState extends State<GetRoot>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   static GetRootState? _controller;
+
+  /// The current root, or `null` when no GetX application is mounted.
+  static GetRootState? get maybeController => _controller;
+
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception('GetRoot is not part of the tree');
     } else {
       return _controller!;
     }

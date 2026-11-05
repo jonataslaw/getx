@@ -1253,13 +1253,15 @@ extension GetNavigationExt on GetInterface {
   /// check if default opaque route is enable
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
-  /// give access to currentContext
-  BuildContext? get context => key.currentContext;
+  /// The navigator context, or `null` when no GetX application is mounted.
+  BuildContext? get context => GetRootState.maybeController?.key.currentContext;
 
-  /// give access to current Overlay Context
+  /// The overlay context, or `null` when the navigator has no mounted overlay.
   BuildContext? get overlayContext {
+    final nav = GetRootState.maybeController?.key.currentState;
+    if (nav == null) return null;
     BuildContext? overlay;
-    key.currentState?.overlay?.context.visitChildElements((element) {
+    nav.overlay?.context.visitChildElements((element) {
       overlay = element;
     });
     return overlay;
