@@ -2,7 +2,7 @@ part of '../rx_types.dart';
 
 class RxMap<K, V> extends GetListenable<Map<K, V>>
     with MapMixin<K, V>, RxObjectMixin<Map<K, V>> {
-  RxMap([super.initial = const {}]);
+  RxMap([Map<K, V>? initial]) : super(initial ?? <K, V>{});
 
   factory RxMap.from(Map<K, V> other) {
     return RxMap(Map.from(other));
