@@ -9,9 +9,12 @@ import XCUIAutomation
 final class DeviceNavigationUITests: XCTestCase {
     private var app: XCUIApplication!
     private let timeout: TimeInterval = 12
-    private enum ProbeError: Error { case missingBundleID, invalidBundleID }
+    private var expectedBuildFingerprint = ""
+    private enum ProbeError: Error { case missingBundleID, invalidBundleID, missingBuildFingerprint }
 
     private enum ID {
+        static let build = "probe.build"
+        static let snapshot = "probe.snapshot"
         static let home = "probe.root.marker"
         static let openSwipe = "probe.open.detail"
         static let swipe = "probe.detail.marker"
@@ -39,12 +42,19 @@ final class DeviceNavigationUITests: XCTestCase {
             XCTFail("APP_BUNDLE_ID must identify the dedicated GetX probe application")
             throw ProbeError.invalidBundleID
         }
+        guard let fingerprint = ProcessInfo.processInfo.environment["EXPECTED_PROBE_BUILD_FINGERPRINT"],
+              !fingerprint.isEmpty, fingerprint != "UNSET" else {
+            XCTFail("EXPECTED_PROBE_BUILD_FINGERPRINT is mandatory for GetX artifact acceptance")
+            throw ProbeError.missingBuildFingerprint
+        }
+        expectedBuildFingerprint = fingerprint
         app = XCUIApplication(bundleIdentifier: bundle)
         dismissProbeNetworkPromptIfPresent()
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: timeout))
         dismissProbeNetworkPromptIfPresent()
         require(ID.home)
+        assertDeployedArtifact()
         evidence("launched")
     }
 
@@ -87,6 +97,11 @@ final class DeviceNavigationUITests: XCTestCase {
         let element = require(identifier)
         let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", label), object: element)
         XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed, "Expected \(identifier) label \(label), observed \(element.label)")
+    }
+
+    private func assertDeployedArtifact() {
+        expectLabel(ID.build, "BUILD:\(expectedBuildFingerprint)")
+        expectLabel(ID.snapshot, "SNAPSHOT_PRESENT:true")
     }
 
     private func edgeDrag(completing: Bool) {
@@ -179,12 +194,21 @@ final class DeviceNavigationUITests: XCTestCase {
                        "Phantom detail reappeared after restored back navigation")
         require(ID.home)
         evidence("restored-history-returned-root")
+        // A new awaiter in the restored process must receive a new typed result.
+        tap(ID.openSwipe)
+        require(ID.swipe)
+        assertDeployedArtifact()
+        tap(ID.finish)
+        require(ID.home)
+        expectLabel(ID.result, "RESULT:42")
+        evidence("new-typed-result-after-restoration")
     }
 
     /// Run alone; the external driver kills only the prepared probe PID.
     func testBackgroundProcessDeathRestoresHistory() {
         tap(ID.openSwipe)
         require(ID.swipe)
+        assertDeployedArtifact()
         expectLabel(ID.count, "COUNT:0")
         for _ in 0..<7 { tap(ID.increment) }
         expectLabel(ID.count, "COUNT:7")
@@ -215,10 +239,18 @@ final class DeviceNavigationUITests: XCTestCase {
             predicate: NSPredicate(format: "state == %d", XCUIApplication.State.notRunning.rawValue), object: app)
         XCTAssertEqual(XCTWaiter.wait(for: [died], timeout: 60), .completed,
                        "Root did not terminate the identified background probe within 60 seconds")
-        // activate() deliberately avoids launch() and any app reinstall/reset.
-        app.activate()
+        // Relaunch through this app's Home-screen icon, not Xcode's launch API.
+        guard let displayName = ProcessInfo.processInfo.environment["APP_DISPLAY_NAME"], !displayName.isEmpty else {
+            XCTFail("APP_DISPLAY_NAME is required for a real Home-screen relaunch")
+            return
+        }
+        let icon = XCUIApplication(bundleIdentifier: "com.apple.springboard").icons.matching(identifier: displayName).firstMatch
+        XCTAssertTrue(icon.waitForExistence(timeout: timeout), "Dedicated probe icon is not on the visible Home screen")
+        XCTAssertTrue(icon.isHittable)
+        icon.tap()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: timeout))
         require(ID.swipe)
+        assertDeployedArtifact()
         let currentBoot = require(ID.boot).label
         let currentPID = require(ID.pid).label
         XCTAssertTrue(currentBoot.hasPrefix("BOOT:"))

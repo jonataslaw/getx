@@ -678,7 +678,7 @@ void main() {
     );
   }
   testWidgets(
-    'saved restoration data rebuilds a fresh default root and delegate',
+    'late restoration bucket updates a newly started default root and delegate',
     (tester) async {
       Widget app() => GetMaterialApp(
         restorationScopeId: 'saved-os-app',
@@ -718,6 +718,58 @@ void main() {
 
       await tester.restoreFrom(savedData);
       await tester.pumpAndSettle();
+      expect(identical(Get.rootController.rootDelegate, freshDelegate), isTrue);
+      expect(find.text('DETAIL:2'), findsOneWidget);
+      expect(find.text('note:detail-note'), findsOneWidget);
+      expect(freshDelegate.activePages.map((page) => page.route?.name), [
+        '/root',
+        '/detail',
+      ]);
+      expect(freshDelegate.canBack, isTrue);
+      Get.back<int>(result: 42);
+      await tester.pumpAndSettle();
+      expect(find.text('ROOT:1'), findsOneWidget);
+      expect(find.text('note:root-note'), findsOneWidget);
+      expect(freshDelegate.canBack, isFalse);
+    },
+  );
+  testWidgets(
+    'cold restoration bucket rebuilds history before a fresh default app mounts',
+    (tester) async {
+      Widget app() => GetMaterialApp(
+        restorationScopeId: 'saved-os-app',
+        initialRoute: '/root',
+        getPages: _pages(),
+      );
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+      final oldRoot = Get.rootController;
+      final oldDelegate = oldRoot.rootDelegate;
+      await tester.tap(find.text('ROOT:0'));
+      await tester.enterText(find.byType(TextField), 'root-note');
+      await tester.pump();
+      Get.toNamed<int>('/detail');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('DETAIL:0'));
+      await tester.pump();
+      await tester.tap(find.text('DETAIL:1'));
+      await tester.enterText(find.byType(TextField), 'detail-note');
+      await tester.pump();
+      final savedData = await tester.getRestorationData();
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      Get.reset();
+      expect(oldRoot.mounted, isFalse);
+      expect(oldDelegate.activePages, isEmpty);
+      // Match OS startup: provide saved engine bytes before constructing the app.
+      await tester.restoreFrom(savedData);
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+      final freshRoot = Get.rootController;
+      final freshDelegate = freshRoot.rootDelegate;
+      expect(identical(freshRoot, oldRoot), isFalse);
+      expect(identical(freshDelegate, oldDelegate), isFalse);
+
       expect(identical(Get.rootController.rootDelegate, freshDelegate), isTrue);
       expect(find.text('DETAIL:2'), findsOneWidget);
       expect(find.text('note:detail-note'), findsOneWidget);

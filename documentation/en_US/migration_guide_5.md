@@ -313,7 +313,9 @@ Browser back/forward snapshot replay and OS-driven Flutter state restoration
 are separate checks. Neither a widget restart test nor background/foreground
 resume alone proves restoration after native process death.
 See the [physical-device checks](../../example_nav2/test/device/README.md) for
-host setup and the current unverified process-death boundary on iOS.
+host setup, deployed-build verification and the tested iOS process-death
+contract. Cold-start tests must provide saved data before mounting the fresh
+app; starting a root page first can conceal missing history.
 
 ## Pages and overlays have separate closing operations
 

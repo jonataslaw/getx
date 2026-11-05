@@ -9,6 +9,8 @@
   live navigation result futures; preserve numeric argument types in WASM.
 - Migrate the iOS navigation example to Flutter's scene lifecycle and add
   physical-device back, gesture and process-death restoration checks.
+- Verify cold restoration before a fresh app mounts, check deployed probe
+  fingerprints, and test new typed navigation results after process recovery.
 - Complete browser HTTP timeout, abort and decoding-error futures and release
   their event subscriptions.
 - Send browser WebSocket text and binary values with the correct JS types;

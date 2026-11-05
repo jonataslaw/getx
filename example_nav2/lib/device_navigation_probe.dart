@@ -5,6 +5,13 @@ import 'package:flutter/semantics.dart';
 import 'package:get/get.dart';
 
 final _processBootId = DateTime.now().microsecondsSinceEpoch.toString();
+const _buildFingerprint = String.fromEnvironment(
+  'PROBE_BUILD_FINGERPRINT',
+  defaultValue: 'UNSET',
+);
+final _artifactInformationParser = GetInformationParser(
+  initialRoute: _initialRoute,
+);
 const _initialRoute = String.fromEnvironment(
   'PROBE_INITIAL_ROUTE',
   defaultValue: '/probe/root',
@@ -89,6 +96,19 @@ Widget _status(String identifier, String text) => Semantics(
   child: Text(text),
 );
 
+Widget _snapshotStatus() => RouterListener(
+  builder: (context) {
+    final configuration = Get.rootController.rootDelegate.currentConfiguration;
+    final present =
+        configuration != null &&
+        _artifactInformationParser
+                .restoreRouteInformation(configuration)
+                .state !=
+            null;
+    return _status('probe.snapshot', 'SNAPSHOT_PRESENT:$present');
+  },
+);
+
 Widget _button(String identifier, String text, VoidCallback onPressed) =>
     Semantics(
       identifier: identifier,
@@ -122,6 +142,8 @@ class _ProbeRootState extends State<_ProbeRoot> {
           _status('probe.root.marker', 'ROOT_ROUTE'),
           _status('probe.boot', 'BOOT:${widget.bootId}'),
           _status('probe.pid', 'PID:$pid'),
+          _status('probe.build', 'BUILD:$_buildFingerprint'),
+          _snapshotStatus(),
           _status('probe.result', 'RESULT:$_result'),
           _button(
             'probe.open.detail',
@@ -180,6 +202,8 @@ class _ProbeDetailState extends State<_ProbeDetail> with RestorationMixin {
           ),
           _status('probe.boot', 'BOOT:${widget.bootId}'),
           _status('probe.pid', 'PID:$pid'),
+          _status('probe.build', 'BUILD:$_buildFingerprint'),
+          _snapshotStatus(),
           _status(
             widget.veto ? 'probe.veto.policy' : 'probe.detail.policy',
             'CAN_POP:${!widget.veto}',
