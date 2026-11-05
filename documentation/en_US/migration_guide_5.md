@@ -6,6 +6,9 @@ candidate. The guide is specific to this source tree, rather than
 an announcement of a stable GetX 5 release or a guide to the newer `master`
 branch. Check your resolved GetX revision before applying it.
 
+See the [release scope and master reconciliation](release_scope_5.md) for
+included fixes, retained contracts and work deferred to later releases.
+
 ## SDK and imports
 
 This stabilization branch requires **Flutter 3.47.9 or later** and

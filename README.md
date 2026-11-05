@@ -1,4 +1,4 @@
-> GetX 5 RC: use the branch-specific [migration guide](documentation/en_US/migration_guide_5.md) for the current API. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
+> GetX 5 RC: use the branch-specific [migration guide](documentation/en_US/migration_guide_5.md) for the current API and [release scope](documentation/en_US/release_scope_5.md) for master reconciliation and deferred work. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 

@@ -3,6 +3,10 @@
 ## [5.0.0-release-candidate-9.4.0] - Unreleased candidate
 
 - Require Flutter 3.47.9 and Dart 3.13.7, matching the selected stable SDK.
+- Port master's fresh mutable defaults for RxList, RxMap and RxSet while
+  preserving explicitly supplied backing collections.
+- Return null from optional navigation context getters outside a mounted
+  GetX application's lifetime, matching master.
 - Modernize the Navigator 2 example's Android host for the current Flutter
   Gradle plugin and document the upstream web-history encoding limitation.
 - Restore opt-in named-route history and supported arguments without losing
