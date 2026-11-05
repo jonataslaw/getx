@@ -344,7 +344,10 @@ public class DeviceNavigationTests {
         if (note == null) note = device.wait(Until.findObject(By.clazz("android.widget.EditText")), TIMEOUT);
         assertNotNull("Note input missing", note);
         note.click();
+        device.waitForIdle();
         note.setText("restored-note");
+        // Let Flutter acknowledge native text input before dismissing the IME.
+        label("NOTE:restored-note");
         // Hide IME, whose back handling is independent of route back.
         device.pressBack();
         label("DETAIL_ROUTE");

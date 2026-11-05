@@ -52,7 +52,7 @@ reviewed by behavior, including the non-UI changes inside the standalone UI PR.
 | #3472 / `28cb1bba`: optional navigation contexts | Ported independently. Get.context and Get.overlayContext return null outside the mounted application's lifetime; mounted access and strict root access retain their contracts. |
 | #3472 / `28cb1bba`: Get.back overlay behavior | Preserve this RC's explicit page/overlay closing contract. Typed `closeDialog`, `closeBottomSheet`, `closeOverlay`, snackbar helpers and the migration aid `backLegacy` cover the closing operations. |
 | #3472 standalone UI types and dependencies | Deferred. This is a public type migration, not required to run the selected bundled-UI baseline. |
-| Private-named constructor formals, formatting and alias removals | Do not copy API-breaking lint changes or remove compatibility helpers merely to match master's text. |
+| Constructor shorthand, formatting and helper/alias cleanup | Cosmetic rewrites do not require a runtime backport. Retain compatibility helpers and accepted public APIs instead of matching master's text. |
 | Nepali translation and unrelated generated assets | Additional localization and machine-generated files are outside this stabilization scope. |
 
 The newly ported fixes have regressions in
