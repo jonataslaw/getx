@@ -1,5 +1,7 @@
 > GetX 5 RC: 현재 API는 [이 브랜치의 마이그레이션 가이드](documentation/en_US/migration_guide_5.md)를 참고하세요. **GetX 4 legacy** 표시는 이전 API 예제입니다.
 
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -22,6 +24,8 @@
 <div align="center">
 
 **Languages:**
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 
   
 [![영어](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)

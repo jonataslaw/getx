@@ -1,12 +1,24 @@
 ## [Unreleased]
 
+The candidate below is prepared from `latest-getx5-RC`; it has not been
+published. Version selection, tagging and package publication remain separate
+release actions. See the [release scope](documentation/en_US/release_scope_5.md)
+for master reconciliation, validation boundaries and deferred work.
+
 ## [5.0.0-release-candidate-9.4.0] - Unreleased candidate
 
+### Compatibility and master reconciliation
+
 - Require Flutter 3.47.9 and Dart 3.13.7, matching the selected stable SDK.
+  Continue using Flutter's bundled Material/Cupertino libraries; standalone
+  `material_ui` / `cupertino_ui` types are outside this candidate's scope.
 - Port master's fresh mutable defaults for RxList, RxMap and RxSet while
   preserving explicitly supplied backing collections.
 - Return null from optional navigation context getters outside a mounted
   GetX application's lifetime, matching master.
+
+### Navigation, restoration and native acceptance
+
 - Modernize the Navigator 2 example's Android host for the current Flutter
   Gradle plugin and document the upstream web-history encoding limitation.
 - Restore opt-in named-route history and supported arguments without losing
@@ -17,6 +29,9 @@
   fingerprints, and test new typed navigation results after process recovery.
 - Add Android emulator checks for system and predictive back, dynamic PopScope
   vetoes, controller disposal and same-task process-death restoration.
+
+### Runtime, transport and application contracts
+
 - Complete browser HTTP timeout, abort and decoding-error futures and release
   their event subscriptions.
 - Send browser WebSocket text and binary values with the correct JS types;
@@ -52,8 +67,15 @@
   restoration scopes in the app wrappers.
 - Correct response modifier removal and keep asynchronous authentication retries
   inside their error-handling scope.
+
+### Documentation and migration
+
 - Add RC-specific migration guidance, refresh translated documentation and
   replace placeholder example tests with navigation and authentication scenarios.
+- Add a Persian README with current GetX 5 examples; link it from every root
+  README and distinguish the source candidate from published packages.
+- Add a branch-specific quick start and document compatibility, selective
+  master backports, explicit overlay closing and deferred SDK encoding work.
 
 ## [5.0.0-release-candidate-9.3.0]
 

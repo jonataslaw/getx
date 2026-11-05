@@ -1,5 +1,9 @@
 > GetX 5 RC: xem [hướng dẫn chuyển đổi của nhánh này](documentation/en_US/migration_guide_5.md) để dùng API hiện tại. Ví dụ có nhãn **GetX 4 legacy** mô tả API cũ.
 
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Ngôn ngữ: Tiếng Việt (file này), [English](README.md), [Indonesian](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md), [French](README-fr.md).**

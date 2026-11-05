@@ -1,5 +1,9 @@
 # GetX 5 Navigator 2 example
 
+Package version: `5.0.0-release-candidate-9.4.0` (unreleased candidate).
+[فارسی](../README-fa.md) · [Release scope](../documentation/en_US/release_scope_5.md)
+· [Changelog](../CHANGELOG.md).
+
 This application uses the GetX package in the parent directory through a path
 dependency. Follow the [RC migration guide](../documentation/en_US/migration_guide_5.md)
 for this branch; it uses Flutter's bundled Material library rather than the

@@ -1,5 +1,9 @@
 # GetX 5 example
 
+Package version: `5.0.0-release-candidate-9.4.0` (unreleased candidate).
+[فارسی](../README-fa.md) · [Release scope](../documentation/en_US/release_scope_5.md)
+· [Changelog](../CHANGELOG.md).
+
 This application uses the parent checkout through a path dependency. Read the
 [RC migration guide](../documentation/en_US/migration_guide_5.md) and the
 [example walkthrough](example.md) for the APIs in this branch.

@@ -1,5 +1,7 @@
 > GetX 5 RC: use the branch-specific [migration guide](documentation/en_US/migration_guide_5.md) for the current API and [release scope](documentation/en_US/release_scope_5.md) for master reconciliation and deferred work. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
 
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -25,6 +27,7 @@
 
   
 [![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 [![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
 [![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
 [![Urdu](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
@@ -42,6 +45,7 @@
   
 </div>
 
+- [GetX 5 RC quick start](#getx-5-rc-quick-start)
 - [About Get](#about-get)
 - [Installing](#installing)
 - [Counter App with GetX](#counter-app-with-getx)
@@ -90,6 +94,44 @@
   - [How to contribute](#how-to-contribute)
   - [Articles and videos](#articles-and-videos)
 
+# GetX 5 RC quick start
+
+This source tree is an unreleased candidate. To try this exact code, check out
+this branch and use a path dependency from a separate Flutter application
+(the example assumes `getx` is next to the application's directory):
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Run `flutter pub get` with Flutter 3.47.9 / Dart 3.13.7, then import
+`package:flutter/material.dart` and `package:get/get.dart`. Installing the
+published `get` package does not necessarily select this branch. Record the
+resolved revision; pin a reviewed revision or published version for your app.
+
+For a complete current counter, see the [Persian quick start](README-fa.md) or
+this branch's [example application](example/README.md). Key GetX 5 contracts:
+
+- Use `GetMaterialApp.binds` and route `Binding` objects returning `List<Bind>`.
+- Use `Get.spawn` for per-find factories; resolve async dependencies before
+  registering them with `Get.put`.
+- Use `GetStatus<T>.success(data)` or `setSuccess(data)` with `StateMixin`.
+- Pass page factories to `Get.to`; return matching typed values with `Get.back`.
+- Close dialogs, sheets and snackbars with their explicit helpers. This RC's
+  `Get.back` returns pages.
+- Named-route history restoration is opt-in. Review the
+  [restoration contract](documentation/en_US/migration_guide_5.md#named-route-history-and-restoration)
+  and the documented web encoding/reload limitations before relying on it.
+
+The following overview retains historical explanations. Marked legacy recipes
+need migration; the [RC migration guide](documentation/en_US/migration_guide_5.md)
+and [release scope](documentation/en_US/release_scope_5.md) define this branch's
+current behavior.
+
 # About Get
 
 - GetX is an extra-light and powerful solution for Flutter. It combines high-performance state management, intelligent dependency injection, and route management quickly and practically.
@@ -120,12 +162,9 @@
 
 # Installing
 
-Add Get to your pubspec.yaml file:
-
-```yaml
-dependencies:
-  get:
-```
+For this unreleased RC, follow the [checkout installation](#getx-5-rc-quick-start)
+above. For a published package, choose an available version on
+[pub.dev](https://pub.dev/packages/get) and follow that version's documentation.
 
 Import get in files that it will be used:
 

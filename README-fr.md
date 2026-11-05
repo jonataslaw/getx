@@ -1,5 +1,9 @@
 > GetX 5 RC : consultez le [guide de migration de cette branche](documentation/en_US/migration_guide_5.md) pour les API actuelles. Les exemples marqués **GetX 4 legacy** décrivent les anciennes API.
 
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Langues: Français (Ce fichier), [Anglais](README.md), [Vietnamien](README-vi.md), [Indonésien](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinois](README.zh-cn.md), [Portuguais du Brésil](README.pt-br.md), [Espagnol](README-es.md), [Russe](README.ru.md), [Polonais](README.pl.md), [Koréen](README.ko-kr.md).**

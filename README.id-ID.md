@@ -1,5 +1,9 @@
 > GetX 5 RC: lihat [panduan migrasi cabang ini](documentation/en_US/migration_guide_5.md) untuk API saat ini. Contoh bertanda **GetX 4 legacy** menjelaskan API lama.
 
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Bahasa: Indonesia (file ini), [Inggris](README.md), [Orang Vietnam](README-vi.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
