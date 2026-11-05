@@ -317,6 +317,16 @@ host setup, deployed-build verification and the tested iOS process-death
 contract. Cold-start tests must provide saved data before mounting the fresh
 app; starting a root page first can conceal missing history.
 
+For Android, see the [native instrumentation checks](../../example_nav2/test/device/android/README.md).
+On Flutter 3.47.9, the ARM64 Profile AOT probe passed system-back checks on
+API 24 and predictive start/progress/cancel/commit checks on API 36, including
+static and dynamic back vetoes and controller disposal. Both emulator lanes
+passed three same-task process-death restoration cycles. The probe uses
+`Transition.native` on Android and the example manifest explicitly enables
+`android:enableOnBackInvokedCallback`. Custom transitions and host settings
+need their own platform acceptance; a widget back callback is not a native
+predictive gesture test.
+
 ## Pages and overlays have separate closing operations
 
 `GetQueue.cancelAllJobs()` discards work that has not started. Its active job

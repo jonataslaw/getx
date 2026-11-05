@@ -11,6 +11,8 @@
   physical-device back, gesture and process-death restoration checks.
 - Verify cold restoration before a fresh app mounts, check deployed probe
   fingerprints, and test new typed navigation results after process recovery.
+- Add Android emulator checks for system and predictive back, dynamic PopScope
+  vetoes, controller disposal and same-task process-death restoration.
 - Complete browser HTTP timeout, abort and decoding-error futures and release
   their event subscriptions.
 - Send browser WebSocket text and binary values with the correct JS types;

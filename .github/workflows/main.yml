@@ -104,3 +104,6 @@ jobs:
         working-directory: example_nav2
       - run: flutter build apk --debug --no-pub --target-platform android-arm64
         working-directory: example_nav2
+      - name: Compile native Android acceptance harness
+        run: ./android/gradlew -p test/device/android assembleDebug assembleDebugAndroidTest
+        working-directory: example_nav2

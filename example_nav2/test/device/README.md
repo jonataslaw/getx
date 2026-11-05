@@ -1,9 +1,16 @@
-# Physical iOS navigation and restoration checks
+# Native navigation and restoration checks
 
 `lib/device_navigation_probe.dart` is a separate native-only entry point. It
-uses real GetX routes, typed results, Cupertino gestures, `RestorableInt` and
-`RestorableTextEditingController`. It does not persist the test values itself.
+uses real GetX routes, typed results, platform transitions, `RestorableInt` and
+`RestorableTextEditingController`. Route-owned controllers and Navigator gesture
+counters expose disposal and real gesture progress. It does not persist the test values itself.
 The ordinary example entry point is unchanged.
+
+For Android system/predictive back and same-task process restoration, follow the
+[independent Android instrumentation suite](android/README.md). It uses native
+Android transitions; the iOS checks below retain Cupertino transitions.
+
+## iOS host setup
 
 `DeviceNavigationUITests.swift` is an XCUITest source for a dedicated signed
 test host. Add it to a UI testing target whose application uses that entry
@@ -95,8 +102,8 @@ the test deliberately does not expect that dead caller to receive `42`.
 Screenshots and accessibility attachments are retained in the local
 `.xcresult`. Keep device diagnostics outside the repository.
 
-This suite covers iOS navigation. Android system back and predictive-back
-gestures require a separate Android device or emulator.
+The Swift suite covers iOS navigation. The separate Android suite covers system
+back, predictive gestures and Android task restoration on dedicated emulators.
 
 ## Verified cold-start behavior
 
