@@ -1,6 +1,4 @@
-> GetX 5 RC: актуальный API описан в [руководстве по миграции этой ветки](documentation/en_US/migration_guide_5.md). Примеры с пометкой **GetX 4 legacy** относятся к старому API.
-
-> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+> GetX 5 RC: Этот кандидат ещё не опубликован. Проверенная основа — Flutter 3.47.9 и Dart 3.13.7 со встроенными UI-библиотеками Flutter.
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 
@@ -24,40 +22,114 @@ _Языки: Русский (этот файл), [вьетнамский](README
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Про Get](#про-get)
-- [Установка](#установка)
-- [Приложение "Счётчик" с GetX](#приложение-счётчик-с-getx)
-- [Три столпа](#три-столпа)
-  - [Управление состоянием](#управление-состоянием)
-    - [Реактивное управление состоянием](#реактивное-управление-состоянием)
-    - [Подробнее об управлении состоянием](#подробнее-об-управлении-состоянием)
-  - [Управление маршрутами](#управление-маршрутами)
-    - [Подробнее об управлении маршрутами](#подробнее-об-управлении-маршрутами)
-  - [Внедрение зависимостей](#внедрение-зависимостей)
-    - [Подробнее о внедрении зависимостей](#подробнее-о-внедрении-зависимостей)
-- [Утилиты](#утилиты)
-  - [Интернационализация](#интернационализация)
-    - [Переводы](#переводы)
-      - [Использование переводов](#использование-переводов)
-    - [Локализация](#локализация)
-      - [Изменение локализации](#изменение-локализации)
-      - [Системная локализация](#системная-локализация)
-  - [Изменение темы](#изменение-темы)
-  - [Другие API](#другие-api)
-    - [Дополнительные глобальные настройки и ручные настройки](#дополнительные-глобальные-настройки-и-ручные-настройки)
-    - [Локальные виджеты состояния](#локальные-виджеты-состояния)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Полезные советы](#полезные-советы)
-      - [GetView](#getview)
-      - [GetWidget](#getwidget)
-      - [GetxService](#getxservice)
-- [Критические изменения по сравнению с версией 2.0](#критические-изменения-по-сравнению-с-версией-20)
-- [Почему Getx?](#почему-getx)
-- [Сообщества](#сообщества)
-  - [Каналы сообщества](#каналы-сообщества)
-  - [Как внести свой вклад](#как-внести-свой-вклад)
-  - [Статьи и видео](#статьи-и-видео)
+## Содержание
+
+  - [Изменения GetX 5 в этой ветке](#getx5-current)
+- [Про Get](#readme-section-2)
+- [Установка](#readme-section-3)
+- [Приложение "Счётчик" с GetX](#readme-section-4)
+- [Три столпа](#readme-section-5)
+  - [Управление состоянием](#readme-section-6)
+    - [Реактивное управление состоянием](#readme-section-7)
+    - [Подробнее об управлении состоянием](#readme-section-8)
+  - [Управление маршрутами](#readme-section-9)
+    - [Подробнее об управлении маршрутами](#readme-section-10)
+  - [Внедрение зависимостей](#readme-section-11)
+    - [Подробнее о внедрении зависимостей](#readme-section-12)
+- [Утилиты](#readme-section-13)
+  - [Интернационализация](#readme-section-14)
+    - [Переводы](#readme-section-15)
+    - [Использование переводов](#readme-section-16)
+    - [Локализация](#readme-section-17)
+    - [Изменение локализации](#readme-section-18)
+    - [Системная локализация](#readme-section-19)
+  - [Изменение темы](#readme-section-20)
+  - [Другие API](#readme-section-21)
+    - [Дополнительные глобальные настройки и ручные настройки](#readme-section-22)
+    - [Локальные виджеты состояния](#readme-section-23)
+    - [ValueBuilder](#readme-section-24)
+    - [ObxValue](#readme-section-25)
+  - [Полезные советы](#readme-section-26)
+    - [GetView](#readme-section-27)
+    - [GetWidget](#readme-section-28)
+    - [GetxService](#readme-section-29)
+- [Критические изменения по сравнению с версией 2.0](#readme-section-30)
+- [Почему Getx?](#readme-section-31)
+- [Сообщества](#readme-section-32)
+  - [Каналы сообщества](#readme-section-33)
+  - [Как внести свой вклад](#readme-section-34)
+  - [Статьи и видео](#readme-section-35)
+
+<a id="getx5-current"></a>
+
+## Изменения GetX 5 в этой ветке
+
+Этот кандидат ещё не опубликован. Проверенная основа — Flutter 3.47.9 и Dart 3.13.7 со встроенными UI-библиотеками Flutter.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding возвращает `List<Bind>`. Используйте binds для приложения и bindings для маршрута. Get.spawn заменяет Get.create; дождитесь асинхронной инициализации, затем зарегистрируйте значение через Get.put.
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` содержит данные. futurize принимает функцию создания Future и возвращает void; результаты применяются по порядку завершения. Пустые Rx-коллекции имеют независимое изменяемое хранилище.
+
+Навигация использует Navigator 2. Get.back возвращает страницы; диалоги, sheets и snackbar закрывайте специальными helper. Get.context и Get.overlayContext могут быть null вне времени жизни приложения.
+
+Задайте restorationScopeId и стабильные restorationId для истории именованных маршрутов. Аргументы совместимы с JSON, ограничены по размеру и проверяются middleware; после гибели процесса создаются новые контроллеры и Future.
+
+Исправлены удаление response modifiers и ошибки авторизации, timeout, отмены и декодирования. HTTP/WebSocket проверяются в IO, браузере и JS/WASM с освобождением ресурсов.
+
+Ограничение percent-encoding истории браузера во Flutter 3.47.9 остаётся; обычные web-тесты не означают его исправление. Проверяйте refresh, back и восстановление на реальном хосте и устройстве.
+
+Задавайте параметры GetMaterialApp или GetCupertinoApp вместо старого Get.config. Собственному router нужна согласованная конфигурация Navigator 2.
+
+В redirectDelegate верните route для продолжения, другой RouteDecoder для перенаправления или null для отмены. Зарегистрируйте login и избегайте циклов.
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Про Get
 
@@ -81,6 +153,8 @@ _Языки: Русский (этот файл), [вьетнамский](README
 
 **Кроме того, для дальнейшего повышения вашей продуктивности у нас есть [расширение для VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) и [расширение для Android Studio / Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets).**
 
+<a id="readme-section-3"></a>
+
 # Установка
 
 Добавьте Get в файл pubspec.yaml:
@@ -95,6 +169,8 @@ dependencies:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # Приложение "Счётчик" с GetX
 
@@ -159,7 +235,7 @@ class Other extends StatelessWidget {
 
 Результат:
 
-![](counter-app-gif.gif)
+![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/counter-app-gif.gif)
 
 Это простой проект, но он уже дает понять, насколько мощным является Get. По мере роста вашего проекта эта разница будет становиться все более значительной.
 
@@ -167,7 +243,11 @@ Get был разработан для работы с командами, но 
 
 Оптимизируйте ваши сроки, доставляйте всё вовремя без потери производительности. Get не для всех, но, если вы идентифицировали себя с предыщим предложением, Get для вас!
 
+<a id="readme-section-5"></a>
+
 # Три столпа
+
+<a id="readme-section-6"></a>
 
 ## Управление состоянием
 
@@ -178,6 +258,8 @@ Get не лучше и не хуже, чем любой другой менед�
 Определенно, Get не враг любого другого менеджера состояний, потому что Get - это микрофреймворк, а не просто менеджер состояний, и его можно использовать отдельно или вместе с ними.
 
 Get имеет два разных менеджера состояний: простой менеджер состояний (мы назовем его GetBuilder) и реактивный менеджер состояний (который называется GetX).
+
+<a id="readme-section-7"></a>
 
 ### Реактивное управление состоянием
 
@@ -212,11 +294,15 @@ Obx(() => Text("${controller.name}"));
 
 Вот и всё. Это _так_ просто.
 
+<a id="readme-section-8"></a>
+
 ### Подробнее об управлении состоянием
 
 **Более подробное объяснение управления состоянием [здесь](./documentation/ru_RU/state_management.md). Там вы увидите больше примеров, а также разницу между простым менеджером состояния и реактивным менеджером состояния.**
 
 Вы получите хорошее представление о мощности GetX.
+
+<a id="readme-section-9"></a>
 
 ## Управление маршрутами
 
@@ -237,7 +323,7 @@ GetMaterialApp( // Ранее: MaterialApp(
 Get.to(() => NextScreen());
 ```
 
-Перейдите на новый экран с именем. Более подробную информацию об именованных маршрутах смотрите [здесь](./documentation/ru_RU/route_management.md#navigation-with-named-routes)
+Перейдите на новый экран с именем. Более подробную информацию об именованных маршрутах смотрите [здесь](./documentation/ru_RU/route_management.md)
 
 ```dart
 
@@ -268,9 +354,13 @@ Get.offAll(() => NextScreen());
 
 Заметили, что вам не нужно было использовать контекст, чтобы делать что-либо из этого? Это одно из самых больших преимуществ использования Get. Благодаря этому вы можете без проблем выполнять все эти методы из класса контроллера.
 
+<a id="readme-section-10"></a>
+
 ### Подробнее об управлении маршрутами
 
 **Get работает с именованными маршрутами, а также предлагает более низкий уровень контроля над вашими маршрутами! [Здесь](./documentation/ru_RU/route_management.md) есть подробная документация.**
+
+<a id="readme-section-11"></a>
 
 ## Внедрение зависимостей
 
@@ -303,13 +393,21 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### Подробнее о внедрении зависимостей
 
 **Более подробное объяснение управления зависимостями [здесь](./documentation/ru_RU/dependency_management.md)**
 
+<a id="readme-section-13"></a>
+
 # Утилиты
 
+<a id="readme-section-14"></a>
+
 ## Интернационализация
+
+<a id="readme-section-15"></a>
 
 ### Переводы
 
@@ -331,6 +429,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### Использование переводов
 
 Просто добавьте `.tr` к указанному ключу, и он будет переведен с использованием текущего значения `Get.locale` и `Get.fallbackLocale`.
@@ -338,6 +438,8 @@ class Messages extends Translations {
 ```dart
 Text('title'.tr);
 ```
+
+<a id="readme-section-17"></a>
 
 ### Локализация
 
@@ -351,6 +453,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-18"></a>
+
 #### Изменение локализации
 
 Вызовите `Get.updateLocale(locale)`, чтобы обновить локализацию. Затем переводы автоматически используют новый языковой стандарт.
@@ -359,6 +463,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-19"></a>
 
 #### Системная локализация
 
@@ -371,6 +477,8 @@ return GetMaterialApp(
     locale: ui.window.locale,
 );
 ```
+
+<a id="readme-section-20"></a>
 
 ## Изменение темы
 
@@ -395,14 +503,13 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 Когда `.darkmode` активен, он переключится на _light theme_, и когда _light theme_ станет активной, он изменится на _dark theme_.
 
+<a id="readme-section-21"></a>
+
 ## Другие API
 
 ```dart
 // получить текущие аргументы текущего экрана
 Get.arguments
-
-// получить аргументы предыдущего маршрута
-Get.previousArguments
 
 // получить имя предыдущего маршрута
 Get.previousRoute
@@ -423,16 +530,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // удалить один маршрут
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // возвращаться назад, пока данный предикат не выполнится
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // идти вперед, удалив предыдущие маршруты, пока данный предикат не выполнится
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // перейти к следующему именованному маршруту, удалив предыдущие маршруты, пока данный предикат не выполнится
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 // проверить на какой платформе работает приложение
 GetPlatform.isAndroid
@@ -460,7 +567,7 @@ Get.width
 Get.context
 
 // Получить контекст показанного снекбара/диалога/bottomsheets в любом месте вызова.
-Get.contextOverlay
+Get.overlayContext
 
 // Внимание: методы ниже являются расширениями класса BuildContext.
 // Поскольку доступ к контексту есть в любом месте из вашего UI,
@@ -478,49 +585,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Схоже с MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// Схоже с MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// Схоже с MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// Схоже с MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// Схоже с MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// Проверить, в горизонтальном ли режиме устройство
-context.isLandscape()
+context.isLandscape
 
 /// Проверить, в вертикальном ли режиме устройство
-context.isPortrait()
+context.isPortrait
 
 /// Схоже с to MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// Схоже с MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Получить shortestSide экрана
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// Вернет True, если ширина больше 800
-context.showNavbar()
+context.showNavbar
 
 /// Вернет True, если меньшая сторона меньше 600p
-context.isPhone()
+context.isPhone
 
 /// Вернет True, если меньшая сторона больше 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// Вернет True, если меньшая сторона больше 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// Вернет True, если текущее устройство — Планшет
-context.isTablet()
+context.isTablet
 
 /// Возвращает value<T> в зависимости от размера экрана
 /// Можно устанавливать значения для:
@@ -530,6 +637,8 @@ context.isTablet()
 /// desktop: Если ширина больше 1200
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-22"></a>
 
 ### Дополнительные глобальные настройки и ручные настройки
 
@@ -553,24 +662,26 @@ MaterialApp(
 );
 ```
 
-Вы можете создать _Глобальные Настройки_ Для `Get`. Просто добавьте `Get.config` в ваш код прежде чем нажимать на любой из маршрутов.
-Или сделайте это прямо в `GetMaterialApp`
+Задавайте параметры GetMaterialApp или GetCupertinoApp вместо старого Get.config. Собственному router нужна согласованная конфигурация Navigator 2.
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 При желании, вы сможете перенаправить все сообщения из `Get`.
@@ -587,14 +698,17 @@ void localLogWriter(String text, {bool isError = false}) {
   // но учитывайте, что даже если enableLog: false, сообщения все равно будут передаваться сюда
   // узнать значение этого флага можно с помощью GetConfig.isLogEnable
 }
-
 ```
+
+<a id="readme-section-23"></a>
 
 ### Локальные виджеты состояния
 
 Эти виджеты позволяют управлять одним значением, сохраняя состояние эфемерным и локальным.
 У нас есть варианты для Reactive и Simple.
 Например, вы можете использовать их для переключения obscureText в `TextField`, возможно, для создания кастомного ExpandablePanel или, возможно, для изменения текущего индекса в `BottomNavigationBar` при изменении содержимого body в `Scaffold`.
+
+<a id="readme-section-24"></a>
 
 #### ValueBuilder
 
@@ -613,6 +727,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-25"></a>
+
 #### ObxValue
 
 Похож на [`ValueBuilder`](#valuebuilder), но это реактивная версия, вы передаёте Rx экземпляр (помните волшебный .obs?) и
@@ -626,6 +742,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-26"></a>
 
 ## Полезные советы
 
@@ -647,93 +765,35 @@ print( 'Тип "$message" — ${message.runtimeType}');
 Самый "используемый способ" это `.value`, но, знаете ли вы, что вы также можете использовать ...
 
 ```dart
-final name = 'GetX'.obs;
-// "обновляет" поток только если значение отличается от текущего.
-name.value = 'Хей';
-
-// Все свойства Rx являются "вызываемыми" и возвращают новые значения.
-// но это не работает с `null`: UI не будет перестроен.
-name('Привет');
-
-// как геттер, напечатает 'Привет'.
-name() ;
-
-/// числа:
-
-final count = 0.obs;
-
-// Вы можете использовать все неизменяемые операции с числами!
-count + 1;
-
-// Осторожно! Это можно использовать только если `count` не final, а var
-count += 1;
-
-// Сравнения так же работают:
-count > 2;
-
-/// логические:
-
-final flag = false.obs;
-
-// переключает значение между true/false
-flag.toggle();
-
-
-/// все типы:
-
-// обнуляет значение переменной `value`.
-flag.nil();
-
-// Все toString(), toJson() операции применяются к `value`
-print( count ); // вызывает `toString()` внутри RxInt
-
-final abc = [0,1,2].obs;
-// Преобразует значение в json массив, выводит RxList
-// Json поддерживается всеми Rx типами!
-print('json: ${jsonEncode(abc)}, тип: ${abc.runtimeType}');
-
-// RxMap, RxList и RxSet являются особенными Rx типами: они расширяют нативные типы.
-// Но вы можете работать со списком как и с обычным списком, хоть и реактивным!
-abc.add(12); // добавлеет 12 в список, and ОБНОВЛЯЕТ поток.
-abc[3]; // как списки, возвращает значение с индексом 3.
-
-
-// Сравнение равенства работает с Rx и с его value, но хэш код всегда берется у value
-final number = 12.obs;
-print( number == 12 ); // печатает true
-
-/// Кастомные Rx Модели:
-
-// toJson(), toString() передаются child, так что вы можете перегрузить эти методы в нем, и вызвать print напрямую.
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, возраст: $age';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'Джон', last: 'Доу', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` – "реактивный", но его свойства – НЕТ!
-// Так что если мы обновим что-либо внутри user...
-user.value.name = 'Рой';
-// Виджет перестроен не будет!
-// `Rx` не знает, изменили ли вы что-то у user.
-// Так что для кастомных классов вам нужно явно "уведомлять" об изменении.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// или мы можем использовать метод `update()`!
-user.update((previous) => User(
-  name: 'Рой',
-  last: previous!.last,
-  age: previous.age,
-));
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+
+<a id="readme-section-27"></a>
 
 #### GetView
 
@@ -758,71 +818,57 @@ print( user );
  }
 ```
 
+<a id="readme-section-28"></a>
+
 #### GetWidget
 
-Большинство людей понятия не имеют об этом виджете или путаются при его применении.
-Вариант его использования редок, но конкретен: он кэширует Controller.
-Поэтому из-за _cache_, он не может быть `const Stateless`.
+GetWidget кеширует контроллер этого экземпляра виджета и поддерживает const. Контроллер Get.spawn закрывается при удалении владельца. GetView выполняет поиск без такого кеша.
 
-> Итак, когда вам нужно «кэшировать» контроллер?
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-В случаях использования другой "не распространённой" фичи **GetX**: `Get.spawn()`.
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.spawn(()=>Controller())` будет создавать новый `Controller` каждый раз при вызове
-`Get.find<Controller>()`,
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-Это тот самый случай, когда `GetWidget` блистает... поскольку вы можете использовать его, например, для хранения списка элементов Todo. Итак, если виджет будет «перестроен», он сохранит тот же экземпляр контроллера.
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-29"></a>
 
 #### GetxService
 
-Этот класс похож на `GetxController`, у него такой же жизненный цикл ( `onInit()`, `onReady()`, `onClose()`).
-Но внутри нет никакой «логики». Он просто уведомляет систему **GetX** Dependency Injection о том, что этот подкласс **нельзя** удалить из памяти.
-
-Так что очень полезно держать ваши «Сервисы» всегда доступными и активными с помощью `Get.find()`. Например:
-`ApiService`, `StorageService`, `CacheService`.
-
-> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
+GetxService предоставляет onInit/onReady/onClose для сервисов приложения. Обычное удаление защищает их; force или Get.reset позволяют явную очистку. Это не хранение после гибели процесса. Дождитесь init и используйте Get.put.
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// ПОДОЖДИТЕ ИНИЦИАЛИЗАЦИЮ СЕРВИСОВ.
-  runApp(SomeApp());
-}
-
-/// Умным решением будет проинициализировать сервисы перед вызовом runApp,
-/// поскольку вы можете контроллировать процесс инициализации
-/// (может, вам нужно загрузить конфигурацию Темы, ключи API, язык, определенный пользователем...
-/// Загружайте SettingService прежде чем запускать ApiService.
-/// Таким образом GetMaterialApp() принимает параметры напрямую, и ему не нужно будет перезагружаться
-void initServices() async {
-  print('запуск сервисов ...');
-  /// Здесь вы инициализируете get_storage, hive, shared_pref,
-  /// или что-либо другое асинхронное.
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('Все сервисы запущены...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType задержка 2 секунды');
-    await 2.delay();
-    print('$runtimeType готов!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType задержка 1 секунду');
-    await 1.delay();
-    print('$runtimeType готов!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-Единственный способ удалить `GetxService` - использовать `Get.reset()`,  который похож на «горячую перезагрузку» вашего приложения. Так что помните, если вам нужен постоянный экземпляр класса в течение всего жизненного цикла вашего приложения, используйте `GetxService`.
+<a id="readme-section-30"></a>
 
 # Критические изменения по сравнению с версией 2.0
 
@@ -842,7 +888,7 @@ RxController и GetBuilder теперь объединены, вам больш�
 2- NamedRoutes
 До:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -877,6 +923,8 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-31"></a>
+
 # Почему Getx?
 
 1- Много раз после обновления Flutter многие из ваших пакетов ломались. Иногда случаются ошибки компиляции, часто возникают ошибки, на которые до сих пор нет ответов, и разработчику необходимо знать, откуда возникла ошибка, отслеживать ошибку, только затем попытаться открыть проблему в соответствующем репозитории и увидеть, как проблема решена. Get централизует основные ресурсы для разработки (управление состоянием, зависимостями и маршрутами), позволяя вам добавить один пакет в свой pubspec и начать работу. После обновления Flutter единственное, что вам нужно сделать, это обновить зависимость Get и приступить к работе. Get также решает проблемы совместимости. Как часто бывало, что одна версия пакета несовместима с другой, потому что одна использует зависимость в одной версии, а другая - в другой? Это не проблема при использовании Get, поскольку все находится в одном пакете и полностью совместимо.
@@ -890,7 +938,11 @@ GetMaterialApp(
 
 Эта библиотека всегда будет обновляться и реализовывать новые функции. Не стесняйтесь предлагать PR.
 
+<a id="readme-section-32"></a>
+
 # Сообщества
+
+<a id="readme-section-33"></a>
 
 ## Каналы сообщества
 
@@ -899,6 +951,8 @@ GetMaterialApp(
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-34"></a>
 
 ## Как внести свой вклад
 
@@ -911,6 +965,8 @@ _Хотите внести свой вклад в проект? Вы будем 
 - Новые фичи.
 
 Приветствуется любой вклад!
+
+<a id="readme-section-35"></a>
 
 ## Статьи и видео
 

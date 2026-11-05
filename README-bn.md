@@ -1,6 +1,4 @@
-> GetX 5 RC: বর্তমান API-এর জন্য এই শাখার [মাইগ্রেশন নির্দেশিকা](documentation/en_US/migration_guide_5.md) দেখুন। **GetX 4 legacy** চিহ্নিত উদাহরণগুলো পুরোনো API-এর জন্য।
-
-> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+> GetX 5 RC: এই candidate এখনো প্রকাশিত নয়। পরীক্ষিত ভিত্তি Flutter 3.47.9 ও Dart 3.13.7; Flutter-এর অন্তর্ভুক্ত UI লাইব্রেরি ব্যবহার করা হয়।
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 
@@ -23,48 +21,128 @@
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
 
-- [Get সম্পর্কে](#about-get)
-- [ইনস্টল](#installing)
-- [GetX দিয়ে কাউন্টার অ্যাপ](#counter-app-with-getx)
-- [GetX এর তিনটি স্তম্ভ](#the-three-pillars)
-  - [স্টেট ব্যবস্থাপনা](#state-management)
-    - [প্রতিক্রিয়াশীল স্টেট ম্যানেজার](#reactive-state-manager)
-    - [স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-state-management)
-  - [রুট ব্যবস্থাপনা](#route-management)
-    - [রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-route-management)
-  - [ডিপেনডেন্সি ব্যবস্থাপনা](#dependency-management)
-    - [ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#more-details-about-dependency-management)
-- [ইউটিলিটি](#utils)
-  - [আন্তর্জাতিকীকরণ](#internationalization)
-    - [অনুবাদ](#translations)
-      - [অনুবাদের ব্যবহার](#using-translations)
-    - [লোকেল](#locales)
-      - [লোকেল পরিবর্তন করুন](#change-locale)
-      - [লোকেল পদ্ধতি](#system-locale)
-  - [থিম পরিবর্তন করুন](#change-theme)
-  - [গেট কানেক্ট](#getconnect)
-    - [ডিফল্ট কনফিগারেশন](#default-configuration)
-    - [কাস্টম কনফিগারেশন](#custom-configuration)
-  - [গেট পেজ মিডিলওয়্যার](#getpage-middleware)
-    - [অগ্রাধিকার](#priority)
-    - [পুনঃনির্দেশ](#redirect)
-    - [অন-পেজ কলড](#onpagecalled)
-    - [অন-বাইন্ডিং স্টার্ট](#onbindingsstart)
-    - [অন-পেজ বিল্ড স্টার্ট](#onpagebuildstart)
-    - [অন-পেজ বিল্ড](#onpagebuilt)
-    - [অন-পেজ ডিসপোজ](#onpagedispose)
-  - [অন্যান্য এপিআই সমূহ](#other-advanced-apis)
-    - [ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন](#optional-global-settings-and-manual-configurations)
-    - [লোকাল স্টেট উইজেট](#local-state-widgets)
-      - [ভ্যালু বিল্ডার](#valuebuilder)
-      - [অব এক্স ভ্যালু](#obxvalue)
-  - [প্রয়োজনীয় পরামর্শ](#useful-tips)
-    - [গেট ভিউ](#getview)
-    - [গেট রেস্পন্সিভ ভিউ](#getresponsiveview)
-      - [কিভাবে এটি ব্যবহার করতে হয়](#how-to-use-it)
-    - [গেট উইজেট](#getwidget)
-    - [গেট এক্স সার্ভিস](#getxservice)
-- [2.0 থেকে পরিবর্তন](#breaking-changes-from-20)
+## সূচিপত্র
+
+  - [এই শাখায় GetX 5-এর পরিবর্তন](#getx5-current)
+- [Get সম্পর্কে](#readme-section-2)
+- [ইনস্টল](#readme-section-3)
+- [GetX দিয়ে কাউন্টার অ্যাপ](#readme-section-4)
+- [GetX এর তিনটি স্তম্ভ](#readme-section-5)
+  - [স্টেট ব্যবস্থাপনা](#readme-section-6)
+    - [প্রতিক্রিয়াশীল স্টেট ম্যানেজার](#readme-section-7)
+    - [স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#readme-section-8)
+  - [রুট ব্যবস্থাপনা](#readme-section-9)
+    - [রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#readme-section-10)
+  - [ডিপেনডেন্সি ব্যবস্থাপনা](#readme-section-11)
+    - [ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত](#readme-section-12)
+- [ইউটিলিটি](#readme-section-13)
+  - [আন্তর্জাতিকীকরণ](#readme-section-14)
+    - [অনুবাদ](#readme-section-15)
+    - [অনুবাদের ব্যবহার](#readme-section-16)
+    - [একবচন এবং বহুবচন সহ অনুবাদ ব্যবহার](#readme-section-17)
+    - [প্যারামিটার সহ অনুবাদ ব্যবহার](#readme-section-18)
+    - [লোকেল](#readme-section-19)
+    - [লোকেল পরিবর্তন করুন](#readme-section-20)
+    - [লোকেল পদ্ধতি](#readme-section-21)
+  - [থিম পরিবর্তন করুন](#readme-section-22)
+  - [গেট কানেক্ট (GetConnect)](#readme-section-23)
+    - [ডিফল্ট কনফিগারেশন](#readme-section-24)
+    - [কাস্টম কনফিগারেশন](#readme-section-25)
+  - [গেট পেজ মিডিলওয়্যার](#readme-section-26)
+    - [অগ্রাধিকার (Priority)](#readme-section-27)
+    - [পুনঃনির্দেশ (Redirect)](#readme-section-28)
+    - [অন-পেজ কলড (onPageCalled)](#readme-section-29)
+    - [অন-বাইন্ডিং স্টার্ট (OnBindingsStart)](#readme-section-30)
+    - [অন-পেজ বিল্ড স্টার্ট (OnPageBuildStart)](#readme-section-31)
+    - [অন-পেজ বিল্ড (OnPageBuilt)](#readme-section-32)
+    - [অন-পেজ ডিসপোজ (OnPageDispose)](#readme-section-33)
+  - [অন্যান্য এপিআই সমূহ](#readme-section-34)
+    - [ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন](#readme-section-35)
+    - [লোকাল স্টেট উইজেট](#readme-section-36)
+    - [ভ্যালু বিল্ডার (ValueBuilder)](#readme-section-37)
+    - [অবএক্সভ্যালু (ObxValue)](#readme-section-38)
+  - [প্রয়োজনীয় পরামর্শ](#readme-section-39)
+  - [StateMixin](#readme-section-40)
+    - [গেট ভিউ (GetView)](#readme-section-41)
+    - [গেট রেস্পন্সিভ ভিউ (GetResponsiveView)](#readme-section-42)
+    - [কিভাবে এটি ব্যবহার করতে হয়](#readme-section-43)
+    - [গেট উইজেট (GetWidget)](#readme-section-44)
+    - [গেট এক্স সার্ভিস (GetxService)](#readme-section-45)
+    - [পরীক্ষা (Tests)](#readme-section-46)
+    - [পরামর্শ](#readme-section-47)
+    - [Mockito or mocktail](#readme-section-48)
+    - [Using Get.reset()](#readme-section-49)
+    - [Get.testMode ](#readme-section-50)
+- [2.0 থেকে পরিবর্তন](#readme-section-51)
+
+<a id="getx5-current"></a>
+
+## এই শাখায় GetX 5-এর পরিবর্তন
+
+এই candidate এখনো প্রকাশিত নয়। পরীক্ষিত ভিত্তি Flutter 3.47.9 ও Dart 3.13.7; Flutter-এর অন্তর্ভুক্ত UI লাইব্রেরি ব্যবহার করা হয়।
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding থেকে `List<Bind>` ফেরত দিন। অ্যাপের জন্য binds এবং রুটের জন্য bindings ব্যবহার করুন। Get.create-এর বদলে Get.spawn; async initialization await করে প্রস্তুত মান Get.put দিয়ে নিবন্ধন করুন।
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` সফল ডেটা বহন করে। futurize Future তৈরির ফাংশন নেয় ও void ফেরায়; ফল সম্পূর্ণ হওয়ার ক্রমে প্রয়োগ হয়। খালি Rx collection আলাদা পরিবর্তনযোগ্য backing collection তৈরি করে।
+
+Navigator 2 ব্যবহৃত হয়। Get.back পৃষ্ঠা ফেরায়; dialog, sheet ও snackbar বন্ধে নির্দিষ্ট helper ব্যবহার করুন। অ্যাপের জীবনকালের বাইরে Get.context ও Get.overlayContext null হতে পারে।
+
+নামযুক্ত রুটের history ফেরাতে restorationScopeId এবং স্থির restorationId দিন। JSON-সদৃশ argument, আকারসীমা ও middleware যাচাই প্রযোজ্য; process শেষ হলে নতুন controller ও Future তৈরি হয়।
+
+Response modifier অপসারণ, authentication, timeout, abort ও decoding error সংশোধিত হয়েছে। IO ও ব্রাউজারের HTTP/WebSocket এবং JS/WASM পরীক্ষা ও resource cleanup অন্তর্ভুক্ত।
+
+Flutter 3.47.9-এর browser history percent-encoding সীমাবদ্ধতা রয়ে গেছে; সাধারণ web test পাস মানে এটি ঠিক নয়। প্রকৃত host ও device-এ refresh, back ও restoration পরীক্ষা করুন।
+
+GetMaterialApp বা GetCupertinoApp-এর option ব্যবহার করুন; পুরোনো Get.config নয়। কাস্টম navigation-এর জন্য পূর্ণ Navigator 2 configuration প্রয়োজন।
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Get সম্পর্কে
 
@@ -84,6 +162,8 @@
 
 **এছাড়াও আপনার উত্পাদনশীলতা আরও বাড়াতে, আমাদের রয়েছে [VSCode extension](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) এবং [Android Studio/Intellij extension](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**।
 
+<a id="readme-section-3"></a>
+
 # ইনস্টল
 
 আপনার pubspec.yaml ফাইলে get যোগ করুন:
@@ -98,6 +178,8 @@ dependencies:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # GetX দিয়ে কাউন্টার অ্যাপ
 
@@ -160,11 +242,17 @@ class Other extends StatelessWidget {
 }
 ```
 
+<a id="readme-section-5"></a>
+
 # GetX এর তিনটি স্তম্ভ
+
+<a id="readme-section-6"></a>
 
 ## স্টেট ব্যবস্থাপনা
 
 Get দুই ভিন্ন স্টেট ম্যানেজার আছে: সাধারণ স্টেট ম্যানেজার (আমরা একে GetBuilder বলব) and প্রতিক্রিয়াশীল স্টেট ম্যানেজার (GetX/Obx)
+
+<a id="readme-section-7"></a>
 
 ### প্রতিক্রিয়াশীল স্টেট ম্যানেজার
 
@@ -200,11 +288,15 @@ Obx(() => Text("${controller.name}"));
 
 এখানেই শেষ। এটা এমনই সহজ।
 
+<a id="readme-section-8"></a>
+
 ### স্টেট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **স্টেট পরিচালনার আরও ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/state_management.md)। সেখানে আপনি আরও উদাহরণ দেখতে পাবেন এবং সাধারণ স্টেট ব্যবস্থাপক এবং প্রতিক্রিয়াশীল স্টেট ব্যবস্থাপকের মধ্যে পার্থক্যও দেখতে পাবেন**
 
 GetX পাওয়ার সম্পর্কে ভালো ধারণা পাবেন।
+
+<a id="readme-section-9"></a>
 
 ## রুট ব্যবস্থাপনা
 
@@ -256,9 +348,13 @@ Get.offAll(() => NextScreen());
 
 লক্ষ্য করেছেন যে এই জিনিসগুলির কোনটি করার জন্য আপনাকে context ব্যবহার করতে হবে না? এটি Get রুট ম্যানেজমেন্ট ব্যবহার করার সবচেয়ে বড় সুবিধাগুলির মধ্যে একটি। এটির সাহায্যে, আপনি চিন্তা ছাড়াই আপনার controller class এর মধ্যে থেকে এই সমস্ত পদ্ধতিগুলি চালাতে পারেন।
 
+<a id="readme-section-10"></a>
+
 ### রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **রুট ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ডকুমেন্টেশন আছে [এখানে](./documentation/en_US/route_management.md)**
+
+<a id="readme-section-11"></a>
 
 ## ডিপেনডেন্সি ব্যবস্থাপনা
 
@@ -292,13 +388,21 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত
 
 **ডিপেনডেন্সি ব্যবস্থাপনা সম্পর্কে আরো বিস্তারিত ব্যাখ্যা দেখুন [এখানে](./documentation/en_US/dependency_management.md)**
 
+<a id="readme-section-13"></a>
+
 # ইউটিলিটি
 
+<a id="readme-section-14"></a>
+
 ## আন্তর্জাতিকীকরণ
+
+<a id="readme-section-15"></a>
 
 ### অনুবাদ
 
@@ -322,6 +426,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### অনুবাদের ব্যবহার
 
 শুধুমাত্র নির্দিষ্ট key তে `.tr` যোগ করুন এবং এটি অনুবাদ করা হবে, `Get.locale` এবং `Get.fallbackLocale` এর বর্তমান মান ব্যবহার করে।
@@ -330,12 +436,16 @@ class Messages extends Translations {
 Text('title'.tr);
 ```
 
+<a id="readme-section-17"></a>
+
 #### একবচন এবং বহুবচন সহ অনুবাদ ব্যবহার
 
 ```dart
 var products = [];
-Text('singularKey'.trPlural('pluralKey', products.length, Args));
+Text('singularKey'.trPlural('pluralKey', products.length));
 ```
+
+<a id="readme-section-18"></a>
 
 #### প্যারামিটার সহ অনুবাদ ব্যবহার
 
@@ -358,6 +468,8 @@ Text('logged_in'.trParams({
   }));
 ```
 
+<a id="readme-section-19"></a>
+
 ### লোকেল
 
 লোকেল এবং অনুবাদ সংজ্ঞায়িত করতে `GetMaterialApp`-এ প্যারামিটার পাস করুন।
@@ -370,6 +482,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-20"></a>
+
 #### লোকেল পরিবর্তন করুন
 
 লোকেল আপডেট করতে `Get.updateLocale(locale)` কল করুন। অনুবাদগুলি তখন স্বয়ংক্রিয়ভাবে নতুন লোকেল ব্যবহার করে।
@@ -378,6 +492,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-21"></a>
 
 #### লোকেল পদ্ধতি
 
@@ -388,6 +504,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-22"></a>
 
 ## থিম পরিবর্তন করুন
 
@@ -410,34 +528,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 When `.darkmode` is activated, it will switch to the _light theme_, and when the _light theme_ becomes active, it will change to _dark theme_.
 
+<a id="readme-section-23"></a>
+
 ## গেট কানেক্ট (GetConnect)
 
 GetConnect is an easy way to communicate from your back to your front with http or websockets
+
+<a id="readme-section-24"></a>
 
 ### ডিফল্ট কনফিগারেশন
 
 You can simply extend GetConnect and use the GET/POST/PUT/DELETE/SOCKET methods to communicate with your Rest API or websockets.
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request with File
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-25"></a>
 
 ### কাস্টম কনফিগারেশন
 
@@ -445,47 +578,34 @@ GetConnect is highly customizable You can define base Url, as answer modifiers, 
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
-
-    // It's will attach 'apikey' property on header from all requests
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // Set the header
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    //Autenticator will be called 3 times if HttpStatus is
-    //HttpStatus.unauthorized
-    httpClient.maxAuthRetries = 3;
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-26"></a>
 
 ## গেট পেজ মিডিলওয়্যার
 
@@ -493,31 +613,50 @@ The GetPage has now new property that takes a list of GetMiddleWare and run them
 
 **Note**: When GetPage has a Middlewares, all the children of this page will have the same middlewares automatically.
 
+<a id="readme-section-27"></a>
+
 ### অগ্রাধিকার (Priority)
 
 The Order of the Middlewares to run can be set by the priority in the GetMiddleware.
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 those middlewares will be run in this order **-8 => 2 => 4 => 5**
 
+<a id="readme-section-28"></a>
+
 ### পুনঃনির্দেশ (Redirect)
 
-This function will be called when the page of the called route is being searched for. It takes RouteSettings as a result to redirect to. Or give it null and there will be no redirecting.
+redirectDelegate থেকে route দিলে চলবে, অন্য RouteDecoder দিলে redirect, null দিলে বাতিল। login route নিবন্ধন করুন এবং redirect loop এড়ান।
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### অন-পেজ কলড (onPageCalled)
 
@@ -525,11 +664,13 @@ This function will be called when this Page is called before anything created
 you can use it to change something about the page or give it new page
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### অন-বাইন্ডিং স্টার্ট (OnBindingsStart)
 
@@ -537,14 +678,14 @@ This function will be called right before the Bindings are initialize.
 Here you can change Bindings for this page.
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-31"></a>
 
 ### অন-পেজ বিল্ড স্টার্ট (OnPageBuildStart)
 
@@ -552,19 +693,25 @@ This function will be called right after the Bindings are initialize.
 Here you can do something after that you created the bindings and before creating the page widget.
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-32"></a>
 
 ### অন-পেজ বিল্ড (OnPageBuilt)
 
 This function will be called right after the GetPage.page function is called and will give you the result of the function. and take the widget that will be showed.
 
+<a id="readme-section-33"></a>
+
 ### অন-পেজ ডিসপোজ (OnPageDispose)
 
 This function will be called right after disposing all the related objects (Controllers, views, ...) of the page.
+
+<a id="readme-section-34"></a>
 
 ## অন্যান্য এপিআই সমূহ
 
@@ -591,16 +738,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // remove one route.
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // back repeatedly until the predicate returns true.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // go to next route and remove all the previous routes until the predicate returns true.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // go to next named route and remove all the previous routes until the predicate returns true.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //Check in what platform the app is running
 GetPlatform.isAndroid
@@ -628,7 +775,7 @@ Get.width
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
-Get.contextOverlay
+Get.overlayContext
 
 // Note: the following methods are extensions on context. Since you
 // have access to context in any place of your UI, you can use it anywhere in the UI code
@@ -645,49 +792,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Similar to MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// Similar to MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// Similar to MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// Similar to MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// Similar to MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// Check if device is on landscape mode
-context.isLandscape()
+context.isLandscape
 
 /// Check if device is on portrait mode
-context.isPortrait()
+context.isPortrait
 
 /// Similar to MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// Similar to MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Get the shortestSide from screen
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// True if width be larger than 800
-context.showNavbar()
+context.showNavbar
 
 /// True if the shortestSide is smaller than 600p
-context.isPhone()
+context.isPhone
 
 /// True if the shortestSide is largest than 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// True if the shortestSide is largest than 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// True if the current device is Tablet
-context.isTablet()
+context.isTablet
 
 /// Returns a value<T> according to the screen size
 /// can give value for:
@@ -697,6 +844,8 @@ context.isTablet()
 /// desktop: if width is largest than 1200
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-35"></a>
 
 ### ঐচ্ছিক গ্লোবাল সেটিংস এবং ম্যানুয়াল কনফিগারেশন
 
@@ -720,24 +869,26 @@ MaterialApp(
 );
 ```
 
-You can create _Global Settings_ for `Get`. Just add `Get.config` to your code before pushing any route.
-Or do it directly in your `GetMaterialApp`
+GetMaterialApp বা GetCupertinoApp-এর option ব্যবহার করুন; পুরোনো Get.config নয়। কাস্টম navigation-এর জন্য পূর্ণ Navigator 2 configuration প্রয়োজন।
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 You can optionally redirect all the logging messages from `Get`.
@@ -755,8 +906,9 @@ void localLogWriter(String text, {bool isError = false}) {
   // please note that even if enableLog: false log messages will be pushed in this callback
   // you get check the flag if you want through GetConfig.isLogEnable
 }
-
 ```
+
+<a id="readme-section-36"></a>
 
 ### লোকাল স্টেট উইজেট
 
@@ -765,6 +917,8 @@ We have flavours for Reactive and Simple.
 For instance, you might use them to toggle obscureText in a `TextField`, maybe create a custom
 Expandable Panel, or maybe modify the current index in `BottomNavigationBar` while changing the content
 of the body in a `Scaffold`.
+
+<a id="readme-section-37"></a>
 
 #### ভ্যালু বিল্ডার (ValueBuilder)
 
@@ -783,9 +937,11 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-38"></a>
+
 #### অবএক্সভ্যালু (ObxValue)
 
-Similar to [`ValueBuilder`](#valuebuilder), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
+Similar to [`ValueBuilder`](README.md#local), but this is the Reactive version, you pass a Rx instance (remember the magical .obs?) and
 updates automatically... isn't it awesome?
 
 ```dart
@@ -796,6 +952,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-39"></a>
 
 ## প্রয়োজনীয় পরামর্শ
 
@@ -817,93 +975,35 @@ You have to access the real `value` inside the _observable_:
 The most "used way" is `.value`, but, did you know that you can also use...
 
 ```dart
-final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
-name.value = 'Hey';
-
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
-name('Hello');
-
-// is like a getter, prints 'Hello'.
-name() ;
-
-/// numbers:
-
-final count = 0.obs;
-
-// You can use all non mutable operations from num primitives!
-count + 1;
-
-// Watch out! this is only valid if `count` is not final, but var
-count += 1;
-
-// You can also compare against values:
-count > 2;
-
-/// booleans:
-
-final flag = false.obs;
-
-// switches the value between true/false
-flag.toggle();
-
-
-/// all types:
-
-// Sets the `value` to null.
-flag.nil();
-
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
-
-final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
-
-
-// equality works with the Rx and the value, but hashCode is always taken from the value
-final number = 12.obs;
-print( number == 12 ); // prints > true
-
-/// Custom Rx Models:
-
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
-user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// or we can use the `update()` method!
-user.update((previous) => User(
-  name: 'Roi',
-  last: previous!.last,
-  age: previous.age,
-));
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+<a id="readme-section-40"></a>
+
 ## StateMixin
 
 Another way to handle your `UI` state is use the `StateMixin<T>` .
@@ -933,26 +1033,33 @@ GetStatus.error('message');
 To represent it in the UI, use:
 
 ```dart
-class OtherClass extends GetView<Controller> {
+class NamesController extends GetxController with StateMixin<List<String>> {
+  void showNames(List<String> names) {
+    change(GetStatus<List<String>>.success(names));
+  }
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+  void showLoading() => setLoading();
+  void showEmpty() => setEmpty();
+  void showError(Object error) => setError(error);
+}
+
+class NamesView extends GetView<NamesController> {
+  const NamesView({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: controller.obx(
-        (state)=>Text(state.name),
-        
-        // here you can put your custom loading indicator, but
-        // by default would be Center(child:CircularProgressIndicator())
-        onLoading: CustomLoadingIndicator(),
-        onEmpty: Text('No data found'),
-
-        // here also you can set your own error widget, but by
-        // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error ?? 'Unknown error'),
-      ),
-    );
+  Widget build(BuildContext context) => Scaffold(
+    body: controller.obx(
+      (names) => Text(names.join(', ')),
+      onLoading: const Center(child: CircularProgressIndicator()),
+      onEmpty: const Text('No data'),
+      onError: (error) => Text(error ?? 'Unknown error'),
+    ),
+  );
 }
 ```
+
+<a id="readme-section-41"></a>
 
 #### গেট ভিউ (GetView)
 
@@ -977,11 +1084,15 @@ Is a `const Stateless` Widget that has a getter `controller` for a registered `C
  }
 ```
 
+<a id="readme-section-42"></a>
+
 #### গেট রেস্পন্সিভ ভিউ (GetResponsiveView)
 
 Extend this widget to build responsive view.
 this widget contains the `screen` property that have all
 information about the screen size and type.
+
+<a id="readme-section-43"></a>
 
 ##### কিভাবে এটি ব্যবহার করতে হয়
 
@@ -1000,75 +1111,57 @@ With `settings` property you can set the width limit for the screen types.
 Code to this screen
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
+<a id="readme-section-44"></a>
+
 #### গেট উইজেট (GetWidget)
 
-Most people have no idea about this Widget, or totally confuse the usage of it.
-The use case is very rare, but very specific: It `caches` a Controller.
-Because of the _cache_, can't be a `const Stateless`.
+GetWidget একই widget instance-এর controller cache করে এবং const সমর্থন করে। Get.spawn factory হলে widget সরালে তার controller বন্ধ হয়। GetView প্রতিবার lookup করে।
 
-> So, when do you need to "cache" a Controller?
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-If you use, another "not so common" feature of **GetX**: `Get.spawn()`.
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.spawn(()=>Controller())` will generate a new `Controller` each time you call
-`Get.find<Controller>()`,
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-That's where `GetWidget` shines... as you can use it, for example,
-to keep a list of Todo items. So, if the widget gets "rebuilt", it will keep the same controller instance.
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-45"></a>
 
 #### গেট এক্স সার্ভিস (GetxService)
 
-This class is like a `GetxController`, it shares the same lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-But has no "logic" inside of it. It just notifies **GetX** Dependency Injection system, that this subclass
-**can not** be removed from memory.
-
-So is super useful to keep your "Services" always reachable and active with `Get.find()`. Like:
-`ApiService`, `StorageService`, `CacheService`.
-
-> **GetX 4 legacy** — [GetX 5 RC API](documentation/en_US/migration_guide_5.md).
+GetxService অ্যাপ-জীবনকালের সেবা, যার onInit/onReady/onClose আছে। সাধারণ deletion সুরক্ষিত; ইচ্ছাকৃত force বা Get.reset দিয়ে পরিষ্কার করা যায়। এটি process-পরবর্তী storage নয়। init await করে Get.put করুন।
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
-  runApp(SomeApp());
-}
-
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
-void initServices() async {
-  print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
-lifetime of your app, use `GetxService`.
-
+<a id="readme-section-46"></a>
 
 ### পরীক্ষা (Tests)
 
@@ -1121,7 +1214,11 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
+<a id="readme-section-47"></a>
+
 #### পরামর্শ
+
+<a id="readme-section-48"></a>
 
 ##### Mockito or mocktail
 If you need to mock your GetxController/GetxService, you should extend GetxController, and mixin it with Mock, that way
@@ -1130,12 +1227,18 @@ If you need to mock your GetxController/GetxService, you should extend GetxContr
 class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
 ```
 
+<a id="readme-section-49"></a>
+
 ##### Using Get.reset()
 If you are testing widgets, or test groups, use Get.reset at the end of your test or in tearDown to reset all settings from your previous test.
+
+<a id="readme-section-50"></a>
 
 ##### Get.testMode 
 if you are using your navigation in your controllers, use `Get.testMode = true` at the beginning of your main.
 
+
+<a id="readme-section-51"></a>
 
 # 2.0 থেকে পরিবর্তন
 
@@ -1156,7 +1259,7 @@ RxController এবং GetBuilder এখন একত্রিত, আপনি 
 
 আগে:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),

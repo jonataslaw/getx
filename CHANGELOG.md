@@ -74,6 +74,11 @@ for master reconciliation, validation boundaries and deferred work.
   replace placeholder example tests with navigation and authentication scenarios.
 - Add a Persian README with current GetX 5 examples; link it from every root
   README and distinguish the source candidate from published packages.
+- Expand the English and Persian READMEs into matching comprehensive guides
+  covering the same 32 topics and checked code examples, including RC changes.
+- Integrate current async service, middleware, network, app configuration and
+  context recipes into translated README bodies; localize the RC changes and
+  repair their tables of contents and internal links.
 - Add a branch-specific quick start and document compatibility, selective
   master backports, explicit overlay closing and deferred SDK encoding work.
 
