@@ -1,3 +1,7 @@
+## [Unreleased]
+
+- Add optional `showDragHandle` to `Get.bottomSheet` (#2796). `null` keeps Flutter's default.
+
 ## [5.0.0-release-candidate-9.3.3]
 
 - Require Flutter 3.47 / Dart 3.13 so older SDKs cannot resolve this candidate against `material_ui`
