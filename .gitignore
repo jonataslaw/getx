@@ -83,3 +83,6 @@ example/macos/Flutter/GeneratedPluginRegistrant.swift
 
 # Coverage files
 coverage/
+
+# Python helper test caches
+__pycache__/

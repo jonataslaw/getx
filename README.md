@@ -1294,7 +1294,12 @@ _Want to contribute to the project? We will be proud to highlight you as one of 
 
 Any contribution is welcome!
 
-Before submitting a pull request, run the same checks used by CI:
+Read the [contribution guide](CONTRIBUTING.md) for the PR checklist, changed-file
+formatting, browser checks, and coverage scope. If you use AI tools, also read the
+[AI contribution guidelines](CONTRIBUTING.ai.md).
+
+Before submitting a pull request, run these core checks and the additional
+checks described in the contribution guide:
 
 ```sh
 flutter pub get
