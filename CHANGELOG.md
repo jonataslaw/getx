@@ -1,3 +1,96 @@
+## [Unreleased]
+
+The candidate below is prepared from `latest-getx5-RC`; it has not been
+published. Version selection, tagging and package publication remain separate
+release actions. See the [release scope](documentation/en_US/release_scope_5.md)
+for master reconciliation, validation boundaries and deferred work.
+
+## [5.0.0-release-candidate-9.4.0] - Unreleased candidate
+
+### Compatibility and master reconciliation
+
+- Require Flutter 3.47.9 and Dart 3.13.7, matching the selected stable SDK.
+  Continue using Flutter's bundled Material/Cupertino libraries; standalone
+  `material_ui` / `cupertino_ui` types are outside this candidate's scope.
+- Port master's fresh mutable defaults for RxList, RxMap and RxSet while
+  preserving explicitly supplied backing collections.
+- Return null from optional navigation context getters outside a mounted
+  GetX application's lifetime, matching master.
+
+### Navigation, restoration and native acceptance
+
+- Keep covered nested pages from overwriting browser acceptance probe reports
+  after navigating back to a visible root page.
+- Migrate low-level GetNavigator and GetRouterOutlet.pickPages callback
+  arguments from `onPopPage` to `onDidRemovePage`. Configure back vetoes through
+  GetPage.canPop / PopScope and forward custom outlet notifications to the
+  owning delegate.
+- Preserve typed native route results and remove the committed page's history
+  entry, including imperative replacement and covered-page removal; ignore
+  stale notifications for replaced pages with reused keys.
+- Modernize the Navigator 2 example's Android host for the current Flutter
+  Gradle plugin and document the upstream web-history encoding limitation.
+- Restore opt-in named-route history and supported arguments without losing
+  live navigation result futures; preserve numeric argument types in WASM.
+- Migrate the iOS navigation example to Flutter's scene lifecycle and add
+  physical-device back, gesture and process-death restoration checks.
+- Verify cold restoration before a fresh app mounts, check deployed probe
+  fingerprints, and test new typed navigation results after process recovery.
+- Add Android emulator checks for system and predictive back, dynamic PopScope
+  vetoes, controller disposal and same-task process-death restoration.
+
+### Runtime, transport and application contracts
+
+- Complete browser HTTP timeout, abort and decoding-error futures and release
+  their event subscriptions.
+- Send browser WebSocket text and binary values with the correct JS types;
+  close replaced connections and release heartbeat timers on disposal.
+- Document queue cancellation and concurrent `futurize` completion ordering.
+- Add real-browser HTTP, upload, socket and JS/WASM navigation checks, plus
+  local HTTPS/WSS certificate validation tests.
+- Exclude generated machine-specific example files from the package inputs.
+- Adapt app `routes` maps to Navigator 2 and report unsupported RouteFactory
+  callbacks explicitly. Preserve live theme, locale, routing and binding
+  ownership across ordinary app rebuilds.
+- Honor shared binding lifetimes, current `autoRemove` settings and replacement
+  registrations; ignore asynchronous state completion after controller deletion.
+- Dispose scroll resources and forward memory-pressure and accessibility events.
+- Support typed HTTP modifiers and authenticators, replacement authentication
+  requests, response-body timeouts and IO WebSocket reconnection/disposal.
+- Preserve snackbar completion and cleanup for queued cancellation, immediate
+  close, swipe dismissal and application teardown.
+- Add safe `closeBottomSheet`, native Cupertino sheet transitions, nullable
+  routing observer support and current TickerMode frame settings.
+- Restore Rx stream notifications after the last subscription is canceled and a
+  new subscription is created; make disposal safe during notification delivery.
+- Prevent `onReady` after controller deletion, release locally owned bindings, and
+  correct `Bind.spawn` initialization and `Bind.put` cleanup.
+- Recover queued jobs after errors while preserving stack traces, and make
+  collection assignment safe for aliased inputs.
+- Handle synchronous `StateMixin.futurize` errors and ignore completion after
+  notifier disposal without duplicate status notifications.
+- Complete displaced navigation results, honor middleware before replacing
+  history, preserve route configuration, and respect back-navigation vetoes.
+- Correct selective overlay closing and snackbar overlay lookup.
+- Support custom router configurations, forward app settings, and expose
+  restoration scopes in the app wrappers.
+- Correct response modifier removal and keep asynchronous authentication retries
+  inside their error-handling scope.
+
+### Documentation and migration
+
+- Add RC-specific migration guidance, refresh translated documentation and
+  replace placeholder example tests with navigation and authentication scenarios.
+- Add a Persian README with current GetX 5 examples; link it from every root
+  README and distinguish the source candidate from published packages.
+- Expand the English and Persian READMEs into matching comprehensive guides
+  covering the same 32 topics and checked code examples, including RC changes.
+- Integrate current async service, middleware, network, app configuration and
+  context recipes into translated README bodies; localize the RC changes and
+  repair their tables of contents and internal links.
+- Add a branch-specific quick start and document compatibility, selective
+  master backports, explicit overlay closing and deferred SDK encoding work.
+
 ## [5.0.0-release-candidate-9.3.0]
 
 - Support for Flutter 3.29.0

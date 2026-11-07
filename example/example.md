@@ -1,3 +1,5 @@
+> GetX 5 RC: use the branch-specific [migration guide](../documentation/en_US/migration_guide_5.md) for the current API. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
+
 # GetX codelab
 
 In this example you will learn the basics of GetX. You will see how much easier it is to code with this framework, and you will know what problems GetX proposes to solve.
@@ -56,7 +58,7 @@ class Home extends StatelessWidget {
             ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
-                Get.to(Second());
+                Get.to(() => Second());
               },
             ),
           ],
@@ -78,7 +80,7 @@ class Second extends StatelessWidget {
 }
 ```
 When instantiating your controller, you may have noticed that we use `Get.put(Controller())`. This is enough to make your controller available to other pages as long as it is in memory.
-You may have noticed that you have a new button using `Get.to(Second())`. This is enough to navigate to another page. You don't need a 
+You may have noticed that you have a new button using `Get.to(() => Second())`. This is enough to navigate to another page. You don't need a
 
 ```dart
 Navigator.of(context).push(context, 
@@ -87,7 +89,7 @@ Navigator.of(context).push(context,
  },
 );
 ``` 
-all that huge code, it's reduced to a simple `Get.to(Second())`. Isn't that incredible?
+all that huge code, it's reduced to a simple `Get.to(() => Second())`. Isn't that incredible?
 
 You may also have noticed that on the other page you simply used Get.find (), and the framework knows which controller you registered previously, and returns it effortlessly, you don't need to type the find with `Get.find<Controller>()` so that he knows what you need.
 
@@ -123,7 +125,7 @@ class Home extends StatelessWidget {
             ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
-                Get.to(Second());
+                Get.to(() => Second());
               },
             ),
           ],
@@ -164,7 +166,7 @@ class Home extends StatelessWidget {
             ElevatedButton(
               child: Text('Next Route'),
               onPressed: () {
-                Get.to(Second());
+                Get.to(() => Second());
               },
             ),
           ],
@@ -217,7 +219,7 @@ void main() {
   runApp(GetMaterialApp(
     initialRoute: '/home',
     getPages: [
-      GetPage(name: '/home', page: () => First(), binding: SampleBind()),
+      GetPage(name: '/home', page: () => First(), bindings: [SampleBind()]),
     ],
   ));
 }
@@ -225,7 +227,7 @@ void main() {
 
 Or unnamed
 ```dart
-Get.to(Second(), binding: SampleBind());
+Get.to(() => Second(), bindings: [SampleBind()]);
 ```
 
 There is a trick that can clear your View even more.
@@ -240,18 +242,18 @@ void main() {
   runApp(GetMaterialApp(
     initialRoute: '/home',
     getPages: [
-      GetPage(name: '/home', page: () => HomeView(), binding: HomeBinding()),
+      GetPage(name: '/home', page: () => HomeView(), bindings: [HomeBinding()]),
     ],
   ));
 }
 ```
 on home_bindings.dart
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut(() => HomeController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut(() => HomeController()),
+  ];
 }
 ```
 
@@ -303,7 +305,7 @@ void main() {
         name: '/second',
         page: () => Second(),
         customTransition: SizeTransitions(),
-        binding: SampleBind(),
+        bindings: [SampleBind()],
       ),
       // GetPage with default transitions
       GetPage(
@@ -491,9 +493,9 @@ class Third extends GetView<ControllerX> {
 
 class SampleBind extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<ControllerX>(() => ControllerX());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<ControllerX>(() => ControllerX()),
+  ];
 }
 
 class User {
@@ -509,10 +511,7 @@ class ControllerX extends GetxController {
   final user = User().obs;
 
   updateUser() {
-    user.update((value) {
-      value!.name = 'Jose';
-      value.age = 30;
-    });
+    user.update((previous) => User(name: 'Jose', age: 30));
   }
 
   /// Once the controller has entered memory, onInit will be called.

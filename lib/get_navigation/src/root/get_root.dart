@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/test_kit.dart';
@@ -15,13 +16,17 @@ class ConfigData {
   final LogWriterCallback? logWriterCallback;
   final SmartManagement smartManagement;
   final List<Bind> binds;
+  final BindingsInterface? initialBinding;
   final Duration? transitionDuration;
   final bool? defaultGlobalState;
   final List<GetPage>? getPages;
+  final Map<String, WidgetBuilder>? routes;
   final GetPage? unknownRoute;
   final RouteInformationProvider? routeInformationProvider;
   final RouteInformationParser<Object>? routeInformationParser;
   final RouterDelegate<Object>? routerDelegate;
+  final RouterConfig<Object>? routerConfig;
+  final String? restorationScopeId;
   final BackButtonDispatcher? backButtonDispatcher;
   final List<NavigatorObserver>? navigatorObservers;
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -46,7 +51,7 @@ class ConfigData {
   final Duration defaultDialogTransitionDuration;
   final Routing routing;
   final Map<String, String?> parameters;
-  final SnackBarQueue snackBarQueue = SnackBarQueue();
+  final SnackBarQueue snackBarQueue;
 
   ConfigData({
     required this.routingCallback,
@@ -58,13 +63,17 @@ class ConfigData {
     required this.logWriterCallback,
     required this.smartManagement,
     required this.binds,
+    this.initialBinding,
     required this.transitionDuration,
     required this.defaultGlobalState,
     required this.getPages,
+    this.routes,
     required this.unknownRoute,
     required this.routeInformationProvider,
     required this.routeInformationParser,
     required this.routerDelegate,
+    this.routerConfig,
+    this.restorationScopeId,
     required this.backButtonDispatcher,
     required this.navigatorObservers,
     required this.navigatorKey,
@@ -89,7 +98,9 @@ class ConfigData {
     this.parameters = const {},
     Routing? routing,
     bool? defaultPopGesture,
-  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
+    SnackBarQueue? snackBarQueue,
+  })  : snackBarQueue = snackBarQueue ?? SnackBarQueue(),
+        defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
         routing = routing ?? Routing();
 
   ConfigData copyWith({
@@ -102,13 +113,17 @@ class ConfigData {
     LogWriterCallback? logWriterCallback,
     SmartManagement? smartManagement,
     List<Bind>? binds,
+    BindingsInterface? initialBinding,
     Duration? transitionDuration,
     bool? defaultGlobalState,
     List<GetPage>? getPages,
+    Map<String, WidgetBuilder>? routes,
     GetPage? unknownRoute,
     RouteInformationProvider? routeInformationProvider,
     RouteInformationParser<Object>? routeInformationParser,
     RouterDelegate<Object>? routerDelegate,
+    RouterConfig<Object>? routerConfig,
+    String? restorationScopeId,
     BackButtonDispatcher? backButtonDispatcher,
     List<NavigatorObserver>? navigatorObservers,
     GlobalKey<NavigatorState>? navigatorKey,
@@ -133,10 +148,17 @@ class ConfigData {
     Duration? defaultDialogTransitionDuration,
     Routing? routing,
     Map<String, String?>? parameters,
+    bool clearDefaultTransition = false,
+    bool clearTheme = false,
+    bool clearDarkTheme = false,
+    bool clearLocale = false,
+    bool clearFallbackLocale = false,
   }) {
     return ConfigData(
       routingCallback: routingCallback ?? this.routingCallback,
-      defaultTransition: defaultTransition ?? this.defaultTransition,
+      defaultTransition: clearDefaultTransition
+          ? null
+          : defaultTransition ?? this.defaultTransition,
       onInit: onInit ?? this.onInit,
       onReady: onReady ?? this.onReady,
       onDispose: onDispose ?? this.onDispose,
@@ -144,30 +166,36 @@ class ConfigData {
       logWriterCallback: logWriterCallback ?? this.logWriterCallback,
       smartManagement: smartManagement ?? this.smartManagement,
       binds: binds ?? this.binds,
+      initialBinding: initialBinding ?? this.initialBinding,
       transitionDuration: transitionDuration ?? this.transitionDuration,
       defaultGlobalState: defaultGlobalState ?? this.defaultGlobalState,
       getPages: getPages ?? this.getPages,
+      routes: routes ?? this.routes,
+      snackBarQueue: snackBarQueue,
       unknownRoute: unknownRoute ?? this.unknownRoute,
       routeInformationProvider:
           routeInformationProvider ?? this.routeInformationProvider,
       routeInformationParser:
           routeInformationParser ?? this.routeInformationParser,
       routerDelegate: routerDelegate ?? this.routerDelegate,
+      routerConfig: routerConfig ?? this.routerConfig,
+      restorationScopeId: restorationScopeId ?? this.restorationScopeId,
       backButtonDispatcher: backButtonDispatcher ?? this.backButtonDispatcher,
       navigatorObservers: navigatorObservers ?? this.navigatorObservers,
       navigatorKey: navigatorKey ?? this.navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey ?? this.scaffoldMessengerKey,
       translationsKeys: translationsKeys ?? this.translationsKeys,
       translations: translations ?? this.translations,
-      locale: locale ?? this.locale,
-      fallbackLocale: fallbackLocale ?? this.fallbackLocale,
+      locale: clearLocale ? null : locale ?? this.locale,
+      fallbackLocale:
+          clearFallbackLocale ? null : fallbackLocale ?? this.fallbackLocale,
       initialRoute: initialRoute ?? this.initialRoute,
       customTransition: customTransition ?? this.customTransition,
       home: home ?? this.home,
       testMode: testMode ?? this.testMode,
       unikey: unikey ?? this.unikey,
-      theme: theme ?? this.theme,
-      darkTheme: darkTheme ?? this.darkTheme,
+      theme: clearTheme ? null : theme ?? this.theme,
+      darkTheme: clearDarkTheme ? null : darkTheme ?? this.darkTheme,
       themeMode: themeMode ?? this.themeMode,
       defaultPopGesture: defaultPopGesture ?? this.defaultPopGesture,
       defaultOpaqueRoute: defaultOpaqueRoute ?? this.defaultOpaqueRoute,
@@ -198,13 +226,17 @@ class ConfigData {
         other.logWriterCallback == logWriterCallback &&
         other.smartManagement == smartManagement &&
         listEquals(other.binds, binds) &&
+        other.initialBinding == initialBinding &&
         other.transitionDuration == transitionDuration &&
         other.defaultGlobalState == defaultGlobalState &&
         listEquals(other.getPages, getPages) &&
+        mapEquals(other.routes, routes) &&
         other.unknownRoute == unknownRoute &&
         other.routeInformationProvider == routeInformationProvider &&
         other.routeInformationParser == routeInformationParser &&
         other.routerDelegate == routerDelegate &&
+        other.routerConfig == routerConfig &&
+        other.restorationScopeId == restorationScopeId &&
         other.backButtonDispatcher == backButtonDispatcher &&
         listEquals(other.navigatorObservers, navigatorObservers) &&
         other.navigatorKey == navigatorKey &&
@@ -243,13 +275,19 @@ class ConfigData {
         logWriterCallback.hashCode ^
         smartManagement.hashCode ^
         binds.hashCode ^
+        initialBinding.hashCode ^
         transitionDuration.hashCode ^
         defaultGlobalState.hashCode ^
         getPages.hashCode ^
+        Object.hashAllUnordered(routes?.entries
+                .map((entry) => Object.hash(entry.key, entry.value)) ??
+            const <int>[]) ^
         unknownRoute.hashCode ^
         routeInformationProvider.hashCode ^
         routeInformationParser.hashCode ^
         routerDelegate.hashCode ^
+        routerConfig.hashCode ^
+        restorationScopeId.hashCode ^
         backButtonDispatcher.hashCode ^
         navigatorObservers.hashCode ^
         navigatorKey.hashCode ^
@@ -311,17 +349,24 @@ class GetRoot extends StatefulWidget {
   }
 }
 
-class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
+class GetRootState extends State<GetRoot>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   static GetRootState? _controller;
+
+  /// The current root, or `null` when no GetX application is mounted.
+  static GetRootState? get maybeController => _controller;
+
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception('GetRoot is not part of the tree');
     } else {
       return _controller!;
     }
   }
 
   late ConfigData config;
+  GetDelegate? _ownedDelegate;
+  PlatformRouteInformationProvider? _ownedRouteInformationProvider;
 
   @override
   void initState() {
@@ -332,17 +377,66 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     super.initState();
   }
 
-  // @override
-  // void didUpdateWidget(covariant GetRoot oldWidget) {
-  //   if (oldWidget.config != widget.config) {
-  //     config = widget.config;
-  //   }
-
-  //   super.didUpdateWidget(oldWidget);
-  // }
+  @override
+  void didUpdateWidget(covariant GetRoot oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final previous = oldWidget.config;
+    final next = widget.config;
+    config = config.copyWith(
+      theme: previous.theme != next.theme ? next.theme : config.theme,
+      clearTheme: previous.theme != next.theme && next.theme == null,
+      darkTheme: previous.darkTheme != next.darkTheme
+          ? next.darkTheme
+          : config.darkTheme,
+      clearDarkTheme:
+          previous.darkTheme != next.darkTheme && next.darkTheme == null,
+      themeMode: previous.themeMode != next.themeMode
+          ? next.themeMode
+          : config.themeMode,
+      locale: previous.locale != next.locale ? next.locale : config.locale,
+      clearLocale: previous.locale != next.locale && next.locale == null,
+      fallbackLocale: previous.fallbackLocale != next.fallbackLocale
+          ? next.fallbackLocale
+          : config.fallbackLocale,
+      clearFallbackLocale: previous.fallbackLocale != next.fallbackLocale &&
+          next.fallbackLocale == null,
+      defaultPopGesture: previous.defaultPopGesture != next.defaultPopGesture
+          ? next.defaultPopGesture
+          : config.defaultPopGesture,
+      defaultOpaqueRoute: previous.defaultOpaqueRoute != next.defaultOpaqueRoute
+          ? next.defaultOpaqueRoute
+          : config.defaultOpaqueRoute,
+      defaultTransitionDuration:
+          previous.defaultTransitionDuration != next.defaultTransitionDuration
+              ? next.defaultTransitionDuration
+              : config.defaultTransitionDuration,
+    );
+    if (previous.defaultTransition != next.defaultTransition) {
+      final useDarkTheme = config.themeMode == ThemeMode.dark ||
+          (config.themeMode == ThemeMode.system &&
+              Engine.instance.platformDispatcher.platformBrightness ==
+                  Brightness.dark);
+      final theme = (useDarkTheme ? config.darkTheme : null) ??
+          config.theme ??
+          ThemeData.fallback();
+      final transition = next.defaultTransition ?? getThemeTransition(theme);
+      config = config.copyWith(
+        defaultTransition: transition,
+        clearDefaultTransition: transition == null,
+      );
+    }
+    if (previous.locale != next.locale) Get.locale = next.locale;
+    if (previous.fallbackLocale != next.fallbackLocale) {
+      Get.fallbackLocale = next.fallbackLocale;
+    }
+  }
 
   void onClose() {
     config.onDispose?.call();
+    _ownedDelegate?.dispose();
+    _ownedDelegate = null;
+    _ownedRouteInformationProvider?.dispose();
+    _ownedRouteInformationProvider = null;
     Get.clearTranslations();
     config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
@@ -359,21 +453,20 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   void onInit() {
-    if (config.getPages == null && config.home == null) {
+    if (config.routerConfig == null &&
+        config.routerDelegate == null &&
+        (config.getPages?.isEmpty ?? true) &&
+        (config.routes?.isEmpty ?? true) &&
+        config.home == null) {
       throw 'You need add pages or home';
     }
 
-    if (config.routerDelegate == null) {
+    if (config.routerConfig == null && config.routerDelegate == null) {
       final newDelegate = GetDelegate.createDelegate(
-        pages: config.getPages ??
-            [
-              GetPage(
-                name: cleanRouteName("/${config.home.runtimeType}"),
-                page: () => config.home!,
-              ),
-            ],
+        pages: _initialPages(),
         notFoundRoute: config.unknownRoute,
         navigatorKey: config.navigatorKey,
+        restorationScopeId: config.restorationScopeId,
         navigatorObservers: (config.navigatorObservers == null
             ? <NavigatorObserver>[
                 GetObserver(config.routingCallback, Get.routing)
@@ -383,15 +476,31 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
                 ...config.navigatorObservers!
               ]),
       );
+      _ownedDelegate = newDelegate;
       config = config.copyWith(routerDelegate: newDelegate);
     }
 
-    if (config.routeInformationParser == null) {
+    if (config.routerConfig == null &&
+        config.routeInformationProvider == null &&
+        config.initialRoute != null &&
+        Engine.instance.platformDispatcher.defaultRouteName == '/') {
+      final provider = PlatformRouteInformationProvider(
+        initialRouteInformation:
+            RouteInformation(uri: Uri.parse(config.initialRoute!)),
+      );
+      _ownedRouteInformationProvider = provider;
+      config = config.copyWith(routeInformationProvider: provider);
+    }
+
+    if (config.routerConfig == null &&
+        config.routeInformationParser == null &&
+        config.routerDelegate is GetDelegate) {
+      final delegate = config.routerDelegate as GetDelegate;
       final newRouteInformationParser =
           GetInformationParser.createInformationParser(
         initialRoute: config.initialRoute ??
-            config.getPages?.first.name ??
-            cleanRouteName("/${config.home.runtimeType}"),
+            delegate.currentConfiguration?.pageSettings?.name ??
+            delegate.registeredRoutes.first.name,
       );
 
       config =
@@ -411,12 +520,15 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     }
 
     Get.smartManagement = config.smartManagement;
+    config.initialBinding?.dependencies();
     config.onInit?.call();
 
     Get.isLogEnable = config.enableLog ?? kDebugMode;
     Get.log = config.logWriterCallback ?? defaultLogWriterCallback;
 
-    if (config.defaultTransition == null) {
+    if (config.defaultTransition == null &&
+        config.routerConfig == null &&
+        config.routerDelegate is GetDelegate) {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
@@ -426,6 +538,30 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     //     config.transitionDuration ?? Duration(milliseconds: 300);
 
     Future(() => onReady());
+  }
+
+  List<GetPage> _initialPages() {
+    final pages = <String, GetPage>{};
+    if (config.home != null) {
+      final name = (config.routes?.isNotEmpty ?? false) ||
+              (config.getPages?.isNotEmpty ?? false)
+          ? '/'
+          : cleanRouteName('/${config.home.runtimeType}');
+      pages[name] = GetPage(name: name, page: () => config.home!);
+    }
+    for (final entry
+        in config.routes?.entries ?? <MapEntry<String, WidgetBuilder>>[]) {
+      pages.putIfAbsent(
+          entry.key,
+          () => GetPage(
+                name: entry.key,
+                page: () => Builder(builder: entry.value),
+              ));
+    }
+    for (final page in config.getPages ?? <GetPage>[]) {
+      pages.putIfAbsent(page.name, () => page);
+    }
+    return pages.values.toList();
   }
 
   set parameters(Map<String, String?> newParameters) {
@@ -442,10 +578,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     config.onReady?.call();
   }
 
-  Transition? getThemeTransition() {
-    final platform = context.theme.platform;
+  Transition? getThemeTransition([ThemeData? theme]) {
+    final platform = theme?.platform ?? context.theme.platform;
     final matchingTransition =
-        Get.theme.pageTransitionsTheme.builders[platform];
+        (theme ?? Get.theme).pageTransitionsTheme.builders[platform];
     switch (matchingTransition) {
       case CupertinoPageTransitionsBuilder():
         return Transition.cupertino;
@@ -502,10 +638,19 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
-  GetDelegate get rootDelegate => config.routerDelegate as GetDelegate;
+  GetDelegate get rootDelegate {
+    final delegate =
+        config.routerConfig?.routerDelegate ?? config.routerDelegate;
+    if (delegate is GetDelegate) return delegate;
+    throw FlutterError(
+      'Get navigation requires a GetDelegate. '
+      'Use the navigation API of your custom RouterDelegate instead.',
+    );
+  }
 
   RouteInformationParser<Object> get informationParser =>
-      config.routeInformationParser!;
+      (config.routerConfig?.routeInformationParser ??
+          config.routeInformationParser)!;
 
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
     rootDelegate.navigatorKey = newKey;
@@ -531,7 +676,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return config.binds.isEmpty
+        ? widget.child
+        : Binds(binds: config.binds, child: widget.child);
   }
 
   String cleanRouteName(String name) {

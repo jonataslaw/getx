@@ -3,9 +3,13 @@ import 'package:flutter/widgets.dart';
 import '../../../get.dart';
 
 class GetNavigator extends Navigator {
+  /// Creates a navigator whose page owner handles committed removals.
+  ///
+  /// [onDidRemovePage] updates the caller-owned page list after a route is
+  /// removed. Configure back vetoes on [GetPage.canPop] or with `PopScope`.
   GetNavigator.onGenerateRoute({
     GlobalKey<NavigatorState>? super.key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    DidRemovePageCallback? onDidRemovePage,
     required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
@@ -13,15 +17,7 @@ class GetNavigator extends Navigator {
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-          //keys should be optional
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
+          onDidRemovePage: onDidRemovePage ?? (_) {},
           onGenerateRoute: (settings) {
             final selectedPageList =
                 pages.where((element) => element.name == settings.name);
@@ -42,9 +38,13 @@ class GetNavigator extends Navigator {
               transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
         );
 
+  /// Creates a page-based navigator with a committed-removal callback.
+  ///
+  /// [onDidRemovePage] updates the caller-owned page list. It cannot veto a
+  /// removal; use [GetPage.canPop] or `PopScope` for back policy.
   GetNavigator({
     super.key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    DidRemovePageCallback? onDidRemovePage,
     required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
@@ -52,14 +52,7 @@ class GetNavigator extends Navigator {
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
+          onDidRemovePage: onDidRemovePage ?? (_) {},
           observers: [
             // GetObserver(null, Get.routing),
             HeroController(),

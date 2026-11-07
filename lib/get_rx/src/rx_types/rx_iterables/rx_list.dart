@@ -3,7 +3,7 @@ part of '../rx_types.dart';
 /// Create a list similar to `List<T>`
 class RxList<E> extends GetListenable<List<E>>
     with ListMixin<E>, RxObjectMixin<List<E>> {
-  RxList([super.initial = const []]);
+  RxList([List<E>? initial]) : super(initial ?? <E>[]);
 
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));
@@ -169,16 +169,20 @@ extension ListExtension<E> on List<E> {
 
     if (this is RxList) {
       (this as RxList).value.clear();
+    } else {
+      clear();
     }
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
+    final source = List<E>.of(items);
     if (this is RxList) {
       (this as RxList).value.clear();
+    } else {
+      clear();
     }
-    //clear();
-    addAll(items);
+    addAll(source);
   }
 }

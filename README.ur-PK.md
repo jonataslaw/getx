@@ -1,3 +1,7 @@
+> GetX 5 RC: یہ candidate ابھی شائع نہیں ہوا۔ آزمودہ بنیاد Flutter 3.47.9 اور Dart 3.13.7 ہے اور Flutter کی شامل شدہ UI لائبریریاں استعمال ہوتی ہیں۔
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ﻿![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **🌎 اردو ( Selected ✔) [| انگریزی |](README.md) [| ویتنامی |](README-vi.md) [| انڈونیشی |](README.id-ID.md) [چینی |](README.zh-cn.md) [برازیلی پرتگالی |](README.pt-br.md) [ہسپانوی |](README-es.md) [روسی |](README.ru.md) [پولش |](README.pl.md) [کورین |](README.ko-kr.md), [French](README-fr.md)**
@@ -18,51 +22,129 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [تعارف](#تعارف)
-- [انسٹال](#انسٹال)
-- [کاؤنٹرایپ](#کاؤنٹرایپ)
-- [تین ستون](#تین-ستون)
-  - [اسٹیٹ مینجمنٹ](#اسٹیٹ-مینجمنٹ)
-    - [ری ایکٹو اسٹیٹ منیجر](#ری-ایکٹو-اسٹیٹ-منیجر)
-    - [اسٹیٹ مینجمنٹ کے بارے میں مزید تفصیلات](#اسٹیٹ-مینجمنٹ-کے-بارے-میں-مزید-تفصیلات)
-  - [روٹ مینجمنٹ](#روٹ-مینجمنٹ)
-    - [روٹ مینجمنٹ کے بارے میں مزید تفصیلات](#روٹ-مینجمنٹ-کے-بارے-میں-مزید-تفصیلات)
-  - [انحصار کا انتظام](#انحصار-کا-انتظام)
-    - [انحصار کے انتظام کے بارے میں مزید تفصیلات](#انحصار-کے-انتظام-کے-بارے-میں-مزید-تفصیلات)
-- [استعمال](#استعمال)
-  - [عالمگیریت](#عالمگیریت)
-    - [ترجمہ](#ترجمہ)
-      - [ترجمہ کا استعمال](#ترجمہ-کا-استعمال)
-    - [مقامی](#مقامی)
-      - [مقام کی تبدیلی](#مقام-کی-تبدیلی)
-      - [سسٹم لوکیشن](#سسٹم-لوکیشن)
-  - [تھیم کی تبدیلی](#تھیم-کی-تبدیلی)
-  - [رابطے کا قیام](#رابطے-کا-قیام)
-    - [ڈیفالٹ کنکشن کا قیام](#ڈیفالٹ-کنکشن-کا-قیام)
-    - [خود سے رابطے کا قیام](#خود-سے-رابطے-کا-قیام)
-  - [گیٹ پیج مڈل ویئر](#گیٹ-پیج-مڈل-ویئر)
-    - [ترجیح](#ترجیح)
-    - [ری ڈائریکٹ](#ری-ڈائریکٹ)
-    - [جب پیج کی درخواست کی جائے](#جب-پیج-کی-درخواست-کی-جائے)
-    - [آنبائنڈنگ اسٹارٹ](#آنبائنڈنگ-اسٹارٹ)
-    - [آنپیج بلڈ اسٹارٹ](#آنپیج-بلڈ-اسٹارٹ)
-    - [جب پیج لوڈ ہو](#جب-پیج-لوڈ-ہو)
-    - [جب صفحہ تصرف ہوجائے](#جب-صفحہ-تصرف-ہوجائے)
-  - [دوسرے اعلی درجے کی APIs](#دوسرے-اعلی-درجے-کی-apis)
-    - [اختیاری عالمی ترتیبات اور دستی تشکیلات](#اختیاری-عالمی-ترتیبات-اور-دستی-تشکیلات)
-    - [مقامی اسٹیٹ ویجٹ](#مقامی-اسٹیٹ-ویجٹ)
-      - [ویلیو بلڈر](#ویلیو-بلڈر)
-      - [اوبکس ویلیو](#اوبکس-ویلیو)
-  - [کارآمد نکات](#کارآمد-نکات)
-      - [گیٹ ویو](#گیٹ-ویو)
-      - [گیٹ ویجٹ](#گیٹ-ویجٹ)
-      - [گیٹکس سروس](#گیٹکس-سروس)
-- [پچھلے ورژن سے اہم تبدیلیاں](#پچھلے-ورژن-سے-اہم-تبدیلیاں)
-- [گیٹکس کیوں؟](#گیٹکس-کیوں)
-- [سماجی خدمات](#سماجی-خدمات)
-  - [کمیونٹی چینلز](#کمیونٹی-چینلز)
-  - [کس طرح شراکت کریں](#کس-طرح-شراکت-کریں)
-  - [مضامین اور ویڈیوز](#مضامین-اور-ویڈیوز)
+## فہرست
+
+  - [اس برانچ میں GetX 5 کی تبدیلیاں](#getx5-current)
+- [تعارف](#readme-section-2)
+- [انسٹال](#readme-section-3)
+- [کاؤنٹرایپ](#readme-section-4)
+- [تین ستون](#readme-section-5)
+  - [اسٹیٹ مینجمنٹ](#readme-section-6)
+    - [ری ایکٹو اسٹیٹ منیجر](#readme-section-7)
+    - [اسٹیٹ مینجمنٹ کے بارے میں مزید تفصیلات](#readme-section-8)
+  - [روٹ مینجمنٹ](#readme-section-9)
+    - [روٹ مینجمنٹ کے بارے میں مزید تفصیلات](#readme-section-10)
+  - [انحصار کا انتظام](#readme-section-11)
+    - [انحصار کے انتظام کے بارے میں مزید تفصیلات](#readme-section-12)
+- [استعمال](#readme-section-13)
+  - [عالمگیریت](#readme-section-14)
+    - [ترجمہ](#readme-section-15)
+    - [ترجمہ کا استعمال](#readme-section-16)
+    - [مقامی](#readme-section-17)
+    - [مقام کی تبدیلی](#readme-section-18)
+    - [سسٹم لوکیشن](#readme-section-19)
+  - [تھیم کی تبدیلی](#readme-section-20)
+  - [رابطے کا قیام](#readme-section-21)
+    - [ڈیفالٹ کنکشن کا قیام](#readme-section-22)
+    - [خود سے رابطے کا قیام](#readme-section-23)
+  - [گیٹ پیج مڈل ویئر](#readme-section-24)
+    - [ترجیح](#readme-section-25)
+    - [ری ڈائریکٹ](#readme-section-26)
+    - [جب پیج کی درخواست کی جائے](#readme-section-27)
+    - [آنبائنڈنگ اسٹارٹ](#readme-section-28)
+    - [آنپیج بلڈ اسٹارٹ](#readme-section-29)
+    - [جب پیج لوڈ ہو](#readme-section-30)
+    - [جب صفحہ تصرف ہوجائے](#readme-section-31)
+  - [دوسرے اعلی درجے کی APIs](#readme-section-32)
+    - [اختیاری عالمی ترتیبات اور دستی تشکیلات](#readme-section-33)
+    - [مقامی اسٹیٹ ویجٹ](#readme-section-34)
+    - [ویلیو بلڈر](#readme-section-35)
+    - [اوبکس ویلیو](#readme-section-36)
+  - [کارآمد نکات](#readme-section-37)
+    - [گیٹ ویو](#readme-section-38)
+    - [گیٹ ویجٹ](#readme-section-39)
+    - [گیٹکس سروس](#readme-section-40)
+- [پچھلے ورژن سے اہم تبدیلیاں](#readme-section-41)
+- [گیٹکس کیوں؟](#readme-section-42)
+- [سماجی خدمات](#readme-section-43)
+  - [کمیونٹی چینلز](#readme-section-44)
+  - [کس طرح شراکت کریں](#readme-section-45)
+  - [مضامین اور ویڈیوز](#readme-section-46)
+
+<a id="getx5-current"></a>
+
+## اس برانچ میں GetX 5 کی تبدیلیاں
+
+یہ candidate ابھی شائع نہیں ہوا۔ آزمودہ بنیاد Flutter 3.47.9 اور Dart 3.13.7 ہے اور Flutter کی شامل شدہ UI لائبریریاں استعمال ہوتی ہیں۔
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding سے `List<Bind>` واپس کریں۔ ایپ کے لیے binds اور روٹ کے لیے bindings استعمال کریں۔ Get.create کی جگہ Get.spawn لیں؛ async initialization کو await کرنے کے بعد تیار قدر Get.put سے رجسٹر کریں۔
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` کامیاب ڈیٹا رکھتا ہے۔ futurize، Future بنانے والا فنکشن لیتا اور void لوٹاتا ہے؛ نتائج تکمیل کی ترتیب سے لگتے ہیں۔ خالی Rx مجموعوں کا الگ قابل تبدیلی storage ہوتا ہے۔
+
+نیویگیشن Navigator 2 پر ہے۔ Get.back صفحات واپس کرتا ہے؛ dialog، sheet اور snackbar کے لیے الگ helper استعمال کریں۔ ایپ کی زندگی سے باہر Get.context اور Get.overlayContext null ہو سکتے ہیں۔
+
+نام والے روٹس کی تاریخ بحال کرنے کے لیے restorationScopeId اور مستقل restorationId دیں۔ JSON موافق arguments پر حد اور middleware لاگو ہیں؛ process ختم ہونے کے بعد نئے controller اور Future بنتے ہیں۔
+
+Response modifier ہٹانا، authentication، timeout، abort اور decoding errors درست کیے گئے ہیں۔ IO، browser اور JS/WASM میں HTTP/WebSocket اور وسائل کی صفائی جانچی جاتی ہے۔
+
+Flutter 3.47.9 کی browser-history percent-encoding حد برقرار ہے؛ عام web test کی کامیابی اس کا حل نہیں۔ اصل host اور device پر refresh، back اور restoration جانچیں۔
+
+پرانے Get.config کے بجائے GetMaterialApp یا GetCupertinoApp کی settings استعمال کریں۔ Custom router کے لیے مکمل Navigator 2 ترتیب چاہیے۔
+
+GetxService ایپ کی زندگی کی سروس کے لیے onInit/onReady/onClose دیتا ہے۔ عام deletion اسے محفوظ رکھتا ہے؛ جان بوجھ کر force یا Get.reset سے صاف کیا جا سکتا ہے۔ یہ process کے بعد مستقل storage نہیں۔ init await کرکے Get.put کریں۔
+
+GetWidget اسی widget instance کا controller cache کرتا ہے اور const کی حمایت کرتا ہے۔ Get.spawn کا controller مالک widget ہٹنے پر بند ہوتا ہے۔ GetView اس cache کے بجائے lookup کرتا ہے۔
+
+GetNavigator اور GetRouterOutlet.pickPages میں `onPopPage` کی جگہ `onDidRemovePage` ہے۔ یہ حذف کے بعد اطلاع ہے؛ back روکنے کے لیے `GetPage.canPop` یا `PopScope` لیں، اور custom outlet callback سے `delegate.didRemovePage` کو اطلاع دیں۔
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # تعارف
 
@@ -85,6 +167,8 @@
 **اس کے علاوہ ، آپ کی پیداوری کو مزید بڑھانے کے لئے ، ہمارے پاس ہے
 [VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) اور [Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
+<a id="readme-section-3"></a>
+
 # انسٹال
 کوڈ میں گیٹ ایکس کی تنصیب
 ```yaml
@@ -96,6 +180,8 @@ dependencies:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # کاؤنٹرایپ
 
@@ -140,7 +226,7 @@ class Home extends StatelessWidget {
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -163,9 +249,15 @@ class Other extends StatelessWidget {
 یہ ایک سادہ پروجیکٹ ہے لیکن اس سے پہلے ہی یہ واضح ہوجاتا ہے کہ گیٹ کتنا طاقتور ہے۔ جیسے جیسے آپ کا پروجیکٹ بڑھتا جائے گا ، یہ فرق مزید نمایاں ہوتا جائے گا۔
 گیٹ کو ٹیموں کے ساتھ کام کرنے کے لئے ڈیزائن کیا گیا تھا ، لیکن اس سے ایک فرد ڈویلپر کا کام آسان ہوجاتا ہے۔
 اپنی آخری تاریخ کو بہتر بنائیں ، کارکردگی کو کھونے کے بغیر وقت پر سب کچھ فراہم کریں۔ اگر آپ نے اس جملے کی نشاندہی کی ہے تو ، گیٹ-ایکس آپ کے لئے ہے!
+<a id="readme-section-5"></a>
+
 # تین ستون
+<a id="readme-section-6"></a>
+
 ## اسٹیٹ مینجمنٹ
 گیٹ کے دو مختلف مینیجر ہوتے ہیں: سادہ ریاستی مینیجر (ہم اسے گیٹ بلڈر کہیں گے) اور رد عمل کا مظاہرہ کرنے والے مینیجر (گیٹ-ایکس / اوب-ایکس)
+<a id="readme-section-7"></a>
+
 ### ری ایکٹو اسٹیٹ منیجر
 ری ایکٹیو پروگرامنگ بہت سے لوگوں کو اجنبی بنا سکتا ہے کیونکہ ایسا کہا جاتا ہے کہ یہ پیچیدہ ہے۔ گیٹ ایکس نے رد عمل مندانہ پروگرامنگ کو کسی آسان چیز میں تبدیل کردیا:
 - آپ کو اسٹریمکنٹرولر بنانے کی ضرورت نہیں ہوگی
@@ -199,11 +291,15 @@ Obx(() => Text("${controller.name}"));
 
 بس۔ یہ آسان ہے.
 
+<a id="readme-section-8"></a>
+
 ### اسٹیٹ مینجمنٹ کے بارے میں مزید تفصیلات
 
 **اسٹیٹ مینجمنٹ کی مزید گہرائی سے وضاحت ملاحظہ کریں [یہاں](./documentation/en_US/state_management.md).  وہاں آپ مزید مثالیں دیکھیں گے اور آسان ریاستی مینیجر اور رد عمل ریاست کے مینیجر کے مابین بھی فرق**
 
 آپ کو گیٹ ایکس پاور کا ایک اچھا خیال ملے گا۔
+
+<a id="readme-section-9"></a>
 
 ## روٹ مینجمنٹ
 اگر آپ سیاق و سباق کے بغیر راستے / سنیکبارز / مکالمے / بوتل شیٹ استعمال کرنے جارہے ہیں تو گیٹ ایکس آپ کے لئے بھی بہترین ہے ، بس اسے دیکھیں:
@@ -218,7 +314,7 @@ GetMaterialApp( // Before: MaterialApp(
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 نام کے ساتھ نئی اسکرین پر جائیں۔ نامزد راستوں کے بارے میں مزید تفصیلات دیکھیں [یہاں](./documentation/en_US/route_management.md#navigation-with-named-routes)
@@ -232,26 +328,34 @@ Get.toNamed('/details');
 Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 اگلی اسکرین پر جانے کے لئے اور پچھلی اسکرین پر واپس جانے کا کوئی آپشن نہیں (اسپلش اسکرین ، لاگ ان اسکرینوں وغیرہ میں استعمال کیلئے)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 اگلی سکرین پر جانے اور پچھلے سبھی راستوں کو منسوخ کرنے کے لئے (شاپنگ کارٹس ، پولز اور ٹیسٹوں میں کارآمد)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 غور کیا کہ آپ کو ان میں سے کوئی بھی کام کرنے کے لئے سیاق و سباق کا استعمال نہیں کرنا پڑا؟ گیٹ روٹ مینجمنٹ کو استعمال کرنے کا سب سے بڑا فائدہ یہ ہے۔ اس کی مدد سے ، آپ اپنے کنٹرولر کلاس کے اندر ، تشویش کے بغیر ، ان تمام طریقوں کو انجام دے سکتے ہیں۔
 
+<a id="readme-section-10"></a>
+
 ### روٹ مینجمنٹ کے بارے میں مزید تفصیلات
 
 **گیٹ ایکس نامی روٹ کے ساتھ کام کرتا ہے اور اپنے راستوں پر نچلی سطح کا کنٹرول بھی پیش کرتا ہے! ایک گہرائی میں دستاویزات موجود ہیں [یہاں](./documentation/en_US/route_management.md)**
+
+<a id="readme-section-11"></a>
 
 ## انحصار کا انتظام
 
@@ -282,13 +386,21 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### انحصار کے انتظام کے بارے میں مزید تفصیلات
 
 **انحصار کے انتظام کی مزید گہرائی سے وضاحت ملاحظہ کریں [یہاں](./documentation/en_US/dependency_management.md)**
 
+<a id="readme-section-13"></a>
+
 # استعمال
 
+<a id="readme-section-14"></a>
+
 ## عالمگیریت
+
+<a id="readme-section-15"></a>
 
 ### ترجمہ
 
@@ -311,6 +423,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### ترجمہ کا استعمال
 
 بس ضمیمہ کریں `.tr` مخصوص کی میں اور اس کی موجودہ قیمت کا استعمال کرتے ہوئے ترجمہ کیا جائے گا`Get.locale` اور `Get.fallbackLocale`.
@@ -318,6 +432,8 @@ class Messages extends Translations {
 ```dart
 Text('title'.tr);
 ```
+
+<a id="readme-section-17"></a>
 
 ### مقامی
 
@@ -331,6 +447,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-18"></a>
+
 #### مقام کی تبدیلی
 
 لوکل کو اپ ڈیٹ کرنے کے لئے کال کریں گیٹ۔ اپ ڈیٹ لوکل (لوکل)۔ پھر ترجمے خود بخود نیا مقام استعمال کرتے ہیں۔
@@ -339,6 +457,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-19"></a>
 
 #### سسٹم لوکیشن
 
@@ -349,6 +469,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-20"></a>
 
 ## تھیم کی تبدیلی
 
@@ -372,79 +494,81 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 جب ڈارک موڈ چالو ہوجاتا ہے ، تو وہ _ لائٹ تھیم_ میں تبدیل ہوجائے گا ، اور جب _ لائٹ تھیم_ فعال ہوجائے گا ، تو یہ _ ڈارک تھیم_ میں بدل جائے گا۔
 
+<a id="readme-section-21"></a>
+
 ## رابطے کا قیام
 گیٹ کنیکٹ آپ کی پیٹھ سے اپنے سامنے تک HTTP یا ویب ساکٹس کے ذریعہ مواصلت کرنے کا ایک آسان طریقہ ہے
+
+<a id="readme-section-22"></a>
 
 ### ڈیفالٹ کنکشن کا قیام
 آپ آرام سے گیٹ کنیکٹ کو بڑھا سکتے ہیں اور GET / POST / PUT / DELETE / SOCKET طریقوں کو اپنے ریسٹ API یا ویب ساکٹس کے ساتھ بات چیت کرسکتے ہیں۔
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request with File
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+<a id="readme-section-23"></a>
+
 ### خود سے رابطے کا قیام
 
 گیٹ کنیکٹ انتہائی حسب ضرورت ہے آپ درخواست کو تبدیل کرنے والے ، جواب دہندگان کے بطور ، جواب دہندگان کی حیثیت سے ، ایک مستند کی وضاحت ، اور حتی کہ کوششوں کی تعداد بھی کرسکتے ہیں جس میں وہ خود کو مستند کرنے کی کوشش کرے گی ، اس کے علاوہ یہ ایک معیاری ڈیکوڈر کی وضاحت کے امکان کو بھی فراہم کرے گی جو تبدیل ہوجائے گی۔ آپ کی ساری درخواستیں آپ میں اضافی تشکیل کے بغیر ماڈل کرتی ہیں۔
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
-
-    // It's will attach 'apikey' property on header from all requests
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // Set the header
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    //Autenticator will be called 3 times if HttpStatus is 
-    //HttpStatus.unauthorized
-    httpClient.maxAuthRetries = 3;
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-24"></a>
 
 ## گیٹ پیج مڈل ویئر
 
@@ -452,30 +576,49 @@ class HomeProvider extends GetConnect {
 
 نوٹ: جب گیٹ پیج کے مڈل ویئرز ہوں گے تو ، اس صفحے کے سبھی بچوں میں ایک جیسے مڈل ویئرز خودبخود ہوں گے۔
 
+<a id="readme-section-25"></a>
+
 ### ترجیح
 
 مڈل ویئر کو چلانے کا آرڈر گیٹ میڈل ویئر میں ترجیحی طور پر ترتیب دیا جاسکتا ہے۔
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 وہ مڈل ویئر اسی ترتیب سے چلائے جائیں گے **-8 => 2 => 4 => 5**
 
+<a id="readme-section-26"></a>
+
 ### ری ڈائریکٹ
 
-اس فنکشن کو اس وقت کہا جائے گا جب کال والے راستے کے صفحے کی تلاش کی جا رہی ہو۔ اس کو ری ڈائریکٹ کرنے کے نتیجے میں روٹ سیٹنگز لیتے ہیں۔ یا اسے کالعدم کردیں اور کوئی ردوبدل نہیں ہوگا۔
+redirectDelegate میں route جاری رکھتا ہے، دوسرا RouteDecoder redirect کرتا ہے اور null منسوخ کرتا ہے۔ login رجسٹر کریں اور loop سے بچیں۔
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-27"></a>
 
 ### جب پیج کی درخواست کی جائے
 
@@ -483,11 +626,13 @@ RouteSettings redirect(String route) {
 آپ اسے صفحہ کے بارے میں کچھ تبدیل کرنے یا نیا صفحہ دینے کیلئے استعمال کرسکتے ہیں
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-28"></a>
 
 ### آنبائنڈنگ اسٹارٹ
 
@@ -495,14 +640,14 @@ GetPage onPageCalled(GetPage page) {
 یہاں آپ اس صفحے کے لئے پابندیوں کو تبدیل کرسکتے ہیں۔
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### آنپیج بلڈ اسٹارٹ
 
@@ -510,19 +655,25 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 یہاں آپ اس کے بعد اور پیج ویجیٹ بنانے سے پہلے پابندیوں کو تخلیق کرنے کے بعد کچھ کرسکتے ہیں۔
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### جب پیج لوڈ ہو
 
 اس فنکشن کو گیٹ پیج ڈاٹ پیج فنکشن کے بلانے کے ٹھیک ہی بعد میں کہا جائے گا اور آپ کو اس فنکشن کا نتیجہ پیش کرے گا۔ اور دکھایا جائے گا کہ ویجیٹ لے لو.
 
+<a id="readme-section-31"></a>
+
 ### جب صفحہ تصرف ہوجائے
 
 اس فنکشن کو صفحے کے تمام متعلقہ اشیاء (کنٹرولرز ، آراء ، ...) کو ضائع کرنے کے بعد ہی کہا جائے گا۔
+
+<a id="readme-section-32"></a>
 
 ## دوسرے اعلی درجے کی APIs
 
@@ -549,16 +700,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // remove one route.
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // back repeatedly until the predicate returns true.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // go to next route and remove all the previous routes until the predicate returns true.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // go to next named route and remove all the previous routes until the predicate returns true.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //Check in what platform the app is running
 GetPlatform.isAndroid
@@ -586,7 +737,7 @@ Get.width
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
-Get.contextOverlay
+Get.overlayContext
 
 // Note: the following methods are extensions on context. Since you
 // have access to context in any place of your UI, you can use it anywhere in the UI code
@@ -603,49 +754,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Similar to MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// Similar to MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// Similar to MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// Similar to MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// Similar to MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// Check if device is on landscape mode
-context.isLandscape()
+context.isLandscape
 
 /// Check if device is on portrait mode
-context.isPortrait()
+context.isPortrait
 
 /// Similar to MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// Similar to MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Get the shortestSide from screen
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// True if width be larger than 800
-context.showNavbar()
+context.showNavbar
 
 /// True if the shortestSide is smaller than 600p
-context.isPhone()
+context.isPhone
 
 /// True if the shortestSide is largest than 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// True if the shortestSide is largest than 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// True if the current device is Tablet
-context.isTablet()
+context.isTablet
 
 /// اسکرین کے سائز کے مطابق <T> ایک قیمت لوٹاتا ہے
 /// اس کی قیمت دے سکتے ہیں:
@@ -655,6 +806,8 @@ context.isTablet()
 /// ڈیسک ٹاپ: اگر چوڑائی 1200 سے زیادہ ہے
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-33"></a>
 
 ### اختیاری عالمی ترتیبات اور دستی تشکیلات
 
@@ -682,20 +835,23 @@ MaterialApp(
 یا اسے اپنے `گیٹ میٹیرال ایپ` میں براہ راست کریں
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 آپ لاگ ان پیغامات کو اختیاری طور پر `گیٹ` سے دوبارہ بھیج سکتے ہیں۔
@@ -713,8 +869,9 @@ void localLogWriter(String text, {bool isError = false}) {
   // please note that even if enableLog: false log messages will be pushed in this callback
   // you get check the flag if you want through GetConfig.isLogEnable
 }
-
 ```
+
+<a id="readme-section-34"></a>
 
 ### مقامی اسٹیٹ ویجٹ
 
@@ -723,6 +880,8 @@ void localLogWriter(String text, {bool isError = false}) {
 مثال کے طور پر ، آپ ان کو ٹیکسٹ فیلڈ میں چھپے ہوئے متن کو ٹوگل کرنے کے لئے استعمال کرسکتے ہیں ، شاید کوئی رواج بنائیں
 توسیع پذیر پینل ، یا ہوسکتا ہے کہ موجودہ فہرست میں ترمیم کرکے نیچے کی نیویگیشن بار میں مواد کو تبدیل کرتے ہوئے
 `Scaffold` میں جسم کا
+
+<a id="readme-section-35"></a>
 
 #### ویلیو بلڈر
 
@@ -741,6 +900,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-36"></a>
+
 #### اوبکس ویلیو
 
 اس طرح آپ کو قیمت ملتی ہے
@@ -753,6 +914,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-37"></a>
 
 ## کارآمد نکات
 
@@ -768,91 +931,35 @@ print( 'Message "$message" has Type ${message.runtimeType}');
 [o] `.value`
 
 ```dart
-final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
-name.value = 'Hey';
-
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
-name('Hello');
-
-// is like a getter, prints 'Hello'.
-name() ;
-
-/// numbers:
-
-final count = 0.obs;
-
-// You can use all non mutable operations from num primitives!
-count + 1;
-
-// Watch out! this is only valid if `count` is not final, but var
-count += 1;
-
-// You can also compare against values:
-count > 2;
-
-/// booleans:
-
-final flag = false.obs;
-
-// switches the value between true/false
-flag.toggle();
-
-
-/// all types:
-
-// Sets the `value` to null.
-flag.nil();
-
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
-
-final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
-
-
-// equality works with the Rx and the value, but hashCode is always taken from the value
-final number = 12.obs;
-print( number == 12 ); // prints > true
-
-/// Custom Rx Models:
-
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
-user.value.name = 'Roi';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// or we can use the `update()` method!
-user.update((value){
-  value.name='Roi';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+
+<a id="readme-section-38"></a>
 
 #### گیٹ ویو
 
@@ -878,6 +985,8 @@ print( user );
  }
 ```
 
+<a id="readme-section-39"></a>
+
 #### گیٹ ویجٹ
 
 زیادہ تر لوگوں کو اس ویجیٹ کے بارے میں کوئی اندازہ نہیں ہے ، یا اس کے استعمال کو پوری طرح سے الجھن میں ہے
@@ -888,11 +997,13 @@ print( user );
 
 اگر آپ استعمال کرتے ہیں تو ، ** گیٹ ایکس ** کی ایک اور "اتنی عام نہیں" خصوصیت: `گیٹ.کریٹ`۔
 
-`Get.create(()=>Controller())` ایک نیا پیدا کرے گا `Controller` ہر بار جب آپ کال کریں گے
+`Get.spawn(()=>Controller())` ایک نیا پیدا کرے گا `Controller` ہر بار جب آپ کال کریں گے
 `Get.find<Controller>()`,
 
 اسی جگہ پر `گیٹ ویجٹ` چمکتا ہے ... جیسے کہ آپ اسے استعمال کرسکتے ہیں ، مثال کے طور پر ،
 ٹوڈو اشیاء کی ایک فہرست رکھنے کے ل. لہذا ، اگر آپکے پاس وجٹس کو "دوبارہ تعمیر" ہو جاتا ہے تو ، یہ وہی کنٹرولر مثال برقرار رکھے گا۔
+
+<a id="readme-section-40"></a>
 
 #### گیٹکس سروس
 
@@ -904,46 +1015,33 @@ So is super useful to keep your "Services" always reachable and active with `Get
 `ApiService`, `StorageService`, `CacheService`.
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
-  runApp(SomeApp());
-}
-
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
-void initServices() async {
-  print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
 `گیٹکسسروس` کو اصل میں حذف کرنے کا واحد راستہ ،`گیٹ.ریسیٹ`  ہے جو ایک جیسے ہے
 آپ کی ایپ کا "گرم ریبوٹ"۔ لہذا ، یاد رکھیں ، اگر آپ کو دوران کلاس مثال کے طور پر مطلق استقامت کی ضرورت ہو
 اپنی ایپ کی زندگی بھر ، `گیٹکسسروس` استعمال کریں۔
+
+<a id="readme-section-41"></a>
 
 # پچھلے ورژن سے اہم تبدیلیاں
 
@@ -963,7 +1061,7 @@ class SettingsService extends GetxService {
 2.  نامزد روٹس
 پہلے:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -998,11 +1096,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-42"></a>
+
 # گیٹکس کیوں؟
 
 1.  فلٹر کی تازہ کاری کے بعد ، آپ کے بہت سے پیکیجز ٹوٹ جائیں گے۔ بعض اوقات تالیف کی غلطیاں ہوتی ہیں ، غلطیاں اکثر ظاہر ہوتی ہیں کہ اب بھی اس کے بارے میں کوئی جواب نہیں ملتا ہے ، اور ڈویلپر کو یہ جاننے کی ضرورت ہوتی ہے کہ غلطی کہاں سے ہوئی ہے ، غلطی کو ٹریک کریں ، تب ہی متعلقہ ذخیرہ میں کوئی مسئلہ کھولنے کی کوشش کریں ، اور دیکھیں کہ اس کا مسئلہ حل ہوتا ہے۔ ترقی کے مرکزی وسائل کو مرکز بنائیں (ریاست ، انحصار اور روٹ مینجمنٹ) ، آپ کو اپنے پبسپیک میں ایک پیکیج شامل کرنے اور کام شروع کرنے کی اجازت دے۔ پھڑپھڑانے کی تازہ کاری کے بعد ، آپ کو صرف انحصار کرنے کی ضرورت ہے گیٹ انحصار کو اپ ڈیٹ کریں ، اور کام کریں۔ مطابقت کے مسائل کو بھی حل کریں حاصل کریں۔ ایک پیکج کا ورژن کتنی بار دوسرے کے ورژن کے ساتھ مطابقت نہیں رکھتا ہے ، کیونکہ ایک ورژن میں انحصار استعمال کرتا ہے ، اور دوسرا دوسرے ورژن میں۔ گیٹ کو استعمال کرنے میں بھی یہ کوئی تشویش نہیں ہے ، کیونکہ سب کچھ ایک ہی پیکج میں ہے اور مکمل طور پر ہم آہنگ ہے۔
 
-2. فلٹر آسان ہے .فلٹر ناقابل یقین ہے ، لیکن .فلٹر کے پاس اب بھی کچھ بوائلرپلیٹ موجود ہے جو زیادہ تر ڈویلپرز کے لئے ناپسندیدہ ہوسکتا ہے ، جیسے `Navigator.of(context).push (context, builder [...]`. پروگرامنگ کو آسان بنائیں۔ صرف راستے پر کال کرنے کے لئے 8 لائنوں کے کوڈ لکھنے کے بجائے ، آپ صرف یہ کرسکتے ہیں: `Get.to(Home())` اور آپ کر چکے ہیں ، آپ اگلے صفحے پر جائیں گے۔ متحرک ویب یو آر ایل ایک بہت تکلیف دہ چیز ہے جس کے ساتھ کرنا ہے ۔فلٹر فی الحال ، اور یہ کہ گیٹیکس کے ساتھ احمقانہ حد تک آسان ہے۔ .. فلٹر میں ریاستوں کا انتظام کرنا ، اور انحصار کا انتظام کرنا بھی ایک ایسی چیز ہے جو بہت ساری بحثیں پیدا کرتی ہے ، کیوں کہ پب میں سیکڑوں نمونوں کی موجودگی موجود ہے۔ لیکن آپ کے متغیر کے اختتام پر `.obs` شامل کرنے جتنا آسان کوئی چیز نہیں ہے ، اور اپنے ویجیٹ کو کسی اوکس کے اندر رکھ دیں ، اور بات یہ ہے کہ اس متغیر کی تمام تر تازہ کاری خود بخود اسکرین پر اپ ڈیٹ ہوجائے گی۔
+2. فلٹر آسان ہے .فلٹر ناقابل یقین ہے ، لیکن .فلٹر کے پاس اب بھی کچھ بوائلرپلیٹ موجود ہے جو زیادہ تر ڈویلپرز کے لئے ناپسندیدہ ہوسکتا ہے ، جیسے `Navigator.of(context).push (context, builder [...]`. پروگرامنگ کو آسان بنائیں۔ صرف راستے پر کال کرنے کے لئے 8 لائنوں کے کوڈ لکھنے کے بجائے ، آپ صرف یہ کرسکتے ہیں: `Get.to(() => Home())` اور آپ کر چکے ہیں ، آپ اگلے صفحے پر جائیں گے۔ متحرک ویب یو آر ایل ایک بہت تکلیف دہ چیز ہے جس کے ساتھ کرنا ہے ۔فلٹر فی الحال ، اور یہ کہ گیٹیکس کے ساتھ احمقانہ حد تک آسان ہے۔ .. فلٹر میں ریاستوں کا انتظام کرنا ، اور انحصار کا انتظام کرنا بھی ایک ایسی چیز ہے جو بہت ساری بحثیں پیدا کرتی ہے ، کیوں کہ پب میں سیکڑوں نمونوں کی موجودگی موجود ہے۔ لیکن آپ کے متغیر کے اختتام پر `.obs` شامل کرنے جتنا آسان کوئی چیز نہیں ہے ، اور اپنے ویجیٹ کو کسی اوکس کے اندر رکھ دیں ، اور بات یہ ہے کہ اس متغیر کی تمام تر تازہ کاری خود بخود اسکرین پر اپ ڈیٹ ہوجائے گی۔
 
 3. کارکردگی کی فکر کئے بغیر آسانی۔ .فلٹر کی کارکردگی پہلے ہی حیرت انگیز ہے ، لیکن تصور کریں کہ آپ اپنے بلاکس / اسٹورز / کنٹرولرز / وغیرہ کلاسوں کو تقسیم کرنے کے لئے اسٹیٹ مینیجر اور لوکیٹر کا استعمال کرتے ہیں۔ جب آپ کو ضرورت نہ ہو تو آپ کو دستی طور پر اس انحصار کے اخراج کو کال کرنا پڑے گا۔ لیکن کیا آپ نے کبھی اپنے کنٹرولر کو محض استعمال کرنے کے بارے میں سوچا ہے ، اور جب اب یہ کسی کے ذریعہ استعمال نہیں ہو رہا تھا تو ، اسے آسانی سے میموری سے حذف کردیا جائے گا؟ گیٹ ایکس یہی کرتا ہے۔ اسمارٹ مینجمنٹ کے ساتھ ، ہر وہ چیز جو استعمال نہیں ہورہی ہے اسے میموری سے حذف کردیا جاتا ہے ، اور آپ کو پروگرامنگ کے علاوہ کسی بھی چیز کی فکر کرنے کی ضرورت نہیں ہے۔ آپ کو یقین دلایا جائے گا کہ آپ کم از کم ضروری وسائل بروئے کار لا رہے ہیں ، حتی کہ اس کے لئے بھی کوئی منطق پیدا نہیں کیا۔
 
@@ -1011,7 +1111,11 @@ GetMaterialApp(
 
 اس لائبریری کو ہمیشہ اپ ڈیٹ کیا جائے گا اور نئی خصوصیات کو نافذ کیا جائے گا۔ بلا جھجک پی آر پیش کریں اور ان میں اپنا حصہ ڈالیں۔
 
+<a id="readme-section-43"></a>
+
 # سماجی خدمات
+
+<a id="readme-section-44"></a>
 
 ## کمیونٹی چینلز
 
@@ -1020,6 +1124,8 @@ GetMaterialApp(
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-45"></a>
 
 ## کس طرح شراکت کریں
 
@@ -1033,6 +1139,8 @@ GetMaterialApp(
 - نئے افعال سمیت.
 
 کسی بھی شراکت کا خیرمقدم ہے!
+
+<a id="readme-section-46"></a>
 
 ## مضامین اور ویڈیوز
 

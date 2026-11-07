@@ -1,3 +1,5 @@
+> GetX 5 RC: यह candidate अभी प्रकाशित नहीं है। जाँचा गया आधार Flutter 3.47.9 और Dart 3.13.7 है; Flutter की अंतर्निहित UI लाइब्रेरी प्रयोग होती हैं।
+
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
@@ -34,6 +36,7 @@
 **Languages:**
 
 [![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 
 [![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
 
@@ -63,99 +66,95 @@
 
 </div>
 
-- [Get के बारे में](#about-get)
+## विषय-सूची
 
-- [इंस्टॉलिंग](#installing)
+  - [इस शाखा में GetX 5 के बदलाव](#getx5-current)
+- [Get के बारे में](#readme-section-2)
+- [इंस्टॉलिंग](#readme-section-3)
+- [GetX के साथ काउंटर ऐप](#readme-section-4)
+- [तीन सिद्धांत](#readme-section-5)
+  - [State  management](#readme-section-6)
+    - [Reactive  State  Manager](#readme-section-7)
+    - [State Management के बारे में अधिक जानकारी](#readme-section-8)
+  - [Route  प्रबंधन](#readme-section-9)
+    - [Route Management के बारे में अधिक जानकारी](#readme-section-10)
 
-- [Get के साथ काउंटर ऐप](#counter-app-with-getx)
+<a id="getx5-current"></a>
 
-- [तीन सिद्धांत](#the-three-pillars)
+## इस शाखा में GetX 5 के बदलाव
 
-  - [स्टेट मैनेजमेंट](#state-management)
+यह candidate अभी प्रकाशित नहीं है। जाँचा गया आधार Flutter 3.47.9 और Dart 3.13.7 है; Flutter की अंतर्निहित UI लाइब्रेरी प्रयोग होती हैं।
 
-    - [रिएक्टिव स्टेट मैनेजर ](#reactive-state-manager)
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
 
-    - [स्टेट मैनेजमेंट के बारे में और जाने](#more-details-about-state-management)
+Binding से `List<Bind>` लौटाएँ। ऐप के लिए binds और रूट के लिए bindings प्रयोग करें। Get.create की जगह Get.spawn लें; async initialization को await करके तैयार मान Get.put से रजिस्टर करें।
 
-  - [रूट मैनेजमेंट ](#route-management)
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
 
-    - [रूट मैनेजमेंट के बारे में और जाने](#more-details-about-route-management)
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
 
-  - [डिपेंडेंसी मैनेजमेंट](#dependency-management)
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
 
-    - [डिपेंडेंसी मैनेजमेंट के बारे में और जाने](#more-details-about-dependency-management)
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
 
-- [मदद करने वाले फीचर्स](#utils)
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
 
-  - [इंटरनॅशनलिनाइज़ेशन](#internationalization)
+`GetStatus<T>.success(data)` सफल डेटा रखता है। futurize Future बनाने वाला फ़ंक्शन लेता है और void लौटाता है; परिणाम पूरा होने के क्रम में लगते हैं। खाली Rx collection अलग mutable storage बनाते हैं।
 
-    - [अनुवाद](#translations)
+नेविगेशन Navigator 2 पर है। Get.back पृष्ठ लौटाता है; dialog, sheet और snackbar के लिए अलग closing helper लें। ऐप के जीवनकाल के बाहर Get.context और Get.overlayContext null हो सकते हैं।
 
-      - [अनुवादों का उपयोग करना](#using-translations)
+नामित history के लिए restorationScopeId और स्थिर restorationId दें। JSON-संगत arguments, आकार सीमा और middleware लागू होते हैं; process समाप्त होने के बाद नए controller और Future बनते हैं।
 
-    - [क्षेत्र के अनुसार पसंद](#locales)
+Response modifier हटाना, authentication, timeout, abort और decoding errors सुधारे गए हैं। IO, browser और JS/WASM में HTTP/WebSocket और resource cleanup की जाँच है।
 
-      - [लोकेल बदलें](#change-locale)
+Flutter 3.47.9 की browser-history percent-encoding सीमा बनी है; सामान्य web tests इसे ठीक नहीं मानते। वास्तविक host और device पर refresh, back और restoration जाँचें।
 
-      - [सिस्टम लोकेलस ](#system-locale)
+GetMaterialApp या GetCupertinoApp की settings प्रयोग करें; पुराना Get.config नहीं। Custom router के लिए पूरा Navigator 2 setup चाहिए।
 
-  - [थीम बदलें](#change-theme)
+GetxService ऐप के जीवनकाल की सेवा है और onInit/onReady/onClose देता है। सामान्य deletion इसे बचाता है; जानबूझकर force या Get.reset से सफाई संभव है। यह process के बाद data storage नहीं है। init await करके Get.put करें।
 
-  - [GetConnect](#getconnect)
+GetWidget उस widget instance का controller cache करता है और const समर्थित है। Get.spawn से बने controller को widget हटने पर बंद किया जाता है। GetView ऐसा cache नहीं करता, lookup करता है।
 
-    - [डिफ़ॉल्ट कॉन्फ़िगरेशन ](#default-configuration)
+redirectDelegate में route लौटाने पर जारी, दूसरा RouteDecoder लौटाने पर redirect और null पर रद्द होता है। login route दर्ज करें और loop से बचें।
 
-    - [कस्टम कॉन्फ़िगरेशन](#custom-configuration)
+GetNavigator और GetRouterOutlet.pickPages में `onPopPage` की जगह `onDidRemovePage` है। यह हटाने के बाद की सूचना है; back रोकने के लिए `GetPage.canPop` या `PopScope` लें। custom outlet callback से `delegate.didRemovePage` को सूचना भेजें।
 
-  - [GetPage Middleware](#getpage-middleware)
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
-    - [वरीयता](#priority)
-
-    - [रीडायरेक्ट](#redirect)
-
-    - [पेज कॉल होने पर](#onpagecalled)
-
-    - [बाइंडिंग शुरू होने पर](#onbindingsstart)
-
-    - [पेज बिल्ड स्टार्ट पर](#onpagebuildstart)
-
-    - [पेज पूरा बन ने पर](#onpagebuilt)
-
-    - [पेज डिस्पोसे होने पर](#onpagedispose)
-
-  - [अन्य उन्नत एपीआई](#other-advanced-apis)
-
-    - [वैकल्पिक वैश्विक सेटिंग्स और मैन्युअल कॉन्फ़िगरेशन](#optional-global-settings-and-manual-configurations)
-
-    - [लोकल स्टेट विद्गेट्स ](#local-state-widgets)
-
-      - [वैल्यू बिल्डर](#valuebuilder)
-
-      - [ObxValue](#obxvalue)
-
-  - [उपयोगी सलाह](#useful-tips)
-
-    - [GetView](#getview)
-
-    - [GetResponsiveView](#getresponsiveview)
-
-      - [इसका उपयोग कैसे करना है](#how-to-use-it)
-
-    - [GetWidget](#getwidget)
-
-    - [GetxService](#getxservice)
-
-- [2.0 से बड़े बदलाव](#breaking-changes-from-20)
-
-- [क्यों GetX?](#why-getx)
-
-- [समुदाय](#community)
-
-  - [सामुदायिक चैनल](#community-channels)
-
-  - [कैसे योगदान करें](#how-to-contribute)
-
-  - [लेख और वीडियो](#articles-and-videos)
+<a id="readme-section-2"></a>
 
 # Get के बारे में
 
@@ -189,6 +188,8 @@
 
 **[VSCODE के लिए एक्सटेंशन](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)  and  the  [Android Studio और Intellij के लिए एक्सटेंशन](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
+<a id="readme-section-3"></a>
+
 # इंस्टॉलिंग
 
 अपनी ```pubspec.yaml``` फ़ाइल में Get को ऐड करे
@@ -198,7 +199,6 @@
 dependencies:
   ...
   get:
-
 ```
 
 Get को अन फाइल्स में Import करे जहां आप Get को इस्तेमाल करेंगे: 
@@ -206,8 +206,9 @@ Get को अन फाइल्स में Import करे जहां आ
 ```dart
 
 import 'package:get/get.dart';
-
 ```
+
+<a id="readme-section-4"></a>
 
 # GetX के साथ काउंटर ऐप
 
@@ -220,7 +221,6 @@ Flutter पर नए Project पर Default रूप से बनाए ग�
 ```dart
 
 void main() => runApp(GetMaterialApp(home: Home()));
-
 ```
 
 - **सूचना**: यह Flutter के MaterialApp को संशोधित नहीं करता है, GetMaterialApp एक संशोधित MaterialApp नहीं है, यह सिर्फ एक पूर्व-कॉन्फ़िगर विजेट है, जिसमें एक बच्चे के रूप में डिफ़ॉल्ट MaterialApp है। आप इसे मैन्युअल रूप से कॉन्फ़िगर कर सकते हैं, लेकिन यह निश्चित रूप से आवश्यक नहीं है। GetMaterialApp मार्ग बनाएगा, उन्हें इंजेक्ट करेगा, अनुवाद इंजेक्ट करेगा, मार्ग नेविगेशन के लिए आपको जो कुछ भी चाहिए उसे इंजेक्ट करेगा। यदि आप केवल राज्य प्रबंधन या निर्भरता प्रबंधन के लिए गेट का उपयोग करते हैं, तो GetMaterialApp का उपयोग करना आवश्यक नहीं है। GetMaterialApp मार्गों, स्नैकबार, अंतर्राष्ट्रीयकरण, बॉटमशीट, संवाद, और मार्गों से संबंधित उच्च-स्तरीय एपिस और संदर्भ की अनुपस्थिति के लिए आवश्यक है।
@@ -242,7 +242,6 @@ class Controller extends GetxController{
   increment() => count++;
 
 }
-
 ```
 
 - चरण 3:
@@ -271,7 +270,7 @@ class Home extends StatelessWidget {
 
       body: Center(child: ElevatedButton(
 
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
 
       floatingActionButton:
 
@@ -298,7 +297,6 @@ class Other extends StatelessWidget {
   }
 
 }
-
 ```
 
 **परिणाम**:
@@ -311,11 +309,17 @@ Get को टीमों के साथ काम करने के लि
 
 अपनी समय सीमा में सुधार करें, Performance को खोए बिना समय पर सब कुछ वितरित करें। Get हर किसी के लिए नहीं है, लेकिन अगर आपने उस वाक्यांश के साथ पहचान की है, तो Get आपके लिए है!
 
+<a id="readme-section-5"></a>
+
 # तीन सिद्धांत
+
+<a id="readme-section-6"></a>
 
 ## State  management
 
 Get के दो अलग-अलग State Manager हैं: Simple State Builder (हम इसे GetBuilder कहते हैं) और Reactive State Manager (GetX/Obx)
+
+<a id="readme-section-7"></a>
 
 ### Reactive  State  Manager
 
@@ -339,14 +343,12 @@ Reactive Programming कई लोगों को अलग-थलग कर �
 ```dart
 
 var name = 'Adison Masih';
-
 ```
 
 इसे Observable बनाने के लिए, आपको बस इसके अंत में ".obs" जोड़ना होगा:
 ```dart
 
 var name = 'Adison Masih'.obs;
-
 ```
 
 अगर आप आप उस Value को दिखाना चाहते हैं और जब भी Value बदलती हैं तो स्क्रीन को करना चाहते हैं, तो यह करें:
@@ -354,16 +356,19 @@ var name = 'Adison Masih'.obs;
 ```dart
 
 Obx(() => Text("${controller.name}"));
-
 ```
 
 बस इतना ही। यह _इत्ना_ आसान है।
+
+<a id="readme-section-8"></a>
 
 ### State Management के बारे में अधिक जानकारी
 
 राज्य प्रबंधन की अधिक गहन व्याख्या [यहां](./documentation/en_US/state_management.md) देखें । वहां आपको अधिक उदाहरण और **Simple State Manager** और **Reactive State Manager** के बीच का अंतर दिखाई देगा
 
 आपको GetX की शक्ति का अच्छा अंदाजा हो जाएगा।
+
+<a id="readme-section-9"></a>
 
 ## Route  प्रबंधन
 
@@ -378,14 +383,12 @@ GetMaterialApp( // यह पहले MaterialApp था
   home: MyHome(),
 
 )
-
 ```
 
 एक नई स्क्रीन पर Navigate करें:
 ```dart
 
-Get.to(NextScreen());
-
+Get.to(() => NextScreen());
 ```
 
 नाम के साथ नई स्क्रीन पर Navigate करें। **Named Routes** पर अधिक विवरण [यहां](./documentation/en_US/route_management.md#navigation-with-named-routes) देखें।
@@ -393,33 +396,35 @@ Get.to(NextScreen());
 ```dart
 
 Get.toNamed('/details');
-
 ```
 
 Snackbar, Dialog तथा Bottomsheets या ऐसी किसी भी चीज़ को बंद करने के लिए आप आम तौर पर ```Navigator.pop(context);``` के साथ बंद करते हैं;
 
 ```dart
 
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
-
 ```
 अगली Screen पर जाने के लिए और पिछली Screen पर वापस जाने का कोई विकल्प नहीं है (SplashScreens, Login Screens आदि में उपयोग के लिए)
 
 ```dart
 
-Get.off(NextScreen());
-
+Get.off(() => NextScreen());
 ```
 
 अगली Screen पर जाने और पिछले सभी Routes को रद्द करने के लिए (Shopping Carts, Polls और Tests में उपयोगी)
 
 ```dart
 
-Get.offAll(NextScreen());
-
+Get.offAll(() => NextScreen());
 ```
 
 ध्यान दिया कि आपको इनमें से कोई भी काम करने के लिए **"context"** का उपयोग करने की आवश्यकता नहीं है? **"Get Route Management"** का उपयोग करने का यह सबसे बड़ा लाभ है। इसके साथ, आप इन सभी **"Methods"** को अपने **"Controller Class"** से बिना किसी चिंता के Execute कर सकते हैं।
+
+<a id="readme-section-10"></a>
 
 ### Route Management के बारे में अधिक जानकारी
 

@@ -24,10 +24,12 @@ class SnackbarController {
   late final Alignment? _endAlignment;
 
   bool _wasDismissedBySwipe = false;
+  bool _isInitialized = false;
 
   bool _onTappedDismiss = false;
 
   Timer? _timer;
+  Timer? _swipeTimer;
 
   /// The animation that drives the route's transition and the previous route's
   /// forward transition.
@@ -50,7 +52,8 @@ class SnackbarController {
 
   /// Close the snackbar with animation
   Future<void> close({bool withAnimations = true}) async {
-    if (!withAnimations) {
+    if (_transitionCompleter.isCompleted) return;
+    if (!withAnimations || !_isInitialized) {
       _removeOverlay();
       return;
     }
@@ -66,6 +69,7 @@ class SnackbarController {
   }
 
   void _cancelTimer() {
+    _swipeTimer?.cancel();
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
@@ -94,8 +98,7 @@ class SnackbarController {
   void _configureOverlay() {
     final overlayContext = Get.overlayContext;
     _isTesting = overlayContext == null;
-    _overlayState =
-        _isTesting ? OverlayState() : Overlay.of(Get.overlayContext!);
+    _overlayState = _isTesting ? OverlayState() : Get.key.currentState?.overlay;
     _overlayEntries.clear();
     _overlayEntries.addAll(_createOverlayEntries(_getBodyWidget()));
     if (!_isTesting) {
@@ -109,6 +112,7 @@ class SnackbarController {
     assert(!_transitionCompleter.isCompleted,
         'Cannot configure a snackbar after disposing it.');
     _controller = _createAnimationController();
+    _isInitialized = true;
     _configureAlignment(snackbar.snackPosition);
     _snackbarStatus = snackbar.snackbarStatus;
     _filterBlurAnimation = _createBlurFilterAnimation();
@@ -157,7 +161,7 @@ class SnackbarController {
     return AnimationController(
       duration: snackbar.animationDuration,
       debugLabel: '$runtimeType',
-      vsync: _overlayState!,
+      vsync: GetRootState.controller,
     );
   }
 
@@ -325,7 +329,9 @@ class SnackbarController {
     _cancelTimer();
 
     if (_wasDismissedBySwipe) {
-      Timer(const Duration(milliseconds: 200), _controller.reset);
+      _swipeTimer = Timer(const Duration(milliseconds: 200), () {
+        if (!_transitionCompleter.isCompleted) _controller.reset();
+      });
       _wasDismissedBySwipe = false;
     } else {
       _controller.reverse();
@@ -333,20 +339,21 @@ class SnackbarController {
   }
 
   void _removeOverlay() {
+    if (_transitionCompleter.isCompleted) return;
+    _cancelTimer();
     if (!_isTesting) {
       for (var element in _overlayEntries) {
         element.remove();
       }
     }
 
-    assert(!_transitionCompleter.isCompleted,
-        'Cannot remove overlay from a disposed snackbar');
-    _controller.dispose();
+    if (_isInitialized) _controller.dispose();
     _overlayEntries.clear();
     _transitionCompleter.complete();
   }
 
   Future<void> _show() {
+    if (_transitionCompleter.isCompleted) return future;
     _configureOverlay();
     return future;
   }
@@ -373,30 +380,29 @@ class SnackBarQueue {
 
   Future<void> addJob(SnackbarController job) async {
     _snackbarList.add(job);
-    final data = await _queue.add(job._show);
-    _snackbarList.remove(job);
-    return data;
+    try {
+      await Future.any<void>([_queue.add<void>(job._show), job.future]);
+    } finally {
+      _snackbarList.remove(job);
+    }
   }
 
   Future<void> cancelAllJobs() async {
-    await _currentSnackbar?.close();
+    final jobs = _snackbarList.toList();
     _queue.cancelAllJobs();
-    _snackbarList.clear();
+    for (final job in jobs.skip(1)) {
+      job._removeOverlay();
+    }
+    if (jobs.isNotEmpty) await jobs.first.close();
   }
 
   void disposeControllers() {
-    if (_currentSnackbar != null) {
-      _currentSnackbar?._removeOverlay();
-      _currentSnackbar?._controller.dispose();
-      _snackbarList.remove(_currentSnackbar);
-    }
-
+    final jobs = _snackbarList.toList();
     _queue.cancelAllJobs();
-
-    for (var element in _snackbarList) {
-      element._controller.dispose();
-    }
     _snackbarList.clear();
+    for (final job in jobs) {
+      job._removeOverlay();
+    }
   }
 
   Future<void> closeCurrentJob() async {

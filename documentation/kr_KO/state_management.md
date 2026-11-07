@@ -1,3 +1,5 @@
+> GetX 5 RC: 현재 API는 [이 브랜치의 마이그레이션 가이드](../en_US/migration_guide_5.md)를 참고하세요. **GetX 4 legacy** 표시는 이전 API 예제입니다.
+
 - [상태 관리자](#상태-관리자)
   - [반응형 상태 관리자](#반응형-상태-관리자)
     - [장점](#장점)
@@ -255,9 +257,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -312,9 +314,9 @@ class RxUser {
 * 또는 클래스 전체를 observable로 만들 수 있습니다.
 ```dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // 인스턴스화 할때
@@ -345,7 +347,7 @@ ListView.builder (
 ```dart
 // model 파일에서
 // 각 field들을 observable로 만드는 대신, 클래스 전체를 observable로 만들 것입니다.
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -356,10 +358,7 @@ class User() {
 final user = User().obs;
 // when you need to update the user variable:
 // user의 변수를 업데이트해야할 때
-user.update( (user) { // 이 parameter는 업데이트 하길 원하는 인스턴스 자체입니다.
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // user 인스턴스를 업데이트하는 또다른 방법
 user(User(name: 'João', age: 35));
 

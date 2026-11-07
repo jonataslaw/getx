@@ -1,3 +1,11 @@
+> GetX 5 RC: 此候选版本尚未发布。已验证的基线是 Flutter 3.47.9 和 Dart 3.13.7，使用 Flutter 内置 UI 库。
+
+> GetX 5 RC：当前 API 请参阅[本分支迁移指南](documentation/en_US/migration_guide_5.md)。标为 **GetX 4 legacy** 的示例说明旧版 API。
+
+> **RC checkout:** `5.0.0-release-candidate-9.4.0` is an unreleased candidate, validated with Flutter **3.47.9** / Dart **3.13.7** and Flutter's bundled UI libraries. The pub.dev badge describes published packages, not this checkout. Read the [release scope](documentation/en_US/release_scope_5.md) and [current API guide](documentation/en_US/migration_guide_5.md) before using historical examples. [فارسی](README-fa.md).
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西亚](README.id-ID.md), [乌尔都语](README.ur-PK.md), [巴西葡萄牙语](README.pt-br.md), [俄语](README.ru.md), [西班牙语](README-es.md), [波兰语](README.pl.md), [韩国语](README.ko-kr.md), [法语](README-fr.md), [French](README-fr.md)._
@@ -18,51 +26,125 @@ _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西�
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [关于Get](#关于get)
-- [安装](#安装)
-- [GetX的计数器示例](#getx的计数器示例)
-- [三大功能](#三大功能)
-  - [状态管理](#状态管理)
-    - [响应式状态管理器](#响应式状态管理器)
-    - [关于状态管理的更多细节](#关于状态管理的更多细节)
-  - [路由管理](#路由管理)
-    - [关于路由管理的更多细节](#关于路由管理的更多细节)
-  - [依赖管理](#依赖管理)
-    - [关于依赖管理的更多细节](#关于依赖管理的更多细节)
-- [实用工具](#实用工具)
-  - [国际化](#国际化)
-    - [翻译](#翻译)
-      - [使用翻译](#使用翻译)
-    - [语言](#语言)
-      - [改变语言](#改变语言)
-      - [系统语言](#系统语言)
-  - [改变主题](#改变主题)
-  - [GetConnect](#getconnect)
-    - [默认配置](#默认配置)
-    - [自定义配置](#自定义配置)
-  - [GetPage 中间件](#getpage-中间件)
-    - [优先级](#优先级)
-    - [Redirect](#redirect)
-    - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [其他高级API](#其他高级api)
-    - [可选的全局设置和手动配置](#可选的全局设置和手动配置)
-    - [局部状态组件](#局部状态组件)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [有用的提示](#有用的提示)
-      - [GetView](#getview)
-      - [GetWidget](#getwidget)
-      - [GetxService](#getxservice)
-- [从2.0开始的兼容性变化](#从20开始的兼容性变化)
-- [为什么选择Getx？](#为什么选择getx)
-- [社区](#社区)
-  - [社区渠道](#社区渠道)
-  - [如何做贡献](#如何做贡献)
-  - [文章和视频](#文章和视频)
+## 目录
+
+  - [此分支的 GetX 5 更新](#getx5-current)
+- [关于Get](#readme-section-2)
+- [安装](#readme-section-3)
+- [GetX的计数器示例](#readme-section-4)
+- [三大功能](#readme-section-5)
+  - [状态管理](#readme-section-6)
+    - [响应式状态管理器](#readme-section-7)
+    - [关于状态管理的更多细节](#readme-section-8)
+  - [路由管理](#readme-section-9)
+    - [关于路由管理的更多细节](#readme-section-10)
+  - [依赖管理](#readme-section-11)
+    - [关于依赖管理的更多细节](#readme-section-12)
+- [实用工具](#readme-section-13)
+  - [国际化](#readme-section-14)
+    - [翻译](#readme-section-15)
+    - [使用翻译](#readme-section-16)
+    - [语言](#readme-section-17)
+    - [改变语言](#readme-section-18)
+    - [系统语言](#readme-section-19)
+  - [改变主题](#readme-section-20)
+  - [GetConnect](#readme-section-21)
+    - [默认配置](#readme-section-22)
+    - [自定义配置](#readme-section-23)
+  - [GetPage 中间件](#readme-section-24)
+    - [优先级](#readme-section-25)
+    - [Redirect](#readme-section-26)
+    - [onPageCalled](#readme-section-27)
+    - [OnBindingsStart](#readme-section-28)
+    - [OnPageBuildStart](#readme-section-29)
+    - [OnPageBuilt](#readme-section-30)
+    - [OnPageDispose](#readme-section-31)
+  - [其他高级API](#readme-section-32)
+    - [可选的全局设置和手动配置](#readme-section-33)
+    - [局部状态组件](#readme-section-34)
+    - [ValueBuilder](#readme-section-35)
+    - [ObxValue](#readme-section-36)
+  - [有用的提示](#readme-section-37)
+    - [GetView](#readme-section-38)
+    - [GetWidget](#readme-section-39)
+    - [GetxService](#readme-section-40)
+- [从2.0开始的兼容性变化](#readme-section-41)
+- [为什么选择Getx？](#readme-section-42)
+- [社区](#readme-section-43)
+  - [社区渠道](#readme-section-44)
+  - [如何做贡献](#readme-section-45)
+  - [文章和视频](#readme-section-46)
+
+<a id="getx5-current"></a>
+
+## 此分支的 GetX 5 更新
+
+此候选版本尚未发布。已验证的基线是 Flutter 3.47.9 和 Dart 3.13.7，使用 Flutter 内置 UI 库。
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding 返回 `List<Bind>`。应用使用 binds，路由使用 bindings。Get.create 改为 Get.spawn；先 await 异步初始化，再通过 Get.put 注册已完成的值。
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` 携带成功数据。futurize 接受创建 Future 的函数并返回 void，结果按完成顺序应用。空 Rx 集合各自分配独立的可变存储。
+
+导航基于 Navigator 2。Get.back 返回页面；对话框、sheet 和 snackbar 使用专用关闭 helper。Get.context 和 Get.overlayContext 在应用生命周期之外可能为 null。
+
+设置 restorationScopeId 和稳定的 restorationId 可恢复命名路由历史。参数须兼容 JSON，并受大小限制和 middleware 检查；进程恢复后创建新的 controller 和 Future。
+
+修复了 response modifier 删除以及认证、超时、中止和解码错误。HTTP/WebSocket 在 IO、浏览器和 JS/WASM 中测试，并清理连接与订阅。
+
+Flutter 3.47.9 浏览器 history 的 percent-encoding 限制仍有记录；普通 Web 测试通过不表示已修复。请在实际主机和设备验证刷新、返回和恢复。
+
+在 GetMaterialApp 或 GetCupertinoApp 上配置选项，不再使用旧 Get.config。自定义 router 需要完整且一致的 Navigator 2 配置。
+
+GetNavigator 和 GetRouterOutlet.pickPages 将 `onPopPage` 改为删除后的通知 `onDidRemovePage`。返回拦截请使用 `GetPage.canPop` 或 `PopScope`；自定义 outlet callback 应转发给 `delegate.didRemovePage`。
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # 关于Get
 
@@ -89,6 +171,8 @@ _语言: 中文, [英文](README.md), [越南文](README-vi.md), [印度尼西�
   - [Android Studio/Intellij扩展](https://plugins.jetbrains.com/plugin/14975-getx-snippets)
   - [VSCode扩展](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)
 
+<a id="readme-section-3"></a>
+
 # 安装
 
 将 Get 添加到你的 pubspec.yaml 文件中。
@@ -103,6 +187,8 @@ dependencies:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # GetX的计数器示例
 
@@ -153,7 +239,7 @@ class Home extends StatelessWidget {
 
       // 用一个简单的Get.to()即可代替Navigator.push那8行，无需上下文！
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -181,17 +267,23 @@ Get的设计是为了与团队合作，但它也可以让个人开发者的工�
 
 加快开发速率，在不损失性能的情况下按时交付一切。Get并不适合每一个人，但如果你认同这句话，Get就是为你准备的!
 
+<a id="readme-section-5"></a>
+
 # 三大功能
+
+<a id="readme-section-6"></a>
 
 ## 状态管理
 
-目前，Flutter有几种状态管理器。但是，它们中的大多数都涉及到使用ChangeNotifier来更新widget，这对于中大型应用的性能来说是一个很糟糕的方法。你可以在Flutter的官方文档中查看到，[ChangeNotifier应该使用1个或最多2个监听器](https://api.flutter.dev/flutter/foundation/ChangeNotifier-class.html)，这使得它们实际上无法用于任何中等或大型应用。
+**性能：** GetX 提供响应式和 stream API，无需为每个值手动创建 StreamController/StreamBuilder。请按更新方式选择 Obx 或 GetBuilder，并在应用中测量重建和资源使用。
 
 Get 并不是比任何其他状态管理器更好或更差，而是说你应该分析这些要点以及下面的要点来选择只用Get，还是与其他状态管理器结合使用。
 
 Get不是其他状态管理器的敌人，因为Get是一个微框架，而不仅仅是一个状态管理器，既可以单独使用，也可以与其他状态管理器结合使用。
 
 Get有两个不同的状态管理器：简单的状态管理器（GetBuilder）和响应式状态管理器（GetX）。
+
+<a id="readme-section-7"></a>
 
 ### 响应式状态管理器
 
@@ -226,11 +318,15 @@ Obx(() => Text("${controller.name}"));
 
 这就是全部，就这么简单。
 
+<a id="readme-section-8"></a>
+
 ### 关于状态管理的更多细节
 
 **关于状态管理更深入的解释请查看[这里](./documentation/zh_CN/state_management.md)。在那里你将看到更多的例子，以及简单的状态管理器和响应式状态管理器之间的区别**。
 
 你会对GetX的能力有一个很好的了解。
+
+<a id="readme-section-9"></a>
 
 ## 路由管理
 
@@ -248,10 +344,10 @@ GetMaterialApp( // Before: MaterialApp(
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
-用别名导航到新页面。查看更多关于命名路由的详细信息[这里](./documentation/zh_CN/route_management.md#navigation-with-named-routes)
+用别名导航到新页面。查看更多关于命名路由的详细信息[这里](./documentation/zh_CN/route_management.md)
 
 ```dart
 
@@ -261,26 +357,34 @@ Get.toNamed('/details');
 要关闭snackbars, dialogs, bottomsheets或任何你通常会用Navigator.pop(context)关闭的东西。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 进入下一个页面，但没有返回上一个页面的选项（用于闪屏页，登录页面等）。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 进入下一个页面并取消之前的所有路由（在购物车、投票和测试中很有用）。
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 注意到你不需要使用context来做这些事情吗？这就是使用Get路由管理的最大优势之一。有了它，你可以在你的控制器类中执行所有这些方法，而不用担心context在哪里。
 
+<a id="readme-section-10"></a>
+
 ### 关于路由管理的更多细节
 
 **关于别名路由，和对路由的低级控制，请看[这里](./documentation/zh_CN/route_management.md)**。
+
+<a id="readme-section-11"></a>
 
 ## 依赖管理
 
@@ -314,13 +418,21 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### 关于依赖管理的更多细节
 
 **关于依赖管理的更深入解释请看[此处](./documentation/zh_CN/dependency_management.md)**。
 
+<a id="readme-section-13"></a>
+
 # 实用工具
 
+<a id="readme-section-14"></a>
+
 ## 国际化
+
+<a id="readme-section-15"></a>
 
 ### 翻译
 
@@ -343,6 +455,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### 使用翻译
 
 只要将`.tr`追加到指定的键上，就会使用`Get.locale`和`Get.fallbackLocale`的当前值进行翻译。
@@ -350,6 +464,8 @@ class Messages extends Translations {
 ```dart
 Text('title'.tr);
 ```
+
+<a id="readme-section-17"></a>
 
 ### 语言
 
@@ -363,6 +479,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-18"></a>
+
 #### 改变语言
 
 调用`Get.updateLocale(locale)`来更新语言环境。然后翻译会自动使用新的locale。
@@ -371,6 +489,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-19"></a>
 
 #### 系统语言
 
@@ -383,6 +503,8 @@ return GetMaterialApp(
     locale: ui.window.locale,
 );
 ```
+
+<a id="readme-section-20"></a>
 
 ## 改变主题
 
@@ -405,34 +527,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 当`.darkmode`被激活时，它将切换到light主题，当light主题被激活时，它将切换到dark主题。
 
+<a id="readme-section-21"></a>
+
 ## GetConnect
 
 GetConnect可以便捷的通过http或websockets进行前后台通信。
+
+<a id="readme-section-22"></a>
 
 ### 默认配置
 
 你能轻松的通过extend GetConnect就能使用GET/POST/PUT/DELETE/SOCKET方法与你的Rest API或websockets通信。
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request with File
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-23"></a>
 
 ### 自定义配置
 
@@ -440,47 +577,34 @@ GetConnect具有多种自定义配置。你可以配置base Url，配置响应�
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
-
-    // It's will attach 'apikey' property on header from all requests
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // Set the header
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    //Autenticator will be called 3 times if HttpStatus is
-    //HttpStatus.unauthorized
-    httpClient.maxAuthRetries = 3;
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-24"></a>
 
 ## GetPage 中间件
 
@@ -488,31 +612,50 @@ GetPage现在有个新的参数可以把列表中的Get中间件按指定顺序�
 
 **注意**: 当GetPage有中间件时，所有的子page会自动有相同的中间件。
 
+<a id="readme-section-25"></a>
+
 ### 优先级
 
 设置中间件的优先级定义Get中间件的执行顺序。
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 这些中间件会按这个顺序执行 **-8 => 2 => 4 => 5**
 
+<a id="readme-section-26"></a>
+
 ### Redirect
 
-当被调用路由的页面被搜索时，这个函数将被调用。它将RouteSettings作为重定向的结果。或者给它null，就没有重定向了。
+redirectDelegate 返回 route 表示继续，另一个 RouteDecoder 表示重定向，null 表示取消。请注册 login 路由并避免循环。
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-27"></a>
 
 ### onPageCalled
 
@@ -520,11 +663,13 @@ RouteSettings redirect(String route) {
 您可以使用它来更改页面的某些内容或给它一个新页面。
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-28"></a>
 
 ### OnBindingsStart
 
@@ -532,14 +677,14 @@ GetPage onPageCalled(GetPage page) {
 在这里，您可以更改此页面的绑定。
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### OnPageBuildStart
 
@@ -547,19 +692,25 @@ List<Bindings> onBindingsStart(List<Bindings> bindings) {
 在这里，您可以在创建绑定之后和创建页面widget之前执行一些操作。
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### OnPageBuilt
 
 这个函数将在GetPage.page调用后被调用，并给出函数的结果，并获取将要显示的widget。
 
+<a id="readme-section-31"></a>
+
 ### OnPageDispose
 
 这个函数将在处理完页面的所有相关对象(Controllers, views, ...)之后被调用。
+
+<a id="readme-section-32"></a>
 
 ## 其他高级API
 
@@ -586,16 +737,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // 删除一个路由。
-Get.removeRoute()
+Get.removeRoute('/details')
 
 //反复返回，直到表达式返回真。
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // 转到下一条路由，并删除所有之前的路由，直到表达式返回true。
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // 转到下一个命名的路由，并删除所有之前的路由，直到表达式返回true。
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //检查应用程序在哪个平台上运行。
 GetPlatform.isAndroid
@@ -623,7 +774,7 @@ Get.width
 Get.context
 
 // 在你的代码中的任何地方，在前台提供 snackbar/dialog/bottomsheet 的上下文。
-Get.contextOverlay
+Get.overlayContext
 
 // 注意：以下方法是对上下文的扩展。
 // 因为在你的UI的任何地方都可以访问上下文，你可以在UI代码的任何地方使用它。
@@ -640,49 +791,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// 类似于 MediaQuery.of(context).size。
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// 类似于 MediaQuery.of(context).padding。
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// 类似于 MediaQuery.of(context).viewPadding。
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// 类似于 MediaQuery.of(context).viewInsets。
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// 类似于 MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 ///检查设备是否处于横向模式
-context.isLandscape()
+context.isLandscape
 
 ///检查设备是否处于纵向模式。
-context.isPortrait()
+context.isPortrait
 
 ///类似于MediaQuery.of(context).devicePixelRatio。
-context.devicePixelRatio()
+context.devicePixelRatio
 
 ///类似于MediaQuery.of(context).textScaleFactor。
-context.textScaleFactor()
+context.textScaleFactor
 
 ///查询设备最短边。
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 ///如果宽度大于800，则为真。
-context.showNavbar()
+context.showNavbar
 
 ///如果最短边小于600p，则为真。
-context.isPhone()
+context.isPhone
 
 ///如果最短边大于600p，则为真。
-context.isSmallTablet()
+context.isSmallTablet
 
 ///如果最短边大于720p，则为真。
-context.isLargeTablet()
+context.isLargeTablet
 
 ///如果当前设备是平板电脑，则为真
-context.isTablet()
+context.isTablet
 
 ///根据页面大小返回一个值<T>。
 ///可以给值为：
@@ -692,6 +843,8 @@ context.isTablet()
 ///desktop：如果宽度大于1200
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-33"></a>
 
 ### 可选的全局设置和手动配置
 
@@ -715,24 +868,26 @@ MaterialApp(
 );
 ```
 
-你可以为 "Get "创建_全局设置。只需在推送任何路由之前将`Get.config`添加到你的代码中。
-或者直接在你的`GetMaterialApp`中做。
+在 GetMaterialApp 或 GetCupertinoApp 上配置选项，不再使用旧 Get.config。自定义 router 需要完整且一致的 Navigator 2 配置。
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 你可以选择重定向所有来自`Get`的日志信息。
@@ -749,8 +904,9 @@ void localLogWriter(String text, {bool isError = false}) {
   // 请注意，即使enableLog: false，日志信息也会在这个回调中被推送。
   // 如果你想的话，可以通过GetConfig.isLogEnable来检查这个标志。
 }
-
 ```
+
+<a id="readme-section-34"></a>
 
 ### 局部状态组件
 
@@ -758,6 +914,8 @@ void localLogWriter(String text, {bool isError = false}) {
 我们有Reactive和Simple两种风格。
 例如，你可以用它们来切换`TextField`中的obscureText，也许可以创建一个自定义的可扩展面板（Expandable Panel），或者在"Scaffold "的主体中改变内容的同时修改`BottomNavigationBar`中的当前索引。
 
+
+<a id="readme-section-35"></a>
 
 #### ValueBuilder
 
@@ -776,6 +934,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-36"></a>
+
 #### ObxValue
 
 类似于[`ValueBuilder`](#valuebuilder)，但这是Reactive版本，你需要传递一个Rx实例（还记得神奇的.obs吗？自动更新......是不是很厉害？）
@@ -788,6 +948,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-37"></a>
 
 ## 有用的提示
 
@@ -808,90 +970,35 @@ print( 'Message "$message" has Type ${message.runtimeType}');
 最常用的方法是".value", 但是你也可以用...
 
 ```dart
-final name = 'GetX'.obs;
-//只有在值与当前值不同的情况下，才会 "更新 "流。
-name.value = 'Hey';
-
-// 所有Rx属性都是 "可调用 "的，并返回新的值。
-//但这种方法不接受 "null"，UI将不会重建。
-name('Hello');
-
-// 就像一个getter，打印'Hello'。
-name() ;
-
-///数字。
-
-final count = 0.obs;
-
-// 您可以使用num基元的所有不可变操作!
-count + 1;
-
-// 注意！只有当 "count "不是final时，这才有效，除了var
-count += 1;
-
-// 你也可以与数值进行比较。
-count > 2;
-
-/// booleans:
-
-final flag = false.obs;
-
-// 在真/假之间切换数值
-flag.toggle();
-
-
-/// 所有类型。
-
-// 将 "value "设为空。
-flag.nil();
-
-// 所有的toString()、toJson()操作都会向下传递到`value`。
-print( count ); // 在内部调用 "toString() "来GetRxInt
-
-final abc = [0,1,2].obs;
-// 将值转换为json数组，打印RxList。
-// 所有Rx类型都支持Json!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList 和 RxSet 是特殊的 Rx 类型，扩展了它们的原生类型。
-// 但你可以像使用普通列表一样使用列表，尽管它是响应式的。
-abc.add(12); // 将12添加到列表中，并更新流。
-abc[3]; // 和Lists一样，读取索引3。
-
-
-// Rx和值是平等的，但hashCode总是从值中提取。
-final number = 12.obs;
-print( number == 12 ); // prints > true
-
-///自定义Rx模型。
-
-// toJson(), toString()都是递延给子代的，所以你可以在它们上实现覆盖，并直接打印()可观察的内容。
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user`是 "响应式 "的，但里面的属性却不是!
-// 所以，如果我们改变其中的一些变量：
-user.value.name = 'Roi';
-// 小部件不会重建！ 
-// 对于自定义类，我们需要手动 "通知 "改变。
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// 或者我们可以使用`update()`方法!
-user.update((value){
-  value.name='Roi';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+
+<a id="readme-section-38"></a>
 
 #### GetView
 
@@ -916,68 +1023,57 @@ print( user );
  }
 ```
 
+<a id="readme-section-39"></a>
+
 #### GetWidget
 
-大多数人都不知道这个Widget，或者完全搞不清它的用法。
-这个用例非常少见且特殊：它 "缓存 "了一个Controller，由于_cache_，不能成为一个 "const Stateless"（因为_cache_，所以不能成为一个`const Stateless`）。
+GetWidget 缓存该组件实例的 controller，支持 const。使用 Get.spawn 时，所有者组件移除会关闭创建的 controller。GetView 执行查找，不使用这种缓存。
 
-> 那么，什么时候你需要 "缓存 "一个Controller？
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-如果你使用了**GetX**的另一个 "不常见 "的特性 `Get.create()`
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.create(()=>Controller())` 会在每次调用时生成一个新的`Controller`
-`Get.find<Controller>()`
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-你可以用它来保存Todo项目的列表，如果小组件被 "重建"，它将保持相同的控制器实例。
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-40"></a>
 
 #### GetxService
 
-这个类就像一个 "GetxController"，它共享相同的生命周期（"onInit()"、"onReady()"、"onClose()"）。
-但里面没有 "逻辑"。它只是通知**GetX**的依赖注入系统，这个子类**不能**从内存中删除。
-
-所以这对保持你的 "服务 "总是可以被`Get.find()`获取到并保持运行是超级有用的。比如
-`ApiService`，`StorageService`，`CacheService`。
+GetxService 面向应用生命周期服务，提供 onInit/onReady/onClose。普通删除会保护它；明确的 force 或 Get.reset 可清理它。它不等于进程死亡后的持久存储。先 await init，再 Get.put。
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// 等待服务初始化.
-  runApp(SomeApp());
-}
-
-/// 在你运行Flutter应用之前，让你的服务初始化是一个明智之举。
-////因为你可以控制执行流程（也许你需要加载一些主题配置，apiKey，由用户自定义的语言等，所以在运行ApiService之前加载SettingService。
-///所以GetMaterialApp()不需要重建，可以直接取值。
-void initServices() async {
-  print('starting services ...');
-  ///这里是你放get_storage、hive、shared_pref初始化的地方。
-  ///或者moor连接，或者其他什么异步的东西。
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-实际删除一个`GetxService`的唯一方法是使用`Get.reset()`，它就像"热重启 "你的应用程序。
-
-所以如果你需要在你的应用程序的生命周期内对一个类实例进行绝对的持久化，请使用`GetxService`。
+<a id="readme-section-41"></a>
 
 # 从2.0开始的兼容性变化
 
@@ -997,7 +1093,7 @@ class SettingsService extends GetxService {
 2- 别名路由
 之前：
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -1032,11 +1128,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-42"></a>
+
 # 为什么选择Getx？
 
 1- Flutter更新后，很多时候，你的很多包都会坏掉。有时会发生编译错误，经常出现的错误，至今仍没有答案，开发者需要知道错误的来源，跟踪错误，才会尝试在相应的仓库中开一个问题，并看到其问题的解决。Get集中了开发的主要资源（状态、依赖和路由管理），让你可以在pubspec中添加一个包，然后开始工作。Flutter更新后，你唯一需要做的就是更新Get依赖，然后开始工作。Get还可以解决兼容性问题。有多少次，一个包的版本与另一个包的版本不兼容，因为一个包在一个版本中使用了依赖，而另一个包在另一个版本中使用了依赖？使用Get也不用担心这个问题，因为所有的东西都在同一个包里，是完全兼容的。
 
-2- Flutter很简单，Flutter很不可思议，但是Flutter仍然有一些代码，对于大多数开发者来说可能是不需要的，比如`Navigator.of(context).push (context, builder [...]`，你写了8行代码仅仅只为了调用一个路由。而使用Get只需`Get.to(Home())`就完成了，你将进入下一个页面。动态网页URL是目前Flutter中非常痛苦的一件事，而用GetX则非常简单。在Flutter中管理状态，管理依赖关系也产生了很多讨论，因为pub中的模式有上百种。但是没有什么比在你的变量末尾加一个".obs "更简单的了，把你的widget放在一个Obx里面，就这样，所有对这个变量的更新都会在页面上自动更新。
+2- Flutter很简单，Flutter很不可思议，但是Flutter仍然有一些代码，对于大多数开发者来说可能是不需要的，比如`Navigator.of(context).push (context, builder [...]`，你写了8行代码仅仅只为了调用一个路由。而使用Get只需`Get.to(() => Home())`就完成了，你将进入下一个页面。动态网页URL是目前Flutter中非常痛苦的一件事，而用GetX则非常简单。在Flutter中管理状态，管理依赖关系也产生了很多讨论，因为pub中的模式有上百种。但是没有什么比在你的变量末尾加一个".obs "更简单的了，把你的widget放在一个Obx里面，就这样，所有对这个变量的更新都会在页面上自动更新。
 
 3-轻松，不用担心性能。Flutter的性能已经很惊人了，但是想象一下，你使用一个状态管理器，和一个定位器来分布你的blocs/stores/controllers/等等类。当你不需要那个依赖的时候，你必须手动调用排除它。但是，你有没有想过简单地使用你的控制器，当它不再被任何人使用时，它会简单地从内存中删除？这就是GetX所做的。有了SmartManagement，所有不被使用的东西都会从内存中删除，除了编程，您不应该担心任何事情。GetX将保证您消耗的是最低限度的必要资源，甚至没有为此创建一个逻辑。
 
@@ -1045,7 +1143,11 @@ GetMaterialApp(
 
 这个库会一直更新和实现新的功能。欢迎提供PR，并为其做出贡献。
 
+<a id="readme-section-43"></a>
+
 # 社区
+
+<a id="readme-section-44"></a>
 
 ## 社区渠道
 
@@ -1054,6 +1156,8 @@ GetX拥有一个非常活跃且乐于助人的社区。如果你有问题，或�
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-45"></a>
 
 ## 如何做贡献
 
@@ -1066,6 +1170,8 @@ _想为项目做贡献吗？我们将自豪地强调你是我们的合作者之�
 - 包括新功能。
 
 欢迎任何贡献
+
+<a id="readme-section-46"></a>
 
 ## 文章和视频
 

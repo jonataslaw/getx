@@ -29,6 +29,10 @@ mixin StateMixin<T> on ListNotifier {
   T? _value;
   GetStatus<T>? _status;
 
+  bool get _isStateClosed =>
+      isDisposed ||
+      (this is GetLifeCycleMixin && (this as GetLifeCycleMixin).isClosed);
+
   void _fillInitialStatus() {
     _status = (_value == null || _value!._isEmpty())
         ? GetStatus<T>.loading()
@@ -87,23 +91,40 @@ mixin StateMixin<T> on ListNotifier {
     change(GetStatus<T>.empty());
   }
 
+  /// Starts [body] and updates the state when its future completes.
+  ///
+  /// Concurrent calls run independently and apply results in completion order.
+  /// An older call that finishes later can replace a newer call's result or
+  /// status. Loading describes a state transition, not the number of pending
+  /// calls; a completion can set success or error while another call is pending.
+  ///
+  /// [initialData] initializes data only when no value has been set. With
+  /// [useEmpty], an empty result selects [EmptyStatus] without replacing the
+  /// current data. Otherwise the result becomes successful data.
+  ///
+  /// Failures select error status without replacing the current data.
+  /// Exceptions are retained; other errors are wrapped in an [Exception] using
+  /// [errorMessage] when supplied, or the error's string representation.
+  ///
+  /// Calls made after disposal or controller deletion do not start [body].
+  /// Closing the state ignores later results but does not cancel work already
+  /// started. This method returns `void`; it is not a completion future.
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
-    final compute = body;
+    if (_isStateClosed) return;
     _value ??= initialData;
     status = GetStatus<T>.loading();
-    compute().then((newValue) {
+    Future<T>.sync(body).then((newValue) {
+      if (_isStateClosed) return;
       if ((newValue == null || newValue._isEmpty()) && useEmpty) {
         status = GetStatus<T>.empty();
       } else {
         status = GetStatus<T>.success(newValue);
       }
-
-      refresh();
     }, onError: (err) {
+      if (_isStateClosed) return;
       status = GetStatus.error(
           err is Exception ? err : Exception(errorMessage ?? err.toString()));
-      refresh();
     });
   }
 }
@@ -116,26 +137,37 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
 
   StreamController<T>? _controller;
+  VoidCallback? _removeStreamListener;
 
   StreamController<T> get subject {
     if (_controller == null) {
-      _controller =
-          StreamController<T>.broadcast(onCancel: addListener(_streamListener));
+      _controller = StreamController<T>.broadcast(
+        onListen: () => _removeStreamListener ??= addListener(_streamListener),
+        onCancel: _detachStreamListener,
+      );
       _controller?.add(_value);
-
-      ///TODO: report to controller dispose
     }
     return _controller!;
   }
 
+  void _detachStreamListener() {
+    _removeStreamListener?.call();
+    _removeStreamListener = null;
+  }
+
   void _streamListener() {
-    _controller?.add(_value);
+    final controller = _controller;
+    // An earlier notifier callback can close this Rx during the same dispatch.
+    if (controller != null && !controller.isClosed) {
+      controller.add(_value);
+    }
   }
 
   @override
   @mustCallSuper
   void close() {
-    removeListener(_streamListener);
+    if (isDisposed) return;
+    _detachStreamListener();
     _controller?.close();
     dispose();
   }

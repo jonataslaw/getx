@@ -1,3 +1,7 @@
+> GetX 5 RC: Kandidat ini belum diterbitkan. Baseline yang divalidasi adalah Flutter 3.47.9 dan Dart 3.13.7 dengan pustaka UI bawaan Flutter.
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Bahasa: Indonesia (file ini), [Inggris](README.md), [Orang Vietnam](README-vi.md), [Urdu](README.ur-PK.md), [China](README.zh-cn.md), [Portugis (Brazil)](README.pt-br.md), [Spanyol](README-es.md), [Russia](README.ru.md), [Polandia](README.pl.md), [Korea](README.ko-kr.md), [French](README-fr.md)**
@@ -18,53 +22,127 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Tentang Get](#tentang-get)
-- [Instalasi](#instalasi)
-- [Aplikasi Counter menggunakan GetX](#aplikasi-counter-menggunakan-getx)
-- [Tiga Pilar](#tiga-pilar)
-  - [State management](#state-management)
-    - [Reactive State Manager](#reactive-state-manager)
-    - [Detail lebih lanjut mengenai state management](#detail-lebih-lanjut-mengenai-state-management)
-  - [Route management](#route-management)
-    - [Detail lebih lanjut mengenai route management](#detail-lebih-lanjut-mengenai-route-management)
-  - [Dependency management](#dependency-management)
-    - [Detail lebih lanjut mengenai dependency management](#detail-lebih-lanjut-mengenai-dependency-management)
-- [Utilitas](#utilitas)
-  - [Internasionalisasi](#internasionalisasi)
-    - [Translasi](#translasi)
-      - [Menggunakan Translasi](#menggunakan-translasi)
-    - [Lokalisasi](#lokalisasi)
-      - [Mengubah Lokal](#mengubah-lokal)
-      - [Lokal Sistem](#lokal-sistem)
-  - [Mengubah Tema](#mengubah-tema)
-  - [GetConnect](#getconnect)
-    - [Konfigurasi Default](#konfigurasi-default)
-    - [Konfigurasi Kustom](#konfigurasi-kustom)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Prioritas](#prioritas)
-    - [Redirect](#redirect)
-    - [OnPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [API Lanjutan Lainnya](#api-lanjutan-lainnya)
-    - [Pengaturan Global Opsional dan Konfigurasi Manual](#pengaturan-global-opsional-dan-konfigurasi-manual)
-    - [Local State Widgets](#local-state-widgets)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Tips berguna](#tips-berguna)
-      - [GetView](#getview)
-      - [GetResponsiveView](#getresponsiveview)
-        - [Cara pakai](#cara-pakai)
-      - [GetWidget](#getwidget)
-      - [GetxService](#getxservice)
-- [Breaking change dari 2.0](#breaking-change-dari-20)
-- [Mengapa Getx?](#mengapa-getx)
-- [Komunitas](#komunitas)
-  - [Channel Komunitas](#kanal-komunitas)
-  - [Cara berkontribusi](#cara-berkontribusi)
-  - [Artikel dan Video](#artikel-dan-video)
+## Daftar isi
+
+  - [Perubahan GetX 5 pada cabang ini](#getx5-current)
+- [Tentang Get](#readme-section-2)
+- [Instalasi](#readme-section-3)
+- [Aplikasi Counter menggunakan GetX](#readme-section-4)
+- [Tiga Pilar](#readme-section-5)
+  - [State management](#readme-section-6)
+    - [Reactive State Manager](#readme-section-7)
+    - [Detail lebih lanjut mengenai state management](#readme-section-8)
+  - [Route management](#readme-section-9)
+    - [Detail lebih lanjut mengenai route management](#readme-section-10)
+  - [Dependency management](#readme-section-11)
+    - [Detail lebih lanjut mengenai dependency management](#readme-section-12)
+- [Utilitas](#readme-section-13)
+  - [Internasionalisasi](#readme-section-14)
+    - [Translasi](#readme-section-15)
+    - [Menggunakan Translasi](#readme-section-16)
+    - [Lokalisasi](#readme-section-17)
+    - [Mengubah Lokal](#readme-section-18)
+    - [Lokal Sistem](#readme-section-19)
+  - [Mengubah Tema](#readme-section-20)
+  - [GetConnect](#readme-section-21)
+    - [Konfigurasi Default](#readme-section-22)
+    - [Konfigurasi Kustom](#readme-section-23)
+  - [GetPage Middleware](#readme-section-24)
+    - [Prioritas](#readme-section-25)
+    - [Redirect](#readme-section-26)
+    - [OnPageCalled](#readme-section-27)
+    - [OnBindingsStart](#readme-section-28)
+    - [OnPageBuildStart](#readme-section-29)
+    - [OnPageBuilt](#readme-section-30)
+    - [OnPageDispose](#readme-section-31)
+  - [API Lanjutan Lainnya](#readme-section-32)
+    - [Pengaturan Global Opsional dan Konfigurasi Manual](#readme-section-33)
+    - [Local State Widgets](#readme-section-34)
+    - [ValueBuilder](#readme-section-35)
+    - [ObxValue](#readme-section-36)
+  - [Tips berguna](#readme-section-37)
+    - [GetView](#readme-section-38)
+    - [GetResponsiveView](#readme-section-39)
+    - [Cara pakai](#readme-section-40)
+    - [GetWidget](#readme-section-41)
+    - [GetxService](#readme-section-42)
+- [Breaking change dari 2.0](#readme-section-43)
+- [Mengapa Getx?](#readme-section-44)
+- [Komunitas](#readme-section-45)
+  - [Channel Komunitas](#readme-section-46)
+  - [Cara berkontribusi](#readme-section-47)
+  - [Artikel dan Video](#readme-section-48)
+
+<a id="getx5-current"></a>
+
+## Perubahan GetX 5 pada cabang ini
+
+Kandidat ini belum diterbitkan. Baseline yang divalidasi adalah Flutter 3.47.9 dan Dart 3.13.7 dengan pustaka UI bawaan Flutter.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding mengembalikan `List<Bind>`. Gunakan binds pada aplikasi dan bindings pada route. Get.spawn menggantikan Get.create; tunggu inisialisasi async lalu daftarkan nilainya dengan Get.put.
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` membawa data sukses. futurize menerima fungsi pembuat Future dan mengembalikan void; hasil diterapkan menurut urutan selesai. Koleksi Rx kosong memiliki penyimpanan mutable terpisah.
+
+Navigasi memakai Navigator 2. Get.back kembali antarhalaman; gunakan helper khusus untuk dialog, sheet, dan snackbar. Get.context serta Get.overlayContext dapat null di luar masa hidup aplikasi.
+
+Aktifkan restorationScopeId dan restorationId stabil untuk memulihkan riwayat route bernama. Argumen harus sesuai JSON, dengan batas ukuran dan middleware; proses baru membuat controller dan Future baru.
+
+Penghapusan response modifier serta error autentikasi, timeout, pembatalan, dan decoding diperbaiki. HTTP/WebSocket diuji pada IO, browser, dan JS/WASM dengan pembersihan sumber daya.
+
+Batasan percent-encoding browser history pada Flutter 3.47.9 tetap didokumentasikan; web test biasa tidak membuktikannya selesai. Uji refresh, back, dan restoration pada host/perangkat sebenarnya.
+
+Atur GetMaterialApp atau GetCupertinoApp, bukan Get.config lama. Router khusus membutuhkan konfigurasi Navigator 2 yang lengkap.
+
+GetNavigator dan GetRouterOutlet.pickPages mengganti `onPopPage` dengan `onDidRemovePage`, notifikasi setelah halaman dihapus. Gunakan `GetPage.canPop` atau `PopScope` untuk veto back; callback outlet khusus harus meneruskan ke `delegate.didRemovePage`.
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Tentang Get
 
@@ -72,7 +150,7 @@
 
 - GetX memiliki 3 prinsip dasar, yang menjadi prioritas untuk semua resource yang ada di dalamnya: **PRODUKTIFITAS, PERFORMA DAN ORGANISASI**
 
-  - **PERFORMA:** GetX fokus pada performa dan konsumsi resource minimum. GetX tidak menggunakan Stream atau ChangeNotifier.
+  - **Performa:** GetX menyediakan API reaktif dan stream tanpa membuat StreamController/StreamBuilder manual untuk setiap nilai. Pilih Obx atau GetBuilder sesuai pembaruan dan ukur rebuild serta sumber daya aplikasi.
 
   - **PRODUKTIFITAS:** GetX menggunakan sintaks yang mudah dan nyaman. Tidak peduli apa yang akan anda lakukan, akan selalu ada cara yang lebih mudah dengan GetX. Ini akan menghemat waktu development, dan meng-ekstrak performa maksimum pada aplikasi anda.
   Umumnya, developer akan selalu berhubungan dengan penghapusan controller dari memori. Dengan GetX, ini tidak diperlukan, karena resource akan dihapus dari memori secara default ketika tidak digunakan. Jika anda ingin menyimpannnya kedalam memori, anda harus secara eksplisit mendeklarasikan "permanent: true" pada dependensi anda. Dengan begitu, selain menghemat waktu, anda juga mengurangi resiko memiliki dependensi yang tidak diperlukan dalam memori. Pemuatan dependensi juga bersifat "lazy" secara default.
@@ -92,6 +170,8 @@
 
 **Selain itu, untuk lebih meningkatkan produktifitas anda, kami memiliki [ekstensi untuk VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) dan [ekstensi untuk Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
+<a id="readme-section-3"></a>
+
 # Instalasi
 
 Tambahkan Get kedalam file `pubspec.yaml` anda:
@@ -106,6 +186,8 @@ Import get didalam file dimana get akan digunakan:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # Aplikasi Counter menggunakan GetX
 
@@ -151,7 +233,7 @@ class Home extends StatelessWidget {
 
       // Ganti 8 baris Navigator.push menggunan Get.to() agar lebih sederhana. Anda tidak perlu `context`.
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -179,11 +261,17 @@ Get di desain untuk bekerja dalam tim, namun juga memudahkan pekerjaan untuk dev
 
 Tingkatkan deadline anda, antarkan semuanya tanpa kehilangan performa. Get bukan untuk semua orang, namun jika anda tersinggung dengan frasa tersebut, Get cocok untukmu!
 
+<a id="readme-section-5"></a>
+
 # Tiga Pilar
+
+<a id="readme-section-6"></a>
 
 ## State management
 
 Get memiliki dua state manager berbeda: Simple state manager (kami menyebutnya GetBuilder) dan Reactive state manager (GetX/Obx)
+
+<a id="readme-section-7"></a>
 
 ### Reactive State Manager
 
@@ -219,11 +307,15 @@ Obx(() => Text("${controller.name}"));
 
 Selesai! _Sesederhana_ itu.
 
+<a id="readme-section-8"></a>
+
 ### Detail lebih lanjut mengenai state management
 
 **Baca penjelasan lebih lanjut tentang state management [disini](./documentation/id_ID/state_management.md). Disana anda akan melihat contoh lebih banyak dan juga perbedaan diantara simple state manager dengan reactive state manager**
 
 Anda akan mendapatkan pemahaman yang baik tentang kekuatan dari GetX.
+
+<a id="readme-section-9"></a>
 
 ## Route management
 
@@ -241,10 +333,10 @@ Pindah ke halaman baru:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
-Pindah ke halaman baru menggunakan nama. Baca detail lebih lanjut tentang penamaan route [disini](./documentation/id_ID/route_management.md#navigation-with-named-routes)
+Pindah ke halaman baru menggunakan nama. Baca detail lebih lanjut tentang penamaan route [disini](./documentation/id_ID/route_management.md)
 
 ```dart
 
@@ -254,26 +346,34 @@ Get.toNamed('/details');
 Untuk menutup snackbar, dialog, bottomsheet, atau apapun yang normalnya anda tutup menggunakan Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Untuk pergi ke halaman baru dan mencegah user kembali ke halaman sebelumnya (biasanya digunakan untuk SplashScreen, LoginScreen, dsb).
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Untuk pergi ke halaman baru dan batalkan navigasi sebelumnya (berguna untuk shopping cart, polls, dan test).
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Sadarkah bahwa anda tidak menggunakan context sama sekali untuk hal tersebut? Itu adalah keuntungan terbesar dalam menggunakan Get route management. Dengan ini, anda bisa mengeksekusi semua metode dari controller, tanpa ragu.
 
+<a id="readme-section-10"></a>
+
 ### Detail lebih lanjut mengenai route management
 
 **Get bekerja dengan named route dan juga menawarkan kontrol dengan level yang lebih rendah untuk navigasimu! Dokumentasinya ada [disini](./documentation/id_ID/route_management.md)**
+
+<a id="readme-section-11"></a>
 
 ## Dependency management
 
@@ -307,13 +407,21 @@ Dan setelahnya anda bisa memperoleh data yang tertinggal sebelumnya:
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### Detail lebih lanjut mengenai dependency management
 
 **Baca penjelasan lebih lanjut tentang dependency management [disini](./documentation/id_ID/dependency_management.md)**
 
+<a id="readme-section-13"></a>
+
 # Utilitas
 
+<a id="readme-section-14"></a>
+
 ## Internasionalisasi
+
+<a id="readme-section-15"></a>
 
 ### Translasi
 
@@ -336,6 +444,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### Menggunakan Translasi
 
 Cukup tambahkan `.tr` setelah key yang disebutkan dan value nya akan diterjemahkan, menggunakan value awal dari `Get.locale` dan `Get.fallbackLocale`.
@@ -343,6 +453,8 @@ Cukup tambahkan `.tr` setelah key yang disebutkan dan value nya akan diterjemahk
 ```dart
 Text('title'.tr);
 ```
+
+<a id="readme-section-17"></a>
 
 ### Lokalisasi
 
@@ -356,6 +468,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-18"></a>
+
 #### Mengubah Lokal
 
 Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, translasi akan menggunakan lokal baru.
@@ -364,6 +478,8 @@ Panggil `Get.updateLocale(locale)` untuk memperbarui lokal. Setelahnya, translas
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-19"></a>
 
 #### Lokal Sistem
 
@@ -374,6 +490,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-20"></a>
 
 ## Mengubah Tema
 
@@ -396,34 +514,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 Ketika `.darkmode` aktif, ini akan mengubah aplikasi anda ke _light theme_, dan sebaliknya, jika _light theme_ sedang aktif, ini akan mengubah aplikasi anda ke _dark theme_.
 
+<a id="readme-section-21"></a>
+
 ## GetConnect
 
 GetConnect adalah cara mudah untuk berkomunikasi dari backend ke frontend menggunakan http atau websocket.
+
+<a id="readme-section-22"></a>
 
 ### Konfigurasi Default
 
 Anda bisa secara sederhana meng-extend GetConnect dan menggunakan GET/POST/PUT/DELETE/SOCKET untuk berkomunikasi dengan REST API atau Websocket anda.
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request dengan File
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-23"></a>
 
 ### Konfigurasi Kustom
 
@@ -431,48 +564,34 @@ GetConnect sangat bisa di disesuaikan, anda bisa mendefinisikan base URL, Respon
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // Semua request akan melewati jsonEncode, jadi, CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // Ini akan men-setting baseUrl ke
-    // Http dan websocket jika digunakan tanpa [httpClient]
-
-    // Ini akan mengaitkan properti 'apikey' kedalam header dari semua request.
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Bahkan jika server mengirim data dari negara "Brazil"
-    // itu tidak akan pernah ditampilkan ke user, karena anda menghapus
-    // data tersebut sebelum response, bahkan sebelum response diantarkan.
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // Sesuaikan header
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    // Authenticator akan dipanggil 3 kali jika
-    // HttpStatus == HttpStatus.unauthorized
-    httpClient.maxAuthRetries = 3;
-  }
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-24"></a>
 
 ## GetPage Middleware
 
@@ -480,31 +599,50 @@ GetPage sekarang memiliki properti baru yang menerima list GetMiddleware dan men
 
 **Catatan**: Ketika GetPage memiliki middleware, seluruh child dari halaman tersebut akan secara otomatis memiliki middleware yang sama.
 
+<a id="readme-section-25"></a>
+
 ### Prioritas
 
 Urutan dari Middleware yang akan dijalankan bisa diatur berdasarkan prioritas didalam GetMiddleware.
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 middleware diatas akan dijalankan dengan urutan sebagai berikut **-8 => 2 => 4 => 5**
 
+<a id="readme-section-26"></a>
+
 ### Redirect
 
-Fungsi ini akan terpanggil ketika halaman dari route yang dipanggil sedang dicari. RouteSettings diperlukan untuk mengatur tujuan dari fungsi redirect. Atau berikan null jika tidak ingin ada redirect.
+Pada redirectDelegate, kembalikan route untuk lanjut, RouteDecoder lain untuk redirect, atau null untuk batal. Daftarkan login dan hindari loop.
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-27"></a>
 
 ### OnPageCalled
 
@@ -513,11 +651,13 @@ anda bisa menggunakannya untuk mengubah sesuatu tentang halaman tersebut atau
 berikan halaman baru.
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-28"></a>
 
 ### OnBindingsStart
 
@@ -525,14 +665,14 @@ Fungsi ini akan terpanggil tepat sebelum Binding ter-inisialisasi.
 Disini anda bisa mengubah Binding untuk halaman yang dituju.
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### OnPageBuildStart
 
@@ -540,19 +680,25 @@ Fungsi ini akan terpanggil tepat setelah Binding ter-inisialisasi.
 Disini anda bisa melakukan sesuatu sebelum halaman yang dituju dibuat.
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### OnPageBuilt
 
 Fungsi ini akan terpanggil tepat setelah fungsi `GetPage.page` terpanggil dan akan memberikan anda hasil dari fungsinya. Dan mengambil widget yang akan ditampilkan.
 
+<a id="readme-section-31"></a>
+
 ### OnPageDispose
 
 Fungsi ini akan terpanggil tepat setelah semua objek yang berhubungan (Controller, Views, ...) ter-dispose dari halaman.
+
+<a id="readme-section-32"></a>
 
 ## API Lanjutan Lainnya
 
@@ -579,16 +725,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // hapus satu route
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // kembali berturut-turut hingga predikat mereturn nilai true.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // pergi ke halaman selanjutnya dan hapus semua route sebelumnya hingga predikat mereturn nilai true.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // pergi ke halaman selanjutnya menggunakan nama dan hapus semua route sebelumnya hingga predikat mereturn nilai true.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 // Cek di platform apa aplikasi sedang berjalan
 GetPlatform.isAndroid
@@ -616,7 +762,7 @@ Get.width
 Get.context
 
 // Memberikan konteks dari snackbar/dialog/bottomsheet di Gives the latar depan, dimanapun di kode anda
-Get.contextOverlay
+Get.overlayContext
 
 // Catatan: metode berikut adalah sebuah perluasan konteks. Berhubung anda
 // memiliki akses terhadap konteks dimanapun di UI anda, anda bisa menggunakannya dimanapun di kode UI
@@ -633,49 +779,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Mirip seperti MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// Mirip seperti MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// Mirip seperti MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// Mirip seperti MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// Mirip seperti MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// Cek apakah perangkat sedang dalam mode lansekap
-context.isLandscape()
+context.isLandscape
 
 /// Cek apakah perangkat sedang dalam mode portrait
-context.isPortrait()
+context.isPortrait
 
 /// Mirip seperti MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// Mirip seperti MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Dapatkan shortestSide dari layar
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// True jika layar lebih besar dari 800
-context.showNavbar()
+context.showNavbar
 
 /// True jika shortestSide kurang dari 600p
-context.isPhone()
+context.isPhone
 
 /// True jika shortestSide lebih besar dari 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// True jika shortestSide lebih besar dari 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// True jika perangkat adalah sebuah Tablet
-context.isTablet()
+context.isTablet
 
 /// Memberikan sebuah value<T> berdasarkan ukuran layar
 /// dapat memberi value untuk:
@@ -685,6 +831,8 @@ context.isTablet()
 /// desktop: jika lebar lebih besar dari 1200
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-33"></a>
 
 ### Pengaturan Global Opsional dan Konfigurasi Manual
 
@@ -708,24 +856,26 @@ MaterialApp(
 );
 ```
 
-Anda bisa membuat _Pengaturan Global_ untuk `Get`. Cukup tambahkan `Get.config` kedalam kode anda sebelum berpindah ke route manapun.
-Atau lakukan secara langsung di `GetMaterialApp`
+Atur GetMaterialApp atau GetCupertinoApp, bukan Get.config lama. Router khusus membutuhkan konfigurasi Navigator 2 yang lengkap.
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 Anda bisa secara opsional me-redirect seluruh pesan logging dari `Get`.
@@ -743,8 +893,9 @@ void localLogWriter(String text, {bool isError = false}) {
   // harap dicatat bahwa meskipun enableLog: false, pesan log akan di-push dalam callback ini,
   // anda dapat memeriksa flag-nya jika anda mau melalui GetConfig.isLogEnable
 }
-
 ```
+
+<a id="readme-section-34"></a>
 
 ### Local State Widgets
 
@@ -753,6 +904,8 @@ Kita memiliki rasa untuk Reactive dan Simple.
 Contohnya, anda mungkin menggunakannya untuk men-toggle obscureText di sebuah `TextField`, mungkin membuat
 Expandable Panel kustom, atau mungkin memodifikasi index saat ini dalam `BottomNavigationBar` sembari mengganti konten
 dari body didalam `Scaffold`
+
+<a id="readme-section-35"></a>
 
 #### ValueBuilder
 
@@ -771,6 +924,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-36"></a>
+
 #### ObxValue
 
 Mirip seperti [`ValueBuilder`](#valuebuilder), tapi ini versi Reactive nya, anda bisa menaruh Rx instance (ingat .obs?) dan
@@ -784,6 +939,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-37"></a>
 
 ## Tips berguna
 
@@ -805,91 +962,35 @@ Anda perlu mengakses `value` aslinya didalam _observable_:
 Cara yang paling "sering digunakan" adalah `.value`, tapi, tahukah anda bahwa anda juga bisa menggunakan...
 
 ```dart
-final name = 'GetX'.obs;
-// hanya "memperbarui" stream, jika nilainya berbeda dari sebelumnya.
-name.value = 'Hey';
-
-// Seluruh properti Rx "bisa dipanggil" dan akan mereturn nilai baru.
-// tapi cara ini tidak menerima `null`, UI-nya tidak akan rebuild.
-name('Hello');
-
-// ini seperti getter, mengeluarkan output 'Hello'.
-name();
-
-/// angka:
-
-final count = 0.obs;
-
-// Anda bisa menggunakan semua operasi non-mutable dari primitif num!
-count + 1;
-
-// Hati hati! ini hanya valid jika `count` tidak final, melainkan var
-count += 1;
-
-// Anda juga bisa melakukan komparasi antar nilai:
-count > 2;
-
-/// boolean:
-
-final flag = false.obs;
-
-// bertukar nilai antara true/false
-flag.toggle();
-
-
-/// semua tipe:
-
-// Atur `value` menjadi null.
-flag.nil();
-
-// Semua operasi toString(), toJson() dikirimkan ke `value`
-print( count ); // memanggil `toString()` didalamnya untuk RxInt
-
-final abc = [0,1,2].obs;
-// Mengkonversi nilai dari Array json, mengeluarkan output RxList
-// Json didukung oleh semua tipe Rx!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList dan RxSet adalah tipe Rx spesial, mereka meng-extends native type masing-masing.
-// tapi anda bisa bekerja menggunakan List sebagai list biasa, meskipun reactive!
-abc.add(12); // memasukkan 12 kedalam list, dan MEMPERBARUI stream.
-abc[3]; // seperti List, membaca index ke 3.
-
-
-// persamaan berfungsi dengan Rx dan value nya, namun hashCode nya selalu diambil dari value
-final number = 12.obs;
-print( number == 12 ); // mengeluarkan output: true
-
-/// Model Rx Kustom:
-
-// toJson(), toString() ditangguhkan ke child, jadi anda bisa mengimplementasi override pada mereka dan print() observable nya secara langsung
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` memang "reaktif", tapi properti didalamnya TIDAK REAKTIF!
-// Jadi, jika kita mengubah variabel didalamnya...
-user.value.name = 'Roi';
-// Widget tidak akan rebuild!,
-// `Rx` tidak mengetahui apapun ketika anda mengubah sesuatu didalam user.
-// Jadi, untuk kelas kustom, kita perlu secara manual "memberi tahu" perubahannya.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// atau kita bisa menggunakan `update()` method!
-user.update((value){
-  value.name='Roi';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+
+<a id="readme-section-38"></a>
 
 #### GetView
 
@@ -914,11 +1015,15 @@ Adalah sebuah `const Stateless` Widget yang memiliki getter `controller` untuk `
  }
 ```
 
+<a id="readme-section-39"></a>
+
 #### GetResponsiveView
 
 Extend widget ini untuk membuat responsive view.
 widget ini mengandung properti `screen` yang memiliki semua
 informasi tentang ukuran layar dan tipenya.
+
+<a id="readme-section-40"></a>
 
 ##### Cara pakai
 
@@ -937,76 +1042,57 @@ Dengan properti `settings` anda bisa mengatur batasan lebar untuk tipe layar.
 Code to this screen
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
+<a id="readme-section-41"></a>
+
 #### GetWidget
 
-Kebanyakan orang tidak tahu untuk apa Widget ini, atau benar benar membingungkan penggunaannya.
-Kasus penggunaannya sangat langka, namun sangat spesifik: Melakukan `cache` terhadap Controller.
-Karena _cache_, tidak bisa dijadikan `const Stateless`.
+GetWidget menyimpan controller untuk instance widget tersebut dan mendukung const. Dengan Get.spawn, controller ditutup saat widget pemilik dihapus. GetView melakukan lookup tanpa cache tersebut.
 
-> Lalu, kapan anda harus men-"cache" sebuah Controller?
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-Jika anda menggunakan, fitur "tidak terlalu umum" dari **GetX**: `Get.create()`.
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.create(()=>Controller())` akan men-generate `Controller` baru setiap kali anda memanggil
-`Get.find<Controller>()`,
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-Itulah dimana `GetWidget` bercahaya... karena anda bisa menggunakannya, sebagai contoh,
-untuk menyimpan list dari sebuah Todo item. Jadi, jika widget ter-"rebuild", dia akan meyimpan controller yang sama.
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-42"></a>
 
 #### GetxService
 
-Kelas ini mirip seperti `GetxController`, dia berbagi lifecycle ( `onInit()`, `onReady()`, `onClose()`).
-Tetapi tidak memiliki "logic" didalamnya. Dia hanya memberi tahu Sistem Dependency Injection **GetX**, bahwa subclass
-ini **TIDAK BISA** dihapus dari memori.
-
-Jadi ini sangat berguna untuk memastikan "Service" anda selalu dapat dijangkau dan aktif dengan `Get.find()`. Seperti:
-`ApiService`, `StorageService`, `CacheService`.
+GetxService menyediakan onInit/onReady/onClose untuk layanan sepanjang umur aplikasi. Penghapusan biasa melindunginya; force atau Get.reset dapat membersihkannya secara sengaja. Ini bukan penyimpanan setelah proses mati. Tunggu init lalu Get.put.
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
-  runApp(SomeApp());
-}
-
-/// Adalah gerakan yang cerdas untuk membuat Service anda menginisialisasi sebelum anda menjalankan aplikasi Flutter
-/// seperti anda bisa mengontrol flow eksekusi (mungkin anda perlu memuat beberapa konfigurasi tema,
-/// apiKey, bahasa yang ditentukan oleh user...) jadi, load SettingSerice sebelum menjalankan ApiService.
-/// supaya GetMaterialApp() tidak perlu rebuild, dan mengambil nilainya secara langsung.
-void initServices() async {
-  print('starting services ...');
-  /// Disini adalah dimana anda meletakkan get_storage, hive, inisialisasi shared_pref.
-  /// atau koneksi moor, atau apapun yang sifatnya async.
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-The only way to actually delete a `GetxService`, is with `Get.reset()` which is like a
-"Hot Reboot" of your app. So remember, if you need absolute persistence of a class instance during the
-lifetime of your app, use `GetxService`.
-
-Satu-satunya cara untuk benar benar menghapus sebuah `GetxService`, adalah dengan `Get.reset()` dimana ini seperti
-"Hot Reboot" dari aplikasi anda. Jadi ingat, jika anda butuh persistensi absolut dari sebuah instance kelas selama
-masa hidup aplikasi anda, gunakan `GetxService`.
+<a id="readme-section-43"></a>
 
 # Breaking change dari 2.0
 
@@ -1026,7 +1112,7 @@ RxController dan GetBuilder sekarang digabungkan, anda tidak lagi perlu menginga
 2- NamedRoutes
 Sebelumnya:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -1061,11 +1147,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-44"></a>
+
 # Mengapa Getx?
 
 1- Seringkali setelah Flutter update, banyak package anda yang akan berhenti bekerja. Terkadang compilation error terjadi, error yang sering muncul dan belum ada jawabannya, dan developer perlu mengetahui dimana errornya berasal, mencari errornya, lalu kemudian mencoba membuka sebuah isu di repository yang bersangkutan, dan melihat apakah problemnya terselesaikan. Get memusatkan resource utama untuk development (State, dependency dan route management), memungkinkan anda untuk menambahkan satu package kedalam pubspec, dan mulai bekerja. Setelah Flutter update, satu-satunya hal yang anda perlu lakukan adalah memperbarui dependensi Get, dan kembali bekerja. Get juga menyelesaikan isu kompatibilitas. Berapa kali sebuah versi dari sebuah package tidak kompatibel dengan versi lainnya, karena yang satu menggunakan sebuah dependensi dalam satu versi, dan yang lain menggunakan versi lainnya? Ini juga bukan sebuah masalah menggunakan Get, yang mana semua berada di package yang sama dan kompatibel secara penuh.
 
-2- Flutter mudah digunakan, Flutter luar biasa, tetapi Flutter masih memiliki beberapa boilerplate yang mungkin tidak diinginkan untuk kebanyakan developer, seperti `Navigator.of(context).push(context builder [...]`. Get menyederhanakan proses development. Daripada menulis 8 baris kode hanya untuk memanggil route, anda bisa menggunakan: `Get.to(Home())` dan selesai, anda akan pergi ke halaman selanjutnya. URL web dinamis adalah hal yang sangat menyakitkan untuk dilakukan dengan Flutter saat ini, dan dengan GetX sangat sederhana. Mengelola state di Flutter, dan megelola dependensi juga suatu hal yang menghasilkan banyak diskusi, dengan ratusan jenis pattern di pub. Tetapi tidak ada yang semudah menambahkan ".obs" di akhir variabel anda, dan meletakkan widget didalam Obx, dan selesai, semua update terhadap variabel tersebut akan secara otomatis terupdate di layar.
+2- Flutter mudah digunakan, Flutter luar biasa, tetapi Flutter masih memiliki beberapa boilerplate yang mungkin tidak diinginkan untuk kebanyakan developer, seperti `Navigator.of(context).push(context builder [...]`. Get menyederhanakan proses development. Daripada menulis 8 baris kode hanya untuk memanggil route, anda bisa menggunakan: `Get.to(() => Home())` dan selesai, anda akan pergi ke halaman selanjutnya. URL web dinamis adalah hal yang sangat menyakitkan untuk dilakukan dengan Flutter saat ini, dan dengan GetX sangat sederhana. Mengelola state di Flutter, dan megelola dependensi juga suatu hal yang menghasilkan banyak diskusi, dengan ratusan jenis pattern di pub. Tetapi tidak ada yang semudah menambahkan ".obs" di akhir variabel anda, dan meletakkan widget didalam Obx, dan selesai, semua update terhadap variabel tersebut akan secara otomatis terupdate di layar.
 
 3- Meringankan tanpa mengkhawatirkan performa. Performa Flutter sudah luar biasa, tetapi bayangkan anda menggunakan state manager, dan sebuah locator untuk mendistribusikan bloc/store/controller dsb, kelas. Anda perlu secara manual memanggil pengecualian terhadap dependensi ketika anda tidak membutuhkannya. Namun apakah anda pernah terfikirkan ketika simpelnya, anda menggunakan controller, dan tidak lagi digunakan oleh siapapun, akan dihapus dari memori? Itu yang GetX lakukan. Dengan SmartManagement, semua yang tidak digunakan akan dihapus dari memori, dan anda tidak perlu khawatir tentang apapun selain programming. Anda akan terjamin bahwa anda mengkonsumsi resource minimum yang diperlukan, bahkan tanpa harus membuat logic untuk hal ini.
 
@@ -1074,7 +1162,11 @@ Jika anda memerlukan konteks untuk menemukan InheritedWidget, anda membutuhkanny
 
 Library ini akan terus diperbarui dan mengimplementasikan fitur baru. Jangan ragu untuk menawarkan PR dan berkontribusi ke mereka.
 
+<a id="readme-section-45"></a>
+
 # Komunitas
+
+<a id="readme-section-46"></a>
 
 ## Channel Komunitas
 
@@ -1083,6 +1175,8 @@ GetX memiliki komunitas yang sangat aktif dan membantu. Jika anda memiliki perta
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-47"></a>
 
 ## Cara berkontribusi
 
@@ -1095,6 +1189,8 @@ _Ingin berkontribusi kedalam proyek? Kami akan sangat bangga untuk menyorot anda
 - Menambahkan fungsi baru.
 
 Kontribusi dalam bentuk apapun dipersilahkan!
+
+<a id="readme-section-48"></a>
 
 ## Artikel dan Video
 

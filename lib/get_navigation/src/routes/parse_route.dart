@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 import '../../../get.dart';
@@ -6,10 +9,15 @@ import '../../../get.dart';
 class RouteDecoder {
   const RouteDecoder(
     this.currentTreeBranch,
-    this.pageSettings,
-  );
+    this.pageSettings, {
+    this.restorationHistory,
+  });
   final List<GetPage> currentTreeBranch;
   final PageSettings? pageSettings;
+
+  /// The opt-in navigation snapshot transported by the route information parser.
+  @internal
+  final RestorableRouteHistory? restorationHistory;
 
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
@@ -70,15 +78,210 @@ class RouteDecoder {
 
     return other is RouteDecoder &&
         listEquals(other.currentTreeBranch, currentTreeBranch) &&
-        other.pageSettings == pageSettings;
+        other.pageSettings == pageSettings &&
+        other.restorationHistory == restorationHistory;
   }
 
   @override
-  int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
+  int get hashCode => Object.hash(
+    Object.hashAll(currentTreeBranch),
+    pageSettings,
+    restorationHistory,
+  );
 
   @override
   String toString() =>
       'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
+}
+
+/// An internal, detached snapshot of named navigation entries.
+class RestorableRouteHistory {
+  RestorableRouteHistory._(this.scope, this.entries, this._encoded);
+
+  static const _namespace = 'getx.navigationHistory';
+  static const _version = 1;
+  static const maxEntries = 128;
+  static const maxBytes = 64 * 1024;
+  final String scope;
+  final List<RestorableRouteEntry> entries;
+  final String _encoded;
+
+  static RestorableRouteHistory? create(
+    String scope,
+    List<RestorableRouteEntry> entries,
+  ) {
+    if (scope.isEmpty || entries.isEmpty || entries.length > maxEntries) {
+      return null;
+    }
+    final ids = <int>{};
+    if (scope.length > maxBytes) return null;
+    try {
+      for (final entry in entries) {
+        if (entry.id < 0 || entry.id >= 9007199254740991 ||
+            !ids.add(entry.id) || !entry.uri.path.startsWith('/') ||
+            entry.uri.hasScheme || entry.uri.hasAuthority ||
+            entry.uri.toString().length > maxBytes) {
+          return null;
+        }
+      }
+      final values = _RestorationValues();
+      final detachedEntries = [
+        for (final entry in entries)
+          RestorableRouteEntry(entry.id, entry.uri,
+              values.copy(entry.arguments), entry.preventDuplicates),
+      ];
+      final raw = {
+        _namespace: {
+          'version': _version,
+          'scope': scope,
+          'entries': [for (final entry in detachedEntries) entry._toPrimitives()],
+        }
+      };
+      final detached = _RestorationValues().copy(raw) as Map;
+      final encoded = jsonEncode(detached);
+      if (utf8.encode(encoded).length > maxBytes) return null;
+      return RestorableRouteHistory._(
+          scope, List.unmodifiable(detachedEntries), encoded);
+    } on FormatException {
+      return null;
+    }
+  }
+
+  static RestorableRouteHistory? decode(Object? state, Uri selectedUri) {
+    if (state is! Map) return null;
+    final payload = state[_namespace];
+    if (payload is! Map ||
+        payload['version'] != _version ||
+        payload['scope'] is! String ||
+        payload['entries'] is! List) {
+      return null;
+    }
+    final raw = payload['entries'] as List;
+    if (raw.isEmpty || raw.length > maxEntries) return null;
+    final entries = <RestorableRouteEntry>[];
+    try {
+      for (final entry in raw) {
+        if (entry is! Map || entry['uri'] is! String ||
+            entry['preventDuplicates'] is! bool ||
+            entry['argumentsJson'] is! String) {
+          return null;
+        }
+        final id = entry['id'];
+        if (id is! num || !id.isFinite || id < 0 ||
+            id >= 9007199254740991 || id.truncateToDouble() != id ||
+            (entry['uri'] as String).length > maxBytes ||
+            (entry['argumentsJson'] as String).length > maxBytes) {
+          return null;
+        }
+        final uri = Uri.tryParse(entry['uri'] as String);
+        if (uri == null) return null;
+        entries.add(RestorableRouteEntry(id.toInt(), uri,
+            jsonDecode(entry['argumentsJson'] as String),
+            entry['preventDuplicates'] as bool));
+      }
+    } on FormatException {
+      return null;
+    }
+    if (entries.last.uri != selectedUri) return null;
+    return create(payload['scope'] as String, entries);
+  }
+
+  Object toPrimitives() => jsonDecode(_encoded) as Object;
+
+  @override
+  bool operator ==(Object other) =>
+      other is RestorableRouteHistory && _encoded == other._encoded;
+
+  @override
+  int get hashCode => _encoded.hashCode;
+}
+
+/// An internal named page instance and its supported restoration arguments.
+class RestorableRouteEntry {
+  const RestorableRouteEntry(
+    this.id,
+    this.uri,
+    this.arguments,
+    this.preventDuplicates,
+  );
+
+  final int id;
+  final Uri uri;
+  final Object? arguments;
+  final bool preventDuplicates;
+
+  Map<String, Object?> _toPrimitives() => {
+    'id': id,
+    'uri': uri.toString(),
+    'argumentsJson': jsonEncode(arguments),
+    'preventDuplicates': preventDuplicates,
+  };
+
+  Object? copyArguments() => jsonDecode(jsonEncode(arguments));
+
+  bool hasArguments(Object? candidate) {
+    try {
+      return jsonEncode(arguments) ==
+          jsonEncode(_RestorationValues().copy(candidate));
+    } on FormatException {
+      return false;
+    }
+  }
+}
+
+class _RestorationValues {
+  final _active = HashSet<Object>.identity();
+  int _remaining = RestorableRouteHistory.maxBytes;
+  int _nodes = RestorableRouteHistory.maxBytes;
+
+  void _charge(int bytes) {
+    if (bytes > _remaining) {
+      throw const FormatException('Restoration arguments exceed the byte limit.');
+    }
+    _remaining -= bytes;
+  }
+
+  Object? copy(Object? value, [int depth = 0]) {
+    if (--_nodes < 0 || depth > 16) {
+      throw const FormatException('Restoration arguments exceed limits.');
+    }
+    if (value == null || value is bool || value is int ||
+        (value is double && value.isFinite)) {
+      _charge(jsonEncode(value).length);
+      return value;
+    }
+    if (value is String && value.length <= RestorableRouteHistory.maxBytes) {
+      _charge(utf8.encode(jsonEncode(value)).length);
+      return value;
+    }
+    if ((value is! List && value is! Map) || !_active.add(value)) {
+      throw const FormatException('Unsupported or cyclic restoration arguments.');
+    }
+    try {
+      if (value is List && value.length <= RestorableRouteHistory.maxBytes) {
+        _charge(2 + (value.isEmpty ? 0 : value.length - 1));
+        return List<Object?>.unmodifiable(
+            value.map((item) => copy(item, depth + 1)));
+      }
+      if (value is Map && value.length <= RestorableRouteHistory.maxBytes) {
+        _charge(2 + (value.isEmpty ? 0 : value.length * 2 - 1));
+        final keys = <String>[];
+        for (final key in value.keys) {
+          if (key is! String) {
+            throw const FormatException('Restoration map keys must be strings.');
+          }
+          copy(key, depth + 1);
+          keys.add(key);
+        }
+        keys.sort();
+        return Map<String, Object?>.unmodifiable(
+            {for (final key in keys) key: copy(value[key], depth + 1)});
+      }
+      throw const FormatException('Unsupported restoration arguments.');
+    } finally {
+      _active.remove(value);
+    }
+  }
 }
 
 class ParseRouteTree {
@@ -277,7 +480,7 @@ class ParseRouteTree {
       return params;
     }
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
+      var param = Uri.decodeComponent(paramsMatch[i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;

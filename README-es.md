@@ -1,3 +1,7 @@
+> GetX 5 RC: Este candidato aún no está publicado. La base validada es Flutter 3.47.9 y Dart 3.13.7 con las bibliotecas de interfaz incluidas en Flutter.
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 *Idiomas: Español (este archivo), [Vietnamita](README-vi.md), [Indonesio](README.id-ID.md), [Urdu](README.ur-PK.md), [Lengua china](README.zh-cn.md), [Inglés](README.md), [Portugués de Brasil](README.pt-br.md), [Ruso](README.ru.md), [Polaco](README.pl.md), [Coreano](README.ko-kr.md), [Francés](README-fr.md).*
@@ -20,30 +24,110 @@
 
 <h3>Lamentamos la inconsistencia en la traducción. El paquete GetX se actualiza con bastante frecuencia y es posible que las traducciones a documentos no sean tan rápidas. Entonces, para que esta documentación aún tenga todo el contenido, dejaré aquí todos los textos nuevos sin traducir (considero que es mejor tener los documentos en inglés que no tenerlos), por lo que si alguien quiere traducir, sería de gran ayuda 😁</h3>
 
-- [Sobre GetX](#sobre-getx)
-- [Instalación](#instalación)
-- [Proyecto contador con GetX](#proyecto-contador-con-getx)
-- [Los tres pilares](#los-tres-pilares)
-  - [Gestión del Estado](#gestión-del-estado)
-    - [Reactivo STATE_MANAGER](#reactivo-state_manager)
-    - [Más detalles sobre la gestión del estado.](#más-detalles-sobre-la-gestión-del-estado)
-    - [Explicación en video sobre state management](#explicación-en-video-sobre-state-management)
-  - [Gestión de Rutas](#gestión-de-rutas)
-    - [Más detalles sobre la gestión de rutas.](#más-detalles-sobre-la-gestión-de-rutas)
-    - [Explicación del video](#explicación-del-video)
-  - [Gestión de dependencias](#gestión-de-dependencias)
-    - [Más detalles sobre la gestión de dependencias.](#más-detalles-sobre-la-gestión-de-dependencias)
-- [Utilidades](#utilidades)
-  - [Cambiar de tema](#cambiar-de-tema)
-  - [Otras API avanzadas y configuraciones manuales](#otras-api-avanzadas-y-configuraciones-manuales)
-    - [Configuraciones globales opcionales](#configuraciones-globales-opcionales)
-  - [Video explanation of Other GetX Features](#video-explanation-of-other-getx-features)
-- [Cambios importantes desde 2.0](#cambios-importantes-desde-20)
-- [¿Por qué Getx?](#por-qué-getx)
-- [Comunidad](#comunidad)
-  - [Canales de la comunidad](#canales-de-la-comunidad)
-  - [Cómo contribuir](#cómo-contribuir)
-  - [Artículos y vídeos](#artículos-y-vídeos-inglés)
+## Contenido
+
+  - [Cambios de GetX 5 en esta rama](#getx5-current)
+- [Sobre GetX](#readme-section-2)
+- [Instalación](#readme-section-3)
+- [Proyecto Contador con GetX](#readme-section-4)
+- [Los tres pilares](#readme-section-5)
+  - [Gestión del Estado](#readme-section-6)
+    - [Reactivo STATE_MANAGER](#readme-section-7)
+    - [Más detalles sobre la gestión del estado.](#readme-section-8)
+    - [Explicación en video sobre state management](#readme-section-9)
+  - [Gestión de Rutas](#readme-section-10)
+    - [Más detalles sobre la gestión de rutas.](#readme-section-11)
+    - [Explicación del video](#readme-section-12)
+  - [Gestión de dependencias](#readme-section-13)
+    - [Más detalles sobre la gestión de dependencias.](#readme-section-14)
+- [Utilidades](#readme-section-15)
+  - [Cambiar de tema](#readme-section-16)
+  - [Otras API avanzadas y configuraciones manuales](#readme-section-17)
+    - [Configuraciones globales opcionales](#readme-section-18)
+  - [Video explanation of Other GetX Features](#readme-section-19)
+- [Cambios importantes desde 2.0](#readme-section-20)
+- [¿Por qué Getx?](#readme-section-21)
+- [Comunidad](#readme-section-22)
+  - [Canales de la comunidad](#readme-section-23)
+- [Cómo contribuir](#readme-section-24)
+  - [Artículos y vídeos (inglés)](#readme-section-25)
+
+<a id="getx5-current"></a>
+
+## Cambios de GetX 5 en esta rama
+
+Este candidato aún no está publicado. La base validada es Flutter 3.47.9 y Dart 3.13.7 con las bibliotecas de interfaz incluidas en Flutter.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding devuelve `List<Bind>`. Usa binds en la aplicación y bindings en las rutas. Get.spawn sustituye a Get.create; espera la inicialización asíncrona y registra el valor con Get.put.
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` contiene los datos. futurize recibe una función que crea un Future y devuelve void; aplica resultados por orden de finalización. Las colecciones Rx vacías tienen almacenamiento mutable independiente.
+
+La navegación usa Navigator 2. Get.back vuelve entre páginas; cierra diálogos, hojas y snackbars con sus helpers específicos. Get.context y Get.overlayContext pueden ser null fuera de la vida de la aplicación.
+
+Activa restorationScopeId y asigna restorationId estables para recuperar el historial nombrado. Los argumentos son compatibles con JSON, con límites y middleware; tras la muerte del proceso se crean controladores y futuros nuevos.
+
+Se corrigen la eliminación de response modifiers y los errores de autenticación, timeout, cancelación y decodificación. Hay pruebas HTTP/WebSocket en IO, navegador y JS/WASM, con liberación de recursos.
+
+La limitación de percent-encoding del historial web de Flutter 3.47.9 sigue documentada; las pruebas web ordinarias no la dan por resuelta. Comprueba refresh, back y restauración en el host y dispositivo reales.
+
+Configura GetMaterialApp o GetCupertinoApp; no uses el antiguo Get.config. Un router personalizado requiere una configuración completa de Navigator 2.
+
+GetxService ofrece onInit/onReady/onClose para servicios de la aplicación. La eliminación normal los protege; force o Get.reset permiten limpieza deliberada. No conserva datos tras morir el proceso. Espera init y registra con Get.put.
+
+GetWidget almacena el controlador de esa instancia de widget y admite const. Con Get.spawn, el controlador creado se cierra al retirar su widget. GetView hace lookup sin esa caché.
+
+En redirectDelegate, devuelve route para continuar, otro RouteDecoder para redirigir o null para cancelar. Registra login y evita bucles.
+
+GetNavigator y GetRouterOutlet.pickPages sustituyen `onPopPage` por `onDidRemovePage`, una notificación posterior a la eliminación. Usa `GetPage.canPop` o `PopScope` para vetar back; un callback personalizado del outlet debe reenviar a `delegate.didRemovePage`.
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Sobre GetX
 
@@ -60,6 +144,8 @@
 
 **GetX hace que su desarrollo sea productivo, pero ¿quiere hacerlo aún más productivo? [Agregue la extensión a su VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets)**
 
+<a id="readme-section-3"></a>
+
 # Instalación
 
 Añada la librería Get en tu archivo pubspec.yaml:
@@ -74,6 +160,8 @@ Importe Get en los archivos en los que se utilizará:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # Proyecto Contador con GetX
 
@@ -117,7 +205,7 @@ class Home extends StatelessWidget {
 
       // Reemplace el Navigator.push de 8 líneas por un simple Get.to(). No necesitas contexto
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -133,7 +221,6 @@ class Other extends StatelessWidget {
      return Scaffold(body: Center(child: Text(c.count.string)));
   }
 }
-
 ```
 
 Resultado:
@@ -142,15 +229,21 @@ Resultado:
 
 Este es un proyecto simple pero ya deja en claro cuán poderoso es GetX. A medida que su proyecto crezca, esta diferencia se volverá más significativa. GetX fue diseñado para trabajar con equipos, pero también simplifica el trabajo de un desarrollador individual. Mejore sus plazos, entregue todo a tiempo, sin perder rendimiento. GetX no es para todos, pero si te identificaste con esa frase, ¡GET es para ti!
 
+<a id="readme-section-5"></a>
+
 # Los tres pilares
+
+<a id="readme-section-6"></a>
 
 ## Gestión del Estado
 
-Actualmente hay varios State Managers para Flutter. Sin embargo, con la mayoría de ellos implica utilizar ChangeNotifier para actualizar widgets y este es un enfoque malo y muy malo para el rendimiento de aplicaciones medianas o grandes. Puede verificar en la documentación oficial de Flutter que [ChangeNotifier debe usarse con 1 o un máximo de 2 listeners](https://api.Flutter.dev/Flutter/foundation/ChangeNotifier-class.html), por lo que es prácticamente inutilizable para cualquier aplicación mediana o grande.
+**Rendimiento:** GetX ofrece APIs reactivas y de streams sin crear manualmente un StreamController/StreamBuilder por valor. Elige Obx o GetBuilder según las actualizaciones y mide reconstrucciones y recursos en tu aplicación.
 
 GetX no es mejor ni peor que cualquier otro gestor de estado, pero debe analizar estos puntos, así como los puntos que se mencionan a continuación, para elegir entre usar GetX en forma pura (vanilla) o usarlo junto con otro gestor de estado.
 
 Definitivamente, GetX no es enemigo de ningún otro gestor de estado, porque GetX es más bien un microframework, no solo un gestor de estado, y se puede usar solo o en combinación con ellos.
+
+<a id="readme-section-7"></a>
 
 ### Reactivo STATE_MANAGER
 
@@ -176,9 +269,13 @@ var name = 'Jonatas Borges'.obs;
 Obx(() => Text (controller.name));
 ```
 
+<a id="readme-section-8"></a>
+
 ### Más detalles sobre la gestión del estado.
 
 **Vea una explicación más detallada de la administración del estado [aquí](./documentation/es_ES/state_management.md). Allí verá más ejemplos y también la diferencia entre el Gestión del Estado simple y el Gestión del Estado reactivo**
+
+<a id="readme-section-9"></a>
 
 ### Explicación en video sobre state management
 
@@ -186,45 +283,57 @@ Darwin Morocho hizo una increíble serie de videos sobre state management! Link:
 
 Obtendrá una buena idea de la potencia de GetX.
 
+<a id="readme-section-10"></a>
+
 ## Gestión de Rutas
 
 Para navegar a una nueva pantalla:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Para cerrar snackbars, dialogs, bottomsheets o cualquier cosa que normalmente cierre con Navigator.pop(contexto);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Para ir a la siguiente pantalla, sin opción a volver (util por ejemplo en SplashScreens, LoginScreen, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Para ir a la siguiente pantalla y cancelar todas las rutas anteriores (útil en carritos de compras, encuestas y exámenes)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Para navegar a la siguiente ruta y recibir o actualizar datos tan pronto como se regrese de ella:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
+
+<a id="readme-section-11"></a>
 
 ### Más detalles sobre la gestión de rutas.
 
 **Vea una explicación más detallada de la Gestión de Rutas [aquí](./documentation/es_ES/route_management.md).**
 
+<a id="readme-section-12"></a>
+
 ### Explicación del video
 
 Amateur Coder hizo un excelente video que cubre route management con Get! aquí esta el link: [Complete Getx Navigation](https://www.youtube.com/watch?v=RaqPIoJSTtI)
+
+<a id="readme-section-13"></a>
 
 ## Gestión de dependencias
 
@@ -262,11 +371,17 @@ Get.lazyPut<Service>(()=> ApiMock());
 /// ApiMock solo se llamará cuando alguien use Get.find<Service> por primera vez
 ```
 
+<a id="readme-section-14"></a>
+
 ### Más detalles sobre la gestión de dependencias.
 
 **Vea una explicación más detallada de la Gestión de dependencias [aquí](./documentation/es_ES/dependency_management.md).**
 
+<a id="readme-section-15"></a>
+
 # Utilidades
+
+<a id="readme-section-16"></a>
 
 ## Cambiar de tema
 
@@ -289,6 +404,8 @@ Cuando el modo oscuro está activado, cambiará al tema claro, y cuando el tema 
 Si quieres saber en profundidad cómo cambiar el tema, puedes seguir este tutorial en Medium que incluso enseña la persistencia del tema usando GetX:
 
 - [Temas dinámicos en 3 líneas usando GetX](https://medium.com/swlh/flutter-dynamic-themes-in-3-lines-c3b375f292e3) - Tutorial de [Rod Brown](https://github.com/RodBr).
+
+<a id="readme-section-17"></a>
 
 ## Otras API avanzadas y configuraciones manuales
 
@@ -333,16 +450,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // eliminar una ruta.
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // volver repetidamente hasta que predicate devuelva verdadero.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 //ir a la siguiente ruta y eliminar todas las rutas anteriores hasta que predicate devuelva verdadero.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // ir a la siguiente ruta con nombre y eliminar todas las rutas anteriores hasta que predicate devuelve verdadero.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //Verifique en qué plataforma se ejecuta la aplicación
 GetPlatform.isAndroid
@@ -357,7 +474,7 @@ Get.width
 Get.context
 
 // Da el contexto de la barra de bocadillos / diálogo / hoja inferior en primer plano en cualquier parte de su código.
-Get.contextOverlay
+Get.overlayContext
 
 // Note: los siguientes métodos son extensiones de context. Desde que tu
 // tiene acceso al contexto en cualquier lugar de su interfaz de usuario, puede usarlo en cualquier lugar del código de la interfaz de usuario
@@ -376,70 +493,75 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Similar a MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// similar a MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// similar a MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// similar a MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// similar a MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// comprobar si el dispositivo esta en landscape mode
-context.isLandscape()
+context.isLandscape
 
 /// comprobar si el dispositivo esta en portrait mode
-context.isPortrait()
+context.isPortrait
 
 /// similar a MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// similar a MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// obtener el lado más corto de la pantalla
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// Verdadero si el ancho es mayor que 800
-context.showNavbar()
+context.showNavbar
 
 /// Verdadero si el lado más corto es menor que 600p
-context.isPhone()
+context.isPhone
 
 /// Verdadero si el lado más corto es más grande que 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// Verdadero si el lado más corto es mayor que 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// Verdadero si el dispositivo actual es una tableta
-context.isTablet()
+context.isTablet
 ```
+
+<a id="readme-section-18"></a>
 
 ### Configuraciones globales opcionales
 
-Puede crear configuraciones globales para GetX. Simplemente agregue Get.config a su código antes de insertar cualquier ruta o hágalo directamente en su GetMaterialApp
+Configura GetMaterialApp o GetCupertinoApp; no uses el antiguo Get.config. Un router personalizado requiere una configuración completa de Navigator 2.
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 Opcionalmente, puede redirigir todos los mensajes de registro de Get. Si desea utilizar su propio paquete de registro favorito y desea capturar los registros allí.
@@ -456,12 +578,15 @@ void localLogWriter(String text, {bool isError = false}) {
   // con el comando "enableLog: false", los mensajes seguirán pasando por aquí
   // Debe verificar esta configuración manualmente aquí si desea respetarla
 }
-
 ```
+
+<a id="readme-section-19"></a>
 
 ## Video explanation of Other GetX Features
 
 Amateur Coder hizo un video asombroso sobre utilidades, almacenamiento, enlaces y otras características! Link: [GetX Other Features](https://youtu.be/ttQtlX_Q0eU)
+
+<a id="readme-section-20"></a>
 
 # Cambios importantes desde 2.0
 
@@ -482,7 +607,7 @@ RxController y GetBuilder ahora se han fusionado, ya no necesita memorizar qué 
 
 Antes:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -518,11 +643,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-21"></a>
+
 # ¿Por qué Getx?
 
 1- Después de una actualización de Flutter, muchos paquetes suelen romperse. A veces se producen errores de compilación, errores de los que aún no hay respuestas y el desarrollador necesita saber el origen del error, poder rastrear, y solo entonces intentar abrir un issue en el repositorio correspondiente, para finalmente ver su problema resuelto. Getx centraliza los principales recursos para el desarrollo (gestión de estado, dependencia y rutas), lo que le permite agregar un único paquete a su pubspec y comenzar a trabajar. Después de una actualización de Flutter, lo único que debe hacer es actualizar la dependencia Get y ponerse a trabajar. Get también resuelve problemas de compatibilidad. ¿Cuántas veces una versión de un paquete no es compatible con la versión de otro, porque una usa una dependencia en una versión y la otra en otra? Tampoco es una preocupación usando Get, ya que todo estará en el mismo paquete y será totalmente compatible.
 
-2- Flutter es fácil, Flutter es increíble, pero todavía tiene algo repetitivo que puede ser no deseado para la mayoría de los desarrolladores, como `Navigator.of(context).push (context, builder [...]`. Get simplifica el desarrollo. En lugar de escribir 8 líneas de código para simplemente llamar a una ruta, simplemente puede hacerlo: `Get.to(Home())` y listo, irá a la página siguiente. Algo doloroso de hacer con Flutter actualmente, mientras que con GetX es estúpidamente simple. Gestionar estados en Flutter y dependencias también es algo que genera mucho debate, ya que hay cientos de patrones en el pub. Pero no hay nada tan fácil como agregar un ".obs" al final de su variable, y colocar su widget dentro de un Obx, y eso es todo, todas las actualizaciones de esa variable se actualizarán automáticamente en la pantalla.
+2- Flutter es fácil, Flutter es increíble, pero todavía tiene algo repetitivo que puede ser no deseado para la mayoría de los desarrolladores, como `Navigator.of(context).push (context, builder [...]`. Get simplifica el desarrollo. En lugar de escribir 8 líneas de código para simplemente llamar a una ruta, simplemente puede hacerlo: `Get.to(() => Home())` y listo, irá a la página siguiente. Algo doloroso de hacer con Flutter actualmente, mientras que con GetX es estúpidamente simple. Gestionar estados en Flutter y dependencias también es algo que genera mucho debate, ya que hay cientos de patrones en el pub. Pero no hay nada tan fácil como agregar un ".obs" al final de su variable, y colocar su widget dentro de un Obx, y eso es todo, todas las actualizaciones de esa variable se actualizarán automáticamente en la pantalla.
 
 3- Facilidad sin preocuparse por el rendimiento. El rendimiento de Flutter ya es sorprendente, pero imagine que usa un gestor de estado y un localizador para distribuir sus clases de bloc/stores/controllers/ etc. Tendrá que llamar manualmente a la exclusión de esa dependencia cuando no la necesite. Pero, ¿alguna vez pensó en simplemente usar el controlador, y cuando ya no sea necesario, simplemente se elimine de la memoria? Eso es lo que hace GetX. Con SmartManagement, todo lo que no se está utilizando se elimina de la memoria, y no debería tener que preocuparse por nada más que la programación. Se le garantiza el consumo mínimo de recursos, sin siquiera haber creado una lógica para esto.
 
@@ -531,7 +658,11 @@ Si necesita contexto para encontrar un InheritedWidget, lo necesita en la vista 
 
 Esta librería siempre se actualizará e implementará nuevas características. Siéntase libre de ofrecer PRs y contribuir a ellas.
 
+<a id="readme-section-22"></a>
+
 # Comunidad
+
+<a id="readme-section-23"></a>
 
 ## Canales de la comunidad
 
@@ -542,6 +673,8 @@ GetX tiene una comunidad muy activa e implicada. Si tiene dudas, o necesita cual
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
 
+
+<a id="readme-section-24"></a>
 
 # Cómo contribuir
 
@@ -558,6 +691,8 @@ _¿Quieres contribuir al proyecto? Estaremos orgullosos de destacarte como uno d
 - Incluyendo nuevas funciones.
 
 ¡Cualquier contribución es bienvenida!
+
+<a id="readme-section-25"></a>
 
 ## Artículos y vídeos (inglés)
 

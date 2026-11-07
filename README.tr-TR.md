@@ -1,3 +1,5 @@
+> GetX 5 RC: Bu aday henüz yayımlanmadı. Doğrulanan temel, Flutter'ın yerleşik UI kitaplıklarıyla Flutter 3.47.9 ve Dart 3.13.7'dir.
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -23,6 +25,7 @@
 
   
 [![English](https://img.shields.io/badge/Language-English-blueviolet?style=for-the-badge)](README.md)
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 [![Vietnamese](https://img.shields.io/badge/Language-Vietnamese-blueviolet?style=for-the-badge)](README-vi.md)
 [![Indonesian](https://img.shields.io/badge/Language-Indonesian-blueviolet?style=for-the-badge)](README.id-ID.md)
 [![Urdu](https://img.shields.io/badge/Language-Urdu-blueviolet?style=for-the-badge)](README.ur-PK.md)
@@ -38,53 +41,135 @@
 
 </div>
 
-- [Get Hakkında](#get-hakkında)
-- [Kurulum](#kurulum)
-- [GetX ile Sayaç Uygulaması](#getx-ile-sayaç-uygulaması)
-- [Üç Temel Kavram](#üç-temel-kavram)
-  - [State Management (Durum Yönetimi)](#state-management-durum-yönetimi)
-    - [Reactive State Manager (Reaktif Durum Yönetimi)](#reactive-state-manager-reaktif-durum-yönetimi)
-    - [State Management Hakkında Daha Fazla Bilgi](#state-management-hakkında-daha-fazla-bilgi)
-  - [Route Management (Rota Yönetimi)](#route-management-rota-yönetimi)
-    - [Route Management Hakkında Daha Fazla Bilgi](#route-management-hakkında-daha-fazla-bilgi)
-  - [Dependency Management (Bağımlılık Yönetimi)](#dependency-management-bağımlılık-yönetimi)
-    - [Dependency Management Hakkında Daha Fazla Bilgi](#dependency-management-hakkında-daha-fazla-bilgi)
-- [Utils](#utils)
-  - [Internationalization (Uluslararasılaştırma)](#internationalization-uluslararasılaştırma)
-    - [Translations (Çeviriler)](#translations-çeviriler)
-      - [Translations Kullanımı](#translations-kullanımı)
-    - [Locales (Yerel Ayarlar)](#locales-yerel-ayarlar)
-      - [Locale Değiştirme](#locale-değiştirme)
-      - [System locale (Yerel Sistem Ayarları)](#system-locale-yerel-sistem-ayarları)
-  - [Tema Değiştirme](#tema-değiştirme)
-  - [GetConnect](#getconnect)
-    - [Varsayılan Ayarlar](#varsayılan-ayarlar)
-    - [Özel Ayarlarlamalar](#özel-ayarlamalar)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Priority (Öncelik)](#priority-öncelik)
-    - [Redirect (Yönlendirme)](#redirect-yönlendirme)
-    - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [Advanced APIs (Gelişmiş API'ler)](#advanced-apis-gelişmiş-apiler)
-    - [Opsiyonel Genel Ayarlar ve Manuel Ayarlamalar](#opsiyonel-genel-ayarlar-ve-manuel-ayarlamalar)
-    - [Local State Widgets (Yerel Durum Widgetları)](#local-state-widgets-yerel-durum-widgetları)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Faydalı İpuçları](#faydalı-ipuçları)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
-      - [Nasıl Kullanılır?](#nasıl-kullanılır)
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
-- [2.0 İle Gelen Büyük Değişiklikler](#20-ile-gelen-büyük-değişiklikler)
-- [Neden Getx?](#neden-getx)
-- [Topluluk](#topluluk)
-  - [Topluluk Kanalları](#topluluk-kanalları)
-  - [Nasıl katkıda bulunulur?](#nasıl-katkıda-bulunulur)
-  - [Makaleler ve Videolar](#makaleler-ve-videolar)
+## İçindekiler
+
+  - [Bu daldaki GetX 5 değişiklikleri](#getx5-current)
+- [Get Hakkında](#readme-section-2)
+- [Kurulum](#readme-section-3)
+- [GetX ile Sayaç Uygulaması](#readme-section-4)
+- [Üç Temel Kavram](#readme-section-5)
+  - [State management (Durum Yönetimi)](#readme-section-6)
+    - [Reactive State Manager (Reaktif Durum Yönetimi)](#readme-section-7)
+    - [State Management Hakkında Daha Fazla Bilgi](#readme-section-8)
+  - [Route Management (Rota Yönetimi)](#readme-section-9)
+    - [Route Management Hakkında Daha Fazla Bilgi](#readme-section-10)
+  - [Dependency Management (Bağımlılık Yönetimi)](#readme-section-11)
+    - [Dependency Management Hakkında Daha Fazla Bilgi](#readme-section-12)
+- [Utils](#readme-section-13)
+  - [Internationalization (Uluslararasılaştırma)](#readme-section-14)
+    - [Translations (Çeviriler)](#readme-section-15)
+    - [Translations kullanımı](#readme-section-16)
+    - [Tekil ve çoğul çevirisi yapımı](#readme-section-17)
+    - [Parametreler ile çeviri yapımı](#readme-section-18)
+    - [Locales (Yerel Ayarlar)](#readme-section-19)
+    - [Locale değiştirme](#readme-section-20)
+    - [System locale (Yerel Sistem Ayarları)](#readme-section-21)
+  - [Tema Değiştirme](#readme-section-22)
+  - [GetConnect](#readme-section-23)
+    - [Varsayılan Ayarlar](#readme-section-24)
+    - [Özel Ayarlamalar](#readme-section-25)
+  - [GetPage Middleware](#readme-section-26)
+    - [Priority (Öncelik)](#readme-section-27)
+    - [Redirect (Yönlendirme)](#readme-section-28)
+    - [onPageCalled](#readme-section-29)
+    - [OnBindingsStart](#readme-section-30)
+    - [OnPageBuildStart](#readme-section-31)
+    - [OnPageBuilt](#readme-section-32)
+    - [OnPageDispose](#readme-section-33)
+  - [Advanced APIs (Gelişmiş API'ler)](#readme-section-34)
+    - [Opsiyonel Genel Ayarlar ve Manuel Ayarlamalar](#readme-section-35)
+    - [Local State Widgets (Yerel Durum Widgetları)](#readme-section-36)
+    - [ValueBuilder](#readme-section-37)
+    - [ObxValue](#readme-section-38)
+  - [Faydalı Ipuçları](#readme-section-39)
+  - [StateMixin](#readme-section-40)
+    - [GetView](#readme-section-41)
+    - [GetResponsiveView](#readme-section-42)
+    - [Nasıl kullanılır?](#readme-section-43)
+    - [GetWidget](#readme-section-44)
+    - [GetxService](#readme-section-45)
+    - [Testler](#readme-section-46)
+    - [Ipuçları](#readme-section-47)
+    - [Mockito or mocktail](#readme-section-48)
+    - [Using Get.reset()](#readme-section-49)
+    - [Get.testMode ](#readme-section-50)
+- [2.0 Ile Gelen Büyük Değişiklikler](#readme-section-51)
+- [Neden Getx?](#readme-section-52)
+- [Topluluk](#readme-section-53)
+  - [Topluluk Kanalları](#readme-section-54)
+  - [Nasıl katkıda bulunulur?](#readme-section-55)
+  - [Makaleler ve videolar](#readme-section-56)
+
+<a id="getx5-current"></a>
+
+## Bu daldaki GetX 5 değişiklikleri
+
+Bu aday henüz yayımlanmadı. Doğrulanan temel, Flutter'ın yerleşik UI kitaplıklarıyla Flutter 3.47.9 ve Dart 3.13.7'dir.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding, `List<Bind>` döndürür. Uygulamada binds, rotada bindings kullanın. Get.create yerine Get.spawn kullanın; asenkron başlatmayı await edip hazır değeri Get.put ile kaydedin.
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` başarılı veriyi taşır. futurize, Future üreten fonksiyonu alır ve void döndürür; sonuçlar tamamlanma sırasıyla uygulanır. Boş Rx koleksiyonları bağımsız değiştirilebilir depolar oluşturur.
+
+Gezinme Navigator 2 kullanır. Get.back sayfaları geri alır; dialog, sheet ve snackbar için özel kapatma helper'larını kullanın. Get.context ve Get.overlayContext uygulama ömrü dışında null olabilir.
+
+Adlandırılmış geçmişi geri yüklemek için restorationScopeId ve sabit restorationId ayarlayın. JSON uyumlu argümanlar boyut sınırına ve middleware denetimine tabidir; süreç sonrasında yeni controller ve Future oluşturulur.
+
+Response modifier kaldırma, kimlik doğrulama, timeout, iptal ve decoding hataları düzeltildi. IO, tarayıcı ve JS/WASM üzerinde HTTP/WebSocket ve kaynak temizliği test edilir.
+
+Flutter 3.47.9 tarayıcı geçmişindeki percent-encoding kısıtı belgelenmiştir; normal web testleri bunu çözülmüş saymaz. Gerçek host ve cihazda refresh, back ve restoration test edin.
+
+Eski Get.config yerine GetMaterialApp veya GetCupertinoApp ayarlarını kullanın. Özel router için tutarlı Navigator 2 yapılandırması gerekir.
+
+GetNavigator ve GetRouterOutlet.pickPages, `onPopPage` yerine silme sonrası bildirim olan `onDidRemovePage` kullanır. Back vetosu için `GetPage.canPop` veya `PopScope` kullanın; özel outlet callback'i `delegate.didRemovePage` metoduna iletmelidir.
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Get Hakkında
 
@@ -92,7 +177,7 @@
 
 - GetX'in 3 temel ilkesi vardır. Bu ilkeler kütüphanedeki tüm kaynaklar için önemlidir: **ÜRETKENLİK, PERFORMANS VE ORGANİZASYON.**
 
-  - **PERFORMANS:** GetX, performansa ve kaynakların minimum düzeyde tüketimine odaklanmıştır. GetX, Streams ya da ChangeNotifier kullanmaz.
+  - **Performans:** GetX, her değer için elle StreamController/StreamBuilder oluşturmadan reaktif ve stream API'leri sunar. Güncelleme biçimine göre Obx veya GetBuilder seçin, uygulamadaki rebuild ve kaynakları ölçün.
 
   - **ÜRETKENLİK:** GetX kolay ve keyifli bir syntax (yazım kuralları) kullanır. Ne yapmak istersen iste GetX'de her zaman kolay bir çözüm yolu vardır. Saatlerce süren geliştirmeden tasarruf etmeyi ve uygulanın size sağladığı  performansı maksimum seviyede kullanmayı mümkün kılar.
 
@@ -114,6 +199,8 @@
 **Ayrıca üretkenliğinizi arttırmak için 
 [VSCode eklentileri](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) ve the [Android Studio/Intellij eklentileri](https://plugins.jetbrains.com/plugin/14975-getx-snippets) vardır.**
 
+<a id="readme-section-3"></a>
+
 # Kurulum
 
 pubspec.yaml dosyasına Get’i ekleyin:
@@ -128,6 +215,8 @@ Get’i kullanılacak sayfaya import ediyoruz:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # GetX ile Sayaç Uygulaması
 
@@ -171,7 +260,7 @@ class Home extends StatelessWidget {
 
       // Navigator.push içeren 8 satırı basit bir şekilde Get.to() ile değiştirin. Bunda context'e ihtiyacınız kalmamaktadır.
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -199,11 +288,17 @@ Get, ekiplerle çalışmak üzere tasarlanmıştır. Ayrıca bireysel geliştiri
 
 Performanstan ödün vermeden her şeyi zamanında teslim etmenize yardımcı olur. Get tam olarak sana layık!
 
+<a id="readme-section-5"></a>
+
 # Üç Temel Kavram
+
+<a id="readme-section-6"></a>
 
 ## State management (Durum Yönetimi)
 
 Get iki farklı state manager içerir: simple state manager (GetBuilder da denilir) ve reactive state manager (GetX/Obx)
+
+<a id="readme-section-7"></a>
 
 ### Reactive State Manager (Reaktif Durum Yönetimi)
 
@@ -239,11 +334,15 @@ Obx(() => Text("${controller.name}"));
 
 Hepsi bu. İşte _bu kadar_ basit.
 
+<a id="readme-section-8"></a>
+
 ### State Management Hakkında Daha Fazla Bilgi
 
 **State Management'ın daha ayrıntılı bir açıklamasına [buradan](./documentation/en_US/state_management.md) erişebilirsiniz. Orada daha fazla örnek ile simple state manager ve reactive state manager arasındaki farkı görebilirsiniz**
 
 GetX'in gücü hakkında daha iyi bir fikir edineceksiniz.
+
+<a id="readme-section-9"></a>
 
 ## Route Management (Rota Yönetimi)
 
@@ -261,10 +360,10 @@ Yeni ekrana geçmek için:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
-Name (isim) ile yeni sayfaya geçiş yapılabilir. Named routes (İsimli rotalar) hakkında daha çok bilgiye [buradan](./documentation/tr_TR/route_management.md#navigation-with-named-routes) ulaşabilirsiniz.
+Name (isim) ile yeni sayfaya geçiş yapılabilir. Named routes (İsimli rotalar) hakkında daha çok bilgiye [buradan](./documentation/tr_TR/route_management.md) ulaşabilirsiniz.
 
 ```dart
 
@@ -274,26 +373,34 @@ Get.toNamed('/details');
 Snackbars, dialogs, bottomsheets ve normalde Navigator.pop(context) ile kapatacağınız herhangi bir şeyi kapatmak için;
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Önceki ekrana geri dönme seçeneğinin olmadan bir sonraki ekrana gitmek için (örnek olarak SplashScreens, login screens, vs.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Sonraki ekrana gitmek ve önceki tüm route'ları kapatmak için shopping carts, polls, ve test'lerde kullanılır)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Bunlardan herhangi birini yapmak için context kullanmanız gerekmediğini fark ettiniz mi? Get route management'ı kullanmanın en büyük avantajlarından biri de budur. Böylelikle controller sınıfınızda olan tüm metodları endişe olmadan çalıştırabilirsiniz.
 
+<a id="readme-section-10"></a>
+
 ### Route Management Hakkında Daha Fazla Bilgi
 
 **Get, named routes ile çalışırken route'lar arası geçişleri kolayca kontrol etmenizi sağlar. Daha ayrıntılı doküman için [buraya](./documentation/tr_TR/route_management.md) tıklayabilirsiniz.**
+
+<a id="readme-section-11"></a>
 
 ## Dependency Management (Bağımlılık Yönetimi)
 
@@ -327,13 +434,21 @@ Sonrasında üstte alınan controller'daki verilerinizi kullanabileceksiniz:
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### Dependency Management Hakkında Daha Fazla Bilgi
 
 **Dependency management'a daha derinden bakmak için [buraya](./documentation/tr_TR/dependency_management.md) tıklayabilirsiniz**
 
+<a id="readme-section-13"></a>
+
 # Utils
 
+<a id="readme-section-14"></a>
+
 ## Internationalization (Uluslararasılaştırma)
+
+<a id="readme-section-15"></a>
 
 ### Translations (Çeviriler)
 
@@ -356,6 +471,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### Translations kullanımı
 
 Önecen belirlenmiş key'e sadece `.tr` eklenince `Get.locale` ve `Get.fallbackLocale` şimdiki değerleri kullanarak otomatik çeviriyi yapacaktır.
@@ -365,12 +482,16 @@ class Messages extends Translations {
 Text('title'.tr);
 ```
 
+<a id="readme-section-17"></a>
+
 #### Tekil ve çoğul çevirisi yapımı
 
 ```dart
 var products = [];
-Text('singularKey'.trPlural('pluralKey', products.length, Args));
+Text('singularKey'.trPlural('pluralKey', products.length));
 ```
+
+<a id="readme-section-18"></a>
 
 #### Parametreler ile çeviri yapımı
 
@@ -393,6 +514,8 @@ Text('logged_in'.trParams({
   }));
 ```
 
+<a id="readme-section-19"></a>
+
 ### Locales (Yerel Ayarlar)
 
 Locale ve translation'lar`GetMaterialApp`'in parametreleri içinde atanabilir.
@@ -405,6 +528,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-20"></a>
+
 #### Locale değiştirme
 
 `Get.updateLocale(locale)` çağrılarak locale güncellenebilir. Çeviriler otomatik olarak yeni locale dilinde olacaktır.
@@ -413,6 +538,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-21"></a>
 
 #### System locale (Yerel Sistem Ayarları)
 
@@ -423,6 +550,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-22"></a>
 
 ## Tema Değiştirme
 
@@ -445,34 +574,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 `.darkmode` aktif hale geldiğinde, tıklandığında _light theme_ 'e döner, _light theme_ aktif olduğunda,  _dark theme_'e geçer.
 
+<a id="readme-section-23"></a>
+
 ## GetConnect
 
 GetConnect backend ile frontend'in http ya da websockets ile kolayca iletişime geçmesini sağlar.
+
+<a id="readme-section-24"></a>
 
 ### Varsayılan Ayarlar
 
 Sadece GetConnect'den extend ederek gelen GET/POST/PUT/DELETE/SOCKET metodlarını kullanarak Rest API ya da websockets ile kolayca iletişim kurabilirsiniz.
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // File  ile Post request
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-25"></a>
 
 ### Özel Ayarlamalar
 
@@ -480,49 +624,34 @@ GetConnect oldukça düzenlenebilir. Kendi base Url'nizi tanımlayabilir, cevapl
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // Tüm request'ler jsonEncode'a gider: CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; //baseUrl'yi bu şekilde tanımlar
-    // Http ve websockets kullanılmış ise [httpClient] instance'ına ihtiyaç yoktur.
-
-
-    // Gelen tüm request'ler "apikey"'in header özelliğine gier.
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Eğer sunucu "Brazilya"'dan bir veri gönderse bile
-    // response'dan veriyi kaldırdığın için kullanıcılar göremez.
-    // response önceden getirişmiş olsa bile 
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // header veriliyor
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    // HttpStatus, HttpStatus.unauthorized ise 
-    // Autenticator 3 defa çağırılır.
-    httpClient.maxAuthRetries = 3;
-  }
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-26"></a>
 
 ## GetPage Middleware
 
@@ -530,42 +659,63 @@ GetPage'in GetMiddleWare listesi oluşturan ve bunları özel bir sırada çalı
 
 **Not**: GetPage, Middlewares içeriyor ise bu sayfanın tüm çocukları da aynı middlewares'i otomatik olarak içerir.
 
+<a id="readme-section-27"></a>
+
 ### Priority (Öncelik)
 
 Middlewares'in sıralı çalışması için GetMiddleware'lerin priority'leri (öncelikleri) düzenlenmelidir.
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 Middleware'ler bu sırada çalışacaktır:   **-8 => 2 => 4 => 5**
 
+<a id="readme-section-28"></a>
+
 ### Redirect (Yönlendirme)
 
- Çağrılan route'un sayfası arandığında, fonsyon çağırılmış olacaktır. Redirect için RouteSettings kullanılır. Name değeri null verilebilir ve bu olduğu zaman herhangi bir redirect olmayacaktır.
+redirectDelegate içinde route devam, başka RouteDecoder yönlendirme, null iptal anlamına gelir. login rotasını kaydedin ve döngüden kaçının.
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### onPageCalled
 
 Bu fonsyon, herhangi bir şey oluşmadan önce sayfa çağırılmak istenildiğinde kullanılır. Sayfada bir şey değiştirmek için ya da yeni bir sayfa vermek için kullanabilirsiniz.
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### OnBindingsStart
 
@@ -573,14 +723,14 @@ Bu fonsyon Bindings başlatılmadan hemen önce çalışır.
 Bu sayfa için Bindings'i şu şekilde değiştirebilirsiniz.
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-31"></a>
 
 ### OnPageBuildStart
 
@@ -588,19 +738,25 @@ Bu fonsyon Bindings başlatıldıktan hemen sonra çalışır.
 Bindings oluşturulduktan hemen sonra ve widget sayfası oluşturulmadan önce kullanabilirsiniz.
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-32"></a>
 
 ### OnPageBuilt
 
 Bu fonskyon GetPage.page fonskyonu çağrıldıktan hemen sonra çalışır ve fonksyonun sonucunu verir. Sonrasında gösterilecek widget'ı alır.
 
+<a id="readme-section-33"></a>
+
 ### OnPageDispose
 
 Bu fonsyon sayfadaki ilgili tüm objelerin (Controllers, views, ...) dispose olmasından hemen sonra çalışır.
+
+<a id="readme-section-34"></a>
 
 ## Advanced APIs (Gelişmiş API'ler)
 
@@ -627,16 +783,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // Tek route kaldırılır.
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // predicate, true döndürene kadar terarlanarak geri gelir.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // Yeni route a gider ve eski tüm route'ları, predicate, true döndürene kadar kaldırır.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // named route'a gider ve eski tüm route'ları, predicate, true döndürene kadar kaldırır.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //Hangi platformda çalıştığı kontrol edilir.
 GetPlatform.isAndroid
@@ -664,7 +820,7 @@ Get.width
 Get.context
 
 // Önde olan snackbar/dialog/bottomsheet'a nerede olursanız olun context'i verir. 
-Get.contextOverlay
+Get.overlayContext
 
 // Not: aşağıdaki metodlar context üzerine olan extension'lardır.
 // UI'ın herhangi bir yerinde context'e erişebilirsiniz ve istediğiniz yerde kullanabilirsiniz.
@@ -681,49 +837,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// MediaQuery.of(context).size'a benzer
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// MediaQuery.of(context).padding'e benzer
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// MediaQuery.of(context).viewPadding'e benzer
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// MediaQuery.of(context).viewInsets;'e benzer
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// MediaQuery.of(context).orientation;'a benzer
-context.orientation()
+context.orientation
 
 /// Cihazın yatay modda olup olmadığını kontrol eder.
-context.isLandscape()
+context.isLandscape
 
 /// Cihazın dikey modda olup olmadığını kontrol eder.
-context.isPortrait()
+context.isPortrait
 
 /// MediaQuery.of(context).devicePixelRatio;'ya benzer
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// MediaQuery.of(context).textScaleFactor;'e benzer
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Ekranın en kısa kenarını getirir
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// width 800'den büyük ise true döndürür.
-context.showNavbar()
+context.showNavbar
 
 /// Kısa kenar 600p'den küçük ise true döndürür.
-context.isPhone()
+context.isPhone
 
 /// Kısa kenar 600p'den büyük ise true döndürür.
-context.isSmallTablet()
+context.isSmallTablet
 
 /// Kısa kenar 720p'den büyük ise true döndürür.
-context.isLargeTablet()
+context.isLargeTablet
 
 /// Cihaz tablet ise true döndürür.
-context.isTablet()
+context.isTablet
 
 /// Ekran boyutuna göre <T> değerini döndürür
 /// için değer verebilir:
@@ -734,6 +890,8 @@ context.isTablet()
 
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-35"></a>
 
 ### Opsiyonel Genel Ayarlar ve Manuel Ayarlamalar
 
@@ -757,24 +915,26 @@ MaterialApp(
 );
 ```
 
-`Get` için _Global Settings_ oluşturabilirsiniz. Herhangi bir route'a push yapmadan önce kodunuza `Get.config` eklemeniz yeterli. 
-Ya da doğrudan  `GetMaterialApp` içinde tanımlayabilirsiniz.
+Eski Get.config yerine GetMaterialApp veya GetCupertinoApp ayarlarını kullanın. Özel router için tutarlı Navigator 2 yapılandırması gerekir.
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 İsteğe bağlı olarak tüm logging mesajlarını `Get` üzerinden yönlendirebilirsiniz. 
@@ -792,14 +952,17 @@ void localLogWriter(String text, {bool isError = false}) {
   // eğer, enableLog: false ise log mesajları bu callback içine gönderilir
   // GetConfig.isLogEnable aracılığıyla isterseniz kontrol edebilirsiniz
 }
-
 ```
+
+<a id="readme-section-36"></a>
 
 ### Local State Widgets (Yerel Durum Widgetları)
 
 Bu widget'lar tek bir değeri kontrol etmenize ve durumu geçici ya da yerel olarak tutmanızı sağlar.
 Reactive ve simple olan yapılar içerir.
 Örneğin bunları `TextField` içindeki obscureText parametresine bağlayabilirsiniz. İsterseniz kendinizinkini (Expandable Panel vs.) de oluşturabilirsiniz ya da `Scaffold`'daki body'nin içeriği değişirken `BottomNavigationBar` içindeki current index'i değiştirebilirsiniz.
+
+<a id="readme-section-37"></a>
 
 #### ValueBuilder
 
@@ -818,6 +981,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-38"></a>
+
 #### ObxValue
 
 [`ValueBuilder`](#valuebuilder)'a oldukça benzer olmasının yanında bu Reactive halidir. Rx nesnesine aktarabilir ( .obs yapısını hatıladınız mı?) ve otomatik olarak güncellenmensini sağlayabilirsiniz, resmen muhteşem değil mi ?  
@@ -830,6 +995,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-39"></a>
 
 ## Faydalı Ipuçları
 
@@ -852,93 +1019,35 @@ En çok "kullanılan yol"  `.value` yapısı ile erişmektir fakat şu şekilde 
 
 
 ```dart
-final name = 'GetX'.obs;
-// eğer değer şimdikinden farklı ise, sadece stream'i "günceller"
-name.value = 'Hey';
-
-// Tüm Rx özellikleri "çağrılabilir" ve geriye yeni bir değer döndürür.
-// Fakat bu yaklaşım `null` değerleri kabul etmez, sonucunda UI rebuild (tekrardan oluşturulmaz) edilmez.
-name('Hello');
-
-// getter yapmak gibi, 'Hello'yazdırır.
-
-name() ;
-
-/// numbers:
-
-final count = 0.obs;
-
-// Tüm non mutable (değişken olmayan) işlemleri num primitives üzerinden yapabilirsiniz.
-count + 1;
-
-// Dikkat edin! Bu sadece `count` değerinin 'final' olmayıp 'var' olduğu değerlerde mümkündür.
-count += 1;
-
-// Ayrıca değerleri kıyaslayabilirsiniz:
-count > 2;
-
-/// booleans:
-
-final flag = false.obs;
-
-// değer true/false arasında değişir.
-flag.toggle();
-
-
-/// tüm tipler için:
-
-// "value"'ları null'a çevirir.
-flag.nil();
-
-// Tüm toString(), toJson() işlemleri `value`'ya aktarılır.
-print( count ); // RxInt içinden `toString()` çağrılır.
-
-final abc = [0,1,2].obs;
-// Değeri bir json Array (dizi) yapısına çevirir ve RxList şeklinde yazdırır.
-// Json tüm Rx tipleri tarafından desteklenir.
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList ve RxSet kendi native tiplerinden extend edilen özel Rx tipleridir.
-// Fakat List ile çalışmak normal listelerle çalışmak gibidir. Reaktiv olmasına rağmen.
-abc.add(12); // '12' listeye eklenir ve stream GÜNCELLENİR.
-abc[3]; // List'deki gibi 3. index okunur.
-
-
-// Rx ve value ile çalışmak aynıdır fakat hashCode her zaman value'dan alınır.
-final number = 12.obs;
-print( number == 12 ); // çıktı: true
-
-/// Özel Rx Modelleri:
-
-
-// toJson(), toString() child'a gönderilir. Böylelikle override'ları onlara implement edebilirsiniz ve doğrudan gözlemlenebiliri print() edebilirsiniz.
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user`,"reactive" yapıdadır. Fakat içinde özellikleri DEĞİLDİR.
-// Yani eğer içindeki bazı değerleri değiştirirsek
-user.value.name = 'Roi';
-//widget, rebuild olmayacaktır!,
-//`Rx`, user içindeki bir şeyi değiştirdiğinizde, bundan haberi olmayacaktır.
-// Özel sınıflar oluşturmak için, manuel olarak değişiklikleri "notify" etmeliyiz.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// Ya da `update()` metodunu kullanabiliriz
-user.update((value){
-  value.name='Roi';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+<a id="readme-section-40"></a>
+
 ## StateMixin
 
 `UI` state ile başa çıkmanın başka bir yolu da `StateMixin<T>`  kullanmaktır.
@@ -947,48 +1056,55 @@ Bu sizin T modelini kullanmanızı sağlar.
 
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 `change()` metodu istediğiniz yerde State'i değiştirmemizi sağlar.
 Veri(data) ve durum(status) aktarmak için kullanılan yol:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus şu durumları kullanmanızı sağlar:
+GetStatus şu durumları kullanmanızı sağlar:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 UI'ın içinde temsil edilmesi için şu şekilde kullanılır:
 
 ```dart
-class OtherClass extends GetView<Controller> {
+class NamesController extends GetxController with StateMixin<List<String>> {
+  void showNames(List<String> names) {
+    change(GetStatus<List<String>>.success(names));
+  }
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+  void showLoading() => setLoading();
+  void showEmpty() => setEmpty();
+  void showError(Object error) => setError(error);
+}
+
+class NamesView extends GetView<NamesController> {
+  const NamesView({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: controller.obx(
-        (state)=>Text(state.name),
-        
-        // Kendi yüklenme göstergenizi (loading indicator) buraya eklebilirsiniz
-        // hali hazırda gelen yapı şudur: Center(child:CircularProgressIndicator())
-        onLoading: CustomLoadingIndicator(),
-        onEmpty: Text('No data found'),
-
-        // Keni hata widget'ınızı buraya yazabilirsiniz
-        // hali hazırda gelen yapı şudur: Center(child:Text(error))
-        onError: (error)=>Text(error),
-      ),
-    );
+  Widget build(BuildContext context) => Scaffold(
+    body: controller.obx(
+      (names) => Text(names.join(', ')),
+      onLoading: const Center(child: CircularProgressIndicator()),
+      onEmpty: const Text('No data'),
+      onError: (error) => Text(error ?? 'Unknown error'),
+    ),
+  );
 }
 ```
+
+<a id="readme-section-41"></a>
 
 #### GetView
 
@@ -997,7 +1113,7 @@ Bu widget'ı çok seviyorum, oldukça basit ve çok kullanışlı!
 `const Stateless` Widget, `Controller`'ı tanımlamak için `controller` özelliği içerir. 
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -1013,11 +1129,15 @@ Bu widget'ı çok seviyorum, oldukça basit ve çok kullanışlı!
  }
 ```
 
+<a id="readme-section-42"></a>
+
 #### GetResponsiveView
 
 Responsive view oluşturmak için bu widget'tan extend edilir.
 Bu widget ekran size ve type hakkında bilgiler içeren  
 `screen` özelliğini taşır.
+
+<a id="readme-section-43"></a>
 
 ##### Nasıl kullanılır?
 
@@ -1035,73 +1155,57 @@ build yapmanız için 2 yönteminiz vardır.
 Bu ekranın kodları
 [burada](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
+<a id="readme-section-44"></a>
+
 #### GetWidget
 
-Çoğu kişinin widget'lar hakkında hiçbir fikri yok ya da kullanırken inanılmaz kafası karışıyor.
-Bu kullanım oldukça nadir fakat özel: Controller `caches`'leme işlemi _cache_ yüzünden asla bir  `const Stateless` oluşamaz.
+GetWidget o widget örneğinin controller'ını önbellekler ve const destekler. Get.spawn controller'ı, sahibi widget kaldırılınca kapanır. GetView bu önbellek olmadan lookup yapar.
 
-> Peki ne zaman Controller'ı "cache"'yemeye ihtiyacınız olacak?
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-"Çok da yaygın olmayan" bir **GetX** özelliğini kullanıyorsanız: `Get.create()`.
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.create(()=>Controller())` yapısı siz her `Get.find<Controller>()` dediğinizde size yeni bir `Controller` oluşturacak.
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-`GetWidget`'ın ışığı burada parlıyor. Örnek olarak bir listede 
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
 
-Todo ögelerini tutmak istiyorsanız kullanılır. Eğer widget'ın "rebuilt" olursa, yapı yine aynı controller nesnesini tutmaya devam edecektir.
+<a id="readme-section-45"></a>
 
 #### GetxService
 
-Bu sınıf `GetxController`' bezer. Uygulamanın lifecycle'larını (hayat döngüsü metodlarını) içerir ( `onInit()`, `onReady()`, `onClose()`).
-Fakat içinde hiçbir mantıksal yapı bulunmaz. Sadece **GetX**'in Dependency Injection sistemini bilgilendirir. 
-
-Bunun alt sınıfları, memory (bellekten) hiçbir şekilde **kaldırılamaz**. 
-
-
-Bu yöntem "Servislerinizi" tutmak için oldukça kullanışlıdır. Servisleriniz bu şekilde her zaman ulaşılabilir ve aktif olur.  `Get.find()` metodu buna yeter. Örnek olarak:`ApiService`, `StorageService`, `CacheService`.
-
+GetxService uygulama ömründeki hizmetler için onInit/onReady/onClose sağlar. Normal silme korur; bilinçli force veya Get.reset temizleyebilir. Süreç öldükten sonra kalıcı depolama sağlamaz. init'i await edip Get.put kullanın.
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// SERVİSLERİN BAŞLATILMASI BEKLENİR
-  runApp(SomeApp());
-}
-
-/// Servislerinizi Flutter uygulaması çalışmadan önce başlatılması oldukça mantıklı bir harekettir.
-/// Uygulama akışını kontrol edebilirsiniz. (belki de birkaç tane Tema düzenlemesi ya da
-/// apiKey, kulllanıcıdan gelen  dil tanımlaması gibi düzenlemeler yapmanız lazımdır...Bu durumna SettingService'i ApiService'den önce çalışması gerekmektedir.
-/// GetMaterialApp() 'in rebuild yapmasına gerek yoktur. Çünkü değerleri doğrudan alır.
-void initServices() async {
-  print('starting services ...');
-  /// Burası sizin get_storage, hive, shared_pref gibi yükelemeleri yaptığınız yer.
-  /// ya da daha fazla özellik bağlamak ve ya async yapıları kullanmak için
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-`GetxService`'lerini silmenin tek bir yolu vardır o da `Get.reset()`. 
-Bu yöntem uygulamanıza "Hot Reboot" yapmak gibidir. Eğer uygulamanızın hayat süresi boyunca mutlaka kalıcılığı olmasını istediğiniz bir sınıfın nesnesini oluşturmak istediğiniz zaman  `GetxService`'i kullanın.
-
+<a id="readme-section-46"></a>
 
 ### Testler
 
@@ -1155,7 +1259,11 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
+<a id="readme-section-47"></a>
+
 #### Ipuçları
+
+<a id="readme-section-48"></a>
 
 ##### Mockito or mocktail
 Eğer GetxController/GetxService'inizi mock yapmaya ihtiyacınız varsa GetxController'dan extend etmeniz ve Mock ile mixin'lemelisiniz.
@@ -1164,12 +1272,18 @@ Eğer GetxController/GetxService'inizi mock yapmaya ihtiyacınız varsa GetxCont
 class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
 ```
 
+<a id="readme-section-49"></a>
+
 ##### Using Get.reset()
 Eğer widget'ları ya da widget grupllarını test etmek istiyorsanız, testinizin sonunda Get.reset'i kullanın ya da önceki testinizden kalma tüm ayarları sıfırlayın.
+
+<a id="readme-section-50"></a>
 
 ##### Get.testMode 
 Eğer controller'larınızın içinden navigation kullanmak istiyorsanız. Main'den önce  `Get.testMode = true` şeklinde kullanın.
 
+
+<a id="readme-section-51"></a>
 
 # 2.0 Ile Gelen Büyük Değişiklikler
 
@@ -1190,7 +1304,7 @@ RxController ve GetBuilder şimdi birleştiler. Artık hangi controller'ı kulla
 
 Önce:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -1225,11 +1339,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-52"></a>
+
 # Neden Getx?
 
 1- Birçok kez Flutter güncellendikten sonra, birçok paket çalışmaz hale gelecek. Genelde derleme hataları gerçekleşir. Bu hataların hala cevabı olmayabilir. Geliştiricinin bu hatanın nerden geldiğini bilmesi gereklidir. Sonrasında bu hatayı izleyip bunun hakkında repository'de issue açması ve sorunun çözülmesini beklemelidir. Get, geliştirme için gereken ana kaynaklarını  (State, dependency ve route management) merkezde toplar, pubspec'e tek bir paket eklemeye izin verir ve çalışmaya başlar. Flutter güncellendikten sonra tek yapmanız gereken Get dependency'yi güncellemek ve çalışmaya başlamaktır. Get uyumluluk problemlerini de çözer. Paketler arasında genelde güncellemeler sonrası uyumsuzluklar olabilir. Get'in kendi içinde her şey birbiri ile uyumlu olduğundan bunun için endişelenmenize gerek yoktur.
 
-2- Flutter oldukça kolay kullanımı olan inanılmaz olmasının yanı sıra birçok geliştirici tarafından istenmeyen `Navigator.of(context).push (context, builder [...]` gibi ezber yapılar içerir. Get geliştirmeyi basitleştirir. Route çağırmak için 8 kod yazmak yerine sadece `Get.to(Home())` diyerek bir sonraki sayfaya geçebilirsin. Dynamic web urls ile çalışmak mevcut Flutter ile çalışırken zorlayıcı olabilir. Get ile durum tam tersi hal alır ve işleri çok kolay bir hale getirir. Flutter'da State'leri yönetmek için dependency'leri pub içerindeki yüzlerce kütüphane arasından seçmek birçok tartışmayı da beraberinde getiren bir konudur. Get sayesinde ekranda değişkeni otomatik olarak güncellemesini sağlamak için değişkeninizin sonuna ".obs" eklemek ve widget'ınızı Obx ile sarmalamak yeterlidir.
+2- Flutter oldukça kolay kullanımı olan inanılmaz olmasının yanı sıra birçok geliştirici tarafından istenmeyen `Navigator.of(context).push (context, builder [...]` gibi ezber yapılar içerir. Get geliştirmeyi basitleştirir. Route çağırmak için 8 kod yazmak yerine sadece `Get.to(() => Home())` diyerek bir sonraki sayfaya geçebilirsin. Dynamic web urls ile çalışmak mevcut Flutter ile çalışırken zorlayıcı olabilir. Get ile durum tam tersi hal alır ve işleri çok kolay bir hale getirir. Flutter'da State'leri yönetmek için dependency'leri pub içerindeki yüzlerce kütüphane arasından seçmek birçok tartışmayı da beraberinde getiren bir konudur. Get sayesinde ekranda değişkeni otomatik olarak güncellemesini sağlamak için değişkeninizin sonuna ".obs" eklemek ve widget'ınızı Obx ile sarmalamak yeterlidir.
 
 3- Performansı kafaya takmayın. Flutter'ın performansı zaten çok iyi. Bir de state manager kullanırken ve blocs/stores/controllers gibi sınıflarınızı locator ile yönetirken de aynı performansı aldığınızı düşünün. İhtiyacınız olmadığında  dependency'lerinizi dışarıdan çağırmak zorunda kalacaksınız. Hiç düşündünüz mü, basitçe kullandığınız controller'ınızın artık kimse tarafından kullanılmadığında kolayca bellekten silindiğini? İşte  GetX bunu yapar. SmartManagement sayesinde kullanılmayan her şey endişelenmenize gerek kalmadan otomatik olarak hafızadan silinir. Bunun için bir logic yaratmaya gerek bile kalmadan, kaynakları minimum ölçüde tükettiğinize emin olabilirsiniz. 
 
@@ -1238,7 +1354,11 @@ Bir InheritedWidget bulabilmek için context'e ihtiyaç duyduğunuzda, bunu view
 
 Bu kütüphane her zaman güncellenebilir ve yeni özellikler eklenebilir olacaktır. PR ve contribute yapmakta tamamen özgürsünüz.
 
+<a id="readme-section-53"></a>
+
 # Topluluk
+
+<a id="readme-section-54"></a>
 
 ## Topluluk Kanalları
 
@@ -1247,6 +1367,8 @@ GetX oldukça aktif ve yardımsever bir topluluğa sahiptir. Bu framework kullan
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-55"></a>
 
 ## Nasıl katkıda bulunulur?
 
@@ -1260,6 +1382,8 @@ _Projeye katkıda bulunmak ister misiniz? Sizi destekçilerimizden biri olarak �
 
 Her türlü yardım için teşekkürler.
 
+
+<a id="readme-section-56"></a>
 
 ## Makaleler ve videolar
 

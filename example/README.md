@@ -1,16 +1,32 @@
-# example
+# GetX 5 example
 
-A new Flutter project.
+Package version: `5.0.0-release-candidate-9.4.0` (unreleased candidate).
+[فارسی](../README-fa.md) · [Release scope](../documentation/en_US/release_scope_5.md)
+· [Changelog](../CHANGELOG.md).
 
-## Getting Started
+This application uses the parent checkout through a path dependency. Read the
+[RC migration guide](../documentation/en_US/migration_guide_5.md) and the
+[example walkthrough](example.md) for the APIs in this branch.
 
-This project is a starting point for a Flutter application.
+Use one selected Flutter SDK for resolution, analysis and tests. Local checks
+use Flutter 3.47.9/Dart 3.13.7; the [CI workflow](../.github/workflows/main.yml)
+tests this example on Flutter 3.47.9. Check the CI result for the exact
+revision you consume. From this directory:
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+flutter --version
+flutter pub get --offline
+flutter analyze --no-pub
+flutter test --no-pub --no-dds
+flutter run --no-pub
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/documentation/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/documentation/cookbook)
+Offline resolution requires an existing dependency cache. These commands do not
+install or upgrade an SDK. Root-package tests do not include this package's
+tests. See [example_nav2](../example_nav2/README.md) for the nested Navigator 2
+application and authentication/route smoke checks.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter resources:
+
+- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter cookbook](https://docs.flutter.dev/cookbook)

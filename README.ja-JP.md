@@ -1,3 +1,7 @@
+> GetX 5 RC: この候補版は未公開です。検証基準は Flutter 3.47.9 と Dart 3.13.7 で、Flutter 同梱の UI ライブラリを使います。
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 [![pub package](https://img.shields.io/pub/v/get.svg?label=get&color=blue)](https://pub.dev/packages/get)
@@ -33,62 +37,138 @@
 [![ポーランド語](https://img.shields.io/badge/Language-Polish-blueviolet?style=for-the-badge)](README.pl.md)
 [![韓国語](https://img.shields.io/badge/Language-Korean-blueviolet?style=for-the-badge)](README.ko-kr.md)
 [![フランス語](https://img.shields.io/badge/Language-French-blueviolet?style=for-the-badge)](README-fr.md)
-[![日本語](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README-ja.md)
+[![日本語](https://img.shields.io/badge/Language-Japanese-blueviolet?style=for-the-badge)](README.ja-JP.md)
 
 </div>
 
-- [Getとは](#Getとは)
-- [インストール方法](#インストール方法)
-- [GetXによるカウンターアプリ](#GetXによるカウンターアプリ)
-- [三本柱](#三本柱)
-  - [状態管理](#状態管理)
-    - [リアクティブな状態管理](#リアクティブな状態管理)
-    - [状態管理に関する詳細ドキュメント](#状態管理に関する詳細ドキュメント)
-  - [Route管理](#Route管理)
-    - [Route管理に関する詳細ドキュメント](#Route管理に関する詳細ドキュメント)
-  - [依存オブジェクト管理](#依存オブジェクト管理)
-    - [依存オブジェクト管理に関する詳細ドキュメント](#依存オブジェクト管理に関する詳細ドキュメント)
-- [ユーティリティ](#ユーティリティ)
-  - [多言語対応](#多言語対応)
-    - [翻訳ファイル](#翻訳ファイル)
-      - [翻訳ファイルの利用](#翻訳ファイルの利用)
-    - [ロケール](#ロケール)
-      - [ロケールの変更](#ロケールの変更)
-      - [システムのロケールを読み込む](#システムのロケールを読み込む)
-  - [Themeの変更](#Themeの変更)
-  - [GetConnect](#getconnect)
-    - [デフォルト設定](#デフォルト設定)
-    - [カスタム設定](#カスタム設定)
-  - [GetPageにミドルウェアを設定](#GetPageにミドルウェアを設定)
-    - [実行優先度](#実行優先度)
-    - [redirect](#redirect)
-    - [onPageCalled](#onpagecalled)
-    - [onBindingsStart](#onbindingsstart)
-    - [onPageBuildStart](#onpagebuildstart)
-    - [onPageBuilt](#onpagebuilt)
-    - [onPageDispose](#onpagedispose)
-  - [その他API](#その他API)
-    - [オプションのグローバル設定と手動設定](#オプションのグローバル設定と手動設定)
-    - [ローカルステートWidget](#ローカルステートWidget)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [お役立ちTIPS](#お役立ちTIPS)
-    - [StateMixin](#statemixin)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
-      - [使い方](#使い方])
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
-  - [テストの実行](#テストの実行)
-    - [mockitoやmocktailを使う場合](#mockitoやmocktailを使う場合)
-    - [Get.reset()](#Get.reset())
-    - [Get.testMode](#Get.testMode)
-- [バージョン2.0からの破壊的変更](#バージョン2.0からの破壊的変更)
-- [なぜGetXなのか](#なぜGetXなのか)
-- [コミュニティ](#コミュニティ)
-  - [コミュニティチャンネル](#コミュニティチャンネル)
-  - [コントリビュート方法](#コントリビュート方法)
-  - [GetXに関する記事と動画](#GetXに関する記事と動画)
+## 目次
+
+  - [このブランチの GetX 5 更新内容](#getx5-current)
+- [Getとは](#readme-section-2)
+- [インストール方法](#readme-section-3)
+- [GetXによるカウンターアプリ](#readme-section-4)
+- [三本柱](#readme-section-5)
+  - [状態管理](#readme-section-6)
+    - [リアクティブな状態管理](#readme-section-7)
+    - [状態管理に関する詳細ドキュメント](#readme-section-8)
+  - [Route管理](#readme-section-9)
+    - [Route管理に関する詳細ドキュメント](#readme-section-10)
+  - [依存オブジェクト管理](#readme-section-11)
+    - [依存オブジェクト管理に関する詳細ドキュメント](#readme-section-12)
+- [ユーティリティ](#readme-section-13)
+  - [多言語対応](#readme-section-14)
+    - [翻訳ファイル](#readme-section-15)
+    - [翻訳ファイルの利用](#readme-section-16)
+    - [単数系と複数形に対応](#readme-section-17)
+    - [パラメーターに対応](#readme-section-18)
+    - [ロケール](#readme-section-19)
+    - [ロケールの変更](#readme-section-20)
+    - [システムのロケールを読み込む](#readme-section-21)
+  - [Themeの変更](#readme-section-22)
+  - [GetConnect](#readme-section-23)
+    - [デフォルト設定](#readme-section-24)
+    - [カスタム設定](#readme-section-25)
+  - [GetPageにミドルウェアを設定](#readme-section-26)
+    - [実行優先度](#readme-section-27)
+    - [redirect](#readme-section-28)
+    - [onPageCalled](#readme-section-29)
+    - [onBindingsStart](#readme-section-30)
+    - [onPageBuildStart](#readme-section-31)
+    - [onPageBuilt](#readme-section-32)
+    - [onPageDispose](#readme-section-33)
+  - [その他API](#readme-section-34)
+    - [オプションのグローバル設定と手動設定](#readme-section-35)
+    - [ローカルステートWidget](#readme-section-36)
+    - [ValueBuilder](#readme-section-37)
+    - [ObxValue](#readme-section-38)
+  - [お役立ちTIPS](#readme-section-39)
+    - [StateMixin](#readme-section-40)
+    - [GetView](#readme-section-41)
+    - [GetResponsiveView](#readme-section-42)
+    - [使い方](#readme-section-43)
+    - [GetWidget](#readme-section-44)
+    - [GetxService](#readme-section-45)
+  - [テストの実行](#readme-section-46)
+    - [mockitoやmocktailを使う場合](#readme-section-47)
+    - [Get.reset()](#readme-section-48)
+    - [Get.testMode](#readme-section-49)
+- [バージョン2.0からの破壊的変更](#readme-section-50)
+- [なぜGetXなのか](#readme-section-51)
+- [コミュニティ](#readme-section-52)
+  - [コミュニティチャンネル](#readme-section-53)
+  - [コントリビュート方法](#readme-section-54)
+  - [GetXに関する記事と動画](#readme-section-55)
+
+<a id="getx5-current"></a>
+
+## このブランチの GetX 5 更新内容
+
+この候補版は未公開です。検証基準は Flutter 3.47.9 と Dart 3.13.7 で、Flutter 同梱の UI ライブラリを使います。
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding は `List<Bind>` を返します。アプリには binds、ルートには bindings を使います。Get.create は Get.spawn に置き換え、非同期初期化を await してから Get.put で登録します。
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` が成功データを保持します。futurize は Future を作る関数を受け取り void を返し、結果を完了順に反映します。空の Rx コレクションは独立した変更可能な格納先を持ちます。
+
+ナビゲーションは Navigator 2 を使います。Get.back はページを戻し、ダイアログ・シート・snackbar は専用 helper で閉じます。Get.context と Get.overlayContext はアプリの生存期間外では null になり得ます。
+
+名前付き履歴の復元には restorationScopeId と安定した restorationId を設定します。引数は JSON 互換で、サイズ制限と middleware 検証があります。プロセス復旧後は新しい controller と Future を作ります。
+
+response modifier の削除、認証、タイムアウト、中止、デコードのエラーを修正しました。IO・ブラウザ・JS/WASM の HTTP/WebSocket とリソース解放を検証しています。
+
+Flutter 3.47.9 のブラウザ履歴における percent-encoding 制限は残ります。通常の Web テスト成功は修正済みを意味しません。実際のホストと端末で refresh・back・復元を確認してください。
+
+旧 Get.config ではなく GetMaterialApp または GetCupertinoApp の設定を使います。独自ルーターには整合した Navigator 2 構成が必要です。
+
+GetNavigator と GetRouterOutlet.pickPages の `onPopPage` は `onDidRemovePage` に変わりました。削除後の通知なので、戻る操作の禁止には `GetPage.canPop` または `PopScope` を使い、独自 outlet callback から `delegate.didRemovePage` に通知してください。
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Getとは
 
@@ -96,7 +176,7 @@
 
 - GetXは3つの基本原則を念頭に開発されています。 **【生産性、パフォーマンス、コードの分離性】** これらはライブラリ内のすべてのリソースに優先適用されている原則です。
 
-  - **パフォーマンス:** GetXは高いパフォーマンスと最小限のリソース消費を目標にしています。GetXはでは Stream および ChangeNotifier を利用しなくて済みます。
+  - **パフォーマンス:** GetX はリアクティブ API と stream API を提供し、値ごとに StreamController/StreamBuilder を手動作成する必要はありません。更新方法に応じて Obx または GetBuilder を選び、アプリの再ビルドとリソースを計測してください。
 
   - **生産性:** GetXはシンプルで使い心地のいいシンタックスを採用しています。あなたの実現したい機能がどんなものであれ、GetXを使えばより簡単に実現できる方法が見つかるでしょう。開発にかかる時間を短縮し、あなたのアプリケーションのパフォーマンスを最大限引き出してくれます。
 
@@ -118,6 +198,8 @@
 
 **また、生産性をさらに高めるためのツールとして、[VSCode用の拡張機能](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) と [Android Studio/Intellij用の拡張機能](https://plugins.jetbrains.com/plugin/14975-getx-snippets)があります。**
 
+<a id="readme-section-3"></a>
+
 # インストール方法
 
 Getパッケージを pubspec.yaml に追加します:
@@ -132,6 +214,8 @@ dependencies:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # GetXによるカウンターアプリ
 
@@ -176,7 +260,7 @@ class Home extends StatelessWidget {
 
       // 8行使っていたNavigator.pushの代わりに短い Get.to()を使ってください。context不要です。
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -204,11 +288,17 @@ Getはチームでの作業を想定して設計されていますが、個人�
 
 パフォーマンスを落とさず納期までにすべて納品。Getはすべての人に向いているわけではありませんが、このフレーズにぴんと来た人には確実に向いています！
 
+<a id="readme-section-5"></a>
+
 # 三本柱
+
+<a id="readme-section-6"></a>
 
 ## 状態管理
 
 Getの状態管理には、非リアクティブ（GetBuilder）と、リアクティブ（GetX/Obx）の2つのアプローチがあります。
+
+<a id="readme-section-7"></a>
 
 ### リアクティブな状態管理
 
@@ -242,11 +332,15 @@ Obx(() => Text("${controller.name}"));
 
 以上です。こんなに簡単なんですよ。
 
+<a id="readme-section-8"></a>
+
 ### 状態管理に関する詳細ドキュメント
 
 **状態管理に関するより詳細な説明を知りたい方は[こちらの日本語ドキュメント](./documentation/ja_JP/state_management.md)をご覧ください。多くの事例や、非リアクティブな状態管理とリアクティブな状態管理の違いについても説明されています。**
 
 GetXパワーがもたらす利点をより理解していただけると思います。
+
+<a id="readme-section-9"></a>
 
 ## Route管理
 
@@ -263,10 +357,10 @@ GetMaterialApp( // MaterialApp の前に Get
 新しいRouteに画面遷移するにはこのシンタックス。
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
-名前付きRouteに画面遷移するにはこのシンタックス。名前付きRouteの詳細は[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md#navigation-with-named-routes)
+名前付きRouteに画面遷移するにはこのシンタックス。名前付きRouteの詳細は[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md)
 
 ```dart
 Get.toNamed('/details');
@@ -275,26 +369,34 @@ Get.toNamed('/details');
 SnackBar、Dialog、BottomSheetなど、Navigator.pop(context)で閉じられるRouteはこれで閉じます。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 次の画面に移動した後、前の画面に戻れないようにする場合（スプラッシュスクリーンやログイン画面など）はこちら。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 次の画面に進み、前のRouteをすべてキャンセルする場合（ショッピングカート、アンケート、テストなど）はこちら。
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 以上、contextを一度も使わなかったことに気付きましたか？これがGetでRoute管理を行う最大のメリットのひとつです。contextを使わないので、たとえばcontrollerクラスの中でも、これらのメソッドを実行することができます。
 
+<a id="readme-section-10"></a>
+
 ### Route管理に関する詳細ドキュメント
 
 **Getは名前付きRouteでも動作し、Routeの下位レベルの制御も可能です。詳細なドキュメントは[こちらの日本語ドキュメント](./documentation/ja_JP/route_management.md)にあります。**
+
+<a id="readme-section-11"></a>
 
 ## 依存オブジェクト管理
 
@@ -327,13 +429,21 @@ Controller controller = Get.find();
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### 依存オブジェクト管理に関する詳細ドキュメント
 
 **依存オブジェクト管理に関するより詳細な説明は[こちらの日本語ドキュメント](./documentation/ja_JP/dependency_management.md)をご覧ください。**
 
+<a id="readme-section-13"></a>
+
 # ユーティリティ
 
+<a id="readme-section-14"></a>
+
 ## 多言語対応
+
+<a id="readme-section-15"></a>
 
 ### 翻訳ファイル
 
@@ -356,6 +466,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### 翻訳ファイルの利用
 
 指定されたキーに `.tr` （translateのtr）を追加するだけで、`Get.locale` と `Get.fallbackLocale` の現在の値をに沿って適切な言語に翻訳されます。
@@ -364,12 +476,16 @@ class Messages extends Translations {
 Text('title'.tr);
 ```
 
+<a id="readme-section-17"></a>
+
 #### 単数系と複数形に対応
 
 ```dart
 var products = [];
-Text('singularKey'.trPlural('pluralKey', products.length, Args));
+Text('singularKey'.trPlural('pluralKey', products.length));
 ```
+
+<a id="readme-section-18"></a>
 
 #### パラメーターに対応
 
@@ -392,6 +508,8 @@ Text('logged_in'.trParams({
   }));
 ```
 
+<a id="readme-section-19"></a>
+
 ### ロケール
 
 ロケールと翻訳を定義するため、`GetMaterialApp`にパラメータを渡します。
@@ -404,6 +522,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-20"></a>
+
 #### ロケールの変更
 
 ロケールを変更するには、`Get.updateLocale(locale)`を呼び出します。翻訳は新しいロケールに沿ってなされます。
@@ -412,6 +532,8 @@ return GetMaterialApp(
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-21"></a>
 
 #### システムのロケールを読み込む
 
@@ -422,6 +544,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-22"></a>
 
 ## Themeの変更
 
@@ -444,34 +568,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 Darkモードが有効であれば、_light theme_に切り替わり、Lightモードが有効なら、_dark theme_に切り替わります。
 
+<a id="readme-section-23"></a>
+
 ## GetConnect
 
 GetConnect は、http または websocket を使用してバックエンドとフロントエンド間の通信を行う機能です。
+
+<a id="readme-section-24"></a>
 
 ### デフォルト設定
 
 GetConnectを拡張することで、GET/POST/PUT/DELETE/SOCKETメソッドを使用して、Rest APIやウェブソケットと通信することができます。
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get リクエスト
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post リクエスト
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // File付き Post リクエスト
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-25"></a>
 
 ### カスタム設定
 
@@ -479,46 +618,34 @@ GetConnect は高度なカスタマイズが可能です。ベースUrlの定義
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // デフォルトデコーダーをセット
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrlをセット
-
-    // リクエストヘッダーに 'apikey' プロパティを付け足しています。
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // サーバーが"Brazil"を含むデータを送ってきてもユーザーに表示されることはありません。
-    // レスポンスがUIレイヤーに届けられる前にデータが取り除かれているからです。
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // ヘッダーをセット
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    // HttpStatus が HttpStatus.unauthorized である限り、
-    // 3回まで認証が試みられます。
-    httpClient.maxAuthRetries = 3;
-  }
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-26"></a>
 
 ## GetPageにミドルウェアを設定
 
@@ -526,31 +653,50 @@ GetPageに新しいプロパティが追加され、GetMiddleWareのListを設�
 
 **注**: GetPageにミドルウェアを設定すると、そのページの子ページはすべて同じミドルウェアを自動的に持つことになります。
 
+<a id="readme-section-27"></a>
+
 ### 実行優先度
 
 GetMiddlewareに設定したpriority(優先度)の若い順にミドルウェアが実行されます。
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 この場合の実行順序は **-8 => 2 => 4 => 5**
 
+<a id="readme-section-28"></a>
+
 ### redirect
 
-redirect関数は、Routeを呼び出してページが検索されると実行されます。リダイレクト先のRouteSettingsが戻り値となります。もしくはnullを与えれば、リダイレクトは行われません。
+redirectDelegate で route を返すと続行、別の RouteDecoder でリダイレクト、null で中止します。login を登録し、ループを避けてください。
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### onPageCalled
 
@@ -558,11 +704,13 @@ onPageCalled関数は、ページが呼び出された直後に実行されま�
 この関数を使ってページの内容を変更したり、新しいページを作成したりすることができます。
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### onBindingsStart
 
@@ -570,33 +718,39 @@ onBindingsStart関数は、Bindingsが初期化される直前に実行されま
 たとえば、ページのBindingsを変更することもできます。
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-31"></a>
 
 ### onPageBuildStart
 
 onPageBuildStart関数は、Bindingsが初期化された直後、ページWidgetが作成される前に実行されます。
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-32"></a>
 
 ### onPageBuilt
 
 onPageBuilt関数は、GetPage.page(ページのビルダー)が呼び出された直後に実行され、表示されるWidgetを結果として受け取ることができます。
 
+<a id="readme-section-33"></a>
+
 ### onPageDispose
 
 onPageDispose関数は、ページに関するすべてのオブジェクト（Controller、ビューなど）が破棄された直後に実行されます。
+
+<a id="readme-section-34"></a>
 
 ## その他API
 
@@ -623,16 +777,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // Routeを削除
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // 引数のRoutePredicateがtrueを返すまで画面を戻る
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // 引数で指定したRouteに進み、RoutePredicateがtrueを返すまで画面を戻る
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // 引数で指定した名前付きRouteに進み、RoutePredicateがtrueを返すまで画面を戻る
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 // アプリがどのプラットフォームで実行されているかのチェック
 GetPlatform.isAndroid
@@ -676,49 +830,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// MediaQuery.of(context).size とほぼ同じ
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// MediaQuery.of(context).padding とほぼ同じ
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// MediaQuery.of(context).viewPadding とほぼ同じ
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// MediaQuery.of(context).viewInsets とほぼ同じ
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// MediaQuery.of(context).orientation とほぼ同じ
-context.orientation()
+context.orientation
 
 /// デバイスがランドスケープ(横長)モードかどうかチェック
-context.isLandscape()
+context.isLandscape
 
 /// デバイスがポートレート(縦長)モードかどうかチェック
-context.isPortrait()
+context.isPortrait
 
 /// MediaQuery.of(context).devicePixelRatio とほぼ同じ
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// MediaQuery.of(context).textScaleFactor とほぼ同じ
-context.textScaleFactor()
+context.textScaleFactor
 
 /// 画面の短辺の長さを取得
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// 画面の横幅が800より大きい場合にtrueを返す
-context.showNavbar()
+context.showNavbar
 
 /// 画面の短辺が600より小さい場合にtrueを返す
-context.isPhone()
+context.isPhone
 
 /// 画面の短辺が600より小さい場合にtrueを返す
-context.isSmallTablet()
+context.isSmallTablet
 
 /// 画面の短辺が720より大きい場合にtrueを返す
-context.isLargeTablet()
+context.isLargeTablet
 
 /// デバイスがタブレットの場合にtrueを返す
-context.isTablet()
+context.isTablet
 
 /// 画面サイズに合わせて value<T> を返す
 /// たとえば:
@@ -728,6 +882,8 @@ context.isTablet()
 /// 横幅が1200より大きい → desktopパラメーターの値を返す
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-35"></a>
 
 ### オプションのグローバル設定と手動設定
 
@@ -751,23 +907,26 @@ MaterialApp(
 );
 ```
 
-`Get` クラスに_グローバル設定_を施すことができます。Routeをプッシュする前のコードに `Get.config` を追加するだけです。もしくは、`GetMaterialApp` 内で直接設定することもできます。
+旧 Get.config ではなく GetMaterialApp または GetCupertinoApp の設定を使います。独自ルーターには整合した Navigator 2 構成が必要です。
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 オプションで、すべてのログメッセージを `Get` からリダイレクトさせることができます。
@@ -784,14 +943,17 @@ void localLogWriter(String text, {bool isError = false}) {
   // enableLog: false にしても、ログメッセージはこのコールバックでプッシュされる点ご注意を
   // ログが有効かどうかのチェックは Get.isLogEnable で可能
 }
-
 ```
+
+<a id="readme-section-36"></a>
 
 ### ローカルステートWidget
 
 ローカルステートWidgetは、1つの変数の状態を一時的かつローカルに管理したい場合に便利です。
 シンプルなValueBuilderとリアクティブなObxValueの2種類があります。
 たとえば、`TextField` Widgetの obscureText プロパティを切り替えたり、折りたたみ可能なパネルをカスタムで作成したり、`BottomNavigation` の現在のインデックス値を変更して内容を変更したりといった用途に最適です。
+
+<a id="readme-section-37"></a>
 
 #### ValueBuilder
 
@@ -810,6 +972,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-38"></a>
+
 #### ObxValue
 
 [`ValueBuilder`](#valuebuilder)に似ていますが、これはそのリアクティブバージョンです。Rxインスタンス(.obsを付けたときに戻る値です)を渡すと自動で更新されます。すごいでしょ？
@@ -824,6 +988,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-39"></a>
 
 ## お役立ちTIPS
 
@@ -845,138 +1011,90 @@ Stringのメソッドにアクセスするには _observable_ の中にある実
 アクセスには `.value`を使うのが通常ですが、他の方法もあるのでご紹介します。
 
 ```dart
-final name = 'GetX'.obs;
-// 新しい値が現在のものと異なる場合のみ Stream が更新されます。
-name.value = 'Hey';
-
-// すべてのRxプロパティは「呼び出し可能」で、valueを返してくれます。
-// ただし `null` は受付不可。nullの場合はUIが更新されない。
-name('Hello');
-
-// これはgetterみたいなものです。'Hello' を返します。
-name() ;
-
-/// num型の場合
-
-final count = 0.obs;
-
-// num型の非破壊的な演算子はすべて使えます。
-count + 1;
-
-// 注意！ この場合は`count`がfinalなら有効ではないです。varなら有効。
-count += 1;
-
-// 比較演算子も使用可能
-count > 2;
-
-/// bool型の場合
-
-final flag = false.obs;
-
-// true/false を入れ替えることができます。
-flag.toggle();
-
-
-/// すべての型
-
-// `value` を null にセット。
-flag.nil();
-
-// toString(), toJson() などの操作はすべて `value` が対象になります。
-print( count ); // RxIntの `toString()` が呼び出されて数字がprintされる。
-
-final abc = [0,1,2].obs;
-// json配列に変換した値と、'RxList' がprintされます。
-// JsonはすべてのRx型でサポートされています！
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap、RxList、RxSetはそれぞれの元の型を拡張した特別なRx型です。
-// たとえばRxListは通常のListとして扱うことができる上にリアクティブです。
-abc.add(12); // 12をListにプッシュし、Streamを更新してくれます。
-abc[3]; // Listと同様にインデックス番号3の値を取得してくれます。
-
-
-// 等価演算子はRx型と元の型でも動作しますが、.hashCode は常にvalueから取得します。
-final number = 12.obs;
-print( number == 12 ); // true
-
-/// カスタムのRxモデル
-
-// toJson()やtoString()をモデルクラスに設定すれば、.obsからでもprintされるように実装可能。
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'John', last: 'Doe', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` 自体はリアクティブですが、その中のプロパティはリアクティブではありません。
-// そのため、このようにプロパティの値を変更してもWidgetは更新されません。
-user.value.name = 'Roi';
-// `Rx` には自ら変更を検知する手段がないからです。
-// そのため、カスタムクラスの場合はこのようにWidgetに変更を知らせる必要があります。
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// もしくは `update()` メソッドを使用してください。
-user.update((value){
-  value.name='Roi';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+<a id="readme-section-40"></a>
+
 #### StateMixin
 
 `UI`の状態を管理するもう一つの手法として、`StateMixin<T>`を利用する方法があります。
 controllerクラスに`with`を使って`StateMixin<T>`を追加することで実装可能です。
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 `change()`メソッドにより好きなタイミングで状態を変更することができます。
 このようにデータと状態を渡すだけです。
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus には以下のステータスが存在します。
+GetStatus には以下のステータスが存在します。
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 ステータスごとにUIを設定するにはこのようにします。
 
 ```dart
-class OtherClass extends GetView<Controller> {
+class NamesController extends GetxController with StateMixin<List<String>> {
+  void showNames(List<String> names) {
+    change(GetStatus<List<String>>.success(names));
+  }
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+  void showLoading() => setLoading();
+  void showEmpty() => setEmpty();
+  void showError(Object error) => setError(error);
+}
+
+class NamesView extends GetView<NamesController> {
+  const NamesView({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: controller.obx(
-        (state)=>Text(state.name),
-
-        // ローディング中はカスタムのインジケーターの設定も可能ですが、
-        // デフォルトで Center(child:CircularProgressIndicator()) となります。
-        onLoading: CustomLoadingIndicator(),
-        onEmpty: Text('No data found'),
-
-        // 同様にエラーWidgetはカスタム可能ですが、
-        // デフォルトは Center(child:Text(error)) です。
-        onError: (error)=>Text(error),
-      ),
-    );
+  Widget build(BuildContext context) => Scaffold(
+    body: controller.obx(
+      (names) => Text(names.join(', ')),
+      onLoading: const Center(child: CircularProgressIndicator()),
+      onEmpty: const Text('No data'),
+      onError: (error) => Text(error ?? 'Unknown error'),
+    ),
+  );
 }
 ```
+
+<a id="readme-section-41"></a>
 
 #### GetView
 
@@ -985,7 +1103,7 @@ class OtherClass extends GetView<Controller> {
 このWidgetを一言で表現すると、「controllerをgetterに持つ `const` な StatelessWidget」です。
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -1001,10 +1119,14 @@ class OtherClass extends GetView<Controller> {
  }
 ```
 
+<a id="readme-section-42"></a>
+
 #### GetResponsiveView
 
 GetViewをレスポンシブデザインに対応させたい場合はこのWidgetを継承してください。
 画面サイズやデバイスタイプなどの情報を持つ `screen` プロパティを保持しています。
+
+<a id="readme-section-43"></a>
 
 ##### 使い方
 
@@ -1022,69 +1144,57 @@ Widgetをビルドする方法は2つあります。
 この画面のコード
 [コード](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
+<a id="readme-section-44"></a>
+
 #### GetWidget
 
-このWidgetはあまり知られておらず、使用するケースは稀です。
-GetViewとの違いは、Controllerを`キャッシュ`してくれる点です。
-このキャッシュがあるため `const` にはできません。
+GetWidget はそのウィジェットの controller をキャッシュし、const をサポートします。Get.spawn で作った controller は所有ウィジェットを取り除くと閉じます。GetView はこのキャッシュを使わず検索します。
 
-> それでは一体いつControllerをキャッシュする必要があるのかって？
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-それは **GetX** のこれまた使う機会の少ない `Get.create()` を使うときです。
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.create(()=>Controller())` は `Get.find<Controller>()` を実行するたびに
-新しいControllerインスタンスを生成します。
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-そこで `GetWidget` の出番です。たとえば、Todoアイテムのリスト内容を保持したいとき。
-Widgetが更新されてもアイテムはControllerのキャッシュを参照してくれます。
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-45"></a>
 
 #### GetxService
 
-このクラスは `GetxController` に似ており、同様のライフサイクル（`onInit()`, `onReady()`, `onClose()`）を共有しますが、そこに「ロジック」はありません。**GetX**の依存オブジェクト注入システムに、このサブクラスがメモリから **削除できない** ということを知らせるだけです。
-
-そのため `Get.find()` で `ApiService`, `StorageService`, `CacheService` のようなサービス系クラスにいつでもアクセスできるようにしておくと非常に便利です。
+GetxService はアプリ寿命のサービス向けで onInit/onReady/onClose を持ちます。通常の削除から保護されますが、明示的な force や Get.reset で解放できます。プロセス終了後の永続化ではありません。init を await して Get.put します。
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// サービスクラスの初期化をawait
-  runApp(SomeApp());
-}
-
-/// Flutterアプリ実行前にサービスクラスを初期化してフローをコントロールするのは賢いやり方です。
-/// たとえば GetMaterialAppを更新する必要がないようにUser別の
-/// Theme、apiKey、言語設定などをApiサービス実行前にロードしたり。
-void initServices() async {
-  print('starting services ...');
-  /// get_storage, hive, shared_pref の初期化はここで行います。
-  /// あるいは moor の connection など非同期のメソッドならなんでも。
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-`GetxService` を破棄する唯一の方法は `Get.reset()` メソッドを使うことです。
-これはアプリにおける「ホットリブート」のようなものです。あるクラスのインスタンスを
-ライフサイクルの間ずっと残しておきたい場合は `GetxService` を使うというのを覚えておいてください。
-
+<a id="readme-section-46"></a>
 
 ## テストの実行
 
@@ -1135,6 +1245,8 @@ Test the state of the reactive variable "name" across all of its lifecycles''',
 }
 ```
 
+<a id="readme-section-47"></a>
+
 #### mockitoやmocktailを使う場合
 GetxController/GetxService をモックする場合 Mock をミックスインしてください。
 
@@ -1142,12 +1254,18 @@ GetxController/GetxService をモックする場合 Mock をミックスイン�
 class NotificationServiceMock extends GetxService with Mock implements NotificationService {}
 ```
 
+<a id="readme-section-48"></a>
+
 #### Get.reset()
 WidgetやGroupのテスト時に、テストの最後かtearDownの中で Get.reset() を実行することで設定をリセットすることができます。
+
+<a id="readme-section-49"></a>
 
 #### Get.testMode
 Controllerの中でナビゲーションを使用している場合は、`Get.testMode = true`をmainの開始で実行してください。
 
+
+<a id="readme-section-50"></a>
 
 # バージョン2.0からの破壊的変更
 
@@ -1167,7 +1285,7 @@ RxControllerとGetBuilderが統合され、Controllerにどれを使うか覚え
 2- 名前付きRoute
 変更前:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -1202,11 +1320,13 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-51"></a>
+
 # なぜGetXなのか
 
 1- Flutterのアップデートが重なると、依存パッケージがうまく動かなくなることがあります。コンパイルエラーを起こしたり、その時点で解決方法がないようなエラーが発生したり。開発者はそのエラーを追跡し、該当リポジトリにissueを提起し、問題が解決されるのを待つ必要があります。Getは開発に必要な主要リソース（状態管理、依存オブジェクト管理、Route管理）を一元化し、Pubspecにパッケージを1つ追加するだけでコーディングを開始することができます。Flutterがアップデートしたときに必要なことは、Getも併せてアップデートすることだけです。それですぐに作業を再開できます。またGetはパッケージ間の互換性の問題も解消します。互いに依存するパッケージAの最新バージョンとBの最新バージョンの間に互換性がない、ということが何度あったでしょうか。Getを使えばすべてが同じパッケージ内にあるため、互換性の心配はありません。
 
-2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文が一部にあります。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(Home())`を実行すれば、次の画面に遷移することができるのです。またウェブURLを動的なものにすることは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクト管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変シンプルです。これは一例ですが、変数の最後に「.obs」を追加して「Obx()」の中にWidgetを配置するだけで、その変数の状態変化が自動でWidgetに反映されます。
+2- Flutterは手軽で素晴らしいフレームワークですが、`Navigator.of(context).push (context, builder [...]`のように、ほとんどの開発者にとって不要な定型文が一部にあります。Getを使えばそのような定型文を簡素化できます。Routeを呼ぶためだけに8行のコードを書く代わりに、`Get.to(() => Home())`を実行すれば、次の画面に遷移することができるのです。またウェブURLを動的なものにすることは現在Flutterでは本当に骨の折れる作業ですが、GetXを使えば非常に簡単です。そしてFlutterにおける状態管理と依存オブジェクト管理については、たくさんのパターンやパッケージがあるので多くの議論を生んでいます。しかしGetXのアプローチは大変シンプルです。これは一例ですが、変数の最後に「.obs」を追加して「Obx()」の中にWidgetを配置するだけで、その変数の状態変化が自動でWidgetに反映されます。
 
 3- GetXではパフォーマンスのことをあまり気にせず開発ができます。Flutterのパフォーマンスはそれだけで素晴らしいものですが、状態管理と併せて BLoC / データストア / Controller などを届けるためのサービスロケーターを使用することを想像してみてください。そのインスタンスが必要ないときはリソースを解放するイベントを明示的に呼び出さなければなりません。そんなとき、使用されなくなったら自動でメモリから削除してくれればいいのに、と考えたことはありませんか？それを実現してくれるのがGetXです。SmartManagement機能により未使用のリソースはすべて自動でメモリから破棄されるので、本来の開発作業に集中することができます。メモリ管理のためのロジックを作らなくても、常に必要最小限のリソースを使っていることが保証されるのです。
 
@@ -1215,7 +1335,11 @@ InheritedWidgetを参照するためにcontextが必要なとき、ビューの�
 
 GetXライブラリは今後も更新され続け、新しい機能を実装していきます。気軽にプルリクエストを出していただき、ライブラリの成長に貢献していただけるとうれしいです。
 
+<a id="readme-section-52"></a>
+
 # コミュニティ
+
+<a id="readme-section-53"></a>
 
 ## コミュニティチャンネル
 
@@ -1224,6 +1348,8 @@ GetXコミュニティは非常に活発で有益な情報であふれていま�
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-54"></a>
 
 ## コントリビュート方法
 
@@ -1236,6 +1362,8 @@ _GetXプロジェクトに貢献してみませんか？あなたをコントリ
 - 新機能の提案。
 
 どのような形の貢献であれ歓迎しますので、ぜひコミュニティにご参加ください！
+
+<a id="readme-section-55"></a>
 
 ## GetXに関する記事と動画
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import '../../../get_core/get_core.dart';
 import 'socket_notifier.dart';
@@ -14,6 +13,8 @@ class BaseWebSocket {
   Duration ping;
   bool allowSelfSigned;
   ConnectionStatus? connectionStatus;
+  int _generation = 0;
+  Future<void>? _connecting;
 
   BaseWebSocket(
     this.url, {
@@ -26,42 +27,70 @@ class BaseWebSocket {
   }
 
   // ignore: use_setters_to_change_properties
-  Future connect() async {
+  Future<void> connect() {
+    final pending = _connecting;
+    if (pending != null) return pending;
+    late final Future<void> connecting;
+    connecting = _connect().whenComplete(() {
+      if (identical(_connecting, connecting)) _connecting = null;
+    });
+    _connecting = connecting;
+    return connecting;
+  }
+
+  Future<void> _connect() async {
     if (isDisposed) {
       socketNotifier = SocketNotifier();
+      isDisposed = false;
     }
+    final generation = ++_generation;
+    final previous = socket;
+    socket = null;
+    await previous?.close();
+    if (isDisposed || generation != _generation) return;
     try {
       connectionStatus = ConnectionStatus.connecting;
-      socket = allowSelfSigned
+      final connected = allowSelfSigned
           ? await _connectForSelfSignedCert(url)
           : await WebSocket.connect(url);
-
-      socket!.pingInterval = ping;
-      socketNotifier?.open();
+      if (isDisposed || generation != _generation) {
+        await connected.close();
+        return;
+      }
+      socket = connected;
+      connected.pingInterval = ping;
       connectionStatus = ConnectionStatus.connected;
-
-      socket!.listen((data) {
-        socketNotifier!.notifyData(data);
-      }, onError: (err) {
-        socketNotifier!.notifyError(Close(err.toString(), 1005));
+      connected.listen((data) {
+        if (generation == _generation) socketNotifier?.notifyData(data);
+      }, onError: (Object err) {
+        if (generation == _generation) {
+          socketNotifier?.notifyError(Close(err.toString(), 1005));
+        }
       }, onDone: () {
+        if (generation != _generation) return;
         connectionStatus = ConnectionStatus.closed;
-        socketNotifier!
-            .notifyClose(Close('Connection Closed', socket!.closeCode));
+        socketNotifier
+            ?.notifyClose(Close('Connection Closed', connected.closeCode));
       }, cancelOnError: true);
-      return;
+      socketNotifier?.open();
     } on SocketException catch (e) {
+      if (generation != _generation) return;
       connectionStatus = ConnectionStatus.closed;
-      socketNotifier!
-          .notifyError(Close(e.osError!.message, e.osError!.errorCode));
-      return;
+      socketNotifier?.notifyError(
+          Close(e.osError?.message ?? e.message, e.osError?.errorCode));
     }
   }
 
   void dispose() {
-    socketNotifier!.dispose();
-    socketNotifier = null;
+    if (isDisposed) return;
     isDisposed = true;
+    _generation++;
+    _connecting = null;
+    connectionStatus = ConnectionStatus.closed;
+    socket?.close();
+    socket = null;
+    socketNotifier?.dispose();
+    socketNotifier = null;
   }
 
   void emit(String event, dynamic data) {
@@ -90,44 +119,26 @@ class BaseWebSocket {
   }
 
   void send(dynamic data) async {
-    if (connectionStatus == ConnectionStatus.closed) {
+    if (isDisposed) return;
+    if (connectionStatus == ConnectionStatus.closed || _connecting != null) {
       await connect();
     }
 
-    if (socket != null) {
-      socket!.add(data);
+    if (!isDisposed && connectionStatus == ConnectionStatus.connected) {
+      socket?.add(data);
     }
   }
 
   Future<WebSocket> _connectForSelfSignedCert(String url) async {
+    final client = HttpClient(context: SecurityContext());
+    client.badCertificateCallback = (cert, host, port) {
+      Get.log('BaseWebSocket: Allow self-signed certificate => $host:$port. ');
+      return true;
+    };
     try {
-      var r = Random();
-      var key = base64.encode(List<int>.generate(8, (_) => r.nextInt(255)));
-      var client = HttpClient(context: SecurityContext());
-      client.badCertificateCallback = (cert, host, port) {
-        Get.log(
-            'BaseWebSocket: Allow self-signed certificate => $host:$port. ');
-        return true;
-      };
-
-      var request = await client.getUrl(Uri.parse(url))
-        ..headers.add('Connection', 'Upgrade')
-        ..headers.add('Upgrade', 'websocket')
-        ..headers.add('Cache-Control', 'no-cache')
-        ..headers.add('Sec-WebSocket-Version', '13')
-        ..headers.add('Sec-WebSocket-Key', key.toLowerCase());
-
-      var response = await request.close();
-      // ignore: close_sinks
-      var socket = await response.detachSocket();
-      var webSocket = WebSocket.fromUpgradedSocket(
-        socket,
-        serverSide: false,
-      );
-
-      return webSocket;
-    } on Exception catch (_) {
-      rethrow;
+      return await WebSocket.connect(url, customClient: client);
+    } finally {
+      client.close();
     }
   }
 }

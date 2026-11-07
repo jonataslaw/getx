@@ -3,9 +3,15 @@ name: build
 # Trigger the workflow on push or pull request
 on:
   push:
-    branches: [master]
+    branches: [master, latest-getx5-RC, getx5-rc-stabilize]
   pull_request:
-    branches: [master]
+    branches: [master, latest-getx5-RC]
+  workflow_dispatch:
+    inputs:
+      encoded_query:
+        description: Check the strict encoded-query browser gate
+        type: boolean
+        default: false
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
   test:
@@ -14,6 +20,10 @@ jobs:
       run:
         working-directory: ./
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter: ["3.47.9"]
     #sequence of tasks called
     steps:
       # The branch or tag ref that triggered the workflow will be checked out.
@@ -23,12 +33,83 @@ jobs:
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.0"
+          flutter-version: ${{ matrix.flutter }}
           channel: "stable"
       - run: flutter pub get
-      #- run: flutter analyze
+      - run: flutter analyze --no-fatal-infos lib test
       # run  flutter widgets tests  and unit tests
       - run: flutter test --coverage
+      - run: >-
+          flutter test --platform chrome
+          test/documentation/public_imports_test.dart
+          test/rx/rx_workers_test.dart
+          test/rx/rx_collection_defaults_test.dart
+          test/regression/rc_page_removal_test.dart
+          test/regression/rc_navigator_removal_api_test.dart
+      - run: dart test/connect/support/run_browser_transport.dart
+      - run: dart test/connect/support/run_browser_transport.dart flutter --wasm
+      - run: flutter pub get
+        working-directory: example
+      - run: flutter analyze --no-fatal-infos lib test
+        working-directory: example
+      - run: flutter test
+        working-directory: example
+      - run: flutter pub get
+        working-directory: example_nav2
+      - run: flutter analyze --no-fatal-infos lib test
+        working-directory: example_nav2
+      - run: flutter test
+        working-directory: example_nav2
+      - run: flutter build web --no-pub
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --wasm
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run -t lib/browser_navigation_probe.dart -o build/browser-js
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/js.json
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --wasm -t lib/browser_navigation_probe.dart -o build/browser-wasm
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-wasm --mode wasm --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/wasm.json
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run --dart-define=GETX_PROBE_RESTORATION=true -t lib/browser_navigation_probe.dart -o build/browser-history-js
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-history-js --mode js --case history --chrome /usr/bin/google-chrome --report build/browser-results/history-js.json
+        working-directory: example_nav2
+      - run: flutter build web --no-pub --no-web-resources-cdn --wasm --dart-define=GETX_PROBE_RESTORATION=true -t lib/browser_navigation_probe.dart -o build/browser-history-wasm
+        working-directory: example_nav2
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-history-wasm --mode wasm --case history --chrome /usr/bin/google-chrome --report build/browser-results/history-wasm.json
+        working-directory: example_nav2
+      - name: Strict encoded-query diagnostics
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.encoded_query }}
+        run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case encoded --chrome /usr/bin/google-chrome --report build/browser-results/encoded.json
+        working-directory: example_nav2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-results-${{ matrix.flutter }}
+          path: example_nav2/build/browser-results/
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
       - uses: codecov/codecov-action@v4
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.9"
+          channel: stable
+      - run: flutter pub get
+      - run: flutter pub get
+        working-directory: example_nav2
+      - run: flutter build apk --debug --no-pub --target-platform android-arm64
+        working-directory: example_nav2
+      - name: Compile native Android acceptance harness
+        run: ./android/gradlew -p test/device/android assembleDebug assembleDebugAndroidTest
+        working-directory: example_nav2

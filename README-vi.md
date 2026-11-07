@@ -1,3 +1,7 @@
+> GetX 5 RC: Bản candidate này chưa được phát hành. Nền tảng đã kiểm chứng là Flutter 3.47.9 và Dart 3.13.7 với thư viện UI tích hợp của Flutter.
+
+[![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
+
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 
 **Ngôn ngữ: Tiếng Việt (file này), [English](README.md), [Indonesian](README.id-ID.md), [Urdu](README.ur-PK.md), [Chinese](README.zh-cn.md), [Brazilian Portuguese](README.pt-br.md), [Spanish](README-es.md), [Russian](README.ru.md), [Polish](README.pl.md), [Korean](README.ko-kr.md), [French](README-fr.md).**
@@ -18,53 +22,130 @@
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/getx.png)
 
-- [Về GetX](#về-getx)
-- [Cài Đặt](#cài-đặt)
-- [Counter App với GetX](#counter-app-với-getx)
-- [Tam Trụ](#tam-trụ)
-  - [Quản lý State](#quản-lý-state)
-    - [Quản lý Reactive State](#quản-lý-reactive-state)
-    - [Thêm thông tin về quản lý state](#thêm-thông-tin-về-quản-lý-state)
-  - [Quản lý route](#quản-lý-route)
-    - [Thêm thông tin về quản lý route](#thêm-thông-tin-về-quản-lý-route)
-  - [Quản lý dependency](#quản-lý-dependency)
-    - [Thêm thông tin về quản lý dependency](#thêm-thông-tin-về-quản-lý-dependency)
-- [Utils](#utils)
-  - [Internationalization](#internationalization)
-    - [Dịch thuật](#dịch-thuật)
-      - [Sử dụng bản dịch thuật](#sử-dụng-bản-dịch-thuật)
-    - [Locales](#locales)
-      - [Đổi locale](#đổi-locale)
-      - [System locale](#system-locale)
-  - [Đổi Theme](#đổi-theme)
-  - [GetConnect](#getconnect)
-    - [Cấu hình mặc định](#cấu-hình-mặc-định)
-    - [Cấu hình tùy chỉnh](#cấu-hình-tùy-chỉnh)
-  - [GetPage Middleware](#getpage-middleware)
-    - [Ưu tiên](#ưu-tiên)
-    - [Chuyển hướng](#chuyển-hướng)
-    - [onPageCalled](#onpagecalled)
-    - [OnBindingsStart](#onbindingsstart)
-    - [OnPageBuildStart](#onpagebuildstart)
-    - [OnPageBuilt](#onpagebuilt)
-    - [OnPageDispose](#onpagedispose)
-  - [APIs nâng cao khác](#apis-nâng-cao-khác)
-    - [Cấu hình thủ công và cài đặt chung tuỳ chọn](#cấu-hình-thủ-công-và-cài-đặt-chung-tuỳ-chọn)
-    - [Local State Widgets](#local-state-widgets)
-      - [ValueBuilder](#valuebuilder)
-      - [ObxValue](#obxvalue)
-  - [Mẹo hữu ích](#mẹo-hữu-ích)
-    - [GetView](#getview)
-    - [GetResponsiveView](#getresponsiveview)
-      - [Hướng dẫn sử dụng trước khi dùng](#hướng-dẫn-sử-dụng-trước-khi-dùng)
-    - [GetWidget](#getwidget)
-    - [GetxService](#getxservice)
-- [Thay đổi đột phá 2.0](#thay-đổi-đột-phá-2.0)
-- [Tại sao lại dùng GetX](#tại-sao-lại-dùng-getx)
-- [Cộng đồng](#cộng-đồng)
-  - [Kênh Cộng đồng](#kênh-cộng-đồng)
-  - [Cách cống hiến](#cách-cống-hiến)
-  - [Các bài báo và video](#các-bài-báo-và-video)
+## Mục lục
+
+  - [Các thay đổi GetX 5 trong nhánh này](#getx5-current)
+- [Về GetX](#readme-section-2)
+- [Cài Đặt](#readme-section-3)
+- [Counter App với GetX](#readme-section-4)
+- [Tam Trụ](#readme-section-5)
+  - [Quản lý State](#readme-section-6)
+    - [Quản lý Reactive State](#readme-section-7)
+    - [Thêm thông tin về Quản lý state](#readme-section-8)
+  - [Quản lý route](#readme-section-9)
+    - [Thêm thông tin về quản lý route](#readme-section-10)
+  - [Quản lý dependency](#readme-section-11)
+    - [Thêm thông tin về quản lý dependency](#readme-section-12)
+- [Utils](#readme-section-13)
+  - [Internationalization](#readme-section-14)
+    - [Dịch thuật](#readme-section-15)
+    - [Sử dụng bản dịch thuật](#readme-section-16)
+    - [Sử dụng bản dịch thuật với số ít và số nhiều](#readme-section-17)
+    - [Sử dụng bản dịch với tham số (parameters)](#readme-section-18)
+    - [Locales](#readme-section-19)
+    - [Đổi locale](#readme-section-20)
+    - [System locale](#readme-section-21)
+  - [Đổi chủ đề (Theme)](#readme-section-22)
+  - [GetConnect](#readme-section-23)
+    - [Cấu hình mặc định](#readme-section-24)
+    - [Cấu hình tùy chỉnh](#readme-section-25)
+  - [GetPage Middleware](#readme-section-26)
+    - [Ưu tiên](#readme-section-27)
+    - [Chuyển hướng](#readme-section-28)
+    - [onPageCalled](#readme-section-29)
+    - [OnBindingsStart](#readme-section-30)
+    - [OnPageBuildStart](#readme-section-31)
+    - [OnPageBuilt](#readme-section-32)
+    - [OnPageDispose](#readme-section-33)
+  - [APIs nâng cao khác](#readme-section-34)
+    - [Cấu hình thủ công và cài đặt chung tuỳ chọn](#readme-section-35)
+    - [Local State Widgets](#readme-section-36)
+    - [ValueBuilder](#readme-section-37)
+    - [ObxValue](#readme-section-38)
+  - [Mẹo hữu ích](#readme-section-39)
+  - [StateMixin](#readme-section-40)
+    - [GetView](#readme-section-41)
+    - [GetResponsiveView](#readme-section-42)
+    - [Hướng dẫn sử dụng trước khi dùng](#readme-section-43)
+    - [GetWidget](#readme-section-44)
+    - [GetxService](#readme-section-45)
+- [Thay đổi đột phá 2.0](#readme-section-46)
+- [Tại sao lại dùng GetX](#readme-section-47)
+- [Cộng đồng](#readme-section-48)
+  - [Kênh Cộng đồng](#readme-section-49)
+  - [Cách cống hiến](#readme-section-50)
+  - [Các bài báo và video](#readme-section-51)
+
+<a id="getx5-current"></a>
+
+## Các thay đổi GetX 5 trong nhánh này
+
+Bản candidate này chưa được phát hành. Nền tảng đã kiểm chứng là Flutter 3.47.9 và Dart 3.13.7 với thư viện UI tích hợp của Flutter.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  get:
+    path: ../getx
+```
+
+Binding trả về `List<Bind>`. Dùng binds cho ứng dụng và bindings cho route. Get.spawn thay Get.create; chờ khởi tạo bất đồng bộ rồi đăng ký giá trị bằng Get.put.
+
+```dart
+class RcNamesController extends GetxController with StateMixin<List<String>> {
+  final labels = RxSet<String>();
+
+  void showNames(List<String> names) =>
+      change(GetStatus<List<String>>.success(names));
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+}
+
+class RcNamesBinding extends Binding {
+  @override
+  List<Bind> dependencies() => [
+    Bind.lazyPut<RcNamesController>(() => RcNamesController()),
+  ];
+}
+
+Widget rcNamesApplication() => GetMaterialApp(
+  restorationScopeId: 'names-app',
+  initialRoute: '/names',
+  getPages: [
+    GetPage<void>(
+      name: '/names',
+      restorationId: 'names',
+      bindings: [RcNamesBinding()],
+      page: () => Scaffold(
+        body: Get.find<RcNamesController>().obx(
+          (names) => Text(names.join(', ')),
+          onEmpty: const Text('No data'),
+          onError: (error) => Text(error ?? 'Unknown error'),
+        ),
+      ),
+    ),
+  ],
+);
+```
+
+`GetStatus<T>.success(data)` chứa dữ liệu thành công. futurize nhận hàm tạo Future và trả void; kết quả áp dụng theo thứ tự hoàn tất. Collection Rx rỗng có bộ lưu trữ mutable độc lập.
+
+Điều hướng dùng Navigator 2. Get.back quay lại trang; đóng dialog, sheet và snackbar bằng helper riêng. Get.context và Get.overlayContext có thể null ngoài vòng đời ứng dụng.
+
+Bật restorationScopeId và đặt restorationId ổn định để phục hồi lịch sử route có tên. Tham số phải tương thích JSON, có giới hạn và kiểm tra middleware; process mới tạo controller và Future mới.
+
+Đã sửa việc xóa response modifier và lỗi xác thực, timeout, hủy, giải mã. HTTP/WebSocket được kiểm tra trên IO, trình duyệt và JS/WASM, kèm giải phóng tài nguyên.
+
+Giới hạn percent-encoding trong browser history của Flutter 3.47.9 vẫn được ghi nhận; web test thông thường không chứng minh đã sửa. Kiểm tra refresh, back và phục hồi trên host/thiết bị thực.
+
+Đặt tùy chọn trên GetMaterialApp hoặc GetCupertinoApp thay Get.config cũ. Router tùy chỉnh cần cấu hình Navigator 2 đầy đủ.
+
+GetNavigator và GetRouterOutlet.pickPages thay `onPopPage` bằng `onDidRemovePage`, thông báo sau khi đã xóa trang. Dùng `GetPage.canPop` hoặc `PopScope` để chặn back; callback outlet tùy chỉnh cần chuyển tiếp tới `delegate.didRemovePage`.
+
+[Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
+
+<a id="readme-section-2"></a>
 
 # Về GetX
 
@@ -72,7 +153,7 @@
 
 - GetX hướng tới 3 tham vọng chính, nghĩa là tất cả các tài nguyên của thư viện sẽ dành cho những điểm ưu tiên sau: **NĂNG SUẤT, HIỆU SUẤT VÀ TỔ CHỨC.**
 
-  - **HIỆU SUẤT:** GetX tập trung vào hiệu suất và mức tiêu thụ tài nguyên tối thiểu, do đó nó không sử dụng Streams hoặc ChangeNotifier.
+  - **Hiệu suất:** GetX có API reactive và stream, không cần tự tạo StreamController/StreamBuilder cho từng giá trị. Chọn Obx hoặc GetBuilder theo cách cập nhật và đo số lần rebuild cùng tài nguyên trong ứng dụng.
 
   - **NĂNG SUẤT:** GetX sử dụng một cú pháp dễ dàng và dễ thở. Bất kể bạn muốn làm gì, luôn có một cách dễ dàng hơn với GetX. Nó sẽ tiết kiệm hàng giờ phát triển và sẽ cung cấp hiệu suất tối đa mà ứng dụng của bạn có thể mang lại.
 
@@ -96,6 +177,8 @@
 **Ngoài ra, nhằm tăng thêm năng suất của bạn, chúng tôi hỗ trợ
 [tiện ích trên VSCode](https://marketplace.visualstudio.com/items?itemName=get-snippets.get-snippets) và [tiện ích cho Android Studio/Intellij](https://plugins.jetbrains.com/plugin/14975-getx-snippets)**
 
+<a id="readme-section-3"></a>
+
 # Cài Đặt
 
 Thêm Get vào file pubspec.yaml:
@@ -110,6 +193,8 @@ Import get vào file cần sử dụng:
 ```dart
 import 'package:get/get.dart';
 ```
+
+<a id="readme-section-4"></a>
 
 # Counter App với GetX
 
@@ -154,7 +239,7 @@ class Home extends StatelessWidget {
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Center(child: ElevatedButton(
-              child: Text("Go to Other"), onPressed: () => Get.to(Other()))),
+              child: Text("Go to Other"), onPressed: () => Get.to(() => Other()))),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.add), onPressed: c.increment));
   }
@@ -182,11 +267,17 @@ Get được thiết kế để làm việc với các nhóm, nhưng nó làm ch
 
 Cải thiện thời gian, giao mọi thứ đúng hạn mà không làm giảm hiệu suất. Get không dành cho tất cả mọi người, nhưng nếu bạn đã xác định gắn với Get, Get sẽ "get" bạn!
 
+<a id="readme-section-5"></a>
+
 # Tam Trụ
+
+<a id="readme-section-6"></a>
 
 ## Quản lý State
 
 Get có 2 cách quản lý trạng thái (state managers) khác nhau : quản lý trạng thái đơn giản (chúng ta gọi nó là GetBuilder) và quản lý trạng thái phản ứng (the reactive state manager) (GetX/Obx).
+
+<a id="readme-section-7"></a>
 
 ### Quản lý Reactive State
 
@@ -222,11 +313,15 @@ Obx(() => Text("${controller.name}"));
 
 Thế thôi. Chỉ là _thế_ thôi người ơi~.
 
+<a id="readme-section-8"></a>
+
 ### Thêm thông tin về Quản lý state
 
 **Xem thông tin cụ thể tại [đây](./documentation/en_US/state_management.md). Tại đó, bạn có thể tham khảo ví dụ và so sánh sự khác nhau giữa quản lý state cơ bản và quản lý state reactive**
 
 Bạn sẽ hình dung được sức mạnh của GetX.
+
+<a id="readme-section-9"></a>
 
 ## Quản lý route
 
@@ -244,7 +339,7 @@ Di chuyển tới màn hình mới:
 
 ```dart
 
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Di chuyển tới màn hình mới theo tên. Xem thêm tại [đây](./documentation/en_US/route_management.md#navigation-with-named-routes)
@@ -257,26 +352,34 @@ Get.toNamed('/details');
 Để đóng snackbars, dialogs, bottomsheets, hay bất kì thứ gì, bạn có thể xài cái này để thay Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Đi đến màn hình kế tiếp và bỏ luôn màn hình cũ (thường dùng cho màn hình giới thiệu, màn hình đăng nhập, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Đi đến màn hình kế tiếp và đóng tất cả các routes (hữu dụng cho shopping cart, polls, và tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Bạn có thấy nãy giờ chúng ta không sử dụng từ khóa "context"? Đây chính là thang điểm 9 + 1 của quản lý route ở Get. Với điểm mạnh trên, bạn có thể thao tác bất cứ đâu, kể cả trong controller class.
 
+<a id="readme-section-10"></a>
+
 ### Thêm thông tin về quản lý route
 
 **Get hoạt động được với named routes và cũng cung cấp cách điều khiển ở cấp thấp (lower-level control) cho routes của bạn! Tài liệu chi tiết tại [đây](./documentation/en_US/route_management.md)**
+
+<a id="readme-section-11"></a>
 
 ## Quản lý dependency
 
@@ -310,13 +413,21 @@ Và sau đó, bạn sẽ có thể khôi phục dữ liệu controller của mì
 Text(controller.textFromApi);
 ```
 
+<a id="readme-section-12"></a>
+
 ### Thêm thông tin về quản lý dependency
 
 **Xem thêm tại [đây](./documentation/en_US/dependency_management.md)**
 
+<a id="readme-section-13"></a>
+
 # Utils
 
+<a id="readme-section-14"></a>
+
 ## Internationalization
+
+<a id="readme-section-15"></a>
 
 ### Dịch thuật
 
@@ -339,6 +450,8 @@ class Messages extends Translations {
 }
 ```
 
+<a id="readme-section-16"></a>
+
 #### Sử dụng bản dịch thuật
 
 Chỉ cần thêm `.tr` vào key được chỉ định và nó sẽ được dịch, sử dụng giá trị hiện tại của` Get.locale` và `Get.fallbackLocale`.
@@ -347,12 +460,16 @@ Chỉ cần thêm `.tr` vào key được chỉ định và nó sẽ được d�
 Text('title'.tr);
 ```
 
+<a id="readme-section-17"></a>
+
 #### Sử dụng bản dịch thuật với số ít và số nhiều
 
 ```dart
 var products = [];
-Text('singularKey'.trPlural('pluralKey', products.length, Args));
+Text('singularKey'.trPlural('pluralKey', products.length));
 ```
+
+<a id="readme-section-18"></a>
 
 #### Sử dụng bản dịch với tham số (parameters)
 
@@ -375,6 +492,8 @@ Text('logged_in'.trParams({
   }));
 ```
 
+<a id="readme-section-19"></a>
+
 ### Locales
 
 Chuyển các tham số (parameters) cho `GetMaterialApp` để xác định ngôn ngữ và bản dịch.
@@ -387,6 +506,8 @@ return GetMaterialApp(
 );
 ```
 
+<a id="readme-section-20"></a>
+
 #### Đổi locale
 
 Gọi `Get.updateLocale (locale)` 'để cập nhật ngôn ngữ. Các bản dịch sau đó sẽ tự động sử dụng ngôn ngữ mới.
@@ -395,6 +516,8 @@ Gọi `Get.updateLocale (locale)` 'để cập nhật ngôn ngữ. Các bản d�
 var locale = Locale('en', 'US');
 Get.updateLocale(locale);
 ```
+
+<a id="readme-section-21"></a>
 
 #### System locale
 
@@ -405,6 +528,8 @@ return GetMaterialApp(
     locale: Get.deviceLocale,
 );
 ```
+
+<a id="readme-section-22"></a>
 
 ## Đổi chủ đề (Theme)
 
@@ -427,34 +552,49 @@ Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
 
 Khi bật `.darkmode`, nó sẽ chuyển _light theme_, và khi bật _light theme_ , nó sẽ chuyển _dark theme_.
 
+<a id="readme-section-23"></a>
+
 ## GetConnect
 
 GetConnect tạo giao thức tới http hoặc websockets
+
+<a id="readme-section-24"></a>
 
 ### Cấu hình mặc định
 
 Đơn giản, bạn có thể kế thừa (extend) từ GetConnect và sử dụng các phương thức GET/POST/PUT/DELETE/SOCKET khi giao tiếp với Rest API hoặc websockets.
 
 ```dart
+class ApiUser {
+  ApiUser(this.name);
+  final String name;
+
+  static ApiUser fromJson(dynamic data) =>
+      ApiUser((data as Map<String, dynamic>)['name'] as String);
+}
+
 class UserProvider extends GetConnect {
-  // Get request
-  Future<Response> getUser(int id) => get('http://youapi/users/$id');
-  // Post request
-  Future<Response> postUser(Map data) => post('http://youapi/users', body: data);
-  // Post request with File
-  Future<Response<CasesModel>> postCases(List<int> image) {
-    final form = FormData({
-      'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return post('http://youapi/users/upload', form);
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.timeout = const Duration(seconds: 10);
   }
 
-  GetSocket userMessages() {
-    return socket('https://yourapi/users/socket');
-  }
+  Future<Response<ApiUser>> getUser(int id) =>
+      get<ApiUser>('/users/$id', decoder: ApiUser.fromJson);
+
+  Future<Response<dynamic>> createUser(String name) =>
+      post<dynamic>('/users', {'name': name});
+
+  Future<Response<dynamic>> uploadAvatar(List<int> bytes) =>
+      post<dynamic>('/upload', FormData({
+        'file': MultipartFile(bytes, filename: 'avatar.png'),
+      }));
 }
 ```
+
+<a id="readme-section-25"></a>
 
 ### Cấu hình tùy chỉnh
 
@@ -462,47 +602,34 @@ GetConnect có khả năng tùy chỉnh cao Bạn có thể xác định Url ch�
 
 ```dart
 class HomeProvider extends GetConnect {
+  HomeProvider(this.token);
+  final String Function() token;
+
   @override
   void onInit() {
-    // All request will pass to jsonEncode so CasesModel.fromJson()
-    httpClient.defaultDecoder = CasesModel.fromJson;
-    httpClient.baseUrl = 'https://api.covid19api.com';
-    // baseUrl = 'https://api.covid19api.com'; // It define baseUrl to
-    // Http and websockets if used with no [httpClient] instance
-
-    // It's will attach 'apikey' property on header from all requests
-    httpClient.addRequestModifier((request) {
-      request.headers['apikey'] = '12345678';
+    super.onInit();
+    httpClient.baseUrl = 'https://example.com/api';
+    httpClient.addRequestModifier<dynamic>((request) {
+      request.headers['Accept'] = 'application/json';
       return request;
     });
-
-    // Even if the server sends data from the country "Brazil",
-    // it will never be displayed to users, because you remove
-    // that data from the response, even before the response is delivered
-    httpClient.addResponseModifier<CasesModel>((request, response) {
-      CasesModel model = response.body;
-      if (model.countries.contains('Brazil')) {
-        model.countries.remove('Brazilll');
-      }
+    httpClient.addResponseModifier<dynamic>((request, response) {
+      Get.log('HTTP status: ${response.statusCode}');
+      return response;
     });
-
-    httpClient.addAuthenticator((request) async {
-      final response = await get("http://yourapi/token");
-      final token = response.body['token'];
-      // Set the header
-      request.headers['Authorization'] = "$token";
+    httpClient.addAuthenticator<dynamic>((request) {
+      request.headers['Authorization'] = 'Bearer ${token()}';
       return request;
     });
-
-    //Autenticator will be called 3 times if HttpStatus is
-    //HttpStatus.unauthorized
-    httpClient.maxAuthRetries = 3;
+    httpClient.maxAuthRetries = 2;
   }
 
-  @override
-  Future<Response<CasesModel>> getCases(String path) => get(path);
+  Future<Response<Map<String, dynamic>>> getCases(String path) =>
+      get<Map<String, dynamic>>(path);
 }
 ```
+
+<a id="readme-section-26"></a>
 
 ## GetPage Middleware
 
@@ -510,31 +637,50 @@ GetPage hiện có thuộc tính mới lấy danh sách GetMiddleWare và chạy
 
 **Chú ý**: Khi GetPage có Middleware (phần trung gian), tất cả các children của trang này sẽ tự động có cùng middlewares.
 
+<a id="readme-section-27"></a>
+
 ### Ưu tiên
 
 Thứ tự ưu tiên của Middlewares có thể đặt như sau trong GetMiddleware.
 
 ```dart
+class PriorityMiddleware extends GetMiddleware {
+  PriorityMiddleware({super.priority});
+}
+
 final middlewares = [
-  GetMiddleware(priority: 2),
-  GetMiddleware(priority: 5),
-  GetMiddleware(priority: 4),
-  GetMiddleware(priority: -8),
+  PriorityMiddleware(priority: 2),
+  PriorityMiddleware(priority: 5),
+  PriorityMiddleware(priority: 4),
+  PriorityMiddleware(priority: -8),
 ];
 ```
 
 và chúng sẽ chạy như thế này **-8 => 2 => 4 => 5**
 
+<a id="readme-section-28"></a>
+
 ### Chuyển hướng
 
-Khi bạn muốn tìm kiếm trang của route được gọi, function (hàm) sẽ khởi động. Kết quả là phải có RouteSettings để chuyển hướng đến. Hoặc cung cấp cho nó null và chuyển hướng không xảy ra.
+Trong redirectDelegate, trả route để tiếp tục, RouteDecoder khác để chuyển hướng, null để hủy. Đăng ký route login và tránh vòng lặp.
 
 ```dart
-RouteSettings redirect(String route) {
-  final authService = Get.find<AuthService>();
-  return authService.authed.value ? null : RouteSettings(name: '/login')
+class AuthService extends GetxService {
+  final authed = false.obs;
+}
+
+class AuthMiddleware extends GetMiddleware {
+  AuthMiddleware({super.priority});
+
+  @override
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
+    final auth = Get.find<AuthService>();
+    return auth.authed.value ? route : RouteDecoder.fromRoute('/login');
+  }
 }
 ```
+
+<a id="readme-section-29"></a>
 
 ### onPageCalled
 
@@ -542,44 +688,52 @@ Khi bạn gọi một trang trước mọi thứ được tạo, hàm này sẽ 
 bạn có thể sử dụng nó để thay đổi điều gì đó về trang hoặc tạo cho nó một trang mới
 
 ```dart
-GetPage onPageCalled(GetPage page) {
-  final authService = Get.find<AuthService>();
-  return page.copyWith(title: 'Welcome ${authService.UserName}');
+class PageTitleMiddleware extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page?.copyWith(title: 'Welcome');
 }
 ```
+
+<a id="readme-section-30"></a>
 
 ### OnBindingsStart
 
 Hàm này sẽ khởi động ngay trước khi Bindings diễn ra và bạn có thể thay đổi Bindings cho trang này.
 
 ```dart
-List<Bindings> onBindingsStart(List<Bindings> bindings) {
-  final authService = Get.find<AuthService>();
-  if (authService.isAdmin) {
-    bindings.add(AdminBinding());
-  }
-  return bindings;
+class BindingMiddleware extends GetMiddleware {
+  @override
+  List<R>? onBindingsStart<R>(List<R>? bindings) =>
+      bindings == null ? null : List<R>.of(bindings);
 }
 ```
+
+<a id="readme-section-31"></a>
 
 ### OnPageBuildStart
 
 Hàm này sẽ khởi động ngay sau khi Bindings diễn ra. Ở đây, bạn có thể làm thứ gì đó sau khi bạn tạo Bindings và trước khi tạo trang widget.
 
 ```dart
-GetPageBuilder onPageBuildStart(GetPageBuilder page) {
-  print('bindings are ready');
-  return page;
+class BuildMiddleware extends GetMiddleware {
+  @override
+  GetPageBuilder? onPageBuildStart(GetPageBuilder? page) => page;
 }
 ```
+
+<a id="readme-section-32"></a>
 
 ### OnPageBuilt
 
 Hàm này sẽ khởi động ngay sau khi GetPage.page được gọi và sẽ cho bạn kết quả của hàm và lấy widget được hiển thị.
 
+<a id="readme-section-33"></a>
+
 ### OnPageDispose
 
 Function này sẽ khởi động ngay sau khi hủy bỏ tất cả các đối tượng liên quan (Controller, views, ...) của trang.
+
+<a id="readme-section-34"></a>
 
 ## APIs nâng cao khác
 
@@ -606,16 +760,16 @@ Get.isDialogOpen
 Get.isBottomSheetOpen
 
 // remove one route.
-Get.removeRoute()
+Get.removeRoute('/details')
 
 // back repeatedly until the predicate returns true.
-Get.until()
+Get.until((page) => page.name == '/home')
 
 // go to next route and remove all the previous routes until the predicate returns true.
-Get.offUntil()
+Get.offUntil(() => const Scaffold(), (page) => page.name == '/home')
 
 // go to next named route and remove all the previous routes until the predicate returns true.
-Get.offNamedUntil()
+Get.offNamedUntil('/details', (page) => page.name == '/home')
 
 //Check in what platform the app is running
 GetPlatform.isAndroid
@@ -643,7 +797,7 @@ Get.width
 Get.context
 
 // Gives the context of the snackbar/dialog/bottomsheet in the foreground, anywhere in your code.
-Get.contextOverlay
+Get.overlayContext
 
 // Chí ú: Nếu bạn dùng cái này, nhớ đặtt. thànhnce you
 // have access to context in any place of your UI, you can use it anywhere in the UI code
@@ -660,49 +814,49 @@ context.heightTransformer()
 context.widthTransformer()
 
 /// Similar to MediaQuery.of(context).size
-context.mediaQuerySize()
+context.mediaQuerySize
 
 /// Similar to MediaQuery.of(context).padding
-context.mediaQueryPadding()
+context.mediaQueryPadding
 
 /// Similar to MediaQuery.of(context).viewPadding
-context.mediaQueryViewPadding()
+context.mediaQueryViewPadding
 
 /// Similar to MediaQuery.of(context).viewInsets;
-context.mediaQueryViewInsets()
+context.mediaQueryViewInsets
 
 /// Similar to MediaQuery.of(context).orientation;
-context.orientation()
+context.orientation
 
 /// Check if device is on landscape mode
-context.isLandscape()
+context.isLandscape
 
 /// Check if device is on portrait mode
-context.isPortrait()
+context.isPortrait
 
 /// Similar to MediaQuery.of(context).devicePixelRatio;
-context.devicePixelRatio()
+context.devicePixelRatio
 
 /// Similar to MediaQuery.of(context).textScaleFactor;
-context.textScaleFactor()
+context.textScaleFactor
 
 /// Get the shortestSide from screen
-context.mediaQueryShortestSide()
+context.mediaQueryShortestSide
 
 /// True if width be larger than 800
-context.showNavbar()
+context.showNavbar
 
 /// True if the shortestSide is smaller than 600p
-context.isPhone()
+context.isPhone
 
 /// True if the shortestSide is largest than 600p
-context.isSmallTablet()
+context.isSmallTablet
 
 /// True if the shortestSide is largest than 720p
-context.isLargeTablet()
+context.isLargeTablet
 
 /// True if the current device is Tablet
-context.isTablet()
+context.isTablet
 
 /// Returns a value<T> according to the screen size
 /// can give value for:
@@ -712,6 +866,8 @@ context.isTablet()
 /// desktop: if width is largest than 1200
 context.responsiveValue<T>()
 ```
+
+<a id="readme-section-35"></a>
 
 ### Cấu hình thủ công và cài đặt chung tuỳ chọn
 
@@ -735,24 +891,26 @@ MaterialApp(
 );
 ```
 
-Bạn có thể tạo _Global Settings_ cho `Get`. Chỉ cần thêm `Get.config` vào code của bạn trước khi đẩy (push) bất cứ route nào.
-Hoặc làm nó trực tiếp trong `GetMaterialApp` của bạn.
+Đặt tùy chọn trên GetMaterialApp hoặc GetCupertinoApp thay Get.config cũ. Router tùy chỉnh cần cấu hình Navigator 2 đầy đủ.
 
 ```dart
-GetMaterialApp(
+Widget configuredApplication() => GetMaterialApp(
   enableLog: true,
   defaultTransition: Transition.fade,
-  opaqueRoute: Get.isOpaqueRouteDefault,
-  popGesture: Get.isPopGestureEnable,
-  transitionDuration: Get.defaultDurationTransition,
-  defaultGlobalState: Get.defaultGlobalState,
+  transitionDuration: const Duration(milliseconds: 250),
+  popGesture: true,
+  logWriterCallback: localLogWriter,
+  routingCallback: (routing) {
+    if (routing != null) {
+      debugPrint('Route: ${routing.current}');
+    }
+  },
+  home: const Scaffold(body: Text('Configuration')),
 );
 
-Get.config(
-  enableLog = true,
-  defaultPopGesture = true,
-  defaultTransition = Transitions.cupertino
-)
+void localLogWriter(String text, {bool isError = false}) {
+  debugPrint('${isError ? "ERROR" : "GETX"}: $text');
+}
 ```
 
 Bạn có thể tự chọn chuyển hướng tất cả logging messages từ `Get`.
@@ -769,8 +927,9 @@ void localLogWriter(String text, {bool isError = false}) {
   // please note that even if enableLog: false log messages will be pushed in this callback
   // you get check the flag if you want through GetConfig.isLogEnable
 }
-
 ```
+
+<a id="readme-section-36"></a>
 
 ### Local State Widgets
 
@@ -779,6 +938,8 @@ Chúng ta có các hướng đi cho Reactive và Simple.
 Ví dụ: bạn có thể sử dụng chúng để chuyển đổi văn bản tối nghĩa trong một `TextField`, có thể tạo một widget
 Expandable Panel tùy chỉnh hoặc có thể sửa đổi chỉ mục hiện tại trong `BottomNavigationBar` trong khi thay đổi nội dung
 bên trong một `Scaffold`.
+
+<a id="readme-section-37"></a>
 
 #### ValueBuilder
 
@@ -797,6 +958,8 @@ ValueBuilder<bool>(
 ),
 ```
 
+<a id="readme-section-38"></a>
+
 #### ObxValue
 
 Tương tự như [`ValueBuilder`](#valuebuilder), nhưng đây là phiên bản Reactive, bạn kèm một lệnh Rx (nhớ cái .obs không?) và nó cập nhật tự động ... hay chưa?
@@ -809,6 +972,8 @@ ObxValue((data) => Switch(
     false.obs,
 ),
 ```
+
+<a id="readme-section-39"></a>
 
 ## Mẹo hữu ích
 
@@ -828,91 +993,35 @@ Ngay cả khi `message` _prints_ giá trị String, thì kiểu của nó lại 
 Vì vậy, bạn không thể thực hiện `message.substring (0, 4) '. Bạn phải truy cập vào `value`thực bên trong _observable_: Cách được sử dụng nhiều nhất là`.value`, nhưng, bạn có biết rằng bạn cũng có thể sử dụng ...
 
 ```dart
-final name = 'GetX'.obs;
-// only "updates" the stream, if the value is different from the current one.
-name.value = 'Hey';
-
-// All Rx properties are "callable" and returns the new value.
-// but this approach does not accepts `null`, the UI will not rebuild.
-name('Hello');
-
-// is like a getter, prints 'Hello'.
-name() ;
-
-/// numbers:
-
-final count = 0.obs;
-
-// You can use all non mutable operations from num primitives!
-count + 1;
-
-// Watch out! this is only valid if `count` is not final, but var
-count += 1;
-
-// You can also compare against values:
-count > 2;
-
-/// booleans:
-
-final flag = false.obs;
-
-// switches the value between true/false
-flag.toggle();
-
-
-/// all types:
-
-// Sets the `value` to null.
-flag.nil();
-
-// All toString(), toJson() operations are passed down to the `value`
-print( count ); // calls `toString()` inside  for RxInt
-
-final abc = [0,1,2].obs;
-// Converts the value to a json Array, prints RxList
-// Json is supported by all Rx types!
-print('json: ${jsonEncode(abc)}, type: ${abc.runtimeType}');
-
-// RxMap, RxList and RxSet are special Rx types, that extends their native types.
-// but you can work with a List as a regular list, although is reactive!
-abc.add(12); // pushes 12 to the list, and UPDATES the stream.
-abc[3]; // like Lists, reads the index 3.
-
-
-// equality works with the Rx and the value, but hashCode is always taken from the value
-final number = 12.obs;
-print( number == 12 ); // prints > true
-
-/// Custom Rx Models:
-
-// toJson(), toString() are deferred to the child, so you can implement override on them, and print() the observable directly.
-
-class User {
-    String name, last;
-    int age;
-    User({this.name, this.last, this.age});
-
-    @override
-    String toString() => '$name $last, $age years old';
+class Person {
+  Person({required this.name});
+  String name;
 }
 
-final user = User(name: 'Khang', last: 'Huỳnh', age: 33).obs;
+void reactiveExamples() {
+  final name = 'GetX'.obs;
+  name.value = 'Hello';
+  final enabled = false.obs;
+  enabled.toggle();
 
-// `user` is "reactive", but the properties inside ARE NOT!
-// So, if we change some variable inside of it...
-user.value.name = 'Kaiser';
-// The widget will not rebuild!,
-// `Rx` don't have any clue when you change something inside user.
-// So, for custom classes, we need to manually "notify" the change.
-user.refresh();
+  final items = RxList<int>()..add(1);
+  final counters = RxMap<String, int>()..['visits'] = 1;
+  final labels = RxSet<String>()..add('new');
+  items.assignAll(items.where((value) => value > 0));
 
-// or we can use the `update()` method!
-user.update((value){
-  value.name='Kaiser';
-});
+  final person = Person(name: 'Sara').obs;
+  person.update((previous) => Person(name: '${previous!.name}!'));
 
-print( user );
+  name.close();
+  enabled.close();
+  items.close();
+  counters.close();
+  labels.close();
+  person.close();
+}
 ```
+
+<a id="readme-section-40"></a>
 
 ## StateMixin
 
@@ -920,48 +1029,55 @@ Một cách khác để xử lý trạng thái `UI` của bạn là sử dụng`
 Để triển khai nó, hãy sử dụng dấu `with` để thêm`StateMixin <T>` vào bộ điều khiển (controller) của bạn cho phép tích hợp kèm mô hình T.
 
 ```dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 Phương thức `change()` thay đổi trạng thái bất cứ khi nào chúng ta muốn.
 Chỉ cần chuyển dữ liệu và trạng thái theo cách này:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus cho phép những trang thái này:
+GetStatus cho phép những trang thái này:
 
 ```dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 Để biểu hiện nó trên UI, sử dụng:
 
 ```dart
-class OtherClass extends GetView<Controller> {
+class NamesController extends GetxController with StateMixin<List<String>> {
+  void showNames(List<String> names) {
+    change(GetStatus<List<String>>.success(names));
+  }
+
+  void load(Future<List<String>> Function() fetch) => futurize(fetch);
+  void showLoading() => setLoading();
+  void showEmpty() => setEmpty();
+  void showError(Object error) => setError(error);
+}
+
+class NamesView extends GetView<NamesController> {
+  const NamesView({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: controller.obx(
-        (state)=>Text(state.name),
-
-        // here you can put your custom loading indicator, but
-        // by default would be Center(child:CircularProgressIndicator())
-        onLoading: CustomLoadingIndicator(),
-        onEmpty: Text('No data found'),
-
-        // here also you can set your own error widget, but by
-        // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error),
-      ),
-    );
+  Widget build(BuildContext context) => Scaffold(
+    body: controller.obx(
+      (names) => Text(names.join(', ')),
+      onLoading: const Center(child: CircularProgressIndicator()),
+      onEmpty: const Text('No data'),
+      onError: (error) => Text(error ?? 'Unknown error'),
+    ),
+  );
 }
 ```
+
+<a id="readme-section-41"></a>
 
 #### GetView
 
@@ -970,7 +1086,7 @@ Widget này là bảo bối của GetX, rất đơn giản, nhưng rất hữu �
 Là một Widget `const Stateless` có getter` controller` cho một `Controller` đã đăng ký, chỉ vậy thôi người ơi~.
 
 ```dart
- class AwesomeController extends GetController {
+ class AwesomeController extends GetxController {
    final String title = 'My Awesome View';
  }
 
@@ -986,11 +1102,15 @@ Là một Widget `const Stateless` có getter` controller` cho một `Controller
  }
 ```
 
+<a id="readme-section-42"></a>
+
 #### GetResponsiveView
 
 Mở rộng tiện ích này để xây dựng chế độ responsive.
 Widget này chứa thuộc tính `screen` có tất cả
 thông tin về kích thước và loại màn hình.
+
+<a id="readme-section-43"></a>
 
 ##### Hướng dẫn sử dụng trước khi dùng
 
@@ -1006,67 +1126,57 @@ Với thuộc tính `settings` bạn có thể đặt chiều dài tối thiểu
 Code to this screen
 [code](https://github.com/SchabanBo/get_page_example/blob/master/lib/pages/responsive_example/responsive_view.dart)
 
+<a id="readme-section-44"></a>
+
 #### GetWidget
 
-Hầu hết mọi người không biết gì về Widget này, hoặc hoàn toàn nhầm lẫn về cách sử dụng nó.
-Trường hợp sử dụng rất hiếm, nhưng rất cụ thể: Nó `caches` một Bộ điều khiển.
-Bởi vì _cache_ không thể là một `const Stateless`.
+GetWidget cache controller cho chính instance widget đó và hỗ trợ const. Với Get.spawn, controller được đóng khi widget sở hữu bị gỡ. GetView thực hiện lookup thay vì cache này.
 
-> Vậy khi nào mình cần cache bộ điều khiển (controller)?
+```dart
+class ItemController extends GetxController {
+  final label = 'Item'.obs;
+}
 
-Nếu sử dụng, bạn sẽ dùng cái này **GetX**: `Get.create()`.
+void registerItemFactory() => Get.spawn<ItemController>(() => ItemController());
 
-`Get.create(()=>Controller())` sẽ tạo một `Controller` với mỗi lần gọi `Get.find<Controller>()`,
+class ItemView extends GetWidget<ItemController> {
+  const ItemView({super.key});
 
-Đó là nơi mà `GetWidget` tỏa sáng ... chẳng hạn như bạn có thể sử dụng nó, để giữ một danh sách các mục Todo. Vì vậy, nếu widget được "xây dựng lại", nó sẽ giữ nguyên phiên bản controller.
+  @override
+  Widget build(BuildContext context) => Obx(() => Text(controller.label.value));
+}
+```
+
+<a id="readme-section-45"></a>
 
 #### GetxService
 
-Class này giống như một `GetxController`, nó chia sẻ cùng một vòng đời (`onInit ()`,`onReady ()`,`onClose ()`).
-Nhưng không có "logic" bên trong của nó. Nó chỉ thông báo cho ** GetX ** Hệ thống Nạp Dependency rằng class con này ** không thể ** bị xóa khỏi bộ nhớ.
-
-Vì vậy, rất hữu ích để giữ cho "Service" của bạn luôn có thể truy cập và hoạt động với `Get.find ()`. Giống:
-`ApiService`,` StorageService`, `CacheService`.
+GetxService có onInit/onReady/onClose cho dịch vụ vòng đời ứng dụng. Xóa thông thường bảo vệ dịch vụ; force hoặc Get.reset cho phép dọn dẹp chủ động. Nó không lưu dữ liệu qua lần chết process. Chờ init rồi dùng Get.put.
 
 ```dart
-Future<void> main() async {
-  await initServices(); /// AWAIT SERVICES INITIALIZATION.
-  runApp(SomeApp());
-}
-
-/// Is a smart move to make your Services intiialize before you run the Flutter app.
-/// as you can control the execution flow (maybe you need to load some Theme configuration,
-/// apiKey, language defined by the User... so load SettingService before running ApiService.
-/// so GetMaterialApp() doesnt have to rebuild, and takes the values directly.
-void initServices() async {
-  print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
-  await Get.putAsync(() => DbService().init());
-  await Get.putAsync(SettingsService()).init();
-  print('All services started...');
-}
-
 class DbService extends GetxService {
-  Future<DbService> init() async {
-    print('$runtimeType delays 2 sec');
-    await 2.delay();
-    print('$runtimeType ready!');
-    return this;
-  }
+  Future<DbService> init() async => this;
 }
 
 class SettingsService extends GetxService {
-  void init() async {
-    print('$runtimeType delays 1 sec');
-    await 1.delay();
-    print('$runtimeType ready!');
-  }
+  Future<SettingsService> init() async => this;
 }
 
+Future<void> initServices() async {
+  final database = await DbService().init();
+  Get.put<DbService>(database, permanent: true);
+  final settings = await SettingsService().init();
+  Get.put<SettingsService>(settings, permanent: true);
+}
+
+Future<void> startApplication() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
+  runApp(GetMaterialApp(home: const Scaffold(body: Text('Ready'))));
+}
 ```
 
-Cách duy nhất để thực sự xóa một `GetxService`, là với `Get.reset ()` giống như cách thức "Khởi động nóng" ứng dụng của bạn. Vì vậy, hãy nhớ rằng, nếu bạn cần sự tồn tại tuyệt đối của một class trong vòng đời tồn tại của nó trong ứng dụng của bạn, hãy sử dụng `GetxService`.
+<a id="readme-section-46"></a>
 
 # Thay đổi đột phá 2.0
 
@@ -1086,7 +1196,7 @@ RxController và GetBuilder bây giờ đã hợp nhất, bạn không cần ph�
 2- NamedRoutes
 Before:
 
-```dart
+```text
 GetMaterialApp(
   namedRoutes: {
     '/': GetRoute(page: Home()),
@@ -1121,6 +1231,8 @@ GetMaterialApp(
 )
 ```
 
+<a id="readme-section-47"></a>
+
 # Tại sao lại dùng GetX
 
 1- Nhiều lần sau khi cập nhật Flutter, nhiều package của bạn sẽ bị hỏng. Đôi khi lỗi biên dịch code xảy ra, lỗi thường xuất hiện mà vẫn không có câu trả lời; và, chúng ta, nhà phát triển, cần biết lỗi đến từ đâu, theo dõi lỗi, chỉ sau đó cố gắng mở một vấn đề trong kho lưu trữ tương ứng và xem vấn đề của nó đã được giải quyết. Tập trung các tài nguyên chính để phát triển (Quản lý state, dependency và route), cho phép bạn thêm một gói duy nhất vào pubspec của mình và bắt đầu hoạt động. Sau khi cập nhật Flutter, điều duy nhất bạn cần làm là cập nhật Get dependency và bắt đầu làm việc. Get cũng giải quyết các vấn đề tương thích. Có bao nhiêu lần một phiên bản của một gói không tương thích với phiên bản của gói khác, vì một gói sử dụng phần phụ thuộc trong một phiên bản và gói kia trong phiên bản khác? Đây cũng không phải là vấn đề đáng lo ngại khi sử dụng Get, vì mọi thứ đều nằm trong cùng một gói và hoàn toàn tương thích.
@@ -1134,7 +1246,11 @@ Nếu bạn cần ngữ cảnh để tìm một InheritedWidget, bạn cần nó
 
 Thư viện này sẽ luôn được cập nhật và triển khai các tính năng mới. Hãy thoải mái đưa ra các bài PR và đóng góp cho chúng.
 
+<a id="readme-section-48"></a>
+
 # Cộng đồng
+
+<a id="readme-section-49"></a>
 
 ## Kênh Cộng đồng
 
@@ -1143,6 +1259,8 @@ GetX có một cộng đồng rất tích cực và hữu ích. Nếu bạn có 
 | **Slack**                                                                                                                   | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
 | [![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://communityinviter.com/apps/getxworkspace/getx) | [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/9Hpt99N) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/PhdbJRmsZNpAqSLJL6bH7g) |
+
+<a id="readme-section-50"></a>
 
 ## Cách cống hiến
 
@@ -1155,6 +1273,8 @@ _Bạn muốn đóng góp cho dự án? Chúng tôi sẽ tự hào giới thiệ
 - Bao gồm các chức năng mới.
 
 Mọi đóng góp đều được hoan nghênh!
+
+<a id="readme-section-51"></a>
 
 ## Các bài báo và video
 
