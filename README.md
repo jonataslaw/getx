@@ -1294,6 +1294,22 @@ _Want to contribute to the project? We will be proud to highlight you as one of 
 
 Any contribution is welcome!
 
+Read the [contribution guide](CONTRIBUTING.md) for the PR checklist, changed-file
+formatting, browser checks, and coverage scope. If you use AI tools, also read the
+[AI contribution guidelines](CONTRIBUTING.ai.md).
+
+Before submitting a pull request, run these core checks and the additional
+checks described in the contribution guide:
+
+```sh
+flutter pub get
+flutter analyze --no-fatal-warnings
+flutter test --coverage
+```
+
+Analysis errors and info-level diagnostics fail CI. Warnings are reported but
+are currently non-fatal so the existing warnings do not block unrelated fixes.
+
 ## Articles and videos
 
 - [Flutter Getx EcoSystem package for arabic people](https://www.youtube.com/playlist?list=PLV1fXIAyjeuZ6M8m56zajMUwu4uE3-SL0) - Tutorial by [Pesa Coder](https://github.com/UsamaElgendy).

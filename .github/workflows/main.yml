@@ -1,34 +1,163 @@
-#The name of your workflow.
 name: build
-# Trigger the workflow on push or pull request
+
 on:
   push:
     branches: [master]
   pull_request:
     branches: [master]
-#A workflow run is made up of one or more jobs. Jobs run in parallel by default.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-quality-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
-    defaults:
-      run:
-        working-directory: ./
+  workflow-checks:
+    name: Workflow checks
     runs-on: ubuntu-latest
-    #sequence of tasks called
+    timeout-minutes: 10
     steps:
-      # The branch or tag ref that triggered the workflow will be checked out.
-      # https://github.com/actions/checkout
-      - uses: actions/checkout@v6
-      # Setup a flutter environment.
-      # https://github.com/marketplace/actions/flutter-action
-      - uses: subosito/flutter-action@v2
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          flutter-version: "3.47.8"
-          channel: "stable"
+          persist-credentials: false
+      - name: Test quality scripts
+        run: python3 -m unittest discover -s .github/tests -v
+      - name: Check workflow security
+        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95 # v0.4.1
+        with:
+          advanced-security: false
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+      - name: Check changed Dart files
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE_SHA: ${{ github.event.before }}
+        run: |
+          base="${PR_BASE_SHA:-${PUSH_BASE_SHA:-}}"
+          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+            # Manual runs and the first push to a branch compare to its parent.
+            base=$(git rev-parse HEAD^)
+          fi
+          bash .github/scripts/check-format.sh "$base"
+
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
       - run: flutter pub get
-      #- run: flutter analyze
-      # run  flutter widgets tests  and unit tests
-      - run: flutter test --coverage
-      # Upload coverage reports to Codecov
-      # https://github.com/marketplace/actions/codecov
-      - uses: codecov/codecov-action@v7
+      # Retain the warning policy introduced in PR #3486.
+      - run: flutter analyze --no-pub --no-fatal-warnings
+
+  test:
+    name: Tests (${{ matrix.flutter }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter: ['3.47.8', '3.47.9']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: ${{ matrix.flutter }}
+          channel: stable
+      - run: flutter pub get
+      - run: flutter test --no-pub --coverage
+      - name: Preserve coverage report
+        if: matrix.flutter == '3.47.9'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: root-coverage
+          path: coverage/lcov.info
+          if-no-files-found: error
+          retention-days: 14
+
+  web:
+    name: Web smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.9'
+          channel: stable
+      - run: flutter pub get
+      - name: Check Rx workers and dependency injection in Chrome
+        run: flutter test --no-pub --platform chrome test/rx/rx_workers_test.dart test/instance/get_instance_test.dart
+
+  coverage:
+    name: Coverage
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: root-coverage
+          path: coverage
+      - name: Validate coverage and write summary
+        run: python3 .github/scripts/summarize-coverage.py coverage/lcov.info
+      # Public tokenless upload must be enabled in Codecov. The artifact and
+      # summary remain required when the external service is unavailable.
+      - name: Publish to Codecov
+        id: codecov
+        continue-on-error: true
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7
+        with:
+          files: coverage/lcov.info
+          disable_search: true
+          fail_ci_if_error: true
+      - name: Report unavailable Codecov upload
+        if: steps.codecov.outcome == 'failure'
+        run: echo '::warning::Codecov upload failed. See the root-coverage artifact and Coverage job summary; check public tokenless upload settings.'
+
+  required-checks:
+    name: Required checks
+    if: always()
+    needs: [workflow-checks, format, analyze, test, web, coverage]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every quality job to succeed
+        env:
+          RESULTS: ${{ join(needs.*.result, ',') }}
+        run: |
+          IFS=',' read -ra results <<< "$RESULTS"
+          for result in "${results[@]}"; do
+            if [[ "$result" != success ]]; then
+              echo "::error::A required quality job finished with: $result"
+              exit 1
+            fi
+          done
