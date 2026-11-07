@@ -19,6 +19,8 @@ for master reconciliation, validation boundaries and deferred work.
 
 ### Navigation, restoration and native acceptance
 
+- Keep covered nested pages from overwriting browser acceptance probe reports
+  after navigating back to a visible root page.
 - Migrate low-level GetNavigator and GetRouterOutlet.pickPages callback
   arguments from `onPopPage` to `onDidRemovePage`. Configure back vetoes through
   GetPage.canPop / PopScope and forward custom outlet notifications to the

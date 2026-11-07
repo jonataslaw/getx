@@ -79,8 +79,16 @@ class _ProbePage extends StatelessWidget {
             ?.pageSettings?.name;
         final parameters = Map<String, String>.from(Get.parameters);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) {
-            return;
+          if (!context.mounted) return;
+          var route = ModalRoute.of(context);
+          if (route == null) return;
+          // A child can stay current inside a covered parent navigator.
+          while (route != null) {
+            if (!route.isCurrent) return;
+            final navigatorContext = route.navigator?.context;
+            route = navigatorContext == null
+                ? null
+                : ModalRoute.of(navigatorContext);
           }
           _browserState = jsonEncode({
             'boot': _boot,
