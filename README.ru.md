@@ -127,6 +127,8 @@ Widget rcNamesApplication() => GetMaterialApp(
 
 В redirectDelegate верните route для продолжения, другой RouteDecoder для перенаправления или null для отмены. Зарегистрируйте login и избегайте циклов.
 
+GetNavigator и GetRouterOutlet.pickPages заменяют `onPopPage` на `onDidRemovePage`, уведомление после удаления страницы. Запрет back задаётся через `GetPage.canPop` или `PopScope`; собственный callback outlet передаёт уведомление в `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

@@ -165,6 +165,8 @@ Flutter 3.47.9 tarayıcı geçmişindeki percent-encoding kısıtı belgelenmiş
 
 Eski Get.config yerine GetMaterialApp veya GetCupertinoApp ayarlarını kullanın. Özel router için tutarlı Navigator 2 yapılandırması gerekir.
 
+GetNavigator ve GetRouterOutlet.pickPages, `onPopPage` yerine silme sonrası bildirim olan `onDidRemovePage` kullanır. Back vetosu için `GetPage.canPop` veya `PopScope` kullanın; özel outlet callback'i `delegate.didRemovePage` metoduna iletmelidir.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

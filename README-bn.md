@@ -140,6 +140,8 @@ Flutter 3.47.9-এর browser history percent-encoding সীমাবদ্ধ�
 
 GetMaterialApp বা GetCupertinoApp-এর option ব্যবহার করুন; পুরোনো Get.config নয়। কাস্টম navigation-এর জন্য পূর্ণ Navigator 2 configuration প্রয়োজন।
 
+GetNavigator ও GetRouterOutlet.pickPages-এর `onPopPage` এখন `onDidRemovePage`। এটি অপসারণের পরের notification; back আটকাতে `GetPage.canPop` বা `PopScope` নিন। custom outlet callback থেকে `delegate.didRemovePage`-এ notification পাঠান।
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

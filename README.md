@@ -360,6 +360,8 @@ Widget routedApplication() => GetMaterialApp(
 Future<int?> openNamedDetails() async => await Get.toNamed<int>('/details');
 ```
 
+Low-level `GetNavigator`, `GetNavigator.onGenerateRoute` and `GetRouterOutlet.pickPages` now accept `onDidRemovePage` instead of `onPopPage`. This notification removes the committed page from its owner’s list; veto back through `GetPage.canPop` / `PopScope`. The default delegate/outlet wire history cleanup automatically. Custom outlet callbacks should forward to `delegate.didRemovePage`; a custom GetNavigator owner rebuilds its own page list. Typed navigation results remain forwarded from route completion. See the [callback migration](documentation/en_US/migration_guide_5.md#low-level-page-removal-callbacks).
+
 <a id="nested"></a>
 
 ## Nested routes, deep links and app configuration
@@ -858,6 +860,7 @@ Review the complete [GetX 4 → 5 migration guide](documentation/en_US/migration
 | Widget instances in direct navigation | Page factories such as `Get.to(() => Page())` |
 | One `Get.back` recipe for every popup | Explicit dialog/sheet/snackbar helpers; `Get.back` for pages |
 | Navigator 1 nested-key recipe | `GetPage.children` + `GetRouterOutlet`, string IDs |
+| Low-level `onPopPage` callback | `onDidRemovePage` notification; veto via `GetPage.canPop` / `PopScope` |
 | Global `Get.config` | App constructor settings / supported custom router setup |
 
 For historical GetX 2 migrations, StringX/IntX/MapX/ListX/NumX/DoubleX became RxString/RxInt/RxMap/RxList/RxNum/RxDouble, and namedRoutes/GetRoute recipes became getPages/GetPage with page factories. These are historical notes, not supported old constructors to copy into current code.

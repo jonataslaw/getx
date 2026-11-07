@@ -150,6 +150,8 @@ GetWidget उस widget instance का controller cache करता है औ
 
 redirectDelegate में route लौटाने पर जारी, दूसरा RouteDecoder लौटाने पर redirect और null पर रद्द होता है। login route दर्ज करें और loop से बचें।
 
+GetNavigator और GetRouterOutlet.pickPages में `onPopPage` की जगह `onDidRemovePage` है। यह हटाने के बाद की सूचना है; back रोकने के लिए `GetPage.canPop` या `PopScope` लें। custom outlet callback से `delegate.didRemovePage` को सूचना भेजें।
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

@@ -140,6 +140,8 @@ Flutter 3.47.9 浏览器 history 的 percent-encoding 限制仍有记录；普�
 
 在 GetMaterialApp 或 GetCupertinoApp 上配置选项，不再使用旧 Get.config。自定义 router 需要完整且一致的 Navigator 2 配置。
 
+GetNavigator 和 GetRouterOutlet.pickPages 将 `onPopPage` 改为删除后的通知 `onDidRemovePage`。返回拦截请使用 `GetPage.canPop` 或 `PopScope`；自定义 outlet callback 应转发给 `delegate.didRemovePage`。
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

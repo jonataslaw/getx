@@ -164,6 +164,8 @@ Flutter 3.47.9 브라우저 history의 percent-encoding 제한은 남아 있습�
 
 이전 Get.config 대신 GetMaterialApp 또는 GetCupertinoApp 옵션을 설정하세요. 사용자 지정 router에는 일관된 Navigator 2 구성이 필요합니다.
 
+GetNavigator와 GetRouterOutlet.pickPages의 `onPopPage`가 `onDidRemovePage`로 바뀝니다. 삭제 후 알림이므로 back 거부는 `GetPage.canPop` 또는 `PopScope`로 설정하고, 사용자 outlet callback에서 `delegate.didRemovePage`로 전달하세요.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

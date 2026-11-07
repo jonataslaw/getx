@@ -123,6 +123,8 @@ GetWidget almacena el controlador de esa instancia de widget y admite const. Con
 
 En redirectDelegate, devuelve route para continuar, otro RouteDecoder para redirigir o null para cancelar. Registra login y evita bucles.
 
+GetNavigator y GetRouterOutlet.pickPages sustituyen `onPopPage` por `onDidRemovePage`, una notificación posterior a la eliminación. Usa `GetPage.canPop` o `PopScope` para vetar back; un callback personalizado del outlet debe reenviar a `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

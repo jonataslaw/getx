@@ -140,6 +140,8 @@ GetxService ایپ کی زندگی کی سروس کے لیے onInit/onReady/onCl
 
 GetWidget اسی widget instance کا controller cache کرتا ہے اور const کی حمایت کرتا ہے۔ Get.spawn کا controller مالک widget ہٹنے پر بند ہوتا ہے۔ GetView اس cache کے بجائے lookup کرتا ہے۔
 
+GetNavigator اور GetRouterOutlet.pickPages میں `onPopPage` کی جگہ `onDidRemovePage` ہے۔ یہ حذف کے بعد اطلاع ہے؛ back روکنے کے لیے `GetPage.canPop` یا `PopScope` لیں، اور custom outlet callback سے `delegate.didRemovePage` کو اطلاع دیں۔
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

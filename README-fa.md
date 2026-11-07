@@ -402,6 +402,8 @@ Future<int?> openNamedDetails() async => await Get.toNamed<int>('/details');
 
 </div>
 
+در API سطح پایینِ `GetNavigator`، `GetNavigator.onGenerateRoute` و `GetRouterOutlet.pickPages`، پارامتر `onPopPage` به `onDidRemovePage` تغییر کرده است. این callback پس از حذف قطعی صفحه، فهرست مالک را به‌روز می‌کند؛ برای veto برگشت از `GetPage.canPop` یا `PopScope` استفاده کنید. delegate و outlet پیش‌فرض history را خودکار پاک می‌کنند. callback سفارشی outlet باید به `delegate.didRemovePage` هم اطلاع دهد؛ مالک GetNavigator سفارشی فهرست خودش را rebuild می‌کند. نتیجهٔ typed مسیریابی از تکمیل route منتقل می‌شود. [راهنمای مهاجرت callback](documentation/en_US/migration_guide_5.md#low-level-page-removal-callbacks) جزئیات را توضیح می‌دهد.
+
 <a id="nested"></a>
 
 ## مسیر تو‌در‌تو، deep link و تنظیمات برنامه
@@ -960,6 +962,7 @@ void main() {
 | نمونهٔ ویجت در navigation مستقیم | تابع سازنده، مانند `Get.to(() => Page())` |
 | یک `Get.back` برای تمام popupها | helper صریح دیالوگ، sheet و snackbar؛ `Get.back` برای صفحه |
 | nested-key مربوط به Navigator 1 | `GetPage.children` و `GetRouterOutlet` با id رشته‌ای |
+| callback سطح پایین `onPopPage` | اعلان `onDidRemovePage`؛ veto با `GetPage.canPop` و `PopScope` |
 | `Get.config` سراسری | تنظیمات سازندهٔ برنامه یا router سفارشی پشتیبانی‌شده |
 
 در مهاجرت تاریخی GetX 2، نوع‌های StringX، IntX، MapX، ListX، NumX و DoubleX به RxString، RxInt، RxMap، RxList، RxNum و RxDouble تبدیل شدند و دستورهای namedRoutes و GetRoute جای خود را به getPages و GetPage با تابع سازندهٔ صفحه دادند. این بخش توضیح سابقه است و سازندهٔ قدیمی برای کپی در کد جدید نیست.

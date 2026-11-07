@@ -146,6 +146,8 @@ A limitação de percent-encoding no histórico web do Flutter 3.47.9 permanece 
 
 Configure GetMaterialApp ou GetCupertinoApp em vez do antigo Get.config. Um router personalizado exige configuração completa do Navigator 2.
 
+GetNavigator e GetRouterOutlet.pickPages substituem `onPopPage` por `onDidRemovePage`, uma notificação após remover a página. Use `GetPage.canPop` ou `PopScope` para vetar back; o callback personalizado do outlet deve encaminhar para `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

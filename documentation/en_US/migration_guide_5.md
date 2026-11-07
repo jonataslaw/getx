@@ -267,6 +267,39 @@ router. Choose the back handler appropriate to your selected Flutter SDK and
 route configuration, and test platform back, browser back and swipe gestures.
 Do not assume every back source follows the same path as a direct `Get.back`.
 
+## Low-level page removal callbacks
+
+`GetNavigator`, `GetNavigator.onGenerateRoute` and
+`GetRouterOutlet.pickPages` replace the `onPopPage` constructor argument with
+`onDidRemovePage`. This is a low-level API migration: the new callback takes
+`Page<Object?>` and returns `void`, after Flutter has committed the removal.
+Do not call `route.didPop` again or return a veto from this notification.
+Configure back policy ahead of time with `GetPage.canPop` / `PopScope`.
+
+For a custom GetNavigator, its page owner must remove that exact page and
+rebuild. For example, inside a State with a `pages` list of GetPage values:
+
+```dart
+GetNavigator(
+  pages: pages,
+  onDidRemovePage: (page) {
+    setState(() => pages.removeWhere((entry) => identical(entry, page)));
+  },
+);
+```
+
+GetNavigator's omitted callback is a no-op; it does not mutate a caller-owned
+list. The default GetDelegate and GetRouterOutlet provide history cleanup.
+If you replace an outlet's callback to add observation, also forward the page
+to that outlet's delegate with `delegate.didRemovePage(page)`.
+
+The notification does not receive the popped result. GetX forwards native
+route completion to the pending typed page future separately, preserving an
+already completed declarative result. History cleanup identifies the removed
+entry rather than always popping the current entry. Replacement of a covered
+page therefore retains the foreground page and its pending result; delayed
+notifications for an older page cannot delete a replacement with the same key.
+
 ## Named-route history and restoration
 
 Setting `GetMaterialApp.restorationScopeId` or

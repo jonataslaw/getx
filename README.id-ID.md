@@ -138,6 +138,8 @@ Batasan percent-encoding browser history pada Flutter 3.47.9 tetap didokumentasi
 
 Atur GetMaterialApp atau GetCupertinoApp, bukan Get.config lama. Router khusus membutuhkan konfigurasi Navigator 2 yang lengkap.
 
+GetNavigator dan GetRouterOutlet.pickPages mengganti `onPopPage` dengan `onDidRemovePage`, notifikasi setelah halaman dihapus. Gunakan `GetPage.canPop` atau `PopScope` untuk veto back; callback outlet khusus harus meneruskan ke `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

@@ -141,6 +141,8 @@ Giới hạn percent-encoding trong browser history của Flutter 3.47.9 vẫn �
 
 Đặt tùy chọn trên GetMaterialApp hoặc GetCupertinoApp thay Get.config cũ. Router tùy chỉnh cần cấu hình Navigator 2 đầy đủ.
 
+GetNavigator và GetRouterOutlet.pickPages thay `onPopPage` bằng `onDidRemovePage`, thông báo sau khi đã xóa trang. Dùng `GetPage.canPop` hoặc `PopScope` để chặn back; callback outlet tùy chỉnh cần chuyển tiếp tới `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

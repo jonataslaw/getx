@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
+import 'support/page_removal_fixture.dart';
 
 class _TestPage extends GetPage<int> {
   _TestPage(String name) : super(name: name, page: () => Text(name));
@@ -65,6 +69,47 @@ class _Outlet extends StatelessWidget {
 
 void main() {
   tearDown(Get.reset);
+  testWidgets('generated routes do not complete the declarative page result',
+      (tester) async {
+    final result = Completer<int?>();
+    final navigatorKey = GlobalKey<NavigatorState>();
+    final pages = <GetPage>[
+      GetPage<int>(
+          name: '/base', page: () => const Scaffold(body: Text('base'))),
+      GetPage<int>(
+          name: '/detail',
+          page: () => const Scaffold(body: Text('detail')),
+          completer: result),
+    ];
+    await tester.pumpWidget(pageRemovalApp(
+      initialRoute: '/host',
+      getPages: [
+        GetPage(
+          name: '/host',
+          page: () => StatefulBuilder(
+            builder: (context, update) => GetNavigator.onGenerateRoute(
+              key: navigatorKey,
+              pages: List.of(pages),
+              onDidRemovePage: (page) => update(() => pages.remove(page)),
+            ),
+          ),
+        ),
+        ...pages,
+      ],
+    ));
+    await tester.pumpAndSettle();
+    final generated = navigatorKey.currentState!.pushNamed<dynamic>('/detail');
+    await tester.pumpAndSettle();
+    navigatorKey.currentState!.pop<int>(9);
+    await tester.pumpAndSettle();
+    expect(await generated, 9);
+    expect(result.isCompleted, isFalse);
+    navigatorKey.currentState!.pop<int>(42);
+    await tester.pumpAndSettle();
+    expect(await result.future, 42);
+    expect(pages.map((page) => page.name), ['/base']);
+    expect(tester.takeException(), isNull);
+  });
   for (final generated in [false, true]) {
     testWidgets(
       'GetNavigator generated=$generated reports committed removals',
@@ -94,7 +139,7 @@ void main() {
         (tester) async {
       final navigatorKey = GlobalKey<NavigatorState>();
       final observed = <Page<Object?>>[];
-      await tester.pumpWidget(GetMaterialApp(
+      await tester.pumpWidget(pageRemovalApp(
         initialRoute: '/shell/one',
         getPages: [
           GetPage(

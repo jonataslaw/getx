@@ -163,6 +163,8 @@ Widget rcNamesApplication() => GetMaterialApp(
 
 اضبط الخيارات على GetMaterialApp أو GetCupertinoApp؛ لا تستخدم Get.config القديم. للمسارات المخصصة استخدم إعداد Navigator 2 متكاملاً.
 
+تغيّر وسيط GetNavigator وGetRouterOutlet.pickPages من `onPopPage` إلى `onDidRemovePage`. هذا إشعار بعد الحذف؛ استخدم `GetPage.canPop` أو `PopScope` لمنع الرجوع، ومرّر الإشعار إلى `delegate.didRemovePage` إذا خصّصت callback المخرج.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

@@ -119,6 +119,8 @@ GetWidget buforuje kontroler tej instancji widżetu i obsługuje const. Kontrole
 
 W redirectDelegate zwróć route, aby kontynuować, inny RouteDecoder, aby przekierować, lub null, aby anulować. Zarejestruj login i unikaj pętli.
 
+GetNavigator i GetRouterOutlet.pickPages zastępują `onPopPage` przez `onDidRemovePage`, powiadomienie po usunięciu strony. Weto back ustaw przez `GetPage.canPop` lub `PopScope`; własny callback outletu przekazuje do `delegate.didRemovePage`.
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>

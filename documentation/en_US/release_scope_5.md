@@ -47,7 +47,7 @@ reviewed by behavior, including the non-UI changes inside the standalone UI PR.
 | #3427 pop-mode annotation | Already present with exhaustive PopMode handling. |
 | Flutter 3.44 Cupertino import compatibility | Already covered on the selected SDK. |
 | #3459 TickerMode | Already covered for both `enabled` and `forceFrames`. |
-| #3461 documentation, extension relocation and API cleanup | Retain source-compatible RC imports, extension paths and Navigator APIs. Use the RC migration guide instead of copying master examples with different contracts. |
+| #3461 documentation, extension relocation and API cleanup | Retain RC imports, extension paths and compatibility helpers. The separately selected low-level page-removal callback migration is documented below. Use the RC migration guide instead of copying master examples with different contracts. |
 | #3472 / `28cb1bba`: mutable default Rx collections | Ported independently of the UI migration. Empty RxList/RxMap/RxSet constructors allocate fresh mutable backing collections; explicit backing collections retain their behavior. |
 | #3472 / `28cb1bba`: optional navigation contexts | Ported independently. Get.context and Get.overlayContext return null outside the mounted application's lifetime; mounted access and strict root access retain their contracts. |
 | #3472 / `28cb1bba`: Get.back overlay behavior | Preserve this RC's explicit page/overlay closing contract. Typed `closeDialog`, `closeBottomSheet`, `closeOverlay`, snackbar helpers and the migration aid `backLegacy` cover the closing operations. |
@@ -62,6 +62,17 @@ Each failed against the previous implementation before its fix was applied.
 The original fixes came from the already merged
 [PR #3472](https://github.com/jonataslaw/getx/pull/3472); no duplicate upstream
 fix is being presented.
+
+## Navigator callback modernization
+
+The 2026-11-08 follow-up migrates GetNavigator, its onGenerateRoute constructor,
+GetDelegate and GetRouterOutlet.pickPages from Flutter's deprecated onPopPage
+path to onDidRemovePage. This deliberately changes the low-level constructor
+callback argument; application-facing Get.to/Get.back result types remain.
+Vetoes belong to Page.canPop / PopScope. Typed results are forwarded separately
+from route completion, and committed removals target the specific history
+entry. See the [callback migration](migration_guide_5.md#low-level-page-removal-callbacks)
+before updating custom navigator/outlet integrations.
 
 ## Follow-up work and publication
 

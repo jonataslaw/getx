@@ -19,6 +19,13 @@ for master reconciliation, validation boundaries and deferred work.
 
 ### Navigation, restoration and native acceptance
 
+- Migrate low-level GetNavigator and GetRouterOutlet.pickPages callback
+  arguments from `onPopPage` to `onDidRemovePage`. Configure back vetoes through
+  GetPage.canPop / PopScope and forward custom outlet notifications to the
+  owning delegate.
+- Preserve typed native route results and remove the committed page's history
+  entry, including imperative replacement and covered-page removal; ignore
+  stale notifications for replaced pages with reused keys.
 - Modernize the Navigator 2 example's Android host for the current Flutter
   Gradle plugin and document the upstream web-history encoding limitation.
 - Restore opt-in named-route history and supported arguments without losing

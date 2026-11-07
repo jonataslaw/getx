@@ -164,6 +164,8 @@ Flutter 3.47.9 のブラウザ履歴における percent-encoding 制限は残�
 
 旧 Get.config ではなく GetMaterialApp または GetCupertinoApp の設定を使います。独自ルーターには整合した Navigator 2 構成が必要です。
 
+GetNavigator と GetRouterOutlet.pickPages の `onPopPage` は `onDidRemovePage` に変わりました。削除後の通知なので、戻る操作の禁止には `GetPage.canPop` または `PopScope` を使い、独自 outlet callback から `delegate.didRemovePage` に通知してください。
+
 [Migration](documentation/en_US/migration_guide_5.md) · [Release scope](documentation/en_US/release_scope_5.md) · [CHANGELOG](CHANGELOG.md) · [English](README.md) · [فارسی](README-fa.md)
 
 <a id="readme-section-2"></a>
