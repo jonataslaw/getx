@@ -29,7 +29,8 @@ browser behavior, native platform, or Flutter version. Validate each release
 branch's SDK constraints before extending the workflow beyond `master`.
 
 Third-party actions are pinned to commit SHAs. Dependabot checks GitHub Actions
-weekly and proposes grouped updates; review and test those changes before merging.
+weekly and proposes grouped updates with a seven-day cooldown; review and test
+those changes before merging.
 
 ## Merge rules
 
