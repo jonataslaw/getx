@@ -11,9 +11,9 @@ class _TestPage extends GetPage<int> {
 
   @override
   Route<int> createRoute(BuildContext context) => MaterialPageRoute<int>(
-    settings: this,
-    builder: (_) => Scaffold(body: Text(name)),
-  );
+        settings: this,
+        builder: (_) => Scaffold(body: Text(name)),
+      );
 }
 
 class _Host extends StatefulWidget {

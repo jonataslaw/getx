@@ -17,24 +17,26 @@ class GetNavigator extends Navigator {
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-         onDidRemovePage: onDidRemovePage ?? (_) {},
-         onGenerateRoute: (settings) {
-           final selectedPageList = pages.where(
-             (element) => element.name == settings.name,
-           );
-           if (selectedPageList.isNotEmpty) {
-             final selectedPage = selectedPageList.first;
-             return GetPageRoute(page: selectedPage.page, settings: settings);
-           }
-           return null;
-         },
-         observers: [
-           // GetObserver(),
-           ...?observers,
-         ],
-         transitionDelegate:
-             transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-       );
+          onDidRemovePage: onDidRemovePage ?? (_) {},
+          onGenerateRoute: (settings) {
+            final selectedPageList =
+                pages.where((element) => element.name == settings.name);
+            if (selectedPageList.isNotEmpty) {
+              final selectedPage = selectedPageList.first;
+              return GetPageRoute(
+                page: selectedPage.page,
+                settings: settings,
+              );
+            }
+            return null;
+          },
+          observers: [
+            // GetObserver(),
+            ...?observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
 
   /// Creates a page-based navigator with a committed-removal callback.
   ///
@@ -50,13 +52,13 @@ class GetNavigator extends Navigator {
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-         onDidRemovePage: onDidRemovePage ?? (_) {},
-         observers: [
-           // GetObserver(null, Get.routing),
-           HeroController(),
-           ...?observers,
-         ],
-         transitionDelegate:
-             transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-       );
+          onDidRemovePage: onDidRemovePage ?? (_) {},
+          observers: [
+            // GetObserver(null, Get.routing),
+            HeroController(),
+            ...?observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
 }
