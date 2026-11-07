@@ -375,7 +375,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     return GetNavigator(
       key: navigatorKey,
-      onPopPage: _onPopVisualRoute,
+      onDidRemovePage: didRemovePage,
       pages: pages,
       restorationScopeId: restorationScopeId,
       observers: navigatorObservers,
@@ -1093,24 +1093,21 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     notifyListeners();
   }
 
-  bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
-    final didPop = route.didPop(result);
-    if (!didPop) {
-      return false;
-    }
-    _popWithResult(result);
-    // final settings = route.settings;
-    // if (settings is GetPage) {
-    //   final config = _activePages.cast<RouteDecoder?>().firstWhere(
-    //         (element) => element?.route == settings,
-    //         orElse: () => null,
-    //       );
-    //   if (config != null) {
-    //     _removeHistoryEntry(config, result);
-    //   }
-    // }
+  /// Removes the history entry whose page the navigator has already removed.
+  ///
+  /// This is a notification, not a back veto. The route completes its typed
+  /// result through [GetPageRoute.didComplete]. Identity checks prevent an old
+  /// removal from deleting a replacement page with the same key or name.
+  void didRemovePage(Page<Object?> page) {
+    if (_isDisposed) return;
+    final completer = page is GetPage ? page.completer : null;
+    final index = _activePages.indexWhere(
+      (entry) =>
+          identical(entry.route, page) ||
+          (completer != null && identical(entry.route?.completer, completer)),
+    );
+    if (index < 0) return;
+    _activePages.removeAt(index);
     notifyListeners();
-    //return !route.navigator!.userGestureInProgress;
-    return true;
   }
 }

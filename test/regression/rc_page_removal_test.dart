@@ -25,6 +25,31 @@ List<String> history() => Get.rootController.rootDelegate.activePages
 void main() {
   tearDown(Get.reset);
 
+  testWidgets('delayed removal ignores a replacement with the same page key',
+      (tester) async {
+    await mountRoutes(tester);
+    final oldResults = <int?>[];
+    final newResults = <String?>[];
+    Get.toNamed<int>('/one')!.then(oldResults.add);
+    await tester.pumpAndSettle();
+    final delegate = Get.rootController.rootDelegate;
+    final oldPage = delegate.activePages.last.route!;
+    Get.offNamed<String>('/one')!.then(newResults.add);
+    await tester.pumpAndSettle();
+    delegate.didRemovePage(oldPage);
+    await tester.pumpAndSettle();
+    expect(history(), ['/root', '/one']);
+    expect(oldResults, [null]);
+    expect(newResults, isEmpty);
+    Get.back<String>(result: 'new result');
+    await tester.pumpAndSettle();
+    expect(newResults, ['new result']);
+    delegate.didRemovePage(oldPage);
+    await tester.pumpAndSettle();
+    expect(history(), ['/root']);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('imperative pop completes the typed result exactly once', (
     tester,
   ) async {

@@ -115,7 +115,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
     Widget Function(GetDelegate delegate)? emptyWidget,
     GetPage Function(GetDelegate delegate)? emptyPage,
     required super.pickPages,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    DidRemovePageCallback? onDidRemovePage,
     String? restorationScopeId,
     GlobalKey<NavigatorState>? navigatorKey,
     GetDelegate? delegate,
@@ -132,14 +132,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                     Get.rootController.rootDelegate.navigatorKey,
                 child: GetNavigator(
                   restorationScopeId: restorationScopeId,
-                  onPopPage: onPopPage ??
-                      (route, result) {
-                        final didPop = route.didPop(result);
-                        if (!didPop) {
-                          return false;
-                        }
-                        return true;
-                      },
+                  onDidRemovePage: onDidRemovePage ?? rDelegate.didRemovePage,
                   pages: pageRes.toList(),
                   key: navigatorKey,
                 ),

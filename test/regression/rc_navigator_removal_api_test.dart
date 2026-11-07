@@ -22,7 +22,7 @@ class _Host extends StatefulWidget {
 
 class _HostState extends State<_Host> {
   final navigatorKey = GlobalKey<NavigatorState>();
-  final pages = <GetPage>[_TestPage('root'), _TestPage('detail')];
+  final pages = <GetPage>[_TestPage('/root'), _TestPage('/detail')];
   final removed = <Page<Object?>>[];
 
   void removePage(Page<Object?> page) {
@@ -44,7 +44,27 @@ class _HostState extends State<_Host> {
         );
 }
 
+class _Outlet extends StatelessWidget {
+  const _Outlet({required this.navigatorKey, required this.observe});
+  final GlobalKey<NavigatorState> navigatorKey;
+  final List<Page<Object?>>? observe;
+
+  @override
+  Widget build(BuildContext context) => GetRouterOutlet.pickPages(
+        navigatorKey: navigatorKey,
+        pickPages: (_) => Get.rootController.rootDelegate.activePages
+            .map((entry) => entry.route!),
+        onDidRemovePage: observe == null
+            ? null
+            : (page) {
+                observe!.add(page);
+                Get.rootController.rootDelegate.didRemovePage(page);
+              },
+      );
+}
+
 void main() {
+  tearDown(Get.reset);
   for (final generated in [false, true]) {
     testWidgets(
       'GetNavigator generated=$generated reports committed removals',
@@ -61,11 +81,51 @@ void main() {
         state.navigatorKey.currentState!.pop<int>(7);
         await tester.pumpAndSettle();
         expect(state.removed, [same(detail)]);
-        expect(state.pages.map((page) => page.name), ['root']);
-        expect(find.text('root'), findsOneWidget);
-        expect(find.text('detail'), findsNothing);
+        expect(state.pages.map((page) => page.name), ['/root']);
+        expect(find.text('/root'), findsOneWidget);
+        expect(find.text('/detail'), findsNothing);
         expect(tester.takeException(), isNull);
       },
     );
+  }
+
+  for (final custom in [false, true]) {
+    testWidgets('nested outlet forwards custom=$custom committed removals',
+        (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      final observed = <Page<Object?>>[];
+      await tester.pumpWidget(GetMaterialApp(
+        initialRoute: '/shell/one',
+        getPages: [
+          GetPage(
+            name: '/shell',
+            participatesInRootNavigator: true,
+            page: () => _Outlet(
+                navigatorKey: navigatorKey, observe: custom ? observed : null),
+            children: [
+              for (final name in ['/one', '/two'])
+                GetPage(
+                  name: name,
+                  participatesInRootNavigator: false,
+                  page: () => Scaffold(body: Text(name)),
+                ),
+            ],
+          ),
+        ],
+      ));
+      await tester.pumpAndSettle();
+      final results = <int?>[];
+      Get.toNamed<int>('/shell/two')!.then(results.add);
+      await tester.pumpAndSettle();
+      navigatorKey.currentState!.pop<int>(19);
+      await tester.pumpAndSettle();
+      expect(results, [19]);
+      expect(Get.rootController.rootDelegate.currentConfiguration?.route?.name,
+          '/shell/one');
+      expect(Get.rootController.rootDelegate.activePages, hasLength(1));
+      expect(observed, hasLength(custom ? 1 : 0));
+      expect(find.text('/one'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   }
 }

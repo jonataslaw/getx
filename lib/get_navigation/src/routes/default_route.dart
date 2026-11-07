@@ -34,6 +34,21 @@ mixin PageRouteReportMixin<T> on Route<T> {
 
 class GetPageRoute<T> extends PageRoute<T>
     with GetPageRouteTransitionMixin<T>, PageRouteReportMixin {
+  /// Completes the route and its pending GetX page result with the same value.
+  ///
+  /// Keeps a result already completed by a declarative history operation.
+  @override
+  void didComplete(T? result) {
+    super.didComplete(result);
+    final page = settings;
+    if (page is GetPage) {
+      final completer = page.completer;
+      if (completer?.isCompleted == false) {
+        completer!.complete(result ?? currentResult);
+      }
+    }
+  }
+
   /// Creates a GetX page route with configurable transitions.
   ///
   /// [page] supplies the page content. [maintainState] controls whether its
