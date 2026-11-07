@@ -186,6 +186,9 @@ try {
   await step('nested redirect updates visible route and URL', () => evaluate('window.getxProbeNavigate("/shell/private")'), '/shell/item/redirected?from=guard', 'nested item', { id: 'redirected', from: 'guard' });
   await step('browser back after redirect restores child', () => evaluate('history.back()'), '/shell/item/43?tab=files', 'nested item', { id: '43', tab: 'files' });
   await step('browser forward after redirect restores target', () => evaluate('history.forward()'), '/shell/item/redirected?from=guard', 'nested item', { id: 'redirected', from: 'guard' });
+  await step('root control before nested exit', () => call('Page.navigate', { url: origin + '/' }), '/', 'home', {});
+  await step('enter nested route from root', () => evaluate('window.getxProbeNavigate("/shell/item/44?tab=return")'), '/shell/item/44?tab=return', 'nested item', { id: '44', tab: 'return' });
+  await step('nested browser back publishes visible root', () => evaluate('history.back()'), '/', 'home', {});
   }
   if ((args.case ?? 'all') === 'all') {
     const strictPath = '/item/a+b?tag=a%2Bb&label=%D8%B3%D9%84%D8%A7%D9%85';
