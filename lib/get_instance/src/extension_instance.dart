@@ -366,12 +366,7 @@ extension Inst on GetInterface {
 
     if (dep == null) return false;
 
-    final _InstanceBuilderFactory builder;
-    if (dep.isDirty) {
-      builder = dep.lateRemove ?? dep;
-    } else {
-      builder = dep;
-    }
+    final builder = dep.lateRemove ?? dep;
 
     if (builder.permanent && !force) {
       Get.log(

@@ -50,6 +50,10 @@ class GetObserver extends NavigatorObserver {
       RouterReportManager.instance.reportCurrentRoute(previousRoute);
     }
 
+    if (route is GetPageRoute) {
+      RouterReportManager.instance.reportRouteWillDispose(route);
+    }
+
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
