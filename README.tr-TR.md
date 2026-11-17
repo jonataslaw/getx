@@ -1,4 +1,4 @@
-> GetX 5 RC: Bu aday henüz yayımlanmadı. Doğrulanan temel, Flutter'ın yerleşik UI kitaplıklarıyla Flutter 3.47.9 ve Dart 3.13.7'dir.
+> GetX 5 RC: Bu aday henüz yayımlanmadı. Doğrulanan temel, Flutter'ın yerleşik UI kitaplıklarıyla Flutter 3.47.9 ve Dart 3.13.7'dir. Uyumluluk testleri Flutter 3.50.0 ve Dart 3.14.0 sürümlerini de kapsar.
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 

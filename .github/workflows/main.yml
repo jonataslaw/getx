@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        flutter: ["3.47.9"]
+        flutter: ["3.47.9", "3.50.0"]
     #sequence of tasks called
     steps:
       # The branch or tag ref that triggered the workflow will be checked out.
@@ -66,11 +66,11 @@ jobs:
         working-directory: example_nav2
       - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run -t lib/browser_navigation_probe.dart -o build/browser-js
         working-directory: example_nav2
-      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/js.json
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case ${{ matrix.flutter == '3.50.0' && 'all' || 'ordinary' }} --chrome /usr/bin/google-chrome --report build/browser-results/js.json
         working-directory: example_nav2
       - run: flutter build web --no-pub --no-web-resources-cdn --wasm -t lib/browser_navigation_probe.dart -o build/browser-wasm
         working-directory: example_nav2
-      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-wasm --mode wasm --case ordinary --chrome /usr/bin/google-chrome --report build/browser-results/wasm.json
+      - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-wasm --mode wasm --case ${{ matrix.flutter == '3.50.0' && 'all' || 'ordinary' }} --chrome /usr/bin/google-chrome --report build/browser-results/wasm.json
         working-directory: example_nav2
       - run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run --dart-define=GETX_PROBE_RESTORATION=true -t lib/browser_navigation_probe.dart -o build/browser-history-js
         working-directory: example_nav2
@@ -80,8 +80,16 @@ jobs:
         working-directory: example_nav2
       - run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-history-wasm --mode wasm --case history --chrome /usr/bin/google-chrome --report build/browser-results/history-wasm.json
         working-directory: example_nav2
+      - name: Build the pure Flutter encoding control
+        if: ${{ matrix.flutter == '3.50.0' }}
+        run: flutter build web --no-pub --no-web-resources-cdn --no-wasm-dry-run -t test/browser/encoding_control.dart -o build/browser-control
+        working-directory: example_nav2
+      - name: Verify SDK URL encoding
+        if: ${{ matrix.flutter == '3.50.0' }}
+        run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-control --mode js --case encoded --chrome /usr/bin/google-chrome --report build/browser-results/control.json
+        working-directory: example_nav2
       - name: Strict encoded-query diagnostics
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.encoded_query }}
+        if: ${{ matrix.flutter == '3.47.9' && github.event_name == 'workflow_dispatch' && inputs.encoded_query }}
         run: node --experimental-websocket test/browser/navigation_smoke.mjs --build-dir build/browser-js --mode js --case encoded --chrome /usr/bin/google-chrome --report build/browser-results/encoded.json
         working-directory: example_nav2
       - uses: actions/upload-artifact@v4
@@ -103,7 +111,7 @@ jobs:
           java-version: "17"
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.47.9"
+          flutter-version: "3.50.0"
           channel: stable
       - run: flutter pub get
       - run: flutter pub get

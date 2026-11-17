@@ -1,4 +1,4 @@
-> GetX 5 RC: Bản candidate này chưa được phát hành. Nền tảng đã kiểm chứng là Flutter 3.47.9 và Dart 3.13.7 với thư viện UI tích hợp của Flutter.
+> GetX 5 RC: Bản candidate này chưa được phát hành. Nền tảng đã kiểm chứng là Flutter 3.47.9 và Dart 3.13.7 với thư viện UI tích hợp của Flutter. Các kiểm tra tương thích cũng bao gồm Flutter 3.50.0 và Dart 3.14.0.
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

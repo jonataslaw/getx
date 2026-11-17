@@ -115,4 +115,5 @@ These results cover the selected SDK, host, images and native transition.
 Repeat target acceptance when those change. CI compiles the standalone harness;
 its build result alone does not establish emulator runtime acceptance. Keep
 screenshots, logs, emulator configuration and machine identifiers outside the
-repository. The documented SDK web encoding limitation remains unchanged.
+repository. The [browser checks](../../browser/README.md) document encoding
+behavior by SDK version.

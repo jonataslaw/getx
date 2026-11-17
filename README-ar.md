@@ -1,4 +1,4 @@
-> GetX 5 RC: هذا المرشح غير منشور بعد؛ الأساس المختبر هو Flutter 3.47.9 وDart 3.13.7 مع مكتبات واجهة Flutter المضمّنة.
+> GetX 5 RC: هذا المرشح غير منشور بعد؛ الأساس المختبر هو Flutter 3.47.9 وDart 3.13.7 مع مكتبات واجهة Flutter المضمّنة. تشمل اختبارات التوافق أيضاً Flutter 3.50.0 وDart 3.14.0.
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 

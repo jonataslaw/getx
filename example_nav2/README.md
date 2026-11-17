@@ -1,6 +1,6 @@
 # GetX 5 Navigator 2 example
 
-Package version: `5.0.0-release-candidate-9.4.0` (unreleased candidate).
+Package version: `5.0.0-release-candidate-9.4.1` (unreleased candidate).
 [فارسی](../README-fa.md) · [Release scope](../documentation/en_US/release_scope_5.md)
 · [Changelog](../CHANGELOG.md).
 
@@ -9,9 +9,8 @@ dependency. Follow the [RC migration guide](../documentation/en_US/migration_gui
 for this branch; it uses Flutter's bundled Material library rather than the
 standalone UI packages used by newer `master` revisions.
 
-Use Flutter 3.47.9/Dart 3.13.7 for dependency resolution, analysis, tests and
-running the application. CI tests Flutter 3.47.9. Check the CI result for your
-exact revision before claiming support on a platform.
+Use Flutter 3.47.9/Dart 3.13.7 or Flutter 3.50.0/Dart 3.14.0 for dependency
+resolution, analysis, tests and running the application. CI tests both SDKs.
 
 From this directory:
 
@@ -51,8 +50,8 @@ compatibility or production-host configuration.
 
 ## Android host
 
-The Android example follows the selected Flutter 3.47.9 template: Java 17,
-Gradle 9.3.1, AGP 9.1.0 and Kotlin 2.4.0. Use `flutter build apk --debug
+The Android example uses Java 17, Gradle 9.3.1, AGP 9.1.1 and Kotlin 2.4.10
+to meet Flutter 3.50.0 build requirements. Use `flutter build apk --debug
 --no-pub --target-platform android-arm64` for a single-ABI debug build.
 Flutter supplies the compile/target SDK and NDK versions; the example now
 requires Android API 24 or later. This is the example application's minimum,

@@ -5,7 +5,16 @@ published. Version selection, tagging and package publication remain separate
 release actions. See the [release scope](documentation/en_US/release_scope_5.md)
 for master reconciliation, validation boundaries and deferred work.
 
-## [5.0.0-release-candidate-9.4.0] - Unreleased candidate
+## [5.0.0-release-candidate-9.4.1] - Unreleased candidate
+
+- Add Flutter 3.50.0 / Dart 3.14.0 to CI while keeping the Flutter 3.47.9 /
+  Dart 3.13.7 minimum for existing consumers. The candidate still accepts the
+  Material and Cupertino types bundled with Flutter, deprecated in 3.50.
+- Update the Navigator 2 Android example to AGP 9.1.1 and Kotlin 2.4.10.
+- Verify encoded query values through browser refresh on Flutter 3.50.0. CI
+  checks the GetX probe in JS and WASM and runs an independent Flutter control.
+
+## [5.0.0-release-candidate-9.4.0] - Previous candidate
 
 ### Compatibility and master reconciliation
 

@@ -1,4 +1,4 @@
-> GetX 5 RC: یہ candidate ابھی شائع نہیں ہوا۔ آزمودہ بنیاد Flutter 3.47.9 اور Dart 3.13.7 ہے اور Flutter کی شامل شدہ UI لائبریریاں استعمال ہوتی ہیں۔
+> GetX 5 RC: یہ candidate ابھی شائع نہیں ہوا۔ آزمودہ بنیاد Flutter 3.47.9 اور Dart 3.13.7 ہے اور Flutter کی شامل شدہ UI لائبریریاں استعمال ہوتی ہیں۔ مطابقت کے ٹیسٹوں میں Flutter 3.50.0 اور Dart 3.14.0 بھی شامل ہیں۔
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

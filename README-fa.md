@@ -55,9 +55,9 @@ GetX ابزارهای مدیریت وضعیت واکنشی و ساده، تزر�
 
 ## سازگاری و نصب
 
-این README مخصوص کد GetX 5 RC در همین checkout است؛ API و نوع‌های عمومی شاخهٔ master ممکن است متفاوت باشند. نسخهٔ پکیج **5.0.0-release-candidate-9.4.0 و یک نامزد انتشار منتشرنشده** است. انتشار نسخهٔ stable یک مرحلهٔ جداگانه است.
+این README مخصوص کد GetX 5 RC در همین checkout است؛ API و نوع‌های عمومی شاخهٔ master ممکن است متفاوت باشند. نسخهٔ پکیج **5.0.0-release-candidate-9.4.1 و یک نامزد انتشار منتشرنشده** است. انتشار نسخهٔ stable یک مرحلهٔ جداگانه است.
 
-مبنای اعتبارسنجی **Flutter 3.47.9 و Dart 3.13.7** است. manifest حداقل Flutter 3.47.9 و Dart 3.13.7 تا قبل از ۴ را می‌پذیرد؛ این حدود به معنی تأیید خودکار تمام SDKها و پلتفرم‌های بعدی نیست. این شاخه از کتابخانه‌های Material و Cupertino همراه Flutter استفاده می‌کند؛ نوع‌های مستقل material_ui و cupertino_ui را با سازنده‌های آن ترکیب نکنید.
+حداقل نسخهٔ پشتیبانی‌شده **Flutter 3.47.9 و Dart 3.13.7** است و Dart باید پایین‌تر از ۴ باشد. بررسی‌های سازگاری روی **Flutter 3.50.0 و Dart 3.14.0** هم انجام می‌شوند. سازنده‌های این RC از نوع‌های همراه Flutter برای Material و Cupertino استفاده می‌کنند که در Flutter 3.50 deprecated شده‌اند. پوشش SDK و پلتفرم‌ها در [محدودهٔ انتشار](documentation/en_US/release_scope_5.md#selected-compatibility) آمده است.
 
 برای آزمایش، checkout مخزن را کنار یک برنامهٔ مستقل Flutter بگذارید و وابستگی مسیر زیر را اضافه کنید. سپس در برنامه، `flutter --version`، `flutter pub get`، `flutter analyze` و `flutter test` را اجرا کنید. وابستگی pub.dev ممکن است کد دیگری دریافت کند؛ نسخهٔ واقعاً منتشرشده را انتخاب و مستندات همان نسخه را مطالعه کنید. برای وابستگی منبع، commit بررسی‌شده را ثبت و تثبیت کنید. نشان pub.dev وضعیت نسخه‌های منتشرشده را نمایش می‌دهد.
 
@@ -977,7 +977,7 @@ void main() {
 - **مسیریابی و برنامه:** تکمیل نتیجهٔ typed مسیر کنارگذاشته‌شده، اجرای middleware پیش از جایگزینی history، مسیر تو‌در‌تو، veto برگشت، context اختیاری، بستن صریح overlay، پاک‌سازی صف و timer و swipe مربوط به snackbar، transition مربوط به Cupertino sheet و انتقال تنظیمات برنامه.
 - **بازیابی:** تاریخچهٔ محدود و opt-in مسیر نام‌دار با آرگومان معتبر و middleware، ساخت کنترلر و completer تازه پس از بازیابی process و probe بومی برای شروع سرد واقعی و نتیجهٔ typed جدید.
 - **شبکه:** حذف درست modifier، مدیریت درخواست جایگزین و retry احراز هویت، خطای timeout و abort و decoding در IO و مرورگر، اتصال مجدد WebSocket، انتقال متن و باینری JS و dispose.
-- **SDK و میزبان:** مبنای Flutter 3.47.9 و Dart 3.13.7، میزبان Android به‌روز و چرخهٔ scene در iOS، تنظیمات TickerMode و callbackهای حافظه و accessibility.
+- **SDK و میزبان:** آزمون روی Flutter 3.47.9 و 3.50.0، میزبان Android و چرخهٔ scene در iOS، تنظیمات TickerMode و callbackهای حافظه و accessibility.
 - **اعتبارسنجی و مستندات:** تست‌های regression واحد و ویجت، پکیج‌های مستقل مثال، آزمون واقعی Chrome در JS و WASM برای شبکه و تاریخچه، harness بومی، راهنمای مهاجرت و READMEهای جامع انگلیسی و فارسی و دستورهای به‌روز ترجمه‌ها.
 
 تغییرات master بر اساس رفتار انتخاب شده‌اند؛ مهاجرت نوع‌های عمومی UI مستقل و قرارداد متفاوت Get.back بدون بررسی merge نشده‌اند. PRهای قبلی و منبع تغییرات در محدودهٔ انتشار و PR تثبیت ثبت شده‌اند.
@@ -986,9 +986,7 @@ void main() {
 
 ## محدودیت‌های شناخته‌شده و دامنهٔ پشتیبانی
 
-در Flutter 3.47.9، موتور وب ممکن است کاراکتر percent-encoded مسیر را هنگام ثبت در history decode کند: `?tag=a%2Bb` به `?tag=a+b` تبدیل می‌شود و refresh می‌تواند مقدار مورد نظر `a+b` را به `a b` تغییر دهد. نمونهٔ خالص Flutter بدون GetX هم همین خطا را بازتولید می‌کند. این محدودیت SDK است و راهکار سراسریِ double-encoding یا نوشتن مستقیم history اعمال نشده است. Flutter حفظ encoding را برای 3.50 به بعد مستند کرده؛ این به معنی اعتبارسنجی آن SDK در این پروژه نیست.
-
-آزمون سخت‌گیرانهٔ encoded-query یک بررسی دستی جداست و سبزشدن CI عادی وب رفع آن را اعلام نمی‌کند. شروع URI-only پس از reload کامل هم مرز جداگانه‌ای برای بازیابی تاریخچه است. دستور اجرا و شواهد در [harness مرورگر](example_nav2/test/browser/README.md) آمده‌اند.
+در Flutter 3.47.9، موتور وب ممکن است `?tag=a%2Bb` را به‌صورت `?tag=a+b` در تاریخچه ثبت کند و پس از refresh مقدار `a+b` به `a b` تبدیل شود. در سناریوهای بررسی‌شده روی Flutter 3.50.0، encoding پس از ورود مستقیم و refresh حفظ شد. CI این رفتار را در Chrome برای JS و WASM و با یک نمونهٔ مستقل Flutter بررسی می‌کند. با route information provider پیش‌فرض، reload کامل همچنان از URI آغاز می‌شود. دستورهای اجرا در [راهنمای تست مرورگر](example_nav2/test/browser/README.md) آمده‌اند.
 
 پذیرش native به transition، میزبان و نسخهٔ سیستم‌عامل تست‌شده محدود است. حداقل میزبان مثال Android API 24 و iOS 15 است؛ این‌ها تضمین تمام ترکیب‌های پلتفرم برای هر برنامه نیستند. issue قدیمی بازتولیدنشده، ترکیب‌های تازهٔ SDK و میزبان و مهاجرت UI مستقل، کارهای بعدی‌اند. regression جدید در قراردادهای منتخب باید پیش از انتشار ارزیابی شود.
 
@@ -998,7 +996,7 @@ void main() {
 
 پکیج‌های مستقل [example](example/README.md) و [مثال Navigator 2](example_nav2/README.md) از طریق path به همین checkout وابسته‌اند. بررسی را در هر پکیج جدا اجرا کنید. دستورهای زیر SDK نصب یا ارتقا نمی‌دهند؛ resolution آفلاین علاوه بر این به cache وابستگی‌ها نیاز دارد. برای بررسی تعاملی برنامه، flutter run را روی target نصب‌شده اجرا کنید.
 
-[گردش‌کار CI](.github/workflows/main.yml) SDK انتخابی را pin می‌کند و analyzer، تست‌ها، آزمون شبکه و مسیریابی Chrome، build وب JS و WASM، ساخت APK و کامپایل harness بومی را انجام می‌دهد. نتیجهٔ اجرای commit دقیق خود را بررسی کنید. [راهنمای دستگاه](example_nav2/test/device/README.md) و [راهنمای امولاتور Android](example_nav2/test/device/android/README.md) back، gesture پیش‌بینانه، بازیابی پس از مرگ process و تطبیق هویت artifact را توضیح می‌دهند.
+[گردش‌کار CI](.github/workflows/main.yml) هر دو نسخهٔ SDK را پوشش می‌دهد و analyzer، تست‌ها، آزمون شبکه و مسیریابی Chrome، build وب JS و WASM، ساخت APK و کامپایل harness بومی را انجام می‌دهد. نتیجهٔ اجرای commit دقیق خود را بررسی کنید. [راهنمای دستگاه](example_nav2/test/device/README.md) و [راهنمای امولاتور Android](example_nav2/test/device/android/README.md) back، gesture پیش‌بینانه، بازیابی پس از مرگ process و تطبیق هویت artifact را توضیح می‌دهند.
 
 <div dir="ltr">
 

@@ -1,4 +1,4 @@
-> GetX 5 RC: この候補版は未公開です。検証基準は Flutter 3.47.9 と Dart 3.13.7 で、Flutter 同梱の UI ライブラリを使います。
+> GetX 5 RC: この候補版は未公開です。検証基準は Flutter 3.47.9 と Dart 3.13.7 で、Flutter 同梱の UI ライブラリを使います。 互換性テストには Flutter 3.50.0 と Dart 3.14.0 も含まれます。
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

@@ -1,4 +1,4 @@
-> GetX 5 RC: 이 후보 버전은 아직 배포되지 않았습니다. 검증 기준은 Flutter 3.47.9와 Dart 3.13.7이며 Flutter에 포함된 UI 라이브러리를 사용합니다.
+> GetX 5 RC: 이 후보 버전은 아직 배포되지 않았습니다. 검증 기준은 Flutter 3.47.9와 Dart 3.13.7이며 Flutter에 포함된 UI 라이브러리를 사용합니다. 호환성 테스트에는 Flutter 3.50.0과 Dart 3.14.0도 포함됩니다.
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)
 

@@ -81,7 +81,7 @@ Every step is recorded even when another step fails. The command exits nonzero
 if any required step fails. `ordinary` is an explicit diagnostic subset, not a
 replacement for the complete gate.
 
-Flutter 3.47.5 and 3.47.9 locally fail the strict case: a literal plus encoded as `%2B` in
+Flutter 3.47.5 and 3.47.9 fail the strict case: a literal plus encoded as `%2B` in
 the query is rewritten as `+`, then becomes a space after refresh. GetX's
 in-memory parameters are initially correct. The following pure Flutter control
 contains no GetX code and reproduces the same loss:
@@ -106,8 +106,11 @@ Flutter tracks this engine limitation in
 The engine fix [#189835](https://github.com/flutter/flutter/pull/189835) merged
 into Flutter master on 2026-10-03; it is absent from the tested 3.47.9 SDK.
 [Flutter's web deployment documentation](https://docs.flutter.dev/deployment/web#url-percent-encoding-in-browser-history)
-assigns percent-encoding preservation to Flutter 3.50 or later. This is an
-upstream fix version, not a claim that a 3.50 SDK has been tested here.
+assigns percent-encoding preservation to Flutter 3.50 or later. On the
+installed Flutter 3.50.0 SDK, both GetX builds pass the full Chrome case
+including the two strict encoding steps. The independent Flutter control also
+passes. CI requires all three results on the 3.50.0 lane. The 3.47.9 lane
+uses the ordinary case, with the strict case available as a manual diagnostic.
 
 A custom `RouteInformationProvider` that still calls public
 `SystemNavigator.routeInformationUpdated` passes through the same engine path.
@@ -116,5 +119,3 @@ raw browser-history writes can desynchronize Flutter's history state. Neither
 is used by this harness or added to GetX. Applications whose identifiers permit
 it can choose URL-safe opaque tokens at their own API boundary; that is an
 application data contract, not a transparent fix for arbitrary query values.
-Keep the strict gate red until the intended SDK passes both this probe and the
-pure Flutter control, including a refresh that preserves the original value.

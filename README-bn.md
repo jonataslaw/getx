@@ -1,4 +1,4 @@
-> GetX 5 RC: এই candidate এখনো প্রকাশিত নয়। পরীক্ষিত ভিত্তি Flutter 3.47.9 ও Dart 3.13.7; Flutter-এর অন্তর্ভুক্ত UI লাইব্রেরি ব্যবহার করা হয়।
+> GetX 5 RC: এই candidate এখনো প্রকাশিত নয়। পরীক্ষিত ভিত্তি Flutter 3.47.9 ও Dart 3.13.7; Flutter-এর অন্তর্ভুক্ত UI লাইব্রেরি ব্যবহার করা হয়। সামঞ্জস্য পরীক্ষায় Flutter 3.50.0 ও Dart 3.14.0 অন্তর্ভুক্ত।
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

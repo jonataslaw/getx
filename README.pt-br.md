@@ -1,4 +1,4 @@
-> GetX 5 RC: Este candidato ainda não foi publicado. A base validada é Flutter 3.47.9 e Dart 3.13.7 com as bibliotecas de interface incluídas no Flutter.
+> GetX 5 RC: Este candidato ainda não foi publicado. A base validada é Flutter 3.47.9 e Dart 3.13.7 com as bibliotecas de interface incluídas no Flutter. Os testes de compatibilidade também cobrem Flutter 3.50.0 e Dart 3.14.0.
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

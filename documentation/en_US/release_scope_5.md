@@ -2,7 +2,7 @@
 
 This document defines the scope selected for stabilizing the existing GetX 5
 RC. It is not an announcement that a stable package has been published. The
-working package remains `5.0.0-release-candidate-9.4.0` until the final release
+working package remains `5.0.0-release-candidate-9.4.1` until the final release
 artifact is versioned and published.
 
 The release prioritizes the RC's reactive state, dependency injection,
@@ -15,18 +15,20 @@ compatibility impact.
 
 ## Selected compatibility
 
-- Flutter 3.47.9 and Dart 3.13.7 are the validated SDK baseline. The manifest's
-  lower bounds do not certify every later SDK or platform automatically.
+- Flutter 3.47.9 and Dart 3.13.7 remain the minimum. The CI matrix also
+  targets Flutter 3.50.0 with Dart 3.14.0. Android CI builds on Flutter 3.50.0.
 - This tree uses `package:flutter/material.dart` and
-  `package:flutter/cupertino.dart`. Standalone `material_ui` / `cupertino_ui`
+  `package:flutter/cupertino.dart`, deprecated in Flutter 3.50. Standalone
+  `material_ui` / `cupertino_ui`
   types are a separate compatibility decision; they cannot be mixed with
   these constructor types. Moving public UI types is not an ordinary patch fix.
 - Android emulator and physical iOS acceptance are scoped to the SDK, host,
   transition and operating-system versions recorded in the
   [native checks](../../example_nav2/test/device/README.md).
-- The documented [web encoding and reload limitations](migration_guide_5.md#navigation-uses-navigator-2)
-  remain known SDK/host limitations. A green ordinary browser test does not
-  claim that strict encoded-query behavior has been fixed.
+- The [Chrome encoding check](../../example_nav2/test/browser/README.md)
+  passes in JS and WASM on Flutter 3.50.0, as does the pure Flutter control.
+  Flutter 3.47.9 is still affected by the engine limitation. URI-only web
+  reload is distinct from browser back/forward replay of the route state.
 
 ## Master reconciliation
 
@@ -77,7 +79,7 @@ before updating custom navigator/outlet integrations.
 ## Follow-up work and publication
 
 Open-issue triage, new features, additional host/SDK combinations, standalone UI
-migration and SDK-level encoding changes can be scheduled after this release.
+migration can be scheduled after this release.
 Deferral means those items remain tracked or documented, not that they have
 been fixed. Do not advertise unsupported combinations as part of the release.
 

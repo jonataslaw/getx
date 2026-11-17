@@ -1,4 +1,4 @@
-> GetX 5 RC: यह candidate अभी प्रकाशित नहीं है। जाँचा गया आधार Flutter 3.47.9 और Dart 3.13.7 है; Flutter की अंतर्निहित UI लाइब्रेरी प्रयोग होती हैं।
+> GetX 5 RC: यह candidate अभी प्रकाशित नहीं है। जाँचा गया आधार Flutter 3.47.9 और Dart 3.13.7 है; Flutter की अंतर्निहित UI लाइब्रेरी प्रयोग होती हैं। संगतता परीक्षणों में Flutter 3.50.0 और Dart 3.14.0 भी शामिल हैं।
 
 
 ![](https://raw.githubusercontent.com/jonataslaw/getx-community/master/get.png)

@@ -1,4 +1,4 @@
-> GetX 5 RC: Kandidat ini belum diterbitkan. Baseline yang divalidasi adalah Flutter 3.47.9 dan Dart 3.13.7 dengan pustaka UI bawaan Flutter.
+> GetX 5 RC: Kandidat ini belum diterbitkan. Baseline yang divalidasi adalah Flutter 3.47.9 dan Dart 3.13.7 dengan pustaka UI bawaan Flutter. Pengujian kompatibilitas juga mencakup Flutter 3.50.0 dan Dart 3.14.0.
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 

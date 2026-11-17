@@ -1,6 +1,6 @@
 # GetX 5 example
 
-Package version: `5.0.0-release-candidate-9.4.0` (unreleased candidate).
+Package version: `5.0.0-release-candidate-9.4.1` (unreleased candidate).
 [فارسی](../README-fa.md) · [Release scope](../documentation/en_US/release_scope_5.md)
 · [Changelog](../CHANGELOG.md).
 
@@ -9,8 +9,8 @@ This application uses the parent checkout through a path dependency. Read the
 [example walkthrough](example.md) for the APIs in this branch.
 
 Use one selected Flutter SDK for resolution, analysis and tests. Local checks
-use Flutter 3.47.9/Dart 3.13.7; the [CI workflow](../.github/workflows/main.yml)
-tests this example on Flutter 3.47.9. Check the CI result for the exact
+use Flutter 3.47.9/Dart 3.13.7 or Flutter 3.50.0/Dart 3.14.0.
+The [CI workflow](../.github/workflows/main.yml) tests both. Check the CI result for the exact
 revision you consume. From this directory:
 
 ```sh

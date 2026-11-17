@@ -53,9 +53,9 @@ Separate views from application logic with controllers and bindings. Keep reacti
 
 ## Compatibility and installation
 
-This README describes this GetX 5 RC checkout, not the different API/type choices on master. The package is **5.0.0-release-candidate-9.4.0, an unreleased candidate**. Publication of a stable package is a separate action.
+This README describes this GetX 5 RC checkout, not the different API/type choices on master. The package is **5.0.0-release-candidate-9.4.1, an unreleased candidate**. Publication of a stable package is a separate action.
 
-The validated baseline is **Flutter 3.47.9 / Dart 3.13.7**. The manifest requires Flutter >=3.47.9 and Dart >=3.13.7 <4.0.0; these lower bounds do not automatically certify every later SDK/platform. This tree uses Flutter's bundled Material and Cupertino libraries. Do not mix standalone material_ui/cupertino_ui types with its constructors.
+The minimum is **Flutter 3.47.9 / Dart 3.13.7** (Dart below 4.0.0). The compatibility checks also target **Flutter 3.50.0 / Dart 3.14.0**. This RC's constructors use Flutter's bundled Material and Cupertino types, which Flutter 3.50 deprecates. The [release scope](documentation/en_US/release_scope_5.md#selected-compatibility) describes SDK and platform coverage.
 
 To try this checkout, place it next to a separate Flutter application and use the path below. Run `flutter --version`, `flutter pub get`, `flutter analyze` and `flutter test` in that application. A pub.dev dependency can resolve different code: select an actually published version and read that version's docs. Record and pin the reviewed revision for a source dependency. The pub.dev badge describes published packages, not this candidate.
 
@@ -875,7 +875,7 @@ This candidate stabilizes the selected RC contracts, not every historical upstre
 - **Navigation and app:** typed result completion for displaced routes, middleware before history replacement, nested routes, back vetoes, optional contexts, explicit overlay closing, snackbar queue/timer/swipe cleanup, Cupertino sheet transitions and forwarded app configuration.
 - **Restoration:** opt-in bounded named-route history with validated arguments and middleware; fresh controllers/completers after process recovery; native probes check real cold restoration and new typed results.
 - **Networking:** correct modifier removal, authentication replacement/retry handling, IO/browser timeout/abort/decoding errors, WebSocket reconnection, JS text/binary transport and disposal.
-- **SDK/hosts:** Flutter 3.47.9 / Dart 3.13.7 baseline, current Android host and iOS scene lifecycle, TickerMode settings and memory/accessibility callbacks.
+- **SDK/hosts:** Flutter 3.47.9 and 3.50.0 CI lanes, Android host and iOS scene lifecycle, TickerMode settings and memory/accessibility callbacks.
 - **Verification/docs:** unit/widget regressions, independent example packages, real Chrome JS/WASM transport/history checks, native harnesses, current migration docs and comprehensive English/Persian READMEs with updated translated recipes.
 
 Master changes were selected by behavior; standalone UI public-type migration and a different Get.back contract were not blindly merged. Existing upstream PRs and source attribution are recorded in the release scope and stabilization PR.
@@ -884,9 +884,13 @@ Master changes were selected by behavior; standalone UI public-type migration an
 
 ## Known limits and support boundaries
 
-On Flutter 3.47.9, the web engine can decode percent-encoded route characters while writing browser history: `?tag=a%2Bb` becomes `?tag=a+b`, and refresh can turn the intended `a+b` into `a b`. A pure Flutter control without GetX reproduces the loss. It is an SDK limitation; no global double-encoding or raw browser-history workaround is applied. Flutter documents preservation for 3.50 or later, but that is not a claim that this project has validated that SDK.
-
-The strict encoded-query gate is a separate manual diagnostic; green ordinary web CI does not claim it fixed. Full browser reload's URI-only startup is a separate history-restoration boundary. See the [browser harness](example_nav2/test/browser/README.md) for exact commands and evidence.
+On Flutter 3.47.9, the web engine can write `?tag=a%2Bb` to browser history
+as `?tag=a+b`, changing the query value from `a+b` to `a b` after refresh.
+Flutter 3.50.0 preserves the encoding in the tested deep-link and refresh
+scenarios. CI checks this on Chrome in JS and WASM and runs a pure Flutter
+control. A full browser reload still starts from the URI under the default
+route information provider. See the
+[browser harness](example_nav2/test/browser/README.md) for the checks.
 
 Native acceptance is scoped to the tested transition/host/OS configuration. The example hosts require Android API 24+ and iOS 15+; these are host minima, not universal platform guarantees for every app. Unreproduced old issues, additional SDK/host combinations and standalone UI migration remain follow-up work. New regressions in selected contracts still require assessment before publication.
 
@@ -896,7 +900,7 @@ Native acceptance is scoped to the tested transition/host/OS configuration. The 
 
 The independent [example](example/README.md) and [Navigator 2 example](example_nav2/README.md) use this checkout through path dependencies. Run checks in each package. Commands below do not install or upgrade an SDK; offline resolution additionally requires cached dependencies. Use an installed target with flutter run when checking an app interactively.
 
-The [workflow](.github/workflows/main.yml) pins the selected SDK and performs analyzer/tests, Chrome transport/navigation checks, web JS/WASM builds, Android APK build and native-harness compilation. Check the run for the exact revision you consume. The [device guide](example_nav2/test/device/README.md) and [Android emulator guide](example_nav2/test/device/android/README.md) describe back, predictive gestures, process-death restoration and artifact identity checks.
+The [workflow](.github/workflows/main.yml) tests both SDKs and performs analyzer/tests, Chrome transport/navigation checks, web JS/WASM builds, Android APK build and native-harness compilation. Check the run for the exact revision you consume. The [device guide](example_nav2/test/device/README.md) and [Android emulator guide](example_nav2/test/device/android/README.md) describe back, predictive gestures, process-death restoration and artifact identity checks.
 
 ```sh
 flutter --version

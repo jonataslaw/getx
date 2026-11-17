@@ -1,4 +1,4 @@
-> GetX 5 RC: Этот кандидат ещё не опубликован. Проверенная основа — Flutter 3.47.9 и Dart 3.13.7 со встроенными UI-библиотеками Flutter.
+> GetX 5 RC: Этот кандидат ещё не опубликован. Проверенная основа — Flutter 3.47.9 и Dart 3.13.7 со встроенными UI-библиотеками Flutter. Тесты совместимости также охватывают Flutter 3.50.0 и Dart 3.14.0.
 
 [![فارسی](https://img.shields.io/badge/Language-Persian-blueviolet?style=for-the-badge)](README-fa.md)
 
