@@ -1,3 +1,5 @@
+> GetX 5 RC: lihat [panduan migrasi cabang ini](../en_US/migration_guide_5.md) untuk API saat ini. Contoh bertanda **GetX 4 legacy** menjelaskan API lama.
+
 - [Route Management](#route-management)
   - [Cara pakai](#cara-pakai)
   - [Navigasi tanpa named route](#navigasi-tanpa-named-route)
@@ -37,31 +39,35 @@ GetMaterialApp( // Sebelumnya: MaterialApp(
 Untuk pindah ke halaman baru:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Untuk menutup snackbar, dialog, bottomsheet, atau apapun yang normalnya anda tutup menggunakan Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Untuk pergi ke halaman baru dan mencegah user kembali ke halaman sebelumnya (biasanya digunakan untuk SplashScreen, LoginScreen, dsb).
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Untuk pergi ke halaman baru dan batalkan navigasi sebelumnya (berguna untuk shopping cart, polls, dan test).
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Untuk pergi ke halaman baru dan menerima atau memperbarui data segera setelah anda kembali dari halaman tersebut:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 pada halaman lain, kirim data ke halaman sebelumnya:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // Sintaks Get (Lebih baik, tapi anda juga berhak untuk tidak setuju)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -280,6 +286,8 @@ GetMaterialApp(
 ```
 
 Jika anda tidak menggunakan GetMaterialApp, anda bisa menggunakan API untuk mengaitkan Middleware observer secara manual.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -522,6 +530,8 @@ Anda tidak perlu konteks, dan anda akan menemukan stack navigasi melalui Id.
 - CATATAN: Membuat stack navigasi parallel bisa jadi berbahaya. Sebaiknya hindari penggunaan Navigasi Bersarang, atau gunakan dengan bijak. Jika proyek anda membutuhkannya, silahkan, tapi mohon di ingat bahwa menyimpan lebih dari satu navigation stack didalam memori mungkin bukan ide yang bagus untuk konsumsi RAM.
 
 Lihat betapa sederhananya ini:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

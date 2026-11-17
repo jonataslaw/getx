@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js_interop';
+import 'dart:typed_data';
 
 import 'package:web/web.dart' as html;
 
@@ -17,6 +18,8 @@ class BaseWebSocket {
 
   ConnectionStatus? connectionStatus;
   Timer? _t;
+  int _generation = 0;
+  final _pendingMessages = <Object>[];
   BaseWebSocket(
     this.url, {
     this.ping = const Duration(seconds: 5),
@@ -41,44 +44,84 @@ class BaseWebSocket {
 
   // ignore: use_setters_to_change_properties
   void connect() {
+    if (isDisposed) {
+      socketNotifier = SocketNotifier();
+      isDisposed = false;
+    }
+    final generation = ++_generation;
+    _t?.cancel();
+    _t = null;
+    socket?.close();
+    socket = null;
     try {
       connectionStatus = ConnectionStatus.connecting;
-      socket = html.WebSocket(url);
-      socket!.onOpen.listen((e) {
-        socketNotifier?.open();
-        _t = Timer?.periodic(ping, (t) {
-          socket!.send(''.toJSBox);
-        });
+      final connected = html.WebSocket(url)..binaryType = 'arraybuffer';
+      socket = connected;
+      connected.onOpen.listen((_) {
+        if (generation != _generation || isDisposed) {
+          connected.close();
+          return;
+        }
         connectionStatus = ConnectionStatus.connected;
-      });
-
-      socket!.onMessage.listen((event) {
-        socketNotifier!.notifyData(event.data);
-      });
-
-      socket!.onClose.listen((e) {
+        final pending = _pendingMessages.toList();
+        _pendingMessages.clear();
+        for (final message in pending) {
+          _sendData(connected, message);
+        }
+        socketNotifier?.open();
+        if (generation != _generation || isDisposed) return;
         _t?.cancel();
-
-        connectionStatus = ConnectionStatus.closed;
-        socketNotifier!.notifyClose(Close(e.reason, e.code));
+        _t = Timer.periodic(ping, (timer) {
+          if (generation != _generation ||
+              connected.readyState != html.WebSocket.OPEN) {
+            timer.cancel();
+            return;
+          }
+          connected.send(''.toJS);
+        });
       });
-      socket!.onError.listen((event) {
+      connected.onMessage.listen((event) {
+        if (generation != _generation || isDisposed) return;
+        final data = event.data;
+        if (data != null && data.isA<JSArrayBuffer>()) {
+          socketNotifier
+              ?.notifyData((data as JSArrayBuffer).toDart.asUint8List());
+        } else {
+          socketNotifier?.notifyData(data.dartify());
+        }
+      });
+      connected.onClose.listen((event) {
+        if (generation != _generation) return;
         _t?.cancel();
-        socketNotifier!.notifyError(Close(event.toString(), 0));
         connectionStatus = ConnectionStatus.closed;
+        socketNotifier?.notifyClose(Close(event.reason, event.code));
       });
-    } on Exception catch (e) {
+      connected.onError.listen((event) {
+        if (generation != _generation) return;
+        _t?.cancel();
+        connectionStatus = ConnectionStatus.closed;
+        socketNotifier?.notifyError(Close(event.toString(), 0));
+      });
+    } on Exception catch (error) {
+      if (generation != _generation) return;
       _t?.cancel();
-      socketNotifier!.notifyError(Close(e.toString(), 500));
       connectionStatus = ConnectionStatus.closed;
-      //  close(500, e.toString());
+      socketNotifier?.notifyError(Close(error.toString(), 500));
     }
   }
 
   void dispose() {
-    socketNotifier!.dispose();
-    socketNotifier = null;
+    if (isDisposed) return;
     isDisposed = true;
+    _generation++;
+    _t?.cancel();
+    _t = null;
+    socket?.close();
+    socket = null;
+    connectionStatus = ConnectionStatus.closed;
+    _pendingMessages.clear();
+    socketNotifier?.dispose();
+    socketNotifier = null;
   }
 
   void emit(String event, dynamic data) {
@@ -107,13 +150,32 @@ class BaseWebSocket {
   }
 
   void send(Object data) {
-    if (connectionStatus == ConnectionStatus.closed) {
-      connect();
+    if (isDisposed) return;
+    if (connectionStatus == ConnectionStatus.closed ||
+        connectionStatus == ConnectionStatus.connecting) {
+      _pendingMessages.add(data);
+      if (connectionStatus == ConnectionStatus.closed) connect();
+      return;
     }
-    if (socket != null && socket!.readyState == html.WebSocket.OPEN) {
-      socket!.send(data.toJSBox);
+    final connected = socket;
+    if (connected != null && connected.readyState == html.WebSocket.OPEN) {
+      _sendData(connected, data);
     } else {
       Get.log('WebSocket not connected, message $data not sent');
+    }
+  }
+
+  void _sendData(html.WebSocket connected, Object data) {
+    if (data is String) {
+      connected.send(data.toJS);
+    } else if (data is Uint8List) {
+      connected.send(data.toJS);
+    } else if (data is ByteBuffer) {
+      connected.send(data.toJS);
+    } else if (data is List<int>) {
+      connected.send(Uint8List.fromList(data).toJS);
+    } else {
+      throw ArgumentError.value(data, 'data', 'Expected text or binary bytes');
     }
   }
 }

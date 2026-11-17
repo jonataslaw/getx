@@ -1,3 +1,5 @@
+> GetX 5 RC : consultez le [guide de migration de cette branche](../en_US/migration_guide_5.md) pour les API actuelles. Les exemples marqués **GetX 4 legacy** décrivent les anciennes API.
+
 - [Gestion de route](#gestion-de-route)
   - [Utilisation](#utilisation)
   - [Navigation sans nom](#navigation-sans-nom)
@@ -37,31 +39,35 @@ GetMaterialApp( // Avant: MaterialApp(
 Pour accéder à un nouvel écran:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Pour fermer les snackbars, dialogs, bottomsheets ou tout ce que vous fermez normalement avec Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Pour aller à l'écran suivant et aucune option pour revenir à l'écran précédent (pour une utilisation dans SplashScreens, écrans de connexion, etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Pour aller à l'écran suivant et annuler toutes les routes précédents (utile dans les paniers d'achat e-commerce, les sondages et les tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Pour naviguer vers l'écran suivant et recevoir ou mettre à jour des données dès que vous en revenez:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 sur l'autre écran, envoyez les données pour l'écran précédent:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // Syntaxe Get (c'est beaucoup mieux, mais vous avez le droit d'être en désaccord)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -277,6 +283,8 @@ GetMaterialApp(
 ```
 
 Si vous n'utilisez pas GetMaterialApp, vous pouvez utiliser l'API manuelle pour attacher l'observateur Middleware.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -518,6 +526,8 @@ Vous n'avez pas besoin de 'context' et vous trouverez votre stack de navigation 
 - NOTE: La création de stacks de navigation parallèles peut être dangereuse. L'idéal est de ne pas utiliser NestedNavigators, ou de l'utiliser avec parcimonie. Si votre projet l'exige, allez-y, mais gardez à l'esprit que conserver plusieurs stacks de navigation en mémoire n'est peut-être pas une bonne idée pour la consommation de RAM.
 
 Voyez comme c'est simple:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

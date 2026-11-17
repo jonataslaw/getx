@@ -10,7 +10,13 @@ typedef Disposer = void Function();
 typedef GetStateUpdate = void Function();
 
 class ListNotifier extends Listenable
-    with ListNotifierSingleMixin, ListNotifierGroupMixin {}
+    with ListNotifierSingleMixin, ListNotifierGroupMixin {
+  @override
+  void dispose() {
+    super.dispose();
+    _updaters = null;
+  }
+}
 
 /// A Notifier with single listeners
 class ListNotifierSingle = ListNotifier with ListNotifierSingleMixin;
@@ -30,7 +36,7 @@ mixin ListNotifierSingleMixin on Listenable {
   Disposer addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.add(listener);
-    return () => _updaters!.remove(listener);
+    return () => _updaters?.remove(listener);
   }
 
   bool containsListener(GetStateUpdate listener) {
@@ -179,19 +185,22 @@ class Notifier {
   void read(ListNotifierSingleMixin updaters) {
     final listener = _notifyData?.updater;
     if (listener != null && !updaters.containsListener(listener)) {
-      updaters.addListener(listener);
-      add(() => updaters.removeListener(listener));
+      add(updaters.addListener(listener));
     }
   }
 
   T append<T>(NotifyData data, T Function() builder) {
+    final previous = _notifyData;
     _notifyData = data;
-    final result = builder();
-    if (data.disposers.isEmpty && data.throwException) {
-      throw const ObxError();
+    try {
+      final result = builder();
+      if (data.disposers.isEmpty && data.throwException) {
+        throw const ObxError();
+      }
+      return result;
+    } finally {
+      _notifyData = previous;
     }
-    _notifyData = null;
-    return result;
   }
 }
 

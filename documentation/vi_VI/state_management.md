@@ -1,3 +1,5 @@
+> GetX 5 RC: xem [hướng dẫn chuyển đổi của nhánh này](../en_US/migration_guide_5.md) để dùng API hiện tại. Ví dụ có nhãn **GetX 4 legacy** mô tả API cũ.
+
 * [Quản lý State](#state-management)
   + [Quản lý Reactive State](#reactive-state-manager)
     - [Lợi thế](#advantages)
@@ -267,9 +269,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -326,9 +328,9 @@ class RxUser {
 
 ``` dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // when instantianting:
@@ -359,7 +361,7 @@ Khi bạn đang làm cho các class của riêng mình có thể quan sát đư�
 ``` dart
 // on the model file
 // we are going to make the entire class observable instead of each attribute
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -368,10 +370,7 @@ class User() {
 // on the controller file
 final user = User().obs;
 // when you need to update the user variable:
-user.update( (user) { // this parameter is the class itself that you want to update
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // an alternative way of update the user variable:
 user(User(name: 'João', age: 35));
 
@@ -721,23 +720,23 @@ Một cách khác để xử lý state `UI` của bạn là sử dụng` StateMi
 Để triển khai nó, hãy sử dụng dấu `với` để thêm` StateMixin <T> ` bộ điều khiển của bạn cho phép một mô hình T.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 Phương thức `change()` thay đổi state bất cứ khi nào chúng ta muốn.
 Chỉ cần truyền dữ liệu và state theo cách này:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus cho phép các state này:
+GetStatus cho phép các state này:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 Để diễn tả nó trên UI, sử dụng:
@@ -758,7 +757,7 @@ class OtherClass extends GetView<Controller> {
 
         // here also you can set your own error widget, but by
         // default will be an Center(child:Text(error))
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }

@@ -1,3 +1,5 @@
+> GetX 5 RC: consulte o [guia de migração desta branch](../en_US/migration_guide_5.md) para a API atual. Exemplos marcados **GetX 4 legacy** descrevem APIs antigas.
+
 - [Navegação sem rotas nomeadas](#navegação-sem-rotas-nomeadas)
   - [SnackBars](#snackbars)
   - [Dialogs](#dialogs)
@@ -15,31 +17,35 @@
 Para navegar para uma próxima tela:
 
 ```dart
-Get.to(ProximaTela());
+Get.to(() => ProximaTela());
 ```
 
 Para fechar snackbars, dialogs, bottomsheets, ou qualquer coisa que você normalmente fecharia com o `Navigator.pop(context)` (como por exemplo fechar a View atual e voltar para a anterior):
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Para ir para a próxima tela e NÃO deixar opção para voltar para a tela anterior (bom para SplashScreens, telas de login e etc.):
 
 ```dart
-Get.off(ProximaTela());
+Get.off(() => ProximaTela());
 ```
 
 Para ir para a próxima tela e cancelar todas as rotas anteriores (útil em telas de carrinho, votações ou testes):
 
 ```dart
-Get.offAll(ProximaTela());
+Get.offAll(() => ProximaTela());
 ```
 
 Para navegar para a próxima rota, e receber ou atualizar dados assim que retornar da rota:
 
 ```dart
-var dados = await Get.to(Pagamento());
+var dados = await Get.to(() => Pagamento());
 ```
 
 Na outra tela, envie os dados para a rota anterior:
@@ -80,7 +86,7 @@ navigator.push(
 );
 
 // Sintaxe do Get (é bem melhor, mas você tem o direito de discordar)
-Get.to(HomePage());
+Get.to(() => HomePage());
 ```
 
 ### SnackBars
@@ -360,6 +366,8 @@ GetMaterialApp(
 
 Se você não estiver usando o `GetMaterialApp`, você pode usar a API manual para anexar um observer Middleware.
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 void main() {
   runApp(
@@ -517,6 +525,8 @@ Get fez a navegação aninhada no Flutter mais fácil ainda. Você não precisa 
 * Nota: Criar navegação paralela em stacks pode ser perigoso. O idela é não usar `NestedNavigators`, ou usar com moderação. Se o seu projeto requer isso, vá em frente, mas fique ciente que manter múltiplas stacks de navegação na memória pode não ser uma boa ideia no quesito consumo de RAM.
 
 Veja como é simples:
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Navigator(
   key: nestedKey(1), // crie uma key com um index

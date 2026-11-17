@@ -2,7 +2,7 @@ part of '../rx_types.dart';
 
 class RxSet<E> extends GetListenable<Set<E>>
     with SetMixin<E>, RxObjectMixin<Set<E>> {
-  RxSet([super.initial = const {}]);
+  RxSet([Set<E>? initial]) : super(initial ?? <E>{});
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
@@ -142,10 +142,14 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    // if (this is RxSet) {
-    //   (this as RxSet)._value;
-    // }
-    clear();
-    addAll(items);
+    final source = Set<E>.of(items);
+    if (this is RxSet<E>) {
+      final rx = this as RxSet<E>;
+      rx.value.clear();
+      rx.addAll(source);
+    } else {
+      clear();
+      addAll(source);
+    }
   }
 }

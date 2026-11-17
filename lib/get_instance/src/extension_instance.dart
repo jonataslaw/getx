@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show internal;
 import 'package:flutter/material.dart';
 
 import '../../get_core/get_core.dart';
@@ -13,12 +14,22 @@ class InstanceInfo {
   final bool isRegistered;
   final bool isPrepared;
   final bool? isInit;
+
+  /// An opaque token identifying this registration, not its current instance.
+  ///
+  /// Internal widget lifetime tracking compares this token by identity. It is
+  /// not serializable and remains unchanged when a fenix factory recreates its
+  /// instance. Removing or replacing the registration creates a new token.
+  @internal
+  final Object? registrationId;
+
   const InstanceInfo({
     required this.isPermanent,
     required this.isSingleton,
     required this.isRegistered,
     required this.isPrepared,
     required this.isInit,
+    this.registrationId,
   });
 
   @override
@@ -120,22 +131,23 @@ extension Inst on GetInterface {
     );
   }
 
-  /// Creates a new Class Instance [S] from the builder callback[S].
-  /// Every time [find]<[S]>() is used, it calls the builder method to generate
-  /// a new Instance [S].
-  /// It also registers each `instance.onClose()` with the current
-  /// Route `Get.reference` to keep the lifecycle active.
-  /// Is important to know that the instances created are only stored per Route.
-  /// So, if you call `Get.delete<T>()` the "instance factory" used in this
-  /// method (`Get.spawn<T>()`) will be removed, but NOT the instances
-  /// already created by it.
+  /// Registers a factory that creates a new instance on every [find] call.
+  ///
+  /// Instances using [GetLifeCycleMixin] start their lifecycle when found and
+  /// are associated with the current route for cleanup. Deleting the factory
+  /// does not close instances it already created. The factory is permanent by
+  /// default; deleting it requires `force: true` or [resetInstance].
   ///
   /// Example:
   ///
-  /// ```Get.spawn(() => Repl());
-  /// Repl a = find();
-  /// Repl b = find();
-  /// print(a==b); (false)```
+  /// ```dart
+  /// class Repl {}
+  ///
+  /// Get.spawn<Repl>(() => Repl());
+  /// final first = Get.find<Repl>();
+  /// final second = Get.find<Repl>();
+  /// assert(!identical(first, second));
+  /// ```
   void spawn<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
@@ -184,10 +196,8 @@ extension Inst on GetInterface {
   /// Optionally associating the current Route to the lifetime of the instance,
   /// if `Get.smartManagement` is marked as [SmartManagement.full] or
   /// [SmartManagement.keepFactory]
-  /// Only flags `isInit` if it's using `Get.create()`
-  /// (not for Singletons access).
-  /// Returns the instance if not initialized, required for Get.create() to
-  /// work properly.
+  /// Marks singleton factories as initialized. Factories registered by
+  /// [spawn] remain reusable so every [find] starts a new instance.
   S? _initDependencies<S>({String? name}) {
     final key = _getKey(S, name);
     final isInit = _singl[key]!.isInit;
@@ -218,6 +228,7 @@ extension Inst on GetInterface {
       isRegistered: isRegistered<S>(tag: tag),
       isPrepared: !(build?.isInit ?? true),
       isInit: build?.isInit,
+      registrationId: build?.registrationId,
     );
   }
 
@@ -271,8 +282,8 @@ extension Inst on GetInterface {
   }
 
   /// Finds the registered type <[S]> (or [tag])
-  /// In case of using Get.[create] to register a type <[S]> or [tag],
-  /// it will create an instance each time you call [find].
+  /// If [spawn] registered the builder for [S] and [tag], each call creates a
+  /// new instance.
   /// If the registered type <[S]> (or [tag]) is a Controller,
   /// it will initialize it's lifecycle.
   S find<S>({String? tag}) {
@@ -289,7 +300,7 @@ extension Inst on GetInterface {
 
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
-      /// to make it compatible with `Get.create()`.
+      /// to make it compatible with `Get.spawn()`.
       final i = _initDependencies<S>(name: tag);
       return i ?? dep.getDependency() as S;
     } else {
@@ -504,6 +515,8 @@ typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class to register instances with `Get.put<S>()`.
 class _InstanceBuilderFactory<S> {
+  final Object registrationId = Object();
+
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;

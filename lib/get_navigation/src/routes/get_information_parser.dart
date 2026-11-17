@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../../get.dart';
 
+import 'parse_route.dart';
+
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   factory GetInformationParser.createInformationParser(
       {String initialRoute = '/'}) {
@@ -25,9 +27,9 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
     if (location == '/') {
       //check if there is a corresponding page
       //if not, relocate to initialRoute
-      if (!(Get.rootController.rootDelegate)
-          .registeredRoutes
-          .any((element) => element.name == '/')) {
+      if (!(Get.rootController.rootDelegate).registeredRoutes.any(
+        (element) => element.name == '/',
+      )) {
         location = initialRoute;
       }
     } else if (location.isEmpty) {
@@ -36,6 +38,12 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
 
     Get.log('GetInformationParser: route location: $location');
 
+    final history = RestorableRouteHistory.decode(routeInformation.state, uri);
+    if (history != null && location == uri.toString()) {
+      return SynchronousFuture(
+        RouteDecoder([], PageSettings(uri), restorationHistory: history),
+      );
+    }
     return SynchronousFuture(RouteDecoder.fromRoute(location));
   }
 
@@ -43,7 +51,7 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   RouteInformation restoreRouteInformation(RouteDecoder configuration) {
     return RouteInformation(
       uri: Uri.tryParse(configuration.pageSettings?.name ?? ''),
-      state: null,
+      state: configuration.restorationHistory?.toPrimitives(),
     );
   }
 }

@@ -5,32 +5,29 @@ import '../../../utils.dart';
 import 'get_state.dart';
 import 'get_widget_cache.dart';
 
-/// GetView is a great way of quickly access your Controller
-/// without having to call Get.find<AwesomeController>() yourself.
+/// A stateless view that resolves its controller through [Get.find].
 ///
 /// Sample:
-/// ```
-/// class AwesomeController extends GetxController {
+/// ```dart
+/// class AwesomeController {
 ///   final String title = 'My Awesome View';
 /// }
 ///
 /// class AwesomeView extends GetView<AwesomeController> {
-///   /// if you need you can pass the tag for
-///   /// Get.find<AwesomeController>(tag:"myTag");
 ///   @override
-///   final String tag = "myTag";
+///   final String tag = 'myTag';
 ///
-///   AwesomeView({Key key}):super(key:key);
+///   const AwesomeView({super.key});
 ///
 ///   @override
 ///   Widget build(BuildContext context) {
 ///     return Container(
-///       padding: EdgeInsets.all(20),
-///       child: Text( controller.title ),
+///       padding: const EdgeInsets.all(20),
+///       child: Text(controller.title),
 ///     );
 ///   }
 /// }
-///``
+/// ```
 abstract class GetView<T> extends StatelessWidget {
   const GetView({super.key});
 
@@ -42,12 +39,11 @@ abstract class GetView<T> extends StatelessWidget {
   Widget build(BuildContext context);
 }
 
-/// GetWidget is a great way of quickly access your individual Controller
-/// without having to call Get.find<AwesomeController>() yourself.
-/// Get save you controller on cache, so, you can to use Get.create() safely
-/// GetWidget is perfect to multiples instance of a same controller. Each
-/// GetWidget will have your own controller, and will be call events as `onInit`
-/// and `onClose` when the controller get in/get out on memory.
+/// A view that caches the controller resolved for this widget instance.
+///
+/// With a factory registered by `Get.spawn`, each widget caches its own
+/// controller and closes that controller when removed. Unlike [GetView],
+/// repeated controller reads do not perform another lookup.
 abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
   const GetWidget({super.key});
 

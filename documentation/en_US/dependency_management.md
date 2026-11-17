@@ -1,10 +1,12 @@
+> GetX 5 RC: use the branch-specific [migration guide](../en_US/migration_guide_5.md) for the current API. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
+
 # Dependency Management
 - [Dependency Management](#dependency-management)
   - [Instancing methods](#instancing-methods)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
-    - [Get.create](#getcreate)
+    - [Get.spawn](#getspawn)
   - [Using instantiated methods/classes](#using-instantiated-methodsclasses)
   - [Specifying an alternate instance](#specifying-an-alternate-instance)
   - [Differences between methods](#differences-between-methods)
@@ -113,7 +115,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 If you want to register an asynchronous instance, you can use `Get.putAsync`:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -126,6 +132,8 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 This is all options you can set when using putAsync:
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -142,34 +150,24 @@ Get.putAsync<S>(
 )
 ```
 
-### Get.create
+### Get.spawn
 
 This one is tricky. A detailed explanation of what this is and the differences between the other one can be found on [Differences between methods:](#differences-between-methods) section
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
-This is all options you can set when using create:
+These are the factory registration options in this RC:
 
 ```dart
-Get.create<S>(
-  // required: a function that returns a class that will be "fabricated" every
-  // time `Get.find()` is called
-  // Example: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
-
-  // optional: just like Get.put(), but it is used when you need multiple instances
-  // of a of a same class
-  // Useful in case you have a list that each item need it's own controller
-  // needs to be a unique string. Just change from tag to name
-  String name,
-
-  // optional: just like int`Get.put()`, it is for when you need to keep the
-  // instance alive thoughout the entire app. The difference is in Get.create
-  // permanent is true by default
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## Using instantiated methods/classes
@@ -247,9 +245,10 @@ But if you want to opt for using `permanent:true`, then the controller will not 
 
 Proceeding with the differences between methods:
 
-- Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only purpose is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+> **GetX 4 legacy**
+> - Get.put and Get.putAsync follows the same creation order, with the difference that the second uses an asynchronous method: those two methods creates and initializes the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only purpose is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also calls the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsible to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
 
@@ -268,25 +267,25 @@ In addition, the Binding class will allow you to have SmartManager configuration
 - Create a class and implements Binding
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 Your IDE will automatically ask you to override the "dependencies" method, and you just need to click on the lamp, override the method, and insert all the classes you are going to use on that route:
 
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.put<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.put<Service>(Api()),
+  ];
 }
 
-class DetailsBinding implements Bindings {
+class DetailsBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetailsController>(() => DetailsController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetailsController>(() => DetailsController()),
+  ];
 }
 ```
 
@@ -299,12 +298,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: DetailsBinding(),
+    bindings: [DetailsBinding()],
   ),
 ];
 ```
@@ -312,51 +311,39 @@ getPages: [
 - Using normal routes:
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetailsView(), binding: DetailsBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetailsView(), bindings: [DetailsBinding()])
 ```
 
 There, you don't have to worry about memory management of your application anymore, Get will do it for you.
 
-The Binding class is called when a route is called, you can create an "initialBinding in your GetMaterialApp to insert all the dependencies that will be created.
+Use `binds` on `GetMaterialApp` for application-level bindings:
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```
 
 ### BindingsBuilder
 
-The default way of creating a binding is by creating a class that implements Bindings.
-But alternatively, you can use `BindingsBuilder` callback so that you can simply use a function to instantiate whatever you desire.
-
-Example:
+`BindingsBuilder` is a GetX 4 API and is not available in this RC. Use a
+`Binding` class returning `List<Bind>` as shown above, or give a named route a
+list of `Bind` values directly:
 
 ```dart
-getPages: [
-  GetPage(
-    name: '/',
-    page: () => HomeView(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut<ControllerX>(() => ControllerX());
-      Get.put<Service>(()=> Api());
-    }),
-  ),
-  GetPage(
-    name: '/details',
-    page: () => DetailsView(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut<DetailsController>(() => DetailsController());
-    }),
-  ),
-];
+GetPage(
+  name: '/details',
+  page: () => DetailsView(),
+  binds: [Bind.lazyPut<DetailsController>(() => DetailsController())],
+);
 ```
 
-That way you can avoid to create one Binding class for each route making this even simpler.
-
-Both ways of doing work perfectly fine and we want you to use what most suit your tastes.
+Direct navigation uses `bindings: [DetailsBinding()]`; `GetMaterialApp` uses
+`binds: [...]`. These lists contain different types. Do not change the old
+`Bindings.dependencies(): void` return type without also changing its base
+class to `Binding`.
 
 ### SmartManagement
 
@@ -404,7 +391,7 @@ Use whichever is most convenient for you.
 
 ## Notes
 
-- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's initialBinding.
+- DO NOT USE SmartManagement.keepFactory if you are using multiple Bindings. It was designed to be used without Bindings, or with a single Binding linked in the GetMaterialApp's binds.
 
 - Using Bindings is completely optional, if you want you can use `Get.put()` and `Get.find()` on classes that use a given controller without any problem.
 However, if you work with Services or any other abstraction, I recommend using Bindings for a better organization.

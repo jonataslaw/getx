@@ -1,3 +1,5 @@
+> GetX 5 RC : consultez le [guide de migration de cette branche](../en_US/migration_guide_5.md) pour les API actuelles. Les exemples marqués **GetX 4 legacy** décrivent les anciennes API.
+
 - [Gestion d'État](#gestion-d-etat)
   - [Gestionnaire d'état réactif](#gestionnaire-d-etat-reactif)
     - [Avantages](#avantages)
@@ -261,9 +263,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -318,9 +320,9 @@ class RxUser {
 * ou vous pouvez convertir la classe entière en un observable:
 ```dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // en instanciant:
@@ -351,7 +353,7 @@ Lorsque vous rendez vos propres classes observables, il existe une manière diff
 ```dart
 // sur le fichier modèle
 // nous allons rendre la classe entière observable au lieu de chaque attribut
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -361,10 +363,7 @@ class User() {
 // Dans le controlleur
 final user = User().obs;
 // lorsque vous devez mettre à jour la variable utilisateur:
-user.update( (user) { // ce paramètre est la classe même que vous souhaitez mettre à jour
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // une autre manière de mettre à jour la variable user:
 user(User(name: 'João', age: 35));
 

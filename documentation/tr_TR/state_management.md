@@ -1,3 +1,5 @@
+> GetX 5 RC: güncel API için [bu dalın geçiş kılavuzuna](../en_US/migration_guide_5.md) bakın. **GetX 4 legacy** işaretli örnekler eski API içindir.
+
 * [State Management](#state-management)
   + [Reactive State Manager](#reactive-state-manager)
     - [Avantajlar](#avantajlar)
@@ -272,9 +274,9 @@ onInit() async {
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```
@@ -332,9 +334,9 @@ class RxUser {
 
 ``` dart
 class User {
-  User({String name, int age});
-  var name;
-  var age;
+  User({this.name = '', this.age = 0});
+  String name;
+  int age;
 }
 
 // örnek:
@@ -365,7 +367,7 @@ Kendi sınıflarınızı observable hale getirirken, bunları güncellemenin far
 ``` dart
 // model dosyasında
 // her bir öznitelik yerine tüm sınıfı observable hale getireceğiz
-class User() {
+class User {
   User({this.name = '', this.age = 0});
   String name;
   int age;
@@ -374,10 +376,7 @@ class User() {
 // Controller dosyası
 final user = User().obs;
 // User değişkenini güncellemeniz gerektiğinde:
-user.update( (user) { // bu parametre, güncellemek istediğiniz sınıfın kendisidir.
-user.name = 'Jonny';
-user.age = 18;
-});
+user.update((previous) => User(name: 'Jonny', age: 18));
 // user değişkenini güncellemenin alternatif bir yolu:
 user(User(name: 'João', age: 35));
 
@@ -731,7 +730,7 @@ Bunu uygulamak için, `StateMixin<T>` ile `with`i kullanın.
 bir controller'a T modelinizi ekleyin.
 
 ``` dart
-class Controller extends GetController with StateMixin<User>{}
+class Controller extends GetxController with StateMixin<User>{}
 ```
 
 
@@ -739,16 +738,16 @@ class Controller extends GetController with StateMixin<User>{}
 Sadece verileri ve state'i bu şekilde iletin:
 
 ```dart
-change(data, status: RxStatus.success());
+change(GetStatus.success(data));
 ```
 
-RxStatus şu duruma izin verir:
+GetStatus şu duruma izin verir:
 
 ``` dart
-RxStatus.loading();
-RxStatus.success();
-RxStatus.empty();
-RxStatus.error('message');
+GetStatus.loading();
+GetStatus.success(data);
+GetStatus.empty();
+GetStatus.error('message');
 ```
 
 UI'da bu şekilde kullanın:
@@ -769,7 +768,7 @@ class OtherClass extends GetView<Controller> {
 
         // burada ayrıca kendi hata widget'ınızı ayarlayabilirsiniz, ancak
         // default birCenter(child:Text(error)) olacaktır.
-        onError: (error)=>Text(error),
+        onError: (error)=>Text(error ?? 'Unknown error'),
       ),
     );
 }

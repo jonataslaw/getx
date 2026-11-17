@@ -1,3 +1,5 @@
+> GetX 5 RC：当前 API 请参阅[本分支迁移指南](../en_US/migration_guide_5.md)。标为 **GetX 4 legacy** 的示例说明旧版 API。
+
 - [路由管理](#路由管理)
   - [如何使用](#如何使用)
   - [普通路由导航](#普通路由导航)
@@ -37,31 +39,35 @@ GetMaterialApp( // Before: MaterialApp(
 导航到新的页面。
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 关闭SnackBars、Dialogs、BottomSheets或任何你通常会用Navigator.pop(context)关闭的东西。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 进入下一个页面，但没有返回上一个页面的选项（用于SplashScreens，登录页面等）。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 进入下一个界面并取消之前的所有路由（在购物车、投票和测试中很有用）。
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 要导航到下一条路由，并在返回后立即接收或更新数据。
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 在另一个页面上，发送前一个路由的数据。
@@ -101,7 +107,7 @@ navigator.push(
 );
 
 // get语法 (这要好得多)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -275,6 +281,8 @@ GetMaterialApp(
 ```
 
 如果你没有使用GetMaterialApp，你可以使用手动API来附加Middleware观察器。
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -514,6 +522,8 @@ Get让Flutter的嵌套导航更加简单。
 - 注意：创建平行导航堆栈可能是危险的。理想的情况是不要使用NestedNavigators，或者尽量少用。如果你的项目需要它，请继续，但请记住，在内存中保持多个导航堆栈可能不是一个好主意(消耗RAM)。
 
 看看它有多简单:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

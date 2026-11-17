@@ -100,6 +100,9 @@ class GetPage<T> extends Page<T> {
         );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
+  /// Copies this page with a typed result completer for internal restoration.
+  GetPage<T> withFreshCompleter() => copyWith(completer: Completer<T?>());
+
   GetPage<T> copyWith({
     LocalKey? key,
     String? name,
@@ -124,7 +127,8 @@ class GetPage<T> extends Page<T> {
     GetPage? unknownRoute,
     List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
-    final double Function(BuildContext context)? gestureWidth,
+    PreventDuplicateHandlingMode? preventDuplicateHandlingMode,
+    double Function(BuildContext context)? gestureWidth,
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,
@@ -139,6 +143,8 @@ class GetPage<T> extends Page<T> {
       participatesInRootNavigator:
           participatesInRootNavigator ?? this.participatesInRootNavigator,
       preventDuplicates: preventDuplicates ?? this.preventDuplicates,
+      preventDuplicateHandlingMode:
+          preventDuplicateHandlingMode ?? this.preventDuplicateHandlingMode,
       name: name ?? this.name,
       page: page ?? this.page,
       popGesture: popGesture ?? this.popGesture,
@@ -168,7 +174,7 @@ class GetPage<T> extends Page<T> {
       inheritParentPath: inheritParentPath ?? this.inheritParentPath,
       canPop: canPop ?? this.canPop,
       onPopInvoked: onPopInvoked ?? this.onPopInvoked,
-      restorationId: restorationId ?? restorationId,
+      restorationId: restorationId ?? this.restorationId,
     );
   }
 

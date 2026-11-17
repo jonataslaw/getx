@@ -30,26 +30,26 @@ class SocketNotifier {
   List<void Function(Close)>? _onCloses = <CloseSocket>[];
   List<void Function(Close)>? _onErrors = <CloseSocket>[];
 
-  late OpenSocket open;
+  OpenSocket open = () {};
 
   /// subscribe to close events
   void addCloses(CloseSocket socket) {
-    _onCloses!.add(socket);
+    _onCloses?.add(socket);
   }
 
   /// subscribe to error events
   void addErrors(CloseSocket socket) {
-    _onErrors!.add((socket));
+    _onErrors?.add(socket);
   }
 
   /// subscribe to named events
   void addEvents(String event, MessageSocket socket) {
-    _onEvents![event] = socket;
+    _onEvents?[event] = socket;
   }
 
   /// subscribe to message events
   void addMessages(MessageSocket socket) {
-    _onMessages!.add((socket));
+    _onMessages?.add(socket);
   }
 
   /// Dispose messages, events, closes and errors subscriptions
@@ -62,14 +62,16 @@ class SocketNotifier {
 
   /// Notify all subscriptions on [addCloses]
   void notifyClose(Close err) {
-    for (var item in _onCloses!) {
+    for (var item in List<CloseSocket>.of(_onCloses ?? const [])) {
+      if (_onCloses == null) return;
       item(err);
     }
   }
 
   /// Notify all subscriptions on [addMessages]
   void notifyData(dynamic data) {
-    for (var item in _onMessages!) {
+    for (var item in List<MessageSocket>.of(_onMessages ?? const [])) {
+      if (_onMessages == null) return;
       item(data);
     }
     if (data is String) {
@@ -80,7 +82,8 @@ class SocketNotifier {
   /// Notify all subscriptions on [addErrors]
   void notifyError(Close err) {
     // rooms.removeWhere((key, value) => value.contains(_ws));
-    for (var item in _onErrors!) {
+    for (var item in List<CloseSocket>.of(_onErrors ?? const [])) {
+      if (_onErrors == null) return;
       item(err);
     }
   }
@@ -90,7 +93,7 @@ class SocketNotifier {
       var msg = jsonDecode(message);
       final event = msg['type'];
       final data = msg['data'];
-      if (_onEvents!.containsKey(event)) {
+      if (_onEvents?.containsKey(event) ?? false) {
         _onEvents![event]!(data);
       }
       // ignore: avoid_catches_without_on_clauses

@@ -1,3 +1,5 @@
+> GetX 5 RC: consulta la [guía de migración de esta rama](../en_US/migration_guide_5.md) para las API actuales. Los ejemplos marcados **GetX 4 legacy** describen API anteriores.
+
 - [Gestión del Estado](#gestión-del-estado)
   - [Gestor de Estado Simple](#gestor-de-estado-simple)
     - [Ventajas](#ventajas)
@@ -429,9 +431,9 @@ onInit(){
 
 fireRoute(logged) {
   if (logged) {
-   Get.off(Home());
+   Get.off(() => Home());
   } else {
-   Get.off(Login());
+   Get.off(() => Login());
   }
 }
 ```

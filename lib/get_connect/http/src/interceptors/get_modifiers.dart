@@ -11,12 +11,12 @@ typedef ResponseModifier<T> = FutureOr Function(
 typedef HandlerExecute<T> = Future<Request<T>> Function();
 
 class GetModifier<S> {
-  final _requestModifiers = <RequestModifier>[];
-  final _responseModifiers = <ResponseModifier>[];
-  RequestModifier? authenticator;
+  final _requestModifiers = <Function>[];
+  final _responseModifiers = <Function>[];
+  Function? authenticator;
 
   void addRequestModifier<T>(RequestModifier<T> interceptor) {
-    _requestModifiers.add(interceptor as RequestModifier);
+    _requestModifiers.add(interceptor);
   }
 
   void removeRequestModifier<T>(RequestModifier<T> interceptor) {
@@ -24,11 +24,11 @@ class GetModifier<S> {
   }
 
   void addResponseModifier<T>(ResponseModifier<T> interceptor) {
-    _responseModifiers.add(interceptor as ResponseModifier);
+    _responseModifiers.add(interceptor);
   }
 
   void removeResponseModifier<T>(ResponseModifier<T> interceptor) {
-    _requestModifiers.remove(interceptor);
+    _responseModifiers.remove(interceptor);
   }
 
   Future<Request<T>> modifyRequest<T>(Request<T> request) async {

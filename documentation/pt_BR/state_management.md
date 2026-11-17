@@ -1,3 +1,5 @@
+> GetX 5 RC: consulte o [guia de migração desta branch](../en_US/migration_guide_5.md) para a API atual. Exemplos marcados **GetX 4 legacy** descrevem APIs antigas.
+
 - [Simple State Manager](#simple-state-manager)
   - [Uso do gerenciador de estado simples](#uso-do-gerenciador-de-estado-simples)
     - [Sem StatefulWidget](#sem-statefulwidget)
@@ -66,8 +68,8 @@ Você remover classe B da rota de forma inesperada, e tentasse usar o controller
 ### Uso do gerenciador de estado simples
 
 ```dart
-// Crie a classe Controller e entenda ela do GetController
-class Controller extends GetController {
+// Crie a classe Controller e entenda ela do GetxController
+class Controller extends GetxController {
   int counter = 0;
   void increment() {
     counter++;
@@ -110,7 +112,7 @@ class OutraClasse extends StatelessWidget {
 Se você precisa utilizar seu controller em vários outros lugares, e fora do GetBuilder, apenas crie um getter no seu controller que você consegue ele facilmente (ou use `Get.find<Controller>()` )
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
 
   /// Você não precisa disso. Eu recomendo usar isso apenas
   /// porque a sintaxe é mais fácil.
@@ -180,12 +182,12 @@ Você não precisa chamar métodos no `initState()` e enviá-los para seu contro
 
 Você não precisa chamar o método `dispose()`, você tem o método `onClose()` que vai ser chamado no momento exato quando seu controller não for mais necessário e será removido da memória. Dessa forma, você pode deixar a view somente para os widgets, e o controller só para as regras de negócio.
 
-Não chame o método `dispose()` dentro do GetController, não vai fazer nada. Lembre-se que o controller não é um widget, você não deveria usar o dispose lá, e esse método será automaticamente e inteligentemente removido da memória pelo Get. Se você usou algum stream no controller e quer fechá-lo, apenas insira o método para fechar os stream dentro do método `onClose()`.
+Não chame o método `dispose()` dentro do GetxController, não vai fazer nada. Lembre-se que o controller não é um widget, você não deveria usar o dispose lá, e esse método será automaticamente e inteligentemente removido da memória pelo Get. Se você usou algum stream no controller e quer fechá-lo, apenas insira o método para fechar os stream dentro do método `onClose()`.
 
 Exemplo:
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
   var user = StreamController<User>();
   var name = StreamController<String>();
 
@@ -223,7 +225,7 @@ Você talvez também precise de uma instância do seu controller fora do GetBuil
 essa:
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
   static Controller get to => Get.find(); // criando um getter estático
   [...]
 }
@@ -239,7 +241,7 @@ GetBuilder<Controller>(
 ou essa:
 
 ```dart
-class Controller extends GetController {
+class Controller extends GetxController {
  // sem nenhum método estático
 [...]
 }
@@ -466,7 +468,7 @@ Concluindo, uma pessoa abriu um pedido para uma feature nova, como ele queria us
 
 Porém, desses 4 widgets, esse é o que consome mais recursos, já que usa os dois gerenciadores de estado combinados.
 
-* Nota: Para usar GetBuilder e MixinBuilder você precisa usar GetController. Para usar GetX ou Obx você precisa usar RxController.
+* Nota: Para usar GetBuilder e MixinBuilder você precisa usar GetxController. Para usar GetX ou Obx você precisa usar RxController.
 
 ## Workers
 

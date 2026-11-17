@@ -1,10 +1,12 @@
+> GetX 5 RC: 현재 API는 [이 브랜치의 마이그레이션 가이드](../en_US/migration_guide_5.md)를 참고하세요. **GetX 4 legacy** 표시는 이전 API 예제입니다.
+
 # 종속성 관리
 - [종속성 관리](#종속성-관리)
   - [인스턴스 메서드](#인스턴스-메서드)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
-    - [Get.create](#getcreate)
+    - [Get.spawn](#getspawn)
   - [인스턴스화 된 메서드/클래스 사용](#인스턴스화-된-메서드/클래스-사용)
   - [메서드간의 차이점](#메서드간의-차이점)
   - [바인딩](#바인딩)
@@ -110,7 +112,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 만약 비동기로 인스턴스를 등록하길 원하면 `Get.putAsync`를 사용할 수 있습니다.:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -123,6 +129,8 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 putAsync 사용시 설정 가능한 모든 사항:
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -139,32 +147,24 @@ Get.putAsync<S>(
 )
 ```
 
-### Get.create
+### Get.spawn
 
 이것은 까다롭습니다. 이것이 무엇인지 상세한 설명과 다른것과의 차이점에 대해서는 [메서드간의 차이점:](#메서드간의-차이점) 섹션에서 확인할 수 있습니다.
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
 create 사용 시 설정 가능한 모든 사항:
 
 ```dart
-Get.create<S>(
-  // 필수: `Get.find()`가 호출 될 때마다 만들어진 클래스를 반환하는 메서드입니다.
-  // 예시: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
-
-  // 선택: Get.put()과 거의 동일하지만 동일 클래스의 여러 인스턴스가 필요할 때 사용합니다.
-  // 개개의 리스트별로 controller가 필요한 경우 유용합니다.
-  // 고유값이어야 합니다. 단지 tag에서 name으로 변경되었습니다.
-  String name,
-
-  // 선택: Get.put()과 같이 앱 유지중에 인스턴스가 활성되어야 하는 경우 사용합니다.
-  // Get.create에서 다른점은
-  // permanent의 기본값이 true 입니다.
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## 인스턴스화 된 메서드/클래스 사용
@@ -244,9 +244,10 @@ print(instance is OtherClass); //true
 
 메서드간 차이점에 대해:
 
-- Get.put과 Get.putAsync는 동일한 생성 명령을 따르지만 두번째가 비동기 메서드를 사용하는 것이 차이점입니다: 두 메서드는 인스턴스를 생성하고 초기화 합니다. 이것은 `permanent: false`와 `isSingleton: true` 파라미터들과 내부 `insert` 메서드를 사용하여 메모리에 직접 추가됩니다.(여기의 isSingleton 파라미터의 목적은 `dependency`에 의한 종속성을 사용할 것인지 `FcBuilderFunc`에 의한 종속성을 사용할 것인지 알려주는 것입니다.) 이후에 `Get.find()`는 즉시 초기화한 메모리안의 인스턴스를 호출합니다.
+> **GetX 4 legacy**
+> - Get.put과 Get.putAsync는 동일한 생성 명령을 따르지만 두번째가 비동기 메서드를 사용하는 것이 차이점입니다: 두 메서드는 인스턴스를 생성하고 초기화 합니다. 이것은 `permanent: false`와 `isSingleton: true` 파라미터들과 내부 `insert` 메서드를 사용하여 메모리에 직접 추가됩니다.(여기의 isSingleton 파라미터의 목적은 `dependency`에 의한 종속성을 사용할 것인지 `FcBuilderFunc`에 의한 종속성을 사용할 것인지 알려주는 것입니다.) 이후에 `Get.find()`는 즉시 초기화한 메모리안의 인스턴스를 호출합니다.
 
-- Get.create: 이름 그대로 종속성을 "생성"합니다! `Get.put()`과 마찬가지로 내부 메서드 `insert`를 호출하여 인스턴스화 합니다. 그러나 `permanent`가 true가 되고 `isSingleton`이 false가 됩니다(종속성을 "생성중"인 상태라 싱글톤 인스턴스가 될 방법이 없어서 false 입니다.) 그리고 `permanent: true`이기 때문에 기본적으로 화면 전환간에 손실되지 않는 장점이 있습니다! 또한 `Get.find()`는 즉시 호출되지 않으며 호출될 화면에서 사용되기를 기다립니다. `permanent` 파라미터를 사용하기 위한 방법으로 만들어졌습니다. 다음의 가치를 가지고 있습니다. 생성을 위한 목적으로 `Get.create()`는 공유되는 인스턴스가 아니지만 폐기되지 않습니다. 예를들어 리스트뷰 안의 버튼은 리스트를 위한 고유한 인스턴스입니다. - 이때문에 Get.create는 GetWidget과 함께 사용되어야만 합니다.
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut: 이름 그대로 lazy 처리됩니다. 인스턴스가 만들어지나 즉시 사용되도록 호출되지 않고 호출되기를 기다립니다. 다른 메서드와 다르게 `insert`가 여기에서 호출되지 않습니다. 대신 인스턴스는 메모리의 다른 부분에 추가됩니다. 인스턴스가 재생성 가능한지 아닌지를 책임지는 부분으로 "factory"라고 부릅니다. 나중에 사용할 어떤 것을 생성하기 원한다면 지금 사용했던 것과 섞이지 않아야 할 것입니다. 그리고 여기에서 `fenix` 마법이 시작됩니다: `fenix: false`를 그대로두고 `smartManagement`는 `keepFactory`가 아니면 `Get.find`를 사용할 때 인스턴스는 "factory"에서 공통 인스턴스 메모리 영역으로 위치가 변경됩니다. 바로 그뒤에 기본적으로 "factory"에서 제거됩니다. 이제 `fenix: true`로 설정하면 인스턴스는 전용부분에서 계속 존재하며 공통 영역으로 이동하여 미래에 다시 호출됩니다.
 
@@ -265,25 +266,25 @@ Get의 2.10 버전에는 Bindings API를 완전히 구현했습니다.
 - class를 생성하고 Binding을 implement 합니다.
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 IDE가 자동적으로 "종속적인" 메서드를 오버라이딩할지 요청하며 램프를 클릭하기만 하면 됩니다. 그리고 메서드를 오버라이딩하고 해당 경로에 사용할 모든 클래스들을 추가하면 됩니다:
 
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.put<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.put<Service>(Api()),
+  ];
 }
 
-class DetailsBinding implements Bindings {
+class DetailsBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetailsController>(() => DetailsController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetailsController>(() => DetailsController()),
+  ];
 }
 ```
 
@@ -296,12 +297,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: DetailsBinding(),
+    bindings: [DetailsBinding()],
   ),
 ];
 ```
@@ -309,27 +310,31 @@ getPages: [
 - 일반 라우트 사용법:
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetailsView(), binding: DetailsBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetailsView(), bindings: [DetailsBinding()])
 ```
 
 이제 어플리케이션의 어디서도 메모리 관리에 대해서 걱정하지 않아도 됩니다. Get이 그것을 처리 할 것입니다.
 
-Binding 클래스는 라우트가 호출될 때 불려집니다. GetMaterialApp의 "initialBinding"에서 모든 종속성을 추가하여 생성할 수 있습니다.
+Binding 클래스는 라우트가 호출될 때 불려집니다. GetMaterialApp의 "binds"에서 모든 종속성을 추가하여 생성할 수 있습니다.
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```
 
 ### BindingsBuilder
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 바인딩을 생성하는 기본 방법은 바인딩을 구현한 클래스를 만드는 것 입니다.
 하지만 대안으로 `BindingsBuilder` 콜백을 사용하여 간단하게 원하는 것을 인스턴스화하는 함수를 사용할 수 있습니다.
 
 예시:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 getPages: [
@@ -401,7 +406,7 @@ Factory는 적은 메모리만 사용하고 인스턴스를 가지지 않지만 
 
 ## 주석
 
-- 다중 바인딩을 사용한다면 SmartManagement.keepFactory를 사용하지 마세요. 바인딩을 사용하지 않거나 GetMaterialApp의 initialBinding에 연결한 1개의 바인딩만 설계하세요.
+- 다중 바인딩을 사용한다면 SmartManagement.keepFactory를 사용하지 마세요. 바인딩을 사용하지 않거나 GetMaterialApp의 binds에 연결한 1개의 바인딩만 설계하세요.
 
 - 바인딩의 사용은 완전히 선택사항입니다. 클래스에서 `Get.put()`과 `Get.find()`를 사용하면 아무 문제없이 컨트롤러가 주어집니다.
 그러나 서비스나 다른 추상적인 동작을 원하면 더 나은 구성의 바인딩을 추천합니다.

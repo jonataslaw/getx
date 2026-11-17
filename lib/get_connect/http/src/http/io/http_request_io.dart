@@ -412,7 +412,9 @@ class HttpRequestImpl extends IClient {
           ?.call(request, T, IOHttpResponse(response: response));
       if (interceptionResponse != null) return interceptionResponse;
 
-      final stringBody = await bodyBytesToString(bodyBytes, headers);
+      final stringBody = timeout == null
+          ? await bodyBytesToString(bodyBytes, headers)
+          : await bodyBytesToString(bodyBytes, headers).timeout(timeout!);
 
       final body = bodyDecoded<T>(
         request,

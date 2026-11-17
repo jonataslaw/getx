@@ -1,10 +1,12 @@
+> GetX 5 RC: 現在の API は[このブランチの移行ガイド](../en_US/migration_guide_5.md)を参照してください。**GetX 4 legacy** と記された例は旧 API の説明です。
+
 # 依存オブジェクト管理
 - [依存オブジェクト管理](#依存オブジェクト管理)
   - [インスタンス化に使用するメソッド](#インスタンス化に使用するメソッド)
     - [Get.put()](#getput)
     - [Get.lazyPut()](#getlazyput)
     - [Get.putAsync()](#getputasync)
-    - [Get.create()](#getcreate)
+    - [Get.spawn()](#getspawn)
   - [インスタンス化したクラスを使う](#インスタンス化したクラスを使う)
   - [依存オブジェクトの置換](#依存オブジェクトの置換)
   - [各メソッドの違い](#各メソッドの違い)
@@ -111,7 +113,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync()
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 SharedPreferencesなど、非同期のインスタンスを登録したいときに使います。
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -124,6 +130,8 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 これが .putAsync で設定できるパラメーターです。
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -140,32 +148,24 @@ Get.putAsync<S>(
 )
 ```
 
-### Get.create()
+### Get.spawn()
 
 これは使いどころに迷うかもしれません。他のものとの違いなど詳細な説明は「[各メソッドの違い](#各メソッドの違い)」のセクションをご一読ください。
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
 これが .create で設定できるパラメーターです。
 
 ```dart
-Get.create<S>(
-  // 必須。Get.find() が呼ばれるたびにインスタンスがこの関数で新たに組み立てられる。
-  // 例: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
-
-  // オプション。Get.put() のtagと同様で、同じクラスによる
-  // 複数インスタンスを扱うときに使用します。
-  // リストのアイテムにそれぞれコントローラが必要な場合に便利です。
-  // 文字列はユニークである必要があります。
-  String name,
-
-  // オプション。Get.put() と同様アプリ全体でインスタンスを維持するときに使用。
-  // 唯一の違いは Get.create() のpermanentはデフォルトでtrueということだけです。
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## インスタンス化したクラスを使う
@@ -243,9 +243,10 @@ print(instance is OtherClass); //true
 
 各メソッドを使用する際のプロセスの違いをご説明します。
 
-- Get.put と Get.putAsync はインスタンスを作成して初期化するプロセスは同じですが、後者は非同期メソッドを使用するという違いがあります。この2つのメソッドは内部に保有するメソッド `insert` に `permanent: false` と `isSingleton: true` という引数を渡して、メモリに直接インスタンスを挿入します (この isSingleton が行っていることは、依存オブジェクトを `dependency` と `builder` プロパティのどちらから拝借するかを判断することだけです)。その後に `Get.find()` が呼ばれると、メモリ上にあるインスタンスを即座に初期化するというプロセスをたどります。
+> **GetX 4 legacy**
+> - Get.put と Get.putAsync はインスタンスを作成して初期化するプロセスは同じですが、後者は非同期メソッドを使用するという違いがあります。この2つのメソッドは内部に保有するメソッド `insert` に `permanent: false` と `isSingleton: true` という引数を渡して、メモリに直接インスタンスを挿入します (この isSingleton が行っていることは、依存オブジェクトを `dependency` と `builder` プロパティのどちらから拝借するかを判断することだけです)。その後に `Get.find()` が呼ばれると、メモリ上にあるインスタンスを即座に初期化するというプロセスをたどります。
 
-- Get.create はその名の通り、依存オブジェクトを「クリエイト」します。Get.put() と同様に内部メソッドである `insert` を呼び出してインスタンス化します。違いは `permanent: true` で `isSingleton: false` である点です (依存オブジェクトを「クリエイト」しているため、シングルトンにはなりません。それが false になっている理由です)。また `permanent: true` となっているので、デフォルトでは画面の破棄などでインスタンスを失わないというメリットがあります。また `Get.find()` はすぐに呼ばれず、画面内で実際に使用されてから呼ばれます。これは `permanent` の特性を活かすための設計ですが、それゆえ `Get.create()` は共有しないけど破棄もされないインスタンスを作成する目的で作られたと言えます。たとえば、ListViewの中のボタンアイテムに使うControllerインスタンスのように、そのリスト内でしか使わないけどリストアイテムごとに固有のインスタンスが必要なケースなどが考えられます。そのため、Get.create は GetWidget との併用がマストです。
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut は初期化をlazy（遅延、消極的）に行います。実行されるとインスタンスは作成されますが、すぐに使用できるように初期化はされず、待機状態になります。また他のメソッドと異なり `insert` メソッドは呼び出されません。その代わり、インスタンスはメモリの別の部分に挿入されます。この部分を「ファクトリー」と呼ぶことにしましょう。「ファクトリー」は、そのインスタンスが再生成できるかどうかを決める役割を持っています。これは後で使う予定のものを、現在進行形で使われているものと混ざらないようにするための工夫です。ここで `fenix` によるマジックが登場します。デフォルトの `fenix: false` のままにしており、かつ `SmartManagement` が `keepFactory` ではない場合において `Get.find` を使用すると、インスタンスは「ファクトリー」から共有メモリ領域に移動します。その直後にインスタンスは「ファクトリー」から削除されます。しかし `fenix: true` としていた場合、インスタンスは「ファクトリー」に残るため、共有メモリ領域から削除されても再び呼び出すことができるのです。
 
@@ -264,25 +265,25 @@ Bindingsは依存オブジェクトの注入をビューから切り離すこと
 - Bindings機能を実装したクラスを作成することができます。
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 "dependencies" メソッドをオーバーライドするようIDEに自動で指摘されます。表示をクリックしてメソッドを override し、そのRoute内で使用するすべてのクラスを挿入してください。
 
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.put<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.put<Service>(Api()),
+  ];
 }
 
-class DetailsBinding implements Bindings {
+class DetailsBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetailsController>(() => DetailsController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetailsController>(() => DetailsController()),
+  ];
 }
 ```
 
@@ -295,12 +296,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: DetailsBinding(),
+    bindings: [DetailsBinding()],
   ),
 ];
 ```
@@ -308,26 +309,30 @@ getPages: [
 - 通常のRouteを使う場合
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetailsView(), binding: DetailsBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetailsView(), bindings: [DetailsBinding()])
 ```
 
 これでアプリケーションのメモリ管理を気にする必要がなくなります。Getがすべてやってくれます。
 
-BindingsクラスはRouteの呼び出しと同時に呼び出されます。また、すべてに共通の依存オブジェクトを挿入するためには GetMaterialApp の initialBinding プロパティを使用してください。
+BindingsクラスはRouteの呼び出しと同時に呼び出されます。また、すべてに共通の依存オブジェクトを挿入するためには GetMaterialApp の binds プロパティを使用してください。
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```
 
 ### BindingsBuilder
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 Bindingsを作成する一般的な方法は Bindings を実装したクラスを作成することですが、`BindingsBuilder` コールバックを使う方法もあります。
 
 Example:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 getPages: [
@@ -399,7 +404,7 @@ Bindingsは「一過性のファクトリー」のようなものを作成しま
 
 ## 補足
 
-- 複数のBindingsを使う場合は SmartManagement.keepFactory は**使わない**でください。これは Bindings を使わないケースや、GetMaterialAppのinitialBindingに設定された単独のBindingと一緒に使うケースを想定されて作られました。
+- 複数のBindingsを使う場合は SmartManagement.keepFactory は**使わない**でください。これは Bindings を使わないケースや、GetMaterialAppのbindsに設定された単独のBindingと一緒に使うケースを想定されて作られました。
 
 - Bindingsを使うことは必須ではありません。`Get.put()` と `Get.find()` だけでも全く問題ありません。
 ただし、サービスやその他抽象度の高いクラスをアプリに取り入れる場合はコード整理のために使うことをおすすめします。

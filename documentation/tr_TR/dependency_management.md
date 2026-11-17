@@ -1,10 +1,12 @@
+> GetX 5 RC: güncel API için [bu dalın geçiş kılavuzuna](../en_US/migration_guide_5.md) bakın. **GetX 4 legacy** işaretli örnekler eski API içindir.
+
 # Dependency Management
 - [Dependency Management](#dependency-management)
   - [Örnek Metodlar](#örnek-metodlar)
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
-    - [Get.create](#getcreate)
+    - [Get.spawn](#getspawn)
   - [Metodların/Sınıfların örneklerinin kullanılması](#metodların/sınıfların-örneklerinin-kullanılması)
   - [Alternatif bir instance tanımlama](#alternatif-bir-instance-tanımlama)
   - [Metodlar arasındaki farklılıklar](#metodlar-arasındaki-farklılıklar)
@@ -114,7 +116,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 Eşzamansız bir instance kaydetmek istiyorsanız, `Get.putAsync` kullanabilirsiniz:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -127,6 +133,8 @@ Get.putAsync<YourAsyncClass>( () async => await YourAsyncClass() )
 ```
 
 putAsync kullanırken ayarlayabileceğiniz tüm seçenekler şunlardır:
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -143,34 +151,24 @@ Get.putAsync<S>(
 )
 ```
 
-### Get.create
+### Get.spawn
 
 Bu zor. Bunun ne olduğuna ve diğeri arasındaki farklara ilişkin ayrıntılı bir açıklama, [Differences between methods:](#differences-between-methods) bölümünde bulunabilir.
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
 Oluştururken ayarlayabileceğiniz tüm seçenekler şunlardır:
 
 ```dart
-Get.create<S>(
-  // gerekli: her seferinde "fabrikasyon" olacak bir sınıf döndüren bir işlev
-  // `Get.find()` çağrılır
-  // Örnek: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
-
-  // isteğe bağlı: tıpkı Get.put() gibi, ancak birden çok örneğe ihtiyacınız olduğunda kullanılır
-  // aynı sınıftan bir
-  // Her öğenin kendi denetleyicisine ihtiyaç duyduğu bir listeniz varsa kullanışlıdır
-  // benzersiz bir dize olması gerekir.
-  String name,
-
-  // isteğe bağlı: tıpkı int`Get.put()` gibi,
-  // tüm uygulama boyunca canlı örnek. Fark Get.create'de
-  // kalıcı, varsayılan olarak doğrudur
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## Metodların/Sınıfların örneklerinin kullanılması
@@ -248,10 +246,11 @@ Ancak `permanent:true` kullanmayı tercih etmek istiyorsanız, bu geçişte cont
 
 Metodlar arasındaki farklarla devam edelim:
 
-- Get.put ve Get.putAsync, ikincisinin eşzamansız bir yöntem kullanması farkıyla aynı oluşturma sırasını takip eder: bu iki yöntem, örneği oluşturur ve başlatır. Bu, `permanent: false` ve `isSingleton: true` parametreleriyle `insert` dahili yöntemi kullanılarak doğrudan belleğe eklenir (bu isSingleton parametresinin tek amacı, "bağımlılık" bağımlılığını kullanıp kullanmayacağını söylemektir. veya `FcBuilderFunc` bağımlılığını kullanacaksa). Bundan sonra, bellekteki örnekleri hemen başlatan `Get.find()` çağrılır.
+> **GetX 4 legacy**
+> - Get.put ve Get.putAsync, ikincisinin eşzamansız bir yöntem kullanması farkıyla aynı oluşturma sırasını takip eder: bu iki yöntem, örneği oluşturur ve başlatır. Bu, `permanent: false` ve `isSingleton: true` parametreleriyle `insert` dahili yöntemi kullanılarak doğrudan belleğe eklenir (bu isSingleton parametresinin tek amacı, "bağımlılık" bağımlılığını kullanıp kullanmayacağını söylemektir. veya `FcBuilderFunc` bağımlılığını kullanacaksa). Bundan sonra, bellekteki örnekleri hemen başlatan `Get.find()` çağrılır.
 
 
-- Get.create: Adından da anlaşılacağı gibi, dependency'i (bağımlılığı) "create(oluşturacak)"! `Get.put()`a benzer şekilde, örneklemeye `insert` dahili yöntemini de çağırır. Ancak `permanent` doğru oldu ve`isSingleton` yanlış oldu (bağımlılığımızı "creating", bunun tek bir örnek olmasının bir yolu yok, bu yüzden yanlış). Ve `permanent: true` olduğu için, varsayılan olarak ekranlar arasında kaybetmeme avantajına sahibiz! Ayrıca `Get.find()` hemen çağrılmaz, çağrılacak ekranda kullanılmayı bekler. `permanent` parametresini kullanmak için bu şekilde yaratılmıştır, o zamandan beri, fark edilmeye değer `Get.create()`, örneğin bir bu liste için benzersiz bir örnek istiyorsanız - bu nedenle Get.create GetWidget ile birlikte kullanılmalıdır.
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut: Adından da anlaşılacağı gibi tembel bir işlemdir. Örnek yaratılır, ancak hemen kullanılmak üzere çağrılmaz, çağrılmayı bekler. Diğer yöntemlerin aksine burada `insert` denilmez. Bunun yerine, instance hafızanın başka bir bölümüne, örneğin yeniden oluşturulup oluşturulamayacağını söylemekle sorumlu bir kısma eklenir, buna "factory" diyelim. Daha sonra kullanılmak üzere bir şey yaratmak istersek, şu anda kullanılanlarla karıştırılmayacak. Ve işte burada `fenix` sihirleri devreye giriyor: `fenix: false` bırakmayı seçerseniz ve `smartManagement`ınız `keepFactory` değilse, o zaman `Get.find` kullanılırken örnek bellekteki yeri değiştirecektir. "factory"den ortak örnek bellek alanına. Bundan hemen sonra, varsayılan olarak "factory"den kaldırılır. Şimdi, `fenix: true` seçeneğini seçerseniz, örnek bu özel bölümde var olmaya devam eder, hatta gelecekte tekrar çağrılmak üzere ortak alana gider.
 
@@ -270,25 +269,25 @@ Ayrıca Binding sınıfı, SmartManager yapılandırma kontrolüne sahip olmanı
 - Bir sınıf oluşturun ve Binding'i uygulayın
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 IDE'niz otomatik olarak sizden "dependencies(bağımlılıklar)" metodunu geçersiz kılmanızı isteyecektir ve sadece lambaya tıklamanız, metodu geçersiz kılmanız ve o rotada kullanacağınız tüm sınıfları eklemeniz yeterlidir:
 
 ```dart
-class HomeBinding implements Bindings {
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.put<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.put<Service>(Api()),
+  ];
 }
 
-class DetailsBinding implements Bindings {
+class DetailsBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetailsController>(() => DetailsController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetailsController>(() => DetailsController()),
+  ];
 }
 ```
 
@@ -301,12 +300,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/details',
     page: () => DetailsView(),
-    binding: DetailsBinding(),
+    bindings: [DetailsBinding()],
   ),
 ];
 ```
@@ -314,27 +313,31 @@ getPages: [
 - Normal yolları kullanma:
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetailsView(), binding: DetailsBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetailsView(), bindings: [DetailsBinding()])
 ```
 
 Orada, artık uygulamanızın bellek yönetimi konusunda endişelenmenize gerek yok, Get bunu sizin için yapacak.
 
-Bir rota çağrıldığında Binding sınıfı çağrılır, oluşturulacak tüm bağımlılıkları eklemek için GetMaterialApp'ınızda bir "initialBinding" oluşturabilirsiniz.
+Bir rota çağrıldığında Binding sınıfı çağrılır, oluşturulacak tüm bağımlılıkları eklemek için GetMaterialApp'ınızda bir "binds" oluşturabilirsiniz.
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```
 
 ### BindingsBuilder
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 Binding oluşturmanın varsayılan yolu, Binding'leri uygulayan bir sınıf oluşturmaktır.
 Ancak alternatif olarak, istediğiniz her şeyi somutlaştırmak için bir işlevi kullanabilmeniz için `BindingsBuilder` callback kullanabilirsiniz.
 
 Örnek:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 getPages: [
@@ -406,7 +409,7 @@ Hangisi sizin için daha uygunsa onu kullanın.
 
 ## Notlar
 
-- Birden çok Bindings kullanıyorsanız SmartManagement.keepFactory KULLANMAYIN. Bindings olmadan veya GetMaterialApp'in initialBinding'inde bağlantılı tek bir Binding ile kullanılmak üzere tasarlanmıştır.
+- Birden çok Bindings kullanıyorsanız SmartManagement.keepFactory KULLANMAYIN. Bindings olmadan veya GetMaterialApp'in binds'inde bağlantılı tek bir Binding ile kullanılmak üzere tasarlanmıştır.
 
 - Bindings kullanmak tamamen isteğe bağlıdır, isterseniz belirli bir controller(denetleyiciyi) kullanan sınıflarda `Get.put()` ve `Get.find()` kullanabilirsiniz.
 Ancak, Services veya başka bir abstract class ile çalışıyorsanız, daha iyi bir organizasyon için Bindings'i kullanmanızı öneririm.

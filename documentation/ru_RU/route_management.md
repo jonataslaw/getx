@@ -1,3 +1,5 @@
+> GetX 5 RC: актуальный API описан в [руководстве по миграции этой ветки](../en_US/migration_guide_5.md). Примеры с пометкой **GetX 4 legacy** относятся к старому API.
+
 - [Управление маршрутами](#управление-маршрутами)
   - [Как использовать](#как-использовать)
   - [Навигация без именованных маршрутов](#навигация-без-именованных-маршрутов)
@@ -37,31 +39,35 @@ GetMaterialApp( // Before: MaterialApp(
 Для навигации на новый экран:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 Чтобы закрыть snackbars, диалог, bottomsheets, или все, что вы обычно закрывали с помощью Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 Для перехода к следующему экрану и отсутствия возможности вернуться к предыдущему экрану (для использования в SplashScreens, экранах входа и т.д.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 Для перехода к следующему экрану и отмены всех предыдущих маршрутов (полезно в корзинах для покупок, опросах и тестах)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 Чтобы перейти к следующему маршруту и ​​получить или обновить данные, как только вы вернетесь с него:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 отправить данные на предыдущий экран:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // Get syntax (It is much better, but you have the right to disagree)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -279,6 +285,8 @@ GetMaterialApp(
 ```
 
 Если вы не используете GetMaterialApp, вы можете использовать ручной API для подключения наблюдателя.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -521,6 +529,8 @@ Get сделал вложенную навигацию Flutter еще проще
 - ПРИМЕЧАНИЕ: Создание параллельных стеков навигации может быть опасным. В идеале не используйте NestedNavigators или используйте их редко. Если этого требует ваш проект, продолжайте, но имейте в виду, что хранение нескольких стеков навигации в памяти может быть не лучшим решением для потребления оперативной памяти.
 
 Смотрите как это просто:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

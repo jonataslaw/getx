@@ -1,3 +1,5 @@
+> GetX 5 RC: use the branch-specific [migration guide](../en_US/migration_guide_5.md) for the current API. Sections marked **GetX 4 legacy** describe older APIs, not this RC. Translations retain historical explanations.
+
 - [Route Management](#route-management)
   - [How to use](#how-to-use)
   - [Navigation without named routes](#navigation-without-named-routes)
@@ -37,31 +39,35 @@ GetMaterialApp( // Before: MaterialApp(
 To navigate to a new screen:
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 To close snackbars, dialogs, bottomsheets, or anything you would normally close with Navigator.pop(context);
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 To go to the next screen and no option to go back to the previous screen (for use in SplashScreens, login screens and etc.)
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 To go to the next screen and cancel all previous routes (useful in shopping carts, polls, and tests)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 To navigate to the next route, and receive or update data as soon as you return from it:
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 on other screen, send a data for previous route:
@@ -104,7 +110,7 @@ navigator.push(
 );
 
 // Get syntax (It is much better, but you have the right to disagree)
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -285,6 +291,8 @@ GetMaterialApp(
 ```
 
 If you are not using GetMaterialApp, you can use the manual API to attach Middleware observer.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -548,49 +556,25 @@ Get.bottomSheet(
 
 ## Nested Navigation
 
-Get made Flutter's nested navigation even easier.
-You don't need the context, and you will find your navigation stack by Id.
-
-- NOTE: Creating parallel navigation stacks can be dangerous. The ideal is not to use NestedNavigators, or to use sparingly. If your project requires it, go ahead, but keep in mind that keeping multiple navigation stacks in memory may not be a good idea for RAM consumption.
-
-See how simple it is:
+This RC uses Navigator 2. Define the parent/child route hierarchy through
+`GetPage.children`, then render the appropriate part of it with a
+`GetRouterOutlet`. For a configured parent `/shell` and child `/shell/home`,
+the parent view can render:
 
 ```dart
-Navigator(
-  key: Get.nestedKey(1), // create a key by index
-  initialRoute: '/',
-  onGenerateRoute: (settings) {
-    if (settings.name == '/') {
-      return GetPageRoute(
-        page: () => Scaffold(
-          appBar: AppBar(
-            title: Text("Main"),
-          ),
-          body: Center(
-            child: TextButton(
-              color: Colors.blue,
-              onPressed: () {
-                Get.toNamed('/second', id:1); // navigate by your nested route by index
-              },
-              child: Text("Go to second"),
-            ),
-          ),
-        ),
-      );
-    } else if (settings.name == '/second') {
-      return GetPageRoute(
-        page: () => Center(
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text("Main"),
-            ),
-            body: Center(
-              child:  Text("second")
-            ),
-          ),
-        ),
-      );
-    }
-  }
-),
+GetRouterOutlet(
+  anchorRoute: '/shell',
+  initialRoute: '/shell/home',
+);
 ```
+
+Do not pass `Get.nestedKey` to the `Navigator.key` parameter as in GetX 4:
+the RC returns a delegate rather than the old navigator key. Nested navigator
+IDs are strings and select a configured delegate, not an arbitrary dialog.
+
+Use the [Navigator 2 example](../../example_nav2/README.md) for the complete
+route hierarchy, nested outlets, authentication redirects and smoke test.
+Test direct child URLs and browser refresh as well as in-app navigation.
+Keep a deliberate lifetime for each controller and verify its disposal when
+its final route/widget owner leaves. See the [RC migration guide](migration_guide_5.md)
+for bindings, back operations and the distinction between pages and overlays.

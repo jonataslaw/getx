@@ -1,3 +1,5 @@
+> GetX 5 RC: consulta la [guía de migración de esta rama](../en_US/migration_guide_5.md) para las API actuales. Los ejemplos marcados **GetX 4 legacy** describen API anteriores.
+
 - [Gestión de dependencias](#gestión-de-dependencias)
   - [Simple Instance Manager](#simple-instance-manager)
   - [Options](#options)
@@ -45,6 +47,8 @@ Get.lazyPut<Service>(()=> ApiMock());
 ```
 
 Si desea registrar una instancia asincrónica, puede usar Get.putAsync.
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -124,7 +128,10 @@ Get.lazyPut<S>(
 )
 ```
 
-- Get.putAsync:
+> **GetX 4 legacy**
+> - Get.putAsync:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<S>(
@@ -142,23 +149,15 @@ Get.putAsync<S>(
   bool permanent = false
 ```
 
-- Get.create:
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 ```dart
-Get.create<S>(
-  // required: a function that returns a class that will be "fabricated" every
-  // time `Get.find()` is called
-  // Example: Get.create<YourClass>(() => YourClass())
-  FcBuilderFunc<S> builder,
-  // optional: just like Get.put(), but it is used when you need multiple instances
-  // of a of a same class
-  // Useful in case you have a list that each item need it's own controller
-  // needs to be a unique string. Just change from tag to name
-  String name,
-  // optional: just like int`Get.put()`, it is for when you need to keep the
-  // instance alive thoughout the entire app. The difference is in Get.create
-  // permanent is true by default
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ### Diferences between methods:
@@ -167,15 +166,16 @@ First, let's of the `fenix` of Get.lazyPut and the `permanent` of the other meth
 
 The fundamental difference between `permanent` and `fenix` is how you want to store your instances.
 Reinforcing: by default, GetX deletes instances when they are not is use.
-It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offName()`) the controller 1 lost it's use so it will be erased.
+It means that: If screen 1 has controller 1 and screen 2 has controller 2 and you remove the first route from stack, (like if you use `Get.off()` or `Get.offNamed()`) the controller 1 lost it's use so it will be erased.
 But if you want to opt to `permanent:true`, then the controller will not be lost in this transition - which is very usefult for services that you want to keep alive thoughout the entire application.
 `fenix` in the other hand is for services that you don't worry in losing between screen changes, but when you need that service, you expect that it is alive. So basically, it will dispose the unused controller/service/class, but when you need that, it will "recreate from the ashes" a new instance.
 
 Proceeding with the differences between methods: 
 
-- Get.put and Get.putAsync follow the same creation order, with the difference that asyn opt for applying a asynchronous method: those two methods create and initialize the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only porpuse is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
+> **GetX 4 legacy**
+> - Get.put and Get.putAsync follow the same creation order, with the difference that asyn opt for applying a asynchronous method: those two methods create and initialize the instance. That one is inserted directly in the memory, using the internal method `insert` with the parameters `permanent: false` and `isSingleton: true` (this isSingleton parameter only porpuse is to tell if it is to use the dependency on `dependency` or if it is to use the dependency on `FcBuilderFunc`). After that, `Get.find()` is called that immediately initialize the instances that are on memory.
 
-- Get.create: As the name implies, it will "create" your dependency! Similar to `Get.put()`, it also call the internal method `insert` to instancing. But `permanent` became true and `isSingleton` became false (since we are "creating" our dependency, there is no way for it to be a singleton instace, that's why is false). And because it has `permanent: true`, we have by default the benefit of not losing it between screens! Also, `Get.find()` is not called immediately, it wait to be used in the screen to be called. It is created this way to make use of the parameter `permanent`, since then, worth noticing, `Get.create()` was made with the goal of create not shared instances, but don't get disposed, like for example a button in a listView, that you want a unique instance for that list - because of that, Get.create must be used together with GetWidget.
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut: As the name implies, it is a lazy proccess. The instance is create, but it is not called to be used immediately, it remains waiting to be called. Contrary to the other methods, `insert` is not called here. Instead, the instance is inserted in another part of the memory, a part responsable to tell if the instance can be recreated or not, let's call it "factory". If we want to create something to be used later, it will not be mix with things been used right now. And here is where `fenix` magic enters: if you opt to leaving `fenix: false`, and your `smartManagement` are not `keepFactory`, then when using `Get.find` the instance will change the place in the memory from the "factory" to common instance memory area. Right after that, by default it is removed from the "factory". Now, if you opt for `fenix: true`, the instance continues to exist in this dedicated part, even going to the common area, to be called again in the future.
 
@@ -201,18 +201,18 @@ Además, la clase Binding le permitirá tener el control de configuración Smart
 - Crea una clase e implementa Binding
 
 ```dart
-class HomeBinding implements Bindings{
+abstract class HomeBinding extends Binding {}
 ```
 
 Su IDE le pedirá automáticamente que anule el método de "dependencies", y solo necesita hacer clic en la lámpara, anular el método e insertar todas las clases que va a utilizar en esa ruta:
 
 ```dart
-class HomeBinding implements Bindings{
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<ControllerX>(() => ControllerX());
-    Get.lazyPut<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<ControllerX>(() => ControllerX()),
+    Bind.lazyPut<Service>(()=> Api()),
+  ];
 }
 ```
 
@@ -222,23 +222,23 @@ Ahora solo necesita informar su ruta, que utilizará ese binding para establecer
 
 ```dart
 getPages: [
-  GetPage(name: '/', page: () => Home(), binding: HomeBinding()),
+  GetPage(name: '/', page: () => Home(), bindings: [HomeBinding()]),
 ]
 ```
 
 - Usando rutas normales:
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
+Get.to(() => Home(), bindings: [HomeBinding()]);
 ```
 
 Allí, ya no tiene que preocuparse por la administración de memoria de su aplicación, GetX lo hará por usted.
 
-La clase Binding se llama cuando se llama una ruta, puede crear un initialBinding en su GetMaterialApp para insertar todas las dependencias que se crearán.
+La clase Binding se llama cuando se llama una ruta, puede crear un binds en su GetMaterialApp para insertar todas las dependencias que se crearán.
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 );
 ```

@@ -1,3 +1,5 @@
+> GetX 5 RC: 現在の API は[このブランチの移行ガイド](../en_US/migration_guide_5.md)を参照してください。**GetX 4 legacy** と記された例は旧 API の説明です。
+
 - [Route管理](#Route管理)
   - [使い方](#使い方)
   - [通常Routeによるナビゲーション](#通常Routeによるナビゲーション)
@@ -37,31 +39,35 @@ GetMaterialApp( // 変更前: MaterialApp(
 次の画面に遷移するには Get.to を使ってください。
 
 ```dart
-Get.to(NextScreen());
+Get.to(() => NextScreen());
 ```
 
 SnackBar / Dialog / BottomSheet など Navigator.pop(context) で閉じるものと同じものを閉じるには Get.back を使います。
 
 ```dart
+Get.closeDialog();
+Get.closeOverlay(); // Current dialog or bottom sheet
+Get.closeCurrentSnackbar();
+// Return a page instead:
 Get.back();
 ```
 
 次の画面に遷移しつつ、前の画面に戻れないようにするには Get.off を使います（スプラッシュスクリーンやログイン画面などで使用)。
 
 ```dart
-Get.off(NextScreen());
+Get.off(() => NextScreen());
 ```
 
 次の画面に遷移して、それ以前のRouteはすべて破棄するには Get.offAll を使います（ショッピングカート、投票、テストなどで使用)
 
 ```dart
-Get.offAll(NextScreen());
+Get.offAll(() => NextScreen());
 ```
 
 次の画面に遷移して、戻ったらデータを受け取る方法はこちら。
 
 ```dart
-var data = await Get.to(Payment());
+var data = await Get.to(() => Payment());
 ```
 
 次の画面では、このようにデータを前の画面に送る必要があります。
@@ -103,7 +109,7 @@ navigator.push(
 );
 
 // Getのシンタックス（上記よりかなり短いですね）
-Get.to(HomePage());
+Get.to(() => HomePage());
 
 
 ```
@@ -285,6 +291,8 @@ GetMaterialApp(
 ```
 
 GetMaterialAppを使用しない場合は、手動のAPIを使ってミドルウェアオブザーバーを設定してください。
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 void main() {
@@ -525,6 +533,8 @@ contextを必要とせず、IDによりナビゲーションのスタックを�
 - 注: 並列のナビゲーションスタックを作成することは危険です。ネスト構造のNavigatorを使用しないか、使用を控えめにするのが理想です。必要なら使っていただいても問題ありませんが、複数のナビゲーションのスタックを保持することはRAM消費の面で好ましくないということは覚えておいてください。
 
 こんなに簡単にできます。
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Navigator(

@@ -1,3 +1,5 @@
+> GetX 5 RC: consulte o [guia de migração desta branch](../en_US/migration_guide_5.md) para a API atual. Exemplos marcados **GetX 4 legacy** descrevem APIs antigas.
+
 # Gerenciamento de dependência
 - [Gerenciamento de dependência](#gerenciamento-de-dependência)
   - [Gerenciamento de dependências simples](#gerenciamento-de-dependências-simples)
@@ -5,7 +7,7 @@
     - [Get.put()](#getput)
     - [Get.lazyPut](#getlazyput)
     - [Get.putAsync](#getputasync)
-    - [Get.create](#getcreate)
+    - [Get.spawn](#getspawn)
   - [Usando as classes/dependências instanciadas](#usando-as-classesdependências-instanciadas)
   - [Diferenças entre os métodos](#diferenças-entre-os-métodos)
   - [Bindings](#bindings)
@@ -114,7 +116,11 @@ Get.lazyPut<S>(
 ```
 
 ### Get.putAsync
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 Se você quiser criar uma instância assíncrona, você pode usar `Get.putAsync`:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 Get.putAsync<SharedPreferences>(() async {
@@ -127,6 +133,8 @@ Get.putAsync<SuaClasseAssincrona>( () async => await SuaClasseAssincrona() )
 ```
 
 E essas são todas as opções que você pode definir:
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 ```dart
 Get.putAsync<S>(
 
@@ -142,29 +150,23 @@ Get.putAsync<S>(
   bool permanent = false
 ```
 
-### Get.create
+### Get.spawn
 Esse é mais específico. Uma explicação detalhada do que esse método é e as diferenças dele para os outros podem ser encontradas em [Diferenças entre os métodos](#diferenças-entre-os-métodos)
 
 
 ```dart
-Get.Create<SomeClass>(() => SomeClass());
-Get.Create<LoginController>(() => LoginController());
+Get.spawn<SomeClass>(() => SomeClass());
+Get.spawn<LoginController>(() => LoginController());
 ```
 
 E essas são todas as opções que você pode definir:
 ```dart
-Get.create<S>(
-  // Obrigatório: Uma função que retorna uma classe que será "fabricada" toda vez que Get.find() for chamado
-  InstanceBuilderCallback<S> builder,
-
-  // opcional: igual ao Get.put(), mas é usado quando você precisa de múltiplas instâncias de uma mesma classe. 
-  // Útil caso você tenha uma lista em que cada item precise de um controller próprio
-  // precisa ser uma string única. Apenas mudou o nome de tag para name.
-  String name,
-
-  // opcional: igual ao Get.put(), usado quando você precisa manter a instância ativa no app inteiro. A diferença
-  // é que com Get.create o permanent está habilitado por padrão
-  bool permanent = true
+Get.spawn<SomeClass>(
+  () => SomeClass(),
+  tag: 'item',
+  permanent: true,
+);
+final instance = Get.find<SomeClass>(tag: 'item');
 ```
 
 ## Usando as classes/dependências instanciadas
@@ -214,9 +216,10 @@ Já o `fenix`, é para serviços que você não se preocupa em perder por uma te
 
 Prosseguindo com as diferenças entre os métodos:
 
-- Get.put e Get.putAsync seguem a mesma ordem de criação, com a diferença que o Async opta por aplicar um método assíncrono: Esses dois métodos criam e já inicializam a instância. Esta é inserida diretamente na memória, através do método interno `insert` com os parâmetros `permanent: false` e `isSingleton: true` (esse parâmetro `isSingleton` serve apenas para dizer se é para utilizar a dependência colocada em `dependency`, ou se é para usar a dependência colocada no `InstanceBuilderCallback`). Depois disso, é chamado o `Get.find` que imediatamente inicializa as instâncias que estão na memória. 
+> **GetX 4 legacy**
+> - Get.put e Get.putAsync seguem a mesma ordem de criação, com a diferença que o Async opta por aplicar um método assíncrono: Esses dois métodos criam e já inicializam a instância. Esta é inserida diretamente na memória, através do método interno `insert` com os parâmetros `permanent: false` e `isSingleton: true` (esse parâmetro `isSingleton` serve apenas para dizer se é para utilizar a dependência colocada em `dependency`, ou se é para usar a dependência colocada no `InstanceBuilderCallback`). Depois disso, é chamado o `Get.find` que imediatamente inicializa as instâncias que estão na memória.
 
-- Get.create: Como o nome indica, você vai "criar" a sua dependência! Similar ao `Get.put`, ela também chama o método interno `insert` para instanciamento. Contudo, `permanent` e `isSingleton` passam a ser `true` e `false` (Como estamos "criando" a nossa dependência, não tem como ela ser um Singleton de algo, logo, `false`). E por ser `permanent: true`, temos por padrão o benefício de não se perder entre telas! Além disso, não é chamado o `Get.find`, logo ela fica esperando ser chamada para ser usada. Ele é criado dessa forma para aproveitar o uso do parâmetro `permanent`, já que, vale ressaltar, o Get.create foi criado com o objetivo de criar instâncias não compartilhadas, mas que não se perdem, como por exemplo um botão em um listView, que você quer uma instância única para aquela lista - por conta disso, o Get.create deve ser usado em conjunto com o GetWidget. 
+- `Get.spawn`: a new instance per `Get.find`; `tag` selects the factory and `permanent` retains its registration (default `true`). `GetWidget` caching is optional. See the [RC migration guide](../en_US/migration_guide_5.md).
 
 - Get.lazyPut: Como o nome dá a entender, é um processo preguiçoso (lazy). A instância é criada, mas ela não é chamada para uso logo em seguida, ela fica aguardando ser chamada. Diferente dos outros métodos, o `insert` não é chamado. Ao invés disso, a instância é inserida em outra parte na memória, uma parte responsável por dizer se a instância pode ser recriada ou não, vamos chamá-la de "fábrica". Se queremos criar algo para ser chamado só depois, não vamos misturá-lo com as coisas que estão sendo usadas agora. E é aqui que entra a mágica do `fenix`. Se você optou por deixar `fenix: false`, e seu `smartManagement` não for `keepFactory`, então ao usar o `Get.find` a instância passa da "fábrica" para a área comum das instância. Em seguinda, por padrão é removida da "fábrica". Agora, se você optou por  `fenix: true`, a instância continua a existir nessa parte dedicada, mesmo indo para a área comum, para ser chamada futuramente caso precise. 
 
@@ -241,25 +244,25 @@ Somando a isso, a classe Binding vai permitir que você tenha um controle de con
 Crie uma classe qualquer que implemente a Bindings.
 
 ```dart
-class HomeBinding implements Bindings {}
+abstract class HomeBinding extends Binding {}
 ```
 
 Sua IDE vai automaticamente te perguntar para dar override no método `dependencies()`, aí você clica na lâmpada, clica em "override the method", e insira todas as classes que você vai usar nessa rota:
 
 ```dart
-class HomeBinding implements Bindings{
+class HomeBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.lazyPut<Service>(()=> Api());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<HomeController>(() => HomeController()),
+    Bind.lazyPut<Service>(()=> Api()),
+  ];
 }
 
-class DetalhesBinding implements Bindings {
+class DetalhesBinding extends Binding {
   @override
-  void dependencies() {
-    Get.lazyPut<DetalhesController>(() => DetalhesController());
-  }
+  List<Bind> dependencies() => [
+    Bind.lazyPut<DetalhesController>(() => DetalhesController()),
+  ];
 }
 ```
 
@@ -272,12 +275,12 @@ getPages: [
   GetPage(
     name: '/',
     page: () => HomeView(),
-    binding: HomeBinding(),
+    bindings: [HomeBinding()],
   ),
   GetPage(
     name: '/detalhes',
     page: () => DetalhesView(),
-    binding: DetalhesBinding(),
+    bindings: [DetalhesBinding()],
   ),
 ];
 ```
@@ -285,8 +288,8 @@ getPages: [
 Usando rotas normais:
 
 ```dart
-Get.to(Home(), binding: HomeBinding());
-Get.to(DetalhesView(), binding: DetalhesBinding())
+Get.to(() => Home(), bindings: [HomeBinding()]);
+Get.to(() => DetalhesView(), bindings: [DetalhesBinding()])
 ```
 
 Então, você não vai precisar se preocupar com gerenciamento da memória da sua aplicação mais, Get vai fazer para você.
@@ -295,18 +298,22 @@ A classe Bindings é chamada quando uma rota é chamada. Você pode criar uma Bi
 
 ```dart
 GetMaterialApp(
-  initialBinding: SampleBind(),
+  binds: SampleBind().dependencies(),
   home: Home(),
 )
 ```
 
 ### BindingsBuilder
 
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
+
 A forma padrão de criar um binding é criando uma classe que implementa o Bindings.
 
 Mas alternativamente, você também pode usar a função `BindingsBuilder` par que você possa simplesmente usar uma função pra criar essas instâncias
 
 Exemplo:
+
+> **GetX 4 legacy** — [GetX 5 RC API](../en_US/migration_guide_5.md).
 
 ```dart
 getPages: [
@@ -377,6 +384,6 @@ Isso é muito pouco, mas como o objetivo dessa lib é obter o máximo de desempe
 
 ## Notas
 
-* Nota: NÃO USE SmartManagement.keepfactory se você está usando vários Bindings. Ele foi criado para ser usado sem Bindings, ou com um único Binding ligado ao GetMaterialApp lá no `initialBinding`
+* Nota: NÃO USE SmartManagement.keepfactory se você está usando vários Bindings. Ele foi criado para ser usado sem Bindings, ou com um único Binding ligado ao GetMaterialApp lá no `binds`
 
 * Nota²: Usar Bindings é completamente opcional, você pode usar Get.put() e Get.find() em classes que usam o controller sem problemas. Porém, se você trabalhar com Services ou qualquer outra abstração, eu recomendo usar Bindings. Especialmente em grandes empresas.
