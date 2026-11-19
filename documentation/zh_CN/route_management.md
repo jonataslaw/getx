@@ -6,9 +6,9 @@
     - [动态网页链接](#动态网页链接)
     - [中间件](#中间件)
   - [免context导航](#免context导航)
-    - [SnackBars](#SnackBars)
+    - [SnackBars](#snackbars)
     - [Dialogs](#dialogs)
-    - [BottomSheets](#bottomSheets)
+    - [BottomSheets](#bottomsheets)
   - [嵌套导航](#嵌套导航)
 
 # 路由管理
@@ -156,15 +156,17 @@ void main() {
   runApp(
     GetMaterialApp(
       unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
-      initialRoute: '/',
+      initialRoute: '/home',
       getPages: [
-        GetPage(name: '/', page: () => MyHomePage()),
+        GetPage(name: '/home', page: () => MyHomePage()),
         GetPage(name: '/second', page: () => Second()),
       ],
     )
   );
 }
 ```
+
+备注: 为了让`unknownRoute`能成功工作, 你的`initialRoute`一定不能是`/`, 否则当有未定义的导航时, Get只会跳到initialRoute页面去了. 
 
 ### 发送数据到别名路由
 
