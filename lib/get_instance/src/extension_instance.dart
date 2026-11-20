@@ -163,7 +163,13 @@ extension Inst on GetInterface {
     if (_singl.containsKey(key)) {
       final newDep = _singl[key];
       if (newDep == null || !newDep.isDirty) {
-        return;
+        if (isSingleton == true) {
+          return;
+        } else {
+          delete<S>(tag: name, key: key);
+          dep = newDep as _InstanceBuilderFactory<S>;
+          dep.isDeleteByNextCreate = true;
+        }
       } else {
         dep = newDep as _InstanceBuilderFactory<S>;
       }
@@ -366,6 +372,14 @@ extension Inst on GetInterface {
 
     if (dep == null) return false;
 
+    if (dep.isDeleteByNextCreate) {
+      // fix:https://github.com/jonataslaw/getx/issues/2944
+      // Prevent the normal lifecycle from being unable to be destroyed
+      dep.isDeleteByNextCreate = false;
+      return false;
+    }
+
+
     final _InstanceBuilderFactory builder;
     if (dep.isDirty) {
       builder = dep.lateRemove ?? dep;
@@ -507,6 +521,10 @@ class _InstanceBuilderFactory<S> {
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
+
+  // fix: https://github.com/jonataslaw/getx/issues/2944
+  // the identifier of the previous instance forcibly deleted when created
+  bool isDeleteByNextCreate = false;
 
   /// When fenix mode is available, when a new instance is need
   /// Instance manager will recreate a new instance of S
